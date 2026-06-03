@@ -23,7 +23,7 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
 - Default Codex prompt history file: `~/.codex/history.jsonl`.
 - Default Codex rich session root: `~/.codex/sessions/**/*.jsonl`.
 
-## Workflow
+## Process
 
 1. Resolve arguments and mode:
    - Default mode is report-only.

@@ -16,7 +16,7 @@ Invoke as `$onboarding-map`.
 
 Create the stage-level onboarding plan that expands `research/journey-map.md`.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

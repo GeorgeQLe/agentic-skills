@@ -11,7 +11,7 @@ Invoke as `$commit-and-push-by-feature`.
 
 Use this skill when the user wants current changes committed and pushed in sensible feature-oriented buckets rather than one undifferentiated commit.
 
-## Workflow
+## Process
 
 1. Inspect `git status` and relevant diffs to understand the change set.
 1a. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, bucket and commit `.agents/project.json`. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.

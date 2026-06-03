@@ -61,7 +61,7 @@ Use `/analyze-sessions` instead when the user wants broad cross-session trends, 
    - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
    - Route verified skill changes to `/targeted-skill-builder` (skill-dev pack) for a narrow update or `/create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
 
-## Output Format
+## Output
 
 Produce a structured report with:
 

@@ -11,7 +11,7 @@ invocation: orchestrator
 
 Ship already-finished work, commit it, optionally deploy it, and plan the next step. In Codex, `$exec` usually handles execution plus shipping; use `$ship` when finished work is already present in the tree or there are unpushed commits to package. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment. If `$ARGUMENTS` contains `--save-conversation`, save the current conversation to `conversations/`. If `$ARGUMENTS` contains `--save-all-conversations`, export all past conversations to `conversations/`.
 
-## Workflow
+## Process
 
 1. Check if there is anything to ship:
    - Run `git status` and `git diff --stat`.

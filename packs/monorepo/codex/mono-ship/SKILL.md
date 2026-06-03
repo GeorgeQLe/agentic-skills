@@ -87,7 +87,7 @@ After `$ship` completes successfully:
 - Without `turbo.json`: prefer `pnpm --filter <package> run <task>`.
 - Use `.agents/monorepo.json.dependency_graph` to compute transitive dependents and validation order when Turborepo is absent.
 
-## Output Format
+## Output
 
 - **Detection:** monorepo detected or delegated to `$ship`.
 - **Modified packages:** package names and source used to identify them.

@@ -10,7 +10,7 @@ invocation: orchestrator
 
 Use this skill when the project is primarily developer-facing.
 
-## Workflow
+## Process
 
 1. Read `.agents/project.json` and confirm `project_type` is `devtool`.
 2. If the devtool pack is not enabled, run `scripts/pack.sh install devtool`.

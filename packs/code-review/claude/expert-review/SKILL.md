@@ -46,7 +46,7 @@ Conduct a thorough code review of this project serving as a panel of expert prog
      - The "missing" test coverage isn't already covered by a test under a different name or in a different test file.
    - **Drop any finding you cannot re-confirm with a second read.** If uncertain, downgrade rather than drop — move it to Low with a note that it needs manual verification.
 
-## Output Format
+## Output
 
 Report findings as a prioritized list grouped by severity:
 

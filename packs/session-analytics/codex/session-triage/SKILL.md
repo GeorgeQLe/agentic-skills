@@ -22,7 +22,7 @@ Use `$analyze-sessions` instead when the user wants broad cross-session trends, 
 - Optional skill name or `SKILL.md` path.
 - Optional user correction text, error output, test failure, log excerpt, file path, commit, or issue description.
 
-## Workflow
+## Process
 
 1. Define the investigation scope:
    - Treat the current conversation and current working directory as the default scope.

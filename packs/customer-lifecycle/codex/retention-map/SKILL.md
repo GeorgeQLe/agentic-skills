@@ -16,7 +16,7 @@ Invoke as `$retention-map`.
 
 Map why customers return, what predicts churn, and how the product recovers at-risk users.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

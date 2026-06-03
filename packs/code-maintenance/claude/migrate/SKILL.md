@@ -51,7 +51,7 @@ Execute a structural migration, dependency upgrade, or large-scale codebase reor
    - Check for any remaining instances of the old pattern.
    - Report any manual follow-ups needed.
 
-## Output Format
+## Output
 
 ### Migration Summary
 - **Scope**: X files across Y packages

@@ -53,7 +53,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Check `command -v yt-dlp` before proceeding. If missing, tell the user what to install and stop.
 
-## Workflow
+## Process
 
 ### 1. Parse Arguments
 
@@ -363,7 +363,7 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 

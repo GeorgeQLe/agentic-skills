@@ -106,7 +106,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
    - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the Assumptions Checkpoint as presented, user corrections, and a summary of significant deviations from the original spec.
 
-## Output Format
+## Output
 
 Two files written:
 

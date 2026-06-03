@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `research/youtube/peer-benchmark-<slug>.md`
 - Optional peer raw metadata under `research/youtube/data/<peer-slug>/`
 
-## Workflow
+## Process
 
 1. Require a channel slug, handle, or channel audit path.
 2. Ensure raw upload metadata exists. If not, run `/youtube-channel-audit <channel> [--count N]`.
@@ -105,7 +105,7 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 

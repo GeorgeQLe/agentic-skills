@@ -20,7 +20,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 - **`--scan`**: scans the codebase for CSS custom properties, Tailwind config, theme files, and component patterns to reverse-engineer a DESIGN.md.
 - **`--update`**: reads an existing `DESIGN.md` alongside new spec changes and produces an updated version.
 
-## Workflow
+## Process
 
 1. **Resolve context**
    - Read `.agents/project.json`, `README.md`, `AGENTS.md`, `CLAUDE.md` when present.

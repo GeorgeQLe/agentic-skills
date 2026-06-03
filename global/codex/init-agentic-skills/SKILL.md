@@ -12,7 +12,7 @@ Invoke as `$init-agentic-skills`.
 
 Initialize this `agentic-skills` checkout on the current machine by installing global core skills for both Claude and Codex. Active installs are repo-managed directories that expose the canonical `SKILL.md` and exclude `archive/`; copied managed launchers resolve this checkout through `.agentic-skills-managed` provenance. Pinned installs intentionally point at `archive/<version>`. Keep domain packs project-local; use `$pack` from the target project when packs are needed.
 
-## Workflow
+## Process
 
 1. Parse `$ARGUMENTS`:
    - No args, `init`, `refresh`, or `sync`: run `scripts/init-agentic-skills.sh`, then run the first-run setup prompts in step 6 when the drift preferences are still unset.

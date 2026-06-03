@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Map how evaluators become customers, including the decision path from first value to commitment.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

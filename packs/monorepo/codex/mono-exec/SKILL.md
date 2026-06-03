@@ -29,7 +29,7 @@ The global `$exec` skill remains the source of truth for task selection, task do
 - `--phase`: execute all steps in the current phase, using cross-cutting serial work first and package-scoped waves where eligible.
 - `--pipeline`: execute the monorepo run flow and continue into `mono-ship` after successful post-integration guard validation.
 
-## Workflow
+## Process
 
 1. Run `mono-detect`.
    - If the project is not a detected pnpm workspace monorepo, delegate directly to `$exec`.
@@ -81,7 +81,7 @@ The global `$exec` skill remains the source of truth for task selection, task do
 - Without `turbo.json`: prefer `pnpm --filter <package> run <task>`.
 - Use `.agents/monorepo.json.dependency_graph` to order package work when Turborepo is absent.
 
-## Output Format
+## Output
 
 - **Detection:** monorepo detected or delegated to `$exec`.
 - **Execution mode:** serial delegation, guarded package lanes, or pipeline.

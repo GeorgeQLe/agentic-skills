@@ -14,7 +14,7 @@ Use this skill after the user has built and evaluated multiple UI layout variati
 
 Users with manually built variations (not from the `/ux-variations` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

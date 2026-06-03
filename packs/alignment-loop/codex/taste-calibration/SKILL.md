@@ -62,6 +62,6 @@ No files. Summary lives in conversation context.
 - Do not mutate the repo during context gathering
 - No assumptions manifest, no coverage checkpoint, no canonical sections
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After the summary: "Run `$destination-doc` to serialize this alignment."

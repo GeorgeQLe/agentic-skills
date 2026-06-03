@@ -15,7 +15,7 @@ Design the smallest playable test that can prove or disprove the game's core fun
 
 Write or update `research/game-prototype-test.md` with prototype scope, test questions, playtest script, observation checklist, success criteria, and cut/keep/amplify decisions.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

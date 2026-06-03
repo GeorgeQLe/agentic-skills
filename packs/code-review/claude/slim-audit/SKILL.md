@@ -84,7 +84,7 @@ Audit the codebase, documentation, and specs to identify concrete opportunities 
      - The reduction **preserves all existing functionality** unless the current behavior is a clear, demonstrable bug.
    - **Drop any finding you cannot re-confirm with a second read.** If uncertain, move it to "Needs Investigation" rather than recommending removal.
 
-## Output Format
+## Output
 
 ### Summary
 - **Total opportunities found**: N

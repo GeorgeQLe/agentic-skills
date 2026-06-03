@@ -170,7 +170,7 @@ Only fix mechanical, unambiguous issues:
 
 After fixing, re-run the audit to show remaining issues.
 
-## Output Format
+## Output
 
 Display directly to the user (no files written in audit mode):
 

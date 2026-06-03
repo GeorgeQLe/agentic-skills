@@ -43,7 +43,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Workflow
+## Process
 
 1. Require one primary channel and at least one peer channel.
 2. For each channel, ensure a current `$youtube-channel-audit` exists or run one with the same `--count`.

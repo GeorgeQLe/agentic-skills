@@ -42,7 +42,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-audience.md` with target segments, platform fit, genre familiarity, motivations, adjacent audiences, and risky assumptions to validate.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

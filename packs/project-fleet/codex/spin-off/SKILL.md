@@ -14,7 +14,7 @@ Use this skill when the user wants to extract a package, app, component family, 
 
 The workflow is one skill with a visibility gate, not separate closed-source and OSS skills. Private and public-OSS spin-offs share the same extraction mechanics; visibility changes the legal, naming, licensing, documentation, and scrub requirements.
 
-## Workflow
+## Process
 
 1. **Resolve intent and mode.**
    - Parse the target path, symbol, feature name, desired repo name, GitHub owner, and `--visibility private|public-oss`.

@@ -27,7 +27,7 @@ If either is missing, halt with a clear message:
 
 Do not proceed past this gate until both prerequisites exist.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

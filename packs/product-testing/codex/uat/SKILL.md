@@ -22,7 +22,7 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
 
 When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$consolidate-variations`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

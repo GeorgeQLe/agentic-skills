@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--comparables N`: target number of comparable videos to inspect. Default 8, max 20.
 - Optional `--angle search|browse|packaging|retention|format|all`: default `all`.
 
-## Workflow
+## Process
 
 1. Parse the concept into:
    - audience job: problem, desire, identity, fear, curiosity, or aspiration served.

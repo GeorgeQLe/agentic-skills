@@ -74,7 +74,7 @@ When a fleet contains many candidate apps, specs, repos, experiments, content it
 - Prefer runnable milestone progress over more broad expansion once any `active-build` item exists.
 - Do not let candidate count, scaffold count, or repo count stand in for shipped or runnable progress.
 
-## Workflow
+## Process
 
 1. **Read conventions first.** Load `AGENTS.md`, `CLAUDE.md`, or equivalent control-repo instructions. Treat project-specific safety rules as higher priority than this generic skill.
 2. **Find fleet state.** Look for `tasks/`, `docs/`, `scripts/`, manifest tables, status files, queue files, or project-local conventions. If no state exists, propose a minimal one before executing.
@@ -200,7 +200,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

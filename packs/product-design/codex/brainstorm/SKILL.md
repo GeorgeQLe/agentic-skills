@@ -12,7 +12,7 @@ Invoke as `$brainstorm`.
 
 Evaluate the current codebase and generate actionable suggestions that the user can take into `$feature-interview` for human/agent alignment, planning-destination triage, and follow-up specification or roadmap work.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

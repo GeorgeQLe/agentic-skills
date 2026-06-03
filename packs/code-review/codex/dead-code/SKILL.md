@@ -11,7 +11,7 @@ Invoke as `$dead-code`.
 
 Use this skill when the user wants to identify unused code, orphaned files, or stale dependencies for cleanup.
 
-## Workflow
+## Process
 
 1. Determine scope (specific package or entire project).
 2. Scan for unused exports by cross-referencing imports.
@@ -23,7 +23,7 @@ Use this skill when the user wants to identify unused code, orphaned files, or s
    - Re-read actual source code for every flagged item. Confirm: exports are genuinely unused (check barrel files, dynamic imports), orphaned files aren't consumed by tools/frameworks, stale dependencies aren't used implicitly (plugins, peer deps, CLI tools in scripts).
    - Drop any finding you cannot re-confirm on second read. If uncertain, move to "Needs Investigation" instead of "Safe to Remove."
 
-## Output Format
+## Output
 
 - **Unused Exports**: file, export name, last modified
 - **Orphaned Files**: files not imported anywhere

@@ -54,7 +54,7 @@ Systematically remove a service, package, module, or infrastructure component wi
    - Grep for any remaining references to the target.
    - Check for orphaned files (files that were only used by the target).
 
-## Output Format
+## Output
 
 ### Decommission Summary
 - **Target**: what was removed

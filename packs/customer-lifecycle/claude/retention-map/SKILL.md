@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Map why customers return, what predicts churn, and how the product recovers at-risk users.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

@@ -108,7 +108,7 @@ If the project has task docs, add a concise review note with:
 
 Commit and push if the user asked to ship or the active workflow requires it.
 
-## Output Format
+## Output
 
 In audit mode:
 

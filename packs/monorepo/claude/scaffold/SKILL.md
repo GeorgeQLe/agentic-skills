@@ -57,7 +57,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
    - Run `pnpm install` (or equivalent) to link the new package.
    - Run type-checking to verify the scaffold compiles.
 
-## Output Format
+## Output
 
 ### Scaffolded
 - **Type**: package/app

@@ -10,7 +10,7 @@ argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 
 Invoke as `$benchmark-agent-review <skill-or-run-path>`.
 
-Use this skill after `$benchmark-test-skill <skill>` when the deterministic benchmark passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next operator.
+Use this skill after `$benchmark-test-skill <skill>` when the deterministic benchmark passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next caller.
 
 This skill is a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
 
@@ -22,7 +22,7 @@ The primary object of review is the generated skill output, not the benchmark ha
 - Optional: `--reviewers codex,claude` to request named reviewer families when both outputs are available.
 - Optional: `--runs N` to request multiple independent review passes. Default to 3 when practical; use 1 when only one reviewer pass is available in the active environment.
 
-## Workflow
+## Process
 
 1. Resolve benchmark evidence:
    - If the input is a run directory, inspect that directory.
@@ -46,7 +46,7 @@ The primary object of review is the generated skill output, not the benchmark ha
 
 4. Grade each evaluated output with this rubric:
    - **Task selection clarity**: the selected work is unambiguous and traceable to fixture evidence.
-   - **Implementation specificity**: the output gives a next operator concrete enough steps to act without redoing basic discovery.
+   - **Implementation specificity**: the output gives a next caller concrete enough steps to act without redoing basic discovery.
    - **Validation strength**: proposed checks prove behavior or artifact quality, not just file existence or generic completion.
    - **Scope control**: the output respects the fixture and user constraints without becoming timid or incomplete.
    - **Next-route ergonomics**: the next command is correct for the runner mode and explains what it will do.
@@ -77,7 +77,7 @@ The primary object of review is the generated skill output, not the benchmark ha
    - Propose the exact contract, rubric, fixture, or evidence-capture behavior to add or tighten; avoid vague changes such as "update the skill" without naming the behavior that changes.
    - Include the validation command or contract-lint assertion that would prove the issue is fixed; a focused fixture rerun is acceptable only when it names the expected assertion or artifact-quality behavior.
    - When retained artifact text contains placeholder risk, monitoring, validation, or known-unknown sections such as `Not captured`, `Not specified`, `TBD`, `None`, or `N/A`, the remediation must identify the owner target that should reject or repair that placeholder and the validation check that would fail before the fix.
-   - Choose one definitive next route from the highest-impact verified remediation; do not leave the next operator to choose among generic options.
+   - Choose one definitive next route from the highest-impact verified remediation; do not leave the next caller to choose among generic options.
 
 ## Output
 

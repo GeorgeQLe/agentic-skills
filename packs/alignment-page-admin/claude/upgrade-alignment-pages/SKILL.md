@@ -1,7 +1,7 @@
 ---
 name: upgrade-alignment-pages
 description: Audit and explicitly upgrade generated alignment/*.html review pages to the current local alignment-page standard while preserving page-specific context
-type: utility
+type: ops
 version: v0.1
 argument-hint: "[--repo <path>] [--apply] [alignment/*.html...]"
 ---
@@ -25,7 +25,7 @@ Use this skill when a repository already has generated `alignment/*.html` review
 - The skill name alone is not apply intent; do not modify files unless the visible user request explicitly asks to apply or upgrade existing pages.
 - In audit/dry-run mode, inspect pages and report drift without creating, editing, moving, or deleting any files.
 
-## Workflow
+## Process
 
 1. Resolve scope:
    - Locate the project-root `alignment/` directory; stop if absent.

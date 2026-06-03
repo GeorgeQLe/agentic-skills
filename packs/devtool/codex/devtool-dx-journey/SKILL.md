@@ -15,7 +15,7 @@ Map the developer experience from discovery to production use.
 
 Write or update `research/devtool-dx-journey.md` with install, quickstart, first success, error recovery, production adoption, team rollout, and retention journeys. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual skill:
 

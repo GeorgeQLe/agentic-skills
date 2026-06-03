@@ -13,7 +13,7 @@ Define what evidence will prove the game is legible, compelling, replayable, and
 
 Write or update `research/game-playtest-metrics.md` with first-session completion, time-to-fun, replay rate, confusion points, quit points, clip/share moments, demo conversion, wishlist conversion, and retention metrics where relevant.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

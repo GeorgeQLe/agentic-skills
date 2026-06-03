@@ -260,7 +260,7 @@ Other options:
 - check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — resequence implementation if reconciliation changed priorities
 ```
 
-## Output Format
+## Output
 
 Findings are presented **interactively one at a time** via `AskUserQuestion`, not as a batch report. After all findings have been walked through, display a final summary:
 

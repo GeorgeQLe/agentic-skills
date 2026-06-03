@@ -12,7 +12,7 @@ Invoke as `$create-agentic-skill`.
 
 Use this skill when the user wants to add or update a skill in the `agentic-skills` repository itself. This is the repo-managed counterpart to `$create-local-skill`, which writes experimental user-local skills under `~/.codex/skills` or `~/.claude/skills`.
 
-## Workflow
+## Process
 
 1. **Confirm repository context.**
    - Verify the current repo is `agentic-skills` by checking for `init.sh`, `global/codex/`, and `global/claude/`.

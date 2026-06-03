@@ -11,7 +11,7 @@ Invoke as `$expert-review`.
 
 Use this skill when the user wants a code review of the whole project or a specific path, with findings validated against project documentation.
 
-## Workflow
+## Process
 
 1. Gather project context:
    - Read CLAUDE.md, README, and project config to understand conventions.
@@ -37,7 +37,7 @@ Use this skill when the user wants a code review of the whole project or a speci
    - Re-read the actual source code for every finding. Confirm: the code behaves as claimed, the issue isn't handled elsewhere (guard clause, middleware, caller), flagged dependencies actually exist/are missing, and "missing" test coverage isn't in a different test file.
    - Drop any finding you cannot re-confirm on second read. If uncertain, downgrade to Low with a note that it needs manual verification.
 
-## Output Format
+## Output
 
 Report findings grouped by severity:
 

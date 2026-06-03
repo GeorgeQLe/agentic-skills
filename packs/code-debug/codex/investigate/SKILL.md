@@ -11,7 +11,7 @@ Invoke as `$investigate`.
 
 Use this skill when the user reports a bug, error, unexpected behavior, or provides observations/hypotheses about what they think is wrong. Validates claims against the codebase and git history before tracing to root cause.
 
-## Workflow
+## Process
 
 1. Parse the error message, stack trace, bug description, or user observations/claims.
 2. **Select investigation strategy** from flags or auto-detection:
@@ -30,7 +30,7 @@ Use this skill when the user reports a bug, error, unexpected behavior, or provi
 7. Apply a minimal fix and write or update tests.
 8. Run tests to verify the fix and check for regressions.
 
-## Output Format
+## Output
 
 - **Strategy Used**: UI / Data / General (auto-detected or flag-forced), whether a pivot occurred
 - **User Claims Validated**: For each claim — verdict (confirmed/partially correct/not supported) and evidence. Skip if input was a plain error message.

@@ -11,7 +11,7 @@ Invoke as `$deploy`.
 
 Deploy the current project to the specified environment. Defaults to staging if no environment is provided. Maintains a deployment ledger (`tasks/deploys.md`) to track what was deployed when, enabling staleness detection. Use `--status` to view staleness without deploying.
 
-## Workflow
+## Process
 
 1. Determine the target environment from the user's request (default: staging). If `--status`, skip to step 7.
    - If production is specified, ask for explicit confirmation before proceeding.

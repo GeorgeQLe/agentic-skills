@@ -11,7 +11,7 @@ Invoke as `$trace`.
 
 Use this skill when the user wants to understand how a specific route, endpoint, or feature flows through the application stack.
 
-## Workflow
+## Process
 
 1. Identify the entry point from the user's description.
 2. Read CLAUDE.md for architecture context.
@@ -19,7 +19,7 @@ Use this skill when the user wants to understand how a specific route, endpoint,
 4. Map the data flow and types at each boundary.
 5. Identify concerns: N+1 queries, auth gaps, type mismatches, performance issues.
 
-## Output Format
+## Output
 
 - **Visual trace**: entry → middleware → handler → service → DB → response with file:line refs
 - **Layer-by-layer detail**: file, inputs, outputs, what it does

@@ -86,7 +86,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** installed (M sub-skills), **P skills** available via packs` (or `**N skills** matching "<keyword>"`).
 
-## Output Format
+## Output
 
 ### List mode (default — grouped by workflow stage)
 ```

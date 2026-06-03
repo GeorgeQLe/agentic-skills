@@ -155,7 +155,7 @@ If mode is `fix`:
 
 Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core assumptions affected). If any impact is Major, recommend running `/reconcile-research` (business-discovery pack) to propagate changes.
 
-## Output Format
+## Output
 
 **Audit mode** (default): Display directly to the user. No files written.
 

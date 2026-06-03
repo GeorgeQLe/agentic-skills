@@ -16,7 +16,7 @@ Invoke as `$lifecycle-metrics`.
 
 Define measurable signals for each lifecycle stage. This complements `$metrics`: use this skill for stage instrumentation and handoff clarity, then use `$metrics` for the broader success framework, targets, and business metrics.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

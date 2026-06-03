@@ -44,7 +44,7 @@ Commit and push all changes to GitHub grouped by feature/function.
    - Push the resulting commits to the primary branch. `commit-and-push-by-feature` means commit and push when the workflow succeeds.
    - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean, and whether push was performed or blocked.
 
-## Output Format
+## Output
 
 ```
 ## Commits

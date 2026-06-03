@@ -16,7 +16,7 @@ Invoke as `$expansion-map`.
 
 Map how retained customers grow into larger accounts, higher usage, referrals, or advocacy.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

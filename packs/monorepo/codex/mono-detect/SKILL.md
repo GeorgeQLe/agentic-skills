@@ -20,7 +20,7 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 
 `mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `$exec`, `$ship`, or global monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-exec`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
 
-## Workflow
+## Process
 
 1. Resolve the target repository root.
    - Use `$ARGUMENTS` as the root when provided.
@@ -47,7 +47,7 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
    - If detection passed and the user is checking lane safety, recommend `$mono-guard`.
    - If detection failed because this is not a pnpm monorepo, recommend `$mono-migrate` as the V2 advisory route.
 
-## Output Format
+## Output
 
 - **Detection:** detected, fresh, regenerated, or not detected.
 - **Workspace:** manager, build orchestrator, root path.

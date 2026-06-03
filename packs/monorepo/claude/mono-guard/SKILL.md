@@ -74,7 +74,7 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
    - Missing PR review evidence is `FAIL` because package lanes must not bypass consolidation review.
 5. Report violations without reverting, fixing, or editing task files.
 
-## Output Format
+## Output
 
 ```markdown
 ### Mono Guard Report

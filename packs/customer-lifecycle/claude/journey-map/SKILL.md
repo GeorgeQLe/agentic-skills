@@ -27,7 +27,7 @@ Create or update the canonical lifecycle overview. This is the top-level map for
 - `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `/icp` first.
 - Specs, competitive analysis, enterprise ICP, customer feedback, and codebase evidence are supporting context when present.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

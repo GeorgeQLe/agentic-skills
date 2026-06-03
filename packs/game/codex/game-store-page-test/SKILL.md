@@ -42,7 +42,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-store-page-test.md` with capsule assumptions, short description, trailer beats, screenshot plan, tag strategy, wishlist test, and fake-door or demo-page experiment.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

@@ -16,7 +16,7 @@ Use `/ux-variations` after this skill when the user wants multiple experience co
 
 When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode feeds directly into `/ux-variations --layout-mode` to explore multiple concrete visual approaches for the same content contract.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

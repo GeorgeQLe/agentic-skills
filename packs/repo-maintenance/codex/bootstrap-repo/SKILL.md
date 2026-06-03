@@ -65,7 +65,7 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - Only route directly to `$roadmap` or `$exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
    - The intended product sequence after reset is: `$icp` -> `$competitive-analysis` -> `$journey-map` -> `$ux-variations` -> `$ui-interview` -> build variants/prototypes via `$exec` or the applicable prototype-building route -> `$uat --variant-evaluation` -> `$consolidate-variations` -> `$research-roadmap --post-prototype` -> `$spec-interview` or `$roadmap`.
 
-## Output Format
+## Output
 
 ```markdown
 Bootstrapped repository

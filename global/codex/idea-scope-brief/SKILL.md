@@ -12,7 +12,7 @@ Invoke as `$idea-scope-brief`.
 
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-ICP: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select an ICP, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

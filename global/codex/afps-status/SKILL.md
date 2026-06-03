@@ -14,7 +14,7 @@ Use this skill when the user asks where a product project is in the AFPS workflo
 
 AFPS here means the product workflow from raw idea through concept scoping, ICP/research, lifecycle/growth planning, specs, roadmap/phase work, implementation, validation, and shipping. This is read-mostly reconciliation. It summarizes existing artifacts and recommends a route; it does not create a competing workflow state system.
 
-## Workflow
+## Process
 
 1. Resolve target project:
    - Default to the current working directory.
@@ -98,7 +98,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
 - This skill is normally read-only and should not create or modify tracked repository files.
 - If the user explicitly asks this skill to create or modify tracked files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

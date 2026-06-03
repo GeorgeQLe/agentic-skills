@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--comments N`: fetch up to N public top-level comments when public comment tooling/API access is available. Default 50, max 200.
 - Optional `--angle packaging|topic|retention|positioning`: default is to cover all four.
 
-## Workflow
+## Process
 
 1. Resolve every target into a video ID from watch URLs, Shorts URLs, youtu.be URLs, embed URLs, or raw 11-character IDs.
 2. Require `yt-dlp` for public metadata:

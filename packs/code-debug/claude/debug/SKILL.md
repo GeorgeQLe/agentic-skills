@@ -74,7 +74,7 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 
 8. **Report to the user** using the output format below.
 
-## Output Format
+## Output
 
 ### Problem
 - **Symptom**: What was reported

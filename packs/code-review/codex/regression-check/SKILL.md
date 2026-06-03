@@ -11,7 +11,7 @@ Invoke as `$regression-check`.
 
 Use this skill after completing a phase or major change to verify nothing is broken.
 
-## Workflow
+## Process
 
 1. Determine scope (specific package or entire project).
 2. Run type checking, lint, tests, and build in parallel where possible.
@@ -19,7 +19,7 @@ Use this skill after completing a phase or major change to verify nothing is bro
 4. Verify environment variable documentation.
 5. Compare results against baseline to distinguish new vs. pre-existing issues.
 
-## Output Format
+## Output
 
 - **Health Check Table**: status for each check category
 - **Failures**: detailed list with file paths

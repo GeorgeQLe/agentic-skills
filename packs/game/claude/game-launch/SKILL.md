@@ -40,7 +40,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-launch.md` with Steam launch plan, festival calendar, creator outreach, demo timing, trailer timing, Discord/community plan, wishlist targets, and launch discount strategy.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

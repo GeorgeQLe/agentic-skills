@@ -56,7 +56,7 @@ Follow a request or feature flow end-to-end through the application stack, mappi
    - Type mismatches between layers.
    - Performance bottlenecks (large queries, missing indexes, unnecessary joins).
 
-## Output Format
+## Output
 
 ### Trace: [route/feature name]
 

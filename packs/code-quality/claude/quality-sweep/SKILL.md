@@ -60,7 +60,7 @@ Use this skill when a project needs a behavior-preserving code quality cleanup c
    - Distinguish new failures from pre-existing baseline failures.
    - If validation fails in `fix` or `full`, fix the regression or stop and report the blocker.
 
-## Output Format
+## Output
 
 - **Summary:** mode, scope, tools/checks used, and overall cleanup potential.
 - **Safe to Fix:** concrete items with file references, evidence, proposed change, and validation path.

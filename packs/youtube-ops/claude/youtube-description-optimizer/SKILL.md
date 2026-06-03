@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--series <name>`: names the repeatable show or format for template work.
 - Optional `--compare-channel <slug>`: reuse channel evidence under `research/youtube/data/<slug>/`.
 
-## Workflow
+## Process
 
 1. Resolve the target and mode. If the target is ambiguous, infer from file existence and URL/video-ID shape before asking the user.
 2. Prefer existing evidence:

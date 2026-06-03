@@ -39,7 +39,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Workflow
+## Process
 
 1. Identify the creator, project slug, platforms, and existing evidence paths from the user request and repo context.
 2. Read `research/creator-platforms/capability-matrix.md` if it exists. If it is missing, recommend `$creator-platform-capability-matrix` before synthesis.

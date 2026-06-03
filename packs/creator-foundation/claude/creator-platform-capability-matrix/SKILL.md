@@ -43,7 +43,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Workflow
+## Process
 
 1. Identify the creator, project, and platforms in scope from the user request and repo context.
 2. Prefer free, open-source, owner-provided, and manual evidence paths. Do not require paid APIs, privileged platform programs, logged-in scraping, or access-control bypasses.

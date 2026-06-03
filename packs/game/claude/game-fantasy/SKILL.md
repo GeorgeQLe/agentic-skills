@@ -40,7 +40,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-fantasy.md` with the player fantasy, emotional pillars, vibe references, one-sentence hook, and fast first-session promise.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

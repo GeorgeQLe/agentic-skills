@@ -109,7 +109,7 @@ Given a bug report, error message, unexpected behavior, or user observations abo
    - Final item must be an acceptance criterion (run tests, verify behavior).
    - Order steps by dependency — changes that other steps depend on come first.
 
-## Output Format
+## Output
 
 ### Strategy Used
 - **Mode**: UI / Data / General (and whether auto-detected or flag-forced)

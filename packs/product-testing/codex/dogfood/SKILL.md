@@ -20,7 +20,7 @@ Dogfood is not UAT. Dogfood asks how the app owner can use the product in their 
 
 This is a human-run product adoption plan, not automated testing. Do not run the product, start servers, drive a browser, call APIs, create accounts, or perform the scenarios yourself.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

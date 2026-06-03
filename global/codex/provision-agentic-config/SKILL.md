@@ -15,7 +15,7 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 
 - Current repository files: `./CLAUDE.md` and `./AGENTS.md`
 
-## Workflow
+## Process
 
 1. Ensure `./CLAUDE.md` and `./AGENTS.md` exist.
 2. Insert the Claude policy block below verbatim into `CLAUDE.md`.

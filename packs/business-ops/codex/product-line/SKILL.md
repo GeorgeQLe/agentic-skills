@@ -1,7 +1,7 @@
 ---
 name: product-line
 description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
-type: operations
+type: ops
 version: v0.1
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 ---

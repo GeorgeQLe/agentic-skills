@@ -46,7 +46,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

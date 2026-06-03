@@ -52,7 +52,7 @@ Scan the codebase for unused code, orphaned files, and stale dependencies. Outpu
      - Commented-out code isn't an intentional reference or example kept for documentation purposes.
    - **Drop any finding you cannot re-confirm with a second read.** If uncertain, move it to "Needs Investigation" rather than "Safe to Remove."
 
-## Output Format
+## Output
 
 ### Unused Exports (high confidence)
 | File | Export | Last Modified |

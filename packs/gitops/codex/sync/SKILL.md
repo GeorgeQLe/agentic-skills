@@ -11,7 +11,7 @@ Invoke as `$sync`.
 
 Pull the latest changes from the remote repository and report status.
 
-## Workflow
+## Process
 
 1. Check current state:
    - Run `git status` to check for uncommitted changes.

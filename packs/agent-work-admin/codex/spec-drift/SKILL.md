@@ -19,7 +19,7 @@ Checks that specs and codebase tell the same story. Extracts verifiable claims f
 
 At least one spec file must exist in `specs/` (or `specs/{app}/`, `docs/specifications/`). If no specs exist, tell the user to run `$research-roadmap` first.
 
-## Workflow
+## Process
 
 ### 0. App Scope Resolution (Monorepo Support)
 

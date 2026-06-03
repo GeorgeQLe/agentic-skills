@@ -1,7 +1,7 @@
 ---
 name: skill-inventory
 description: Inventory downstream repository Claude and Codex skill installs from a control-repo manifest, classify managed local skill-copy drift against canonical agentic-skills sources, and produce report-only Markdown or JSON guidance without refreshing, deleting, or mutating downstream repos.
-type: utility
+type: ops
 version: v0.0
 argument-hint: "[--manifest <path>] [--repo <path>] [--format markdown|json]"
 ---
@@ -22,7 +22,7 @@ This skill is report-only.
 - Do not add an apply route in v1. Suggest exact follow-up commands only after the inventory report shows what is needed.
 - Only write control-repo artifacts: `tasks/skill-inventory.md`, `alignment/skill-inventory-{topic}.html`, task notes, prompt history, and normal shipping docs.
 
-## Workflow
+## Process
 
 1. Read repo instructions first: `AGENTS.md`, `CLAUDE.md`, or the local equivalent.
 2. Capture the visible `$skill-inventory` invocation under `prompts/skill-inventory/` before substantive work, following the repo prompt-history convention.

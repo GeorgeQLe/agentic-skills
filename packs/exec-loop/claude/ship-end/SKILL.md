@@ -49,7 +49,7 @@ Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` co
    - Branch and commit list
    - Confirm working tree is clean
 
-## Output Format
+## Output
 
 ```
 ## Session Summary

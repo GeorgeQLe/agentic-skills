@@ -11,7 +11,7 @@ Invoke as `$decommission`.
 
 Use this skill when the user wants to remove a service, package, module, or infrastructure component from the project.
 
-## Workflow
+## Process
 
 1. Identify the target to decommission.
 2. Audit all references: imports, configs, infrastructure, documentation.
@@ -20,7 +20,7 @@ Use this skill when the user wants to remove a service, package, module, or infr
 5. Execute removal: migrate consumers, delete target, clean up references.
 6. Verify: tests, build, grep for remaining references.
 
-## Output Format
+## Output
 
 - **Dependencies Resolved**: consumers migrated or updated
 - **Infrastructure Cleanup**: automated vs. manual required

@@ -43,7 +43,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Workflow
+## Process
 
 1. Require a channel URL or handle. Good target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 2. Run `$youtube-audit <channel> [--count N]` or follow its contract directly when the skill link is unavailable.
@@ -96,7 +96,7 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 

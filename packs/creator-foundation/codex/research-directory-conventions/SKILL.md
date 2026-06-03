@@ -1,7 +1,7 @@
 ---
 name: research-directory-conventions
 description: Reference standard for creator-media research directory layout — platform-scoped nesting, handle-scoped data, dated snapshots, archive-before-replace, and README indexing
-type: reference
+type: analysis
 version: v0.1
 invocation: sub-skill
 parent: creator-positioning

@@ -74,7 +74,7 @@ When a broad verified workflow gap routes to `/targeted-skill-builder` (skill-de
 - Do not put both Claude slash and Codex dollar commands in the final handoff. It is fine to mention the counterpart route in cross-tool analysis, but the final `Recommended next command:` must be one Claude-native command.
 - Distinguish explicit evidence from inference when labeling source, runner, project, or owner. Use language such as "explicitly says", "implies", or "not stated" rather than assigning runner ownership to sparse logs.
 
-## Output Format
+## Output
 
 Produce a structured report with:
 

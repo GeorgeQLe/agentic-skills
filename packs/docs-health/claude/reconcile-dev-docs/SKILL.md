@@ -95,7 +95,7 @@ In `fix` mode, apply only unambiguous development-doc changes:
 
 Ask before applying any ambiguous change. If already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask plainly in chat.
 
-## Output Format
+## Output
 
 ### Audit Mode
 

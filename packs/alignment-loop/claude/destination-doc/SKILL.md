@@ -58,6 +58,6 @@ Keep to 1-2 pages. Cut anything that belongs in a full spec.
 
 Commit and push the destination doc.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing: "Run `/vertical-slice-splitter research/destination-[topic].md` to split into issue cards."

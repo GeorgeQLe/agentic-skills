@@ -78,7 +78,7 @@ poketo kanban create-board --name "Board Name"
 poketo kanban create-list --board <board-id> --name "List Name"
 ```
 
-## Output Format
+## Output
 
 All commands output JSON. Parse the output and present results in a human-readable format:
 - For `boards`: show a table of board names and IDs

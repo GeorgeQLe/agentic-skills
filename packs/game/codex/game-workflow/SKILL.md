@@ -12,7 +12,7 @@ Invoke as `$game-workflow`.
 
 Use this skill when a project is a video game or playable entertainment product.
 
-## Workflow
+## Process
 
 1. Read `.agents/project.json` and confirm `project_type` is `game`.
 2. If the game pack is not enabled, run `scripts/pack.sh install game`.

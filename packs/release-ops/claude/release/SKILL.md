@@ -54,7 +54,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
    - Create a GitHub release? (ask for confirmation)
    - Trigger a deploy? (ask for confirmation)
 
-## Output Format
+## Output
 
 ### Release vX.Y.Z
 

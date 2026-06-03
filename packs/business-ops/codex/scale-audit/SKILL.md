@@ -19,7 +19,7 @@ Automated analysis that evaluates the codebase against `research/enterprise-icp.
 
 `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) must exist. If not, tell the user to run `$enterprise-icp` first.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

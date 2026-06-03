@@ -38,7 +38,7 @@ Determine which packages and apps in the monorepo are affected by current change
    - If Turborepo: suggest `turbo run test --filter=...[HEAD~1]` or equivalent.
    - Otherwise: list the test commands for each affected package.
 
-## Output Format
+## Output
 
 ### Directly Changed
 - `packages/foo` — 3 files changed (briefly what)

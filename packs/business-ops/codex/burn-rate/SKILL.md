@@ -18,7 +18,7 @@ Default stance: assume the user does not know infrastructure pricing or SaaS cos
 - **Hard**: None — can run on any codebase.
 - **Soft**: Read if they exist — `research/monetization.md`, `research/metrics.md`, `research/gtm.md`, `research/icp.md`, `CLAUDE.md`, `README`.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

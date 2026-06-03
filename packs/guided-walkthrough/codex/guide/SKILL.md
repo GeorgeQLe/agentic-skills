@@ -22,7 +22,7 @@ SDK wiring, generated assets, local commands, tests, audits, or CLI/API work
 with available authentication, stop and route it to `$exec`, `$ship`, or the
 specific implementation skill instead of producing click instructions.
 
-## Workflow
+## Process
 
 1. **Find the blocker:**
    - If `$ARGUMENTS` is non-empty, use the provided text as the task description.

@@ -14,7 +14,7 @@ Autopsy a stuck project, extract salvageable artifacts (lessons, valid specs, no
 
 This skill always desk-flips. If the user invoked it, the decision to restart is already made. Do not offer incremental migration or attempt to fix the old project in place.
 
-## Workflow
+## Process
 
 1. **Identify the stuck project.**
    - Accept an optional project path from the invocation arguments; default to the current working directory.

@@ -14,7 +14,7 @@ Use this skill when the user wants a narrow, durable workflow improvement from t
 
 This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/Codex history by default. Treat broad session analysis as optional evidence only when the user explicitly asks for it. Use `$session-triage` first when one immediate issue, correction, repo incident, or suspected skill failure still needs verification before a skill change is designed.
 
-## Workflow
+## Process
 
 1. Read `tasks/lessons.md` first when it exists. Extract only correction patterns relevant to the user's current request.
 2. Identify the narrow workflow gap:

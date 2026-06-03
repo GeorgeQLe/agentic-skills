@@ -11,7 +11,7 @@ Invoke as `$debug`.
 
 Investigate a reported problem, maintain a persistent debug changelog (`docs/debug-changelog.md`), and propose a fix that avoids repeating past solutions.
 
-## Workflow
+## Process
 
 1. Parse the error message, stack trace, or bug description.
 2. Capture environment context: current branch, recent commits, uncommitted changes.
@@ -24,7 +24,7 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 9. Apply the fix, write or update tests, and run them to verify.
 10. Prepend a structured entry to `docs/debug-changelog.md` with: date, symptom, category, severity, root cause, fix, test results, related entries, and systemic flag.
 
-## Output Format
+## Output
 
 - **Problem**: Symptom, new or recurring
 - **Root Cause**: file:line, what's wrong, when introduced

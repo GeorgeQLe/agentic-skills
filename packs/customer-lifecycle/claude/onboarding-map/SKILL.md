@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Create the stage-level onboarding plan that expands `research/journey-map.md`.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

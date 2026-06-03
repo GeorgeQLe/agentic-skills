@@ -268,7 +268,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Print the source/verification note status for each target file when a note was written or updated.
    - Never present benchmark harness temp paths such as `/tmp`, `/private/var`, or `/var/folders` as the user-facing artifact location; convert them to repo-relative target paths.
 
-## Output Format
+## Output
 
 Display confirmation directly to the user (the block itself is written to `./CLAUDE.md` and `./AGENTS.md`):
 

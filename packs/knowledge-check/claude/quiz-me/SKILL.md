@@ -1,7 +1,7 @@
 ---
 name: quiz-me
 description: Adversarial one-question-at-a-time questioning to verify deep reading comprehension of alignment pages, specs, or any document
-type: evaluation
+type: review
 version: v0.0
 argument-hint: "[file-path-or-glob]"
 ---
@@ -12,7 +12,7 @@ Adversarial comprehension testing. Reads a document silently, then grills the us
 
 This is not teaching. This is not alignment-building. This is a test. The user claims they read something; this skill finds out if that's true.
 
-## Workflow
+## Process
 
 ### Phase 1: Silent Document Ingestion
 

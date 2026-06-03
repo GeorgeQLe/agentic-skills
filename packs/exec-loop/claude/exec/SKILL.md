@@ -11,7 +11,7 @@ invocation: orchestrator
 
 Identify the next incomplete unit of work from the phased plan, build an execution plan, and enter plan mode for user approval before implementing. By default, plans **only the next single incomplete step**. If `$ARGUMENTS` contains `--phase`, plans the **entire next phase**.
 
-## Protocol
+## Process
 
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` -> `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Stop after the migration and tell the user to run `/ship` to package and push the task-doc split. Do **not** commit or push from `/exec`.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
@@ -148,7 +148,7 @@ Rules:
 - Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `/reconcile-dev-docs` (docs-health pack) or promoted into `tasks/todo.md`, not routed to `/guide` (guided-walkthrough pack).
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 
-## Workflow
+## Flow
 
 ```
 /exec                  → plans one step, enters plan mode, executes after approval

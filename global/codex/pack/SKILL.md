@@ -12,7 +12,7 @@ Invoke as `$pack`.
 
 Use this skill when the user wants to inspect, recommend, install, remove, or refresh project-local skill packs or individual skills from those packs.
 
-## Workflow
+## Process
 
 1. Parse `$ARGUMENTS`.
    - Treat commas as separators.

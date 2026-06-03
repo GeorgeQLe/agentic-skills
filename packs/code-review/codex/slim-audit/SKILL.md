@@ -11,7 +11,7 @@ Invoke as `$slim-audit`.
 
 Use this skill when the user wants to identify opportunities to reduce lines of code while maintaining or improving functionality, performance, and code quality.
 
-## Workflow
+## Process
 
 1. Read project context (CLAUDE.md, specs, docs, conventions).
 2. Determine scope (specific path from arguments, or entire project).
@@ -29,7 +29,7 @@ Use this skill when the user wants to identify opportunities to reduce lines of 
    - Re-read actual source code for every finding. Confirm duplicates are genuine, wrappers don't handle hidden edge cases, replacements are behaviorally equivalent, and redundant checks are truly redundant.
    - Drop any finding you cannot re-confirm on second read. If uncertain, move to "Needs Investigation."
 
-## Output Format
+## Output
 
 - **Summary**: total opportunities, estimated LOC reduction, risk breakdown
 - **High-Value Reductions**: low risk, high savings — with location, category, savings, and proposed approach

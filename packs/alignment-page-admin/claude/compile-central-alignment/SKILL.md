@@ -1,7 +1,7 @@
 ---
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
-type: utility
+type: ops
 version: v0.0
 ---
 

@@ -18,7 +18,7 @@ Expand a single UAT journey from `research/uat-plan.md` into detailed, step-by-s
 
 This skill does not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` from the product-testing pack.
 
-## Workflow
+## Process
 
 1. **Locate UAT plan**
    - Read `research/uat-plan.md`.
@@ -67,7 +67,7 @@ This skill does not generate UAT journeys. If no UAT plan exists, stop and recom
      - Check off the corresponding item in `tasks/manual-todo.md`.
      - If the result is `Fail` or `Blocked`, suggest follow-up routing: `$debug` for reproducible failures, `$guide` for external blockers, `$ux-variations` from the product-design pack for unclear acceptance criteria, or `$uat-guide next` for the next journey. Apply the Pack Availability Guard before recommending a skill from another pack.
 
-## Output Format
+## Output
 
 ```markdown
 ## UAT Guide: Journey N -- [Journey Name]

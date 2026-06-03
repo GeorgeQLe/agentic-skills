@@ -43,7 +43,7 @@ Use this skill for type hoisting, type barreling, shared `types/` directories, i
    - Inspect the diff for runtime changes: implementation logic, emitted values, schema definitions, package exports, route behavior, and component behavior should not change.
    - If verification fails, fix import/type issues without changing runtime behavior.
 
-## Output Format
+## Output
 
 When reporting completion, include:
 

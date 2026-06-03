@@ -12,7 +12,7 @@ Invoke as `$ship-end`.
 
 Use this skill when the user wants the current session wrapped up cleanly. If `$ARGUMENTS` contains `--save-conversation`, save the current conversation to `conversations/`. If `$ARGUMENTS` contains `--save-all-conversations`, export all past conversations to `conversations/`.
 
-## Workflow
+## Process
 
 1. Inspect `git status` and diffs.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.

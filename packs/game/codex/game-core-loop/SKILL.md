@@ -15,7 +15,7 @@ Break the game into repeatable loops.
 
 Write or update `research/game-core-loop.md` with the 10-second interaction loop, 1-minute action loop, 5-minute session loop, 30-minute progression loop, multi-day retention loop, reward cadence, and novelty sources.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

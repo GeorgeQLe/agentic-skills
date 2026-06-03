@@ -18,7 +18,7 @@ Use this skill when the user wants one report, a directory of reports, or all do
 - **Directory**: `/report-website path/to/reports/ [base route]` converts Markdown files under a directory into an index route plus one route per document.
 - **All documented outputs**: `/report-website --all-output-docs [base route]` discovers documented output Markdown files across the repo and converts them into a route-based report collection.
 
-## Workflow
+## Process
 
 1. **Resolve source and target**
    - Read the requested Markdown report path, directory, or `--all-output-docs` mode. If no path was provided, locate likely report files under `reports/`, `docs/`, `research/`, `benchmark/`, or the project root and ask only when there is no clear source.

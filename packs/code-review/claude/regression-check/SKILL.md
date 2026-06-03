@@ -45,7 +45,7 @@ Run a comprehensive health check across the project or monorepo to catch regress
 8. **Compare with baseline:**
    - If there's a CI status or previous test run to compare against, note new failures vs. pre-existing ones.
 
-## Output Format
+## Output
 
 ### Health Check Results
 

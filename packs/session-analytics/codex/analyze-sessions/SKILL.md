@@ -22,7 +22,7 @@ If the user asks about one current session, one mistake, one correction, one rep
 - Optional paths from the user. Accept history files, session directories, repository directories, or exported logs.
 - Optional filters such as repo path, project name, date range, command/skill name, exact phrase, or trend question.
 
-## Workflow
+## Process
 
 1. Confirm the request is broad enough for cross-session analysis:
    - Continue when the user asks for overall history, usage breakdowns, repeated prompts, recurring workflow issues, cross-tool changes, automation opportunities, or performance trends across multiple sessions.

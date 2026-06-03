@@ -11,7 +11,7 @@ Invoke as `$affected`.
 
 Use this skill when the user wants to understand the blast radius of their current changes in a monorepo.
 
-## Workflow
+## Process
 
 1. Determine the change set from git diff or a specified commit range.
 2. Read the monorepo config to understand the package graph.
@@ -20,7 +20,7 @@ Use this skill when the user wants to understand the blast radius of their curre
 5. Check for cross-cutting changes (root configs, shared packages).
 6. Recommend test commands for affected packages.
 
-## Output Format
+## Output
 
 - **Directly Changed**: packages with file changes
 - **Transitively Affected**: downstream dependents

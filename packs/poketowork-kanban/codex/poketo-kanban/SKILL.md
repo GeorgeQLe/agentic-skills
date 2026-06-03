@@ -34,7 +34,7 @@ Manage Poketo Work kanban boards directly from any session. All operations go th
    - Parse JSON output and display in human-readable format.
    - After mutations, re-fetch the board to show updated state.
 
-## Output Format
+## Output
 
 - For `boards`: table of board names and IDs
 - For `board <id>`: each list as a column header with cards as bullet points (include done status, due dates, starred)

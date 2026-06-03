@@ -16,7 +16,7 @@ Use `/ui-interview` first when the interface has not yet been specified page by 
 
 When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

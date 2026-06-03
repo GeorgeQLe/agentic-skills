@@ -13,7 +13,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
 
 `init.sh --uninstall` only removes repo-managed skill installs whose source is inside the agentic-skills repo, so user-authored real directories are safe from upstream sync.
 
-## Workflow
+## Process
 
 1. Parse `<skill-name>` and optional description from arguments. If missing, ask for:
    - Skill name (kebab-case)

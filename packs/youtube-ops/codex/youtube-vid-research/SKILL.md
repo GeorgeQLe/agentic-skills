@@ -49,7 +49,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--focus context|claims|summary|references`: default `context`.
 - Optional `--compare-channel <slug>`: reuse channel evidence under `research/youtube/data/<slug>/` when the user asks how the reference relates to a known channel.
 
-## Workflow
+## Process
 
 1. Resolve every target into a video ID from watch URLs, Shorts URLs, youtu.be URLs, embed URLs, or raw 11-character IDs.
 2. Require `yt-dlp` for public metadata:

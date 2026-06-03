@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Map the operational transaction flow after a customer decides to buy or upgrade.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

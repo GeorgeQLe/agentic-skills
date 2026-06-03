@@ -10,7 +10,7 @@ argument-hint: "[skill-name-or-topic]"
 
 Use this skill when the user wants to create or substantially redesign a skill but the desired behavior, scope, triggers, outputs, validation, or agent compatibility is not yet clear. This skill interrogates the user and turns the answers into a creation-ready skill brief. It does not create the skill itself; route to `/create-agentic-skill`, `/create-local-skill`, or `/targeted-skill-builder` after the brief is complete.
 
-## Workflow
+## Process
 
 1. **Identify the target skill idea.**
    - Treat the user's initial request as a draft, not a complete requirement.

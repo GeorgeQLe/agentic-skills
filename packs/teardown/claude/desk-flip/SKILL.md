@@ -68,7 +68,7 @@ This skill always desk-flips. If the user invoked it, the decision to restart is
    - After bootstrap, route product/app restarts into the research-first alignment workflow using the high-level concept seed as input: `/icp` to define who this is for, `/competitive-analysis` to map the market, `/journey-map` to map lifecycle and task flow, `/ux-variations` to explore experience directions, `/ui-interview` to specify interface details, then prototype work, `/uat --variant-evaluation`, and `/consolidate-variations` before `/spec-interview` or `/roadmap`.
    - If the business-discovery or customer-lifecycle packs are not enabled in the fresh repo, recommend `/pack install business-discovery` and `/pack install customer-lifecycle` before the research sequence.
 
-## Output Format
+## Output
 
 ```markdown
 Desk-flipped: <project name>

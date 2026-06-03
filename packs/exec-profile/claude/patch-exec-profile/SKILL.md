@@ -15,7 +15,7 @@ Audit and fill missing lane metadata in the `### Execution Profile` blocks of `t
 
 - `tasks/todo.md` must exist and contain at least one `### Execution Profile` block.
 
-## Protocol
+## Process
 
 1. **Read `tasks/todo.md`.** Find every phase with `Parallel mode: agent-team` or `Parallel mode: implementation-safe`.
 2. **For each lane in each such profile**, check presence and concreteness of:

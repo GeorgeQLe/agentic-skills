@@ -49,7 +49,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--target remotion|script|style-guide`: default `remotion`.
 - Optional `--compare <video URL or ID...>`: additional references to distinguish repeatable format rules from one-off choices.
 
-## Workflow
+## Process
 
 1. Resolve all video targets into video IDs from watch URLs, Shorts URLs, youtu.be URLs, embed URLs, or raw 11-character IDs.
 2. Require `yt-dlp` for public metadata:

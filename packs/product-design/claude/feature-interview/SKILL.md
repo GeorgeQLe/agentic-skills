@@ -18,7 +18,7 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
 
 Use `/feature-interview` especially after a production spec already exists and the user wants to add, adjust, or triage a smaller feature. In post-spec use, treat existing specs as the baseline contract: prefer a scoped add-on spec or a tightly bounded update to an existing spec over re-running `/spec-interview` for the whole product. Only route to `/spec-interview` when the existing spec is absent, obsolete, or too incomplete to support the new feature decision.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

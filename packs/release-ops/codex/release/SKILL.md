@@ -11,7 +11,7 @@ Invoke as `$release`.
 
 Use this skill when the user wants to cut a release for the project.
 
-## Workflow
+## Process
 
 1. Determine version bump from arguments or analyze commits to suggest one.
 2. Run pre-release checks:
@@ -25,7 +25,7 @@ Use this skill when the user wants to cut a release for the project.
 5. Commit and create annotated git tag.
 6. Ask about push, GitHub release, and deploy.
 
-## Output Format
+## Output
 
 - **Changelog**: features, fixes, breaking changes
 - **Files Updated**: version files and changelog

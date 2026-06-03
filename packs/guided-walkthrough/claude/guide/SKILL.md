@@ -62,7 +62,7 @@ specific implementation skill instead of producing click instructions.
    - After presenting the guide, tell the user: "When you've completed these steps, let me know and I'll mark the item done in `tasks/manual-todo.md`."
    - When the user confirms, check off the item (`- [x]`) in `tasks/manual-todo.md`.
 
-## Output Format
+## Output
 
 ```
 ## Guide: [Task title]

@@ -76,7 +76,7 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
    - `Depends on` references are valid lane names with no cycles.
    - No lane's `Scope` contains install/add commands (except the deps lane).
 
-## Output Format
+## Output
 
 ```markdown
 ### Mono Plan: Phase N

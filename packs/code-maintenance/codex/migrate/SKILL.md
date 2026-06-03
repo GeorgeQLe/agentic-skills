@@ -11,7 +11,7 @@ Invoke as `$migrate`.
 
 Use this skill when the user needs to perform a large-scale codebase reorganization, dependency upgrade, or pattern migration.
 
-## Workflow
+## Process
 
 1. Understand the migration target from the user's description.
 2. Audit the current state — find all instances of the old pattern.
@@ -19,7 +19,7 @@ Use this skill when the user needs to perform a large-scale codebase reorganizat
 4. Execute in verifiable batches, running type-checks and tests after each.
 5. Final verification: full test suite, build, and grep for remaining old patterns.
 
-## Output Format
+## Output
 
 - **Scope**: files and packages affected
 - **Changes Made**: batch-by-batch summary

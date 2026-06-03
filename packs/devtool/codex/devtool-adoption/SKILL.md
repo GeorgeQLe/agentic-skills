@@ -42,7 +42,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/devtool-adoption.md` with adoption loops, examples, templates, community channels, proof artifacts, and activation metrics. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual skill:
 

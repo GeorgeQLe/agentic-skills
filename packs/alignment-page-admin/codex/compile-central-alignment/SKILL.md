@@ -1,7 +1,7 @@
 ---
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
-type: utility
+type: ops
 version: v0.0
 ---
 
@@ -11,7 +11,7 @@ Invoke as `$compile-central-alignment`.
 
 Generate a browsable `alignment/index.html` linking to every alignment page in the current repository. Works in any repo with an `alignment/` directory.
 
-## Workflow
+## Process
 
 1. Locate `alignment/` at the project root; stop if absent.
 2. Scan `alignment/*.html` (exclude `index.html`), extract per-file: `<title>`, first `<h1>`, first `<p class="meta">`, modification date.

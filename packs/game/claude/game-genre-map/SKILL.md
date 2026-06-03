@@ -40,7 +40,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-genre-map.md` with expected conventions, common complaints, overused mechanics, underserved combinations, and player tolerance risks.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 

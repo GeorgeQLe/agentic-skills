@@ -10,7 +10,7 @@ argument-hint: "[package names, workspace scope, or --all]"
 
 Use this skill when a project needs dependency updates but should avoid newly published versions that may still be unstable or compromised. The default target is the newest package version whose publish timestamp is more than 8 days old. When the project uses npm, try to migrate it to pnpm first unless project constraints make that unsafe. Every mutation run must also leave behind package-manager configuration that enforces the same age gate for future installs.
 
-## Workflow
+## Process
 
 1. **Plan and scope the update.**
    - Inspect repository instructions, `package.json` files, workspace config, and lockfiles.

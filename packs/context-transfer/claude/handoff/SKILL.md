@@ -89,7 +89,7 @@ Generate a self-contained context document that captures exactly where you left 
 - [List of 3-5 files most relevant to the current work]
 ```
 
-## Output Format
+## Output
 
 After writing the handoff, report:
 - Path to the handoff document

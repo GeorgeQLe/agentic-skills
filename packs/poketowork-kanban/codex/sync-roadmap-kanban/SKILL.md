@@ -12,7 +12,7 @@ Invoke as `$sync-roadmap-kanban`.
 
 Reconcile the kanban board, roadmap docs, and codebase state so all three reflect the same reality.
 
-## Workflow
+## Process
 
 1. **Pull latest** — run the sync skill first. Stop on merge conflicts.
 

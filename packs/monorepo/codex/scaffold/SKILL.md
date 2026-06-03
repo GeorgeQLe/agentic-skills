@@ -13,7 +13,7 @@ Use this skill when the user wants to create a new package or app in their monor
 
 For product/app workflows, `$scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `$roadmap`/`$plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `$idea-scope-brief`, `$bootstrap-repo`, `$icp`, `$competitive-analysis`, `$journey-map`, `$ux-variations`, or `$ui-interview` directly to `$scaffold` unless the user explicitly asks to create a minimal shell first.
 
-## Workflow
+## Process
 
 1. Parse the type (package/app) and name from arguments.
 2. Check `.agents/project.json`. If it is missing, run or recommend `$pack recommend` and include the likely project type in the scaffold plan.
@@ -24,7 +24,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 7. Generate files, adapting the template with the new name.
 8. Run install and type-check to verify.
 
-## Output Format
+## Output
 
 - **Scaffolded**: type, name, location
 - **Files Created**: list of generated files

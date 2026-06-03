@@ -40,7 +40,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/devtool-monetization.md` with free/open-source stance, packaging, usage limits, team conversion, enterprise triggers, and unit economics. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual skill:
 

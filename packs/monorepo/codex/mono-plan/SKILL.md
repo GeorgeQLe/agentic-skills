@@ -13,7 +13,7 @@ Use this skill when the user needs to plan safe parallel work across a monorepo.
 
 Run after `/roadmap` sets `agent-team` or `implementation-safe` on a phase, before `/plan-phase` decomposes it.
 
-## Workflow
+## Process
 
 1. Detect monorepo structure (`pnpm-workspace.yaml`, `turbo.json`, `lerna.json`, `package.json` workspaces). Stop if not a monorepo.
 2. Enumerate packages, read each `package.json`, build internal dependency graph.
@@ -27,7 +27,7 @@ Run after `/roadmap` sets `agent-team` or `implementation-safe` on a phase, befo
    - **Consolidation/PR review:** add a final review lane or implementation step that reviews every package lane branch/PR before integration.
 8. Validate: disjoint Owns, all lockfiles excluded from write lanes, valid DAG, unique non-primary branches, and a consolidation/PR review gate.
 
-## Output Format
+## Output
 
 - **Monorepo tool and package count**
 - **Shared Chokepoints**: lockfiles, root configs, high-fan-out packages

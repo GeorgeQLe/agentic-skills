@@ -48,7 +48,7 @@ Two CLI tools are required. Neither needs API keys.
 
 Check `yt-dlp` before proceeding. The transcript dependency should be handled through a project-local `.venv` when it is missing.
 
-## Workflow
+## Process
 
 ### 1. Parse Arguments
 

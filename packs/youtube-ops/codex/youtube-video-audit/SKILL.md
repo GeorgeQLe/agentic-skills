@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Optional `--comments N`: fetch up to N public top-level comments when public comment tooling/API access is available. Default 50, max 200.
 - Optional `--compare-channel <slug>`: compare the video against existing raw channel evidence under `research/youtube/data/<slug>/`.
 
-## Workflow
+## Process
 
 ### 1. Resolve Target and Tools
 
@@ -258,7 +258,7 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 

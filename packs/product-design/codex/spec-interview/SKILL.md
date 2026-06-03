@@ -25,7 +25,7 @@ Invoke as `$spec-interview`.
 
 Use this skill when the user has a consolidated prototype and research context that needs to be turned into a complete production implementation specification. For half-formed product ideas, run `$idea-scope-brief` before this skill.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

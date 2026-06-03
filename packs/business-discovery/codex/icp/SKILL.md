@@ -41,7 +41,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 

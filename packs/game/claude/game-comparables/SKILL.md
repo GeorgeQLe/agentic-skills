@@ -40,7 +40,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 Write or update `research/game-comparables.md` with comparable titles, tags, price points, review signals, update cadence, creator traction, and the positioning frame `X meets Y, but Z`.
 
-## Next-Skill Routing
+## Next-Step Routing
 
 After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
 
