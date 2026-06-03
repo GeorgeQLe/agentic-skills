@@ -1,5 +1,17 @@
 # repo-glossary Changelog
 
+## v0.1 — 2026-06-03
+
+- Two-level glossary hierarchy: parent (`research/glossary.md`) + scoped (`research/{slug}/glossary.md`)
+- Child-inherits-parent model with explicit override (shadow) support
+- Three new term categories: shadowed terms, cross-path divergences, inheritance gaps
+- `confirmed-override` status for acknowledged shadows
+- Optional Scope column in parent glossary for multi-path repos
+- Hierarchy-aware write rules: promote, align, acknowledge shadow, reconcile divergence
+- Dual glossary format: parent (with Scope) and scoped/flat (without Scope)
+- Updated alignment gate string to cover all seven categories
+- Backward compatible: flat single-product repos unchanged
+
 ## v0.0 — 2026-06-03
 
 - Initial skill: glossary audit and reconciliation

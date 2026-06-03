@@ -86,7 +86,7 @@ function skillSpecificGates(skillName) {
   };
   if (rules[skillName]) return rules[skillName];
   if (skillName === "repo-glossary") {
-    return `**Glossary audit gates.** Render the four term categories (existing, missing, conflicting, stale) as separate gate sections. Each category must include per-term inline radio questions for the user to approve, edit, reject, or flag terms. Include an evidence matrix mapping proposed changes to source documents. The glossary approval gate must show term, proposed definition, source, category, and per-term action controls. ${outputGateDedup}`;
+    return `**Glossary audit gates.** Render the seven term categories (existing, missing, conflicting, stale, shadowed, cross-path divergences, and inheritance gaps) as separate gate sections. Each category must include per-term inline radio questions for the user to approve, edit, reject, or flag terms. Include an evidence matrix mapping proposed changes to source documents. The glossary approval gate must show term, proposed definition, source, category, origin (parent or scoped), and per-term action controls. For shadowed terms, show parent and scoped definitions side by side. For cross-path divergences, show each sibling definition with its slug. ${outputGateDedup}`;
   }
   if (["icp", "competitive-analysis", "customer-feedback", "journey-map", "conversion-map", "retention-map"].includes(skillName)) {
     return `**Discovery-specific gates.** Render evidence coverage, assumptions/confidence, recommended path, output-location/change-scope decisions, approval, and post-approval route as gates before creating or updating canonical discovery artifacts. ${outputGateDedup}`;

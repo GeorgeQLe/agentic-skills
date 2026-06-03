@@ -187,11 +187,17 @@ When a skill says "Follow the shared shipping contract convention", apply these 
 
 Research-producing skills maintain a shared project glossary at `research/glossary.md` (or `research/{slug}/glossary.md` in product-path mode).
 
-**Write-forward rule.** When a research skill introduces or encounters domain-specific terms, acronyms, or concept definitions that a reader outside the project would not know, include a `## Glossary Additions` section in the alignment page. This section contains a glossary approval gate with each proposed term, its definition, source tag, and category. The gate uses the standard inline question pattern: the user can approve, edit, reject, or flag each term. Only user-approved terms are appended to `research/glossary.md` during the confirmed-page write step. If `research/glossary.md` does not exist, create it with the standard glossary header before appending.
+**Write-forward rule.** When a research skill introduces or encounters domain-specific terms, acronyms, or concept definitions that a reader outside the project would not know, include a `## Glossary Additions` section in the alignment page. This section contains a glossary approval gate with each proposed term, its definition, source tag, and category. The gate uses the standard inline question pattern: the user can approve, edit, reject, or flag each term. Only user-approved terms are appended to the target glossary during the confirmed-page write step. If the target glossary does not exist, create it with the standard glossary header before appending. When multiple product paths are active, the alignment page glossary gate must ask the user whether each new term belongs in the parent or scoped glossary; default to the scoped glossary when the skill is writing to a scoped path.
 
 **Glossary entry format.** Each entry in `research/glossary.md` is a row in the Terms table: `| Term | Definition | Source | Category | Status |` where Source is the research doc that introduced the term, Category is one of business/tooling/workflow/technical/domain, and Status is `confirmed` (user-approved) or `proposed` (pending review by `/repo-glossary`).
 
 **Audit.** Run `/repo-glossary` (business-ops pack) periodically to audit the glossary for accuracy, conflicts, staleness, and missing terms across all research docs.
+
+**Hierarchy.** When multiple product paths exist, glossary files form a two-level hierarchy: `research/glossary.md` is the parent containing shared cross-path terms; `research/{slug}/glossary.md` is the scoped glossary for that product path. A scoped glossary inherits all parent terms. A term defined in a scoped glossary with the same name as a parent term overrides (shadows) the parent definition within that scope. Flat single-product repos with only `research/glossary.md` are unaffected.
+
+**Scoped write-forward.** Research skills writing to a scoped path append new terms to `research/{slug}/glossary.md`. Skills writing to flat `research/` or producing cross-path output append to `research/glossary.md`. The alignment page glossary gate must ask the user whether each new term belongs in the parent or scoped glossary. Default: scoped glossary when the skill is writing to a scoped path.
+
+**Parent Scope column.** The parent glossary adds an optional `Scope` column after Status: `| Term | Definition | Source | Category | Status | Scope |`. Values: `shared` (default — inherited by all paths) or comma-separated slugs. Scoped glossaries omit the Scope column. Repos with no product paths omit it entirely.
 
 ### Cross-Pack Routing
 

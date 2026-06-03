@@ -1,14 +1,14 @@
 ---
 name: repo-glossary
-description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, shadows, inheritance gaps, and cross-path divergences across research docs
+description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, and gaps across research docs
 type: analysis
-version: v0.1
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"tooling\", \"business\", \"workflow\"]"
 ---
 
 # Repo Glossary — Glossary Audit & Reconciliation
 
-Scans all research documents, CLAUDE.md, and docs for domain-specific terminology, then audits the shared glossary for accuracy, conflicts, staleness, shadows, inheritance gaps, and cross-path divergences. In multi-path repos, glossaries form a two-level hierarchy: a parent glossary (`research/glossary.md`) with shared terms and scoped glossaries (`research/{slug}/glossary.md`) that inherit parent terms and can override them. This is the look-back complement to the write-forward glossary convention: research skills add terms during their alignment flow, and this skill periodically reviews the full glossary hierarchy for drift and gaps.
+Scans all research documents, CLAUDE.md, and docs for domain-specific terminology, then audits the shared glossary at `research/glossary.md` for accuracy, conflicts, staleness, and missing terms. This is the look-back complement to the write-forward glossary convention: research skills add terms during their alignment flow, and this skill periodically reviews the full glossary for drift and gaps.
 
 ## Prerequisites
 
@@ -33,22 +33,12 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### 1. Load Sources
 
-Read every file in scope and extract terminology. Load glossary files hierarchy-aware:
+Read every file in scope and extract terminology:
 
-**Parent glossary** (`research/glossary.md`):
-- Always load when it exists, even when running in scoped mode
-- Parse all existing entries from the Terms table (Term, Definition, Source, Category, Status, and optional Scope)
-- Parse Acronyms table and Recently Added table
-- Tag each term with origin `parent`
-
-**Scoped glossary** (`research/{slug}/glossary.md`):
-- Load the target scoped glossary when running in product-path mode
-- Parse Terms table (Term, Definition, Source, Category, Status — no Scope column)
-- Tag each term with origin `scoped:{slug}`
-
-**Sibling glossaries** (cross-path audit mode):
-- When auditing across all product paths, also load `research/{other-slug}/glossary.md` for each active product path
-- Tag each sibling term with origin `scoped:{other-slug}`
+**Glossary file** (`research/glossary.md` or `research/{slug}/glossary.md`):
+- Parse all existing entries from the Terms table (Term, Definition, Source, Category, Status)
+- Parse Acronyms table
+- Parse Recently Added table
 
 **Research documents** (`research/*.md` or `research/{slug}/*.md`):
 - Extract terms that appear with inline definitions, parenthetical expansions, or "i.e." / "a.k.a." markers
@@ -83,19 +73,6 @@ Cross-reference the combined term index against the existing glossary to classif
 - Show the term, its glossary definition, and original source
 - Ask whether to keep, update, or remove
 
-**Shadowed terms** — same term defined in both parent and scoped glossary with different definitions:
-- Show parent definition and scoped definition side by side
-- Ask: intentional override (set `status: confirmed-override` in scoped) / promote scoped definition to parent / align scoped definition to match parent
-
-**Cross-path divergences** — same term defined differently in sibling scoped glossaries:
-- List each sibling's definition with its slug
-- Ask: all valid in context (each scope uses its own meaning) / reconcile to a shared parent definition / provide a new shared definition
-
-**Inheritance gaps** — hierarchy inconsistencies between parent and scoped glossaries:
-- Parent terms with Scope references to removed or archived product paths
-- Scope-restricted parent terms that conflict with their target scoped glossary's definition
-- Scoped terms that duplicate a parent term identically (candidate for removal from scoped glossary)
-
 If `$ARGUMENTS` specifies a focus area, filter findings to that category.
 
 ### 3. Present in Alignment Page
@@ -107,17 +84,12 @@ Build the alignment page with findings grouped by the four categories above. Eac
 **For conflicting terms**: per-term radio showing each conflicting definition — select canonical / Provide new / Needs clarification
 **For stale terms**: per-term radio — Keep / Remove / Needs clarification
 
-**For shadowed terms**: per-term radio — Intentional override (confirm shadow) / Promote scoped to parent / Align scoped to parent / Needs clarification
-**For cross-path divergences**: per-term radio showing each sibling definition — All valid in context / Reconcile to parent / Provide new shared definition / Needs clarification
-**For inheritance gaps**: per-term radio — Fix scope reference / Remove duplicate from scoped / Update conflicting definition / Needs clarification
-
 Include an evidence matrix mapping each proposed change to the source documents that support it.
 
 ### 4. Write Output
 
-After final compiled YAML approval, apply approved changes to the appropriate glossary file(s):
+After final compiled YAML approval, apply approved changes to `research/glossary.md` (or `research/{slug}/glossary.md`):
 
-**Base write rules** (apply to both parent and scoped glossaries):
 - Add approved new terms to the Terms table with `status: confirmed`
 - Update definitions for terms marked "Update definition"
 - Remove terms marked "Remove"
@@ -126,40 +98,9 @@ After final compiled YAML approval, apply approved changes to the appropriate gl
 - Update the Recently Added table with terms added in this run
 - Update the header metadata (last updated date, source count, term count)
 
-**Hierarchy-aware write rules:**
-- **Promote scoped → parent**: add the term to the parent glossary with `Scope: shared`, remove the term from the scoped glossary
-- **Align scoped → parent**: update the scoped definition to match the parent, or remove the scoped entry entirely
-- **Acknowledge shadow**: set `status: confirmed-override` in the scoped glossary entry; future audits skip the shadow warning for that term
-- **Reconcile cross-path divergence**: write the reconciled definition to the parent glossary, remove or update sibling scoped entries
-- **Fix inheritance gap**: remove stale Scope references from parent, remove duplicate scoped entries that match parent identically
-- **Add Scope column**: add the Scope column to the parent glossary only when the repo has multiple active product paths; omit for flat repos
+If `research/glossary.md` does not exist, create it with the standard glossary format before writing entries.
 
-If a target glossary does not exist, create it with the appropriate standard format before writing entries.
-
-**Standard parent glossary format** (multi-path repos — includes Scope column):
-
-```markdown
-# Glossary
-
-> Last updated: YYYY-MM-DD | Sources: [count] docs | Terms: [count]
-
-## Terms
-
-| Term | Definition | Source | Category | Status | Scope |
-|------|-----------|--------|----------|--------|-------|
-
-## Acronyms
-
-| Acronym | Expansion | Source |
-|---------|-----------|--------|
-
-## Recently Added
-
-| Term | Added | Source Skill | Approved In |
-|------|-------|-------------|-------------|
-```
-
-**Standard glossary format** (flat repos and scoped glossaries — no Scope column):
+**Standard glossary format:**
 
 ```markdown
 # Glossary
@@ -208,13 +149,9 @@ Use this staged workflow for glossary changes.
 
 ## Output
 
-### `research/glossary.md` (parent glossary)
+### `research/glossary.md` (or `research/{slug}/glossary.md`)
 
-The shared cross-path project glossary in the standard parent format shown in Section 4. Includes the Scope column only in multi-path repos.
-
-### `research/{slug}/glossary.md` (scoped glossary, when product-path mode is active)
-
-The scoped glossary for a specific product path, inheriting all parent terms. Uses the standard format without the Scope column.
+The shared project glossary in the standard format shown in Section 4.
 
 ## Task Classification
 
@@ -228,13 +165,12 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Read-only on research docs.** Extract terms from existing research — do not modify source documents. Only glossary files (`research/glossary.md` and `research/{slug}/glossary.md`) are writable.
+- **Read-only on research docs.** Extract terms from existing research — do not modify source documents. Only `research/glossary.md` is writable.
 - **Be specific.** "A thing" is not a term. "Pack — a collection of related skills installed together via pack.sh" is.
 - **Trace to source.** Every term must reference the specific document it was extracted from.
-- **Update, don't duplicate.** If a glossary already exists, merge new findings with existing entries. When updating, preserve confirmation status, `confirmed-override` status, and Recently Added history.
+- **Update, don't duplicate.** If `research/glossary.md` already exists, merge new findings with existing entries. When updating, preserve confirmation status and Recently Added history.
 - **Present before writing.** Never write output files until findings have been presented and validated via the alignment page.
 - **Respect write-forward.** Terms added by research skills during their alignment flow have `status: confirmed`. Do not downgrade confirmed terms to `proposed` during audit.
-- **Hierarchy consistency.** A scoped glossary entry with `status: confirmed-override` is an acknowledged shadow — do not re-flag it as a conflict in future audits. When promoting or reconciling terms, ensure the parent and scoped glossaries remain consistent.
 
 ## Alignment Page
 
