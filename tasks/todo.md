@@ -1,3 +1,26 @@
+## Current Task - Ship-End Deploy Routing Session Triage 2026-06-02
+
+**Goal:** Verify the correction that `$ship-end` should not have recommended deploy-skill installation for the animation walkthrough wrap-up, then record the lesson and recommended durable fix.
+
+### Plan
+
+- [x] Capture the visible `$session-triage` invocation under `prompts/session-triage/`.
+- [x] Verify the prior `$ship-end` final handoff against the active conversation, ship manifest, deploy contract, task history, and ship-end skill contracts.
+- [x] Record the correction in `tasks/lessons.md`.
+- [x] Correct the prior wrap-up artifacts so they no longer encode `$pack install deploy` as the contextual next command.
+- [x] Write the full session-triage alignment page.
+- [x] Validate, commit, and push the triage artifacts.
+
+### Review
+
+- Verified the correction: the prior `$ship-end` handoff over-routed to `$pack install deploy` because the deploy contract existed and the deploy skill was missing, but the shipped boundary did not require manual deployment.
+- Root cause is a `ship-end` contract gap: mirrored contracts do not require contextual manual-deploy relevance classification before invoking deploy or recommending deploy tooling.
+- Added the lesson "Do not turn deploy-skill absence into next work when deploy is not contextually needed."
+- Corrected the prior wrap-up task/history/manifest language so `none` is recorded as the contextual handoff for that completed ship, not `$pack install deploy`.
+- Wrote `alignment/session-triage-ship-end-deploy-routing.html` with the structured triage report and review gates.
+- Validation passed: HTML/script parse and required-content check, corrected-language `rg` check, `bash scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Recommended durable follow-up: `$targeted-skill-builder ship-end contextual deploy routing`.
+
 ## Current Task - Animation Code Walkthrough Ship-End 2026-06-02
 
 **Goal:** Ship the remaining animation code walkthrough alignment page, validation-generated showcase proof refresh, prompt history, and session wrap-up docs on `master`.
@@ -21,7 +44,7 @@
 - Validation passed: page-specific jsdom YAML-control check, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (12 files / 129 tests), `pnpm --dir apps/skills-showcase build`, `bash scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
 - Manual tasks: 1/5 complete; four deferred newsletter/Vercel setup checks remain unchecked.
 - Advisory tasks: `tasks/record-todo.md` is absent; `tasks/recurring-todo.md` has 2 unchecked advisory items.
-- Deploy not run: `tasks/deploy.md` exists, but `scripts/pack.sh which deploy` reports `deploy` is provided by the uninstalled `release-ops` pack. Next command is `$pack install deploy`.
+- Deploy not run because no manual deploy follow-up was contextually needed for this standalone alignment/proof-refresh boundary. `tasks/deploy.md` remains available for future deploy-relevant changes or explicit deploy requests.
 
 ## Current Task - Staged Research Alignment Workflow 2026-06-02
 

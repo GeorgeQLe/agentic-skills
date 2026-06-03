@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-02 — Ship-end deploy routing session triage
+
+- Verified the user correction that the prior `$ship-end` handoff should not have recommended `$pack install deploy`; the animation walkthrough boundary did not need a manual deploy follow-up.
+- Root cause: the mirrored `ship-end` contracts use deploy-contract existence as the deploy trigger and do not require contextual manual-deploy relevance classification before invoking deploy or recommending deploy tooling.
+- Recorded the correction in `tasks/lessons.md`, corrected the prior task/history/manifest artifacts so they no longer preserve deploy installation as the contextual next command, and wrote `alignment/session-triage-ship-end-deploy-routing.html`.
+- Recommended durable follow-up: `$targeted-skill-builder ship-end contextual deploy routing` to update mirrored Codex/Claude `ship-end` contracts and focused tests.
+
 ## 2026-06-02 — Animation code walkthrough ship-end
 
 - Shipped the standalone `apps/skills-showcase/alignment/animation-code-walkthrough.html` alignment page for the pack-drawer 16-step animation code walkthrough.
@@ -7,7 +14,7 @@
 - Captured the visible `$ship-end` invocation under `prompts/ship-end/` and recorded this wrap-up in `tasks/todo.md`, `tasks/roadmap.md`, and a quality-gate ship manifest.
 - Refreshed Skills Showcase generated proof assets after validation found stale recent-history data.
 - Verification passed for the page-specific jsdom YAML-control check, Skills Showcase typecheck, app test suite, production build, generated-data validation, and whitespace checks.
-- Deploy was not run because the existing deploy contract requires a `$deploy` skill, and `scripts/pack.sh which deploy` reports it is provided by the uninstalled `release-ops` pack.
+- Deploy was not run because no manual deploy follow-up was contextually needed for this standalone alignment/proof-refresh boundary; `tasks/deploy.md` remains available for future deploy-relevant changes or explicit deploy requests.
 
 ## 2026-06-02 — Staged research alignment workflow
 

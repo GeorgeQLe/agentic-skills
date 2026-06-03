@@ -1,3 +1,24 @@
+## Current Targeted Update: Ship-End Deploy Routing Session Triage 2026-06-02
+
+**Goal:** Investigate the corrected `$ship-end` handoff and route the durable fix without over-promoting deployment tooling.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/session-triage/`.
+- [x] The correction is verified against the prior ship manifest, final task/history notes, deploy contract, and `ship-end` contract.
+- [x] `tasks/lessons.md` records the deploy-context routing lesson.
+- [x] Prior wrap-up artifacts are corrected to avoid preserving `$pack install deploy` as the contextual next command.
+- [x] `alignment/session-triage-ship-end-deploy-routing.html` contains the structured triage report, evidence, root cause, and recommended fix.
+- [x] Validation passes and intended artifacts are committed and pushed on `master`.
+
+**Implementation Plan:**
+1. Capture the visible `$session-triage` invocation and read the active `session-triage` and `ship-end` contracts.
+2. Verify whether the prior `$pack install deploy` recommendation followed from the actual ship boundary or only from the deploy contract's existence.
+3. Record the correction in lessons and correct the prior task/history/manifest artifacts.
+4. Write the alignment-page report and validate it with targeted content checks, HTML/script parsing, generated-data freshness, and whitespace checks.
+5. Commit and push the triage artifacts on `master`.
+
+**Result:** Completed. The verified durable follow-up is `$targeted-skill-builder ship-end contextual deploy routing`.
+
 ## Current Targeted Update: Animation Code Walkthrough Ship-End 2026-06-02
 
 **Goal:** Ship the standalone animation code walkthrough alignment page and wrap-up artifacts with a verified local boundary, while recording the deploy-skill gap for the existing Skills Showcase deploy contract.

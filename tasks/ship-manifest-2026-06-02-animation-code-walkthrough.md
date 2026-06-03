@@ -50,13 +50,13 @@ Documentation/task checks:
 - `tasks/manual-todo.md`: 1 of 5 manual tasks complete; 4 deferred newsletter/Vercel tasks remain unchecked.
 - `tasks/recurring-todo.md`: 2 advisory recurring tasks remain unchecked.
 - `tasks/record-todo.md`: file absent, so there are 0 record advisory tasks to count.
-- `scripts/pack.sh which deploy`: `deploy` is provided by the uninstalled `release-ops` pack.
+- `scripts/pack.sh which deploy`: `deploy` is provided by the uninstalled `release-ops` pack. This was checked, but later session triage classified deploy tooling as not contextually needed for this boundary.
 
 ## Skipped Tests
 
 - Full repository layer1 was not run because the source behavior change is a single standalone HTML alignment page outside the shared skill-contract test surface; the app checks and targeted DOM test cover the changed executable behavior.
 - Benchmark reruns were not run because no benchmark fixtures, skill contracts, or benchmark outputs were changed by the walkthrough page.
-- Live Vercel route checks and deploy smoke tests were skipped because the `$deploy` skill is not installed and production/manual environment-variable checks require explicit human setup or confirmation.
+- Live Vercel route checks and deploy smoke tests were skipped because the shipped boundary did not require manual deploy follow-up and production/manual environment-variable checks require explicit human setup or confirmation.
 
 ## Adversarial Review
 
@@ -72,7 +72,7 @@ Generated-data review found legitimate stale proof output after recent history c
 ## Residual Risk
 
 - Browser rendering was not visually inspected. Risk is limited to layout polish for this standalone alignment file; DOM validation proves the dynamic controls initialize and compile expected YAML.
-- Deploy remains unperformed because `release-ops` is not installed. A later deploy path must install `deploy` and follow `tasks/deploy.md`, with production confirmation if it targets production.
+- Deploy remains unperformed because this boundary did not require manual deployment. `tasks/deploy.md` is a production/manual contract; deploy tooling should be installed only when a future deploy-relevant boundary or explicit deploy request makes that work necessary.
 
 ## Rollback Note
 
@@ -80,4 +80,8 @@ Revert the session commit to remove the walkthrough page rewrite, generated proo
 
 ## Next Command
 
-`$pack install deploy`
+`none`
+
+## Correction
+
+2026-06-02 session triage corrected the original next command. The prior `$pack install deploy` recommendation over-routed from the existence of `tasks/deploy.md` and the uninstalled deploy skill. The contextual handoff for this boundary should have been no deploy follow-up; the durable follow-up is a targeted `ship-end` contract update so future runs classify deploy relevance before recommending deploy tooling.

@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-06-02 - Do not turn deploy-skill absence into next work when deploy is not contextually needed
+
+- A `$ship-end` final route recommended `$pack install deploy` because `tasks/deploy.md` existed and the `deploy` skill was not installed, even though the shipped boundary was a standalone alignment page/proof refresh and did not need a manual deploy follow-up.
+- Before recommending deploy setup, classify whether the shipped boundary actually changes a deploy-relevant runtime surface, deploy script, schema, environment requirement, or manual launch state. The existence of `tasks/deploy.md` alone is not enough.
+- If deployment is not contextually needed, report deploy as not applicable or skipped and choose the next work from verified active project tasks; if no verified unblocked task remains, recommend `none` rather than installing deployment tooling.
+- If a deploy contract exists but targets production/manual setup, do not promote deploy tooling as the next command without an explicit deploy need and appropriate confirmation.
+
 ## 2026-06-01 — Verify stale unchecked tasks before recommending next work
 
 - A `$ship-end` final route recommended `$analyze-sessions` for "Animation Approval Signal History" because `tasks/todo.md` still showed unchecked items, but the research already existed in `alignment/analyze-sessions-animation-approval-signals.html` and `docs/history/animation-approval-signals-2026-06-01.md`.

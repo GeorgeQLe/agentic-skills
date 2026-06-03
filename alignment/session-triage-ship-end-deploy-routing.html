@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session Triage - Ship-End Deploy Routing</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+  --code-bg: #1c2128;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+main {
+  width: min(1040px, calc(100% - 32px));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 32px 0 56px;
+  overflow-wrap: break-word;
+}
+a { color: var(--accent); }
+h1, h2, h3 { color: #fff; line-height: 1.2; }
+h1 { margin: 0 0 8px; font-size: 1.8rem; }
+h2 { margin: 0; font-size: 1.35rem; color: var(--accent); }
+h3 { margin: 20px 0 8px; font-size: 1.05rem; }
+p { color: var(--text); }
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #e6edf3;
+}
+section {
+  margin: 24px 0;
+  padding: 22px;
+  background: rgba(22, 27, 34, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.hero { padding: 28px 0 10px; border: 0; background: transparent; }
+.muted { color: var(--text-muted); }
+.toc { background: var(--surface); }
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.toc-grid a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #11161d;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: min(320px, 100%);
+}
+.fb-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.fb-btn, button, .radio-option {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.fb-btn.active-up { border-color: var(--green); color: var(--green); background: rgba(63, 185, 80, .12); }
+.fb-btn.active-down { border-color: var(--red); color: var(--red); background: rgba(248, 81, 73, .12); }
+.fb-btn.active-clarify { border-color: var(--orange); color: var(--orange); background: rgba(210, 153, 34, .12); }
+.fb-panel {
+  display: none;
+  width: 100%;
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.fb-panel.show { display: block; }
+textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #0b1017;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+.yaml { min-height: 150px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.status-pill {
+  display: inline-block;
+  border: 1px solid var(--green);
+  color: var(--green);
+  background: rgba(63, 185, 80, .12);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.callout {
+  border-left: 3px solid var(--orange);
+  background: #1c2333;
+  padding: 12px 14px;
+  border-radius: 0 6px 6px 0;
+}
+.evidence-table { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  vertical-align: top;
+}
+th { background: var(--surface); color: #fff; text-align: left; }
+.gate {
+  background: #1c2333;
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+}
+.gate h3 { color: var(--purple); margin-top: 0; }
+.radio-stack { display: grid; gap: 8px; margin-top: 10px; }
+.radio-option { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.conditional-note { display: none; margin-top: 8px; }
+.conditional-note.show { display: block; }
+.status { color: var(--orange); min-height: 1.5em; }
+.compile-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #08111f; font-weight: 700; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 860px) {
+  main { width: min(100% - 24px, 1040px); padding-top: 22px; }
+  section { padding: 18px; }
+}
+@media (max-width: 560px) {
+  main { width: min(100% - 16px, 1040px); }
+  h1 { font-size: 1.4rem; }
+  .fb-row, .compile-actions { width: 100%; }
+  button, .fb-btn, .radio-option { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero" id="top">
+    <h1>Session Triage - Ship-End Deploy Routing</h1>
+    <p class="muted">Focused investigation of the correction that the previous <code>$ship-end</code> handoff should not have recommended installing deploy tooling.</p>
+    <p><span class="status-pill">Verification verdict: verified</span></p>
+  </section>
+
+  <section class="toc" id="toc">
+    <div class="section-head">
+      <h2>Table of Contents</h2>
+      <div class="feedback" data-section="Table of Contents"></div>
+    </div>
+    <div class="toc-grid">
+      <a href="#target">Target</a>
+      <a href="#issue">User-Identified Issue</a>
+      <a href="#verification">Verification Verdict</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#evidence">Evidence Matrix</a>
+      <a href="#root-cause">Root Cause</a>
+      <a href="#responsible-gap">Responsible Contract Gap</a>
+      <a href="#recommended-fix">Recommended Fix</a>
+      <a href="#validation">Validation Plan</a>
+      <a href="#confidence">Confidence And Gaps</a>
+      <a href="#gates">Approval Gates</a>
+      <a href="#compile">Compile &amp; Approve</a>
+    </div>
+  </section>
+
+  <section id="target">
+    <div class="section-head">
+      <h2>Target</h2>
+      <div class="feedback" data-section="Target"></div>
+    </div>
+    <p><strong>Scope:</strong> Current repository and active conversation around the just-completed <code>$ship-end</code> for commit <code>88adc2ca ship: animation walkthrough alignment page</code>.</p>
+    <p><strong>Primary evidence sources:</strong> active conversation correction, <code>.codex/skills/session-triage/SKILL.md</code>, <code>.codex/skills/ship-end/SKILL.md</code>, <code>packs/exec-loop/codex/ship-end/SKILL.md</code>, <code>packs/exec-loop/claude/ship-end/SKILL.md</code>, <code>tasks/ship-manifest-2026-06-02-animation-code-walkthrough.md</code>, <code>tasks/deploy.md</code>, <code>tasks/todo.md</code>, and <code>tasks/history.md</code>.</p>
+  </section>
+
+  <section id="issue">
+    <div class="section-head">
+      <h2>User-Identified Issue</h2>
+      <div class="feedback" data-section="User-Identified Issue"></div>
+    </div>
+    <div class="callout">
+      <p>The user corrected the final handoff: there was no need to deploy, and the agent should have detected that contextually instead of recommending <code>$pack install deploy</code>.</p>
+    </div>
+  </section>
+
+  <section id="verification">
+    <div class="section-head">
+      <h2>Verification Verdict</h2>
+      <div class="feedback" data-section="Verification Verdict"></div>
+    </div>
+    <p><strong>Verdict:</strong> verified.</p>
+    <p>The previous final response and committed wrap-up artifacts treated missing deploy tooling as the next work item. The actual ship boundary was a standalone alignment page, generated proof refresh, prompt log, and task/history docs. Existing project history already shows comparable wrap-ups where deploy was explicitly skipped as not applicable or not confirmed, despite <code>tasks/deploy.md</code> existing.</p>
+    <p>The active Codex <code>ship-end</code> contract explains why the mistake happened: it says that if a deploy contract exists, continue to deploy. It does not require a deploy-relevance classification before invoking deploy or before recommending deploy tooling as the next command.</p>
+  </section>
+
+  <section id="timeline">
+    <div class="section-head">
+      <h2>Timeline</h2>
+      <div class="feedback" data-section="Timeline"></div>
+    </div>
+    <ol>
+      <li>User invoked <code>$ship-end</code> to wrap up the current session.</li>
+      <li>The agent shipped commit <code>88adc2ca</code> containing the walkthrough page, generated proof data, prompt history, task docs, and a ship manifest.</li>
+      <li>During wrap-up, the agent checked <code>tasks/deploy.md</code> and <code>scripts/pack.sh which deploy</code>.</li>
+      <li>Because <code>deploy</code> was provided by the uninstalled <code>release-ops</code> pack, the agent recommended <code>$pack install deploy</code>.</li>
+      <li>User corrected that no deploy was needed and that the agent should have selected the next step contextually.</li>
+      <li>This triage verified the correction, updated <code>tasks/lessons.md</code>, and corrected the prior task/history/manifest artifacts.</li>
+    </ol>
+  </section>
+
+  <section id="evidence">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix"></div>
+    </div>
+    <div class="evidence-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Claim</th>
+            <th>Evidence</th>
+            <th>Inference</th>
+            <th>Confidence</th>
+            <th>Decision Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The previous handoff over-routed to deploy tooling.</td>
+            <td><code>tasks/ship-manifest-2026-06-02-animation-code-walkthrough.md</code> originally ended with <code>$pack install deploy</code>; <code>tasks/todo.md</code> recorded the same next command.</td>
+            <td>The final recommendation was based on missing deploy skill availability rather than deploy necessity for the shipped boundary.</td>
+            <td>High</td>
+            <td>Correct the prior artifacts and route a contract fix.</td>
+          </tr>
+          <tr>
+            <td>The shipped boundary did not need a manual deploy follow-up.</td>
+            <td>Commit <code>88adc2ca</code> changed a standalone alignment page, generated proof data, prompt history, task docs, history, and a ship manifest. No deployment script, schema, environment variable, auth path, or production launch state changed.</td>
+            <td>A manual deploy step or deploy-skill installation was not the primary next work item.</td>
+            <td>High</td>
+            <td>Future <code>ship-end</code> runs should classify deploy relevance before invoking or routing to deploy.</td>
+          </tr>
+          <tr>
+            <td>The existing deploy contract alone is not enough to imply deployment.</td>
+            <td><code>tasks/deploy.md</code> targets the live Skills Showcase/Vercel deployment and includes production/manual environment checks. Project history includes prior entries where deploy was skipped despite this contract because production confirmation or manual setup was not applicable.</td>
+            <td>The contract is a deploy procedure when deploy is needed, not proof that every wrap-up needs deploy.</td>
+            <td>High</td>
+            <td>Add contextual deploy gating to <code>ship-end</code>.</td>
+          </tr>
+          <tr>
+            <td>The responsible contract gap exists in mirrored <code>ship-end</code> contracts.</td>
+            <td>Codex and Claude pack contracts say to continue when <code>deploy.md</code> or <code>tasks/deploy.md</code> exists. They do not ask the agent to classify whether the boundary requires manual deploy.</td>
+            <td>The skill contract encourages the bad decision path, so a durable fix should update both mirrors.</td>
+            <td>High</td>
+            <td>Route to <code>$targeted-skill-builder</code> for a narrow mirrored contract update.</td>
+          </tr>
+          <tr>
+            <td>A lesson update is required.</td>
+            <td>Project instructions say after any user correction, update <code>tasks/lessons.md</code>. This session added a lesson for deploy-context routing.</td>
+            <td>The correction is repeatable and now documented for future agents.</td>
+            <td>High</td>
+            <td>Keep the lesson in the shipping boundary.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="root-cause">
+    <div class="section-head">
+      <h2>Root Cause</h2>
+      <div class="feedback" data-section="Root Cause"></div>
+    </div>
+    <p><strong>Root cause:</strong> weak output and routing contract around deploy relevance. The <code>ship-end</code> deploy step uses deploy-contract existence as the trigger and the next-step rules allow deploy status to become primary next work. There is no required evidence gate that asks whether the just-shipped boundary actually needs manual deployment, production confirmation, service dashboard work, schema/env setup, or smoke testing.</p>
+    <p>The agent then compounded the gap by treating the missing <code>deploy</code> skill as a blocker to resolve instead of checking whether deployment was needed at all.</p>
+  </section>
+
+  <section id="responsible-gap">
+    <div class="section-head">
+      <h2>Responsible Contract Gap</h2>
+      <div class="feedback" data-section="Responsible Contract Gap"></div>
+    </div>
+    <p><strong>Responsible contract:</strong> <code>ship-end</code>, mirrored in <code>packs/exec-loop/codex/ship-end/SKILL.md</code> and <code>packs/exec-loop/claude/ship-end/SKILL.md</code>. The project-local generated roots share the same deploy trigger issue, though they also show unrelated local-install drift around newer save-conversation arguments.</p>
+    <p><strong>Not responsible:</strong> <code>session-triage</code> is adequate for this investigation. <code>tasks/deploy.md</code> is a deploy procedure, not a next-step selector.</p>
+  </section>
+
+  <section id="recommended-fix">
+    <div class="section-head">
+      <h2>Recommended Fix</h2>
+      <div class="feedback" data-section="Recommended Fix"></div>
+    </div>
+    <p><strong>Recommended next skill:</strong> <code>$targeted-skill-builder ship-end contextual deploy routing</code>.</p>
+    <p><strong>Files to change in that follow-up:</strong></p>
+    <ul>
+      <li><code>packs/exec-loop/codex/ship-end/SKILL.md</code></li>
+      <li><code>packs/exec-loop/claude/ship-end/SKILL.md</code></li>
+      <li>Potentially generated/project-local refreshed roots after the pack-source fix, without committing generated roots unless the task explicitly includes install hygiene.</li>
+      <li>Focused layer1 contract coverage for deploy relevance and next-command selection.</li>
+    </ul>
+    <p><strong>Proposed behavior text:</strong></p>
+    <pre><code>Before invoking deploy or recommending deploy tooling, classify manual deploy relevance from the exact ship manifest and diff. A deploy contract existing is not sufficient by itself. Manual deploy is applicable only when the boundary changes deploy-relevant runtime behavior, deployment configuration/scripts, schema or environment requirements, live smoke-test obligations, or when the user explicitly requested deploy. If the deploy contract targets production/manual setup and no explicit deploy need or confirmation exists, report deploy as not applicable or skipped and do not recommend installing deploy tooling. If deploy is applicable and the deploy skill is missing, then recommend installing the owning deploy pack or skill.</code></pre>
+    <p><strong>Corrected contextual handoff for the previous ship:</strong> no deploy follow-up; <code>Recommended next command: none</code>.</p>
+  </section>
+
+  <section id="validation">
+    <div class="section-head">
+      <h2>Validation Plan</h2>
+      <div class="feedback" data-section="Validation Plan"></div>
+    </div>
+    <p>For this triage artifact, validate by checking prompt capture, the lesson entry, corrected task/history/manifest language, required report sections, HTML/script parse, generated-data freshness after history changes, and whitespace.</p>
+    <p>For the future <code>targeted-skill-builder</code> contract update, add focused tests that cover:</p>
+    <ul>
+      <li>A docs/prompt-history/alignment-only ship with <code>tasks/deploy.md</code> present must not recommend deploy tooling.</li>
+      <li>A deploy-relevant app/source/schema/config change with an explicit deploy need may recommend deploy or deploy-skill installation when missing.</li>
+      <li>Production deploy is never recommended without explicit confirmation.</li>
+      <li>Claude and Codex <code>ship-end</code> mirrors carry equivalent deploy-relevance rules.</li>
+    </ul>
+  </section>
+
+  <section id="confidence">
+    <div class="section-head">
+      <h2>Confidence And Evidence Gaps</h2>
+      <div class="feedback" data-section="Confidence And Evidence Gaps"></div>
+    </div>
+    <p><strong>Confidence:</strong> high. The active conversation correction, prior committed artifacts, deploy contract, task history, and mirrored ship-end contracts all point to the same failure mode.</p>
+    <p><strong>Evidence gaps:</strong> no broad cross-session recurrence analysis was run because the correction was immediate and already verified narrowly. <code>$analyze-sessions</code> is not needed unless the user wants frequency or trend evidence across many ship-end runs.</p>
+    <p><strong>Recommended next skill:</strong> <code>$targeted-skill-builder</code>, not <code>$analyze-sessions</code>.</p>
+  </section>
+
+  <section id="gates">
+    <div class="section-head">
+      <h2>Approval Gates</h2>
+      <div class="feedback" data-section="Approval Gates"></div>
+    </div>
+    <div class="gate" data-gate="evidence-coverage">
+      <h3>Gate: Evidence Coverage</h3>
+      <p>Does the triage evidence sufficiently verify the deploy-routing correction?</p>
+      <div class="radio-stack" data-question="Evidence Coverage">
+        <label class="radio-option"><input type="radio" name="q1" value="Yes - evidence verifies the correction"> Yes - evidence verifies the correction</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Needs more evidence"> Needs more evidence</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q1" placeholder="Optional notes or missing evidence"></textarea>
+      </div>
+    </div>
+    <div class="gate" data-gate="recommended-path">
+      <h3>Gate: Recommended Path</h3>
+      <p>Should the durable fix be routed to a targeted <code>ship-end</code> contract update?</p>
+      <div class="radio-stack" data-question="Recommended Path">
+        <label class="radio-option"><input type="radio" name="q2" value="Yes - route to targeted-skill-builder"> Yes - route to targeted-skill-builder</label>
+        <label class="radio-option"><input type="radio" name="q2" value="No - no contract change needed"> No - no contract change needed</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q2" placeholder="Optional notes or alternate route"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="compile">
+    <div class="section-head">
+      <h2>Compile &amp; Approve</h2>
+      <div class="feedback" data-section="Compile"></div>
+    </div>
+    <p class="muted">Use feedback YAML for revision requests before final approval. Use final answers after all required gates are answered.</p>
+    <div class="compile-actions">
+      <button id="compile-feedback">Compile Feedback YAML</button>
+      <button class="primary" id="compile-answers">Compile Answers</button>
+      <button id="copy-final">Copy YAML</button>
+    </div>
+    <p class="status" id="compile-status">Required questions remaining: 2</p>
+    <textarea class="yaml" id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+const ALIGNMENT_PAGE = "alignment/session-triage-ship-end-deploy-routing.html";
+const questionNames = ["q1", "q2"];
+
+function yamlEscape(value) {
+  return String(value ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, "\\\"")
+    .replace(/\n/g, "\\n");
+}
+
+function collectQuestionAnswers() {
+  return questionNames.map((name) => {
+    const input = document.querySelector(`input[name="${name}"]:checked`);
+    const block = document.querySelector(`[data-for="${name}"]`);
+    const stack = document.querySelector(`input[name="${name}"]`)?.closest("[data-question]");
+    const gate = stack?.closest(".gate");
+    return {
+      name,
+      section: stack?.dataset.question || name,
+      gateType: gate?.dataset.gate || name,
+      answer: input?.value || "",
+      notes: block?.value || "",
+      answered: Boolean(input)
+    };
+  });
+}
+
+function selectedFeedback() {
+  return Array.from(document.querySelectorAll(".feedback")).flatMap((fb) => {
+    const selected = fb.dataset.value;
+    if (!selected) return [];
+    const notes = fb.querySelector(".fb-notes")?.value || "";
+    const action = selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval";
+    return [{
+      section: fb.dataset.section || "Unknown section",
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes,
+      requested_agent_action: action
+    }];
+  });
+}
+
+function feedbackYaml(items) {
+  const unanswered = collectQuestionAnswers().filter(q => !q.answered).map(q => q.section);
+  const feedbackItems = items.length ? items : selectedFeedback();
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "feedback_status: revision-request",
+    "approval_status: not-approved",
+    "unanswered_required_questions:",
+    ...unanswered.map(q => `  - "${yamlEscape(q)}"`),
+    "section_feedback:",
+    ...feedbackItems.map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n"))
+  ];
+  if (feedbackItems.length === 0) lines.push("  []");
+  return lines.join("\n");
+}
+
+function answersYaml() {
+  const answers = collectQuestionAnswers();
+  const feedback = selectedFeedback();
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "approval_status: ready-for-agent-review",
+    "gate_answers:",
+    ...answers.map(a => [
+      `  - section: "${yamlEscape(a.section)}"`,
+      `    gate_type: "${yamlEscape(a.gateType)}"`,
+      `    status: "${a.answer === "Other / None of the above" ? "other" : a.answer === "Need clarification" ? "needs-clarification" : "answered"}"`,
+      `    answer: "${yamlEscape(a.answer)}"`,
+      `    notes: "${yamlEscape(a.notes)}"`
+    ].join("\n")),
+    "section_feedback:",
+    ...(feedback.length ? feedback.map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n")) : ["  []"])
+  ];
+  return lines.join("\n");
+}
+
+async function copyText(text, target) {
+  try {
+    await navigator.clipboard.writeText(text);
+    if (target) target.textContent = "Copied YAML to clipboard.";
+  } catch (_) {
+    if (target) target.textContent = "Clipboard blocked. YAML is selected for copying.";
+    const area = document.getElementById("compiled-yaml");
+    if (area) area.select();
+  }
+}
+
+function updateStatus() {
+  const remaining = collectQuestionAnswers().filter(q => !q.answered);
+  document.getElementById("compile-status").textContent = `Required questions remaining: ${remaining.length}`;
+  return remaining;
+}
+
+document.querySelectorAll("input[type=radio]").forEach(input => {
+  input.addEventListener("change", () => {
+    const note = document.querySelector(`[data-for="${input.name}"]`);
+    if (note) note.classList.add("show");
+    updateStatus();
+  });
+});
+
+document.querySelectorAll(".feedback").forEach((fb) => {
+  const section = fb.dataset.section || "Section";
+  fb.innerHTML = `
+    <div class="fb-row">
+      <button type="button" class="fb-btn" data-value="up" title="Approve section">Thumbs up</button>
+      <button type="button" class="fb-btn" data-value="down" title="Flag concern">Thumbs down</button>
+      <button type="button" class="fb-btn" data-value="clarify" title="Need clarification">Clarify</button>
+    </div>
+    <div class="fb-panel">
+      <textarea class="fb-notes" placeholder="Section feedback for ${section}"></textarea>
+      <div class="compile-actions">
+        <button type="button" class="local-feedback">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+      </div>
+      <textarea class="yaml local-yaml" readonly></textarea>
+    </div>
+  `;
+  const panel = fb.querySelector(".fb-panel");
+  fb.querySelectorAll(".fb-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const value = btn.dataset.value;
+      fb.dataset.value = fb.dataset.value === value ? "" : value;
+      fb.querySelectorAll(".fb-btn").forEach(b => {
+        b.classList.remove("active-up", "active-down", "active-clarify");
+      });
+      if (fb.dataset.value) {
+        btn.classList.add(`active-${value}`);
+        panel.classList.add("show");
+      } else {
+        panel.classList.remove("show");
+      }
+    });
+  });
+  fb.querySelector(".local-feedback").addEventListener("click", () => {
+    const selected = fb.dataset.value;
+    if (!selected) return;
+    const item = {
+      section,
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes: fb.querySelector(".fb-notes").value || "",
+      requested_agent_action: selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval"
+    };
+    fb.querySelector(".local-yaml").value = feedbackYaml([item]);
+  });
+  fb.querySelector(".local-copy").addEventListener("click", () => {
+    const area = fb.querySelector(".local-yaml");
+    if (!area.value) fb.querySelector(".local-feedback").click();
+    copyText(area.value, document.getElementById("compile-status"));
+  });
+});
+
+document.getElementById("compile-feedback").addEventListener("click", () => {
+  const yaml = feedbackYaml([]);
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("compile-answers").addEventListener("click", () => {
+  const remaining = updateStatus();
+  if (remaining.length) {
+    const first = document.querySelector(`input[name="${remaining[0].name}"]`);
+    first?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const yaml = answersYaml();
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("copy-final").addEventListener("click", () => {
+  const area = document.getElementById("compiled-yaml");
+  copyText(area.value, document.getElementById("compile-status"));
+});
+
+updateStatus();
+</script>
+</body>
+</html>
