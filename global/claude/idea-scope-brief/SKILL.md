@@ -59,7 +59,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - riskiest unknowns
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
-4. **Interview until concept-ready**
+4. **Interview until idea-ready**
    - Ask 1 to 3 focused questions per turn.
    - Resolve only concept-level ambiguity:
      - what problem exists
@@ -78,7 +78,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Build pre-approval alignment preview**
    - Before writing any canonical `research/**/idea-brief.md`, `research/**/idea-brief-interview.md`, legacy flat `research/idea-brief-{slug}.md` variant, or `research/.progress.yaml`, build `alignment/idea-scope-brief-{topic}.html` as the review artifact.
-   - The HTML page must render the Idea/Concept Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates.
+   - The HTML page must render the Idea Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
    - Treat coverage-checkpoint confirmation as non-final; it only confirms the draft scope is ready to preview. Only final compiled YAML from the alignment page authorizes canonical writes.
    - Before compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved artifacts below have been written or updated.
