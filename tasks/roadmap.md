@@ -16,7 +16,7 @@
 - [x] Generated `ALIGNMENT-PAGE.md` bundles are regenerated from the canonical convention with no generator drift.
 - [x] Focused layer1 tests prove the semantic distinction, duplicate path-only visual combination rule, and preserved `gate_type` values for file-output decisions.
 - [x] Targeted alignment tests pass; broader layer1 verification was run and residual unrelated failures are documented in `tasks/todo.md`.
-- [ ] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+- [x] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
 
 **Implementation Plan:**
 1. Capture the visible invocation and record this execution plan in task docs.

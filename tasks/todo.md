@@ -16,7 +16,7 @@
 - [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
 - [x] Add or adjust focused layer1 assertions for semantic distinction, visual de-duplication, and preserved YAML gate types.
 - [x] Run targeted tests and `pnpm test:layer1`.
-- [ ] Inspect diffs, record review notes, commit, and push intended changes.
+- [x] Inspect diffs, record review notes, commit, and push intended changes.
 
 ### Review
 
@@ -28,6 +28,7 @@
 - Added layer1 coverage for the semantic distinction, duplicate path-only visual de-duplication, and preserved final YAML `gate_type` values for file-output decisions.
 - Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, `pnpm exec vitest run --project layer1 layer1/alignment-gates.test.ts`, `pnpm exec vitest run --project layer1 layer1/upgrade-alignment-pages.test.ts`, and `git diff --check`.
 - Broad verification was run with `pnpm test:layer1` from `tests/`; it failed on 5 residual layer1 files outside this diff: stale benchmark matrix/showcase demo expectations, the existing `idea-scope-brief` Claude/Codex wording mismatch already present in `HEAD`, macOS Bash 3 rejecting `declare -A` in `skill-inventory.sh`, and a broken local `rollup` symlink under `packs/poketowork-kanban/.../scripts/node_modules`.
+- Shipped on `master` in commit `c3f71e0b` (`fix(alignment): deduplicate output gate rendering`) and pushed to `origin/master`; the unrelated local `apps/skills-showcase/next-env.d.ts` modification remains unstaged.
 
 ## Current Task - Prototype Pack Flow Phase Refactor 2026-06-03
 
