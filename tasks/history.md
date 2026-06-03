@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-03 — Prototype pack flow phase refactor
+
+- Refactored `/prototype` pack/drawer orchestration so `PackFlowPhase` is the page-owned lifecycle authority, while `activePack` remains the drawer identity through collapse, sheet exit, layout morph-out, and elevation drop.
+- Removed page-owned lifecycle boolean state for sheet mounting/drawer closing/ref guarding; `BottomSheet.isOpen`, `PackOpener.isClosing`, and dismissability are derived from `phase`.
+- Added close-completion callbacks from `SealedPack` so the page advances `layout-morph-out -> drop-elevation -> sealed` and clears `activePack` only after the elevation-drop phase completes.
+- Updated the animation-machine debug runtime and regenerated `apps/skills-showcase/alignment/animation-state-machine.html` around `page.phase`, `page.activePack`, and derived page values.
+- Expanded `prototype-close-sequence.test.tsx` to prove the phase chain, active-pack lifetime, reset behavior, one-shot collapse handoff, close apex gate ordering, and source regression against old lifecycle state declarations.
+- Verification passed for focused close/debug tests, app typecheck, full app tests, production build, generated-data freshness after refresh, local `/prototype` HTTP 200, Safari route/title check, and whitespace. Automated browser interaction remained blocked by unavailable Browser/Computer Use tooling and disabled Safari JavaScript-from-Apple-Events.
+
 ## 2026-06-02 — Ship-end deploy routing session triage
 
 - Verified the user correction that the prior `$ship-end` handoff should not have recommended `$pack install deploy`; the animation walkthrough boundary did not need a manual deploy follow-up.

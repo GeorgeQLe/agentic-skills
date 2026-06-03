@@ -1,3 +1,35 @@
+## Current Task - Prototype Pack Flow Phase Refactor 2026-06-03
+
+**Goal:** Refactor `/prototype` pack/drawer orchestration so `PackFlowPhase` is the single lifecycle authority while `activePack` remains the active pack identity.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: The page lifecycle, `SealedPack` close callbacks, debug-machine runtime model, and close-sequence tests share one animation contract and need to be changed together in one working tree.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/exec/`.
+- [x] Inspect current `/prototype` page state, `SealedPack`, `PackOpener`, `BottomSheet`, debug runtime model, and close-sequence tests.
+- [x] Replace page-level lifecycle booleans with `activePack`, `openedPacks`, and `phase: PackFlowPhase`.
+- [x] Drive close transitions through `drawer-open -> closing-collapse -> sheet-exiting -> layout-morph-out -> drop-elevation -> sealed` without clearing `activePack` before the final phase.
+- [x] Update `SealedPack` callbacks and debug reporting so close morph and elevation drop advance page phase deterministically.
+- [x] Update debug animation-machine runtime/source labels to report `page.phase` and derived lifecycle values.
+- [x] Update close-sequence and source regression tests for the phase chain and removed page-level lifecycle booleans.
+- [x] Run Skills Showcase typecheck, test suite, browser/manual `/prototype` debug check, and whitespace verification.
+- [x] Record review/history notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Implemented a single page-owned `PackFlowPhase` lifecycle for `/prototype`, with `activePack` retained as identity through close collapse, sheet exit, layout morph-out, and elevation drop.
+- Removed page-owned `isSheetMounted`, `isDrawerClosing`, and `isDrawerClosingRef` lifecycle state; `BottomSheet.isOpen`, `PackOpener.isClosing`, and dismissability are now derived from `phase`.
+- Added `SealedPack` callbacks for close morph completion and elevation-drop completion so the page advances `layout-morph-out -> drop-elevation -> sealed` and clears `activePack` only at the final close step.
+- Updated the debug animation-machine runtime and generated static reference page to use `page.phase`, `page.activePack`, `page.isSheetOpen`, and derived close/dismiss values.
+- Updated close-sequence tests to assert the full phase chain, active-pack lifetime, reset behavior, one-shot collapse guard, close apex gate order, and absence of old page-level lifecycle state declarations.
+- Validation passed: focused close-sequence test, focused debug model/static-page test, Skills Showcase typecheck, full Skills Showcase tests, production build, generated-data validation after refresh, and `git diff --check`.
+- Browser/manual status: `/prototype` returned HTTP 200 and Safari opened `http://localhost:3001/prototype` with title `Card Pack Prototype`; automated browser interaction was blocked because the Browser plugin's JavaScript control tool was unavailable, Computer Use timed out, Safari JavaScript from Apple Events is disabled, and `screencapture` could not capture the display.
+- Deploy not run: `tasks/deploy.md` targets Vercel production, and production deploy requires explicit confirmation.
+
 ## Current Task - Ship-End Deploy Routing Session Triage 2026-06-02
 
 **Goal:** Verify the correction that `$ship-end` should not have recommended deploy-skill installation for the animation walkthrough wrap-up, then record the lesson and recommended durable fix.

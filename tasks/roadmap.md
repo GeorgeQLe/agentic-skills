@@ -1,3 +1,34 @@
+## Current Targeted Update: Prototype Pack Flow Phase Refactor 2026-06-03
+
+**Goal:** Refactor `/prototype` pack/drawer orchestration so one `PackFlowPhase` state owns lifecycle transitions while `activePack` remains separate pack identity.
+
+**Execution Profile:**
+- Parallel mode: serial
+- Rationale: The implementation touches one tightly coupled animation lifecycle across page state, component callbacks, debug runtime fields, and close-sequence regression tests.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/exec/`.
+- [x] `app/prototype/page.tsx` keeps only `activePack`, `openedPacks`, and `phase` as page-owned pack flow state.
+- [x] `page.tsx` no longer declares `isSheetMounted`, `isDrawerClosing`, or `isDrawerClosingRef`.
+- [x] Close transitions follow `drawer-open -> closing-collapse -> sheet-exiting -> layout-morph-out -> drop-elevation -> sealed`.
+- [x] `activePack` remains set through sheet exit, close morph, and elevation drop, then clears only when the final close phase completes.
+- [x] `BottomSheet.isOpen`, `PackOpener.isClosing`, and dismissability are derived from `phase`.
+- [x] `SealedPack` reports or completes `layout-morph-out` and `drop-elevation` so the page can advance and seal deterministically.
+- [x] Debug animation-machine runtime reports `page.phase` and derived lifecycle values instead of treating drawer/sheet booleans as source fields.
+- [x] Focused close-sequence tests assert phase transitions, sheet lifetime, active-pack lifetime, reset behavior, and source regression constraints.
+- [x] Skills Showcase typecheck, test suite, browser/manual `/prototype` debug check, and whitespace checks pass before shipping.
+- [x] Intended changes are committed and pushed on `master`.
+
+**Implementation Plan:**
+1. Inspect the current page lifecycle, animation components, debug model, and existing close-sequence tests.
+2. Refactor `app/prototype/page.tsx` to define `PackFlowPhase`, derive runtime booleans from `phase`, and route open/close/reset handlers through phase transitions.
+3. Update `SealedPack` props/callbacks to expose close morph and elevation-drop completion to the page without visual redesign.
+4. Update debug machine runtime types, graph node labels/descriptions, and source tests to use `page.phase` plus derived values.
+5. Rewrite focused close-sequence tests around phase transitions and removed page-level lifecycle booleans while preserving one-shot collapse and gate-order coverage.
+6. Run validation, perform browser/manual `/prototype` debug check, record review/history notes, commit, and push.
+
+**Result:** Completed. The `/prototype` close/open orchestration now uses page phase as the lifecycle authority, generated debug-machine documentation is refreshed, and validation passed. Automated browser interaction was blocked by unavailable browser-control tooling and local Safari automation settings; local route and executable checks passed.
+
 ## Current Targeted Update: Ship-End Deploy Routing Session Triage 2026-06-02
 
 **Goal:** Investigate the corrected `$ship-end` handoff and route the durable fix without over-promoting deployment tooling.
