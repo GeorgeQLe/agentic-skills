@@ -1,3 +1,27 @@
+## Current Task - Legacy Skill Routing for prompt-history-backfill 2026-06-04
+
+**Goal:** Add legacy skill routing to `prompt-history-backfill` so renamed/removed/never-existed skill prompts route to `prompts/legacy/<old-slug>/` instead of polluting top-level prompt dirs, then backfill all missing prompt files from conversation history.
+
+### Plan
+
+- [x] Update SKILL.md with legacy skill map, legacy classification tagging, legacy write routing, and legacy constraint.
+- [x] Archive v0.0 SKILL.md in all four mirror locations.
+- [x] Move `prompts/skill-creator/` to `prompts/legacy/skill-creator/`.
+- [x] Mirror SKILL.md and CHANGELOG.md changes to `.codex/skills/`, `packs/session-analytics/claude/`, and `packs/session-analytics/codex/`.
+- [x] Bump version to v0.1 and update CHANGELOG.md in all locations.
+- [x] Run `/prompt-history-backfill --apply` — backfilled 123 prompt files (9 legacy `/run`, 38 `/ship`, 14 `/ship-end`, 19 `/analyze-sessions`, and 43 others across 16 skill slugs).
+- [x] Verify: `prompts/legacy/run/` and `prompts/legacy/skill-creator/` exist, no top-level dirs for legacy slugs, active skill prompts in correct dirs.
+- [x] Commit and push.
+
+### Review
+
+- Bumped prompt-history-backfill to v0.1 across all four mirror locations with v0.0 archived.
+- Added hardcoded legacy skill map (run→exec, review→expert-review, skill-creator→create-agentic-skill, verify/simplify/schedule→never-a-skill).
+- Legacy prompts route to `prompts/legacy/<old-slug>/` with `legacy: true` and `successor` YAML frontmatter.
+- Backfilled 123 missing prompt files from Claude Code history spanning 2026-04-06 through 2026-06-03.
+- Created 16 new prompt directories for active skills that had invocations but no prompt history.
+- Shipped in commit `d1d12c4b` on `master` and pushed.
+
 ## Current Task - Alignment Gate De-Duplication 2026-06-03
 
 **Goal:** Update the shared alignment-page convention so identical path-only `artifact destination` and `proposed file changes` questions are rendered once visually, while distinct file-output decisions keep separate gate semantics and YAML `gate_type` values.

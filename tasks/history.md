@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-04 — Legacy skill routing and prompt history backfill
+
+- Added legacy skill routing to `prompt-history-backfill` v0.1: hardcoded map of 6 renamed/removed/never-existed skill slugs routes their prompts to `prompts/legacy/<old-slug>/` with `legacy: true` and optional `successor` frontmatter.
+- Archived v0.0 SKILL.md in all four mirror locations (`.claude/skills/`, `.codex/skills/`, `packs/session-analytics/claude/`, `packs/session-analytics/codex/`).
+- Moved `prompts/skill-creator/` to `prompts/legacy/skill-creator/`.
+- Ran full backfill from Claude Code conversation history: created 123 prompt files across 26 skill slugs (9 legacy `/run` invocations, 38 `/ship`, 19 `/analyze-sessions`, 14 `/ship-end`, 8 `/investigate`, and 35 others).
+- Created 16 new prompt directories for active skills that had invocations but no prior prompt history.
+
 ## 2026-06-03 — Prototype pack flow phase refactor
 
 - Refactored `/prototype` pack/drawer orchestration so `PackFlowPhase` is the page-owned lifecycle authority, while `activePack` remains the drawer identity through collapse, sheet exit, layout morph-out, and elevation drop.
