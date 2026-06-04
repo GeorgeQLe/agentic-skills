@@ -1,3 +1,35 @@
+## Current Task - Overall Session History Analysis 2026-06-04
+
+**Goal:** Determine broad usage trends and automation opportunities from full local Claude and Codex session history.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/analyze-sessions/`.
+- [x] Record the analysis plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Parse full available Claude and Codex history into normalized user-message records.
+- [x] Analyze recurring workflow themes, repeated prompt patterns, skill performance signals, source/tool differences, and common multi-step sequences.
+- [x] Write `alignment/analyze-sessions-overall-history.html` with the complete report and review gates.
+- [x] Verify the artifact, record review notes, commit, and push intended changes if the dirty tree allows a safe intended-file boundary.
+
+### Review
+
+- Parsed 10,019 Claude history lines with 0 parse errors.
+- Parsed 6,551 Codex compact history lines with 0 parse errors.
+- Scanned 2,681 Codex rollout JSONL files, 853,620 rollout lines, and 2,681 session metadata records.
+- Excluded 5,827 rollout user candidates that were empty, injected skill/instruction context, or too large for safe prompt-pattern counting; conservatively added 751 rollout user prompts tied to known session metadata and missing from compact history.
+- Normalized 17,321 user messages across 6,549 source-qualified sessions from 2025-12-10 through 2026-06-04.
+- Top source split: Claude 10,019 messages / 3,795 sessions; Codex 7,302 messages / 2,754 sessions.
+- Top projects: `apps/bismarck-v0.4` 1,445 messages, `apps/poke` 1,367, `apps/lexcorp-war-room` 1,256, `tools/agentic-skills` 1,220, `experimental/metternich-engine` 1,108.
+- Strongest repeated patterns: commit/push closure requests 701 messages / 599 sessions, still-wrong or not-visible corrections 425 / 314, implement numbered step requests 319 / 285, next-step requests 311 / 295, browser/screenshot validation 190 / 150.
+- Top activity categories: skill/pack/runner routing 3,441 messages, shipping/git closure 3,227, task status/planning 2,516, implementation/build 2,313, docs/research/specs 1,861, verification/debugging 1,494.
+- Highest-confidence recommendation in the report: `$targeted-skill-builder ship boundary proof and task-state reconciliation gate`, likely owned by shared shipping conventions plus `ship`, `ship-end`, `exec`, and `codebase-status`, with validation via a layer1 dirty-tree/stale-todo/next-command normalization fixture.
+- Wrote `alignment/analyze-sessions-overall-history.html` with source comparison, project breakdown, categories, fuzzy and exact repeat notes, common workflow sequences, skill performance signals, recommendations, evidence matrix, assumptions, gaps, and review gates.
+- Focused verification passed: HTML required-content/parser check, embedded JavaScript parse via Node `vm.Script`, ASCII byte check, and `git diff --check` for intended files.
+- Browser open attempt succeeded for `alignment/analyze-sessions-overall-history.html`.
+- Intended shipping boundary is limited to this run's alignment page, prompt log, and task docs; unrelated existing app/config modifications and older untracked artifacts are preserved outside staging.
+
+---
+
 ## Current Task - Development Stuck-Point Session Analysis 2026-06-04
 
 **Goal:** Determine recurring development sticking points from full local session history and recommend ways to unstick or avoid them.

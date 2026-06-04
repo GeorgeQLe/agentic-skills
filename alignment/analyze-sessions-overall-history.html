@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Overall Session History Analysis</title>
+  <style>
+    :root { --bg: #0d1117; --surface: #161b22; --surface-2: #1c2333; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; max-width: 100%; overflow-wrap: break-word; }
+    h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 12px; }
+    h2 { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { margin-top: 24px; color: var(--accent); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code { background: #111722; border: 1px solid var(--border); border-radius: 6px; padding: 1px 5px; }
+    .lede { color: var(--text-muted); max-width: 940px; font-size: 1.05rem; }
+    .status { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; margin: 22px 0; }
+    .stat, .toc, .callout, .question, .feedback, .compile, .note { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .stat strong { display: block; color: #fff; font-size: 1.3rem; }
+    .stat span { color: var(--text-muted); }
+    .toc ul { margin: 8px 0 0; padding-left: 20px; columns: 2; }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+    .feedback { margin: 14px 0 22px; }
+    .feedback .controls, .answers, .buttons { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button, .radio-card { min-height: 44px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: #111722; color: var(--text); cursor: pointer; }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+    .feedback button[data-value="up"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea { width: 100%; min-height: 96px; margin-top: 10px; resize: vertical; border-radius: 8px; border: 1px solid var(--border); background: #0b111b; color: var(--text); padding: 12px; font: inherit; }
+    .feedback .local-yaml, .feedback .notes { display: none; }
+    .feedback[data-active="true"] .local-yaml { display: block; margin-top: 10px; }
+    .feedback[data-active="true"] .notes { display: block; }
+    .question { margin: 18px 0; background: var(--surface-2); border-color: #33415f; }
+    .question h3 { margin: 0 0 8px; color: var(--purple); }
+    .radio-card { display: inline-flex; gap: 8px; align-items: center; }
+    .radio-card input { transform: translateY(1px); }
+    .notes-for-answer { display: none; }
+    .question:has(input:checked) .notes-for-answer { display: block; }
+    .muted { color: var(--text-muted); }
+    .table-wrap { overflow-x: auto; margin: 14px 0 24px; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: left; }
+    th { background: var(--surface); color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+    .pill { display: inline-block; margin: 2px 4px 2px 0; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-muted); background: #111722; font-size: 0.9rem; }
+    blockquote { margin: 12px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: #101723; color: var(--text); }
+    .compile { margin-top: 28px; }
+    .copy-status { color: var(--text-muted); min-height: 24px; }
+    @media (max-width: 860px) { main { width: min(100% - 24px, 1180px); padding-top: 24px; } .toc ul { columns: 1; } }
+    @media (max-width: 560px) { .status { grid-template-columns: 1fr; } button, .radio-card { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Overall Session History Analysis</h1>
+  <p class="lede">Alignment status: <strong>review</strong>. This page analyzes full local Claude and Codex user-message history for recurring workflows, repeated prompt patterns, source differences, skill performance signals, and automation opportunities.</p>
+  <div class="status" aria-label="Overview stats">
+    <div class="stat"><strong>17,321</strong><span>normalized user messages</span></div>
+    <div class="stat"><strong>6,549</strong><span>source-qualified sessions</span></div>
+    <div class="stat"><strong>2025-12-10 to 2026-06-04</strong><span>available history range</span></div>
+    <div class="stat"><strong>2,681</strong><span>Codex rollout JSONL files scanned</span></div>
+  </div>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#method">Method And Coverage</a></li>
+      <li><a href="#overview">Main Findings</a></li>
+      <li><a href="#source-comparison">Source Comparison</a></li>
+      <li><a href="#projects">Top Projects</a></li>
+      <li><a href="#categories">Activity Categories</a></li>
+      <li><a href="#repeats">Repeated Prompt Patterns</a></li>
+      <li><a href="#sequences">Workflow Sequences</a></li>
+      <li><a href="#skills">Skill Performance Signals</a></li>
+      <li><a href="#recommendations">Ranked Recommendations</a></li>
+      <li><a href="#impact">Highest Impact Automations</a></li>
+      <li><a href="#evidence">Evidence Matrix</a></li>
+      <li><a href="#assumptions">Assumptions And Gaps</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Feedback And Answers</a></li>
+    </ul>
+  </section>
+
+  <section id="method" data-section="Method And Coverage">
+    <h2>Method And Coverage</h2>
+
+    <div class="feedback" data-section="Method And Coverage">
+      <div class="controls" aria-label="Section feedback for Method And Coverage">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>Explicit evidence:</strong> Parsed the full readable Claude and Codex local history files, not a sample. Codex compact history is the prompt-count authority. Codex rollout JSONL files were streamed for session metadata and conservatively recovered user prompts that were tied to known session metadata, absent from compact history, and not skill blocks or injected instruction context.</p>
+    <p><strong>Classification caveat:</strong> Activity categories are transparent keyword/command classifications and can overlap. They are useful for ranking repeated workflow pressure, not for assigning one exclusive label to each prompt.</p>
+    <div class="table-wrap"><table><thead><tr><th>Source</th><th>Readable input</th><th>Parse errors</th><th>Normalized messages</th><th>Sessions</th><th>Date range</th><th>Use in analysis</th></tr></thead><tbody><tr><td>Claude</td><td>10,019 history lines</td><td>0</td><td>10,019</td><td>3,795</td><td>2025-12-10 to 2026-06-04</td><td>Primary source for older product implementation, shipping, and context reset loops.</td></tr><tr><td>Codex</td><td>6,551 compact lines plus 853,620 rollout lines</td><td>0</td><td>7,302</td><td>2,754</td><td>2026-01-20 to 2026-06-04</td><td>Compact history is prompt-count authority; rollout files enrich cwd/model/provider and add 751 conservative missing user prompts.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="overview" data-section="Main Findings">
+    <h2>Main Findings</h2>
+
+    <div class="feedback" data-section="Main Findings">
+      <div class="controls" aria-label="Section feedback for Main Findings">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="callout">
+      <p><strong>The strongest overall pattern is closure management.</strong> The user repeatedly asks agents to ship, commit, push, reconcile task status, or answer what comes next. The highest-frequency loops are not only coding problems; they are proof-of-completion problems.</p>
+      <p><strong>The second pattern is workflow machinery becoming the work.</strong> Codex history is dense with skill, pack, benchmark, and triage commands. That is productive, but it also means command resolution, pack visibility, and route normalization need first-class checks.</p>
+      <p><strong>The third pattern is validation needing observable evidence.</strong> Build/test checks are common, but history and lessons show repeated risk around false pass claims, stale tasks, visual regressions, and environment freshness.</p>
+    </div>
+    <p><span class="pill">commit/push fuzzy pattern: 701 messages</span><span class="pill">next-step fuzzy pattern: 311 messages</span><span class="pill">still-wrong fuzzy pattern: 425 messages</span></p>
+  </section>
+
+  <section id="source-comparison" data-section="Source Comparison">
+    <h2>Source Comparison</h2>
+
+    <div class="feedback" data-section="Source Comparison">
+      <div class="controls" aria-label="Section feedback for Source Comparison">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Claude has the larger total history and dominates older closure commands such as <code>/ship</code> and <code>/clear</code>. Codex has fewer total months but dominates recent workflow remediation: <code>$targeted-skill-builder</code>, <code>$benchmark-test-skill</code>, <code>$session-triage</code>, <code>$investigate</code>, and <code>$pack</code> are all Codex-heavy.</p>
+    <p>Monthly counts show the transition clearly: in March 2026 Claude had 2,544 messages versus Codex 180; in April Codex rose to 4,133 versus Claude 2,468; in May Codex remained ahead at 2,737 versus Claude 1,547. In the last 30 days, Codex has 2,577 messages and Claude has 1,466.</p>
+    <div class="table-wrap"><table><thead><tr><th>Month</th><th>Claude messages</th><th>Codex messages</th></tr></thead><tbody><tr><td>2025-12</td><td>190</td><td>0</td></tr><tr><td>2026-01</td><td>1,309</td><td>89</td></tr><tr><td>2026-02</td><td>1,786</td><td>0</td></tr><tr><td>2026-03</td><td>2,544</td><td>180</td></tr><tr><td>2026-04</td><td>2,468</td><td>4,133</td></tr><tr><td>2026-05</td><td>1,547</td><td>2,737</td></tr><tr><td>2026-06</td><td>175</td><td>163</td></tr></tbody></table></div>
+    <h3>Top Commands</h3>
+    <div class="table-wrap"><table><thead><tr><th>Command</th><th>Count</th><th>Sources</th></tr></thead><tbody><tr><td><code>/ship</code></td><td>1,538</td><td>claude: 1,537, codex: 1</td></tr><tr><td><code>/clear</code></td><td>883</td><td>claude: 882, codex: 1</td></tr><tr><td><code>/ship-end</code></td><td>266</td><td>claude: 266</td></tr><tr><td><code>/run</code></td><td>182</td><td>claude: 182</td></tr><tr><td><code>/ship-then-plan</code></td><td>161</td><td>claude: 161</td></tr><tr><td><code>$targeted-skill-builder</code></td><td>98</td><td>codex: 98</td></tr><tr><td><code>/sync</code></td><td>97</td><td>claude: 97</td></tr><tr><td><code>/investigate</code></td><td>93</td><td>claude: 93</td></tr><tr><td><code>/usage</code></td><td>89</td><td>claude: 89</td></tr><tr><td><code>$benchmark-test-skill</code></td><td>85</td><td>codex: 85</td></tr><tr><td><code>/resume</code></td><td>69</td><td>claude: 69</td></tr><tr><td><code>$session-triage</code></td><td>65</td><td>codex: 65</td></tr><tr><td><code>$investigate</code></td><td>65</td><td>codex: 65</td></tr><tr><td><code>$pack</code></td><td>59</td><td>codex: 57, claude: 2</td></tr><tr><td><code>/roadmap</code></td><td>54</td><td>claude: 54</td></tr></tbody></table></div>
+  </section>
+
+  <section id="projects" data-section="Top Projects">
+    <h2>Top Projects</h2>
+
+    <div class="feedback" data-section="Top Projects">
+      <div class="controls" aria-label="Section feedback for Top Projects">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>The top projects are spread across product apps, tooling repos, and the agentic-skills workflow repo. That spread matters: the repeated patterns are cross-project habits, not one repo's bug backlog.</p>
+    <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Project</th><th>Messages</th><th>Sessions</th><th>Share</th><th>Source split</th></tr></thead><tbody><tr><td>1</td><td>apps/bismarck-v0.4</td><td>1,445</td><td>614</td><td>8.3%</td><td>claude: 1,228, codex: 217</td></tr><tr><td>2</td><td>apps/poke</td><td>1,367</td><td>535</td><td>7.9%</td><td>claude: 897, codex: 470</td></tr><tr><td>3</td><td>apps/lexcorp-war-room</td><td>1,256</td><td>427</td><td>7.3%</td><td>claude: 694, codex: 562</td></tr><tr><td>4</td><td>tools/agentic-skills</td><td>1,220</td><td>449</td><td>7.0%</td><td>codex: 774, claude: 446</td></tr><tr><td>5</td><td>experimental/metternich-engine</td><td>1,108</td><td>391</td><td>6.4%</td><td>claude: 906, codex: 202</td></tr><tr><td>6</td><td>tools/dev</td><td>1,009</td><td>502</td><td>5.8%</td><td>codex: 833, claude: 176</td></tr><tr><td>7</td><td>apps/bismarck-v0.3</td><td>929</td><td>228</td><td>5.4%</td><td>claude: 900, codex: 29</td></tr><tr><td>8</td><td>apps/loadoutworks.com</td><td>839</td><td>316</td><td>4.8%</td><td>claude: 765, codex: 74</td></tr><tr><td>9</td><td>dev/mobile-ideas</td><td>631</td><td>355</td><td>3.6%</td><td>codex: 502, claude: 129</td></tr><tr><td>10</td><td>apps/pitwall-monorepo</td><td>539</td><td>239</td><td>3.1%</td><td>codex: 335, claude: 204</td></tr><tr><td>11</td><td>apps/lexcorp-sdk</td><td>418</td><td>149</td><td>2.4%</td><td>codex: 350, claude: 68</td></tr><tr><td>12</td><td>dev/bismarck-v5</td><td>375</td><td>134</td><td>2.2%</td><td>codex: 209, claude: 166</td></tr></tbody></table></div>
+  </section>
+
+  <section id="categories" data-section="Activity Categories">
+    <h2>Activity Categories</h2>
+
+    <div class="feedback" data-section="Activity Categories">
+      <div class="controls" aria-label="Section feedback for Activity Categories">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>The categories below overlap by design. For example, a prompt can be both a shipping request and a task-status reconciliation request.</p>
+    <div class="table-wrap"><table><thead><tr><th>Category</th><th>Messages</th><th>Sessions</th><th>Source split</th><th>Top projects</th><th>Examples</th></tr></thead><tbody><tr><td>Skill, pack, and runner routing</td><td>3,441</td><td>2,606</td><td>codex: 3,041, claude: 400</td><td>tools/agentic-skills: 649, tools/dev: 422, dev/mobile-ideas: 238</td><td><code>can you make a script which when run will add a claude code and agent.md compatible global skill which can teach agents to successfully use this cli tool to run and manage dev env...</code><br><code>can you make a script which when run will add a claude code and agent.md compatible global skill which can teach agents to successfully use this cli tool to run and manage dev env...</code></td></tr><tr><td>Shipping, git, and dirty-state closure</td><td>3,227</td><td>2,499</td><td>claude: 2,786, codex: 441</td><td>apps/bismarck-v0.4: 435, apps/poke: 369, experimental/metternich-engine: 297</td><td><code>ok can you push the changes to github with the appropriate commit message?</code><br><code>before we continue can you push our changes to github with the appropriate commit message?</code></td></tr><tr><td>Task status, planning, and next-work selection</td><td>2,516</td><td>1,709</td><td>claude: 1,380, codex: 1,136</td><td>apps/bismarck-v0.4: 292, experimental/metternich-engine: 272, apps/poke: 226</td><td><code>let&#x27;s continue, I will add the svgs and images later, place placeholder or TODO values for now in development</code><br><code>everything else seems reasonable, what&#x27;s next on the todo? I feel like we have a lot of extensibility to have an admin/superuser provider specific details but we don&#x27;t yet have a...</code></td></tr><tr><td>Implementation and feature build work</td><td>2,313</td><td>1,537</td><td>claude: 1,256, codex: 1,057</td><td>tools/agentic-skills: 265, apps/bismarck-v0.4: 253, apps/lexcorp-war-room: 179</td><td><code>let&#x27;s continue, I will add the svgs and images later, place placeholder or TODO values for now in development</code><br><code>can you change the filenames to be weapon-svg.tsx, part-card.ts etc</code></td></tr><tr><td>Docs, research, reports, and specs</td><td>1,861</td><td>1,266</td><td>claude: 1,014, codex: 847</td><td>tools/agentic-skills: 222, apps/bismarck-v0.4: 173, apps/lexcorp-war-room: 162</td><td><code>can you verify if the problems have been solved already or not? i.e. validate the documentation</code><br><code>can you update the project readme then push?</code></td></tr><tr><td>Verification, tests, errors, and debugging</td><td>1,494</td><td>979</td><td>codex: 830, claude: 664</td><td>tools/agentic-skills: 275, apps/lexcorp-war-room: 149, apps/bismarck-v0.3: 127</td><td><code>I don&#x27;t think the svgs are overlayed properly over the rifle, can you give them a black border so I can verify?</code><br><code>we can remove the black borders we put in for debug purposes</code></td></tr><tr><td>Backend, data, infra, and integrations</td><td>1,250</td><td>766</td><td>codex: 666, claude: 584</td><td>apps/lexcorp-war-room: 231, apps/bismarck-v0.3: 152, apps/bismarck-v0.4: 124</td><td><code>I have added a GOD_ACCOUNT environment variable with an email address that can correspond to who is allowed to be admin. There is only one god account and there should be strict a...</code><br><code>I would also say we should do the auth check on each individual page not at the layout level</code></td></tr><tr><td>Frontend, visual UX, and animation work</td><td>1,127</td><td>758</td><td>claude: 608, codex: 519</td><td>tools/agentic-skills: 116, apps/lexcorp-war-room: 109, apps/poke: 100</td><td><code>can you change the filenames to be weapon-svg.tsx, part-card.ts etc</code><br><code>have you been able to properly increate a landing page, and login interactions?</code></td></tr><tr><td>Corrections, scope control, and intent repair</td><td>970</td><td>668</td><td>codex: 561, claude: 409</td><td>tools/agentic-skills: 131, apps/lexcorp-war-room: 98, dev/mobile-ideas: 80</td><td><code>can you try npm run build again?</code><br><code>actually I realized that certain parts may be shared between different platforms, do we need to refactor to support that?</code></td></tr><tr><td>Product strategy, ideas, and market workflow</td><td>503</td><td>331</td><td>codex: 345, claude: 158</td><td>apps/lexcorp-war-room: 131, tools/agentic-skills: 43, tools/dev: 34</td><td><code>and is a part the specific product sku?</code><br><code>go over the project and determine what the various user journeys are through the website</code></td></tr></tbody></table></div>
+  </section>
+
+  <section id="repeats" data-section="Repeated Prompt Patterns">
+    <h2>Repeated Prompt Patterns</h2>
+
+    <div class="feedback" data-section="Repeated Prompt Patterns">
+      <div class="controls" aria-label="Section feedback for Repeated Prompt Patterns">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Exact repeats are dominated by command strings and runner UI links, so the actionable view is fuzzy repeated workflow language. These are the prompts most worth automating away.</p>
+    <div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Messages</th><th>Sessions</th><th>Examples</th></tr></thead><tbody><tr><td>Commit and push closure requests</td><td>701</td><td>599</td><td><code>ok can you push the changes to github with the appropriate commit message?</code><br><code>before we continue can you push our changes to github with the appropriate commit message?</code></td></tr><tr><td>Still wrong / not visible corrections</td><td>425</td><td>314</td><td><code>Warning Found data-loss statements: &#183; You&#x27;re about to add not-null sku column without default value, which contains 24 items &#183; You&#x27;re about to delete platform_slug column in part...</code><br><code>can we provide support for right-side view as well? I don&#x27;t think top view would be often used. I might be wrong but that&#x27;s my personal feeling</code></td></tr><tr><td>Implement numbered step requests</td><td>319</td><td>285</td><td><code>@docs/step2-7.md implement step 2</code><br><code>@docs/step2-7.md implement step 3</code></td></tr><tr><td>What&#x27;s next / next step requests</td><td>311</td><td>295</td><td><code>everything else seems reasonable, what&#x27;s next on the todo? I feel like we have a lot of extensibility to have an admin/superuser provider specific details but we don&#x27;t yet have a...</code><br><code>no I think we should keep it static, there may be too many cascading issues. Ok what&#x27;s next for development?</code></td></tr><tr><td>Open/browser/screenshot validation</td><td>190</td><td>150</td><td><code>when we jump into claude code on each session we have to log in every time even if I reconnect to a session. This forces me to do the claude code onboarding (color scheme and clau...</code><br><code>chunk-3LBSCF6M.js?v=7d155f73:21609 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools __vite-browser-external:crypto:3 Uncaug...</code></td></tr><tr><td>Run it and fix error loops</td><td>151</td><td>122</td><td><code>You&#x27;re about to add part_sku_unique unique constraint to the table, which contains 24 items. If this statement fails, you will receive an error from the database. Do you want to t...</code><br><code>there was an error trying to seed, can you run it and try to fix the error</code></td></tr><tr><td>Skill visibility/staleness prompts</td><td>96</td><td>83</td><td><code>ok let&#x27;s remove it, can you ensure and validate the symlinks and that there are only one slash commands for each and that claude code and codex use their respective skills and not...</code><br><code>/pack install business, game packs</code></td></tr><tr><td>Report-only or do-not-implement corrections</td><td>20</td><td>19</td><td><code>based on the manual stripe work and top level yaml work that we have done, for each of our lexcorp portfolio products, do we need to adjust the manual-todo and documentation for e...</code><br><code>prototype it but don&#x27;t implement it. I&#x27;m fine if planning is heavy unless you think it is too heavy? I mean also sometimes I see the run skill or a run +1 step after plan mode app...</code></td></tr><tr><td>Validate finished/outstanding status</td><td>9</td><td>7</td><td><code>yeah, verify and update all documentation. Some might be finished and so we can add those to docs/completed directory for archival and report to me what the outstanding specs are....</code><br><code>/plan-phases @docs/implementation-plans/walreign-empire-onboarding-gamification.md can you identify was finished and create a roadmap for the rest of the outstanding steps</code></td></tr></tbody></table></div>
+    <h3>Exact Repeat Notes</h3>
+    <p>The most repeated exact strings include <code>/ship</code> with 1,531 normalized repeats, <code>/clear</code> with 883, <code>/ship-end</code> with 262, <code>continue</code> with 214, <code>yes please</code> with 177, and <code>commit and push</code> with 146. Codex runner UI link strings for legacy <code>run</code> and <code>ship</code> also repeat heavily, which is why they are treated as command-surface evidence rather than semantic task requests.</p>
+  </section>
+
+  <section id="sequences" data-section="Workflow Sequences">
+    <h2>Workflow Sequences</h2>
+
+    <div class="feedback" data-section="Workflow Sequences">
+      <div class="controls" aria-label="Section feedback for Workflow Sequences">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Within sessions, the highest-frequency transitions show a loop between task status and shipping closure. That supports a single automation target: reconcile task truth and ship boundary before recommending next work.</p>
+    <div class="table-wrap"><table><thead><tr><th>Transition</th><th>Count</th><th>Interpretation</th></tr></thead><tbody><tr><td>Shipping, git, and dirty-state closure -&gt; Task status, planning, and next-work selection</td><td>253</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Task status, planning, and next-work selection -&gt; Shipping, git, and dirty-state closure</td><td>232</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Implementation and feature build work -&gt; Shipping, git, and dirty-state closure</td><td>121</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Shipping, git, and dirty-state closure -&gt; Implementation and feature build work</td><td>116</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Skill, pack, and runner routing -&gt; Task status, planning, and next-work selection</td><td>107</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Verification, tests, errors, and debugging -&gt; Shipping, git, and dirty-state closure</td><td>92</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Task status, planning, and next-work selection -&gt; Implementation and feature build work</td><td>89</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr><tr><td>Implementation and feature build work -&gt; Task status, planning, and next-work selection</td><td>86</td><td>Adjacent category transition inside the same session after chronological sorting.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="skills" data-section="Skill Performance Signals">
+    <h2>Skill Performance Signals</h2>
+
+    <div class="feedback" data-section="Skill Performance Signals">
+      <div class="controls" aria-label="Section feedback for Skill Performance Signals">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Explicit command counts show heavy use of operational skills. Heuristic correction windows are weaker evidence: they only mean a correction-like prompt appeared within four later user messages in the same session, not that the command caused the issue.</p>
+    <div class="table-wrap"><table><thead><tr><th>Lesson-backed area</th><th>Lesson headings</th><th>Examples</th></tr></thead><tbody><tr><td>Frontend, visual UX, and animation work</td><td>11</td><td><code>2026-05-31 &#8212; Alignment page compile controls must stay in normal page flow</code><br><code>2026-05-25 &#8212; Open WSL HTML pages in Windows browsers with file URI PowerShell</code><br><code>2026-05-25 &#8212; Alignment-page feedback includes research quality, not only HTML UX</code></td></tr><tr><td>Skill, pack, and runner routing</td><td>11</td><td><code>2026-05-27 &#8212; Skill preview duplicates can come from archived SKILL.md files</code><br><code>2026-05-27 &#8212; Do not wrap direct skill routes in exec-loop by default</code><br><code>2026-05-27 &#8212; Distinguish injected external skills from project-local skill links</code></td></tr><tr><td>Verification, tests, errors, and debugging</td><td>9</td><td><code>2026-06-01 &#8212; Verify stale unchecked tasks before recommending next work</code><br><code>2026-05-30 &#8212; Never write a test/verification claim from remembered or garbled tool output</code><br><code>2026-05-30 &#8212; Prove a test failure is pre-existing before calling it unrelated</code></td></tr><tr><td>Docs, research, reports, and specs</td><td>7</td><td><code>2026-05-31 &#8212; Alignment feedback YAML needs a local section path</code><br><code>2026-05-30 &#8212; Alignment feedback needs an early YAML path</code><br><code>2026-05-22 &#8212; Approval-gated research needs alignment preview before approval</code></td></tr><tr><td>Task status, planning, and next-work selection</td><td>4</td><td><code>2026-05-29 &#8212; Status routing must follow canonical skill contracts</code><br><code>2026-05-11 &#8212; Review reports need remediation-ready next steps</code><br><code>2026-05-03 &#8212; Verification gates should not become no-op plan handoffs</code></td></tr><tr><td>Implementation and feature build work</td><td>4</td><td><code>2026-05-24 &#8212; Feature interview is the post-spec add-on path</code><br><code>2026-05-17 &#8212; Package update skills should persist installer age gates</code><br><code>2026-05-14 &#8212; UI refactor scope must include duplicate legacy blocks on already-themed pages</code></td></tr><tr><td>Product strategy, ideas, and market workflow</td><td>4</td><td><code>2026-05-21 &#8212; Idea scope brief routes bootstrap only before repo readiness</code><br><code>2026-05-18 &#8212; Interview questions should use product language</code><br><code>2026-05-11 &#8212; Preserve existing product surfaces before proposing framework migration</code></td></tr><tr><td>Backend, data, infra, and integrations</td><td>3</td><td><code>2026-06-02 - Do not turn deploy-skill absence into next work when deploy is not contextually needed</code><br><code>2026-05-15 &#8212; Do not treat stale manual deploy tasks as live deployment truth</code><br><code>2026-04-17 &#8212; Check live AWS auth before SSO login</code></td></tr></tbody></table></div>
+    <p>Heuristic correction windows were highest near <code>/ship</code> with 14, <code>/ship-end</code> with 12, <code>/review</code> with 7, and <code>$investigate</code> with 7. Treat this as a smoke signal for contracts needing clearer closure or post-command checks.</p>
+  </section>
+
+  <section id="recommendations" data-section="Ranked Recommendations">
+    <h2>Ranked Recommendations</h2>
+
+    <div class="feedback" data-section="Ranked Recommendations">
+      <div class="controls" aria-label="Section feedback for Ranked Recommendations">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>The top recommendation is a targeted workflow contract, not a new broad agent. The evidence points to a narrow preflight that joins dirty-tree proof, task reconciliation, command route normalization, and validation evidence before the agent says the work is done or picks next work.</p>
+    <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Pattern</th><th>Frequency evidence</th><th>Recommendation type</th><th>Suggested name</th><th>Likely owner and validation</th></tr></thead><tbody><tr><td>1</td><td>Session closure repeatedly needs manual reassertion</td><td>/ship 1,538; commit/push requests 701; shipping -> status transition 253 and status -> shipping transition 232</td><td>Skill plus standing instruction</td><td>ship boundary proof and task-state reconciliation gate</td><td>Owner surface: shared shipping contract, ship, ship-end, exec, codebase-status. Validation: layer1 fixture with dirty tree, stale todo, committed artifact, and required next-command normalization.</td></tr><tr><td>2</td><td>Skill and pack routing is now a major work surface</td><td>Skill/pack/routing category 3,441 messages in 2,606 sessions; Codex contributes 3,041 messages</td><td>Skill/plugin preflight</td><td>skill command resolution and pack health preflight</td><td>Owner surface: pack, skills, sync, project config. Validation: fixture covering stale symlink, archived SKILL.md duplicate, missing pack, and slash/dollar final route.</td></tr><tr><td>3</td><td>Next-work selection drifts when task docs age</td><td>Task/status category 2,516 messages; "what next" pattern 311 messages</td><td>Standing instruction plus helper skill</td><td>artifact-backed task reconciliation before next route</td><td>Owner surface: codebase-status, ship-end, exec. Validation: fixture where unchecked todo is already satisfied by alignment page and commit history.</td></tr><tr><td>4</td><td>Verification failures and visual regressions need observable proof</td><td>Verification category 1,494; frontend/visual category 1,127; browser/screenshot pattern 190</td><td>Skill contract update</td><td>observable validation packet for UI and build failures</td><td>Owner surface: investigate, exec, frontend app skills. Validation: focused benchmark smoke requiring screenshot/DOM/build freshness evidence.</td></tr><tr><td>5</td><td>Report-only and implementation intent can blur</td><td>Correction/intent category 970; report-only correction pattern 20</td><td>Standing instruction</td><td>mutation intent gate for analysis/report-only requests</td><td>Owner surface: shared workflow conventions and analysis/research skills. Validation: layer1 contract test that allows prompt/task tracking but rejects source edits for report-only prompts.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="impact" data-section="Highest Impact Automations">
+    <h2>Highest Impact Automations</h2>
+
+    <div class="feedback" data-section="Highest Impact Automations">
+      <div class="controls" aria-label="Section feedback for Highest Impact Automations">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Automation</th><th>Avoided manual prompt pattern</th><th>Evidence basis</th></tr></thead><tbody><tr><td>1</td><td>Automatic ship boundary proof</td><td>Avoids repeated /ship, commit/push, and dirty-state prompts by making completion observable.</td><td>Likely reduction target: 701 commit/push prompts plus part of 1,538 /ship prompts.</td></tr><tr><td>2</td><td>Task reconciliation before next-work routing</td><td>Prevents stale todo items from becoming repeated work or bad handoffs.</td><td>Likely reduction target: 311 next-step prompts and 2,516 task/status category messages.</td></tr><tr><td>3</td><td>Skill/pack/runner preflight</td><td>Turns command visibility and stale-pack diagnosis into a deterministic check.</td><td>Likely reduction target: 96 explicit skill visibility prompts plus recurring pack/skill routing sessions.</td></tr><tr><td>4</td><td>Observable UI validation packet</td><td>Requires browser route, build freshness, screenshot/DOM/state evidence before shipping visual changes.</td><td>Likely reduction target: 190 browser/screenshot prompts and 1,127 frontend/visual messages.</td></tr><tr><td>5</td><td>Root-cause switch after repeated failure</td><td>Moves from retrying fixes to reproduction, comparator, and owner-surface isolation.</td><td>Likely reduction target: 151 run/fix/error prompts and 425 still-wrong corrections.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="evidence" data-section="Evidence Matrix">
+    <h2>Evidence Matrix</h2>
+
+    <div class="feedback" data-section="Evidence Matrix">
+      <div class="controls" aria-label="Section feedback for Evidence Matrix">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead><tbody><tr><td>Command closure loops</td><td>/ship 1,538; /ship-end 266; commit/push fuzzy pattern 701; top transition shipping -> task status 253</td><td>Closure is the largest recurring manual operation. The user often has to ask for push, docs, status, or next command after work is otherwise done.</td><td>High</td><td>Counts are exact for command and fuzzy patterns; inference is that avoided prompts depend on stronger ship contracts.</td><td>Prioritize ship boundary proof and task reconciliation.</td></tr><tr><td>Runner shift from Claude to Codex</td><td>Monthly counts show Claude 2,468 vs Codex 4,133 in April, Claude 1,547 vs Codex 2,737 in May, and last 30 days Codex 2,577 vs Claude 1,466</td><td>Recent workflow-heavy work has moved toward Codex; final routes must use current runner conventions and cannot copy stale slash commands.</td><td>High</td><td>Rollout-added prompts may slightly raise Codex counts, but compact history and command counts show the same direction.</td><td>Normalize handoffs to dollar commands in Codex and verify pack visibility before routing.</td></tr><tr><td>Skill/pack/routing recurrence</td><td>Skill/pack category 3,441 messages; $targeted-skill-builder 98; $benchmark-test-skill 85; $session-triage 65; $pack 59</td><td>Skills are not just tools; maintaining the skill system is itself a repeated workflow.</td><td>High</td><td>Category is overlapping; some messages are normal skill use, not failures.</td><td>Build preflight around command resolution, pack install state, mirror/version freshness, and reload requirements.</td></tr><tr><td>Task drift and next-work uncertainty</td><td>Task/status category 2,516; next-step fuzzy pattern 311; lessons include stale unchecked task routing</td><td>Task docs are useful candidates but must be reconciled against artifacts and git history before recommending next work.</td><td>High</td><td>Some status prompts are normal planning, not drift.</td><td>Require artifact-backed task reconciliation before next command.</td></tr><tr><td>Validation and visual proof gaps</td><td>Verification category 1,494; frontend/visual category 1,127; lessons call out false verification and visual validation gaps</td><td>Build/test commands are not enough when output is visual, cached, or hard to observe.</td><td>Medium-high</td><td>Counts are broad; stronger proof comes from lessons and repeated still-wrong prompts.</td><td>Add observable validation packet and parent-commit failure proof for unrelated failures.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="assumptions" data-section="Assumptions And Gaps">
+    <h2>Assumptions And Gaps</h2>
+
+    <div class="feedback" data-section="Assumptions And Gaps">
+      <div class="controls" aria-label="Section feedback for Assumptions And Gaps">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <h3>Confidence Register</h3>
+    <div class="table-wrap"><table><thead><tr><th>Assumption</th><th>Meaning</th><th>Impact</th><th>Confidence</th></tr></thead><tbody><tr><td>Overlapping categories</td><td>The category counts can overlap because a prompt can involve shipping, status, and verification at once.</td><td>Use counts as directional load, not mutually exclusive taxonomy.</td><td>High</td></tr><tr><td>Rollout missing prompts</td><td>751 Codex rollout user prompts were added only when tied to known metadata and not present in compact history.</td><td>If a stricter compact-only analysis is desired, Codex total drops to 6,551, but the top trends remain similar.</td><td>Medium</td></tr><tr><td>Correction heuristic</td><td>Skill correction windows count a correction phrase within four later messages in the same session.</td><td>This is an inference signal, not proof that the named skill caused the correction.</td><td>Medium</td></tr><tr><td>Project labels</td><td>Project paths are normalized to short labels from local path segments.</td><td>Some labels such as tools/dev or content may combine multiple local directories with similar tails.</td><td>Medium</td></tr><tr><td>Examples</td><td>Examples are short sanitized prompt excerpts.</td><td>They preserve wording but not the full context of long pasted messages.</td><td>High</td></tr></tbody></table></div>
+    <h3>Alternatives Considered</h3>
+    <div class="table-wrap"><table><thead><tr><th>Alternative</th><th>Reason not chosen</th><th>What remains useful</th></tr></thead><tbody><tr><td>Compact-only Codex counts</td><td>Rejected as primary because rollout metadata contains user messages missing from compact history.</td><td>Kept as caveat: compact history remains the count authority, rollout additions are separately reported.</td></tr><tr><td>Exact-repeat driven recommendations</td><td>Rejected because exact repeats are dominated by command strings and runner UI links.</td><td>Fuzzy workflow patterns are more actionable for automation.</td></tr><tr><td>Single owner skill for all issues</td><td>Rejected because the evidence spans ship, task status, skill routing, visual validation, and report-only intent.</td><td>Recommend a top preflight plus owner-specific contract updates.</td></tr><tr><td>No follow-up automation</td><td>Rejected because several patterns are high-frequency and already recur in lessons.</td><td>A targeted builder route is justified after review approval.</td></tr></tbody></table></div>
+    <h3>Source Coverage Gaps</h3>
+    <div class="table-wrap"><table><thead><tr><th>Gap</th><th>Effect</th><th>Mitigation</th></tr></thead><tbody><tr><td>No assistant/tool outputs counted</td><td>The analysis intentionally excludes system/developer/tool output and focuses on user-message history.</td><td>It can identify repeated user-facing friction, not every hidden internal failure.</td></tr><tr><td>No semantic embedding clustering</td><td>Fuzzy grouping uses transparent regex patterns instead of embeddings.</td><td>Counts are auditable but may undercount paraphrases.</td></tr><tr><td>No cost/token analysis</td><td>This run did not join usage/cost telemetry.</td><td>A separate cost-value analysis can rank automation by dollars, not just prompt frequency.</td></tr><tr><td>No per-session transcript reconstruction in report</td><td>Sequences are category transitions, not full transcripts.</td><td>This keeps the report safe and readable while preserving real examples.</td></tr></tbody></table></div>
+  </section>
+
+  <section id="gates" data-section="Review Gates">
+    <h2>Review Gates</h2>
+
+    <div class="feedback" data-section="Review Gates">
+      <div class="controls" aria-label="Section feedback for Review Gates">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="question gate-question" data-section="Evidence Coverage" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage</h3>
+      <p>Is the local-history evidence sufficient to treat these as recurring workflow patterns?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Evidence is sufficient for workflow remediation">Evidence is sufficient for workflow remediation</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Evidence is directionally useful but needs another analysis pass">Directionally useful, needs another pass</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Assumptions And Confidence" data-gate-type="assumptions-confidence">
+      <h3>Assumptions And Confidence</h3>
+      <p>Which caveat should govern use of this report?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Use as high-confidence directional workflow analysis">Use as high-confidence directional workflow analysis</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Treat category counts as rough and prioritize command counts, fuzzy patterns, and lessons">Treat category counts as rough and prioritize command counts, fuzzy patterns, and lessons</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Recommended Path" data-gate-type="recommended-path">
+      <h3>Recommended Path</h3>
+      <p>Which remediation should be treated as the post-approval next action?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-path" value="$targeted-skill-builder ship boundary proof and task-state reconciliation gate">Build ship boundary proof and task-state reconciliation gate</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="$targeted-skill-builder skill command resolution and pack health preflight">Build skill command resolution and pack health preflight</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Proposed File Changes" data-gate-type="proposed-file-changes" data-target-path="alignment/analyze-sessions-overall-history.html">
+      <h3>Proposed File Changes</h3>
+      <p>Are the proposed artifacts for this analysis acceptable?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-files" value="Keep this alignment report plus prompt and task history artifacts">Keep this alignment report plus prompt and task history artifacts</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Revise the report before treating it as current">Revise the report before treating it as current</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Post-Approval Route" data-gate-type="post-approval-route">
+      <h3>Post-Approval Route</h3>
+      <p>After approval, how should this report route next work?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-route" value="Recommended next command: $targeted-skill-builder ship boundary proof and task-state reconciliation gate">Use the recommended next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="No immediate next command">No immediate next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile" data-section="Compile Feedback And Answers">
+    <h2>Compile Feedback And Answers</h2>
+    <p class="muted">Use feedback YAML for concerns before answering all gates. Use final answers only when the report is ready for agent review.</p>
+    <div class="buttons">
+      <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+      <button type="button" id="compile-answers" disabled>Compile Answers</button>
+      <button type="button" id="copy-compiled">Copy YAML</button>
+      <span id="answer-count" class="copy-status"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+  const alignmentPage = "alignment/analyze-sessions-overall-history.html";
+  const feedbackBlocks = Array.from(document.querySelectorAll(".feedback"));
+  const gateQuestions = Array.from(document.querySelectorAll(".gate-question"));
+  const compiled = document.getElementById("compiled-yaml");
+  const answerCount = document.getElementById("answer-count");
+  const compileAnswers = document.getElementById("compile-answers");
+  function yamlString(value) { return JSON.stringify(String(value || "")); }
+  function selectedFeedback(block) {
+    const active = block.querySelector("button.active");
+    if (!active) return null;
+    const feedback = active.dataset.value;
+    return { section: block.dataset.section, feedback, notes: block.querySelector(".notes").value.trim(), requested_agent_action: feedback === "up" ? "accept-as-is" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval" };
+  }
+  function feedbackYaml(entries) {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked")).map(q => q.dataset.section);
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "feedback_status: revision-request", "approval_status: not-approved", "unanswered_required_questions:"];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q))); else lines.push("  []");
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    return lines.join("\\n");
+  }
+  function updateAnswerState() {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    compileAnswers.disabled = unanswered.length > 0;
+    answerCount.textContent = unanswered.length ? `${unanswered.length} required gate question(s) unanswered` : "All required gate questions answered";
+  }
+  function copyText(text, statusEl) {
+    const done = () => { if (statusEl) statusEl.textContent = "Copied"; };
+    const fallback = () => { compiled.focus(); compiled.select(); if (statusEl) statusEl.textContent = "Select and copy the YAML"; };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done).catch(fallback); else fallback();
+  }
+  feedbackBlocks.forEach(block => {
+    block.querySelectorAll("button[data-value]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wasActive = btn.classList.contains("active");
+        block.querySelectorAll("button[data-value]").forEach(b => b.classList.remove("active"));
+        if (!wasActive) btn.classList.add("active");
+        block.dataset.active = (!wasActive).toString();
+      });
+    });
+    block.querySelector(".compile-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+    block.querySelector(".copy-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = block.querySelector(".yaml-output").value || feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+  });
+  gateQuestions.forEach(q => q.addEventListener("change", updateAnswerState));
+  updateAnswerState();
+  document.getElementById("compile-feedback").addEventListener("click", () => {
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    const yaml = feedbackYaml(entries);
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+  compileAnswers.addEventListener("click", () => {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    if (unanswered.length) { unanswered[0].scrollIntoView({behavior: "smooth", block: "center"}); updateAnswerState(); return; }
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "approval_status: ready-for-agent-review", "answers:"];
+    gateQuestions.forEach(q => {
+      const selected = q.querySelector("input:checked");
+      const notes = q.querySelector(".notes-for-answer").value.trim();
+      const status = selected.value === "Need clarification" ? "needs-clarification" : selected.value === "Other / None of the above" ? "other" : "answered";
+      lines.push("  - section: " + yamlString(q.dataset.section));
+      lines.push("    gate_type: " + yamlString(q.dataset.gateType));
+      lines.push("    status: " + yamlString(status));
+      lines.push("    answer: " + yamlString(selected.value));
+      if (q.dataset.targetPath) lines.push("    target_path: " + yamlString(q.dataset.targetPath));
+      if (notes) lines.push("    notes: " + yamlString(notes));
+    });
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    const yaml = lines.join("\\n");
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+  document.getElementById("copy-compiled").addEventListener("click", () => copyText(compiled.value, answerCount));
+</script>
+</body>
+</html>
