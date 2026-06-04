@@ -20,6 +20,7 @@
 - After ANY correction from the user: update `tasks/lessons.md` with the pattern
 - Write rules for yourself that prevent the same mistake
 - Ruthlessly iterate on these lessons until mistake rate drops
+- For misunderstood-intent corrections, capture: what the user wanted, what the agent interpreted, and which signal was missed
 - Review lessons at session start for relevant project
 
 ### 4. Verification Before Done
@@ -130,6 +131,10 @@ When a skill says "Follow the shared shipping contract convention", apply these 
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+
+### Scope Confirmation for Destructive Work
+
+When a skill's resolved scope would delete, archive, overwrite, or irreversibly transform existing project artifacts not explicitly named in the user's invocation, confirm scope before proceeding. Does NOT apply to additive work, routine shipping, or bug fixes where the user described the symptom.
 
 ### Glossary Convention
 
