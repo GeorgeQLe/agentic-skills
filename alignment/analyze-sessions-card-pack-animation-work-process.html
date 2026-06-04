@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card Pack Animation Work Process Analysis</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 8px; }
+    h2 { margin: 0; color: var(--accent); }
+    h3 { margin-top: 24px; }
+    a { color: var(--accent); }
+    code {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: #fff;
+    }
+    pre, textarea {
+      width: 100%;
+      max-width: 100%;
+      background: #0b1220;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    blockquote {
+      margin: 12px 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--purple);
+      background: #111827;
+      color: #e6edf3;
+    }
+    .summary {
+      color: var(--text-muted);
+      max-width: 900px;
+      margin: 0 0 20px;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 4px 10px;
+      border: 1px solid var(--purple);
+      border-radius: 999px;
+      color: var(--purple);
+      background: #171225;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    .toc, .card, .question-block, .compile-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .toc {
+      margin: 24px 0;
+    }
+    .toc ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+      gap: 8px 16px;
+      padding-left: 20px;
+      margin: 8px 0 0;
+    }
+    section.review-section {
+      margin: 26px 0;
+      padding-top: 8px;
+    }
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .section-feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    button, .radio-card {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1624;
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled { cursor: not-allowed; opacity: 0.55; }
+    .feedback-btn.active[data-feedback="up"] { border-color: var(--green); color: var(--green); }
+    .feedback-btn.active[data-feedback="down"] { border-color: var(--red); color: var(--red); }
+    .feedback-btn.active[data-feedback="needs-clarification"] { border-color: var(--orange); color: var(--orange); }
+    .feedback-panel { display: none; width: 100%; margin-top: 8px; }
+    .feedback-panel textarea, .question-notes textarea { min-height: 90px; }
+    .local-yaml { margin-top: 8px; display: none; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 12px;
+    }
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .metric strong { display: block; font-size: 1.5rem; color: #fff; }
+    .muted { color: var(--text-muted); }
+    .callout {
+      border: 1px solid var(--purple);
+      background: #1c2333;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .table-wrap { overflow-x: auto; width: 100%; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: var(--surface); color: #fff; }
+    .question-block {
+      margin-top: 16px;
+      background: #1c2333;
+      border-color: var(--purple);
+    }
+    .question-block h3 {
+      color: var(--purple);
+      margin-top: 0;
+    }
+    .question {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #121a2a;
+    }
+    .question-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .radio-card {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .question-notes { margin-top: 8px; display: none; }
+    .copy-status { color: var(--text-muted); font-size: 0.875rem; margin-left: 8px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+    @media (max-width: 860px) {
+      main { width: min(100% - 24px, 1180px); padding-top: 24px; }
+    }
+    @media (max-width: 560px) {
+      main { width: min(100% - 16px, 1180px); }
+      .metric strong { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <p class="status">alignment_status: review</p>
+  <h1>Card Pack Animation Work Process Analysis</h1>
+  <p class="summary">Report for the `$analyze-sessions` request on June 4, 2026: determine what happened with the card pack animation work process and why repeated fixes kept drifting. This page is a review artifact for the analysis, not a code change.</p>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#overview">Overview Stats</a></li>
+      <li><a href="#executive-finding">Executive Finding</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#patterns">Recurring Patterns</a></li>
+      <li><a href="#root-cause">Root Cause</a></li>
+      <li><a href="#evidence-matrix">Evidence Matrix</a></li>
+      <li><a href="#confidence">Confidence Register</a></li>
+      <li><a href="#recommendations">Recommendations</a></li>
+      <li><a href="#gaps">Coverage Gaps</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile</a></li>
+    </ul>
+  </nav>
+
+  <section id="overview" class="review-section">
+    <div class="section-head">
+      <h2>Overview Stats</h2>
+      <div class="section-feedback" data-section="Overview Stats">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls">
+            <button class="compile-local">Compile Feedback YAML</button>
+            <button class="copy-local">Copy YAML</button>
+            <span class="copy-status"></span>
+          </div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="metric"><strong>14,297</strong><span class="muted">normalized visible user records after de-duplication across compact and rich local history sources</span></div>
+      <div class="metric"><strong>34</strong><span class="muted">direct visible card-pack/prototype-animation prompts in this repo after strict filtering</span></div>
+      <div class="metric"><strong>26</strong><span class="muted">direct prompt sessions in the focused set</span></div>
+      <div class="metric"><strong>May 24 - Jun 4</strong><span class="muted">focused direct-prompt date range in 2026</span></div>
+    </div>
+    <p>Full available local history scan used the readable sources, not a sample: Claude compact history had 10,061 lines, Claude project transcripts had 678 JSONL files and 56,394 lines, Codex rollout history had 714 JSONL files and 204,775 lines, and Codex compact history had 1,994 lines. There were no JSON parse errors in the scan used for this report.</p>
+    <p>The focused direct-prompt set is intentionally conservative: 33 Claude prompts and 1 Codex prompt from `tools/dev/agentic-skills`. Rich Claude subagent prompts and agent-generated implementation plans were retained as process evidence, but not counted as direct user frustration prompts.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Focused Signal</th><th>Direct Prompts</th><th>Sessions</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Apex and layering contract</td><td>14</td><td>12</td><td><code>top apex position</code>, <code>above the pack body</code>, <code>behind the pack body</code></td></tr>
+          <tr><td>Visual/debug proof request</td><td>14</td><td>11</td><td><code>make all animations related to the drawer close very slow</code>, <code>I need to see what's causing a visual bug</code></td></tr>
+          <tr><td>Close sequence and collapse behavior</td><td>11</td><td>10</td><td><code>visible top-left-most card</code>, <code>reverse of the fan out animation</code></td></tr>
+          <tr><td>Visual correction or regression report</td><td>10</td><td>9</td><td><code>It doesn't look right</code>, <code>there are two visual bugs</code>, <code>there are still visual glitching</code></td></tr>
+          <tr><td>Investigation, audit, or state-machine request</td><td>7</td><td>7</td><td><code>/investigate</code>, <code>state machine</code>, <code>step by step</code></td></tr>
+          <tr><td>Approval or working signal</td><td>2</td><td>2</td><td><code>I like it, but without validation...</code>, <code>Subsequent drawer closes appear to animate correctly</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="executive-finding" class="review-section">
+    <div class="section-head">
+      <h2>Executive Finding</h2>
+      <div class="section-feedback" data-section="Executive Finding">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <p><strong>What happened:</strong> the card pack animation work became a moving target because the implementation treated a multi-component visual choreography as a set of local animation bugs. The actual owner surface was a state machine spanning `PrototypePage`, `BottomSheet`, `PackOpener`, and `SealedPack`.</p>
+      <p><strong>Why it kept recurring:</strong> fixes repeatedly adjusted local symptoms such as `cardSlideY`, z-index, timing, or layout animation behavior before the page had a single lifecycle authority. That let pack identity, sheet lifetime, drawer collapse, shared-layout morph, and debug readout drift from each other.</p>
+      <p><strong>When it materially improved:</strong> `781d44c1` fixed the missing sheet-exit handoff by keeping pack identity alive until `BottomSheet.onExitComplete`. `cfb236e0` then made the cleaner architectural move: one `PackFlowPhase` owns the flow, while `activePack` remains data identity.</p>
+    </div>
+    <p>The failure was therefore not primarily "Framer Motion is hard" or "one bad z-index." Framer Motion made symptoms visible, but the deeper issue was orchestration: the code lacked a canonical sequence until after several correction cycles.</p>
+  </section>
+
+  <section id="timeline" class="review-section">
+    <div class="section-head">
+      <h2>Timeline</h2>
+      <div class="section-feedback" data-section="Timeline">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Evidence</th><th>What Changed</th><th>Process Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>2026-05-24</td><td>Direct prompt: "unpacks a card pack with a nifty animation"</td><td>Initial prototype direction. Commit `f13cfdce` introduced prototype route and sealed pack components.</td><td>Work began as an exploratory visual prototype, not a locked state-machine spec.</td></tr>
+          <tr><td>2026-05-25</td><td>7 direct prompts about drag tear, opacity, shimmer, card pop-out, bottom sheet, and reopen interactions.</td><td>Rapid implementation added tear, shimmer, pack reveal, pop-out/spread, bottom sheet, and reopen behavior.</td><td>Design evolved through visual feedback. That was normal for a prototype, but no durable invariant was created as complexity grew.</td></tr>
+          <tr><td>2026-05-26</td><td>11 direct prompts, including repeated corrections about clipping, teleports, apex travel, and close path.</td><td>Commits through `6bcb2076` improved shared card face, full-height card, z-index/elevation, return height, and card-to-drawer motion.</td><td>The user had to restate the visual contract. The work was still local-fix driven, mostly inside `SealedPack` and animation constants.</td></tr>
+          <tr><td>2026-05-27</td><td>6 direct prompts asked for slow debugging, reported two teleports, adjusted apex height, and filed `/investigate` for close blink/reopen.</td><td>Debug slowdowns exposed first-close and unintended-reopen bugs. `5736f3c0` fixed one open-path issue by adding pending-open/fallback handling.</td><td>Slow motion revealed the state mismatch, but the diagnosis still focused on symptoms such as pending flags and timing.</td></tr>
+          <tr><td>2026-05-28</td><td>6 direct prompts covered first-close apex skip, unintentional auto-open behavior, and visible top-left collapse requirement.</td><td>`fcc302a5` added reverse fan-in close but still cleared `openPack` at collapse completion. `558a9873` then removed apex travel while trying to eliminate flash.</td><td>This is the key regression fork: the first real close pipeline existed, but sheet lifetime and pack identity were still coupled.</td></tr>
+          <tr><td>2026-05-29</td><td>Audit request and repo artifacts: `4d076fff` debug harness, `3fe33813` audit page.</td><td>Step-debug harness and audit document made the expected sequence visible.</td><td>The harness improved observability, but did not itself fix the missing state boundary.</td></tr>
+          <tr><td>2026-05-31</td><td>Direct prompt: open debug HTML and start dev server. Repo artifact: `3ed1e11a` changed two-stage open behavior.</td><td>Tearing only unsealed the pack except first-tear auto-open; close mismatch was inherited.</td><td>Open model changed while close architecture remained fragile.</td></tr>
+          <tr><td>2026-06-01</td><td>Forensics and approval-signal reports; direct state-machine explanation request.</td><td>`781d44c1` restored pack close sequencing with `isSheetMounted`, `onExitComplete`, one-shot collapse, restored apex travel, and focused tests. `ca3efd37` added state-machine visualization.</td><td>The work finally shifted from symptom patching to explicit state sequencing.</td></tr>
+          <tr><td>2026-06-03</td><td>Prompt history: "Single-Phase Pack Animation Flow Plan"; ship manifest for `cfb236e0`.</td><td>`cfb236e0` replaced parallel lifecycle booleans with `PackFlowPhase` plus `activePack` identity.</td><td>This was the elegant cleanup: a single lifecycle authority removed the drift surface that caused the struggle.</td></tr>
+          <tr><td>2026-06-04</td><td>Current `$analyze-sessions` prompt.</td><td>This report correlates direct prompts, commits, task history, and prior reports.</td><td>The remaining durable gap is a visual proof gate for animation work, not another source-only explanation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="patterns" class="review-section">
+    <div class="section-head">
+      <h2>Recurring Patterns</h2>
+      <div class="section-feedback" data-section="Recurring Patterns">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>1. Same Visual Contract Repeated</h3>
+        <p>The user repeatedly described the same path: card comes out of the pack to an apex, moves into the drawer, then on close returns to apex and only descends behind the pack body after that.</p>
+        <blockquote>"It will be behind the pack body when it is moving downward to the final closed position"</blockquote>
+      </div>
+      <div class="card">
+        <h3>2. Local Fixes Beat System Ownership</h3>
+        <p>Many fixes touched local values: `cardSlideY`, z-index, `packBodyElevated`, durations, and pending flags. The true invariant was cross-component: page phase, sheet mount, drawer collapse, layout morph, and elevation drop.</p>
+      </div>
+      <div class="card">
+        <h3>3. Debugging Arrived Late</h3>
+        <p>Slow-motion debugging and the step harness appeared after repeated visual corrections. Before that, the process relied on manual observation and code reasoning, which was insufficient for a stateful animation.</p>
+      </div>
+      <div class="card">
+        <h3>4. Approval Was Implicit</h3>
+        <p>The approval-signal report found no clean "approved" statement. It found implicit signals, including a user-authored plan calling `6bcb2076` "Working correctly" for the apex chain.</p>
+      </div>
+      <div class="card">
+        <h3>5. Visual Proof Was Blocked Or Weak</h3>
+        <p>The June 3 ship manifest passed unit tests, typecheck, build, route HTTP 200, and Safari open, but automated browser interaction and screenshot capture were blocked. That left the highest-risk visual timing proof manual.</p>
+      </div>
+      <div class="card">
+        <h3>6. The Final Fix Was Architectural</h3>
+        <p>`cfb236e0` succeeded because it reduced lifecycle sources of truth. It made phase the owner of the animation flow instead of coordinating several booleans and refs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="root-cause" class="review-section">
+    <div class="section-head">
+      <h2>Root Cause</h2>
+      <div class="section-feedback" data-section="Root Cause">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <p>The main process failure was not that agents failed to edit animation code. They edited it constantly. The failure was that implementation moved faster than the explicit lifecycle contract.</p>
+    <ol>
+      <li><strong>Prototype complexity crossed a threshold.</strong> The first pack interactions were ordinary prototype iteration. Once a bottom sheet, shared `layoutId`, reverse fan-in, z-index/elevation, first-tear onboarding, and debug stepping were all involved, the animation became a state machine.</li>
+      <li><strong>The owner state was wrong.</strong> Pre-`781d44c1` code made `openPack` act as both identity and sheet lifetime. Clearing it meant several things at once: sheet exits, drawer content unmounts, and the pack sees close state.</li>
+      <li><strong>The first reverse-collapse implementation was incomplete.</strong> `fcc302a5` added `isClosing`, `PackOpener.isClosing`, and collapse completion, but still cleared `openPack` from collapse completion.</li>
+      <li><strong>A symptom fix became a regression.</strong> `558a9873` tried to eliminate a flash by changing `cardSlideY.set(-180)` to `0`, but later evidence says the flash was from collapse visibility/sheet handoff, while `-180` was part of the intended apex travel.</li>
+      <li><strong>Durable recovery came from making the lifecycle explicit.</strong> `781d44c1` separated sheet exit from pack identity. `cfb236e0` consolidated that into `PackFlowPhase`, which is the more maintainable form.</li>
+    </ol>
+  </section>
+
+  <section id="evidence-matrix" class="review-section">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="section-feedback" data-section="Evidence Matrix">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+        <tbody>
+          <tr><td>The struggle was process-level, not only code-level.</td><td>34 direct focused prompts across 26 sessions; 10 visual-correction prompts; 11 close-sequence prompts; 14 debug/visual-proof prompts.</td><td>The user had to keep restating behavior, which means the workflow did not preserve accepted visual invariants between fixes.</td><td>High</td><td>Future fixes need a visual contract and regression proof gate.</td></tr>
+          <tr><td>The close pipeline's first major behavior change was incomplete.</td><td>Forensics report identifies `fcc302a5` as adding reverse fan-in close while still tying `BottomSheet.isOpen` to `!!openPack` and clearing `openPack` in `handleCollapseComplete`.</td><td>The close path had a new collapse phase, but no separate sheet-exit and pack-identity lifetime.</td><td>High</td><td>Do not evaluate future fixes by local component diffs only.</td></tr>
+          <tr><td>`558a9873` misdiagnosed the flash.</td><td>Forensics and approval-signal reports state `cardSlideY.set(-180)` was restored later; approval-signal report records the user plan saying the flash was from visible collapse in the still-open sheet.</td><td>Removing apex travel addressed a symptom by deleting intended behavior.</td><td>High</td><td>Symptom fixes should be checked against accepted behavior lists before commit.</td></tr>
+          <tr><td>`781d44c1` was the first known-good current close sequence.</td><td>Forensics report lists `isSheetMounted`, `onExitComplete`, one-shot collapse completion, restored `cardSlideY.set(-180)`, and focused tests.</td><td>This commit added the missing state boundary and proved sequencing in tests.</td><td>High</td><td>Use `781d44c1` as the baseline for close behavior when comparing future changes.</td></tr>
+          <tr><td>`cfb236e0` resolved the owner-boundary smell more elegantly.</td><td>Ship manifest and git patch show `PackFlowPhase`, `activePack`, derived `isSheetOpen`, `drawerIsClosing`, and source-regression tests removing old booleans.</td><td>The refactor reduced multiple lifecycle sources of truth into one page phase state.</td><td>High</td><td>Future animation work should keep one lifecycle owner and derived booleans.</td></tr>
+          <tr><td>Automated visual proof remained the main residual gap.</td><td>June 3 ship manifest says browser/plugin interaction, Computer Use, Safari JavaScript, and screenshot capture were blocked; route open and tests passed.</td><td>The code-level proof was strong, but pixel/timing proof was still not fully automated.</td><td>Medium-High</td><td>Add a Playwright/debug-step visual gate when browser control is available.</td></tr>
+          <tr><td>Codex was not the main runner during the early struggle.</td><td>Focused direct-prompt split is 33 Claude, 1 Codex. The June 3 Codex plan appears in repo prompt history, not as an early direct prompt.</td><td>Most early iteration happened in Claude; Codex appears in later analysis/refactor/shipping surfaces.</td><td>Medium</td><td>Do not assign early root cause to Codex-specific behavior without more evidence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="question-block" data-gate-section="Evidence Matrix">
+      <h3>Research Completeness Gate</h3>
+      <div class="question" data-question="evidence_sufficient" data-gate-type="evidence coverage">
+        <p>Is the evidence sufficient to explain the card pack animation work process?</p>
+        <div class="question-options">
+          <label class="radio-card"><input type="radio" name="evidence_sufficient" value="Sufficient for process diagnosis" data-status="answered"> Sufficient for process diagnosis</label>
+          <label class="radio-card"><input type="radio" name="evidence_sufficient" value="Needs more transcript excerpts" data-status="answered"> Needs more transcript excerpts</label>
+          <label class="radio-card"><input type="radio" name="evidence_sufficient" value="Other / None of the above" data-status="other"> Other / None of the above</label>
+          <label class="radio-card"><input type="radio" name="evidence_sufficient" value="Need clarification" data-status="needs-clarification"> Need clarification</label>
+        </div>
+        <div class="question-notes"><textarea placeholder="Notes, requested evidence, or clarification"></textarea></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="confidence" class="review-section">
+    <div class="section-head">
+      <h2>Confidence Register</h2>
+      <div class="section-feedback" data-section="Confidence Register">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Conclusion</th><th>Status</th><th>What Could Change It</th></tr></thead>
+        <tbody>
+          <tr><td>The central problem was lifecycle ownership drift.</td><td>Evidence-backed, high confidence.</td><td>A direct transcript showing the behavior was visually correct before `cfb236e0` despite the parallel-state model would narrow the claim.</td></tr>
+          <tr><td>`781d44c1` is the known-good close baseline.</td><td>Evidence-backed, high confidence from existing forensics and tests.</td><td>New visual evidence showing `781d44c1` still fails the accepted close sequence would downgrade this to partial.</td></tr>
+          <tr><td>`cfb236e0` is the elegant architecture outcome.</td><td>Evidence-backed, high confidence from patch and ship manifest.</td><td>A later regression caused by `PackFlowPhase` would not invalidate the design, but would require amending the implementation verdict.</td></tr>
+          <tr><td>Most early iteration happened in Claude.</td><td>Evidence-backed for direct compact prompts; medium confidence for all hidden or unavailable context.</td><td>External/exported transcripts not present locally could change source attribution.</td></tr>
+          <tr><td>Visual proof gap is the highest remaining workflow issue.</td><td>Evidence-backed, medium-high confidence.</td><td>If a separate screenshot/video proof artifact exists outside scanned sources, this would become "proof not linked to ship records" rather than "proof absent."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="recommendations" class="review-section">
+    <div class="section-head">
+      <h2>Recommendations</h2>
+      <div class="section-feedback" data-section="Recommendations">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Pattern</th><th>Frequency Evidence</th><th>Recommendation Type</th><th>Suggested Owner And Validation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Visual animation fixes ship without automated visual gate.</td><td>14 direct debug/visual-proof prompts; June 3 manifest says automated interaction/screenshot proof was blocked.</td><td>Skill or standing instruction.</td><td>Owner surface: frontend debug/investigation workflow. Validation: Playwright debug-step test for `/prototype` that captures open/close gate screenshots.</td></tr>
+          <tr><td>2</td><td>Multi-component choreography lacks one state-machine authority until late.</td><td>Forensics root cause plus `cfb236e0` refactor.</td><td>Standing code convention.</td><td>Owner surface: app animation architecture and tests. Validation: source assertion for one lifecycle state plus derived booleans.</td></tr>
+          <tr><td>3</td><td>Accepted behavior is implicit in chats rather than canonical before changes.</td><td>Approval-signal report found no clean explicit approval, only implicit signals.</td><td>Skill workflow.</td><td>Owner surface: `analyze-sessions` to `targeted-skill-builder` handoff. Validation: accepted behavior list must be written before rebuild.</td></tr>
+          <tr><td>4</td><td>Symptom fixes are not checked against the current accepted behavior list.</td><td>`558a9873` removed intended apex travel while chasing flash.</td><td>Review checklist.</td><td>Owner surface: `investigate` and `debug`. Validation: each visual fix names preserved behaviors and likely regression risk.</td></tr>
+          <tr><td>5</td><td>Ship manifests record blocked visual proof but do not convert it into an actionable follow-up gate.</td><td>June 3 manifest lists blocked browser/screenshot tools and residual timing risk.</td><td>Shipping convention.</td><td>Owner surface: `ship`/`ship-end` for frontend visual changes. Validation: blocked visual proof creates explicit manual or automated follow-up item.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Highest-Impact Automations</h3>
+    <ol>
+      <li><strong>Animation visual regression proof gate:</strong> run route, drive debug steps, capture screenshots at apex, collapse, sheet exit, layout morph, and sealed state.</li>
+      <li><strong>Accepted-behavior extraction:</strong> convert user visual corrections into a short invariant list before implementation.</li>
+      <li><strong>Lifecycle-owner smell check:</strong> flag animation flows with multiple page booleans/refs controlling one sequence.</li>
+      <li><strong>Forensics-to-fix handoff:</strong> require a fix plan to map each prior finding to either preserved behavior, changed behavior, or rejected diagnosis.</li>
+      <li><strong>Blocked-proof follow-up:</strong> when browser automation is unavailable, preserve a task with exact manual steps instead of treating route-open as equivalent proof.</li>
+    </ol>
+    <p><strong>Post-approval remediation candidate:</strong> `$targeted-skill-builder frontend animation visual regression proof gate`. Likely owner surface: frontend investigation/debug and shipping conventions. Validation expectation: a focused fixture or layer1 contract that requires visual proof or explicit blocked-proof follow-up for Framer/shared-layout animation changes.</p>
+  </section>
+
+  <section id="gaps" class="review-section">
+    <div class="section-head">
+      <h2>Coverage Gaps</h2>
+      <div class="section-feedback" data-section="Coverage Gaps">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <ul>
+      <li>The report did not replay the real browser animation. It analyzes history, source, commits, tests, and ship artifacts.</li>
+      <li>Compact history is the authority for direct user prompt counts. Rich subagent prompts were inspected as process evidence but not counted as direct user prompts.</li>
+      <li>Codex rollout history exists and was scanned for metadata/user records, but the early direct animation work appears overwhelmingly in Claude compact history.</li>
+      <li>Visual proof artifacts, if stored outside local history and repo files, were not available to this scan.</li>
+      <li>The current `cfb236e0` code was not re-tested in this analysis run. The report relies on the existing ship manifest and current git patch for that commit.</li>
+    </ul>
+  </section>
+
+  <section id="gates" class="review-section">
+    <div class="section-head">
+      <h2>Review Gates</h2>
+      <div class="section-feedback" data-section="Review Gates">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="question-block">
+      <h3>Assumptions And Confidence</h3>
+      <div class="question" data-question="confidence_acceptance" data-gate-type="assumptions/confidence">
+        <p>Do you accept the confidence levels and main inference that lifecycle ownership drift was the core process failure?</p>
+        <div class="question-options">
+          <label class="radio-card"><input type="radio" name="confidence_acceptance" value="Accept confidence and core inference" data-status="answered"> Accept confidence and core inference</label>
+          <label class="radio-card"><input type="radio" name="confidence_acceptance" value="Revise confidence or core inference" data-status="answered"> Revise confidence or core inference</label>
+          <label class="radio-card"><input type="radio" name="confidence_acceptance" value="Other / None of the above" data-status="other"> Other / None of the above</label>
+          <label class="radio-card"><input type="radio" name="confidence_acceptance" value="Need clarification" data-status="needs-clarification"> Need clarification</label>
+        </div>
+        <div class="question-notes"><textarea placeholder="Notes, requested changes, or clarification"></textarea></div>
+      </div>
+    </div>
+    <div class="question-block">
+      <h3>Artifact Destination & Proposed File Changes</h3>
+      <div class="question" data-question="artifact_scope" data-gate-type="artifact destination" data-target-path="alignment/analyze-sessions-card-pack-animation-work-process.html">
+        <p>Is this review artifact correctly scoped to this HTML page plus prompt/task tracking files, with no canonical Markdown report yet?</p>
+        <div class="question-options">
+          <label class="radio-card"><input type="radio" name="artifact_scope" value="Keep as review HTML plus prompt/task tracking only" data-status="answered"> Keep as review HTML plus prompt/task tracking only</label>
+          <label class="radio-card"><input type="radio" name="artifact_scope" value="Also write a canonical Markdown history report after approval" data-status="answered"> Also write canonical Markdown after approval</label>
+          <label class="radio-card"><input type="radio" name="artifact_scope" value="Other / None of the above" data-status="other"> Other / None of the above</label>
+          <label class="radio-card"><input type="radio" name="artifact_scope" value="Need clarification" data-status="needs-clarification"> Need clarification</label>
+        </div>
+        <div class="question-notes"><textarea placeholder="Notes, requested path, or clarification"></textarea></div>
+      </div>
+      <div class="question" data-question="post_approval_route" data-gate-type="post-approval route">
+        <p>After approval, should the durable follow-up be a targeted skill-builder pass for the frontend animation visual regression proof gate?</p>
+        <div class="question-options">
+          <label class="radio-card"><input type="radio" name="post_approval_route" value="Yes, use targeted-skill-builder for the visual proof gate" data-status="answered"> Yes, use targeted-skill-builder</label>
+          <label class="radio-card"><input type="radio" name="post_approval_route" value="No follow-up route from this report" data-status="answered"> No follow-up route</label>
+          <label class="radio-card"><input type="radio" name="post_approval_route" value="Other / None of the above" data-status="other"> Other / None of the above</label>
+          <label class="radio-card"><input type="radio" name="post_approval_route" value="Need clarification" data-status="needs-clarification"> Need clarification</label>
+        </div>
+        <div class="question-notes"><textarea placeholder="Notes, alternate route, or clarification"></textarea></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compile" class="review-section">
+    <div class="section-head">
+      <h2>Compile</h2>
+      <div class="section-feedback" data-section="Compile">
+        <button class="feedback-btn" data-feedback="up">Approve</button>
+        <button class="feedback-btn" data-feedback="down">Concern</button>
+        <button class="feedback-btn" data-feedback="needs-clarification">Clarify</button>
+        <div class="feedback-panel">
+          <textarea placeholder="Optional section feedback"></textarea>
+          <div class="controls"><button class="compile-local">Compile Feedback YAML</button><button class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+          <textarea class="local-yaml" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="compile-box">
+      <p class="muted">Use feedback YAML for concerns or clarification before final approval. Use final answers only when every required gate has an answer.</p>
+      <div class="controls">
+        <button id="compile-feedback">Compile Feedback YAML</button>
+        <button id="compile-answers">Compile Answers</button>
+        <button id="copy-compiled">Copy YAML</button>
+        <span id="remaining"></span>
+        <span id="copy-status" class="copy-status"></span>
+      </div>
+      <textarea id="compiled-yaml" readonly rows="14"></textarea>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const ALIGNMENT_PAGE = "alignment/analyze-sessions-card-pack-animation-work-process.html";
+  const feedbackMap = new Map();
+
+  function yamlEscape(value) {
+    const text = String(value == null ? "" : value);
+    if (!text) return "\"\"";
+    return JSON.stringify(text);
+  }
+
+  function selectedFeedbackEntries(sectionName) {
+    const entries = [];
+    document.querySelectorAll(".section-feedback").forEach((wrap) => {
+      const active = wrap.querySelector(".feedback-btn.active");
+      if (!active) return;
+      if (sectionName && wrap.dataset.section !== sectionName) return;
+      const notes = wrap.querySelector(".feedback-panel textarea")?.value || "";
+      const feedback = active.dataset.feedback;
+      entries.push({
+        section: wrap.dataset.section,
+        feedback,
+        notes,
+        requested_agent_action:
+          feedback === "up" ? "accept-as-is" :
+          feedback === "down" ? "investigate-and-revise" :
+          "clarify-before-approval"
+      });
+    });
+    return entries;
+  }
+
+  function unansweredQuestions() {
+    return Array.from(document.querySelectorAll(".question")).filter((q) => {
+      return !q.querySelector("input[type=radio]:checked");
+    });
+  }
+
+  function compileFeedback(sectionName) {
+    const entries = selectedFeedbackEntries(sectionName);
+    const unanswered = unansweredQuestions().map((q) => q.dataset.question);
+    const lines = [
+      `alignment_page: ${yamlEscape(ALIGNMENT_PAGE)}`,
+      "feedback_status: revision-request",
+      "approval_status: not-approved",
+      "unanswered_required_questions:",
+      ...unanswered.map((q) => `  - ${yamlEscape(q)}`),
+      "section_feedback:"
+    ];
+    if (entries.length === 0) {
+      lines.push("  []");
+    } else {
+      entries.forEach((entry) => {
+        lines.push("  - section: " + yamlEscape(entry.section));
+        lines.push("    feedback: " + yamlEscape(entry.feedback));
+        lines.push("    notes: " + yamlEscape(entry.notes));
+        lines.push("    requested_agent_action: " + yamlEscape(entry.requested_agent_action));
+      });
+    }
+    return lines.join("\n");
+  }
+
+  function compileAnswers() {
+    const lines = [
+      `alignment_page: ${yamlEscape(ALIGNMENT_PAGE)}`,
+      "approval_status: ready-for-agent-review",
+      "answers:"
+    ];
+    document.querySelectorAll(".question").forEach((q) => {
+      const checked = q.querySelector("input[type=radio]:checked");
+      const notes = q.querySelector(".question-notes textarea")?.value || "";
+      const section = q.closest(".question-block")?.dataset.gateSection ||
+        q.closest("section")?.querySelector("h2")?.textContent ||
+        "Review Gates";
+      lines.push("  - section: " + yamlEscape(section));
+      lines.push("    gate_type: " + yamlEscape(q.dataset.gateType || "review"));
+      lines.push("    status: " + yamlEscape(checked?.dataset.status || "unanswered"));
+      lines.push("    answer: " + yamlEscape(checked?.value || ""));
+      if (notes) lines.push("    notes: " + yamlEscape(notes));
+      if (q.dataset.targetPath) lines.push("    target_path: " + yamlEscape(q.dataset.targetPath));
+    });
+    const feedback = selectedFeedbackEntries();
+    lines.push("section_feedback:");
+    if (feedback.length === 0) {
+      lines.push("  []");
+    } else {
+      feedback.forEach((entry) => {
+        lines.push("  - section: " + yamlEscape(entry.section));
+        lines.push("    feedback: " + yamlEscape(entry.feedback));
+        lines.push("    notes: " + yamlEscape(entry.notes));
+        lines.push("    requested_agent_action: " + yamlEscape(entry.requested_agent_action));
+      });
+    }
+    return lines.join("\n");
+  }
+
+  async function copyText(text, statusEl) {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        if (statusEl) statusEl.textContent = "Copied";
+        return;
+      }
+    } catch (error) {
+      // Fall back to selecting text below.
+    }
+    if (statusEl) statusEl.textContent = "Copy blocked; select the textarea";
+  }
+
+  function refreshRemaining() {
+    const remaining = unansweredQuestions();
+    const el = document.getElementById("remaining");
+    const finalBtn = document.getElementById("compile-answers");
+    el.textContent = remaining.length ? `${remaining.length} required unanswered` : "All required answered";
+    finalBtn.disabled = remaining.length > 0;
+  }
+
+  document.querySelectorAll(".feedback-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest(".section-feedback");
+      const wasActive = btn.classList.contains("active");
+      wrap.querySelectorAll(".feedback-btn").forEach((b) => b.classList.remove("active"));
+      if (!wasActive) btn.classList.add("active");
+      const hasActive = !!wrap.querySelector(".feedback-btn.active");
+      wrap.querySelector(".feedback-panel").style.display = hasActive ? "block" : "none";
+      if (!hasActive) {
+        const local = wrap.querySelector(".local-yaml");
+        local.value = "";
+        local.style.display = "none";
+      }
+    });
+  });
+
+  document.querySelectorAll(".compile-local").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest(".section-feedback");
+      const yaml = compileFeedback(wrap.dataset.section);
+      const out = wrap.querySelector(".local-yaml");
+      out.value = yaml;
+      out.style.display = "block";
+      copyText(yaml, wrap.querySelector(".copy-status"));
+    });
+  });
+
+  document.querySelectorAll(".copy-local").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest(".section-feedback");
+      const out = wrap.querySelector(".local-yaml");
+      out.select();
+      copyText(out.value, wrap.querySelector(".copy-status"));
+    });
+  });
+
+  document.querySelectorAll(".question input[type=radio]").forEach((input) => {
+    input.addEventListener("change", () => {
+      const notes = input.closest(".question").querySelector(".question-notes");
+      if (notes) notes.style.display = "block";
+      refreshRemaining();
+    });
+  });
+
+  document.getElementById("compile-feedback").addEventListener("click", () => {
+    const yaml = compileFeedback();
+    const out = document.getElementById("compiled-yaml");
+    out.value = yaml;
+    copyText(yaml, document.getElementById("copy-status"));
+  });
+
+  document.getElementById("compile-answers").addEventListener("click", () => {
+    const remaining = unansweredQuestions();
+    if (remaining.length) {
+      remaining[0].scrollIntoView({ behavior: "smooth", block: "center" });
+      refreshRemaining();
+      return;
+    }
+    const yaml = compileAnswers();
+    const out = document.getElementById("compiled-yaml");
+    out.value = yaml;
+    copyText(yaml, document.getElementById("copy-status"));
+  });
+
+  document.getElementById("copy-compiled").addEventListener("click", () => {
+    const out = document.getElementById("compiled-yaml");
+    out.select();
+    copyText(out.value, document.getElementById("copy-status"));
+  });
+
+  refreshRemaining();
+})();
+</script>
+</body>
+</html>

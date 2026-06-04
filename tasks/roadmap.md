@@ -1,3 +1,28 @@
+## Current Targeted Update: Card Pack Animation Work Process Analysis 2026-06-04
+
+**Goal:** Determine what happened across the card pack animation work process, why the same pack/drawer problems kept recurring, and what workflow gap would prevent repeated fixes from drifting.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The analysis needs one normalized evidence model across local Claude/Codex history, existing animation reports, git/task artifacts, and the latest phase-refactor shipping record.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the analysis plan and final review notes.
+- [x] Full readable Claude and Codex histories are searched rather than sampled, with unreadable sources explicitly reported.
+- [x] Existing animation forensics, approval-signal, state-machine, and phase-refactor artifacts are incorporated as repo evidence.
+- [x] The report distinguishes explicit evidence from inference and explains the process failure, not just the code failure.
+- [x] `alignment/analyze-sessions-card-pack-animation-work-process.html` renders the full report with evidence, assumptions, recommendations, and review gates.
+- [x] Validation checks prove the artifact exists, parses as HTML, contains required sections, and intended files are committed and pushed while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation, inspect relevant instructions/lessons, and record this plan.
+2. Stream-parse `~/.claude/history.jsonl`, `~/.codex/history.jsonl`, and `~/.codex/sessions/**/*.jsonl` into normalized user-message records.
+3. Filter and classify card pack animation messages by date, source, session, project, symptom, approval signal, implementation attempt, verification method, and correction pattern.
+4. Correlate history evidence with repo artifacts: forensics report, approval-signal report, task/history notes, ship manifests, and recent animation phase refactor.
+5. Write the full-depth alignment page/report and update task review notes.
+6. Run targeted verification, inspect the diff boundary, commit, and push intended changes on `master` if the unrelated dirty tree allows a safe intended-file boundary.
+
 ## Current Targeted Update: Environment Variable Leak Conversation Audit 2026-06-04
 
 **Goal:** Audit full available Claude and Codex conversation history to determine what issues led to environment variables or credential-bearing values being leaked, without repeating any secret values in the report.

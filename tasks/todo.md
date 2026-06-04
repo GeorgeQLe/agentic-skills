@@ -1,3 +1,34 @@
+## Current Task - Card Pack Animation Work Process Analysis 2026-06-04
+
+**Goal:** Determine what happened across the card pack animation work process, why the same pack/drawer problems kept recurring, and what workflow gap would prevent repeated fixes from drifting.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/analyze-sessions/`.
+- [x] Record the analysis plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Parse full available Claude and Codex histories into normalized user-message records.
+- [x] Classify card pack animation sessions by symptom, fix attempt, verification method, approval signal, and correction pattern.
+- [x] Correlate history evidence with existing animation forensics, approval-signal, state-machine, phase-refactor, task, history, and ship artifacts.
+- [x] Write `alignment/analyze-sessions-card-pack-animation-work-process.html` with the complete report and review gates.
+- [x] Verify the artifact, record review notes, commit, and push intended changes while preserving unrelated dirty work.
+
+### Review
+
+- Captured the visible `$analyze-sessions` invocation under `prompts/analyze-sessions/skill-prompt-20260604-182117-card-pack-animation-work-process.md`.
+- Parsed full readable local history sources rather than sampling: 10,061 Claude compact history lines, 678 Claude project JSONL files / 56,394 lines, 714 Codex rollout JSONL files / 204,775 lines, and 1,994 Codex compact history lines, with 0 JSON parse errors.
+- Normalized 14,297 visible user records after de-duplication. Direct focused card-pack/prototype-animation prompts in this repo totaled 34 messages across 26 sessions from 2026-05-24 through 2026-06-04: 33 Claude and 1 Codex.
+- Kept rich Claude subagent prompts and agent-generated implementation plans as process evidence only; they were not counted as direct user prompts.
+- Direct focused category counts: apex/layering contract 14 prompts / 12 sessions, visual/debug proof request 14 / 11, close sequence/collapse behavior 11 / 10, visual correction/regression 10 / 9, investigation/audit/state-machine request 7 / 7, approval-or-working signal 2 / 2.
+- Correlated the prompt history with `docs/history/animation-pack-drawer-forensics-2026-06-01.md`, `docs/history/animation-approval-signals-2026-06-01.md`, `tasks/ship-manifest-2026-06-03-prototype-pack-flow-phase.md`, current task/history notes, and scoped git history.
+- Main finding: the repeated struggle was a process/ownership failure. Agents kept chasing local visual symptoms while the actual owner surface was a cross-component lifecycle state machine across `PrototypePage`, `BottomSheet`, `PackOpener`, and `SealedPack`.
+- Key code/process pivot: `fcc302a5` added reverse fan-in close but still coupled sheet lifetime to `openPack`; `558a9873` misdiagnosed the flash and removed intended apex travel; `781d44c1` restored sequencing by separating sheet exit from pack identity; `cfb236e0` made the elegant follow-up by centralizing lifecycle in `PackFlowPhase`.
+- Wrote `alignment/analyze-sessions-card-pack-animation-work-process.html` with overview stats, timeline, recurring patterns, root-cause analysis, evidence matrix, confidence register, coverage gaps, recommendations, review gates, and feedback/final-answer YAML controls.
+- Focused validation passed: required HTML content check, Python `HTMLParser` parse, embedded JavaScript parse via Node `vm.Script`, and `git diff --check` for intended files.
+- Browser open status: Linux `xdg-open` failed because no Linux browser was registered; WSL Windows `powershell.exe Start-Process file://wsl.localhost/Ubuntu/.../alignment/analyze-sessions-card-pack-animation-work-process.html` succeeded.
+- Intended shipping boundary is limited to `alignment/analyze-sessions-card-pack-animation-work-process.html`, `prompts/analyze-sessions/skill-prompt-20260604-182117-card-pack-animation-work-process.md`, `tasks/roadmap.md`, and `tasks/todo.md`; existing unrelated dirty `skill-interview` files and older untracked token-spend/pack prompt artifacts are preserved outside staging.
+
+---
+
 ## Current Task - Environment Variable Leak Conversation Audit 2026-06-04
 
 **Goal:** Determine what issues in conversation/workflow history led to environment variables or credential-bearing values being leaked, while keeping all secret values redacted.
