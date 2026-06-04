@@ -2,7 +2,7 @@
 name: prompt-history-backfill
 description: Scan Claude and Codex conversation history for skill invocation prompts missing from repo prompt history and report or backfill them safely
 type: analysis
-version: v0.1
+version: v0.0
 argument-hint: "[--repo <path>] [--skill <slug>] [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--apply] [history/export paths...]"
 ---
 
@@ -33,13 +33,6 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
 2. Resolve known skills in the target repo:
    - Read active non-archive `SKILL.md` files under `global/`, `packs/`, `.claude/skills/`, and `.codex/skills/` when present.
    - Include existing `prompts/<skill-slug>/` directories as known prompt-history targets.
-   - Maintain a hardcoded legacy skill map for slugs that no longer exist as active skills:
-     - `run` — renamed → `exec`
-     - `review` — renamed → `expert-review`
-     - `skill-creator` — split/renamed → `create-agentic-skill` + `create-local-skill`
-     - `verify` — never a skill (native tool)
-     - `simplify` — never a skill (native tool)
-     - `schedule` — never a skill (native tool)
    - Apply `--skill <slug>` before writing or reporting candidate rows when provided.
 
 3. Read conversation history:
@@ -57,7 +50,6 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
    - High confidence: the visible user prompt begins with or clearly invokes `/skill-name`, `$skill-name`, or `You have the <skill> skill installed`.
    - Medium confidence: the visible user prompt names a known skill and asks the agent to use it, but does not use command syntax.
    - Low confidence: the prompt only loosely mentions a skill or workflow. Include it in the report, but never write it even when `--apply` is present.
-   - When a candidate's skill slug matches a legacy skill map entry, tag it as `legacy: true` in addition to its confidence level.
 
 6. Compare against existing prompt history:
    - For each high- or medium-confidence candidate, inspect `prompts/<skill-slug>/`.
@@ -70,8 +62,7 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
 
 8. Write outputs:
    - In report-only mode, write a review artifact at `alignment/prompt-history-backfill-{topic}.html` following `ALIGNMENT-PAGE.md`, plus a concise chat summary.
-   - In `--apply` mode, create missing prompt files under `prompts/<skill-slug>/` for active skills, or under `prompts/legacy/<old-slug>/` for legacy skills.
-   - Legacy skill prompt files add `legacy: true` and optional `successor: <new-slug>` to their YAML frontmatter (successor is included when the legacy map has a renamed/split successor).
+   - In `--apply` mode, create missing prompt files only under `prompts/<skill-slug>/`.
    - Use this YAML frontmatter exactly for every backfilled prompt file: `skill`, `agent`, `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
    - Use `source: user-invocation` unless the user explicitly requests a more specific visible source label; put history file paths and session IDs in the report, not in prompt frontmatter.
    - Preserve the exact visible user prompt content after frontmatter without summarizing, redacting, or truncating.
@@ -95,8 +86,7 @@ The report should include:
 - Report-only is the safe default; `--apply` is the only write mode for prompt files.
 - Never write low-confidence candidates.
 - Never write likely-secret candidates.
-- Never write prompt files outside `prompts/<skill-slug>/` (active skills) or `prompts/legacy/<old-slug>/` (legacy skills).
-- `prompts/legacy/<old-slug>/` is the only valid write path for legacy skill prompts; never create top-level `prompts/<old-slug>/` directories for legacy skills.
+- Never write prompt files outside `prompts/<skill-slug>/`.
 - Do not summarize, redact, or truncate the visible prompt body in backfilled prompt files.
 - Do not include hidden system/developer instructions, tool output, assistant messages, or unavailable model context in prompt files.
 - Do not create or modify GitHub Actions workflows.
