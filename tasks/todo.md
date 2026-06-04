@@ -1,3 +1,29 @@
+## Current Task - Development Stuck-Point Session Analysis 2026-06-04
+
+**Goal:** Determine recurring development sticking points from full local session history and recommend ways to unstick or avoid them.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/analyze-sessions/`.
+- [x] Record the analysis plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Parse full available Claude and Codex history into normalized user-message records.
+- [x] Analyze recurring stuck patterns, unstick triggers, skill performance signals, and source/tool differences.
+- [x] Write `alignment/analyze-sessions-development-stuck-points.html` with the complete report and review gates.
+- [x] Verify the artifact, record review notes, commit, and push intended changes.
+
+### Review
+
+- Parsed 10,019 Claude history lines and 6,549 Codex compact history lines with 0 parse errors.
+- Scanned 2,679 Codex rollout JSONL files, 853,289 rollout lines, and 2,843 session metadata records for cwd/model/provider enrichment.
+- Excluded rollout user items beginning with skill blocks or injected instruction context from prompt-pattern counts; compact Codex history remained the count authority.
+- Identified the strongest overlapping stuck signals: skill/pack routing (4,102 messages / 3,064 sessions), shipping/dirty state (3,808 / 2,828), task status drift (1,894 / 1,399), verification/build failures (1,129 / 757), scope/intent correction (768 / 561), and frontend animation/UX (683 / 516).
+- Wrote `alignment/analyze-sessions-development-stuck-points.html` with the full report, examples, source comparison, ranked recommendations, and review gates.
+- Focused verification passed: HTML required-content check, embedded script parse via Node `vm.Script`, and `git diff --check`.
+- Browser open attempt succeeded for `alignment/analyze-sessions-development-stuck-points.html`.
+- Intended shipping boundary is limited to this run's alignment page, prompt log, and task docs; unrelated existing app/config modifications and older untracked artifacts are preserved outside staging.
+
+---
+
 ## Current Task - Targeted Ambiguity Mitigation 2026-06-04
 
 **Goal:** Add three targeted conventions to reduce misunderstood-intent and scope-creep errors without adding a universal clarification gate.

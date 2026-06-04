@@ -1,3 +1,28 @@
+## Current Targeted Update: Development Stuck-Point Session Analysis 2026-06-04
+
+**Goal:** Analyze full available Claude and Codex session history to determine how and why development projects get stuck, and produce practical unstick/avoidance recommendations.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The analysis needs one coherent evidence model across local history files and a single durable alignment page/report.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the analysis plan and final review notes.
+- [x] Full readable Claude and Codex histories are parsed rather than sampled, with unreadable sources explicitly reported.
+- [x] The report includes overview stats, source comparison, top projects, recurring stuck patterns, real examples, and exact counts where possible.
+- [x] Recommendations distinguish evidence from inference and include automation shape, likely owner surface, and validation expectation for the top remediation.
+- [x] `alignment/analyze-sessions-development-stuck-points.html` renders the full report with evidence, assumptions, gates, and feedback controls.
+- [x] Validation checks prove the analysis artifact exists, parses as HTML, contains required sections, and intended files are committed and pushed while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation, inspect relevant instructions/lessons, and record this plan.
+2. Stream-parse `~/.claude/history.jsonl`, `~/.codex/history.jsonl`, and `~/.codex/sessions/**/*.jsonl` into normalized user-message records.
+3. Categorize stuck-point prompts and sessions by failure mode, project, source, skill/command, repeated wording, and unstick trigger.
+4. Build the ranked recommendations and highest-impact automation list, distinguishing explicit evidence from inference.
+5. Write the full-depth alignment page/report and update task review notes.
+6. Run targeted verification, inspect the diff boundary, commit, and push intended changes on `master`.
+
 ## Current Targeted Update: Alignment Gate De-Duplication 2026-06-03
 
 **Goal:** De-duplicate visually identical alignment review gates while preserving distinct `artifact destination` and `proposed file changes` semantics in compiled YAML when those decisions are actually separate.

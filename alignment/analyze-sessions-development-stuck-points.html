@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Development Stuck-Point Session Analysis</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 12px; }
+    h2 { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { margin-top: 24px; color: var(--accent); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code {
+      background: #111722;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+    .lede {
+      color: var(--text-muted);
+      max-width: 900px;
+      font-size: 1.05rem;
+    }
+    .status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+    .stat, .toc, .callout, .question, .feedback, .compile, .note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .stat strong {
+      display: block;
+      color: #fff;
+      font-size: 1.3rem;
+    }
+    .stat span { color: var(--text-muted); }
+    .toc ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+      columns: 2;
+    }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-head h2 { margin-bottom: 0; flex: 1 1 320px; }
+    .feedback {
+      margin: 14px 0 22px;
+    }
+    .feedback .controls, .answers, .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    button, .radio-card {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #111722;
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled {
+      color: var(--text-muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .feedback button[data-value="up"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea {
+      width: 100%;
+      min-height: 96px;
+      margin-top: 10px;
+      resize: vertical;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b111b;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+    .feedback .local-yaml { display: none; }
+    .feedback[data-active="true"] .local-yaml { display: block; margin-top: 10px; }
+    .feedback .notes { display: none; }
+    .feedback[data-active="true"] .notes { display: block; }
+    .question {
+      margin: 18px 0;
+      background: var(--surface-2);
+      border-color: #33415f;
+    }
+    .question h3 {
+      margin: 0 0 8px;
+      color: var(--purple);
+    }
+    .radio-card {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .radio-card input { transform: translateY(1px); }
+    .notes-for-answer { display: none; }
+    .question:has(input:checked) .notes-for-answer { display: block; }
+    .muted { color: var(--text-muted); }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      margin: 2px 4px 2px 0;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: #111722;
+      font-size: 0.9rem;
+    }
+    .high { color: var(--green); }
+    .medium { color: var(--orange); }
+    .low { color: var(--red); }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 3px solid var(--accent);
+      background: #101723;
+      color: var(--text);
+    }
+    .compile {
+      margin-top: 28px;
+    }
+    .copy-status {
+      color: var(--text-muted);
+      min-height: 24px;
+    }
+    @media (max-width: 860px) {
+      main { width: min(100% - 24px, 1180px); padding-top: 24px; }
+      .toc ul { columns: 1; }
+    }
+    @media (max-width: 560px) {
+      .status { grid-template-columns: 1fr; }
+      button, .radio-card { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Development Stuck-Point Session Analysis</h1>
+  <p class="lede">Alignment status: <strong>review</strong>. This report analyzes local Claude and Codex user-message history to identify recurring ways projects get stuck during development and the practical moves that unstick them.</p>
+
+  <div class="status" aria-label="Overview stats">
+    <div class="stat"><strong>16,568</strong><span>normalized user messages</span></div>
+    <div class="stat"><strong>6,355</strong><span>source-qualified sessions</span></div>
+    <div class="stat"><strong>2025-12-10 to 2026-06-04</strong><span>available history range</span></div>
+    <div class="stat"><strong>2,679</strong><span>Codex rollout JSONL files scanned for metadata</span></div>
+  </div>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#method">Method And Coverage</a></li>
+      <li><a href="#thesis">Main Finding</a></li>
+      <li><a href="#source-comparison">Source Comparison</a></li>
+      <li><a href="#projects">Top Projects</a></li>
+      <li><a href="#patterns">Recurring Stuck Patterns</a></li>
+      <li><a href="#sequences">Workflow Sequences</a></li>
+      <li><a href="#skills">Skill Performance Trends</a></li>
+      <li><a href="#unstick">Unstick Playbook</a></li>
+      <li><a href="#recommendations">Ranked Recommendations</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Feedback And Answers</a></li>
+    </ul>
+  </section>
+
+  <section id="method" data-section="Method And Coverage">
+    <div class="section-head">
+      <h2>Method And Coverage</h2>
+    </div>
+    <div class="feedback" data-section="Method And Coverage">
+      <div class="controls" aria-label="Section feedback">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>Explicit evidence:</strong> I parsed the full readable `~/.claude/history.jsonl` and `~/.codex/history.jsonl` files. I also scanned all available Codex rollout JSONL files for session metadata such as cwd, model, provider, and CLI version.</p>
+    <p><strong>Prompt-count source:</strong> Codex compact history was used as the authority for Codex user-prompt counts. Rich rollout files were used for metadata and audited for user-message shape, but rollout user items beginning with skill blocks or injected instruction context were excluded from pattern counts to avoid contaminating the analysis.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Readable input</th><th>Parse errors</th><th>Normalized messages</th><th>Sessions</th><th>Date range</th></tr></thead>
+        <tbody>
+          <tr><td>Claude</td><td>10,019 history lines</td><td>0</td><td>10,019</td><td>3,795</td><td>2025-12-10 to 2026-06-04</td></tr>
+          <tr><td>Codex</td><td>6,549 compact history lines plus 853,289 rollout lines</td><td>0</td><td>6,549</td><td>2,560</td><td>2026-01-20 to 2026-06-04</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Classification caveat:</strong> The pattern counts below are keyword-rule classifications and can overlap. They are reliable as directional stuck-point signals, not as exclusive labels for each prompt. Confidence rises where history counts, repeated prompt text, command usage, and `tasks/lessons.md` all point to the same failure mode.</p>
+  </section>
+
+  <section id="thesis" data-section="Main Finding">
+    <div class="section-head">
+      <h2>Main Finding</h2>
+    </div>
+    <div class="feedback" data-section="Main Finding">
+      <div class="controls">
+        <button type="button" data-value="up">Thumbs up</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="callout">
+      <p><strong>Projects usually get stuck when the active work loses a trustworthy closure boundary.</strong> The same symptoms recur: the user asks what is next, asks to commit and push again, reports that a fix is still not visible, asks whether a skill is stale, or has to correct intent after the agent routes or implements past the requested boundary.</p>
+      <p>The root cause is rarely "one hard bug." It is usually one of four boundary failures: unclear worktree/shipping state, stale task truth, insufficient observable verification, or command/skill routing confusion. Frontend animation work amplifies all four because the defect is visual, stateful, and easy to misverify from code alone.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stuck signal</th><th>Message count</th><th>Session count</th><th>Explicit examples from history</th><th>Primary inference</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Skill, pack, and routing confusion</td>
+            <td>4,102</td>
+            <td>3,064</td>
+            <td>`I tried restarting codex and I don't see access to the skills appearing as slash commands in codex`; `Is it because the skill is stale?`</td>
+            <td>Workflow machinery becomes part of the work, so product progress pauses while the runner, skill registry, or command convention is repaired.</td>
+          </tr>
+          <tr>
+            <td>Shipping and dirty-state loops</td>
+            <td>3,808</td>
+            <td>2,828</td>
+            <td>`commit and push` appears 496 times; `/ship` appears 1,538 times; `update docs, commit and push` appears 76 times.</td>
+            <td>Closure has to be manually reasserted because the agent often cannot prove what is done, staged, committed, pushed, or still dirty.</td>
+          </tr>
+          <tr>
+            <td>Task status drift</td>
+            <td>1,894</td>
+            <td>1,399</td>
+            <td>`what's next?` appears 107 times; `I see that the todo.md still references run instead of exec the new convention`.</td>
+            <td>Task docs remain useful but become stale candidates rather than authoritative truth unless reconciled against artifacts and git history.</td>
+          </tr>
+          <tr>
+            <td>Verification and build failures</td>
+            <td>1,129</td>
+            <td>757</td>
+            <td>`we still get a 500 error`; `there was an error trying to seed, can you run it and try to fix the error`.</td>
+            <td>Validation is often performed too late or from ambiguous output, which lets regressions reach the next phase.</td>
+          </tr>
+          <tr>
+            <td>Scope and intent corrections</td>
+            <td>768</td>
+            <td>561</td>
+            <td>`do not implement, just report`; `No that's not what I see`; `do not revert the y`.</td>
+            <td>The agent sometimes acts before separating report-only, destructive, visual, or semantic intent from implementation intent.</td>
+          </tr>
+          <tr>
+            <td>Frontend animation and visual UX regressions</td>
+            <td>683</td>
+            <td>516</td>
+            <td>`the close drawer animation has seriously regressed`; `the pack is facing the wrong direction`; `previous fixes are still not appearing`.</td>
+            <td>Code-level fixes are not enough when the acceptance criterion is a time-based visual state transition.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="source-comparison" data-section="Source Comparison">
+    <h2>Source Comparison</h2>
+    <div class="feedback" data-section="Source Comparison">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <p>Claude history has more total prompts and older product-development loops. Codex history is more concentrated in skill, benchmark, and remediation workflows. This implies the stuck pattern has evolved from mostly product implementation closure to meta-workflow reliability and skill routing.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Claude evidence</th><th>Codex evidence</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>High-frequency closure commands</td><td>`/ship` 1,537; `/clear` 882; `/ship-end` 266; `/run` 182</td><td>`$targeted-skill-builder` 93; `$benchmark-test-skill` 82; `$session-triage` 62; `$pack` 55</td><td>Claude side shows repeated manual closing and context resets. Codex side shows more durable remediation and pack management.</td></tr>
+          <tr><td>Recent trend</td><td>Claude remains active in June with 175 messages.</td><td>Codex has 144 June messages and owns most current `tools/agentic-skills` remediation work.</td><td>The runner split itself is now part of the workflow surface; final handoffs must normalize slash vs dollar commands.</td></tr>
+          <tr><td>Correction memory</td><td>Correction examples often show product bugs, UX mismatches, and "what's next" loops.</td><td>Correction examples often show skill routes, alignment YAML, benchmark reviews, and stale skill visibility.</td><td>Use one shared evidence model, but route fixes to different owner surfaces depending on whether the blocker is app behavior or workflow behavior.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="projects" data-section="Top Projects">
+    <h2>Top Projects</h2>
+    <div class="feedback" data-section="Top Projects">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Project</th><th>Messages</th><th>Sessions</th><th>Share</th><th>Stuck-point read</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>apps/bismarck-v0.4</td><td>1,438</td><td>613</td><td>8.7%</td><td>Large implementation surface; high shipping and status-loop pressure.</td></tr>
+          <tr><td>2</td><td>poke/monorepo</td><td>1,284</td><td>511</td><td>7.7%</td><td>Task/status and shipping loops across monorepo work.</td></tr>
+          <tr><td>3</td><td>tools/agentic-skills</td><td>1,158</td><td>447</td><td>7.0%</td><td>Highest workflow-remediation density; skill routing, alignment pages, lessons, and verification dominate.</td></tr>
+          <tr><td>4</td><td>apps/lexcorp-war-room</td><td>1,111</td><td>380</td><td>6.7%</td><td>Product plus operational workflow complexity.</td></tr>
+          <tr><td>5</td><td>experimental/metternich-engine</td><td>1,084</td><td>381</td><td>6.5%</td><td>Visual/editor interaction work with UX and implementation uncertainty.</td></tr>
+          <tr><td>6</td><td>apps/bismarck-v0.3</td><td>929</td><td>228</td><td>5.6%</td><td>Runner/session/terminal reliability issues and repeated bug fix loops.</td></tr>
+          <tr><td>7</td><td>apps/loadoutworks.com</td><td>839</td><td>316</td><td>5.1%</td><td>Early product planning, data/model evolution, and database verification.</td></tr>
+          <tr><td>8</td><td>dev/mobile-ideas</td><td>535</td><td>316</td><td>3.2%</td><td>Idea-to-workflow routing and skill availability.</td></tr>
+          <tr><td>9</td><td>apps/pitwall-monorepo</td><td>511</td><td>237</td><td>3.1%</td><td>Recent rich-menu visual regressions and investigation loops.</td></tr>
+          <tr><td>10</td><td>apps/lexcorp-sdk</td><td>416</td><td>149</td><td>2.5%</td><td>Developer-tool workflow and packaging adoption questions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="patterns" data-section="Recurring Stuck Patterns">
+    <h2>Recurring Stuck Patterns</h2>
+    <div class="feedback" data-section="Recurring Stuck Patterns">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+
+    <h3>1. Skill And Route Resolution Becomes The Work</h3>
+    <p><span class="pill">4,102 messages</span><span class="pill">3,064 sessions</span><span class="pill">29 lesson headings</span></p>
+    <p><strong>Evidence:</strong> `tools/agentic-skills` is the top project inside this category with 601 messages. Command counts include `$targeted-skill-builder` 93, `$benchmark-test-skill` 82, `$pack` 57, `/pack` 47, and `/investigate` 27. `tasks/lessons.md` has 29 headings classified as skill/pack/routing related.</p>
+    <blockquote>`I tried restarting codex and I don't see access to the skills appearing as slash commands in codex`</blockquote>
+    <blockquote>`I see that the todo.md still references run instead of exec the new convention`</blockquote>
+    <p><strong>Why it sticks:</strong> When the command surface is stale, the agent cannot reliably start the right workflow. Work then shifts from product progress to resolving the runner, pack install, skill mirror, or slash/dollar naming problem.</p>
+    <p><strong>Unstick move:</strong> Run a deterministic skill-health preflight before any multi-step workflow: resolve the intended command, check pack status, check active skill path, check mirror/version, and normalize final handoffs to the current runner.</p>
+
+    <h3>2. Shipping Closure Requires Too Much Manual Reassertion</h3>
+    <p><span class="pill">3,808 messages</span><span class="pill">2,828 sessions</span><span class="pill">`commit and push` 496 mentions</span></p>
+    <p><strong>Evidence:</strong> `/ship` appears 1,538 times, `/ship-end` 266 times, `commit and push` 496 times, and `update docs, commit and push` 76 times. The most common closure transition involving meaningful categories is `task_status_drift -> shipping_dirty_state` with 157 adjacent occurrences and `shipping_dirty_state -> task_status_drift` with 147.</p>
+    <blockquote>`can you examine all of the uncommited code and push them to github based on feature/purpose`</blockquote>
+    <blockquote>`update docs, commit and push`</blockquote>
+    <p><strong>Why it sticks:</strong> The user has to repeatedly ask the agent to close the loop because the agent's notion of done is not always tied to staged files, verification output, commit SHA, remote push state, and stale task cleanup.</p>
+    <p><strong>Unstick move:</strong> Treat every mutation as unfinished until a ship boundary is explicit: intended files, excluded dirty files, validation command outputs, commit result, push result, and next command or `none`.</p>
+
+    <h3>3. Task Docs Drift Away From Reality</h3>
+    <p><span class="pill">1,894 messages</span><span class="pill">1,399 sessions</span><span class="pill">`what's next` 107 mentions</span></p>
+    <p><strong>Evidence:</strong> Status prompts recur from December through June. A 2026-06-01 lesson explicitly says to verify stale unchecked tasks before recommending next work.</p>
+    <blockquote>`can you validate that the work that has been labeled finish are actually finished and the work that is labeled outstanding or todo is still pending?`</blockquote>
+    <blockquote>`what's next?`</blockquote>
+    <p><strong>Why it sticks:</strong> The tracker is treated as a source of truth even after commits, generated artifacts, or prior alignment pages already satisfied the work. The user then has to ask for status, reconciliation, and next-step selection again.</p>
+    <p><strong>Unstick move:</strong> Before choosing next work, reconcile task docs against git log, artifact existence, recent alignment pages, and review notes. Stale unchecked items should trigger reconciliation, not repeat work.</p>
+
+    <h3>4. Verification Is Present But Sometimes Untrustworthy</h3>
+    <p><span class="pill">1,129 messages</span><span class="pill">757 sessions</span><span class="pill">8 lesson headings</span></p>
+    <p><strong>Evidence:</strong> `tasks/lessons.md` includes direct corrections about false pass claims, pre-existing failure proof, and commit/push return code verification. The history also contains recurring bug/error prompts such as `we still get a 500 error` and `there was an error trying to seed`.</p>
+    <blockquote>`Never write a test/verification claim from remembered or garbled tool output`</blockquote>
+    <blockquote>`Prove a test failure is pre-existing before calling it unrelated`</blockquote>
+    <p><strong>Why it sticks:</strong> Verification runs happen, but when the output is ambiguous, stale, or not tied to the actual edited surface, the project can move forward on a false pass or misdiagnosed unrelated failure.</p>
+    <p><strong>Unstick move:</strong> Prefer machine-readable reporters, focused tests at the owner surface, parent-commit reproduction for unrelated failures, and explicit "not yet verified" language when output is unclear.</p>
+
+    <h3>5. Intent Gets Lost At Implementation Boundaries</h3>
+    <p><span class="pill">768 messages</span><span class="pill">561 sessions</span><span class="pill">9 lesson headings</span></p>
+    <p><strong>Evidence:</strong> Correction phrases include `do not implement` 16 times, `wrong` 40 times, and `still` 268 times. Lessons include scope confirmation for destructive work and interview language corrections.</p>
+    <blockquote>`do not implement, just report`</blockquote>
+    <blockquote>`No that's not what I see.`</blockquote>
+    <p><strong>Why it sticks:</strong> The agent sometimes collapses analysis, planning, and implementation into one action, or treats a visual/product-language request as a code-state request. The result is extra work that has to be undone, clarified, or re-routed.</p>
+    <p><strong>Unstick move:</strong> When the user says report-only, compare, audit, determine, or do not implement, freeze mutations except prompt/task tracking required by the current repo convention. For ambiguous visual feedback, restate the screen behavior in product language before changing code.</p>
+
+    <h3>6. Visual And Animation Bugs Need Visual Proof, Not Just Code Proof</h3>
+    <p><span class="pill">683 messages</span><span class="pill">516 sessions</span><span class="pill">9 lesson headings</span></p>
+    <p><strong>Evidence:</strong> Recent examples concentrate in `tools/agentic-skills` and `apps/pitwall-monorepo` with drawer, card, rich-menu, and animation regressions.</p>
+    <blockquote>`the close drawer animation has seriously regressed`</blockquote>
+    <blockquote>`previous fixes are still not appearing in the prototype page`</blockquote>
+    <blockquote>`the pack is facing the wrong direction`</blockquote>
+    <p><strong>Why it sticks:</strong> Visual regressions are stateful and timing-sensitive. A test can pass while the human-visible behavior is still wrong, and a dev-server/cache issue can make a correct code change appear absent.</p>
+    <p><strong>Unstick move:</strong> Use a visual-debug contract for UI work: known-good comparator, dev-server freshness check, browser screenshot or trace, deterministic state timeline, and no shipping until the visual acceptance criterion is observed.</p>
+  </section>
+
+  <section id="sequences" data-section="Workflow Sequences">
+    <h2>Workflow Sequences</h2>
+    <div class="feedback" data-section="Workflow Sequences">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <p>Adjacent message transitions show where work tends to loop. Counts below are category-to-category transitions inside the same session after sorting by timestamp.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Transition</th><th>Count</th><th>Interpretation</th><th>Unstick trigger</th></tr></thead>
+        <tbody>
+          <tr><td>`task_status_drift -> shipping_dirty_state`</td><td>157</td><td>Status ambiguity often resolves into a ship request.</td><td>Ask for a status reconciliation before shipping, then ship exact intended files.</td></tr>
+          <tr><td>`shipping_dirty_state -> task_status_drift`</td><td>147</td><td>After shipping, next-work selection is still ambiguous.</td><td>Ship final answer should include verified next command or `none`, not stale task text.</td></tr>
+          <tr><td>`verification_build_failures -> shipping_dirty_state`</td><td>123</td><td>Fix/validation loops often end in a closure push.</td><td>Require machine-readable validation summary before commit.</td></tr>
+          <tr><td>`shipping_dirty_state -> verification_build_failures`</td><td>95</td><td>Closure sometimes exposes missed verification.</td><td>Move verification before staging and commit, not after.</td></tr>
+          <tr><td>`scope_intent_correction -> other`</td><td>247</td><td>Corrections frequently reset the conversation into fresh work.</td><td>Route corrections to lessons and owner contract updates, not just local fixes.</td></tr>
+          <tr><td>`verification_build_failures -> verification_build_failures`</td><td>148</td><td>Failure investigation can get trapped in repeated attempts.</td><td>After a repeated failure, switch to root-cause mode with reproduction, comparator, and smallest failing surface.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="skills" data-section="Skill Performance Trends">
+    <h2>Skill Performance Trends</h2>
+    <div class="feedback" data-section="Skill Performance Trends">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <p>`tasks/lessons.md` is direct correction evidence rather than inferred history. It contains 74 lesson headings. Rule classification of those headings produced 29 skill/pack/routing lessons, 19 alignment/research lessons, 9 scope/intent lessons, 9 frontend/animation lessons, 8 verification lessons, 7 shipping lessons, and 5 task-status lessons.</p>
+    <p>This means the highest-friction workflows are not one skill alone. The system gets stuck at the boundaries between skills: route selection, alignment page lifecycle, task truth, verification proof, and final command normalization.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Visible skill signal</th><th>Count</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>`$targeted-skill-builder`</td><td>93</td><td>Durable remediation is already the common Codex path for recurring workflow gaps.</td></tr>
+          <tr><td>`$session-triage`</td><td>62</td><td>Single incidents often need verified triage before a generalized fix.</td></tr>
+          <tr><td>`$pack` and `/pack`</td><td>104 combined</td><td>Skill availability and pack install state are common blockers.</td></tr>
+          <tr><td>`$benchmark-test-skill`</td><td>82</td><td>Benchmarking is used as a validation surface for skill contract changes.</td></tr>
+          <tr><td>`/investigate`</td><td>93</td><td>Root-cause investigation is a reliable unstick move when repeated fixes fail.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="unstick" data-section="Unstick Playbook">
+    <h2>Unstick Playbook</h2>
+    <div class="feedback" data-section="Unstick Playbook">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <h3>When You Feel Stuck</h3>
+    <p>Ask the agent for a <strong>stuck-state packet</strong>, not another broad next step. The packet should include current branch, dirty files split into intended/unrelated, last passing verification, last failing verification, current task source, artifact evidence, and the single suspected blocker.</p>
+    <h3>When A Fix Is Still Wrong</h3>
+    <p>Switch from execution to investigation. Require a reproduction, the expected behavior in product language, the observed behavior, a known-good comparator, and the smallest owner surface before any new fix.</p>
+    <h3>When You Cannot See A Change</h3>
+    <p>First verify environment freshness: dev server PID/port, build artifact timestamp, browser route, cache state, and a screenshot or DOM marker. Do not keep changing source until the displayed app is proven to be the edited app.</p>
+    <h3>When The Agent Wants To Ship</h3>
+    <p>Require a shipping boundary: intended changed files, excluded unrelated files, exact validation commands and results, commit SHA, push target, residual risk, and next command. If any line is unknown, shipping is not done.</p>
+    <h3>When The Agent Recommends Next Work</h3>
+    <p>Ask it to prove the task is still open from artifacts and git history. Unchecked task docs are candidates, not truth. If an alignment page or committed artifact already satisfies the task, reconcile the tracker first.</p>
+    <h3>When Skill Commands Look Wrong</h3>
+    <p>Run skill resolution before doing work: active runner command convention, installed pack status, visible skill path, mirror version, stale symlink/archive collision, and reload/fresh-session requirement.</p>
+  </section>
+
+  <section id="recommendations" data-section="Ranked Recommendations">
+    <h2>Ranked Recommendations</h2>
+    <div class="feedback" data-section="Ranked Recommendations">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Pattern</th><th>Frequency evidence</th><th>Recommendation type</th><th>Suggested name and description</th><th>Likely owner surface</th><th>Validation expectation</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Repeated stuck-state ambiguity across routing, status, verification, and visibility</td>
+            <td>Top stuck categories total thousands of overlapping signals; `still` 268, `what's next` 107, `commit and push` 496.</td>
+            <td>Skill/standing instruction</td>
+            <td><strong>development stuck-state preflight and unstick routing</strong>: detect whether the blocker is status, visibility, verification, routing, or intent, then route to the smallest owner workflow.</td>
+            <td>Shared workflow conventions plus `exec`, `investigate`, `ship`, `ship-end`, and `session-triage` contracts.</td>
+            <td>Layer1 contract tests with fixtures for report-only, still-not-fixed, stale task, invisible change, and dirty-tree closure; one focused benchmark smoke.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Manual closure and dirty-tree reassertion</td>
+            <td>`/ship` 1,538; `/ship-end` 266; `commit and push` 496.</td>
+            <td>Skill contract hardening</td>
+            <td><strong>ship boundary proof gate</strong>: one invariant checklist for intended files, unrelated dirty files, verification, commit result, push result, and next command.</td>
+            <td>`ship`, `ship-end`, `commit-and-push-by-feature`.</td>
+            <td>Layer1 fixture that rejects final answers without commit SHA, push target, validation result, and dirty-file classification.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Stale task truth and repeated next-work prompts</td>
+            <td>`what's next` 107; task-status category 1,894 messages; 2026-06-01 lesson about stale unchecked tasks.</td>
+            <td>Standing instruction plus helper script</td>
+            <td><strong>task artifact reconciliation</strong>: compare unchecked task docs with matching artifacts, history, recent commits, and alignment pages before recommending next work.</td>
+            <td>`ship-end`, `codebase-status`, `exec`, task docs convention.</td>
+            <td>Fixture repo with stale unchecked task and existing artifact; expected route is tracker reconciliation, not repeated work.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Skill visibility and slash/dollar route confusion</td>
+            <td>Skill/pack category 4,102 messages; 29 lesson headings; `$pack` and `/pack` 104 combined.</td>
+            <td>Plugin/integration or skill</td>
+            <td><strong>skill route healthcheck</strong>: resolve command, active runner, pack status, mirror path, version, archive collision, and reload requirement before work starts.</td>
+            <td>`pack`, `skills`, project config provisioning.</td>
+            <td>Layer1 tests for missing command fallback, installed-but-stale pack, archive duplicate, and Codex/Claude handoff normalization.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Visual fixes that pass code checks but remain wrong on screen</td>
+            <td>Frontend/animation category 683 messages; 9 lesson headings; recent repeated drawer/rich-menu regressions.</td>
+            <td>Skill convention and browser proof harness</td>
+            <td><strong>visual regression acceptance packet</strong>: expected state timeline, known-good comparator, dev-server freshness, screenshot/DOM proof, and no source churn before visible target is confirmed.</td>
+            <td>`investigate`, frontend app workflow, Browser/Computer Use capability when available.</td>
+            <td>Focused browser smoke or Playwright screenshot check plus a code-source regression test for state-machine assumptions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Recommended next skill:</strong> `$targeted-skill-builder development stuck-state preflight and unstick routing`.</p>
+      <p><strong>Why this first:</strong> It addresses the broadest verified workflow gap and should reduce repeated manual prompts across status drift, invisible changes, report-only mistakes, verification loops, and skill route confusion. Owner surface is shared workflow conventions plus `exec`/`investigate`/`ship`/`ship-end`/`session-triage`; validation should include layer1 contract tests and one focused benchmark smoke.</p>
+    </div>
+  </section>
+
+  <section id="gates" data-section="Review Gates">
+    <h2>Review Gates</h2>
+    <div class="feedback" data-section="Review Gates">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="question gate-question" data-section="Evidence Coverage" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage</h3>
+      <p>Is the local-history evidence sufficient to treat these as recurring development stuck points?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Evidence is sufficient for workflow remediation">Evidence is sufficient for workflow remediation</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Evidence is directionally useful but needs another pass">Directionally useful, needs another pass</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Assumptions And Confidence" data-gate-type="assumptions-confidence">
+      <h3>Assumptions And Confidence</h3>
+      <p>Which caveat should govern use of this report?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Use as a high-confidence directional workflow analysis">Use as high-confidence directional workflow analysis</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Treat category counts as rough and prioritize lesson-backed claims">Treat category counts as rough and prioritize lesson-backed claims</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Recommended Path" data-gate-type="recommended-path">
+      <h3>Recommended Path</h3>
+      <p>Which remediation path should be treated as the next concrete action?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-path" value="$targeted-skill-builder development stuck-state preflight and unstick routing">Build stuck-state preflight first</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Build ship boundary proof gate first">Build ship boundary proof gate first</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Proposed File Changes" data-gate-type="proposed-file-changes" data-target-path="alignment/analyze-sessions-development-stuck-points.html">
+      <h3>Proposed File Changes</h3>
+      <p>Are the proposed durable artifacts for this analysis acceptable?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-files" value="Keep this alignment report plus prompt and task history artifacts">Keep this alignment report plus prompt and task history artifacts</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Revise the report before treating it as current">Revise the report before treating it as current</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Post-Approval Route" data-gate-type="post-approval-route">
+      <h3>Post-Approval Route</h3>
+      <p>After approval, how should this report route next work?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-route" value="Recommended next command: $targeted-skill-builder development stuck-state preflight and unstick routing">Use the recommended next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="No immediate next command">No immediate next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile" data-section="Compile Feedback And Answers">
+    <h2>Compile Feedback And Answers</h2>
+    <p class="muted">Use feedback YAML for concerns before answering all gates. Use final answers only when the report is ready for agent review.</p>
+    <div class="buttons">
+      <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+      <button type="button" id="compile-answers" disabled>Compile Answers</button>
+      <button type="button" id="copy-compiled">Copy YAML</button>
+      <span id="answer-count" class="copy-status"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+
+<script>
+  const alignmentPage = "alignment/analyze-sessions-development-stuck-points.html";
+  const feedbackBlocks = Array.from(document.querySelectorAll(".feedback"));
+  const gateQuestions = Array.from(document.querySelectorAll(".gate-question"));
+  const compiled = document.getElementById("compiled-yaml");
+  const answerCount = document.getElementById("answer-count");
+  const compileAnswers = document.getElementById("compile-answers");
+
+  function yamlString(value) {
+    return JSON.stringify(String(value || ""));
+  }
+
+  function selectedFeedback(block) {
+    const active = block.querySelector("button.active");
+    if (!active) return null;
+    const feedback = active.dataset.value;
+    return {
+      section: block.dataset.section,
+      feedback,
+      notes: block.querySelector(".notes").value.trim(),
+      requested_agent_action: feedback === "up" ? "accept-as-is" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval"
+    };
+  }
+
+  function feedbackYaml(entries) {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked")).map(q => q.dataset.section);
+    const lines = [
+      "alignment_page: " + yamlString(alignmentPage),
+      "feedback_status: revision-request",
+      "approval_status: not-approved",
+      "unanswered_required_questions:"
+    ];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q)));
+    else lines.push("  []");
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    return lines.join("\n");
+  }
+
+  function updateAnswerState() {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    compileAnswers.disabled = unanswered.length > 0;
+    answerCount.textContent = unanswered.length ? `${unanswered.length} required gate question(s) unanswered` : "All required gate questions answered";
+  }
+
+  function copyText(text, statusEl) {
+    const done = () => { if (statusEl) statusEl.textContent = "Copied"; };
+    const fallback = () => {
+      compiled.focus();
+      compiled.select();
+      if (statusEl) statusEl.textContent = "Select and copy the YAML";
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  feedbackBlocks.forEach(block => {
+    block.querySelectorAll("button[data-value]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wasActive = btn.classList.contains("active");
+        block.querySelectorAll("button[data-value]").forEach(b => b.classList.remove("active"));
+        if (!wasActive) btn.classList.add("active");
+        block.dataset.active = (!wasActive).toString();
+      });
+    });
+    block.querySelector(".compile-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+    block.querySelector(".copy-local").addEventListener("click", () => {
+      const yaml = block.querySelector(".yaml-output").value || feedbackYaml(selectedFeedback(block) ? [selectedFeedback(block)] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+  });
+
+  gateQuestions.forEach(q => q.addEventListener("change", updateAnswerState));
+  updateAnswerState();
+
+  document.getElementById("compile-feedback").addEventListener("click", () => {
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    const yaml = feedbackYaml(entries);
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+
+  compileAnswers.addEventListener("click", () => {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    if (unanswered.length) {
+      unanswered[0].scrollIntoView({behavior: "smooth", block: "center"});
+      updateAnswerState();
+      return;
+    }
+    const lines = [
+      "alignment_page: " + yamlString(alignmentPage),
+      "approval_status: ready-for-agent-review",
+      "answers:"
+    ];
+    gateQuestions.forEach(q => {
+      const selected = q.querySelector("input:checked");
+      const notes = q.querySelector(".notes-for-answer").value.trim();
+      const status = selected.value === "Need clarification" ? "needs-clarification" : selected.value === "Other / None of the above" ? "other" : "answered";
+      lines.push("  - section: " + yamlString(q.dataset.section));
+      lines.push("    gate_type: " + yamlString(q.dataset.gateType));
+      lines.push("    status: " + yamlString(status));
+      lines.push("    answer: " + yamlString(selected.value));
+      if (q.dataset.targetPath) lines.push("    target_path: " + yamlString(q.dataset.targetPath));
+      if (notes) lines.push("    notes: " + yamlString(notes));
+    });
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    const yaml = lines.join("\n");
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+
+  document.getElementById("copy-compiled").addEventListener("click", () => {
+    copyText(compiled.value, answerCount);
+  });
+</script>
+</body>
+</html>
