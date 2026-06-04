@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-04 — Targeted ambiguity mitigation conventions
+
+- Added "Scope Confirmation for Destructive Work" convention to CLAUDE.md under Shared Skill Conventions — requires scope confirmation when a skill would delete/archive/overwrite artifacts the user didn't explicitly name.
+- Enriched Self-Improvement Loop in CLAUDE.md with diagnostic capture for misunderstood-intent corrections (what user wanted, what agent interpreted, which signal was missed).
+- Added "Clarification strategy" bullet to skill-interview coverage checklist in both `.claude/skills/` and `.codex/skills/` mirrors.
+- Shipped in commit `70d02b9c` on `master`.
+
 ## 2026-06-04 — Legacy skill routing and prompt history backfill
 
 - Added legacy skill routing to `prompt-history-backfill` v0.1: hardcoded map of 6 renamed/removed/never-existed skill slugs routes their prompts to `prompts/legacy/<old-slug>/` with `legacy: true` and optional `successor` frontmatter.

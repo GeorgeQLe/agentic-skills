@@ -1,3 +1,24 @@
+## Current Task - Targeted Ambiguity Mitigation 2026-06-04
+
+**Goal:** Add three targeted conventions to reduce misunderstood-intent and scope-creep errors without adding a universal clarification gate.
+
+### Plan
+
+- [x] Add "Scope Confirmation for Destructive Work" convention to CLAUDE.md after Shipping Contract.
+- [x] Add misunderstood-intent diagnostic capture to Self-Improvement Loop in CLAUDE.md.
+- [x] Add "Clarification strategy" bullet to skill-interview coverage checklist (both mirrors).
+- [x] Verify: "Scope Confirmation" appears exactly once, skill-interview bullet present in both mirrors.
+- [x] Commit and push.
+
+### Review
+
+- All three changes shipped in commit `70d02b9c` on `master`.
+- Scope confirmation convention is narrow: only fires for destructive/irreversible operations on artifacts the user didn't name.
+- Self-improvement loop now captures structured diagnostics for misunderstood-intent corrections.
+- New skills created via `/skill-interview` will get an explicit clarification strategy during design.
+
+---
+
 ## Current Task - Legacy Skill Routing for prompt-history-backfill 2026-06-04
 
 **Goal:** Add legacy skill routing to `prompt-history-backfill` so renamed/removed/never-existed skill prompts route to `prompts/legacy/<old-slug>/` instead of polluting top-level prompt dirs, then backfill all missing prompt files from conversation history.
