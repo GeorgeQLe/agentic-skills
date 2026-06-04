@@ -1,3 +1,28 @@
+## Current Targeted Update: Environment Variable Leak Conversation Audit 2026-06-04
+
+**Goal:** Audit full available Claude and Codex conversation history to determine what issues led to environment variables or credential-bearing values being leaked, without repeating any secret values in the report.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The audit needs one redacted evidence model across local history sources and one durable report/alignment page.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the audit plan and final review notes.
+- [x] Full readable Claude and Codex history sources are parsed rather than sampled, with unreadable sources explicitly reported.
+- [x] The audit identifies credential/environment-variable exposure events by redacted value class, source, date, project, and likely workflow cause without printing secret values.
+- [x] The report distinguishes explicit evidence from inference and names recurring process/tooling failures that enabled leaks.
+- [x] `alignment/analyze-sessions-env-leak-audit.html` renders the full report with evidence, assumptions, recommendations, and review gates.
+- [x] Validation checks prove the artifact exists, parses as HTML, contains required sections, avoids obvious leaked secret values, and intended files are committed and pushed while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation, inspect relevant instructions/lessons, and record this plan.
+2. Stream-parse `~/.claude/history.jsonl`, `~/.codex/history.jsonl`, and `~/.codex/sessions/**/*.jsonl` into normalized records, excluding system/developer/base instruction text from pattern counts.
+3. Detect likely leaks with redaction-first scanning for assignment syntax, URL credentials, token/key prefixes, password-bearing params, dotenv blocks, and commands that echo or document resolved env values.
+4. Correlate leak evidence with surrounding prompts, tool workflow, project/task artifacts, and existing lessons to identify root causes and recurrence.
+5. Write the full-depth alignment page/report and update task review notes.
+6. Run targeted verification, inspect the diff boundary, commit, and push intended changes on `master`.
+
 ## Current Targeted Update: Overall Session History Analysis 2026-06-04
 
 **Goal:** Analyze full available Claude and Codex session history for broad usage trends, recurring prompt patterns, source differences, skill performance signals, and automation opportunities.
@@ -22,7 +47,6 @@
 4. Build the ranked recommendations and highest-impact automation list, distinguishing explicit evidence from inference.
 5. Write the full-depth alignment page/report and update task review notes.
 6. Run targeted verification, inspect the diff boundary, commit, and push intended changes on `master` when possible.
-
 ## Current Targeted Update: Development Stuck-Point Session Analysis 2026-06-04
 
 **Goal:** Analyze full available Claude and Codex session history to determine how and why development projects get stuck, and produce practical unstick/avoidance recommendations.

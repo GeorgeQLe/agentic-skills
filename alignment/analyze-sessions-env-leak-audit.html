@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Environment Variable Leak Conversation Audit</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 12px; }
+    h2 { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { margin-top: 24px; color: var(--accent); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code {
+      background: #111722;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+    .lede {
+      color: var(--text-muted);
+      max-width: 940px;
+      font-size: 1.05rem;
+    }
+    .status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+    .stat, .toc, .callout, .question, .feedback, .compile, .note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .stat strong {
+      display: block;
+      color: #fff;
+      font-size: 1.3rem;
+    }
+    .stat span { color: var(--text-muted); }
+    .toc ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+      columns: 2;
+    }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-head h2 { margin-bottom: 0; flex: 1 1 320px; }
+    .feedback { margin: 14px 0 22px; }
+    .feedback .controls, .answers, .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    button, .radio-card {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #111722;
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled {
+      color: var(--text-muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .feedback button[data-value="up"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea {
+      width: 100%;
+      min-height: 96px;
+      margin-top: 10px;
+      resize: vertical;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b111b;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+    .feedback .local-yaml { display: none; }
+    .feedback[data-active="true"] .local-yaml { display: block; margin-top: 10px; }
+    .feedback .notes { display: none; }
+    .feedback[data-active="true"] .notes { display: block; }
+    .question {
+      margin: 18px 0;
+      background: var(--surface-2);
+      border-color: #33415f;
+    }
+    .question h3 {
+      margin: 0 0 8px;
+      color: var(--purple);
+    }
+    .radio-card {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .radio-card input { transform: translateY(1px); }
+    .notes-for-answer { display: none; }
+    .question:has(input:checked) .notes-for-answer { display: block; }
+    .muted { color: var(--text-muted); }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      margin: 2px 4px 2px 0;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: #111722;
+      font-size: 0.9rem;
+    }
+    .high { color: var(--green); }
+    .medium { color: var(--orange); }
+    .low { color: var(--red); }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 3px solid var(--accent);
+      background: #101723;
+      color: var(--text);
+    }
+    .compile { margin-top: 28px; }
+    .copy-status {
+      color: var(--text-muted);
+      min-height: 24px;
+    }
+    @media (max-width: 860px) {
+      main { width: min(100% - 24px, 1180px); padding-top: 24px; }
+      .toc ul { columns: 1; }
+    }
+    @media (max-width: 560px) {
+      .status { grid-template-columns: 1fr; }
+      button, .radio-card { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Environment Variable Leak Conversation Audit</h1>
+  <p class="lede">Alignment status: <strong>review</strong>. This report audits local Claude and Codex conversation history, related task records, and current repo artifacts to determine what workflow issues led to environment variables or credential-bearing values being exposed. No resolved secret values are reproduced here.</p>
+
+  <div class="status" aria-label="Overview stats">
+    <div class="stat"><strong>156,963</strong><span>conversation text records scanned</span></div>
+    <div class="stat"><strong>0</strong><span>JSONL parse errors</span></div>
+    <div class="stat"><strong>10,061</strong><span>Claude compact history lines</span></div>
+    <div class="stat"><strong>678</strong><span>Claude project transcript files</span></div>
+    <div class="stat"><strong>1,988</strong><span>Codex compact history lines</span></div>
+    <div class="stat"><strong>712</strong><span>Codex rollout files</span></div>
+  </div>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#verdict">Verdict</a></li>
+      <li><a href="#scope">Scope And Method</a></li>
+      <li><a href="#confirmed">Confirmed Leak Chain</a></li>
+      <li><a href="#patterns">Recurring Patterns</a></li>
+      <li><a href="#evidence">Evidence Matrix</a></li>
+      <li><a href="#causes">Root Causes</a></li>
+      <li><a href="#examples">Sanitized Examples</a></li>
+      <li><a href="#recommendations">Recommendations</a></li>
+      <li><a href="#impact">Highest Impact Automations</a></li>
+      <li><a href="#gaps">Assumptions And Gaps</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Feedback And Answers</a></li>
+    </ul>
+  </section>
+
+  <section id="verdict" data-section="Verdict">
+    <div class="section-head"><h2>Verdict</h2></div>
+    <div class="feedback" data-section="Verdict">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="callout">
+      <p><strong>Main finding:</strong> The environment-variable leak was not caused by one isolated accidental paste. It came from a workflow design that normalized direct database credentials as an operational prerequisite, then allowed validation output and documentation handoffs to carry resolved values into tracked files and conversations.</p>
+      <p><strong>Confirmed incident:</strong> the repo records a tracked-file leak in <code>docs/kanban-test-results.md</code>. The cleanup commit is <code>72fdc1ad</code> (<code>fix: remove leaked Neon database credential from tracked file</code>). I did not open the removed patch hunk because it could reveal the deleted credential. Supporting task history says the credential was scrubbed and the Neon password was rotated.</p>
+      <p><strong>Primary cause:</strong> legacy kanban skills used a standalone direct-DB script that required <code>POKETOWORK_DATABASE_URL</code> for normal work. That design made a production database URL part of the agent workflow instead of keeping it behind an authenticated app-layer API. Later Phase 10 work migrated standard usage to <code>poketo kanban</code> and made the direct script fallback/admin-only.</p>
+    </div>
+  </section>
+
+  <section id="scope" data-section="Scope And Method">
+    <div class="section-head"><h2>Scope And Method</h2></div>
+    <div class="feedback" data-section="Scope And Method">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <p>The scan included compact user histories and richer conversation transcripts because environment-variable exposure can happen in assistant messages, tool outputs, or generated docs rather than only in user prompts.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Records</th><th>Purpose</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>~/.claude/history.jsonl</code></td><td>10,061 lines</td><td>Compact Claude user prompts and pasted visible content</td><td>Used for user correction history and prompt themes.</td></tr>
+          <tr><td><code>~/.claude/projects/**/*.jsonl</code></td><td>678 files</td><td>Claude user, assistant, and tool-result transcripts</td><td>Skipped system, file snapshots, attachments, and title records for leak-pattern counts.</td></tr>
+          <tr><td><code>~/.codex/history.jsonl</code></td><td>1,988 lines</td><td>Compact Codex prompt history</td><td>Used for user prompt context.</td></tr>
+          <tr><td><code>~/.codex/sessions/**/*.jsonl</code></td><td>712 rollout files, 203,470 rollout lines, 735 metadata records</td><td>Codex rich session records, including assistant messages and tool outputs</td><td>Skipped identifiable system/developer/reasoning records.</td></tr>
+          <tr><td>Repo artifacts</td><td>Focused files and commits</td><td>Durable corroboration</td><td>Read task history, phase docs, current safe docs, and commit metadata. Did not print deleted credential patch content.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The first-pass scanner found 13,314 raw secret-like candidates and 2,890 deduplicated candidate matches. Many were false positives such as code variables named <code>key</code>, <code>token</code>, or animation state. The report therefore relies on confirmed repo records, high-confidence credential shapes, and correction history rather than treating every candidate as a leak.</p>
+  </section>
+
+  <section id="confirmed" data-section="Confirmed Leak Chain">
+    <div class="section-head"><h2>Confirmed Leak Chain</h2></div>
+    <div class="feedback" data-section="Confirmed Leak Chain">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Evidence</th><th>What Happened</th><th>Cause</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Direct-DB workflow became standard</td>
+            <td>Archived <code>poketo-headless-auth-migration.md</code> says active Claude/Codex kanban skills required <code>POKETOWORK_DATABASE_URL</code> and that operations went straight to Neon.</td>
+            <td>Agent kanban work depended on a raw database URL rather than a scoped API token or app-layer auth.</td>
+            <td>Credential-bearing infrastructure was embedded in normal agent operations.</td>
+          </tr>
+          <tr>
+            <td>Validation docs used resolved setup syntax</td>
+            <td><code>docs/kanban-test-results.md</code> tracked kanban validation and originally included an env export line. Current safe version now uses <code>poketo auth login</code> and <code>POKETO_API_KEY</code>.</td>
+            <td>A resolved Neon credential was written to a tracked result file during validation documentation.</td>
+            <td>Documentation treated a live setup command as content to preserve, without a placeholder-only rule or secret scan gate.</td>
+          </tr>
+          <tr>
+            <td>Expert review caught it</td>
+            <td><code>tasks/history.md</code> records: "Critical: database credential in tracked <code>docs/kanban-test-results.md</code>".</td>
+            <td>The leak was identified as a critical review finding.</td>
+            <td>Detection happened after the file was tracked, not before staging or committing.</td>
+          </tr>
+          <tr>
+            <td>Credential was removed</td>
+            <td>Commit <code>72fdc1ad</code> is titled <code>fix: remove leaked Neon database credential from tracked file</code> and changed <code>docs/kanban-test-results.md</code>.</td>
+            <td>The tracked file was scrubbed. The removed patch content was intentionally not inspected in this audit.</td>
+            <td>Cleanup fixed the artifact but did not by itself remove the workflow that made the credential necessary.</td>
+          </tr>
+          <tr>
+            <td>Credential was rotated</td>
+            <td><code>docs/phases/phase-5.md</code> says "Credential scrubbed from <code>docs/kanban-test-results.md</code>, Neon password rotated".</td>
+            <td>The known exposed database password was rotated after removal.</td>
+            <td>Rotation was the right incident response, but prevention needed workflow changes.</td>
+          </tr>
+          <tr>
+            <td>Workflow was redesigned</td>
+            <td><code>tasks/phases/phase-10.md</code> says no kanban skill requires <code>POKETOWORK_DATABASE_URL</code> for standard usage and that standard workflows use <code>poketo kanban</code>.</td>
+            <td>Direct DB access was demoted to legacy fallback/admin-only.</td>
+            <td>The durable prevention was replacing raw DB access with an authenticated app-layer route.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="patterns" data-section="Recurring Patterns">
+    <div class="section-head"><h2>Recurring Patterns</h2></div>
+    <div class="feedback" data-section="Recurring Patterns">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pattern</th><th>Observed Count</th><th>What The Count Means</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td><code>POKETOWORK_DATABASE_URL</code> mentions</td><td>488 transcript records</td><td>Mostly April 2026 Codex session records, many repeated tool outputs or post-fix discussions.</td><td>The variable was a recurring workflow dependency and cleanup topic, not an incidental one-time string.</td></tr>
+          <tr><td>Candidate env assignments</td><td>2,124 deduplicated candidates</td><td>Regex candidates across all transcripts; includes false positives and public/non-secret values.</td><td>Agent sessions often contain env-shaped syntax, so output channels need redaction rather than relying on manual judgment.</td></tr>
+          <tr><td>Candidate sensitive fields</td><td>715 deduplicated candidates</td><td>Fields named token, secret, database URL, connection string, and related variants.</td><td>Many are examples, placeholders, or code identifiers, but the volume shows that secret-shaped text is common enough to require automated policy.</td></tr>
+          <tr><td>URL credentials</td><td>44 deduplicated candidates</td><td>Connection strings or URLs with user/password structure; some are local/test placeholders.</td><td>This is the highest-risk shape and should be blocked from docs, final answers, and commits unless redacted.</td></tr>
+          <tr><td>Token prefix matches</td><td>7 deduplicated candidates</td><td>Provider-token-shaped strings found in transcripts.</td><td>Low count but high severity; final answers and tracked files should fail closed on these patterns.</td></tr>
+          <tr><td>User warnings/corrections</td><td>At least 5 distinct compact prompts</td><td>Examples include "do not look at the .env.local value" and "did you read the secret? Did you leak them?"</td><td>The user had already established the boundary; the workflow needed to enforce it automatically.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="evidence" data-section="Evidence Matrix">
+    <div class="section-head"><h2>Evidence Matrix</h2></div>
+    <div class="feedback" data-section="Evidence Matrix">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>The main confirmed leak was a tracked Neon database credential.</td>
+            <td><code>tasks/history.md</code> names a critical database credential in <code>docs/kanban-test-results.md</code>; commit <code>72fdc1ad</code> removed a leaked Neon credential from that tracked file.</td>
+            <td>Repo history explicitly labels the incident and its cleanup boundary.</td>
+            <td><span class="high">High</span></td>
+            <td>Do not treat this as only a chat-output problem. The prevention gate must cover docs and commits.</td>
+          </tr>
+          <tr>
+            <td>The leak was enabled by a direct-DB kanban architecture.</td>
+            <td>Archived headless-auth spec says standard kanban usage required <code>POKETOWORK_DATABASE_URL</code>, direct Neon writes, and local session config.</td>
+            <td>When a raw production DB URL is a normal prerequisite, agents will naturally read, export, test, document, and mention it.</td>
+            <td><span class="high">High</span></td>
+            <td>Keep direct DB scripts fallback/admin-only and make app-layer auth the default.</td>
+          </tr>
+          <tr>
+            <td>Documentation and final handoff paths lacked an enforced placeholder rule.</td>
+            <td><code>tasks/lessons.md</code> now says to write placeholder syntax and never paste current secret values from env files, shell context, command output, or model-visible context.</td>
+            <td>The lesson exists because a prior handoff copied a resolved value. It also names the missing behavior.</td>
+            <td><span class="high">High</span></td>
+            <td>Implement a pre-commit/pre-final-answer secret scan for docs and handoffs.</td>
+          </tr>
+          <tr>
+            <td>Tool outputs were a recurring leak vector.</td>
+            <td>Transcript scan found high-confidence credential shapes mostly in <code>function_call_output</code> and related tool-output records; <code>rg</code>, installer, and validation outputs repeatedly surfaced env requirements.</td>
+            <td>Even if a command is meant to validate, its output can become model-visible and then be copied into docs or final answers.</td>
+            <td><span class="medium">Medium-high</span></td>
+            <td>Run secret-aware wrappers or output filters around commands that can print env, dotenv, config, or connection strings.</td>
+          </tr>
+          <tr>
+            <td>The user had repeatedly clarified the secret boundary.</td>
+            <td>Compact history includes prompts on 2026-03-02, 2026-04-01, 2026-04-14, and 2026-05-03 warning not to inspect or leak env values.</td>
+            <td>The issue was not lack of user intent. It was lack of reliable enforcement under normal agent operations.</td>
+            <td><span class="high">High</span></td>
+            <td>Standing instructions should be backed by automation, not memory.</td>
+          </tr>
+          <tr>
+            <td>Current standard kanban workflow is materially safer.</td>
+            <td><code>tasks/phases/phase-10.md</code> says standard workflows use <code>poketo kanban</code> with <code>poketo auth login</code> or <code>POKETO_API_KEY</code>, and no kanban skill requires the DB URL for standard usage.</td>
+            <td>The key architecture fix has already happened for the primary known incident path.</td>
+            <td><span class="high">High</span></td>
+            <td>Remaining work should focus on regression gates and fallback/admin-only boundaries.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="causes" data-section="Root Causes">
+    <div class="section-head"><h2>Root Causes</h2></div>
+    <div class="feedback" data-section="Root Causes">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <h3>1. Production credential as routine workflow input</h3>
+    <p>The kanban workflow originally required <code>POKETOWORK_DATABASE_URL</code> for standard operations. That put a raw database credential into the same operational lane as board discovery, card creation, validation, and test documentation.</p>
+    <h3>2. Direct script bypassed app-layer auth and scoping</h3>
+    <p>The archived migration brief says the standalone script executed direct SQL via Neon and bypassed application permission checks. This made the DB URL both powerful and operationally necessary.</p>
+    <h3>3. Validation artifacts copied live setup state</h3>
+    <p>The validation results doc preserved how tests were run. Before cleanup, that included a resolved credential-bearing export instead of a placeholder. This is the direct tracked-file leak path.</p>
+    <h3>4. Secret scanning happened after review, not before commit</h3>
+    <p>The credential was caught by expert review and then removed. The evidence implies there was no reliable gate at the moment docs were written, staged, or committed.</p>
+    <h3>5. Tool output was treated as safe source material</h3>
+    <p>Session transcripts show commands like installers, search, test runners, and validation outputs repeatedly printing env names, setup instructions, and sometimes credential-shaped values. Tool output then became model-visible source material for summaries and docs.</p>
+    <h3>6. User warnings were not converted into automatic controls</h3>
+    <p>History contains direct user warnings about not reading <code>.env.local</code> values and not leaking secrets. Those warnings reduced ambiguity but did not create mechanical checks. The later lesson fixed the instruction layer; the remaining gap is enforcement.</p>
+  </section>
+
+  <section id="examples" data-section="Sanitized Examples">
+    <div class="section-head"><h2>Sanitized Examples</h2></div>
+    <div class="feedback" data-section="Sanitized Examples">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <blockquote>2026-03-02 user prompt: "woah, you should not be looking at environment variables, they're secret right"</blockquote>
+    <blockquote>2026-04-01 user prompt: "ok I've added the env vars. Remember they're meant to be secret, do not look at them."</blockquote>
+    <blockquote>2026-04-06 user prompt: "can you identify how many times secrets were leaked and what we can do to prevent this from happening in the future? Can you also inventory what needs to be rotated?"</blockquote>
+    <blockquote>2026-04-14 user prompt: "will the test leak any env vars?"</blockquote>
+    <blockquote>2026-05-03 user prompt: "did you read the secret? Did you leak them?"</blockquote>
+    <p>Representative redacted leak shape found in history: <code>DATABASE_URL=&lt;redacted postgres URL with credentials&gt;</code>. Representative safe replacement now present in current docs: <code>poketo auth login</code> or <code>export POKETO_API_KEY="pk_..."</code>. The report intentionally does not include old resolved values.</p>
+  </section>
+
+  <section id="recommendations" data-section="Recommendations">
+    <div class="section-head"><h2>Recommendations</h2></div>
+    <div class="feedback" data-section="Recommendations">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Pattern</th><th>Recommendation Type</th><th>Suggested Owner Surface</th><th>Validation Expectation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Docs and handoffs can preserve resolved env values</td><td>Skill + standing instruction</td><td><code>ship</code>, <code>ship-end</code>, <code>exec</code>, report-producing skills</td><td>Layer1 fixture fails when docs/final handoffs include URL credentials, provider tokens, or sensitive env assignments.</td></tr>
+          <tr><td>2</td><td>Tool output can become source material without redaction</td><td>Plugin/integration or wrapper</td><td>Command execution and transcript summarization paths</td><td>Focused smoke test runs a command emitting fake secrets and proves outputs are redacted before documentation or final answer use.</td></tr>
+          <tr><td>3</td><td>Fallback direct-DB scripts can drift back into default docs</td><td>Standing convention + regression test</td><td><code>poketowork-kanban</code> pack</td><td>Test rejects active standard-use docs requiring <code>POKETOWORK_DATABASE_URL</code> or <code>kanban.mjs</code>.</td></tr>
+          <tr><td>4</td><td>Agents may inspect <code>.env*</code> when user only asked for required variable names</td><td>Skill behavior rule</td><td>All coding/debug/review skills</td><td>Fixture distinguishes reading <code>.env.example</code> from reading <code>.env.local</code>; real env reads require explicit approval and value redaction.</td></tr>
+          <tr><td>5</td><td>Secret detection is currently scattered across lessons and human review</td><td>Repository hygiene command</td><td>Validation scripts</td><td>Secret scan checks current tracked files plus staged diff before commit; deleted historical hunk inspection is avoided unless intentionally authorized.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Recommended next command:</strong> <code>$targeted-skill-builder secret-safe documentation and tool-output gate for ship/exec workflows</code>. Likely owner surface: shared execution/shipping contracts plus validation scripts. Minimum validation: a layer1 contract test with fake secret fixtures and a focused command-output redaction smoke.</p>
+  </section>
+
+  <section id="impact" data-section="Highest Impact Automations">
+    <div class="section-head"><h2>Highest Impact Automations</h2></div>
+    <div class="feedback" data-section="Highest Impact Automations">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <ol>
+      <li><strong>Secret-safe docs/handoff gate.</strong> Before any report, test result, task doc, final answer, or commit, scan for URL credentials, sensitive env assignments, provider token prefixes, and password-like query params.</li>
+      <li><strong>Tool-output redaction filter.</strong> Treat command output as untrusted when it contains env/config/dotenv text. Redact before summarizing or writing it.</li>
+      <li><strong>Env-file access boundary.</strong> Default to <code>.env.example</code>, schema validation code, or variable names. Reading live <code>.env</code> files should require explicit user intent and should never print values.</li>
+      <li><strong>Direct-DB fallback quarantine.</strong> Keep <code>kanban.mjs</code> fallback/admin-only, with active docs and skills using <code>poketo kanban</code>.</li>
+      <li><strong>Historical leak handling rule.</strong> When a prior commit removed a credential, report commit/path metadata only. Do not run patch-view commands that could reprint deleted secret content unless the user explicitly asks for forensic history rewriting.</li>
+    </ol>
+  </section>
+
+  <section id="gaps" data-section="Assumptions And Gaps">
+    <div class="section-head"><h2>Assumptions And Gaps</h2></div>
+    <div class="feedback" data-section="Assumptions And Gaps">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <p><strong>Assumption:</strong> Conversation history and repo artifacts are sufficient to identify the main leak path. This is strong because task history and commit metadata explicitly name the tracked credential leak.</p>
+    <p><strong>Gap:</strong> I did not inspect the deleted patch hunk from commit <code>72fdc1ad</code>, so I cannot classify the exact credential string beyond what repo records state: a Neon database credential in <code>docs/kanban-test-results.md</code>. That omission is intentional to avoid re-disclosure.</p>
+    <p><strong>Gap:</strong> The broad scanner counted candidate secret-shaped matches, not confirmed secrets. Counts should be used to prioritize guardrails, not to infer exact rotation inventory.</p>
+    <p><strong>Residual risk:</strong> Git history may still contain the old value unless history was rewritten outside the observed artifacts. The evidence only proves scrub + rotation, not complete historical erasure.</p>
+  </section>
+
+  <section id="gates" data-section="Review Gates">
+    <h2>Review Gates</h2>
+    <div class="feedback" data-section="Review Gates">
+      <div class="controls"><button type="button" data-value="up">Thumbs up</button><button type="button" data-value="down">Thumbs down</button><button type="button" data-value="needs-clarification">Clarification needed</button></div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml"><div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div><textarea class="yaml-output" readonly></textarea></div>
+    </div>
+    <div class="question gate-question" data-section="Evidence Coverage" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage</h3>
+      <p>Is the evidence sufficient to treat the tracked kanban docs leak as the primary confirmed incident?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Evidence is sufficient; do not inspect deleted credential hunks">Evidence is sufficient; do not inspect deleted credential hunks</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Need deeper forensic history review with explicit secret-safe handling">Need deeper forensic history review</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-evidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Assumptions And Confidence" data-gate-type="assumptions-confidence">
+      <h3>Assumptions And Confidence</h3>
+      <p>How should this report treat candidate secret-like counts?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Use candidate counts for guardrail priority, not exact leak inventory">Use counts for guardrail priority, not exact leak inventory</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Require a separate rotation inventory before action">Require separate rotation inventory first</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-confidence" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Recommended Path" data-gate-type="recommended-path">
+      <h3>Recommended Path</h3>
+      <p>Which remediation should be prioritized?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-path" value="$targeted-skill-builder secret-safe documentation and tool-output gate for ship/exec workflows">Build secret-safe docs and tool-output gate</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Audit git history rewrite and rotation inventory first">Audit history rewrite and rotation inventory first</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-path" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Proposed File Changes" data-gate-type="proposed-file-changes" data-target-path="alignment/analyze-sessions-env-leak-audit.html">
+      <h3>Proposed File Changes</h3>
+      <p>Are the durable artifacts for this audit acceptable?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-files" value="Keep this redacted alignment page plus prompt and task artifacts">Keep this redacted alignment page plus prompt and task artifacts</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Revise the report before treating it as current">Revise before treating current</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-files" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+    <div class="question gate-question" data-section="Post-Approval Route" data-gate-type="post-approval-route">
+      <h3>Post-Approval Route</h3>
+      <p>After approval, how should this report route next work?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-route" value="Recommended next command: $targeted-skill-builder secret-safe documentation and tool-output gate for ship/exec workflows">Use the recommended next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="No immediate next command">No immediate next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile" data-section="Compile Feedback And Answers">
+    <h2>Compile Feedback And Answers</h2>
+    <p class="muted">Use feedback YAML for concerns before answering all gates. Use final answers only when the report is ready for agent review.</p>
+    <div class="buttons">
+      <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+      <button type="button" id="compile-answers" disabled>Compile Answers</button>
+      <button type="button" id="copy-compiled">Copy YAML</button>
+      <span id="answer-count" class="copy-status"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+
+<script>
+  const alignmentPage = "alignment/analyze-sessions-env-leak-audit.html";
+  const feedbackBlocks = Array.from(document.querySelectorAll(".feedback"));
+  const gateQuestions = Array.from(document.querySelectorAll(".gate-question"));
+  const compiled = document.getElementById("compiled-yaml");
+  const answerCount = document.getElementById("answer-count");
+  const compileAnswers = document.getElementById("compile-answers");
+
+  function yamlString(value) {
+    return JSON.stringify(String(value || ""));
+  }
+
+  function selectedFeedback(block) {
+    const active = block.querySelector("button.active");
+    if (!active) return null;
+    const feedback = active.dataset.value;
+    return {
+      section: block.dataset.section,
+      feedback,
+      notes: block.querySelector(".notes").value.trim(),
+      requested_agent_action: feedback === "up" ? "accept-as-is" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval"
+    };
+  }
+
+  function feedbackYaml(entries) {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked")).map(q => q.dataset.section);
+    const lines = [
+      "alignment_page: " + yamlString(alignmentPage),
+      "feedback_status: revision-request",
+      "approval_status: not-approved",
+      "unanswered_required_questions:"
+    ];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q)));
+    else lines.push("  []");
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    return lines.join("\n");
+  }
+
+  function updateAnswerState() {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    compileAnswers.disabled = unanswered.length > 0;
+    answerCount.textContent = unanswered.length ? `${unanswered.length} required gate question(s) unanswered` : "All required gate questions answered";
+  }
+
+  function copyText(text, statusEl) {
+    const done = () => { if (statusEl) statusEl.textContent = "Copied"; };
+    const fallback = () => {
+      compiled.focus();
+      compiled.select();
+      if (statusEl) statusEl.textContent = "Select and copy the YAML";
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  feedbackBlocks.forEach(block => {
+    block.querySelectorAll("button[data-value]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wasActive = btn.classList.contains("active");
+        block.querySelectorAll("button[data-value]").forEach(b => b.classList.remove("active"));
+        if (!wasActive) btn.classList.add("active");
+        block.dataset.active = (!wasActive).toString();
+      });
+    });
+    block.querySelector(".compile-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+    block.querySelector(".copy-local").addEventListener("click", () => {
+      const yaml = block.querySelector(".yaml-output").value || feedbackYaml(selectedFeedback(block) ? [selectedFeedback(block)] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+  });
+
+  gateQuestions.forEach(q => q.addEventListener("change", updateAnswerState));
+  updateAnswerState();
+
+  document.getElementById("compile-feedback").addEventListener("click", () => {
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    const yaml = feedbackYaml(entries);
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+
+  compileAnswers.addEventListener("click", () => {
+    const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
+    if (unanswered.length) {
+      unanswered[0].scrollIntoView({behavior: "smooth", block: "center"});
+      updateAnswerState();
+      return;
+    }
+    const lines = [
+      "alignment_page: " + yamlString(alignmentPage),
+      "approval_status: ready-for-agent-review",
+      "answers:"
+    ];
+    gateQuestions.forEach(q => {
+      const selected = q.querySelector("input:checked");
+      const notes = q.querySelector(".notes-for-answer").value.trim();
+      const status = selected.value === "Need clarification" ? "needs-clarification" : selected.value === "Other / None of the above" ? "other" : "answered";
+      lines.push("  - section: " + yamlString(q.dataset.section));
+      lines.push("    gate_type: " + yamlString(q.dataset.gateType));
+      lines.push("    status: " + yamlString(status));
+      lines.push("    answer: " + yamlString(selected.value));
+      if (q.dataset.targetPath) lines.push("    target_path: " + yamlString(q.dataset.targetPath));
+      if (notes) lines.push("    notes: " + yamlString(notes));
+    });
+    const entries = feedbackBlocks.map(selectedFeedback).filter(Boolean);
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    const yaml = lines.join("\n");
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+
+  document.getElementById("copy-compiled").addEventListener("click", () => {
+    copyText(compiled.value, answerCount);
+  });
+</script>
+</body>
+</html>

@@ -1,3 +1,32 @@
+## Current Task - Environment Variable Leak Conversation Audit 2026-06-04
+
+**Goal:** Determine what issues in conversation/workflow history led to environment variables or credential-bearing values being leaked, while keeping all secret values redacted.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/analyze-sessions/`.
+- [x] Record the audit plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Parse full available Claude and Codex histories into normalized redacted records.
+- [x] Identify likely environment-variable/credential leak events and their surrounding causes.
+- [x] Write `alignment/analyze-sessions-env-leak-audit.html` with the complete redacted report and review gates.
+- [x] Verify the artifact, record review notes, commit, and push intended changes.
+
+### Review
+
+- Parsed 10,061 Claude compact history lines and 1,988 Codex compact history lines with 0 parse errors.
+- Scanned 678 Claude project transcript JSONL files and 712 Codex rollout JSONL files, including assistant and tool-output records where leaks can occur.
+- Scanned 156,963 conversation text records with redaction-first detection and wrote no raw matched secret values to the report.
+- First-pass detection found 13,314 raw secret-like candidates and 2,890 deduplicated candidates; these were treated as candidates because many were false positives such as code variables named `key` or `token`.
+- Confirmed primary incident from repo evidence: a Neon database credential was tracked in `docs/kanban-test-results.md`, then removed by commit `72fdc1ad` and rotated per `docs/phases/phase-5.md`.
+- Root cause identified: legacy kanban workflows made `POKETOWORK_DATABASE_URL` a standard direct-DB prerequisite, validation docs preserved live setup state, and secret scanning happened after review instead of before commit.
+- Wrote `alignment/analyze-sessions-env-leak-audit.html` with the redacted report, evidence matrix, sanitized examples, recommendations, and review gates.
+- Initial focused checks passed for HTML required content, inline script parse, and targeted secret-shape scan. `git diff --check` then caught task-doc conflict markers, which were resolved by preserving both the prior overall-history section and this audit section.
+- Final verification passed after conflict resolution: no task-doc conflict markers, HTML required-content check, inline JavaScript parse via Node `vm.Script`, targeted secret-shape scan over intended files, and `git diff --check`.
+- Browser open status: Linux `xdg-open` was blocked because no browser is installed; WSL Windows PowerShell `Start-Process file://wsl.localhost/.../alignment/analyze-sessions-env-leak-audit.html` succeeded.
+- Intended shipping boundary is limited to `alignment/analyze-sessions-env-leak-audit.html`, `prompts/analyze-sessions/skill-prompt-20260604-180756-env-leak-audit.md`, `tasks/roadmap.md`, and `tasks/todo.md`; existing token-spend untracked files are preserved outside staging.
+
+---
+
 ## Current Task - Overall Session History Analysis 2026-06-04
 
 **Goal:** Determine broad usage trends and automation opportunities from full local Claude and Codex session history.
@@ -27,7 +56,6 @@
 - Focused verification passed: HTML required-content/parser check, embedded JavaScript parse via Node `vm.Script`, ASCII byte check, and `git diff --check` for intended files.
 - Browser open attempt succeeded for `alignment/analyze-sessions-overall-history.html`.
 - Intended shipping boundary is limited to this run's alignment page, prompt log, and task docs; unrelated existing app/config modifications and older untracked artifacts are preserved outside staging.
-
 ---
 
 ## Current Task - Development Stuck-Point Session Analysis 2026-06-04
