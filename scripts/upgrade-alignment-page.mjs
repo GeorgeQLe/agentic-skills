@@ -22,15 +22,15 @@ function skillNameFor(file) {
   return parts[parts.length - 2];
 }
 
-// Single authoring source: the marked block inside CLAUDE.md.
-const claudeMdPath = `${repoRoot}/CLAUDE.md`;
-const claudeMd = readFileSync(claudeMdPath, "utf8");
-const markerMatch = claudeMd.match(
+// Single authoring source: the marked block inside docs/alignment-page-convention.md.
+const conventionPath = `${repoRoot}/docs/alignment-page-convention.md`;
+const conventionFile = readFileSync(conventionPath, "utf8");
+const markerMatch = conventionFile.match(
   /<!-- alignment-convention:start -->\n([\s\S]*?)\n<!-- alignment-convention:end -->/,
 );
 if (!markerMatch) {
   console.error(
-    "Could not find <!-- alignment-convention:start --> / :end markers in CLAUDE.md",
+    "Could not find <!-- alignment-convention:start --> / :end markers in docs/alignment-page-convention.md",
   );
   process.exit(1);
 }
