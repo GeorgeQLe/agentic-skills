@@ -48,10 +48,6 @@ specific implementation skill instead of producing click instructions.
 6. **Offer to check off:**
    - When the user confirms completion, mark the item done in `tasks/manual-todo.md`.
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/guide-{topic}.html`.
-
 ## Constraints
 
 - Always web search — never produce instructions from memory alone.

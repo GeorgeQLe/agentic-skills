@@ -64,10 +64,6 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 - Do not modify `.agents/monorepo.json` manually; use `mono-detect.sh`.
 - Treat `mono-detect` as an augmentation foundation for `mono-exec`, `mono-ship`, and `mono-guard`, not as a replacement for `/exec`, `/ship`, or global monorepo planning skills.
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/mono-detect-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.

@@ -105,10 +105,6 @@ Input (params) → validated → service call → DB query → transform → res
 - Do not modify any code — this is a read-only analysis.
 
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/trace-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.

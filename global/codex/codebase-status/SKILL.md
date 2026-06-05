@@ -104,10 +104,6 @@ End with exactly:
 - When recommending a pack skill, first check `.agents/project.json` for `enabled_packs`. If the target skill's pack is not enabled, include `$pack install <pack-name>` as a prerequisite in the recommendation.
 - Do not create or modify GitHub Actions workflows.
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/codebase-status-{topic}.html`.
-
 ## Default Shipping Contract
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.

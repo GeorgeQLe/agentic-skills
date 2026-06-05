@@ -87,10 +87,6 @@ Produce a structured report with:
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
-## Output Format
-
-Output the structured report directly in the terminal (or wherever this skill was invoked). Do not create alignment HTML pages, separate report files, or any other file-based output. The report is ephemeral conversation output, not a durable deliverable.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
