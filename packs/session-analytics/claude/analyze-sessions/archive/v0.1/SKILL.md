@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.2
+version: v0.1
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 ---
 
@@ -19,7 +19,6 @@ If the user asks about one current session, one mistake, one correction, one rep
 - Default Codex rich session root: `~/.codex/sessions/**/*.jsonl`
 - Optional paths from the user. Accept history files, session directories, repository directories, or exported logs.
 - Optional filters such as repo path, project name, date range, command/skill name, exact phrase, or trend question.
-- Optional model pricing table or explicit request to verify current provider pricing. Use pricing only when it is supplied by the user, present in the logs, or verified from an authoritative provider source during the run.
 
 ## Process
 
@@ -38,8 +37,6 @@ If the user asks about one current session, one mistake, one correction, one rep
    - `session_id`
    - `project` or `cwd`
    - `text`
-   - optional token usage such as input, cached input, output, reasoning output, and total tokens
-   - optional cost metadata such as estimated USD cost, billed credits, pricing source, and price-table version
    - optional metadata such as git branch, repository URL, model, provider, and CLI version
 
 5. Parse Claude history:
@@ -50,29 +47,17 @@ If the user asks about one current session, one mistake, one correction, one rep
    - `~/.codex/sessions/**/*.jsonl` lines contain richer rollout records. Use `session_meta.payload.id` to map session IDs to `cwd`, git metadata, CLI version, and model/provider.
    - Include user `response_item` records only when they represent user messages. Exclude developer/system/base instruction payloads from prompt-pattern counts.
    - Prefer compact Codex prompt history for user prompt counts, enriched with rollout metadata. Use rollout user records only for prompts missing from compact history or for metadata checks.
-   - Parse Codex `event_msg` records with `payload.type == "token_count"`. Normalize `payload.info.total_token_usage` and `payload.info.last_token_usage` fields such as `input_tokens`, `cached_input_tokens`, `output_tokens`, `reasoning_output_tokens`, and `total_tokens`.
 
-7. Parse token spend and cost metadata:
-   - For session-level token totals, use the final or highest cumulative `total_token_usage` snapshot per session instead of summing every cumulative snapshot.
-   - For date or turn-level trends, sum deduplicated `last_token_usage` records and reconcile them against each session's final cumulative total when possible.
-   - Attribute token usage by source, session, project, model, provider, and date when those fields are available; otherwise report the missing dimensions explicitly.
-   - Use direct cost fields when logs include them, such as `cost`, `total_cost`, `totalCost`, `estimated_cost_usd`, or `estimatedCostUsd`, preserving their original source and units.
-   - When costs are not logged, estimate USD cost only from a user-provided or freshly verified provider pricing table. Show the pricing source, retrieval date or table version, model mapping, formula, and assumptions.
-   - Treat cached-input and reasoning-output tokens according to the pricing table. If the table is ambiguous, state the assumption, such as reasoning tokens billed as output tokens, and keep the estimate labeled as an estimate.
-   - If no reliable cost basis is available, still report token totals and say cost is unavailable instead of guessing.
-
-8. Extract and report:
+7. Extract and report:
    - Project breakdown: top projects by message volume with percentages.
    - Source breakdown: Claude vs. Codex message/session counts and date ranges.
-   - Token spend breakdown: total tokens plus input, cached input, output, and reasoning output by source, project, model, and date where supported.
-   - Cost breakdown: total estimated cost, cost by source/project/model/date, and top cost-driving sessions when supported by explicit cost fields or a verified/provided price table.
    - Activity categories and recurring workflow themes.
    - Exact and fuzzy repeated prompt patterns.
    - Common multi-step workflow sequences.
    - Cross-tool differences, including workflows that moved from Claude to Codex or still require different commands.
    - Skill performance patterns across multiple invocations, including recurring corrections or repeated bad recommendations when supported by scoped history evidence.
 
-9. For each major pattern, recommend the best automation shape:
+8. For each major pattern, recommend the best automation shape:
    - Skill: repeatable workflow with a stable sequence.
    - Agent: complex exploratory or autonomous work.
    - Plugin/integration: external-service or persistent-connection workflow.
@@ -95,7 +80,6 @@ Produce a structured report with:
 
 - Overview stats: total messages, sessions, date range, and top projects.
 - Source comparison: Claude vs. Codex totals, top projects, command usage, and recent trend.
-- Token and cost check: total tokens, token class breakdown, total estimated cost or explicit `cost unavailable`, pricing source/assumptions, and coverage gaps for sources without usage metadata.
 - Categorized patterns with counts and real examples from history.
 - Skill performance trends when requested or visible in the scoped data.
 - Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description.
@@ -107,10 +91,6 @@ Produce a structured report with:
 - Process the entire available history for broad usage analysis, not just a sample.
 - Use actual message examples from the history, not hypothetical ones.
 - Be specific about frequencies; show exact counts where possible.
-- Show exact token counts where available and clearly distinguish logged costs from estimated costs.
-- Do not infer token counts from message length when usage metadata is missing.
-- Do not estimate dollar cost from remembered or stale model pricing. Use explicit log cost fields, a user-provided price table, or a current provider source verified during the run; otherwise report cost as unavailable.
-- Avoid double-counting cumulative token snapshots. For Codex `token_count` events, aggregate final session totals from `total_token_usage` and use `last_token_usage` only for deduplicated timeline or turn-level analysis.
 - Group near-identical prompts together.
 - Deduplicate Codex prompts that appear in both `~/.codex/history.jsonl` and rollout files by `(session_id, timestamp, normalized text)` where possible.
 - Do not include system, developer, base instruction, or tool output text in repeated-prompt counts.

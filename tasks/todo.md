@@ -1,3 +1,45 @@
+## Current Task - Analyze Sessions Token Cost Check 2026-06-05
+
+**Goal:** Update `analyze-sessions` so session-history reports include a token-spend and related-cost check when usage metadata is available.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The change belongs in the `session-analytics` pack source mirrors, not only the managed project-local copy.
+
+### Plan
+
+- [x] Capture prompt history under `prompts/analyze-sessions/`.
+- [x] Inspect the managed skill source, mirrored source skills, changelogs, and validation scripts.
+- [x] Archive current source `SKILL.md` files before version bumps.
+- [x] Update both runner mirrors with token/cost usage accounting requirements.
+- [x] Run focused token/cost contract coverage plus validation for archives, mirror parity, routing, versions, and whitespace.
+- [x] Record review notes, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [x] `analyze-sessions` reads available token usage metadata from rich session records without inventing usage values when absent.
+- [x] Reports include total input/cache/output/reasoning tokens where available, plus total tokens and cost by source/model/project/date where supported by data.
+- [x] Cost reporting states the pricing source or provided price table and labels estimates clearly.
+- [x] Missing token/cost data is reported as unavailable rather than guessed.
+- [x] Version archives, changelogs, and active frontmatter are consistent.
+
+### Review
+
+- Captured the visible `$analyze-sessions` invocation and pasted skill context under `prompts/analyze-sessions/skill-prompt-20260605-090252-token-cost-check.md`.
+- Confirmed the active `.codex/skills/analyze-sessions` copy is managed from `packs/session-analytics/codex/analyze-sessions`; updated the source pack mirrors rather than only the local managed copy.
+- Archived current v0.1 source contracts to `packs/session-analytics/claude/analyze-sessions/archive/v0.1/SKILL.md` and `packs/session-analytics/codex/analyze-sessions/archive/v0.1/SKILL.md`.
+- Bumped both source mirrors to v0.2 and updated changelogs.
+- Added token/cost accounting requirements: parse Codex `event_msg` `payload.type == "token_count"` records, normalize `total_token_usage` and `last_token_usage`, use final/highest cumulative session totals to avoid double-counting, use deduplicated `last_token_usage` for timeline analysis, and attribute usage by source/session/project/model/provider/date where available.
+- Added cost rules: use direct log cost fields when present, estimate USD only from a user-provided or freshly verified provider pricing table, state pricing source/retrieval date/formula/assumptions, and report `cost unavailable` rather than guessing when no reliable basis exists.
+- Added focused layer1 coverage in `tests/layer1/analyze-sessions-token-cost.test.ts`.
+- Repaired and refreshed ignored project-local managed copies for `.claude/skills/analyze-sessions` and `.codex/skills/analyze-sessions`; `scripts/pack.sh doctor` reports both as ok.
+- Skills Showcase generation was intentionally not included in the shipping boundary: the generator reads ignored local `tests/benchmarks/runs/**` artifacts, causing unrelated benchmark/demo/proof churn and a zeroed matrix in a clean temp worktree. Generated rewrites were restored out of scope.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/analyze-sessions-token-cost.test.ts`; `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `git diff --check`; `scripts/pack.sh doctor`.
+- Unrelated dirty files preserved outside the intended boundary: `.agents/project.json`, `.claude/skills/skill-interview/SKILL.md`, and `.codex/skills/skill-interview/SKILL.md`.
+
+---
+
 ## Current Task - Alignment Feedback Emphasize Option 2026-06-05
 
 **Goal:** Change newly created HTML alignment pages so section feedback uses `emphasize` when the user wants the agent to add more weight to a section, rather than a "looks good / approved" positive option.

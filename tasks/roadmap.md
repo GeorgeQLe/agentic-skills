@@ -1,3 +1,30 @@
+## Current Targeted Update: Analyze Sessions Token Cost Check 2026-06-05
+
+**Goal:** Update the `analyze-sessions` skill so every broad session-history report checks available token usage metadata and reports total token spend plus related cost when the history data supports it.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a skill-contract behavior change in the `session-analytics` pack, so the Claude and Codex mirrors should stay semantically aligned while preserving runner-specific command syntax.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the plan and final review notes.
+- [x] Active `analyze-sessions` source mirrors are archived before the version bump.
+- [x] The skill normalization contract captures token usage and cost metadata when present.
+- [x] The report contract includes total tokens, token breakdowns, total estimated cost, pricing source/assumptions, and missing-cost-data caveats.
+- [x] Validation covers focused token/cost contract tests, version archives, mirror parity, routing, version fields, and whitespace.
+- [x] Intended changes are committed and pushed on `master`.
+
+**Implementation Plan:**
+1. Capture the visible invocation and inspect the active managed skill source.
+2. Record this plan in task docs.
+3. Archive current `analyze-sessions` source mirrors and bump versions.
+4. Add token usage and cost accounting requirements to inputs, normalization, extraction, output, and constraints.
+5. Run focused token/cost contract coverage plus repository validation and inspect the diff boundary.
+6. Record review notes, stage intended files, commit, and push on `master`.
+
+---
+
 ## Current Targeted Update: Alignment Feedback Emphasize Option 2026-06-05
 
 **Goal:** Change the shared HTML alignment-page section feedback pattern so the positive/approval option becomes `emphasize`, meaning the user wants the agent to give that section more weight, rather than treating the section as already approved.
