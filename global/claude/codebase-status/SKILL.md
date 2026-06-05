@@ -2,7 +2,7 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
@@ -64,7 +64,7 @@ This is read-only status synthesis. It does not replace `/roadmap`: `roadmap` ma
      - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `/ship`.
      - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
      - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `/pack install customer-lifecycle` before `/journey-map`; if enabled, recommend `/journey-map`.
-     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Recommend `/value-prop-canvas` only for contested solution-fit evidence, and `/lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, or `ux-variations`.
+     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-discovery` availability; if it is not enabled, recommend `/pack install business-discovery` before `/value-prop-canvas` or `/lean-canvas`. Recommend `/value-prop-canvas` only for contested solution-fit evidence, and `/lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, or `ux-variations`.
      - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `/brainstorm` to discover new AFPS work.
    - `/exec` when the next task is already clear and executable. _(exec-loop pack)_
    - `/roadmap` when specs exist but sequencing or task queue health needs updating. _(agent-work-admin pack)_

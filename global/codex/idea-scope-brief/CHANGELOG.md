@@ -1,5 +1,13 @@
 # idea-scope-brief Changelog
 
+## v0.10 - 2026-06-04
+
+- Added Market Structure Handoff guidance so marketplace/platform/B2B2C/multi-sided concepts pass apparent sides and value exchange to `$icp` as hypotheses for validation, not preselected ICPs.
+
+## v0.9 - 2026-06-04
+
+- Added explicit `business-discovery` and `business-ops` pack-install fallback wording at `$icp` and `$product-line` recommendation sites so the routing audit can verify cross-pack guards.
+
 ## v0.8 - 2026-05-31
 
 - Require a pre-approval HTML alignment preview after the coverage checkpoint and before canonical `idea-brief`, interview-log, or `research/.progress.yaml` writes. Coverage-checkpoint confirmation is non-final; only final compiled YAML approval authorizes canonical writes or downstream routing. This applies the `tasks/lessons.md` lesson "Approval-gated research needs alignment preview before approval."

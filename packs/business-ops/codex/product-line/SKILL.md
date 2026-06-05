@@ -2,7 +2,7 @@
 name: product-line
 description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
 type: ops
-version: v0.1
+version: v0.2
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 ---
 
@@ -173,6 +173,10 @@ Update `research/.progress.yaml`. `archive` and `restore` may also move product-
 - Do not use `archive` without a documented rationale.
 - Respect `max_concurrent` for active paths.
 - Use product-path terminology. Never use "branch" to mean a product path.
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/product-line-{topic}.html`.
 
 ## Default Shipping Contract
 

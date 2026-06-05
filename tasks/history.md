@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-04 — Claude/Codex pack skill parity audit
+
+- Added `scripts/skill-mirror-parity-audit.sh` to check mirrored pack skills for missing mirrors, selected frontmatter drift, required shared-section drift, and command-syntax-normalized heading drift while allowlisting documented one-sided/platform-specific cases.
+- Repaired current parity drift in Codex `business-discovery/icp`, Codex `business-growth/gtm`, Codex `business-growth/monetization`, and Claude `product-design/ux-variations` with archives, version bumps, and changelog entries.
+- Fixed adjacent parity findings in `business-ops/product-line` and `guided-walkthrough/uat-guide`, plus global routing-audit gaps in `codebase-status` and `idea-scope-brief`.
+- Wired the new audit into README validation guidance, `docs/skill-versioning.md`, and generated Skills Showcase proof data; regenerated Skills Showcase assets and the benchmark matrix.
+- Verification passed for mirror parity, version metadata, archive integrity, pack routing, showcase freshness, Node syntax checks, and whitespace. `skill-deps.sh --broken` still reports accepted existing parser/reference noise.
+
 ## 2026-06-04 — Targeted ambiguity mitigation conventions
 
 - Added "Scope Confirmation for Destructive Work" convention to CLAUDE.md under Shared Skill Conventions — requires scope confirmation when a skill would delete/archive/overwrite artifacts the user didn't explicitly name.

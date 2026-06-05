@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.10
+version: v0.11
 argument-hint: <spec file path, concept/idea, or empty to use idea brief>
 ---
 
@@ -83,6 +83,16 @@ Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`
 **Migrate flat files when product paths are introduced:** If canonical flat `research/*.md` files exist and the user chooses or creates a product path, offer to move path-specific canonical docs into `research/{chosen-slug}/`. Leave or regenerate top-level files only when they are cross-path summaries.
 
 **Migrate old convention:** If `research/icp-{slug}.md` files exist (old naming), offer to move them to `research/{slug}/icp.md` (and corresponding search logs to `research/{slug}/icp-search-log.md`). Create the subdirectories as needed.
+
+### Marketplace Side Preflight
+
+Before identifying ICP candidates, resolve market-structure side coverage:
+
+- Read any `Market Structure Handoff` or marketplace/platform/B2B2C/multi-sided notes from the idea brief, especially `## ICP Readiness`. Treat side names and value exchange as hypotheses from the idea-scope brief, not validated ICPs.
+- If no idea brief exists, infer likely sides from `$ARGUMENTS`, README, specs, codebase context, or product description when the concept suggests a marketplace/platform/B2B2C/multi-sided model.
+- During broad market research, validate or refute the marketplace/platform/B2B2C/multi-sided classification with evidence; log the evidence for or against each apparent side and value exchange.
+- Before candidate generation, write a side-coverage note in the working packet or search log that names material sides, buyer/customer/user distinctions, and any uncertain or unsupported side assumptions.
+- Candidate generation must cover each material side or explicitly explain why a side is excluded, deferred, or not a customer side.
 
 ### 2. Broad Market Research
 
@@ -428,6 +438,7 @@ Raw research log containing:
 - Every WebSearch query executed and why
 - Key findings from each search (with source attribution)
 - Evidence that supported or contradicted each ICP candidate
+- Marketplace Side Preflight validation/refutation plus side coverage/exclusion rationale
 - The scoring rationale for primary ICP selection
 - Any data gaps or areas where research was inconclusive
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-06-04
+
+- Restored version parity with the Codex mirror after verifying the solo-evaluator default is present in the Claude contract.
+
 ## v0.10 - 2026-05-31
 
 - Required alignment pages to use a top in-flow Table of Contents instead of sidebar navigation, and to avoid sticky/fixed bottom compile banners.

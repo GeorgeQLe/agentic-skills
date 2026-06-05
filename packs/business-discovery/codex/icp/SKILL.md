@@ -2,9 +2,13 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.9
+version: v0.11
 argument-hint: <spec file path, concept/idea, or empty to use idea brief>
 ---
+
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # ICP — Research-Driven Customer Discovery
 
@@ -67,6 +71,17 @@ When product path `{slug}` is active, read and write research under `research/{s
    - **Use code/app hints secondarily** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, `package.json` workspaces, app folders, or package folders) only after product-path resolution. If multiple active product paths exist, or if this run is explicitly producing a cross-path overview, run the full ICP process per product path and produce `research/{slug}/icp.md` per path plus a unified `research/icp.md`. If code clearly exposes a user-facing app without a matching product path, suggest creating `research/{slug}/` instead of treating monorepo detection as a gate.
    - **Migrate flat files when product paths are introduced:** If canonical flat `research/*.md` files exist and the user chooses or creates a product path, offer to move path-specific canonical docs into `research/{chosen-slug}/`. Leave or regenerate top-level files only when they are cross-path summaries.
    - **Migrate old convention:** If `research/icp-{slug}.md` files exist (old naming), offer to move them to `research/{slug}/icp.md` (and corresponding search logs to `research/{slug}/icp-search-log.md`). Create the subdirectories as needed.
+
+### Marketplace Side Preflight
+
+Before identifying ICP candidates, resolve market-structure side coverage:
+
+- Read any `Market Structure Handoff` or marketplace/platform/B2B2C/multi-sided notes from the idea brief, especially `## ICP Readiness`. Treat side names and value exchange as hypotheses from the idea-scope brief, not validated ICPs.
+- If no idea brief exists, infer likely sides from `$ARGUMENTS`, README, specs, codebase context, or product description when the concept suggests a marketplace/platform/B2B2C/multi-sided model.
+- During broad market research, validate or refute the marketplace/platform/B2B2C/multi-sided classification with evidence; log the evidence for or against each apparent side and value exchange.
+- Before candidate generation, write a side-coverage note in the working packet or search log that names material sides, buyer/customer/user distinctions, and any uncertain or unsupported side assumptions.
+- Candidate generation must cover each material side or explicitly explain why a side is excluded, deferred, or not a customer side.
+
 2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports, business model, willingness-to-pay signals). Log all queries and findings. **Classify the business model** into one or more of: B2B SaaS (PLG), B2B SaaS (SLG), B2C, B2C subscription, marketplace/platform, B2B2C, D2C, open-source/open-core, API/developer-first. Document classification with evidence in search log — this gates which sub-sections appear in the Discovery & Evaluation Behavior section.
 3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, value potential, and WTP signal strength.
 4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale — cite pain evidence found, accessibility signals, and value delivery reasoning from search findings for each candidate. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
@@ -94,7 +109,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 ## Deliverables
 
 - `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Current Alternatives (User Perspective), Market Sizing, Stated Value Drivers, Customer ↔ User Dynamics). Include WTP evidence as a subsection inside `## Stated Value Drivers`, not as a new top-level parser-breaking section. Then supplementary `## Discovery & Evaluation Behavior` (section 10: how they find solutions, how they evaluate, how they choose), then `## Additional ICPs` (condensed 9-section + condensed discovery & evaluation per ICP, including condensed WTP evidence), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence, discovery & evaluation comparison), then `## Signals for Downstream Research` (unvalidated observations routed to /competitive-analysis, /positioning, /monetization, /gtm)
-- `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
+- `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale, and Marketplace Side Preflight validation/refutation plus side coverage/exclusion rationale
 - `research/.progress.yaml` — product-path manifest when secondary ICPs, Cross-ICP Analysis, or product-line recommendations create parked or promotable paths. Status values include `active`, `deferred`, `archived`, `promoted`, and `revisit_candidate`.
 - **Product-path or cross-path mode**: `research/{slug}/icp.md` + `research/{slug}/icp-search-log.md` per product path, plus unified `research/icp.md` cross-referencing all product-path ICPs with top-level prioritization when multiple active paths exist
 

@@ -13,7 +13,7 @@ const mirroredSkills = [
   {
     pack: "guided-walkthrough",
     skill: "uat-guide",
-    version: "v0.1",
+    version: "v0.2",
   },
   {
     pack: "alignment-loop",

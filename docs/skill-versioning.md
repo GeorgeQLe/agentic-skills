@@ -134,3 +134,12 @@ The archive audit checks:
 2. Any skill at `v0.1`+ has corresponding archive entries for prior versions
 3. If `archive/` has entries, `CHANGELOG.md` must exist
 4. Each archived version has a heading in `CHANGELOG.md`
+
+### Mirror parity audit
+
+```bash
+bash scripts/skill-mirror-parity-audit.sh
+bash scripts/skill-mirror-parity-audit.sh --verbose
+```
+
+The mirror parity audit checks pack skill pairs under `packs/*/{claude,codex}/*/SKILL.md` for missing mirrors, frontmatter drift (`name`, `type`, `version`, `argument-hint`), required shared-section drift, and command-syntax-normalized heading drift. Intentional one-sided skills and documented pre-existing platform-specific drift are allowlisted inside the script.

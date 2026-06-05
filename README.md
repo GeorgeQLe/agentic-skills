@@ -139,6 +139,7 @@ agentic-skills/
 ├── scripts/
 │   ├── pack.sh
 │   ├── skill-deps.sh
+│   ├── skill-mirror-parity-audit.sh
 │   ├── skill-pack-routing-audit.sh
 │   └── skill-versions.sh
 ├── init.sh
@@ -380,13 +381,14 @@ See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioni
 
 ```bash
 ./scripts/skill-deps.sh --broken
+./scripts/skill-mirror-parity-audit.sh
 ./scripts/skill-pack-routing-audit.sh
 ./scripts/skill-versions.sh --missing
 pnpm --dir tests test
 cd packs/poketowork-kanban/claude/poketo-kanban/scripts && npm test
 ```
 
-`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`.
+`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`; `skill-mirror-parity-audit.sh` checks mirrored pack skill pairs under `packs/`.
 
 Live agent behavior tests are opt-in because they invoke authenticated CLIs and may spend model budget:
 

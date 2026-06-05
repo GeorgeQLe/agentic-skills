@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.11 - 2026-06-04
+
+- Added Marketplace Side Preflight so ICP reads idea-brief side handoffs, infers sides on direct invocation, validates/refutes marketplace/platform/B2B2C classification during broad research, and covers or explicitly excludes each material side before candidate generation.
+
+## v0.10 - 2026-06-04
+
+- Added the shared Pack Availability Guard to match the Claude mirror and restored version parity.
+
 ## v0.9 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

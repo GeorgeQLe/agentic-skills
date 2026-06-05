@@ -51,6 +51,12 @@ const validationScripts = [
     path: "scripts/skill-versions.sh"
   },
   {
+    id: "skill-mirror-parity",
+    title: "Claude/Codex mirror parity",
+    command: "./scripts/skill-mirror-parity-audit.sh",
+    path: "scripts/skill-mirror-parity-audit.sh"
+  },
+  {
     id: "next-step-routing",
     title: "Mutation next-step routing",
     command: "./scripts/skill-next-step-routing.sh --missing",

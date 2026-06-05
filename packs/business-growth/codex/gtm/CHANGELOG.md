@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-04
+
+- Restored version parity with the Claude mirror after verifying the staged research and research-first GTM contracts are present on both sides.
+
 ## v0.6 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

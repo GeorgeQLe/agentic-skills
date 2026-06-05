@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.8
+version: v0.10
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 ---
 
@@ -37,8 +37,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/ICP focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
    - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `scope_path`, `status`, `source_skill`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/icp <path/audience>`.
-   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/icp <path/audience>`; if `business-discovery` is not enabled, recommend `/pack install business-discovery` before `/icp`.
+   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `/pack install business-ops` before `/product-line`.
 
 2. **Keep the boundary clear**
    - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
@@ -59,6 +59,15 @@ When product path `{slug}` is active, read and write research under `research/{s
      - riskiest unknowns
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
+### Market Structure Handoff
+
+During the Idea Assumptions Manifest, if the concept appears marketplace/platform/B2B2C/multi-sided, add a compact `Market Structure Handoff` note:
+
+- Name the apparent sides and the expected value exchange between them.
+- Mark those sides and exchanges as hypotheses, not validated ICPs; do not decide which side is the customer, buyer, or primary ICP here.
+- Keep the source tag for each side as `[from prompt]`, `[from repo]`, or `[inferred]` unless the user provides a correction.
+- If the concept appears single-sided, omit the handoff or state that no marketplace/platform/B2B2C/multi-sided handoff is apparent.
+
 4. **Interview until idea-ready**
    - Ask 1 to 3 focused questions per turn.
    - Resolve only concept-level ambiguity:
@@ -78,7 +87,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Build pre-approval alignment preview**
    - Before writing any canonical `research/**/idea-brief.md`, `research/**/idea-brief-interview.md`, legacy flat `research/idea-brief-{slug}.md` variant, or `research/.progress.yaml`, build `alignment/idea-scope-brief-{topic}.html` as the review artifact.
-   - The HTML page must render the Idea Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates.
+   - The HTML page must render the Idea/Concept Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates, including any Market Structure Handoff.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
    - Treat coverage-checkpoint confirmation as non-final; it only confirms the draft scope is ready to preview. Only final compiled YAML from the alignment page authorizes canonical writes.
    - Before compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved artifacts below have been written or updated.
@@ -108,7 +117,7 @@ The idea brief must include:
 - `## ICP Readiness`
 - `## Next Steps`
 
-The `## ICP Readiness` section must state whether the concept is ready for `/icp`, what inputs `/icp` should use, and which assumptions should be tested first.
+The `## ICP Readiness` section must state whether the concept is ready for `/icp`, what inputs `/icp` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `/icp` to validate or refute.
 
 The `## Next Steps` section must recommend exactly one primary command:
 

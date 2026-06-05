@@ -2,7 +2,7 @@
 name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: journey number, journey name, or 'next']"
 ---
 
@@ -139,4 +139,3 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

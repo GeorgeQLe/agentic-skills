@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.10
+version: v0.11
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 

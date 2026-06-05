@@ -1,28 +1,58 @@
-## Current Targeted Update: Animation Design Planner Skill 2026-06-04
+## Current Targeted Update: Marketplace Handoff Between Idea Scope Brief and ICP 2026-06-04
 
-**Goal:** Create a mirrored repo-managed `animation-design-planner` skill that forces interactive UI animation planning before implementation, including lifecycle ownership, reduced-motion behavior, performance guardrails, and a visual proof gate.
+**Goal:** Add a compact cross-skill contract so `idea-scope-brief` flags marketplace/platform side hypotheses and `icp` validates or refutes that market structure before generating candidates.
 
 **Execution Profile:**
 - Parallel mode: serial for source mutations; parallel reads allowed.
-- Rationale: The mirrored skill contracts, benchmark fixture, coverage matrix, generated showcase data, and shipping notes need one coherent boundary so animation planning behavior and benchmark expectations stay aligned.
+- Rationale: The handoff affects mirrored skill contracts, version archives, changelogs, and layer1 tests; it should be one focused follow-up boundary on top of the existing parity/versioning edits.
 
 **Acceptance Criteria:**
 - [x] Prompt history is captured under `prompts/create-agentic-skill/`.
-- [x] `global/codex/animation-design-planner/SKILL.md` exists with Codex invocation syntax, `version: v0.0`, and planning/proof workflow sections.
-- [x] `global/claude/animation-design-planner/SKILL.md` exists with Claude syntax, `version: v0.0`, and mirrored semantics.
-- [x] The skill requires a visible motion contract, storyboard/timeline, lifecycle ownership map, implementation guardrails, and proof gate before implementation.
-- [x] Benchmark coverage includes a deterministic card-pack-style fixture that rejects local timing tweaks without lifecycle/state-machine planning.
-- [x] Coverage validation and focused setup tests pass.
-- [x] Skills Showcase data is regenerated and validated after the new skill metadata.
+- [x] Both `idea-scope-brief` mirrors add a Market Structure Handoff in the Idea Assumptions Manifest for marketplace/platform/B2B2C/multi-sided concepts.
+- [x] The idea brief ICP readiness contract passes apparent sides and value exchange to `$icp` or `/icp` as hypotheses, not validated ICPs.
+- [x] Both `icp` mirrors add Marketplace Side Preflight before candidate generation.
+- [x] ICP reads any idea-brief market-structure handoff, infers likely sides when no idea brief exists, validates/refutes the classification during broad research, and covers or explicitly excludes each material side before candidate generation.
+- [x] Current `SKILL.md` files are archived before version bumps, versions are bumped in both mirrors, and changelogs document the behavior.
+- [x] Focused layer1 contract tests, existing idea-scope approval ordering tests, ICP/product-path contract tests, mirror parity audit, and whitespace checks pass or any unrelated failures are documented.
+- [ ] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation and record this execution plan in task docs.
+2. Inspect the in-progress parity/versioning state and treat it as the base for this follow-up without rewriting unrelated dirty work.
+3. Archive the current `idea-scope-brief` and `icp` `SKILL.md` files, then bump the touched mirrors.
+4. Add the idea-side Market Structure Handoff and the ICP Marketplace Side Preflight contracts with platform-specific command syntax.
+5. Add focused layer1 contract coverage for the handoff, preflight, research validation/refutation, and side coverage/exclusion requirements.
+6. Run targeted validation, generated-data validation if needed, parity/whitespace checks, then record review notes.
+7. Stage intended files only, commit, and push on `master`.
+
+---
+
+## Current Targeted Update: Claude/Codex Pack Skill Parity Remediation 2026-06-04
+
+**Goal:** Add repo-wide mirrored Claude/Codex pack skill parity validation and repair the known semantic/version drift in `business-discovery/icp`, `business-growth/gtm`, `business-growth/monetization`, and `product-design/ux-variations`.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The audit, mirrored skill contracts, archives, changelogs, and validation path must move together so allowed platform syntax differs while semantic skill contracts stay aligned.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/exec/`.
+- [x] The audit reports missing mirror files except documented intentional one-sided skills.
+- [x] The audit reports frontmatter drift for `name`, `type`, `version`, and `argument-hint`.
+- [x] The audit reports required shared-section drift for `## Pack Availability Guard`, `## Report-First Approval Gate`, `## Staged Research Workflow`, and `## Alignment Page`.
+- [x] The audit detects command-syntax-normalized heading drift while allowing Claude `/skill` vs Codex `$skill` syntax.
+- [x] The four known version mismatches are repaired with mirrored semantics and repo versioning metadata.
+- [x] Existing validation entry points include the new parity audit.
+- [x] Required validation commands have been run, with noisy dependency-parser output documented if still present.
 - [x] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
 
 **Implementation Plan:**
-1. Capture the visible invocation, inspect repo skill/benchmark patterns, and record this execution plan in task docs.
-2. Add mirrored `animation-design-planner` skill directories, initial changelogs, and Codex display metadata if useful.
-3. Add the skill to the benchmark coverage matrix and global workflow fixture setup with deterministic modal/drawer/list transition expectations.
-4. Add focused setup-quality tests if the fixture introduces behavior not covered by existing generic setup assertions.
-5. Run mirrored metadata checks, benchmark coverage validation, focused tests, showcase regeneration/validation, and whitespace checks.
-6. Record review notes, stage only intended files, commit, and push on `master`.
+1. Capture the visible invocation and record this execution plan in task docs.
+2. Inspect current mirrored pack skills, existing validation scripts, and the historical one-sided changes from `6c89a792`.
+3. Add a repo-wide parity audit for mirrored `packs/*/{claude,codex}/*/SKILL.md` pairs and prove it fails against the current known drift before repairs.
+4. Repair the four known mismatches by applying the missing behavior to the opposite mirror, then normalize versions, changelogs, and archives according to the repo policy.
+5. Add the parity audit to the normal validation path.
+6. Run the required validation commands, document any accepted dependency-parser noise, update review/history notes, inspect the intended boundary, commit, and push on `master`.
 
 ---
 

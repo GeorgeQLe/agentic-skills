@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-04
+
+- Added explicit `business-discovery` pack-install fallback wording at optional `value-prop-canvas` and `lean-canvas` recommendation sites so the routing audit can verify cross-pack guards.
+
 ## v0.2 - 2026-05-29
 
 - Added canonical AFPS routing evidence requirements, last completed skill next-step contract checks, pack availability guards, and phase-aware exec/ship/brainstorm routing boundaries.

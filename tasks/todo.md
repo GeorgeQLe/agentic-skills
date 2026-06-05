@@ -1,46 +1,89 @@
-## Current Task - Claude/Codex Pack Skill Parity Remediation 2026-06-04
+## Current Task - Marketplace Handoff Between Idea Scope Brief and ICP 2026-06-04
 
-**Goal:** Add repo-wide mirrored Claude/Codex pack skill parity validation and repair the known semantic/version drift in `icp`, `gtm`, `monetization`, and `ux-variations`.
+**Goal:** Add a compact cross-skill contract so `idea-scope-brief` records marketplace/platform sides as hypotheses and `icp` validates/refutes that shape before ICP candidate generation.
 
 ### Execution Profile
 
 - Parallel mode: serial for source mutations; parallel reads allowed.
-- Rationale: The audit, mirrored skill contracts, archives, changelogs, and validation path need one coherent diff so platform-specific syntax remains allowed while semantic drift is caught.
+- Rationale: The change spans mirrored skill instructions, archives, changelogs, and deterministic contract tests.
 
 ### Plan
 
-- [x] Capture the visible invocation under `prompts/exec/`.
-- [x] Inspect current mirrored pack skills, existing validation scripts, and the historical one-sided changes from `6c89a792`.
-- [x] Add a repo-wide parity audit for mirrored `packs/*/{claude,codex}/*/SKILL.md` pairs.
-- [x] Verify the new audit fails against the current known parity drift before repairs.
-- [x] Repair the four known mismatches by applying missing behavior to the opposite mirror and normalizing version/changelog/archive state.
-- [x] Add the parity audit to the normal validation path.
-- [x] Run required validation commands and record any accepted existing noise.
-- [x] Update review/history notes, inspect the intended boundary, commit, and push on `master` while preserving unrelated dirty work.
+- [x] Capture the visible invocation under `prompts/create-agentic-skill/`.
+- [x] Inspect the current dirty parity/versioning state and identify the target skill mirrors.
+- [x] Archive current `SKILL.md` files before version bumps.
+- [x] Update both `idea-scope-brief` mirrors with Market Structure Handoff requirements.
+- [x] Update both `icp` mirrors with Marketplace Side Preflight requirements.
+- [x] Add focused layer1 contract tests for the marketplace handoff and ICP side validation.
+- [x] Run targeted tests, mirror parity audit, generated-data validation if required, and `git diff --check`.
+- [ ] Record review notes, stage intended files, commit, and push on `master`.
 
 ### Acceptance Criteria
 
-- [x] The audit reports missing mirror files except documented intentional one-sided skills.
-- [x] The audit reports frontmatter drift for `name`, `type`, `version`, and `argument-hint`.
-- [x] The audit reports required shared-section drift for `## Pack Availability Guard`, `## Report-First Approval Gate`, `## Staged Research Workflow`, and `## Alignment Page`.
-- [x] The audit detects command-syntax-normalized heading drift while allowing Claude `/skill` vs Codex `$skill` syntax.
-- [x] The four known version mismatches are repaired with mirrored semantics and repo versioning metadata.
-- [x] Existing validation entry points include the new parity audit.
-- [x] Required validation commands have been run, with noisy dependency-parser output documented if still present.
+- [x] Idea assumptions manifest names apparent marketplace/platform/B2B2C/multi-sided sides and value exchange when present.
+- [x] Idea brief `## ICP Readiness` passes apparent sides to `$icp` or `/icp` as hypotheses, not validated ICPs.
+- [x] ICP reads market-structure handoff from an idea brief and infers likely sides when directly invoked without one.
+- [x] Broad research validates or refutes marketplace/platform classification before candidate generation.
+- [x] Candidate generation covers each material side or explains why a side is excluded, deferred, or not a customer side.
+- [x] Version archives and changelogs are present for both touched skill families.
+- [x] Verification results are recorded in the review section.
 
 ### Review
 
-- Captured the visible `$exec` invocation under `prompts/exec/skill-prompt-20260604-183222-parity-remediation.md`.
-- Added `scripts/skill-mirror-parity-audit.sh`, which audits all mirrored `packs/*/{claude,codex}/*/SKILL.md` pairs for missing mirrors, selected frontmatter drift, required shared-section drift, and command-syntax-normalized heading drift.
-- Initial parity audit evidence before repairs reported the expected unapproved failures for `business-discovery/icp`, `business-growth/gtm`, `business-growth/monetization`, and `product-design/ux-variations`, plus adjacent required-section drift in `business-ops/product-line` and `guided-walkthrough/uat-guide`.
-- Repaired the four known version mismatches with archived prior versions and changelog entries: Codex `icp` v0.10, Codex `gtm` v0.7, Codex `monetization` v0.7, and Claude `ux-variations` v0.11.
-- Repaired adjacent parity audit findings by adding the missing Codex `product-line` Alignment Page contract and Claude `uat-guide` Pack Availability Guard, bumping both mirrors with archives and changelogs.
-- Added explicit pack-install fallback wording to global `codebase-status` and `idea-scope-brief` mirrors after `scripts/skill-pack-routing-audit.sh` exposed cross-pack recommendation gaps.
-- Added the mirror parity audit to README validation guidance, `docs/skill-versioning.md`, and generated GitHub proof data.
-- Refreshed generated Skills Showcase data and benchmark matrix after skill metadata changes. The benchmark matrix shrink is generated by the current checked-in generator, and the freshness validator is now idempotent.
-- Validation passed: `bash -n scripts/skill-mirror-parity-audit.sh`; `scripts/skill-mirror-parity-audit.sh` (170 mirrored pairs, 0 failures); `scripts/skill-versions.sh --missing`; `scripts/skill-archive-audit.sh --strict`; `scripts/skill-pack-routing-audit.sh`; `scripts/validate-skills-showcase-data.sh`.
-- Accepted validation noise: `scripts/skill-deps.sh --broken` still reports existing unresolved-reference/parser false positives.
-- Unrelated dirty work preserved outside this shipping boundary includes `.claude/.codex` `skill-interview` edits, animation-planner task/skill/test work, token-spend/pack prompt logs, and `alignment/analyze-sessions-token-spend.html`.
+- Captured the visible handoff invocation under `prompts/create-agentic-skill/skill-prompt-20260604-195354-marketplace-handoff.md`.
+- Archived active `SKILL.md` files before behavior bumps: `idea-scope-brief` `v0.9` in both global mirrors and `icp` `v0.10` in both business-discovery mirrors.
+- Bumped `idea-scope-brief` mirrors to `v0.10` and added `### Market Structure Handoff` so marketplace/platform/B2B2C/multi-sided concepts name apparent sides and value exchange as hypotheses, not validated ICPs.
+- Updated `## ICP Readiness` so any market-structure handoff is passed to `$icp` or `/icp` for validation/refutation.
+- Bumped `icp` mirrors to `v0.11` and added `### Marketplace Side Preflight` before broad research/candidate generation so ICP reads idea-brief handoffs, infers likely sides on direct invocation, validates/refutes the classification with evidence, and covers or explicitly excludes each material side.
+- Added `tests/layer1/marketplace-side-handoff.test.ts` for the handoff/preflight contract and mirrored-section checks.
+- Refreshed and validated Skills Showcase generated data after the skill metadata changes.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/marketplace-side-handoff.test.ts layer1/idea-scope-brief-approval-ordering.test.ts layer1/product-path-manifest.test.ts`; `bash -n scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-pack-routing-audit.sh`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `bash scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 layer1/afps-alignment-preview-gates.test.ts layer1/pack-skill-mirror-parity.test.ts`; `git diff --check`; `git diff --cached --check`.
+- A stale `uat-guide` version expectation in `tests/layer1/pack-skill-mirror-parity.test.ts` was updated from `v0.1` to `v0.2` to match the parity/versioning boundary already present in the worktree.
+
+---
+
+## Current Task - Animation Design Planner Skill 2026-06-04
+
+**Goal:** Create a mirrored repo-managed `animation-design-planner` skill that requires a visible animation plan and proof gate before implementation.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The skill contract, mirrored runner wording, benchmark fixture, coverage matrix, generated showcase data, and shipping notes need one coherent diff.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/create-agentic-skill/`.
+- [x] Inspect current global skill, prompt-history, and benchmark setup patterns.
+- [x] Add mirrored `global/codex/animation-design-planner` and `global/claude/animation-design-planner` skill files with `version: v0.0`.
+- [x] Add changelogs and optional Codex display metadata.
+- [x] Add benchmark coverage and a deterministic global workflow fixture.
+- [x] Add focused fixture/setup tests if needed for the new animation-planning rubric.
+- [x] Regenerate and validate Skills Showcase data.
+- [x] Run validation, record review notes, inspect the intended boundary, commit, and push on `master` while preserving unrelated dirty work.
+
+### Acceptance Criteria
+
+- [x] Codex skill has `Invoke as `$animation-design-planner`.` and mirrored Claude semantics without Codex-only invocation text.
+- [x] Output contract requires visible motion contract, storyboard/timeline, lifecycle ownership map, implementation guardrails, and proof gate sections.
+- [x] Workflow blocks direct timing-constant tweaks until visible sequence, lifecycle owner, state phases, and proof method are named.
+- [x] Reduced-motion, transform/opacity-first performance, stable keys, `AnimatePresence`, layout grouping, and visual proof expectations are explicit.
+- [x] Benchmark fixture checks for state-machine lifecycle planning instead of local timing tweaks.
+- [x] Required validation commands pass or any unrelated failures are documented with evidence.
+
+### Review
+
+- Captured the visible create-skill invocation under `prompts/create-agentic-skill/skill-prompt-20260604-183627-animation-design-planner.md`.
+- Added mirrored `global/codex/animation-design-planner` and `global/claude/animation-design-planner` skill directories with `version: v0.0`, changelogs, alignment-page bundles, and Codex `agents/openai.yaml` metadata.
+- The skill now requires Visible Motion Contract, Storyboard / Timeline, Lifecycle Ownership Map, Implementation Guardrails, Proof Gate, and Implementation Handoff sections before implementation routing.
+- The workflow explicitly blocks timing-constant, easing, CSS-class, or Motion-prop tweaks until the visible sequence, lifecycle owner, state phases, and proof method are named.
+- Added deterministic benchmark coverage for a card-pack-style modal/drawer/list transition that requires one lifecycle owner or state-machine coordinator, stable keys, `AnimatePresence`, Motion sequencing mode, `LayoutGroup` considerations, reduced-motion behavior, transform/opacity-first constraints, slow-motion review, and Playwright screenshot/video proof.
+- Added a focused layer1 setup-quality regression test proving a lifecycle-owned proof plan passes and a timing-only local tweak plan fails critical criteria.
+- Added a blocked benchmark coverage row for the existing Claude-only `repo-glossary` skill so repository coverage validation can pass without pretending Codex can execute a missing mirror.
+- Validation passed: `pnpm --dir tests bench:coverage` (170 skills); `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` (79 tests); `scripts/skill-versions.sh --missing` (421 skills); `git diff --check`.
+- Skills Showcase generation was validated in clean temp worktree `/tmp/agentic-skills-animation-fresh`: `node scripts/generate-skills-showcase-data.mjs` wrote 361 skills / 41 packs, `node scripts/generate-skills-showcase-github-data.mjs` wrote 4 proof artifacts / 5 validation scripts, and `scripts/validate-skills-showcase-data.sh` passed.
+- Generated showcase assets were not included in this shipping boundary because the checked-in generator depends on ignored local benchmark run artifacts; a clean checkout would drop unrelated benchmark demo/matrix data while adding the new skill entries.
+- Unrelated dirty parity-remediation, `skill-interview`, token-spend, pack prompt, generated-proof, and benchmark-matrix work was preserved outside the animation-planner staging boundary.
 
 ---
 

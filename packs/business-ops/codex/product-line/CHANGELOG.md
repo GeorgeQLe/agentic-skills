@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-04
+
+- Added the shared Alignment Page contract to match the Claude mirror and restored version parity.
+
 ## v0.1 - 2026-05-30
 
 - Split product-path operations into `activate`, `archive`, `restore`, and app-graduation `promote` modes.

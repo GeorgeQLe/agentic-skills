@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-04
+
+- Restored mirror version parity for the shared Alignment Page contract.
+
 ## v0.1 - 2026-05-30
 
 - Split product-path operations into `activate`, `archive`, `restore`, and app-graduation `promote` modes.
