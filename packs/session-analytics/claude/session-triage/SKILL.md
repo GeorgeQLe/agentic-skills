@@ -87,9 +87,9 @@ Produce a structured report with:
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
-## Alignment Page
+## Output Format
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/session-triage-{topic}.html`.
+Output the structured report directly in the terminal (or wherever this skill was invoked). Do not create alignment HTML pages, separate report files, or any other file-based output. The report is ephemeral conversation output, not a durable deliverable.
 
 ## Default Shipping Contract
 
