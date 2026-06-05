@@ -1,3 +1,42 @@
+## Current Task - Alignment Page Index Convention 2026-06-05
+
+**Goal:** Update the shared alignment-page convention so research HTML alignment pages are added to a central repo alignment index, creating the index when needed.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a generated convention change. The canonical convention, bundled copies, prompt history, and task review notes should ship together.
+
+### Plan
+
+- [x] Read the repo-managed skill workflow, existing convention, generator, lessons, task docs, and dirty worktree state.
+- [x] Capture prompt history under `prompts/create-agentic-skill/`.
+- [x] Record this plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Update `docs/alignment-page-convention.md` with central index behavior.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Run targeted verification and inspect intended changes.
+- [x] Record review notes, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- [x] The convention requires research skills that create HTML alignment pages to find or create the repo alignment index.
+- [x] The convention requires adding the new page to that index.
+- [x] Product-line repositories sort index entries by product or product path.
+- [x] Generated bundled copies contain the same guidance.
+- [x] Unrelated dirty work remains unstaged and preserved.
+
+### Review
+
+- Captured the visible invocation at `prompts/create-agentic-skill/skill-prompt-20260605-114058-alignment-index-convention.md`.
+- Added `**Central alignment index.**` to the canonical convention. Research-producing skills now look for `alignment/index.html`, create it if missing, include every active `alignment/*.html` page except the index itself, add the new or updated page, deduplicate entries by page path, and keep links repo-relative.
+- Product-line/product-path repositories now group or sort index entries by product/product path first using `research/.progress.yaml` `product_paths[]`, active `research/{slug}/` or `specs/{slug}/` scopes, page metadata, page title, or the alignment page path.
+- Regenerated 255 bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+- Added focused layer1 regression coverage for the central-index requirement.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --dry-run`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/upgrade-alignment-pages.test.ts`; targeted `rg` checks for canonical and generated guidance; `git diff --check`; `pnpm --dir tests bench:coverage`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`.
+- Unrelated dirty work preserved outside this boundary includes `.agents/project.json`, managed `skill-interview` copies, Skills Showcase files, review-only product-path skill edits, task lesson updates from another lane, and animation benchmark coverage files.
+
+---
+
 ## Current Task - Default Open Behavior For Compiled Alignment Index 2026-06-05
 
 **Goal:** Make `compile-central-alignment` open or focus the regenerated central `alignment/index.html` through the shared HTML opener script by default.

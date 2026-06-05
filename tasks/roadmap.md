@@ -1,3 +1,39 @@
+## Current Targeted Update: Alignment Page Index Convention 2026-06-05
+
+**Goal:** Extend the shared alignment-page convention so research skills that create HTML alignment pages also register them in the repository's central alignment index, creating the index when it does not exist.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The canonical convention and generated bundled `ALIGNMENT-PAGE.md` files must stay in sync so every alignment-producing skill inherits the same index behavior.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/create-agentic-skill/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the implementation plan and final review notes.
+- [x] `docs/alignment-page-convention.md` instructs research skills to find or create the repository alignment index when they create HTML alignment pages.
+- [x] The convention tells agents to add the new page to the index and keep entries sorted by product when the repository uses product-line or product-path organization.
+- [x] Bundled `ALIGNMENT-PAGE.md` files are regenerated from the canonical convention.
+- [x] Focused verification confirms the canonical and generated convention contain the new index guidance and generated files are in sync.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty files are preserved.
+
+**Implementation Plan:**
+1. Read the repo-managed skill workflow, current alignment convention, generator, lessons, task docs, and dirty worktree.
+2. Capture the visible prompt and record this plan in task docs.
+3. Patch the canonical alignment-page convention with the central-index behavior.
+4. Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical source.
+5. Run targeted convention/generator validation and inspect the intended diff boundary.
+6. Record review notes, stage only intended files, commit, and push.
+
+**Review:**
+- Captured the visible prompt in `prompts/create-agentic-skill/skill-prompt-20260605-114058-alignment-index-convention.md`.
+- Added a new `Central alignment index` section to `docs/alignment-page-convention.md`.
+- The convention now requires research-producing skills that write HTML alignment pages to find `alignment/index.html`, create it when absent, add the new or updated page, deduplicate by page path, keep repo-relative links, and group/sort by product or product path first in product-line repositories.
+- Regenerated 255 bundled `ALIGNMENT-PAGE.md` files with `node scripts/upgrade-alignment-page.mjs`.
+- Added layer1 regression coverage in `tests/layer1/alignment-gates.test.ts`.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/upgrade-alignment-pages.test.ts`; targeted `rg` confirmation for canonical and generated guidance; `git diff --check`; `pnpm --dir tests bench:coverage`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`.
+- Unrelated dirty work preserved outside this boundary includes `.agents/project.json`, managed `skill-interview` copies, Skills Showcase files, review-only product-path skill edits, task lesson updates from another lane, and animation benchmark coverage files.
+
+---
+
 ## Current Targeted Update: Default Open Behavior For Compiled Alignment Index 2026-06-05
 
 **Goal:** Update the mirrored `compile-central-alignment` skill contracts so regenerating the central `alignment/index.html` opens or focuses the index through the shared `scripts/open-html-page.mjs` opener.

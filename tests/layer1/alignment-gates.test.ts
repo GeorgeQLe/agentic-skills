@@ -188,6 +188,27 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("requires research alignment pages to register with the central alignment index", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} central index section`).toContain("**Central alignment index.**");
+      expect(content, `${path} index path`).toContain("Look for `alignment/index.html` at the repository root");
+      expect(content, `${path} create missing index`).toContain("If the index does not exist, create it");
+      expect(content, `${path} links active pages`).toContain(
+        "links to every active `alignment/*.html` page except itself",
+      );
+      expect(content, `${path} include new page`).toContain("includes the newly written page");
+      expect(content, `${path} update existing`).toContain("If the index exists, update it instead of blindly appending");
+      expect(content, `${path} dedupe entries`).toContain("remove duplicate entries for the same page path");
+      expect(content, `${path} product-line sort`).toContain(
+        "group or sort index entries by product/product path first",
+      );
+      expect(content, `${path} progress manifest`).toContain("`product_paths[]`");
+      expect(content, `${path} flat organization`).toContain("In flat repositories, preserve the existing index organization");
+    }
+  });
+
   it("scopes approval gates, required questions, and final answer compilation to review pages", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {
