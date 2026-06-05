@@ -13,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Positioning — Orchestrator
 
-This is an **orchestrator skill** using the parent router delegation pattern. It detects context, recommends applicable positioning frameworks, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
+This is an **orchestrator skill** using the parent router delegation pattern (see `docs/orchestrator-convention.md`). It detects context, recommends applicable positioning frameworks, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
 
 ## Report-First Approval Gate
 

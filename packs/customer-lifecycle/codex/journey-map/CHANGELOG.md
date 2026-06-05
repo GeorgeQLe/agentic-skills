@@ -1,5 +1,14 @@
 # journey-map changelog (codex)
 
+## v0.8 - 2026-06-05
+
+- Refactored to orchestrator pattern with 5 framework subskills: `service-blueprint`, `experience-map`, `user-story-map`, `jtbd-timeline`, `customer-journey-canvas`
+- Added mode detection: pre-product (defaults: jtbd-timeline + experience-map) vs product-exists (defaults: service-blueprint + user-story-map)
+- Three operational modes: Mode A (framework selection via alignment page), Mode B (--synthesize), Mode C ($journey-map product shortcut)
+- Task queueing to tasks/todo.md with $exec-driven sequential framework execution
+- Synthesis reads all framework intermediates into unified research/journey-map.md
+- Kept: prerequisites, product-path scope resolution, next-step routing decision tree, optional research trigger map, constraints, pack availability guard
+
 ## v0.7 - 2026-06-01
 
 - Evaluate blocking optional research triggers before default positioning or UX routing.

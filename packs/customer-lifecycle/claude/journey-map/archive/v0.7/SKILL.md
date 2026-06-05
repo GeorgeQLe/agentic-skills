@@ -1,19 +1,16 @@
 ---
 name: journey-map
-description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
+description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: v0.8
-argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
-invocation: orchestrator
+version: v0.7
+argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 
 ## Pack Availability Guard
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Journey Map — Orchestrator
-
-This is an **orchestrator skill** using the parent router delegation pattern. It detects context, recommends applicable journey-mapping frameworks, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
+# Journey Map — Lifecycle Overview
 
 ## Report-First Approval Gate
 
@@ -23,29 +20,12 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
+Create or update the canonical lifecycle overview. This is the top-level map for user task journeys and the customer relationship lifecycle; deeper stage docs belong in `/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, and `/lifecycle-metrics`.
+
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `/icp` first.
-- **Soft**: Read these if they exist:
-  - `research/competitive-analysis.md` — competitor landscape
-  - `research/customer-feedback.md` — real customer language
-  - Specs, README/CLAUDE, and relevant source files for product context
-
-## Operational Modes
-
-### Mode A: Framework Selection (default first invocation)
-
-Activated by: `/journey-map` or `/journey-map [focus area]` (no special flags).
-
-### Mode B: Synthesis
-
-Activated by: `/journey-map --synthesize`
-
-### Mode C: Product-Exists Shortcut
-
-Activated by: `/journey-map product`
-
----
+- `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `/icp` first.
+- Specs, competitive analysis, enterprise ICP, customer feedback, and codebase evidence are supporting context when present.
 
 ## Process
 
@@ -64,135 +44,27 @@ Resolve research scope by product path before using code or app structure as a h
 When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 0b. **Product-path manifest**: Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the journey map to the active product path by default. When journey mapping reveals lifecycle stages or user flows that only apply to a deferred product path, add a `## Product Path Implications` section noting the finding and recommending `/product-line fork` if it implies a new product surface.
+1. **Load context**: Read ICP, competitive analysis, enterprise ICP, customer feedback, existing lifecycle docs, specs, README/AGENTS/CLAUDE, and relevant source files when they clarify real product surfaces.
+2. **Map user journeys**: For each key persona, identify 3-5 core use cases, entry points, task steps, decision points, happy path, failure modes, outputs, and delta from current state.
+3. **Map customer lifecycle**: Cover trigger, discovery, evaluation, onboarding, aha moment, conversion, transaction, retention, expansion, advocacy, churn, and recovery.
+4. **Identify critical moments**: Name the 3-5 moments where the product wins or loses the user/customer, with evidence and success criteria.
+5. **Present before writing**: Summarize the lifecycle, evidence, open assumptions, and stage docs that should be split out. Ask what needs correction or product-specific context. Continue until validated.
+6. **Write only after validation**, archiving existing canonical files first when replacing them.
 
-### 1. Mode Detection
+## Deliverables
 
-Detect **pre-product mode** (default) or **product-exists mode**:
+- `research/journey-map.md` (or `research/{slug}/journey-map.md`) — canonical lifecycle overview with links or references to deeper stage docs when they exist.
+- `research/journey-map-interview.md` (or `research/{slug}/journey-map-interview.md`) — raw interview log and decisions.
 
-**Pre-product mode** activates when:
-- No production codebase with live users detected, AND
-- No `research/customer-feedback.md` with post-launch customer evidence, AND
-- `$ARGUMENTS` does not contain "product"
+The output file must end with `## Next Steps` using "Pick one:" framing. Follow the Next-Step Routing contract below to decide the recommendation.
 
-Available frameworks in pre-product mode:
-- `jtbd-timeline` (default) — Moesta/Switch timeline with push/pull/anxiety/habit forces
-- `experience-map` (default) — Adaptive Path emotional arc with doing/thinking/feeling
-- `customer-journey-canvas` (optional) — Stickdorn stage×touchpoints×actions canvas
-- `service-blueprint` (optional) — Shostack front-stage/backstage/support lines
-- `user-story-map` (optional) — Jeff Patton activity→task→story hierarchy
-
-**Product-exists mode** activates when:
-- Production code or deployment exists, OR
-- `research/customer-feedback.md` exists with real customer data, OR
-- `$ARGUMENTS` contains "product"
-
-Available frameworks in product-exists mode:
-- `service-blueprint` (default) — operational gaps visible with a running product
-- `user-story-map` (default) — release slicing grounded in real usage
-- `customer-journey-canvas` (optional) — full-stage touchpoint audit
-- `experience-map` (optional) — emotional arc refresh with real feedback
-- `jtbd-timeline` (optional) — switching timeline with post-launch evidence
-
-### 2. Load Context
-
-- Read `research/icp.md` — ICP segments, pain points, value props, trigger events
-- Read `research/competitive-analysis.md` if it exists — competitor landscape
-- Read `research/customer-feedback.md` if it exists — real customer language
-- Read CLAUDE.md, README for product context
-- Read any existing `research/journey-map-*.md` intermediate artifacts (from prior runs)
-
-### 3. Mode A — Framework Selection
-
-Build an alignment page with:
-
-1. **Mode explanation**: which mode was detected and why (evidence for detection)
-2. **Available evidence summary**: what research exists and what's missing
-3. **Multi-select framework section**: checkboxes for each available framework with:
-   - Framework name and one-line description
-   - Why it's recommended or optional for this context
-   - Pre-checked defaults based on detected mode (see mode detection above)
-4. **Execution plan explanation**: selected frameworks will be written to `tasks/todo.md` for sequential `/exec` execution
-5. **Approval gate**: framework selection confirmation
-
-After user approval via compiled YAML (which includes `selected_frameworks` list):
-
-Write selected frameworks as sequential steps in `tasks/todo.md`:
-
-```markdown
-## Journey Map Framework Execution
-
-- [ ] Run `/journey-map/frameworks/jtbd-timeline` — JTBD switching timeline
-- [ ] Run `/journey-map/frameworks/experience-map` — Adaptive Path experience map
-- [ ] Synthesize: `/journey-map --synthesize` — Combine framework outputs into research/journey-map.md
-```
-
-Only include frameworks the user selected. Always append the synthesis step last.
-
-Stop after writing `tasks/todo.md`. The user runs `/exec` to execute each framework sequentially.
-
-### 4. Mode B — Synthesis (`/journey-map --synthesize`)
-
-Read all intermediate framework outputs:
-- `research/journey-map-jtbd-timeline.md`
-- `research/journey-map-experience-map.md`
-- `research/journey-map-customer-journey-canvas.md`
-- `research/journey-map-service-blueprint.md`
-- `research/journey-map-user-story-map.md`
-
-At least one must exist. If none exist, tell user to run framework selection first.
-
-Synthesize into unified `research/journey-map.md`:
-
-**Synthesis includes:**
-- Unified customer lifecycle: trigger, discovery, evaluation, onboarding, aha moment, conversion, transaction, retention, expansion, advocacy, churn, recovery
-- User journey map per key persona with core use cases, entry points, task steps, decision points, happy path, failure modes
-- Critical moments: the 3-5 moments where the product wins or loses the user/customer
-- Evidence matrix: each claim mapped to which framework(s) support it
-- Confidence levels per claim (strong/moderate/hypothesized)
-- Stage detail index: links to deeper stage docs when they exist
-- Journey gaps: stages needing deeper analysis
-- Mode header: `> Mode: Pre-Product (hypothesized)` or `> Mode: Product-Exists (grounded)`
-
-Build alignment page for synthesis approval with:
-- Full proposed `research/journey-map.md` content
-- Evidence matrix combining all framework sources
-- Confidence/assumption register
-- Critical-moment evidence matrix
-- Proposed file changes gate
-- Approval gate
-
-After approval: write `research/journey-map.md`, then emit next-step routing.
-
-### 5. Mode C — Product-Exists Shortcut
-
-Skip multi-select. Build an alignment page for the shortcut execution plan with:
-
-1. **Shortcut explanation**: product-exists shortcut selected and why `service-blueprint` + `user-story-map` are the queued defaults
-2. **Evidence readiness**: available product/customer evidence and any caveats
-3. **Proposed execution plan**: the exact `tasks/todo.md` framework queue shown below
-4. **Approval gate**: require final compiled YAML approval before writing `tasks/todo.md`
-
-Do not write `tasks/todo.md` before alignment approval. The next action is review of the HTML alignment page.
-
-After user approval via final compiled YAML, write this execution plan to `tasks/todo.md`:
-
-```markdown
-## Journey Map Framework Execution
-
-- [ ] Run `/journey-map/frameworks/service-blueprint` — Shostack service blueprint
-- [ ] Run `/journey-map/frameworks/user-story-map` — Jeff Patton user story map
-- [ ] Synthesize: `/journey-map --synthesize` — Write research/journey-map.md
-```
-
-Stop — user runs `/exec`.
-
-### 6. Next Steps (after synthesis only)
+## Next-Step Routing
 
 Priority-ordered decision tree — recommend the **first** match:
 
-1. **Blocking optional research trigger** — the overview exposed a stage, fit, measurement, or product-loop risk that must be resolved before positioning or UX choices harden → use the Optional Research Trigger Map below. Cite the exact journey evidence, why it blocks the next AFPS step, and which existing framework skill owns it.
-2. **Positioning missing** (`research/positioning.md` does not exist) → check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
-3. **Positioning done, UX variations missing** → check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations` — Explore experience directions before production specification.
+1. **Blocking optional research trigger** — the overview exposed a stage, fit, measurement, or product-loop risk that must be resolved before positioning or UX choices harden -> use the Optional Research Trigger Map below. Cite the exact journey evidence, why it blocks the next AFPS step, and which existing framework skill owns it.
+2. **Positioning missing** (`research/positioning.md` does not exist) -> check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
+3. **Positioning done, UX variations missing** -> check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations` — Explore experience directions before production specification.
 4. **Never** recommend `/spec-interview` from this skill — it is many steps downstream in the AFPS chain.
 
 ## Optional Research Trigger Map
@@ -215,40 +87,20 @@ These detours are conditional framework owners, not required AFPS chain links. U
 
 `/growth-model` is an existing Reforge-style framework owner for compounding acquisition, retention, and monetization loops, but do not route to it directly from `journey-map` unless metrics/GTM prerequisites are already satisfied. In most AFPS cases, `/hook-model`, `/metrics`, `/monetization`, or `/gtm` is the earlier business-growth detour.
 
-## Output
-
-### Mode A output: `tasks/todo.md` update
-
-Framework execution steps (see section 3 above).
-
-### Mode B output: `research/journey-map.md` (or `research/{slug}/journey-map.md`)
+## Output Shape
 
 ```markdown
 # Journey Map
 
-> Based on: [list of framework outputs used]
-> Date: [current date]
-> Mode: Pre-Product (hypothesized) | Product-Exists (grounded)
-> Frameworks applied: [list]
+> Based on: research/icp.md[, other evidence]
+> Date: YYYY-MM-DD
 
 ## Summary
-
 ## User Journeys
-
 ## Customer Lifecycle
-
 ## Critical Moments
-
-## Evidence Matrix
-
-| Claim | Supporting Framework(s) | Evidence | Confidence |
-|-------|------------------------|----------|------------|
-| [claim] | JTBD Timeline / Experience Map / Service Blueprint / User Story Map / Customer Journey Canvas | [source] | Strong / Moderate / Hypothesized |
-
 ## Stage Detail Index
-
 ## Journey Gaps
-
 ## Next Steps
 ```
 
@@ -256,21 +108,19 @@ Framework execution steps (see section 3 above).
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/journey-map-{topic}.html`.
 
-**Journey research translation.** Render the lifecycle overview as approval-ready research, not a chat-only summary. The alignment page must include the proposed `research/journey-map.md` content, proposed file changes, evidence coverage by journey stage, assumptions/confidence register, critical-moment evidence matrix, and approval gates before canonical research files are created or updated.
+**Journey research translation.** Render the lifecycle overview as approval-ready research, not a chat-only summary. The alignment page must include the proposed `research/journey-map.md` content, proposed `research/journey-map-interview.md` decision log, evidence coverage by journey stage, assumptions/confidence register, critical-moment evidence matrix, proposed file changes, and approval gates before canonical research files are created or updated.
 
 Before approval, the next action is review of `alignment/journey-map-{topic}.html` and compiled YAML answers from that page. Do not treat a plain-text lifecycle summary as a substitute for the HTML alignment preview.
 
 ## Constraints
 
-- **Parent does not execute frameworks.** It selects and queues them. `/exec` handles execution.
-- **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
-- **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
+- Keep this file as the overview; put step-level stage detail in the focused lifecycle skills.
 - Ground every important step in ICP, research, specs, feedback, or codebase evidence.
 - Do not prescribe UI or architecture.
 - Present findings before writing.
 - Follow the archive-first replacement policy for canonical research/spec documents.
-- Do not overwrite existing `research/journey-map.md` without asking the user first.
 
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
+

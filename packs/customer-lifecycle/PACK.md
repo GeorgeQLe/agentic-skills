@@ -15,7 +15,10 @@ The focused stage maps are conditional detours from `journey-map`, not required 
 Skills:
 
 ```text
-journey-map, onboarding-map, conversion-map, transaction-map,
+journey-map (orchestrator)
+  frameworks: service-blueprint, experience-map, user-story-map,
+              jtbd-timeline, customer-journey-canvas
+onboarding-map, conversion-map, transaction-map,
 retention-map, expansion-map, lifecycle-metrics
 ```
 
