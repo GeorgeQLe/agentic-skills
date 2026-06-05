@@ -21,13 +21,13 @@ describe("upgrade-alignment-pages skill contract", () => {
     },
   ];
 
-  it("adds mirrored v0.0 utility skill contracts", () => {
+  it("adds mirrored ops skill contracts", () => {
     for (const contract of contracts) {
       expect(existsSync(repoPath(contract.path)), `${contract.path} exists`).toBe(true);
       const content = read(contract.path);
 
       expect(content, `${contract.path} name`).toContain("name: upgrade-alignment-pages");
-      expect(content, `${contract.path} type`).toMatch(/^type: utility$/m);
+      expect(content, `${contract.path} type`).toMatch(/^type: ops$/m);
       expect(content, `${contract.path} version`).toMatch(/^version: v0\.\d+$/m);
       expect(content, `${contract.path} command`).toContain(`Invoke as \`${contract.command}\`.`);
       expect(content, `${contract.path} argument hint`).toContain("--repo <path>");
