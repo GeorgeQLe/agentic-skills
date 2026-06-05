@@ -19,6 +19,13 @@
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
+| `animation-design-planner` | orchestrator | user | UI animation planning needed |
+| **Animation Framework Subskills** | | | |
+| `motion-framer` | sub-skill | `/animation-design-planner` router | Motion/Framer detected in codebase |
+| `css-transitions` | sub-skill | `/animation-design-planner` router | CSS transitions/keyframes detected |
+| `gsap` | sub-skill | `/animation-design-planner` router | GSAP detected in codebase |
+| `web-animations-api` | sub-skill | `/animation-design-planner` router | Web Animations API usage detected |
+| `threejs` | sub-skill | `/animation-design-planner` router | Three.js/R3F detected in codebase |
 | `codebase-status` | primary | user | Any time — status check |
 | `idea-scope-brief` | primary | user | New project/concept needs scoping |
 | `init-agentic-skills` | primary | user | First-time machine setup |
@@ -367,10 +374,10 @@
 
 | Type | Count | Percentage |
 |------|-------|------------|
-| Primary | 120 | 69% |
-| Chained | 38 | 22% |
-| Sub-skill | 8 | 5% |
-| Orchestrator | 14 | 8% |
+| Primary | 120 | 68% |
+| Chained | 38 | 21% |
+| Sub-skill | 13 | 7% |
+| Orchestrator | 15 | 8% |
 
 **Sub-skills identified:**
 
@@ -383,6 +390,11 @@
 7. `strategic-canvas` — positioning framework, invoked by `/positioning` router
 8. `mono-detect` — monorepo structure detection, invoked by other monorepo skills
 9. `research-directory-conventions` — directory setup, invoked by creator-foundation skills
+10. `motion-framer` — Motion/Framer animation guardrails, invoked by `/animation-design-planner` router
+11. `css-transitions` — CSS animation guardrails, invoked by `/animation-design-planner` router
+12. `gsap` — GSAP animation guardrails, invoked by `/animation-design-planner` router
+13. `web-animations-api` — Web Animations API guardrails, invoked by `/animation-design-planner` router
+14. `threejs` — Three.js/R3F animation guardrails, invoked by `/animation-design-planner` router
 
 **Orchestrators identified:**
 
@@ -392,6 +404,7 @@
 4. `devtool-workflow` — devtool development workflow
 5. `game-workflow` — game development workflow
 6. `research-roadmap` — research prioritization orchestrator
+7. `animation-design-planner` — animation framework detection + guardrails routing
 
 ## Validation
 

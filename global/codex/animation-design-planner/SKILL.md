@@ -3,6 +3,7 @@ name: animation-design-planner
 description: Plan interactive UI animations before implementation with visible motion contracts, lifecycle ownership, accessibility/performance guardrails, and proof gates
 type: planning
 version: v0.0
+invocation: orchestrator
 argument-hint: "[component, interaction, animation bug, or motion brief]"
 ---
 
@@ -10,7 +11,7 @@ argument-hint: "[component, interaction, animation bug, or motion brief]"
 
 Invoke as `$animation-design-planner`.
 
-Use this skill when a user asks to create, change, debug, or polish an interactive UI animation, transition, or multi-component motion sequence. The default target is web UI animation in React with Motion/Framer-style lifecycle concepts. This is a planning and proof skill, not a direct implementation skill: it prevents local timing tweaks from starting before the visible sequence, lifecycle owner, state phases, and proof method are named.
+Use this skill when a user asks to create, change, debug, or polish an interactive UI animation, transition, or multi-component motion sequence. This is a planning and proof skill, not a direct implementation skill: it prevents local timing tweaks from starting before the visible sequence, lifecycle owner, state phases, and proof method are named.
 
 Use it for drawers, modals, popovers, cards, route transitions, list reordering, shared-element illusions, mount/unmount choreography, staggered content, and visual regressions such as flashing, popping, jumping, duplicated layers, or broken close/open sequencing.
 
@@ -47,9 +48,18 @@ For generated video, Remotion timelines, or non-interactive animation, produce o
    - If ownership is split across siblings without a named coordinator, stop and redesign the ownership map before proposing timing changes.
 
 5. **Choose implementation guardrails**
-   - Choose Motion/Framer sequencing mode intentionally: `sync`, `wait`, or `popLayout`, and say why.
-   - Place `AnimatePresence` at the conditional render boundary that owns exit. Do not bury it where the exiting child is already unmounted.
-   - Use `LayoutGroup` or layout animation only when shared layout identity is stable and the measurement boundary is clear.
+
+   **Framework detection and routing:** detect which animation framework the codebase uses, then route to the appropriate framework subskill for framework-specific guardrails. Detection order:
+   - Grep for `framer-motion` or `motion` in package.json / imports → route to `$animation-design-planner frameworks/motion-framer`
+   - Grep for `gsap` in package.json / imports → route to `frameworks/gsap` subskill
+   - Grep for `@angular/animations` → route to the appropriate Angular animation subskill when available
+   - Grep for `three` or `@react-three/fiber` → route to `frameworks/threejs` subskill
+   - Grep for `element.animate(` or Web Animations API usage → route to `frameworks/web-animations-api` subskill
+   - Grep for CSS `@keyframes`, `transition:`, `animation:` in stylesheets → route to `frameworks/css-transitions` subskill
+   - If multiple frameworks detected or ambiguous, ask the user which framework to target
+   - If no subskill exists for the detected framework, use the baseline guardrails below
+
+   **Baseline guardrails (all frameworks inherit these):**
    - Prefer transform and opacity animation. Avoid animating layout, paint, filter, shadow, or expensive size properties unless the plan names the cost and proof.
    - Define reduced-motion behavior for interaction-triggered motion. Nonessential motion must be suppressed or converted to instant/fade behavior when the user prefers reduced motion.
    - Specify focus management, pointer-event behavior, scroll locking, z-index/layering, and content clipping rules when they affect the motion.
@@ -74,7 +84,7 @@ Produce a structured animation plan with these sections:
 - **Visible Motion Contract:** trigger, start state, end state, expected user-visible sequence, focal point, continuity target, forbidden artifacts, and accepted interruption behavior.
 - **Storyboard / Timeline:** phases or key frames, timing, easing, focal element, supporting elements, shared elements, stagger, anticipation, follow-through, and settling.
 - **Lifecycle Ownership Map:** single sequence owner, state phases, component mount/unmount responsibilities, stable key rules, identity persistence, callback handoffs, focus/scroll responsibilities, and interruption handling.
-- **Implementation Guardrails:** Motion/Framer sequencing mode, `AnimatePresence` placement, `LayoutGroup`/layout-animation considerations, reduced-motion behavior, transform/opacity-first performance constraints, layout/paint risks, layering, and pointer/focus rules.
+- **Implementation Guardrails:** framework-specific guardrails (from the routed subskill), reduced-motion behavior, transform/opacity-first performance constraints, layout/paint risks, layering, and pointer/focus rules.
 - **Proof Gate:** slow-motion/manual review steps, Playwright screenshot or video capture plan where feasible, reduced-motion verification, regression checks, and acceptance checklist tied to the visible motion contract.
 - **Implementation Handoff:** whether implementation is ready, blocked, or should route to `$exec`, `$investigate --ui`, or another skill.
 
