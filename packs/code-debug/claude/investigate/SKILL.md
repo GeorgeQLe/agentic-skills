@@ -153,10 +153,6 @@ _(Shown in plan mode — replaces "Fix Applied")_
 - Do not write to `tasks/todo.md` for single-step fixes unless `--plan` is explicitly set.
 
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/investigate-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.

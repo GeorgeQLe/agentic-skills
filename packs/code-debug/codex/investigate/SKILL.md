@@ -46,10 +46,6 @@ Use this skill when the user reports a bug, error, unexpected behavior, or provi
 - Always run tests after applying the fix.
 
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/investigate-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.

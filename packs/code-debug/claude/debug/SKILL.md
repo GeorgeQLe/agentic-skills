@@ -107,10 +107,6 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 - Keep changelog entries concise but complete — they are the institutional memory for debugging.
 
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/debug-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.

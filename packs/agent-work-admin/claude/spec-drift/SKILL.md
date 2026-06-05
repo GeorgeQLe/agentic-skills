@@ -197,10 +197,6 @@ Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 - **Do not make code changes.** In fix mode, only update spec documents, `tasks/todo.md`, and `tasks/record-todo.md` — never modify source code. Archive existing specs before replacement per the Archive-First Replacement Policy.
 
-## Alignment Page
-
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/spec-drift-{topic}.html`.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
