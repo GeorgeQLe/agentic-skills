@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.4
+version: v0.3
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -31,7 +31,6 @@ Discover and search installed global skills plus enabled project-local pack skil
    The mapping includes global skills and pack-provided skills. Only skills
    discovered in step 2 should be printed, so domain and kanban entries appear
    only when the corresponding project-local pack is enabled or linked.
-   PoketoWork kanban skills are intentionally absent while the kanban packs are hibernated.
 
    | Stage | Skills (pack in parentheses; no label = global) |
    |-------|--------|
@@ -39,14 +38,14 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Discovery & Market Fit | `icp` (business-discovery), `enterprise-icp` (business-discovery) |
    | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
    | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
-   | Planning | `idea-scope-brief`, `brainstorm` (product-design), `feature-interview` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-variations` (product-design), `experiment` (business-growth) |
+   | Planning | `idea-scope-brief`, `brainstorm` (product-design), `brainstorm-kanban` (business-app-kanban), `feature-interview` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-variations` (product-design), `spec-interview-kanban` (business-app-kanban), `experiment` (business-growth) |
    | Mapping | `journey-map` (customer-lifecycle), `metrics` (business-ops) |
-   | Strategize | `roadmap` (agent-work-admin), `competitive-analysis` (business-discovery), `platform-strategy` (business-growth), `gtm` (business-growth), `landing-copy` (business-growth), `monetization` (business-growth), `positioning` (business-discovery), `runway-model` (business-ops) |
+   | Strategize | `roadmap` (agent-work-admin), `roadmap-kanban` (business-app-kanban), `competitive-analysis` (business-discovery), `platform-strategy` (business-growth), `gtm` (business-growth), `landing-copy` (business-growth), `monetization` (business-growth), `positioning` (business-discovery), `runway-model` (business-ops) |
    | Evaluate | `dogfood` (product-testing), `mvp-gap` (business-discovery), `scale-audit` (business-ops), `customer-feedback` (customer-lifecycle), `assumption-tracker` (business-discovery), `cohort-review` (customer-lifecycle), `retro` (business-ops) |
    | Research Health | `research-roadmap` (research-admin), `reconcile-research` (business-discovery), `reconcile-dev-docs` (docs-health) |
    | Detail | `plan-phase` (agent-work-admin) |
-   | Execution | `exec` (exec-loop), `guide` (guided-walkthrough) |
-   | Shipping | `ship` (exec-loop), `ship-end` (exec-loop) |
+   | Execution | `exec` (exec-loop), `exec-kanban` (business-app-kanban), `guide` (guided-walkthrough) |
+   | Shipping | `ship` (exec-loop), `ship-end` (exec-loop), `ship-kanban` (business-app-kanban), `ship-end-kanban` (business-app-kanban) |
    | Code Quality | `expert-review` (code-review), `regression-check` (code-review), `dead-code` (code-review), `slim-audit` (code-review) |
    | Debugging | `investigate` (code-debug), `debug` (code-debug), `trace` (code-debug), `session-triage` (session-analytics) |
    | Refactoring & Migration | `migrate` (code-maintenance), `decommission` (teardown), `scaffold` (monorepo) |

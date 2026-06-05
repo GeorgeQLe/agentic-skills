@@ -229,7 +229,6 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `business-growth` | Claude-orchestration | Engagement loops, metrics, monetization, GTM, landing copy, experiments, growth, PMF |
 | `business-ops` | Both | Assumptions, cohorts, retros, risks, runway, stakeholder reporting, platform/research reconciliation |
 | `business-app` | Claude-orchestration | Compatibility alias for `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops` |
-| `business-app-kanban` | Both | Business-app kanban `run`/`ship`/`ship-end` variants (execution) |
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
 | `creator-foundation` | Both | Creator evidence, dossier, positioning, programming, series, product-led media, metrics |
 | `creator-media` | Both | Compatibility alias for `creator-foundation` and `youtube-ops`; add `remotion` separately for production work |
@@ -237,22 +236,19 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `remotion` | Both | Format research, scene-by-scene scripts, Remotion build specs and scaffolds |
 | `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, and spin-off workflows |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
-| `devtool-kanban` | Both | Inherits `devtool` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |
-| `game-kanban` | Both | Inherits `game` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `monorepo` | Both | Workspace-aware detection, branch-backed lane specs, guardrails, and scoped shipping overlay |
-| `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
 
 ### Codex `$exec` routing
 
-Codex `$exec` consumes this table at runtime. The "Next-Step Routing" block in `global/codex/exec/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` for command-text routing and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$exec` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$exec --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/exec/SKILL.md` § "Pack-Aware Command Text" for the full resolver.
+PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Codex `$exec` should not substitute `$exec-kanban`, `$ship-kanban`, or `$ship-end-kanban` for global defaults. If a stale `.agents/project.json` still lists a hibernated kanban pack, keep using the global default command and remove the stale pack designation with `scripts/pack.sh remove <kanban-pack>` when cleanup is relevant.
 
 ## Migrating from the parity-mirror model
 
 Before Phase 11, every skill existed in parallel under `global/claude/` and `global/codex/`, and users chose a CLI by opening the corresponding terminal. The three-mode model replaces "pick a terminal" with "declare a mode, then let skills route." The migration is pointer-level — there is no automated converter, and there is no breaking change to any skill surface.
 
 - **Designate a mode.** Run `scripts/pack.sh set-mode <claude-only|codex-only|hybrid>` once per project. This writes `.agents/project.json.agent_mode`, which the resolver (`scripts/agent-mode.sh`) reads on every skill invocation. `scripts/pack.sh set-mode unset` clears the field — skills then keep the concrete next work item primary and infer the command route from invocation and task type. For a shell-scoped override (e.g., demoing a different mode), export `SKILLS_AGENT_MODE` instead of editing the file.
-- **Pick packs by role, not by CLI.** The `## Pack emphasis` tables above tag each pack as `Claude-orchestration`, `Codex-execution`, or `Both`. Enable packs via `pack.sh install` based on the work the project does (strategy framing vs refactor mutation vs kanban flow), not based on which CLI the developer happens to prefer. Parity-mirror skills in `global/` still work everywhere; pack emphasis just records intent.
+- **Pick packs by role, not by CLI.** The `## Pack emphasis` tables above tag each pack as `Claude-orchestration`, `Codex-execution`, or `Both`. Enable packs via `pack.sh install` based on the work the project does, not based on which CLI the developer happens to prefer. Parity-mirror skills in `global/` still work everywhere; pack emphasis just records intent.
 - **Use `/delegate` in hybrid.** The old workflow — "plan in Claude, switch terminals, paste the plan into Codex, run it" — collapses into `/delegate <target-skill>` inside the Claude session. `/delegate` produces an approval packet, prompts once, then synchronously invokes `codex exec`. No manual CLI switching.
 - **Use `/handoff --target=codex` for async handoffs.** When a human needs to resume work later in a separate Codex session (e.g., end of day, or cross-developer), `/handoff --target=codex` produces the same approval packet plus a `tasks/handoff.md` note. Codex resumes with `$exec --execute-approved`. Used in both `claude-only` (planning in Claude, executing later in Codex) and `hybrid` (async variant of `/delegate`).
 - **Leave mode unset if you are unsure.** An absent `agent_mode` field is not a bug — the twelve Step-7 planning/execution skills keep the concrete next work item primary and infer the command route from invocation and task type. Declare a mode only once the project's steady-state workflow is clear.

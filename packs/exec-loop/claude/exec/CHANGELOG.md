@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2
+
+- Aligned the Claude exec-loop mirror version with Codex v0.2 after PoketoWork kanban routing hibernation; Claude execution behavior is unchanged.
+
 ## v0.1
 
 - Renamed the Claude exec-loop command from `/exec` to `/exec` to avoid collision with Claude's default slash-command surface.

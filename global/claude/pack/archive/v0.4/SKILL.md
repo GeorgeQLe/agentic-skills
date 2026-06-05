@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.5
+version: v0.4
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -88,7 +88,8 @@ The `{skill: pack}` format tracks provenance so `refresh` knows where to rebuild
 - Use `alignment-loop` for lightweight operator-agent calibration before committing to a full spec-interview pipeline.
 - Use `game` for video games, prototypes, playable entertainment, game engines, store pages, playtest loops, and game assets.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
-- PoketoWork kanban packs (`business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban`) are hibernated while Poketo.work is being rebuilt. Do not recommend or install kanban packs until they are reactivated.
+- Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
+- Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
 - Use `exec-loop` for the plan-exec-ship execution workflow (ship, run, ship-end).
 - Use `agent-work-admin` for roadmap management, phase planning, and spec-drift auditing.
 - Use `product-design` for UX exploration, prototyping, feature/spec/UI interviews, brainstorming, and design systems.
@@ -112,7 +113,7 @@ The `{skill: pack}` format tracks provenance so `refresh` knows where to rebuild
 - Use `knowledge-check` for quiz-style knowledge reviews.
 - Use `exec-profile` for execution profile patching.
 - Use `alignment-page-admin` for compiling central alignment pages.
-- Treat `monorepo` and `code-quality` as overlays. Pair overlays with a domain pack unless the user explicitly wants only the overlay behavior.
+- Treat `monorepo`, `code-quality`, and `*-kanban` packs as overlays. Pair them with a domain pack unless the user explicitly wants only the overlay behavior.
 - For workflow ordering, lead-in recommendations, and overlay dependencies, read `docs/pack-workflow-matrix.md`.
 
 ## Mixed Monorepos

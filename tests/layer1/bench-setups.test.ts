@@ -3422,13 +3422,12 @@ describe("benchmark coverage matrix", () => {
     const matrix = benchmarkCoverageMatrix();
     const expectedPackSkills = [
       "assumption-tracker",
-      "brainstorm-kanban",
       "competitive-analysis",
       "devtool-workflow",
       "game-core-loop",
       "mono-guard",
-      "poketo-kanban",
       "project-fleet",
+      "quality-sweep",
       "video-script",
       "youtube-video-audit",
     ];
@@ -3460,7 +3459,7 @@ describe("benchmark coverage matrix", () => {
       ["game-core-loop", "game-context"],
       ["devtool-workflow", "devtool-context"],
       ["mono-guard", "monorepo-context"],
-      ["exec-kanban", "kanban-context"],
+      ["quality-sweep", "code-quality-context"],
       ["project-fleet", "project-fleet-context"],
       ["video-script", "remotion-context"],
       ["youtube-video-audit", "youtube-ops-context"],

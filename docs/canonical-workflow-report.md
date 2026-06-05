@@ -66,7 +66,7 @@ The current business routing model is lane-based:
 
 `business-app` is now a compatibility alias that installs the four business lanes. It should not be described as the primary pack for normal work. Prefer the narrow lane that matches the current job, then add downstream lanes as evidence becomes ready.
 
-Kanban execution remains separate. `business-app-kanban` is an opt-in board-aware execution variant and should be paired with the relevant business lane; it is not a substitute for discovery, lifecycle, growth, or ops research.
+PoketoWork kanban execution packs are hibernated while Poketo.work is being rebuilt. Do not recommend `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban`, or their `*-kanban` skill surfaces as active workflow routes until the service/API, auth contract, and smoke tests are stable.
 
 ### Operating Modes
 

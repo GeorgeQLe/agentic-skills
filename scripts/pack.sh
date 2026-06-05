@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PACKS_DIR="$REPO_ROOT/packs"
+HIBERNATED_KANBAN_DIR="$REPO_ROOT/archive/hibernated-packs/2026-06-poketowork-rebuild"
 PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
 PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
@@ -128,6 +129,77 @@ available_packs_inline() {
   list_packs | paste -sd ', ' -
 }
 
+canonical_hibernated_pack() {
+  local pack="$1"
+  case "$pack" in
+    business-app-kanban|business_app_kanban|businessapp-kanban|businessapp_kanban|business-kanban|business_kanban|saas-kanban|saas_kanban)
+      echo "business-app-kanban"
+      ;;
+    devtool-kanban|devtool_kanban|dev-kanban|dev_kanban|dev-tool-kanban|dev-tool_kanban|dev-tools-kanban|dev-tools_kanban|developer-tool-kanban|developer-tool_kanban|developer-tools-kanban|developer-tools_kanban)
+      echo "devtool-kanban"
+      ;;
+    game-kanban|game_kanban|games-kanban|games_kanban)
+      echo "game-kanban"
+      ;;
+    poketowork-kanban|poketowork_kanban|poketo-work-kanban|poketo_work_kanban)
+      echo "poketowork-kanban"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+die_hibernated_pack() {
+  local requested="$1"
+  local pack="$2"
+  local archive_path="$HIBERNATED_KANBAN_DIR/$pack"
+  local archive_rel="${archive_path#"$REPO_ROOT"/}"
+
+  {
+    echo "ERROR: PoketoWork kanban pack '$pack' is hibernated while Poketo.work is being rebuilt."
+    echo "Requested: $requested"
+    echo "Archive: $archive_rel"
+    echo "Reactivation requires a stable service/API, a known auth contract, and updated smoke tests."
+    echo "No active install is available. To clean up a stale project designation, run: scripts/pack.sh remove $pack"
+  } >&2
+  exit 1
+}
+
+find_hibernated_packs_for_skill() {
+  local skill="$1"
+  local pack_dir pack found=false
+  [[ -d "$HIBERNATED_KANBAN_DIR" ]] || return 1
+
+  for pack_dir in "$HIBERNATED_KANBAN_DIR"/*/; do
+    [[ -d "$pack_dir" ]] || continue
+    pack="$(basename "${pack_dir%/}")"
+    if [[ -d "$pack_dir/claude/$skill" || -d "$pack_dir/codex/$skill" ]]; then
+      echo "$pack"
+      found=true
+    fi
+  done
+
+  [[ "$found" == true ]]
+}
+
+die_hibernated_skill() {
+  local skill="$1"
+  local packs="$2"
+  local packs_inline archive_rel
+  packs_inline="$(printf '%s\n' "$packs" | awk 'BEGIN { first = 1 } { if (!first) printf ", "; printf "%s", $0; first = 0 } END { print "" }')"
+  archive_rel="${HIBERNATED_KANBAN_DIR#"$REPO_ROOT"/}"
+
+  {
+    echo "ERROR: PoketoWork kanban skill '$skill' is archived in hibernated pack(s): $packs_inline"
+    echo "PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt."
+    echo "Archive: $archive_rel"
+    echo "Reactivation requires a stable service/API, a known auth contract, and updated smoke tests."
+    echo "No active installable pack provides '$skill'."
+  } >&2
+  exit 1
+}
+
 normalize_pack() {
   local pack="$1"
   pack="${pack%,}"
@@ -143,7 +215,6 @@ normalize_pack() {
     customer-lifecycle|customer_lifecycle|lifecycle|journey|customer-journey|customer_journey|user-journey|user_journey|onboarding|conversion|transactions|transaction) echo "customer-lifecycle" ;;
     business-growth|growth|gtm-growth|gtm_growth) echo "business-growth" ;;
     business-ops|business_ops|ops|business-operations|business_operations) echo "business-ops" ;;
-    business-kanban|business_app_kanban|businessapp-kanban|saas-kanban) echo "business-app-kanban" ;;
     creator|creator_media|creatormedia|media|founder-media|creator-media)
       echo "creator-foundation"
       echo "youtube-ops"
@@ -155,7 +226,6 @@ normalize_pack() {
     quality|codequality|code_quality|code-quality) echo "code-quality" ;;
     games) echo "game" ;;
     dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;
-    dev-kanban|dev-tool-kanban|dev-tools-kanban|developer-tool-kanban|developer-tools-kanban) echo "devtool-kanban" ;;
     alignment|align|taste|alignment_loop|alignmentloop) echo "alignment-loop" ;;
     product|product-design|product_design|productdesign|ux|design) echo "product-design" ;;
     agent-work|agent_work_admin|agent-work-admin|work-admin|planning|planner) echo "agent-work-admin" ;;
@@ -198,9 +268,9 @@ collect_pack_args() {
 
 project_type_for_pack() {
   case "$1" in
-    business-discovery|customer-lifecycle|business-growth|business-ops|business-app|business-app-kanban) echo "business-app" ;;
-    game|game-kanban) echo "game" ;;
-    devtool|devtool-kanban) echo "devtool" ;;
+    business-discovery|customer-lifecycle|business-growth|business-ops|business-app) echo "business-app" ;;
+    game) echo "game" ;;
+    devtool) echo "devtool" ;;
     creator-foundation|youtube-ops|creator-media|remotion) echo "creator-media" ;;
     project-fleet) echo "project-fleet" ;;
     *) return 1 ;;
@@ -435,6 +505,11 @@ link_one_tool() {
 
 install_pack() {
   local pack="$1"
+  local hibernated_pack
+  hibernated_pack="$(canonical_hibernated_pack "$pack" 2>/dev/null || true)"
+  if [[ -n "$hibernated_pack" ]]; then
+    die_hibernated_pack "$pack" "$hibernated_pack"
+  fi
   pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
 
   link_one_tool "$pack" "claude"
@@ -454,8 +529,15 @@ install_pack() {
 
 install_single_skill() {
   local skill="$1"
-  local pack
-  pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack. Available packs: $(available_packs_inline)"
+  local pack hibernated_packs
+  pack="$(find_pack_for_skill "$skill" 2>/dev/null || true)"
+  if [[ -z "$pack" ]]; then
+    hibernated_packs="$(find_hibernated_packs_for_skill "$skill" 2>/dev/null || true)"
+    if [[ -n "$hibernated_packs" ]]; then
+      die_hibernated_skill "$skill" "$hibernated_packs"
+    fi
+    die "Skill '$skill' not found in any pack. Available packs: $(available_packs_inline)"
+  fi
 
   for tool in claude codex; do
     local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
@@ -497,14 +579,21 @@ install_single_skill() {
 
 remove_single_skill() {
   local skill="$1"
-  local pack
+  local pack hibernated_packs
   pack="$(read_enabled_skill_pack "$skill")"
   if [[ -z "$pack" ]]; then
-    pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+    pack="$(find_pack_for_skill "$skill" 2>/dev/null || true)"
+    if [[ -z "$pack" ]]; then
+      hibernated_packs="$(find_hibernated_packs_for_skill "$skill" 2>/dev/null || true)"
+      if [[ -n "$hibernated_packs" ]]; then
+        pack="$(printf '%s\n' "$hibernated_packs" | sed -n '1p')"
+      else
+        die "Skill '$skill' not found in any pack"
+      fi
+    fi
   fi
 
   for tool in claude codex; do
-    local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
     local target_root="$PROJECT_ROOT/.$tool/skills"
     local target="$target_root/$skill"
     if remove_repo_skill_install "$target"; then
@@ -518,10 +607,20 @@ remove_single_skill() {
 
 remove_pack() {
   local pack="$1"
-  pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
+  local source_pack_dir="$PACKS_DIR/$pack"
+  if ! pack_exists "$pack"; then
+    local hibernated_pack
+    hibernated_pack="$(canonical_hibernated_pack "$pack" 2>/dev/null || true)"
+    if [[ -n "$hibernated_pack" && -d "$HIBERNATED_KANBAN_DIR/$hibernated_pack" ]]; then
+      pack="$hibernated_pack"
+      source_pack_dir="$HIBERNATED_KANBAN_DIR/$pack"
+    else
+      die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
+    fi
+  fi
 
   for tool in claude codex; do
-    local source_dir="$PACKS_DIR/$pack/$tool"
+    local source_dir="$source_pack_dir/$tool"
     local target_root="$PROJECT_ROOT/.$tool/skills"
     [[ -d "$source_dir" && -d "$target_root" ]] || continue
     for skill_dir in "$source_dir"/*/; do
@@ -608,17 +707,17 @@ recommend() {
   fi
   if [[ "$inferred_project_type" == "game" ]]; then
     echo "Recommended pack: game"
-    echo "If this project intentionally uses PoketoWork boards, also install game-kanban."
+    echo "PoketoWork kanban packs are hibernated during the Poketo.work rebuild."
   elif [[ "$inferred_project_type" == "devtool" ]]; then
     echo "Recommended pack: devtool or a narrow business pack"
     echo "Use devtool for developer-facing tools/libraries; use business-discovery, customer-lifecycle, business-growth, or business-ops for SaaS/business work."
-    echo "If this project intentionally uses PoketoWork boards, install the matching explicit kanban pack: devtool-kanban or business-app-kanban."
+    echo "PoketoWork kanban packs are hibernated during the Poketo.work rebuild."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   else
     echo "Recommended pack: business-discovery"
     echo "Add customer-lifecycle when the current phase needs journey, onboarding, conversion, transaction, retention, expansion, or lifecycle metrics work."
     echo "Add business-growth or business-ops only when the current phase needs them."
-    echo "If this project intentionally uses PoketoWork boards, also install business-app-kanban."
+    echo "PoketoWork kanban packs are hibernated during the Poketo.work rebuild."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   fi
 }
@@ -811,6 +910,10 @@ case "$cmd" in
         token="${token%,}"
         token="${token#pack:}"
         case "$token" in pack|packs|"") continue ;; esac
+        hibernated_pack="$(canonical_hibernated_pack "$token" 2>/dev/null || true)"
+        if [[ -n "$hibernated_pack" ]]; then
+          die_hibernated_pack "$token" "$hibernated_pack"
+        fi
         normalized="$(normalize_pack "$token" 2>/dev/null)" || normalized=""
         if [[ -n "$normalized" ]]; then
           all_exist=true
@@ -828,6 +931,10 @@ case "$cmd" in
           install_skills+=("$token")
           continue
         }
+        hibernated_packs="$(find_hibernated_packs_for_skill "$token" 2>/dev/null || true)"
+        if [[ -n "$hibernated_packs" ]]; then
+          die_hibernated_skill "$token" "$hibernated_packs"
+        fi
         die "Unknown pack or skill '$token'. Available packs: $(available_packs_inline)"
       done
     done
@@ -856,6 +963,11 @@ case "$cmd" in
         token="${token%,}"
         token="${token#pack:}"
         case "$token" in pack|packs|"") continue ;; esac
+        hibernated_pack="$(canonical_hibernated_pack "$token" 2>/dev/null || true)"
+        if [[ -n "$hibernated_pack" ]]; then
+          remove_packs+=("$hibernated_pack")
+          continue
+        fi
         skill_pack="$(read_enabled_skill_pack "$token")"
         if [[ -n "$skill_pack" ]]; then
           remove_skills+=("$token")
@@ -878,6 +990,11 @@ case "$cmd" in
           remove_skills+=("$token")
           continue
         }
+        hibernated_packs="$(find_hibernated_packs_for_skill "$token" 2>/dev/null || true)"
+        if [[ -n "$hibernated_packs" ]]; then
+          remove_skills+=("$token")
+          continue
+        fi
         die "Unknown pack or skill '$token'. Available packs: $(available_packs_inline)"
       done
     done
@@ -932,7 +1049,14 @@ case "$cmd" in
     shift
     skill="${1:-}"
     [[ -n "$skill" ]] || die "which requires a skill name"
-    pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+    pack="$(find_pack_for_skill "$skill" 2>/dev/null || true)"
+    if [[ -z "$pack" ]]; then
+      hibernated_packs="$(find_hibernated_packs_for_skill "$skill" 2>/dev/null || true)"
+      if [[ -n "$hibernated_packs" ]]; then
+        die_hibernated_skill "$skill" "$hibernated_packs"
+      fi
+      die "Skill '$skill' not found in any pack"
+    fi
     skill_pack="$(read_enabled_skill_pack "$skill")"
     enabled="$(read_enabled_packs)"
     if [[ -n "$skill_pack" ]]; then

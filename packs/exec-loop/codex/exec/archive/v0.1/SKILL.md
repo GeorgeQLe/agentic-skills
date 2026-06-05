@@ -2,7 +2,7 @@
 name: exec
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
-version: v0.2
+version: v0.1
 argument-hint: "[--phase] [--execute-approved]"
 invocation: orchestrator
 ---
@@ -148,10 +148,11 @@ Rules:
 
 ### Pack-Aware Command Text
 
-PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Do not substitute `$exec-kanban`, `$ship-kanban`, or `$ship-end-kanban` for global-default recommendations. If `.agents/project.json` still lists a hibernated kanban pack, keep recommending the global default command and mention `scripts/pack.sh remove <kanban-pack>` only when cleanup of stale pack designation is directly relevant.
+After resolving or inferring the command route, resolve enabled packs via `./scripts/pack.sh list-packs` (newline-separated enabled pack names from `.agents/project.json.enabled_packs`; reuses the `read_enabled_packs` reader — do not grep `.agents/project.json` directly). When the recommendation would emit `$exec`, `$ship`, or `$ship-end`, check whether any enabled pack ships the matching `-kanban` variant (`exec-kanban`, `ship-kanban`, `ship-end-kanban`) under `packs/<pack>/codex/`. If one does, emit the kanban invocation (e.g., `$exec-kanban`) in place of the global default. Candidates today are `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` — each tagged `Both` in `docs/operating-modes.md` § "Pack emphasis" with kanban `run`/`ship`/`ship-end` execution variants.
 
-- **No-match / no-pack:** emit the global-default recommendation exactly as today.
-- **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) -> silent fallback to the global-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.
+- **No-match / no-pack:** emit the global-default recommendation exactly as today. No "I checked enabled_packs" noise.
+- **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) → silent fallback to the global-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.
+- **Ambiguity:** if two enabled packs both ship the same `-kanban` variant, recommend the first in `enabled_packs` order and note the tie inline. Do not prompt.
 - **Scope:** recommendation-text routing only. `$exec --execute-approved` still consumes `.agents/approved-plan.json` verbatim regardless of pack routing — the approval-packet contract is unchanged.
 
 ## Constraints

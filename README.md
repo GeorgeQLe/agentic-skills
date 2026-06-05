@@ -48,7 +48,6 @@ scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
 scripts/pack.sh install alignment-loop
-scripts/pack.sh install business-app-kanban
 scripts/pack.sh install design-system
 scripts/pack.sh which design-system
 scripts/pack.sh status
@@ -302,7 +301,7 @@ scripts/pack.sh install monorepo
 mono-detect, mono-exec, mono-guard, mono-ship
 ```
 
-The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `exec` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `exec-kanban` and `ship-kanban`.
+The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `exec` and `ship` skills. This differs from the former `*-kanban` duplication pattern; PoketoWork kanban packs are currently hibernated while Poketo.work is being rebuilt.
 
 Lane dispatch uses a JSON + Markdown mirror:
 
@@ -322,24 +321,9 @@ scope: cross-cutting
 
 Use `scope: package-scoped` for package-contained work, `scope: cross-cutting` for shared-package or multi-package work, and `scope: root-only` for root config, scripts, docs, or repository policy.
 
-### Kanban Variants
+### Hibernated Kanban Packs
 
-Kanban workflow variants are explicit opt-ins for PoketoWork users. Base packs never install them automatically.
-
-```bash
-scripts/pack.sh install business-app-kanban
-scripts/pack.sh install game-kanban
-scripts/pack.sh install devtool-kanban
-```
-
-These packs add:
-
-```text
-brainstorm-kanban, spec-interview-kanban, roadmap-kanban,
-exec-kanban, ship-kanban, ship-end-kanban
-```
-
-The generic `poketowork-kanban` pack contains board-management utilities such as `poketo-kanban` and `sync-roadmap-kanban`.
+PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Their source is preserved under `archive/hibernated-packs/2026-06-poketowork-rebuild/`, but they are not active install targets and should not be recommended until the service/API is stable, the auth contract is known, and smoke tests are updated.
 
 ## Moved Skills
 
@@ -385,7 +369,6 @@ See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioni
 ./scripts/skill-pack-routing-audit.sh
 ./scripts/skill-versions.sh --missing
 pnpm --dir tests test
-cd packs/poketowork-kanban/claude/poketo-kanban/scripts && npm test
 ```
 
 `skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`; `skill-mirror-parity-audit.sh` checks mirrored pack skill pairs under `packs/`.

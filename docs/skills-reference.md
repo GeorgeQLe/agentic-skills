@@ -250,7 +250,7 @@ mono-detect -> mono-exec -> mono-guard -> mono-ship
 
 `mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-exec` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, package-scoped dispatch on separate GitHub branches, and consolidation/PR review before integration. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries and PR-review evidence. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
 
-The pack uses an augmentation injection pattern rather than a duplication pattern. The global `exec` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. By contrast, `*-kanban` packs provide explicit workflow variants such as `exec-kanban`, `ship-kanban`, and `ship-end-kanban`.
+The pack uses an augmentation injection pattern rather than a duplication pattern. The global `exec` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. The former `*-kanban` workflow-variant packs are hibernated while Poketo.work is being rebuilt.
 
 Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, `mode`, and `branch`. For `agent-team` work, each write lane must push its non-primary GitHub branch and provide commit SHA, validation evidence, and PR URL before the consolidation/PR review gate approves integration.
 
@@ -365,30 +365,17 @@ Default flow:
 youtube-format-research -> video-script -> video-build
 ```
 
-## Kanban Variant Packs
+## Hibernated Kanban Packs
 
-Install only in projects that intentionally use PoketoWork boards. Base domain packs do not install these automatically.
+PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. They are preserved under `archive/hibernated-packs/2026-06-poketowork-rebuild/`, but are not active install or recommendation targets.
 
-```bash
-scripts/pack.sh install business-app-kanban
-scripts/pack.sh install game-kanban
-scripts/pack.sh install devtool-kanban
-```
-
-Skills:
+Hibernated packs:
 
 ```text
-brainstorm-kanban, spec-interview-kanban, roadmap-kanban,
-exec-kanban, ship-kanban, ship-end-kanban
+business-app-kanban, devtool-kanban, game-kanban, poketowork-kanban
 ```
 
-For direct board-management utilities, install:
-
-```bash
-scripts/pack.sh install poketowork-kanban
-```
-
-That pack contains `poketo-kanban` and `sync-roadmap-kanban`.
+Hibernated skill surfaces include `brainstorm-kanban`, `spec-interview-kanban`, `roadmap-kanban`, `exec-kanban`, `ship-kanban`, `ship-end-kanban`, `poketo-kanban`, and `sync-roadmap-kanban`.
 
 ## Engineering & Workflow Packs
 

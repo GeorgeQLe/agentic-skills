@@ -1,3 +1,35 @@
+## Current Targeted Update: PoketoWork Kanban Pack Hibernation 2026-06-04
+
+**Goal:** Hibernate all Poketo.work/PoketoWork kanban pack surfaces while the service is being rebuilt, preserving the source under a repo-root archive while removing them from active discovery, installation, recommendations, and generated catalogs.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a pack-level deactivation across pack directories, pack routing, docs, generated data, and validation. The boundary should remain one coherent change so active inventories and recommendation surfaces agree.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/exec/` and `prompts/pack/`.
+- [x] `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` are moved from `packs/` into `archive/hibernated-packs/2026-06-poketowork-rebuild/`.
+- [x] The archive folder has a short README explaining hibernation date, rebuild reason, preserved surfaces, and reactivation criteria.
+- [x] Active pack discovery no longer lists kanban packs and active skill discovery no longer exposes kanban skill names.
+- [x] `scripts/pack.sh install <kanban-pack-or-alias>` exits non-zero with an explicit hibernation message for direct names and common aliases.
+- [x] `scripts/pack.sh which <kanban-skill>` does not report an active installable pack and reports hibernation when feasible.
+- [x] Docs and recommendation flows stop presenting kanban packs as installable, with a concise hibernation note instead.
+- [x] Skills Showcase/catalog assets are regenerated and validated after the active skill set changes.
+- [x] Inventory checks, behavior checks, audit scripts, generated-data validation, and whitespace checks pass or documented residual failures are proven unrelated.
+- [x] Intended changes are committed and pushed on `master`.
+
+**Implementation Plan:**
+1. Capture prompt history and record this hibernation plan in task docs.
+2. Inspect the current kanban pack surfaces, `scripts/pack.sh`, recommendation docs, audit exceptions, and generated catalog outputs.
+3. Move the four active kanban pack directories to `archive/hibernated-packs/2026-06-poketowork-rebuild/` and add the archive README.
+4. Update `scripts/pack.sh` for hibernated direct pack names, common aliases, and kanban skill `which` responses.
+5. Remove active kanban recommendations from docs and any script allowlists/audit exceptions that only existed because the packs were active.
+6. Regenerate Skills Showcase/catalog data and validate generated assets.
+7. Run inventory, behavior, audit, generated-data, and whitespace checks.
+8. Record review/history notes, inspect the staged boundary, commit, and push on `master`.
+
+---
+
 ## Current Targeted Update: Marketplace Handoff Between Idea Scope Brief and ICP 2026-06-04
 
 **Goal:** Add a compact cross-skill contract so `idea-scope-brief` flags marketplace/platform side hypotheses and `icp` validates or refutes that market structure before generating candidates.

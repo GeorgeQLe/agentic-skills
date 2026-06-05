@@ -18,7 +18,7 @@ The tool will not function without these. Each is a hard dependency visible in t
 Soft integrations — used by some skills but not required for core install:
 
 - **`jq` or awk/sed.** Not required by the installers; `scripts/agent-mode.sh:28` deliberately parses JSON with `sed` to avoid adding a `jq` dependency. Individual skills may shell out to `jq` if present, but the scripts run without it.
-- **`npm` / `node`.** Required only for the `poketowork-kanban` pack (`README.md:205` — `cd packs/poketowork-kanban/claude/poketo-kanban/scripts && npm test`). The `devtool`, `business-app`, `game`, and `code-quality` base packs do not need Node.
+- **`npm` / `node`.** Not required by the active base packs covered here (`devtool`, `business-app`, `game`, and `code-quality`). The previous PoketoWork kanban script tests are hibernated with that pack while Poketo.work is being rebuilt.
 
 ## Ecosystem assumptions
 

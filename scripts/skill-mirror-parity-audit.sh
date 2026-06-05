@@ -42,7 +42,6 @@ const sharedSections = [
 
 const approvedOneSided = new Map([
   ["agent-bridge/delegate", "Claude-only bridge skill."],
-  ["business-ops/repo-glossary", "Claude-only glossary maintenance skill."],
   ["exec-profile/patch-exec-profile", "Claude-only execution-profile patch helper."],
   ["project-fleet/project-fleet", "Codex-only project fleet command surface."],
   ["project-fleet/spin-off", "Codex-only project fleet command surface."],

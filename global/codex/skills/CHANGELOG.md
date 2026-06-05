@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4
+
+- Removed hibernated PoketoWork kanban skills from the static workflow-stage inventory while the kanban packs are archived.
+
 ## v0.3
 
 - Added `afps-status` to the global Context & Session inventory mapping.

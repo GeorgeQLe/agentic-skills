@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5
+
+- Marked PoketoWork kanban packs as hibernated during the Poketo.work rebuild and removed kanban packs from active pack-selection guidance.
+
 ## v0.4
 
 - Added source-level shipping guidance: commit `.agents/project.json` for pack configuration changes, but never stage or commit generated local skill roots under `.claude/skills/**` or `.codex/skills/**`.

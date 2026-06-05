@@ -1,3 +1,49 @@
+## Current Task - PoketoWork Kanban Pack Hibernation 2026-06-04
+
+**Goal:** Hibernate all Poketo.work/PoketoWork kanban pack surfaces while the service is being rebuilt, preserving the source under a repo-root archive while removing them from active discovery, installation, recommendations, and generated catalogs.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This deactivation crosses pack directories, pack routing, docs, generated data, and validation; keeping it in one serial boundary avoids active/catalog drift.
+
+### Plan
+
+- [x] Capture prompt history under `prompts/exec/` and `prompts/pack/`.
+- [x] Record this hibernation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect kanban pack surfaces, `scripts/pack.sh`, recommendation docs, audit exceptions, and generated catalog outputs.
+- [x] Move the four kanban pack directories from `packs/` to `archive/hibernated-packs/2026-06-poketowork-rebuild/`.
+- [x] Add an archive README with hibernation date, rebuild reason, preserved surfaces, and reactivation criteria.
+- [x] Update `scripts/pack.sh` so direct kanban pack names, common aliases, and kanban skill lookups return explicit hibernation behavior.
+- [x] Remove active kanban recommendations from docs and script/audit surfaces that treated them as active.
+- [x] Regenerate Skills Showcase/catalog data.
+- [x] Run inventory checks, behavior checks, repo audits, generated-data validation, and whitespace checks.
+- [x] Record review notes, update history, stage intended files, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- [x] Active `find packs -path '*kanban*' -name SKILL.md -not -path '*/archive/*'` returns no active kanban skills.
+- [x] `scripts/pack.sh list` does not include kanban packs.
+- [x] `scripts/pack.sh install business-app-kanban` exits non-zero with a clear hibernation message.
+- [x] `scripts/pack.sh install dev-kanban` exits non-zero with the same hibernation class of message.
+- [x] `scripts/pack.sh which brainstorm-kanban` does not report an active installable pack.
+- [x] `bash scripts/skill-archive-audit.sh --strict` passes.
+- [x] `bash scripts/skill-mirror-parity-audit.sh` passes.
+- [x] `bash scripts/skill-pack-routing-audit.sh` passes.
+- [x] `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `bash scripts/validate-skills-showcase-data.sh` pass.
+
+### Review
+
+- Captured prompt history under `prompts/exec/skill-prompt-20260604-234318-poketowork-kanban-hibernate.md` and `prompts/pack/skill-prompt-20260604-234318-poketowork-kanban-hibernate.md`.
+- Moved `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` from active `packs/` into `archive/hibernated-packs/2026-06-poketowork-rebuild/` with a README documenting the rebuild reason, hibernation date, preserved surfaces, and reactivation criteria.
+- Updated `scripts/pack.sh` so direct hibernated pack names, aliases such as `dev-kanban`, and hibernated skill lookups fail non-zero with explicit hibernation messages instead of unknown-pack messaging.
+- Removed active kanban recommendations and stale active inventory entries from pack docs, workflow docs, README, active alignment inventory/report pages, generated showcase data, and benchmark coverage/setup fixtures.
+- Updated active support skill contracts and changelogs for `pack`, `skills`, and Codex `exec` routing so agents stop recommending kanban installs or kanban next-step substitutions.
+- Regenerated Skills Showcase assets; active generated showcase and `alignment/skills-inventory.html` no longer contain the hibernated kanban pack or skill entries.
+- Validation passed: `find packs -path '*kanban*' -name SKILL.md -not -path '*/archive/*'`; `scripts/pack.sh list`; expected non-zero hibernation checks for `scripts/pack.sh install business-app-kanban`, `scripts/pack.sh install dev-kanban`, and `scripts/pack.sh which brainstorm-kanban`; `bash scripts/validate-skills-showcase-data.sh`; `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts`; `pnpm --dir apps/skills-showcase test src/showcase/catalog.test.tsx`; `pnpm --dir apps/skills-showcase typecheck`; `bash -n scripts/pack.sh`; `bash -n scripts/skill-mirror-parity-audit.sh`; `git diff --check`.
+
+---
+
 ## Current Task - Marketplace Handoff Between Idea Scope Brief and ICP 2026-06-04
 
 **Goal:** Add a compact cross-skill contract so `idea-scope-brief` records marketplace/platform sides as hypotheses and `icp` validates/refutes that shape before ICP candidate generation.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2
+
+- Stopped substituting PoketoWork kanban command variants in next-step recommendations while the kanban packs are hibernated.
+
 ## v0.1
 
 - Renamed the Codex exec-loop command from `$exec` to `$exec` to avoid cross-agent naming drift with Claude's default slash-command surface.

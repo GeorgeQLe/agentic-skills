@@ -62,17 +62,6 @@
 | `compile-central-alignment` | primary | user | Alignment pages need central compilation |
 | `upgrade-alignment-pages` | primary | user | Alignment pages need convention upgrade |
 
-### Pack: business-app-kanban
-
-| Skill | Type | Typical invoker | Entry condition |
-|-------|------|-----------------|-----------------|
-| `brainstorm-kanban` | primary | user | Brainstorm with kanban card creation |
-| `exec-kanban` | orchestrator | user | Execute kanban-tracked work |
-| `roadmap-kanban` | primary | user | Build kanban-tracked roadmap |
-| `ship-end-kanban` | chained | `/ship-kanban` | Session wrap-up for kanban projects |
-| `ship-kanban` | orchestrator | user | Ship kanban-tracked work |
-| `spec-interview-kanban` | primary | user | Spec interview with kanban tracking |
-
 ### Pack: business-discovery
 
 | Skill | Type | Typical invoker | Entry condition |
@@ -197,17 +186,6 @@
 | `devtool-user-map` | primary | user | Devtool stakeholder mapping |
 | `devtool-workflow` | orchestrator | user | Devtool workflow entry point |
 
-### Pack: devtool-kanban (same structure as business-app-kanban)
-
-| Skill | Type | Typical invoker | Entry condition |
-|-------|------|-----------------|-----------------|
-| `brainstorm-kanban` | primary | user | Brainstorm with kanban |
-| `exec-kanban` | orchestrator | user | Execute kanban work |
-| `roadmap-kanban` | primary | user | Kanban roadmap |
-| `ship-end-kanban` | chained | `/ship-kanban` | Session wrap-up |
-| `ship-kanban` | orchestrator | user | Ship kanban work |
-| `spec-interview-kanban` | primary | user | Spec with kanban |
-
 ### Pack: docs-health
 
 | Skill | Type | Typical invoker | Entry condition |
@@ -245,17 +223,6 @@
 | `game-store-page-test` | chained | after game concept | Store page validation |
 | `game-workflow` | orchestrator | user | Game development workflow entry |
 
-### Pack: game-kanban (same structure as business-app-kanban)
-
-| Skill | Type | Typical invoker | Entry condition |
-|-------|------|-----------------|-----------------|
-| `brainstorm-kanban` | primary | user | Brainstorm with kanban |
-| `exec-kanban` | orchestrator | user | Execute kanban work |
-| `roadmap-kanban` | primary | user | Kanban roadmap |
-| `ship-end-kanban` | chained | `/ship-kanban` | Session wrap-up |
-| `ship-kanban` | orchestrator | user | Ship kanban work |
-| `spec-interview-kanban` | primary | user | Spec with kanban |
-
 ### Pack: gitops
 
 | Skill | Type | Typical invoker | Entry condition |
@@ -287,19 +254,6 @@
 | `mono-plan` | primary | user | Plan monorepo-scoped work |
 | `mono-ship` | orchestrator | user | Ship monorepo changes |
 | `scaffold` | primary | user | Scaffold new package |
-
-### Pack: poketowork-kanban
-
-| Skill | Type | Typical invoker | Entry condition |
-|-------|------|-----------------|-----------------|
-| `brainstorm-kanban` | primary | user | Brainstorm with kanban |
-| `exec-kanban` | orchestrator | user | Execute kanban work |
-| `poketo-kanban` | primary | user | Poketo-specific kanban ops |
-| `roadmap-kanban` | primary | user | Kanban roadmap |
-| `ship-end-kanban` | chained | `/ship-kanban` | Session wrap-up |
-| `ship-kanban` | orchestrator | user | Ship kanban work |
-| `spec-interview-kanban` | primary | user | Spec with kanban |
-| `sync-roadmap-kanban` | chained | after roadmap changes | Sync roadmap to kanban |
 
 ### Pack: product-design
 
@@ -432,8 +386,8 @@
 
 **Orchestrators identified:**
 
-1. `exec` / `exec-kanban` / `mono-exec` — execute plan steps
-2. `ship` / `ship-kanban` / `mono-ship` — ship + plan next
+1. `exec` / `mono-exec` — execute plan steps
+2. `ship` / `mono-ship` — ship + plan next
 3. `positioning` — framework selection router + synthesis
 4. `devtool-workflow` — devtool development workflow
 5. `game-workflow` — game development workflow

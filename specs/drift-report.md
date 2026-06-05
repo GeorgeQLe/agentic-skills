@@ -112,7 +112,7 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
 - [x] `specs/poketo-headless-auth-migration.md` remains the active architectural reference for kanban migration.
   - Spec claim: active kanban skills should run on the headless path, while `kanban.mjs` remains fallback/admin tooling.
   - Evidence: the legacy kanban specs carry a banner naming `kanban.mjs` as fallback/admin-only and point to `specs/poketo-headless-auth-migration.md` for the active path.
-  - Evidence: `packs/poketowork-kanban/claude/poketo-kanban/` still contains the standalone script surface, so the fallback specs remain historical context rather than active product claims.
+  - Evidence: `archive/hibernated-packs/2026-06-poketowork-rebuild/poketowork-kanban/claude/poketo-kanban/` preserves the standalone script surface, so the fallback specs remain historical context rather than active product claims.
 
 - [x] Legacy kanban specs are intentionally scoped as fallback-path documents.
   - Spec claim: each legacy file begins with `Status: Legacy (kanban.mjs fallback path)` and points to the headless migration spec.
@@ -198,7 +198,7 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
 - [x] `specs/poketo-headless-auth-migration.md` remains the active architectural reference for kanban migration.
   - Spec claim: active kanban skills should run on the headless path, while `kanban.mjs` remains fallback/admin tooling.
   - Evidence: the legacy kanban specs carry a banner naming `kanban.mjs` as fallback/admin-only and point to `specs/poketo-headless-auth-migration.md` for the active path.
-  - Evidence: `packs/poketowork-kanban/claude/poketo-kanban/` still contains the standalone script surface, so the fallback specs remain historical context rather than active product claims.
+  - Evidence: `archive/hibernated-packs/2026-06-poketowork-rebuild/poketowork-kanban/claude/poketo-kanban/` preserves the standalone script surface, so the fallback specs remain historical context rather than active product claims.
 
 - [x] Legacy kanban specs are intentionally scoped as fallback-path documents.
   - Spec claim: each legacy file begins with `Status: Legacy (kanban.mjs fallback path)` and points to the headless migration spec.
@@ -277,7 +277,7 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
 - [x] `specs/poketo-headless-auth-migration.md` remains the active architectural reference for kanban migration.
   - Spec claim: active kanban skills should run on the headless path, while `kanban.mjs` remains fallback/admin tooling.
   - Evidence: the legacy kanban specs now carry a banner naming `kanban.mjs` as fallback/admin-only and point to `specs/poketo-headless-auth-migration.md` for the active path.
-  - Evidence: `packs/poketowork-kanban/claude/poketo-kanban/` still contains the standalone script surface, so the fallback specs remain historical context rather than active product claims.
+  - Evidence: `archive/hibernated-packs/2026-06-poketowork-rebuild/poketowork-kanban/claude/poketo-kanban/` preserves the standalone script surface, so the fallback specs remain historical context rather than active product claims.
 
 - [x] Legacy kanban specs are intentionally scoped as fallback-path documents.
   - Spec claim: each legacy file begins with `Status: Legacy (kanban.mjs fallback path)` and points to the headless migration spec.

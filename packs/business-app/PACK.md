@@ -15,4 +15,4 @@ Use the narrowest pack for the current phase:
 
 For backwards compatibility, `scripts/pack.sh install business-app` expands to all four packs. Prefer installing only the lane needed for the current work.
 
-Use `business-app-kanban` only when the project intentionally uses PoketoWork boards.
+PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt; do not recommend `business-app-kanban` as an active overlay.

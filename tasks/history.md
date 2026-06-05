@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-04 — PoketoWork kanban pack hibernation
+
+- Hibernated `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` by moving the active pack sources from `packs/` into `archive/hibernated-packs/2026-06-poketowork-rebuild/` with a README documenting the rebuild reason and reactivation criteria.
+- Updated `scripts/pack.sh` so hibernated pack names, aliases, and hibernated skill lookups fail with explicit hibernation messages instead of active install or unknown-pack behavior.
+- Removed active kanban recommendations from pack docs, workflow docs, README, generated/showcase inventory surfaces, benchmark coverage fixtures, and next-step routing guidance.
+- Regenerated Skills Showcase assets; active generated data now reports 309 skills and 37 packs, with no hibernated kanban skills or packs.
+- Verification passed for active inventory checks, hibernated pack behavior checks, strict archive audit, mirror parity audit, pack routing audit, generated-data validation, focused benchmark/setup tests, Skills Showcase catalog test/typecheck, shell syntax checks, and whitespace checks.
+
 ## 2026-06-04 — Claude/Codex pack skill parity audit
 
 - Added `scripts/skill-mirror-parity-audit.sh` to check mirrored pack skills for missing mirrors, selected frontmatter drift, required shared-section drift, and command-syntax-normalized heading drift while allowlisting documented one-sided/platform-specific cases.

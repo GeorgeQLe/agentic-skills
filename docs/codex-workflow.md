@@ -209,43 +209,9 @@ This skill ports well because it already depends on repo state more than tool st
   1. planning/compression
   2. fresh-thread execution
 
-### `$exec-kanban`
+### PoketoWork Kanban Commands
 
-**Claude Code**
-- move card into progress
-- warn on conflicts
-- enter plan mode
-- execute
-
-**Codex**
-- move card into progress
-- warn on conflicts
-- summarize the plan
-- execute by default under implicit approval
-- execute in-thread
-- commit/push the result
-- move the completed card to Done
-- prepare the next card in Todo
-
-**Manual gap**
-- no skill-controlled plan-mode boundary
-
-**Recommended Codex usage**
-- use `$exec-kanban` as the default kanban execution loop in Codex when a kanban variant pack is explicitly installed
-
-### `$ship-kanban` and `$ship-end-kanban`
-
-**Claude Code**
-- ship work
-- move cards
-- optionally suggest next work
-
-**Codex**
-- use `$ship-kanban` only when finished work or board state needs manual cleanup
-- use `$ship-end-kanban` to wrap a session that is not the normal completed-step path
-
-**Manual gap**
-- no automatic continuation into the next approved execution phase
+PoketoWork kanban commands such as `$exec-kanban`, `$ship-kanban`, and `$ship-end-kanban` are hibernated while Poketo.work is being rebuilt. Use the global `$exec`, `$ship`, and `$ship-end` routes unless the kanban packs are later reactivated with stable service/API behavior, a known auth contract, and updated smoke tests.
 
 ## Manual Gaps Summary
 

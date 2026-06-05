@@ -27,15 +27,12 @@ compatibility alias = old broad name kept for existing commands
 | Full creator-to-video path | `creator-foundation` | `youtube-ops`, `remotion` | research -> YouTube ops -> Remotion production | `scripts/pack.sh install creator-foundation youtube-ops remotion` |
 | Creator media compatibility | `creator-media` | expands to `creator-foundation` + `youtube-ops` | add `remotion` separately for production work | `scripts/pack.sh install creator-media` |
 | Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | global spec/roadmap/exec/ship flow | `scripts/pack.sh install devtool` |
-| Game product workflow | `game` | `code-quality` for implementation cleanup; `game-kanban` only for board users | audience -> fantasy -> loop -> prototype -> launch | `scripts/pack.sh install game` |
+| Game product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> loop -> prototype -> launch | `scripts/pack.sh install game` |
 | Monorepo execution overlay | `monorepo` | any domain pack that describes the product work | wraps `run` and `ship` with detection, branch-backed lane specs, guards, PR review, and scoped validation | `scripts/pack.sh install monorepo` |
 | Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `scripts/pack.sh install code-quality` |
 | Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spin-off | `scripts/pack.sh install project-fleet` |
 | Alignment-first planning | `alignment-loop` | a domain pack once the project type is clear | grill -> destination doc -> vertical slice -> implementation | `scripts/pack.sh install alignment-loop` |
-| Business kanban flow | `business-app-kanban` | a narrow business pack, usually `business-discovery`, `customer-lifecycle`, `business-growth`, or `business-ops` | board-aware brainstorm/spec/roadmap/exec/ship | `scripts/pack.sh install business-discovery business-app-kanban` |
-| Devtool kanban flow | `devtool-kanban` | `devtool` | board-aware brainstorm/spec/roadmap/exec/ship | `scripts/pack.sh install devtool devtool-kanban` |
-| Game kanban flow | `game-kanban` | `game` | board-aware brainstorm/spec/roadmap/exec/ship | `scripts/pack.sh install game game-kanban` |
-| Generic PoketoWork boards | `poketowork-kanban` | optional with any domain pack | board utilities independent of a domain pack | `scripts/pack.sh install poketowork-kanban` |
+| PoketoWork kanban flows | hibernated | wait for Poketo.work rebuild | archived board-aware workflows | not installable |
 
 ## Canonical Chains
 
@@ -73,4 +70,4 @@ Alignment loop:
 taste-calibration -> destination-doc -> vertical-slice-splitter -> implementation
 ```
 
-Monorepo and code-quality are overlays. Kanban packs are workflow variants. They should usually be installed alongside a domain pack, not used as the domain pack themselves.
+Monorepo and code-quality are overlays. PoketoWork kanban workflow variants are hibernated during the Poketo.work rebuild and should not be recommended as active install targets.
