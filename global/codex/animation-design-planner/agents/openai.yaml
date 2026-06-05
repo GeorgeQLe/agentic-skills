@@ -1,0 +1,7 @@
+interface:
+  display_name: "Animation Design Planner"
+  short_description: "Plan UI motion contracts, lifecycle ownership, and proof gates before animation implementation"
+  default_prompt: "Use $animation-design-planner to define the visible motion contract, storyboard, lifecycle owner, guardrails, and proof gate before implementing an interactive UI animation."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,3 +1,31 @@
+## Current Targeted Update: Animation Design Planner Skill 2026-06-04
+
+**Goal:** Create a mirrored repo-managed `animation-design-planner` skill that forces interactive UI animation planning before implementation, including lifecycle ownership, reduced-motion behavior, performance guardrails, and a visual proof gate.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The mirrored skill contracts, benchmark fixture, coverage matrix, generated showcase data, and shipping notes need one coherent boundary so animation planning behavior and benchmark expectations stay aligned.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/create-agentic-skill/`.
+- [x] `global/codex/animation-design-planner/SKILL.md` exists with Codex invocation syntax, `version: v0.0`, and planning/proof workflow sections.
+- [x] `global/claude/animation-design-planner/SKILL.md` exists with Claude syntax, `version: v0.0`, and mirrored semantics.
+- [x] The skill requires a visible motion contract, storyboard/timeline, lifecycle ownership map, implementation guardrails, and proof gate before implementation.
+- [x] Benchmark coverage includes a deterministic card-pack-style fixture that rejects local timing tweaks without lifecycle/state-machine planning.
+- [x] Coverage validation and focused setup tests pass.
+- [x] Skills Showcase data is regenerated and validated after the new skill metadata.
+- [x] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation, inspect repo skill/benchmark patterns, and record this execution plan in task docs.
+2. Add mirrored `animation-design-planner` skill directories, initial changelogs, and Codex display metadata if useful.
+3. Add the skill to the benchmark coverage matrix and global workflow fixture setup with deterministic modal/drawer/list transition expectations.
+4. Add focused setup-quality tests if the fixture introduces behavior not covered by existing generic setup assertions.
+5. Run mirrored metadata checks, benchmark coverage validation, focused tests, showcase regeneration/validation, and whitespace checks.
+6. Record review notes, stage only intended files, commit, and push on `master`.
+
+---
+
 ## Current Targeted Update: Card Pack Animation Work Process Analysis 2026-06-04
 
 **Goal:** Determine what happened across the card pack animation work process, why the same pack/drawer problems kept recurring, and what workflow gap would prevent repeated fixes from drifting.

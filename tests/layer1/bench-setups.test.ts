@@ -3107,6 +3107,7 @@ describe("benchmark coverage matrix", () => {
     const expectedCustomSkills = [
       "affected",
       "analyze-sessions",
+      "animation-design-planner",
       "bootstrap-repo",
       "brainstorm",
       "branch-lifecycle",
@@ -3676,6 +3677,73 @@ describe("Tier 2 and Tier 3 global workflow benchmark setups", () => {
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+
+  it("requires animation-design-planner to produce lifecycle-owned visual proof plans", () => {
+    const setup = CUSTOM_BENCH_SETUPS["animation-design-planner"];
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier23-animation-design-planner-"));
+
+    expect(setup).toBeDefined();
+    expect(setup.prompt).toContain("card-pack modal/drawer/list transition");
+    expect(setup.prompt).toContain("Do not tweak timing constants");
+    expect(setup.prompt).toContain("one lifecycle owner or state-machine coordinator");
+    setup.setupProject(workDir);
+
+    expect(readFileSync(resolve(workDir, "fixtures/animation-request.md"), "utf8")).toContain("clears activePack before exit");
+    expect(readFileSync(resolve(workDir, "fixtures/component-lifecycle.md"), "utf8")).toContain("drawer-open -> closing-collapse -> sheet-exiting");
+
+    const strongPlan = [
+      "# Animation Plan",
+      "",
+      "## Visible Motion Contract",
+      "Trigger: close the open card pack drawer. Start state: activePack remains visible while the drawer is open. End state: the sealed card is restored. The user must never see a sheet flash, early activePack clear, duplicate shared card, pop, or layout jump.",
+      "",
+      "## Storyboard / Timeline",
+      "Phase order: drawer-open -> closing-collapse -> sheet-exiting -> layout-morph-out -> drop-elevation -> sealed. Use one focal shared card layer and settle the detail list after the drawer collapse.",
+      "",
+      "## Lifecycle Ownership Map",
+      "One explicit lifecycle owner: PrototypePage runs the state-machine coordinator. BottomSheet owns sheet exit callbacks, PackOpener owns sealed-card elevation, and activePack/stable identity rules persist until drop-elevation completes. Stable keys remain fixed through AnimatePresence exit and only clear after sealed.",
+      "",
+      "## Implementation Guardrails",
+      "AnimatePresence belongs at the conditional render boundary that owns BottomSheet exit. Use Motion mode=\"wait\" for sheet exit; consider LayoutGroup only around the stable shared card identity. Use transform and opacity first; avoid layout and paint-heavy properties unless proven. reduced-motion converts nonessential movement to instant/fade behavior.",
+      "",
+      "## Proof Gate",
+      "Run slow-motion review with debug durations, then capture Playwright screenshot or video proof for open, drawer-open, sheet-exiting, layout-morph-out, and sealed. Verify reduced-motion separately and reject implementation until these screenshots match the visible motion contract.",
+      "",
+      "## Implementation Handoff",
+      "Do not tweak timing constants, duration, easing, or Motion props until the owner, state phases, and proof gate above are accepted.",
+      "",
+      "**Recommended next command:** $exec",
+      "",
+    ].join("\n");
+
+    writeFileSync(resolve(workDir, "animation-plan.md"), strongPlan);
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["animation-plan.md"],
+    }, { agent: "codex" });
+
+    expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
+    expect(setup.qualityEvaluator?.evaluate(strongPlan).passed).toBe(true);
+
+    const timingOnlyPlan = [
+      "# Animation Plan",
+      "",
+      "Visible Motion Contract: make it smoother.",
+      "Storyboard: use 200ms ease-out.",
+      "Implementation Guardrails: change duration constants.",
+      "Proof Gate: eyeball it.",
+      "Recommended next command: $exec",
+      "",
+    ].join("\n");
+    const weakQuality = setup.qualityEvaluator?.evaluate(timingOnlyPlan);
+
+    expect(weakQuality?.passed).toBe(false);
+    expect(weakQuality?.criticalFailures).toContain("workflow-output-names-an-explicit-lifecycle-owner-or-state-machine-coordinator");
+    expect(weakQuality?.criticalFailures).toContain("workflow-output-covers-slow-motion-and-playwright-visual-proof");
   });
 });
 
