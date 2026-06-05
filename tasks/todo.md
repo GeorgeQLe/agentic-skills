@@ -1,3 +1,43 @@
+## Current Task - Cross-Platform Alignment Page Opener 2026-06-05
+
+**Goal:** Add `scripts/open-html-page.mjs` and update the shared alignment-page convention so generated HTML review pages can be opened or focused through one cross-platform command.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a shared convention/tooling change. The script, docs, generated bundles, tests, and task review notes need to stay in one verified boundary.
+
+### Plan
+
+- [x] Inspect existing alignment convention, propagation script, tests, lessons, and worktree status.
+- [x] Record this plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Implement the opener script with canonical URL normalization, platform detection, browser adapters, dry-run mode, and JSON output.
+- [x] Add focused layer1 coverage for normalization and dry-run command planning.
+- [x] Update `docs/alignment-page-convention.md` and regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Run targeted verification, record review notes, inspect intended changes, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- [x] Relative HTML paths, absolute paths with spaces, and existing `file://` URLs normalize to encoded canonical URLs.
+- [x] The script reports one stable status among `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
+- [x] macOS browser mode can focus matching tabs for Brave, Chrome, Safari, and Edge when their scripting APIs support it.
+- [x] Windows, WSL, and Linux modes use best-effort platform openers and do not fail the calling skill solely because opening is blocked.
+- [x] Generated alignment-page conventions instruct agents to run `node scripts/open-html-page.mjs alignment/<page>.html --browser auto`, report the status, and continue when blocked.
+
+### Review
+
+- Added `scripts/open-html-page.mjs` with canonical `file://` URL normalization, OS/WSL detection, browser selection, dry-run mode, JSON output, and stable statuses: `focused`, `opened`, `fallback-opened`, `blocked`, and `failed`.
+- macOS handling scans running Brave, Chrome, Safari, and Edge tabs through AppleScript and focuses exact URL matches before falling back to `open`; explicit browser modes open/focus the selected browser when possible and then fall back.
+- Windows, WSL, and Linux handling is best-effort: PowerShell `Start-Process` on Windows/WSL, `file://wsl.localhost/<distro>/...` for WSL file targets, and `xdg-open`/`gio open`/browser command fallbacks on Linux. Blocked opener attempts report `status: blocked` without failing the calling skill.
+- Updated `docs/alignment-page-convention.md`, regenerated 255 tracked bundled `ALIGNMENT-PAGE.md` files, and added `docs/scripts-reference.md` coverage for the new script.
+- Added `tests/layer1/open-html-page.test.ts` plus an alignment convention assertion guarding the shared opener command in generated bundles.
+- Real macOS browser verification: first `node scripts/open-html-page.mjs docs/skill-routing-map.html --browser auto --json` returned `status: opened`; after fixing the Chromium app detection AppleScript, rerunning the same command returned `status: focused` via Brave.
+- Validation passed: `node --check scripts/open-html-page.mjs`; `node scripts/open-html-page.mjs --dry-run --json alignment/example.html`; `pnpm --dir tests exec vitest run --project layer1 layer1/open-html-page.test.ts layer1/alignment-gates.test.ts layer1/upgrade-alignment-pages.test.ts`; `node scripts/upgrade-alignment-page.mjs --dry-run`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`; `git diff --check`; active old browser-open wording scan excluding tests and archives.
+- `pnpm --dir tests bench:coverage` still fails on missing benchmark coverage rows for `css-transitions`, `gsap`, `motion-framer`, `threejs`, and `web-animations-api`. The same failure reproduces on a clean detached HEAD worktree using the checked-in coverage script, so it is pre-existing and unrelated to this opener change.
+- Unrelated dirty files preserved outside this boundary: `.agents/project.json`, `.claude/skills/skill-interview/SKILL.md`, `.codex/skills/skill-interview/SKILL.md`, `apps/skills-showcase/app/prototype/page.tsx`, `apps/skills-showcase/next-env.d.ts`, `apps/skills-showcase/src/components/PackOpener.tsx`, and `apps/skills-showcase/src/components/SealedPack.tsx`.
+
+---
+
 ## Current Task - Cross-Session Usage Analysis 2026-06-05
 
 **Goal:** Run `$analyze-sessions` across the default local Claude and Codex history sources and produce a structured cross-session usage report plus review alignment page.

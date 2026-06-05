@@ -1,3 +1,33 @@
+## Current Targeted Update: Cross-Platform Alignment Page Opener 2026-06-05
+
+**Goal:** Add a repo script that opens or focuses generated local HTML alignment pages through one cross-platform command, then wire the shared alignment-page convention to call it.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The script, convention, generated bundles, and tests should move together so every alignment-producing skill gets the same browser-open behavior without hand-editing bundled files.
+
+**Acceptance Criteria:**
+- [x] `scripts/open-html-page.mjs` accepts `<html-path-or-url>`, `--browser auto|brave|chrome|safari|edge|default`, `--dry-run`, and `--json`.
+- [x] The script canonicalizes relative paths, absolute paths with spaces, and existing `file://` URLs to stable encoded file URLs.
+- [x] macOS browser adapters focus exact Brave/Chrome/Safari/Edge tabs when available and open otherwise; unsupported platforms use best-effort OS openers without strict tab scanning.
+- [x] WSL handling prefers browser-friendly `file://wsl.localhost/<distro>/...` behavior and reports fallback status without making page generation fail.
+- [x] Stable statuses are emitted: `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
+- [x] `docs/alignment-page-convention.md` tells skills to run `node scripts/open-html-page.mjs alignment/<page>.html --browser auto`, report the status, and continue if opening is blocked.
+- [x] `node scripts/upgrade-alignment-page.mjs` propagates the convention to bundled `ALIGNMENT-PAGE.md` files.
+- [x] Targeted dry-run normalization tests and repo verification commands pass.
+- [x] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Inspect existing alignment conventions, generator behavior, tests, and dirty worktree state.
+2. Record the task plan in `tasks/roadmap.md` and `tasks/todo.md`.
+3. Implement `scripts/open-html-page.mjs` with normalization helpers, platform detection, browser selection, dry-run JSON output, and best-effort opener adapters.
+4. Add focused layer1 tests for path/url normalization, browser validation, dry-run JSON shape, and mocked platform command planning.
+5. Update the canonical alignment convention and propagate bundled `ALIGNMENT-PAGE.md` files.
+6. Run targeted tests, generator dry-run, whitespace checks, and inspect the intended diff boundary.
+7. Record review notes, stage only intended files, commit, and push on `master`.
+
+---
+
 ## Current Targeted Update: Cross-Session Usage Analysis 2026-06-05
 
 **Goal:** Run `$analyze-sessions` across the default local Claude and Codex history sources and produce a full structured report plus HTML alignment page for review.

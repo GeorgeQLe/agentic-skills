@@ -79,4 +79,5 @@ Compact command index for all scripts in this repository.
 
 | Command | Description |
 | --- | --- |
+| `node scripts/open-html-page.mjs <html-path-or-url> --browser auto` | Open or focus a local HTML page with best-effort cross-platform browser handling |
 | `node scripts/upgrade-alignment-page.mjs` | Regenerate per-skill ALIGNMENT-PAGE.md from convention |

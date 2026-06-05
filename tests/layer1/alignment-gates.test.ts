@@ -353,6 +353,23 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("uses the shared cross-platform opener command for generated alignment pages", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} browser open section`).toContain("**Browser open.**");
+      expect(content, `${path} opener command`).toContain("node scripts/open-html-page.mjs");
+      expect(content, `${path} browser auto`).toContain("--browser auto");
+      expect(content, `${path} statuses`).toContain(
+        "`focused`, `opened`, `fallback-opened`, `blocked`, or `failed`",
+      );
+      expect(content, `${path} blocked continuation`).toContain("Continue when opening is `blocked`");
+      expect(content, `${path} old generic open instruction`).not.toContain(
+        "Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked",
+      );
+    }
+  });
+
   it("allows feedback-only YAML before final gate answers are complete", () => {
     expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
     for (const path of activeAlignmentSkillFiles) {

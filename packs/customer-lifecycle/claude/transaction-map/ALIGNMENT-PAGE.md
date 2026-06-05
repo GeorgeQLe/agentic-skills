@@ -46,4 +46,4 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 **Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/transaction-map-{topic}.html`.
 
-**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+**Browser open.** After writing the resulting HTML page, run `node scripts/open-html-page.mjs alignment/transaction-map-{topic}.html --browser auto` from the repository root, replacing the path with the actual page path when needed. Report the script status (`focused`, `opened`, `fallback-opened`, `blocked`, or `failed`) in the handoff. Continue when opening is `blocked` if the files were written and verified correctly; a blocked browser-open attempt does not make the skill fail.
