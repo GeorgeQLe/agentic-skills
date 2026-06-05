@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-05 — Fix prototype-close-sequence test failures
+
+- Fixed 5 failing tests in `prototype-close-sequence.test.tsx` caused by stale mocks and assertions after the pack flow phase refactor.
+- Updated mock `useSkillsData` to return skills matching SETS entries (source: "business-discovery") so packs render correctly.
+- Updated mock `SealedPack` to expose `onCardSettleComplete` instead of removed `onCloseMorphComplete`/`onDropElevationComplete`.
+- Updated mock `PackOpener` to expose `isRisingToApex`/`onApexComplete` for the new `closing-apex` phase.
+- Updated test 1 phase chain: added `closing-apex` step, replaced `layout-morph-out`/`drop-elevation` with `card-settling`.
+- Updated test 4 source-string assertion anchor from removed `"CLOSE morph-back"` to `flowPhaseRef.current === "card-settling"`.
+- Removed stale `expectedCollapseRef` assertion from test 5.
+- All 6 tests pass.
+
 ## 2026-06-05 — Alignment feedback emphasize option
 
 - Captured the visible `$investigate` invocation under `prompts/investigate/skill-prompt-20260605-002257-alignment-feedback-emphasize.md`.
