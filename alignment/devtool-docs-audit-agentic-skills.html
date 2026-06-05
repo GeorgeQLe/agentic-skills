@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devtool Docs Audit — agentic-skills (2026-06-05 Confirmed)</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; }
+main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; overflow-wrap: break-word; max-width: 100%; }
+h1 { color: #fff; font-size: 1.75rem; margin-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+h3 { color: #fff; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+h4 { color: var(--text); font-size: 1rem; margin-top: 1rem; margin-bottom: 0.4rem; }
+p { margin-bottom: 0.75rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; overflow-x: auto; margin-bottom: 1rem; font-size: 0.85rem; }
+ul, ol { margin-left: 1.5rem; margin-bottom: 0.75rem; }
+li { margin-bottom: 0.3rem; }
+
+.status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+.status-confirmed { background: rgba(63, 185, 80, 0.2); color: var(--green); border: 1px solid var(--green); }
+
+.confirmed-block { background: rgba(63, 185, 80, 0.08); border: 1px solid var(--green); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+.confirmed-block h3 { color: var(--green); margin-top: 0; }
+
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+.toc h3 { margin-top: 0; color: var(--accent); }
+.toc ul { list-style: none; margin-left: 0; }
+.toc li { margin-bottom: 0.4rem; }
+.toc a { font-size: 0.95rem; }
+
+.finding-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; }
+.finding-header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 0.75rem; }
+.severity { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+.sev-p1 { background: rgba(248, 81, 73, 0.2); color: var(--red); }
+.sev-p2 { background: rgba(210, 153, 34, 0.2); color: var(--orange); }
+.sev-p3 { background: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
+.resolved { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+
+.evidence-block { background: rgba(88, 166, 255, 0.05); border-left: 3px solid var(--accent); padding: 0.75rem 1rem; margin: 0.5rem 0; border-radius: 0 4px 4px 0; font-size: 0.9rem; }
+.resolution-block { background: rgba(63, 185, 80, 0.05); border-left: 3px solid var(--green); padding: 0.75rem 1rem; margin: 0.5rem 0; border-radius: 0 4px 4px 0; font-size: 0.9rem; }
+
+div[style*="overflow-x"] { margin-bottom: 1rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.6rem 0.75rem; border: 1px solid var(--border); }
+td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(22, 27, 34, 0.5); }
+
+.approval-record { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; }
+.approval-record h4 { color: var(--purple); margin-top: 0; }
+.approval-entry { padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+.approval-entry:last-child { border-bottom: none; }
+
+@media (max-width: 860px) {
+  main { padding: 1.5rem 1rem; }
+  h1 { font-size: 1.4rem; }
+}
+@media (max-width: 560px) {
+  main { padding: 1rem 0.75rem; }
+  h1 { font-size: 1.2rem; }
+  .finding-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<h1>Devtool Docs Audit — agentic-skills</h1>
+<p><span class="status-badge status-confirmed">confirmed</span> &nbsp; 2026-06-05 &nbsp; Third-pass documentation audit</p>
+<p>Third-pass audit of developer-facing documentation for the <code>agentic-skills</code> shared skill library. All P1 and P2 findings have been implemented. This page is current for the completed alignment cycle and remains amendable when later changes extend the conclusions.</p>
+
+<!-- CONFIRMED STATUS BLOCK -->
+<div class="confirmed-block">
+<h3>Confirmation Record</h3>
+<ul>
+<li><strong>alignment_status:</strong> confirmed</li>
+<li><strong>confirmed_date:</strong> 2026-06-05</li>
+<li><strong>confirmed_artifacts:</strong>
+<ul>
+<li><code>research/devtool-docs-audit-2026-06-04.md</code> — canonical audit report (dated, preserves prior)</li>
+<li><code>docs/QUICKSTART.md</code> — new quickstart guide with AFPS workflow lead</li>
+<li><code>docs/troubleshooting.md</code> — new symptom-led troubleshooting page</li>
+<li><code>docs/scripts-reference.md</code> — new compact command index</li>
+<li><code>README.md</code> — added Prerequisites section, Troubleshooting section, quickstart link</li>
+<li><code>docs/skill-anatomy.md</code> — added minimal SKILL.md template and "First Time?" callout</li>
+<li><code>docs/packs.md</code> — added Team Setup Checklist section</li>
+<li>6 research files — added dated reconciliation notes for stale <code>install.sh</code> references</li>
+</ul>
+</li>
+<li><strong>approval_source:</strong> User-provided compiled YAML with all 7 gates answered</li>
+<li><strong>prior_review_archived:</strong> <code>docs/history/archive/2026-06-05/120000/alignment/devtool-docs-audit-agentic-skills-review.html</code></li>
+</ul>
+<p>This page is finished and current for the completed alignment cycle. It remains amendable when later research changes or extends the conclusions.</p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc" id="toc">
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#verdict">Executive Verdict</a></li>
+<li><a href="#findings">Findings &amp; Resolutions (9 items: 3 P1, 4 P2, 2 P3)</a></li>
+<li><a href="#progress">Progress Since Prior Audit</a></li>
+<li><a href="#evidence-matrix">Evidence Matrix</a></li>
+<li><a href="#confidence">Assumptions &amp; Confidence</a></li>
+<li><a href="#approval-record">Approval Record</a></li>
+</ul>
+</div>
+
+<!-- EXECUTIVE VERDICT -->
+<h2 id="verdict">Executive Verdict</h2>
+
+<p><strong>P0: none.</strong> No critical documentation blockers. An experienced shell user can install and use the tool from existing docs.</p>
+<p><strong>P1 (3 findings) — all resolved:</strong></p>
+<ul>
+<li><strong>First-success route</strong> — created <code>docs/QUICKSTART.md</code> with AFPS workflow lead and linked from README</li>
+<li><strong>Troubleshooting</strong> — created <code>docs/troubleshooting.md</code> and added summary table to README</li>
+<li><strong>Prerequisites</strong> — added Prerequisites section to README before Initialization</li>
+</ul>
+<p><strong>P2 (4 findings) — all resolved:</strong></p>
+<ul>
+<li>Added minimal SKILL.md template and "First Time?" callout to <code>docs/skill-anatomy.md</code></li>
+<li>Created compact command index at <code>docs/scripts-reference.md</code></li>
+<li>Added Team Setup Checklist to <code>docs/packs.md</code></li>
+<li>Added dated reconciliation notes to 6 research files with stale <code>install.sh</code> references</li>
+</ul>
+<p><strong>P3 (2 findings) — deferred:</strong> no visual proof artifacts, static benchmark trends</p>
+
+<!-- FINDINGS -->
+<h2 id="findings">Findings &amp; Resolutions</h2>
+
+<!-- P1-1 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p1">P1</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">First-Success Route</h3>
+</div>
+<p>README explained the pieces (init.sh, pack install, CLI reload) but did not package a guided path from clone to visible working skill.</p>
+<div class="evidence-block">
+<strong>Evidence:</strong> No quickstart section existed. Workflow split across 3+ docs. Prior audit recommended this; not yet added.
+</div>
+<div class="resolution-block">
+<strong>Resolution:</strong> Created <code>docs/QUICKSTART.md</code> with prerequisites, 6-step guided path, AFPS workflow lead-in, and "What's Next" pointers. Linked from README Prerequisites section. User requested separate doc (not inline README section) and AFPS skills workflow lead.
+</div>
+</div>
+
+<!-- P1-2 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p1">P1</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">Troubleshooting Fragmented</h3>
+</div>
+<p>Recovery information existed across 5+ docs but no symptom-led support path existed.</p>
+<div class="evidence-block">
+<strong>Evidence:</strong> No <code>docs/troubleshooting.md</code>. Recovery facts scattered across README, packs.md, operating-modes.md, skills-reference.md.
+</div>
+<div class="resolution-block">
+<strong>Resolution:</strong> Created <code>docs/troubleshooting.md</code> with quick-reference symptom table (10 rows) and detailed recovery procedures for skill visibility, drift, jq errors, lock contention, global drift, Windows/WSL, and validation. Added summary troubleshooting table to README per user request.
+</div>
+</div>
+
+<!-- P1-3 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p1">P1</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">Prerequisites Undocumented</h3>
+</div>
+<p>Hard system dependencies (jq, Claude Code/Codex, bash) were never listed upfront.</p>
+<div class="evidence-block">
+<strong>Evidence:</strong> jq required for pack operations (pack.sh line 49 error). pnpm required for tests. No Prerequisites section in README.
+</div>
+<div class="resolution-block">
+<strong>Resolution:</strong> Added Prerequisites section to README.md before Initialization, listing bash, jq (with install commands), Claude Code/Codex, and pnpm (optional).
+</div>
+</div>
+
+<!-- P2-4 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p2">P2</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">No Skill Authoring Template</h3>
+</div>
+<p>First-time skill authors had no copyable starting point despite thorough reference docs.</p>
+<div class="resolution-block">
+<strong>Resolution:</strong> Added "First Time?" section to <code>docs/skill-anatomy.md</code> with pointers to <code>/skill-interview</code>, <code>/create-agentic-skill</code>, and <code>/targeted-skill-builder</code>. Added a minimal SKILL.md template with required fields annotated.
+</div>
+</div>
+
+<!-- P2-5 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p2">P2</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">Script Reference Scattered</h3>
+</div>
+<p>Commands spread across 5+ docs with no compact index.</p>
+<div class="resolution-block">
+<strong>Resolution:</strong> Created <code>docs/scripts-reference.md</code> with grouped tables: Install &amp; Global, Project Packs, Mode &amp; Handoff, Skill Hygiene, Global Skill Management, Testing &amp; Benchmarks, Showcase &amp; Data Generation, Alignment Page Management. Linked from README Troubleshooting section.
+</div>
+</div>
+
+<!-- P2-6 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p2">P2</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">Team Adoption Checklist Absent</h3>
+</div>
+<p>Team use mechanics documented but no actionable checklist existed.</p>
+<div class="resolution-block">
+<strong>Resolution:</strong> Added "Team Setup Checklist" section to <code>docs/packs.md</code> with 7 steps: checkout path, init, commit policy, generated roots, refresh after pull, CLI restart, and shipping workflow agreement.
+</div>
+</div>
+
+<!-- P2-7 -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p2">P2</span>
+<span class="severity resolved">Resolved</span>
+<h3 style="margin:0;">Stale install.sh References</h3>
+</div>
+<p>Six research files referenced <code>install.sh</code> (renamed to <code>init.sh</code>).</p>
+<div class="resolution-block">
+<strong>Resolution:</strong> Added dated reconciliation blockquote to each file noting the rename. Files treated as historical snapshots with dated caveat rather than rewriting all references (which would break line-number citations).
+<br><strong>Affected:</strong> devtool-adoption.md, devtool-dx-journey.md, devtool-monetization.md, devtool-user-map.md, devtool-integration-map.md, devtool-positioning.md
+</div>
+</div>
+
+<!-- P3 deferred -->
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p3">P3</span>
+<h3 style="margin:0;">No Visual Proof Artifacts (deferred)</h3>
+</div>
+<p>29 HTML alignment pages exist but no screenshots/recordings. Low priority — HTML pages serve power users and the tool is CLI-driven.</p>
+</div>
+
+<div class="finding-card">
+<div class="finding-header">
+<span class="severity sev-p3">P3</span>
+<h3 style="margin:0;">Benchmark Trends Static (deferred)</h3>
+</div>
+<p>Benchmark matrix is current but point-in-time only. No time-series analysis. Sufficient for current needs.</p>
+</div>
+
+<!-- PROGRESS -->
+<h2 id="progress">Progress Since Prior Audit (2026-06-02)</h2>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Prior Backlog Item</th><th>Status</th><th>Resolution</th></tr>
+<tr><td>1. Add README first-success and proof sections</td><td style="color:var(--green)">Done</td><td>Created docs/QUICKSTART.md, linked from README</td></tr>
+<tr><td>2. Add docs/troubleshooting.md</td><td style="color:var(--green)">Done</td><td>Created with symptom table + detailed procedures</td></tr>
+<tr><td>3. Add script reference</td><td style="color:var(--green)">Done</td><td>Created docs/scripts-reference.md</td></tr>
+<tr><td>4. Add team adoption checklist</td><td style="color:var(--green)">Done</td><td>Added to docs/packs.md</td></tr>
+<tr><td>5. Reconcile stale install.sh references</td><td style="color:var(--green)">Done</td><td>Added dated reconciliation notes to 6 files</td></tr>
+</table>
+</div>
+<p>All five prior items resolved. Four new findings added: prerequisites (P1, resolved), skill template (P2, resolved), visual proof (P3, deferred), benchmark trends (P3, deferred).</p>
+
+<!-- EVIDENCE MATRIX -->
+<h2 id="evidence-matrix">Evidence Matrix</h2>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Claim</th><th>Evidence</th><th>Confidence</th><th>Resolution</th></tr>
+<tr>
+<td>No P0 blocker</td>
+<td>README covers init, pack install, restart, mode</td>
+<td>High</td>
+<td>No emergency rewrite needed</td>
+</tr>
+<tr>
+<td>First-success implicit</td>
+<td>No quickstart section; workflow split across 3+ docs</td>
+<td>High</td>
+<td>Created docs/QUICKSTART.md</td>
+</tr>
+<tr>
+<td>Troubleshooting fragmented</td>
+<td>Recovery info across 5 docs; no symptom table</td>
+<td>High</td>
+<td>Created docs/troubleshooting.md + README section</td>
+</tr>
+<tr>
+<td>Prerequisites undocumented</td>
+<td>jq hard-required; not in README</td>
+<td>High</td>
+<td>Added Prerequisites to README</td>
+</tr>
+<tr>
+<td>No skill template</td>
+<td>Anatomy docs thorough; no skeleton</td>
+<td>Medium-high</td>
+<td>Added template to skill-anatomy.md</td>
+</tr>
+<tr>
+<td>Script reference scattered</td>
+<td>Commands in 5+ docs</td>
+<td>Medium-high</td>
+<td>Created docs/scripts-reference.md</td>
+</tr>
+<tr>
+<td>Team checklist absent</td>
+<td>Mechanics documented; checklist missing</td>
+<td>Medium-high</td>
+<td>Added checklist to docs/packs.md</td>
+</tr>
+<tr>
+<td>Stale installer refs</td>
+<td>install.sh absent; research uses it</td>
+<td>High</td>
+<td>Added dated reconciliation notes</td>
+</tr>
+</table>
+</div>
+
+<!-- CONFIDENCE -->
+<h2 id="confidence">Assumptions &amp; Confidence</h2>
+
+<ul>
+<li><strong>High confidence:</strong> All P1 and P2 items have been addressed with concrete documentation changes</li>
+<li><strong>High confidence:</strong> jq is now listed as a prerequisite upfront</li>
+<li><strong>Medium-high confidence:</strong> The skill template and script reference will meaningfully reduce onboarding friction</li>
+<li><strong>Medium confidence:</strong> Team adoption checklist may need revision as team usage patterns emerge</li>
+</ul>
+
+<h3>What Would Change These Conclusions</h3>
+<ul>
+<li>If user feedback reveals the quickstart flow is still unclear, the QUICKSTART.md may need revision</li>
+<li>If new scripts are added, docs/scripts-reference.md should be updated</li>
+<li>If team adoption surfaces new friction points, the packs.md checklist should be extended</li>
+</ul>
+
+<!-- APPROVAL RECORD -->
+<h2 id="approval-record">Approval Record</h2>
+
+<div class="approval-record">
+<h4>Gate Decisions (from user-compiled YAML)</h4>
+
+<div class="approval-entry">
+<strong>First-Success Route</strong> (proposed file changes)<br>
+Answer: <code>separate-doc</code> — Create separate docs/QUICKSTART.md<br>
+Notes: "We can also lead with how to get started with the AFPS skills workflow"
+</div>
+
+<div class="approval-entry">
+<strong>Troubleshooting Format</strong> (proposed file changes)<br>
+Answer: <code>dedicated-page</code> — Create dedicated docs/troubleshooting.md<br>
+Notes: "also add a troubleshooting section to readme.md"
+</div>
+
+<div class="approval-entry">
+<strong>Prerequisites</strong> (proposed file changes)<br>
+Answer: <code>add-section</code> — Add Prerequisites section to README.md
+</div>
+
+<div class="approval-entry">
+<strong>Evidence Coverage</strong> (evidence coverage)<br>
+Answer: <code>sufficient</code> — Evidence is sufficient
+</div>
+
+<div class="approval-entry">
+<strong>Scope &amp; Non-Goals</strong> (scope/non-goals)<br>
+Answer: <code>scope-correct</code> — Scope is correct as-is
+</div>
+
+<div class="approval-entry">
+<strong>Artifact Destination</strong> (artifact destination)<br>
+Answer: <code>research-dated</code> — research/devtool-docs-audit-2026-06-04.md (dated, preserves prior)
+</div>
+
+<div class="approval-entry">
+<strong>Post-Approval Route</strong> (post-approval route)<br>
+Answer: <code>implement-all</code> — Implement all P1+P2 fixes
+</div>
+</div>
+
+</main>
+</body>
+</html>

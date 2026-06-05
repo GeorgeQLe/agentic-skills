@@ -1,5 +1,7 @@
 # Devtool Integration Map — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: maps where this specific repo — the `agentic-skills` shared skill library — fits into a developer's stack. Grounded in observable repo signals (`README.md`, `install.sh`, `scripts/pack.sh`, `scripts/agent-mode.sh`, `docs/operating-modes.md`, `docs/packs.md`, `.agents/project.json`, pack layout under `packs/`). Not a generic devtool integration checklist.
 
 Continuity: this file is the second step in the devtool research chain and assumes the audience framing from `research/devtool-user-map.md` (solo builders, repo-embedded contributors, hybrid-mode orchestrators, and the Anthropic/OpenAI subscription-paying economic buyers above them).

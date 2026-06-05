@@ -8,6 +8,30 @@ This repository uses a versioned skillpack layout:
 
 Keep this structure. It supports agent-specific command syntax, pack installation, pinning, benchmarks, generated showcase data, and historical audits.
 
+## First Time?
+
+If you are creating your first skill, use `/skill-interview` (Claude) or `$skill-interview` (Codex) for a guided flow. For bulk creation from a workflow gap, use `/create-agentic-skill` or `/targeted-skill-builder`.
+
+### Minimal SKILL.md Template
+
+```yaml
+---
+name: my-skill
+description: One-line trigger description for when this skill should activate
+version: v0.0
+---
+
+# My Skill
+
+What this skill does in one sentence.
+
+## Output
+
+Describe what this skill produces: file writes, research artifacts, task updates, etc.
+```
+
+Required frontmatter: `name`, `description`, `version`. Everything else is optional. See below for the full field reference.
+
 ## Frontmatter
 
 Every active `SKILL.md` must include YAML frontmatter with:

@@ -1,5 +1,7 @@
 # Devtool Adoption — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: maps how developers actually find, try, trust, and keep using this specific repo — the `agentic-skills` shared skill library — and what proof artifacts and activation signals exist today versus what is aspirational. Grounded in observable repo signals (`README.md`, `install.sh`, `scripts/pack.sh`, `packs/devtool/**/SKILL.md`, `global/{claude,codex}/create-skill/SKILL.md`, `tasks/history.md`, `tasks/todo.md`, `CLAUDE.md`, `docs/packs.md`, `docs/operating-modes.md`). Not a generic devtool adoption playbook.
 
 Continuity: fourth step in the devtool research chain. Assumes audience framing from `research/devtool-user-map.md`, setup mechanics from `research/devtool-integration-map.md`, and the lived-in sequence from `research/devtool-dx-journey.md`. This file answers "how does the next developer arrive, and why do they stay?" rather than "what does install look like?".

@@ -1,5 +1,7 @@
 # Devtool DX Journey — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: maps the developer experience of adopting and living with this specific repo — the `agentic-skills` shared skill library — from install through long-term retention. Grounded in observable repo signals (`README.md`, `install.sh`, `scripts/pack.sh`, `scripts/agent-mode.sh`, `scripts/skill-deps.sh`, `scripts/skill-versions.sh`, `docs/operating-modes.md`, `docs/packs.md`, `CLAUDE.md`, `.agents/project.json`). Not a generic devtool DX playbook.
 
 Continuity: this is the third step in the devtool research chain and assumes the audience framing from `research/devtool-user-map.md` (solo builders, repo-embedded contributors, hybrid-mode orchestrators) and the setup mechanics from `research/devtool-integration-map.md` (two-CLI symlink install, `.agents/project.json` project designation, CLI-restart requirement). Sections below should be read as the lived sequence a developer moves through, not as discrete, optional stations.

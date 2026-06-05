@@ -1,5 +1,7 @@
 # Devtool User Map — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: maps the audience and buying context for this specific repository — the `agentic-skills` shared skill library for Claude Code and OpenAI Codex. Grounded in observable repo signals (`README.md`, `docs/skills-reference.md`, `docs/operating-modes.md`, `docs/packs.md`, `CLAUDE.md`, `scripts/pack.sh`, pack layout under `packs/`). Not a generic devtool persona sheet.
 
 ## Developer users

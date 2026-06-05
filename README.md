@@ -9,6 +9,15 @@ The library now uses a two-layer model:
 
 This keeps game research out of B2B SaaS sessions, and keeps business-product assumptions out of game and devtool projects.
 
+## Prerequisites
+
+- **bash** shell (macOS, Linux, or WSL on Windows)
+- **jq** for pack installation: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu)
+- **Claude Code** or **OpenAI Codex** installed on your machine
+- **pnpm** (optional, for running tests): `npm install -g pnpm`
+
+For a guided first-use walkthrough, see [`docs/QUICKSTART.md`](docs/QUICKSTART.md).
+
 ## Initialization
 
 ```bash
@@ -382,3 +391,16 @@ pnpm --dir tests test:live:codex    # Codex only
 ```
 
 The live harness runs in temporary git repositories, requests structured JSON from `claude -p` or `codex exec`, and validates skill behavior such as `analyze-sessions` versus `session-triage` routing. Routine `pnpm --dir tests test` does not run live model calls.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Skill installed but not visible | Restart Claude Code or start a fresh Codex session |
+| `jq required for write operations` | Install jq: `brew install jq` or `apt install jq` |
+| Skills out of date after git pull | `scripts/pack.sh doctor` then `scripts/pack.sh refresh` |
+| Broken skill references | `./scripts/skill-deps.sh --broken` |
+
+For detailed recovery procedures, see [`docs/troubleshooting.md`](docs/troubleshooting.md).
+
+For a complete script command index, see [`docs/scripts-reference.md`](docs/scripts-reference.md).

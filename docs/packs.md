@@ -244,6 +244,18 @@ scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers 
 
 Global installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports global drift against `global/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the global "refresh").
 
+## Team Setup Checklist
+
+For teams adopting agentic-skills across multiple developers:
+
+1. **Choose a checkout path.** Each developer clones this repo locally. The path does not need to match across developers, but `scripts/pack.sh refresh` may need to re-run if the checkout moves.
+2. **Run `./init.sh` once per developer.** This installs global core skills to each developer's `~/.claude/skills/` and `~/.codex/skills/`.
+3. **Commit `.agents/project.json`.** This file records the project's pack designation and should be checked into the target project repository.
+4. **Never commit generated skill roots.** `.claude/skills/` and `.codex/skills/` in consumer projects are generated from `.agents/project.json`. Add them to `.gitignore`.
+5. **Run `scripts/pack.sh refresh` after pulling pack changes.** When `.agents/project.json` changes upstream (e.g. a new pack is added), each developer runs refresh to recreate their local skill roots.
+6. **Restart CLI after install/remove/refresh.** Skills are not hot-reloaded. Claude Code: `/reload-skills` then `/clear` or restart. Codex: fresh session.
+7. **Agree on shipping workflow.** The default is direct-to-primary (commit and push to main/master). If your team uses feature branches, note this in `.agents/project.json` `notes` or your project's CLAUDE.md.
+
 ## Former Global Domain Skills
 
 Business/product workflows that used to be globally installed now live in narrow business packs. Prefer the current lane:

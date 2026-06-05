@@ -1,5 +1,7 @@
 # Devtool Monetization — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: designs realistic monetization for this repository — the `agentic-skills` shared skill library for Claude Code and OpenAI Codex. Grounded in the prior devtool research chain (`research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`, `research/devtool-positioning.md`) and observable repo constraints (`README.md`, `CLAUDE.md`, `docs/operating-modes.md`, `docs/packs.md`, `scripts/pack.sh`, `install.sh`). This is not a generic SaaS pricing sheet.
 
 Continuity: sixth step in the devtool research chain. The positioning artifact frames `agentic-skills` as a local-first workflow library, not a hosted agent platform. Monetization should preserve that trust claim: keep the core inspectable, local, and usable without telemetry or a managed control plane.

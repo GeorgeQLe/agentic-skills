@@ -1,5 +1,7 @@
 # Devtool Positioning — agentic-skills
 
+> **Terminology note (2026-06-05):** References to `install.sh` in this document reflect the installer name at time of writing. The script has since been renamed to `init.sh`. See `README.md` for current commands.
+
 Scope: positions this specific repository — the `agentic-skills` shared skill library for Claude Code and OpenAI Codex — against the alternatives a developer actually considers. Grounded in observable repo signals (`README.md`, `docs/operating-modes.md`, `docs/packs.md`, `docs/skills-reference.md`, `CLAUDE.md`, `scripts/pack.sh`, `install.sh`, `tasks/history.md`) and the prior devtool research chain (`research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`). Not a generic positioning sheet for AI coding.
 
 Continuity: fifth step in the devtool research chain. Assumes the audience from `research/devtool-user-map.md`, setup and compatibility constraints from `research/devtool-integration-map.md`, lived adoption sequence from `research/devtool-dx-journey.md`, and proof/adoption loops from `research/devtool-adoption.md`.
