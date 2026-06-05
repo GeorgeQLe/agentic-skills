@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Error Classification — Cross-Session Analysis</title>
+<style>
+  :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --red: #f85149; --orange: #d29922; --green: #3fb950; --purple: #bc8cff; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  h2 { font-size: 1.3rem; margin: 2rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+  .subtitle { color: var(--muted); margin-bottom: 2rem; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+  .stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-label { color: var(--muted); font-size: 0.85rem; }
+  .category { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+  .category-header { display: flex; justify-content: space-between; align-items: center; }
+  .category-name { font-weight: 600; font-size: 1.05rem; }
+  .category-count { background: var(--border); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.85rem; }
+  .bar { height: 6px; background: var(--border); border-radius: 3px; margin: 0.5rem 0; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .example { background: var(--bg); border-left: 3px solid var(--border); padding: 0.6rem 1rem; margin: 0.5rem 0; font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  .severity-high { border-left-color: var(--red); }
+  .severity-med { border-left-color: var(--orange); }
+  .severity-low { border-left-color: var(--green); }
+  .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.75rem; margin-right: 0.3rem; }
+  .tag-claude { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-codex { background: rgba(188,140,255,0.15); color: var(--purple); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  th { color: var(--muted); font-weight: 600; }
+  .proj-bar { display: inline-block; height: 12px; background: var(--accent); border-radius: 3px; margin-right: 0.5rem; vertical-align: middle; }
+  .insight { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.2); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<h1>Agent Error Classification</h1>
+<p class="subtitle">Cross-session analysis of errors, corrections, and failures across Claude Code &amp; Codex history &bull; June 2026</p>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value">1,822</div>
+    <div class="stat-label">Total error-related messages</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">14</div>
+    <div class="stat-label">Error categories identified</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">1,136 / 686</div>
+    <div class="stat-label">Claude / Codex split</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">44+</div>
+    <div class="stat-label">Projects with errors</div>
+  </div>
+</div>
+
+<h2>Error Taxonomy</h2>
+
+<p>Errors classified into <strong>3 tiers</strong> by severity and actionability:</p>
+
+<h3>Tier 1 — Structural Errors (agent doing the wrong thing)</h3>
+<p style="color: var(--muted); font-size: 0.9rem;">These indicate fundamental misalignment between what the agent did and what was wanted.</p>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">1. Misunderstood User Intent</span>
+    <span class="category-count">22 occurrences (1.2%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 3%; background: var(--red);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent interprets a user request literally or incorrectly, producing the wrong output entirely.</p>
+  <div class="example severity-high">"ok when I said radio buttons, I meant a toggle"</div>
+  <div class="example severity-high">"no i mean sounds good for you to do the short pass..."</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 14</span> <span class="tag tag-codex">Codex: 8</span></p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">2. Scope Creep / Unwanted Changes</span>
+    <span class="category-count">16 occurrences (0.9%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 2.5%; background: var(--red);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent modifies code or adds features the user never asked for, breaking existing functionality or adding complexity.</p>
+  <div class="example severity-high">"woah wait why did you make that change to the index? everything in the old code works"</div>
+  <div class="example severity-high">"why did you ship to a feature branch, you are explicitly not supposed to!!!"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 2</span> <span class="tag tag-codex">Codex: 14</span> — Codex 7x more prone, likely due to autonomous execution without approval gates.</p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">3. Git Workflow Violations</span>
+    <span class="category-count">22 occurrences (1.2%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 3%; background: var(--red);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent ships to feature branches when told not to, restores deleted branches, or loses work during cherry-picks/merges.</p>
+  <div class="example severity-high">"why did you ship to a feature branch, you are explicitly not supposed to!!!"</div>
+  <div class="example severity-high">"when we did our branch merges and cherry picks, I think our skills lost a lot of the different fixes"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 16</span> <span class="tag tag-codex">Codex: 6</span></p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">4. Hallucination / Fabricated References</span>
+    <span class="category-count">7 occurrences (0.4%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 1%; background: var(--red);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent references APIs, files, or capabilities that don't exist. Low frequency but high cost per incident.</p>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 5</span> <span class="tag tag-codex">Codex: 2</span></p>
+</div>
+
+<h3>Tier 2 — Execution Errors (agent doing the right thing badly)</h3>
+<p style="color: var(--muted); font-size: 0.9rem;">Agent understood the intent but produced buggy or incomplete output.</p>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">5. Persistent / Repeated Failures</span>
+    <span class="category-count">275 occurrences (15.1%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 60%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Second largest category.</strong> User asks agent to retry something that failed previously, or reports the same issue persisting after a "fix." Indicates the agent's fix didn't address root cause.</p>
+  <div class="example severity-med">"can you try npm run build again?"</div>
+  <div class="example severity-med">"Ok the terminal is popping back up again, but we still have no interactivity"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 164</span> <span class="tag tag-codex">Codex: 111</span></p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">6. UI / Visual Bugs from Agent Changes</span>
+    <span class="category-count">151 occurrences (8.3%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 33%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent makes UI changes that produce visual regressions — broken layouts, wrong scroll behavior, incorrect positioning, phantom UI elements.</p>
+  <div class="example severity-med">"nope now the image looks warped, I think we just need to move the svgs up"</div>
+  <div class="example severity-med">"the list containers extend beyond the height of the board container. There is also no scroll"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 98</span> <span class="tag tag-codex">Codex: 53</span></p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">7. Type / API Contract Mismatches</span>
+    <span class="category-count">47 occurrences (2.6%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 10%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Frontend expects one shape, backend returns another. Includes JSON parse failures, unexpected status codes, type errors at runtime.</p>
+  <div class="example severity-med">"Failed to load sessions: [INVALID_RESPONSE] API returned unexpected data format"</div>
+  <div class="example severity-med">"Failed to check auth status: SyntaxError: Unexpected token '<', '&lt;!DOCTYPE'..."</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 38</span> <span class="tag tag-codex">Codex: 9</span> — Heavily Claude-skewed; Bismarck project accounts for most.</p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">8. State Management & Persistence Issues</span>
+    <span class="category-count">254 occurrences (13.9%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 55%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Cache not invalidated, sessions not reconnecting, auth state lost on refresh, login loops. Agents struggle with stateful systems.</p>
+  <div class="example severity-med">"when I hard refresh while keeping the session open, it does not reconnect"</div>
+  <div class="example severity-med">"we have to log in every time even if I reconnect to a session"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 134</span> <span class="tag tag-codex">Codex: 120</span></p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">9. Incomplete / Missing Functionality</span>
+    <span class="category-count">85 occurrences (4.7%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 18%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agent claims work is done but user discovers missing features, skipped steps, or incomplete implementations.</p>
+  <div class="example severity-med">"ok what about the missing features?"</div>
+  <div class="example severity-med">"did you add all of your findings? it seems quite light"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 36</span> <span class="tag tag-codex">Codex: 49</span> — Codex slightly more prone, possibly due to less interactive verification.</p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">10. Deployment & Infrastructure Errors</span>
+    <span class="category-count">143 occurrences (7.8%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 31%; background: var(--orange);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">Build failures, deploy misconfigurations, staging/prod environment issues, service connectivity problems.</p>
+  <div class="example severity-med">"the https://www.boston4.builders/admin/subscribers page is still down with... server-side exception"</div>
+  <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;"><span class="tag tag-claude">Claude: 84</span> <span class="tag tag-codex">Codex: 59</span></p>
+</div>
+
+<h3>Tier 3 — Navigational (course corrections, not errors)</h3>
+<p style="color: var(--muted); font-size: 0.9rem;">Normal direction-setting that's part of collaborative workflow. Not true agent mistakes.</p>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">11. Direction Corrections</span>
+    <span class="category-count">333 occurrences (18.3%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 72%; background: var(--green);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Largest category.</strong> Mostly "no, do X instead" — user steering rather than agent failures. High noise in this bucket.</p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">12. Bug Fix Requests</span>
+    <span class="category-count">319 occurrences (17.5%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 69%; background: var(--green);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">User asking agent to fix a bug — could be pre-existing or agent-introduced. Ambiguous attribution.</p>
+</div>
+
+<div class="category">
+  <div class="category-header">
+    <span class="category-name">13. Error Reports</span>
+    <span class="category-count">76 occurrences (4.2%)</span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width: 16%; background: var(--green);"></div></div>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">User pasting error messages for agent to diagnose. Informational, not necessarily agent-caused.</p>
+</div>
+
+<h2>Key Patterns &amp; Insights</h2>
+
+<div class="insight">
+  <h3>Pattern 1: Persistent Failures are the biggest real problem</h3>
+  <p>At 15.1% of all error messages, "try again" / "still broken" indicates agents frequently apply surface-level fixes that don't address root causes. The fix-retry loop wastes the most user time of any category.</p>
+</div>
+
+<div class="insight">
+  <h3>Pattern 2: State &amp; UI are the hardest domains for agents</h3>
+  <p>State management (13.9%) and UI visual bugs (8.3%) together account for 22% of errors. Both require runtime understanding that agents lack — they can't see the screen or observe session state. The <strong>bismarck-v0.3</strong> project alone generated 173 error messages, mostly auth/session/terminal state issues.</p>
+</div>
+
+<div class="insight">
+  <h3>Pattern 3: Codex is more prone to scope creep; Claude to type mismatches</h3>
+  <p>Codex scope-creep rate is 7x Claude's (14 vs 2), likely because it runs autonomously without approval gates. Claude generates 4x more type/API mismatches (38 vs 9), concentrated in full-stack projects where it modifies both frontend and backend without cross-checking contracts.</p>
+</div>
+
+<div class="insight">
+  <h3>Pattern 4: Project complexity correlates with error density</h3>
+  <p>Top error-producing projects are full-stack apps with auth, real-time features, and deployment pipelines: <strong>bismarck-v0.3</strong> (173), <strong>loadoutworks.com</strong> (111), <strong>metternich-engine</strong> (110), <strong>monorepo</strong> (90). Tooling repos like agentic-skills (59) produce fewer errors per session.</p>
+</div>
+
+<h2>Error Taxonomy Summary</h2>
+
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Category</th><th>Count</th><th>%</th><th>Severity</th><th>Actionability</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Misunderstood Intent</td><td>22</td><td>1.2%</td><td style="color:var(--red);">High</td><td>Clarification gates, confirm before executing</td></tr>
+    <tr><td>1</td><td>Scope Creep</td><td>16</td><td>0.9%</td><td style="color:var(--red);">High</td><td>Stricter diff scoping, approval before extra changes</td></tr>
+    <tr><td>1</td><td>Git Workflow Violations</td><td>22</td><td>1.2%</td><td style="color:var(--red);">High</td><td>Enforce CLAUDE.md git conventions via hooks</td></tr>
+    <tr><td>1</td><td>Hallucination</td><td>7</td><td>0.4%</td><td style="color:var(--red);">High</td><td>Verify-before-recommend pattern</td></tr>
+    <tr><td>2</td><td>Persistent Failures</td><td>275</td><td>15.1%</td><td style="color:var(--orange);">Med-High</td><td>Root-cause analysis requirement before retry</td></tr>
+    <tr><td>2</td><td>UI/Visual Bugs</td><td>151</td><td>8.3%</td><td style="color:var(--orange);">Medium</td><td>Screenshot verification, browser testing</td></tr>
+    <tr><td>2</td><td>Type/API Mismatches</td><td>47</td><td>2.6%</td><td style="color:var(--orange);">Medium</td><td>Shared types, contract-first development</td></tr>
+    <tr><td>2</td><td>State/Persistence</td><td>254</td><td>13.9%</td><td style="color:var(--orange);">Medium</td><td>State diagram review before changes</td></tr>
+    <tr><td>2</td><td>Incomplete Work</td><td>85</td><td>4.7%</td><td style="color:var(--orange);">Medium</td><td>Checklist verification before marking done</td></tr>
+    <tr><td>2</td><td>Deploy/Infra</td><td>143</td><td>7.8%</td><td style="color:var(--orange);">Medium</td><td>Staging validation, smoke tests</td></tr>
+    <tr><td>3</td><td>Direction Corrections</td><td>333</td><td>18.3%</td><td style="color:var(--green);">Low</td><td>Normal workflow — not actionable</td></tr>
+    <tr><td>3</td><td>Bug Fix Requests</td><td>319</td><td>17.5%</td><td style="color:var(--green);">Low</td><td>Ambiguous attribution</td></tr>
+    <tr><td>3</td><td>Error Reports</td><td>76</td><td>4.2%</td><td style="color:var(--green);">Low</td><td>Informational</td></tr>
+  </tbody>
+</table>
+
+<h2>Recommendations</h2>
+
+<table>
+  <thead>
+    <tr><th>Priority</th><th>Error Class</th><th>Mitigation</th><th>Type</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Persistent Failures</td><td>Add CLAUDE.md rule: "When a fix doesn't work on first try, perform root-cause analysis before attempting a second fix. Never retry the same approach."</td><td>Convention</td></tr>
+    <tr><td>2</td><td>State/Persistence</td><td>For stateful features (auth, sessions, cache), require agent to describe the state machine before modifying code.</td><td>Convention</td></tr>
+    <tr><td>3</td><td>UI/Visual Bugs</td><td>Enforce browser verification for all UI changes (already in CLAUDE.md — compliance is the gap).</td><td>Convention</td></tr>
+    <tr><td>4</td><td>Scope Creep (Codex)</td><td>Tighten Codex task scoping: one specific change per prompt, explicit "do not modify other files" when needed.</td><td>Workflow</td></tr>
+    <tr><td>5</td><td>Type/API Mismatches</td><td>Shared types between frontend/backend; agent must verify API contract before modifying either side.</td><td>Convention</td></tr>
+    <tr><td>6</td><td>Git Workflow</td><td>Pre-push hook enforcing branch policy; already in CLAUDE.md but Codex doesn't always read it.</td><td>Hook</td></tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  <p>Generated by /analyze-sessions &bull; Source: ~/.claude/history.jsonl (10,000 messages), ~/.codex/history.jsonl (6,548 messages) &bull; 2026-06-04</p>
+  <p>Methodology: keyword-based extraction of correction/error messages, then rule-based classification into 14 categories across 3 severity tiers. Messages can appear in multiple categories.</p>
+</div>
+
+</body>
+</html>

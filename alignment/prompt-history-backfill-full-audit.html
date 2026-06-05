@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt History Backfill — Full Audit Report</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; max-width: 100%; overflow-wrap: break-word; }
+h1 { color: #fff; margin-bottom: 0.5rem; }
+h2 { color: var(--accent); margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h3 { color: #fff; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+p, li { margin-bottom: 0.5rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.status-banner { background: var(--surface); border: 1px solid var(--purple); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+.status-banner .label { color: var(--purple); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc li { padding: 0.2rem 0; }
+.toc a { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-size: 0.9rem; }
+td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-size: 0.9rem; }
+tr:hover { background: rgba(88,166,255,0.04); }
+.table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-orange { background: rgba(210,153,34,0.15); color: var(--orange); }
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card .num { font-size: 2rem; font-weight: 700; color: #fff; }
+.stat-card .label { color: var(--text-muted); font-size: 0.85rem; }
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+.question-block h4 { color: var(--purple); margin-bottom: 0.5rem; }
+.question-block label { display: block; padding: 0.4rem 0; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 0.5rem; }
+.question-block input[type="radio"] { margin: 0; }
+.question-block textarea { width: 100%; min-height: 80px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; display: none; }
+.question-block textarea.visible { display: block; }
+.section-feedback { display: inline-flex; gap: 0.5rem; margin-left: 1rem; vertical-align: middle; }
+.section-feedback button { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 0.9rem; min-height: 44px; min-width: 44px; color: var(--text-muted); }
+.section-feedback button.active-up { color: var(--green); border-color: var(--green); }
+.section-feedback button.active-down { color: var(--red); border-color: var(--red); }
+.section-feedback button.active-clarify { color: var(--orange); border-color: var(--orange); }
+.section-feedback-area { display: none; margin-top: 0.5rem; }
+.section-feedback-area.visible { display: block; }
+.section-feedback-area textarea { width: 100%; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; font-family: inherit; }
+.compile-section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
+.compile-section button { background: var(--accent); color: #0d1117; border: none; border-radius: 6px; padding: 10px 20px; font-weight: 600; cursor: pointer; min-height: 44px; font-size: 0.95rem; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+.compile-section button:disabled { opacity: 0.4; cursor: not-allowed; }
+.compile-section button.feedback-btn { background: var(--orange); }
+.yaml-output { width: 100%; min-height: 120px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem; margin-top: 0.75rem; display: none; }
+.yaml-output.visible { display: block; }
+.copy-status { color: var(--green); font-size: 0.85rem; margin-left: 0.5rem; display: none; }
+@media (max-width: 860px) { main { padding: 1rem; } }
+@media (max-width: 560px) { .stat-grid { grid-template-columns: 1fr; } h1 { font-size: 1.4rem; } }
+</style>
+</head>
+<body>
+<main>
+
+<div class="status-banner">
+  <span class="label">Review</span> &mdash; Report-only audit. No files created or modified.
+</div>
+
+<h1>Prompt History Backfill &mdash; Full Audit</h1>
+<p style="color: var(--text-muted);">Generated 2026-06-04 &bull; Mode: report-only &bull; Repo: agentic-skills</p>
+
+<div class="toc">
+  <strong>Table of Contents</strong>
+  <ul>
+    <li><a href="#scope">Scope &amp; Sources</a></li>
+    <li><a href="#summary">Summary Statistics</a></li>
+    <li><a href="#missing-dirs">Skills Missing Prompt Directories</a></li>
+    <li><a href="#gap-analysis">Gap Analysis &mdash; Existing Directories</a></li>
+    <li><a href="#representative">Representative Uncaptured Prompts</a></li>
+    <li><a href="#coverage-gate">Coverage Checkpoint Gate</a></li>
+    <li><a href="#approval-gate">Approval Gate</a></li>
+    <li><a href="#compile">Compile Section</a></li>
+  </ul>
+</div>
+
+<h2 id="scope">Scope &amp; Sources</h2>
+<div class="section-feedback" data-section="scope">
+  <button onclick="toggleFeedback(this,'up')" title="Approve">&#128077;</button>
+  <button onclick="toggleFeedback(this,'down')" title="Reject">&#128078;</button>
+  <button onclick="toggleFeedback(this,'clarify')" title="Clarify">&#10067;</button>
+</div>
+<div class="section-feedback-area" data-section="scope">
+  <textarea placeholder="Notes on this section..."></textarea>
+</div>
+
+<div class="card">
+  <p><strong>Repository:</strong> /Users/georgele/projects/tools/agentic-skills</p>
+  <p><strong>Date range:</strong> All history (no date filter applied)</p>
+  <p><strong>Mode:</strong> Report-only (no files written)</p>
+  <h3 style="margin-top:1rem">Sources Read</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Source</th><th>Status</th><th>Size</th></tr>
+    <tr><td>~/.claude/history.jsonl</td><td><span class="badge badge-green">OK</span></td><td>9,964 lines</td></tr>
+    <tr><td>~/.codex/history.jsonl</td><td><span class="badge badge-green">OK</span></td><td>6,543 lines</td></tr>
+    <tr><td>~/.codex/sessions/**/*.jsonl</td><td><span class="badge badge-green">OK</span></td><td>2,676 session files</td></tr>
+  </table></div>
+  <p><strong>Sources missing:</strong> None</p>
+</div>
+
+<h2 id="summary">Summary Statistics</h2>
+<div class="section-feedback" data-section="summary">
+  <button onclick="toggleFeedback(this,'up')" title="Approve">&#128077;</button>
+  <button onclick="toggleFeedback(this,'down')" title="Reject">&#128078;</button>
+  <button onclick="toggleFeedback(this,'clarify')" title="Clarify">&#10067;</button>
+</div>
+<div class="section-feedback-area" data-section="summary">
+  <textarea placeholder="Notes on this section..."></textarea>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="num">15</div><div class="label">Existing prompt dirs</div></div>
+  <div class="stat-card"><div class="num">67</div><div class="label">Existing prompt files</div></div>
+  <div class="stat-card"><div class="num">13</div><div class="label">Skills missing dirs</div></div>
+  <div class="stat-card"><div class="num">~700</div><div class="label">Total invocations found</div></div>
+</div>
+
+<div class="card">
+  <h3>Invocations by Source</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Source</th><th>Unique High-Confidence</th><th>Distinct Skills</th><th>Date Range</th></tr>
+    <tr><td>Claude Code</td><td>54 (115 skill&times;session pairs)</td><td>18</td><td>2026-04-07 &ndash; 2026-06-04</td></tr>
+    <tr><td>Codex</td><td>599 (604 skill&times;session pairs)</td><td>20</td><td>2026-04-07 &ndash; 2026-06-03</td></tr>
+  </table></div>
+  <p style="color:var(--text-muted)">Existing prompt files cover May 30 &ndash; Jun 4 only. April &ndash; late May invocations are almost entirely uncaptured.</p>
+</div>
+
+<h2 id="missing-dirs">Skills Missing Prompt Directories</h2>
+<div class="section-feedback" data-section="missing-dirs">
+  <button onclick="toggleFeedback(this,'up')" title="Approve">&#128077;</button>
+  <button onclick="toggleFeedback(this,'down')" title="Reject">&#128078;</button>
+  <button onclick="toggleFeedback(this,'clarify')" title="Clarify">&#10067;</button>
+</div>
+<div class="section-feedback-area" data-section="missing-dirs">
+  <textarea placeholder="Notes on this section..."></textarea>
+</div>
+
+<p>These skills were invoked in conversation history but have <strong>no <code>prompts/</code> directory</strong> at all. Running <code>--apply</code> would create directories and backfill prompt files for high/medium confidence matches.</p>
+
+<div class="table-wrap"><table>
+  <tr><th>Skill</th><th>Claude Invocations</th><th>Codex Invocations</th><th>Total</th><th>Priority</th></tr>
+  <tr><td>run</td><td>10</td><td>75</td><td>85</td><td><span class="badge badge-red">High</span></td></tr>
+  <tr><td>targeted-skill-builder</td><td>3</td><td>56</td><td>59</td><td><span class="badge badge-red">High</span></td></tr>
+  <tr><td>benchmark-agent-review</td><td>1</td><td>32</td><td>33</td><td><span class="badge badge-red">High</span></td></tr>
+  <tr><td>provision-agentic-config</td><td>2</td><td>0</td><td>2</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>skill-interview</td><td>2</td><td>1</td><td>3</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>code-review</td><td>1</td><td>0</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>youtube-audit</td><td>1</td><td>0</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>review</td><td>0</td><td>3</td><td>3</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>idea-scope-brief</td><td>0</td><td>1</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>expert-review</td><td>0</td><td>1</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>verify</td><td>0</td><td>1</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>simplify</td><td>0</td><td>1</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+  <tr><td>schedule</td><td>0</td><td>1</td><td>1</td><td><span class="badge badge-orange">Medium</span></td></tr>
+</table></div>
+
+<p><strong>Backfill would create:</strong> 13 new <code>prompts/</code> directories and an estimated <strong>192 prompt files</strong> for these skills.</p>
+
+<h2 id="gap-analysis">Gap Analysis &mdash; Existing Directories</h2>
+<div class="section-feedback" data-section="gap-analysis">
+  <button onclick="toggleFeedback(this,'up')" title="Approve">&#128077;</button>
+  <button onclick="toggleFeedback(this,'down')" title="Reject">&#128078;</button>
+  <button onclick="toggleFeedback(this,'clarify')" title="Clarify">&#10067;</button>
+</div>
+<div class="section-feedback-area" data-section="gap-analysis">
+  <textarea placeholder="Notes on this section..."></textarea>
+</div>
+
+<p>These skills already have prompt directories but are missing earlier invocations (mostly April &ndash; late May). The "gap" column shows uncaptured invocations.</p>
+
+<div class="table-wrap"><table>
+  <tr><th>Skill</th><th>Existing Files</th><th>Total Invocations</th><th>Gap</th><th>Coverage</th></tr>
+  <tr><td>ship</td><td>4</td><td>~307</td><td>~303</td><td><span class="badge badge-red">1%</span></td></tr>
+  <tr><td>benchmark-test-skill</td><td>2</td><td>~85</td><td>~83</td><td><span class="badge badge-red">2%</span></td></tr>
+  <tr><td>session-triage</td><td>3</td><td>~37</td><td>~34</td><td><span class="badge badge-red">8%</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2</td><td>~34</td><td>~32</td><td><span class="badge badge-red">6%</span></td></tr>
+  <tr><td>ship-end</td><td>5</td><td>~32</td><td>~27</td><td><span class="badge badge-red">16%</span></td></tr>
+  <tr><td>exec</td><td>24</td><td>~28</td><td>~4</td><td><span class="badge badge-green">86%</span></td></tr>
+  <tr><td>pack</td><td>8</td><td>~18</td><td>~10</td><td><span class="badge badge-orange">44%</span></td></tr>
+  <tr><td>sync</td><td>2</td><td>~15</td><td>~13</td><td><span class="badge badge-red">13%</span></td></tr>
+  <tr><td>investigate</td><td>14</td><td>~15</td><td>~1</td><td><span class="badge badge-green">93%</span></td></tr>
+  <tr><td>skills</td><td>1</td><td>~87</td><td>~86</td><td><span class="badge badge-red">1%</span></td></tr>
+  <tr><td>init-agentic-skills</td><td>2</td><td>~2</td><td>0</td><td><span class="badge badge-green">100%</span></td></tr>
+  <tr><td>devtool-docs-audit</td><td>1</td><td>~1</td><td>0</td><td><span class="badge badge-green">100%</span></td></tr>
+  <tr><td>commit-and-push-by-feature</td><td>1</td><td>~1</td><td>0</td><td><span class="badge badge-green">100%</span></td></tr>
+  <tr><td>skill-creator</td><td>3</td><td>~3</td><td>0</td><td><span class="badge badge-green">100%</span></td></tr>
+  <tr><td>positioning</td><td>1</td><td>~1</td><td>0</td><td><span class="badge badge-green">100%</span></td></tr>
+</table></div>
+
+<p><strong>Note on bare invocations:</strong> Many <code>/ship</code>, <code>/run</code>, <code>/sync</code>, <code>/skills</code>, and <code>/ship-end</code> invocations are bare commands with no substantive prompt text. Backfilling bare <code>/ship</code> (prompt = just "/ship") may add volume without value. The <code>--apply</code> run would still capture them per the convention, but consider filtering to substantive prompts only.</p>
+
+<h2 id="representative">Representative Uncaptured Prompts</h2>
+<div class="section-feedback" data-section="representative">
+  <button onclick="toggleFeedback(this,'up')" title="Approve">&#128077;</button>
+  <button onclick="toggleFeedback(this,'down')" title="Reject">&#128078;</button>
+  <button onclick="toggleFeedback(this,'clarify')" title="Clarify">&#10067;</button>
+</div>
+<div class="section-feedback-area" data-section="representative">
+  <textarea placeholder="Notes on this section..."></textarea>
+</div>
+
+<p>High-value uncaptured prompts with substantive user context (not bare commands):</p>
+
+<div class="table-wrap"><table>
+  <tr><th>Skill</th><th>Date</th><th>Source</th><th>Prompt (excerpt)</th><th>Confidence</th></tr>
+  <tr><td>analyze-sessions</td><td>2026-04-11</td><td>Claude</td><td>"when we are doing the run and ship loops, I notice that there are pre-existing issues identified after a run..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2026-04-28</td><td>Claude</td><td>"determine if based on conversation history and past plan-interviews... if there are any issues from the par..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2026-04-29</td><td>Claude</td><td>"analyze the recent bismarck-v5 attempt to parallel work using codex..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2026-04-30</td><td>Claude</td><td>"how are the codex sessions running gpt 5.5 low vs gpt 5.5 xhigh doing?..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2026-05-01</td><td>Claude</td><td>"we have some holes in our skills where recommendations for next steps are broken..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>analyze-sessions</td><td>2026-05-07</td><td>Claude</td><td>"audit and compile a report on how we've been using the ux-variations skill and ui-interview..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>investigate</td><td>2026-04-19</td><td>Claude</td><td>"Do you agree with these recommendations? Do not implement anything..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>investigate</td><td>2026-05-27</td><td>Claude</td><td>"evaluate our skills to ensure we can properly support branching research..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>investigate</td><td>2026-06-03</td><td>Claude</td><td>"audit all of the skills to determine if there any language inconsistency..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>investigate</td><td>2026-06-03</td><td>Claude</td><td>"evaluate our skills list and determine if we should have a skill called repo glossary..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>skill-interview</td><td>2026-05-20</td><td>Claude</td><td>"we need a skill to help migrate an existing project to our new workflow..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>skill-interview</td><td>2026-05-20</td><td>Claude</td><td>"create a quiz me skill which will interrogate the user as to their understanding..."</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>targeted-skill-builder</td><td>2026-05-20</td><td>Claude</td><td>"desk-flip benchmark artifact-reference false-negative"</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>benchmark-test-skill</td><td>2026-05-20</td><td>Claude</td><td>"desk-flip"</td><td><span class="badge badge-green">High</span></td></tr>
+  <tr><td>benchmark-agent-review</td><td>2026-05-20</td><td>Claude</td><td>"desk-flip"</td><td><span class="badge badge-green">High</span></td></tr>
+</table></div>
+
+<h2 id="coverage-gate">Coverage Checkpoint Gate</h2>
+
+<div class="question-block" data-gate="coverage">
+  <h4>Gate: Coverage Checkpoint</h4>
+  <p>The audit found ~700 high-confidence invocations across 28 distinct skills, but only 67 prompt files exist covering ~5 days of a 2-month history window. The bulk of uncaptured invocations are bare commands (<code>/ship</code>, <code>/run</code>, <code>/sync</code>) with minimal prompt text.</p>
+
+  <p><strong>Q1: Should bare command invocations (prompt text &le; 20 chars, e.g. just "/ship") be backfilled?</strong></p>
+  <label><input type="radio" name="q1" value="yes" onchange="updateGate(this)"> Yes &mdash; backfill all invocations including bare commands</label>
+  <label><input type="radio" name="q1" value="substantive" onchange="updateGate(this)"> Only substantive &mdash; skip prompts under 20 chars</label>
+  <label><input type="radio" name="q1" value="other" onchange="updateGate(this)"> Other / None of the above</label>
+  <textarea class="q1-notes" placeholder="Additional notes..."></textarea>
+  <label><input type="radio" name="q1" value="clarify" onchange="updateGate(this)"> Need clarification</label>
+  <textarea class="q1-clarify" placeholder="What is unclear?"></textarea>
+</div>
+
+<div class="question-block" data-gate="scope">
+  <h4>Gate: Backfill Scope</h4>
+  <p>13 skills have zero prompt history. 10 skills have directories but significant gaps.</p>
+
+  <p><strong>Q2: Which skills should be prioritized for backfill?</strong></p>
+  <label><input type="radio" name="q2" value="all" onchange="updateGate(this)"> All skills &mdash; backfill everything with high/medium confidence</label>
+  <label><input type="radio" name="q2" value="missing-only" onchange="updateGate(this)"> Missing directories only &mdash; create the 13 new dirs, skip gap-filling existing ones</label>
+  <label><input type="radio" name="q2" value="high-value" onchange="updateGate(this)"> High-value only &mdash; analyze-sessions, investigate, skill-interview, targeted-skill-builder (substantive prompts)</label>
+  <label><input type="radio" name="q2" value="other" onchange="updateGate(this)"> Other / None of the above</label>
+  <textarea class="q2-notes" placeholder="Additional notes..."></textarea>
+  <label><input type="radio" name="q2" value="clarify" onchange="updateGate(this)"> Need clarification</label>
+  <textarea class="q2-clarify" placeholder="What is unclear?"></textarea>
+</div>
+
+<h2 id="approval-gate">Approval Gate</h2>
+
+<div class="question-block" data-gate="approval">
+  <h4>Gate: Proceed to Apply</h4>
+  <p><strong>Q3: Ready to run <code>/prompt-history-backfill --apply</code> with the selected scope?</strong></p>
+  <label><input type="radio" name="q3" value="apply" onchange="updateGate(this)"> Yes &mdash; run --apply with scope from Q1/Q2</label>
+  <label><input type="radio" name="q3" value="report-only" onchange="updateGate(this)"> No &mdash; keep as report-only for now</label>
+  <label><input type="radio" name="q3" value="other" onchange="updateGate(this)"> Other / None of the above</label>
+  <textarea class="q3-notes" placeholder="Additional notes..."></textarea>
+  <label><input type="radio" name="q3" value="clarify" onchange="updateGate(this)"> Need clarification</label>
+  <textarea class="q3-clarify" placeholder="What is unclear?"></textarea>
+</div>
+
+<h2 id="verification">Verification Notes</h2>
+<div class="card">
+  <ul>
+    <li>All candidate prompts extracted from visible user-facing fields only (display, text, leaf).</li>
+    <li>No hidden system/developer instructions, tool output, or assistant messages included.</li>
+    <li>No prompt files were created or modified (report-only mode).</li>
+    <li>No likely secrets detected in sampled candidate prompts.</li>
+    <li>All proposed writes would go under <code>prompts/&lt;skill-slug&gt;/</code> only.</li>
+  </ul>
+</div>
+
+<h2 id="compile">Compile Section</h2>
+<div class="compile-section">
+  <p id="unanswered-count" style="color: var(--orange); margin-bottom: 1rem;">3 required questions unanswered</p>
+  <button class="feedback-btn" onclick="compileFeedback()" id="feedback-btn" disabled>Compile Feedback YAML</button>
+  <button onclick="compileAnswers()" id="compile-btn" disabled>Compile Answers</button>
+  <button onclick="copyYaml()" id="copy-btn" style="display:none; background: var(--purple);">Copy YAML</button>
+  <span class="copy-status" id="copy-status">Copied!</span>
+  <textarea class="yaml-output" id="yaml-output" readonly></textarea>
+</div>
+
+</main>
+
+<script>
+const sectionFeedbackState = {};
+const gateAnswers = {};
+
+function toggleFeedback(btn, type) {
+  const section = btn.parentElement.dataset.section;
+  const area = document.querySelector(`.section-feedback-area[data-section="${section}"]`);
+  const buttons = btn.parentElement.querySelectorAll('button');
+
+  if (sectionFeedbackState[section] === type) {
+    delete sectionFeedbackState[section];
+    buttons.forEach(b => b.className = '');
+    area.classList.remove('visible');
+  } else {
+    sectionFeedbackState[section] = type;
+    buttons.forEach(b => b.className = '');
+    btn.className = type === 'up' ? 'active-up' : type === 'down' ? 'active-down' : 'active-clarify';
+    area.classList.add('visible');
+  }
+  updateCompileState();
+}
+
+function updateGate(input) {
+  const name = input.name;
+  const value = input.value;
+  gateAnswers[name] = value;
+
+  const block = input.closest('.question-block');
+  block.querySelectorAll('textarea').forEach(t => t.style.display = 'none');
+  if (value === 'other') {
+    const notes = block.querySelector(`.${name}-notes`);
+    if (notes) notes.style.display = 'block';
+  } else if (value === 'clarify') {
+    const clarify = block.querySelector(`.${name}-clarify`);
+    if (clarify) clarify.style.display = 'block';
+  } else {
+    const notes = block.querySelector(`.${name}-notes`);
+    if (notes) notes.style.display = 'block';
+  }
+  updateCompileState();
+}
+
+function updateCompileState() {
+  const total = 3;
+  const answered = Object.keys(gateAnswers).length;
+  const unanswered = total - answered;
+  const hasFeedback = Object.keys(sectionFeedbackState).length > 0;
+
+  document.getElementById('unanswered-count').textContent = unanswered > 0 ? `${unanswered} required question${unanswered > 1 ? 's' : ''} unanswered` : 'All questions answered';
+  document.getElementById('unanswered-count').style.color = unanswered > 0 ? 'var(--orange)' : 'var(--green)';
+  document.getElementById('compile-btn').disabled = unanswered > 0;
+  document.getElementById('feedback-btn').disabled = !hasFeedback;
+}
+
+function compileFeedback() {
+  const entries = Object.entries(sectionFeedbackState).map(([section, feedback]) => {
+    const area = document.querySelector(`.section-feedback-area[data-section="${section}"] textarea`);
+    const notes = area ? area.value : '';
+    const action = feedback === 'up' ? 'accept-as-is' : feedback === 'down' ? 'investigate-and-revise' : 'clarify-before-approval';
+    return `  - section: "${section}"\n    feedback: "${feedback}"\n    notes: "${notes.replace(/"/g, '\\"')}"\n    requested_agent_action: "${action}"`;
+  });
+
+  const yaml = `alignment_page: alignment/prompt-history-backfill-full-audit.html
+feedback_status: revision-request
+approval_status: not-approved
+unanswered_required_questions: ${3 - Object.keys(gateAnswers).length}
+section_feedback:
+${entries.join('\n')}`;
+
+  showYaml(yaml);
+}
+
+function compileAnswers() {
+  const gates = [];
+  ['q1', 'q2', 'q3'].forEach((q, i) => {
+    const val = gateAnswers[q] || '';
+    const status = val === 'other' ? 'other' : val === 'clarify' ? 'needs-clarification' : 'answered';
+    const labels = { q1: 'Coverage Checkpoint', q2: 'Backfill Scope', q3: 'Proceed to Apply' };
+    const types = { q1: 'coverage-checkpoint', q2: 'scope', q3: 'approval' };
+    const block = document.querySelector(`[data-gate="${types[q]}"]`);
+    let notes = '';
+    const notesEl = block ? block.querySelector(`.${q}-notes`) : null;
+    const clarifyEl = block ? block.querySelector(`.${q}-clarify`) : null;
+    if (val === 'other' && notesEl) notes = notesEl.value;
+    else if (val === 'clarify' && clarifyEl) notes = clarifyEl.value;
+    else if (notesEl) notes = notesEl.value;
+
+    gates.push(`  - section: "${labels[q]}"\n    gate_type: "${types[q]}"\n    status: "${status}"\n    answer: "${val}"\n    notes: "${notes.replace(/"/g, '\\"')}"`);
+  });
+
+  const feedback = Object.entries(sectionFeedbackState).map(([section, fb]) => {
+    const area = document.querySelector(`.section-feedback-area[data-section="${section}"] textarea`);
+    const notes = area ? area.value : '';
+    const action = fb === 'up' ? 'accept-as-is' : fb === 'down' ? 'investigate-and-revise' : 'clarify-before-approval';
+    return `  - section: "${section}"\n    feedback: "${fb}"\n    notes: "${notes.replace(/"/g, '\\"')}"\n    requested_agent_action: "${action}"`;
+  });
+
+  let yaml = `alignment_page: alignment/prompt-history-backfill-full-audit.html
+approval_status: ready-for-agent-review
+gate_answers:
+${gates.join('\n')}`;
+
+  if (feedback.length > 0) {
+    yaml += `\nsection_feedback:\n${feedback.join('\n')}`;
+  }
+
+  showYaml(yaml);
+}
+
+function showYaml(yaml) {
+  const output = document.getElementById('yaml-output');
+  output.value = yaml;
+  output.classList.add('visible');
+  document.getElementById('copy-btn').style.display = 'inline-block';
+  copyYaml();
+}
+
+function copyYaml() {
+  const output = document.getElementById('yaml-output');
+  const status = document.getElementById('copy-status');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(output.value).then(() => {
+      status.style.display = 'inline';
+      setTimeout(() => status.style.display = 'none', 2000);
+    }).catch(() => {
+      output.select();
+      status.textContent = 'Select & copy manually';
+      status.style.display = 'inline';
+    });
+  } else {
+    output.select();
+    status.textContent = 'Select & copy manually';
+    status.style.display = 'inline';
+  }
+}
+</script>
+</body>
+</html>

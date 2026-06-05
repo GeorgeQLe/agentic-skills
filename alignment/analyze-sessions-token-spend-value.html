@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Spend &amp; Value Analysis — Claude Code &amp; Codex</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; overflow-wrap: break-word; max-width: 100%; }
+h1 { color: #fff; font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.4rem; margin-top: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+h3 { color: #fff; font-size: 1.1rem; margin-top: 1.5rem; }
+.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
+.status-review { background: #1c2333; color: var(--purple); border: 1px solid var(--purple); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1rem; margin: 1rem 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card .value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+.stat-card .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; }
+.stat-card.green .value { color: var(--green); }
+.stat-card.orange .value { color: var(--orange); }
+.stat-card.accent .value { color: var(--accent); }
+.stat-card.purple .value { color: var(--purple); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.6rem 0.8rem; border-bottom: 2px solid var(--border); }
+td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+tr:hover td { background: rgba(88,166,255,0.05); }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem 0; }
+.toc a { color: var(--accent); text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.toc ul { margin: 0.3rem 0; padding-left: 1.5rem; }
+.toc li { margin: 0.3rem 0; }
+.caveat { background: #1c2333; border-left: 3px solid var(--orange); padding: 0.8rem 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.9rem; }
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0; }
+.question-block h4 { color: var(--purple); margin: 0 0 0.8rem; }
+.question-block label { display: block; padding: 0.5rem 0.8rem; margin: 0.3rem 0; border-radius: 4px; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 0.5rem; }
+.question-block label:hover { background: rgba(188,140,255,0.08); }
+.question-block input[type="radio"] { margin: 0; }
+.question-block textarea { width: 100%; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; font-size: 0.9rem; display: none; }
+.bar-chart { margin: 1rem 0; }
+.bar-row { display: flex; align-items: center; margin: 0.4rem 0; gap: 0.5rem; }
+.bar-label { min-width: 120px; font-size: 0.85rem; text-align: right; color: var(--text-muted); }
+.bar { height: 24px; border-radius: 4px; min-width: 2px; transition: width 0.3s; }
+.bar-value { font-size: 0.85rem; color: var(--text-muted); min-width: 80px; }
+.bar-claude { background: var(--accent); }
+.bar-codex { background: var(--green); }
+.section-feedback { display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0; flex-wrap: wrap; }
+.fb-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text-muted); cursor: pointer; font-size: 0.85rem; min-height: 44px; }
+.fb-btn:hover { border-color: var(--accent); }
+.fb-btn.active-up { border-color: var(--green); color: var(--green); background: rgba(63,185,80,0.1); }
+.fb-btn.active-down { border-color: var(--red); color: var(--red); background: rgba(248,81,73,0.1); }
+.fb-btn.active-clarify { border-color: var(--orange); color: var(--orange); background: rgba(210,153,34,0.1); }
+.fb-textarea { width: 100%; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; display: none; }
+.compile-section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+.compile-btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: 600; min-height: 44px; }
+.compile-btn.primary { background: var(--accent); color: #fff; }
+.compile-btn.primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+.compile-btn.secondary { background: var(--surface); color: var(--purple); border: 1px solid var(--purple); margin-right: 0.5rem; }
+.yaml-output { width: 100%; min-height: 120px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.8rem; font-family: monospace; font-size: 0.85rem; margin-top: 1rem; display: none; }
+.copy-status { font-size: 0.85rem; color: var(--green); margin-left: 0.5rem; display: none; }
+@media (max-width: 860px) { main { padding: 1.2rem 1rem; } .stat-grid { grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); } }
+@media (max-width: 560px) { main { padding: 1rem 0.75rem; } h1 { font-size: 1.4rem; } .bar-label { min-width: 80px; font-size: 0.8rem; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Token Spend &amp; Value Analysis <span class="status-badge status-review">review</span></h1>
+<p>Cross-platform analysis of Claude Code and Codex token usage, cost estimation, and value assessment across 6 months of development activity (Dec 2025 — Jun 2026).</p>
+
+<nav class="toc">
+<strong>Table of Contents</strong>
+<ul>
+<li><a href="#overview">Overview Stats</a></li>
+<li><a href="#source-comparison">Source Comparison: Claude vs Codex</a></li>
+<li><a href="#codex-deep">Codex Token Deep Dive</a></li>
+<li><a href="#claude-deep">Claude Code Activity Deep Dive</a></li>
+<li><a href="#cost">Cost Estimation</a></li>
+<li><a href="#value">Value Analysis</a></li>
+<li><a href="#efficiency">Efficiency &amp; Optimization</a></li>
+<li><a href="#evidence">Evidence Matrix</a></li>
+<li><a href="#assumptions">Assumptions &amp; Confidence</a></li>
+<li><a href="#gates">Approval Gates</a></li>
+<li><a href="#compile">Compile Section</a></li>
+</ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="overview">Overview Stats</h2>
+<div class="section-feedback" data-section="overview">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="overview" placeholder="Notes on this section..."></textarea>
+
+<div class="stat-grid">
+<div class="stat-card accent"><div class="value">16,546</div><div class="label">Total User Prompts</div></div>
+<div class="stat-card purple"><div class="value">3,366</div><div class="label">Total Sessions</div></div>
+<div class="stat-card green"><div class="value">~$7.2K</div><div class="label">Est. Combined Spend</div></div>
+<div class="stat-card orange"><div class="value">6 mo</div><div class="label">Dec 2025 — Jun 2026</div></div>
+</div>
+
+<div class="stat-grid">
+<div class="stat-card"><div class="value">9,998</div><div class="label">Claude User Prompts</div></div>
+<div class="stat-card"><div class="value">3,039</div><div class="label">Claude Sessions</div></div>
+<div class="stat-card"><div class="value">6,548</div><div class="label">Codex User Prompts</div></div>
+<div class="stat-card"><div class="value">327</div><div class="label">Codex Sessions (w/ tokens)</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="source-comparison">Source Comparison: Claude vs Codex</h2>
+<div class="section-feedback" data-section="source-comparison">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="source-comparison" placeholder="Notes on this section..."></textarea>
+
+<h3>Monthly Activity Comparison</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Month</th><th>Claude Prompts</th><th>Claude Sessions</th><th>Codex Prompts</th><th>Codex Sessions</th></tr>
+<tr><td>2025-12</td><td>190</td><td>8</td><td>—</td><td>—</td></tr>
+<tr><td>2026-01</td><td>1,309</td><td>289</td><td>89</td><td>13</td></tr>
+<tr><td>2026-02</td><td>1,786</td><td>730</td><td>—</td><td>—</td></tr>
+<tr><td>2026-03</td><td>2,544</td><td>1,039</td><td>176</td><td>36</td></tr>
+<tr><td>2026-04</td><td>2,468</td><td>993</td><td>3,851</td><td>1,409</td></tr>
+<tr><td>2026-05</td><td>1,553</td><td>680</td><td>2,292</td><td>1,035</td></tr>
+<tr><td>2026-06</td><td>148</td><td>64</td><td>140</td><td>71</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Key Observation: Platform Shift</h3>
+<p>Claude Code dominated Jan–Mar 2026 (sole primary tool). <strong>Codex adoption exploded in April</strong> — going from 176 prompts in March to 3,851 in April. By May, Codex surpassed Claude in raw prompt volume. This coincides with Codex becoming production-ready and your shift to parallel autonomous workflows.</p>
+<p>Claude Code usage dropped ~37% from April to May, suggesting active migration of certain workflow types to Codex rather than net-new capacity.</p>
+</div>
+
+<h3>Claude Code Activity Density Over Time</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Month</th><th>Messages</th><th>Sessions</th><th>Tool Calls</th><th>Msgs/Session</th><th>Tools/Session</th></tr>
+<tr><td>2026-01</td><td>75,467</td><td>278</td><td>14,872</td><td>271</td><td>53</td></tr>
+<tr><td>2026-02</td><td>220,660</td><td>736</td><td>34,114</td><td>300</td><td>46</td></tr>
+<tr><td>2026-03</td><td>130,571</td><td>850</td><td>83,018</td><td>154</td><td>98</td></tr>
+<tr><td>2026-04</td><td>139,118</td><td>1,175</td><td>68,889</td><td>118</td><td>59</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Trend: Sessions Got Shorter, Tool Use Got Denser</h3>
+<p>Messages per session dropped from 300 (Feb) to 118 (Apr) while tools per message increased from 0.15 to 0.50. This means sessions became more focused and tool-heavy — less conversational, more execution-oriented. Likely driven by skill adoption and shipping conventions.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="codex-deep">Codex Token Deep Dive</h2>
+<div class="section-feedback" data-section="codex-deep">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="codex-deep" placeholder="Notes on this section..."></textarea>
+
+<div class="stat-grid">
+<div class="stat-card accent"><div class="value">1.06B</div><div class="label">Total Tokens</div></div>
+<div class="stat-card green"><div class="value">94.4%</div><div class="label">Cache Hit Rate</div></div>
+<div class="stat-card"><div class="value">215:1</div><div class="label">Input/Output Ratio</div></div>
+<div class="stat-card orange"><div class="value">4.9M</div><div class="label">Output Tokens</div></div>
+</div>
+
+<h3>Token Breakdown</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Category</th><th>Tokens</th><th>% of Total</th></tr>
+<tr><td>Total input</td><td>1,052,000,000</td><td>99.5%</td></tr>
+<tr><td>  — Cached input</td><td>992,873,000</td><td>94.4% of input</td></tr>
+<tr><td>  — Non-cached input</td><td>59,124,000</td><td>5.6% of input</td></tr>
+<tr><td>Total output</td><td>4,887,000</td><td>0.5%</td></tr>
+<tr><td>  — Reasoning output</td><td>883,000</td><td>18.1% of output</td></tr>
+<tr><td>  — Non-reasoning output</td><td>4,005,000</td><td>81.9% of output</td></tr>
+</table>
+</div>
+
+<div class="caveat">
+<strong>The 215:1 input/output ratio is remarkably high.</strong> This means Codex is reading ~215 tokens of context for every 1 token of output. The 94.4% cache rate means you're paying full price for only 59M of those 1.05B input tokens. Still, this is a context-heavy, low-output pattern — typical of autonomous agents that read extensively but produce targeted edits.
+</div>
+
+<h3>Top Projects by Codex Token Spend</h3>
+<div class="bar-chart">
+<div class="bar-row"><span class="bar-label">mobile-ideas</span><div class="bar bar-codex" style="width: 40%"></div><span class="bar-value">321M tok / 106 sess</span></div>
+<div class="bar-row"><span class="bar-label">agentic-skills</span><div class="bar bar-codex" style="width: 35%"></div><span class="bar-value">282M tok / 47 sess</span></div>
+<div class="bar-row"><span class="bar-label">pitwall-monorepo</span><div class="bar bar-codex" style="width: 24%"></div><span class="bar-value">190M tok / 68 sess</span></div>
+<div class="bar-row"><span class="bar-label">trackctl</span><div class="bar bar-codex" style="width: 8%"></div><span class="bar-value">64M tok / 23 sess</span></div>
+<div class="bar-row"><span class="bar-label">bismarck-v0.4</span><div class="bar bar-codex" style="width: 5%"></div><span class="bar-value">42M tok / 9 sess</span></div>
+<div class="bar-row"><span class="bar-label">metternich-engine</span><div class="bar bar-codex" style="width: 4%"></div><span class="bar-value">33M tok / 8 sess</span></div>
+</div>
+
+<h3>Costliest Individual Sessions</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Date</th><th>Project</th><th>Total Tokens</th><th>Output Tokens</th><th>Tok/Output Ratio</th></tr>
+<tr><td>2026-05-22</td><td>agentic-skills</td><td>23.6M</td><td>39.7K</td><td>595:1</td></tr>
+<tr><td>2026-06-01</td><td>mobile-ideas</td><td>23.0M</td><td>55.5K</td><td>415:1</td></tr>
+<tr><td>2026-05-21</td><td>agentic-skills</td><td>22.3M</td><td>46.0K</td><td>485:1</td></tr>
+<tr><td>2026-05-21</td><td>agentic-skills</td><td>21.6M</td><td>38.8K</td><td>556:1</td></tr>
+<tr><td>2026-06-01</td><td>agentic-skills</td><td>17.6M</td><td>43.6K</td><td>404:1</td></tr>
+</table>
+</div>
+
+<div class="caveat">
+<strong>agentic-skills dominates the top sessions.</strong> The top 5 costliest Codex sessions are heavily skewed toward this repo, with very high input-to-output ratios (400-600:1). This suggests deep codebase reading with modest output — likely skill development, analysis, or research tasks where Codex reads the full repo context repeatedly.
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="claude-deep">Claude Code Activity Deep Dive</h2>
+<div class="section-feedback" data-section="claude-deep">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="claude-deep" placeholder="Notes on this section..."></textarea>
+
+<div class="stat-grid">
+<div class="stat-card"><div class="value">565,816</div><div class="label">Total Messages (Jan–Apr)</div></div>
+<div class="stat-card"><div class="value">200,893</div><div class="label">Total Tool Calls</div></div>
+<div class="stat-card"><div class="value">1,972</div><div class="label">/ship Invocations</div></div>
+<div class="stat-card"><div class="value">15+</div><div class="label">Active Projects</div></div>
+</div>
+
+<h3>Top Projects by Claude Prompts</h3>
+<div class="bar-chart">
+<div class="bar-row"><span class="bar-label">bismarck-v0.4</span><div class="bar bar-claude" style="width: 40%"></div><span class="bar-value">1,228 prompts / 557 sess</span></div>
+<div class="bar-row"><span class="bar-label">loadoutworks</span><div class="bar bar-claude" style="width: 31%"></div><span class="bar-value">962 prompts / 295 sess</span></div>
+<div class="bar-row"><span class="bar-label">metternich</span><div class="bar bar-claude" style="width: 29%"></div><span class="bar-value">906 prompts / 334 sess</span></div>
+<div class="bar-row"><span class="bar-label">bismarck-v0.3</span><div class="bar bar-claude" style="width: 29%"></div><span class="bar-value">900 prompts / 225 sess</span></div>
+<div class="bar-row"><span class="bar-label">monorepo</span><div class="bar bar-claude" style="width: 28%"></div><span class="bar-value">856 prompts / 348 sess</span></div>
+<div class="bar-row"><span class="bar-label">lexcorp-war-room</span><div class="bar bar-claude" style="width: 22%"></div><span class="bar-value">694 prompts / 272 sess</span></div>
+<div class="bar-row"><span class="bar-label">agentic-skills</span><div class="bar bar-claude" style="width: 14%"></div><span class="bar-value">432 prompts / 177 sess</span></div>
+</div>
+
+<h3>Skill Usage (Claude Code)</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Skill</th><th>Count</th><th>% of Total Skill Calls</th><th>Assessment</th></tr>
+<tr><td>/ship</td><td>1,972</td><td>79.2%</td><td style="color:var(--green)">High-value shipping automation</td></tr>
+<tr><td>/run</td><td>212</td><td>8.5%</td><td style="color:var(--green)">Verification & testing</td></tr>
+<tr><td>/investigate</td><td>120</td><td>4.8%</td><td style="color:var(--green)">Bug triage & root cause</td></tr>
+<tr><td>/sync</td><td>97</td><td>3.9%</td><td style="color:var(--accent)">Repo sync utility</td></tr>
+<tr><td>/pack</td><td>51</td><td>2.0%</td><td style="color:var(--accent)">Skill pack management</td></tr>
+<tr><td>/analyze-sessions</td><td>35</td><td>1.4%</td><td style="color:var(--accent)">Meta-analysis</td></tr>
+<tr><td>/expert-review</td><td>13</td><td>0.5%</td><td style="color:var(--green)">Code review</td></tr>
+<tr><td>/code-review</td><td>10</td><td>0.4%</td><td style="color:var(--green)">Code review</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="cost">Cost Estimation</h2>
+<div class="section-feedback" data-section="cost">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="cost" placeholder="Notes on this section..."></textarea>
+
+<div class="stat-grid">
+<div class="stat-card green"><div class="value">$360</div><div class="label">Codex (from token data)</div></div>
+<div class="stat-card orange"><div class="value">~$6.9K</div><div class="label">Claude Code (estimated)</div></div>
+<div class="stat-card purple"><div class="value">~$7.2K</div><div class="label">Combined Est. Total</div></div>
+</div>
+
+<h3>Codex Cost Breakdown (Actual Token Data)</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Month</th><th>Est. Cost</th><th>Sessions</th><th>Input Cost</th><th>Output Cost</th></tr>
+<tr><td>2026-03</td><td>$31.59</td><td>28</td><td>$29.52</td><td>$2.08</td></tr>
+<tr><td>2026-04</td><td>$0.99</td><td>1</td><td>$0.94</td><td>$0.04</td></tr>
+<tr><td>2026-05</td><td>$222.71</td><td>228</td><td>$209.98</td><td>$12.74</td></tr>
+<tr><td>2026-06</td><td>$104.29</td><td>70</td><td>$97.64</td><td>$6.65</td></tr>
+<tr style="font-weight:700"><td>TOTAL</td><td>$359.58</td><td>327</td><td>$338.08</td><td>$21.51</td></tr>
+</table>
+</div>
+
+<div class="caveat">
+<strong>Codex pricing: o4-mini at $1.10/MTok input, $0.275/MTok cached, $4.40/MTok output.</strong> The 94.4% cache hit rate makes Codex remarkably cheap — you're paying $0.275/MTok for most of that 1B input. Output costs are negligible at $21.51 total.
+</div>
+
+<h3>Claude Code Cost Estimate (No Local Token Data)</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Month</th><th>Est. Cost</th><th>Messages</th><th>Sessions</th><th>Tool Calls</th></tr>
+<tr><td>2026-01</td><td>~$817</td><td>75,467</td><td>278</td><td>14,872</td></tr>
+<tr><td>2026-02</td><td>~$2,310</td><td>220,660</td><td>736</td><td>34,114</td></tr>
+<tr><td>2026-03</td><td>~$1,891</td><td>130,571</td><td>850</td><td>83,018</td></tr>
+<tr><td>2026-04</td><td>~$1,852</td><td>139,118</td><td>1,175</td><td>68,889</td></tr>
+<tr style="font-weight:700"><td>TOTAL</td><td>~$6,870</td><td>565,816</td><td>3,039</td><td>200,893</td></tr>
+</table>
+</div>
+
+<div class="caveat">
+<strong>⚠️ Claude Code estimate has significant uncertainty.</strong> Claude Code does not store token counts locally. This estimate uses heuristic averages (~2K input/msg, ~500 output/msg, 80% cache rate, claude-sonnet-4 pricing). Your actual cost depends on:<br>
+• <strong>Model tier</strong>: Opus sessions cost ~5× more than Sonnet<br>
+• <strong>Session length</strong>: longer sessions accumulate larger context windows<br>
+• <strong>Caching</strong>: actual cache rate varies per session<br>
+• <strong>May–Jun data</strong>: stats-cache only covers Jan–Apr; May–Jun is extrapolated from history.jsonl<br>
+<strong>Check your Anthropic billing dashboard for authoritative numbers.</strong>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="value">Value Analysis</h2>
+<div class="section-feedback" data-section="value">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="value" placeholder="Notes on this section..."></textarea>
+
+<h3>Where the Tokens Go</h3>
+<div class="card">
+<h3 style="margin-top:0">Claude Code: Interactive Development Hub</h3>
+<p>Claude Code is your primary interactive development tool. The heaviest spend is on:</p>
+<ul>
+<li><strong>bismarck-v0.4</strong> (1,228 prompts) — game project, heavy /ship usage</li>
+<li><strong>loadoutworks.com</strong> (962 prompts) — web project, active shipping</li>
+<li><strong>metternich-engine</strong> (906 prompts) — game engine, active development</li>
+<li><strong>lexcorp-war-room</strong> (694 prompts) — active project with /investigate usage</li>
+<li><strong>/ship is 79% of all skill calls</strong> — the shipping automation is by far the most-used workflow</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">Codex: Autonomous Batch Processor</h3>
+<p>Codex handles autonomous, parallelizable work. Top spend:</p>
+<ul>
+<li><strong>mobile-ideas</strong> (106 sessions, 321M tokens) — largest Codex consumer by far</li>
+<li><strong>agentic-skills</strong> (47 sessions, 282M tokens) — skill development and meta-work</li>
+<li><strong>pitwall-monorepo</strong> (68 sessions, 190M tokens) — monorepo operations</li>
+<li>Average cost per session: <strong>$1.10</strong> (very cheap)</li>
+<li>Average cost per prompt: <strong>$0.05</strong> (negligible)</li>
+</ul>
+</div>
+
+<h3>Value per Dollar</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Metric</th><th>Claude Code</th><th>Codex</th><th>Winner</th></tr>
+<tr><td>Cost per user prompt</td><td>~$0.69</td><td>$0.05</td><td style="color:var(--green)">Codex (14× cheaper)</td></tr>
+<tr><td>Cost per session</td><td>~$2.26</td><td>$1.10</td><td style="color:var(--green)">Codex (2× cheaper)</td></tr>
+<tr><td>Interactivity</td><td>High (chat-driven)</td><td>Low (fire-and-forget)</td><td style="color:var(--accent)">Claude (by design)</td></tr>
+<tr><td>Skill integration</td><td>Deep (/ship, /investigate, /run)</td><td>Prompt-based</td><td style="color:var(--accent)">Claude (richer)</td></tr>
+<tr><td>Parallelism</td><td>1 session at a time</td><td>Many concurrent</td><td style="color:var(--green)">Codex</td></tr>
+<tr><td>Total projects active</td><td>15+</td><td>15+</td><td>Tie</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">Value Verdict</h3>
+<p><strong>Claude Code (~$6.9K)</strong> delivers value through interactive development, debugging, and shipping automation. The /ship skill alone (1,972 calls) automates commit+push+docs workflows that would take 5–10 min each manually — conservatively saving <strong>~165 hours</strong> of shipping ceremony. At a $100/hr developer rate, that's <strong>~$16,500 in avoided manual work</strong> from /ship alone.</p>
+<p><strong>Codex (~$360)</strong> delivers exceptional token efficiency. At $1.10/session and $0.05/prompt, it's a bargain for autonomous batch work. The high cache rate (94.4%) means you're barely paying for repeated context reads. The value proposition is clear: Codex handles the long-tail of parallel, autonomous tasks that don't need real-time interaction.</p>
+<p><strong>Combined</strong>, the tools complement each other well — Claude for interactive/creative/debugging work, Codex for autonomous/batch/parallel work. The shift from Claude-heavy (Jan–Mar) to Codex-augmented (Apr–Jun) suggests you've found a productive division of labor.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="efficiency">Efficiency &amp; Optimization Opportunities</h2>
+<div class="section-feedback" data-section="efficiency">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="efficiency" placeholder="Notes on this section..."></textarea>
+
+<div class="card">
+<h3 style="margin-top:0">1. Codex Input/Output Ratio (215:1)</h3>
+<p><strong>Observation:</strong> Codex reads 215 tokens for every 1 it writes. The costliest sessions hit 400–600:1.</p>
+<p><strong>Implication:</strong> Even with 94.4% caching, the sheer volume (1.05B input tokens) costs $338 in input alone. If the non-cached fraction could be reduced from 5.6% to 3%, monthly Codex spend drops by ~40%.</p>
+<p><strong>Action:</strong> For agentic-skills (the project with the highest tokens-per-prompt at 1,369K), consider whether Codex sessions are re-reading full repo context unnecessarily. Scoping base instructions or using smaller working sets could cut input tokens significantly.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2. Claude Code Feb Spike ($2,310)</h3>
+<p><strong>Observation:</strong> February was the costliest month — 220,660 messages, 300 messages/session (longest average sessions).</p>
+<p><strong>Implication:</strong> Long sessions accumulate context that pushes up per-message cost. The Feb spike is likely from early-stage project development with lots of back-and-forth.</p>
+<p><strong>Action:</strong> The trend already improved — Apr dropped to 118 msgs/session. The natural shift to shorter, tool-heavy sessions is the right trajectory.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3. Skill Coverage Gap</h3>
+<p><strong>Observation:</strong> /ship (79%) dominates skill usage. /code-review and /expert-review together are only 23 calls — surprisingly low for the volume of code being produced.</p>
+<p><strong>Action:</strong> Consider whether more systematic code review before /ship would catch issues earlier. The /investigate count (120) suggests bugs are being found after the fact.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="evidence">Evidence Matrix</h2>
+<div class="section-feedback" data-section="evidence">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="evidence" placeholder="Notes on this section..."></textarea>
+
+<div class="table-wrap">
+<table>
+<tr><th>Claim</th><th>Source</th><th>Confidence</th><th>Notes</th></tr>
+<tr><td>Codex total spend ~$360</td><td>Token counts from ~/.codex/sessions/**/*.jsonl</td><td style="color:var(--green)">High</td><td>Actual token data; pricing assumptions are the main variable</td></tr>
+<tr><td>Codex cache hit rate 94.4%</td><td>Aggregated total_token_usage from session files</td><td style="color:var(--green)">High</td><td>Direct measurement</td></tr>
+<tr><td>Claude Code total spend ~$6.9K</td><td>Heuristic from stats-cache.json message/tool counts</td><td style="color:var(--orange)">Medium</td><td>No local token data; depends on model tier, session length, cache rate assumptions</td></tr>
+<tr><td>/ship saves ~165 hours</td><td>1,972 invocations × 5 min estimate</td><td style="color:var(--orange)">Medium</td><td>Time-per-ship is estimated; actual varies by complexity</td></tr>
+<tr><td>Platform shift Apr–May</td><td>Monthly prompt counts from both history.jsonl files</td><td style="color:var(--green)">High</td><td>Clear numerical trend</td></tr>
+<tr><td>Sessions got shorter over time</td><td>stats-cache.json daily activity</td><td style="color:var(--green)">High</td><td>msgs/session: 300→118 over Jan–Apr</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="assumptions">Assumptions &amp; Confidence Register</h2>
+<div class="section-feedback" data-section="assumptions">
+<button class="fb-btn" data-fb="up" onclick="toggleFb(this)">👍</button>
+<button class="fb-btn" data-fb="down" onclick="toggleFb(this)">👎</button>
+<button class="fb-btn" data-fb="clarify" onclick="toggleFb(this)">❓</button>
+</div>
+<textarea class="fb-textarea" data-section="assumptions" placeholder="Notes on this section..."></textarea>
+
+<div class="table-wrap">
+<table>
+<tr><th>Assumption</th><th>Impact if Wrong</th><th>What Would Change It</th></tr>
+<tr><td>Claude Code uses claude-sonnet-4 pricing ($3/$0.30/$15)</td><td>High — Opus sessions cost 5× more</td><td>Check billing dashboard for actual model mix</td></tr>
+<tr><td>80% cache hit rate for Claude Code</td><td>Medium — lower rate increases cost by ~2×</td><td>Real cache rate data from API logs</td></tr>
+<tr><td>~2K input tokens per message average</td><td>Medium — could be 3-5× higher for large contexts</td><td>Token data from billing API</td></tr>
+<tr><td>Codex pricing: o4-mini rates</td><td>Low — Codex primarily uses o4-mini</td><td>Model field in session_meta confirms</td></tr>
+<tr><td>stats-cache.json is complete for Jan–Apr</td><td>Low — it's the official local cache</td><td>Gap in dates would indicate missed data</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="gates">Approval Gates</h2>
+
+<div class="question-block" id="q-accuracy">
+<h4>Gate: Evidence Accuracy</h4>
+<p>The Claude Code cost estimate (~$6.9K) is heuristic-based. Does this feel directionally correct based on your billing?</p>
+<label><input type="radio" name="q-accuracy" value="yes" onchange="checkGates()"> Yes, roughly matches billing</label>
+<label><input type="radio" name="q-accuracy" value="high" onchange="checkGates()"> Billing is actually higher — likely Opus usage</label>
+<label><input type="radio" name="q-accuracy" value="low" onchange="checkGates()"> Billing is actually lower — estimate is inflated</label>
+<label><input type="radio" name="q-accuracy" value="other" onchange="checkGates()"> Other / None of the above</label>
+<textarea class="question-block-notes" placeholder="Additional notes..." style="display:none"></textarea>
+<label><input type="radio" name="q-accuracy" value="clarify" onchange="checkGates()"> Need clarification</label>
+<textarea class="question-block-notes" placeholder="What needs clarification?" style="display:none"></textarea>
+</div>
+
+<div class="question-block" id="q-value">
+<h4>Gate: Value Assessment</h4>
+<p>Is the /ship time-savings framing (165 hours / ~$16.5K equivalent) a useful way to think about value, or do you measure value differently?</p>
+<label><input type="radio" name="q-value" value="useful" onchange="checkGates()"> Yes, time savings framing is useful</label>
+<label><input type="radio" name="q-value" value="different" onchange="checkGates()"> I think about value differently — see notes</label>
+<label><input type="radio" name="q-value" value="both" onchange="checkGates()"> Both time savings and something else</label>
+<label><input type="radio" name="q-value" value="other" onchange="checkGates()"> Other / None of the above</label>
+<textarea class="question-block-notes" placeholder="Additional notes..." style="display:none"></textarea>
+<label><input type="radio" name="q-value" value="clarify" onchange="checkGates()"> Need clarification</label>
+<textarea class="question-block-notes" placeholder="What needs clarification?" style="display:none"></textarea>
+</div>
+
+<div class="question-block" id="q-optimization">
+<h4>Gate: Optimization Priority</h4>
+<p>Which optimization area matters most to you right now?</p>
+<label><input type="radio" name="q-optimization" value="reduce-claude" onchange="checkGates()"> Reduce Claude Code spend (model tier, session length)</label>
+<label><input type="radio" name="q-optimization" value="reduce-codex" onchange="checkGates()"> Reduce Codex input token waste</label>
+<label><input type="radio" name="q-optimization" value="shift-more" onchange="checkGates()"> Shift more work from Claude → Codex</label>
+<label><input type="radio" name="q-optimization" value="other" onchange="checkGates()"> Other / None of the above</label>
+<textarea class="question-block-notes" placeholder="Additional notes..." style="display:none"></textarea>
+<label><input type="radio" name="q-optimization" value="clarify" onchange="checkGates()"> Need clarification</label>
+<textarea class="question-block-notes" placeholder="What needs clarification?" style="display:none"></textarea>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="compile">Compile Section</h2>
+
+<div class="compile-section">
+<p><strong>Feedback YAML</strong> — send concerns or clarification requests before answering all gates.</p>
+<button class="compile-btn secondary" id="feedback-btn" onclick="compileFeedback()" disabled>Compile Feedback YAML</button>
+<span class="copy-status" id="feedback-copy-status">Copied!</span>
+<textarea class="yaml-output" id="feedback-yaml" readonly></textarea>
+<button class="compile-btn secondary" id="feedback-copy-btn" onclick="copyYaml('feedback-yaml','feedback-copy-status')" style="display:none;margin-top:0.5rem">Copy YAML</button>
+
+<hr style="border-color:var(--border);margin:1.5rem 0">
+
+<p><strong>Final Approval</strong> — answer all gates first.</p>
+<button class="compile-btn primary" id="compile-btn" onclick="compileAnswers()" disabled>Compile Answers (3 unanswered)</button>
+<span class="copy-status" id="compile-copy-status">Copied!</span>
+<textarea class="yaml-output" id="compile-yaml" readonly></textarea>
+<button class="compile-btn secondary" id="compile-copy-btn" onclick="copyYaml('compile-yaml','compile-copy-status')" style="display:none;margin-top:0.5rem">Copy YAML</button>
+</div>
+
+</main>
+
+<script>
+function toggleFb(btn) {
+  const section = btn.parentElement.dataset.section;
+  const textarea = document.querySelector(`.fb-textarea[data-section="${section}"]`);
+  const siblings = btn.parentElement.querySelectorAll('.fb-btn');
+  const fb = btn.dataset.fb;
+  const wasActive = btn.classList.contains('active-up') || btn.classList.contains('active-down') || btn.classList.contains('active-clarify');
+  siblings.forEach(b => { b.classList.remove('active-up','active-down','active-clarify'); });
+  if (wasActive) { textarea.style.display = 'none'; }
+  else {
+    btn.classList.add(fb === 'up' ? 'active-up' : fb === 'down' ? 'active-down' : 'active-clarify');
+    textarea.style.display = 'block';
+  }
+  checkFeedbackBtn();
+}
+
+function checkFeedbackBtn() {
+  const any = document.querySelector('.fb-btn.active-up,.fb-btn.active-down,.fb-btn.active-clarify');
+  document.getElementById('feedback-btn').disabled = !any;
+}
+
+function getSelectedFeedback() {
+  const entries = [];
+  document.querySelectorAll('.section-feedback').forEach(div => {
+    const section = div.dataset.section;
+    const active = div.querySelector('.fb-btn.active-up,.fb-btn.active-down,.fb-btn.active-clarify');
+    if (!active) return;
+    const fb = active.dataset.fb;
+    const textarea = document.querySelector(`.fb-textarea[data-section="${section}"]`);
+    const notes = textarea ? textarea.value.trim() : '';
+    const fbMap = { up: 'up', down: 'down', clarify: 'needs-clarification' };
+    const actionMap = { up: 'accept-as-is', down: 'investigate-and-revise', clarify: 'clarify-before-approval' };
+    const entry = { section, feedback: fbMap[fb], requested_agent_action: actionMap[fb] };
+    if (notes) entry.notes = notes;
+    entries.push(entry);
+  });
+  return entries;
+}
+
+function compileFeedback() {
+  const entries = getSelectedFeedback();
+  if (!entries.length) return;
+  const unanswered = getUnansweredCount();
+  const yaml = [
+    'alignment_page: alignment/analyze-sessions-token-spend-value.html',
+    'feedback_status: revision-request',
+    'approval_status: not-approved',
+    `unanswered_required_questions: ${unanswered}`,
+    'section_feedback:'
+  ];
+  entries.forEach(e => {
+    yaml.push(`  - section: "${e.section}"`);
+    yaml.push(`    feedback: "${e.feedback}"`);
+    yaml.push(`    requested_agent_action: "${e.requested_agent_action}"`);
+    if (e.notes) yaml.push(`    notes: "${e.notes.replace(/"/g, '\\"')}"`);
+  });
+  const yamlStr = yaml.join('\n');
+  const el = document.getElementById('feedback-yaml');
+  el.value = yamlStr; el.style.display = 'block';
+  document.getElementById('feedback-copy-btn').style.display = 'inline-block';
+  copyYaml('feedback-yaml', 'feedback-copy-status');
+}
+
+function getUnansweredCount() {
+  let count = 0;
+  ['q-accuracy','q-value','q-optimization'].forEach(name => {
+    if (!document.querySelector(`input[name="${name}"]:checked`)) count++;
+  });
+  return count;
+}
+
+function checkGates() {
+  const unanswered = getUnansweredCount();
+  const btn = document.getElementById('compile-btn');
+  btn.disabled = unanswered > 0;
+  btn.textContent = unanswered > 0 ? `Compile Answers (${unanswered} unanswered)` : 'Compile Answers';
+  // Show notes textarea for selected options
+  document.querySelectorAll('.question-block input[type="radio"]').forEach(radio => {
+    if (radio.checked) {
+      const nextTextarea = radio.parentElement.nextElementSibling;
+      if (nextTextarea && nextTextarea.tagName === 'TEXTAREA') nextTextarea.style.display = 'block';
+    }
+  });
+}
+
+function compileAnswers() {
+  const gates = [
+    { name: 'q-accuracy', section: 'Evidence Accuracy', gate_type: 'evidence-coverage' },
+    { name: 'q-value', section: 'Value Assessment', gate_type: 'scope-and-goals' },
+    { name: 'q-optimization', section: 'Optimization Priority', gate_type: 'recommended-path' }
+  ];
+  const yaml = [
+    'alignment_page: alignment/analyze-sessions-token-spend-value.html',
+    'approval_status: ready-for-agent-review',
+    'gate_answers:'
+  ];
+  gates.forEach(g => {
+    const checked = document.querySelector(`input[name="${g.name}"]:checked`);
+    if (!checked) return;
+    const status = checked.value === 'other' ? 'other' : checked.value === 'clarify' ? 'needs-clarification' : 'answered';
+    yaml.push(`  - section: "${g.section}"`);
+    yaml.push(`    gate_type: "${g.gate_type}"`);
+    yaml.push(`    status: "${status}"`);
+    yaml.push(`    answer: "${checked.value}"`);
+    const nextTa = checked.parentElement.nextElementSibling;
+    if (nextTa && nextTa.tagName === 'TEXTAREA' && nextTa.value.trim()) {
+      yaml.push(`    notes: "${nextTa.value.trim().replace(/"/g, '\\"')}"`);
+    }
+  });
+  const feedback = getSelectedFeedback();
+  if (feedback.length) {
+    yaml.push('section_feedback:');
+    feedback.forEach(e => {
+      yaml.push(`  - section: "${e.section}"`);
+      yaml.push(`    feedback: "${e.feedback}"`);
+      yaml.push(`    requested_agent_action: "${e.requested_agent_action}"`);
+      if (e.notes) yaml.push(`    notes: "${e.notes.replace(/"/g, '\\"')}"`);
+    });
+  }
+  const yamlStr = yaml.join('\n');
+  const el = document.getElementById('compile-yaml');
+  el.value = yamlStr; el.style.display = 'block';
+  document.getElementById('compile-copy-btn').style.display = 'inline-block';
+  copyYaml('compile-yaml', 'compile-copy-status');
+}
+
+function copyYaml(textareaId, statusId) {
+  const el = document.getElementById(textareaId);
+  const status = document.getElementById(statusId);
+  navigator.clipboard.writeText(el.value).then(() => {
+    status.style.display = 'inline'; setTimeout(() => { status.style.display = 'none'; }, 2000);
+  }).catch(() => { el.select(); status.textContent = 'Select All applied — Cmd+C to copy'; status.style.display = 'inline'; });
+}
+</script>
+</body>
+</html>
