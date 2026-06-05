@@ -1,3 +1,45 @@
+## Current Task - Repo Glossary Audit 2026-06-05
+
+**Goal:** Run `$repo-glossary` in flat research mode and prepare the report-first glossary audit review artifacts without writing canonical glossary changes.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The skill is staged. Stage 1 and Stage 2 may write prompt history, a non-canonical working packet, and a review HTML page; canonical glossary edits require final compiled YAML first.
+
+### Plan
+
+- [x] Capture prompt history under `prompts/repo-glossary/`.
+- [x] Read the active `repo-glossary` skill and alignment-page instructions.
+- [x] Resolve scope: flat `research/` mode, no active product-path manifest or scoped research directories.
+- [x] Scan research, docs, root agent instructions, and pack metadata for terms, acronyms, definitions, and glossary gaps.
+- [x] Write `research/_working/preliminary-repo-glossary-research.md`.
+- [x] Write `alignment/repo-glossary-flat-research.html` in `review` state with required gates and YAML controls.
+- [x] Verify artifacts and record review notes.
+- [x] Stop for feedback-only YAML or final compiled YAML before any canonical glossary changes.
+
+### Acceptance Criteria
+
+- [x] At least two files exist in `research/`; this repo has eight flat research markdown files.
+- [x] Existing glossary state is handled as bootstrap mode because `research/glossary.md` is absent.
+- [x] Working packet classifies existing, missing, conflicting, stale, shadowed, cross-path divergence, and inheritance-gap findings.
+- [x] Alignment page renders all required glossary gates and evidence matrix.
+- [x] `research/glossary.md` remains absent or unchanged until final approval YAML is provided.
+
+### Review
+
+- Captured the visible `$repo-glossary` invocation and pasted skill context under `prompts/repo-glossary/skill-prompt-20260605-001248-repo-glossary.md`.
+- Resolved scope to flat `research/` mode: no `research/.progress.yaml`, no scoped product directories, and eight `research/*.md` files available.
+- Confirmed bootstrap mode because `research/glossary.md` was absent; no canonical glossary file was created or modified.
+- Scanned 63 source files: eight research docs, root `CLAUDE.md` and `AGENTS.md`, 16 `docs/*.md` files, and 37 `packs/*/PACK.md` manifests.
+- Wrote `research/_working/preliminary-repo-glossary-research.md` with 36 missing-term proposals, 14 acronym candidates, and three terminology conflicts: `install.sh` vs `init.sh`, alignment convention source, and `run` vs `exec`.
+- Wrote `alignment/repo-glossary-flat-research.html` in `review` state with all seven glossary category gates, evidence matrix, assumptions/confidence coverage, full working-packet rendering, section feedback controls, feedback YAML, and final compiled-answer YAML.
+- Validation passed: HTML parser readback, embedded JavaScript `node --check`, required gate/content checks, `research/glossary.md` absence check, and `git diff --check`.
+- Browser open status: Linux `xdg-open` failed because no Linux browser was registered; WSL Windows PowerShell `Start-Process file://wsl.localhost/Ubuntu/.../alignment/repo-glossary-flat-research.html` succeeded.
+- Next action is user review of the HTML page and either feedback-only YAML or final compiled YAML; canonical glossary writes remain blocked until final approval.
+
+---
+
 ## Current Task - PoketoWork Kanban Pack Hibernation 2026-06-04
 
 **Goal:** Hibernate all Poketo.work/PoketoWork kanban pack surfaces while the service is being rebuilt, preserving the source under a repo-root archive while removing them from active discovery, installation, recommendations, and generated catalogs.

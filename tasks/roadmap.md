@@ -1,3 +1,29 @@
+## Current Targeted Update: Repo Glossary Audit 2026-06-05
+
+**Goal:** Run `$repo-glossary` in flat research mode, classify terminology drift and missing glossary coverage, and produce the pre-approval working packet plus HTML review page without modifying canonical glossary files.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a report-first research audit. The synthesized findings should stay in `research/_working/` and `alignment/` until final compiled YAML approves any glossary changes.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/repo-glossary/`.
+- [x] Research scope is resolved from manifest/directories before code/app hints.
+- [x] `research/_working/preliminary-repo-glossary-research.md` contains the Stage 1 scan, classifications, evidence matrix, and proposed glossary changes.
+- [x] `alignment/repo-glossary-flat-research.html` renders all required term-category gates, evidence, confidence/assumption coverage, and YAML compile controls.
+- [x] No canonical `research/glossary.md` is created or modified before final compiled YAML approval.
+- [x] Verification proves the working packet and HTML page exist, contain required sections, parse cleanly, and keep glossary writes gated.
+
+**Implementation Plan:**
+1. Capture the visible skill invocation and read the local `repo-glossary` contract plus alignment-page bundle.
+2. Resolve flat/product-path scope from `research/.progress.yaml` and available `research/` directories.
+3. Scan research, docs, `CLAUDE.md`, `AGENTS.md`, and pack metadata for glossary-like terms, acronyms, stale/missing coverage, and conflicts.
+4. Write the non-canonical working packet under `research/_working/`.
+5. Build the `review` alignment page with complete findings, evidence matrix, term approval gates, feedback-only YAML, and final-answer YAML controls.
+6. Run targeted artifact/content/HTML/JavaScript/whitespace checks, update task review notes, and stop for user YAML approval.
+
+---
+
 ## Current Targeted Update: PoketoWork Kanban Pack Hibernation 2026-06-04
 
 **Goal:** Hibernate all Poketo.work/PoketoWork kanban pack surfaces while the service is being rebuilt, preserving the source under a repo-root archive while removing them from active discovery, installation, recommendations, and generated catalogs.
