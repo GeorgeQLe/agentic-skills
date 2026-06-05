@@ -1,5 +1,25 @@
 # Session History
 
+## 2026-06-05 — Alignment feedback emphasize option
+
+- Captured the visible `$investigate` invocation under `prompts/investigate/skill-prompt-20260605-002257-alignment-feedback-emphasize.md`.
+- Replaced approval-language positive section feedback in the canonical alignment-page convention with `emphasize`, meaning "give this section or named point more weight".
+- Regenerated owned bundled `ALIGNMENT-PAGE.md` files and updated bespoke inline alignment sections with version archives, version bumps, and changelogs.
+- Added alignment-gate regression assertions for `feedback: emphasize`, `requested_agent_action: add-weight-to-section`, revision semantics, and stale `up`/`accept-as-is` removal.
+- Refreshed Skills Showcase generated data after active skill metadata changed.
+- Fixed unrelated stale `upgrade-alignment-pages` test metadata expectation in separate commit `b07f1d2c`.
+- Validation passed for alignment generator dry-run, focused layer1 tests, Skills Showcase generated-data validation, archive audit, mirror parity audit, pack routing audit, skill version metadata, benchmark coverage, and whitespace.
+- Quality-gate record: `tasks/ship-manifest-2026-06-05-alignment-feedback-emphasize.md`.
+
+## 2026-06-05 — Repo glossary review packet
+
+- Ran `$repo-glossary` in flat bootstrap mode for the repository-wide `research/` folder and confirmed `research/glossary.md` is absent.
+- Wrote `research/_working/preliminary-repo-glossary-research.md` with existing, missing, conflicting, stale, shadowed, cross-path divergence, and inheritance-gap findings.
+- Wrote `alignment/repo-glossary-flat-research.html` in `review` state with glossary gates, evidence matrix, assumptions/confidence coverage, feedback YAML, and final compiled-answer YAML controls.
+- Shipped commit `6824ddc8` (`docs: add repo glossary review packet`) on `master`.
+- Validation passed for HTML parser readback, embedded JavaScript syntax, required gate/content checks, `research/glossary.md` absence, and whitespace.
+- Canonical glossary writes remain blocked until the user provides final compiled YAML.
+
 ## 2026-06-05 — Devtool docs audit P1+P2 implementation
 
 - Third-pass devtool docs audit of the agentic-skills repository, building on the 2026-06-02 refresh.

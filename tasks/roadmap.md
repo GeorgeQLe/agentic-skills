@@ -1,3 +1,30 @@
+## Current Targeted Update: Alignment Feedback Emphasize Option 2026-06-05
+
+**Goal:** Change the shared HTML alignment-page section feedback pattern so the positive/approval option becomes `emphasize`, meaning the user wants the agent to give that section more weight, rather than treating the section as already approved.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The behavior should be fixed in the canonical alignment-page convention and propagated/tested from there, instead of editing generated historical pages one by one.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] User claim is validated against the alignment-page convention sources, generated bundles, tests, and recent git history.
+- [x] The canonical feedback-only YAML contract uses `emphasize` for positive section feedback and maps it to an agent action that adds more weight to that section.
+- [x] The visible feedback-control labels in the shared convention no longer frame the positive option as "looks good", "approved", or "approve".
+- [x] Bundled `ALIGNMENT-PAGE.md` files are regenerated from the canonical convention.
+- [x] Focused tests and whitespace checks pass.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty files are preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation and record this investigate plan.
+2. Locate the canonical alignment-page convention, generator, bundled copies, and tests that cover section feedback controls.
+3. Validate the user's hypothesis with code and git-history evidence.
+4. Patch the canonical convention and tests so new pages use `emphasize` rather than approval-language positive feedback.
+5. Regenerate bundled alignment-page instructions and run targeted validation.
+6. Record review notes, inspect the intended diff boundary, commit, and push.
+
+---
+
 ## Current Targeted Update: Repo Glossary Audit 2026-06-05
 
 **Goal:** Run `$repo-glossary` in flat research mode, classify terminology drift and missing glossary coverage, and produce the pre-approval working packet plus HTML review page without modifying canonical glossary files.

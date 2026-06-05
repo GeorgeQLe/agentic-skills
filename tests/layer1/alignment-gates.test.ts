@@ -363,11 +363,16 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} revision status`).toContain("`feedback_status: revision-request`");
       expect(content, `${path} not approved`).toContain("`approval_status: not-approved`");
       expect(content, `${path} unanswered questions`).toContain("`unanswered_required_questions`");
+      expect(content, `${path} emphasize feedback value`).toContain("`feedback` (`emphasize`, `down`, or `needs-clarification`)");
       expect(content, `${path} requested action`).toContain("`requested_agent_action`");
+      expect(content, `${path} emphasize action`).toContain("add-weight-to-section");
+      expect(content, `${path} emphasize semantics`).toContain("this is a revision request, not approval");
       expect(content, `${path} investigate action`).toContain("investigate-and-revise");
       expect(content, `${path} clarification action`).toContain("clarify-before-approval");
+      expect(content, `${path} stale up feedback value`).not.toContain("`feedback` (`up`, `down`, or `needs-clarification`)");
+      expect(content, `${path} stale accept action`).not.toContain("accept-as-is");
       expect(content, `${path} do not require gates for feedback`).toContain(
-        "Do not require the user to answer every gate before sending negative feedback or clarification needs",
+        "Do not require the user to answer every gate before sending emphasis requests, negative feedback, or clarification needs",
       );
     }
   });

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12 - 2026-06-05
+
+- Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.
+
+
 ## v0.11 - 2026-06-04
 
 - Restored version parity with the Codex mirror after verifying the solo-evaluator default is present in the Claude contract.

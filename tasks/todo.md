@@ -1,3 +1,42 @@
+## Current Task - Alignment Feedback Emphasize Option 2026-06-05
+
+**Goal:** Change newly created HTML alignment pages so section feedback uses `emphasize` when the user wants the agent to add more weight to a section, rather than a "looks good / approved" positive option.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a shared convention change; source edits should stay in the canonical convention, generator output, tests, and task/prompt records.
+
+### Plan
+
+- [x] Capture prompt history under `prompts/investigate/`.
+- [x] Read the alignment-page convention, propagation script, bundled copies, and focused tests.
+- [x] Validate the user claim against source evidence and recent git history.
+- [x] Update the canonical feedback contract and visible label guidance to use `emphasize`.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Run targeted tests and `git diff --check`.
+- [x] Record review notes, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- [x] Feedback-only YAML includes `feedback: emphasize` for positive section weighting requests.
+- [x] The agent action for `emphasize` tells the agent to add weight/emphasis to that section, not accept it as-is.
+- [x] Shared guidance no longer instructs new pages to label the positive feedback option as approval.
+- [x] Tests guard against regressions in the shared convention.
+
+### Review
+
+- Strategy used: General. No pivot needed.
+- User claim validation: confirmed. `docs/alignment-page-convention.md` and bundled `ALIGNMENT-PAGE.md` files used `thumbs up (approve as-is)`, `feedback` value `up`, and `requested_agent_action` `accept-as-is`; git history tied the behavior to section feedback and feedback-only YAML commits `7484e664`, `001a8c3b`, later placement fixes, and convention extraction `85e54147`.
+- Root cause: the shared alignment-page feedback contract encoded positive section feedback as approval, so new pages had no first-class way for the user to request more weight or emphasis inside a section.
+- Fix applied: updated `docs/alignment-page-convention.md` so positive section feedback is `emphasize`, emits `feedback` value `emphasize`, and maps to `requested_agent_action: add-weight-to-section`; regenerated bundled `ALIGNMENT-PAGE.md` files; updated 16 active inline alignment-page skill contracts, archived their previous versions, bumped versions, and added changelog entries; added layer1 regression assertions.
+- Generated data: refreshed Skills Showcase skill data so the 16 bumped versions are reflected. The GitHub proof-data generator also picked up unrelated dirty `tasks/history.md` entries, so those proof-data rewrites were restored out of this intended boundary.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/upgrade-alignment-pages.test.ts`; `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `node scripts/upgrade-alignment-page.mjs --dry-run`; `bash scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Ship manifest: `tasks/ship-manifest-2026-06-05-alignment-feedback-emphasize.md`.
+- Unrelated dirty file preserved outside the shipping boundary: `prompts/sync/skill-prompt-20260605-001258-sync.md`.
+
+---
+
 ## Current Task - Repo Glossary Audit 2026-06-05
 
 **Goal:** Run `$repo-glossary` in flat research mode and prepare the report-first glossary audit review artifacts without writing canonical glossary changes.

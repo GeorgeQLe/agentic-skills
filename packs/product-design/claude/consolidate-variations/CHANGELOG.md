@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9 - 2026-06-05
+
+- Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.
+
+
 ## v0.8 - 2026-05-31
 
 - Required alignment pages to use a top in-flow Table of Contents instead of sidebar navigation, and to avoid sticky/fixed bottom compile banners.

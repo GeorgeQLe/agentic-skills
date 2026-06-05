@@ -1,5 +1,10 @@
 # research-roadmap changelog (codex)
 
+## v0.12 - 2026-06-05
+
+- Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.
+
+
 ## v0.11 - 2026-06-02
 
 - Clarified that research-roadmap queues direct named research skill commands instead of wrapping them in execution-loop routes.
