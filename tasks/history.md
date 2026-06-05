@@ -20,6 +20,12 @@
 - Validation passed for HTML parser readback, embedded JavaScript syntax, required gate/content checks, `research/glossary.md` absence, and whitespace.
 - Canonical glossary writes remain blocked until the user provides final compiled YAML.
 
+## 2026-06-05 — Fix drawer drag-to-reopen after snap-back fix
+
+- Fixed the Skills Showcase pack drawer not opening on drag-to-reopen. Root cause: the prior snap-back fix used `.set()` + `animate()` on the same MotionValue, which in Framer Motion 12.x prevents the `.then()` callback from firing — so `proceedToOpen()` never ran.
+- Replaced with two parallel `animate()` calls (`cardDragY → 0` and `cardSlideY → -180`) using the same tween config. No `.set()` calls, so the animation chain is clean and `.then()` fires reliably.
+- Click-to-open path was unaffected (it never used `.set()`). TypeScript compiles clean.
+
 ## 2026-06-05 — Devtool docs audit P1+P2 implementation
 
 - Third-pass devtool docs audit of the agentic-skills repository, building on the 2026-06-02 refresh.
