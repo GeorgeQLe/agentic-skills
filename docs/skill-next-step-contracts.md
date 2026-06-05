@@ -42,6 +42,10 @@ This audit checked:
 
 `hook-model` is not mandatory and is not a post-spec default. It is a product-loop design input before UX/prototype choices harden, only when repeat behavior is central to product value.
 
+## Fork Detection Convention
+
+When a research skill's alignment page responses or findings indicate divergent products, ICPs, or value wedges that cannot coexist in a single path, the skill should suggest `/fork-idea-branch` as an alternative next step. This applies when: (a) the alignment page's assumptions/confidence gate reveals distinct ICP hypotheses requiring separate validation, (b) competitive analysis or positioning evidence shows the concept serves fundamentally different markets, or (c) the user's feedback explicitly identifies a split. Skills with ICP, positioning, or market-structure evidence should add a conditional to their next-step routing: "If alignment page evidence or user feedback indicates divergent products/ICPs/value wedges, suggest `/fork-idea-branch --from {skill-name}`."
+
 ## Expected End States
 
 | Skill family | Expected end states | Valid next-step contract |
@@ -66,7 +70,8 @@ This audit checked:
 
 | Skill | End states | Valid recommendation |
 | --- | --- | --- |
-| `idea-scope-brief` | Business discovery lane missing, business discovery enabled, project type unclear | Pack missing -> `pack install business-discovery`. Pack enabled -> `icp` using `research/idea-brief.md`. Project unclear -> `pack recommend`. |
+| `idea-scope-brief` | Business discovery lane missing, business discovery enabled, project type unclear, divergent paths detected | Pack missing -> `pack install business-discovery`. Pack enabled -> `icp` using `research/idea-brief.md`. Project unclear -> `pack recommend`. Divergent paths -> `/fork-idea-branch`. |
+| `fork-idea-branch` | No active research, fork approved, fork declined | No research -> `/idea-scope-brief`. Approved -> restart checklist with `/idea-scope-brief {slug}` per branch. Declined -> no follow-up. |
 | `competitive-analysis` concept-validation mode | `Proceed to ICP`, `Pivot concept`, `Abandon` | `Proceed` -> `icp`; `Pivot` -> `brainstorm`; `Abandon` -> `No follow-up skill recommended` unless the user wants a new concept. Standard-mode re-run is valid only after `icp` creates `research/icp.md`. |
 | `competitive-analysis` standard mode | Journey missing, positioning missing, UX variations missing, contested solution fit, GTM missing, codebase exists | Missing journey is first: if `customer-lifecycle` is unavailable, recommend `pack install customer-lifecycle`; if it is already enabled, recommend `journey-map`. Then route to `positioning`, `ux-variations`, optional `value-prop-canvas` only for contested solution-fit evidence, `gtm`, `mvp-gap`. |
 | `experiment` | Designed, validated, invalidated, inconclusive | Designed -> run the experiment manually. Validated -> log evidence with `customer-feedback`, update `assumption-tracker`, or plan/spec the validated opportunity. Invalidated -> update `assumption-tracker` and return to the domain skill for the failed assumption. Inconclusive -> `experiment [follow-up]` or `customer-feedback`. |

@@ -82,6 +82,7 @@ function skillSpecificGates(skillName) {
       "**Synthesis mode translation.** When the skill runs in synthesis mode (`--synthesize`), the alignment page must render the full proposed `research/positioning.md` content with an evidence matrix mapping claims to supporting framework(s), a confidence register, market-mode validation plan, and framework cross-references showing where frameworks agree, disagree, or complement each other.",
     ].join("\n\n"),
     "customer-feedback": "**Customer-feedback research translation.** Render feedback evidence with source, date, segment, quote or observation, confidence, and bias risk. Separate verbatim feedback from agent interpretation, and show unresolved contradictions or sample coverage gaps.",
+    "fork-idea-branch": `**Fork-specific gates.** Render the fork rationale, per-branch scope (label, slug, ICP hypothesis, value wedge hypothesis), reuse decisions per branch (fresh start vs. carry-forward with artifact types), archive confirmation for the current path, and proposed file changes as gates. The reuse decision gate must default to "Fresh start (recommended)" and explain contamination risk before presenting carry-forward options. ${outputGateDedup}`,
     "research-roadmap": "**Research-roadmap translation.** Render repository/documentation evidence by file path, observed documentation facts, inferred research gaps, priority rationale, rejected lower-priority items, source coverage gaps, and downstream implications for the next skill route.",
   };
   if (rules[skillName]) return rules[skillName];
