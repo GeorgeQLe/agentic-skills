@@ -1,0 +1,7 @@
+interface:
+  display_name: "Repo Glossary"
+  short_description: "Audit and reconcile the shared project glossary"
+  default_prompt: "Use $repo-glossary to audit research terminology, glossary drift, missing definitions, conflicts, shadows, and cross-path divergence."
+
+policy:
+  allow_implicit_invocation: true
