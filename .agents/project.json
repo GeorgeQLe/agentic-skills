@@ -17,6 +17,7 @@
     "ship": "exec-loop",
     "expert-review": "code-review",
     "investigate": "code-debug",
-    "session-triage": "session-analytics"
+    "session-triage": "session-analytics",
+    "repo-glossary": "business-ops"
   }
 }
