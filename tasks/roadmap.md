@@ -1,3 +1,37 @@
+## Current Targeted Update: Default Open Behavior For Compiled Alignment Index 2026-06-05
+
+**Goal:** Update the mirrored `compile-central-alignment` skill contracts so regenerating the central `alignment/index.html` opens or focuses the index through the shared `scripts/open-html-page.mjs` opener.
+
+**Execution Profile:**
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: This is a mirrored pack-skill behavior change with version archives, changelogs, tests, and possible generated catalog metadata. The active contracts should stay aligned while preserving Claude/Codex command syntax differences.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/create-agentic-skill/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the implementation plan and final review notes.
+- [x] Both active `compile-central-alignment` mirrors are archived at `archive/v0.0/SKILL.md` before the version bump.
+- [x] Both active mirrors are bumped to `version: v0.1`.
+- [x] Both active mirrors instruct agents to run `node scripts/open-html-page.mjs alignment/index.html --browser auto` after generating and verifying the index.
+- [x] Both active mirrors require reporting one opener status: `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
+- [x] Both active mirrors state that `blocked` does not fail the skill when `alignment/index.html` was generated and verified.
+- [x] Active compile-central contracts no longer contain the old `wslpath -w` / `cmd.exe /c start` opener language.
+- [x] Changelogs record the default opener behavior for both mirrors.
+- [x] Focused layer1 coverage and repo audits pass.
+- [x] Generated Skills Showcase data is refreshed and committed because the version bump directly changes tracked catalog data.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty files are preserved.
+
+**Implementation Plan:**
+1. Read the `create-agentic-skill` workflow, active compile-central mirrors, adjacent alignment tests, task docs, and current dirty worktree.
+2. Capture visible prompt history and record this task plan.
+3. Archive both current v0.0 compile-central `SKILL.md` files.
+4. Update the Claude and Codex skill mirrors to v0.1 with shared opener behavior, status reporting, blocked-open non-failure, and local-convenience constraints.
+5. Add or extend focused layer1 coverage for opener instructions, removed WSL-specific wording, versions, archives, and changelogs.
+6. Run targeted tests and required repository audits.
+7. Refresh/validate Skills Showcase data if the v0.1 metadata change affects generated catalogs.
+8. Record review notes, inspect the intended diff boundary, commit, and push.
+
+---
+
 ## Current Targeted Update: Cross-Platform Alignment Page Opener 2026-06-05
 
 **Goal:** Add a repo script that opens or focuses generated local HTML alignment pages through one cross-platform command, then wire the shared alignment-page convention to call it.

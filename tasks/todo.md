@@ -1,3 +1,46 @@
+## Current Task - Default Open Behavior For Compiled Alignment Index 2026-06-05
+
+**Goal:** Make `compile-central-alignment` open or focus the regenerated central `alignment/index.html` through the shared HTML opener script by default.
+
+### Execution Profile
+
+- Parallel mode: serial for source mutations; parallel reads allowed.
+- Rationale: The change is a mirrored skill-contract update and should move together with archives, changelogs, regression tests, and any directly affected generated metadata.
+
+### Plan
+
+- [x] Read the skill workflow, active compile-central mirrors, adjacent tests, task docs, and dirty worktree state.
+- [x] Capture prompt history under `prompts/create-agentic-skill/`.
+- [x] Record this plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Archive both active v0.0 `compile-central-alignment` mirrors.
+- [x] Update both mirrors to v0.1 with shared opener behavior and blocked-open non-failure.
+- [x] Add focused layer1 regression coverage.
+- [x] Run targeted tests, required audits, and generated-data validation when applicable.
+- [x] Record review notes, inspect intended changes, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- [x] Both mirrors use `node scripts/open-html-page.mjs alignment/index.html --browser auto`.
+- [x] Both mirrors require reporting one of `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
+- [x] Both mirrors state that `blocked` does not fail the skill if the index was generated and verified.
+- [x] Active compile-central contracts no longer contain `wslpath -w` or `cmd.exe /c start` browser-open instructions.
+- [x] Archives, changelogs, versions, and focused tests are present.
+- [x] `alignment/index.html` remains a local convenience artifact that is not committed or pushed by default.
+
+### Review
+
+- Used the repo-managed skill workflow and captured the visible invocation at `prompts/create-agentic-skill/skill-prompt-20260605-112937-compile-central-opener.md`.
+- Archived current v0.0 source contracts to `packs/alignment-page-admin/claude/compile-central-alignment/archive/v0.0/SKILL.md` and `packs/alignment-page-admin/codex/compile-central-alignment/archive/v0.0/SKILL.md`.
+- Bumped both active mirrors to v0.1 and added changelogs documenting the default shared opener behavior.
+- Updated both active mirrors to verify `alignment/index.html`, run `node scripts/open-html-page.mjs alignment/index.html --browser auto`, report one of `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`, and treat `blocked` as non-fatal when the index was generated and verified.
+- Preserved compile-central as a local convenience artifact: it only creates or overwrites `alignment/index.html`, does not modify other alignment pages, and does not commit or push the index by default.
+- Added `tests/layer1/compile-central-alignment.test.ts` covering the shared opener command, stable status reporting, blocked-open non-failure, removal of old WSL opener language from active contracts, local artifact constraints, versions, archives, and changelogs.
+- Skills Showcase generation was refreshed and validated; generated catalog data now includes the compile-central v0.1 entries. The generator also refreshed existing stale benchmark/demo/proof metadata as part of making generated assets fresh.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/compile-central-alignment.test.ts`; `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-mirror-parity-audit.sh`; `bash scripts/skill-pack-routing-audit.sh`; `bash scripts/skill-versions.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `bash scripts/validate-skills-showcase-data.sh` after the generated refresh; active compile-central old-opener scan; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- Unrelated pre-existing dirty files preserved outside this boundary include `.agents/project.json`, `.claude/skills/skill-interview/SKILL.md`, `.codex/skills/skill-interview/SKILL.md`, app prototype/component files under `apps/skills-showcase/`, and the in-progress animation benchmark coverage files under `tests/harness/` and `tests/layer4/`.
+
+---
+
 ## Current Task - Cross-Platform Alignment Page Opener 2026-06-05
 
 **Goal:** Add `scripts/open-html-page.mjs` and update the shared alignment-page convention so generated HTML review pages can be opened or focused through one cross-platform command.

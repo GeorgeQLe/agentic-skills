@@ -2,7 +2,7 @@
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
 type: ops
-version: v0.1
+version: v0.0
 ---
 
 # Compile Central Alignment
@@ -40,23 +40,21 @@ Generate a browsable `alignment/index.html` that links to every alignment page i
      - Date line in muted text
    - All links are relative (same directory), no absolute or external URLs.
 
-5. **Open or focus the central index:**
-   - Verify `alignment/index.html` was written and still works as a direct `file://` page.
-   - Run `node scripts/open-html-page.mjs alignment/index.html --browser auto`.
-   - Report the opener script status exactly as one of `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
-   - If the status is `blocked`, report the blocked open attempt; it does not fail this skill when `alignment/index.html` was generated and verified.
+5. **Open in browser (WSL-aware):**
+   - Attempt to open `alignment/index.html` in the default browser.
+   - On WSL, convert the path with `wslpath -w` and use `cmd.exe /c start`.
+   - Report whether the open succeeded or was blocked. A blocked open does not fail the skill.
 
 ## Constraints
 
 - Do not modify any existing alignment page — only create or overwrite `alignment/index.html`.
-- Do not commit or push `alignment/index.html` by default — the index is a local convenience artifact, regenerated fresh each time.
+- Do not commit or push — the index is a local convenience artifact, regenerated fresh each time.
 - If no `.html` files exist in `alignment/` (besides `index.html`), generate an empty-state page with a message instead of an empty grid.
 - The generated HTML must work when opened directly as a `file://` URL — no server required.
-- Do not open individual alignment pages from this skill; individual alignment-producing skills handle their own review pages, and this skill opens or focuses only the central index.
 
 ## Default Shipping Contract
 
-- **No commit/push.** Produce a local convenience file that is regenerated on demand. Do not commit `alignment/index.html` to the repository unless the user explicitly asks.
+- **No commit/push.** Produce a local convenience file that is regenerated on demand. Do not commit `alignment/index.html` to the repository.
 - **Default next-step routing:** After generating the index, suggest contextual next steps based on what was found:
   - If any pages have old modification dates or the scan revealed outdated content: `Recommended next command: /upgrade-alignment-pages`
   - If the index is freshly built with all pages current: confirm completion with no further routing
