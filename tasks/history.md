@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-05 — Devtool docs audit P1+P2 implementation
+
+- Third-pass devtool docs audit of the agentic-skills repository, building on the 2026-06-02 refresh.
+- All 5 prior backlog items resolved plus 4 new findings identified and addressed.
+- P1 fixes: added Prerequisites section to README, created `docs/QUICKSTART.md` with AFPS workflow lead, created `docs/troubleshooting.md` with symptom-led recovery table, added README troubleshooting summary.
+- P2 fixes: added minimal SKILL.md template to `docs/skill-anatomy.md`, created `docs/scripts-reference.md` command index, added Team Setup Checklist to `docs/packs.md`, added dated reconciliation notes to 6 research files with stale `install.sh` references.
+- Canonical audit report written to `research/devtool-docs-audit-2026-06-04.md`. Alignment page confirmed at `alignment/devtool-docs-audit-agentic-skills.html`.
+- P3 items deferred: visual proof artifacts and benchmark trend analysis.
+
 ## 2026-06-04 — PoketoWork kanban pack hibernation
 
 - Hibernated `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` by moving the active pack sources from `packs/` into `archive/hibernated-packs/2026-06-poketowork-rebuild/` with a README documenting the rebuild reason and reactivation criteria.
