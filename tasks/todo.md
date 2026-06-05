@@ -1,3 +1,52 @@
+## Current Task - Cross-Session Usage Analysis 2026-06-05
+
+**Goal:** Run `$analyze-sessions` across the default local Claude and Codex history sources and produce a structured cross-session usage report plus review alignment page.
+
+### Execution Profile
+
+- Parallel mode: serial for source/artifact mutations; parallel reads allowed.
+- Rationale: This is a report-producing analysis. The history parsing should be scriptable and complete across readable sources, while artifact writes stay controlled and reviewable.
+
+### Plan
+
+- [x] Capture prompt history under `prompts/analyze-sessions/`.
+- [x] Review relevant project lessons and alignment-page requirements.
+- [x] Record this analysis plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect available Claude/Codex compact and rich history sources.
+- [x] Stream-parse and normalize all readable user-message history.
+- [x] Aggregate Codex token usage from final/highest cumulative session totals without double-counting snapshots.
+- [x] Classify project/source trends, command usage, repeated prompts, workflow sequences, skill performance, corrections, and automation opportunities.
+- [x] Write `alignment/analyze-sessions-cross-session-usage.html` with full evidence, assumptions, recommendations, review gates, and YAML controls.
+- [x] Run targeted verification, record review notes, inspect intended changes, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- [x] Full readable history is parsed, not sampled.
+- [x] Source gaps and missing metadata are reported explicitly.
+- [x] System, developer, base instruction, and tool-output text are excluded from prompt-pattern counts.
+- [x] Token totals are based only on logged metadata; costs are not estimated without explicit cost fields or verified pricing.
+- [x] Report includes real examples, exact counts where possible, ranked automation recommendations, and one Codex-native proposed next command for approval.
+- [x] Alignment page parses cleanly and contains the required review controls.
+- [x] Intended changes are committed and pushed while unrelated dirty files are preserved.
+
+### Review
+
+- Captured the visible `$analyze-sessions` invocation and pasted skill context under `prompts/analyze-sessions/skill-prompt-20260605-091643-cross-session-analysis.md`.
+- Parsed full readable default sources: `~/.claude/history.jsonl` (10,053 prompts / 3,811 sessions), `~/.codex/history.jsonl` (6,556 prompts / 2,566 sessions), and `~/.codex/sessions/**/*.jsonl` (2,685 rich rollout files / 854,835 records / 0 parse errors).
+- Used compact histories for user-prompt counts and rich Codex session metadata for `cwd`, provider, CLI origin, and token enrichment. Rich rollout user/system/developer/tool-output records were not used for prompt-pattern counts.
+- Aggregated Codex token spend from final/highest cumulative `total_token_usage` snapshots per session: 2,633 token sessions, 9,975,727,071 total tokens, 9,934,443,395 input tokens, 9,452,839,168 cached-input tokens, 41,283,676 output tokens, and 9,132,393 reasoning-output tokens.
+- Reported cost as unavailable because no direct structured cost fields were found, no user-provided pricing table was supplied, and rich session metadata does not log model identifiers needed for reliable current pricing.
+- Top prompt projects by volume: `bismarck-v0.4` (1,438), `poke/monorepo` (1,284), `agentic-skills` (1,181), `lexcorp-war-room` (1,111), and `metternich-engine` (1,084).
+- Top normalized commands: `$run` (1,636, including Codex markdown-link skill invocations), `/ship` (1,541), `/clear` (887), `/ship-end` (268), `/run` (182), and `$ship` (145).
+- Highest-impact proposed automations in the review page: skill maintenance batcher, shipping boundary verifier, task phase executor, correction-to-lesson gate, and alignment page generator/validator.
+- Wrote `alignment/analyze-sessions-cross-session-usage.html` in `review` state with the full report, evidence matrix, assumptions/confidence register, token/cost coverage, ranked recommendations, proposed next-route gate, section feedback controls, feedback-only YAML, and final-answer YAML controls.
+- Browser open status: `open alignment/analyze-sessions-cross-session-usage.html` exited successfully.
+- Verification passed: summary JSON readback; Python HTML parser readback; required section/content checks; embedded JavaScript extracted to `/tmp/analyze_sessions_cross_session_usage.js` and passed `node --check`; targeted secret-pattern scan over the generated page found no matches; `git diff --check` passed for the intended files.
+- Unrelated dirty files preserved outside this boundary: `.agents/project.json`, `.claude/skills/skill-interview/SKILL.md`, `.codex/skills/skill-interview/SKILL.md`, `apps/skills-showcase/app/prototype/page.tsx`, `apps/skills-showcase/src/components/PackOpener.tsx`, and `apps/skills-showcase/src/components/SealedPack.tsx`.
+- The page includes a proposed Codex-native next route, but downstream routing remains gated by final compiled YAML approval per the alignment-page review contract.
+
+---
+
 ## Current Task - Analyze Sessions Token Cost Check 2026-06-05
 
 **Goal:** Update `analyze-sessions` so session-history reports include a token-spend and related-cost check when usage metadata is available.

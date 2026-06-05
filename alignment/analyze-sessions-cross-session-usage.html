@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyze Sessions - Cross-Session Usage Report</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; max-width:100%; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2.2rem; }
+h2 { color:var(--accent); margin:0; font-size:1.45rem; }
+h3 { color:#fff; margin:24px 0 8px; font-size:1.05rem; }
+p { margin:12px 0; } a { color:var(--accent); } code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; }
+.status { display:inline-flex; min-height:44px; align-items:center; padding:10px 16px; border:1px solid var(--purple); color:#fff; background:#1c2333; margin:16px 0; }
+.lead { color:#fff; font-size:1.05rem; }
+.toc, section, .compile-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.toc ol { margin:8px 0 0; columns:2; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,minmax(min(210px,100%),1fr)); gap:12px; margin:18px 0; }
+.stat-grid div { border:1px solid var(--border); background:#0f1623; padding:14px; border-radius:8px; }
+.stat-grid strong { display:block; color:#fff; font-size:1.35rem; } .stat-grid span { color:var(--text-muted); }
+.table-wrap { overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:8px; }
+table { border-collapse:collapse; width:100%; min-width:720px; } th,td { border-bottom:1px solid var(--border); padding:10px 12px; vertical-align:top; text-align:left; } th { background:var(--surface); color:#fff; } tr:last-child td { border-bottom:0; }
+ul,ol { padding-left:22px; } li { margin:4px 0; }
+.callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
+.section-feedback { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 16px; padding:10px; border:1px solid var(--border); border-radius:8px; background:#0f1623; }
+.section-feedback span { color:var(--text-muted); }
+button, .radio-group label { min-height:44px; padding:10px 16px; border-radius:6px; border:1px solid var(--border); background:#0d1117; color:var(--text); cursor:pointer; }
+button:hover, .radio-group label:hover { border-color:var(--accent); }
+button.active[data-feedback="emphasize"] { border-color:var(--green); color:#fff; background:#12351f; }
+button.active[data-feedback="down"] { border-color:var(--red); color:#fff; background:#351616; }
+button.active[data-feedback="needs-clarification"] { border-color:var(--orange); color:#fff; background:#33260f; }
+textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:10px; font:inherit; }
+.feedback-notes, .local-yaml, .local-yaml-actions { display:none; flex-basis:100%; }
+.section-feedback.has-feedback .feedback-notes, .section-feedback.has-feedback .local-yaml-actions { display:block; }
+.section-feedback.has-yaml .local-yaml { display:block; min-height:130px; }
+.question-block { background:#1c2333; border:1px solid var(--purple); padding:16px; border-radius:8px; margin:16px 0; }
+.radio-group { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; } .radio-group label { display:flex; align-items:center; gap:8px; }
+.answer-notes { display:none; margin-top:10px; }
+.question-block.has-answer .answer-notes { display:block; }
+.compile-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+#compiled-yaml, #compiled-feedback-yaml { min-height:180px; }
+.copy-status, #answer-status, #feedback-status { color:var(--text-muted); }
+@media (max-width: 860px) { .toc ol { columns:1; } .stat-grid { grid-template-columns:repeat(2,minmax(min(210px,100%),1fr)); } main { width:min(100% - 24px, 1180px); } }
+@media (max-width: 560px) { .stat-grid { grid-template-columns:1fr; } h1 { font-size:1.7rem; } table { min-width:640px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Analyze Sessions: Cross-Session Usage Report</h1>
+  <p class="lead">Full-history review of local Claude and Codex prompt usage, token telemetry, recurring workflows, skill performance signals, and automation opportunities.</p>
+  <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-05 &nbsp; <strong>artifact:</strong>&nbsp; alignment/analyze-sessions-cross-session-usage.html</div>
+</header>
+<nav class="toc" aria-label="Table of Contents"><h2>Table Of Contents</h2><ol><li><a href="#overview">Overview Stats</a></li><li><a href="#source-comparison">Source Comparison</a></li><li><a href="#token-cost">Token And Cost Check</a></li><li><a href="#patterns">Categorized Patterns</a></li><li><a href="#workflow-sequences">Workflow Sequences</a></li><li><a href="#skill-performance">Skill Performance Trends</a></li><li><a href="#evidence">Evidence Matrix And Assumptions</a></li><li><a href="#recommendations">Ranked Recommendations</a></li><li><a href="#review-gates">Review Gates</a></li><li><a href="#compile">Compile YAML</a></li></ol></nav>
+<section id="overview"><div class="section-head"><h2>Overview Stats</h2></div>
+    <div class="section-feedback" data-section="Overview Stats" id="feedback-overview-stats">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p class="lead">This review page analyzes the default local Claude and Codex histories through June 5, 2026. It uses compact prompt histories for user-message counts, rich Codex rollout metadata for project and token enrichment, and repo lessons as corroborating evidence for recurring correction patterns.</p>
+<div class="stat-grid">
+  <div><strong>16,609</strong><span>Total compact user prompts</span></div>
+  <div><strong>6,377</strong><span>Compact sessions</span></div>
+  <div><strong>2,685</strong><span>Codex rich rollout files</span></div>
+  <div><strong>9,975,727,071</strong><span>Codex logged total tokens</span></div>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Source</th><th>Messages</th><th>Sessions</th><th>Date range</th><th>Active days</th><th>Share</th></tr></thead><tbody><tr><td>claude</td><td>10,053</td><td>3,811</td><td>2025-12-10 to 2026-06-05</td><td>127</td><td>60.5%</td></tr><tr><td>codex</td><td>6,556</td><td>2,566</td><td>2026-01-20 to 2026-06-05</td><td>62</td><td>39.5%</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Project</th><th>Messages</th><th>Share</th></tr></thead><tbody><tr><td>bismarck-v0.4</td><td>1,438</td><td>8.66%</td></tr><tr><td>poke/monorepo</td><td>1,284</td><td>7.73%</td></tr><tr><td>agentic-skills</td><td>1,181</td><td>7.11%</td></tr><tr><td>lexcorp-war-room</td><td>1,111</td><td>6.69%</td></tr><tr><td>metternich-engine</td><td>1,084</td><td>6.53%</td></tr><tr><td>loadoutworks.com</td><td>1,036</td><td>6.24%</td></tr><tr><td>bismarck-v0.3</td><td>929</td><td>5.59%</td></tr><tr><td>mobile-ideas</td><td>537</td><td>3.23%</td></tr><tr><td>pitwall-monorepo</td><td>513</td><td>3.09%</td></tr><tr><td>lexcorp-sdk</td><td>416</td><td>2.5%</td></tr><tr><td>lexcorp-landing</td><td>353</td><td>2.13%</td></tr><tr><td>pitwall</td><td>348</td><td>2.1%</td></tr><tr><td>b4</td><td>345</td><td>2.08%</td></tr><tr><td>bismarck-v5</td><td>342</td><td>2.06%</td></tr><tr><td>claude-usage-review</td><td>338</td><td>2.04%</td></tr></tbody></table></div>
+</section>
+<section id="source-comparison"><div class="section-head"><h2>Source Comparison</h2></div>
+    <div class="section-feedback" data-section="Source Comparison" id="feedback-source-comparison">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Claude has the larger compact prompt archive and a longer date range. Codex has fewer compact prompts but richer per-session metadata and token telemetry. Recent Codex activity is concentrated in <code>agentic-skills</code>, while historical Claude activity is more distributed across application repos.</p>
+<div class="table-wrap"><table><thead><tr><th>Source</th><th>Top projects</th></tr></thead><tbody><tr><td>claude</td><td><ol><li>bismarck-v0.4: 1,228 (12.22%)</li><li>loadoutworks.com: 962 (9.57%)</li><li>metternich-engine: 906 (9.01%)</li><li>bismarck-v0.3: 900 (8.95%)</li><li>poke/monorepo: 860 (8.55%)</li><li>lexcorp-war-room: 694 (6.9%)</li><li>agentic-skills: 466 (4.64%)</li><li>lexcorp-landing: 329 (3.27%)</li></ol></td></tr><tr><td>codex</td><td><ol><li>agentic-skills: 715 (10.91%)</li><li>poke/monorepo: 424 (6.47%)</li><li>lexcorp-war-room: 417 (6.36%)</li><li>mobile-ideas: 406 (6.19%)</li><li>lexcorp-sdk: 348 (5.31%)</li><li>unknown: 318 (4.85%)</li><li>pitwall-monorepo: 307 (4.68%)</li><li>iphone-emulator: 252 (3.84%)</li></ol></td></tr></tbody></table></div>
+<h3>Recent 14-Day Trend</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Claude prompts</th><th>Codex prompts</th></tr></thead><tbody><tr><td>2026-05-16</td><td>68</td><td>56</td></tr><tr><td>2026-05-17</td><td>110</td><td>110</td></tr><tr><td>2026-05-18</td><td>184</td><td>223</td></tr><tr><td>2026-05-19</td><td>87</td><td>39</td></tr><tr><td>2026-05-20</td><td>68</td><td>6</td></tr><tr><td>2026-05-21</td><td>110</td><td>127</td></tr><tr><td>2026-05-22</td><td>11</td><td>86</td></tr><tr><td>2026-05-23</td><td>5</td><td>10</td></tr><tr><td>2026-05-27</td><td>114</td><td>121</td></tr><tr><td>2026-05-28</td><td>82</td><td>56</td></tr><tr><td>2026-06-01</td><td>54</td><td>77</td></tr><tr><td>2026-06-03</td><td>51</td><td>61</td></tr><tr><td>2026-06-04</td><td>72</td><td>10</td></tr><tr><td>2026-06-05</td><td>32</td><td>3</td></tr></tbody></table></div>
+<h3>Top Commands Overall</h3><div class="table-wrap"><table><thead><tr><th>Command</th><th>Count</th><th>Example</th></tr></thead><tbody><tr><td>$run</td><td>1,636</td><td>$run</td></tr><tr><td>/ship</td><td>1,541</td><td>/ship --no-plan</td></tr><tr><td>/clear</td><td>887</td><td>/clear</td></tr><tr><td>/ship-end</td><td>268</td><td>/ship-end</td></tr><tr><td>/run</td><td>182</td><td>/run</td></tr><tr><td>/ship-then-plan</td><td>161</td><td>/ship-then-plan</td></tr><tr><td>$ship</td><td>145</td><td>$ship</td></tr><tr><td>/investigate</td><td>99</td><td>/investigate upon hitting enter after inputing my email within the upcoming events input form, it should not automatically subscribe without letting the user select from the drop...</td></tr><tr><td>/sync</td><td>98</td><td>/sync</td></tr><tr><td>$targeted-skill-builder</td><td>94</td><td>$targeted-skill-builder design-system benchmark timeout reporting</td></tr><tr><td>/usage</td><td>89</td><td>/usage</td></tr><tr><td>$benchmark-test-skill</td><td>82</td><td>$benchmark-test-skill design-system</td></tr><tr><td>$exec</td><td>73</td><td>[$exec](/Users/georgele/projects/tools/agentic-skills/packs/exec-loop/codex/exec/SKILL.md)</td></tr><tr><td>$ship-end</td><td>70</td><td>[$ship-end](/Users/georgele/projects/tools/claude-skills/codex/ship-end/SKILL.md)</td></tr><tr><td>/resume</td><td>69</td><td>/resume</td></tr><tr><td>$roadmap</td><td>65</td><td>[$roadmap](/Users/georgele/projects/tools/claude-skills/codex/roadmap/SKILL.md)</td></tr><tr><td>$session-triage</td><td>62</td><td>$session-triage design-system benchmark failure</td></tr><tr><td>$guide</td><td>59</td><td>$guide for getting all of the stripe information for all products in the lexcorp portfolio as specified by their documentation</td></tr><tr><td>$pack</td><td>58</td><td>$pack refresh</td></tr><tr><td>/roadmap</td><td>54</td><td>/roadmap</td></tr></tbody></table></div>
+<h3>Top Claude Commands</h3><div class="table-wrap"><table><thead><tr><th>Command</th><th>Count</th><th>Example</th></tr></thead><tbody><tr><td>/ship</td><td>1,540</td><td>/ship --no-plan</td></tr><tr><td>/clear</td><td>886</td><td>/clear</td></tr><tr><td>/ship-end</td><td>268</td><td>/ship-end</td></tr><tr><td>/run</td><td>182</td><td>/run</td></tr><tr><td>/ship-then-plan</td><td>161</td><td>/ship-then-plan</td></tr><tr><td>/investigate</td><td>99</td><td>/investigate upon hitting enter after inputing my email within the upcoming events input form, it should not automatically subscribe without letting the user select from the drop...</td></tr><tr><td>/sync</td><td>98</td><td>/sync</td></tr><tr><td>/usage</td><td>89</td><td>/usage</td></tr><tr><td>/resume</td><td>69</td><td>/resume</td></tr><tr><td>/roadmap</td><td>54</td><td>/roadmap</td></tr><tr><td>/pack</td><td>49</td><td>/pack install business, game packs</td></tr><tr><td>/analyze-sessions</td><td>35</td><td>/analyze-sessions</td></tr></tbody></table></div>
+<h3>Top Codex Commands</h3><div class="table-wrap"><table><thead><tr><th>Command</th><th>Count</th><th>Example</th></tr></thead><tbody><tr><td>$run</td><td>1,635</td><td>$run</td></tr><tr><td>$ship</td><td>144</td><td>$ship</td></tr><tr><td>$targeted-skill-builder</td><td>94</td><td>$targeted-skill-builder design-system benchmark timeout reporting</td></tr><tr><td>$benchmark-test-skill</td><td>82</td><td>$benchmark-test-skill design-system</td></tr><tr><td>$exec</td><td>73</td><td>[$exec](/Users/georgele/projects/tools/agentic-skills/packs/exec-loop/codex/exec/SKILL.md)</td></tr><tr><td>$ship-end</td><td>70</td><td>[$ship-end](/Users/georgele/projects/tools/claude-skills/codex/ship-end/SKILL.md)</td></tr><tr><td>$roadmap</td><td>65</td><td>[$roadmap](/Users/georgele/projects/tools/claude-skills/codex/roadmap/SKILL.md)</td></tr><tr><td>$session-triage</td><td>62</td><td>$session-triage design-system benchmark failure</td></tr><tr><td>$guide</td><td>56</td><td>$guide for getting all of the stripe information for all products in the lexcorp portfolio as specified by their documentation</td></tr><tr><td>$pack</td><td>56</td><td>$pack refresh</td></tr><tr><td>$sync</td><td>41</td><td>$sync</td></tr><tr><td>$benchmark-agent-review</td><td>32</td><td>$benchmark-agent-review benchmark-test-skill</td></tr></tbody></table></div>
+</section>
+<section id="token-cost"><div class="section-head"><h2>Token And Cost Check</h2></div>
+    <div class="section-feedback" data-section="Token And Cost Check" id="feedback-token-and-cost-check">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Token totals are available only from Codex rich rollout <code>token_count</code> events. The aggregation uses the final or highest cumulative <code>total_token_usage</code> snapshot per session, avoiding cumulative event double-counting. Cached-input and reasoning-output fields are presented as logged subcategories, not added on top of <code>total_tokens</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Coverage field</th><th>Value</th></tr></thead><tbody><tr><td>Codex rich sessions with metadata</td><td>2,685</td></tr><tr><td>Codex sessions with populated token totals</td><td>2,633</td></tr><tr><td>Token-count events</td><td>125,560</td></tr><tr><td>Populated token-count events</td><td>123,188</td></tr><tr><td>Claude usage metadata</td><td>unavailable in ~/.claude/history.jsonl</td></tr><tr><td>Codex compact usage metadata</td><td>unavailable in ~/.codex/history.jsonl; enriched from rich rollout token_count events where present</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Token class</th><th>Logged total</th><th>Notes</th></tr></thead><tbody><tr><td>Input tokens</td><td>9,934,443,395</td><td>Logged cumulative input tokens per session; includes cached input accounting in the provider telemetry shape.</td></tr><tr><td>Cached input tokens</td><td>9,452,839,168</td><td>Logged cached-input subcategory; not added separately to total tokens.</td></tr><tr><td>Output tokens</td><td>41,283,676</td><td>Logged output tokens.</td></tr><tr><td>Reasoning output tokens</td><td>9,132,393</td><td>Logged reasoning-output subcategory; not added separately to total tokens.</td></tr><tr><td>Total tokens</td><td>9,975,727,071</td><td>Final/highest cumulative total_token_usage snapshot per session, not a sum of every event.</td></tr></tbody></table></div>
+<h3>Top Token Projects</h3><div class="table-wrap"><table><thead><tr><th>Project</th><th>Total</th><th>Input</th><th>Cached input</th><th>Output</th><th>Reasoning output</th></tr></thead><tbody><tr><td>agentic-skills</td><td>1,643,526,627</td><td>1,638,622,360</td><td>1,575,583,872</td><td>4,904,267</td><td>898,025</td></tr><tr><td>mobile-ideas</td><td>1,498,370,660</td><td>1,492,493,517</td><td>1,434,706,048</td><td>5,877,143</td><td>697,905</td></tr><tr><td>poke/monorepo</td><td>698,547,483</td><td>695,136,763</td><td>662,876,416</td><td>3,410,720</td><td>1,095,561</td></tr><tr><td>lexcorp-war-room</td><td>530,318,796</td><td>528,268,389</td><td>496,294,912</td><td>2,050,407</td><td>571,559</td></tr><tr><td>pitwall-monorepo</td><td>469,816,877</td><td>467,989,853</td><td>440,838,400</td><td>1,827,024</td><td>310,145</td></tr><tr><td>content</td><td>433,715,515</td><td>432,156,191</td><td>412,290,944</td><td>1,559,324</td><td>235,310</td></tr><tr><td>bismarck-v0.4</td><td>328,778,351</td><td>327,630,894</td><td>310,726,272</td><td>1,147,457</td><td>309,508</td></tr><tr><td>lexcorp-sdk</td><td>320,328,130</td><td>318,726,452</td><td>299,256,960</td><td>1,601,678</td><td>413,456</td></tr><tr><td>claude-usage-review</td><td>310,408,293</td><td>308,947,919</td><td>294,600,320</td><td>1,460,374</td><td>397,385</td></tr><tr><td>metternich-engine</td><td>307,372,445</td><td>306,077,250</td><td>289,040,384</td><td>1,295,195</td><td>515,804</td></tr></tbody></table></div>
+<h3>Top Token Dates</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Total</th><th>Input</th><th>Cached input</th><th>Output</th></tr></thead><tbody><tr><td>2026-04-16</td><td>725,115,166</td><td>721,924,167</td><td>693,512,064</td><td>3,190,999</td></tr><tr><td>2026-04-28</td><td>685,798,757</td><td>682,599,130</td><td>648,357,248</td><td>3,199,627</td></tr><tr><td>2026-05-18</td><td>578,915,217</td><td>577,533,294</td><td>559,454,848</td><td>1,381,923</td></tr><tr><td>2026-05-15</td><td>529,923,182</td><td>528,180,596</td><td>505,390,336</td><td>1,742,586</td></tr><tr><td>2026-05-13</td><td>471,616,314</td><td>470,079,972</td><td>451,095,936</td><td>1,536,342</td></tr><tr><td>2026-05-14</td><td>427,805,947</td><td>426,354,526</td><td>408,203,520</td><td>1,451,421</td></tr><tr><td>2026-05-12</td><td>393,076,819</td><td>391,877,265</td><td>377,591,808</td><td>1,199,554</td></tr><tr><td>2026-04-21</td><td>358,331,351</td><td>356,838,257</td><td>336,947,200</td><td>1,493,094</td></tr><tr><td>2026-04-19</td><td>346,932,104</td><td>345,310,443</td><td>329,609,600</td><td>1,621,661</td></tr><tr><td>2026-04-22</td><td>321,294,563</td><td>320,222,431</td><td>305,819,648</td><td>1,072,132</td></tr></tbody></table></div>
+<h3>Top Token Sessions</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Project</th><th>Total</th><th>Input</th><th>Output</th><th>Provider</th><th>Model</th></tr></thead><tbody><tr><td>2026-05-12</td><td>content</td><td>145,208,784</td><td>144,762,388</td><td>446,396</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-05-10</td><td>jit-life-os</td><td>98,619,816</td><td>98,356,919</td><td>262,897</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-04-22</td><td>mobile-ideas</td><td>80,212,773</td><td>80,118,263</td><td>94,510</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-04-30</td><td>mobile-ideas</td><td>65,468,846</td><td>65,207,578</td><td>261,268</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-05-10</td><td>content</td><td>44,204,896</td><td>44,031,799</td><td>173,097</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-04-21</td><td>bismarck-v0.4</td><td>42,176,207</td><td>42,082,453</td><td>93,754</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-04-09</td><td>metternich-engine</td><td>41,567,098</td><td>41,398,559</td><td>168,539</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-05-18</td><td>bismarck-v5</td><td>36,600,086</td><td>36,552,217</td><td>47,869</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-04-21</td><td>mobile-ideas</td><td>34,552,204</td><td>34,478,559</td><td>73,645</td><td>openai</td><td>not_logged</td></tr><tr><td>2026-05-05</td><td>mobile-ideas</td><td>31,390,746</td><td>31,253,233</td><td>137,513</td><td>openai</td><td>not_logged</td></tr></tbody></table></div>
+<div class="callout"><strong>Cost status:</strong> cost unavailable: no direct structured cost fields found, no user-provided pricing table, and rich session metadata does not log model identifiers needed for a reliable current pricing map. Pricing source: none used. The report does not estimate dollars from remembered pricing.</div>
+</section>
+<section id="patterns"><div class="section-head"><h2>Categorized Patterns</h2></div>
+    <div class="section-feedback" data-section="Categorized Patterns" id="feedback-categorized-patterns">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>The largest recurring categories are general short instructions, shipping/commit boundaries, skill-pack maintenance, and step execution. General small instructions are kept separate so they do not drown out actionable automation opportunities.</p>
+<div class="table-wrap"><table><thead><tr><th>Category</th><th>Messages</th><th>Source split</th></tr></thead><tbody><tr><td>General small instruction / answer</td><td>7,040</td><td>claude: 4427, codex: 2613</td></tr><tr><td>Ship existing work / commit-push boundary</td><td>3,380</td><td>claude: 2911, codex: 469</td></tr><tr><td>Execute next planned step</td><td>2,589</td><td>claude: 660, codex: 1929</td></tr><tr><td>Skill and pack maintenance</td><td>1,276</td><td>claude: 278, codex: 998</td></tr><tr><td>Docs, specs, and task planning</td><td>655</td><td>claude: 465, codex: 190</td></tr><tr><td>Debugging, tests, and verification</td><td>622</td><td>claude: 483, codex: 139</td></tr><tr><td>Research, investigation, and reports</td><td>518</td><td>claude: 402, codex: 116</td></tr><tr><td>Sync and environment setup</td><td>331</td><td>claude: 283, codex: 48</td></tr><tr><td>Frontend, UX, prototype, and animation</td><td>198</td><td>claude: 144, codex: 54</td></tr></tbody></table></div>
+<h3>Fuzzy Prompt Patterns</h3><div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Count</th><th>Examples</th></tr></thead><tbody><tr><td>Ship existing work / commit-push boundary</td><td>3,380</td><td><ul><li><code>claude</code> 2025-12-10 <strong>walkthrough-starting-point</strong>: ok can you push the changes to github with the appropriate commit message?</li><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: before we continue can you push our changes to github with the appropriate commit message?</li><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: can we push our changes to the database and seed if we haven&#x27;t done that already?</li></ul></td></tr><tr><td>Execute next planned step</td><td>2,781</td><td><ul><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: let&#x27;s continue, I will add the svgs and images later, place placeholder or TODO values for now in development</li></ul></td></tr><tr><td>Skill and pack maintenance</td><td>3,284</td><td><ul><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2026-01-09 <strong>bismarck-v0.3</strong>: can you fix that while I test the old issue? Also can you in the logs add a console log with the current version of the frontend which you will update after each onboarding so we...</li></ul></td></tr><tr><td>Debugging, tests, and verification</td><td>1,067</td><td><ul><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: I don&#x27;t think the svgs are overlayed properly over the rifle, can you give them a black border so I can verify?</li><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: oh ok so it was a bug fix</li><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: You&#x27;re about to add part_sku_unique unique constraint to the table, which contains 24 items. If this statement fails, you will receive an error from the database. Do you want to t...</li></ul></td></tr><tr><td>Research, investigation, and reports</td><td>1,123</td><td><ul><li><code>claude</code> 2025-12-19 <strong>loadoutworks.com</strong>: ok taking a few steps back and taking the role of experienced programmer and code architect, can you conduct an exhaustive and thorough code review of the project?</li><li><code>claude</code> 2025-12-22 <strong>loadoutworks.com</strong>: git status</li><li><code>claude</code> 2026-01-05 <strong>loadoutworks.com</strong>: review the current project and determine what&#x27;s todo to fix issue wise or build feature wise</li></ul></td></tr><tr><td>Frontend, UX, prototype, and animation</td><td>480</td><td><ul><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-11 <strong>loadoutworks.com</strong>: can you make the component sidebar take up 40% of the space on the screen? and on mobile, it should just replace the rifle view area with the build summary remaining underneath</li></ul></td></tr><tr><td>Docs, specs, and task planning</td><td>1,889</td><td><ul><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. [Pasted text #1 +312 lines]</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li></ul></td></tr><tr><td>Sync and environment setup</td><td>652</td><td><ul><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: /init</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li><li><code>claude</code> 2025-12-10 <strong>loadoutworks.com</strong>: Based on your observations and the following prd, edit the claude.md and prepare a todo list that is ready for development. # Product Requirements Document (PRD) # Virtual Gunsmit...</li></ul></td></tr></tbody></table></div>
+<h3>Exact Repeated Prompts</h3><div class="table-wrap"><table><thead><tr><th>Count</th><th>Sources</th><th>Example</th></tr></thead><tbody><tr><td>1,627</td><td>claude: 1, codex: 1626</td><td>$run</td></tr><tr><td>1,534</td><td>claude: 1534</td><td>/ship</td></tr><tr><td>887</td><td>claude: 886, codex: 1</td><td>/clear</td></tr><tr><td>264</td><td>claude: 264</td><td>/ship-end</td></tr><tr><td>216</td><td>claude: 169, codex: 47</td><td>continue</td></tr><tr><td>177</td><td>claude: 145, codex: 32</td><td>yes please</td></tr><tr><td>175</td><td>claude: 175</td><td>/run</td></tr><tr><td>161</td><td>claude: 161</td><td>/ship-then-plan</td></tr><tr><td>146</td><td>claude: 142, codex: 4</td><td>commit and push</td></tr><tr><td>143</td><td>claude: 1, codex: 142</td><td>$ship</td></tr><tr><td>98</td><td>claude: 98</td><td>/sync</td></tr><tr><td>89</td><td>claude: 89</td><td>/usage</td></tr><tr><td>76</td><td>claude: 75, codex: 1</td><td>update docs, commit and push</td></tr><tr><td>72</td><td>codex: 72</td><td>[$exec](/Users/georgele/projects/tools/agentic-skills/packs/exec-loop/codex/exec/SKILL.md)</td></tr><tr><td>67</td><td>codex: 67</td><td>Implement the plan.</td></tr></tbody></table></div>
+</section>
+<section id="workflow-sequences"><div class="section-head"><h2>Workflow Sequences</h2></div>
+    <div class="section-feedback" data-section="Workflow Sequences" id="feedback-workflow-sequences">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Common sequences show clear workflow migration: Claude sessions often use slash-command shipping and clearing loops, while Codex sessions show benchmark/triage/remediation chains and dollar-command task execution.</p>
+<div class="table-wrap"><table><thead><tr><th>Sequence</th><th>Count</th><th>Example source</th></tr></thead><tbody><tr><td>/ship-end -&gt; /clear</td><td>123</td><td>claude session 628cf529-8e81-401c-960f-2f7b91951d5b</td></tr><tr><td>/ship -&gt; /clear</td><td>111</td><td>claude session 4b9bc8f7-303f-4302-a5dd-e2eaf359e672</td></tr><tr><td>$session-triage -&gt; $targeted-skill-builder</td><td>52</td><td>codex session 019e1302-6655-78f3-a084-c9d2dc618f15</td></tr><tr><td>$benchmark-test-skill -&gt; $session-triage</td><td>43</td><td>codex session 019e12f6-145e-78b3-910a-01fbe1616510</td></tr><tr><td>$benchmark-test-skill -&gt; $session-triage -&gt; $targeted-skill-builder</td><td>38</td><td>codex session 019e1302-6655-78f3-a084-c9d2dc618f15</td></tr><tr><td>$run -&gt; $ship</td><td>35</td><td>codex session 019d4e94-ba0b-70d3-9f21-a0a52a4d8d8e</td></tr><tr><td>/run -&gt; /ship</td><td>27</td><td>claude session 08d1a86b-27de-4071-97bf-04e88a817ddb</td></tr><tr><td>/roadmap -&gt; /clear</td><td>24</td><td>claude session 4fa784c4-a013-4d00-b835-021d5eb800d6</td></tr><tr><td>$benchmark-test-skill -&gt; $benchmark-agent-review</td><td>24</td><td>codex session 019e1d57-bdd7-7832-b884-69d44b812da0</td></tr><tr><td>/sync -&gt; /ship</td><td>22</td><td>claude session 4fa784c4-a013-4d00-b835-021d5eb800d6</td></tr><tr><td>$benchmark-agent-review -&gt; $targeted-skill-builder</td><td>22</td><td>codex session 019e1d57-bdd7-7832-b884-69d44b812da0</td></tr><tr><td>/sync -&gt; /clear</td><td>21</td><td>claude session 4696c70d-decf-455e-8f8a-addf063f501b</td></tr><tr><td>/ship-end -&gt; /ship</td><td>20</td><td>claude session 11a09fae-036f-47a8-8980-2a00dd5a0f70</td></tr><tr><td>$benchmark-test-skill -&gt; $benchmark-agent-review -&gt; $targeted-skill-builder</td><td>18</td><td>codex session 019e1d57-bdd7-7832-b884-69d44b812da0</td></tr><tr><td>/ship -&gt; /ship-end</td><td>17</td><td>claude session 63a114a1-aa71-449a-a3ff-6147812f080b</td></tr></tbody></table></div>
+</section>
+<section id="skill-performance"><div class="section-head"><h2>Skill Performance Trends</h2></div>
+    <div class="section-feedback" data-section="Skill Performance Trends" id="feedback-skill-performance-trends">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Skill performance evidence combines compact prompt usage, repo prompt-history files, and lessons. The lessons are especially important because they encode user corrections and the concrete prevention rule that should be automated.</p>
+<h3>Prompt History Counts</h3><div class="table-wrap"><table><thead><tr><th>Prompt history slug</th><th>Files</th></tr></thead><tbody><tr><td>ship</td><td>45</td></tr><tr><td>analyze-sessions</td><td>28</td></tr><tr><td>investigate</td><td>24</td></tr><tr><td>ship-end</td><td>20</td></tr><tr><td>exec</td><td>20</td></tr><tr><td>pack</td><td>17</td></tr><tr><td>session-triage</td><td>4</td></tr><tr><td>reconcile-dev-docs</td><td>4</td></tr><tr><td>sync</td><td>4</td></tr><tr><td>targeted-skill-builder</td><td>4</td></tr><tr><td>devtool-docs-audit</td><td>3</td></tr><tr><td>benchmark-test-skill</td><td>3</td></tr><tr><td>feature-interview</td><td>2</td></tr><tr><td>research-roadmap</td><td>2</td></tr><tr><td>provision-agentic-config</td><td>2</td></tr></tbody></table></div>
+<h3>Recent Lessons</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Lesson title</th></tr></thead><tbody><tr><td>2026-06-02</td><td>Do not turn deploy-skill absence into next work when deploy is not contextually needed</td></tr><tr><td>2026-06-01</td><td>Verify stale unchecked tasks before recommending next work</td></tr><tr><td>2026-05-31</td><td>Alignment page compile controls must stay in normal page flow</td></tr><tr><td>2026-05-31</td><td>Alignment feedback YAML needs a local section path</td></tr><tr><td>2026-05-30</td><td>Never write a test/verification claim from remembered or garbled tool output</td></tr><tr><td>2026-05-30</td><td>Prove a test failure is pre-existing before calling it unrelated</td></tr><tr><td>2026-05-30</td><td>Verify commit/push RC and the staged boundary, don&#x27;t assume</td></tr><tr><td>2026-05-30</td><td>Alignment feedback needs an early YAML path</td></tr><tr><td>2026-05-29</td><td>Status routing must follow canonical skill contracts</td></tr><tr><td>2026-05-28</td><td>Codex `$` visibility can fail on stale symlink skill installs</td></tr></tbody></table></div>
+<h3>Correction Signals From Prompt History</h3>
+<p>Correction/frustration regex matches: Claude 152; Codex 134. These are approximate signals, not a judgment of fault; examples below are sanitized excerpts.</p>
+<div class="table-wrap"><table><thead><tr><th>Source</th><th>Date</th><th>Project</th><th>Example</th></tr></thead><tbody><tr><td>claude</td><td>2025-12-10</td><td>walkthrough-starting-point</td><td>can you try npm run build again?</td></tr><tr><td>claude</td><td>2025-12-10</td><td>loadoutworks.com</td><td>woah wait why did you make that change to the index? everything in the old code works</td></tr><tr><td>claude</td><td>2025-12-12</td><td>loadoutworks.com</td><td>can we provide support for right-side view as well? I don&#x27;t think top view would be often used. I might be wrong but that&#x27;s my personal feeling</td></tr><tr><td>claude</td><td>2025-12-12</td><td>loadoutworks.com</td><td>no the left image is 1950 x 570 and the right image is 1940x494. can you check the image dimensions again and verify your recommendation?</td></tr><tr><td>claude</td><td>2025-12-19</td><td>loadoutworks.com</td><td>try again?</td></tr><tr><td>claude</td><td>2026-01-08</td><td>bismarck-v0.3</td><td>how do I check to see if the orchestrator is working? I get this error now: Failed to load sessions: Service temporarily unavailable. Please try again later.</td></tr><tr><td>claude</td><td>2026-01-09</td><td>bismarck-v0.3</td><td>can you check the runners and orchestrator? bc things have timed out again</td></tr><tr><td>claude</td><td>2026-01-09</td><td>bismarck-v0.3</td><td>Ok the terminal is popping back up again, but we still have no interactivity. I put the logs in logs.md. You might to check on the runners and orchestrator</td></tr><tr><td>claude</td><td>2026-01-09</td><td>bismarck-v0.3</td><td>please try again with the previous commands, I configured the sso for you</td></tr><tr><td>claude</td><td>2026-01-10</td><td>bismarck-v0.3</td><td>can you note that down in the claude.md so we don&#x27;t make that mistake again?</td></tr><tr><td>claude</td><td>2026-01-13</td><td>bismarck-v0.3</td><td>finish step 1 and stop</td></tr><tr><td>claude</td><td>2026-01-15</td><td>bismarck-v0.3</td><td>ok, looks like everything works on production. Redirect is still broken due to the redirect uri and I have confirmed that the callback url has been updated correctly</td></tr></tbody></table></div>
+</section>
+<section id="evidence"><div class="section-head"><h2>Evidence Matrix And Assumptions</h2></div>
+    <div class="section-feedback" data-section="Evidence Matrix And Assumptions" id="feedback-evidence-matrix-and-assumptions">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="table-wrap"><table><thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead><tbody><tr><td>Histories were readable and parsed completely</td><td>Source inventory: Claude 10,053 lines; Codex compact 6,556 lines; Codex rich 2,685 files / 854,835 records; parse_errors = 0.</td><td>The analysis can rely on complete local source coverage for the default scope.</td><td>High</td><td>Assumes current file contents at analysis time are the desired scope.</td><td>Approve or correct the scope before treating the report as complete.</td></tr><tr><td>Codex has usable token metadata; Claude compact history does not</td><td>Codex rich logs: 123,188 populated token_count events and 2,633 token sessions. Claude history has prompt records only.</td><td>Token totals are reportable for Codex rich sessions only; source-level token comparison against Claude is not possible from these logs.</td><td>High</td><td>Token telemetry shape is trusted as logged.</td><td>Use token findings for Codex spend patterns; do not compare to Claude spend.</td></tr><tr><td>Cost is unavailable</td><td>No direct structured cost fields were found; model identifiers are not logged in session_meta; no user-provided pricing table was supplied.</td><td>Estimating dollars would require guessing model mapping or fetching current pricing, so the report stops at token totals.</td><td>High</td><td>A future run with verified pricing and model IDs could estimate cost.</td><td>Approve cost as unavailable or request a pricing-table-backed rerun.</td></tr><tr><td>Recent Codex work is dominated by skills/pack maintenance</td><td>Activity category count: Skill and pack maintenance = 1,276; top Codex project = agentic-skills with 715 messages.</td><td>Codex is being used heavily for repository workflow automation and skill maintenance rather than only app feature work.</td><td>High</td><td>Category classification is regex-based and may overcount prompts mentioning skill terms incidentally.</td><td>Prioritize automation around skill maintenance and shipping boundaries.</td></tr><tr><td>Shipping and verification loops are high risk and frequent</td><td>Top commands include /ship 1,541, $ship 145, /ship-end 268; lessons include verification-claim and stale-task failures.</td><td>The strongest durable workflow gap is not raw implementation, but proving and shipping work without stale claims or stale todo routing.</td><td>High</td><td>Lesson file is repo evidence, not a prompt-history source; used as corroboration for skill performance trends.</td><td>Review the proposed targeted-skill-builder route.</td></tr><tr><td>Plan-step execution remains a repeat workflow</td><td>Execute next planned step pattern count = 2,589; top command $run = 1,636.</td><td>A phase executor/runner remains a high-frequency workflow that benefits from guardrails and task-document synchronization.</td><td>Medium</td><td>Counts include explicit command invocations and natural-language step requests.</td><td>Consider integrating task execution and verification gates.</td></tr></tbody></table></div>
+<h3>Confidence and Assumption Register</h3><div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>What would change it</th></tr></thead><tbody><tr><td>Prompt counts</td><td>Evidence-backed from compact histories</td><td>New history lines written after this run will change counts.</td></tr><tr><td>Codex project attribution</td><td>Evidence-backed when session_id mapped to rich session_meta</td><td>Unknown Codex compact sessions or missing metadata would reduce attribution coverage.</td></tr><tr><td>Token totals</td><td>Evidence-backed for Codex rich sessions with populated cumulative totals</td><td>Provider telemetry changes or model-specific billing details would change interpretation, not logged token counts.</td></tr><tr><td>Cost</td><td>Unavailable, not estimated</td><td>A user-supplied or currently verified pricing table plus model IDs would enable estimation.</td></tr><tr><td>Automation frequencies</td><td>Provisional classification based on regex and command extraction</td><td>A semantic classifier or manual taxonomy could adjust category counts.</td></tr><tr><td>Recommended route</td><td>Inference from frequencies plus repo lessons</td><td>User priority may favor skill-maintenance batcher over shipping verifier despite the verification risk.</td></tr></tbody></table></div>
+<h3>Coverage Gaps</h3>
+<ul>
+<li>Claude history does not contain token usage fields, so Claude token and cost comparisons are unavailable.</li>
+<li>Codex compact history does not contain project/cost/token data by itself; project and token attribution depends on matching rich session metadata.</li>
+<li>Codex session metadata logs provider as <code>openai</code> but does not log model names; cost estimation is intentionally blocked without reliable model mapping.</li>
+<li>Workflow categories are regex-classified and should be treated as directional evidence; command counts are exact after normalizing literal commands and Codex markdown skill links.</li>
+</ul>
+</section>
+<section id="recommendations"><div class="section-head"><h2>Ranked Recommendations</h2></div>
+    <div class="section-feedback" data-section="Ranked Recommendations" id="feedback-ranked-recommendations">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>The highest-leverage automations are the ones that remove repeated multi-step prompt chains while reducing known failure modes from the lessons file.</p>
+<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Pattern</th><th>Frequency</th><th>Type</th><th>Suggested automation</th></tr></thead><tbody><tr><td>1</td><td>Skill/pack maintenance dominates recent Codex work</td><td>3,284</td><td>Skill</td><td>Batch skill version/archive/changelog/parity/generator validation into a single repo-managed maintenance skill</td></tr><tr><td>2</td><td>Validation/ship loops repeatedly ask for prompt capture, task updates, validation, commit, and push</td><td>3,021</td><td>Skill contract hardening</td><td>Add an always-on shipping boundary checklist with machine-readable verification claim capture</td></tr><tr><td>3</td><td>Repeated plan-step execution prompts across projects</td><td>2,781</td><td>Agent or skill</td><td>Standardize phase executor that reads tasks/todo, executes the next unchecked step, verifies, and records review notes</td></tr><tr><td>4</td><td>Correction lessons show routing/next-command drift and stale task docs</td><td>74</td><td>Standing instruction plus tests</td><td>Add next-route normalization and stale-task artifact reconciliation checks to shipping/status skills</td></tr><tr><td>5</td><td>Alignment pages recur across research/report workflows</td><td>55</td><td>Plugin/integration or template</td><td>Reusable alignment-page generator with schema-driven gates and validation checks</td></tr></tbody></table></div>
+<h3>Top 5 Highest-Impact Automations</h3><div class="table-wrap"><table><thead><tr><th>Automation</th><th>Avoided manual prompts estimate</th><th>Why it matters</th></tr></thead><tbody><tr><td>Skill maintenance batcher</td><td>3,284</td><td>Skill versioning, archive, changelog, mirror parity, prompt history, and showcase validation are a repeated multi-step sequence.</td></tr><tr><td>Shipping boundary verifier</td><td>3,021</td><td>Commit/push/status requests are frequent and risky when verification claims are copied from scrollback.</td></tr><tr><td>Task phase executor</td><td>2,781</td><td>Many prompts ask to implement or move to a specific roadmap/todo step.</td></tr><tr><td>Correction-to-lesson gate</td><td>286</td><td>Corrections already produce durable lessons, but a gate could detect and record the lesson before final output.</td></tr><tr><td>Alignment page generator/validator</td><td>55</td><td>Alignment-page construction and feedback controls are cross-cutting and easy to drift.</td></tr></tbody></table></div>
+<div class="callout"><strong>Proposed next route for approval:</strong> <code>$targeted-skill-builder enforce shipping verification claim capture and stale-task reconciliation gate</code><br>Likely owner surface: ship/ship-end/codebase-status/analyze-sessions contracts plus layer1 route/verification tests. Validation expectation: focused layer1 tests that fail on unverified pass/fail claims and stale todo-only next-work recommendations.</div>
+</section>
+<section id="review-gates"><div class="section-head"><h2>Review Gates</h2></div>
+    <div class="section-feedback" data-section="Review Gates" id="feedback-review-gates">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Answer these gates only after reviewing the evidence and recommendations above. Feedback-only YAML can be compiled from any section feedback control before answering every required gate.</p>
+
+    <div class="gate question-block" data-section="Research Completeness" data-gate-type="research completeness" data-question-id="research-completeness-research-completeness" data-target-path="">
+      <h3>Research Completeness</h3>
+      <p>Is the evidence sufficient to accept this cross-session analysis as the current report?</p>
+      <div class="radio-group"><label><input type="radio" name="research-completeness-research-completeness" value="Accept the report evidence as sufficient"> <span>Accept the report evidence as sufficient</span></label><label><input type="radio" name="research-completeness-research-completeness" value="Revise with a narrower date/project scope"> <span>Revise with a narrower date/project scope</span></label><label><input type="radio" name="research-completeness-research-completeness" value="Revise with additional taxonomy detail"> <span>Revise with additional taxonomy detail</span></label>
+        <label><input type="radio" name="research-completeness-research-completeness" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="research-completeness-research-completeness" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+    <div class="gate question-block" data-section="Token And Cost Coverage" data-gate-type="assumptions/confidence" data-question-id="token-and-cost-coverage-assumptions-confidence" data-target-path="">
+      <h3>Assumptions/Confidence</h3>
+      <p>How should token and cost limitations be handled?</p>
+      <div class="radio-group"><label><input type="radio" name="token-and-cost-coverage-assumptions-confidence" value="Accept token totals and cost unavailable status"> <span>Accept token totals and cost unavailable status</span></label><label><input type="radio" name="token-and-cost-coverage-assumptions-confidence" value="Require a pricing-table-backed cost rerun"> <span>Require a pricing-table-backed cost rerun</span></label><label><input type="radio" name="token-and-cost-coverage-assumptions-confidence" value="Require model/project attribution improvements first"> <span>Require model/project attribution improvements first</span></label>
+        <label><input type="radio" name="token-and-cost-coverage-assumptions-confidence" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="token-and-cost-coverage-assumptions-confidence" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+    <div class="gate question-block" data-section="Recommendation Direction" data-gate-type="recommended path" data-question-id="recommendation-direction-recommended-path" data-target-path="">
+      <h3>Recommended Path</h3>
+      <p>Which proposed automation direction should be treated as the next approved path?</p>
+      <div class="radio-group"><label><input type="radio" name="recommendation-direction-recommended-path" value="Use the proposed shipping verification and stale-task reconciliation route"> <span>Use the proposed shipping verification and stale-task reconciliation route</span></label><label><input type="radio" name="recommendation-direction-recommended-path" value="Prioritize the skill maintenance batcher route instead"> <span>Prioritize the skill maintenance batcher route instead</span></label><label><input type="radio" name="recommendation-direction-recommended-path" value="Prioritize the task phase executor route instead"> <span>Prioritize the task phase executor route instead</span></label>
+        <label><input type="radio" name="recommendation-direction-recommended-path" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="recommendation-direction-recommended-path" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+    <div class="gate question-block" data-section="Artifact Destination And Proposed File Changes" data-gate-type="artifact destination" data-question-id="artifact-destination-and-proposed-file-changes-artifact-destination" data-target-path="alignment/analyze-sessions-cross-session-usage.html">
+      <h3>Artifact Destination</h3>
+      <p>Is the review artifact/provenance destination acceptable?</p>
+      <div class="radio-group"><label><input type="radio" name="artifact-destination-and-proposed-file-changes-artifact-destination" value="Accept this review page and prompt/task provenance only"> <span>Accept this review page and prompt/task provenance only</span></label><label><input type="radio" name="artifact-destination-and-proposed-file-changes-artifact-destination" value="Write an additional canonical Markdown report after approval"> <span>Write an additional canonical Markdown report after approval</span></label><label><input type="radio" name="artifact-destination-and-proposed-file-changes-artifact-destination" value="Do not create additional durable artifacts"> <span>Do not create additional durable artifacts</span></label>
+        <label><input type="radio" name="artifact-destination-and-proposed-file-changes-artifact-destination" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="artifact-destination-and-proposed-file-changes-artifact-destination" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+    <div class="gate question-block" data-section="Post-Approval Route" data-gate-type="post-approval route" data-question-id="post-approval-route-post-approval-route" data-target-path="">
+      <h3>Post-Approval Route</h3>
+      <p>After final approval, what should the agent do next?</p>
+      <div class="radio-group"><label><input type="radio" name="post-approval-route-post-approval-route" value="Confirm the page and stop with no downstream route"> <span>Confirm the page and stop with no downstream route</span></label><label><input type="radio" name="post-approval-route-post-approval-route" value="Confirm the page and recommend the approved targeted-skill-builder command"> <span>Confirm the page and recommend the approved targeted-skill-builder command</span></label><label><input type="radio" name="post-approval-route-post-approval-route" value="Confirm the page and update task docs with a new next-work item"> <span>Confirm the page and update task docs with a new next-work item</span></label>
+        <label><input type="radio" name="post-approval-route-post-approval-route" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="post-approval-route-post-approval-route" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div></section>
+<section id="compile" class="compile-box">
+  <div class="section-head"><h2>Compile YAML</h2></div>
+    <div class="section-feedback" data-section="Compile YAML" id="feedback-compile-yaml">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+  <p>Use feedback YAML for emphasis requests, concerns, or clarification before answering all gates. Use final answers YAML only when every required gate is answered.</p>
+  <div class="compile-actions"><button type="button" id="compile-feedback">Compile Feedback YAML</button><button type="button" id="copy-feedback">Copy YAML</button><span id="feedback-status"></span></div>
+  <textarea id="compiled-feedback-yaml" readonly></textarea>
+  <div class="compile-actions"><button type="button" id="compile-answers">Compile Answers</button><button type="button" id="copy-answers">Copy YAML</button><span id="answer-status"></span></div>
+  <textarea id="compiled-yaml" readonly></textarea>
+</section>
+</main>
+<script>
+const alignmentPage = 'alignment/analyze-sessions-cross-session-usage.html';
+const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
+function yamlEscape(value) { return String(value || '').replace(/\n/g, '\n    '); }
+function selectedFeedbackEntries() {
+  return [...document.querySelectorAll('.section-feedback.has-feedback')].map(box => ({
+    section: box.dataset.section,
+    feedback: box.dataset.feedback,
+    notes: box.querySelector('.feedback-notes').value.trim(),
+    requested_agent_action: actionFor[box.dataset.feedback]
+  }));
+}
+function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
+function feedbackYaml(entries) {
+  const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
+  let y = `alignment_page: ${alignmentPage}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n`;
+  y += unanswered.length ? unanswered.map(q => `  - ${q}`).join('\n') + '\n' : '  []\n';
+  y += 'section_feedback:\n';
+  y += entries.length ? entries.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+function answersYaml() {
+  const gates = [...document.querySelectorAll('.gate')];
+  let y = `alignment_page: ${alignmentPage}\napproval_status: ready-for-agent-review\ngate_answers:\n`;
+  for (const g of gates) {
+    const checked = g.querySelector('input[type="radio"]:checked');
+    const answer = checked ? checked.value : '';
+    const status = answer === 'Need clarification' ? 'needs-clarification' : (answer === 'Other / None of the above' ? 'other' : 'answered');
+    const notes = g.querySelector('.answer-notes').value.trim();
+    y += `  - section: ${yamlEscape(g.dataset.section)}\n    gate_type: ${yamlEscape(g.dataset.gateType)}\n    status: ${status}\n    answer: ${yamlEscape(answer)}\n`;
+    if (notes) y += `    notes: ${yamlEscape(notes)}\n`;
+    if (g.dataset.targetPath) y += `    target_path: ${yamlEscape(g.dataset.targetPath)}\n`;
+  }
+  const feedback = selectedFeedbackEntries();
+  y += 'section_feedback:\n';
+  y += feedback.length ? feedback.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+async function copyText(text, statusEl, textarea) {
+  try { await navigator.clipboard.writeText(text); statusEl.textContent = 'Copied'; }
+  catch { if (textarea) { textarea.focus(); textarea.select(); } statusEl.textContent = 'Select text to copy'; }
+}
+function updateAnswerState() {
+  const remaining = unansweredQuestions();
+  const btn = document.getElementById('compile-answers');
+  btn.disabled = remaining.length > 0;
+  document.getElementById('answer-status').textContent = remaining.length ? `${remaining.length} required questions remaining` : 'All required questions answered';
+}
+document.querySelectorAll('.section-feedback button[data-feedback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active'); box.classList.remove('has-feedback','has-yaml'); delete box.dataset.feedback;
+    } else {
+      box.querySelectorAll('button[data-feedback]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); box.dataset.feedback = btn.dataset.feedback; box.classList.add('has-feedback'); box.classList.remove('has-yaml');
+    }
+  });
+});
+document.querySelectorAll('.compile-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    const entry = { section: box.dataset.section, feedback: box.dataset.feedback, notes: box.querySelector('.feedback-notes').value.trim(), requested_agent_action: actionFor[box.dataset.feedback] };
+    const y = feedbackYaml([entry]);
+    const area = box.querySelector('.local-yaml'); area.value = y; box.classList.add('has-yaml');
+    copyText(y, box.querySelector('.copy-status'), area);
+  });
+});
+document.querySelectorAll('.copy-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    copyText(box.querySelector('.local-yaml').value, box.querySelector('.copy-status'), box.querySelector('.local-yaml'));
+  });
+});
+document.querySelectorAll('.gate input[type="radio"]').forEach(r => {
+  r.addEventListener('change', () => { r.closest('.gate').classList.add('has-answer'); updateAnswerState(); });
+});
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  const y = feedbackYaml(selectedFeedbackEntries());
+  const area = document.getElementById('compiled-feedback-yaml'); area.value = y;
+  copyText(y, document.getElementById('feedback-status'), area);
+});
+document.getElementById('copy-feedback').addEventListener('click', () => copyText(document.getElementById('compiled-feedback-yaml').value, document.getElementById('feedback-status'), document.getElementById('compiled-feedback-yaml')));
+document.getElementById('compile-answers').addEventListener('click', () => {
+  const remaining = unansweredQuestions();
+  if (remaining.length) { remaining[0].scrollIntoView({behavior:'smooth', block:'center'}); updateAnswerState(); return; }
+  const y = answersYaml(); const area = document.getElementById('compiled-yaml'); area.value = y;
+  copyText(y, document.getElementById('answer-status'), area);
+});
+document.getElementById('copy-answers').addEventListener('click', () => copyText(document.getElementById('compiled-yaml').value, document.getElementById('answer-status'), document.getElementById('compiled-yaml')));
+updateAnswerState();
+</script>
+</body>
+</html>

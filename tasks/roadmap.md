@@ -1,3 +1,32 @@
+## Current Targeted Update: Cross-Session Usage Analysis 2026-06-05
+
+**Goal:** Run `$analyze-sessions` across the default local Claude and Codex history sources and produce a full structured report plus HTML alignment page for review.
+
+**Execution Profile:**
+- Parallel mode: serial for source/artifact mutations; parallel reads allowed.
+- Rationale: The analysis should stream all readable history sources, avoid sampling, and keep generated report artifacts together with their prompt/task provenance.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the plan and final review notes.
+- [x] Full readable Claude and Codex history sources are parsed rather than sampled, with unreadable or missing sources explicitly reported.
+- [x] Report includes overview stats, source comparison, command/skill usage, recurring patterns, workflow sequences, skill performance trends, token/cost coverage, and ranked automation recommendations.
+- [x] Token totals come only from available usage metadata, cumulative Codex token snapshots are not double-counted, and cost is reported as unavailable unless explicit cost fields or verified pricing are available.
+- [x] `alignment/analyze-sessions-cross-session-usage.html` renders the full report with evidence, assumptions, recommendations, review gates, and YAML controls.
+- [x] Verification proves the artifacts exist, parse as expected, contain required sections, and avoid accidental system/developer/tool-output prompt counting.
+- [x] Intended tracked changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation, review lessons, and record this plan.
+2. Inspect available Claude/Codex history files and rich Codex session roots.
+3. Stream-parse all readable sources into normalized records, excluding system/developer/base instruction and tool-output text from prompt-pattern counts.
+4. Deduplicate Codex compact and rich prompts, enrich compact history with rich session metadata, and aggregate final/highest Codex token totals per session.
+5. Classify projects, commands, repeated prompts, workflow themes, skill invocations, corrections, and automation opportunities.
+6. Write the full-depth HTML alignment page/report and update task review notes.
+7. Run targeted artifact/content/HTML/JavaScript/whitespace checks, inspect the diff boundary, commit, and push intended changes.
+
+---
+
 ## Current Targeted Update: Analyze Sessions Token Cost Check 2026-06-05
 
 **Goal:** Update the `analyze-sessions` skill so every broad session-history report checks available token usage metadata and reports total token spend plus related cost when the history data supports it.
