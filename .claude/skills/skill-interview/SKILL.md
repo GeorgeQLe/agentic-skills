@@ -54,7 +54,6 @@ Use this skill when the user wants to create or substantially redesign a skill b
      - Verification and benchmark coverage strategy
      - Next-step routing after successful completion
      - Relationship to overlapping skills
-     - Clarification strategy: when should this skill ask vs. proceed autonomously?
    - For mutation-capable skills, explicitly define whether the skill should commit and push by default.
    - For repo-managed skills, include benchmark coverage expectations in the brief.
 

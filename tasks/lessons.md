@@ -1,5 +1,13 @@
 # Lessons
 
+## 2026-06-05 — Alignment pages must not embed deliverables, and review-only product-path approvals need a formal state
+
+- An alignment page used `<object data="...">` to embed the working packet instead of rendering all proposed deliverables inline, violating the no-context-loss rule but not explicitly prohibited.
+- A product-path fork was approved as "review only" — a state with no formal representation in the AFPS product-path contracts, leaving the path in limbo (approved but absent from `research/.progress.yaml`).
+- Added an explicit embed prohibition (`<object>`, `<iframe>`, `<embed>`, external-link-as-primary-render) to the alignment page convention.
+- Added a `review-only-approved` alignment page status for product-path forks approved at the alignment level but not yet granted canonical-write approval.
+- Added provisional-path evidence gates to ICP and competitive-analysis so downstream skills do not treat unmanifested paths as canonical active paths.
+
 ## 2026-06-02 - Do not turn deploy-skill absence into next work when deploy is not contextually needed
 
 - A `$ship-end` final route recommended `$pack install deploy` because `tasks/deploy.md` existed and the `deploy` skill was not installed, even though the shipped boundary was a standalone alignment page/proof refresh and did not need a manual deploy follow-up.
