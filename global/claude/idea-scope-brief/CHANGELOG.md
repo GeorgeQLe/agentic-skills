@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.11 - 2026-06-05
+
+- Added review-only product path approval rule: when a user approves a product-path fork at the alignment page level but withholds canonical-write approval, keep canonical files unchanged, render fully in the alignment page, and set `approval_status: review-only-approved`. Downstream skills treat review-only-approved paths as provisional until a subsequent alignment cycle grants manifest approval.
+
 ## v0.10 - 2026-06-04
 
 - Added Market Structure Handoff guidance so marketplace/platform/B2B2C/multi-sided concepts pass apparent sides and value exchange to `/icp` as hypotheses for validation, not preselected ICPs.

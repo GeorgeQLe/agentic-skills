@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.10
+version: v0.11
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 ---
 
@@ -94,6 +94,15 @@ During the Idea Assumptions Manifest, if the concept appears marketplace/platfor
    - Treat coverage-checkpoint confirmation as non-final; it only confirms the draft scope is ready to preview. Only final compiled YAML from the alignment page authorizes canonical writes.
    - Before compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved artifacts below have been written or updated.
    - When feedback-only YAML is provided, revise the alignment page and ask again; do not write canonical artifacts until final compiled YAML approval is provided.
+
+### Review-Only Product Path Approval
+
+When the user approves a product-path fork or split at the alignment page level but explicitly withholds canonical-write approval (e.g., "review only, do not write canonical files"):
+
+1. **Do not write canonical files.** Keep `research/.progress.yaml`, `research/{slug}/idea-brief.md`, and `research/{slug}/idea-brief-interview.md` unchanged.
+2. **Render fully in the alignment page.** The proposed manifest entry, idea brief sections, and interview log for the review-only path must be rendered in full in the alignment page HTML — not summarized, linked, or embedded.
+3. **Mark the page as review-only-approved.** Set `approval_status: review-only-approved` in the alignment page status block. This is distinct from `confirmed` (canonical artifacts written) and `review` (awaiting any approval).
+4. **Downstream treatment.** Downstream skills must treat a review-only-approved path as provisional: it may be referenced as concept context, but it is not a canonical product path until manifest approval is later granted via a subsequent alignment cycle. See the provisional-path evidence rule in ICP and competitive-analysis contracts.
 
 ## Output
 
