@@ -19,7 +19,7 @@
 
 ### Phase 3: Write subskill SKILL.md files
 - [x] `w3-hypothesis` — Schwartzfarb W3 (WHO/WHAT/WHY) hypothesis generation + disproval
-- [ ] `jtbd-needs` — Ulwick/Christensen JTBD needs-based segmentation
+- [x] `jtbd-needs` — Ulwick/Christensen JTBD needs-based segmentation
 - [ ] `four-forces` — Moesta Four Forces (Push/Pull/Anxiety/Habit) switching analysis
 - [ ] `five-rings` — Revella Five Rings of Buying Insight (decision psychology)
 - [ ] `seven-dimensions` — Lincoln Murphy 7 Dimensions ICP scoring
