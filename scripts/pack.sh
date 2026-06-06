@@ -26,6 +26,7 @@ Commands:
   remove <name...>  Remove one or more packs or individual skills from the current project
   refresh           Recreate local skill roots for packs and skills in .agents/project.json
   doctor            Report skill-install drift vs canonical sources (read-only; non-zero if stale)
+  prune [--dry-run]  Remove installed skills whose source no longer exists or whose pack is not enabled
   set-update-mode <mode>  Set .agents/project.json.skill_updates.mode to warn, auto, or unset
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
@@ -892,6 +893,88 @@ doctor() {
   return 0
 }
 
+prune() {
+  local dry_run=false
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --dry-run) dry_run=true; shift ;;
+      *) die "prune: unknown option '$1'" ;;
+    esac
+  done
+
+  # Build the set of expected skill names from enabled packs and individually enabled skills
+  local -A expected_skills
+  local pack skill_dir name
+
+  read_lines_into_packs < <(read_enabled_packs)
+  for pack in "${packs[@]}"; do
+    for tool in claude codex; do
+      local source_dir="$PACKS_DIR/$pack/$tool"
+      [[ -d "$source_dir" ]] || continue
+      for skill_dir in "$source_dir"/*/; do
+        [[ -d "$skill_dir" ]] || continue
+        name="$(basename "${skill_dir%/}")"
+        expected_skills["$name"]=1
+      done
+    done
+  done
+
+  local skill_lines
+  skill_lines="$(read_enabled_skills)"
+  if [[ -n "$skill_lines" ]]; then
+    while IFS=' ' read -r name _pack; do
+      expected_skills["$name"]=1
+    done <<< "$skill_lines"
+  fi
+
+  local target line status rel removed=0
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+    line="$(skill_install_status "$target")"
+    IFS=$'\t' read -r status _ _ <<< "$line"
+    [[ "$status" != "not-managed" ]] || continue
+
+    local reason=""
+    if [[ "$status" == "missing-source" ]]; then
+      reason="source no longer exists"
+    else
+      name="$(basename "$target")"
+      if [[ -z "${expected_skills[$name]+x}" ]]; then
+        reason="pack not enabled"
+      fi
+    fi
+    [[ -n "$reason" ]] || continue
+
+    rel="${target#"$PROJECT_ROOT"/}"
+    if [[ "$dry_run" == true ]]; then
+      printf 'would remove  %s (%s)\n' "$rel" "$reason"
+    else
+      if remove_repo_skill_install "$target"; then
+        printf 'removed  %s (%s)\n' "$rel" "$reason"
+      elif [[ -L "$target" ]]; then
+        rm "$target"
+        printf 'removed  %s (%s)\n' "$rel" "$reason"
+      elif [[ -d "$target" ]]; then
+        rm -rf "$target"
+        printf 'removed  %s (%s)\n' "$rel" "$reason"
+      else
+        printf 'FAILED   %s (%s)\n' "$rel" "$reason" >&2
+      fi
+    fi
+    ((removed++)) || true
+  done < <(find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 \( -type l -o -type d \) -print 2>/dev/null | sort)
+
+  if [[ "$removed" -eq 0 ]]; then
+    echo "Nothing to prune."
+  else
+    if [[ "$dry_run" == true ]]; then
+      printf '%d orphan(s) found. Run without --dry-run to remove.\n' "$removed"
+    else
+      printf '%d orphan(s) removed.\n' "$removed"
+    fi
+  fi
+}
+
 cmd="${1:-}"
 case "$cmd" in
   list) list_packs ;;
@@ -1020,6 +1103,13 @@ case "$cmd" in
   doctor)
     shift
     doctor
+    ;;
+  prune)
+    acquire_project_lock "$@"
+    require_jq_write
+    shift
+    prune "$@"
+    print_session_reload_notice
     ;;
   set-update-mode)
     acquire_project_lock "$@"
