@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-06 — Document orchestrator patterns B and C
+
+- Extended `docs/orchestrator-convention.md` from single-pattern to three-pattern reference: Pattern A (Framework Decomposition + Synthesis, existing), Pattern B (Intent Router + Play Composer, new), Pattern C (Detect-and-Route, new).
+- Added pattern comparison table and "which pattern should I use?" decision guide at top of convention doc.
+- Documented Thin Workflow Router as a variant of Pattern B covering `devtool-workflow` and `game-workflow`.
+- Updated `docs/skill-invocation-types.md`: added `youtube` as `router` type in youtube-ops pack table, updated orchestrators list with pattern labels, bumped orchestrator count from 15 to 16.
+- Updated `docs/skill-anatomy.md`: added cross-reference to orchestrator convention from Delegation Patterns section.
+- All reference implementations verified to exist: customer-discovery, positioning, journey-map (Pattern A); youtube (Pattern B); devtool-workflow, game-workflow (Pattern B thin); animation-design-planner (Pattern C).
+- Shipped on `master` in commits `965d844e` and `badfe48d`.
+
 ## 2026-06-06 — Add user-flow-map AFPS route gate
 
 - Added mirrored `product-design` `user-flow-map` skills for Codex and Claude with `SKILL.md`, `CHANGELOG.md`, `agents/openai.yaml`, and generated `ALIGNMENT-PAGE.md` bundles.
