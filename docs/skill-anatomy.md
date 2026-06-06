@@ -142,7 +142,7 @@ invocation: orchestrator
 
 ## Delegation Patterns
 
-Three patterns exist for skill-to-skill delegation. Choose based on what the user needs to know and whether the delegated work involves judgment.
+Three patterns exist for skill-to-skill delegation. Choose based on what the user needs to know and whether the delegated work involves judgment. For orchestrator-specific conventions (framework decomposition, intent routing, detect-and-route), see `docs/orchestrator-convention.md`.
 
 ### Pattern 1: Parent Router (positioning model)
 
