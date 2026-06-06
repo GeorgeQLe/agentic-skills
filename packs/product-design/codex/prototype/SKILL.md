@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from UX variation and UI specs — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.9
+version: v0.10
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -19,6 +19,8 @@ Before proceeding, verify the following files exist:
 
 - At least one `specs/ux-variations-*.md` file.
 - At least one `specs/ui-*.md` file (e.g., `specs/ui-[topic].md`, `specs/ui-layout-variations-[topic].md`, or `specs/ui-requirements-[topic].md`).
+
+Also read `specs/user-flow-*.md` when present as an upstream screen-ordering and task-sequencing signal. It is preferred evidence, not a hard prerequisite for this gate.
 
 If either is missing, halt with a clear message:
 
@@ -53,6 +55,7 @@ When product path `{slug}` is active, read and write research under `research/{s
   - `research/competitive-analysis.md` — differentiation points the prototype should highlight.
   - `research/journey-map.md` — screen flow ordering, entry points, and task sequencing.
 - Read variation specs: `specs/ux-variations-[topic].md` for each relevant topic.
+- Read user-flow specs: `specs/user-flow-[topic].md` for screen ordering, entry points, branches, decision points, required states, failure/recovery paths, handoffs, and low-fidelity wireframe notes when present.
 - Read per-variation UI specs: `specs/ui-[topic].md`, `specs/ui-layout-variations-[topic].md`, and `specs/ui-requirements-[topic].md` when present.
 - If an argument is provided, use it as the topic filter. Otherwise, identify the topic from available specs.
 
@@ -62,6 +65,7 @@ Before building, extract actionable signals from research:
 
 - **ICP** (`research/icp.md`): Determine copy density (expert vs. novice), terminology choices, information hierarchy, and default density (compact vs. spacious). The prototype should feel like it was built for the target user, not a generic audience.
 - **Journey map** (`research/journey-map.md`): Derive screen flow ordering. The prototype's navigation and page sequence should follow the user's natural task progression, not an arbitrary menu order.
+- **User-flow map** (`specs/user-flow-[topic].md`): Derive concrete screen order, route inventory, branches, required states, failure/recovery behavior, and low-fidelity wireframe structure. The prototype should preserve the approved task sequence unless a variation spec explicitly changes it.
 - **Competitive analysis** (`research/competitive-analysis.md`): Identify differentiation points the prototype must highlight. If the product's thesis is "faster than X" or "simpler than Y," the prototype should make that advantage viscerally obvious.
 - **Idea brief** (`research/idea-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one idea-brief assumption.
 

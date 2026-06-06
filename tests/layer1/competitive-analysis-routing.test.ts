@@ -71,31 +71,31 @@ describe("competitive-analysis routing", () => {
     }
   });
 
-  it("keeps AFPS route order journey-map before positioning before ux-variations", () => {
+  it("keeps AFPS route order journey-map before positioning before user-flow-map", () => {
     const checks = [
       {
         path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
         first: "$journey-map",
         second: "$positioning",
-        third: "$ux-variations",
+        third: "$user-flow-map",
       },
       {
         path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
         first: "/journey-map",
         second: "/positioning",
-        third: "/ux-variations",
+        third: "/user-flow-map",
       },
       {
         path: resolve(TESTS_ROOT, "../docs/skill-next-step-contracts.md"),
         first: "journey-map",
         second: "positioning",
-        third: "ux-variations",
+        third: "user-flow-map",
       },
       {
         path: resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
         first: "journey-map",
         second: "positioning",
-        third: "ux-variations",
+        third: "user-flow-map",
       },
     ];
 
@@ -115,7 +115,7 @@ describe("competitive-analysis routing", () => {
       expect(secondIndex, `${check.path} should mention ${check.second}`).toBeGreaterThanOrEqual(0);
       expect(thirdIndex, `${check.path} should mention ${check.third}`).toBeGreaterThanOrEqual(0);
       expect(firstIndex, `${check.path} should route journey-map before positioning`).toBeLessThan(secondIndex);
-      expect(secondIndex, `${check.path} should route positioning before ux-variations`).toBeLessThan(thirdIndex);
+      expect(secondIndex, `${check.path} should route positioning before user-flow-map`).toBeLessThan(thirdIndex);
     }
   });
 

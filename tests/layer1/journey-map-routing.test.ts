@@ -11,7 +11,7 @@ const mirrors = [
     packInstall: "$pack install business-growth",
     hook: "$hook-model",
     positioning: "$positioning",
-    ux: "$ux-variations",
+    userFlow: "$user-flow-map",
     lifecycleMetrics: "$lifecycle-metrics",
     metrics: "$metrics",
     commands: [
@@ -33,7 +33,7 @@ const mirrors = [
     packInstall: "/pack install business-growth",
     hook: "/hook-model",
     positioning: "/positioning",
-    ux: "/ux-variations",
+    userFlow: "/user-flow-map",
     lifecycleMetrics: "/lifecycle-metrics",
     metrics: "/metrics",
     commands: [
@@ -53,26 +53,26 @@ const mirrors = [
 ];
 
 function section(content: string, heading: string): string {
-  return content.match(new RegExp(`## ${heading}[\\s\\S]*?(?=\\n## |$)`))?.[0] ?? "";
+  return content.match(new RegExp(`(?:^|\\n)#{2,3} (?:\\d+\\. )?${heading}[^\\n]*[\\s\\S]*?(?=\\n#{2,3} |$)`))?.[0] ?? "";
 }
 
 describe("journey-map routing", () => {
-  it("evaluates optional research triggers before ordinary positioning and UX routing", () => {
+  it("evaluates optional research triggers before ordinary positioning and user-flow routing", () => {
     for (const mirror of mirrors) {
       const content = readFileSync(mirror.path, "utf8");
-      const routing = section(content, "Next-Step Routing");
+      const routing = section(content, "Next Steps");
 
       const triggerIndex = routing.indexOf("Blocking optional research trigger");
       const positioningIndex = routing.indexOf(mirror.positioning);
-      const uxIndex = routing.indexOf(mirror.ux);
+      const userFlowIndex = routing.indexOf(mirror.userFlow);
 
       expect(triggerIndex, `${mirror.path} should classify optional triggers`).toBeGreaterThanOrEqual(0);
       expect(positioningIndex, `${mirror.path} should still route to positioning`).toBeGreaterThanOrEqual(0);
-      expect(uxIndex, `${mirror.path} should still route to ux-variations`).toBeGreaterThanOrEqual(0);
+      expect(userFlowIndex, `${mirror.path} should still route to user-flow-map`).toBeGreaterThanOrEqual(0);
       expect(triggerIndex, `${mirror.path} should check triggers before positioning`).toBeLessThan(
         positioningIndex,
       );
-      expect(positioningIndex, `${mirror.path} should keep positioning before UX`).toBeLessThan(uxIndex);
+      expect(positioningIndex, `${mirror.path} should keep positioning before user-flow-map`).toBeLessThan(userFlowIndex);
     }
   });
 
@@ -91,8 +91,8 @@ describe("journey-map routing", () => {
         repeatUseRow!.indexOf(mirror.packInstall),
         `${mirror.path} should install business-growth before recommending hook-model`,
       ).toBeLessThan(repeatUseRow!.indexOf(mirror.hook));
-      expect(repeatUseRow, `${mirror.path} should keep hook-model pre-UX`).toContain(
-        `before \`${mirror.ux}\``,
+      expect(repeatUseRow, `${mirror.path} should keep hook-model pre-user-flow`).toContain(
+        `before \`${mirror.userFlow}\``,
       );
     }
   });

@@ -1,3 +1,54 @@
+## Active Plan — Add `user-flow-map` And Refactor AFPS Routing
+
+### Goal
+
+Add a mirrored `product-design` planning skill named `user-flow-map` and make AFPS route from positioning into concrete user-flow structure before UI requirements, layout variants, prototypes, UAT, consolidation, production specs, and roadmap work.
+
+### Execution Plan
+
+1. Preserve invocation context and task tracking.
+   - [x] Capture the visible `targeted-skill-builder` invocation under `prompts/targeted-skill-builder/`.
+   - [x] Record implementation progress and validation results in `tasks/todo.md`.
+2. Inspect current routing and overlap.
+   - [x] Check whether any existing skill already owns user-flow mapping.
+   - [x] Read product-design skill conventions, routing docs, research-roadmap rules, alignment generator, and benchmark coverage patterns.
+3. Create the new skill mirrors.
+   - [x] Add `packs/product-design/codex/user-flow-map/` and `packs/product-design/claude/user-flow-map/`.
+   - [x] Include `SKILL.md`, `CHANGELOG.md`, `agents/openai.yaml`, and generated `ALIGNMENT-PAGE.md` for both mirrors.
+   - [x] Ensure the skill outputs `specs/user-flow-[topic].md`, `user-flow-[topic]-interview.md`, and `alignment/user-flow-map-{topic}.html`.
+4. Refactor AFPS routing and documentation.
+   - [x] Update pack workflow docs, skill next-step contracts, skills reference, product-design `PACK.md`, and global skill browser mappings.
+   - [x] Archive and bump existing skill mirrors before editing their `SKILL.md` contracts.
+   - [x] Update positioning, UI interview, UX variations, prototype, spec interview, and research-roadmap routing.
+5. Update generated assets and benchmark coverage.
+   - [x] Add `user-flow-map` to the alignment generator and regenerate alignment-page stubs.
+   - [x] Add benchmark coverage metadata or an explicit deferred coverage path.
+   - [x] Regenerate showcase data and validate the public skill catalog artifacts.
+6. Verify and ship.
+   - [x] Run skill integrity checks, generated drift checks, benchmark coverage, tests, targeted `rg` route checks, and `git diff --check`.
+   - [x] Record validation results in `tasks/todo.md`.
+   - [x] Commit and push the intended changes.
+
+### Design Constraints
+
+- Keep `user-flow-map` as flow structure and low-fidelity wireframe guidance, not visual design or runnable prototype work.
+- Preserve existing user changes and avoid staging generated local skill roots.
+- Maintain the new AFPS route:
+
+```text
+icp -> competitive-analysis -> journey-map -> positioning
+-> user-flow-map
+-> ui-interview --requirements-only
+-> ux-variations --layout-mode
+-> prototype
+-> uat --variant-evaluation
+-> consolidate-variations
+-> research-roadmap --post-prototype
+-> spec-interview
+-> research-roadmap --post-spec
+-> roadmap
+```
+
 ## Post-Phase Tail Work
 
 - **2026-05-18 — Workflow demo user-goal and run excerpts:** Refine `/workflows` transcript turns so each scenario leads with the user's goal for using that workflow and benchmark-backed turns render retained prompt/output excerpts from persisted runs where available.

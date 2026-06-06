@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3 - 2026-06-06
+
+- Route enterprise blockers with missing flow/design shape to `/user-flow-map` before UI requirements, layout variations, and production specs.
+- Reserve `/ux-variations --layout-mode` for blockers whose flow map and UI requirements already exist but layout alternatives are missing.
+
 ## v0.2 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.

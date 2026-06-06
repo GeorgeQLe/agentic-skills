@@ -1,5 +1,10 @@
 # positioning changelog (codex)
 
+## v0.11 - 2026-06-06
+
+- Route completed positioning synthesis to `$user-flow-map` by default when the `product-design` pack is enabled, with `$pack install product-design` as the unavailable-pack fallback.
+- Keep optional value-prop, lean-canvas, GTM, monetization, and MVP-gap detours conditional instead of sending positioned product work straight to layout variation planning.
+
 ## v0.10 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

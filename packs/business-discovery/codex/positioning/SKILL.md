@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.10
+version: v0.11
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 interview_depth: light
 visual_tier: visual
@@ -184,8 +184,8 @@ Stop — user runs `$exec`.
 
 ### 6. Next Steps (after synthesis only)
 
-- ALWAYS: check for `product-design` pack → recommend `$ux-variations`
 - IF no journey-map: check for `customer-lifecycle` pack → recommend `$journey-map`
+- DEFAULT: check for `product-design` pack → if enabled, recommend `$user-flow-map [positioning-backed product direction]`; if not enabled, recommend `$pack install product-design`
 - IF solution-customer fit weak/disputed: `$value-prop-canvas`
 - IF business-model risks: `$lean-canvas`
 - IF no GTM: check for `business-growth` pack → recommend `$gtm`

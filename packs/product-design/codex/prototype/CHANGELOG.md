@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-06-06
+
+- Added `specs/user-flow-*.md` as a preferred prototype input for screen ordering, route inventory, branches, states, failure/recovery paths, handoffs, and low-fidelity wireframe structure while preserving the existing UX/UI hard gate.
+
 ## v0.9 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

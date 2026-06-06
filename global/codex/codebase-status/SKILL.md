@@ -2,7 +2,7 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.3
+version: v0.4
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
@@ -62,9 +62,9 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
    - Use phase-aware routing before naming a command:
      - If `tasks/todo.md` or active phase docs contain actionable implementation work, recommend `$exec`. Do not route back to research merely because advisory gaps exist.
      - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `$ship`.
-     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
+     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `icp -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
      - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `$pack install customer-lifecycle` before `$journey-map`; if enabled, recommend `$journey-map`.
-     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-discovery` availability; if it is not enabled, recommend `$pack install business-discovery` before `$value-prop-canvas` or `$lean-canvas`. Recommend `$value-prop-canvas` only for contested solution-fit evidence, and `$lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, or `ux-variations`.
+     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-discovery` availability; if it is not enabled, recommend `$pack install business-discovery` before `$value-prop-canvas` or `$lean-canvas`. Recommend `$value-prop-canvas` only for contested solution-fit evidence, and `$lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, `user-flow-map`, or layout-mode UX variations.
      - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `$brainstorm` to discover new AFPS work.
    - `$exec` when the next task is already clear and executable.
    - `$roadmap` when specs exist but sequencing or task queue health needs updating.

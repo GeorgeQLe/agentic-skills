@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.10
+version: v0.11
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -13,6 +13,8 @@ visual_tier: prototype
 Invoke as `$ui-interview`.
 
 Use this skill when the user needs to turn a rough product idea, feature, page, wireframe, screenshot, or existing app surface into a detailed implementation-ready UI specification. This skill focuses on the interface itself: pages, regions, components, buttons, links, labels, spacing, element size, visual hierarchy, state, responsive layout, and accessibility.
+
+Use `$user-flow-map` before this skill when the product or feature has no credible screen/route inventory, task sequence, branch coverage, or state map. Prefer `specs/user-flow-*.md` as source material when it exists; it is the upstream flow-structure contract for requirements-only UI work.
 
 Use `$ux-variations` after this skill when the user wants multiple experience concepts or interface variants to compare before locking the final direction.
 
@@ -37,8 +39,10 @@ When product path `{slug}` is active, read and write research under `research/{s
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, screenshots, and design artifacts when present.
+   - Prefer `specs/user-flow-*.md` (or product-path-scoped equivalents) for screen sequence, route inventory, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
    - If the request is for an existing UI, inspect the current implementation before interviewing.
    - If multiple apps or surfaces are plausible, ask the user which app, flow, or page to cover first.
+   - If the interface has no credible screen/flow structure from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
 
 2. **Treat inputs as draft material**
    - Do not assume the current UI, prompt, screenshot, or mockup is final.
@@ -92,6 +96,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm before writing deliverables.
    - Write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`.
    - After writing files, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
+   - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
    - Stop. Do not continue to step 5 or beyond.
 
 5. **Full UI specification** (no `--content-only` flag):

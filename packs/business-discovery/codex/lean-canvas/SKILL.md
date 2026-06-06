@@ -2,7 +2,7 @@
 name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 interview_depth: light
 visual_tier: visual
@@ -126,7 +126,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$ux-variations [business-model-informed product direction]` — return to the default AFPS prototype path after resolving material business-model assumptions
+**Recommended:** `$user-flow-map [business-model-informed product direction]` — return to the default AFPS prototype path by mapping screen flow before UI requirements and layout variants
 
 Other options:
 - IF Revenue/Cost hypotheses need validation: `$monetization` — Validate revenue model and cost structure hypotheses

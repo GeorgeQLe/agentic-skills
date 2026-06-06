@@ -1,5 +1,61 @@
 ## Current State
 
+- Tree is dirty, master — `user-flow-map` product-design skill and AFPS routing refactor in progress.
+- Preserved existing customer-discovery orchestrator notes below; do not overwrite unrelated in-progress items.
+
+---
+
+## user-flow-map Skill And AFPS Routing Refactor (in progress)
+
+### Phase 1: Inspect And Plan
+- [x] Capture prompt history for the targeted skill invocation.
+- [x] Read relevant lessons for routing and validation pitfalls.
+- [x] Search for existing user-flow mapping ownership and routing references.
+- [x] Read product-design skill conventions and affected skill contracts.
+
+### Phase 2: Create New Skill
+- [x] Add Codex `packs/product-design/codex/user-flow-map/`.
+- [x] Add Claude `packs/product-design/claude/user-flow-map/`.
+- [x] Add `SKILL.md`, `CHANGELOG.md`, and `agents/openai.yaml` mirrors.
+- [x] Generate `ALIGNMENT-PAGE.md` mirrors through `scripts/upgrade-alignment-page.mjs`.
+
+### Phase 3: Refactor Routing
+- [x] Archive and bump existing `SKILL.md` mirrors before edits.
+- [x] Update `positioning` to route completed product synthesis to `user-flow-map`.
+- [x] Update `ui-interview`, `ux-variations`, `prototype`, and `spec-interview` contracts.
+- [x] Update `research-roadmap` stale rules, artifact tracking, priority order, and dependency tree.
+- [x] Update AFPS docs and global skill browser references.
+
+### Phase 4: Generated Assets And Coverage
+- [x] Update alignment generator gates for `user-flow-map`.
+- [x] Refresh Skills Showcase data and validate it.
+- [x] Update benchmark coverage for `user-flow-map`.
+
+### Phase 5: Verification And Shipping
+- [x] `scripts/skill-versions.sh --missing`
+- [x] `scripts/skill-archive-audit.sh --strict`
+- [x] `scripts/skill-deps.sh --broken`
+- [x] `scripts/skill-pack-routing-audit.sh`
+- [x] `node scripts/upgrade-alignment-page.mjs --dry-run`
+- [x] `scripts/validate-skills-showcase-data.sh`
+- [x] `pnpm --dir tests bench:coverage`
+- [x] Targeted route tests: `competitive-analysis-routing.test.ts` and `journey-map-routing.test.ts`
+- [x] Targeted route `rg` spot checks.
+- [x] `git diff --check`
+- [ ] `pnpm --dir tests test` — ran; still fails on existing unrelated layer1 repo issues listed below.
+- [x] Commit and push intended changes.
+
+### Review Notes
+- Skill integrity checks passed: version fields, archive audit, dependency scan, and pack routing audit.
+- Generated alignment dry-run reported no drift; Skills Showcase generated data is fresh.
+- Benchmark coverage matrix is valid at 180 skills; `user-flow-map` has custom pack workflow coverage.
+- Targeted AFPS route tests pass for competitive-analysis and journey-map.
+- Full `pnpm --dir tests test` still fails with 46 layer1 failures unrelated to the new flow route: stale `icp` test paths after the customer-discovery rename, staged-research contract gaps for customer-discovery/journey framework skills, unrelated YouTube handoff tests, existing alignment/index wording drift, a stale `poketowork-kanban` symlink under `node_modules`, and pre-existing benchmark/demo contract drift.
+
+---
+
+## Current State
+
 - Tree is dirty, master — customer-discovery orchestrator refactor in progress
 - Recent work: icp → customer-discovery rename + orchestrator refactor (Phase 1-2 complete)
 - Active: customer-discovery orchestrator refactor

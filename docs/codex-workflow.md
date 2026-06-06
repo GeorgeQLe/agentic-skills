@@ -286,20 +286,21 @@ If you are used to this Claude Code rhythm:
 4. `$competitive-analysis`
 5. `$journey-map`
 6. `$positioning`
-7. `$ux-variations`
-8. `$ui-interview`
-9. `$prototype`
-10. `$uat --variant-evaluation`
-11. `$consolidate-variations`
-12. `$research-roadmap --post-prototype`
-13. `$spec-interview`
-14. `$research-roadmap --post-spec`
-15. `$roadmap`
-16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-17. `$exec`
-18. `$ship`
-19. `$ship-end` when wrapping an off-script or partial session
-20. `$pmf-assessment` (post-launch)
+7. `$user-flow-map`
+8. `$ui-interview --requirements-only`
+9. `$ux-variations --layout-mode`
+10. `$prototype`
+11. `$uat --variant-evaluation`
+12. `$consolidate-variations`
+13. `$research-roadmap --post-prototype`
+14. `$spec-interview`
+15. `$research-roadmap --post-spec`
+16. `$roadmap`
+17. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+18. `$exec`
+19. `$ship`
+20. `$ship-end` when wrapping an off-script or partial session
+21. `$pmf-assessment` (post-launch)
 
 Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; lifecycle stage maps when onboarding, conversion, transaction, retention, expansion, or stage metrics would change UX/prototype choices. Use `$hook-model` after `$journey-map` only when consumer/PLG-style repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; route to `$pack install business-growth` first if needed. For B2B, enterprise, infrastructure, transactional, or naturally infrequent products, skip `$hook-model` and prefer `$lifecycle-metrics` or `$metrics`. Pricing/GTM detours such as `$monetization` and `$gtm` are also trigger-driven, not mandatory post-spec work.
 
@@ -311,17 +312,18 @@ The closest Codex translation is:
 4. `$competitive-analysis`
 5. `$journey-map`
 6. `$positioning`
-7. `$ux-variations`
-8. `$ui-interview`
-9. `$prototype`
-10. `$uat --variant-evaluation`
-11. `$consolidate-variations`
-12. `$research-roadmap --post-prototype`
-13. `$spec-interview`
-14. `$research-roadmap --post-spec`
-15. `$roadmap`
-16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-17. `$exec` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+7. `$user-flow-map`
+8. `$ui-interview --requirements-only`
+9. `$ux-variations --layout-mode`
+10. `$prototype`
+11. `$uat --variant-evaluation`
+12. `$consolidate-variations`
+13. `$research-roadmap --post-prototype`
+14. `$spec-interview`
+15. `$research-roadmap --post-spec`
+16. `$roadmap`
+17. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+18. `$exec` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
 18. repeat `$exec` for the next planned step
 19. use `$ship` only if finished work needs manual packaging
 20. use `$ship-end` to wrap an interrupted or partial session

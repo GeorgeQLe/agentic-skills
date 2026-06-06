@@ -7,7 +7,7 @@ Install this pack when a project needs ICP discovery, enterprise buyer mapping, 
 Default flow:
 
 ```text
-icp -> competitive-analysis -> journey-map -> positioning -> ux-variations
+icp -> competitive-analysis -> journey-map -> positioning -> user-flow-map
 ```
 
 `journey-map` is provided by the `customer-lifecycle` pack. Install `customer-lifecycle` before continuing past competitive analysis when that pack is not already enabled.

@@ -403,7 +403,7 @@ Two engineering packs are **Claude-only** (no Codex mirror):
 ```bash
 scripts/pack.sh install product-design       # brainstorm, consolidate-variations, design-system,
                                               #   feature-interview, prototype, spec-interview,
-                                              #   ui-interview, ux-variations
+                                              #   ui-interview, user-flow-map, ux-variations
 scripts/pack.sh install product-testing      # dogfood, uat
 scripts/pack.sh install guided-walkthrough   # guide, uat-guide
 scripts/pack.sh install website-polish       # icon-handler

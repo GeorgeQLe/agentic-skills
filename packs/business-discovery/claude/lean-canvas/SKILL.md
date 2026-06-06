@@ -2,7 +2,7 @@
 name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 interview_depth: light
 visual_tier: visual
@@ -120,7 +120,7 @@ Use AskUserQuestion:
 
 Include 3-5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/ux-variations [business-model-informed product direction]` — Return to the default AFPS prototype path after resolving material business-model assumptions
+- ALWAYS: `/user-flow-map [business-model-informed product direction]` — Return to the default AFPS prototype path by mapping screen flow before UI requirements and layout variants
 - IF Revenue/Cost hypotheses need validation: `/monetization` — Validate revenue model and cost structure hypotheses
 - IF riskiest hypothesis identified: `/experiment [riskiest hypothesis]` — Test the riskiest assumption with a structured experiment
 - IF no `research/positioning.md`: `/positioning` — Establish strategic positioning to strengthen UVP and Unfair Advantage sections

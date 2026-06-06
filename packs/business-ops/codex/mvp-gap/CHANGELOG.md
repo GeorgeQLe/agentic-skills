@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5 - 2026-06-06
+
+- Route top unspecced MVP gaps with missing flow/design shape to `$user-flow-map` before UI requirements, layout variations, and production specs.
+- Reserve `$ux-variations --layout-mode` for gaps whose flow map and UI requirements already exist but layout alternatives are missing.
+
 ## v0.4 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

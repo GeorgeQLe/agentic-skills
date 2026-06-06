@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.8
+version: v0.9
 argument-hint: "[optional-topic-override] [--ideas]"
 interview_depth: full
 ---
@@ -51,6 +51,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `/pack install customer-lifecycle` before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
+   - Read `specs/user-flow-*.md` when present as upstream evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, and low-fidelity wireframe intent.
 
 2. **Surface a prototype-grounded assumptions checkpoint before probing:**
    - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
@@ -84,6 +85,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 4. **Iterative prototype updates:**
    - When the interview reveals gaps in the prototype (missing screens, unclear flows, absent states), use AskUserQuestion: "Should I update the prototype to add [gap]? This may warrant re-running upstream steps."
+   - If the consolidated prototype exposes missing or unclear screen flow, branch coverage, state coverage, failure/recovery behavior, or handoff structure, recommend `/user-flow-map [topic]` as the upstream remediation before continuing production-spec work.
    - The user decides per-update whether to update the prototype now or note it for production implementation only.
    - If the user approves a prototype update, make the change and note it in the interview log before continuing.
 

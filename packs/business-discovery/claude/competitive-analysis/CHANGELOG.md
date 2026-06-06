@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.13 - 2026-06-06
+
+- Route standard AFPS output with completed positioning but missing flow structure to `/user-flow-map` before UI requirements, layout variations, or prototype work.
+
 ## v0.12 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

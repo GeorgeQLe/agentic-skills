@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9 - 2026-06-06
+
+- Read `specs/user-flow-*.md` as upstream evidence for screen order, routes, branches, states, failure/recovery paths, handoffs, and low-fidelity wireframe intent.
+- Recommend `$user-flow-map` as upstream remediation when the consolidated prototype exposes missing or unclear flow structure.
+
 ## v0.8 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11 - 2026-06-06
+
+- Prefer `specs/user-flow-*.md` as upstream flow-structure input for UI requirements and detailed UI specs.
+- Route interfaces with missing screen/flow structure to `$user-flow-map` before requirements-only UI interview or layout variations.
+
 ## v0.10 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

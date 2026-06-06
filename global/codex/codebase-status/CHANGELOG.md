@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-06
+
+- Updated canonical AFPS status routing to insert `$user-flow-map` after positioning and requirements-only UI interview before layout-mode UX variations.
+
 ## v0.3 - 2026-06-04
 
 - Added explicit `business-discovery` pack-install fallback wording at optional `value-prop-canvas` and `lean-canvas` recommendation sites so the routing audit can verify cross-pack guards.

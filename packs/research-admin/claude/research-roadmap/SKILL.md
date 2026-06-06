@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.12
+version: v0.13
 invocation: orchestrator
 ---
 
@@ -140,6 +140,7 @@ Also include documentation-producing non-research skills when their outputs are 
 | Skill | Output |
 | --- | --- |
 | `/idea-scope-brief` | `research/idea-brief.md` or `research/{slug}/idea-brief.md` |
+| `/user-flow-map` | `specs/user-flow-*.md` or `specs/{slug}/user-flow-*.md` |
 | `/spec-interview` | `specs/*.md` |
 | `/ux-variations` | `specs/ux-variations-*.md` |
 | `/ui-interview` | `specs/ui-*.md` |
@@ -158,8 +159,10 @@ Record existence and last-modified timestamps for:
 - `research/idea-brief.md` and product-path-scoped `research/{slug}/idea-brief.md` when present
 - `research/*-search-log.md` and `research/*-interview.md` only as supporting context, not primary completion artifacts
 - `specs/*.md` and product-path-scoped `specs/{slug}/*.md`
+- `specs/user-flow-*.md` and product-path-scoped `specs/{slug}/user-flow-*.md`
 - `specs/ux-variations-*.md` and product-path-scoped `specs/{slug}/ux-variations-*.md`
 - `specs/ui-*.md` and product-path-scoped `specs/{slug}/ui-*.md`
+- `prototypes/` prototype directories and consolidated prototype directories when present
 - `tasks/roadmap.md`
 - `tasks/todo.md`
 - `tasks/history.md`
@@ -182,17 +185,19 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 | `research/customer-feedback.md` | `research/icp.md`, `research/journey-map.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/icp.md` | `research/competitive-analysis.md`, `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/competitive-analysis.md` | `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
-| `research/positioning.md` | `research/gtm.md`, `research/landing-copy.md` |
-| `research/journey-map.md` | `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
+| `research/positioning.md` | `specs/user-flow-*.md`, `research/gtm.md`, `research/landing-copy.md` |
+| `research/journey-map.md` | `specs/user-flow-*.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/metrics.md` | `research/cohort-review-*.md`, `research/runway-model.md`, `research/investor-update-*.md` |
 | `research/gtm.md` | `research/monetization.md`, `research/runway-model.md`, `research/investor-update-*.md` |
 | `research/monetization.md` | `research/burn-rate.md`, `research/runway-model.md`, `research/investor-update-*.md` |
 | `research/experiments/*.md` with results | `research/assumption-tracker.md` |
 | `research/cohort-review-*.md` latest | `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/investor-update-*.md` |
 | `research/enterprise-icp.md` | `specs/scale-audit.md` |
-| `research/journey-map.md` | `specs/*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
+| `research/journey-map.md` | `specs/user-flow-*.md`, `specs/*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
+| `specs/user-flow-*.md` | `specs/ui-*.md`, `specs/ux-variations-*.md`, `prototypes/**`, `tasks/roadmap.md` |
 | any non-UX/UI `specs/*.md` | `specs/ux-variations-*.md`, `specs/ui-*.md`, `tasks/roadmap.md` |
-| `specs/ux-variations-*.md` | `specs/ui-*.md`, `tasks/roadmap.md` |
+| `specs/ui-requirements-*.md` | `specs/ux-variations-*.md`, `prototypes/**`, `tasks/roadmap.md` |
+| `specs/ux-variations-*.md` | `prototypes/**`, `tasks/roadmap.md` |
 | `specs/ui-*.md` | `tasks/roadmap.md` |
 | `research/runway-model.md` | `tasks/roadmap.md` |
 
@@ -209,8 +214,8 @@ Order immediately actionable todo items so the user can complete documentation w
 3. Missing foundational research.
 4. Stale downstream research.
 5. Missing downstream research.
-6. Missing or stale specs.
-7. Missing or stale UX/UI planning artifacts for user-facing work.
+6. Missing or stale flow/spec artifacts.
+7. Missing or stale user-flow, UI-requirements, UX/UI planning, and prototype artifacts for user-facing work, in that order.
 8. Missing or stale roadmap/task docs.
 9. Reconciliation items when conflicting docs are detected.
 
@@ -224,9 +229,10 @@ When `research/.progress.yaml` exists, show per-path pipeline progress alongside
   -> /competitive-analysis
   -> /journey-map
   -> /positioning
-    -> /ux-variations
-      -> /ui-interview
-        -> /prototype
+    -> /user-flow-map
+      -> /ui-interview --requirements-only
+        -> /ux-variations --layout-mode
+          -> /prototype
           -> /uat --variant-evaluation
             -> /consolidate-variations
               -> /research-roadmap --post-prototype
@@ -377,9 +383,10 @@ A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If mi
 ### Scan
 
 1. Read the consolidated prototype directory to understand what was built.
-2. Read all research docs: `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files.
+2. Read all research docs: `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files. Read `specs/user-flow-*.md` when present as the approved flow-structure bridge between research and prototype.
 3. For each research document, compare against the consolidated prototype:
    - **User flows**: Does the prototype's flow match the journey map's discovery -> onboarding -> aha -> conversion -> retention path?
+   - **Approved flow map**: Does the prototype preserve the `specs/user-flow-*.md` entry points, screen order, decisions, branches, required states, failure/recovery paths, and handoffs?
    - **Onboarding**: Does the prototype's first-run experience match ICP expectations for technical sophistication and time-to-value?
    - **Density and copy**: Does the prototype's information density and copy tone match ICP communication preferences?
    - **Interactions**: Do the prototype's interaction patterns match journey-map touchpoints and competitive differentiation?

@@ -2,7 +2,7 @@
 name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[optional: journey number, journey name, or 'next']"
 visual_tier: prototype
 ---
@@ -66,7 +66,7 @@ Do not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` f
    - When the user reports completion:
      - Update the `#### UAT result log` section for this journey inline in `research/uat-plan.md` with the reported status, evidence, tester notes, and any follow-up tasks promoted.
      - Check off the corresponding item in `tasks/manual-todo.md`.
-     - If the result is `Fail` or `Blocked`, suggest follow-up routing: `$debug` for reproducible failures, `$guide` for external blockers, `$ux-variations` from the product-design pack for unclear acceptance criteria, or `$uat-guide next` for the next journey. Apply the Pack Availability Guard before recommending a skill from another pack.
+     - If the result is `Fail` or `Blocked`, suggest follow-up routing: `$debug` for reproducible failures, `$guide` for external blockers, `$user-flow-map` from the product-design pack when acceptance criteria are unclear because journey flow, states, or recovery paths are underspecified, `$ux-variations --layout-mode` when the unresolved issue is layout alternatives, or `$uat-guide next` for the next journey. Apply the Pack Availability Guard before recommending a skill from another pack.
 
 ## Output
 
@@ -132,7 +132,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - **One journey at a time** -- guide the user through one journey per invocation. They can run `$uat-guide next` for the next one.
 - **Don't execute the product** -- produce instructions for the user to follow. Do not start dev servers, launch browsers, call APIs, create accounts, or perform CLI workflows.
 - **Don't mark complete unprompted** -- only update the result log after the user explicitly reports the outcome.
-- **Don't invent acceptance criteria** -- use only the criteria defined in the UAT plan. If criteria are missing or unclear, recommend `$ux-variations` from the product-design pack to clarify them.
+- **Don't invent acceptance criteria** -- use only the criteria defined in the UAT plan. If criteria are missing or unclear because flow, states, recovery, or handoff structure is underspecified, recommend `$user-flow-map` from the product-design pack; use `$ux-variations --layout-mode` only when the missing decision is layout alternatives.
 - **Handle all product surface types** -- web apps get click-by-click, CLIs get command-by-command, APIs get request-by-request, hybrids get mixed. Detect from codebase context; don't assume web.
 - **Prerequisite: UAT plan must exist** -- if `research/uat-plan.md` is missing, stop immediately and recommend `$uat` from the product-testing pack.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `$pack install <pack-name>` to the recommendation.

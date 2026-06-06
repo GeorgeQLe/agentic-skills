@@ -1,5 +1,10 @@
 # journey-map changelog (claude)
 
+## v0.9 - 2026-06-06
+
+- Route completed positioning output through `/user-flow-map` before UI requirements, layout variations, or prototype work.
+- Update optional detour wording so missing flow/design shape routes to `/user-flow-map`.
+
 ## v0.8 - 2026-06-05
 
 - Refactored to orchestrator pattern with 5 framework subskills: `service-blueprint`, `experience-map`, `user-story-map`, `jtbd-timeline`, `customer-journey-canvas`

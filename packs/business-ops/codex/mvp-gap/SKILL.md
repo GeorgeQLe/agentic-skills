@@ -2,7 +2,7 @@
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
-version: v0.4
+version: v0.5
 interview_depth: none
 visual_tier: visual
 ---
@@ -73,7 +73,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - **Table-Stakes Gaps** — Auth, error handling, data export, accessibility, docs, notifications
    - **Integration Gaps** — Required integrations from the ICP's current workflow
    - **Competitive Differentiation** — Does it deliver the stated value drivers?
-   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$ux-variations`).
+   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$user-flow-map` when flow/design shape is missing, then `$ux-variations --layout-mode` after flow and UI requirements exist).
    - **Metrics Tie-In** — If `research/metrics.md` exists, identify which metric(s) indicate each gap is closed. Flag gaps with no closure metric as instrumentation gaps.
 3. Tag each gap: `blocks-first-sale`, `blocks-retention`, or `nice-to-have`. Estimate effort (S/M/L).
 4. If `research/gtm.md` exists, cross-reference build sequence against GTM launch gates. Flag conflicts and gaps deferrable to post-launch.
@@ -86,13 +86,13 @@ When product path `{slug}` is active, read and write research under `research/{s
 Each gap in the output should include:
 - _Journey stage:_ [stage from journey-map, or "N/A"]
 - _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined"]
-- _Spec:_ [link to spec + status, or `$ux-variations [topic]`]
+- _Spec:_ [link to spec + status, or `$user-flow-map [topic]`]
 
 The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section with a **Recommended** item and 2–4 other contextual options. Choose the recommendation by the first matching condition:
 
 1. IF downstream impact is **Major**: `$reconcile-research` — audit and fix affected downstream research documents.
-2. IF a `blocks-first-sale` gap lacks a full spec: `$ux-variations [top gap]` — explore solution directions for the highest-priority gap from `research/mvp-gap.md`.
-3. IF any other gap lacks a full spec: `$ux-variations [top gap]` — explore solution directions for the highest-priority unspecced gap from `research/mvp-gap.md`.
+2. IF a `blocks-first-sale` gap lacks flow/design shape or a full spec: `$user-flow-map [top gap]` — map the highest-priority gap into concrete screen flow, decisions, branches, states, and recovery paths before UI/layout planning.
+3. IF any other gap lacks flow/design shape or a full spec: `$user-flow-map [top gap]` — map the highest-priority unspecced gap from `research/mvp-gap.md` before UI/layout planning.
 4. IF required context is missing: the corresponding research skill (`$journey-map`, `$competitive-analysis`, `$metrics`, or `$brainstorm` when creative alternatives could reduce high-effort gaps).
 5. OTHERWISE: `$roadmap` — sequence the existing specs into implementation phases.
 
@@ -118,7 +118,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence from the codebase.
 - Prioritise by market impact, not technical interest.
-- Include `$ux-variations <topic>` prompts only for gaps lacking specs.
+- Include `$user-flow-map <topic>` prompts for gaps lacking flow/design shape or full specs. Use `$ux-variations --layout-mode <topic>` only when flow and UI requirements already exist but layout alternatives are missing.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other contextual options.
 
 ## Alignment Page

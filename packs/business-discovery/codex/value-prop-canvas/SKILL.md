@@ -2,7 +2,7 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[optional: specific job or segment to focus on]"
 interview_depth: light
 visual_tier: visual
@@ -157,9 +157,9 @@ Include a **Recommended** item (the single highest-impact next step given curren
 **Recommended:** `$positioning` — return to the default AFPS route by framing validated fit in the market
 
 Other options:
-- IF gaps identified: `$positioning` — Define product positioning from gap evidence (if `research/positioning.md` missing), or `$ux-variations [top gap]` — Explore UX solutions for the highest-priority gap
+- IF gaps identified: `$positioning` — Define product positioning from gap evidence (if `research/positioning.md` missing), or `$user-flow-map [top gap]` — Map flow structure for the highest-priority gap before UI requirements and layout variants
 - IF no `research/competitive-analysis.md`: `$competitive-analysis` — Understand how alternatives address the same jobs
-- IF `research/positioning.md` exists: `$ux-variations [validated fit direction]` — return to the prototype path
+- IF `research/positioning.md` exists: `$user-flow-map [validated fit direction]` — return to the prototype path by mapping flow structure before UI requirements and layout variants
 - IF business model, revenue, channel, cost, or defensibility risk remains material: `$lean-canvas` — optional synthesis now that fit is validated
 
 ### 8. Write Output

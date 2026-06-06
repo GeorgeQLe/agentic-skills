@@ -1,5 +1,9 @@
 # value-prop-canvas changelog (claude)
 
+## v0.6 - 2026-06-06
+
+- Return from optional value-proposition synthesis to `/user-flow-map` when upstream AFPS evidence exists and the product-design route is ready.
+
 ## v0.5 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.6
+version: v0.7
 argument-hint: "[--existing] [path-to-spec]"
 ---
 
@@ -45,6 +45,8 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/phases/` — archived phase files
 - `tasks/lessons.md` — accumulated lessons
 - `specs/` or `spec.md` — specifications
+- `specs/user-flow-*.md` — screen-flow maps for user-facing work
+- `specs/ui-requirements-*.md` — requirements-only UI content contracts for user-facing work
 - `specs/ux-variations-*.md` — UX variation plans for user-facing work
 - `specs/ui-*.md` — implementation-ready UI specifications for user-facing work
 - `research/journey-map.md` — user/customer journey context for user-facing work
@@ -62,8 +64,8 @@ Route behavior based on the current pipeline state:
 |-------|-----------|----------|
 | A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `/journey-map` (customer-lifecycle pack). Done (skip to step 7). |
 | A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `/feature-interview` (product-design pack) when an idea/research gap exists and the planning destination is not confirmed; queue `/spec-interview` (product-design pack) only when the user already selected full-spec creation. Done (skip to step 7). |
-| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
-| B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
+| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
+| B — Specs, no roadmap | Specs exist and required journey/flow/UI requirements/UX planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `/plan-phase N`. Do not queue `/roadmap`. |
 | D — All complete, documentation scan needed | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has no current `## Priority Documentation Todo` section from a previous `/research-roadmap` (research-admin pack) run | Queue `/research-roadmap` (research-admin pack) for documentation scan. Done (skip to step 7). |
@@ -215,19 +217,21 @@ Work has been completed (checked-off steps in todo, archived phases) but `tasks/
 #### 10. Spec-Task Drift
 Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting). If the drift is a new or changed implementation scope after all roadmap phases are complete, handle it as State G in this run by extending the roadmap and seeding the first new phase; do not queue `/roadmap`. Queue `/spec-interview` (product-design pack) only when the changed spec is incomplete or ambiguous enough that roadmap sequencing cannot proceed.
 
-#### 11. Missing Journey/UX/UI Planning
+#### 11. Missing Journey/Flow/UI/UX Planning
 User-facing specs exist, but one or more required design-planning artifacts are missing:
 
 - `research/journey-map.md` — run `/journey-map` (customer-lifecycle pack) first to define discovery, onboarding, aha, conversion, retention, and advocacy.
-- `specs/ux-variations-*.md` — run `/ux-variations` (product-design pack) after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
-- `specs/ui-*.md` — run `/ui-interview` (product-design pack) after UX variation to lock buildable screen-level detail.
+- `specs/user-flow-*.md` — run `/user-flow-map` (product-design pack) after positioning/journey context to define screen flow, branches, decisions, states, failure paths, and handoffs.
+- `specs/ui-requirements-*.md` — run `/ui-interview --requirements-only` (product-design pack) after user-flow mapping to lock the content and behavior contract before layout alternatives.
+- `specs/ux-variations-*.md` — run `/ux-variations --layout-mode` (product-design pack) after user-flow and UI requirements to compare layout approaches.
+- `specs/ui-*.md` — run `/ui-interview` (product-design pack) only when a full UI specification is still needed after layout selection.
 
-For `/journey-map` (customer-lifecycle pack), `/ux-variations` (product-design pack), and `/ui-interview` (product-design pack), apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+For `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ui-interview` (product-design pack), and `/ux-variations` (product-design pack), apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
 #### 12. Missing Roadmap (internal consistency fallback)
-Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `/roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `/plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/ux-variations` (product-design pack), or `/ui-interview` (product-design pack)) with evidence.
+Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `/roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `/plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ui-interview --requirements-only` (product-design pack), `/ux-variations --layout-mode` (product-design pack), or `/ui-interview` (product-design pack)) with evidence.
 
 #### 13. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
@@ -276,7 +280,7 @@ Rules:
 8. Use checked boxes only when an issue is already resolved.
 9. Never write `/roadmap` into `## Priority Task Queue`. If an issue appears to require `/roadmap`, resolve the underlying state in this run:
    - specs missing: queue `/feature-interview` (product-design pack) for idea triage, `/spec-interview` (product-design pack) when full spec creation is already confirmed, or the relevant upstream planning command
-   - user-facing design gate missing: queue `/journey-map` (customer-lifecycle pack), `/ux-variations` (product-design pack), or `/ui-interview` (product-design pack)
+   - user-facing design gate missing: queue `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ui-interview --requirements-only` (product-design pack), `/ux-variations --layout-mode` (product-design pack), or `/ui-interview` (product-design pack)
    - specs exist but roadmap missing: build `tasks/roadmap.md` through State B and seed `/plan-phase 1`
    - existing queue already contains `/roadmap`: replace it with `/reconcile-dev-docs fix tasks` (docs-health pack) because the queue is stale/self-referential
 
@@ -316,12 +320,14 @@ For dirty tree:
 - [ ] `/ship-end --no-deploy` (exec-loop pack) - commit and push uncommitted changes before continuing task work.
 ```
 
-For missing journey/UX/UI planning:
+For missing journey/flow/UI/UX planning:
 
 ```md
 - [ ] `/journey-map` (customer-lifecycle pack) - create `research/journey-map.md` before roadmap because user-facing specs need lifecycle context.
-- [ ] `/ux-variations` (product-design pack) - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need experience alternatives.
-- [ ] `/ui-interview` (product-design pack) - create `specs/ui-[topic].md` before roadmap because the selected experience needs implementation-ready interface detail.
+- [ ] `/user-flow-map` (product-design pack) - create `specs/user-flow-[topic].md` before roadmap because user-facing specs need screen-flow structure.
+- [ ] `/ui-interview --requirements-only` (product-design pack) - create `specs/ui-requirements-[topic].md` before roadmap because user-facing specs need content and behavior requirements before layout alternatives.
+- [ ] `/ux-variations --layout-mode` (product-design pack) - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need layout alternatives.
+- [ ] `/ui-interview` (product-design pack) - create `specs/ui-[topic].md` before roadmap only if the selected experience still needs implementation-ready interface detail.
 ```
 
 If all pipeline checks pass:
@@ -413,7 +419,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `/roadmap` as the next command from a `/roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview` (product-design pack), `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/ux-variations` (product-design pack), `/ui-interview` (product-design pack), `/prototype` (product-design pack), `/consolidate-variations` (product-design pack), `/research-roadmap` (research-admin pack), `/plan-phase N`, `/ship-end --no-deploy` (exec-loop pack), `/reconcile-dev-docs fix tasks` (docs-health pack), `/exec` (exec-loop pack), `/guide` (guided-walkthrough pack), or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` (docs-health pack) with evidence.
+- Never recommend `/roadmap` as the next command from a `/roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview` (product-design pack), `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ux-variations` (product-design pack), `/ui-interview` (product-design pack), `/prototype` (product-design pack), `/consolidate-variations` (product-design pack), `/research-roadmap` (research-admin pack), `/plan-phase N`, `/ship-end --no-deploy` (exec-loop pack), `/reconcile-dev-docs fix tasks` (docs-health pack), `/exec` (exec-loop pack), `/guide` (guided-walkthrough pack), or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` (docs-health pack) with evidence.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/exec` (exec-loop pack), `/delegate` (agent-bridge pack)) or orchestration-heavy work → recommend the matching `/...` route.

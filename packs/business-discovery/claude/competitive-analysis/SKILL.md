@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.12
+version: v0.13
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 interview_depth: light
 visual_tier: visual
@@ -214,7 +214,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - RECOMMEND the first matching item:
   1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
   2. IF no `research/positioning.md`: `/positioning` — Frame the market category and alternatives after journey evidence shows where value is delivered
-  3. IF no `specs/ux-variations-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations [top journey-backed market gap or positioning opportunity]` — Explore experience directions before production specification
+  3. IF no `specs/user-flow-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/user-flow-map [top journey-backed market gap or positioning opportunity]` — Map flow structure before UI requirements, layout variants, and production specification
   4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `/value-prop-canvas` — Validate contested solution-fit evidence as an optional detour
   5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` — Build a GTM plan using the channel and positioning insights
   6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Evaluate codebase against ICP and competitive landscape

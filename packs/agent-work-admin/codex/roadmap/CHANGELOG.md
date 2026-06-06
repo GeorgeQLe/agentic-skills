@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7 - 2026-06-06
+
+- Add `user-flow-map`, requirements-only UI interview, and layout-mode UX variations to the user-facing design-gate queue.
+- Recognize `specs/user-flow-*.md` and `specs/ui-requirements-*.md` as required pre-roadmap planning artifacts.
+
 ## v0.6 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.12
+version: v0.13
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 visual_tier: prototype
 ---
@@ -13,9 +13,11 @@ Invoke as `/ux-variations`.
 
 Use this skill when the user wants to explore multiple UX/UI directions before committing to a final experience. This skill interrogates the full user journey: onboarding, first success, typical workflows, sharing and collaboration, return use, notifications, handoffs, failure recovery, and the interface patterns that support those moments. It then creates variation plans for flows, layouts, navigation models, interaction patterns, component choices, content density, visual tone, and behavior so the user can compare, test, and lock one direction.
 
-Use `/ui-interview` first when the interface has not yet been specified page by page. Use this skill directly when a UI spec, current implementation, screenshot, prototype, or clear feature scope already exists.
+In the normal AFPS product route, use `/user-flow-map` first to lock screen flow, decisions, branches, states, and low-fidelity wireframe notes, then use `/ui-interview --requirements-only` to lock the per-screen content/data/action contract, then run `/ux-variations --layout-mode`.
 
-When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`.
+Use `/user-flow-map` first when the interface has no credible flow structure. Use `/ui-interview --requirements-only` first when the flow exists but the page content, actions, and states are not specified. Use this skill directly only when a user-flow map plus UI requirements, current implementation, screenshot, prototype, or clear feature scope already exists.
+
+When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed flow contract from `specs/user-flow-[topic].md` plus a fixed content contract from `specs/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`.
 
 ## Process
 
@@ -37,14 +39,16 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, task files, screenshots, route files, and component implementations when present.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Use `active_paths` as the product/app focuses and treat deferred `product_paths[]` as parked product directions, not required UX variants.
-   - Prefer existing `specs/ui-*.md`, product specs, journey maps, ICP research, and user feedback as source evidence.
-   - If no credible scope exists, run or recommend `/ui-interview` before developing variants.
+   - Prefer existing `specs/user-flow-*.md` plus `specs/ui-requirements-*.md` as the normal AFPS layout-mode inputs.
+   - Also read `specs/ui-*.md`, product specs, journey maps, ICP research, positioning research, and user feedback as source evidence.
+   - If no credible flow structure exists, run or recommend `/user-flow-map` before developing variants.
+   - If flow exists but no credible content/data/action contract exists, run or recommend `/ui-interview --requirements-only` before developing layout-mode variants.
 
 2. **Define the decision surface**
    - Identify what the user is deciding: whole app experience, onboarding, activation, typical workflow, sharing flow, collaboration model, purchase flow, editor, dashboard, settings, mobile experience, page layout, or another bounded surface.
    - Identify which dimensions may vary: first-run onboarding, activation, core workflow sequencing, sharing, invitations, permissions, collaboration, return-use loops, notifications, reminders, status surfaces, user or device handoffs, failure recovery, information architecture, navigation, page layout, task flow order, component model, data density, visual hierarchy, motion, copy tone, and mobile behavior.
    - Identify fixed constraints: brand, stack, design system, must-keep components, accessibility, launch scope, performance, and business requirements.
-   - **Layout-mode addition**: In layout-mode, read `specs/ui-requirements-[topic].md` as the fixed content contract. The WHAT is locked; only the HOW varies. Layout dimensions that can vary:
+   - **Layout-mode addition**: In layout-mode, read `specs/user-flow-[topic].md` as the fixed screen-flow contract and `specs/ui-requirements-[topic].md` as the fixed content contract. The WHAT and flow order are locked; only the HOW varies. Layout dimensions that can vary:
      - Container pattern: card grid, data table, list, kanban, timeline, tree, masonry
      - Detail pattern: sidebar panel, full-page route, modal, drawer, inline expand, popover
      - Navigation: top-nav, side-nav, tab-based, breadcrumb-driven, command-palette, hybrid

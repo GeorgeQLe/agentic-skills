@@ -1,0 +1,7 @@
+interface:
+  display_name: "User Flow Map"
+  short_description: "Map screen flow, branches, states, and low-fi wireframe notes before UI requirements"
+  default_prompt: "Use /user-flow-map to turn this positioned product or feature goal into screen flow structure, decisions, branches, states, failure paths, and low-fidelity wireframe notes before UI requirements and layout variants."
+
+policy:
+  allow_implicit_invocation: true

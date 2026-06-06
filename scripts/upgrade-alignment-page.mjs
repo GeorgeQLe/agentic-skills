@@ -82,9 +82,9 @@ const VISUAL_TIER_SKILLS = new Set([
 ]);
 
 const PROTOTYPE_TIER_SKILLS = new Set([
-  'ux-variations', 'prototype', 'design-system', 'ui-interview', 'consolidate-variations',
-  'brainstorm', 'game-prototype-test', 'game-store-page-test', 'landing-copy', 'uat-guide',
-  'animation-design-planner',
+  'ux-variations', 'prototype', 'design-system', 'ui-interview', 'user-flow-map',
+  'consolidate-variations', 'brainstorm', 'game-prototype-test', 'game-store-page-test',
+  'landing-copy', 'uat-guide', 'animation-design-planner',
 ]);
 
 function skillVisualTier(skillName) {
@@ -108,7 +108,7 @@ const FULL_INTERVIEW_SKILLS = new Set([
   'enterprise-icp', 'gtm', 'landing-copy', 'metrics', 'monetization', 'conversion-map',
   'expansion-map', 'lifecycle-metrics', 'onboarding-map', 'retention-map', 'transaction-map',
   'feature-interview', 'ui-interview', 'spec-interview', 'skill-interview', 'idea-scope-brief',
-  'customer-discovery',
+  'customer-discovery', 'user-flow-map',
 ]);
 
 const LIGHT_INTERVIEW_SKILLS = new Set([
@@ -149,6 +149,7 @@ function skillSpecificGates(skillName) {
   const rules = {
     "idea-scope-brief": `**Idea-specific gates.** Render the Idea Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The idea identity, slug, scope/non-goals, ICP readiness, and output-location/change-scope decisions must each be reviewable gates. ${outputGateDedup}`,
     "feature-interview": `**Feature-specific gates.** Render the evidence brief, claim verdicts, assumptions, planning destination, prototype-first decision, priority hypothesis, and output-location/change-scope decisions as gates before writing or updating durable planning artifacts. ${outputGateDedup}`,
+    "user-flow-map": `**User-flow-map gates.** Render surfaced flow assumptions, the proposed flow map, branch and decision coverage, state coverage, failure/recovery and handoff coverage, low-fidelity wireframe notes, output-location/change-scope decisions, and the downstream route to UI requirements as gates before writing final flow deliverables. ${outputGateDedup}`,
     "ui-interview": `**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, output-location/change-scope decisions, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals. ${outputGateDedup}`,
     "ux-variations": `**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, output-location/change-scope decisions, and coverage checkpoint as gates before writing final variation plans. ${outputGateDedup}`,
     "spec-interview": `**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, output-location/change-scope decisions, and post-approval route as gates before writing or replacing specs. ${outputGateDedup}`,

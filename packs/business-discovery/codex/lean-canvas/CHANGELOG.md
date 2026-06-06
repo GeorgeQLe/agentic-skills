@@ -1,5 +1,9 @@
 # lean-canvas changelog (codex)
 
+## v0.6 - 2026-06-06
+
+- Return from optional business-model synthesis to `$user-flow-map` when upstream AFPS evidence exists.
+
 ## v0.5 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.13 - 2026-06-06
+
+- Clarified the normal AFPS route as `/user-flow-map` then `/ui-interview --requirements-only` before `/ux-variations --layout-mode`.
+- Prefer `specs/user-flow-*.md` plus `specs/ui-requirements-*.md` as layout-mode inputs, and route missing flow structure to `/user-flow-map`.
+
 ## v0.12 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

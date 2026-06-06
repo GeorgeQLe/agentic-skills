@@ -1,5 +1,10 @@
 # research-roadmap changelog (codex)
 
+## v0.13 - 2026-06-06
+
+- Added `$user-flow-map` as a documentation-producing product-design skill that writes `specs/user-flow-*.md`.
+- Track user-flow specs, queue them between positioning and requirements-only UI interview, and mark UI/UX/prototype/roadmap artifacts stale when a newer user-flow map changes flow structure.
+
 ## v0.12 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

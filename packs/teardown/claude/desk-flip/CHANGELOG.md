@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-06
+
+- Updated fresh product restart routing to include `/positioning`, `/user-flow-map`, requirements-only UI interview, and layout-mode UX variations before prototype work.
+
 ## v0.0
 
 - Archived previous skill contract.

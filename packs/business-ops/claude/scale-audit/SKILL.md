@@ -2,7 +2,7 @@
 name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[optional: path-to-enterprise-icp-spec]"
 interview_depth: none
 visual_tier: visual
@@ -105,7 +105,7 @@ Estimate effort for each: S / M / L / XL.
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
 
-1. IF any `hard-blocker` lacks a full implementation spec: `/ux-variations [top blocker]` — explore solution directions for the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
+1. IF any `hard-blocker` lacks flow/design shape or a full implementation spec: `/user-flow-map [top blocker]` — map the highest-priority enterprise blocker into concrete screen flow, decisions, branches, states, and recovery paths before UI/layout planning.
 2. IF enterprise stakeholder journey context is missing: `/journey-map enterprise` — map enterprise stakeholder journeys before sequencing build work.
 3. IF startup gaps escalated and `research/mvp-gap.md` is missing or stale: `/mvp-gap` — re-evaluate startup readiness first.
 4. IF enterprise SLA or compliance gaps lack closure metrics: `/metrics` — define metrics covering enterprise SLAs.
@@ -129,17 +129,17 @@ Only recommend `/roadmap` as the primary next step when every hard-blocker alrea
 
 ## Hard Blockers
 - **[Gap title]** — [What's missing, which stakeholder it blocks, and why]. Effort: S/M/L/XL
-  _Start with:_ `/ux-variations [topic]`
+  _Start with:_ `/user-flow-map [topic]`
 - ...
 
 ## Soft Blockers
 - **[Gap title]** — [What's missing and impact]. Effort: S/M/L/XL
-  _Start with:_ `/ux-variations [topic]`
+  _Start with:_ `/user-flow-map [topic]`
 - ...
 
 ## Differentiators
 - **[Gap title]** — [What's missing and competitive advantage]. Effort: S/M/L/XL
-  _Start with:_ `/ux-variations [topic]`
+  _Start with:_ `/user-flow-map [topic]`
 - ...
 
 ## Stakeholder Coverage Matrix
@@ -189,7 +189,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
-- **Include `/ux-variations` prompts** for each gap that lacks a full spec so the user can immediately explore solution directions for the blocker.
+- **Include `/user-flow-map` prompts** for each gap that lacks flow/design shape or a full spec. Use `/ux-variations --layout-mode` only when flow and UI requirements already exist but layout alternatives are missing.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
 
