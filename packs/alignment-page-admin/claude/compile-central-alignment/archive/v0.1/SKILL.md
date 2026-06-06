@@ -2,7 +2,7 @@
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
 type: ops
-version: v0.2
+version: v0.1
 ---
 
 # Compile Central Alignment
@@ -21,21 +21,10 @@ Generate a browsable `alignment/index.html` that links to every alignment page i
      - `<title>` text (fallback: filename without extension)
      - First `<h1>` text (fallback: title)
      - First `<p class="meta">` text (fallback: empty)
-     - `data-alignment-category` attribute from the `<html>` element (fallback: see prefix matching below)
      - File modification date via `git log -1 --format=%aI -- <path>` (fallback: filesystem mtime)
 
-3. **Group and sort entries:**
-   - **Category assignment:** For each page, determine its category using this precedence:
-     1. `data-alignment-category` attribute value from the `<html>` element, if present.
-     2. Match the filename (without extension) against the convention's skill-prefix lists:
-        - `research` — prefixes: `devtool-positioning`, `devtool-adoption`, `devtool-monetization`, `devtool-user-map`, `devtool-workflow`, `devtool-dx-journey`, `devtool-integration-map`, `deep-research`, `repo-glossary`
-        - `product-design` — prefixes: `idea-scope-brief`, `fork-idea-branch`, `animation-design-planner`, `skills-showcase`, `skills-inventory`
-        - `utility` — prefixes: `investigate`, `session-triage`, `prompt-history-backfill`
-        - `qa-meta` — prefixes: `expert-review`, `benchmark`, `targeted-skill-builder`, `devtool-docs-audit`
-        - `ops-analysis` — prefixes: `analyze-sessions`, `canonical-workflow`, `run-batch`
-     3. If no prefix matches, default to `research`.
-   - **Category order:** Group pages by category in this fixed order: research → product-design → utility → qa-meta → ops-analysis.
-   - **Within each category:** Sort by modification date descending.
+3. **Sort entries:**
+   - Order by modification date, most recent first.
 
 4. **Generate `alignment/index.html`:**
    - Self-contained HTML, no external dependencies.
@@ -43,16 +32,12 @@ Generate a browsable `alignment/index.html` that links to every alignment page i
      - `--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --panel: #161b22;`
      - `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif`, `max-width: 1080px`, `line-height: 1.45`
      - `body { background: var(--bg); color: var(--text); }`
-   - Page header: `<h1>Alignment Pages</h1>` with total page count and generation timestamp in a `<p class="meta">`.
-   - Text filter input: an `<input>` that live-filters the card grid by title, description, and date as the user types. The filter searches across all category sections, hiding/showing individual cards and hiding category headings when all their cards are filtered out. Inline `<script>` — no external JS.
-   - Category sections: render each non-empty category as a section with:
-     - `<h2>` heading using the category display name and a count of pages in that category (e.g., "Research (7)")
-     - Display names: Research, Product Design & Spec, Utility & Maintenance, QA & Meta-Skill Improvement, Ops & Session Analysis
-     - Card grid within that section: responsive CSS grid (`repeat(auto-fill, minmax(300px, 1fr))`), each card is a `.panel` link block containing:
-       - Linked title (`<h3>`) pointing to the file (relative `href`)
-       - Description line from the meta paragraph
-       - Date line in muted text
-   - Skip categories that have zero pages — do not render an empty heading.
+   - Page header: `<h1>Alignment Pages</h1>` with page count and generation timestamp in a `<p class="meta">`.
+   - Text filter input: an `<input>` that live-filters the card grid by title, description, and date as the user types. Inline `<script>` — no external JS.
+   - Card grid: responsive CSS grid (`repeat(auto-fill, minmax(300px, 1fr))`), each card is a `.panel` link block containing:
+     - Linked title (`<h3>`) pointing to the file (relative `href`)
+     - Description line from the meta paragraph
+     - Date line in muted text
    - All links are relative (same directory), no absolute or external URLs.
 
 5. **Open or focus the central index:**

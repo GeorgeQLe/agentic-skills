@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2 - 2026-06-06
+
+- Group index entries by category (research, product-design, utility, qa-meta, ops-analysis) instead of a flat date-sorted list.
+- Read `data-alignment-category` from each page's `<html>` element; fall back to filename prefix matching; default to `research`.
+- Render each non-empty category as a section with `<h2>` heading, display name, and page count.
+- Text filter hides individual cards and collapses empty category headings.
+
 ## v0.1 - 2026-06-05
 
 - Open or focus the regenerated central `alignment/index.html` with `node scripts/open-html-page.mjs alignment/index.html --browser auto`.

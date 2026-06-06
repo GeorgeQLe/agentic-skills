@@ -2,7 +2,7 @@
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
 type: ops
-version: v0.2
+version: v0.1
 ---
 
 # Compile Central Alignment
@@ -14,26 +14,14 @@ Generate a browsable `alignment/index.html` linking to every alignment page in t
 ## Process
 
 1. Locate `alignment/` at the project root; stop if absent.
-2. Scan `alignment/*.html` (exclude `index.html`), extract per-file: `<title>`, first `<h1>`, first `<p class="meta">`, `data-alignment-category` from `<html>` element, modification date.
-3. Group and sort:
-   - Assign category per page: `data-alignment-category` attribute first; else match filename against prefix lists:
-     - `research`: `devtool-positioning`, `devtool-adoption`, `devtool-monetization`, `devtool-user-map`, `devtool-workflow`, `devtool-dx-journey`, `devtool-integration-map`, `deep-research`, `repo-glossary`
-     - `product-design`: `idea-scope-brief`, `fork-idea-branch`, `animation-design-planner`, `skills-showcase`, `skills-inventory`
-     - `utility`: `investigate`, `session-triage`, `prompt-history-backfill`
-     - `qa-meta`: `expert-review`, `benchmark`, `targeted-skill-builder`, `devtool-docs-audit`
-     - `ops-analysis`: `analyze-sessions`, `canonical-workflow`, `run-batch`
-     - Default: `research`
-   - Group by category in fixed order: research → product-design → utility → qa-meta → ops-analysis
-   - Within each category, sort by modification date descending
+2. Scan `alignment/*.html` (exclude `index.html`), extract per-file: `<title>`, first `<h1>`, first `<p class="meta">`, modification date.
+3. Sort by modification date descending.
 4. Generate `alignment/index.html` — self-contained HTML with:
    - Visual style matching existing alignment pages (same CSS variables, fonts, layout)
-   - Category sections: each non-empty category gets an `<h2>` with display name and count (e.g., "Research (7)"), followed by its card grid
-   - Display names: Research, Product Design & Spec, Utility & Maintenance, QA & Meta-Skill Improvement, Ops & Session Analysis
    - Card grid with linked titles, descriptions, dates
-   - Text filter input searching across all categories, hiding empty category headings
-   - Total page count and generation timestamp
+   - Text filter input for quick search
+   - Page count and generation timestamp
    - All relative links, no external dependencies
-   - Skip categories with zero pages
 5. Verify `alignment/index.html` was written and still works as a direct `file://` page.
 6. Open or focus the generated index with:
    - `node scripts/open-html-page.mjs alignment/index.html --browser auto`
