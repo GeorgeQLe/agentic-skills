@@ -22,7 +22,7 @@
 - [x] `jtbd-needs` — Ulwick/Christensen JTBD needs-based segmentation
 - [x] `four-forces` — Moesta Four Forces (Push/Pull/Anxiety/Habit) switching analysis
 - [x] `five-rings` — Revella Five Rings of Buying Insight (decision psychology)
-- [ ] `seven-dimensions` — Lincoln Murphy 7 Dimensions ICP scoring
+- [x] `seven-dimensions` — Lincoln Murphy 7 Dimensions ICP scoring
 - [ ] `pmf-engine` — Vohra/Supan PMF Engine + High-Expectation Customer
 - Each needs: SKILL.md, CHANGELOG.md, ALIGNMENT-PAGE.md (claude first, then codex mirror)
 
