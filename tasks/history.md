@@ -13610,3 +13610,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Created framework scaffold directories for 6 subskills (w3-hypothesis, jtbd-needs, four-forces, five-rings, seven-dimensions, pmf-engine).
 - Updated orchestrator-convention.md with customer-discovery as reference implementation.
 - Wrote w3-hypothesis subskill (SKILL.md, CHANGELOG.md, ALIGNMENT-PAGE.md) for both claude and codex — Schwartzfarb W3 (WHO/WHAT/WHY) hypothesis generation with disproval testing and per-candidate confidence scoring.
+
+## 2026-06-06 — customer-discovery pmf-engine framework subskill
+
+- Wrote mirrored `pmf-engine` framework contracts for Claude and Codex under `packs/business-discovery/*/customer-discovery/frameworks/pmf-engine/`.
+- Added generated `ALIGNMENT-PAGE.md` stubs and changelogs for the new subskill.
+- Registered `pmf-engine` in benchmark coverage as a blocked customer-discovery framework fixture because it requires real product/user evidence.
+- Refreshed Skills Showcase generated assets and benchmark result matrix, picking up prior stale `user-flow-map` catalog data while leaving nested framework subskills out of the public showcase catalog by generator design.
+- Marked customer-discovery Phase 3 complete in `tasks/todo.md` and prepared Phase 4.1 AFPS docs update plan.

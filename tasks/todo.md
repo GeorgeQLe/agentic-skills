@@ -79,9 +79,9 @@
 
 ## Current State
 
-- Tree is dirty, master — customer-discovery orchestrator refactor in progress
-- Recent work: icp → customer-discovery rename + orchestrator refactor (Phase 1-2 complete)
-- Active: customer-discovery orchestrator refactor
+- customer-discovery orchestrator refactor in progress on master.
+- Recent work: icp → customer-discovery rename + orchestrator refactor (Phase 1-2 complete), all six Phase 3 framework subskills now have mirrored contracts.
+- Active: Phase 4 documentation updates for the icp → customer-discovery rename.
 
 ---
 
@@ -102,11 +102,24 @@
 - [x] `four-forces` — Moesta Four Forces (Push/Pull/Anxiety/Habit) switching analysis
 - [x] `five-rings` — Revella Five Rings of Buying Insight (decision psychology)
 - [x] `seven-dimensions` — Lincoln Murphy 7 Dimensions ICP scoring
-- [ ] `pmf-engine` — Vohra/Supan PMF Engine + High-Expectation Customer
+- [x] `pmf-engine` — Vohra/Supan PMF Engine + High-Expectation Customer
 - Each needs: SKILL.md, CHANGELOG.md, ALIGNMENT-PAGE.md (claude first, then codex mirror)
+
+### Phase 3 Review Notes
+- Added Claude and Codex `pmf-engine` framework mirrors with `SKILL.md`, `CHANGELOG.md`, and generated `ALIGNMENT-PAGE.md`.
+- PMF Engine is constrained to product-exists contexts with real user/customer evidence, Sean Ellis PMF signal handling, very-disappointed segmentation, behavioral evidence checks, and High-Expectation Customer synthesis.
+- Added `pmf-engine` to the benchmark coverage registry as blocked because it requires real product/user evidence and lacks a deterministic pack workflow fixture.
+- Validation completed: skill versions, dependency scan, pack routing audit, alignment dry-run, Skills Showcase freshness, benchmark coverage, staged-research string check, targeted mirror scans, and `git diff --check`.
+- Broad `pnpm --dir tests verify` still fails on 46 known layer1 failures unrelated to `pmf-engine` (stale `icp` paths, existing alignment wording drift, mirror parity drift, and benchmark/demo contract drift); final failure summary does not list `pmf-engine`.
 
 ### Phase 4: Documentation Updates (icp → customer-discovery rename)
 - [ ] Update AFPS flow docs (canonical-workflow-report.md, skill-next-step-contracts.md, skills-reference.md, skill-anatomy.md, skill-invocation-types.md)
+
+#### Next Step Plan — Phase 4.1 AFPS Flow Docs
+- Scope: update AFPS flow/reference documentation so the canonical flow uses `customer-discovery` instead of legacy `icp` naming where the rename has landed.
+- Files to inspect/edit first: `docs/canonical-workflow-report.md`, `docs/skill-next-step-contracts.md`, `docs/skills-reference.md`, `docs/skill-anatomy.md`, and `docs/skill-invocation-types.md`.
+- Approach: replace executable route references, stage names, and explanatory text carefully; preserve historical/archive mentions when they explicitly describe old commits or deprecated names.
+- Validation: run targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over updated docs, then run `git diff --check` and the smallest relevant docs/skill routing checks discovered by `rg` or existing tests.
 - [ ] Update PACK.md for business-discovery
 - [ ] Update global skills that route to /icp (idea-scope-brief, afps-status, codebase-status, skills, pack)
 - [ ] Update business-discovery pack skills (competitive-analysis, customer-feedback, enterprise-icp, lean-canvas, value-prop-canvas, positioning + 5 frameworks)
