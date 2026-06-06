@@ -1,3 +1,17 @@
+## Current Investigation — Skills That Should Be Scripts
+
+### Goal
+
+Validate whether the "Skills That Should Be Scripts" research matches the repository evidence, classify which claims are confirmed versus overstated, and identify the root problem behind script-shaped skills.
+
+### Plan
+
+1. Capture the visible `investigate` invocation and task checklist.
+2. Inventory `scripts/` and validate the reported standalone-tool claims.
+3. Inspect named skill contracts for pure delegation, static insertion, deterministic orchestration, or real LLM judgment.
+4. Compare the `pack` skill and `pack.sh` specifically because it is the strongest example.
+5. Report confirmed claims, corrections, and the practical recommendation without changing skill behavior.
+
 ## Active Plan — Add `user-flow-map` And Refactor AFPS Routing
 
 ### Goal
@@ -77,6 +91,10 @@ icp -> competitive-analysis -> journey-map -> positioning
 - **Hard-rename initialization surface (2026-05-27)** — replace `install-agentic-skills` / `install.sh` with `init-agentic-skills` / `init.sh` as the first-time setup interface, without compatibility aliases.
 - **Exclude archived skills from `$` preview (2026-05-27)** — active installed skill roots should be archive-free managed directories, while explicit pins continue to point at `archive/<version>`.
 - **Skill structure best-practice audit (2026-05-27)** — preserve the current `global/{claude,codex}` and `packs/<pack>/{claude,codex}` model while tightening repo-local anatomy guidance, archive/changelog hygiene, and validation semantics so active-skill audits ignore historical archive noise.
+- **Orchestrator refactor investigation: `growth-model` (2026-06-06)** — investigate decomposing into a Pattern A (Framework Decomposition + Synthesis) orchestrator with `frameworks/acquisition-loop`, `frameworks/retention-loop`, `frameworks/monetization-loop` subskills. Currently 356 lines with three distinct Reforge-style loop methodologies that produce independent analysis merged at synthesis. Strongest candidate.
+- **Orchestrator refactor investigation: `platform-strategy` (2026-06-06)** — investigate decomposing into a Pattern A orchestrator with `frameworks/vertical-expansion` and `frameworks/horizontal-expansion` subskills, with scoring + portfolio sequencing handled by synthesis. Currently 461 lines with two genuinely different analytical lenses. Moderate candidate.
+- **Orchestrator refactor investigation: `pmf-assessment` (2026-06-06)** — investigate decomposing into a Pattern A orchestrator with quantitative (Sean Ellis survey design) and qualitative (signal analysis) framework subskills. Currently 406 lines. Two frameworks is thin for an orchestrator; assess whether the split improves modularity enough to justify the overhead.
+- **Orchestrator convention: document Pattern B (Intent Router) (2026-06-06)** — the `orchestrator-convention.md` only covers Pattern A (Framework Decomposition). Document the Intent Router + Play Composer pattern (youtube) and the Detect-and-Route pattern (animation-design-planner) as named convention variants so future orchestrator work has a reference for each type.
 - **Alignment YAML clipboard UX (2026-05-24)** — tighten every active HTML alignment-page contract so compiled YAML is copied automatically when possible and always has an explicit copy-to-clipboard control; validate with broad layer1 contract tests.
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
 - **Two-way Neon ↔ poketowork UI sync** — webhook on git push (from original backlog)
