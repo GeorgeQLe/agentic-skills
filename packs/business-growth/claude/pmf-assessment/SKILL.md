@@ -4,6 +4,8 @@ type: research
 version: v0.5
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -386,6 +388,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Present before writing.** Never write output files until the assessment has been presented and validated.
 - **Do not overwrite existing `research/pmf-assessment.md`** without asking the user first.
 - **PMF is a spectrum, not binary.** Frame results as a continuum with actionable next steps at each level. Avoid "you have PMF" / "you don't have PMF" absolutes.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

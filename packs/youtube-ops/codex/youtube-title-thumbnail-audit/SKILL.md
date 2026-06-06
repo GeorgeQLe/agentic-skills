@@ -4,6 +4,7 @@ description: Audit YouTube titles and thumbnails against channel performance and
 type: research
 version: v0.3
 argument-hint: "<channel slug or handle> [--peer <channel>...] [--count N]"
+interview_depth: none
 ---
 
 ## Pack Availability Guard

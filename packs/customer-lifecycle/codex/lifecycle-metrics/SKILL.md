@@ -4,6 +4,8 @@ description: Define stage metrics, instrumentation needs, and evidence gaps acro
 type: analysis
 version: v0.3
 argument-hint: "[optional: app or lifecycle stage]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

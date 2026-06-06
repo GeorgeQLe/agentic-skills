@@ -203,7 +203,7 @@ Present the timeline, forces analysis, and hiring criteria. Ask for corrections,
 
 ## Alignment Page
 
-When this skill produces durable deliverables, build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/jtbd-timeline-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/jtbd-timeline-{topic}.html`.
 
 ## Default Shipping Contract
 

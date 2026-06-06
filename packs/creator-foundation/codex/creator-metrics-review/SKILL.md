@@ -4,6 +4,7 @@ description: Review creator-media performance over time using raw YouTube eviden
 type: research
 version: v0.3
 argument-hint: "[channel slug] [--period monthly|quarterly]"
+interview_depth: none
 ---
 
 ## Pack Availability Guard

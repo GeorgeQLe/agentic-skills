@@ -4,6 +4,8 @@ type: research
 version: v0.5
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

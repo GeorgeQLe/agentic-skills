@@ -4,6 +4,8 @@ description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, a
 type: planning
 version: v0.1
 invocation: orchestrator
+interview_depth: none
+visual_tier: visual
 ---
 
 # Devtool Workflow

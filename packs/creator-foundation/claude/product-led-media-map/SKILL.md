@@ -4,6 +4,8 @@ description: Map a product or company into founder-led YouTube media themes, pro
 type: research
 version: v0.3
 argument-hint: "[product or channel slug]"
+interview_depth: light
+visual_tier: visual
 ---
 
 # Product-Led Media Map
@@ -81,6 +83,14 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 - Dirty intended artifacts: route to shipping/commit/handoff first, not another creator strategy skill.
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

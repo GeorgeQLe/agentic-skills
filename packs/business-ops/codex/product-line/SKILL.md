@@ -4,6 +4,8 @@ description: Manage the portfolio of product paths — review, activate, archive
 type: ops
 version: v0.2
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

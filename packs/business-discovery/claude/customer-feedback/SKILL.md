@@ -4,6 +4,8 @@ description: Ingest and synthesize customer feedback — categorize findings aga
 type: research
 version: v0.4
 argument-hint: "[file path, pasted text, or empty to be prompted]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -257,6 +259,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Tag to existing research.** When ICP and journey map exist, every finding must be tagged. When they don't exist, skip tagging but note "no ICP/journey context" in the session header.
 - **Count across sessions.** Staleness triggers are based on cumulative findings, not just the current session.
 - **Accept any format.** The skill should handle messy, unstructured input gracefully.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

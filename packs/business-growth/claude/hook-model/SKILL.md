@@ -4,6 +4,8 @@ type: research
 version: v0.5
 description: Nir Eyal engagement loop design — trigger, action, variable reward, investment
 argument-hint: "[optional: specific engagement loop or user behavior to focus on]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -318,6 +320,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not force habit-loop thinking on products where usage is naturally infrequent or transactional.** The applicability check exists for a reason — respect it.
 - **Present before writing.** Never write output files until the hook loops have been presented and validated.
 - **Do not overwrite existing `research/hook-model.md`** without asking the user first.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

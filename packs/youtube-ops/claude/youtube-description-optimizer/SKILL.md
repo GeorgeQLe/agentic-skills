@@ -4,6 +4,7 @@ description: Audit, draft, or template YouTube descriptions and metadata for pro
 type: research
 version: v0.3
 argument-hint: "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]"
+interview_depth: none
 ---
 
 ## Pack Availability Guard

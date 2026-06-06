@@ -4,6 +4,8 @@ description: Estimate monthly burn rate from infrastructure signals and calculat
 type: analysis
 version: v0.3
 argument-hint: "[optional: focus area e.g. \"infrastructure only\", \"team costs\", \"runway\"]"
+interview_depth: light
+visual_tier: visual
 ---
 
 # Burn Rate — Infrastructure-Grounded Cost & Runway Analysis
@@ -321,6 +323,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not overwrite existing `research/burn-rate.md`** (or `research/{slug}/burn-rate.md`) without asking the user first.
 - **Minimum research depth**: at least 4 WebSearch queries for pricing data before presenting cost estimates.
 - **Use current pricing.** Always search for current pricing — cached or memorized pricing may be outdated.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

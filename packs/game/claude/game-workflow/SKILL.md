@@ -4,6 +4,7 @@ description: Use only for video game projects; route research, validation, roadm
 type: planning
 version: v0.1
 invocation: orchestrator
+interview_depth: none
 ---
 
 # Game Workflow

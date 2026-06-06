@@ -4,6 +4,7 @@ description: Strategic decision retrospective — review research decisions agai
 type: analysis
 version: v0.2
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
+interview_depth: light
 ---
 
 ## Pack Availability Guard
@@ -233,6 +234,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Be constructive.** The goal is learning, not blame. Frame "wrong" decisions as lessons, not failures.
 - **Recommend actions.** Every finding should connect to a concrete next step for improving the research.
 - **Quarterly or milestone-based.** Designed for periodic use, not continuous. Note the recommended next retro date.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

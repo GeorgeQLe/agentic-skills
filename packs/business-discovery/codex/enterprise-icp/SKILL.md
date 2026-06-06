@@ -4,6 +4,8 @@ description: Enterprise multi-stakeholder discovery — map personas, deal-kille
 type: research
 version: v0.6
 argument-hint: "[optional: target industry or market segment]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

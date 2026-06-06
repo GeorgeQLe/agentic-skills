@@ -4,6 +4,8 @@ description: Generate or audit landing page copy grounded in upstream research �
 type: research
 version: v0.5
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
+interview_depth: full
+visual_tier: prototype
 ---
 
 ## Pack Availability Guard
@@ -466,6 +468,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Audit mode is read-only.** Never write files in audit mode.
 - **Brand voice is law.** Once the user defines tone and vocabulary in the interview, every section must respect it — no section should feel like it was written by a different voice.
 - **Check `tasks/manual-todo.md`** — if it exists, read it. If it lists items related to landing page copy, messaging, or marketing, incorporate those requirements into your work and call them out to the user.
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

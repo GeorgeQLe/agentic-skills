@@ -4,6 +4,7 @@ description: Interview a feature idea with evidence-backed alignment, then decid
 type: planning
 version: v0.4
 argument-hint: "[feature idea or tasks/ideas.md entry]"
+interview_depth: full
 ---
 
 ## Pack Availability Guard

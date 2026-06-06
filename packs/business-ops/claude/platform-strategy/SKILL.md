@@ -4,6 +4,8 @@ description: Expand from a single product into a multi-product platform — map 
 type: research
 version: v0.6
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -441,6 +443,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
 - **Do not overwrite existing `research/platform-strategy.md`** (or `research/{slug}/platform-strategy.md`) without asking the user first.
 - **Keep validation experiments lightweight.** Full experiment design belongs in `/experiment`. Here, provide just enough to estimate validation cost and timeline.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

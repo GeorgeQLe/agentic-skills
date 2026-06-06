@@ -4,6 +4,8 @@ description: Evaluate codebase against enterprise ICP for production readiness, 
 type: analysis
 version: v0.2
 argument-hint: "[optional: path-to-enterprise-icp-spec]"
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

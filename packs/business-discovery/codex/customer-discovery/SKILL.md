@@ -5,6 +5,8 @@ type: research
 version: v1.0
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

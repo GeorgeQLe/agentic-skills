@@ -4,6 +4,7 @@ description: Map a YouTube channel's video portfolio by archetype, strategic rol
 type: research
 version: v0.3
 argument-hint: "[channel slug or audit path]"
+interview_depth: none
 ---
 
 ## Pack Availability Guard

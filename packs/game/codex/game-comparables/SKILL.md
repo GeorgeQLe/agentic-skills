@@ -3,6 +3,8 @@ name: game-comparables
 description: Use only for video game projects; research comparable titles, tags, prices, player signals, and positioning patterns
 type: research
 version: v0.3
+interview_depth: light
+visual_tier: visual
 ---
 
 # Game Comparables

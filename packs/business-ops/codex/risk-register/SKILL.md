@@ -4,6 +4,8 @@ description: Broad risk assessment — key-person, technical, regulatory, compet
 type: analysis
 version: v0.2
 argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"financial\"]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

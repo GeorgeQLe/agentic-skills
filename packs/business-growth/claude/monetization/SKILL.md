@@ -4,6 +4,8 @@ description: Research-driven monetization strategy — revenue models, pricing a
 type: research
 version: v0.7
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -314,6 +316,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not overwrite existing `research/monetization.md`** (or `research/{slug}/monetization.md`) without asking the user first.
 - **Minimum research depth**: at least 6 WebSearch queries before presenting revenue model options, then targeted queries per model option.
 - **State assumptions.** Every unit economics estimate must include the assumption behind it and a confidence level. Never present estimates as facts.
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

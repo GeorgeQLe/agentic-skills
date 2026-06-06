@@ -4,6 +4,8 @@ description: Plan repeat-use loops, lifecycle triggers, churn risks, recovery pa
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, persona, or retention stage]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

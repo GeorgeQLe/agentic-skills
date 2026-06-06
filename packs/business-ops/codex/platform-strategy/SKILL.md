@@ -4,6 +4,8 @@ description: Expand from a single product into a multi-product platform — map 
 type: research
 version: v0.6
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

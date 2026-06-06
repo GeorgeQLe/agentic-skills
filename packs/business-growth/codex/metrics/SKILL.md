@@ -4,6 +4,8 @@ description: Define success metrics framework — activation, engagement, retent
 type: analysis
 version: v0.3
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

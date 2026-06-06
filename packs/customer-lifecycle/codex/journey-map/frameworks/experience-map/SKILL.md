@@ -169,7 +169,7 @@ Present the experience map and emotional arc. Ask for corrections, missing phase
 
 ## Alignment Page
 
-When this skill produces durable deliverables, build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/experience-map-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/experience-map-{topic}.html`.
 
 ## Default Shipping Contract
 

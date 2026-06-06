@@ -4,6 +4,8 @@ description: Specify a repeatable YouTube series format with audience job, episo
 type: planning
 version: v0.2
 argument-hint: "<series idea or programming path>"
+interview_depth: light
+visual_tier: prototype
 ---
 
 # Series Spec

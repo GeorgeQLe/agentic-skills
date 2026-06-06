@@ -4,6 +4,8 @@ description: Interview page by page to define a complete UI specification, inclu
 type: planning
 version: v0.10
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
+interview_depth: full
+visual_tier: prototype
 ---
 
 # UI Interview

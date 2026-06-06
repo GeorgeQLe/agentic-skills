@@ -3,6 +3,8 @@ name: devtool-user-map
 description: Use only for developer-facing products; map users, buyers, champions, contributors, and operational stakeholders
 type: research
 version: v0.4
+interview_depth: light
+visual_tier: visual
 ---
 
 # Devtool User Map

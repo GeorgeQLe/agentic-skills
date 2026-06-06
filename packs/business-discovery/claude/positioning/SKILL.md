@@ -4,6 +4,8 @@ description: Orchestrator — detect market vs product mode, recommend positioni
 type: research
 version: v0.10
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
+interview_depth: light
+visual_tier: visual
 invocation: orchestrator
 ---
 
@@ -335,6 +337,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Parent does not execute frameworks.** It selects and queues them. `/exec` handles execution.
 - **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Do not overwrite existing `research/positioning.md`** without asking the user first.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

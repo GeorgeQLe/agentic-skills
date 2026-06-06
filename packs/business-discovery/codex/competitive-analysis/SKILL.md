@@ -4,6 +4,8 @@ description: Research competitors via web search — map the landscape, GTM stra
 type: research
 version: v0.12
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

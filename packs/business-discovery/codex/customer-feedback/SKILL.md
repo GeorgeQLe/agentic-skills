@@ -4,6 +4,8 @@ description: Ingest and synthesize customer feedback — categorize findings aga
 type: research
 version: v0.4
 argument-hint: "[file path, pasted text, or empty to be prompted]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

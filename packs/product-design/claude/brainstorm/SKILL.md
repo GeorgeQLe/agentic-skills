@@ -4,6 +4,8 @@ description: Evaluate the codebase and suggest ideas to explore with /feature-in
 type: planning
 version: v0.2
 argument-hint: "[optional: focus area]"
+interview_depth: light
+visual_tier: prototype
 ---
 
 # Brainstorm
@@ -78,6 +80,14 @@ Present suggestions grouped by effort level, with each suggestion framed as a to
 - Limit to 3–5 suggestions per effort level to avoid overwhelming the user.
 - Do not suggest changes that conflict with patterns established in CLAUDE.md.
 - Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, or `specs/` (or `specs/{slug}/`).
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

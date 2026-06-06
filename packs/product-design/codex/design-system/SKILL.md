@@ -4,6 +4,7 @@ description: Extract or scan design tokens from a consolidated UI spec or existi
 type: planning
 version: v0.1
 argument-hint: "[spec path | --scan | --update]"
+visual_tier: prototype
 ---
 
 # Design System

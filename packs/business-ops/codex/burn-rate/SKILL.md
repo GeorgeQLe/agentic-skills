@@ -3,6 +3,8 @@ name: burn-rate
 description: "Estimate monthly burn rate from infrastructure signals and calculate payback period against revenue projections"
 type: analysis
 version: v0.3
+interview_depth: light
+visual_tier: visual
 ---
 
 # Burn Rate — Infrastructure-Grounded Cost & Runway Analysis

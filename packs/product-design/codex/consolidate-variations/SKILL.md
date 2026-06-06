@@ -4,6 +4,7 @@ description: Compare multiple built UI variations after UAT evidence, interview 
 type: planning
 version: v0.9
 argument-hint: "[optional: topic, page, or path to variation specs]"
+visual_tier: prototype
 ---
 
 # Consolidate Variations

@@ -4,6 +4,8 @@ description: Research-driven monetization strategy — revenue models, pricing a
 type: research
 version: v0.7
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

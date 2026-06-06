@@ -4,6 +4,7 @@ description: Expand a UAT journey into click-by-click tester instructions, then 
 type: analysis
 version: v0.2
 argument-hint: "[optional: journey number, journey name, or 'next']"
+visual_tier: prototype
 ---
 
 ## Pack Availability Guard

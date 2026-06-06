@@ -5,6 +5,7 @@ type: planning
 version: v0.0
 invocation: orchestrator
 argument-hint: "[component, interaction, animation bug, or motion brief]"
+visual_tier: prototype
 ---
 
 # Animation Design Planner

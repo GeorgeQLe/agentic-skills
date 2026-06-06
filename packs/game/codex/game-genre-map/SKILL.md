@@ -3,6 +3,8 @@ name: game-genre-map
 description: Use only for video game projects; map genre conventions, player expectations, review complaints, and anti-patterns
 type: research
 version: v0.3
+interview_depth: light
+visual_tier: visual
 ---
 
 # Game Genre Map

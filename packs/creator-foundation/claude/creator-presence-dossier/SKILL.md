@@ -4,6 +4,7 @@ description: Build a repo-backed Markdown dossier of a creator's public professi
 type: research
 version: v0.3
 argument-hint: "[creator or project slug]"
+interview_depth: none
 ---
 
 # Creator Presence Dossier

@@ -4,6 +4,7 @@ description: Build tangible, runnable prototypes from UX variation and UI specs 
 type: execution
 version: v0.9
 argument-hint: "[optional: topic, --variant N]"
+visual_tier: prototype
 ---
 
 # Prototype

@@ -4,6 +4,8 @@ description: Evaluate the codebase and suggest ideas to explore with $feature-in
 type: planning
 version: v0.2
 argument-hint: "[optional focus area]"
+interview_depth: light
+visual_tier: prototype
 ---
 
 # Brainstorm

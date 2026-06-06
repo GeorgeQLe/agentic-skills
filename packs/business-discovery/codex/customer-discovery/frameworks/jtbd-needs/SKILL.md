@@ -223,7 +223,7 @@ Present jobs, outcomes, opportunity scores, and segment recommendations. Ask for
 
 ## Alignment Page
 
-When this skill produces durable deliverables, build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/jtbd-needs-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/jtbd-needs-{topic}.html`.
 
 ## Default Shipping Contract
 

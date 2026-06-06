@@ -4,6 +4,8 @@ description: Plan account expansion, upgrades, seat growth, referrals, advocacy,
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, segment, or expansion motion]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

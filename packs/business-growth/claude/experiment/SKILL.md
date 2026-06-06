@@ -4,6 +4,7 @@ description: Design lean validation experiments — hypothesis, method, success 
 type: planning
 version: v0.3
 argument-hint: <hypothesis or assumption to test>
+interview_depth: light
 ---
 
 ## Pack Availability Guard
@@ -263,6 +264,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Include decision rules.** Every experiment must specify what happens for each possible outcome. No experiment should end with "we'll figure it out."
 - **Reference benchmarks.** Success thresholds should be grounded in industry benchmarks or competitor data, not arbitrary numbers.
 - **Don't overdesign.** A simple survey can validate an assumption just as well as an elaborate A/B test. Recommend the simplest method that produces a clear signal.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

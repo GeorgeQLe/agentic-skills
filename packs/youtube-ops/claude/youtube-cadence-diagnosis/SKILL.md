@@ -4,6 +4,8 @@ description: Diagnose YouTube publishing cadence, gaps, streaks, and post-gap pe
 type: research
 version: v0.3
 argument-hint: "<channel slug or handle> [--peer <channel>...] [--count N]"
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

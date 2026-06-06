@@ -3,6 +3,8 @@ name: devtool-integration-map
 description: Use only for developer-facing products; map integrations, ecosystems, setup surfaces, and compatibility constraints
 type: analysis
 version: v0.2
+interview_depth: none
+visual_tier: visual
 ---
 
 # Devtool Integration Map

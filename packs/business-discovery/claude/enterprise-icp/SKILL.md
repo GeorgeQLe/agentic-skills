@@ -4,6 +4,8 @@ description: Enterprise multi-stakeholder discovery — map personas, deal-kille
 type: research
 version: v0.6
 argument-hint: "[optional: target industry or market segment]"
+interview_depth: full
+visual_tier: visual
 ---
 
 # Enterprise ICP — Multi-Stakeholder Discovery Interview
@@ -254,6 +256,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Continue until all 10 areas are covered.** Confirm with the user before concluding.
 - **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{slug}/enterprise-icp.md`) without asking the user first.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

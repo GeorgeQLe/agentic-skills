@@ -4,6 +4,8 @@ description: Plan signup, setup, activation, first success, onboarding drop-offs
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, persona, or onboarding segment]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

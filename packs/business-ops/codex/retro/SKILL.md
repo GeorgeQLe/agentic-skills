@@ -4,6 +4,7 @@ description: Strategic decision retrospective — review research decisions agai
 type: analysis
 version: v0.2
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
+interview_depth: light
 ---
 
 ## Pack Availability Guard

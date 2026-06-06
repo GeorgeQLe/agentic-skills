@@ -4,6 +4,8 @@ description: Plan signup, setup, activation, first success, onboarding drop-offs
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, persona, or onboarding segment]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -58,6 +60,16 @@ When product path `{slug}` is active, read and write research under `research/{s
 ## Product Gaps
 ## Next Steps
 ```
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

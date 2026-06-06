@@ -37,11 +37,18 @@ if (!markerMatch) {
 const conventionTemplate = markerMatch[1];
 
 // Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
-function bundledContentFor(skillName) {
+function bundledContentFor(skillName, skillPath) {
   const specific = skillSpecificGates(skillName);
+  const tier = skillVisualTier(skillName);
+  const tierText = visualTierGuidance(tier);
+  const skillType = skillPath ? readSkillType(skillPath) : null;
+  const glossaryApplies = skillType === 'research' || skillType === 'analysis';
+  const glossaryText = glossaryApplies ? glossaryGateText(skillName) : '';
   const body = conventionTemplate
     .replaceAll("{skill-name}", skillName)
     .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")
+    .replace(/\n*\{\{SKILL_VISUAL_TIER\}\}\n*/, tierText ? `\n\n${tierText}\n\n` : "\n\n")
+    .replace(/\n*\{\{SKILL_GLOSSARY_GATE\}\}\n*/, glossaryText ? `\n\n${glossaryText}\n\n` : "\n\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
   return `# Alignment Page — ${skillName}\n\n${body}\n`;
@@ -58,6 +65,82 @@ function stubParagraph(skillName) {
 
 function isPointerOrStub(paragraph) {
   return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX);
+}
+
+// --- Visual Tier ---
+const VISUAL_TIER_SKILLS = new Set([
+  'competitive-analysis', 'positioning', 'devtool-positioning', 'enterprise-icp', 'devtool-user-map',
+  'game-audience', 'lean-canvas', 'value-prop-canvas', 'growth-model', 'hook-model', 'game-core-loop',
+  'metrics', 'lifecycle-metrics', 'game-playtest-metrics', 'monetization', 'devtool-monetization',
+  'burn-rate', 'runway-model', 'cohort-review', 'assumption-tracker', 'risk-register',
+  'journey-map', 'devtool-dx-journey', 'conversion-map', 'onboarding-map', 'retention-map',
+  'transaction-map', 'analyze-sessions', 'youtube-peer-benchmark', 'youtube-cadence-diagnosis',
+  'creator-platform-capability-matrix', 'expansion-map', 'pmf-assessment', 'platform-strategy',
+  'gtm', 'customer-feedback', 'investor-update', 'product-line', 'scale-audit', 'mvp-gap',
+  'devtool-adoption', 'devtool-integration-map', 'devtool-workflow', 'game-comparables',
+  'game-genre-map', 'game-launch', 'game-roadmap', 'customer-discovery',
+]);
+
+const PROTOTYPE_TIER_SKILLS = new Set([
+  'ux-variations', 'prototype', 'design-system', 'ui-interview', 'consolidate-variations',
+  'brainstorm', 'game-prototype-test', 'game-store-page-test', 'landing-copy', 'uat-guide',
+  'animation-design-planner',
+]);
+
+function skillVisualTier(skillName) {
+  if (PROTOTYPE_TIER_SKILLS.has(skillName)) return 'prototype';
+  if (VISUAL_TIER_SKILLS.has(skillName)) return 'visual';
+  return 'document';
+}
+
+function visualTierGuidance(tier) {
+  if (tier === 'visual') {
+    return `**Visual tier rendering.** This skill's alignment page uses the \`visual\` tier. Inline charts and diagrams are rendered via self-contained Canvas/SVG within the HTML file. Use the alignment chart snippet library (\`scripts/alignment-chart-snippets.js\`) as reference — copy needed chart functions directly into the page's \`<script>\` block. Charts must read CSS variables (\`--chart-1\` through \`--chart-8\`) for the data visualization palette. Every chart must include a \`<table>\` fallback, \`aria-label\` on canvas/SVG, and a "View as table" toggle. Data is embedded as inline JSON — no external fetches.`;
+  }
+  if (tier === 'prototype') {
+    return `**Prototype tier rendering.** This skill's alignment page uses the \`prototype\` tier. In addition to charts and diagrams, functional interactive components (clickable flows, live CSS previews, drag interactions) are permitted. Prototypes are ephemeral previews, not production code. Each interactive component must include a reset button that restores initial state. Interactive components must be self-contained within the HTML file with no external dependencies. Include all visual tier requirements (chart snippets, table fallbacks, aria-labels, toggles) plus: state isolation (no localStorage/sessionStorage persistence), clear "this is a preview" labeling, and graceful degradation when JavaScript is disabled.`;
+  }
+  return '';
+}
+
+// --- Interview Depth ---
+const FULL_INTERVIEW_SKILLS = new Set([
+  'enterprise-icp', 'gtm', 'landing-copy', 'metrics', 'monetization', 'conversion-map',
+  'expansion-map', 'lifecycle-metrics', 'onboarding-map', 'retention-map', 'transaction-map',
+  'feature-interview', 'ui-interview', 'spec-interview', 'skill-interview', 'idea-scope-brief',
+  'customer-discovery',
+]);
+
+const LIGHT_INTERVIEW_SKILLS = new Set([
+  'competitive-analysis', 'customer-feedback', 'lean-canvas', 'positioning', 'value-prop-canvas',
+  'experiment', 'growth-model', 'hook-model', 'pmf-assessment', 'burn-rate', 'platform-strategy',
+  'risk-register', 'runway-model', 'retro', 'devtool-adoption', 'devtool-monetization',
+  'devtool-positioning', 'devtool-user-map', 'game-audience', 'game-comparables', 'game-fantasy',
+  'game-genre-map', 'game-launch', 'game-prototype-test', 'game-store-page-test',
+  'youtube-concept-research', 'content-programming', 'creator-positioning',
+  'product-led-media-map', 'series-spec', 'brainstorm',
+]);
+
+function skillInterviewDepth(skillName) {
+  if (FULL_INTERVIEW_SKILLS.has(skillName)) return 'full';
+  if (LIGHT_INTERVIEW_SKILLS.has(skillName)) return 'light';
+  return 'none';
+}
+
+// --- Glossary Gate ---
+// Read the skill type from SKILL.md frontmatter to determine if glossary gate applies.
+function readSkillType(skillPath) {
+  try {
+    const content = readFileSync(`${repoRoot}/${skillPath}`, 'utf8');
+    const fm = content.match(/^---\n([\s\S]*?)\n---/);
+    if (!fm) return null;
+    const typeMatch = fm[1].match(/^type:\s*(.+)$/m);
+    return typeMatch ? typeMatch[1].trim() : null;
+  } catch { return null; }
+}
+
+function glossaryGateText(skillName) {
+  return `**Glossary Additions gate.** When this research introduces domain-specific terms, acronyms, or concept definitions that a reader outside the project would not know, include a \`## Glossary Additions\` section in the alignment page. Render a table of proposed terms with columns: Term, Definition, Source (\`${skillName}\`), Category (business/tooling/workflow/technical/domain), and per-term Approve/Edit/Reject/Flag radio controls. Only user-approved terms are appended to the target glossary (\`research/glossary.md\` or \`research/{slug}/glossary.md\` for scoped paths) during the confirmed-page write step. When the skill operates in a product-path scope, ask whether each term belongs in the parent or scoped glossary; default to the scoped glossary.`;
 }
 
 function skillSpecificGates(skillName) {
@@ -214,7 +297,7 @@ for (const file of files) {
 
   // 1. Bundled, load-on-demand convention file beside the skill.
   const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
-  const bundleContent = bundledContentFor(skillName);
+  const bundleContent = bundledContentFor(skillName, file);
   const bundleBefore = existsSync(bundlePath) ? readFileSync(bundlePath, "utf8") : "";
   const bundleChanged = bundleBefore !== bundleContent;
 

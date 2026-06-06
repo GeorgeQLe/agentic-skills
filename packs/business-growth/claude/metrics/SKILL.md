@@ -4,6 +4,8 @@ description: Define success metrics framework — activation, engagement, retent
 type: analysis
 version: v0.3
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -291,6 +293,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Present before writing.** Never write output files until the framework has been presented and validated.
 - **Tie to journey stages.** Every non-business metric must reference a specific stage or moment from the journey map.
 - **Do not overwrite existing `research/metrics.md`** (or `research/{slug}/metrics.md`) without asking the user first.
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

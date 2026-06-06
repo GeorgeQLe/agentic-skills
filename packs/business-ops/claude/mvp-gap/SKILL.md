@@ -4,6 +4,8 @@ description: Evaluate codebase against ICP to identify gaps blocking first sales
 type: research
 version: v0.4
 argument-hint: "[optional: path-to-icp-spec]"
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

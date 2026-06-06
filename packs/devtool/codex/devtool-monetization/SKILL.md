@@ -3,6 +3,8 @@ name: devtool-monetization
 description: Use only for developer-facing products; design pricing, packaging, limits, open-source strategy, and team conversion
 type: research
 version: v0.4
+interview_depth: light
+visual_tier: visual
 ---
 
 # Devtool Monetization

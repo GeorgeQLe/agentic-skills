@@ -4,6 +4,8 @@ description: Plan evaluation, trial, pricing decision, objections, buyer roles, 
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, segment, or conversion motion]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

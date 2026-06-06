@@ -4,6 +4,8 @@ description: Plan purchase, checkout, payment, fulfillment, receipt, refund, dis
 type: analysis
 version: v0.3
 argument-hint: "[optional: app, transaction type, or payment scenario]"
+interview_depth: full
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

@@ -3,6 +3,8 @@ name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
 version: v0.4
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

@@ -4,6 +4,7 @@ description: Derive owner/operator dogfood scenarios from product evidence and a
 type: analysis
 version: v0.2
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
+interview_depth: none
 ---
 
 ## Pack Availability Guard

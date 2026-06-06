@@ -4,6 +4,8 @@ description: Map creator platforms to free/manual evidence sources, available fi
 type: research
 version: v0.3
 argument-hint: "[creator or project slug]"
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

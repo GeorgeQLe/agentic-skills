@@ -3,6 +3,8 @@ name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
 version: v0.2
+interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard

@@ -4,6 +4,7 @@ description: Interview and plan multiple UX and UI variations for a product, pag
 type: planning
 version: v0.12
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
+visual_tier: prototype
 ---
 
 # UX Variations

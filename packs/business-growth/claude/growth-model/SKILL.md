@@ -4,6 +4,8 @@ type: research
 version: v0.5
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
+interview_depth: light
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -336,6 +338,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Hypothesis-driven.** Every conversion between loop steps is a hypothesis until validated.
 - **Present before writing.** Never write output files until the growth model has been presented and validated.
 - **Do not overwrite existing `research/growth-model.md`** (or `research/{slug}/growth-model.md`) without asking the user first.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

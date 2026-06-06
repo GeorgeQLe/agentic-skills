@@ -3,6 +3,8 @@ name: game-playtest-metrics
 description: Use only for video game projects; define playtest metrics for time-to-fun, replay, confusion, quit points, sharing, and retention
 type: analysis
 version: v0.1
+interview_depth: none
+visual_tier: visual
 ---
 
 # Game Playtest Metrics
