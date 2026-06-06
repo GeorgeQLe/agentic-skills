@@ -13589,3 +13589,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Completed:** 2026-05-17. `/workflows` now uses structured replay data, chat-style user/agent messages, embedded terminal/result blocks, visible benchmark receipts, and curated no-receipt states. Step-circle navigation, app tests, typecheck, production build, whitespace validation, and Safari desktop/mobile visual sanity checks passed. Next phase: Phase 41 remaining benchmark result coverage.
 
 ---
+
+## 2026-06-05 — customer-discovery orchestrator refactor (Phases 1-2) + w3-hypothesis subskill
+
+- Archived icp v0.11 and renamed icp/ → customer-discovery/ for both claude and codex.
+- Wrote customer-discovery orchestrator SKILL.md v1.0 (claude + codex) with mode detection, candidate bootstrapping, framework multi-select, and synthesis.
+- Created framework scaffold directories for 6 subskills (w3-hypothesis, jtbd-needs, four-forces, five-rings, seven-dimensions, pmf-engine).
+- Updated orchestrator-convention.md with customer-discovery as reference implementation.
+- Wrote w3-hypothesis subskill (SKILL.md, CHANGELOG.md, ALIGNMENT-PAGE.md) for both claude and codex — Schwartzfarb W3 (WHO/WHAT/WHY) hypothesis generation with disproval testing and per-candidate confidence scoring.

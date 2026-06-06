@@ -18,7 +18,7 @@
 - [x] Update orchestrator-convention.md reference implementations
 
 ### Phase 3: Write subskill SKILL.md files
-- [ ] `w3-hypothesis` — Schwartzfarb W3 (WHO/WHAT/WHY) hypothesis generation + disproval
+- [x] `w3-hypothesis` — Schwartzfarb W3 (WHO/WHAT/WHY) hypothesis generation + disproval
 - [ ] `jtbd-needs` — Ulwick/Christensen JTBD needs-based segmentation
 - [ ] `four-forces` — Moesta Four Forces (Push/Pull/Anxiety/Habit) switching analysis
 - [ ] `five-rings` — Revella Five Rings of Buying Insight (decision psychology)
