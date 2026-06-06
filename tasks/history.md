@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-06-06 — Add user-flow-map AFPS route gate
+
+- Added mirrored `product-design` `user-flow-map` skills for Codex and Claude with `SKILL.md`, `CHANGELOG.md`, `agents/openai.yaml`, and generated `ALIGNMENT-PAGE.md` bundles.
+- Refactored AFPS routing so positioned product work flows through `user-flow-map`, then `ui-interview --requirements-only`, then `ux-variations --layout-mode` before prototype/UAT/consolidation/spec/roadmap work.
+- Updated affected routing owners across business discovery, customer lifecycle, product design, research admin, agent work admin, repo maintenance, teardown, guided walkthrough, global skill browsing, docs, route map, alignment generator, benchmark coverage, and generated showcase data.
+- Archived and version-bumped modified `SKILL.md` mirrors before editing them, including route-owner skills touched after validation.
+- Added `user-flow-map` custom pack benchmark workflow coverage and refreshed the explicit benchmark coverage matrix for current repository skills.
+- Captured prompt history for both `$targeted-skill-builder` and `$ship-end` invocations.
+- Shipped commit `276f595f` (`feat(product-design): add user-flow-map route gate`) on `master`.
+- Validation passed: `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, `scripts/skill-pack-routing-audit.sh`, `node scripts/upgrade-alignment-page.mjs --dry-run`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, targeted route tests for competitive-analysis and journey-map, targeted route scans, and `git diff --check`.
+- Full `pnpm --dir tests test` was run and remains blocked by 46 existing layer1 failures unrelated to the new user-flow route, including stale `icp` test paths after the customer-discovery rename, staged-research gaps for customer-discovery/journey framework skills, YouTube handoff tests, alignment/index wording drift, a stale `poketowork-kanban` symlink, and benchmark/demo contract drift.
+- Deploy skipped for ship-end wrap-up because the remaining boundary was prompt/history/task documentation only; `tasks/deploy.md` is scoped to the Skills Showcase app and no app deploy-relevant mutation remained after the pushed feature commit.
+
 ## 2026-06-05 — Fix prototype-close-sequence test failures
 
 - Fixed 5 failing tests in `prototype-close-sequence.test.tsx` caused by stale mocks and assertions after the pack flow phase refactor.

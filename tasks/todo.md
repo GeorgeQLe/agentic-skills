@@ -1,11 +1,11 @@
 ## Current State
 
-- Tree is dirty, master — `user-flow-map` product-design skill and AFPS routing refactor in progress.
+- Tree is clean after ship-end wrap-up, master — `user-flow-map` product-design skill and AFPS routing refactor shipped in commit `276f595f`.
 - Preserved existing customer-discovery orchestrator notes below; do not overwrite unrelated in-progress items.
 
 ---
 
-## user-flow-map Skill And AFPS Routing Refactor (in progress)
+## user-flow-map Skill And AFPS Routing Refactor (shipped)
 
 ### Phase 1: Inspect And Plan
 - [x] Capture prompt history for the targeted skill invocation.
@@ -51,6 +51,7 @@
 - Benchmark coverage matrix is valid at 180 skills; `user-flow-map` has custom pack workflow coverage.
 - Targeted AFPS route tests pass for competitive-analysis and journey-map.
 - Full `pnpm --dir tests test` still fails with 46 layer1 failures unrelated to the new flow route: stale `icp` test paths after the customer-discovery rename, staged-research contract gaps for customer-discovery/journey framework skills, unrelated YouTube handoff tests, existing alignment/index wording drift, a stale `poketowork-kanban` symlink under `node_modules`, and pre-existing benchmark/demo contract drift.
+- Ship-end prompt/history wrap-up only changed documentation artifacts; no app deploy was run.
 
 ---
 
