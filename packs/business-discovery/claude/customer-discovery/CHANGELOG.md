@@ -1,4 +1,15 @@
-# icp changelog (claude)
+# customer-discovery changelog (claude)
+
+## v1.0 - 2026-06-05
+
+- Renamed skill from `icp` to `customer-discovery` to reflect that the skill performs customer discovery using established frameworks, not just ICP template-filling.
+- Refactored from monolithic 9-step process to orchestrator pattern with 6 framework subskills: w3-hypothesis (Schwartzfarb), jtbd-needs (Ulwick/Christensen), four-forces (Moesta), five-rings (Revella), seven-dimensions (Lincoln Murphy), pmf-engine (Vohra/Supan).
+- Added pre-product vs product-exists mode detection with framework defaults per mode.
+- Added candidate bootstrapping step before framework selection (orchestrator is heavier than standard because it's the first research skill in the chain).
+- Added shortcut modes: `/customer-discovery discovery` and `/customer-discovery validate`.
+- Canonical output remains `research/icp.md` with preserved 9+1 section format for downstream compatibility.
+- Framework intermediates written to `research/customer-discovery-{framework-slug}.md`.
+- Synthesis mode (`--synthesize`) merges framework outputs using a defined section-mapping table.
 
 ## v0.11 - 2026-06-04
 

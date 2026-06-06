@@ -82,5 +82,6 @@ Orchestrators may define shortcut invocations (e.g. `/journey-map product`) that
 
 ## Reference Implementations
 
+- `packs/business-discovery/claude/customer-discovery/` — 6 customer-discovery frameworks (Schwartzfarb W3, Ulwick JTBD, Moesta Four Forces, Revella Five Rings, Lincoln Murphy Seven Dimensions, Vohra PMF Engine), pre-product/product-exists mode detection, candidate bootstrapping before framework selection
 - `packs/business-discovery/claude/positioning/` — 5 positioning frameworks, market/product mode detection
 - `packs/customer-lifecycle/claude/journey-map/` — 5 journey-mapping frameworks, pre-product/product-exists mode detection

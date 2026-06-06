@@ -1,0 +1,7 @@
+interface:
+  display_name: "Customer Discovery"
+  short_description: "Customer discovery orchestrator — bootstrap ICP candidates, run discovery frameworks, synthesize into unified ICP research"
+  default_prompt: "Use $customer-discovery to research and identify ideal customer profiles using established discovery frameworks."
+
+policy:
+  allow_implicit_invocation: true
