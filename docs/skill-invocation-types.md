@@ -357,6 +357,7 @@
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
+| `youtube` | router | user | Intent-based routing to youtube-ops skills (Pattern B) |
 | `youtube-audit` | primary | user | YouTube channel audit |
 | `youtube-cadence-diagnosis` | primary | user | Upload cadence analysis |
 | `youtube-channel-audit` | primary | user | Full channel audit |
@@ -374,10 +375,10 @@
 
 | Type | Count | Percentage |
 |------|-------|------------|
-| Primary | 120 | 68% |
+| Primary | 120 | 67% |
 | Chained | 38 | 21% |
 | Sub-skill | 13 | 7% |
-| Orchestrator | 15 | 8% |
+| Orchestrator / Router | 16 | 9% |
 
 **Sub-skills identified:**
 
@@ -400,11 +401,12 @@
 
 1. `exec` / `mono-exec` — execute plan steps
 2. `ship` / `mono-ship` — ship + plan next
-3. `positioning` — framework selection router + synthesis
-4. `devtool-workflow` — devtool development workflow
-5. `game-workflow` — game development workflow
-6. `research-roadmap` — research prioritization orchestrator
-7. `animation-design-planner` — animation framework detection + guardrails routing
+3. `positioning` — framework selection router + synthesis (Pattern A)
+4. `youtube` — intent router + play composer (Pattern B)
+5. `devtool-workflow` — devtool development workflow (Pattern B, thin variant)
+6. `game-workflow` — game development workflow (Pattern B, thin variant)
+7. `research-roadmap` — research prioritization orchestrator
+8. `animation-design-planner` — animation framework detection + guardrails routing (Pattern C)
 
 ## Validation
 
