@@ -4,13 +4,17 @@
 
 Validate whether the "Skills That Should Be Scripts" research matches the repository evidence, classify which claims are confirmed versus overstated, and identify the root problem behind script-shaped skills.
 
+### 2026-06-06 Follow-up Scope
+
+Re-verify the script-shaped skill opportunity with current repo evidence, focusing on downstream/manual script readiness, alignment-page maintenance, and deterministic skill surfaces. Do not implement opportunities in this pass.
+
 ### Plan
 
 1. Capture the visible `investigate` invocation and task checklist.
 2. Inventory `scripts/` and validate the reported standalone-tool claims.
 3. Inspect named skill contracts for pure delegation, static insertion, deterministic orchestration, or real LLM judgment.
 4. Compare the `pack` skill and `pack.sh` specifically because it is the strongest example.
-5. Report confirmed claims, corrections, and the practical recommendation without changing skill behavior.
+5. Report confirmed claims, corrections, portability risks, and the practical recommendation without changing skill behavior.
 
 ## Active Plan — Add `user-flow-map` And Refactor AFPS Routing
 
