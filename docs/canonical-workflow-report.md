@@ -31,12 +31,13 @@ The canonical product path is:
 ```text
 idea-scope-brief
   -> pack selection
-  -> icp
+  -> customer-discovery
   -> competitive-analysis
   -> journey-map
   -> positioning (market mode: framework selection + sequential /exec execution + synthesis)
-  -> ux-variations
-  -> ui-interview
+  -> user-flow-map
+  -> ui-interview --requirements-only
+  -> ux-variations --layout-mode
   -> prototype
   -> uat --variant-evaluation
   -> consolidate-variations
@@ -94,7 +95,7 @@ Claude route:
 /idea-scope-brief
 /pack
 /pack install business-discovery        # when the discovery lane is missing
-/icp
+/customer-discovery
 /competitive-analysis
 /pack install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
@@ -107,8 +108,9 @@ Claude route:
 /metrics                                # optional: broader success framework after journey evidence
 /monetization                           # optional: pricing gates or packaging affect the product path
 /gtm                                    # optional: channel/launch path affects the product path
-/ux-variations
-/ui-interview
+/user-flow-map
+/ui-interview --requirements-only
+/ux-variations --layout-mode
 /prototype
 /uat --variant-evaluation
 /consolidate-variations
@@ -127,7 +129,7 @@ Codex route:
 $idea-scope-brief
 $pack
 $pack install business-discovery
-$icp
+$customer-discovery
 $competitive-analysis
 $pack install customer-lifecycle
 $journey-map
@@ -140,8 +142,9 @@ $lifecycle-metrics                      # optional: stage measurement, especiall
 $metrics                                # optional: broader success framework after journey evidence
 $monetization                           # optional: pricing gates or packaging affect the product path
 $gtm                                    # optional: channel/launch path affects the product path
-$ux-variations
-$ui-interview
+$user-flow-map
+$ui-interview --requirements-only
+$ux-variations --layout-mode
 $prototype
 $uat --variant-evaluation
 $consolidate-variations
@@ -161,7 +164,7 @@ This is an ordered default, not a mandate to run every optional business skill. 
 Use `pack` first to designate the project. Then run the lightest evidence-producing path that fits the codebase:
 
 - If the product concept is unclear, use `idea-scope-brief`.
-- If there is product direction but no market evidence, use `business-discovery` and start with `icp`.
+- If there is product direction but no market evidence, use `business-discovery` and start with `customer-discovery`.
 - If there is market evidence but no user/customer path, install or enable `customer-lifecycle` and run `journey-map`.
 - If the implementation already exists but specs are stale, use `spec-drift` or `reconcile-dev-docs` before mutating plans.
 - If a stale project should restart, use `desk-flip` and `bootstrap-repo --reset-existing` so old docs and code are archived before fresh alignment begins.
@@ -175,7 +178,7 @@ The current `roadmap` contract distinguishes unresolved ideas from confirmed ful
 | No specs and missing journey for user-facing work | Queue `journey-map` first. |
 | No specs, unresolved idea, unclear destination | Queue `feature-interview`. |
 | No specs, user already selected full production spec creation | Queue `spec-interview`. |
-| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `ux-variations`, `ui-interview`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. |
+| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ui-interview --requirements-only`, `ux-variations --layout-mode`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. |
 | Production spec exists, roadmap missing | Build or update `tasks/roadmap.md`, then seed `plan-phase`. |
 | All roadmap phases complete | Queue `research-roadmap`, then route to `brainstorm` unless a concrete idea is selected. |
 
@@ -191,15 +194,16 @@ Use `spec-interview` again only when the selected follow-up truly requires a ful
 
 The current product-spec path is gated by built and reviewed prototypes:
 
-1. `ux-variations` creates multiple UX/UI directions from research and journey evidence.
-2. `ui-interview` or layout/UI requirement artifacts make those directions buildable.
-3. `prototype` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
-4. `uat --variant-evaluation` creates the human-run comparison plan and evidence capture.
-5. `consolidate-variations` compares reviewed variants, interviews the user on keep/reject decisions, resolves conflicts, and builds `prototypes/{topic}/consolidated/`.
-6. `research-roadmap --post-prototype` checks whether prototype decisions stale or contradict research.
-7. `spec-interview` walks the consolidated prototype screen by screen and produces `specs/{topic}.md`.
-8. `research-roadmap --post-spec` checks whether production-spec decisions stale or contradict research.
-9. `roadmap` sequences the spec into phases.
+1. `user-flow-map` turns positioning and journey evidence into concrete flow structure.
+2. `ui-interview --requirements-only` captures screen and content requirements for the accepted flow.
+3. `ux-variations --layout-mode` creates multiple layout directions from research, journey, flow, and UI-requirement evidence.
+4. `prototype` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
+5. `uat --variant-evaluation` creates the human-run comparison plan and evidence capture.
+6. `consolidate-variations` compares reviewed variants, interviews the user on keep/reject decisions, resolves conflicts, and builds `prototypes/{topic}/consolidated/`.
+7. `research-roadmap --post-prototype` checks whether prototype decisions stale or contradict research.
+8. `spec-interview` walks the consolidated prototype screen by screen and produces `specs/{topic}.md`.
+9. `research-roadmap --post-spec` checks whether production-spec decisions stale or contradict research.
+10. `roadmap` sequences the spec into phases.
 
 The production spec should be decision-complete enough to implement. The prototype remains disposable evidence, not production code.
 
@@ -317,11 +321,12 @@ The current `consolidate-variations` contract says the skill produces a consolid
 ```text
 idea-scope-brief
   -> pack recommend/install
-  -> business-discovery: icp -> competitive-analysis
+  -> business-discovery: customer-discovery -> competitive-analysis
   -> customer-lifecycle: journey-map
   -> optional business-discovery/growth/ops evidence lanes
-  -> ux-variations
-  -> ui-interview
+  -> user-flow-map
+  -> ui-interview --requirements-only
+  -> ux-variations --layout-mode
   -> prototype
   -> uat --variant-evaluation
   -> consolidate-variations

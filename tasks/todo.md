@@ -113,14 +113,22 @@
 - Broad `pnpm --dir tests verify` still fails on 46 known layer1 failures unrelated to `pmf-engine` (stale `icp` paths, existing alignment wording drift, mirror parity drift, and benchmark/demo contract drift); final failure summary does not list `pmf-engine`.
 
 ### Phase 4: Documentation Updates (icp → customer-discovery rename)
-- [ ] Update AFPS flow docs (canonical-workflow-report.md, skill-next-step-contracts.md, skills-reference.md, skill-anatomy.md, skill-invocation-types.md)
+- [x] Update AFPS flow docs (canonical-workflow-report.md, skill-next-step-contracts.md, skills-reference.md, skill-anatomy.md, skill-invocation-types.md)
 
-#### Next Step Plan — Phase 4.1 AFPS Flow Docs
-- Scope: update AFPS flow/reference documentation so the canonical flow uses `customer-discovery` instead of legacy `icp` naming where the rename has landed.
-- Files to inspect/edit first: `docs/canonical-workflow-report.md`, `docs/skill-next-step-contracts.md`, `docs/skills-reference.md`, `docs/skill-anatomy.md`, and `docs/skill-invocation-types.md`.
-- Approach: replace executable route references, stage names, and explanatory text carefully; preserve historical/archive mentions when they explicitly describe old commits or deprecated names.
-- Validation: run targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over updated docs, then run `git diff --check` and the smallest relevant docs/skill routing checks discovered by `rg` or existing tests.
+#### Phase 4 Review Notes
+- Phase 4.1 updated the canonical AFPS docs to use `customer-discovery` for executable discovery routes and skill classification.
+- Preserved `enterprise-icp` as a separate skill and `research/icp.md` as the canonical customer-discovery output artifact because the active `customer-discovery` contract still writes it.
+- Also aligned the canonical product path to the current post-positioning sequence: `user-flow-map` → `ui-interview --requirements-only` → `ux-variations --layout-mode`.
+- Validation completed: targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over the five edited docs reported only intentional `enterprise-icp` and `research/icp.md` references; `git diff --check` passed; `pnpm --dir tests exec vitest run --project layer1 layer1/competitive-analysis-routing.test.ts layer1/journey-map-routing.test.ts layer1/codebase-status-routing.test.ts` passed with 3 files and 14 tests.
+
 - [ ] Update PACK.md for business-discovery
+
+#### Next Step Plan — Phase 4.2 Business Discovery PACK.md
+- Scope: update `packs/business-discovery/PACK.md` so the pack overview, default workflow, skill list, and routing guidance use `customer-discovery` instead of legacy executable `icp` naming where the rename has landed.
+- Files to inspect/edit first: `packs/business-discovery/PACK.md`; inspect any generated or mirrored pack metadata only if this file points to it.
+- Approach: replace command/skill references to `icp` with `customer-discovery`, preserve `enterprise-icp` as its own skill, and preserve `research/icp.md` references only when describing the canonical output artifact from customer discovery.
+- Validation: run targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over `packs/business-discovery/PACK.md`, then run `git diff --check`. Because this step changes a tracked `PACK.md`, also refresh and validate Skills Showcase data before shipping: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`.
+
 - [ ] Update global skills that route to /icp (idea-scope-brief, afps-status, codebase-status, skills, pack)
 - [ ] Update business-discovery pack skills (competitive-analysis, customer-feedback, enterprise-icp, lean-canvas, value-prop-canvas, positioning + 5 frameworks)
 - [ ] Update customer-lifecycle pack skills (journey-map orchestrator + 5 frameworks)

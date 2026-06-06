@@ -74,9 +74,9 @@
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
 | `competitive-analysis` | primary | user | Market/competitor research needed |
+| `customer-discovery` | orchestrator | user | Customer discovery entry point |
 | `customer-feedback` | chained | user after research | Customer language/feedback synthesis |
 | `enterprise-icp` | primary | user | Enterprise multi-stakeholder ICP needed |
-| `icp` | primary | user | Customer discovery entry point |
 | `lean-canvas` | chained | `/journey-map` trigger | Business model risk needs Lean Canvas |
 | `positioning` | orchestrator | user | Positioning framework selection + synthesis |
 | `value-prop-canvas` | chained | `/journey-map` trigger | Contested solution-fit needs VPC |

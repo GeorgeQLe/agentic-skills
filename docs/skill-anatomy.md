@@ -118,9 +118,9 @@ Every skill has an invocation type that describes how it enters a workflow. The 
 
 Primary (implicit — no extra fields needed):
 ```yaml
-name: icp
-description: Customer discovery interview...
-version: v0.1
+name: idea-scope-brief
+description: Shape a rough project idea into a scoped brief before ICP and market research
+version: v0.0
 ```
 
 Sub-skill with parent:

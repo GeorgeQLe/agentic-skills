@@ -13628,3 +13628,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Registered `pmf-engine` in benchmark coverage as a blocked customer-discovery framework fixture because it requires real product/user evidence.
 - Refreshed Skills Showcase generated assets and benchmark result matrix, picking up prior stale `user-flow-map` catalog data while leaving nested framework subskills out of the public showcase catalog by generator design.
 - Marked customer-discovery Phase 3 complete in `tasks/todo.md` and prepared Phase 4.1 AFPS docs update plan.
+
+## 2026-06-06 — customer-discovery AFPS flow docs
+
+- Updated AFPS workflow docs to use `customer-discovery` for executable discovery routes and skill classification.
+- Preserved `enterprise-icp` as a separate skill and `research/icp.md` as the canonical customer-discovery output artifact.
+- Aligned canonical post-positioning flow docs to `user-flow-map` -> `ui-interview --requirements-only` -> `ux-variations --layout-mode`.
+- Marked Phase 4.1 complete in `tasks/todo.md` and prepared the next plan for the business-discovery `PACK.md` update.

@@ -112,7 +112,7 @@ scripts/pack.sh install business-ops
 Business discovery:
 
 ```text
-icp, enterprise-icp, competitive-analysis, customer-feedback,
+customer-discovery, enterprise-icp, competitive-analysis, customer-feedback,
 value-prop-canvas, lean-canvas, positioning
 ```
 
