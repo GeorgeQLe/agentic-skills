@@ -13681,3 +13681,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Preserved `enterprise-icp` and `research/icp.md` as intentional skill/artifact names.
 - Archived and bumped affected active skill contracts, refreshed Skills Showcase generated assets, and added layer1 regression coverage for active business-discovery routing.
 - Marked Phase 4.4 complete in `tasks/todo.md` and prepared the Phase 4.5 customer-lifecycle journey-map routing plan.
+
+## 2026-06-07 — business-ops customer-discovery route cleanup
+
+- Updated route-bearing business-ops pack skills from the retired `icp` executable to `customer-discovery` across Codex and Claude mirrors.
+- Preserved `enterprise-icp`, `research/icp.md`, `research/{slug}/icp.md`, and ICP concept language as intentional artifact/concept references.
+- Archived and bumped affected active skill contracts, refreshed Skills Showcase generated assets, and added layer1 regression coverage for active business-ops routing.
+- Marked Phase 4.7 complete in `tasks/todo.md` and prepared the Phase 4.8 product-design routing plan.
