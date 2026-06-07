@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-07 — Product design customer-discovery route audit
+
+- Audited active product-design `brainstorm`, `prototype`, `spec-interview`, and adjacent active skill contracts for retired `icp` executable handoffs.
+- Confirmed no active product-design `SKILL.md` required route changes; remaining ICP references are evidence-artifact or customer-profile concept references.
+- Added `tests/layer1/product-design-customer-discovery-routing.test.ts` to prevent regression to `$icp`, `/icp`, `icp-needed`, or `Proceed to ICP`.
+- Refreshed Skills Showcase GitHub proof data after validation detected stale generated fingerprints.
+- Recorded Phase 4.8 review notes and the next Phase 4.9 product-testing routing plan in `tasks/todo.md`.
+- Validation passed for targeted product-design route scan, focused product-design route test, skill integrity checks, pack routing audit, generated showcase freshness, Skills Showcase production build, and whitespace diff check.
+- Production deploy not run because this step changed tests, task docs, prompt history, and generated showcase metadata only; no production deploy confirmation was requested.
+
 ## 2026-06-07 — Business growth customer-discovery route cleanup
 
 - Updated mirrored business-growth `experiment`, `gtm`, `monetization`, and `pmf-assessment` contracts to route retired discovery executable handoffs to `customer-discovery`.
