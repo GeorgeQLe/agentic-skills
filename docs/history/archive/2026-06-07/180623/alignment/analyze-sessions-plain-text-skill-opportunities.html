@@ -243,7 +243,6 @@
       <a href="#overview">Overview</a>
       <a href="#method">Method</a>
       <a href="#candidates">Candidate Skills</a>
-      <a href="#script-extraction">Script Extraction Clarification</a>
       <a href="#evidence">Evidence Matrix</a>
       <a href="#highest-impact">Highest Impact</a>
       <a href="#lower-confidence">Lower Confidence</a>
@@ -402,34 +401,6 @@
               <td>6 classifier hits, but recent examples show repeated WSL/PowerShell browser-open friction.</td>
               <td>Small utility skill or script wrapper; high convenience despite low count.</td>
             </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="script-extraction" data-section-title="Script Extraction Clarification">
-        <h2>Script Extraction Clarification (2026-06-07)</h2>
-        <div class="feedback-control" data-section="Script Extraction Clarification">
-          <span>Section feedback:</span>
-          <label><input type="radio" name="fb-script-extraction" value="up">Thumbs up</label>
-          <label><input type="radio" name="fb-script-extraction" value="down">Thumbs down</label>
-          <label><input type="radio" name="fb-script-extraction" value="needs-clarification">Clarification needed</label>
-          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
-        </div>
-        <div class="callout">
-          <p><strong>Follow-up finding:</strong> not every recurring natural-language workflow should become a new skill. Deterministic, repeatable primitives should become scripts or script-backed utilities that skills can call, while skills should retain policy, judgment, sequencing, and user-facing synthesis.</p>
-        </div>
-        <p>This clarification narrows the original candidate list. Repeated plain-text asks are still useful evidence, but the implementation choice should split "agentic workflow" from "deterministic primitive." <code>scripts/pack.sh</code> is the strongest current example of this split: the script owns the repeatable lifecycle, while the skill layer handles routing, explanation, and reload guidance.</p>
-        <p>The primary extraction candidate from the scriptability follow-up is <code>compile-central-alignment</code> / alignment index maintenance. The current contract fully specifies a deterministic scan, grouping, sorting, and HTML generation algorithm for <code>alignment/index.html</code>, but only the browser opener is delegated to a script. That index-generation algorithm is a better script-backed utility candidate than a brand-new natural-language skill.</p>
-        <p>Extraction should also inherit the portability lessons from downstream inventory: manual utilities need to work under macOS stock <code>Bash 3.2</code> or explicitly declare Bash 4+ or Node. The same standard should prevent path-level confusion such as recommending <code>scripts/init-agentic-skills.sh</code> when the actual launchers live elsewhere.</p>
-        <h3>Amended Candidate Handling</h3>
-        <table>
-          <thead>
-            <tr><th>Candidate pattern</th><th>Preferred handling</th><th>Reason</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>compile-central-alignment</code> / alignment index maintenance</td><td>Extract deterministic index generation into a script-backed utility.</td><td>The algorithm is fully specified and repeatable; the skill can call the utility and handle review/routing language.</td></tr>
-            <tr><td>Pack install lifecycle</td><td>Keep centered on <code>pack.sh</code>; improve guidance around no-hot-reload and exact identifiers.</td><td>The script-first pattern already exists; the remaining gap is user-facing visibility and install interpretation.</td></tr>
-            <tr><td>Downstream skill inventory</td><td>Keep as report-first workflow, but make script portability a prerequisite.</td><td>Observed <code>Bash 3.2</code> failures mean script readiness must be proven before recommending manual use.</td></tr>
           </tbody>
         </table>
       </section>

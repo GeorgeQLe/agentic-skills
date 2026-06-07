@@ -1,3 +1,30 @@
+## Add Scriptability Findings To Alignment Pages
+
+### Phase 1: Plan And Archive
+- [x] Inspect current target alignment pages and task notes.
+- [x] Confirm `alignment/index.html` is untracked.
+- [x] Archive target HTML pages to `docs/history/archive/2026-06-07/180623/alignment/`.
+
+### Phase 2: Amend Existing Pages
+- [x] Update `alignment/analyze-sessions-pack-install-issues.html` with the dated script surface follow-up.
+- [x] Update `alignment/analyze-sessions-downstream-skill-inventory.html` with the dated portability addendum.
+- [x] Update `alignment/analyze-sessions-plain-text-skill-opportunities.html` with the dated script extraction clarification.
+- [x] Keep `alignment/skills-inventory.html` unchanged because it is a generated/static catalog.
+
+### Phase 3: Verification
+- [x] Refresh or verify local `alignment/index.html`.
+- [x] Run `git diff --check`.
+- [x] Verify required key strings and archive snapshots.
+- [x] Run `node scripts/upgrade-alignment-page.mjs --dry-run`.
+
+### Review Notes
+- Scope is amendment-only: no new alignment page, no script extraction implementation, and no generated `ALIGNMENT-PAGE.md` hand edits.
+- `alignment/index.html` is not tracked by `git ls-files`; treat central index maintenance as local verification unless later evidence shows it should be committed.
+- Local central index was regenerated with 36 pages and includes the three amended alignment pages; it remains untracked by design.
+- Verification passed: `git diff --check`; key-string scan for dated addenda, `pack.sh`, `Bash 3.2`, `compile-central-alignment`, and `scripts/init-agentic-skills.sh`; archive snapshot listing; and `node scripts/upgrade-alignment-page.mjs --dry-run` with `Updated: 0` and `Bundled files written: 0`.
+
+---
+
 ## Skills That Should Be Scripts Research Validation
 
 ### Phase 1: Evidence Capture

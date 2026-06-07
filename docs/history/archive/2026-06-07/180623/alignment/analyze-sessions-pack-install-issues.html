@@ -266,7 +266,6 @@ tbody tr:nth-child(even) { background: rgba(22, 27, 34, 0.45); }
     <a href="#alternatives">Alternatives Considered</a>
     <a href="#gaps">Coverage Gaps</a>
     <a href="#implications">Downstream Implications</a>
-    <a href="#script-follow-up">Script Surface Follow-up</a>
     <a href="#changes">Proposed File Changes</a>
     <a href="#compile">Compile Answers</a>
   </nav>
@@ -549,31 +548,6 @@ tbody tr:nth-child(even) { background: rgba(22, 27, 34, 0.45); }
       <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
       <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
     </div>
-  </section>
-
-  <section id="script-follow-up">
-    <div class="section-header">
-      <h2>Script Surface Follow-up (2026-06-07)</h2>
-      <div class="feedback" data-section="Script Surface Follow-up">
-        <button type="button" data-value="up">Approve</button>
-        <button type="button" data-value="down">Concern</button>
-        <button type="button" data-value="needs-clarification">Clarify</button>
-        <textarea placeholder="Optional notes for this section"></textarea>
-      </div>
-    </div>
-    <div class="callout">
-      <p><strong>Follow-up finding:</strong> <code>scripts/pack.sh</code> is the strongest existing script-first pattern in this repository. It already owns the deterministic pack lifecycle, including install, remove, refresh, doctor, prune, pin/unpin, project-mode writes, managed install markers, and reload notices.</p>
-    </div>
-    <p>This does not change the original conclusion about pack-install friction. The remaining gap is not the absence of a script; it is install and visibility guidance around no-hot-reload behavior, exact pack or skill identifiers, downstream/manual runnable script readiness, and how agents should report successful filesystem installs that are not visible in the current session yet.</p>
-    <p>The scriptability investigation also found a documentation/path mismatch that can confuse manual operators: repo docs reference <code>scripts/init-agentic-skills.sh</code>, but the actual launcher files live under <code>global/{claude,codex}/init-agentic-skills/scripts/</code>. Any user-facing install guidance should either point at the real launcher locations or add the documented root-level launcher before recommending <code>scripts/init-agentic-skills.sh</code>.</p>
-    <p>Downstream/manual readiness needs its own portability gate. Related runnable inventory scripts have already shown <code>Bash 3.2</code> failures on macOS stock Bash, while <code>compile-central-alignment</code> shows the opposite extraction gap: a deterministic alignment-index algorithm still lives primarily in a skill contract, with only the browser opener scripted today.</p>
-    <h3>Amended Decision Impact</h3>
-    <ul>
-      <li>Keep <code>pack.sh</code> as the canonical script-first install surface.</li>
-      <li>Improve user guidance for exact identifiers, no-hot-reload expectations, and post-install visibility checks before treating installs as usable in-session.</li>
-      <li>Do not recommend downstream/manual scripts as generally runnable until they either pass macOS stock Bash or explicitly declare Bash 4+ or Node requirements.</li>
-      <li>Treat the <code>scripts/init-agentic-skills.sh</code> mismatch as documentation or launcher debt, not a new pack-install root cause.</li>
-    </ul>
   </section>
 
   <section id="changes">

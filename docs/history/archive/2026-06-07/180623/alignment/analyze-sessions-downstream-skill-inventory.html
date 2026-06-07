@@ -224,7 +224,6 @@
     <a href="#patterns">Patterns</a>
     <a href="#repo-evidence">Repo Evidence</a>
     <a href="#recommendation">Recommendation</a>
-    <a href="#portability-addendum">Portability Addendum</a>
     <a href="#evidence-matrix">Evidence Matrix</a>
     <a href="#assumptions">Assumptions</a>
     <a href="#alternatives">Alternatives</a>
@@ -393,32 +392,6 @@
       <li>Integration with `$sync` so single-repo and fleet reports use one vocabulary.</li>
       <li>Optional local-edit detector for managed roots, because the current drift engine intentionally does not detect edits to the copied install itself.</li>
     </ol>
-  </section>
-
-  <section id="portability-addendum" data-section="Portability Addendum">
-    <h2>Portability Addendum (2026-06-07)</h2>
-    <div class="feedback" data-feedback="Portability Addendum"></div>
-    <div class="callout warning">
-      <p><strong>Follow-up finding:</strong> downstream inventory scripts are not ready to recommend for broad manual use until they are either macOS-stock-Bash compatible or explicitly documented as requiring Bash 4+ or Node.</p>
-    </div>
-    <p>The inventory-first recommendation still stands, but portability is now a precondition. The scriptability investigation observed <code>Bash 3.2</code> failures on this macOS host in scripts that use Bash 4-only constructs such as associative arrays or <code>mapfile</code>. That matters because downstream/manual inventory workflows are most valuable when they can run from ordinary developer machines without hidden shell-version assumptions.</p>
-    <table>
-      <thead><tr><th>Script surface</th><th>Observed portability issue</th><th>Implication for downstream inventory</th></tr></thead>
-      <tbody>
-        <tr><td><code>packs/project-fleet/{claude,codex}/skill-inventory/scripts/skill-inventory.sh</code></td><td>Failed under <code>Bash 3.2</code> due to Bash 4-only constructs.</td><td>Do not recommend as a stock macOS manual script until rewritten or explicitly gated.</td></tr>
-        <tr><td><code>scripts/skill-deps.sh</code></td><td>Failed under <code>Bash 3.2</code> due to Bash 4-only constructs.</td><td>Dependency inventory needs a Bash 3.2-compatible path or a declared Bash 4+ requirement.</td></tr>
-        <tr><td><code>scripts/skill-versions.sh</code></td><td>Failed under <code>Bash 3.2</code> due to Bash 4-only constructs.</td><td>Version inventory cannot be treated as portable until the shell requirement is explicit.</td></tr>
-        <tr><td><code>scripts/skill-next-step-routing.sh</code></td><td>Failed under <code>Bash 3.2</code> due to Bash 4-only constructs.</td><td>Routing inventory should not become a downstream/manual prerequisite without portability remediation.</td></tr>
-      </tbody>
-    </table>
-    <p><code>scripts/pack.sh</code> remains the best script-first precedent, but fleet inventory should not blindly inherit runnable-script assumptions from adjacent helper scripts. Similarly, the <code>compile-central-alignment</code> follow-up points to a deterministic algorithm that should be extracted carefully, while the <code>scripts/init-agentic-skills.sh</code> documentation/path mismatch shows that a script recommendation is only useful when the documented path exists.</p>
-    <h3>Amended Recommendation</h3>
-    <ul>
-      <li>Keep the report-first downstream inventory shape.</li>
-      <li>Add portability to the acceptance criteria before positioning these scripts as manual or downstream-ready.</li>
-      <li>Choose one compatibility contract per script: macOS stock Bash 3.2, explicit Bash 4+ dependency, or Node-based implementation.</li>
-      <li>Run downstream inventory smoke checks from a stock macOS shell before exposing the workflow as a general operator command.</li>
-    </ul>
   </section>
 
   <section id="evidence-matrix" data-section="Evidence Matrix">

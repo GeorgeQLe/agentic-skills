@@ -1,3 +1,30 @@
+## Current Implementation — Add Scriptability Findings To Alignment Pages
+
+### Goal
+
+Amend the existing alignment pages for pack install issues, downstream skill inventory, and plain-text skill opportunities with the 2026-06-07 scriptability follow-up findings. Preserve the original conclusions, archive every edited page first, refresh the local central alignment index, and verify the bundled alignment-page convention remains unchanged.
+
+### Plan
+
+1. Confirm the current repository state and relevant conventions.
+   - [x] Check working tree cleanliness and tracked alignment pages.
+   - [x] Inspect the three target alignment pages and `compile-central-alignment` contract.
+   - [x] Confirm `alignment/index.html` is untracked and should remain a local convenience artifact.
+2. Archive existing HTML pages.
+   - [x] Copy each target page to `docs/history/archive/2026-06-07/180623/alignment/` before editing.
+3. Amend existing alignment pages only.
+   - [x] Add the pack-install script surface follow-up covering `pack.sh`, no-hot-reload/install visibility guidance, downstream/manual runnable readiness, and the `scripts/init-agentic-skills.sh` path mismatch.
+   - [x] Add the downstream portability addendum covering macOS stock Bash compatibility and Bash 3.2 failures in inventory scripts.
+   - [x] Add the plain-text clarification that deterministic repeatable primitives should become scripts or script-backed utilities, with `compile-central-alignment` as the primary extraction candidate.
+   - [x] Leave `alignment/skills-inventory.html` untouched as a generated/static catalog.
+4. Maintain alignment index locally.
+   - [x] Regenerate or verify `alignment/index.html` locally and keep it untracked unless repo convention forces otherwise.
+5. Verify and ship.
+   - [x] Run `git diff --check`.
+   - [x] Verify each edited page contains its dated addendum and required key findings.
+   - [x] Run `node scripts/upgrade-alignment-page.mjs --dry-run`.
+   - [x] Verify archive snapshots exist for all three edited pages.
+
 ## Current Investigation — Skills That Should Be Scripts
 
 ### Goal
