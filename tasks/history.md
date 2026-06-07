@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-07 — Remaining packs customer-discovery route cleanup
+
+- Updated mirrored remaining-pack route-bearing contracts to route retired discovery executable handoffs to `customer-discovery`.
+- Changed `research-roadmap`, `bootstrap-repo`, `desk-flip`, and `scaffold`; inspected `docs-health` active skill files and preserved artifact-only `research/icp.md` references.
+- Archived and bumped affected active skill mirrors, updated changelogs, and added scaffold changelogs.
+- Added `tests/layer1/remaining-packs-customer-discovery-routing.test.ts` and updated `tests/layer1/research-roadmap-routing.test.ts`.
+- Refreshed Skills Showcase generated assets after active `SKILL.md` metadata changed.
+- Recorded Phase 4.10 review notes and a Future Work plan for the competitive-analysis orchestrator refactor in `tasks/todo.md`.
+- Validation passed for the focused remaining-pack route tests, boundary-aware active-route scan, skill integrity checks, pack routing audit, alignment dry-run, generated showcase freshness, Skills Showcase production build, and whitespace diff check.
+- Production deploy not run because deployment requires explicit confirmation.
+
 ## 2026-06-07 — Product testing customer-discovery route cleanup
 
 - Updated mirrored product-testing `dogfood` and `uat` contracts to route retired discovery executable handoffs to `customer-discovery`.
