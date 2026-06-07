@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-06
+
+- Updated the canonical AFPS route string to start with `customer-discovery` while preserving `research/icp.md` as the evidence artifact check.
+
 ## v0.4 - 2026-06-06
 
 - Updated canonical AFPS status routing to insert `/user-flow-map` after positioning and requirements-only UI interview before layout-mode UX variations.

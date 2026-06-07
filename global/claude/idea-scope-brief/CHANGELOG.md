@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.12 - 2026-06-06
+
+- Updated downstream discovery routing from the retired short-form command to `/customer-discovery`, including readiness wording, product-path next-skill hints, and business-discovery fallback text.
+
 ## v0.11 - 2026-06-05
 
 - Added review-only product path approval rule: when a user approves a product-path fork at the alignment page level but withholds canonical-write approval, keep canonical files unchanged, render fully in the alignment page, and set `approval_status: review-only-approved`. Downstream skills treat review-only-approved paths as provisional until a subsequent alignment cycle grants manifest approval.

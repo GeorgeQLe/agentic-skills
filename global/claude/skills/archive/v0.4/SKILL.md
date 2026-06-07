@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.5
+version: v0.4
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -36,7 +36,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Stage | Skills (pack in parentheses; no label = global) |
    |-------|--------|
    | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>`, `pack remove <pack-or-skill>`, `pack which <skill>` |
-   | Discovery & Market Fit | `customer-discovery` (business-discovery), `enterprise-icp` (business-discovery) |
+   | Discovery & Market Fit | `icp` (business-discovery), `enterprise-icp` (business-discovery) |
    | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
    | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
    | Planning | `idea-scope-brief`, `brainstorm` (product-design), `feature-interview` (product-design), `user-flow-map` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-variations` (product-design), `experiment` (business-growth) |
@@ -93,7 +93,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 ### List mode (default — grouped by workflow stage)
 ```
 ## Discovery & Market Fit
-/customer-discovery — Customer discovery interview...  [research]
+/icp — Customer discovery interview...  [research]
 /enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
 
 ## Strategize
@@ -116,12 +116,12 @@ Discover and search installed global skills plus enabled project-local pack skil
 ### Type mode (`/skills types`)
 ```
 ## Research
-/customer-discovery — Customer discovery interview...
+/icp — Customer discovery interview...
 /competitive-analysis — Research competitors...
 ...
 
 ## Analysis
-/mvp-gap — Evaluate codebase against customer-discovery evidence...
+/mvp-gap — Evaluate codebase against ICP...
 ...
 
 **N skills** found

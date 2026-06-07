@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.6
+version: v0.5
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -69,15 +69,15 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 When a name passed to `install` or `remove` does not match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
 
 - `$pack install design-system` installs only the `design-system` skill from `product-design`, not the whole pack.
-- `$pack install code-review customer-discovery` installs the `code-review` pack plus the individual `customer-discovery` skill.
-- `$pack remove customer-discovery` removes only the `customer-discovery` skill root and its `enabled_skills` entry.
+- `$pack install code-review icp` installs the `code-review` pack plus the individual `icp` skill.
+- `$pack remove icp` removes only the `icp` skill root and its `enabled_skills` entry.
 - `$pack which design-system` shows the source pack and whether the skill is installed.
 
 Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
 
 ```json
 {
-  "enabled_skills": {"customer-discovery": "business-discovery", "positioning": "business-discovery"}
+  "enabled_skills": {"icp": "business-discovery", "positioning": "business-discovery"}
 }
 ```
 

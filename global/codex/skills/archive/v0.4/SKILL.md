@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.5
+version: v0.4
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -36,7 +36,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Stage | Skills |
    |-------|--------|
    | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>`, `pack remove <pack-or-skill>`, `pack which <skill>` |
-   | Discovery & Market Fit | `customer-discovery`, `enterprise-icp` |
+   | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
    | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |
    | Planning | `brainstorm`, `idea-scope-brief`, `feature-interview`, `user-flow-map`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variations`, `consolidate-variations`, `experiment`, `clone-spec-store` (project-fleet pack) |
@@ -92,7 +92,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 ### List mode (default — grouped by workflow stage)
 ```
 ## Discovery & Market Fit
-$customer-discovery — Customer discovery interview...  [research]
+$icp — Customer discovery interview...  [research]
 $enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
 
 ## Strategize
@@ -115,12 +115,12 @@ $competitive-analysis — Research competitors...  [research]
 ### Type mode (`$skills types`)
 ```
 ## Research
-$customer-discovery — Customer discovery interview...
+$icp — Customer discovery interview...
 $competitive-analysis — Research competitors...
 ...
 
 ## Analysis
-$mvp-gap — Evaluate codebase against customer-discovery evidence...
+$mvp-gap — Evaluate codebase against ICP...
 ...
 
 **N skills** found

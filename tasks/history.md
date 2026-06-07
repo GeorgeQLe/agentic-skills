@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-06 — Global customer-discovery route cleanup
+
+- Updated mirrored global `idea-scope-brief`, `afps-status`, `codebase-status`, `skills`, and `pack` contracts to route executable discovery work to `customer-discovery` instead of the retired short-form command.
+- Renamed the `afps-status` stage to `discovery-needed` and preserved `research/icp.md` only as the customer-discovery evidence artifact.
+- Archived and bumped all affected active global skill mirrors, updated changelogs, and added a focused layer1 regression test for global customer-discovery routing.
+- Refreshed Skills Showcase generated assets after active `SKILL.md` metadata changed.
+- Recorded Phase 4.3 review notes and the next Phase 4.4 business-discovery pack routing plan in `tasks/todo.md`.
+- Validation passed for targeted global route tests, skill integrity checks, alignment dry-run, generated showcase freshness, Skills Showcase production build, and whitespace diff check.
+- `scripts/skill-mirror-parity-audit.sh` still reports known pack-level heading drift outside the edited global-skill boundary.
+
 ## 2026-06-06 — Business discovery PACK customer-discovery route
 
 - Updated `packs/business-discovery/PACK.md` so the pack overview, default flow, and skill list use `customer-discovery` instead of the legacy executable `icp` name.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6
+
+- Updated individual business-discovery skill install/remove examples to use `customer-discovery` as the tracked skill name.
+
 ## v0.5
 
 - Marked PoketoWork kanban packs as hibernated during the Poketo.work rebuild and removed kanban packs from active pack-selection guidance.

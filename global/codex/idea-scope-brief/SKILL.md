@@ -1,8 +1,8 @@
 ---
 name: idea-scope-brief
-description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
+description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.11
+version: v0.12
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 interview_depth: full
 ---
@@ -11,7 +11,7 @@ interview_depth: full
 
 Invoke as `$idea-scope-brief`.
 
-Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-ICP: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select an ICP, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
+Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-customer-discovery: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
 ## Process
 
@@ -19,7 +19,7 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
 
 Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the customer, audience, or segment label.
 2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
 3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
 4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
@@ -38,13 +38,13 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Determine the concept identity and a normalized concept slug as soon as either is known from `$ARGUMENTS`, repo context, or the interview. Normalize by lowercasing, removing URL suffix noise, replacing non-alphanumeric runs with `-`, trimming leading/trailing `-`, and dropping only project-wide brand prefixes when the remaining word is the actual scoped concept (for example, `poketo.work` -> `work`; `Poketo Core` -> `poketo-core`).
    - If existing research or the prompt suggests multiple related concepts may exist, prefer slugged output paths over generic filenames. Reserve generic `idea-brief.md` only for a single unambiguous project-level concept.
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
-   - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/ICP focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
+   - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/customer focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
    - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `scope_path`, `status`, `source_skill`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$icp <path/audience>`; if `business-discovery` is not enabled, recommend `$pack install business-discovery` before `$icp`.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$customer-discovery <path/audience>`; if `business-discovery` is not enabled, recommend `$pack install business-discovery` before `$customer-discovery`.
    - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `$pack install business-ops` before `$product-line`.
 
 2. **Keep the boundary clear**
-   - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
+   - Do not run customer discovery, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
    - Do not validate the market with broad web research. Use light repo/context inspection only; downstream research skills own evidence gathering.
    - Treat every user claim as a hypothesis unless supported by existing project files.
 
@@ -67,7 +67,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 During the Idea Assumptions Manifest, if the concept appears marketplace/platform/B2B2C/multi-sided, add a compact `Market Structure Handoff` note:
 
 - Name the apparent sides and the expected value exchange between them.
-- Mark those sides and exchanges as hypotheses, not validated ICPs; do not decide which side is the customer, buyer, or primary ICP here.
+- Mark those sides and exchanges as hypotheses, not validated customer segments; do not decide which side is the customer, buyer, or primary target segment here.
 - Keep the source tag for each side as `[from prompt]`, `[from repo]`, or `[inferred]` unless the user provides a correction.
 - If the concept appears single-sided, omit the handoff or state that no marketplace/platform/B2B2C/multi-sided handoff is apparent.
 
@@ -83,7 +83,7 @@ During the Idea Assumptions Manifest, if the concept appears marketplace/platfor
    - When unsure, recommend a practical default and clearly mark it as an assumption.
 
 5. **Coverage checkpoint**
-   - Present the final concept summary, unknowns, and readiness for ICP.
+   - Present the final concept summary, unknowns, and readiness for customer discovery.
    - Restate the resolved concept identity, slug, and exact output paths before writing.
    - If the conversation pivoted from the initial concept to a different central concept, write the pivoted concept to its own slugged brief and preserve the initial concept as a related or future concept in the brief and interview log. Do not merge both concepts into one generic project-level brief.
    - Ask whether any core premise, constraint, or non-goal is wrong before writing.
@@ -103,7 +103,7 @@ When the user approves a product-path fork or split at the alignment page level 
 1. **Do not write canonical files.** Keep `research/.progress.yaml`, `research/{slug}/idea-brief.md`, and `research/{slug}/idea-brief-interview.md` unchanged.
 2. **Render fully in the alignment page.** The proposed manifest entry, idea brief sections, and interview log for the review-only path must be rendered in full in the alignment page HTML — not summarized, linked, or embedded.
 3. **Mark the page as review-only-approved.** Set `approval_status: review-only-approved` in the alignment page status block. This is distinct from `confirmed` (canonical artifacts written) and `review` (awaiting any approval).
-4. **Downstream treatment.** Downstream skills must treat a review-only-approved path as provisional: it may be referenced as concept context, but it is not a canonical product path until manifest approval is later granted via a subsequent alignment cycle. See the provisional-path evidence rule in ICP and competitive-analysis contracts.
+4. **Downstream treatment.** Downstream skills must treat a review-only-approved path as provisional: it may be referenced as concept context, but it is not a canonical product path until manifest approval is later granted via a subsequent alignment cycle. See the provisional-path evidence rule in customer-discovery and competitive-analysis contracts.
 
 ## Output
 
@@ -126,16 +126,16 @@ The idea brief must include:
 - `## Constraints`
 - `## Non-Goals`
 - `## Assumptions And Unknowns`
-- `## ICP Readiness`
+- `## Customer Discovery Readiness`
 - `## Next Steps`
 
-The `## ICP Readiness` section must state whether the concept is ready for `$icp`, what inputs `$icp` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$icp` to validate or refute.
+The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
-- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `$customer-discovery`
+- If the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
 - If project type is unclear: `$pack recommend`
 
 Include 1-3 other options only when they are materially useful.

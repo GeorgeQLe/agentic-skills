@@ -2,17 +2,17 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.5
+version: v0.4
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
 # Codebase Status
 
-Invoke as `$codebase-status`.
+Invoke as `/codebase-status`.
 
 Use this skill when the user asks what a repo or application is, where work was left, what is outstanding, whether it is ready/stable, or wants a detailed status report that combines codebase evidence with local Claude/Codex conversation history.
 
-This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` maintains the task pipeline and priority queue; `codebase-status` explains the actual current state of the repo and relevant prior conversations.
+This is read-only status synthesis. It does not replace `/roadmap`: `roadmap` maintains the task pipeline and priority queue; `codebase-status` explains the actual current state of the repo and relevant prior conversations.
 
 ## Process
 
@@ -30,7 +30,7 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
    - When `research/`, `specs/`, `spec.md`, product docs, or prototype artifacts exist, read `docs/pack-workflow-matrix.md` and `docs/skill-next-step-contracts.md` if present.
    - Identify the last completed relevant research/product skill from artifacts, task history, or conversation history. Before recommending another research/product skill, consult that skill's active `SKILL.md` `## Next Steps` contract and any `## Next Steps` section in its output artifact.
    - Treat those route contracts as stronger evidence than a generic status impression. If docs disagree, report the contradiction and prefer the newest active skill contract or route matrix with file evidence.
-   - For pack-local recommendations, check `.agents/project.json` `enabled_packs` first. If the target skill's pack is not enabled, recommend `$pack install <pack-name>` before the skill.
+   - For pack-local recommendations, check `.agents/project.json` `enabled_packs` first. If the target skill's pack is not enabled, recommend `/pack install <pack-name>` before the skill.
 5. Inspect git evidence:
    - `git status --short`
    - current branch and upstream status
@@ -58,21 +58,21 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
    - Outstanding work, grouped as blocking, next execution, advisory, manual/human-only, and uncertain.
    - Mismatches between conversation history, task docs, git history, and code reality.
    - Confidence level for each major conclusion: high, medium, or low, with evidence.
-9. Recommend next route:
+9. Recommend next route (check whether each skill's pack is installed; if not, recommend `/pack install <pack>` first):
    - Use phase-aware routing before naming a command:
-     - If `tasks/todo.md` or active phase docs contain actionable implementation work, recommend `$exec`. Do not route back to research merely because advisory gaps exist.
-     - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `$ship`.
-     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
-     - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `$pack install customer-lifecycle` before `$journey-map`; if enabled, recommend `$journey-map`.
-     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-discovery` availability; if it is not enabled, recommend `$pack install business-discovery` before `$value-prop-canvas` or `$lean-canvas`. Recommend `$value-prop-canvas` only for contested solution-fit evidence, and `$lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, `user-flow-map`, or layout-mode UX variations.
-     - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `$brainstorm` to discover new AFPS work.
-   - `$exec` when the next task is already clear and executable.
-   - `$roadmap` when specs exist but sequencing or task queue health needs updating.
-   - `$feature-interview` when the next idea/direction is not yet represented in specs or tasks.
-   - `$reconcile-dev-docs audit` or `$reconcile-dev-docs fix tasks` when task docs contradict git/code reality.
-   - `$spec-drift` when specs and code appear out of sync.
-   - `$guide` only for human-only external blockers.
-   - `$brainstorm` when the repo is complete/current and the next step is discovering a new phase.
+     - If `tasks/todo.md` or active phase docs contain actionable implementation work, recommend `/exec`. Do not route back to research merely because advisory gaps exist.
+     - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `/ship`.
+     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `icp -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
+     - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `/pack install customer-lifecycle` before `/journey-map`; if enabled, recommend `/journey-map`.
+     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-discovery` availability; if it is not enabled, recommend `/pack install business-discovery` before `/value-prop-canvas` or `/lean-canvas`. Recommend `/value-prop-canvas` only for contested solution-fit evidence, and `/lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, `user-flow-map`, or layout-mode UX variations.
+     - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `/brainstorm` to discover new AFPS work.
+   - `/exec` when the next task is already clear and executable. _(exec-loop pack)_
+   - `/roadmap` when specs exist but sequencing or task queue health needs updating. _(agent-work-admin pack)_
+   - `/feature-interview` when the next idea/direction is not yet represented in specs or tasks. _(product-design pack)_
+   - `/reconcile-dev-docs audit` or `/reconcile-dev-docs fix tasks` when task docs contradict git/code reality. _(docs-health pack)_
+   - `/spec-drift` when specs and code appear out of sync. _(agent-work-admin pack)_
+   - `/guide` only for human-only external blockers. _(guided-walkthrough pack)_
+   - `/brainstorm` when the repo is complete/current and the next step is discovering a new phase. _(product-design pack)_
 
 ## Output
 
@@ -99,9 +99,9 @@ End with exactly:
 - Do not include private conversation history unrelated to the target repo.
 - Quote only short prompt excerpts. Prefer paraphrase plus timestamp/source/project.
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues unless an item has clearly become concrete work.
-- Do not put agent-executable work in `tasks/manual-todo.md` or route it to `$guide`.
-- Do not recommend `$roadmap` if the finding is only "tell me the status"; use `$roadmap` only when the task pipeline itself needs queue maintenance or roadmap extension.
-- When recommending a pack skill, first check `.agents/project.json` for `enabled_packs`. If the target skill's pack is not enabled, include `$pack install <pack-name>` as a prerequisite in the recommendation.
+- Do not put agent-executable work in `tasks/manual-todo.md` or route it to `/guide`.
+- Do not recommend `/roadmap` if the finding is only "tell me the status"; use `/roadmap` only when the task pipeline itself needs queue maintenance or roadmap extension.
+- When recommending a pack skill, first check `.agents/project.json` for `enabled_packs`. If the target skill's pack is not enabled, include `/pack install <pack-name>` as a prerequisite in the recommendation.
 - Do not create or modify GitHub Actions workflows.
 
 ## Default Shipping Contract

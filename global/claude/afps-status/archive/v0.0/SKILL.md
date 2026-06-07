@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.1
+version: v0.0
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
@@ -12,14 +12,14 @@ Invoke as `/afps-status`.
 
 Use this skill when the user asks where a product project is in the AFPS workflow, what research/planning/implementation artifact is missing next, whether task docs match product evidence, or which AFPS command should run next.
 
-AFPS here means the product workflow from raw idea through concept scoping, customer discovery/research, lifecycle/growth planning, specs, roadmap/phase work, implementation, validation, and shipping. This is read-mostly reconciliation. It summarizes existing artifacts and recommends a route; it does not create a competing workflow state system.
+AFPS here means the product workflow from raw idea through concept scoping, ICP/research, lifecycle/growth planning, specs, roadmap/phase work, implementation, validation, and shipping. This is read-mostly reconciliation. It summarizes existing artifacts and recommends a route; it does not create a competing workflow state system.
 
 ## Process
 
 1. Resolve target project:
    - Default to the current working directory.
    - If `$ARGUMENTS` names a path, inspect that project.
-   - If `$ARGUMENTS` names a product path, app, customer, audience, or focus, prioritize matching artifacts under `research/`, `specs/`, `tasks/`, and `alignment/`.
+   - If `$ARGUMENTS` names a product path, app, ICP, or focus, prioritize matching artifacts under `research/`, `specs/`, `tasks/`, and `alignment/`.
    - Confirm whether the target is a git worktree when possible. Continue with filesystem evidence if git is unavailable.
 2. Read project orientation:
    - `.agents/project.json`
@@ -29,21 +29,21 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 3. Inspect AFPS evidence from existing artifacts:
    - Product-path state: `research/.progress.yaml`, including legacy `active_path` normalized mentally to `active_paths`.
    - Concept artifacts: `research/idea-brief*.md`, app-scoped `research/*/idea-brief*.md`, and concept/interview notes.
-   - Discovery artifacts: customer-discovery docs such as `research/icp.md`, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
+   - Discovery artifacts: ICP docs, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
    - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, and alignment pages under `alignment/`.
    - Execution artifacts: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases/`, and recent validation notes.
    - Git evidence: `git status --short`, current branch/upstream, last relevant commits, unpushed commits, and changed files.
 4. Reconcile evidence instead of trusting one file:
    - Distinguish missing artifacts, stale artifacts, contradictory artifacts, completed work, active implementation tasks, manual blockers, unvalidated implementation, and unshipped local changes.
-   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts.
+   - Treat `research/.progress.yaml` as a manifest of product/app/ICP focus, not as the source of truth over concrete artifacts.
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
 5. Classify AFPS stage:
-   - `unscoped`: no concept brief or the concept is too unclear for customer discovery.
+   - `unscoped`: no concept brief or the concept is too unclear for ICP.
    - `concept-ready`: concept exists but discovery pack/skills are not enabled.
-   - `discovery-needed`: concept exists and discovery skills are enabled, but customer discovery is absent or not specific enough.
-   - `research-incomplete`: customer discovery exists but market, competitive, value, positioning, journey, or lifecycle evidence is missing.
+   - `icp-needed`: concept exists and discovery skills are enabled, but ICP is absent or not specific enough.
+   - `research-incomplete`: ICP exists but market, competitive, value, positioning, journey, or lifecycle evidence is missing.
    - `lifecycle-gap`: discovery exists but onboarding, conversion, activation, retention, monetization, GTM, or metrics questions block spec quality.
    - `spec-needed`: research is sufficient but durable product/spec artifacts are absent or stale.
    - `roadmap-needed`: research/spec artifacts exist but `tasks/roadmap.md` or `tasks/todo.md` is missing, stale, contradictory, or not actionable.
@@ -53,8 +53,8 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 6. Choose the next route with these rules:
    - No concept brief or unclear concept: `/idea-scope-brief`
    - Concept exists but business discovery is missing: `/pack install business-discovery`
-   - Concept exists and discovery is enabled, but no customer-discovery evidence: `/customer-discovery`
-   - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `/competitive-analysis`, `/value-prop-canvas`, or `/positioning`
+   - Concept exists and discovery is enabled, but no ICP: `/icp`
+   - ICP exists but market/value evidence is missing: the most specific discovery command, usually `/competitive-analysis`, `/value-prop-canvas`, or `/positioning`
    - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or the required pack install first, such as `/pack install customer-lifecycle` or `/pack install business-growth`
    - Research/specs exist but task queue is stale or absent: `/roadmap`
    - Clear executable task exists: `/exec`
@@ -70,7 +70,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 Produce a concise structured report with:
 
 - **Overview:** repo path, product/app focus, git status, enabled packs, and whether AFPS evidence is single-path or multi-path.
-- **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status.
+- **Artifact Map:** concept, ICP/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status.
 - **AFPS Stage:** one stage label from the workflow above, with confidence and evidence.
 - **Contradictions And Gaps:** conflicting artifacts, missing product-path manifest updates, stale task queues, manual blockers, validation/shipping gaps, and uncertainty.
 - **Recommended Route:** the next concrete work item and why it is the narrowest route.

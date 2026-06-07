@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5
+
+- Updated the Discovery & Market Fit catalog examples to list `customer-discovery` as the standard business-discovery route while preserving `enterprise-icp`.
+
 ## v0.4
 
 - Removed hibernated PoketoWork kanban skills from the static workflow-stage inventory while the kanban packs are archived.
