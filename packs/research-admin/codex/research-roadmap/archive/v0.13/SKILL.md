@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.14
+version: v0.13
 invocation: orchestrator
 ---
 
@@ -18,7 +18,7 @@ Use this skill to make the project documentation contract complete before build 
 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
-Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `$customer-discovery`, `$journey-map`, or `$devtool-user-map`. Do not prepend `$exec`, `$exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
+Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `$icp`, `$journey-map`, or `$devtool-user-map`. Do not prepend `$exec`, `$exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
 
 ## Process
 
@@ -89,7 +89,7 @@ Business-app research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$customer-discovery` | `research/icp.md` |
+| `$icp` | `research/icp.md` |
 | `$competitive-analysis` | `research/competitive-analysis.md` |
 | `$journey-map` | `research/journey-map.md` |
 | `$positioning` | `research/positioning.md` |
@@ -173,7 +173,7 @@ Record existence and last-modified timestamps for:
 - `tasks/record-todo.md`
 - `tasks/recurring-todo.md`
 
-When `research/` contains product-path subdirectories, treat it as product-path mode. Build a separate documentation queue per product path and include product-path arguments in commands, such as `$customer-discovery web`.
+When `research/` contains product-path subdirectories, treat it as product-path mode. Build a separate documentation queue per product path and include product-path arguments in commands, such as `$icp web`.
 
 ### 5. Classify Missing And Stale Items
 
@@ -227,7 +227,7 @@ When `research/.progress.yaml` exists, show per-path pipeline progress alongside
 
 ```
 $idea-scope-brief
-  -> $customer-discovery
+  -> $icp
   -> $competitive-analysis
   -> $journey-map
   -> $positioning
@@ -304,7 +304,7 @@ Todo item format:
 - [ ] `$skill [optional-app-or-argument]` - create/update `path/to/output.md` because [missing/stale reason with evidence].
 ```
 
-The command must be the direct named skill route, for example `$customer-discovery`, not `$exec $customer-discovery`, `$exec --phase`, or another execution-loop wrapper.
+The command must be the direct named skill route, for example `$icp`, not `$exec $icp`, `$exec --phase`, or another execution-loop wrapper.
 
 If prerequisites are missing:
 

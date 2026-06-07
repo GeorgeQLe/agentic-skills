@@ -2,11 +2,13 @@
 name: bootstrap-repo
 description: Initialize or reset a repository README and agent workflow docs from a short project brief
 type: execution
-version: v0.2
+version: v0.1
 argument-hint: "<project brief>"
 ---
 
 # Bootstrap Repo
+
+Invoke as `$bootstrap-repo`.
 
 Initialize a repository with a useful `README.md` and the standard agent workflow docs. When invoked with `--reset-existing`, first archive stale implementation and documentation files from a non-empty stuck repo so the fresh start is not built on old code or old assumptions by accident.
 
@@ -44,26 +46,26 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - Use the project brief as the primary source and repository inspection as supporting evidence.
 
 5. **Provision agent workflow docs:**
-   - Run `/provision-agentic-config` for the same repository.
+   - Run `$provision-agentic-config` for the same repository.
    - Confirm `CLAUDE.md` and `AGENTS.md` exist after provisioning.
    - Preserve unrelated existing content in both files.
 
 6. **Verify the result:**
    - Check that `README.md`, `CLAUDE.md`, and `AGENTS.md` exist.
    - Confirm the corresponding workflow orchestration block appears exactly once in each of `CLAUDE.md` and `AGENTS.md`.
-   - Report whether the monorepo safety block was included or skipped by `/provision-agentic-config`.
+   - Report whether the monorepo safety block was included or skipped by `$provision-agentic-config`.
    - In reset mode, check that `archive/YYYY-MM-DD-HHMMSS/MANIFEST.md` exists and lists moved and preserved paths, and verify old docs/research/specs/tasks were archived rather than left active.
 
 7. **Route research-first after product bootstrap:**
    - If this is a product, app, SaaS, dashboard, internal tool, marketplace, website, or other user-facing restart, rebuild market and lifecycle alignment from the high-level concept before UI requirements or prototypes.
-   - Check `.agents/project.json.enabled_packs` when present. If `business-discovery` is not enabled, recommend `/pack install business-discovery` before `/customer-discovery`. If `customer-lifecycle` is not enabled, include `/pack install customer-lifecycle` before `/journey-map`.
-   - When required packs are available, recommend `/customer-discovery <concept>` as the next command. After `/customer-discovery`, the intended sequence is `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> prototype work.
-   - If current, accepted `research/icp.md`, `research/competitive-analysis.md`, and `research/journey-map.md` already exist from the fresh reset but positioning is missing, then recommend `/positioning <topic>`.
-   - If positioning exists but a flow map is missing, recommend `/user-flow-map <topic>`.
-   - If a flow map exists but UI requirements are missing, recommend `/ui-interview --requirements-only <topic>`.
-   - If UI requirements exist but layout variations are missing, recommend `/ux-variations --layout-mode <topic>`.
-   - Only route directly to `/roadmap` or `/exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
-   - The intended product sequence after reset is: `/customer-discovery` -> `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
+   - Check `.agents/project.json.enabled_packs` when present. If `business-discovery` is not enabled, recommend `$pack install business-discovery` before `$icp`. If `customer-lifecycle` is not enabled, include `$pack install customer-lifecycle` before `$journey-map`.
+   - When required packs are available, recommend `$icp <concept>` as the next command. After `$icp`, the intended sequence is `$competitive-analysis` -> `$journey-map` -> `$positioning` -> `$user-flow-map` -> `$ui-interview --requirements-only` -> `$ux-variations --layout-mode` -> prototype work.
+   - If current, accepted `research/icp.md`, `research/competitive-analysis.md`, and `research/journey-map.md` already exist from the fresh reset but positioning is missing, then recommend `$positioning <topic>`.
+   - If positioning exists but a flow map is missing, recommend `$user-flow-map <topic>`.
+   - If a flow map exists but UI requirements are missing, recommend `$ui-interview --requirements-only <topic>`.
+   - If UI requirements exist but layout variations are missing, recommend `$ux-variations --layout-mode <topic>`.
+   - Only route directly to `$roadmap` or `$exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
+   - The intended product sequence after reset is: `$icp` -> `$competitive-analysis` -> `$journey-map` -> `$positioning` -> `$user-flow-map` -> `$ui-interview --requirements-only` -> `$ux-variations --layout-mode` -> build variants/prototypes via `$exec` or the applicable prototype-building route -> `$uat --variant-evaluation` -> `$consolidate-variations` -> `$research-roadmap --post-prototype` -> `$spec-interview` or `$roadmap`.
 
 ## Output
 
@@ -76,7 +78,7 @@ Bootstrapped repository
 - AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
 - Verification: [commands/checks run]
-- Recommended next command: [/pack install business-discovery | /pack install customer-lifecycle | /pack install product-design | /customer-discovery <concept> | /positioning <topic> | /user-flow-map <topic> | /ui-interview --requirements-only <topic> | /ux-variations --layout-mode <topic> | /roadmap | /exec]
+- Recommended next command: [$pack install business-discovery | $pack install customer-lifecycle | $pack install product-design | $icp <concept> | $positioning <topic> | $user-flow-map <topic> | $ui-interview --requirements-only <topic> | $ux-variations --layout-mode <topic> | $roadmap | $exec]
 ```
 
 ## Constraints

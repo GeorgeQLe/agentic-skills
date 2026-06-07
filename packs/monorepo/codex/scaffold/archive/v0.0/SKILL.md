@@ -2,7 +2,7 @@
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
 type: execution
-version: v0.1
+version: v0.0
 ---
 
 # Scaffold
@@ -11,7 +11,7 @@ Invoke as `$scaffold`.
 
 Use this skill when the user wants to create a new package or app in their monorepo.
 
-For product/app workflows, `$scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `$roadmap`/`$plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `$idea-scope-brief`, `$bootstrap-repo`, `$customer-discovery`, `$competitive-analysis`, `$journey-map`, `$ux-variations`, or `$ui-interview` directly to `$scaffold` unless the user explicitly asks to create a minimal shell first.
+For product/app workflows, `$scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `$roadmap`/`$plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `$idea-scope-brief`, `$bootstrap-repo`, `$icp`, `$competitive-analysis`, `$journey-map`, `$ux-variations`, or `$ui-interview` directly to `$scaffold` unless the user explicitly asks to create a minimal shell first.
 
 ## Process
 
@@ -33,7 +33,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 ## Next-Step Routing
 
 - If the scaffold was created as part of an active roadmap/phase, recommend `$exec` to continue the current implementation step.
-- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `$customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `$pack install business-discovery`.
+- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `$icp` when the concept is ready and business-discovery is enabled, otherwise `$pack install business-discovery`.
 - If the scaffold is for a non-product package with no pending roadmap item, recommend `$roadmap` or `$plan-phase` only when implementation sequencing is missing.
 
 ## Constraints

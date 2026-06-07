@@ -7,13 +7,13 @@ const ROOT = resolve(import.meta.dirname, "../..");
 const mirrors = [
   {
     path: "packs/research-admin/codex/research-roadmap/SKILL.md",
-    examples: ["`$icp`", "`$journey-map`", "`$devtool-user-map`"],
-    forbidden: ["`$exec $icp`", "`$exec --phase`"],
+    examples: ["`$customer-discovery`", "`$journey-map`", "`$devtool-user-map`"],
+    forbidden: ["`$exec $customer-discovery`", "`$exec --phase`"],
   },
   {
     path: "packs/research-admin/claude/research-roadmap/SKILL.md",
-    examples: ["`/icp`", "`/journey-map`", "`/devtool-user-map`"],
-    forbidden: ["`/exec /icp`", "`/exec --phase`"],
+    examples: ["`/customer-discovery`", "`/journey-map`", "`/devtool-user-map`"],
+    forbidden: ["`/exec /customer-discovery`", "`/exec --phase`"],
   },
 ];
 

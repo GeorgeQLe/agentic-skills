@@ -1,5 +1,9 @@
 # research-roadmap changelog (codex)
 
+## v0.14 - 2026-06-07
+
+- Routed fallback documentation queue examples and direct-command guidance from retired `$icp` to `$customer-discovery` while preserving `research/icp.md` as the output artifact.
+
 ## v0.13 - 2026-06-06
 
 - Added `$user-flow-map` as a documentation-producing product-design skill that writes `specs/user-flow-*.md`.
