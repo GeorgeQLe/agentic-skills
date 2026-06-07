@@ -2,7 +2,7 @@
 name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
-version: v0.6
+version: v0.7
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 interview_depth: light
 visual_tier: visual
@@ -49,7 +49,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape, channel insights, business model patterns
   - `research/journey-map.md` — lifecycle moments where value, conversion, and retention occur

@@ -2,7 +2,7 @@
 name: moore-positioning
 description: Geoffrey Moore positioning hypothesis — generate Moore template, map evidence per element, identify weakest link
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -48,7 +48,7 @@ Applies Geoffrey Moore's positioning template from "Crossing the Chasm" to gener
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
 - **Soft**: Read if they exist:
   - `research/journey-map.md` — context for trigger events and value delivery

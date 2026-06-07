@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.11
+version: v0.12
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 interview_depth: light
 visual_tier: visual
@@ -50,7 +50,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
 - **Strong default**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `$journey-map` first unless the user explicitly needs a provisional positioning analysis.
 - **Soft**: Read these if they exist:

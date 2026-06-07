@@ -2,7 +2,7 @@
 name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, apply Four Actions Framework (eliminate/reduce/raise/create)
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -49,7 +49,7 @@ Applies the Blue Ocean Strategy framework (Kim & Mauborgne) to identify position
 ## Prerequisites
 
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Soft**: Read if they exist:
   - `research/journey-map.md` — where overserved/underserved moments appear
   - `research/customer-feedback.md` — what customers value and what they ignore

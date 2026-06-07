@@ -2,7 +2,7 @@
 name: obviously-awesome
 description: April Dunford Obviously Awesome methodology — 5-step positioning from real customer evidence
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -49,7 +49,7 @@ Applies the full 5-step Obviously Awesome methodology (April Dunford) as a stand
 ## Prerequisites
 
 - **HARD**: `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) must exist with real customer evidence (interviews, survey data, support tickets, reviews, or usage data). If not, stop and tell the user: "Obviously Awesome requires real customer evidence. Run `$customer-feedback` first to gather and synthesize customer data, then re-run `$obviously-awesome`."
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
 - **Soft**: Read if they exist:
   - `research/journey-map.md` — value delivery moments

@@ -2,7 +2,7 @@
 name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, identify eliminate/reduce/raise/create moves
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -43,7 +43,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 ## Prerequisites
 
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
-- **Soft**: `research/icp.md` (or `research/{slug}/icp.md`) — recommended for understanding which factors matter most to the target customer.
+- **Soft**: `research/icp.md` (or `research/{slug}/icp.md`) — recommended for understanding which factors matter most to the target customer. If this context is missing and customer value factors cannot be assessed, recommend `/customer-discovery` first.
 
 ## Process
 

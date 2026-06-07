@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.13
+version: v0.14
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 interview_depth: light
 visual_tier: visual
@@ -99,7 +99,7 @@ When evidence materially affects parked product paths from `research/.progress.y
 
 ### 4a. Gap Assessment (concept-validation mode only)
 
-Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
+Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to Customer Discovery / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
 
 ### 5. Present Findings & Validate
 
@@ -148,10 +148,10 @@ Only include items whose conditions are met. Do not recommend brainstorm just be
 **Recommended:** [verdict-based next step] — [reason grounded in the gap assessment]
 
 Other options:
-- IF verdict is **Proceed to ICP**: recommend `$icp` — the competitive gap is validated; define who to build for
+- IF verdict is **Proceed to Customer Discovery**: recommend `$customer-discovery` — the competitive gap is validated; define who to build for
 - IF verdict is **Pivot concept**: recommend `$brainstorm` — the market has a gap, but this concept needs a different angle before ICP work is useful
 - IF verdict is **Abandon**: recommend `No follow-up skill recommended` — the analysis did not find a meaningful gap worth pursuing; include `$brainstorm` only if the user wants to explore a new concept
-- `$competitive-analysis` — re-run in standard mode after ICP is defined (only after a proceed verdict and after `$icp` creates `research/icp.md`)
+- `$competitive-analysis` — re-run in standard mode after ICP is defined (only after a proceed verdict and after `$customer-discovery` creates `research/icp.md`)
 
 ## Task Classification
 

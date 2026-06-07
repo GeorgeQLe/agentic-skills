@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.13
+version: v0.14
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 interview_depth: light
 visual_tier: visual
@@ -174,7 +174,7 @@ If running in concept-validation mode, synthesise the market gaps into a structu
 - **Market State**: Virgin (no one does this) / Sparse (few players, early) / Crowded (many established players)
 - **Incumbent Quality**: Dominant-and-loved / Dominant-but-resented (the Jira pattern — widely used, widely disliked) / Fragmented-and-mediocre / Emerging-and-unproven
 - **Gap Quality**: Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap
-- **Verdict**: Proceed to ICP (gap validated) / Pivot concept (gap exists but concept doesn't address it well) / Abandon (no meaningful gap)
+- **Verdict**: Proceed to Customer Discovery (gap validated) / Pivot concept (gap exists but concept doesn't address it well) / Abandon (no meaningful gap)
 
 **Checkpoint — Present gap assessment to user.** Use the AskUserQuestion tool to present the Market State, Incumbent Quality, Gap Quality, and Verdict with supporting evidence from the research. Ask: "Does this assessment match your read of the market? Should we adjust the verdict?" Incorporate feedback before continuing.
 
@@ -200,10 +200,10 @@ Continue the conversation until all non-trivial details are nailed down. If the 
 Before writing, check which files exist to populate the `## Next Steps` section contextually:
 
 **Concept-validation mode:**
-- IF verdict is **Proceed to ICP**: recommend `/icp` — Define your ideal customer profile now that the market gap is validated
+- IF verdict is **Proceed to Customer Discovery**: recommend `/customer-discovery` — Define your ideal customer profile now that the market gap is validated
 - IF verdict is **Pivot concept**: recommend `/brainstorm` — Generate alternative concepts that better address the gap before ICP work
 - IF verdict is **Abandon**: recommend `No follow-up skill recommended` — Stop this concept because the analysis did not find a meaningful gap worth pursuing; include `/brainstorm` only if the user wants to explore a new concept
-- IF verdict is **Proceed to ICP** and `/icp` creates `research/icp.md`: include `/competitive-analysis` as a later option to re-run in standard mode for full competitive positioning
+- IF verdict is **Proceed to Customer Discovery** and `/customer-discovery` creates `research/icp.md`: include `/competitive-analysis` as a later option to re-run in standard mode for full competitive positioning
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
@@ -309,7 +309,7 @@ For each:
 [Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap — with evidence]
 
 ### Verdict
-[Proceed to ICP / Pivot concept / Abandon — with reasoning]
+[Proceed to Customer Discovery / Pivot concept / Abandon — with reasoning]
 
 ## Market Gaps
 - **[Gap title]** — [Description of the unmet need, who it affects, and why it exists]

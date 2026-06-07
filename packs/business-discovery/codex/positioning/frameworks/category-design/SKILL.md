@@ -2,7 +2,7 @@
 name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -49,7 +49,7 @@ Applies the Play Bigger category design framework to determine whether the produ
 ## Prerequisites
 
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Hard**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) must exist. If not, tell the user to run `$journey-map` first and stop.
 - **Soft**: Read if they exist:
   - `research/customer-feedback.md` — language that signals category dissatisfaction

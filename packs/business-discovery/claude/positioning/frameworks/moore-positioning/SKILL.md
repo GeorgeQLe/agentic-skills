@@ -2,7 +2,7 @@
 name: moore-positioning
 description: Geoffrey Moore positioning hypothesis — generate positioning statement using the Crossing the Chasm template
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -42,7 +42,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/customer-discovery` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
 - **Soft**: Any existing positioning framework outputs (`research/positioning-*.md`) — read these if present to build on prior analysis rather than starting from scratch.
 

@@ -2,7 +2,7 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: v0.6
+version: v0.7
 argument-hint: "[optional: specific job or segment to focus on]"
 interview_depth: light
 visual_tier: visual
@@ -49,7 +49,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape and alternative solutions
   - `research/journey-map.md` — where jobs, pains, gains, and aha moments occur in the user/customer lifecycle

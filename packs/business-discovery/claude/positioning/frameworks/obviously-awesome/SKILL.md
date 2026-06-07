@@ -2,7 +2,7 @@
 name: obviously-awesome
 description: April Dunford Obviously Awesome methodology — competitive alternatives, unique attributes, value mapping, target segment, market category
 type: research
-version: v0.3
+version: v0.4
 invocation: sub-skill
 parent: positioning
 ---
@@ -43,7 +43,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 ## Prerequisites
 
 - **Hard**: `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) must exist AND must contain real post-launch customer evidence (not hypothetical personas or pre-launch assumptions). If missing or hypothetical, STOP and tell user: "The Obviously Awesome methodology requires real customer data — what customers actually say and do post-launch. Run `/customer-feedback` with real interview/survey/support data first."
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/customer-discovery` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
 
 ## Process

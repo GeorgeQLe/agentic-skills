@@ -2,7 +2,7 @@
 name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
 type: research
-version: v0.4
+version: v0.5
 argument-hint: "[file path, pasted text, or empty to be prompted]"
 interview_depth: light
 visual_tier: visual
@@ -112,9 +112,9 @@ Present the categorized findings to the user. If the session is already in Plan 
 
 Count the number of **Wrong** and **New** findings across ALL sessions (including previous ones):
 
-- If 3+ **Wrong** findings relate to ICP assumptions: recommend re-running `$icp`
+- If 3+ **Wrong** findings relate to ICP assumptions: recommend re-running `$customer-discovery`
 - If 3+ **Wrong** findings relate to journey stages: recommend re-running `$journey-map`
-- If 3+ **New** findings suggest an unserved segment: recommend re-running `$icp`
+- If 3+ **New** findings suggest an unserved segment: recommend re-running `$customer-discovery`
 
 Display these recommendations after the categorized findings.
 
@@ -132,13 +132,13 @@ Other options:
 
 **Recommendation priority** (first applicable becomes the recommendation):
 1. IF downstream impact is **Major**: recommend `$reconcile-research` — [N] conflicts found in downstream docs need resolution before other work
-2. IF staleness alert for ICP: recommend `$icp` — feedback has invalidated key ICP assumptions that other research depends on
+2. IF staleness alert for ICP: recommend `$customer-discovery` — feedback has invalidated key ICP assumptions that other research depends on
 3. IF staleness alert for journey map: recommend `$journey-map` — real user behavior differs from mapped experience
 4. IF 3+ New findings: recommend `$brainstorm` — newly revealed customer needs deserve solution exploration
 5. IF no staleness alerts and no major findings: recommend `$research-roadmap` — check overall project status for the next priority
 
 **Other options** (include all applicable items not chosen as recommended):
-- IF staleness alert for ICP: `$icp` — Re-run discovery — feedback has invalidated key assumptions
+- IF staleness alert for ICP: `$customer-discovery` — Re-run discovery — feedback has invalidated key assumptions
 - IF staleness alert for journey map: `$journey-map` — Re-map journeys — real behavior differs from mapped experience
 - IF 3+ New findings: `$brainstorm` — Generate ideas for newly revealed customer needs
 - IF New findings relate to a gap: `$ux-variations [topic]` — Explore UX solutions for the most impactful finding
