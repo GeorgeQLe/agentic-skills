@@ -13719,3 +13719,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Preserved `enterprise-icp`, `research/icp.md`, `research/{slug}/icp.md`, and ICP concept language as intentional artifact/concept references.
 - Archived and bumped affected active skill contracts, refreshed Skills Showcase generated assets, and added layer1 regression coverage for active business-ops routing.
 - Marked Phase 4.7 complete in `tasks/todo.md` and prepared the Phase 4.8 product-design routing plan.
+
+## 2026-06-07 — competitive-analysis orchestrator refactor
+
+- Refactored mirrored `competitive-analysis` contracts into Pattern A orchestrators with framework selection, task queueing, and `--synthesize` mode while preserving canonical competitive-analysis outputs and post-synthesis AFPS routing.
+- Added mirrored framework subskills for Porter's Five Forces, SWOT, strategic group mapping, and feature/pricing matrix analysis, each with generated alignment-page bundles and route-free intermediate outputs.
+- Updated invocation taxonomy, orchestrator convention docs, benchmark coverage metadata, and layer1 regression coverage for the new parent/subskill contract.
+- Cleaned up benchmark harness coverage validation by accepting the current deterministic benchmark-test-skill wording and registering `repo-glossary` with the existing pack workflow fixture.
+- Refreshed Skills Showcase generated assets and prepared the next backlog plan for correcting pack-list/count coverage in the showcase.

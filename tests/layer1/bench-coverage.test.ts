@@ -67,8 +67,8 @@ describe("benchmark coverage contract", () => {
       expect(content, `${contract.path} final route output`).toContain("Do not omit the final next-step route.");
       expect(content, `${contract.path} custom coverage route`).toContain(contract.customCoverageRoute);
       expect(content, `${contract.path} failure route`).toContain(contract.failureRoute);
-      expect(content, `${contract.path} deterministic boundary`).toContain(
-        "This skill produces deterministic benchmark evidence only.",
+      expect(content, `${contract.path} deterministic boundary`).toMatch(
+        /Produce deterministic benchmark evidence only\.|This skill produces deterministic benchmark evidence only\./,
       );
       expect(content, `${contract.path} review handoff`).toContain(contract.reviewRoute);
       expect(content, `${contract.path} separate step`).toContain("as the next separate step");

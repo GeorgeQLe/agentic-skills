@@ -1,10 +1,9 @@
 ---
 name: competitive-analysis
-description: Orchestrator — select competitive-analysis frameworks, queue framework research, and synthesize market landscape findings
+description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.15
-argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
-invocation: orchestrator
+version: v0.14
+argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 interview_depth: light
 visual_tier: visual
 ---
@@ -13,20 +12,7 @@ visual_tier: visual
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Competitive Analysis — Orchestrator
-
-Invoke as `$competitive-analysis`.
-
-This is a **Pattern A framework-decomposition orchestrator**. It resolves product/research scope, recommends competitive-analysis frameworks, writes framework execution steps to `tasks/todo.md`, and later synthesizes approved framework outputs into the canonical competitive landscape report. Individual frameworks live as child skills under `frameworks/`.
-
-Available frameworks:
-
-| Framework | Slug | Lens | Default |
-|-----------|------|------|---------|
-| Porter's Five Forces | `porter-five-forces` | Industry structure, power dynamics, substitutes, entrants, rivalry | Yes |
-| SWOT | `swot` | Strengths, weaknesses, opportunities, threats against market evidence | Yes |
-| Strategic Group Map | `strategic-group-map` | Competitive clusters, positioning axes, whitespace by segment | Optional |
-| Feature/Pricing Matrix | `feature-pricing-matrix` | Capability, package, and price comparisons across alternatives | Yes |
+# Competitive Analysis — Market Landscape Research
 
 ## Report-First Approval Gate
 
@@ -46,7 +32,7 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-Conduct competitive landscape research through selected framework subskills, then synthesize the approved intermediates into a comprehensive canonical report. The orchestrator owns framework selection, task queueing, synthesis, and downstream routing; subskills own framework-specific research and must not emit next-step routing.
+Conduct deep web-based research to compile a comprehensive competitive landscape for the project. Uses web search to identify competitors, evaluate their maturity, analyse their go-to-market strategies, and surface market gaps.
 
 Default stance: assume the user has no insider knowledge of the market. Present the landscape, category terms, and recommendations from first principles so the analysis stands on its own. Ask for corrections, hard constraints, or proprietary facts, not intuition.
 
@@ -69,22 +55,6 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 **Provisional product-path evidence.** When a referenced product path is not present in `research/.progress.yaml` (either absent entirely or not in `active_paths` or `product_paths[]`), do not treat it as a canonical active path. Before using it as source context, require an explicit provisional-path evidence reference: a `review-only-approved` alignment page (e.g., `alignment/idea-scope-brief-{topic}.html` with `approval_status: review-only-approved`) that fully renders the proposed path's concept, brief, and manifest entry. If no such evidence exists, ask the user whether to proceed with the path as unverified context or to run `$idea-scope-brief` first.
 
-## Operational Modes
-
-### Mode A: Framework Selection (default)
-
-Activated by `$competitive-analysis`, `$competitive-analysis [concept/category]`, or `$competitive-analysis core`.
-
-Resolve scope, load context, choose mode, recommend frameworks, build an alignment page with selected defaults, and after approval write framework steps plus a synthesis step to `tasks/todo.md`. Stop after queueing the work; `$exec` drives each framework and the final synthesis step.
-
-### Mode B: Synthesis
-
-Activated by `$competitive-analysis --synthesize`.
-
-Read approved framework intermediates, synthesize the canonical competitive analysis and search log, present the report-first alignment page, then write canonical artifacts only after final approval YAML.
-
----
-
 ## Process
 
 ### 0. Product-Path Scope Resolution
@@ -105,61 +75,39 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 **Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
-**Concept-validation mode:** Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before queueing frameworks.
+**Concept-validation mode:** Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
 
-Write the context summary, resolved mode, candidate competitor categories, known competitors from arguments, and source gaps to `research/_working/preliminary-competitive-analysis-research.md` (or `research/{slug}/_working/preliminary-competitive-analysis-research.md`) so framework subskills inherit the same scope.
+### 2. Identify Competitors
 
-### 2. Mode A — Recommend Frameworks
+Use web search extensively across: direct competitors, indirect competitors, incumbents, emerging players, DIY alternatives.
 
-Recommend framework defaults based on context:
+**Checkpoint 1 — Present competitor list to user.** Show all identified competitors grouped by category. For each competitor, include a one-line description and why it's in that category, citing the search source. Ask: "Are there competitors I missed? Any incorrectly categorised?" Incorporate feedback.
 
-- **Always default**: `porter-five-forces`, `swot`, and `feature-pricing-matrix`.
-- **Default `strategic-group-map`** when the category has more than five likely competitors, multiple segments, multiple buyer types, or the user asks for landscape/positioning whitespace.
-- **Concept-validation mode**: keep `porter-five-forces` and `swot` defaulted; use `feature-pricing-matrix` only when named competitors or visible pricing alternatives exist; use `strategic-group-map` when the concept competes across multiple categories.
-- **`core` shortcut**: default only `porter-five-forces`, `swot`, and `feature-pricing-matrix`; still allow the user to add `strategic-group-map`.
+### 3. Research Each Competitor
 
-Build an alignment page that includes: mode, product-path scope, context summary, selected/default frameworks, optional frameworks, execution plan, output paths, source coverage gaps, and approval gates.
+For each: Company & Product (features, funding, pricing), Maturity & Traction (stage, user signals, integrations), GTM Strategy (acquisition, pricing, content, community), Strengths (user praise, moat), Weaknesses (complaints, gaps, vulnerabilities).
 
-After approval, overwrite or update the current execution section of `tasks/todo.md` with the selected framework steps and synthesis step:
+### 4. Identify Market Gaps & White Space
 
-```markdown
-## Competitive Analysis Framework Execution
+Synthesise gaps and white-space opportunities: underserved segments, feature gaps, pricing gaps, UX gaps, integration gaps, geographic/vertical gaps, technology gaps.
 
-- [ ] Run `$competitive-analysis/frameworks/porter-five-forces` — Porter's Five Forces industry structure
-- [ ] Run `$competitive-analysis/frameworks/swot` — SWOT from competitive evidence
-- [ ] Run `$competitive-analysis/frameworks/strategic-group-map` — Strategic group mapping
-- [ ] Run `$competitive-analysis/frameworks/feature-pricing-matrix` — Feature and pricing comparison
-- [ ] Synthesize: `$competitive-analysis --synthesize` — Combine framework outputs into research/competitive-analysis.md
-```
+**Standard mode additional synthesis:** 2-3 most significant white-space opportunities, competitor lessons (do's and don'ts).
 
-Only include frameworks the user selected. Always append synthesis last. Do not emit downstream next-step routing in Mode A.
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `$product-line fork` to create a new path entry.
 
-### 3. Framework Execution
+**Concept-validation mode additional synthesis:** Frame as hypothetical — segments the concept could serve that competitors miss, capability gaps, competitor lessons. Positioning recommendations belong in `$positioning`.
 
-Framework subskills read the orchestrator working packet and any existing relevant research, then produce approved intermediate artifacts:
+### 4a. Gap Assessment (concept-validation mode only)
 
-- `research/competitive-analysis-porter-five-forces.md`
-- `research/competitive-analysis-swot.md`
-- `research/competitive-analysis-strategic-group-map.md`
-- `research/competitive-analysis-feature-pricing-matrix.md`
+Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to Customer Discovery / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
 
-In product-path mode, write under `research/{slug}/`. Subskills follow the staged research workflow, present before writing, and do not emit next-step routing.
+### 5. Present Findings & Validate
 
-### 4. Mode B — Synthesis (`$competitive-analysis --synthesize`)
+**Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps and white-space opportunities, observable GTM patterns, lessons from competitors. Ask: "Which gaps or assumptions need stronger evidence? Any gaps I missed or got wrong?" Continue until all details are nailed down.
 
-Read all existing `research/competitive-analysis-*.md` framework outputs for the active scope. At least one approved framework output must exist; if none exist, stop and ask the user to run `$competitive-analysis` to queue framework research.
+### 6. Write Output
 
-Synthesize across framework outputs into the canonical deliverables below:
-
-- competitor landscape and categories
-- company/product profiles
-- observable GTM and pricing patterns
-- market gaps and white-space opportunities
-- implications for deferred product paths when evidence materially changes them
-- concept-validation `## Gap Assessment` when the orchestrator context selected concept-validation mode
-- `## Next Steps` using the unchanged routing contract below
-
-Build the report-first alignment page before writing. Only after final compiled YAML approval, write canonical artifacts, archive the working packet, update `research/.progress.yaml` only when active-path evidence changed, and emit downstream next-step routing.
+Only after user validates, write the output files.
 
 ## Deliverables
 
@@ -217,7 +165,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- Framework execution must use web search extensively — every competitor in a framework output or synthesis must come from a search result.
+- Use web search extensively — every competitor must come from a search result.
 - Cite sources for competitor facts.
 - Be honest about uncertainty.
 - Stay in analysis mode — no product changes, architecture, or positioning recommendations. Positioning belongs in `$positioning`.
@@ -226,8 +174,6 @@ When this skill produces follow-up work, file it by execution semantics:
 - Prefer recent sources (last 12 months).
 - Search breadth over depth initially.
 - Present before writing — never write until findings are validated.
-- Default Mode A queues framework work only; it must not emit downstream next-step routing.
-- Framework subskills must not emit `Recommended next skill` or `Recommended next command`; routing belongs to synthesis after canonical artifacts are approved.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
 ## Alignment Page

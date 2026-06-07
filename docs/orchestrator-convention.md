@@ -16,7 +16,7 @@ Three orchestrator patterns exist. Each differs in how it selects targets, what 
 | **Artifacts** | Framework intermediates + synthesized canonical | Routed skills own their own artifacts | Parent produces structured plan document |
 | **`tasks/todo.md` usage** | Writes framework steps + synthesis step | Writes multi-step plays (Modes B–E) | Does not use `tasks/todo.md` |
 | **Frontmatter** | `invocation: orchestrator` | `type: router` | `invocation: orchestrator` |
-| **Reference implementations** | customer-discovery, positioning, journey-map | youtube | animation-design-planner |
+| **Reference implementations** | customer-discovery, competitive-analysis, positioning, journey-map | youtube | animation-design-planner |
 
 **Variant: Thin Workflow Router** — a lightweight subset of Pattern B used by `devtool-workflow` and `game-workflow`. Uses project-type detection instead of intent classification, recommends one skill at a time (no multi-step plays), and does not use `tasks/todo.md`. See [Pattern B § Variant](#variant-thin-workflow-router) below.
 
@@ -224,6 +224,7 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 | Skill | Pack | Pattern | Key traits |
 |-------|------|---------|------------|
 | `customer-discovery` | business-discovery | A | 6 frameworks, pre-product/product-exists modes, synthesis |
+| `competitive-analysis` | business-discovery | A | 4 frameworks, market-structure/comparison modes, synthesis |
 | `positioning` | business-discovery | A | 5 frameworks, market/product modes, synthesis |
 | `journey-map` | customer-lifecycle | A | 5 frameworks, pre-product/product-exists modes, synthesis |
 | `youtube` | youtube-ops | B | 12-intent classification, 4 named plays, status mode |

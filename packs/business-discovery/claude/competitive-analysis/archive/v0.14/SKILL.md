@@ -1,10 +1,9 @@
 ---
 name: competitive-analysis
-description: Orchestrator — select competitive-analysis frameworks, queue framework research, and synthesize market landscape findings
+description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.15
-argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
-invocation: orchestrator
+version: v0.14
+argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 interview_depth: light
 visual_tier: visual
 ---
@@ -13,20 +12,7 @@ visual_tier: visual
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Competitive Analysis — Orchestrator
-
-Invoke as `/competitive-analysis`.
-
-This is a **Pattern A framework-decomposition orchestrator**. It resolves product/research scope, recommends competitive-analysis frameworks, writes framework execution steps to `tasks/todo.md`, and later synthesizes approved framework outputs into the canonical competitive landscape report. Individual frameworks live as child skills under `frameworks/`.
-
-Available frameworks:
-
-| Framework | Slug | Lens | Default |
-|-----------|------|------|---------|
-| Porter's Five Forces | `porter-five-forces` | Industry structure, power dynamics, substitutes, entrants, rivalry | Yes |
-| SWOT | `swot` | Strengths, weaknesses, opportunities, threats against market evidence | Yes |
-| Strategic Group Map | `strategic-group-map` | Competitive clusters, positioning axes, whitespace by segment | Optional |
-| Feature/Pricing Matrix | `feature-pricing-matrix` | Capability, package, and price comparisons across alternatives | Yes |
+# Competitive Analysis — Market Landscape Research
 
 ## Report-First Approval Gate
 
@@ -46,7 +32,7 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-Conduct competitive landscape research through selected framework subskills, then synthesize the approved intermediates into a comprehensive canonical report. The orchestrator owns framework selection, task queueing, synthesis, and downstream routing; subskills own framework-specific research and must not emit next-step routing.
+Conduct deep web-based research to compile a comprehensive competitive landscape for the project. Uses web search to identify competitors, evaluate their maturity, analyse their go-to-market strategies, and surface market gaps. The output gives the founder a clear picture of who they're up against and where opportunities exist.
 
 ## Evidence And Feedback Handling
 
@@ -66,22 +52,6 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. In standard mode, scope the full competitive analysis to the first entry in `active_paths` by default. Treat `product_paths[]` entries with `status: deferred` or `status: revisit_candidate` as parked product paths, not as extra full research tracks.
 
 **Provisional product-path evidence.** When a referenced product path is not present in `research/.progress.yaml` (either absent entirely or not in `active_paths` or `product_paths[]`), do not treat it as a canonical active path. Before using it as source context, require an explicit provisional-path evidence reference: a `review-only-approved` alignment page (e.g., `alignment/idea-scope-brief-{topic}.html` with `approval_status: review-only-approved`) that fully renders the proposed path's concept, brief, and manifest entry. If no such evidence exists, ask the user whether to proceed with the path as unverified context or to run `/idea-scope-brief` first.
-
-## Operational Modes
-
-### Mode A: Framework Selection (default)
-
-Activated by `/competitive-analysis`, `/competitive-analysis [concept/category]`, or `/competitive-analysis core`.
-
-Resolve scope, load context, choose mode, recommend frameworks, build an alignment page with selected defaults, and after approval write framework steps plus a synthesis step to `tasks/todo.md`. Stop after queueing the work; `/exec` drives each framework and the final synthesis step.
-
-### Mode B: Synthesis
-
-Activated by `/competitive-analysis --synthesize`.
-
-Read approved framework intermediates, synthesize the canonical competitive analysis and search log, present the report-first alignment page, then write canonical artifacts only after final approval YAML.
-
----
 
 ## Process
 
@@ -105,105 +75,183 @@ When product path `{slug}` is active, read and write research under `research/{s
 - Read CLAUDE.md, README, package config, and key source files to understand the product
 - Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — the customer profile, pain map, and value prop define the competitive frame
 - Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) if they exist for additional context
-- If `$ARGUMENTS` names specific competitors, preserve those as seeded competitors for framework subskills
-- Summarise what the product does, who it's for, and what problem it solves
+- If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
+- Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
 **Concept-validation mode:**
 - Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites to establish the problem space
 - Summarise what the concept proposes (problem it addresses, intended audience, hypothesised approach)
-- Confirm this understanding with the user before queueing frameworks
+- Confirm this understanding with the user before researching
 
-Write the context summary, resolved mode, candidate competitor categories, known competitors from arguments, and source gaps to `research/_working/preliminary-competitive-analysis-research.md` (or `research/{slug}/_working/preliminary-competitive-analysis-research.md`) so framework subskills inherit the same scope.
+### 2. Identify Competitors
 
-### 2. Mode A — Recommend Frameworks
+Use the WebSearch tool extensively to find competitors. Search across multiple angles:
 
-Recommend framework defaults based on context:
+- **Direct competitors**: Products solving the same problem for the same audience
+- **Indirect competitors**: Products solving an adjacent problem that could expand into this space
+- **Incumbents**: Established tools or platforms the target audience currently uses (even if not purpose-built for this problem)
+- **Emerging players**: New startups or open-source projects in the space
+- **DIY alternatives**: Internal tools, spreadsheets, manual processes, or "do nothing" approaches
 
-- **Always default**: `porter-five-forces`, `swot`, and `feature-pricing-matrix`.
-- **Default `strategic-group-map`** when the category has more than five likely competitors, multiple segments, multiple buyer types, or the user asks for landscape/positioning whitespace.
-- **Concept-validation mode**: keep `porter-five-forces` and `swot` defaulted; use `feature-pricing-matrix` only when named competitors or visible pricing alternatives exist; use `strategic-group-map` when the concept competes across multiple categories.
-- **`core` shortcut**: default only `porter-five-forces`, `swot`, and `feature-pricing-matrix`; still allow the user to add `strategic-group-map`.
+Search strategies:
+- `"[product category] software"`, `"[product category] tools"`, `"[product category] alternatives"`
+- `"best [product category] for [target audience]"`, `"[product category] comparison"`
+- `"[competitor name] alternatives"` for each known competitor to find more
+- `"[competitor name] vs"` to discover comparison articles and adjacent players
+- Check Product Hunt, G2, Capterra, and industry-specific directories
+- Search for recent funding rounds in the space: `"[product category] startup funding"`
+- Look for open-source alternatives on GitHub
 
-Build an alignment page that includes: mode, product-path scope, context summary, selected/default frameworks, optional frameworks, execution plan, output paths, source coverage gaps, and approval gates.
+**Checkpoint 1 — Present the competitor list to the user.** Use the AskUserQuestion tool to show all identified competitors grouped by category (direct, indirect, incumbent, emerging, DIY). For each competitor, include a one-line description of what they do and why they belong in that category, citing the search source. Then ask:
+- "Are there competitors I missed?"
+- "Any of these incorrectly categorised or not actually relevant?"
 
-After approval, overwrite or update the current execution section of `tasks/todo.md` with the selected framework steps and synthesis step:
+Incorporate feedback before proceeding to deep research.
 
-```markdown
-## Competitive Analysis Framework Execution
+### 3. Research Each Competitor
 
-- [ ] Run `/competitive-analysis/frameworks/porter-five-forces` - Porter's Five Forces industry structure
-- [ ] Run `/competitive-analysis/frameworks/swot` - SWOT from competitive evidence
-- [ ] Run `/competitive-analysis/frameworks/strategic-group-map` - Strategic group mapping
-- [ ] Run `/competitive-analysis/frameworks/feature-pricing-matrix` - Feature and pricing comparison
-- [ ] Synthesize: `/competitive-analysis --synthesize` - Combine framework outputs into research/competitive-analysis.md
-```
+For each identified competitor, use WebSearch and WebFetch to gather:
 
-Only include frameworks the user selected. Always append synthesis last. Do not emit downstream next-step routing in Mode A.
+#### Company & Product
+- What exactly they do — core product, features, positioning
+- Founding year, team size, funding raised, revenue signals
+- Technology stack and platform (web, mobile, desktop, API, CLI)
+- Pricing model and tiers (free, freemium, paid-only, enterprise)
 
-### 3. Framework Execution
+#### Maturity & Traction
+- Current stage: pre-launch, early, growth, mature, declining
+- User base size signals (published metrics, app store downloads, community size)
+- Customer logos and case studies
+- Recent product launches or major updates
+- Integration ecosystem breadth
 
-Framework subskills read the orchestrator working packet and any existing relevant research, then produce approved intermediate artifacts:
+#### Observable GTM Patterns
+- Primary acquisition channel observed: PLG, sales-led, community-led, content-led, partnerships
+- Pricing model: freemium, free trial, demo-required, open-core, usage-based (as listed on pricing page)
+- Community presence: Discord, Slack, forums, open-source community
+- Target market segment: SMB, mid-market, enterprise, developer, consumer
+- Observable facts only — GTM strategy analysis and recommendations belong in `/gtm`
 
-- `research/competitive-analysis-porter-five-forces.md`
-- `research/competitive-analysis-swot.md`
-- `research/competitive-analysis-strategic-group-map.md`
-- `research/competitive-analysis-feature-pricing-matrix.md`
+#### Strengths
+- What do users praise? (Check review sites, social media, community forums)
+- What features or capabilities set them apart?
+- What's their moat? (Network effects, data, integrations, brand, switching costs)
 
-In product-path mode, write under `research/{slug}/`. Subskills follow the staged research workflow, present before writing, and do not emit next-step routing.
+#### Weaknesses
+- What do users complain about? (Check negative reviews, support forums, social media)
+- What's missing from their product?
+- Where do they lose deals? (Check comparison articles, competitor marketing)
+- What's their biggest vulnerability?
 
-### 4. Mode B — Synthesis (`/competitive-analysis --synthesize`)
+### 4. Identify Market Gaps & White Space
 
-Read all existing `research/competitive-analysis-*.md` framework outputs for the active scope. At least one approved framework output must exist; if none exist, stop and ask the user to run `/competitive-analysis` to queue framework research.
+Synthesise the research to find gaps and white-space opportunities:
 
-Synthesize across framework outputs into the canonical deliverables below:
+- **Underserved segments**: Customer types or use cases that no competitor serves well
+- **Feature gaps**: Capabilities that users want but no competitor provides
+- **Pricing gaps**: Market segments priced out by existing solutions or overpaying for features they don't need
+- **UX gaps**: Areas where all competitors have poor user experience
+- **Integration gaps**: Missing connections to tools the target audience already uses
+- **Geographic or vertical gaps**: Markets or industries that competitors haven't entered
+- **Technology gaps**: Emerging tech (AI, automation, APIs) that competitors haven't leveraged
 
-- competitor landscape and categories
-- company/product profiles
-- observable GTM and pricing patterns
-- market gaps and white-space opportunities
-- implications for deferred product paths when evidence materially changes them
-- concept-validation `## Gap Assessment` when the orchestrator context selected concept-validation mode
-- `## Next Steps` using the unchanged routing contract below
+**Standard mode additional synthesis:**
+- What are the 2-3 most significant white-space opportunities?
+- What can we learn from competitors' successes and failures?
 
-Build the report-first alignment page before writing. Only after final compiled YAML approval, write canonical artifacts, archive the working packet, update `research/.progress.yaml` only when active-path evidence changed, and emit downstream next-step routing.
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `/product-line fork` to create a new path entry.
 
-**Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2-4 alternatives). Choose the recommended item by the first matching condition:
+**Concept-validation mode additional synthesis:**
+- What segments or use cases would this concept serve that competitors miss?
+- What can you learn from competitors' successes and failures?
 
-1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` - if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` - map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
-2. IF no `research/positioning.md`: `/positioning` - frame the market category and alternatives after journey evidence shows where value is delivered
-3. IF no `specs/user-flow-*.md`: check `.agents/project.json.enabled_packs` for `product-design` - if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/user-flow-map [top journey-backed market gap or positioning opportunity]` - map flow structure before UI requirements, layout variants, and production specification
-4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `/value-prop-canvas` - validate contested solution-fit evidence as an optional detour
-5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` - if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` - build go-to-market plan leveraging competitive gaps
-6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` - if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` - check if the codebase exploits the gaps found
+Positioning recommendations and "where we fit" analysis belong in `/positioning` — capture positioning signals in the appendix below.
 
-Use this format in the output:
+### 4a. Gap Assessment (concept-validation mode only)
 
-## Next Steps
+If running in concept-validation mode, synthesise the market gaps into a structured gap assessment:
 
-**Recommended:** `[first matching command above]` - [reason grounded in this analysis]
+- **Market State**: Virgin (no one does this) / Sparse (few players, early) / Crowded (many established players)
+- **Incumbent Quality**: Dominant-and-loved / Dominant-but-resented (the Jira pattern — widely used, widely disliked) / Fragmented-and-mediocre / Emerging-and-unproven
+- **Gap Quality**: Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap
+- **Verdict**: Proceed to Customer Discovery (gap validated) / Pivot concept (gap exists but concept doesn't address it well) / Abandon (no meaningful gap)
 
-Other options:
-- `/pack install customer-lifecycle` or `/journey-map` - map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended; check `.agents/project.json.enabled_packs` for `customer-lifecycle` - if not enabled, recommend `/pack install customer-lifecycle`; if enabled, recommend `/journey-map`)
-- `/positioning` - frame the market category and competitive alternatives after journey evidence exists (if no `research/positioning.md` and not recommended)
-- check `.agents/project.json.enabled_packs` for `product-design` - if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/user-flow-map [top journey-backed market gap or positioning opportunity]` - map flow structure before UI requirements, layout variants, and production specification (if positioning exists and not recommended)
-- `/value-prop-canvas` - optional detour only when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work
-- check `.agents/project.json.enabled_packs` for `business-growth` - if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` - build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
-- check `.agents/project.json.enabled_packs` for `business-ops` - if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` - check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
-- check `.agents/project.json.enabled_packs` for `product-design` - if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/brainstorm` - generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
+**Checkpoint — Present gap assessment to user.** Use the AskUserQuestion tool to present the Market State, Incumbent Quality, Gap Quality, and Verdict with supporting evidence from the research. Ask: "Does this assessment match your read of the market? Should we adjust the verdict?" Incorporate feedback before continuing.
 
-Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
+### 5. Present Findings & Validate
 
-**Concept-validation mode next steps:** Use the same Recommended + Other options format, but choose the recommendation from the validated `## Gap Assessment` verdict:
+**Checkpoint 2 — Present the full analysis to the user before writing.** Use the AskUserQuestion tool to present:
 
-## Next Steps
+1. **Landscape summary** — the competitive picture in 3-5 sentences
+2. **Key competitors** — top 3-5 with their strengths, weaknesses, and key takeaway
+3. **Market gaps** — the most significant unmet needs and white-space opportunities
+4. **Observable GTM patterns** — what works and doesn't work in this market
+5. **Lessons from competitors** — key do's and don'ts
 
-**Recommended:** [verdict-based next step] - [reason grounded in the gap assessment]
+Then ask:
+- "Do the market gaps match your intuition?"
+- "Any gaps I missed or got wrong?"
+- "Any insider knowledge that changes the analysis?"
 
-Other options:
-- IF verdict is **Proceed to Customer Discovery**: recommend `/customer-discovery` - the competitive gap is validated; define who to build for
-- IF verdict is **Pivot concept**: recommend `/brainstorm` - the market has a gap, but this concept needs a different angle before ICP work is useful
-- IF verdict is **Abandon**: recommend `No follow-up skill recommended` - the analysis did not find a meaningful gap worth pursuing; include `/brainstorm` only if the user wants to explore a new concept
-- `/competitive-analysis` - re-run in standard mode after ICP is defined (only after a proceed verdict and after `/customer-discovery` creates `research/icp.md`)
+Continue the conversation until all non-trivial details are nailed down. If the user raises points that require additional research, go back and search before finalising.
+
+### 6. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually:
+
+**Concept-validation mode:**
+- IF verdict is **Proceed to Customer Discovery**: recommend `/customer-discovery` — Define your ideal customer profile now that the market gap is validated
+- IF verdict is **Pivot concept**: recommend `/brainstorm` — Generate alternative concepts that better address the gap before ICP work
+- IF verdict is **Abandon**: recommend `No follow-up skill recommended` — Stop this concept because the analysis did not find a meaningful gap worth pursuing; include `/brainstorm` only if the user wants to explore a new concept
+- IF verdict is **Proceed to Customer Discovery** and `/customer-discovery` creates `research/icp.md`: include `/competitive-analysis` as a later option to re-run in standard mode for full competitive positioning
+
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
+
+**Standard mode:**
+- RECOMMEND the first matching item:
+  1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+  2. IF no `research/positioning.md`: `/positioning` — Frame the market category and alternatives after journey evidence shows where value is delivered
+  3. IF no `specs/user-flow-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/user-flow-map [top journey-backed market gap or positioning opportunity]` — Map flow structure before UI requirements, layout variants, and production specification
+  4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `/value-prop-canvas` — Validate contested solution-fit evidence as an optional detour
+  5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` — Build a GTM plan using the channel and positioning insights
+  6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+- Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
+- Include `/value-prop-canvas` only as an "Other option" when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work. It is not part of the default route.
+
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
+
+### 7. Write Output
+
+Only after the user has validated the findings, write the output files.
+
+### 8. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
+- `research/gtm.md`
+- `research/monetization.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Competitor positioning or market gaps that GTM strategy was built on that have changed
+   - Pricing benchmarks referenced in monetization that no longer match the competitive landscape
+   - Channel strategy assumptions based on competitor behavior that has shifted
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., market positioning shifted, new dominant competitor identified, pricing landscape changed significantly): Display conflicts and strongly recommend `/reconcile-research`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -347,7 +395,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Use web search extensively.** Framework execution and synthesis must be grounded in real, current market data — not assumptions or hallucinated competitor names. Every competitor cited must come from a web search result.
+- **Use web search extensively.** This skill's value comes from real, current market data — not assumptions or hallucinated competitor names. Every competitor cited must come from a web search result.
 - **Cite sources.** When stating facts about competitors (funding, features, pricing), note where the information came from.
 - **Be honest about uncertainty.** If information couldn't be verified, say so. Don't fabricate metrics.
 - **Stay in analysis mode.** Do not propose product changes, architecture, features, or positioning recommendations — product changes are for `/spec-interview` and `/mvp-gap`; positioning is for `/positioning`.
@@ -356,16 +404,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.
 - **Search breadth over depth initially.** Cast a wide net to find all competitors before going deep on each one. It's better to identify 15 competitors and research 8 deeply than to miss half the landscape.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
-- **Queue before research in Mode A.** Default invocation queues framework work only; it must not emit downstream next-step routing.
-- **Keep framework subskills route-free.** Framework subskills must not emit `Recommended next skill` or `Recommended next command`; routing belongs to synthesis after canonical artifacts are approved.
 
 ## Context Gathering
 
-**Step 1 — Scope questions.** Before queueing frameworks, ask the user 1–3 questions via `AskUserQuestion` only if the product/service, target audience, or decision goal is unclear from the repository and arguments.
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
 
-**Step 2 — Framework selection.** Use the answers plus repo context to choose defaults, present the framework-selection alignment page, and write framework steps to `tasks/todo.md` after approval.
+**Step 2 — Research.** Conduct research scoped by the user's answers.
 
-**Step 3 — Synthesis validation.** In `/competitive-analysis --synthesize`, present the 3–5 most important cross-framework findings before building the final approval alignment page.
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

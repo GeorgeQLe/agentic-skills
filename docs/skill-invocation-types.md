@@ -73,13 +73,18 @@
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
-| `competitive-analysis` | primary | user | Market/competitor research needed |
+| `competitive-analysis` | orchestrator | user | Market/competitor research framework selection + synthesis needed |
 | `customer-discovery` | orchestrator | user | Customer discovery entry point |
 | `customer-feedback` | chained | user after research | Customer language/feedback synthesis |
 | `enterprise-icp` | primary | user | Enterprise multi-stakeholder ICP needed |
 | `lean-canvas` | chained | `/journey-map` trigger | Business model risk needs Lean Canvas |
 | `positioning` | orchestrator | user | Positioning framework selection + synthesis |
 | `value-prop-canvas` | chained | `/journey-map` trigger | Contested solution-fit needs VPC |
+| **Competitive Analysis Frameworks** | | | |
+| `porter-five-forces` | sub-skill | `/competitive-analysis` router | Industry-structure framework selected |
+| `swot` | sub-skill | `/competitive-analysis` router | SWOT framework selected |
+| `strategic-group-map` | sub-skill | `/competitive-analysis` router | Strategic group mapping selected |
+| `feature-pricing-matrix` | sub-skill | `/competitive-analysis` router | Feature/pricing matrix selected |
 | **Positioning Frameworks** | | | |
 | `category-design` | sub-skill | `/positioning` router | Play Bigger framework selected |
 | `jtbd-positioning` | sub-skill | `/positioning` router | JTBD framework selected |

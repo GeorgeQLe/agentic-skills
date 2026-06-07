@@ -1,5 +1,15 @@
 # competitive-analysis changelog (codex)
 
+## v0.15 - 2026-06-07
+
+- Refactored `competitive-analysis` into a Pattern A framework-decomposition orchestrator with framework queueing and `--synthesize` mode.
+- Added parent-owned framework contracts for Porter's Five Forces, SWOT, strategic group mapping, and feature/pricing matrix analysis.
+- Preserved canonical `research/competitive-analysis.md` output paths and downstream customer-discovery routing semantics for approved synthesis.
+
+## v0.14 - 2026-06-07
+
+- Updated retired executable discovery routes from `$icp` to `$customer-discovery` while preserving `research/icp.md` as the customer evidence artifact.
+
 ## v0.13 - 2026-06-06
 
 - Route standard AFPS output with completed positioning but missing flow structure to `$user-flow-map` before UI requirements, layout variations, or prototype work.

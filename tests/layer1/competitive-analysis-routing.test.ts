@@ -6,6 +6,63 @@ import { describe, expect, it } from "vitest";
 const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("competitive-analysis routing", () => {
+  it("declares competitive-analysis as a framework orchestrator with route-free framework subskills", () => {
+    const parentChecks = [
+      {
+        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
+        commandPrefix: "$",
+      },
+      {
+        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
+        commandPrefix: "/",
+      },
+    ];
+    const frameworkSlugs = [
+      "porter-five-forces",
+      "swot",
+      "strategic-group-map",
+      "feature-pricing-matrix",
+    ];
+
+    for (const check of parentChecks) {
+      const content = readFileSync(check.path, "utf8");
+
+      expect(content, `${check.path} should declare orchestrator invocation`).toContain("invocation: orchestrator");
+      expect(content, `${check.path} should document Pattern A ownership`).toContain(
+        "Pattern A framework-decomposition orchestrator",
+      );
+      expect(content, `${check.path} should expose synthesis mode`).toContain("competitive-analysis --synthesize");
+      expect(content, `${check.path} should preserve canonical competitive-analysis output`).toContain(
+        "research/competitive-analysis.md",
+      );
+
+      for (const slug of frameworkSlugs) {
+        const command = `${check.commandPrefix}competitive-analysis/frameworks/${slug}`;
+        expect(content, `${check.path} should queue ${command}`).toContain(command);
+      }
+    }
+
+    for (const runner of ["codex", "claude"]) {
+      for (const slug of frameworkSlugs) {
+        const path = resolve(
+          TESTS_ROOT,
+          `../packs/business-discovery/${runner}/competitive-analysis/frameworks/${slug}/SKILL.md`,
+        );
+        const content = readFileSync(path, "utf8");
+
+        expect(content, `${path} should be a subskill`).toContain("invocation: sub-skill");
+        expect(content, `${path} should declare competitive-analysis parent`).toContain("parent: competitive-analysis");
+        expect(content, `${path} should write an intermediate artifact`).toContain(
+          `research/competitive-analysis-${slug}.md`,
+        );
+        expect(content, `${path} should not contain a next-step section`).not.toContain("## Next Steps");
+        expect(content, `${path} should not emit actionable routing labels`).not.toMatch(
+          /Recommended next (skill|command):/i,
+        );
+      }
+    }
+  });
+
   it("routes missing journey-map through customer-lifecycle pack install when unavailable", () => {
     const checks = [
       {
