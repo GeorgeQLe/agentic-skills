@@ -1,7 +1,7 @@
 ---
 name: pmf-assessment
 type: research
-version: v0.6
+version: v0.5
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
 interview_depth: light
@@ -187,7 +187,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 **Recommended:** `$customer-feedback [top user complaint]` — deep-dive on the weakest area to understand what's broken
 
 Other options:
-- `$customer-discovery` — Re-examine customer fit; you may be selling to the wrong segment
+- `$icp` — Re-examine customer fit; you may be selling to the wrong segment
 - `$journey-map` — Map where users drop off to find the biggest gap
 
 **Moderate PMF:**

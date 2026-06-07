@@ -2,18 +2,18 @@
 name: experiment
 description: Design lean validation experiments — hypothesis, method, success criteria, sample size, timeline, and decision rules
 type: planning
-version: v0.4
+version: v0.3
 argument-hint: <hypothesis or assumption to test>
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Experiment — Lean Validation Design
 
-Takes a hypothesis (from `$assumption-tracker` or user) and designs a cheap, fast validation experiment. Covers landing page tests, fake-door tests, concierge MVPs, surveys, A/B tests, pricing tests, and smoke tests. Outputs a structured plan with hypothesis, method, success criteria, sample size, timeline, and decision rules.
+Takes a hypothesis (from `/assumption-tracker` or user) and designs a cheap, fast validation experiment. Covers landing page tests, fake-door tests, concierge MVPs, surveys, A/B tests, pricing tests, and smoke tests. Outputs a structured plan with hypothesis, method, success criteria, sample size, timeline, and decision rules.
 
 ## Soft Prerequisites
 
@@ -40,14 +40,14 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### 1. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope experiment design to the active product path by default. When experiment results validate or invalidate assumptions about a deferred product path, add a `## Product Path Implications` section recommending `$product-line activate` or `$product-line archive` as appropriate.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope experiment design to the active product path by default. When experiment results validate or invalidate assumptions about a deferred product path, add a `## Product Path Implications` section recommending `/product-line activate` or `/product-line archive` as appropriate.
 
 ### 2. Parse Input & Load Context
 
 **Read `$ARGUMENTS`:**
 - If it's a specific hypothesis or assumption: use it directly
 - If it's a reference to an assumption number (e.g., "#3"): look it up in `research/assumption-tracker.md`
-- If empty: check `research/assumption-tracker.md` for the highest-priority unvalidated assumption. If no tracker exists, ask the user what they want to test. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`.
+- If empty: check `research/assumption-tracker.md` for the highest-priority unvalidated assumption. If no tracker exists, ask the user what they want to test.
 
 **Load context:** Read available research docs to understand the ICP, channels, metrics, and existing knowledge.
 
@@ -57,7 +57,7 @@ Convert the input into a structured hypothesis:
 
 **Format**: "We believe that [target segment] will [expected behavior] because [rationale]. We'll know this is true when [measurable outcome]."
 
-Present and refine with the user. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion to present and refine:
 - "Here's how I've structured the hypothesis. Does this capture what you want to test?"
 - If the hypothesis is too broad, help narrow it to something testable in 1-2 weeks
 
@@ -88,7 +88,7 @@ Select the most appropriate experiment type and design the full plan:
 | **Pre-sale / LOI** | B2B willingness to pay | 1-2 weeks | Time only |
 | **Wizard of Oz** | Complex feature viability | 2-4 weeks | Time only |
 
-**Present the experiment design to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show:
+**Present the experiment design to the user.** Use AskUserQuestion to show:
 - Recommended experiment type with rationale (why this method over alternatives)
 - Detailed plan with timeline and cost estimate
 - Success criteria with specific numbers (citing benchmarks from research)
@@ -125,11 +125,11 @@ Other options:
 
 - ALWAYS: Run the experiment (manual step — the plan tells you how)
 - For a newly designed experiment, do not list validation/invalidation commands as current top-level next steps; put those under `## Decision Rules` because they are only valid after results exist.
-- In `### If Validated`: include the next valid command, usually `$customer-feedback [results]` to log evidence, `$assumption-tracker` to mark the assumption validated, or `$roadmap` if the result commits the team to build.
-- In `### If Invalidated`: include `$assumption-tracker` to mark the assumption invalidated, plus `$brainstorm`, `$customer-discovery`, `$gtm`, or `$monetization` only when the failed assumption belongs to that domain.
-- In `### If Inconclusive`: include `$experiment [follow-up]` if the test needs another run, or `$customer-feedback` if qualitative evidence is the missing signal.
-- IF more assumptions remain untested after this design: `$experiment [next assumption]` — Design the next experiment
-- IF enough assumptions are validated after completed results: `$research-roadmap` — Check if research docs need updating based on learnings
+- In `### If Validated`: include the next valid command, usually `/customer-feedback [results]` to log evidence, `/assumption-tracker` to mark the assumption validated, or `/roadmap` if the result commits the team to build.
+- In `### If Invalidated`: include `/assumption-tracker` to mark the assumption invalidated, plus `/brainstorm`, `/icp`, `/gtm`, or `/monetization` only when the failed assumption belongs to that domain.
+- In `### If Inconclusive`: include `/experiment [follow-up]` if the test needs another run, or `/customer-feedback` if qualitative evidence is the missing signal.
+- IF more assumptions remain untested after this design: `/experiment [next assumption]` — Design the next experiment
+- IF enough assumptions are validated after completed results: `/research-roadmap` — Check if research docs need updating based on learnings
 
 ### 8. Write Output
 
@@ -264,6 +264,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Include decision rules.** Every experiment must specify what happens for each possible outcome. No experiment should end with "we'll figure it out."
 - **Reference benchmarks.** Success thresholds should be grounded in industry benchmarks or competitor data, not arbitrary numbers.
 - **Don't overdesign.** A simple survey can validate an assumption just as well as an elaborate A/B test. Recommend the simplest method that produces a clear signal.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

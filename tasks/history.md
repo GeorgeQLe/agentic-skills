@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-07 — Business growth customer-discovery route cleanup
+
+- Updated mirrored business-growth `experiment`, `gtm`, `monetization`, and `pmf-assessment` contracts to route retired discovery executable handoffs to `customer-discovery`.
+- Preserved `research/icp.md` and `research/{slug}/icp.md` as evidence artifact names.
+- Archived and bumped affected active skill mirrors, updated changelogs, and added `tests/layer1/business-growth-customer-discovery-routing.test.ts`.
+- Refreshed Skills Showcase generated assets after active `SKILL.md` metadata changed.
+- Recorded Phase 4.6 review notes and the next Phase 4.7 business-ops routing plan in `tasks/todo.md`.
+- Validation passed for targeted business-growth route tests, nearby routing/cadence tests, skill integrity checks, pack routing, alignment dry-run, generated showcase freshness, Skills Showcase production build, retired-route scan, and whitespace diff check.
+- Production deploy not run because this step changed skill contracts and generated showcase metadata only; no explicit production deploy confirmation was requested.
+
 ## 2026-06-06 — Customer lifecycle customer-discovery route cleanup
 
 - Updated mirrored customer-lifecycle `journey-map` and five journey-map framework contracts to route missing customer-discovery prerequisites to `customer-discovery` instead of the retired short-form command.

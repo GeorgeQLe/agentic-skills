@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.7
+version: v0.8
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 interview_depth: full
 visual_tier: visual
@@ -47,7 +47,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist. If not, tell the user to run `$customer-discovery` first and stop.
 - **Soft**: Read `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`), `research/journey-map.md` (or `research/{slug}/journey-map.md`), `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if they exist — these improve specificity but aren't required.
 
 ## Process

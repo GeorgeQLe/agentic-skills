@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.8
+version: v0.7
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 interview_depth: full
 visual_tier: visual
@@ -10,9 +10,11 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # GTM — Go-to-Market Planning
+
+Invoke as `$gtm`.
 
 ## Report-First Approval Gate
 
@@ -45,7 +47,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist. If not, tell the user to run `/customer-discovery` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist. If not, tell the user to run `$icp` first and stop.
 - **Soft**: Read `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`), `research/journey-map.md` (or `research/{slug}/journey-map.md`), `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if they exist — these improve specificity but aren't required.
 
 ## Process
@@ -66,7 +68,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### 1. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope GTM strategy to the active product path by default. When GTM channels or messaging would serve a deferred product path better than the active one, add a `## Product Path Implications` section recommending `/product-line fork` or noting the impact.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope GTM strategy to the active product path by default. When GTM channels or messaging would serve a deferred product path better than the active one, add a `## Product Path Implications` section recommending `$product-line fork` or noting the impact.
 
 ### 2. Load Context
 
@@ -79,9 +81,9 @@ Read `research/.progress.yaml` when present. Normalize `active_path` (singular l
 
 ### 3. Interview
 
-Use the AskUserQuestion tool. Ask 1–3 focused questions per turn.
+Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same GTM decision, not to batch unrelated questions. If the session is already in Plan mode, `request_user_input` may present 2-3 concrete choices for the current decision; otherwise ask one concise plain-text question.
 
-**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge they haven't shared (internal constraints, personal preferences, strategic bets).
+**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define any relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only ask the user to choose without a recommendation when the decision genuinely depends on internal constraints, personal preferences, or strategic bets that cannot be inferred from evidence.
 
 Cover these areas (skip or abbreviate areas the user has already addressed in `$ARGUMENTS`):
 
@@ -130,25 +132,42 @@ Cover these areas (skip or abbreviate areas the user has already addressed in `$
 4. Launch plan — timeline, channels, goals, assets needed, citing trigger events that inform timing
 5. Early traction tactics — 30/60/90 day plan, the one metric that matters, with journey data supporting the traction approach
 
-Use AskUserQuestion to ask:
-- "Does this capture your go-to-market strategy? Anything missing or off?"
+If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Does this capture the go-to-market plan? What constraints, missing facts, or weak assumptions should I adjust?"
 
 Continue until the user confirms. Only then proceed to writing.
 
 ### 5. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
-- IF no `research/growth-model.md`: `/growth-model` — Design compounding growth loops to make the GTM strategy sustainable
-- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with launch milestones from above
-- IF no `research/metrics.md`: `/metrics` — Define success metrics for the launch goals
-- IF open questions need research: `/experiment [top question]` — Validate the most critical open question
-- IF `tasks/roadmap.md` exists: `/exec` — Start executing — the GTM plan is set
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey to validate funnel assumptions
-- IF no `research/positioning.md`: check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Define strategic positioning — messaging should flow from positioning
+## Next Steps
+
+**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority:**
+1. IF downstream impact is **Major**: recommend `$reconcile-research` — [N] conflicts found in downstream docs need resolution before other work
+2. Otherwise, recommend the first applicable from this list:
+   - IF no `research/growth-model.md`: `$growth-model` — design compounding growth loops to make the GTM strategy sustainable
+   - IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — plan the build with launch milestones from above
+   - IF no `research/metrics.md`: `$metrics` — define success metrics for the launch goals
+   - IF open questions need research: `$experiment [top question]` — validate the most critical open question
+   - IF `tasks/roadmap.md` exists: `$exec` — start executing — the GTM plan is set
+
+**Other options** (include all applicable items not chosen as recommended):
+- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — Plan the build with launch milestones from above
+- IF no `research/metrics.md`: `$metrics` — Define success metrics for the launch goals
+- IF open questions need research: `$experiment [top question]` — Validate the most critical open question
+- IF `tasks/roadmap.md` exists: `$exec` — Start executing — the GTM plan is set
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/growth-model.md`: `$growth-model` — Design compounding growth loops to sustain GTM momentum
+- IF no `research/positioning.md`: check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `$pack install business-discovery` first; if `business-discovery` is enabled, recommend `$positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 - If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
@@ -174,7 +193,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., pricing model changed, primary channel shifted, launch timeline moved significantly): Display conflicts and strongly recommend `/reconcile-research`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., pricing model changed, primary channel shifted, launch timeline moved significantly): Display conflicts and strongly recommend `$reconcile-research`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -282,14 +301,14 @@ Display to the user after showing the written file confirmation. This should be 
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 5]
+**Recommended:** `$skill` — [one-line reason]
 
-**Other options:**
-- [remaining conditional items from step 5 — only include items whose conditions are met]
+Other options:
+- [conditional items from step 4 — only include items whose conditions are met]
 ```
 
 ### `research/gtm-interview.md` (or `research/{slug}/gtm-interview.md`)
@@ -313,18 +332,8 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Ground in research.** Every channel, message, and pricing decision should trace back to ICP insights, competitive gaps, or customer feedback.
 - **Be specific.** "Use social media" is not a channel strategy. "Post weekly technical deep-dives on Twitter targeting DevOps engineers who follow [competitor]" is.
 - **Present before writing.** Never write output files until findings have been presented and validated.
-- **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `/mvp-gap` or `/brainstorm`.
+- **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `$mvp-gap` or `$brainstorm`.
 - **Do not overwrite existing `research/gtm.md`** (or `research/{slug}/gtm.md`) without asking the user first.
-
-## Interview Protocol
-
-**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
-
-**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
-
-**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
-
-**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

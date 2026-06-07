@@ -2,7 +2,7 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: v0.7
+version: v0.8
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 interview_depth: full
 visual_tier: visual
@@ -45,7 +45,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/customer-discovery` first and stop.
 - **Soft**: Read these if they exist — each adds specificity:
   - `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) — competitor pricing, tiers, freemium models
   - `research/journey-map.md` (or `research/{slug}/journey-map.md`) — where value is delivered, conversion triggers

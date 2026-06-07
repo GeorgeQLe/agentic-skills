@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-07
+
+- Routed missing customer-discovery prerequisites to `/customer-discovery` instead of the retired `/icp` executable while preserving `research/icp.md` evidence usage.
+
 ## v0.7 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

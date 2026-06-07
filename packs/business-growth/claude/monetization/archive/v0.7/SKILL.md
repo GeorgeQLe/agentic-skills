@@ -2,7 +2,7 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: v0.8
+version: v0.7
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 interview_depth: full
 visual_tier: visual
@@ -10,11 +10,9 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Monetization — Revenue & Pricing Strategy
-
-Invoke as `$monetization`.
 
 ## Report-First Approval Gate
 
@@ -34,7 +32,7 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-Deep-research skill that analyzes how to monetize the product. Combines web research on revenue models in the category with codebase analysis, ICP data, and competitive pricing to produce a monetization strategy that stands on research before asking the user for hard constraints or proprietary data.
+Deep-research skill that analyzes how to monetize the product. Combines web research on revenue models in the category with codebase analysis, ICP data, and competitive pricing to produce a monetization strategy validated through user interview checkpoints.
 
 ## Evidence And Feedback Handling
 
@@ -47,7 +45,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$customer-discovery` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Soft**: Read these if they exist — each adds specificity:
   - `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) — competitor pricing, tiers, freemium models
   - `research/journey-map.md` (or `research/{slug}/journey-map.md`) — where value is delivered, conversion triggers
@@ -115,9 +113,9 @@ From research evidence and product context, identify **2–4 viable revenue mode
 - **Fit with product**: does the value delivery pattern match? (e.g., usage-based works when value scales with consumption)
 - **Risks**: what could go wrong? (e.g., usage-based creates unpredictable costs that enterprise procurement hates)
 
-**Checkpoint 1 — Present models with a recommendation.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show all options with evidence and fit analysis. State which model you recommend and why (grounded in ICP fit, product fit, and market evidence). Then ask:
-- "I recommend [model] based on [key evidence]. Which constraints, missing facts, or weak assumptions should change this recommendation?"
-- "Any non-negotiable pricing constraints or product realities I need to incorporate? (e.g., must have a free tier, can't do per-seat)"
+**Checkpoint 1 — Present models with a recommendation.** Use AskUserQuestion to show all options with evidence and fit analysis. State which model you recommend and why (grounded in ICP fit, product fit, and market evidence). Then ask:
+- "I recommend [model] based on [key evidence]. Does this feel right, or should we explore a different model?"
+- "Any hard constraints I should know? (e.g., must have a free tier, can't do per-seat)"
 
 Incorporate feedback before proceeding.
 
@@ -147,8 +145,8 @@ For the selected model (or top 2 if the user is undecided), research and design:
 - Are there usage limits, and where do they kick in?
 - Enterprise tier: what justifies the custom pricing? (SSO, SLA, dedicated support, compliance)
 
-**Checkpoint 2 — Present pricing architecture to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show tier design, price points, and packaging — cite competitor pricing benchmarks that anchor each price point, ICP willingness-to-pay signals that validate the range, and journey-stage alignment that justifies feature gates. Then ask:
-- "Which price points, gates, or packaging assumptions need stronger evidence or should change based on hard constraints?"
+**Checkpoint 2 — Present pricing architecture to the user.** Use AskUserQuestion to show tier design, price points, and packaging — cite competitor pricing benchmarks that anchor each price point, ICP willingness-to-pay signals that validate the range, and journey-stage alignment that justifies feature gates. Then ask:
+- "Does this pricing feel right for your market? Too high, too low?"
 - "Any features that absolutely must be free? Any that must be gated?"
 
 Incorporate feedback before proceeding.
@@ -166,8 +164,8 @@ Estimate (with stated assumptions and confidence levels):
 
 If data is insufficient for estimates, state what data is needed and recommend how to gather it (e.g., "run a pricing survey", "track activation-to-conversion for 30 days").
 
-**Checkpoint 3 — Present unit economics to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show the estimates with assumptions, then ask:
-- "Which internal numbers, targets, or assumptions should I adjust with better evidence?"
+**Checkpoint 3 — Present unit economics to the user.** Use AskUserQuestion to show the estimates with assumptions, then ask:
+- "Do these assumptions feel reasonable? Any I should adjust?"
 - "What's your target margin or payback period?"
 
 ### 7. Monetization Timing & Sequencing
@@ -181,35 +179,20 @@ Based on product stage and ICP:
 
 ### 8. Populate Next Steps
 
-Check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
+Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
 
-## Next Steps
-
-**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
-
-Other options:
-- `$skill` — [description]
-- ...
-
-**Recommendation priority** (first applicable becomes the recommendation):
-1. IF no `research/gtm.md`: recommend `$gtm` — pricing needs a go-to-market plan to reach the customers who'll pay
-2. IF `research/gtm.md` exists but predates this analysis: recommend `$gtm` — GTM pricing references are now stale and need updating
-3. IF no `research/metrics.md`: recommend `$metrics` — define metrics to track whether the monetization strategy is working
-4. IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — plan the build with monetization milestones
-
-**Other options** (include all applicable items not chosen as recommended):
-- IF no `research/gtm.md`: `$gtm` — Build go-to-market plan with pricing from this strategy
-- IF `research/gtm.md` exists but predates this analysis: `$gtm` — Update GTM with refined pricing strategy
-- IF no `research/metrics.md`: `$metrics` — Define metrics to track monetization health (conversion, expansion, churn)
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map the journey to validate where pricing gates belong
-- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — Plan the build with monetization milestones
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — Check if the product delivers enough value to charge
-- IF product is live and revenue exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$runway-model` — Track actual financial performance against these estimates
+- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan with pricing from this strategy
+- IF `research/gtm.md` exists but predates this analysis: `/gtm` — Update GTM with refined pricing strategy
+- IF no `research/metrics.md`: `/metrics` — Define metrics to track monetization health (conversion, expansion, churn)
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the journey to validate where pricing gates belong
+- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with monetization milestones
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Check if the product delivers enough value to charge
+- IF product is live and revenue exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/runway-model` — Track actual financial performance against these estimates
 
 ### 9. Final Review & Write
 
 Present the **complete monetization strategy** to the user — revenue model, pricing architecture, unit economics, timing. Ask:
-- "Ready to write this to `research/monetization.md`? Any constraints, missing facts, or weak assumptions to adjust first?"
+- "Ready to write this to `research/monetization.md`? Anything to adjust first?"
 
 Only after the user confirms, write the output files.
 
@@ -302,10 +285,10 @@ Only after the user confirms, write the output files.
 
 ## Next Steps
 
-**Recommended:** `$skill` — [one-line reason]
+**Recommended:** [first matching item from step 8]
 
-Other options:
-- [conditional items from step 7 — only include items whose conditions are met]
+**Other options:**
+- [remaining conditional items from step 8 — only include items whose conditions are met]
 ```
 
 ### `research/monetization-interview.md` (or `research/{slug}/monetization-interview.md`)
@@ -328,11 +311,21 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Requires ICP.** Cannot build a monetization strategy without knowing who pays and why.
 - **Evidence-based.** Every pricing decision must trace back to research evidence (competitor data, market benchmarks, ICP signals). Do not invent price points from intuition.
 - **Present before writing.** Never write output files until findings have been presented and validated through all three checkpoints.
-- **Don't duplicate GTM.** If `research/gtm.md` already has a pricing section, deepen it rather than contradict it. Note any conflicts and ask the user to resolve. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`.
-- **Don't prescribe product changes.** If the product doesn't deliver enough value to support the pricing, note it as a gap — that's `$mvp-gap`'s job.
+- **Don't duplicate GTM.** If `research/gtm.md` already has a pricing section, deepen it rather than contradict it. Note any conflicts and ask the user to resolve.
+- **Don't prescribe product changes.** If the product doesn't deliver enough value to support the pricing, note it as a gap — that's `/mvp-gap`'s job.
 - **Do not overwrite existing `research/monetization.md`** (or `research/{slug}/monetization.md`) without asking the user first.
 - **Minimum research depth**: at least 6 WebSearch queries before presenting revenue model options, then targeted queries per model option.
 - **State assumptions.** Every unit economics estimate must include the assumption behind it and a confidence level. Never present estimates as facts.
+
+## Interview Protocol
+
+**Step 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, and any argument-provided context. Build an internal evidence base before asking questions.
+
+**Step 2 — Assumptions manifest.** Present 3–7 assumptions about the user's situation, goals, and constraints. Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm, correct, or flag before proceeding.
+
+**Step 3 — Focused interview.** Ask 1–3 questions per turn via `AskUserQuestion`. Research and recommend by default — present options with a recommended default. Continue until all areas are covered or the user signals enough.
+
+**Step 4 — Coverage checkpoint.** Present a summary of everything established. Ask the user to confirm completeness before building the alignment page.
 
 ## Alignment Page
 

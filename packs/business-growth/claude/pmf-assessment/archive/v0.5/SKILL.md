@@ -1,7 +1,7 @@
 ---
 name: pmf-assessment
 type: research
-version: v0.6
+version: v0.5
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
 interview_depth: light
@@ -10,11 +10,9 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # PMF Assessment — Product-Market Fit Measurement
-
-Invoke as `$pmf-assessment`.
 
 ## Report-First Approval Gate
 
@@ -36,8 +34,6 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 Designs a Sean Ellis PMF survey and qualitative signal analysis framework for measuring product-market fit post-launch. Combines the quantitative "very disappointed" threshold (40%) with qualitative signal analysis from customer feedback, usage patterns, and market indicators. This is a post-launch measurement skill — it should run after the product has real users.
 
-Default stance: assume the user has no insider knowledge of their PMF status or user sentiment. The assessment must stand on research, metrics evidence, and codebase reality before asking for user input. Ask for corrections, proprietary data, and hard constraints, not intuition.
-
 ## Evidence And Feedback Handling
 
 Treat user feedback as input to evaluate, not as automatic ground truth.
@@ -49,7 +45,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/metrics.md` (or `research/{slug}/metrics.md`) must exist. If not, tell the user to run `$metrics` first and stop.
+- **Hard**: `research/metrics.md` (or `research/{slug}/metrics.md`) must exist. If not, tell the user to run `/metrics` first and stop.
 - **Soft**: Read these if they exist:
   - `research/icp.md` — target customer segments, pain points, jobs-to-be-done
   - `research/journey-map.md` — critical moments, aha moment, drop-off points
@@ -59,7 +55,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ### 0a. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the PMF assessment to the active product path by default. When PMF signals suggest a deferred product path has stronger product-market fit than the active path, add a `## Product Path Implications` section recommending `$product-line activate`.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the PMF assessment to the active product path by default. When PMF signals suggest a deferred product path has stronger product-market fit than the active path, add a `## Product Path Implications` section recommending `/product-line activate`.
 
 ### 0. Product-Path Scope Resolution
 
@@ -93,8 +89,8 @@ Detect whether the product has live users. Look for evidence:
 
 **If no evidence of live product:**
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
-- "I don't see evidence of a live product with real users. PMF assessment requires actual user data. Would you like to design the survey framework now for future use, or should we focus on `$spec-interview` or `$roadmap` to get to launch first?"
+Use AskUserQuestion:
+- "I don't see evidence of a live product with real users. PMF assessment requires actual user data. Would you like to design the survey framework now for future use, or should we focus on `/spec-interview` or `/roadmap` to get to launch first?"
 
 If the user wants to proceed anyway, continue but mark all outputs as "pre-launch framework — requires live data to score."
 
@@ -135,7 +131,7 @@ For "Not disappointed" respondents:
 - Tailored to ICP jobs-to-be-done and journey critical moments
 - Focused on understanding *why* users feel the way they do, not just *that* they do
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion:
 - "Here's the PMF survey design. Are the follow-up questions tailored enough to your product? Any segments you want surveyed separately?"
 
 ### 5. Qualitative Signal Analysis
@@ -173,42 +169,27 @@ If the session is already in Plan mode and there are 2-3 concrete choices, prefe
 - **Moderate PMF**: 25-40% "very disappointed" OR 2 qualitative signals present
 - **Weak PMF**: <25% "very disappointed" AND fewer than 2 qualitative signals
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion:
 - "Does this scoring framework match your context? Any signals more/less important for your market?"
 
 ### 7. Populate Next Steps
 
-Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2-4 alternatives), conditional on PMF strength. Use this format in the output:
+Include 3-5 applicable items with "Pick one:" framing, conditional on PMF strength:
 
 **Weak PMF:**
-
-## Next Steps
-
-**Recommended:** `$customer-feedback [top user complaint]` — deep-dive on the weakest area to understand what's broken
-
-Other options:
-- `$customer-discovery` — Re-examine customer fit; you may be selling to the wrong segment
-- `$journey-map` — Map where users drop off to find the biggest gap
+- `/customer-feedback [top user complaint]` — Deep-dive on the weakest area to understand what's broken
+- `/icp` — Re-examine customer fit; you may be selling to the wrong segment
+- `/journey-map` — Map where users drop off to find the biggest gap
 
 **Moderate PMF:**
-
-## Next Steps
-
-**Recommended:** `$growth-model` — model growth levers to strengthen engagement before scaling
-
-Other options:
-- `$hook-model` — Design habit loops around what's already working
-- `$customer-feedback [most-requested feature]` — Deep-dive on what "somewhat disappointed" users want more of
+- `/growth-model` — Model growth levers to strengthen engagement before scaling
+- `/hook-model` — Design habit loops around what's already working
+- `/customer-feedback [most-requested feature]` — Deep-dive on what "somewhat disappointed" users want more of
 
 **Strong PMF:**
-
-## Next Steps
-
-**Recommended:** `$growth-model` — model growth channels to scale what's working
-
-Other options:
-- `$roadmap` — Plan the scaling phase with confidence
-- `$gtm` — Build go-to-market plan grounded in proven fit
+- `/growth-model` — Model growth channels to scale what's working
+- `/roadmap` — Plan the scaling phase with confidence
+- `/gtm` — Build go-to-market plan grounded in proven fit
 
 ### 8. Write Output
 
@@ -230,7 +211,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream docs exist, or no conflicts. Skip display.
 - **Minor** (1-2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR PMF level changes growth assumptions, success targets need revision, segment focus shifted): Display and recommend `$reconcile-research`.
+- **Major** (3+ conflicts OR PMF level changes growth assumptions, success targets need revision, segment focus shifted): Display and recommend `/reconcile-research`.
 
 ## Output
 
@@ -376,11 +357,12 @@ Survey these segments separately for segment-level PMF signals:
    - **Now**: [what PMF assessment says instead]
 
 [For Major only:]
-> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
-[Use the PMF-level-conditional format from step 7]
+Pick one:
+- [conditional items from step 7, based on PMF level]
 ```
 
 ### `research/pmf-assessment-search-log.md` (or `research/{slug}/pmf-assessment-search-log.md`)
@@ -400,12 +382,20 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Requires metrics.** PMF measurement without success targets is directionless. If `research/metrics.md` doesn't exist, stop and run `$metrics` first.
+- **Requires metrics.** PMF measurement without success targets is directionless. If `research/metrics.md` doesn't exist, stop and run `/metrics` first.
 - **Honest about data availability.** If no live users, say so clearly — do not fabricate PMF scores.
 - **The 40% threshold is a guideline, not gospel.** Context matters — note when domain-specific factors change the threshold (e.g., enterprise B2B with few customers, two-sided marketplaces, regulated industries).
 - **Present before writing.** Never write output files until the assessment has been presented and validated.
 - **Do not overwrite existing `research/pmf-assessment.md`** without asking the user first.
 - **PMF is a spectrum, not binary.** Frame results as a continuum with actionable next steps at each level. Avoid "you have PMF" / "you don't have PMF" absolutes.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

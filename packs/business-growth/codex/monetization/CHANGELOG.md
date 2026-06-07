@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-07
+
+- Routed missing customer-discovery prerequisites to `$customer-discovery` instead of the retired `$icp` executable while preserving `research/icp.md` evidence usage.
+
 ## v0.7 - 2026-06-04
 
 - Restored version parity with the Claude mirror after verifying the staged research and recommended-next-step contracts are present on both sides.

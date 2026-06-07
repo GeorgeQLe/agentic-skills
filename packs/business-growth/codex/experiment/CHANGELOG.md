@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-07
+
+- Routed invalidated customer-fit assumptions to `$customer-discovery` instead of the retired `$icp` executable while preserving `research/icp.md` evidence usage.
+
 ## v0.3 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.
