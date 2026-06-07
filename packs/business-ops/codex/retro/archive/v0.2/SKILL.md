@@ -2,7 +2,7 @@
 name: retro
 description: Strategic decision retrospective — review research decisions against actual outcomes, update confidence levels
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 interview_depth: light
 ---
@@ -118,7 +118,7 @@ Incorporate feedback before proceeding.
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF ICP decisions were wrong: `$customer-discovery` — Re-run customer discovery with what you now know
+- IF ICP decisions were wrong: `$icp` — Re-run ICP discovery with what you now know
 - IF pricing was wrong: `$monetization` — Revisit pricing with real revenue data
 - IF channels underperformed: `$gtm` — Update GTM with actual channel performance
 - IF assumptions tracker exists: `$assumption-tracker` — Bulk-update validation status from retro findings

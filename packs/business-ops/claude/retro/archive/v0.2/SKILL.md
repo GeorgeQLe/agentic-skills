@@ -2,18 +2,16 @@
 name: retro
 description: Strategic decision retrospective — review research decisions against actual outcomes, update confidence levels
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Retro — Strategic Decision Retrospective
-
-Invoke as `$retro`.
 
 Reviews decisions made in research docs against actual outcomes. Was the primary ICP right? Did pricing work? Did the launch channel deliver? Captures lessons and updates confidence levels across all research documents.
 
@@ -102,7 +100,7 @@ Look across all decisions for patterns:
 
 ### 4. Present & Validate
 
-Present findings to the user. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion to present findings:
 - Summary of decisions reviewed and their correctness
 - Key patterns identified
 - Recommendations for which research docs to re-run
@@ -118,13 +116,13 @@ Incorporate feedback before proceeding.
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF ICP decisions were wrong: `$customer-discovery` — Re-run customer discovery with what you now know
-- IF pricing was wrong: `$monetization` — Revisit pricing with real revenue data
-- IF channels underperformed: `$gtm` — Update GTM with actual channel performance
-- IF assumptions tracker exists: `$assumption-tracker` — Bulk-update validation status from retro findings
-- IF metrics targets were off: `$metrics` — Recalibrate targets based on baseline reality
-- IF multiple docs need updating: `$reconcile-research` — Audit all research for consistency after retro findings
-- ALWAYS: `$research-roadmap` — Check overall project status
+- IF ICP decisions were wrong: `/icp` — Re-run ICP discovery with what you now know
+- IF pricing was wrong: `/monetization` — Revisit pricing with real revenue data
+- IF channels underperformed: `/gtm` — Update GTM with actual channel performance
+- IF assumptions tracker exists: `/assumption-tracker` — Bulk-update validation status from retro findings
+- IF metrics targets were off: `/metrics` — Recalibrate targets based on baseline reality
+- IF multiple docs need updating: `/reconcile-research` — Audit all research for consistency after retro findings
+- ALWAYS: `/research-roadmap` — Check overall project status
 
 ### 6. Write Output
 
@@ -236,6 +234,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Be constructive.** The goal is learning, not blame. Frame "wrong" decisions as lessons, not failures.
 - **Recommend actions.** Every finding should connect to a concrete next step for improving the research.
 - **Quarterly or milestone-based.** Designed for periodic use, not continuous. Note the recommended next retro date.
+
+## Context Gathering
+
+**Step 1 — Scope questions.** Before researching, ask the user 1–3 questions via `AskUserQuestion` to understand: their product/service, target audience, and what they hope to learn or decide from this research.
+
+**Step 2 — Research.** Conduct research scoped by the user's answers.
+
+**Step 3 — Findings validation.** Before building the alignment page, present the 3–5 most important findings and ask the user to validate or correct any critical assumptions.
 
 ## Alignment Page
 

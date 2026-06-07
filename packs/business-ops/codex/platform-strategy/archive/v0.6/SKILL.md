@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.7
+version: v0.6
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 interview_depth: light
 visual_tier: visual
@@ -51,7 +51,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - `research/icp.md` (or `research/{slug}/icp.md`) — who you serve today
 - A working product/codebase to analyse for extensibility
 
-If neither exists, tell the user: "Platform expansion requires a foundation. Run `$customer-discovery` first to define who you serve today, then come back."
+If neither exists, tell the user: "Platform expansion requires a foundation. Run `$icp` first to define who you serve today, then come back."
 
 **Strongly recommended** (read if they exist):
 - `research/competitive-analysis.md` — market gaps
@@ -143,7 +143,7 @@ Only after user validates, write the output files.
 Other options:
 - `$assumption-tracker` — track which platform assumptions need validation (if no `research/assumption-tracker.md`)
 - `$competitive-analysis [adjacent category]` — research the competitive landscape for the top expansion candidate
-- `$customer-discovery [new audience]` — run customer discovery for the new audience the top candidate targets
+- `$icp [new audience]` — define the ICP for the new audience the top candidate targets
 - `$enterprise-icp` — map enterprise requirements if the expansion targets enterprise (if no `research/enterprise-icp.md`)
 - `$roadmap` — sequence the expansion into the build plan (if `specs/` exist for the candidate)
 - `$roadmap` — sequence the expansion into the build plan (if `specs/` exist)

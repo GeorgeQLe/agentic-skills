@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-07
+
+- Route missing product-path manifest guidance to `/customer-discovery` instead of the retired `/icp` executable.
+
 ## v0.2 - 2026-06-04
 
 - Restored mirror version parity for the shared Alignment Page contract.

@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.7
+version: v0.6
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 interview_depth: light
 visual_tier: visual
@@ -49,7 +49,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - `research/icp.md` (or `research/{slug}/icp.md`) — who you serve today, their pain points, value props
 - A working product/codebase to analyse for extensibility
 
-If neither exists, tell the user: "Platform expansion requires a foundation. Run `/customer-discovery` first to define who you serve today, then come back."
+If neither exists, tell the user: "Platform expansion requires a foundation. Run `/icp` first to define who you serve today, then come back."
 
 **Strongly recommended** (read if they exist — they enrich the analysis):
 - `research/competitive-analysis.md` — where competitors are/aren't, market gaps
@@ -233,7 +233,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - ALWAYS first: `/experiment [top candidate hypothesis]` — Validate the top expansion candidate
 - IF no `research/assumption-tracker.md`: `/assumption-tracker` — Extract and rank assumptions behind the expansion plan
 - IF `research/competitive-analysis.md` is stale or doesn't cover adjacent markets: `/competitive-analysis [adjacent category]` — Research competitors in the expansion space
-- IF top candidate targets a new audience: `/customer-discovery [new audience]` — run customer discovery for the new product audience
+- IF top candidate targets a new audience: `/icp [new audience]` — Define the ICP for the new product
 - IF top candidate is vertical (enterprise): `/enterprise-icp` — Map enterprise stakeholders for the deeper play
 - IF specs exist for core but not expansion: `/ux-variations [top candidate]` — Explore solution directions for the expansion product
 - ALWAYS: `/roadmap` — Integrate expansion phases into the project roadmap

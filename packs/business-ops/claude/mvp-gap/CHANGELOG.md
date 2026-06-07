@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-07
+
+- Route missing customer-discovery prerequisites to `/customer-discovery` instead of the retired `/icp` executable.
+
 ## v0.5 - 2026-06-06
 
 - Route top unspecced MVP gaps with missing flow/design shape to `/user-flow-map` before UI requirements, layout variations, and production specs.

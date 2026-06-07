@@ -2,7 +2,7 @@
 name: product-line
 description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
 type: ops
-version: v0.3
+version: v0.2
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 interview_depth: none
 visual_tier: visual
@@ -10,11 +10,9 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Product Line — Product Path Portfolio Management
-
-Invoke as `$product-line`.
 
 Manage product paths tracked in `research/.progress.yaml`. Product paths are research divergences — different products, apps, ICPs, expansion candidates, pivots, or competitive gaps — not git branches. Each path tracks its scope directory, status, evidence, pipeline stage, and revisit conditions.
 
@@ -22,7 +20,7 @@ Use `activate` when a deferred or revisit candidate path should become active re
 
 ## Prerequisites
 
-`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `$idea-scope-brief` or `$customer-discovery` first — they create the manifest when multiple product directions emerge."
+`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `/idea-scope-brief` or `/icp` first — they create the manifest when multiple product directions emerge."
 
 ## Manifest Schema
 
@@ -44,7 +42,7 @@ product_paths:
     promoted_at: null
     evidence_refs: []
     revisit_trigger: null
-    next_skill: "$competitive-analysis"
+    next_skill: "/competitive-analysis"
     pipeline_stage: "icp"
     last_touched: "YYYY-MM-DD"
 ```
@@ -61,7 +59,7 @@ product_paths:
 
 ### 1. `review` — Portfolio Dashboard
 
-**Invocation**: `$product-line review`
+**Invocation**: `/product-line review`
 
 Present a dashboard comparing all paths:
 
@@ -76,15 +74,15 @@ Evidence maturity is derived from files under `scope_path` or `evidence_refs`:
 - **Mature** — journey map plus metrics, GTM, monetization, or experiments
 - **Graduated** — promoted to an app/code scope
 
-When 3+ deferred or revisit-candidate paths exist with no recent activation, recommend `$product-line triggers`.
+When 3+ deferred or revisit-candidate paths exist with no recent activation, recommend `/product-line triggers`.
 
 ### 2. `activate <path-id>` — Reactivate Research
 
-**Invocation**: `$product-line activate <path-id>`
+**Invocation**: `/product-line activate <path-id>`
 
 1. Validate the path exists and has status `deferred` or `revisit_candidate`.
 2. Check `max_concurrent` against the current active-path count. If at capacity, ask whether to deactivate another path or increase `max_concurrent`.
-3. Ensure `scope_path` is not under `research/_archive/`. If it is archived, tell the user to run `$product-line restore <path-id>` first.
+3. Ensure `scope_path` is not under `research/_archive/`. If it is archived, tell the user to run `/product-line restore <path-id>` first.
 4. Scan existing research files to infer `pipeline_stage`.
 5. Update the manifest:
    - Set `status: active`
@@ -95,7 +93,7 @@ When 3+ deferred or revisit-candidate paths exist with no recent activation, rec
 
 ### 3. `archive <path-id>` — Archive A Research Path
 
-**Invocation**: `$product-line archive <path-id>`
+**Invocation**: `/product-line archive <path-id>`
 
 1. Validate the path exists and is not already `archived` or legacy `abandoned`.
 2. Ask for a concise archive rationale.
@@ -109,7 +107,7 @@ When 3+ deferred or revisit-candidate paths exist with no recent activation, rec
 
 ### 4. `restore <path-id>` — Restore An Archived Path
 
-**Invocation**: `$product-line restore <path-id>`
+**Invocation**: `/product-line restore <path-id>`
 
 1. Validate the path exists and has status `archived` or legacy `abandoned`.
 2. If `scope_path` is `research/_archive/{slug}/` and the directory exists, move it back to `research/{slug}/`.
@@ -120,17 +118,17 @@ When 3+ deferred or revisit-candidate paths exist with no recent activation, rec
    - Set `scope_path` back to `research/{slug}/`
    - Clear `archived_at`; keep the old archive rationale in `reason` or history, but set `archive_reason: null`
    - Set `last_touched` to today
-5. Recommend `$product-line activate <path-id>` if restored as deferred.
+5. Recommend `/product-line activate <path-id>` if restored as deferred.
 
 ### 5. `promote <path-id>` — Graduate To App Scope
 
-**Invocation**: `$product-line promote <path-id>`
+**Invocation**: `/product-line promote <path-id>`
 
 Use this only when research is ready to become or connect to an app under `apps/{slug}/`.
 
 1. Validate the path exists and is not `archived` or legacy `abandoned`.
 2. Derive `{slug}` from the path ID or `scope_path`.
-3. Confirm or create `apps/{slug}/` during the monorepo scaffolding flow. If scaffolding requires another skill, recommend `$scaffold` or the appropriate monorepo command instead of inventing app files here.
+3. Confirm or create `apps/{slug}/` during the monorepo scaffolding flow. If scaffolding requires another skill, recommend `/scaffold` or the appropriate monorepo command instead of inventing app files here.
 4. Keep research docs under `research/{slug}/` as product evidence unless a separate scaffolder explicitly moves or links docs.
 5. Update the manifest:
    - Set `status: promoted`
@@ -141,7 +139,7 @@ Use this only when research is ready to become or connect to an app under `apps/
 
 ### 6. `fork <label> [--from <skill>]` — Create A New Path
 
-**Invocation**: `$product-line fork "Enterprise vertical" --from competitive-analysis`
+**Invocation**: `/product-line fork "Enterprise vertical" --from competitive-analysis`
 
 1. Generate a stable product-path ID from the label.
 2. Confirm that the slug is the intended product/app name, not merely an ICP, audience, or segment label.
@@ -153,7 +151,7 @@ Use this only when research is ready to become or connect to an app under `apps/
 
 ### 7. `triggers` — Check Revisit Conditions
 
-**Invocation**: `$product-line triggers`
+**Invocation**: `/product-line triggers`
 
 Scan paths with `status: deferred` or `status: revisit_candidate` and evaluate their `revisit_trigger` conditions:
 - **File-based triggers** — check whether the referenced file exists.
@@ -161,11 +159,21 @@ Scan paths with `status: deferred` or `status: revisit_candidate` and evaluate t
 - **Time-based triggers** — compare against today's date.
 - **External triggers** — flag as requiring manual confirmation.
 
-Classify each trigger as **fired**, **pending**, or **manual**. For fired triggers, recommend `$product-line activate <path-id>`.
+Classify each trigger as **fired**, **pending**, or **manual**. For fired triggers, recommend `/product-line activate <path-id>`.
 
 ## Output
 
 Update `research/.progress.yaml`. `archive` and `restore` may also move product-path directories between `research/{slug}/` and `research/_archive/{slug}/`. `promote` may confirm or route creation of `apps/{slug}/`, but it does not move research docs.
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human-only external actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`; repo edits, SDK wiring, generated assets, local commands, tests, audits, and authenticated CLI/API work stay in `tasks/todo.md`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
 
 ## Constraints
 
@@ -182,4 +190,4 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Default Shipping Contract
 
-Follow the shared shipping contract convention in CLAUDE.md (adapted for Codex: commit and push changes to the repository primary branch).
+Follow the shared shipping contract convention in CLAUDE.md.

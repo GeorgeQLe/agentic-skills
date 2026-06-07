@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-07
+
+- Route foundational and new-audience discovery handoffs to `/customer-discovery` instead of the retired `/icp` executable.
+
 ## v0.6 - 2026-06-02
 
 - Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.

@@ -2,7 +2,7 @@
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
-version: v0.6
+version: v0.5
 argument-hint: "[optional: path-to-icp-spec]"
 interview_depth: none
 visual_tier: visual
@@ -45,7 +45,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-`research/icp.md` (or `research/{slug}/icp.md`) must exist. If it doesn't, tell the user to run `/customer-discovery` first and stop.
+`research/icp.md` (or `research/{slug}/icp.md`) must exist. If it doesn't, tell the user to run `/icp` first and stop.
 
 ## Process
 

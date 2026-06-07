@@ -2,7 +2,7 @@
 name: product-line
 description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
 type: ops
-version: v0.3
+version: v0.2
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 interview_depth: none
 visual_tier: visual
@@ -22,7 +22,7 @@ Use `activate` when a deferred or revisit candidate path should become active re
 
 ## Prerequisites
 
-`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `$idea-scope-brief` or `$customer-discovery` first — they create the manifest when multiple product directions emerge."
+`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `$idea-scope-brief` or `$icp` first — they create the manifest when multiple product directions emerge."
 
 ## Manifest Schema
 

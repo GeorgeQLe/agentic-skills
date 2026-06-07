@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-07
+
+- Route missing product-path manifest guidance to `$customer-discovery` instead of the retired `$icp` executable.
+
 ## v0.2 - 2026-06-04
 
 - Added the shared Alignment Page contract to match the Claude mirror and restored version parity.
