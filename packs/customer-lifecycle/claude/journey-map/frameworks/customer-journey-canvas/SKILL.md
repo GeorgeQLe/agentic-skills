@@ -2,7 +2,7 @@
 name: customer-journey-canvas
 description: Stickdorn customer journey canvas — stage×touchpoints×actions×emotion×backstage×pain×opportunities grid
 type: research
-version: v0.0
+version: v0.1
 invocation: sub-skill
 parent: journey-map
 ---
@@ -39,7 +39,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/customer-discovery` first and stop.
 - **Soft**: `research/competitive-analysis.md`, `research/customer-feedback.md`, specs, and codebase context when available.
 
 ## Process

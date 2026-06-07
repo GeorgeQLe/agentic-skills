@@ -1,5 +1,9 @@
 # journey-map changelog (codex)
 
+## v0.10 - 2026-06-06
+
+- Route missing customer-discovery prerequisite guidance to `$customer-discovery` instead of the retired `$icp` command while preserving `research/icp.md` as the evidence artifact name.
+
 ## v0.9 - 2026-06-06
 
 - Route completed positioning output through `$user-flow-map` before UI requirements, layout variations, or prototype work.

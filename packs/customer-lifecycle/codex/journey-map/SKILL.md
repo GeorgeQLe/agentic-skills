@@ -2,7 +2,7 @@
 name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: analysis
-version: v0.9
+version: v0.10
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator
 ---
@@ -25,7 +25,7 @@ When stopping for approval, build and attempt to open the alignment preview page
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `$icp` first.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `$customer-discovery` first.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape
   - `research/customer-feedback.md` — real customer language

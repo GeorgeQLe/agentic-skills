@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-06 — Customer lifecycle customer-discovery route cleanup
+
+- Updated mirrored customer-lifecycle `journey-map` and five journey-map framework contracts to route missing customer-discovery prerequisites to `customer-discovery` instead of the retired short-form command.
+- Preserved `research/icp.md` and `research/{slug}/icp.md` as evidence artifact names.
+- Archived and bumped all affected active skill mirrors, updated changelogs, and added `tests/layer1/customer-lifecycle-customer-discovery-routing.test.ts`.
+- Refreshed Skills Showcase generated assets after active `SKILL.md` metadata changed.
+- Recorded Phase 4.5 review notes and the next Phase 4.6 business-growth routing plan in `tasks/todo.md`.
+- Validation passed for targeted customer-lifecycle/journey route tests, skill integrity checks, pack routing, alignment dry-run, generated showcase freshness, Skills Showcase production build, retired-route scan, and whitespace diff check.
+- Production deploy not run because this step changed skill contracts and generated showcase metadata only; no explicit production deploy confirmation was requested.
+
 ## 2026-06-06 — Global customer-discovery route cleanup
 
 - Updated mirrored global `idea-scope-brief`, `afps-status`, `codebase-status`, `skills`, and `pack` contracts to route executable discovery work to `customer-discovery` instead of the retired short-form command.
