@@ -132,15 +132,25 @@
 - Also aligned the canonical product path to the current post-positioning sequence: `user-flow-map` → `ui-interview --requirements-only` → `ux-variations --layout-mode`.
 - Validation completed: targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over the five edited docs reported only intentional `enterprise-icp` and `research/icp.md` references; `git diff --check` passed; `pnpm --dir tests exec vitest run --project layer1 layer1/competitive-analysis-routing.test.ts layer1/journey-map-routing.test.ts layer1/codebase-status-routing.test.ts` passed with 3 files and 14 tests.
 
-- [ ] Update PACK.md for business-discovery
+- [x] Update PACK.md for business-discovery
 
-#### Next Step Plan — Phase 4.2 Business Discovery PACK.md
-- Scope: update `packs/business-discovery/PACK.md` so the pack overview, default workflow, skill list, and routing guidance use `customer-discovery` instead of legacy executable `icp` naming where the rename has landed.
-- Files to inspect/edit first: `packs/business-discovery/PACK.md`; inspect any generated or mirrored pack metadata only if this file points to it.
-- Approach: replace command/skill references to `icp` with `customer-discovery`, preserve `enterprise-icp` as its own skill, and preserve `research/icp.md` references only when describing the canonical output artifact from customer discovery.
-- Validation: run targeted `rg -n "icp|/icp|\\$icp|icp-needed"` over `packs/business-discovery/PACK.md`, then run `git diff --check`. Because this step changes a tracked `PACK.md`, also refresh and validate Skills Showcase data before shipping: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`.
+#### Phase 4.2 Review Notes
+- Updated `packs/business-discovery/PACK.md` to describe `customer-discovery` as the default discovery skill while preserving `enterprise-icp` as a separate skill.
+- Confirmed both pack mirrors have `customer-discovery` roots and no active `icp` roots: `packs/business-discovery/{codex,claude}/customer-discovery`.
+- Targeted legacy scan over `PACK.md` now reports only the intentional `enterprise-icp` skill-list entry.
+- Refreshed Skills Showcase data because a tracked `PACK.md` changed.
+- Validation passed: targeted `rg -n "icp|/icp|\\$icp|icp-needed" packs/business-discovery/PACK.md`, `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+- Production deploy not run because it requires explicit confirmation; local build and deploy-contract prechecks passed.
 
 - [ ] Update global skills that route to /icp (idea-scope-brief, afps-status, codebase-status, skills, pack)
+
+#### Next Step Plan — Phase 4.3 Global Skill Routing
+- Scope: update global skills that still route users to the legacy executable `icp` command so they route to `customer-discovery` instead, and rename the AFPS status stage `icp-needed` to `discovery-needed`.
+- Files to inspect/edit first: `global/{codex,claude}/idea-scope-brief/SKILL.md`, `global/{codex,claude}/afps-status/SKILL.md`, `global/{codex,claude}/codebase-status/SKILL.md`, `global/{codex,claude}/skills/SKILL.md`, and `global/{codex,claude}/pack/SKILL.md`.
+- Versioning: before changing any active `SKILL.md`, run `scripts/skill-archive.sh <skill-dir>` for each affected Codex and Claude skill directory, bump the decimal `version:` field, and update each skill's `CHANGELOG.md`.
+- Approach: replace route examples and recommendations from `$icp`/`/icp` to `$customer-discovery`/`/customer-discovery` using the correct agent syntax; preserve `enterprise-icp` as a distinct skill and preserve `research/icp.md` only when referring to the canonical customer-discovery output artifact.
+- Validation: run targeted active-file scans over the edited global skill roots for `/icp`, `$icp`, `icp-needed`, and standalone `icp`; allow only intentional `enterprise-icp` and `research/icp.md` artifact references. Then run skill integrity checks (`scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, `scripts/skill-pack-routing-audit.sh`), refresh Skills Showcase data, run `scripts/validate-skills-showcase-data.sh`, run relevant targeted layer1 routing tests if present, and finish with `git diff --check`.
+
 - [ ] Update business-discovery pack skills (competitive-analysis, customer-feedback, enterprise-icp, lean-canvas, value-prop-canvas, positioning + 5 frameworks)
 - [ ] Update customer-lifecycle pack skills (journey-map orchestrator + 5 frameworks)
 - [ ] Update business-growth pack skills (experiment, gtm, hook-model, landing-copy, metrics, monetization, pmf-assessment)

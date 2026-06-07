@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-06 — Business discovery PACK customer-discovery route
+
+- Updated `packs/business-discovery/PACK.md` so the pack overview, default flow, and skill list use `customer-discovery` instead of the legacy executable `icp` name.
+- Preserved `enterprise-icp` as a distinct skill in the business-discovery pack listing.
+- Refreshed Skills Showcase data and proof assets after the tracked `PACK.md` metadata change.
+- Recorded Phase 4.2 review notes and the next Phase 4.3 global-routing plan in `tasks/todo.md`.
+- Validation passed: targeted `PACK.md` legacy-route scan, showcase data refresh, showcase data validation, Skills Showcase production build, and whitespace diff check.
+- Production deploy not run because deployment requires explicit confirmation.
+
 ## 2026-06-06 — Document orchestrator patterns B and C
 
 - Extended `docs/orchestrator-convention.md` from single-pattern to three-pattern reference: Pattern A (Framework Decomposition + Synthesis, existing), Pattern B (Intent Router + Play Composer, new), Pattern C (Detect-and-Route, new).
