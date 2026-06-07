@@ -13654,3 +13654,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Preserved `enterprise-icp` as a separate skill and `research/icp.md` as the canonical customer-discovery output artifact.
 - Aligned canonical post-positioning flow docs to `user-flow-map` -> `ui-interview --requirements-only` -> `ux-variations --layout-mode`.
 - Marked Phase 4.1 complete in `tasks/todo.md` and prepared the next plan for the business-discovery `PACK.md` update.
+
+## 2026-06-06 — business-discovery customer-discovery route cleanup
+
+- Updated route-bearing business-discovery pack skills from the retired `icp` executable to `customer-discovery` across Codex and Claude mirrors.
+- Preserved `enterprise-icp` and `research/icp.md` as intentional skill/artifact names.
+- Archived and bumped affected active skill contracts, refreshed Skills Showcase generated assets, and added layer1 regression coverage for active business-discovery routing.
+- Marked Phase 4.4 complete in `tasks/todo.md` and prepared the Phase 4.5 customer-lifecycle journey-map routing plan.
