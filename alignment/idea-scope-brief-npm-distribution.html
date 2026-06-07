@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="visual">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Idea Scope Brief - Multi-Surface npm Distribution Strategy</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; --chart-1:#58a6ff; --chart-2:#3fb950; --chart-3:#d29922; --chart-4:#bc8cff; --chart-5:#f85149; --chart-6:#79c0ff; --chart-7:#f0883e; --chart-8:#a5d6ff; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; max-width:100%; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2.2rem; }
+h2 { color:var(--accent); margin:0; font-size:1.45rem; }
+h3 { color:#fff; margin:24px 0 8px; font-size:1.05rem; }
+h4 { color:var(--accent); margin:18px 0 6px; font-size:0.95rem; }
+p { margin:12px 0; } a { color:var(--accent); } code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; }
+pre { background:#0b1320; border:1px solid var(--border); border-radius:6px; padding:14px; overflow-x:auto; color:var(--text); font-size:0.9rem; line-height:1.5; }
+.status { display:inline-flex; min-height:44px; align-items:center; padding:10px 16px; border:1px solid var(--purple); color:#fff; background:#1c2333; margin:16px 0; }
+.lead { color:#fff; font-size:1.05rem; }
+.toc, section, .compile-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.toc ol { margin:8px 0 0; columns:2; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,minmax(min(210px,100%),1fr)); gap:12px; margin:18px 0; }
+.stat-grid div { border:1px solid var(--border); background:#0f1623; padding:14px; border-radius:8px; }
+.stat-grid strong { display:block; color:#fff; font-size:1.35rem; } .stat-grid span { color:var(--text-muted); }
+.table-wrap { overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:8px; }
+table { border-collapse:collapse; width:100%; min-width:720px; } th,td { border-bottom:1px solid var(--border); padding:10px 12px; vertical-align:top; text-align:left; } th { background:var(--surface); color:#fff; } tr:last-child td { border-bottom:0; }
+ul,ol { padding-left:22px; } li { margin:4px 0; }
+.callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
+.callout-warn { border-color:var(--orange); }
+.callout-green { border-color:var(--green); }
+.coa-card { border:2px solid var(--border); background:#0f1623; padding:18px; border-radius:10px; margin:16px 0; }
+.coa-card h3 { margin-top:0; }
+.coa-a { border-color:var(--chart-1); }
+.coa-b { border-color:var(--chart-2); }
+.coa-c { border-color:var(--chart-3); }
+.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; margin-right:6px; }
+.tag-a { background:rgba(88,166,255,0.15); color:var(--chart-1); }
+.tag-b { background:rgba(63,185,80,0.15); color:var(--chart-2); }
+.tag-c { background:rgba(210,153,34,0.15); color:var(--chart-3); }
+.section-feedback { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 16px; padding:10px; border:1px solid var(--border); border-radius:8px; background:#0f1623; }
+.section-feedback span { color:var(--text-muted); }
+button, .radio-group label { min-height:44px; padding:10px 16px; border-radius:6px; border:1px solid var(--border); background:#0d1117; color:var(--text); cursor:pointer; }
+button:hover, .radio-group label:hover { border-color:var(--accent); }
+button.active[data-feedback="emphasize"] { border-color:var(--green); color:#fff; background:#12351f; }
+button.active[data-feedback="down"] { border-color:var(--red); color:#fff; background:#351616; }
+button.active[data-feedback="needs-clarification"] { border-color:var(--orange); color:#fff; background:#33260f; }
+textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:10px; font:inherit; }
+.feedback-notes, .local-yaml, .local-yaml-actions { display:none; flex-basis:100%; }
+.section-feedback.has-feedback .feedback-notes, .section-feedback.has-feedback .local-yaml-actions { display:block; }
+.section-feedback.has-yaml .local-yaml { display:block; min-height:130px; }
+.question-block { background:#1c2333; border:1px solid var(--purple); padding:16px; border-radius:8px; margin:16px 0; }
+.radio-group { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; } .radio-group label { display:flex; align-items:center; gap:8px; }
+.answer-notes { display:none; margin-top:10px; }
+.question-block.has-answer .answer-notes { display:block; }
+.compile-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+#compiled-yaml, #compiled-feedback-yaml { min-height:180px; }
+.copy-status, #answer-status, #feedback-status { color:var(--text-muted); }
+.chart-container { margin:18px 0; }
+.chart-container canvas { max-width:100%; height:320px; }
+@media (max-width: 860px) { .toc ol { columns:1; } .stat-grid { grid-template-columns:repeat(2,minmax(min(210px,100%),1fr)); } main { width:min(100% - 24px, 1180px); } }
+@media (max-width: 560px) { .stat-grid { grid-template-columns:1fr; } h1 { font-size:1.7rem; } table { min-width:640px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Multi-Surface npm Distribution Strategy</h1>
+  <p class="lead">Evolving agentic-skills from a git-clone skill repository into a multi-surface distribution system via npm packages and a programmatic SDK &mdash; while preserving the markdown-first skill authoring model.</p>
+  <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-06 &nbsp; <strong>artifact:</strong>&nbsp; alignment/idea-scope-brief-npm-distribution.html</div>
+</header>
+
+<nav class="toc" aria-label="Table of Contents"><h2>Table Of Contents</h2><ol>
+  <li><a href="#current-state">Current State Snapshot</a></li>
+  <li><a href="#goals">Goals and Constraints</a></li>
+  <li><a href="#invariants">Invariants (All COAs)</a></li>
+  <li><a href="#coa-a">COA A: The Monolith</a></li>
+  <li><a href="#coa-b">COA B: The Federation</a></li>
+  <li><a href="#coa-c">COA C: The Registry</a></li>
+  <li><a href="#comparison">Side-by-Side Comparison</a></li>
+  <li><a href="#risk">Risk Matrix</a></li>
+  <li><a href="#naming">Naming and Branding</a></li>
+  <li><a href="#evidence">Evidence and Assumptions</a></li>
+  <li><a href="#review-gates">Review Gates</a></li>
+  <li><a href="#compile">Compile YAML</a></li>
+</ol></nav>
+
+<!-- =========================================================== -->
+<section id="current-state"><div class="section-head"><h2>Current State Snapshot</h2></div>
+    <div class="section-feedback" data-section="Current State Snapshot" id="feedback-current-state-snapshot">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="stat-grid">
+  <div><strong>298</strong><span>SKILL.md files</span></div>
+  <div><strong>40</strong><span>Packs</span></div>
+  <div><strong>9</strong><span>Global skills (Claude)</span></div>
+  <div><strong>0</strong><span>npm packages published</span></div>
+</div>
+<p>Distribution is entirely git-clone-based. <code>init.sh</code> installs global skills to <code>~/.claude/skills/</code> and <code>~/.codex/skills/</code>. <code>scripts/pack.sh</code> (1,164 lines of bash) manages project-local pack installs via file copies with <code>.agentic-skills-managed</code> markers. Versioning uses <code>v0.MINOR</code> decimal convention with <code>archive/&lt;version&gt;/SKILL.md</code> snapshots. Content-hash-based drift detection tracks staleness.</p>
+<p>There is no <code>package.json</code> at repo root, no npm presence, and no programmatic API. The only npm usage is the test harness (vitest) and a Next.js showcase app.</p>
+
+<h3>Current Install Flow</h3>
+<pre>
+# One-time setup
+git clone agentic-skills &amp;&amp; cd agentic-skills
+./init.sh                                    # global skills &rarr; ~/.claude/skills/
+
+# Per-project
+cd ~/my-project
+/path/to/agentic-skills/scripts/pack.sh install game code-quality
+# Copies SKILL.md files into .claude/skills/ with managed markers
+# Writes .agents/project.json with enabled_packs
+</pre>
+
+<h3>What This Limits</h3>
+<ul>
+  <li><strong>No remote distribution</strong> &mdash; requires local git clone of the entire repo</li>
+  <li><strong>No discoverability</strong> &mdash; users must know about the repo to find skills</li>
+  <li><strong>No programmatic access</strong> &mdash; other tools cannot query or use skills without file-system access</li>
+  <li><strong>Manual updates</strong> &mdash; <code>git pull</code> + <code>refresh</code> required to get new versions</li>
+<li><strong>Version pinning is local-only</strong> &mdash; no remote registry of available versions</li>
+</ul>
+</section>
+
+<!-- =========================================================== -->
+<section id="goals"><div class="section-head"><h2>Goals and Constraints</h2></div>
+    <div class="section-feedback" data-section="Goals and Constraints" id="feedback-goals-and-constraints">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<h3>Must-Have Goals</h3>
+<ol>
+  <li><strong>npm distribution</strong> &mdash; users can install skills via npm without cloning the repo</li>
+  <li><strong>Multi-surface reach</strong> &mdash; Claude Code, Codex, programmatic API</li>
+  <li><strong>Agent-maintainable versioning</strong> &mdash; agents can bump versions and publish without human ceremony</li>
+  <li><strong>User version selection</strong> &mdash; users can pin, lock, and update skill versions with standard tooling</li>
+  <li><strong>Backward compatibility</strong> &mdash; existing git-clone + <code>pack.sh</code> users are not broken</li>
+</ol>
+
+<h3>Nice-to-Have Goals</h3>
+<ol>
+  <li>npm search discoverability (users find packs via <code>npm search</code>)</li>
+  <li>Programmatic SDK for third-party integrations</li>
+  <li>Web-based skill browser / registry</li>
+  <li>Per-skill install granularity (install one skill without its whole pack)</li>
+</ol>
+
+<h3>Constraints</h3>
+<ul>
+  <li>Skills must remain SKILL.md markdown files &mdash; no compilation or transpilation</li>
+  <li>Pack grouping must be preserved as the primary organizational unit</li>
+  <li>Dual-surface (Claude + Codex) skill mirrors must continue</li>
+  <li>Solo maintainer &mdash; publishing overhead must be automatable</li>
+  <li><code>.agents/project.json</code> remains the project-level designation file</li>
+</ul>
+</section>
+
+<!-- =========================================================== -->
+<section id="invariants"><div class="section-head"><h2>Invariants (All COAs)</h2></div>
+    <div class="section-feedback" data-section="Invariants (All COAs)" id="feedback-invariants">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>These hold regardless of which COA is chosen:</p>
+<div class="table-wrap"><table><thead><tr><th>Invariant</th><th>Detail</th></tr></thead><tbody>
+  <tr><td>Skills are markdown</td><td>SKILL.md with YAML frontmatter (<code>name</code>, <code>description</code>, <code>version</code>, optional <code>type</code>, <code>argument-hint</code>, <code>invocation</code>) is the canonical format. No transpilation.</td></tr>
+  <tr><td>Pack grouping preserved</td><td>Named collections of domain skills remain the primary selection unit. Pack names survive.</td></tr>
+  <tr><td>Project designation file</td><td><code>.agents/project.json</code> tracks <code>enabled_packs</code>, <code>pinned_versions</code>, <code>project_type</code>, and <code>skill_updates</code> in consumer repos.</td></tr>
+  <tr><td>Dual-surface mirrors</td><td>Skills supporting both Claude and Codex have <code>claude/</code> and <code>codex/</code> variants.</td></tr>
+  <tr><td>Archive-on-bump</td><td><code>archive/&lt;version&gt;/SKILL.md</code> snapshots and per-skill <code>CHANGELOG.md</code> remain the versioning artifacts.</td></tr>
+  <tr><td>Global vs pack distinction</td><td>A small set of domain-neutral skills installs globally; packs install per-project.</td></tr>
+  <tr><td>Git-clone still works</td><td><code>pack.sh</code> continues to function for users who prefer the local checkout model.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- =========================================================== -->
+<section id="coa-a"><div class="section-head"><h2>COA A: The Monolith</h2></div>
+    <div class="section-feedback" data-section="COA A: The Monolith" id="feedback-coa-a">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="coa-card coa-a">
+<h3><span class="tag tag-a">COA A</span> One package ships everything <span style="background:var(--green);color:#0d1117;padding:2px 8px;border-radius:4px;font-size:0.8rem;font-weight:600;vertical-align:middle;">Recommended</span></h3>
+<p><strong>Philosophy:</strong> Maximum simplicity. One <code>npm install</code>, everything available. Optimize for speed to market and minimal publishing overhead.</p>
+
+<h4>Architecture</h4>
+<pre>
+npm packages:
+  agentic-skills              # Single package. CLI + all packs.
+
+Layout inside the package:
+  agentic-skills/
+    package.json
+    bin/agentic-skills.mjs     # CLI entry point
+    src/cli/                   # CLI commands (install, remove, refresh, doctor)
+    src/registry.mjs           # Pack/skill index builder
+    global/claude/...          # Unchanged from current repo
+    global/codex/...
+    packs/...                  # All 40 packs, unchanged
+</pre>
+
+<h4>Version Model</h4>
+<ul>
+  <li>npm package follows semver: <code>1.0.0</code>, <code>1.1.0</code>, <code>2.0.0</code></li>
+  <li>Individual skill <code>v0.x</code> versions remain in SKILL.md frontmatter for pinning</li>
+  <li>An npm version bump aggregates all skill changes since last release</li>
+  <li>Agent workflow: edit SKILL.md &rarr; <code>npx agentic-skills bump-skill &lt;name&gt;</code> &rarr; archives, bumps, optionally triggers <code>npm version patch</code></li>
+</ul>
+
+<h4>CLI Surface</h4>
+<pre>
+npm install -g agentic-skills         # or use npx
+
+agentic-skills install business-discovery game
+agentic-skills list
+agentic-skills status
+agentic-skills doctor
+agentic-skills refresh
+agentic-skills pin devtool-adoption v0.0
+agentic-skills init-global            # replaces ./init.sh
+agentic-skills bump-skill &lt;skill&gt;     # agent-driven version bump
+</pre>
+
+<h4>Migration Path</h4>
+<ol>
+  <li>Add <code>package.json</code> at repo root</li>
+  <li>Port <code>pack.sh</code> core logic to Node.js CLI</li>
+  <li>Keep <code>pack.sh</code> as backward-compat wrapper that delegates to <code>npx agentic-skills</code></li>
+  <li>Publish to npm</li>
+</ol>
+
+<h4>Timeline</h4>
+<div class="table-wrap"><table><thead><tr><th>Phase</th><th>Size</th><th>Duration</th><th>Deliverable</th></tr></thead><tbody>
+  <tr><td>1</td><td>S</td><td>1&ndash;2 weeks</td><td>Add <code>package.json</code>, wire CLI as thin Node wrapper around <code>pack.sh</code></td></tr>
+  <tr><td>2</td><td>M</td><td>2&ndash;4 weeks</td><td>Port <code>pack.sh</code> to Node.js, make bash a shim</td></tr>
+  <tr><td>3</td><td>S</td><td>1 week</td><td>Publish to npm, update docs</td></tr>
+</tbody></table></div>
+
+<div class="callout callout-green"><strong>Best for:</strong> Solo maintainer who wants the fastest path to npm presence. Ideal if the primary audience is Claude Code / Codex users who already know about the project and just want an easier install.</div>
+</div>
+</section>
+
+<!-- =========================================================== -->
+<section id="coa-b"><div class="section-head"><h2>COA B: The Federation</h2></div>
+    <div class="section-feedback" data-section="COA B: The Federation" id="feedback-coa-b">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="coa-card coa-b">
+<h3><span class="tag tag-b">COA B</span> Each pack is its own npm package</h3>
+<p><strong>Philosophy:</strong> Ecosystem-native. Users install only what they need. Each pack has its own identity, version, and npm search presence.</p>
+
+<h4>Architecture</h4>
+<pre>
+npm packages:
+  @agentic-skills/cli                    # CLI coordinator
+  @agentic-skills/core                   # Global skills
+  @agentic-skills/business-discovery     # Pack package
+  @agentic-skills/code-quality           # Pack package
+  @agentic-skills/game                   # Pack package
+  ... (~37 pack packages)
+
+Monorepo layout (pnpm workspaces):
+  agentic-skills/
+    pnpm-workspace.yaml
+    packages/
+      cli/package.json          # @agentic-skills/cli
+      core/package.json         # @agentic-skills/core
+      packs/
+        business-discovery/package.json
+        game/package.json
+        ...
+</pre>
+
+<h4>Version Model</h4>
+<ul>
+  <li>Each pack package has its own semver version, tracking changes to skills within that pack</li>
+  <li><code>@agentic-skills/cli</code> versions independently (CLI features, not skill content)</li>
+  <li>Skill-level <code>v0.x</code> versions remain for pinning within a pack version</li>
+  <li>Agent workflow: edit SKILL.md &rarr; <code>npx @agentic-skills/cli bump &lt;pack&gt;</code> &rarr; bump pack <code>package.json</code> &rarr; <code>npm publish</code> for that one pack</li>
+  <li>Compatibility aliases (<code>business</code> &rarr; three packs) become meta-packages with peer dependencies</li>
+</ul>
+
+<h4>CLI Surface</h4>
+<pre>
+npm install -g @agentic-skills/cli
+
+agentic-skills init                      # install global skills
+agentic-skills install business-discovery game
+agentic-skills list
+agentic-skills status
+agentic-skills doctor
+agentic-skills pin devtool-adoption v0.0
+agentic-skills lock business-discovery@2.1.0  # lock pack npm version
+</pre>
+
+<h4>Migration Path</h4>
+<ol>
+  <li>Restructure repo into pnpm workspace with <code>packages/</code> directory</li>
+  <li>Generate <code>package.json</code> for each pack (scripted from <code>PACK.md</code>)</li>
+  <li>Build <code>@agentic-skills/cli</code> as Node.js port of <code>pack.sh</code></li>
+  <li>Publish core + first 10 packs, validate end-to-end</li>
+  <li>Publish remaining packs in waves</li>
+</ol>
+
+<h4>Timeline</h4>
+<div class="table-wrap"><table><thead><tr><th>Phase</th><th>Size</th><th>Duration</th><th>Deliverable</th></tr></thead><tbody>
+  <tr><td>1</td><td>M</td><td>3&ndash;4 weeks</td><td>Restructure to pnpm workspace, build CLI</td></tr>
+  <tr><td>2</td><td>M</td><td>2&ndash;3 weeks</td><td>Publish <code>core</code> + first 10 packs</td></tr>
+  <tr><td>3</td><td>S</td><td>1&ndash;2 weeks</td><td>Publish remaining packs, add <code>pack.sh</code> shim</td></tr>
+  <tr><td>4</td><td>S</td><td>1 week</td><td>Docs, migration guide</td></tr>
+</tbody></table></div>
+
+<div class="callout callout-green"><strong>Best for:</strong> Building an npm-native ecosystem where packs are independently discoverable and versionable. Ideal if you expect external contributors or want packs to have independent release cadences.</div>
+</div>
+</section>
+
+<!-- =========================================================== -->
+<section id="coa-c"><div class="section-head"><h2>COA C: The Registry</h2></div>
+    <div class="section-feedback" data-section="COA C: The Registry" id="feedback-coa-c">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="coa-card coa-c">
+<h3><span class="tag tag-c">COA C</span> Skill registry + thin client</h3>
+<p><strong>Philosophy:</strong> Skills are data, not code. Publish a registry and a thin client. Maximum granularity and multi-surface reach.</p>
+
+<h4>Architecture</h4>
+<pre>
+npm packages:
+  agentic-skills               # CLI + local manager
+  @agentic-skills/registry     # Skill manifest + all SKILL.md files as data
+  @agentic-skills/sdk          # Programmatic API for third-party tools
+
+Registry structure:
+  @agentic-skills/registry/
+    skills.json                # Generated manifest: every skill with metadata
+    packs.json                 # Pack definitions
+    skills/                    # Flat directory of versioned SKILL.md files
+      business-discovery--icp-interview--claude--v0.3.md
+      game--playtest--claude--v0.0.md
+      ...
+</pre>
+
+<h4>Version Model</h4>
+<ul>
+  <li>Each skill has its own semver version mapped from SKILL.md: <code>v0.0</code> &rarr; <code>0.0.0</code>, <code>v0.1</code> &rarr; <code>0.1.0</code></li>
+  <li>The registry package (<code>@agentic-skills/registry</code>) versions on its own cadence; each publish is a new snapshot</li>
+  <li><code>skills.json</code> manifest includes per-skill version, content hash, pack membership, and dependency info</li>
+  <li>Pinning at skill level: <code>.agents/project.json</code> &rarr; <code>{ "devtool-adoption": "0.0.0" }</code></li>
+  <li>Historical versions available via npm package version history</li>
+</ul>
+
+<h4>CLI Surface</h4>
+<pre>
+npm install -g agentic-skills
+
+agentic-skills init                      # install registry, set up cache
+agentic-skills install game business-discovery
+agentic-skills install-skill devtool-adoption  # single skill from any pack
+agentic-skills pin devtool-adoption 0.0.0
+agentic-skills update                    # show available updates
+agentic-skills update --apply            # apply updates
+agentic-skills search "code quality"
+agentic-skills registry-build            # maintainer: regenerate skills.json
+agentic-skills registry-publish          # maintainer: npm publish registry
+
+</pre>
+
+<h4>SDK Surface</h4>
+<pre>
+import { SkillRegistry } from '@agentic-skills/sdk'
+
+const registry = new SkillRegistry()
+const skill = await registry.getSkill('devtool-adoption')
+const packs = await registry.listPacks()
+const results = await registry.search('code quality')
+</pre>
+
+<h4>Migration Path</h4>
+<ol>
+  <li>Build registry generator (walks <code>global/</code> and <code>packs/</code>, produces <code>skills.json</code>)</li>
+  <li>Build CLI with registry-aware resolution</li>
+  <li>Publish <code>@agentic-skills/registry</code> with initial snapshot</li>
+  <li>Build and publish SDK</li>
+  <li><code>pack.sh</code> becomes backward-compat wrapper; standalone bash mode preserved</li>
+  <li>Over time, registry becomes source of truth; git repo is the authoring environment</li>
+</ol>
+
+<h4>Timeline</h4>
+<div class="table-wrap"><table><thead><tr><th>Phase</th><th>Size</th><th>Duration</th><th>Deliverable</th></tr></thead><tbody>
+  <tr><td>1</td><td>M</td><td>3&ndash;4 weeks</td><td>Registry generator, <code>@agentic-skills/registry</code> publish, basic CLI</td></tr>
+  <tr><td>2</td><td>M</td><td>3&ndash;4 weeks</td><td>Full CLI with install/remove/doctor/pin/update</td></tr>
+  <tr><td>3</td><td>M</td><td>2&ndash;3 weeks</td><td>SDK package with TypeScript types</td></tr>
+  <tr><td>4</td><td>S</td><td>1&ndash;2 weeks</td><td>Docs, migration guide</td></tr>
+</tbody></table></div>
+
+<div class="callout callout-green"><strong>Best for:</strong> Maximum multi-surface reach and future extensibility. Ideal if the vision includes third-party integrations, tool-agnostic consumption, and per-skill granularity.</div>
+</div>
+</section>
+
+<!-- =========================================================== -->
+<section id="comparison"><div class="section-head"><h2>Side-by-Side Comparison</h2></div>
+    <div class="section-feedback" data-section="Side-by-Side Comparison" id="feedback-comparison">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+
+<div class="table-wrap"><table><thead><tr><th>Dimension</th><th><span class="tag tag-a">A</span> Monolith</th><th><span class="tag tag-b">B</span> Federation</th><th><span class="tag tag-c">C</span> Registry</th></tr></thead><tbody>
+  <tr><td><strong>npm package count</strong></td><td>1</td><td>~40</td><td>4</td></tr>
+  <tr><td><strong>Install size per project</strong></td><td>Full library (~3 MB)</td><td>Selected packs only</td><td>Selected skills only</td></tr>
+  <tr><td><strong>Version granularity</strong></td><td>Library-level</td><td>Pack-level</td><td>Skill-level</td></tr>
+  <tr><td><strong>Agent publish workflow</strong></td><td>Edit &rarr; <code>npm publish</code></td><td>Edit &rarr; bump pack &rarr; publish pack</td><td>Edit &rarr; rebuild registry &rarr; publish registry</td></tr>
+  <tr><td><strong>npm discoverability</strong></td><td>Single listing</td><td>Per-pack listings</td><td>Single registry + CLI listing</td></tr>
+  <tr><td><strong>Offline support</strong></td><td>Full</td><td>Full (installed packs)</td><td>After initial fetch</td></tr>
+  <tr><td><strong>Cross-pack dependencies</strong></td><td>All available locally</td><td>npm peer deps</td><td>Registry resolves</td></tr>
+  <tr><td><strong>Publishing overhead</strong></td><td>Lowest</td><td>Highest</td><td>Medium</td></tr>
+  <tr><td><strong>Time to first npm publish</strong></td><td>~2 weeks</td><td>~6 weeks</td><td>~4 weeks</td></tr>
+  <tr><td><strong>Total implementation</strong></td><td>4&ndash;7 weeks</td><td>7&ndash;10 weeks</td><td>9&ndash;13 weeks</td></tr>
+  <tr><td><strong>Programmatic SDK</strong></td><td>Not included</td><td>Not included</td><td>Included</td></tr>
+  <tr><td><strong>Per-skill install</strong></td><td>No (full library)</td><td>No (full pack)</td><td>Yes</td></tr>
+  <tr><td><strong>Community contribution</strong></td><td>Easy (clone + PR)</td><td>Medium (must target pack)</td><td>Harder (registry pipeline)</td></tr>
+</tbody></table></div>
+
+<h3>Effort vs Reach</h3>
+<div class="chart-container" id="chart-effort-reach"></div>
+
+<h3>Evolutionary Path</h3>
+<div class="callout"><strong>These COAs are not mutually exclusive over time.</strong> A pragmatic path: start with COA A (fastest to npm), then extract hot packs into independent packages (COA B pattern) as demand grows, and layer the registry index (COA C pattern) as a discoverability surface on top. The CLI abstracts the backend so users never see the migration.</div>
+
+<div class="callout callout-green"><strong>Recommendation: COA A &mdash; The Monolith.</strong> For a solo maintainer, COA A is the right starting point. It has the lowest publishing overhead (one <code>npm publish</code>), the fastest path to npm presence (~4&ndash;7 weeks), and the simplest agent publish workflow. The ~3 MB tarball is well within npm norms. The CLI abstraction layer means users never see if the backend evolves later &mdash; you can extract hot packs (COA B pattern) or add a registry index (COA C pattern) if demand warrants, without breaking anyone's install.</div>
+
+<div class="callout"><strong>Future Consideration: Hosted Skill Registry.</strong> A central server that serves skills on-demand over HTTP without local npm install. This enables zero-install surface reach, usage analytics, dynamic versioning, access control, and third-party publishing. This is a different product from npm distribution &mdash; it requires hosting, authentication, uptime guarantees, and API design. Build it later if adoption warrants, reusing the versioning and pack metadata that npm establishes. A network protocol like MCP becomes a natural fit here (serving skills over a wire to remote clients) rather than wrapping local file reads.</div>
+</section>
+
+<!-- =========================================================== -->
+<section id="risk"><div class="section-head"><h2>Risk Matrix</h2></div>
+    <div class="section-feedback" data-section="Risk Matrix" id="feedback-risk-matrix">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<div class="table-wrap"><table><thead><tr><th>Risk</th><th><span class="tag tag-a">A</span></th><th><span class="tag tag-b">B</span></th><th><span class="tag tag-c">C</span></th></tr></thead><tbody>
+  <tr><td>Package size bloat</td><td style="color:var(--red)">HIGH</td><td style="color:var(--green)">LOW</td><td style="color:var(--green)">LOW</td></tr>
+  <tr><td>Publishing coordination</td><td style="color:var(--green)">LOW</td><td style="color:var(--red)">HIGH</td><td style="color:var(--orange)">MED</td></tr>
+  <tr><td>Breaking change blast radius</td><td style="color:var(--orange)">MED</td><td style="color:var(--green)">LOW</td><td style="color:var(--green)">LOW</td></tr>
+  <tr><td>Agent publishability</td><td style="color:var(--green)">EASY</td><td style="color:var(--orange)">MED</td><td style="color:var(--orange)">MED</td></tr>
+  <tr><td>Backward compat risk</td><td style="color:var(--green)">LOW</td><td style="color:var(--orange)">MED</td><td style="color:var(--red)">HIGH</td></tr>
+  <tr><td>npm scope availability</td><td style="color:var(--green)">LOW</td><td style="color:var(--orange)">MED</td><td style="color:var(--green)">LOW</td></tr>
+<tr><td>Maintenance burden</td><td style="color:var(--green)">LOW</td><td style="color:var(--red)">HIGH</td><td style="color:var(--orange)">MED</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- =========================================================== -->
+<section id="naming"><div class="section-head"><h2>Naming and Branding</h2></div>
+    <div class="section-feedback" data-section="Naming and Branding" id="feedback-naming-and-branding">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>The current branding uses "agentic-skills" as the repo name and "packs" / "card packs" as the grouping metaphor. Moving to npm creates a public identity that should be intentional.</p>
+
+<h3>Naming Options</h3>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>npm name</th><th>Scoped packages</th><th>Vibe</th></tr></thead><tbody>
+  <tr><td><strong>Keep agentic-skills</strong></td><td><code>agentic-skills</code></td><td><code>@agentic-skills/*</code></td><td>Descriptive, clear, slightly long</td></tr>
+  <tr><td><strong>skillpacks</strong></td><td><code>skillpacks</code></td><td><code>@skillpacks/*</code></td><td>Leans into the "pack" metaphor, shorter</td></tr>
+  <tr><td><strong>agentkit</strong></td><td><code>agentkit</code></td><td><code>@agentkit/*</code></td><td>Broader, positions as a toolkit not just skills</td></tr>
+  <tr><td><strong>promptpacks</strong></td><td><code>promptpacks</code></td><td><code>@promptpacks/*</code></td><td>Describes what it literally is: packaged prompts</td></tr>
+</tbody></table></div>
+
+<h3>Terminology Mapping</h3>
+<div class="table-wrap"><table><thead><tr><th>Concept</th><th>Current term</th><th>Proposed public term</th></tr></thead><tbody>
+  <tr><td>The product</td><td>agentic-skills (repo name)</td><td>TBD &mdash; see gate question</td></tr>
+  <tr><td>A bundle of related skills</td><td>Pack / Card pack</td><td><strong>Pack</strong> (drop "card")</td></tr>
+  <tr><td>An individual skill</td><td>Skill</td><td><strong>Skill</strong> (unchanged)</td></tr>
+  <tr><td>The CLI tool</td><td><code>pack.sh</code></td><td><code>agentic-skills</code> / <code>skillpacks</code> (matches npm name)</td></tr>
+<tr><td>Global (domain-neutral) skills</td><td>Global skills</td><td><strong>Core skills</strong></td></tr>
+</tbody></table></div>
+</section>
+
+<!-- =========================================================== -->
+<section id="evidence"><div class="section-head"><h2>Evidence and Assumptions</h2></div>
+    <div class="section-feedback" data-section="Evidence and Assumptions" id="feedback-evidence-and-assumptions">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<h3>Evidence Matrix</h3>
+<div class="table-wrap"><table><thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr></thead><tbody>
+  <tr><td>Current distribution requires git clone</td><td><code>init.sh</code>, <code>pack.sh</code>, and <code>skill-links.sh</code> all resolve paths relative to the repo checkout. No <code>package.json</code> at root.</td><td>npm distribution requires wrapping or porting these scripts.</td><td>High</td><td>All COAs must port or wrap <code>pack.sh</code>.</td></tr>
+  <tr><td>Estimated npm tarball size ~3 MB for full library</td><td>298 SKILL.md files + archives + scripts; markdown files are small but archives multiply.</td><td>COA A's single package is large but not prohibitive for npm.</td><td>Medium</td><td>COA A is viable but wasteful for single-pack users.</td></tr>
+  <tr><td>Solo maintainer constraint</td><td>All 53k+ commits are from one author. No external contributors.</td><td>Publishing overhead must be automatable by agents.</td><td>High</td><td>COA B's 37+ packages are the highest maintenance risk.</td></tr>
+<tr><td>Agent-driven publishing is feasible</td><td>Existing <code>create-agentic-skill</code> and <code>skill-archive.sh</code> already automate version bumps. <code>npm publish</code> can be scripted.</td><td>Agents can handle the full publish pipeline with minimal human intervention.</td><td>High</td><td>All COAs benefit; COA A is simplest to automate.</td></tr>
+  <tr><td>Pack interdependencies are soft, not hard</td><td>Cross-pack references are via slash-command recommendations in prose, not formal dependency declarations.</td><td>Pack packages do not strictly require npm peer dependencies.</td><td>High</td><td>COA B's dependency model is simpler than expected.</td></tr>
+</tbody></table></div>
+
+<h3>Assumptions Register</h3>
+<div class="table-wrap"><table><thead><tr><th>Assumption</th><th>Status</th><th>What would change it</th></tr></thead><tbody>
+  <tr><td><code>@agentic-skills</code> npm scope is available</td><td>Unverified</td><td>Check npm org availability before committing to scoped packages (COA B/C).</td></tr>
+  <tr><td><code>agentic-skills</code> unscoped name is available</td><td>Unverified</td><td>Check <code>npm info agentic-skills</code>. If taken, all COAs need a different CLI package name.</td></tr>
+  <tr><td>Users are willing to use npm for skill management</td><td>Assumed</td><td>If the primary user base is non-developers, a different distribution channel (brew, curl) may be needed.</td></tr>
+<tr><td>Monorepo tooling (pnpm workspaces) is sufficient for COA B</td><td>Provisional</td><td>37+ packages may need changesets or turborepo for coordinated releases.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- =========================================================== -->
+<section id="review-gates"><div class="section-head"><h2>Review Gates</h2></div>
+    <div class="section-feedback" data-section="Review Gates" id="feedback-review-gates">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+<p>Answer these gates after reviewing the COAs, comparison, and risk matrix above.</p>
+
+    <div class="gate question-block" data-section="COA Selection" data-gate-type="recommended path" data-question-id="coa-selection-recommended-path" data-target-path="">
+      <h3>Recommended Path</h3>
+      <p>Which course of action should we pursue as the primary strategy?</p>
+      <div class="radio-group">
+        <label><input type="radio" name="coa-selection-recommended-path" value="COA A: The Monolith — ship one npm package with everything"> <span>COA A: The Monolith &mdash; ship one npm package with everything</span></label>
+        <label><input type="radio" name="coa-selection-recommended-path" value="COA B: The Federation — one npm package per pack"> <span>COA B: The Federation &mdash; one npm package per pack</span></label>
+        <label><input type="radio" name="coa-selection-recommended-path" value="COA C: The Registry — skill registry + thin client"> <span>COA C: The Registry &mdash; skill registry + thin client</span></label>
+        <label><input type="radio" name="coa-selection-recommended-path" value="Hybrid: Start COA A, evolve toward B/C over time"> <span>Hybrid: Start COA A, evolve toward B/C over time</span></label>
+        <label><input type="radio" name="coa-selection-recommended-path" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="coa-selection-recommended-path" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+
+    <div class="gate question-block" data-section="Naming" data-gate-type="recommended path" data-question-id="naming-recommended-path" data-target-path="">
+      <h3>Product Naming</h3>
+      <p>What should the public-facing npm package name be?</p>
+      <div class="radio-group">
+        <label><input type="radio" name="naming-recommended-path" value="agentic-skills (keep current name)"> <span>agentic-skills (keep current name)</span></label>
+        <label><input type="radio" name="naming-recommended-path" value="skillpacks"> <span>skillpacks</span></label>
+        <label><input type="radio" name="naming-recommended-path" value="agentkit"> <span>agentkit</span></label>
+        <label><input type="radio" name="naming-recommended-path" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="naming-recommended-path" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+
+    <div class="gate question-block" data-section="Version Granularity" data-gate-type="scope/non-goals" data-question-id="version-granularity-scope" data-target-path="">
+      <h3>Version Granularity</h3>
+      <p>What level of version granularity should users be able to pin?</p>
+      <div class="radio-group">
+        <label><input type="radio" name="version-granularity-scope" value="Library-level only (one version for everything)"> <span>Library-level only (one version for everything)</span></label>
+        <label><input type="radio" name="version-granularity-scope" value="Pack-level (each pack has its own version)"> <span>Pack-level (each pack has its own version)</span></label>
+        <label><input type="radio" name="version-granularity-scope" value="Skill-level (each skill has its own version)"> <span>Skill-level (each skill has its own version)</span></label>
+        <label><input type="radio" name="version-granularity-scope" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="version-granularity-scope" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+
+    <div class="gate question-block" data-section="Artifact Destination" data-gate-type="artifact destination" data-question-id="artifact-destination" data-target-path="alignment/idea-scope-brief-npm-distribution.html">
+      <h3>Artifact Destination</h3>
+      <p>Where should implementation planning artifacts go after approval?</p>
+      <div class="radio-group">
+        <label><input type="radio" name="artifact-destination" value="Write a spec to specs/ and create tasks/todo.md for implementation"> <span>Write a spec to <code>specs/</code> and create <code>tasks/todo.md</code> for implementation</span></label>
+        <label><input type="radio" name="artifact-destination" value="Start implementation directly from the approved COA"> <span>Start implementation directly from the approved COA</span></label>
+        <label><input type="radio" name="artifact-destination" value="Write a detailed design doc to docs/ first"> <span>Write a detailed design doc to <code>docs/</code> first</span></label>
+        <label><input type="radio" name="artifact-destination" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="artifact-destination" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+
+    <div class="gate question-block" data-section="Post-Approval Route" data-gate-type="post-approval route" data-question-id="post-approval-route" data-target-path="">
+      <h3>Post-Approval Route</h3>
+      <p>After final approval, what should the agent do next?</p>
+      <div class="radio-group">
+        <label><input type="radio" name="post-approval-route" value="Confirm and stop — I will drive next steps manually"> <span>Confirm and stop &mdash; I will drive next steps manually</span></label>
+        <label><input type="radio" name="post-approval-route" value="Confirm and begin implementation of phase 1"> <span>Confirm and begin implementation of phase 1</span></label>
+        <label><input type="radio" name="post-approval-route" value="Confirm and create a detailed implementation roadmap"> <span>Confirm and create a detailed implementation roadmap</span></label>
+        <label><input type="radio" name="post-approval-route" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+        <label><input type="radio" name="post-approval-route" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+      </div>
+      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+    </div>
+</section>
+
+<!-- =========================================================== -->
+<section id="compile" class="compile-box">
+  <div class="section-head"><h2>Compile YAML</h2></div>
+    <div class="section-feedback" data-section="Compile YAML" id="feedback-compile-yaml">
+      <span>Section feedback</span>
+      <button type="button" data-feedback="emphasize">Emphasize</button>
+      <button type="button" data-feedback="down">Thumbs down</button>
+      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly></textarea>
+    </div>
+  <p>Use feedback YAML for emphasis requests, concerns, or clarification before answering all gates. Use final answers YAML only when every required gate is answered.</p>
+  <div class="compile-actions"><button type="button" id="compile-feedback">Compile Feedback YAML</button><button type="button" id="copy-feedback">Copy YAML</button><span id="feedback-status"></span></div>
+  <textarea id="compiled-feedback-yaml" readonly></textarea>
+  <div class="compile-actions"><button type="button" id="compile-answers">Compile Answers</button><button type="button" id="copy-answers">Copy YAML</button><span id="answer-status"></span></div>
+  <textarea id="compiled-yaml" readonly></textarea>
+</section>
+</main>
+
+<script>
+const alignmentPage = 'alignment/idea-scope-brief-npm-distribution.html';
+const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
+function yamlEscape(value) { return String(value || '').replace(/\n/g, '\n    '); }
+function selectedFeedbackEntries() {
+  return [...document.querySelectorAll('.section-feedback.has-feedback')].map(box => ({
+    section: box.dataset.section,
+    feedback: box.dataset.feedback,
+    notes: box.querySelector('.feedback-notes').value.trim(),
+    requested_agent_action: actionFor[box.dataset.feedback]
+  }));
+}
+function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
+function feedbackYaml(entries) {
+  const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
+  let y = `alignment_page: ${alignmentPage}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n`;
+  y += unanswered.length ? unanswered.map(q => `  - ${q}`).join('\n') + '\n' : '  []\n';
+  y += 'section_feedback:\n';
+  y += entries.length ? entries.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+function answersYaml() {
+  const gates = [...document.querySelectorAll('.gate')];
+  let y = `alignment_page: ${alignmentPage}\napproval_status: ready-for-agent-review\ngate_answers:\n`;
+  for (const g of gates) {
+    const checked = g.querySelector('input[type="radio"]:checked');
+    const answer = checked ? checked.value : '';
+    const status = answer === 'Need clarification' ? 'needs-clarification' : (answer === 'Other / None of the above' ? 'other' : 'answered');
+    const notes = g.querySelector('.answer-notes').value.trim();
+    y += `  - section: ${yamlEscape(g.dataset.section)}\n    gate_type: ${yamlEscape(g.dataset.gateType)}\n    status: ${status}\n    answer: ${yamlEscape(answer)}\n`;
+    if (notes) y += `    notes: ${yamlEscape(notes)}\n`;
+    if (g.dataset.targetPath) y += `    target_path: ${yamlEscape(g.dataset.targetPath)}\n`;
+  }
+  const feedback = selectedFeedbackEntries();
+  y += 'section_feedback:\n';
+  y += feedback.length ? feedback.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+async function copyText(text, statusEl, textarea) {
+  try { await navigator.clipboard.writeText(text); statusEl.textContent = 'Copied'; }
+  catch { if (textarea) { textarea.focus(); textarea.select(); } statusEl.textContent = 'Select text to copy'; }
+}
+function updateAnswerState() {
+  const remaining = unansweredQuestions();
+  const btn = document.getElementById('compile-answers');
+  btn.disabled = remaining.length > 0;
+  document.getElementById('answer-status').textContent = remaining.length ? `${remaining.length} required questions remaining` : 'All required questions answered';
+}
+document.querySelectorAll('.section-feedback button[data-feedback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active'); box.classList.remove('has-feedback','has-yaml'); delete box.dataset.feedback;
+    } else {
+      box.querySelectorAll('button[data-feedback]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); box.dataset.feedback = btn.dataset.feedback; box.classList.add('has-feedback'); box.classList.remove('has-yaml');
+    }
+  });
+});
+document.querySelectorAll('.compile-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    const entry = { section: box.dataset.section, feedback: box.dataset.feedback, notes: box.querySelector('.feedback-notes').value.trim(), requested_agent_action: actionFor[box.dataset.feedback] };
+    const y = feedbackYaml([entry]);
+    const area = box.querySelector('.local-yaml'); area.value = y; box.classList.add('has-yaml');
+    copyText(y, box.querySelector('.copy-status'), area);
+  });
+});
+document.querySelectorAll('.copy-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    copyText(box.querySelector('.local-yaml').value, box.querySelector('.copy-status'), box.querySelector('.local-yaml'));
+  });
+});
+document.querySelectorAll('.gate input[type="radio"]').forEach(r => {
+  r.addEventListener('change', () => { r.closest('.gate').classList.add('has-answer'); updateAnswerState(); });
+});
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  const y = feedbackYaml(selectedFeedbackEntries());
+  const area = document.getElementById('compiled-feedback-yaml'); area.value = y;
+  copyText(y, document.getElementById('feedback-status'), area);
+});
+document.getElementById('copy-feedback').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-feedback-yaml').value, document.getElementById('feedback-status'), document.getElementById('compiled-feedback-yaml'));
+});
+document.getElementById('compile-answers').addEventListener('click', () => {
+  const y = answersYaml();
+  const area = document.getElementById('compiled-yaml'); area.value = y;
+  copyText(y, document.getElementById('answer-status'), area);
+});
+document.getElementById('copy-answers').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-yaml').value, document.getElementById('answer-status'), document.getElementById('compiled-yaml'));
+});
+updateAnswerState();
+
+// Chart: Effort vs Reach radar
+(function() {
+  const container = document.getElementById('chart-effort-reach');
+  if (!container) return;
+  const canvas = document.createElement('canvas');
+  canvas.width = 600; canvas.height = 320;
+  container.appendChild(canvas);
+
+  const dims = ['Speed to\nmarket', 'Install\ngranularity', 'npm\ndiscoverability', 'Agent\npublishability', 'Maintenance\nburden'];
+  const data = [
+    { label: 'COA A: Monolith', values: [95, 15, 20, 95, 90], color: '#58a6ff' },
+    { label: 'COA B: Federation', values: [45, 65, 95, 60, 30], color: '#3fb950' },
+    { label: 'COA C: Registry', values: [35, 95, 50, 55, 55], color: '#d29922' },
+  ];
+  const cx = 200, cy = 160, r = 120, n = dims.length;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = 600 * dpr; canvas.height = 320 * dpr;
+  canvas.style.width = '600px'; canvas.style.height = '320px';
+  ctx.scale(dpr, dpr);
+
+  function angleFor(i) { return (Math.PI * 2 * i / n) - Math.PI / 2; }
+
+  // Grid
+  [0.25, 0.5, 0.75, 1].forEach(f => {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const a = angleFor(i % n);
+      const x = cx + Math.cos(a) * r * f, y = cy + Math.sin(a) * r * f;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1; ctx.stroke();
+  });
+  // Axes
+  for (let i = 0; i < n; i++) {
+    const a = angleFor(i);
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+    ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  // Labels
+  ctx.fillStyle = '#c9d1d9'; ctx.font = '11px -apple-system, sans-serif'; ctx.textAlign = 'center';
+  for (let i = 0; i < n; i++) {
+    const a = angleFor(i);
+    const lx = cx + Math.cos(a) * (r + 28), ly = cy + Math.sin(a) * (r + 20);
+    const lines = dims[i].split('\n');
+    lines.forEach((line, li) => ctx.fillText(line, lx, ly + li * 13));
+  }
+  // Data
+  data.forEach(series => {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const idx = i % n;
+      const a = angleFor(idx);
+      const v = series.values[idx] / 100;
+      const x = cx + Math.cos(a) * r * v, y = cy + Math.sin(a) * r * v;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = series.color; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = series.color + '22'; ctx.fill();
+    // Dots
+    for (let i = 0; i < n; i++) {
+      const a = angleFor(i);
+      const v = series.values[i] / 100;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a) * r * v, cy + Math.sin(a) * r * v, 3, 0, Math.PI * 2);
+      ctx.fillStyle = series.color; ctx.fill();
+    }
+  });
+  // Legend
+  let lx = 420, ly = 80;
+  data.forEach((s, i) => {
+    ctx.fillStyle = s.color;
+    ctx.fillRect(lx, ly + i * 24, 12, 12);
+    ctx.fillStyle = '#c9d1d9'; ctx.font = '12px -apple-system, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(s.label, lx + 18, ly + i * 24 + 11);
+  });
+
+  // Fallback table
+  const table = document.createElement('div');
+  table.hidden = true;
+  table.innerHTML = '<div style="overflow-x:auto;border:1px solid #30363d;border-radius:8px"><table style="width:100%;border-collapse:collapse;min-width:640px"><thead><tr><th style="padding:8px 12px;border-bottom:1px solid #30363d;background:#161b22;color:#fff">Dimension</th><th style="padding:8px 12px;border-bottom:1px solid #30363d;background:#161b22;color:#58a6ff">A: Monolith</th><th style="padding:8px 12px;border-bottom:1px solid #30363d;background:#161b22;color:#3fb950">B: Federation</th><th style="padding:8px 12px;border-bottom:1px solid #30363d;background:#161b22;color:#d29922">C: Registry</th></tr></thead><tbody>' +
+    dims.map((d, i) => `<tr><td style="padding:8px 12px;border-bottom:1px solid #30363d">${d.replace('\n', ' ')}</td><td style="padding:8px 12px;border-bottom:1px solid #30363d">${data[0].values[i]}</td><td style="padding:8px 12px;border-bottom:1px solid #30363d">${data[1].values[i]}</td><td style="padding:8px 12px;border-bottom:1px solid #30363d">${data[2].values[i]}</td></tr>`).join('') +
+    '</tbody></table></div>';
+  container.appendChild(table);
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.textContent = 'View as table';
+  toggleBtn.style.cssText = 'margin:8px 0;padding:6px 14px;background:transparent;color:#58a6ff;border:1px solid #30363d;border-radius:4px;cursor:pointer;font-size:0.85rem;min-height:44px;';
+  let showChart = true;
+  toggleBtn.addEventListener('click', () => {
+    showChart = !showChart;
+    canvas.hidden = !showChart; table.hidden = showChart;
+    toggleBtn.textContent = showChart ? 'View as table' : 'View as chart';
+  });
+  container.appendChild(toggleBtn);
+})();
+</script>
+</body>
+</html>
