@@ -2,22 +2,22 @@
 name: dogfood
 description: Derive owner/operator dogfood scenarios from product evidence and active-use cadence, then produce adoption instructions and manual evaluation checks
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
 interview_depth: none
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Dogfood
 
-Invoke as `$dogfood`.
+Invoke as `/dogfood`.
 
 Create a practical dogfood plan for the app owner or operator. Read the codebase, specs, journey maps, stories, roadmap, and pack-specific research, then tells the operator how to adopt the product into their own workflow so they can understand, evaluate, and improve it through real use.
 
-Dogfood is not UAT. Dogfood asks how the app owner can use the product in their own work and observe what that reveals. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use; use `$uat` for that.
+Dogfood is not UAT. Dogfood asks how the app owner can use the product in their own work and observe what that reveals. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use; use `/uat` for that.
 
 This is a human-run product adoption plan, not automated testing. Do not run the product, start servers, drive a browser, call APIs, create accounts, or perform the scenarios yourself.
 
@@ -74,7 +74,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - friction or failure signals
      - follow-up routing
    - Use concrete product language from specs and journeys. Avoid vague instructions such as "verify the flow works."
-   - If the scenario is primarily about whether a target user would accept the product, route it to `$uat` instead.
+   - If the scenario is primarily about whether a target user would accept the product, route it to `/uat` instead.
 
 5. **Classify follow-up work**
    - Operator-run dogfood scenarios go in `tasks/manual-todo.md` under `## Dogfood Operator Scenarios`.
@@ -82,7 +82,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Do not put operator scenarios in `tasks/todo.md`.
    - Agent-executable implementation fixes discovered after a human run belong in `tasks/todo.md`, but do not invent fixes before the operator has attempted the scenario.
    - Cadence-based dogfood obligations, such as weekly dogfood or pre-release dogfood, go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
-   - If a scenario needs click-by-click help for a human-only external blocker, recommend `$guide`.
+   - If a scenario needs click-by-click help for a human-only external blocker, recommend `/guide` (guided-walkthrough pack).
 
 6. **Present findings before writing when risk is high**
    - If source material is thin, contradictory, or missing the target user journey, summarize the gap and ask whether to proceed with assumptions.
@@ -111,7 +111,7 @@ Use this scenario format in `research/dogfood-audit.md`:
   - [ ] [specific check]
 - Evidence to capture: [screenshots, command output, notes, timestamps, records]
 - Friction/failure signals: [what counts as confusion, delay, breakage, or mismatch]
-- Follow-up routing: [manual note, $uat, $customer-discovery, $journey-map, $guide, or task promotion guidance]
+- Follow-up routing: [manual note, /uat, /icp (business-discovery pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
 
 #### Operator result log
 
@@ -144,8 +144,9 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not mark scenarios complete; only the human operator can do that after performing them.
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
 - Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
-- Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `$customer-discovery`, `$journey-map`, or the relevant pack research skill. For `$customer-discovery`, `$journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
+- Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/icp` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Alignment Page
 

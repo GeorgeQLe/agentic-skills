@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-07
+
+- Routed missing-discovery UAT handoffs from the retired `/icp` executable to `/customer-discovery` while preserving `research/icp.md` as evidence input.
+
 ## v0.8 - 2026-06-05
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.

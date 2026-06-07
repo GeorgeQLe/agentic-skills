@@ -2,18 +2,18 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.9
+version: v0.8
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 interview_depth: none
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # UAT
 
-Invoke as `/uat`.
+Invoke as `$uat`.
 
 Create a user acceptance testing plan from the perspective of a potential or target user. Read the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys that validate whether the product satisfies user goals.
 
@@ -21,7 +21,7 @@ UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into
 
 This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
 
-When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `/consolidate-variations` (product-design pack). This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
+When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$consolidate-variations`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
 ## Process
 
@@ -61,16 +61,16 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Read `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, `specs/ui-requirements-[topic].md`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
    - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
-   - Include a side-by-side comparison matrix and a "Ready for `/consolidate-variations` (product-design pack)?" checklist.
+   - Include a side-by-side comparison matrix and a "Ready for `$consolidate-variations`?" checklist.
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
-   - After writing files, recommend `/consolidate-variations` (product-design pack) only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
+   - After writing files, recommend `$consolidate-variations` only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
    - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**
    - Identify 1-3 target user personas or roles from the evidence.
    - For each selected persona, define the job-to-be-done, context, goal, constraints, and acceptance threshold.
    - Prefer external target users, buyers, evaluators, administrators, developers, or players over the product owner unless the owner is also the target user.
-   - If the target user is unclear, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/customer-discovery`, `/journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+   - If the target user is unclear, stop and recommend `$icp`, `$journey-map`, or the relevant pack research skill. For `$journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
 
 4. **Create UAT journeys**
    - Generate 3-7 journeys unless the user requested a narrower focus.
@@ -96,8 +96,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Implementation or documentation fixes discovered after a completed UAT run belong in `tasks/todo.md`, but do not invent fixes before the user journey has been attempted.
    - One-time evidence collection belongs in `tasks/record-todo.md`.
    - Recurring release acceptance checks belong in `tasks/recurring-todo.md` only when there is a clear release cadence.
-   - If a journey needs step-by-step tester guidance, recommend `/uat-guide` (guided-walkthrough pack).
-   - If a journey step needs click-by-click help for a human-only external blocker (OAuth, DNS, service signup), recommend `/guide` (guided-walkthrough pack).
+   - If a journey needs click-by-click help for a human-only external blocker, recommend `$guide`.
 
 6. **Present findings before writing when risk is high**
    - If source material is thin, contradictory, or missing target-user evidence, summarize the gap and ask whether to proceed with assumptions.
@@ -129,7 +128,7 @@ Use this journey format in `research/uat-plan.md`:
 - Non-acceptance signals: [confusion, delay, missing affordance, incorrect result, trust issue, or blocker]
 - Evidence to capture: [screenshots, recordings, notes, timestamps, records, command output, or artifacts]
 - Tester notes prompt: [question that captures whether the target user would accept this]
-- Follow-up routing: [manual note, /customer-discovery (business-discovery pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
+- Follow-up routing: [manual note, $icp, $journey-map, $guide, or task promotion guidance]
 
 #### UAT result log
 
@@ -177,7 +176,7 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 | Dimension | Variant A | Variant B | Variant C | Current preference | Evidence |
 |---|---|---|---|---|---|
 
-### Ready for `/consolidate-variations` (product-design pack)?
+### Ready for `$consolidate-variations`?
 
 - [ ] Every built variant has been tried or explicitly skipped.
 - [ ] Evidence exists for each kept/rejected design element.
@@ -207,12 +206,11 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not run or operate the product in this skill.
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark journeys complete; only a human tester can do that after performing them.
-- Do not recommend `/consolidate-variations` (product-design pack) before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
+- Do not recommend `$consolidate-variations` before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
-- Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `$icp`, `$journey-map`, or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
 
 ## Alignment Page
 

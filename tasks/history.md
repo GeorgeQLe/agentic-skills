@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-07 — Product testing customer-discovery route cleanup
+
+- Updated mirrored product-testing `dogfood` and `uat` contracts to route retired discovery executable handoffs to `customer-discovery`.
+- Preserved `research/icp.md` as an evidence artifact and kept ICP concept language out of route-only cleanup.
+- Archived and bumped affected active skill mirrors, updated changelogs, and added `tests/layer1/product-testing-customer-discovery-routing.test.ts`.
+- Refreshed Skills Showcase generated assets after active `SKILL.md` metadata changed.
+- Recorded Phase 4.9 review notes and the next Phase 4.10 remaining-pack routing plan in `tasks/todo.md`.
+- Validation passed for the focused product-testing route test, boundary-aware active-route scan, skill integrity checks, pack routing audit, alignment dry-run, generated showcase freshness, Skills Showcase production build, and whitespace diff check.
+- Production deploy not run because this step changed skill contracts and generated showcase metadata only; no explicit production deploy confirmation was requested.
+
 ## 2026-06-07 — Product design customer-discovery route audit
 
 - Audited active product-design `brainstorm`, `prototype`, `spec-interview`, and adjacent active skill contracts for retired `icp` executable handoffs.

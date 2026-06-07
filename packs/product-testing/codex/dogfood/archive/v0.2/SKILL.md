@@ -2,7 +2,7 @@
 name: dogfood
 description: Derive owner/operator dogfood scenarios from product evidence and active-use cadence, then produce adoption instructions and manual evaluation checks
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
 interview_depth: none
 ---
@@ -111,7 +111,7 @@ Use this scenario format in `research/dogfood-audit.md`:
   - [ ] [specific check]
 - Evidence to capture: [screenshots, command output, notes, timestamps, records]
 - Friction/failure signals: [what counts as confusion, delay, breakage, or mismatch]
-- Follow-up routing: [manual note, $uat, $customer-discovery, $journey-map, $guide, or task promotion guidance]
+- Follow-up routing: [manual note, $uat, $icp, $journey-map, $guide, or task promotion guidance]
 
 #### Operator result log
 
@@ -145,7 +145,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
 - Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
 - Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `$customer-discovery`, `$journey-map`, or the relevant pack research skill. For `$customer-discovery`, `$journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `$icp`, `$journey-map`, or the relevant pack research skill. For `$journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
 
 ## Alignment Page
 
