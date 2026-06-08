@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
- * Injects the alignment TTS snippet into existing alignment HTML pages.
- * Idempotent — skips pages that already have the TTS code.
+ * Injects the alignment TTS module tag into existing alignment HTML pages.
+ * Idempotent — skips pages that already have the Kokoro TTS module.
  *
- * Usage: node scripts/inject-tts.mjs [--dry-run] [alignment/specific-page.html]
+ * Usage: node scripts/inject-tts.mjs [--dry-run] [--force] [alignment/specific-page.html]
  *        Default: processes all alignment/*.html except index.html
+ *
+ * --force: replaces any existing TTS code (old inline IIFE or prior module tag)
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -18,28 +20,43 @@ const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 const specificFile = process.argv.find(a => a.endsWith('.html'));
 
-const ttsSnippet = readFileSync(path.join(__dirname, 'alignment-tts-snippet.js'), 'utf8');
-const scriptBlock = `\n<script>\n// --- Brief Me TTS ---\n${ttsSnippet}\n</script>`;
+const KOKORO_TAG = '<script type="module" src="../scripts/alignment-tts-kokoro.js"></script>';
+const scriptBlock = `\n${KOKORO_TAG}`;
+
+function stripOldTTS(html) {
+  // Remove old inline IIFE TTS block
+  const marker = '// --- Brief Me TTS ---';
+  const markerIdx = html.indexOf(marker);
+  if (markerIdx !== -1) {
+    const scriptStart = html.lastIndexOf('<script>', markerIdx);
+    const scriptEnd = html.indexOf('</script>', markerIdx);
+    if (scriptStart !== -1 && scriptEnd !== -1) {
+      html = html.slice(0, scriptStart) + html.slice(scriptEnd + '</script>'.length);
+    }
+  }
+  // Remove old Kokoro module tag if present
+  const kokoroTagRe = /<script type="module" src="[^"]*alignment-tts-kokoro\.js"><\/script>\s*/g;
+  html = html.replace(kokoroTagRe, '');
+  return html;
+}
 
 function inject(filePath) {
   const rel = path.relative(ROOT, filePath);
   let html = readFileSync(filePath, 'utf8');
 
-  if (html.includes('alignTTS')) {
-    if (force) {
-      const marker = '// --- Brief Me TTS ---';
-      const markerIdx = html.indexOf(marker);
-      if (markerIdx !== -1) {
-        const scriptStart = html.lastIndexOf('<script>', markerIdx);
-        const scriptEnd = html.indexOf('</script>', markerIdx);
-        if (scriptStart !== -1 && scriptEnd !== -1) {
-          html = html.slice(0, scriptStart) + html.slice(scriptEnd + '</script>'.length);
-        }
-      }
-    } else {
-      console.log(`  skip (already has TTS): ${rel}`);
-      return false;
-    }
+  const hasKokoro = html.includes('alignment-tts-kokoro.js');
+  const hasOldTTS = html.includes('alignTTS');
+
+  if (hasKokoro && !force) {
+    console.log(`  skip (already has Kokoro TTS): ${rel}`);
+    return false;
+  }
+
+  if ((hasKokoro || hasOldTTS) && force) {
+    html = stripOldTTS(html);
+  } else if (hasOldTTS && !force) {
+    console.log(`  skip (has old TTS, use --force to replace): ${rel}`);
+    return false;
   }
 
   const insertPoint = html.lastIndexOf('</body>');
@@ -69,7 +86,7 @@ if (specificFile) {
     .map(f => path.join(ALIGNMENT_DIR, f));
 }
 
-console.log(`${dryRun ? '[DRY RUN] ' : ''}Injecting TTS into ${files.length} alignment page(s)...`);
+console.log(`${dryRun ? '[DRY RUN] ' : ''}Injecting Kokoro TTS into ${files.length} alignment page(s)...`);
 let count = 0;
 for (const f of files) {
   if (inject(f)) count++;
