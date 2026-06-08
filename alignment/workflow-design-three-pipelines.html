@@ -29,6 +29,7 @@ ul,ol { padding-left:22px; } li { margin:4px 0; }
 .callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
 .callout-warn { border-color:var(--orange); }
 .callout-green { border-color:var(--green); }
+.callout-blue { border-color:var(--accent); }
 .coa-card { border:2px solid var(--border); background:#0f1623; padding:18px; border-radius:10px; margin:16px 0; }
 .coa-card h3 { margin-top:0; }
 .coa-a { border-color:var(--chart-1); }
@@ -103,15 +104,22 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p><strong>Core thesis:</strong> Weekly shipping of small, useful OSS tools builds audience, brand, and distribution surface area. Each tool is a low-cost experiment. Tools that gain traction graduate into deeper product pipelines for sustained investment.</p>
+  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment or a polished product &mdash; compounds brand, audience, and surface area. But two fundamentally different philosophies drive the three pipelines:</p>
+  <ul>
+    <li><strong>Rapid (ORD):</strong> Weekly shipping of small OSS experiments. Volume generates signal. Winners graduate into deeper pipelines.</li>
+    <li><strong>Deliberate (AFPS):</strong> ~Monthly shipping of deeper products. Higher investment per tool, full research and design cycle. Quality and positioning compound over time.</li>
+  </ul>
 
   <div class="callout callout-green">
-    <strong>The flywheel:</strong> Ship fast &rarr; collect signal (stars, installs, issues, usage) &rarr; graduate winners &rarr; deeper investment &rarr; brand compounds &rarr; next tool ships to a larger audience.
+    <strong>ORD flywheel (rapid):</strong> Ship fast &rarr; collect signal (stars, installs, issues, usage) &rarr; graduate winners &rarr; deeper investment &rarr; brand compounds &rarr; next tool ships to a larger audience.
+  </div>
+  <div class="callout callout-blue">
+    <strong>AFPS cycle (deliberate):</strong> Research deeply &rarr; validate with users &rarr; ship polished product (~monthly) &rarr; iterate on traction &rarr; compound through quality.
   </div>
 
   <h3>Why three pipelines?</h3>
   <ul>
-    <li><strong>Different tempos:</strong> A rapid weekly tool needs a 3-step workflow, not a 20-step enterprise discovery process.</li>
+    <li><strong>Rapid vs deliberate:</strong> ORD ships weekly with minimal ceremony (3 steps). AFPS ships monthly with full research and design (12&ndash;20+ steps). These are separate philosophies, not just different ceremony levels.</li>
     <li><strong>Different artifacts:</strong> ORD produces an npm package and README; Business AFPS produces specs, prototypes, UAT, roadmaps.</li>
     <li><strong>Shared graduation path:</strong> ORD tools that show traction enter Devtool AFPS or Business AFPS for full treatment.</li>
     <li><strong>Existing infrastructure:</strong> Business AFPS is mature (40+ skills). Devtool has a strong back half (8 skills). ORD needs to be built.</li>
@@ -186,7 +194,7 @@ devtool-workflow (orchestrator)
     <table>
       <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>ORD</th></tr></thead>
       <tbody>
-        <tr><td>Tempo</td><td>Weeks to months</td><td>1&ndash;3 weeks</td><td>1&ndash;3 days</td></tr>
+        <tr><td>Tempo</td><td>~Monthly (deliberate)</td><td>~Monthly (deliberate)</td><td>Weekly (rapid)</td></tr>
         <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Minimal (3&ndash;4 steps)</td></tr>
         <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Quick scan or skip</td></tr>
         <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>npm package + README</td></tr>
@@ -558,7 +566,7 @@ POST-RESEARCH:
     <table>
       <thead><tr><th>Assumption</th><th>Risk if wrong</th><th>Validation approach</th></tr></thead>
       <tbody>
-        <tr><td>Weekly tool shipping is sustainable</td><td>ORD pipeline underused</td><td>Ship 3&ndash;5 tools, measure cadence</td></tr>
+        <tr><td>Weekly ORD tool shipping is sustainable</td><td>ORD pipeline underused</td><td>Ship 3&ndash;5 ORD tools, measure cadence</td></tr>
         <tr><td>3-step ORD is enough ceremony</td><td>Quality or scoping issues</td><td>Retrospective after first 5 tools</td></tr>
         <tr><td>Traction signals are measurable</td><td>Graduation decisions are subjective</td><td>Define thresholds, track actuals</td></tr>
         <tr><td>Devtool front-half needs differ from business</td><td>Unnecessary skill duplication</td><td>Let ORD graduations reveal actual gaps</td></tr>
