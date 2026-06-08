@@ -1,3 +1,25 @@
+## Current Revision — npm Distribution Deck Installation Gate
+
+### Goal
+
+Revise `alignment/idea-scope-brief-npm-distribution.html` so deck-based installation is part of the active review surface and has an explicit approval gate before final YAML compilation.
+
+### Plan
+
+1. Preserve invocation context and task tracking.
+   - [x] Capture the visible `investigate` invocation under `prompts/investigate/`.
+   - [x] Validate the user claim against the alignment page and recent deck documentation.
+   - [x] Record validation and review results in `tasks/todo.md`.
+2. Apply the minimal alignment-page fix.
+   - [x] Move the deck-based installation section before the review gates so it is part of the reviewed body.
+   - [x] Add a required deck-installation approval gate covering COA A/B/C behavior.
+   - [x] Refresh page/index metadata only where needed.
+   - [x] Add a lesson for future addenda that introduce new decisions.
+3. Verify and ship.
+   - [x] Run targeted string/structure checks and `git diff --check`.
+   - [x] Confirm the compiled gate list includes the new deck-installation gate.
+   - [ ] Commit and push the intended tracked changes while leaving unrelated work untouched.
+
 ## Current Revision — Workflow Design Alignment Chart Clipping
 
 ### Goal

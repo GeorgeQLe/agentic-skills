@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-08 — New alignment-page addenda need matching gates before compile controls
+
+- A deck-based installation addendum was appended after the npm distribution alignment page's review gates and YAML compile controls, so reviewers could approve the page without making the new deck-install decision.
+- When adding a substantive decision section to an existing alignment page, place the section before `Review Gates` and add a matching `.gate` question block with a stable `data-question-id`.
+- Verification should compare substantive section headings against gate sections and confirm the final compiled gate list includes every newly introduced decision surface.
+
 ## 2026-06-08 — Flow-chart SVG labels must stay inside the viewBox
 
 - An alignment-page flow chart rendered all node labels to the right of each node, so destination labels on the final layer extended beyond the SVG viewBox and were cut off even when the SVG itself scaled responsively.

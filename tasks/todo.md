@@ -1,3 +1,28 @@
+## npm Distribution Deck Installation Gate
+
+### Phase 1: Investigation And Fix
+- [x] Capture prompt history for the `investigate` invocation.
+- [x] Confirm the npm distribution alignment page has deck-installation content but no corresponding review gate.
+- [x] Move deck-based installation above the review gates.
+- [x] Add a required deck-installation gate.
+- [x] Update correction lesson.
+
+### Phase 2: Verification And Shipping
+- [x] Run targeted page/gate checks and `git diff --check`.
+- [x] Add review notes with root cause, fix, and verification results.
+- [ ] Commit and push the intended changes.
+
+### Review Notes
+- User claim validated: confirmed. `alignment/idea-scope-brief-npm-distribution.html` had deck-based installation content, but it was appended after the review gates and compile controls, so final YAML could omit the deck-install decision entirely.
+- Root cause: the 2026-06-07 deck addendum added substantive COA-specific installation behavior without adding a matching `.gate` question block or moving the section into the pre-gate review body.
+- Fix: moved `Deck-Based Installation` before `Review Gates`, added it to the TOC, added local section feedback controls, and added a required `Deck-Based Installation` gate with COA A/B/C/hybrid/other/clarification choices.
+- Archive: saved the pre-revision page at `docs/history/archive/2026-06-08/145626/alignment/idea-scope-brief-npm-distribution.html`.
+- Prevention: added a lesson requiring substantive alignment-page addenda to include matching gates before compile controls.
+- Verification passed: structure/order check (`deck-based-installation` before `review-gates` before `compile`), single deck heading check, TOC/feedback/gate presence check, inline JavaScript syntax check, extracted gate list containing `deck-based-installation`, archive existence check, targeted string scan, and `git diff --check`.
+- Unrelated worktree item left untouched: `apps/skills-showcase/next-env.d.ts`.
+
+---
+
 ## Workflow Design Alignment Chart Clipping
 
 ### Phase 1: Investigation And Fix

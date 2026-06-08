@@ -67,7 +67,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <header>
   <h1>Multi-Surface npm Distribution Strategy</h1>
   <p class="lead">Evolving agentic-skills from a git-clone skill repository into a multi-surface distribution system via npm packages and a programmatic SDK &mdash; while preserving the markdown-first skill authoring model.</p>
-  <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-08 &nbsp; <strong>artifact:</strong>&nbsp; alignment/idea-scope-brief-npm-distribution.html</div>
+  <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-06 &nbsp; <strong>artifact:</strong>&nbsp; alignment/idea-scope-brief-npm-distribution.html</div>
 </header>
 
 <nav class="toc" aria-label="Table of Contents"><h2>Table Of Contents</h2><ol>
@@ -81,7 +81,6 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
   <li><a href="#risk">Risk Matrix</a></li>
   <li><a href="#naming">Naming and Branding</a></li>
   <li><a href="#evidence">Evidence and Assumptions</a></li>
-  <li><a href="#deck-based-installation">Deck-Based Installation</a></li>
   <li><a href="#review-gates">Review Gates</a></li>
   <li><a href="#compile">Compile YAML</a></li>
 </ol></nav>
@@ -553,67 +552,6 @@ const results = await registry.search('code quality')
 </section>
 
 <!-- =========================================================== -->
-<section id="deck-based-installation">
-<div class="section-head"><h2>Deck-Based Installation</h2></div>
-    <div class="section-feedback" data-section="Deck-Based Installation" id="feedback-deck-based-installation">
-      <span>Section feedback</span>
-      <button type="button" data-feedback="emphasize">Emphasize</button>
-      <button type="button" data-feedback="down">Thumbs down</button>
-      <button type="button" data-feedback="needs-clarification">Clarification needed</button>
-      <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
-      <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
-      <textarea class="local-yaml" readonly></textarea>
-    </div>
-<p>The skill system uses four <strong>decks</strong> — named workflow sequences that guide which packs to install and in what order. Decks sit on a 2×2 matrix of domain (business vs. devtool) and tempo (rapid vs. deliberate). See <code>docs/decks.md</code> for full details.</p>
-
-<div class="table-wrap">
-<table>
-<thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th></tr></thead>
-<tbody>
-<tr><td><strong>Rapid</strong> (days)</td><td>VARD</td><td>ORD</td></tr>
-<tr><td><strong>Deliberate</strong> (weeks–months)</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
-</tbody>
-</table>
-</div>
-
-<p>Each COA handles deck-based installation differently:</p>
-
-<div class="coa-card coa-a">
-<h3><span class="tag tag-a">COA A</span> Monolith — Decks as install presets</h3>
-<p>Decks become preset commands that install the right subset of skills from the monolith package:</p>
-<pre>npx agentic-skills install-deck vard    # installs vard-scan, vard-align, vard-ship
-npx agentic-skills install-deck ord     # installs ord-scan, ord-align, ord-ship
-npx agentic-skills install-deck business-afps  # installs business-discovery + lifecycle + growth + ops skills
-npx agentic-skills install-deck devtool-afps   # installs devtool skills</pre>
-<p>All skills ship in one package; the deck command just activates the relevant subset in the project config.</p>
-</div>
-
-<div class="coa-card coa-b">
-<h3><span class="tag tag-b">COA B</span> Federation — Decks as curated package lists</h3>
-<p>Each deck maps to a curated list of scoped packages to install together:</p>
-<pre># VARD deck
-npm install @agentic-skills/vard
-
-# ORD deck
-npm install @agentic-skills/ord
-
-# Business AFPS deck (progressive)
-npm install @agentic-skills/business-discovery
-npm install @agentic-skills/customer-lifecycle  # when ready</pre>
-<p>Rapid decks are single packages. Deliberate decks are multi-package sequences installed progressively.</p>
-</div>
-
-<div class="coa-card coa-c">
-<h3><span class="tag tag-c">COA C</span> Registry — Decks as tagged collections</h3>
-<p>Decks become tagged collections in the skill registry. Installing a deck pulls all skills with that tag:</p>
-<pre>agentic-skills install --deck vard      # pulls all skills tagged "vard"
-agentic-skills install --deck ord       # pulls all skills tagged "ord"
-agentic-skills install --deck business  # pulls business-discovery skills, add more tags progressively</pre>
-<p>The registry maintains deck metadata: canonical order, graduation paths, and compatibility constraints.</p>
-</div>
-</section>
-
-<!-- =========================================================== -->
 <section id="review-gates"><div class="section-head"><h2>Review Gates</h2></div>
     <div class="section-feedback" data-section="Review Gates" id="feedback-review-gates">
       <span>Section feedback</span>
@@ -624,7 +562,7 @@ agentic-skills install --deck business  # pulls business-discovery skills, add m
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<p>Answer these gates after reviewing the COAs, comparison, risk matrix, and deck-based installation options above.</p>
+<p>Answer these gates after reviewing the COAs, comparison, and risk matrix above.</p>
 
     <div class="gate question-block" data-section="COA Selection" data-gate-type="recommended path" data-question-id="coa-selection-recommended-path" data-target-path="">
       <h3>Recommended Path</h3>
@@ -662,20 +600,6 @@ agentic-skills install --deck business  # pulls business-discovery skills, add m
         <label><input type="radio" name="version-granularity-scope" value="Skill-level (each skill has its own version)"> <span>Skill-level (each skill has its own version)</span></label>
         <label><input type="radio" name="version-granularity-scope" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
         <label><input type="radio" name="version-granularity-scope" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
-      </div>
-      <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
-    </div>
-
-    <div class="gate question-block" data-section="Deck-Based Installation" data-gate-type="candidate/verdict decisions" data-question-id="deck-based-installation" data-target-path="">
-      <h3>Deck-Based Installation</h3>
-      <p>How should npm distribution expose deck installation for VARD, ORD, Business AFPS, and Devtool AFPS?</p>
-      <div class="radio-group">
-        <label><input type="radio" name="deck-based-installation" value="COA A: install-deck presets from the monolith package"> <span>COA A: <code>install-deck</code> presets from the monolith package</span></label>
-        <label><input type="radio" name="deck-based-installation" value="COA B: deck packages or curated package lists per deck"> <span>COA B: deck packages or curated package lists per deck</span></label>
-        <label><input type="radio" name="deck-based-installation" value="COA C: registry deck tags with order and compatibility metadata"> <span>COA C: registry deck tags with order and compatibility metadata</span></label>
-        <label><input type="radio" name="deck-based-installation" value="Hybrid: monolith presets first, preserve package/tag migration path"> <span>Hybrid: monolith presets first, preserve package/tag migration path</span></label>
-        <label><input type="radio" name="deck-based-installation" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
-        <label><input type="radio" name="deck-based-installation" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
       </div>
       <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
     </div>
@@ -920,6 +844,63 @@ updateAnswerState();
   container.appendChild(toggleBtn);
 })();
 </script>
+
+<section>
+<div class="section-head"><h2>Deck-Based Installation</h2></div>
+<p>The skill system uses four <strong>decks</strong> — named workflow sequences that guide which packs to install and in what order. Decks sit on a 2×2 matrix of domain (business vs. devtool) and tempo (rapid vs. deliberate). See <code>docs/decks.md</code> for full details.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th></tr></thead>
+<tbody>
+<tr><td><strong>Rapid</strong> (days)</td><td>VARD</td><td>ORD</td></tr>
+<tr><td><strong>Deliberate</strong> (weeks–months)</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Each COA handles deck-based installation differently:</p>
+
+<div class="coa-card coa-a">
+<h3><span class="tag tag-a">COA A</span> Monolith — Decks as install presets</h3>
+<p>Decks become preset commands that install the right subset of skills from the monolith package:</p>
+<pre>npx agentic-skills install-deck vard    # installs vard-scan, vard-align, vard-ship
+npx agentic-skills install-deck ord     # installs ord-scan, ord-align, ord-ship
+npx agentic-skills install-deck business-afps  # installs business-discovery + lifecycle + growth + ops skills
+npx agentic-skills install-deck devtool-afps   # installs devtool skills</pre>
+<p>All skills ship in one package; the deck command just activates the relevant subset in the project config.</p>
+</div>
+
+<div class="coa-card coa-b">
+<h3><span class="tag tag-b">COA B</span> Federation — Decks as curated package lists</h3>
+<p>Each deck maps to a curated list of scoped packages to install together:</p>
+<pre># VARD deck
+npm install @agentic-skills/vard
+
+# ORD deck
+npm install @agentic-skills/ord
+
+# Business AFPS deck (progressive)
+npm install @agentic-skills/business-discovery
+npm install @agentic-skills/customer-lifecycle  # when ready</pre>
+<p>Rapid decks are single packages. Deliberate decks are multi-package sequences installed progressively.</p>
+</div>
+
+<div class="coa-card coa-c">
+<h3><span class="tag tag-c">COA C</span> Registry — Decks as tagged collections</h3>
+<p>Decks become tagged collections in the skill registry. Installing a deck pulls all skills with that tag:</p>
+<pre>agentic-skills install --deck vard      # pulls all skills tagged "vard"
+agentic-skills install --deck ord       # pulls all skills tagged "ord"
+agentic-skills install --deck business  # pulls business-discovery skills, add more tags progressively</pre>
+<p>The registry maintains deck metadata: canonical order, graduation paths, and compatibility constraints.</p>
+</div>
+</section>
+
+
+
+
+
+
 
 <script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>
