@@ -30,8 +30,8 @@ const alignTTS = (() => {
 
   function extractText(el) {
     const clone = el.cloneNode(true);
-    clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar, .stat-grid').forEach(n => n.remove());
-    clone.querySelectorAll('.chart-container, .table-wrap').forEach(n => {
+    clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
+    clone.querySelectorAll('.chart-container, .table-wrap, .stat-grid').forEach(n => {
       const narrative = n.getAttribute('data-tts-narrative');
       if (narrative) {
         const span = document.createElement('span');
@@ -42,7 +42,6 @@ const alignTTS = (() => {
       }
     });
     let text = clone.textContent.replace(/\s+/g, ' ').trim();
-    if (text.length > 2000) text = text.slice(0, 2000) + '... section truncated for brevity.';
     return text;
   }
 

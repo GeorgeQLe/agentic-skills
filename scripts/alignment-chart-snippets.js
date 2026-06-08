@@ -719,5 +719,40 @@ const alignChart = (() => {
     setAutoNarrative(container, `${title}: ${yLabels.length} rows by ${xLabels.length} columns, values ranging from ${min} to ${max}.`);
   }
 
+  function setAutoNarratives() {
+    document.querySelectorAll('.stat-grid').forEach(grid => {
+      if (grid.getAttribute('data-tts-narrative')) return;
+      const parts = [];
+      grid.querySelectorAll('.stat-card').forEach(card => {
+        const value = card.querySelector('.stat-value')?.textContent?.trim();
+        const label = card.querySelector('.stat-label')?.textContent?.trim();
+        if (value && label) parts.push(`${value} ${label}`);
+      });
+      if (parts.length) grid.setAttribute('data-tts-narrative', parts.join(', '));
+    });
+
+    document.querySelectorAll('.table-wrap').forEach(wrap => {
+      if (wrap.getAttribute('data-tts-narrative')) return;
+      const table = wrap.querySelector('table');
+      if (!table) return;
+      const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent.trim());
+      const rowSummaries = [];
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        const cells = Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim());
+        const pairs = cells.map((c, i) => headers[i] ? `${headers[i]}: ${c}` : c).join(', ');
+        rowSummaries.push(pairs);
+      });
+      let narrative = rowSummaries.join('; ');
+      if (narrative.length > 500) narrative = narrative.slice(0, 497) + '...';
+      if (narrative) wrap.setAttribute('data-tts-narrative', narrative);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setAutoNarratives);
+  } else {
+    setAutoNarratives();
+  }
+
   return { bar, line, radar, quadrant, funnel, flow, ring, heatmap };
 })();
