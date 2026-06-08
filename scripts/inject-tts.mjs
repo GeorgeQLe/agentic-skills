@@ -20,7 +20,7 @@ const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 const specificFile = process.argv.find(a => a.endsWith('.html'));
 
-const KOKORO_TAG = '<script type="module" src="../scripts/alignment-tts-kokoro.js"></script>';
+const KOKORO_TAG = '<script src="../scripts/alignment-tts-kokoro.js"></script>';
 const scriptBlock = `\n${KOKORO_TAG}`;
 
 function stripOldTTS(html) {
@@ -35,7 +35,7 @@ function stripOldTTS(html) {
     }
   }
   // Remove old Kokoro module tag if present
-  const kokoroTagRe = /<script type="module" src="[^"]*alignment-tts-kokoro\.js"><\/script>\s*/g;
+  const kokoroTagRe = /<script[^>]*src="[^"]*alignment-tts-kokoro\.js"><\/script>\s*/g;
   html = html.replace(kokoroTagRe, '');
   return html;
 }

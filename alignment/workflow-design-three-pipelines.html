@@ -378,6 +378,8 @@ POST-RESEARCH:
 
   <p>Rapid-pipeline tools (VARD and ORD) that show traction graduate into their domain&rsquo;s deliberate pipeline. The graduation path depends on the tool&rsquo;s domain and ambition.</p>
 
+  <div class="callout callout-green"><strong>Revision note:</strong> The rapid graduation routing chart now keeps destination labels inside the SVG viewBox so the Business AFPS and Devtool AFPS paths remain fully visible at desktop and mobile widths.</div>
+
   <div class="chart-container" id="chart-graduation-funnel"></div>
 
   <h4>Graduation triggers</h4>
@@ -1080,6 +1082,7 @@ const alignChart = (() => {
     const nodeWidth = 24; const pad = { top: 40, bottom: 20, left: 30, right: 30 };
     const layers = {}; nodes.forEach(n => { layers[n.layer] = layers[n.layer] || []; layers[n.layer].push(n); });
     const layerKeys = Object.keys(layers).sort((a, b) => a - b);
+    const lastLayer = layerKeys[layerKeys.length - 1];
     const layerSpacing = (width - pad.left - pad.right - nodeWidth) / (layerKeys.length - 1 || 1);
     const nodePositions = {};
     layerKeys.forEach((lk, li) => {
@@ -1103,7 +1106,9 @@ const alignChart = (() => {
       rect.setAttribute('width', nodeWidth); rect.setAttribute('height', pos.h);
       rect.setAttribute('fill', getColor(i % 8)); rect.setAttribute('rx', '3'); svg.appendChild(rect);
       const label = document.createElementNS(ns, 'text');
-      label.setAttribute('x', pos.x + nodeWidth + 6); label.setAttribute('y', pos.y + 4);
+      const labelOnLeft = layerKeys.length > 1 && String(n.layer) === lastLayer;
+      label.setAttribute('x', labelOnLeft ? pos.x - 6 : pos.x + nodeWidth + 6); label.setAttribute('y', pos.y + 4);
+      label.setAttribute('text-anchor', labelOnLeft ? 'end' : 'start');
       label.setAttribute('fill', getTextColor()); label.setAttribute('font-size', '11');
       label.setAttribute('font-family', 'system-ui, sans-serif');
       label.textContent = n.name + (n.value != null ? ` (${n.value})` : ''); svg.appendChild(label);
@@ -1227,7 +1232,7 @@ const alignChart = (() => {
       { source: 'ord-traction', target: 'devtool', value: 6 },
       { source: 'ord-traction', target: 'business', value: 2 }
     ]
-  }, { title: 'Rapid Pipeline Graduation Routing', width: 700, height: 340 });
+  }, { title: 'Rapid Pipeline Graduation Routing', width: 900, height: 340 });
 })();
 
 // Chart 6: COA Profile Radar (Section 13)
@@ -1258,6 +1263,7 @@ const alignChart = (() => {
 
 
 
-<script type="module" src="../scripts/alignment-tts-kokoro.js"></script>
+
+<script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>
 </html>

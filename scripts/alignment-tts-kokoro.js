@@ -1,10 +1,14 @@
 /**
  * Alignment TTS — Kokoro-powered "Brief Me" narration for alignment pages.
  *
- * Loaded as <script type="module"> from alignment pages.
+ * Loaded as <script src="..."> from alignment pages (not type="module",
+ * because module scripts are blocked by CORS on file:// URLs).
  * Uses kokoro-js for natural-sounding client-side TTS via WebGPU/WASM.
  * Falls back to Web Speech API if Kokoro fails to load.
  */
+
+(function() {
+'use strict';
 
 const KOKORO_CDN = 'https://esm.sh/kokoro-js@1.1.0';
 const MODEL_ID = 'onnx-community/Kokoro-82M-v1.0-ONNX';
@@ -447,3 +451,5 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
+
+})();
