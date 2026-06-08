@@ -1,3 +1,32 @@
+## Documentation Freshness And Cleanup Audit
+
+### Phase 1: Plan And Inventory
+- [x] Capture prompt history for the `devtool-docs-audit` invocation.
+- [x] Record full plan in `tasks/roadmap.md`.
+- [x] Inventory tracked documentation surfaces and classify active vs generated vs historical docs.
+
+### Phase 2: Freshness Checks
+- [x] Compare top-level/setup docs against current scripts and repository layout.
+- [x] Compare workflow/routing docs against active skill contracts.
+- [x] Scan docs for stale command names, moved paths, missing scripts, and archive-worthy historical artifacts.
+
+### Phase 3: Report And Verify
+- [x] Write `research/devtool-docs-audit.md`.
+- [x] Build `alignment/devtool-docs-audit-docs-freshness.html`.
+- [x] Add review notes with cleanup/archive recommendations.
+- [x] Run targeted verification and `git diff --check`.
+
+### Review Notes
+- Current docs audit report: `research/devtool-docs-audit.md`.
+- Alignment review page: `alignment/devtool-docs-audit-docs-freshness.html`; browser open fallback via `open` succeeded.
+- Previous live docs-audit report archived to `docs/history/archive/2026-06-08/040539/research/devtool-docs-audit.md`.
+- Highest-priority fixes: correct managed-copy vs symlink wording, repair missing `scripts/init-agentic-skills.sh` references, replace retired `icp` command routes with `customer-discovery`, and archive or relabel historical docs in active-looking locations.
+- Cleanup candidates: `docs/workflow-refactor-proposal.html`, `docs/kanban-test-results.md`, `docs/phases/*`, root session artifacts, older dated devtool audit research, and stale `specs/drift-report.md`.
+- Pack-doc gaps: add `PACK.md` for active `devtool` and `game` packs; remove ignored local `packs/poketowork-kanban/` residue only after explicit cleanup approval.
+- Validation passed: `scripts/skill-deps.sh --broken`, `scripts/skill-pack-routing-audit.sh`, `scripts/skill-versions.sh --missing`, `node scripts/upgrade-alignment-page.mjs --dry-run`, `pnpm --dir tests bench:coverage`, `scripts/validate-skills-showcase-data.sh`, key-string scans, and `git diff --check`.
+
+---
+
 ## Add Scriptability Findings To Alignment Pages
 
 ### Phase 1: Plan And Archive

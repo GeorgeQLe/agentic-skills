@@ -1,3 +1,30 @@
+## Current Audit — Documentation Freshness And Cleanup
+
+### Goal
+
+Audit repository documentation for freshness, duplicated or superseded guidance, archive candidates, and cleanup priorities. Produce a durable docs-audit report and alignment page before making any broad documentation changes.
+
+### Plan
+
+1. Preserve invocation context and task tracking.
+   - [x] Capture the visible `devtool-docs-audit` invocation under `prompts/devtool-docs-audit/`.
+   - [x] Record the audit plan in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Inventory documentation surfaces.
+   - [x] List tracked Markdown/HTML/docs artifacts across root docs, research, specs, alignment, tasks, benchmark, and pack/global skill docs.
+   - [x] Separate active operating docs from generated artifacts, prompt history, archives, and historical reports.
+3. Validate freshness against current repo behavior.
+   - [x] Check README/AGENTS/setup docs against current scripts, pack commands, init flow, and skill layout.
+   - [x] Check canonical workflow/routing docs against active skill contracts and recent rename/routing work.
+   - [x] Check docs that mention missing or moved paths, stale commands, retired skill names, or generated-file conventions.
+4. Classify cleanup work.
+   - [x] Mark docs as current, needs update, duplicate/superseded, generated/local-only, or archive candidate.
+   - [x] Identify minimal high-confidence cleanup actions and larger follow-up remediation work.
+5. Produce and verify deliverables.
+   - [x] Write `research/devtool-docs-audit.md` findings-first.
+   - [x] Build `alignment/devtool-docs-audit-docs-freshness.html`.
+   - [x] Add review notes to `tasks/todo.md`.
+   - [x] Run targeted verification commands and `git diff --check`.
+
 ## Current Implementation — Add Scriptability Findings To Alignment Pages
 
 ### Goal

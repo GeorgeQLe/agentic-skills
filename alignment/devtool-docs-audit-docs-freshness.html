@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation Freshness Audit - Review</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.15; }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 12px; }
+    h2 { color: var(--accent); margin-top: 36px; }
+    h3 { margin-top: 24px; }
+    a { color: var(--accent); }
+    code, pre, textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    code {
+      background: rgba(88, 166, 255, 0.12);
+      border: 1px solid rgba(88, 166, 255, 0.22);
+      border-radius: 5px;
+      padding: 0.08rem 0.26rem;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #0a0f17;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .status, .toc, .card, .question, .feedback-panel, .compile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .status {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(min(210px, 100%), 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metric {
+      background: #0a0f17;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .metric strong { display: block; color: #fff; font-size: 1.25rem; }
+    .toc ul { columns: 2; padding-left: 20px; }
+    .tag {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: #0a0f17;
+      font-size: 0.9rem;
+    }
+    .p1 { border-color: var(--orange); color: #ffe3a3; }
+    .p2 { border-color: var(--purple); color: #eadcff; }
+    .pass { border-color: var(--green); color: #c9f7d4; }
+    .fail { border-color: var(--red); color: #ffd1d1; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+    .table-wrap { overflow-x: auto; }
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+    .feedback {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 0.92rem;
+    }
+    .feedback label, .question label {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0a0f17;
+      cursor: pointer;
+    }
+    .feedback textarea, .question textarea, .compile textarea {
+      width: 100%;
+      min-height: 92px;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0a0f17;
+      color: var(--text);
+    }
+    .feedback-panel { display: none; margin-top: 10px; }
+    .question {
+      background: var(--surface-2);
+      margin-top: 14px;
+    }
+    .question h3 { color: var(--purple); margin-top: 0; }
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .muted { color: var(--text-muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(260px, 100%), 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 860px) {
+      .status, .grid { grid-template-columns: 1fr; }
+      .toc ul { columns: 1; }
+    }
+    @media (max-width: 560px) {
+      main { width: min(100% - 20px, 1180px); padding-top: 20px; }
+      h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <p class="tag">alignment_status: review</p>
+  <h1>Documentation Freshness And Cleanup Audit</h1>
+  <p class="muted">Review artifact for <code>research/devtool-docs-audit.md</code>. Generated 2026-06-08 for the repository documentation audit requested by the user.</p>
+
+  <section class="status" aria-label="Audit status summary">
+    <div class="metric"><strong>P0: none</strong><span>Core skill integrity checks passed.</span></div>
+    <div class="metric"><strong>7 findings</strong><span>P1/P2 live docs and cleanup issues.</span></div>
+    <div class="metric"><strong>2,972</strong><span>Tracked documentation-like files inventoried by path group.</span></div>
+    <div class="metric"><strong>185</strong><span>Benchmark coverage rows validated.</span></div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2 id="toc">Table Of Contents</h2>
+    <ul>
+      <li><a href="#executive-verdict">Executive Verdict</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#evidence-matrix">Evidence Matrix</a></li>
+      <li><a href="#cleanup-matrix">Cleanup Matrix</a></li>
+      <li><a href="#assumptions">Assumptions And Confidence</a></li>
+      <li><a href="#alternatives">Alternatives Considered</a></li>
+      <li><a href="#source-gaps">Source Coverage Gaps</a></li>
+      <li><a href="#proposed-changes">Artifact Destination And Proposed Changes</a></li>
+      <li><a href="#complete-report">Complete Report Content</a></li>
+      <li><a href="#approval-gates">Approval Gates</a></li>
+      <li><a href="#compile">Bottom Compile Section</a></li>
+    </ul>
+  </nav>
+
+  <section id="executive-verdict">
+    <div class="section-head">
+      <h2>Executive Verdict</h2>
+      <div class="feedback" data-section="Executive Verdict">
+        <label><input type="radio" name="fb-executive" value="emphasize"> emphasize</label>
+        <label><input type="radio" name="fb-executive" value="down"> down</label>
+        <label><input type="radio" name="fb-executive" value="needs-clarification"> clarification needed</label>
+      </div>
+    </div>
+    <div class="feedback-panel"><textarea placeholder="Optional section feedback"></textarea><button type="button" class="local-feedback">Compile Feedback YAML</button><textarea readonly></textarea></div>
+    <div class="grid">
+      <div class="card">
+        <p><span class="tag pass">Healthy</span></p>
+        <p>The skill catalog is structurally healthy. Dependency, cross-pack routing, version, benchmark-coverage, and alignment-stub checks passed.</p>
+      </div>
+      <div class="card">
+        <p><span class="tag p1">P1</span></p>
+        <p>Public setup docs mix the old symlink/install model with the current managed-copy/init model.</p>
+      </div>
+      <div class="card">
+        <p><span class="tag p1">P1</span></p>
+        <p>Several live workflow docs still route to the retired executable <code>icp</code> command instead of <code>customer-discovery</code>.</p>
+      </div>
+      <div class="card">
+        <p><span class="tag p1">P1</span></p>
+        <p>Current reference docs are mixed with old reports, proposals, and phase records that should move to history or be clearly relabeled.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <div class="section-head">
+      <h2>Findings</h2>
+      <div class="feedback" data-section="Findings">
+        <label><input type="radio" name="fb-findings" value="emphasize"> emphasize</label>
+        <label><input type="radio" name="fb-findings" value="down"> down</label>
+        <label><input type="radio" name="fb-findings" value="needs-clarification"> clarification needed</label>
+      </div>
+    </div>
+    <div class="feedback-panel"><textarea placeholder="Optional section feedback"></textarea><button type="button" class="local-feedback">Compile Feedback YAML</button><textarea readonly></textarea></div>
+
+    <h3><span class="tag p1">P1</span> Setup Docs Teach The Old Install Model</h3>
+    <p>Current install code creates repo-managed directories with <code>.agentic-skills-managed</code> markers for track-latest installs. Several docs still say active installs are symlinks. The fix is to update live setup and troubleshooting docs to use managed-copy language and reserve symlink language for pinned archive installs.</p>
+
+    <h3><span class="tag p1">P1</span> Global Init Helper Path Is Missing At Root</h3>
+    <p>Live docs refer to <code>scripts/init-agentic-skills.sh</code>, but no root script exists. The helper exists only under <code>global/{claude,codex}/init-agentic-skills/scripts/</code>. Either add a root wrapper or update docs to prefer the skill command and bundled helper path.</p>
+
+    <h3><span class="tag p1">P1</span> Live AFPS Docs Still Reference Retired <code>icp</code> Command</h3>
+    <p><code>README.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/pack-workflow-matrix.md</code>, and <code>docs/skill-routing-map.html</code> still present <code>icp</code> as an executable route. Active source contracts use <code>customer-discovery</code>.</p>
+
+    <h3><span class="tag p1">P1</span> Historical Reports Sit Beside Current Reference Docs</h3>
+    <p><code>docs/kanban-test-results.md</code>, <code>docs/workflow-refactor-proposal.html</code>, <code>docs/phases/*</code>, root interview logs, and the dated active <code>specs/drift-report.md</code> need archive or regeneration decisions.</p>
+
+    <h3><span class="tag p1">P1</span> Local Hibernated Kanban Residue Misleads Pack Listing</h3>
+    <p>This workspace contains ignored local residue under <code>packs/poketowork-kanban/</code>. A dry run of <code>git clean -ndX packs/poketowork-kanban</code> reported it would remove that directory. The residue caused skill-name install resolution to see a hibernated skill as locally active; the accidental test install was removed.</p>
+
+    <h3><span class="tag p2">P2</span> Script Reference Is Not A Complete Script Index</h3>
+    <p><code>docs/scripts-reference.md</code> is useful but overclaims. It omits several root scripts and includes the missing root init helper path. Rename it to common scripts or expand it into a complete table.</p>
+
+    <h3><span class="tag p2">P2</span> Active Packs <code>devtool</code> And <code>game</code> Lack <code>PACK.md</code></h3>
+    <p>Both packs have active mirrored skills and public references, but no pack-local <code>PACK.md</code>. Add pack metadata using <code>docs/skills-reference.md</code> as the source of truth.</p>
+
+    <h3><span class="tag p2">P2</span> Skills Showcase Generated Proof Data Was Stale</h3>
+    <p>The first <code>scripts/validate-skills-showcase-data.sh</code> run regenerated proof-data assets and failed with a stale-data message. After rerunning both showcase generators, final validation passed with <code>Skills Showcase generated data is fresh</code>. The relevant tracked diffs are source fingerprint updates in both proof-data copies.</p>
+  </section>
+
+  <section id="evidence-matrix">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix">
+        <label><input type="radio" name="fb-evidence" value="emphasize"> emphasize</label>
+        <label><input type="radio" name="fb-evidence" value="down"> down</label>
+        <label><input type="radio" name="fb-evidence" value="needs-clarification"> clarification needed</label>
+      </div>
+    </div>
+    <div class="feedback-panel"><textarea placeholder="Optional section feedback"></textarea><button type="button" class="local-feedback">Compile Feedback YAML</button><textarea readonly></textarea></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Skill catalog is structurally healthy.</td><td><code>skill-deps</code>, <code>skill-pack-routing-audit</code>, <code>skill-versions</code>, alignment dry-run, and bench coverage passed.</td><td>Freshness problems are docs surface issues, not broad catalog breakage.</td><td>High</td><td>Do targeted docs cleanup instead of large skill refactor.</td></tr>
+          <tr><td>Install docs have model drift.</td><td><code>scripts/skill-links.sh</code> copies managed installs; docs still say symlink in quickstart/troubleshooting/scripts reference.</td><td>Users will misunderstand drift and refresh semantics.</td><td>High</td><td>Update setup docs first.</td></tr>
+          <tr><td>Root init helper path is broken.</td><td><code>test -f scripts/init-agentic-skills.sh</code> returned missing; helper exists under bundled skill paths.</td><td>Copy-paste commands in docs fail.</td><td>High</td><td>Add wrapper or update docs.</td></tr>
+          <tr><td>AFPS route docs are stale.</td><td>Active contracts use <code>customer-discovery</code>; several docs still show <code>icp</code>.</td><td>Users may invoke a retired command or follow old diagrams.</td><td>High</td><td>Update current docs and archive stale diagrams/proposals.</td></tr>
+          <tr><td>Historical docs are mixed with live docs.</td><td>Dated kanban reports, old proposal HTML, old phase docs, and root session artifacts sit in active locations.</td><td>Maintainers cannot quickly tell what is current.</td><td>Medium</td><td>Move to history/archive or relabel.</td></tr>
+          <tr><td>Generated proof data was stale.</td><td>Initial validator run changed proof-data fingerprints; final validator run passed after the two generators.</td><td>Generated static proof data needed refresh before shipping audit changes.</td><td>High</td><td>Commit refreshed generated proof-data assets with audit boundary.</td></tr>
+          <tr><td>Local ignored hibernated residue affects pack commands.</td><td><code>git clean -ndX packs/poketowork-kanban</code> would remove ignored residue; pack install by skill name unexpectedly succeeded before removal.</td><td>Workspace-local ignored files can reanimate hibernated skill discovery.</td><td>High for this workspace, medium for clean repo</td><td>Clean ignored residue and harden pack discovery.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="question" data-gate="evidence coverage">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is the repo evidence sufficient to accept the audit findings as the cleanup basis?</p>
+      <label><input type="radio" name="gate-evidence" value="accept"> Accept evidence as sufficient for cleanup planning.</label>
+      <label><input type="radio" name="gate-evidence" value="more-evidence"> Need more repo evidence before cleanup.</label>
+      <label><input type="radio" name="gate-evidence" value="other"> Other / None of the above</label>
+      <textarea data-other-for="gate-evidence" placeholder="Optional notes or alternate evidence requirement"></textarea>
+      <label><input type="radio" name="gate-evidence" value="needs-clarification"> Need clarification</label>
+      <textarea data-clarify-for="gate-evidence" placeholder="What is unclear?"></textarea>
+    </div>
+  </section>
+
+  <section id="cleanup-matrix">
+    <div class="section-head">
+      <h2>Cleanup Matrix</h2>
+      <div class="feedback" data-section="Cleanup Matrix">
+        <label><input type="radio" name="fb-cleanup" value="emphasize"> emphasize</label>
+        <label><input type="radio" name="fb-cleanup" value="down"> down</label>
+        <label><input type="radio" name="fb-cleanup" value="needs-clarification"> clarification needed</label>
+      </div>
+    </div>
+    <div class="feedback-panel"><textarea placeholder="Optional section feedback"></textarea><button type="button" class="local-feedback">Compile Feedback YAML</button><textarea readonly></textarea></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Surface</th><th>Classification</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><code>README.md</code></td><td>Needs update</td><td>Fix <code>icp</code> route and active install wording.</td></tr>
+          <tr><td><code>docs/QUICKSTART.md</code></td><td>Needs update</td><td>Replace symlink wording with managed-copy wording.</td></tr>
+          <tr><td><code>docs/packs.md</code></td><td>Mostly current</td><td>Fix missing root init-helper references.</td></tr>
+          <tr><td><code>docs/skills-reference.md</code></td><td>Mostly current</td><td>Keep; use as source for missing pack docs.</td></tr>
+          <tr><td><code>docs/canonical-workflow-report.md</code></td><td>Current</td><td>Keep as canonical AFPS route reference.</td></tr>
+          <tr><td><code>docs/skill-next-step-contracts.md</code></td><td>Current</td><td>Keep as routing contract reference.</td></tr>
+          <tr><td><code>docs/codex-workflow.md</code></td><td>Needs update</td><td>Replace <code>$icp</code> examples.</td></tr>
+          <tr><td><code>docs/pack-workflow-matrix.md</code></td><td>Needs update</td><td>Replace default <code>icp</code> route.</td></tr>
+          <tr><td><code>docs/skill-routing-map.html</code></td><td>Needs update or archive</td><td>Regenerate or move to history.</td></tr>
+          <tr><td><code>docs/workflow-refactor-proposal.html</code></td><td>Archive candidate</td><td>Move under history as old proposal.</td></tr>
+          <tr><td><code>docs/kanban-test-results.md</code></td><td>Archive candidate</td><td>Move under history; workflow is hibernated.</td></tr>
+          <tr><td><code>docs/phases/*</code></td><td>Archive/rationalize candidate</td><td>Merge with or move under phase-history convention.</td></tr>
+          <tr><td><code>docs/scripts-reference.md</code></td><td>Needs update</td><td>Fix root init path and all-script claim.</td></tr>
+          <tr><td><code>docs/troubleshooting.md</code></td><td>Needs update</td><td>Fix managed-copy wording and global helper path.</td></tr>
+          <tr><td><code>docs/test-harness.md</code></td><td>Needs update</td><td>Prefer <code>pnpm --dir tests ...</code> examples.</td></tr>
+          <tr><td><code>research/devtool-*.md</code></td><td>Historical or needs reconciliation</td><td>Reconcile stale installer/symlink facts or mark historical.</td></tr>
+          <tr><td><code>specs/drift-report.md</code></td><td>Needs regenerate or archive</td><td>Latest report predates later routing and hibernation work.</td></tr>
+          <tr><td>Root session files</td><td>Archive candidate</td><td>Move completed session artifacts out of repo root.</td></tr>
+          <tr><td><code>packs/devtool/PACK.md</code></td><td>Missing</td><td>Add pack-level docs.</td></tr>
+          <tr><td><code>packs/game/PACK.md</code></td><td>Missing</td><td>Add pack-level docs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="assumptions">
+    <div class="section-head">
+      <h2>Assumptions And Confidence</h2>
+      <div class="feedback" data-section="Assumptions And Confidence">
+        <label><input type="radio" name="fb-assumptions" value="emphasize"> emphasize</label>
+        <label><input type="radio" name="fb-assumptions" value="down"> down</label>
+        <label><input type="radio" name="fb-assumptions" value="needs-clarification"> clarification needed</label>
+      </div>
+    </div>
+    <div class="feedback-panel"><textarea placeholder="Optional section feedback"></textarea><button type="button" class="local-feedback">Compile Feedback YAML</button><textarea readonly></textarea></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Conclusion</th><th>Status</th><th>What Could Change It</th></tr></thead>
+        <tbody>
+          <tr><td>Core skill catalog is healthy.</td><td>Evidence-backed</td><td>A broader full test run may expose unrelated layer failures, but targeted catalog checks passed.</td></tr>
+          <tr><td>Setup model docs are stale.</td><td>Evidence-backed</td><td>Would change only if install code is intentionally reverted to symlink-first behavior.</td></tr>
+          <tr><td>Historical docs should move to archive.</td><td>Evidence-backed with naming-policy assumption</td><td>A repo decision to keep historical reports in active root docs would change the action, not the freshness issue.</td></tr>
+          <tr><td>Pack discovery should ignore hibernated residue.</td><td>Evidence-backed for this workspace</td><td>A clean clone may not reproduce the local residue, but command hardening remains prudent.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <h2>Alternatives Considered</h2>
+    <ul>
+      <li>Do nothing because core skill checks pass. Rejected: live setup and route docs still have copy-paste failures.</li>
+      <li>Only update <code>icp</code> route examples. Rejected: install-model drift and active/historical doc mixing are equally important.</li>
+      <li>Archive all old research under <code>research/</code>. Rejected: some research remains valuable as historical evidence, but it needs explicit status or reconciliation before being used as current examples.</li>
+      <li>Hard-delete local ignored hibernated residue in this audit. Rejected for now: it is a destructive local cleanup, so the report recommends it separately.</li>
+    </ul>
+  </section>
+
+  <section id="source-gaps">
+    <h2>Source Coverage Gaps</h2>
+    <ul>
+      <li>No web research was performed; this is a repo-internal audit.</li>
+      <li>The audit did not manually read every documentation-like file. It combined inventory counts, targeted scans, sampled live docs, and repo validators.</li>
+      <li>The full test suite was not run. The audit used targeted documentation and skill-integrity checks.</li>
+      <li>Some archive decisions need owner preference: move old reports to history, or relabel them in place as historical.</li>
+    </ul>
+  </section>
+
+  <section id="proposed-changes">
+    <h2>Artifact Destination And Proposed File Changes</h2>
+    <p>Canonical report destination: <code>research/devtool-docs-audit.md</code>.</p>
+    <p>Previous report archived to: <code>docs/history/archive/2026-06-08/040539/research/devtool-docs-audit.md</code>.</p>
+    <p>Alignment page destination: <code>alignment/devtool-docs-audit-docs-freshness.html</code>.</p>
+    <p>Prompt history destination: <code>prompts/devtool-docs-audit/skill-prompt-20260608-040022-docs-freshness-cleanup.md</code>.</p>
+    <p>Task tracking destinations: <code>tasks/roadmap.md</code> and <code>tasks/todo.md</code>.</p>
+    <p>Generated proof-data assets changed after the final generator run: <code>docs/skills-showcase/assets/github-proof-data.js</code> and <code>apps/skills-showcase/public/assets/github-proof-data.js</code>.</p>
+  </section>
+
+  <section id="complete-report">
+    <h2>Complete Report Content</h2>
+    <p>The full canonical Markdown report is rendered below for no-context-loss review. Source path: <code>research/devtool-docs-audit.md</code>.</p>
+    <pre># Devtool Docs Audit - Documentation Freshness And Cleanup (2026-06-08)
+
+Scope: current repository documentation for the `agentic-skills` shared skill library, with emphasis on whether live docs still match the current install model, pack model, AFPS routing, generated-data contract, and historical/archive boundaries.
+
+Executive verdict:
+- P0: none. Core skill catalog is structurally healthy.
+- P1: setup docs mix the old symlink/install model with the current managed-copy/init model.
+- P1: live workflow docs still route to retired `icp` in several places.
+- P1: `docs/` mixes current reference material with old reports/proposals that should be archived or relabeled.
+- P1: ignored local `packs/poketowork-kanban/` residue misleads pack listing and skill-name install resolution.
+- P2: script reference omits root scripts and points at a missing root init helper.
+- P2: active `devtool` and `game` packs lack `PACK.md`.
+- P2: generated Skills Showcase proof data was stale and passed after regeneration.
+
+Primary cleanup order:
+1. Fix live copy-paste blockers: root init helper path, managed-copy wording, and `icp` route examples.
+2. Commit the regenerated Skills Showcase proof-data updates.
+3. Archive or relabel historical docs in active-looking locations.
+4. Add missing `PACK.md` files for `devtool` and `game`.
+5. Regenerate or archive `specs/drift-report.md`.
+6. Harden `scripts/pack.sh` against ignored hibernated-pack residue.
+
+Verification:
+- `scripts/skill-deps.sh --broken`: passed.
+- `scripts/skill-pack-routing-audit.sh`: passed.
+- `scripts/skill-versions.sh --missing`: passed, all 405 skills have versions.
+- `node scripts/upgrade-alignment-page.mjs --dry-run`: passed with no drift.
+- `pnpm --dir tests bench:coverage`: passed, 185 skills.
+- Initial `scripts/validate-skills-showcase-data.sh`: failed after regenerating stale proof-data fingerprints.
+- Final `scripts/validate-skills-showcase-data.sh`: passed after the two showcase generators.
+
+Recommended next skill: `$exec` to implement the first cleanup slice after approval.</pre>
+  </section>
+
+  <section id="approval-gates">
+    <h2>Approval Gates</h2>
+    <div class="question" data-gate="recommended path">
+      <h3>Recommended Path Gate</h3>
+      <p>Which cleanup path should be used after this audit?</p>
+      <label><input type="radio" name="gate-path" value="approve-order"> Approve the recommended cleanup order.</label>
+      <label><input type="radio" name="gate-path" value="setup-routes-only"> Start only with setup docs and `customer-discovery` route fixes.</label>
+      <label><input type="radio" name="gate-path" value="archive-first"> Start by archiving historical docs first.</label>
+      <label><input type="radio" name="gate-path" value="other"> Other / None of the above</label>
+      <textarea data-other-for="gate-path" placeholder="Optional alternate cleanup path"></textarea>
+      <label><input type="radio" name="gate-path" value="needs-clarification"> Need clarification</label>
+      <textarea data-clarify-for="gate-path" placeholder="What is unclear?"></textarea>
+    </div>
+
+    <div class="question" data-gate="proposed file changes">
+      <h3>Proposed File Changes Gate</h3>
+      <p>Do you approve the audit artifact destinations and generated-data refresh boundary?</p>
+      <label><input type="radio" name="gate-files" value="approve"> Approve report, alignment page, prompt history, task tracking, archive copy, and generated proof-data updates.</label>
+      <label><input type="radio" name="gate-files" value="report-only"> Keep only report/alignment/task artifacts; defer generated proof-data update.</label>
+      <label><input type="radio" name="gate-files" value="other"> Other / None of the above</label>
+      <textarea data-other-for="gate-files" placeholder="Optional file-boundary notes"></textarea>
+      <label><input type="radio" name="gate-files" value="needs-clarification"> Need clarification</label>
+      <textarea data-clarify-for="gate-files" placeholder="What is unclear?"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile">
+    <h2>Bottom Compile Section</h2>
+    <p class="muted">Use feedback YAML for revisions before final approval. Use compiled answers when all required gates are answered.</p>
+    <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+    <button type="button" id="compile-answers">Compile Answers</button>
+    <p id="compile-status" class="muted"></p>
+    <textarea id="compiled-output" readonly placeholder="Compiled YAML appears here"></textarea>
+    <button type="button" id="copy-output">Copy YAML</button>
+  </section>
+</main>
+
+<script>
+const pagePath = 'alignment/devtool-docs-audit-docs-freshness.html';
+
+function selectedFeedback() {
+  return [...document.querySelectorAll('.feedback')].flatMap(group => {
+    const input = group.querySelector('input[type="radio"]:checked');
+    if (!input) return [];
+    const panel = group.parentElement.nextElementSibling;
+    const notes = panel && panel.classList.contains('feedback-panel') ? panel.querySelector('textarea')?.value.trim() : '';
+    return [{
+      section: group.dataset.section || 'unknown',
+      feedback: input.value,
+      notes,
+      requested_agent_action: input.value === 'emphasize' ? 'add-weight-to-section' : input.value === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'
+    }];
+  });
+}
+
+function gateAnswers() {
+  return [...document.querySelectorAll('.question')].map(q => {
+    const input = q.querySelector('input[type="radio"]:checked');
+    const name = input ? input.name : q.querySelector('input[type="radio"]')?.name;
+    const other = name ? q.querySelector(`[data-other-for="${name}"]`)?.value.trim() : '';
+    const clarify = name ? q.querySelector(`[data-clarify-for="${name}"]`)?.value.trim() : '';
+    return {
+      section: q.querySelector('h3')?.textContent.trim() || 'Gate',
+      gate_type: q.dataset.gate || 'gate',
+      status: input ? (input.value === 'needs-clarification' ? 'needs-clarification' : input.value === 'other' ? 'other' : 'answered') : 'unanswered',
+      answer: input ? input.value : '',
+      notes: input && input.value === 'other' ? other : input && input.value === 'needs-clarification' ? clarify : ''
+    };
+  });
+}
+
+function yamlScalar(value) {
+  const text = (value || '').replace(/"/g, '\\"');
+  return `"${text}"`;
+}
+
+function buildFeedbackYaml(localItems) {
+  const items = localItems || selectedFeedback();
+  const unanswered = gateAnswers().filter(g => g.status === 'unanswered').map(g => g.section);
+  const lines = [
+    `alignment_page: ${pagePath}`,
+    'feedback_status: revision-request',
+    'approval_status: not-approved',
+    'unanswered_required_questions:',
+    ...unanswered.map(q => `  - ${yamlScalar(q)}`),
+    'section_feedback:'
+  ];
+  if (!items.length) lines.push('  []');
+  for (const item of items) {
+    lines.push(`  - section: ${yamlScalar(item.section)}`);
+    lines.push(`    feedback: ${item.feedback}`);
+    lines.push(`    notes: ${yamlScalar(item.notes)}`);
+    lines.push(`    requested_agent_action: ${item.requested_agent_action}`);
+  }
+  return lines.join('\n');
+}
+
+function buildAnswersYaml() {
+  const answers = gateAnswers();
+  const unanswered = answers.filter(g => g.status === 'unanswered');
+  if (unanswered.length) {
+    document.getElementById('compile-status').textContent = `${unanswered.length} required question(s) remain unanswered.`;
+  } else {
+    document.getElementById('compile-status').textContent = 'All required questions answered.';
+  }
+  const lines = [
+    `alignment_page: ${pagePath}`,
+    'approval_status: ready-for-agent-review',
+    'gate_answers:'
+  ];
+  for (const ans of answers) {
+    lines.push(`  - section: ${yamlScalar(ans.section)}`);
+    lines.push(`    gate_type: ${yamlScalar(ans.gate_type)}`);
+    lines.push(`    status: ${ans.status}`);
+    lines.push(`    answer: ${yamlScalar(ans.answer)}`);
+    lines.push(`    notes: ${yamlScalar(ans.notes)}`);
+  }
+  const feedback = selectedFeedback();
+  lines.push('section_feedback:');
+  if (!feedback.length) lines.push('  []');
+  for (const item of feedback) {
+    lines.push(`  - section: ${yamlScalar(item.section)}`);
+    lines.push(`    feedback: ${item.feedback}`);
+    lines.push(`    notes: ${yamlScalar(item.notes)}`);
+    lines.push(`    requested_agent_action: ${item.requested_agent_action}`);
+  }
+  return lines.join('\n');
+}
+
+document.querySelectorAll('.feedback input[type="radio"]').forEach(input => {
+  input.addEventListener('change', event => {
+    const panel = event.target.closest('.section-head').nextElementSibling;
+    if (panel && panel.classList.contains('feedback-panel')) panel.style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.local-feedback').forEach(button => {
+  button.addEventListener('click', event => {
+    const panel = event.target.closest('.feedback-panel');
+    const group = panel.previousElementSibling.querySelector('.feedback');
+    const checked = group.querySelector('input[type="radio"]:checked');
+    const output = panel.querySelector('textarea[readonly]');
+    if (!checked) {
+      output.value = 'No feedback option selected.';
+      return;
+    }
+    output.value = buildFeedbackYaml([{
+      section: group.dataset.section || 'unknown',
+      feedback: checked.value,
+      notes: panel.querySelector('textarea:not([readonly])')?.value.trim() || '',
+      requested_agent_action: checked.value === 'emphasize' ? 'add-weight-to-section' : checked.value === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'
+    }]);
+  });
+});
+
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  document.getElementById('compiled-output').value = buildFeedbackYaml();
+  document.getElementById('compile-status').textContent = 'Feedback YAML compiled.';
+});
+
+document.getElementById('compile-answers').addEventListener('click', () => {
+  document.getElementById('compiled-output').value = buildAnswersYaml();
+});
+
+document.getElementById('copy-output').addEventListener('click', async () => {
+  const output = document.getElementById('compiled-output');
+  if (!output.value) return;
+  try {
+    await navigator.clipboard.writeText(output.value);
+    document.getElementById('compile-status').textContent = 'YAML copied to clipboard.';
+  } catch (error) {
+    output.focus();
+    output.select();
+    document.getElementById('compile-status').textContent = 'Clipboard blocked; YAML selected for manual copy.';
+  }
+});
+</script>
+</body>
+</html>
