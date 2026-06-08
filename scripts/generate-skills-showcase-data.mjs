@@ -394,7 +394,7 @@ function parseSkill(relativePath) {
   const scope = segments[0] === "global" ? "global" : "pack";
   const platform = scope === "global" ? segments[1] : segments[2];
   const pack = scope === "global" ? null : segments[1];
-  const fallbackName = scope === "global" ? segments[2] : segments[3];
+  const fallbackName = segments[segments.length - 2];
   const name = fields.name || fallbackName;
 
   return {
@@ -619,7 +619,10 @@ function main() {
   const skillPaths = files.filter((file) => {
     return (
       /^global\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
-      /^packs\/[^/]+\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(file)
+      (
+        /^packs\/[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
+        !file.split("/").includes("archive")
+      )
     );
   });
   const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
@@ -642,7 +645,10 @@ function main() {
     return [pack.name, pack];
   }));
 
-  const packs = Array.from(new Set(skills.map((skill) => skill.pack).filter(Boolean)))
+  const packs = Array.from(new Set([
+    ...packMetadata.keys(),
+    ...skills.map((skill) => skill.pack).filter(Boolean)
+  ]))
     .sort()
     .map((name) => {
       const packSkills = skills.filter((skill) => skill.pack === name);

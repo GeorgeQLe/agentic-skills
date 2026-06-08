@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-08 — Skills Showcase pack count coverage
+
+- Updated the Skills Showcase generator to include active nested pack skills such as framework subskills while excluding archives.
+- Generated pack data now includes every active `PACK.md` metadata row plus compatibility aliases with active skill roots; current generated data reports 355 skill rows and 39 pack rows.
+- Added visible generated skill counts to `/packs` pack nodes and detail panels, and labeled `business-app` / `creator-media` as compatibility aliases.
+- Added layer1 coverage for pack metadata representation and nested framework skill counts.
+- Repaired a stale benchmark-demo test fixture to target the demo-backed Codex `pack` benchmark row.
+- Refreshed Skills Showcase generated data and proof assets.
+- Validation passed for focused layer1 and app catalog tests, generated-data freshness, local `/packs` HTTP 200, production app build, adversarial invariant scans, and whitespace diff check.
+- Production deploy not run because deployment requires explicit confirmation.
+
 ## 2026-06-07 — Remaining packs customer-discovery route cleanup
 
 - Updated mirrored remaining-pack route-bearing contracts to route retired discovery executable handoffs to `customer-discovery`.
