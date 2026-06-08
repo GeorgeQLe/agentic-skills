@@ -187,8 +187,9 @@ async function speakKokoro(text, id, onEnd) {
 
     for await (const chunk of stream) {
       if (streamState.abort || id !== skipId) return;
-      const buf = audioCtx.createBuffer(1, chunk.audio.length, chunk.sampling_rate);
-      buf.getChannelData(0).set(chunk.audio);
+      const samples = chunk.audio.data;
+      const buf = audioCtx.createBuffer(1, samples.length, 24000);
+      buf.getChannelData(0).set(samples);
       const src = audioCtx.createBufferSource();
       src.buffer = buf;
       src.connect(audioCtx.destination);
