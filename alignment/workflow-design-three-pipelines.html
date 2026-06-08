@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Three-Pipeline Workflow Design — Alignment Page</title>
+<title>Four-Pipeline Workflow Design — Alignment Page</title>
 <style>
 :root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; --chart-1:#58a6ff; --chart-2:#3fb950; --chart-3:#d29922; --chart-4:#bc8cff; --chart-5:#f85149; --chart-6:#79c0ff; --chart-7:#f0883e; --chart-8:#a5d6ff; }
 * { box-sizing: border-box; }
@@ -39,6 +39,7 @@ ul,ol { padding-left:22px; } li { margin:4px 0; }
 .tag-a { background:rgba(88,166,255,0.15); color:var(--chart-1); }
 .tag-b { background:rgba(63,185,80,0.15); color:var(--chart-2); }
 .tag-c { background:rgba(210,153,34,0.15); color:var(--chart-3); }
+.tag-d { background:rgba(188,140,255,0.15); color:var(--chart-4); }
 .section-feedback { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 16px; padding:10px; border:1px solid var(--border); border-radius:8px; background:#0f1623; }
 .section-feedback span { color:var(--text-muted); }
 button, .radio-group label { min-height:44px; padding:10px 16px; border-radius:6px; border:1px solid var(--border); background:#0d1117; color:var(--text); cursor:pointer; }
@@ -66,9 +67,9 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <main>
 
 <!-- Section 1: Header + Status -->
-<h1>Three-Pipeline Workflow Design</h1>
-<div class="status">alignment_status: review</div>
-<p class="lead">Formalizing three distinct AFPS workflow pipelines &mdash; Business AFPS, Devtool AFPS, and ORD (OSS Rapid Distribution) &mdash; to support the "Apps as Distribution" thesis. This page presents the current state, proposed architecture, three courses of action, and alignment gates for your review.</p>
+<h1>Four-Pipeline Workflow Design</h1>
+<div class="status">alignment_status: revision</div>
+<p class="lead">Formalizing four distinct workflow pipelines &mdash; Business AFPS, Devtool AFPS, VARD (Viral App Rapid Distribution), and ORD (OSS Rapid Distribution) &mdash; to support the "Apps as Distribution" thesis. Two domains (business, devtool) &times; two tempos (deliberate, rapid). This page presents the current state, proposed architecture, courses of action, and alignment gates for your review.</p>
 
 <!-- Section 2: TOC -->
 <nav class="toc">
@@ -76,14 +77,15 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
   <ol>
     <li><a href="#thesis">Apps as Distribution Thesis</a></li>
     <li><a href="#current-state">Current State</a></li>
-    <li><a href="#three-pipelines">The Three Pipelines Overview</a></li>
+    <li><a href="#three-pipelines">The Four Pipelines Overview</a></li>
     <li><a href="#pipeline-a">Pipeline A: Business AFPS</a></li>
     <li><a href="#pipeline-b">Pipeline B: Devtool AFPS</a></li>
-    <li><a href="#pipeline-c">Pipeline C: ORD</a></li>
+    <li><a href="#pipeline-c">Pipeline C: VARD</a></li>
+    <li><a href="#pipeline-d">Pipeline D: ORD</a></li>
     <li><a href="#graduation">Graduation Path</a></li>
-    <li><a href="#coa-a">COA A: Build All Three</a></li>
-    <li><a href="#coa-b">COA B: ORD First, Evolve Devtool</a></li>
-    <li><a href="#coa-c">COA C: Unified Mode Flag + ORD</a></li>
+    <li><a href="#coa-a">COA A: Build All Four</a></li>
+    <li><a href="#coa-b">COA B: Rapid Pipelines First</a></li>
+    <li><a href="#coa-c">COA C: Unified Mode Flag + Rapid</a></li>
     <li><a href="#coa-compare">COA Comparison</a></li>
     <li><a href="#evidence">Evidence &amp; Assumptions</a></li>
     <li><a href="#gates">Review Gates</a></li>
@@ -104,25 +106,40 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment or a polished product &mdash; compounds brand, audience, and surface area. But two fundamentally different philosophies drive the three pipelines:</p>
+  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment or a polished product &mdash; compounds brand, audience, and surface area. Two domains and two tempos produce a 2&times;2 matrix of four pipelines:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>Deliberate (~monthly)</th><th>Rapid (~weekly)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Business / Viral Apps</strong></td><td>Business AFPS</td><td>VARD (Viral App Rapid Distribution)</td></tr>
+        <tr><td><strong>Devtools / OSS</strong></td><td>Devtool AFPS</td><td>ORD (OSS Rapid Distribution)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <ul>
-    <li><strong>Rapid (ORD):</strong> Weekly shipping of small OSS experiments. Volume generates signal. Winners graduate into deeper pipelines.</li>
-    <li><strong>Deliberate (AFPS):</strong> ~Monthly shipping of deeper products. Higher investment per tool, full research and design cycle. Quality and positioning compound over time.</li>
+    <li><strong>Rapid (VARD + ORD):</strong> Weekly shipping of small experiments. Volume generates signal. Winners graduate into their respective deliberate pipeline.</li>
+    <li><strong>Deliberate (Business AFPS + Devtool AFPS):</strong> ~Monthly shipping of deeper products. Full research and design cycle. Quality and positioning compound over time.</li>
   </ul>
 
   <div class="callout callout-green">
-    <strong>ORD flywheel (rapid):</strong> Ship fast &rarr; collect signal (stars, installs, issues, usage) &rarr; graduate winners &rarr; deeper investment &rarr; brand compounds &rarr; next tool ships to a larger audience.
+    <strong>VARD flywheel (rapid, business):</strong> Ship viral app fast &rarr; collect signal (users, shares, engagement) &rarr; graduate winners into Business AFPS &rarr; deeper investment &rarr; brand compounds &rarr; next app ships to a larger audience.
   </div>
   <div class="callout callout-blue">
+    <strong>ORD flywheel (rapid, devtool):</strong> Ship OSS tool fast &rarr; collect signal (stars, installs, issues) &rarr; graduate winners into Devtool AFPS &rarr; deeper investment &rarr; next tool ships to a larger audience.
+  </div>
+  <div class="callout">
     <strong>AFPS cycle (deliberate):</strong> Research deeply &rarr; validate with users &rarr; ship polished product (~monthly) &rarr; iterate on traction &rarr; compound through quality.
   </div>
 
-  <h3>Why three pipelines?</h3>
+  <h3>Why four pipelines?</h3>
   <ul>
-    <li><strong>Rapid vs deliberate:</strong> ORD ships weekly with minimal ceremony (3 steps). AFPS ships monthly with full research and design (12&ndash;20+ steps). These are separate philosophies, not just different ceremony levels.</li>
-    <li><strong>Different artifacts:</strong> ORD produces an npm package and README; Business AFPS produces specs, prototypes, UAT, roadmaps.</li>
-    <li><strong>Shared graduation path:</strong> ORD tools that show traction enter Devtool AFPS or Business AFPS for full treatment.</li>
-    <li><strong>Existing infrastructure:</strong> Business AFPS is mature (40+ skills). Devtool has a strong back half (8 skills). ORD needs to be built.</li>
+    <li><strong>Two domains:</strong> Business/viral apps and devtools/OSS have different audiences, distribution channels, success metrics, and research needs. ORD tools live on npm/GitHub; VARD apps live on app stores, the web, or viral channels.</li>
+    <li><strong>Two tempos:</strong> Rapid ships weekly with minimal ceremony (3&ndash;4 steps). Deliberate ships monthly with full research and design (12&ndash;20+ steps). These are separate philosophies, not just different ceremony levels.</li>
+    <li><strong>Different artifacts:</strong> ORD produces an npm package + README. VARD produces a deployed app + landing page. AFPS produces specs, prototypes, UAT, roadmaps.</li>
+    <li><strong>Shared graduation paths:</strong> Rapid tools that show traction graduate into their domain&rsquo;s deliberate pipeline for full treatment.</li>
+    <li><strong>Existing infrastructure:</strong> Business AFPS is mature (40+ skills). Devtool has a strong back half (8 skills). VARD and ORD need to be built.</li>
   </ul>
 </section>
 
@@ -173,14 +190,14 @@ devtool-workflow (orchestrator)
   &rarr; devtool-monetization      (research, v0.4)
   &rarr; devtool-docs-audit        (review, v0.1)</pre>
 
-  <h3>ORD Pipeline (does not exist yet)</h3>
-  <p>No rapid-tempo workflow exists. Small tools currently either go through the full Business AFPS (too heavy) or get built ad-hoc with no structured process.</p>
+  <h3>Rapid Pipelines (do not exist yet)</h3>
+  <p>No rapid-tempo workflows exist. Small tools and viral apps currently either go through the full Business AFPS (too heavy) or get built ad-hoc with no structured process. Both VARD (business/viral rapid) and ORD (devtool/OSS rapid) need to be built.</p>
 </section>
 
-<!-- Section 5: Three Pipelines Overview -->
+<!-- Section 5: Four Pipelines Overview -->
 <section id="three-pipelines">
-  <div class="section-head"><h2>The Three Pipelines Overview</h2></div>
-  <div class="section-feedback" data-section="Three Pipelines Overview" id="feedback-three-pipelines">
+  <div class="section-head"><h2>The Four Pipelines Overview</h2></div>
+  <div class="section-feedback" data-section="Four Pipelines Overview" id="feedback-three-pipelines">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -192,15 +209,16 @@ devtool-workflow (orchestrator)
 
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>ORD</th></tr></thead>
+      <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>VARD</th><th>ORD</th></tr></thead>
       <tbody>
-        <tr><td>Tempo</td><td>~Monthly (deliberate)</td><td>~Monthly (deliberate)</td><td>Weekly (rapid)</td></tr>
-        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Minimal (3&ndash;4 steps)</td></tr>
-        <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Quick scan or skip</td></tr>
-        <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>npm package + README</td></tr>
-        <tr><td>Graduation from</td><td>&mdash;</td><td>ORD or standalone</td><td>&mdash;</td></tr>
-        <tr><td>Graduation to</td><td>&mdash;</td><td>Business AFPS</td><td>Devtool or Business AFPS</td></tr>
-        <tr><td>Skills needed (new)</td><td>0</td><td>3&ndash;5 front-half</td><td>3&ndash;4</td></tr>
+        <tr><td>Domain</td><td>Business / viral apps</td><td>Devtools / OSS</td><td>Business / viral apps</td><td>Devtools / OSS</td></tr>
+        <tr><td>Tempo</td><td>~Monthly (deliberate)</td><td>~Monthly (deliberate)</td><td>Weekly (rapid)</td><td>Weekly (rapid)</td></tr>
+        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Minimal (3&ndash;4 steps)</td><td>Minimal (3&ndash;4 steps)</td></tr>
+        <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Quick viral/market scan</td><td>Quick ecosystem scan</td></tr>
+        <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>Deployed app + landing page</td><td>npm package + README</td></tr>
+        <tr><td>Graduation from</td><td>VARD</td><td>ORD</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Graduation to</td><td>&mdash;</td><td>Business AFPS</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
+        <tr><td>Skills needed (new)</td><td>0</td><td>3&ndash;5 front-half</td><td>3&ndash;4</td><td>3&ndash;4</td></tr>
       </tbody>
     </table>
   </div>
@@ -221,18 +239,18 @@ devtool-workflow (orchestrator)
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p>The existing durable business product pipeline. <strong>No changes needed.</strong> It receives graduates from ORD and Devtool AFPS when a tool shows enough traction to warrant full business treatment (ICP research, competitive analysis, monetization strategy, spec, prototype, UAT).</p>
+  <p>The existing durable business product pipeline. <strong>No changes needed.</strong> It receives graduates from VARD (viral apps that showed traction) and from Devtool AFPS (devtools that need full business treatment). Entry triggers: revenue potential, enterprise demand, or product complexity warranting full customer discovery, spec, prototype, and UAT.</p>
 
   <h4>When a tool enters Business AFPS</h4>
   <ul>
-    <li>Tool has clear revenue potential or enterprise demand signals</li>
+    <li>VARD app has clear revenue potential or enterprise demand signals</li>
     <li>User base is large enough to justify deep customer discovery</li>
     <li>Product complexity requires spec &rarr; prototype &rarr; UAT cycle</li>
     <li>Business model questions (pricing, packaging, channels) are material</li>
   </ul>
 
   <h4>Entry point from graduation</h4>
-  <p>Graduated tools enter at <code>/idea-scope-brief</code> with prior ORD/Devtool research artifacts linked as evidence. The brief skill detects existing artifacts and fast-tracks sections already covered.</p>
+  <p>Graduated tools enter at <code>/idea-scope-brief</code> with prior VARD/Devtool research artifacts linked as evidence. The brief skill detects existing artifacts and fast-tracks sections already covered.</p>
 </section>
 
 <!-- Section 7: Pipeline B — Devtool AFPS -->
@@ -272,10 +290,10 @@ POST-RESEARCH:
   <div class="chart-container" id="chart-devtool-flow"></div>
 </section>
 
-<!-- Section 8: Pipeline C — ORD -->
+<!-- Section 8: Pipeline C — VARD -->
 <section id="pipeline-c">
-  <div class="section-head"><h2>Pipeline C: ORD (OSS Rapid Distribution)</h2></div>
-  <div class="section-feedback" data-section="Pipeline C: ORD" id="feedback-pipeline-c">
+  <div class="section-head"><h2>Pipeline C: VARD (Viral App Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline C: VARD" id="feedback-pipeline-c">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -285,7 +303,49 @@ POST-RESEARCH:
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p>A new rapid-tempo workflow for shipping small OSS tools as distribution touchpoints. Designed for 1&ndash;3 day cycle time. Minimum viable ceremony.</p>
+  <p>A new rapid-tempo workflow for shipping small viral apps and consumer-facing tools as distribution touchpoints. Mirrors the ORD philosophy but for the business/consumer domain. Designed for 1&ndash;3 day cycle time. Minimum viable ceremony.</p>
+
+  <h4>Proposed VARD pipeline (3-step core)</h4>
+  <pre>
+1. vard-scan         Quick market scan: viral potential, audience, distribution channel.
+                     Output: 1-page scan doc with go/no-go recommendation.
+
+2. vard-align        Lightweight alignment: confirm scope, name, target audience, distribution.
+                     Output: Mini alignment page (3 gates max) or skip if solo.
+
+3. vard-ship         Build, deploy, announce.
+                     Output: Deployed app + landing page + social announcement.</pre>
+
+  <div class="callout">
+    <strong>Optional 4th step:</strong> <code>vard-traction</code> &mdash; check back after 1&ndash;2 weeks. Users, shares, engagement, revenue signals. Decide: iterate, graduate to Business AFPS, or archive.
+  </div>
+
+  <h4>How VARD differs from ORD</h4>
+  <ul>
+    <li><strong>Audience:</strong> End users / consumers vs. developers</li>
+    <li><strong>Distribution:</strong> App stores, web, social vs. npm, GitHub</li>
+    <li><strong>Success metrics:</strong> Users, shares, engagement vs. stars, installs, issues</li>
+    <li><strong>Scan focus:</strong> Viral mechanics, market timing vs. ecosystem gaps, existing tools</li>
+    <li><strong>Graduation target:</strong> Business AFPS vs. Devtool AFPS</li>
+  </ul>
+
+  <div class="chart-container" id="chart-time-to-ship"></div>
+</section>
+
+<!-- Section 8b: Pipeline D — ORD -->
+<section id="pipeline-d">
+  <div class="section-head"><h2>Pipeline D: ORD (OSS Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline D: ORD" id="feedback-pipeline-d">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>The devtool rapid-tempo workflow for shipping small OSS developer tools. Same rapid philosophy as VARD but targeting the developer ecosystem.</p>
 
   <h4>Proposed ORD pipeline (3-step core)</h4>
   <pre>
@@ -299,10 +359,8 @@ POST-RESEARCH:
                      Output: npm package + GitHub repo + README + optional tweet.</pre>
 
   <div class="callout">
-    <strong>Optional 4th step:</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Decide: iterate, graduate, or archive.
+    <strong>Optional 4th step:</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Decide: iterate, graduate to Devtool AFPS, or archive.
   </div>
-
-  <div class="chart-container" id="chart-time-to-ship"></div>
 </section>
 
 <!-- Section 9: Graduation Path -->
@@ -318,7 +376,7 @@ POST-RESEARCH:
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p>ORD tools that show traction enter a deeper pipeline. The graduation path depends on the tool&rsquo;s nature and ambition.</p>
+  <p>Rapid-pipeline tools (VARD and ORD) that show traction graduate into their domain&rsquo;s deliberate pipeline. The graduation path depends on the tool&rsquo;s domain and ambition.</p>
 
   <div class="chart-container" id="chart-graduation-funnel"></div>
 
@@ -341,16 +399,17 @@ POST-RESEARCH:
 
   <h4>Graduation routing</h4>
   <ul>
-    <li><strong>ORD &rarr; Devtool AFPS:</strong> Tool is developer-facing, needs better DX, docs, integrations, or positioning. Enter at <code>devtool-idea-brief</code> (or <code>devtool-user-map</code> if front-half is not yet built).</li>
-    <li><strong>ORD &rarr; Business AFPS:</strong> Tool has revenue potential, enterprise demand, or needs full customer discovery. Enter at <code>idea-scope-brief</code>.</li>
+    <li><strong>VARD &rarr; Business AFPS:</strong> Viral app has revenue potential, enterprise demand, or needs full customer discovery. Enter at <code>idea-scope-brief</code> with VARD scan/traction data as evidence.</li>
+    <li><strong>ORD &rarr; Devtool AFPS:</strong> OSS tool needs better DX, docs, integrations, or positioning. Enter at <code>devtool-idea-brief</code> (or <code>devtool-user-map</code> if front-half is not yet built).</li>
+    <li><strong>ORD &rarr; Business AFPS (cross-domain):</strong> Rare case where an OSS tool shows business/enterprise demand. Enter at <code>idea-scope-brief</code>.</li>
     <li><strong>Devtool AFPS &rarr; Business AFPS:</strong> Devtool matures to need pricing strategy, enterprise ICP, go-to-market. Enter at <code>idea-scope-brief</code> with devtool research as evidence.</li>
   </ul>
 </section>
 
-<!-- Section 10: COA A — Build All Three -->
+<!-- Section 10: COA A — Build All Four -->
 <section id="coa-a">
-  <div class="section-head"><h2>COA A: Build All Three Now</h2></div>
-  <div class="section-feedback" data-section="COA A: Build All Three" id="feedback-coa-a">
+  <div class="section-head"><h2>COA A: Build All Four Now</h2></div>
+  <div class="section-feedback" data-section="COA A: Build All Four" id="feedback-coa-a">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -361,15 +420,19 @@ POST-RESEARCH:
   </div>
 
   <div class="coa-card coa-a">
-    <h3><span class="tag tag-a">COA A</span> Build all three pipelines simultaneously</h3>
-    <p><strong>Philosophy:</strong> Full capability upfront. Build the ORD pack, the devtool front-half, and graduation routing all at once. Ship a complete three-pipeline system.</p>
+    <h3><span class="tag tag-a">COA A</span> Build all four pipelines simultaneously</h3>
+    <p><strong>Philosophy:</strong> Full capability upfront. Build both rapid packs (VARD + ORD), the devtool front-half, and graduation routing all at once. Ship a complete four-pipeline system.</p>
 
     <h4>New skills required</h4>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Pack</th><th>Skill</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td>ORD</td><td><code>ord-scan</code></td><td>Quick research scan and go/no-go</td></tr>
+          <tr><td>VARD</td><td><code>vard-scan</code></td><td>Quick market/viral scan and go/no-go</td></tr>
+          <tr><td>VARD</td><td><code>vard-align</code></td><td>Lightweight alignment page</td></tr>
+          <tr><td>VARD</td><td><code>vard-ship</code></td><td>Build, deploy, announce</td></tr>
+          <tr><td>VARD</td><td><code>vard-traction</code></td><td>Post-ship traction check</td></tr>
+          <tr><td>ORD</td><td><code>ord-scan</code></td><td>Quick ecosystem scan and go/no-go</td></tr>
           <tr><td>ORD</td><td><code>ord-align</code></td><td>Lightweight alignment page</td></tr>
           <tr><td>ORD</td><td><code>ord-ship</code></td><td>Build, package, publish</td></tr>
           <tr><td>ORD</td><td><code>ord-traction</code></td><td>Post-ship traction check</td></tr>
@@ -381,13 +444,14 @@ POST-RESEARCH:
     </div>
 
     <h4>Effort estimate</h4>
-    <p>7 new skills + graduation routing in <code>afps-status</code> + pack metadata. ~3&ndash;5 days of skill authoring.</p>
+    <p>11 new skills + graduation routing in <code>afps-status</code> + pack metadata. ~5&ndash;7 days of skill authoring.</p>
 
     <h4>Timeline</h4>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Phase</th><th>Duration</th><th>Deliverable</th></tr></thead>
         <tbody>
+          <tr><td>VARD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional VARD workflow</td></tr>
           <tr><td>ORD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional ORD workflow</td></tr>
           <tr><td>Devtool front-half (3 skills)</td><td>1&ndash;2 days</td><td>Complete devtool pipeline</td></tr>
           <tr><td>Graduation routing</td><td>0.5 day</td><td>afps-status updates, cross-pack routing</td></tr>
@@ -396,14 +460,14 @@ POST-RESEARCH:
       </table>
     </div>
 
-    <div class="callout callout-warn"><strong>Risk:</strong> Building the devtool front-half without real data about what&rsquo;s needed. The 3 new devtool skills are modeled on business-discovery, but developer workflows may need different structures.</div>
+    <div class="callout callout-warn"><strong>Risk:</strong> Building both rapid packs and the devtool front-half without real data. VARD and ORD share a structure but may diverge more than expected. The 3 devtool skills are modeled on business-discovery, but developer workflows may need different structures.</div>
   </div>
 </section>
 
-<!-- Section 11: COA B — ORD First -->
+<!-- Section 11: COA B — Rapid Pipelines First -->
 <section id="coa-b">
-  <div class="section-head"><h2>COA B: ORD First, Evolve Devtool</h2></div>
-  <div class="section-feedback" data-section="COA B: ORD First, Evolve Devtool" id="feedback-coa-b">
+  <div class="section-head"><h2>COA B: Rapid Pipelines First, Evolve Devtool</h2></div>
+  <div class="section-feedback" data-section="COA B: Rapid Pipelines First" id="feedback-coa-b">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -414,14 +478,15 @@ POST-RESEARCH:
   </div>
 
   <div class="coa-card coa-b">
-    <h3><span class="tag tag-b">COA B</span> Ship ORD now, evolve devtool front-half on demand <em>(Recommended)</em></h3>
-    <p><strong>Philosophy:</strong> Fastest to value. Build the ORD pack first (3 skills). Start shipping tools immediately. Let real ORD-to-devtool graduations reveal what the devtool front-half actually needs, then build those skills with real data.</p>
+    <h3><span class="tag tag-b">COA B</span> Ship both rapid pipelines now, evolve devtool front-half on demand <em>(Recommended)</em></h3>
+    <p><strong>Philosophy:</strong> Fastest to value. Build VARD and ORD packs first (6 skills, sharing structure). Start shipping both viral apps and OSS tools immediately. Let real graduations reveal what the devtool front-half actually needs.</p>
 
-    <h4>Phase 1: ORD pack (immediate)</h4>
+    <h4>Phase 1: VARD + ORD packs (immediate)</h4>
     <ul>
-      <li>Build <code>ord-scan</code>, <code>ord-align</code>, <code>ord-ship</code></li>
-      <li>Start shipping OSS tools within days</li>
-      <li>Graduation routing: manual initially (user runs <code>/devtool-workflow</code> or <code>/idea-scope-brief</code>)</li>
+      <li>Build <code>vard-scan</code>, <code>vard-align</code>, <code>vard-ship</code> (business rapid)</li>
+      <li>Build <code>ord-scan</code>, <code>ord-align</code>, <code>ord-ship</code> (devtool rapid)</li>
+      <li>VARD and ORD share structure &mdash; build one, adapt the other</li>
+      <li>Graduation routing: manual initially (user runs <code>/idea-scope-brief</code> or <code>/devtool-workflow</code>)</li>
     </ul>
 
     <h4>Phase 2: Devtool front-half (on demand)</h4>
@@ -433,21 +498,21 @@ POST-RESEARCH:
 
     <h4>Phase 3: Graduation automation (later)</h4>
     <ul>
-      <li>Add <code>ord-traction</code> for structured traction checking</li>
+      <li>Add <code>vard-traction</code> and <code>ord-traction</code> for structured traction checking</li>
       <li>Wire graduation triggers into <code>afps-status</code></li>
     </ul>
 
     <h4>Effort estimate</h4>
-    <p>Phase 1: 1&ndash;2 days (3 skills). Phase 2: 1&ndash;2 days when needed. Phase 3: 0.5 day. Total: ~3&ndash;4.5 days, spread over weeks/months.</p>
+    <p>Phase 1: 2&ndash;3 days (6 skills, shared structure). Phase 2: 1&ndash;2 days when needed. Phase 3: 0.5 day. Total: ~4&ndash;5.5 days, spread over weeks/months.</p>
 
-    <div class="callout callout-green"><strong>Why recommended:</strong> Generates real data about what the devtool front-half needs before building it. Lowest risk of over-engineering. Fastest path to the first shipped ORD tool. Phase 2 may turn out to be unnecessary if the existing devtool chain works well enough as a graduation target.</div>
+    <div class="callout callout-green"><strong>Why recommended:</strong> Both rapid pipelines ship fast because they share structure. Generates real data about what the devtool front-half needs before building it. Lowest risk of over-engineering. VARD and ORD can be adapted from the same skeleton. Phase 2 may turn out to be unnecessary.</div>
   </div>
 </section>
 
 <!-- Section 12: COA C — Unified Mode Flag -->
 <section id="coa-c">
-  <div class="section-head"><h2>COA C: Unified Mode Flag + ORD</h2></div>
-  <div class="section-feedback" data-section="COA C: Unified Mode Flag + ORD" id="feedback-coa-c">
+  <div class="section-head"><h2>COA C: Unified Mode Flag + Rapid Packs</h2></div>
+  <div class="section-feedback" data-section="COA C: Unified Mode Flag + Rapid" id="feedback-coa-c">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -458,15 +523,15 @@ POST-RESEARCH:
   </div>
 
   <div class="coa-card coa-c">
-    <h3><span class="tag tag-c">COA C</span> Add mode flags to existing AFPS + build ORD pack</h3>
-    <p><strong>Philosophy:</strong> One pipeline, three modes. Add a <code>--mode=business|devtool|rapid</code> flag to existing AFPS skills. Skills adapt their ceremony level, research depth, and output format based on the mode. Build a separate ORD pack only for the rapid-specific skills.</p>
+    <h3><span class="tag tag-c">COA C</span> Add mode flags to existing AFPS + build both rapid packs</h3>
+    <p><strong>Philosophy:</strong> One deliberate pipeline with mode flags, two separate rapid packs. Add a <code>--mode=business|devtool</code> flag to existing AFPS skills so they adapt per domain. Build VARD and ORD packs separately for rapid workflows.</p>
 
     <h4>How it works</h4>
     <ul>
       <li><code>idea-scope-brief --mode=devtool</code> &rarr; developer-focused brief, skips consumer sections</li>
       <li><code>customer-discovery --mode=devtool</code> &rarr; developer ICP template, DX-focused questions</li>
       <li><code>competitive-analysis --mode=devtool</code> &rarr; ecosystem/alternatives focus</li>
-      <li>ORD pack still exists separately for the rapid 3-step workflow</li>
+      <li>VARD and ORD packs exist separately for the rapid 3-step workflows</li>
     </ul>
 
     <h4>New work</h4>
@@ -474,6 +539,7 @@ POST-RESEARCH:
       <table>
         <thead><tr><th>Item</th><th>Effort</th></tr></thead>
         <tbody>
+          <tr><td>VARD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
           <tr><td>ORD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
           <tr><td>Mode flag infrastructure in AFPS skills</td><td>2&ndash;3 days</td></tr>
           <tr><td>Devtool mode templates for 5&ndash;8 existing skills</td><td>1&ndash;2 days</td></tr>
@@ -483,7 +549,7 @@ POST-RESEARCH:
     </div>
 
     <h4>Effort estimate</h4>
-    <p>5&ndash;8 days total. Higher than COA A or B because it touches existing stable skills.</p>
+    <p>6&ndash;10 days total. Highest effort because it touches existing stable skills and builds both rapid packs.</p>
 
     <div class="callout callout-warn"><strong>Risk:</strong> Modifying 5&ndash;8 mature skills to support mode flags adds regression risk. Each skill becomes more complex. Mode-specific behavior is harder to test than separate skills. Could slow down iteration on the devtool path.</div>
   </div>
@@ -504,15 +570,15 @@ POST-RESEARCH:
 
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Dimension</th><th><span class="tag tag-a">COA A</span> Build All</th><th><span class="tag tag-b">COA B</span> ORD First</th><th><span class="tag tag-c">COA C</span> Mode Flags</th></tr></thead>
+      <thead><tr><th>Dimension</th><th><span class="tag tag-a">COA A</span> Build All</th><th><span class="tag tag-b">COA B</span> Rapid First</th><th><span class="tag tag-c">COA C</span> Mode Flags</th></tr></thead>
       <tbody>
-        <tr><td>Time to first ORD tool</td><td>3&ndash;5 days</td><td><strong>1&ndash;2 days</strong></td><td>1&ndash;2 days</td></tr>
-        <tr><td>Total effort</td><td>3&ndash;5 days</td><td>3&ndash;4.5 days (spread)</td><td>5&ndash;8 days</td></tr>
+        <tr><td>Time to first rapid tool</td><td>5&ndash;7 days</td><td><strong>2&ndash;3 days</strong></td><td>2&ndash;3 days</td></tr>
+        <tr><td>Total effort</td><td>5&ndash;7 days</td><td>4&ndash;5.5 days (spread)</td><td>6&ndash;10 days</td></tr>
         <tr><td>Risk to existing skills</td><td>None</td><td>None</td><td><strong>High</strong> (modifies 5&ndash;8)</td></tr>
         <tr><td>Data-driven devtool design</td><td>No</td><td><strong>Yes</strong></td><td>Partial</td></tr>
         <tr><td>Upfront completeness</td><td><strong>Full</strong></td><td>Partial</td><td>Full</td></tr>
         <tr><td>Over-engineering risk</td><td>High</td><td><strong>Low</strong></td><td>Medium</td></tr>
-        <tr><td>Maintenance complexity</td><td>7 new skills</td><td>3 now, more later</td><td>Mode logic in 8+ skills</td></tr>
+        <tr><td>Maintenance complexity</td><td>11 new skills</td><td>6 now, more later</td><td>Mode logic in 8+ skills + 6 rapid</td></tr>
       </tbody>
     </table>
   </div>
@@ -524,9 +590,10 @@ POST-RESEARCH:
       <tbody>
         <tr><td>Over-build devtool front-half</td><td>Wasted effort</td><td>High</td><td>None</td><td>Medium</td></tr>
         <tr><td>Break existing business skills</td><td>Pipeline disruption</td><td>None</td><td>None</td><td>High</td></tr>
-        <tr><td>ORD-to-devtool graduation friction</td><td>Slow graduation</td><td>Low</td><td>Medium (manual)</td><td>Low</td></tr>
-        <tr><td>Skill sprawl</td><td>Maintenance burden</td><td>High (7 at once)</td><td>Low (incremental)</td><td>Low</td></tr>
-        <tr><td>Delayed ORD launch</td><td>Lost distribution momentum</td><td>Medium</td><td>None</td><td>Medium</td></tr>
+        <tr><td>Graduation friction</td><td>Slow graduation</td><td>Low</td><td>Medium (manual)</td><td>Low</td></tr>
+        <tr><td>Skill sprawl</td><td>Maintenance burden</td><td>High (11 at once)</td><td>Low (incremental)</td><td>Medium</td></tr>
+        <tr><td>Delayed rapid launch</td><td>Lost distribution momentum</td><td>Medium</td><td>None</td><td>Medium</td></tr>
+        <tr><td>VARD/ORD diverge more than expected</td><td>Duplicated maintenance</td><td>Medium</td><td>Low (adapt as needed)</td><td>Medium</td></tr>
       </tbody>
     </table>
   </div>
@@ -555,7 +622,7 @@ POST-RESEARCH:
         <tr><td>Business AFPS is complete and operational</td><td>40+ skills across 4 packs, documented in canonical-workflow-report</td><td>High</td></tr>
         <tr><td>Devtool pack covers research through docs</td><td>8 skills in packs/devtool/claude, v0.1&ndash;v0.4</td><td>High</td></tr>
         <tr><td>Devtool pack lacks front-half</td><td>No idea-brief, discovery, or competitive skills in pack</td><td>High</td></tr>
-        <tr><td>No rapid workflow exists</td><td>No ORD pack or rapid-mode skills in repository</td><td>High</td></tr>
+        <tr><td>No rapid workflow exists</td><td>No VARD or ORD pack or rapid-mode skills in repository</td><td>High</td></tr>
         <tr><td>Business-discovery structure is a good model for devtool front-half</td><td>Similar shape: ICP &rarr; competitive &rarr; journey &rarr; positioning</td><td>Medium</td></tr>
       </tbody>
     </table>
@@ -566,11 +633,12 @@ POST-RESEARCH:
     <table>
       <thead><tr><th>Assumption</th><th>Risk if wrong</th><th>Validation approach</th></tr></thead>
       <tbody>
-        <tr><td>Weekly ORD tool shipping is sustainable</td><td>ORD pipeline underused</td><td>Ship 3&ndash;5 ORD tools, measure cadence</td></tr>
-        <tr><td>3-step ORD is enough ceremony</td><td>Quality or scoping issues</td><td>Retrospective after first 5 tools</td></tr>
+        <tr><td>Weekly rapid tool shipping is sustainable</td><td>VARD/ORD pipelines underused</td><td>Ship 3&ndash;5 tools through each, measure cadence</td></tr>
+        <tr><td>3-step rapid pipeline is enough ceremony</td><td>Quality or scoping issues</td><td>Retrospective after first 5 tools per pipeline</td></tr>
+        <tr><td>VARD and ORD share enough structure to build from one skeleton</td><td>More divergence than expected, rework needed</td><td>Build ORD first, adapt for VARD, measure delta</td></tr>
         <tr><td>Traction signals are measurable</td><td>Graduation decisions are subjective</td><td>Define thresholds, track actuals</td></tr>
         <tr><td>Devtool front-half needs differ from business</td><td>Unnecessary skill duplication</td><td>Let ORD graduations reveal actual gaps</td></tr>
-        <tr><td>ORD tools will generate meaningful distribution</td><td>Thesis is wrong, effort wasted</td><td>Track aggregate downloads/stars after 10 tools</td></tr>
+        <tr><td>Rapid tools will generate meaningful distribution</td><td>Thesis is wrong, effort wasted</td><td>Track aggregate engagement/downloads/stars after 10 tools across both pipelines</td></tr>
       </tbody>
     </table>
   </div>
@@ -594,9 +662,9 @@ POST-RESEARCH:
     <h3>Gate 1: Pipeline Architecture</h3>
     <p>How many distinct pipelines should we formalize?</p>
     <div class="radio-group">
-      <label><input type="radio" name="pipeline-architecture" value="Three pipelines (Business AFPS + Devtool AFPS + ORD) as proposed"> <span>Three pipelines (Business AFPS + Devtool AFPS + ORD) as proposed</span></label>
-      <label><input type="radio" name="pipeline-architecture" value="Two pipelines (Business AFPS + ORD only, devtool uses business pipeline)"> <span>Two pipelines (Business AFPS + ORD only, devtool uses business pipeline)</span></label>
-      <label><input type="radio" name="pipeline-architecture" value="One pipeline with mode flags for all three tempos"> <span>One pipeline with mode flags for all three tempos</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed"> <span>Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Three pipelines (Business AFPS + Devtool AFPS + one unified rapid pipeline)"> <span>Three pipelines (AFPS &times; 2 + one unified rapid pipeline)</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Two pipelines (Business AFPS + one rapid pipeline, devtool uses business)"> <span>Two pipelines (Business AFPS + one rapid, devtool uses business)</span></label>
       <label><input type="radio" name="pipeline-architecture" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
     </div>
     <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
@@ -607,18 +675,18 @@ POST-RESEARCH:
     <h3>Gate 2: COA Selection</h3>
     <p>Which course of action should we pursue?</p>
     <div class="radio-group">
-      <label><input type="radio" name="coa-selection" value="COA B: ORD First, Evolve Devtool (recommended)"> <span>COA B: ORD First, Evolve Devtool (recommended)</span></label>
-      <label><input type="radio" name="coa-selection" value="COA A: Build All Three Now"> <span>COA A: Build All Three Now</span></label>
-      <label><input type="radio" name="coa-selection" value="COA C: Unified Mode Flag + ORD"> <span>COA C: Unified Mode Flag + ORD</span></label>
+      <label><input type="radio" name="coa-selection" value="COA B: Rapid Pipelines First, Evolve Devtool (recommended)"> <span>COA B: Rapid Pipelines First, Evolve Devtool (recommended)</span></label>
+      <label><input type="radio" name="coa-selection" value="COA A: Build All Four Now"> <span>COA A: Build All Four Now</span></label>
+      <label><input type="radio" name="coa-selection" value="COA C: Unified Mode Flag + Rapid Packs"> <span>COA C: Unified Mode Flag + Rapid Packs</span></label>
       <label><input type="radio" name="coa-selection" value="Hybrid (specify in notes)"> <span>Hybrid (specify in notes)</span></label>
     </div>
     <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
   </div>
 
-  <!-- Gate 3: ORD Ceremony Level -->
-  <div class="gate question-block" data-section="ORD Ceremony" data-gate-type="ceremony-level" data-question-id="ord-ceremony" data-target-path="">
-    <h3>Gate 3: ORD Ceremony Level</h3>
-    <p>How many steps should the ORD pipeline have?</p>
+  <!-- Gate 3: Rapid Pipeline Ceremony Level -->
+  <div class="gate question-block" data-section="Rapid Ceremony" data-gate-type="ceremony-level" data-question-id="ord-ceremony" data-target-path="">
+    <h3>Gate 3: Rapid Pipeline Ceremony Level</h3>
+    <p>How many steps should the VARD and ORD pipelines have? (Same structure for both, different domain content.)</p>
     <div class="radio-group">
       <label><input type="radio" name="ord-ceremony" value="3 steps: scan, align, ship (minimal)"> <span>3 steps: scan, align, ship (minimal)</span></label>
       <label><input type="radio" name="ord-ceremony" value="4 steps: scan, align, ship, traction (with follow-up)"> <span>4 steps: scan, align, ship, traction (with follow-up)</span></label>
@@ -644,24 +712,24 @@ POST-RESEARCH:
   <!-- Gate 5: Graduation Triggers -->
   <div class="gate question-block" data-section="Graduation Triggers" data-gate-type="automation-level" data-question-id="graduation-triggers" data-target-path="">
     <h3>Gate 5: Graduation Trigger Mechanism</h3>
-    <p>How should ORD-to-deeper-pipeline graduation work?</p>
+    <p>How should VARD/ORD-to-deliberate-pipeline graduation work?</p>
     <div class="radio-group">
       <label><input type="radio" name="graduation-triggers" value="Manual — user decides when to graduate a tool"> <span>Manual &mdash; user decides when to graduate</span></label>
-      <label><input type="radio" name="graduation-triggers" value="Semi-auto — ord-traction skill recommends, user confirms"> <span>Semi-auto &mdash; ord-traction recommends, user confirms</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Semi-auto — traction skill recommends, user confirms"> <span>Semi-auto &mdash; traction skill recommends, user confirms</span></label>
       <label><input type="radio" name="graduation-triggers" value="Automated — afps-status detects traction thresholds and routes"> <span>Automated &mdash; afps-status detects and routes</span></label>
       <label><input type="radio" name="graduation-triggers" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
     </div>
     <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
   </div>
 
-  <!-- Gate 6: ORD Pack Location -->
-  <div class="gate question-block" data-section="ORD Pack Location" data-gate-type="pack-structure" data-question-id="ord-pack-location" data-target-path="">
-    <h3>Gate 6: ORD Pack Location</h3>
-    <p>Where should the ORD skills live?</p>
+  <!-- Gate 6: Rapid Pack Location -->
+  <div class="gate question-block" data-section="Rapid Pack Location" data-gate-type="pack-structure" data-question-id="ord-pack-location" data-target-path="">
+    <h3>Gate 6: Rapid Pack Location</h3>
+    <p>Where should the VARD and ORD skills live?</p>
     <div class="radio-group">
-      <label><input type="radio" name="ord-pack-location" value="New dedicated pack: packs/ord/"> <span>New dedicated pack: <code>packs/ord/</code></span></label>
-      <label><input type="radio" name="ord-pack-location" value="Inside existing devtool pack: packs/devtool/claude/ord-*"> <span>Inside devtool pack: <code>packs/devtool/</code></span></label>
-      <label><input type="radio" name="ord-pack-location" value="Global skills: global/claude/ord-*"> <span>Global skills: <code>global/claude/ord-*</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="Two dedicated packs: packs/vard/ + packs/ord/"> <span>Two dedicated packs: <code>packs/vard/</code> + <code>packs/ord/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="One shared rapid pack: packs/rapid/ with vard-* and ord-* prefixes"> <span>One shared rapid pack: <code>packs/rapid/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="Domain packs: VARD in packs/business-rapid/, ORD in packs/devtool/"> <span>Domain packs: VARD in business, ORD in devtool</span></label>
       <label><input type="radio" name="ord-pack-location" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
     </div>
     <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
@@ -1042,6 +1110,7 @@ const alignChart = (() => {
     { axis: 'Tempo', sets: [
       { name: 'Business AFPS', values: [30, 95, 90, 95, 0, 30] },
       { name: 'Devtool AFPS', values: [60, 60, 50, 70, 60, 60] },
+      { name: 'VARD', values: [95, 20, 20, 40, 95, 95] },
       { name: 'ORD', values: [95, 20, 15, 30, 95, 95] }
     ]},
     { axis: 'Ceremony' },
@@ -1097,8 +1166,9 @@ const alignChart = (() => {
   alignChart.bar(container, [
     { label: 'Business AFPS', value: 30 },
     { label: 'Devtool AFPS', value: 14 },
+    { label: 'VARD', value: 3 },
     { label: 'ORD', value: 3 }
-  ], { title: 'Typical Days to Ship', horizontal: true, width: 600, height: 240 });
+  ], { title: 'Typical Days to Ship', horizontal: true, width: 600, height: 280 });
 })();
 
 // Chart 4: Graduation Funnel (Section 9)
@@ -1106,11 +1176,11 @@ const alignChart = (() => {
   const container = document.getElementById('chart-graduation-funnel');
   if (!container) return;
   alignChart.funnel(container, [
-    { label: 'ORD tools shipped', value: 20 },
-    { label: 'Show initial traction', value: 8 },
-    { label: 'Meet graduation threshold', value: 4 },
-    { label: 'Graduate to deeper pipeline', value: 3 }
-  ], { title: 'Expected ORD Graduation Funnel (per quarter)', width: 500, height: 320 });
+    { label: 'Rapid tools shipped (VARD + ORD)', value: 30 },
+    { label: 'Show initial traction', value: 12 },
+    { label: 'Meet graduation threshold', value: 6 },
+    { label: 'Graduate to deliberate pipeline', value: 4 }
+  ], { title: 'Expected Rapid Graduation Funnel (per quarter)', width: 500, height: 320 });
 })();
 
 // Chart 5: Graduation Flow (Section 9)
@@ -1119,21 +1189,27 @@ const alignChart = (() => {
   if (!container) return;
   alignChart.flow(container, {
     nodes: [
+      { id: 'vard', name: 'VARD App', layer: 0 },
       { id: 'ord', name: 'ORD Tool', layer: 0 },
-      { id: 'traction', name: 'Traction Check', layer: 1 },
+      { id: 'vard-traction', name: 'VARD Traction Check', layer: 1 },
+      { id: 'ord-traction', name: 'ORD Traction Check', layer: 1 },
       { id: 'archive', name: 'Archive', layer: 2 },
-      { id: 'iterate', name: 'Iterate (stay ORD)', layer: 2 },
-      { id: 'devtool', name: 'Devtool AFPS', layer: 3 },
-      { id: 'business', name: 'Business AFPS', layer: 3 }
+      { id: 'iterate', name: 'Iterate (stay rapid)', layer: 2 },
+      { id: 'business', name: 'Business AFPS', layer: 3 },
+      { id: 'devtool', name: 'Devtool AFPS', layer: 3 }
     ],
     links: [
-      { source: 'ord', target: 'traction', value: 10 },
-      { source: 'traction', target: 'archive', value: 4 },
-      { source: 'traction', target: 'iterate', value: 3 },
-      { source: 'traction', target: 'devtool', value: 6 },
-      { source: 'traction', target: 'business', value: 4 }
+      { source: 'vard', target: 'vard-traction', value: 8 },
+      { source: 'ord', target: 'ord-traction', value: 8 },
+      { source: 'vard-traction', target: 'archive', value: 3 },
+      { source: 'vard-traction', target: 'iterate', value: 2 },
+      { source: 'vard-traction', target: 'business', value: 6 },
+      { source: 'ord-traction', target: 'archive', value: 3 },
+      { source: 'ord-traction', target: 'iterate', value: 2 },
+      { source: 'ord-traction', target: 'devtool', value: 6 },
+      { source: 'ord-traction', target: 'business', value: 2 }
     ]
-  }, { title: 'ORD Graduation Routing', width: 600, height: 280 });
+  }, { title: 'Rapid Pipeline Graduation Routing', width: 700, height: 340 });
 })();
 
 // Chart 6: COA Profile Radar (Section 13)
@@ -1142,9 +1218,9 @@ const alignChart = (() => {
   if (!container) return;
   const data = [
     { axis: 'Speed to value', sets: [
-      { name: 'COA A: Build All', values: [50, 95, 30, 85, 70, 40] },
-      { name: 'COA B: ORD First', values: [95, 50, 90, 50, 85, 90] },
-      { name: 'COA C: Mode Flags', values: [60, 80, 40, 70, 40, 55] }
+      { name: 'COA A: Build All', values: [40, 95, 25, 85, 60, 35] },
+      { name: 'COA B: Rapid First', values: [90, 55, 85, 50, 80, 90] },
+      { name: 'COA C: Mode Flags', values: [55, 80, 35, 70, 35, 50] }
     ]},
     { axis: 'Completeness' },
     { axis: 'Low risk' },
@@ -1156,5 +1232,279 @@ const alignChart = (() => {
 })();
 </script>
 
+
+<script>
+// --- Brief Me TTS ---
+/**
+ * Alignment TTS — "Brief Me" text-to-speech for alignment pages.
+ *
+ * Usage: copy this entire IIFE into a <script> block in the alignment page HTML,
+ * after the existing script block. It attaches a floating "Brief Me" button that
+ * reads through each section like a spoken briefing.
+ *
+ * Features:
+ *   - Reads page section-by-section, skipping gate controls and YAML compile UI
+ *   - Highlights the active section with a glow border
+ *   - Play / pause / stop / skip-forward / skip-back controls
+ *   - Speed selector (1x, 1.25x, 1.5x, 2x)
+ *   - Keyboard: Space = toggle, Escape = stop, ArrowRight = skip forward, ArrowLeft = skip back
+ *   - Graceful degradation: hides the button if speechSynthesis is unavailable
+ *
+ * Respects the alignment page dark-mode palette via CSS variables.
+ */
+
+const alignTTS = (() => {
+  if (!('speechSynthesis' in window)) return null;
+
+  const synth = window.speechSynthesis;
+  let sections = [];
+  let currentIdx = -1;
+  let rate = 1;
+  let paused = false;
+  let active = false;
+  let bar = null;
+
+  function extractText(el) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
+    let text = clone.textContent.replace(/\s+/g, ' ').trim();
+    if (text.length > 2000) text = text.slice(0, 2000) + '... section truncated for brevity.';
+    return text;
+  }
+
+  function gatherSections() {
+    sections = [];
+    const header = document.querySelector('header');
+    if (header) {
+      const title = header.querySelector('h1')?.textContent?.trim() || 'Alignment Page';
+      const lead = header.querySelector('.lead')?.textContent?.trim() || '';
+      sections.push({ el: header, label: 'Introduction', text: `${title}. ${lead}` });
+    }
+    document.querySelectorAll('section').forEach(sec => {
+      const id = sec.id;
+      if (id === 'compile' || id === 'review-gates') return;
+      const heading = sec.querySelector('h2')?.textContent?.trim() || 'Section';
+      const text = extractText(sec);
+      if (text.length > 10) sections.push({ el: sec, label: heading, text: `${heading}. ${text}` });
+    });
+    if (!sections.length) {
+      const body = extractText(document.querySelector('main') || document.body);
+      if (body.length > 10) sections.push({ el: document.body, label: 'Page', text: body });
+    }
+  }
+
+  function highlight(el) {
+    document.querySelectorAll('.tts-active-section').forEach(e => e.classList.remove('tts-active-section'));
+    if (el) {
+      el.classList.add('tts-active-section');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function speak(idx) {
+    if (idx < 0 || idx >= sections.length) { stop(); return; }
+    synth.cancel();
+    currentIdx = idx;
+    const sec = sections[idx];
+    highlight(sec.el);
+    updateStatus();
+
+    const utt = new SpeechSynthesisUtterance(sec.text);
+    utt.rate = rate;
+    utt.onend = () => {
+      if (!paused && active) speak(currentIdx + 1);
+    };
+    utt.onerror = (e) => {
+      if (e.error !== 'canceled' && active) speak(currentIdx + 1);
+    };
+    synth.speak(utt);
+  }
+
+  function play() {
+    gatherSections();
+    if (!sections.length) return;
+    active = true;
+    paused = false;
+    if (currentIdx < 0) currentIdx = 0;
+    showBar();
+    speak(currentIdx);
+  }
+
+  function togglePause() {
+    if (!active) { play(); return; }
+    if (paused) {
+      paused = false;
+      synth.resume();
+      updateStatus();
+    } else {
+      paused = true;
+      synth.pause();
+      updateStatus();
+    }
+  }
+
+  function stop() {
+    synth.cancel();
+    active = false;
+    paused = false;
+    currentIdx = -1;
+    highlight(null);
+    hideBar();
+  }
+
+  function skipForward() {
+    if (!active) return;
+    paused = false;
+    speak(currentIdx + 1);
+  }
+
+  function skipBack() {
+    if (!active) return;
+    paused = false;
+    speak(Math.max(0, currentIdx - 1));
+  }
+
+  function setRate(r) {
+    rate = r;
+    if (active && !paused) {
+      speak(currentIdx);
+    }
+  }
+
+  function updateStatus() {
+    if (!bar) return;
+    const label = bar.querySelector('.tts-status');
+    if (!label) return;
+    const sec = sections[currentIdx];
+    const state = paused ? 'Paused' : 'Reading';
+    label.textContent = sec ? `${state}: ${sec.label} (${currentIdx + 1}/${sections.length})` : '';
+  }
+
+  function createBar() {
+    const el = document.createElement('div');
+    el.className = 'tts-bar';
+    el.innerHTML = `
+      <button class="tts-btn" data-action="back" title="Previous section" aria-label="Previous section">&#9664;&#9664;</button>
+      <button class="tts-btn" data-action="toggle" title="Play / Pause" aria-label="Play or Pause">&#9208;</button>
+      <button class="tts-btn" data-action="stop" title="Stop" aria-label="Stop">&#9632;</button>
+      <button class="tts-btn" data-action="forward" title="Next section" aria-label="Next section">&#9654;&#9654;</button>
+      <span class="tts-status"></span>
+      <select class="tts-speed" title="Playback speed" aria-label="Playback speed">
+        <option value="0.8">0.8x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    `;
+    el.querySelectorAll('.tts-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        if (action === 'toggle') togglePause();
+        else if (action === 'stop') stop();
+        else if (action === 'forward') skipForward();
+        else if (action === 'back') skipBack();
+      });
+    });
+    el.querySelector('.tts-speed').addEventListener('change', (e) => {
+      setRate(parseFloat(e.target.value));
+    });
+    return el;
+  }
+
+  function showBar() {
+    if (bar) { bar.style.display = 'flex'; return; }
+    bar = createBar();
+    document.body.appendChild(bar);
+  }
+
+  function hideBar() {
+    if (bar) bar.style.display = 'none';
+  }
+
+  function injectButton() {
+    const header = document.querySelector('header');
+    if (!header) return;
+    const btn = document.createElement('button');
+    btn.className = 'tts-brief-btn';
+    btn.textContent = 'Brief Me';
+    btn.title = 'Read this page aloud section by section';
+    btn.setAttribute('aria-label', 'Brief Me — read this page aloud');
+    btn.addEventListener('click', () => {
+      if (active) { stop(); return; }
+      play();
+    });
+    header.appendChild(btn);
+  }
+
+  function injectStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .tts-brief-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        min-height: 44px; padding: 10px 20px; border-radius: 6px;
+        border: 1px solid var(--accent, #58a6ff); background: transparent;
+        color: var(--accent, #58a6ff); font-size: 0.95rem; font-weight: 600;
+        cursor: pointer; margin: 12px 0; transition: background 0.15s, color 0.15s;
+      }
+      .tts-brief-btn:hover { background: var(--accent, #58a6ff); color: #fff; }
+
+      .tts-bar {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 16px; background: #161b22; border-top: 1px solid var(--border, #30363d);
+        box-shadow: 0 -2px 12px rgba(0,0,0,0.4); flex-wrap: wrap;
+      }
+      .tts-btn {
+        min-height: 44px; min-width: 44px; padding: 8px 12px;
+        border: 1px solid var(--border, #30363d); border-radius: 6px;
+        background: var(--bg, #0d1117); color: var(--text, #c9d1d9);
+        cursor: pointer; font-size: 1rem;
+      }
+      .tts-btn:hover { border-color: var(--accent, #58a6ff); }
+      .tts-status {
+        flex: 1; min-width: 120px; color: var(--text-muted, #8b949e);
+        font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .tts-speed {
+        min-height: 44px; padding: 8px 12px; border: 1px solid var(--border, #30363d);
+        border-radius: 6px; background: var(--bg, #0d1117); color: var(--text, #c9d1d9);
+        font-size: 0.85rem; cursor: pointer;
+      }
+      .tts-active-section {
+        outline: 2px solid var(--accent, #58a6ff); outline-offset: 4px;
+        transition: outline-color 0.3s;
+      }
+      @media (max-width: 560px) {
+        .tts-bar { gap: 4px; padding: 8px; }
+        .tts-status { min-width: 80px; font-size: 0.8rem; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function init() {
+    injectStyles();
+    injectButton();
+    document.addEventListener('keydown', (e) => {
+      if (e.target.matches('input, textarea, select')) return;
+      if (e.key === ' ' && active) { e.preventDefault(); togglePause(); }
+      else if (e.key === 'Escape' && active) { stop(); }
+      else if (e.key === 'ArrowRight' && active) { skipForward(); }
+      else if (e.key === 'ArrowLeft' && active) { skipBack(); }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return { play, stop, togglePause, skipForward, skipBack, setRate };
+})();
+
+</script>
 </body>
 </html>

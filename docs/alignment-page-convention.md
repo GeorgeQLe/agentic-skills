@@ -86,5 +86,7 @@ The tier is set per skill via `visual_tier` in SKILL.md frontmatter (or detected
 
 **Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/{skill-name}-{topic}.html`.
 
+**Brief Me (text-to-speech).** Every alignment page must include the TTS snippet from `scripts/alignment-tts-snippet.js` as an inline `<script>` block before `</body>`. The snippet adds a "Brief Me" button in the header that reads the page aloud section-by-section using the Web Speech API, with play/pause/stop/skip controls and speed selection. It skips gate controls, compile UI, and feedback textareas. To inject TTS into existing pages, run `node scripts/inject-tts.mjs` (idempotent). Copy the full snippet contents into the page script block; do not use `<script src="...">`.
+
 **Browser open.** After writing the resulting HTML page, run `node scripts/open-html-page.mjs alignment/{skill-name}-{topic}.html --browser auto` from the repository root, replacing the path with the actual page path when needed. Report the script status (`focused`, `opened`, `fallback-opened`, `blocked`, or `failed`) in the handoff. Continue when opening is `blocked` if the files were written and verified correctly; a blocked browser-open attempt does not make the skill fail.
 <!-- alignment-convention:end -->
