@@ -1,3 +1,29 @@
+## Workflow Design Alignment Chart Clipping
+
+### Phase 1: Investigation And Fix
+- [x] Capture prompt history for `investigate`, Browser verification, and Computer Use verification.
+- [x] Record the plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect the Graduation Path routing chart markup and styles.
+- [x] Reproduce or confirm the right-edge clipping.
+- [x] Patch the layout so the rapid pipeline chart remains fully visible.
+- [x] Update `tasks/lessons.md` with the correction pattern.
+
+### Phase 2: Verification And Shipping
+- [x] Run static validation and `git diff --check`.
+- [x] Verify the fixed page visually in the browser.
+- [x] Add review notes with root cause, fix, and verification results.
+- [x] Commit and push the intended changes.
+
+### Review Notes
+- User claim validated: confirmed. The previous Graduation Path flow chart placed every node label to the right of its node, so final-layer destination labels extended beyond the SVG viewBox and were clipped on the right edge.
+- Root cause: `alignChart.flow()` did not account for edge-layer label placement. The current `HEAD` alignment page now anchors final-layer labels inward with `text-anchor="end"` and includes a visible revision note in the Graduation Path section.
+- Archive: saved the pre-revision page state to `docs/history/archive/2026-06-08/105036/alignment/workflow-design-three-pipelines.html`; that snapshot shows the old outward-label flow helper and `alignment_status: approved`.
+- Index maintenance: updated tracked `alignment/index.html` so the entry matches the revised Four-Pipeline page title and 2026-06-08 refresh date.
+- Verification passed: `git diff --check`; targeted status/helper/index string scans; archive existence check; focused node-position calculation showing all Graduation Routing labels inside bounds; Quick Look render; and Safari visual inspection of the Graduation Path section showing the right-side Business AFPS and Devtool AFPS labels visible.
+- Tooling note: Browser plugin control was unavailable because the required Node REPL browser tool was not exposed in this session, so the visual check used Safari through Computer Use. `node scripts/upgrade-alignment-page.mjs --dry-run` exited successfully but reports broader pre-existing generated `ALIGNMENT-PAGE.md` drift outside this page revision; those 267 generated writes were not applied.
+
+---
+
 ## Documentation Freshness And Cleanup Audit
 
 ### Phase 1: Plan And Inventory

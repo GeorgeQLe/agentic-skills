@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-08 — Flow-chart SVG labels must stay inside the viewBox
+
+- An alignment-page flow chart rendered all node labels to the right of each node, so destination labels on the final layer extended beyond the SVG viewBox and were cut off even when the SVG itself scaled responsively.
+- For generated SVG flow diagrams, reserve space for labels or anchor labels inward on edge layers; do not rely on `max-width:100%` or a wider SVG width to fix text that is already outside the viewBox.
+- For visual-tier alignment pages, verify charts at both desktop and narrow widths after feedback-driven edits, and treat clipped labels as a generator/layout bug rather than a content-only issue.
+
 ## 2026-06-05 — Alignment pages must not embed deliverables, and review-only product-path approvals need a formal state
 
 - An alignment page used `<object data="...">` to embed the working packet instead of rendering all proposed deliverables inline, violating the no-context-loss rule but not explicitly prohibited.

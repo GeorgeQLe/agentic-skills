@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four-Pipeline Workflow Design — Alignment Page</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; --chart-1:#58a6ff; --chart-2:#3fb950; --chart-3:#d29922; --chart-4:#bc8cff; --chart-5:#f85149; --chart-6:#79c0ff; --chart-7:#f0883e; --chart-8:#a5d6ff; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; max-width:100%; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2.2rem; }
+h2 { color:var(--accent); margin:0; font-size:1.45rem; }
+h3 { color:#fff; margin:24px 0 8px; font-size:1.05rem; }
+h4 { color:var(--accent); margin:18px 0 6px; font-size:0.95rem; }
+p { margin:12px 0; } a { color:var(--accent); } code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; }
+pre { background:#0b1320; border:1px solid var(--border); border-radius:6px; padding:14px; overflow-x:auto; color:var(--text); font-size:0.9rem; line-height:1.5; }
+.status { display:inline-flex; min-height:44px; align-items:center; padding:10px 16px; border:1px solid var(--purple); color:#fff; background:#1c2333; margin:16px 0; }
+.lead { color:#fff; font-size:1.05rem; }
+.toc, section, .compile-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.toc ol { margin:8px 0 0; columns:2; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,minmax(min(210px,100%),1fr)); gap:12px; margin:18px 0; }
+.stat-grid div { border:1px solid var(--border); background:#0f1623; padding:14px; border-radius:8px; }
+.stat-grid strong { display:block; color:#fff; font-size:1.35rem; } .stat-grid span { color:var(--text-muted); }
+.table-wrap { overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:8px; }
+table { border-collapse:collapse; width:100%; min-width:720px; } th,td { border-bottom:1px solid var(--border); padding:10px 12px; vertical-align:top; text-align:left; } th { background:var(--surface); color:#fff; } tr:last-child td { border-bottom:0; }
+ul,ol { padding-left:22px; } li { margin:4px 0; }
+.callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
+.callout-warn { border-color:var(--orange); }
+.callout-green { border-color:var(--green); }
+.callout-blue { border-color:var(--accent); }
+.coa-card { border:2px solid var(--border); background:#0f1623; padding:18px; border-radius:10px; margin:16px 0; }
+.coa-card h3 { margin-top:0; }
+.coa-a { border-color:var(--chart-1); }
+.coa-b { border-color:var(--chart-2); }
+.coa-c { border-color:var(--chart-3); }
+.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; margin-right:6px; }
+.tag-a { background:rgba(88,166,255,0.15); color:var(--chart-1); }
+.tag-b { background:rgba(63,185,80,0.15); color:var(--chart-2); }
+.tag-c { background:rgba(210,153,34,0.15); color:var(--chart-3); }
+.tag-d { background:rgba(188,140,255,0.15); color:var(--chart-4); }
+.section-feedback { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 16px; padding:10px; border:1px solid var(--border); border-radius:8px; background:#0f1623; }
+.section-feedback span { color:var(--text-muted); }
+button, .radio-group label { min-height:44px; padding:10px 16px; border-radius:6px; border:1px solid var(--border); background:#0d1117; color:var(--text); cursor:pointer; }
+button:hover, .radio-group label:hover { border-color:var(--accent); }
+button.active[data-feedback="emphasize"] { border-color:var(--green); color:#fff; background:#12351f; }
+button.active[data-feedback="down"] { border-color:var(--red); color:#fff; background:#351616; }
+button.active[data-feedback="needs-clarification"] { border-color:var(--orange); color:#fff; background:#33260f; }
+textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:10px; font:inherit; }
+.feedback-notes, .local-yaml, .local-yaml-actions { display:none; flex-basis:100%; }
+.section-feedback.has-feedback .feedback-notes, .section-feedback.has-feedback .local-yaml-actions { display:block; }
+.section-feedback.has-yaml .local-yaml { display:block; min-height:130px; }
+.question-block { background:#1c2333; border:1px solid var(--purple); padding:16px; border-radius:8px; margin:16px 0; }
+.radio-group { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; } .radio-group label { display:flex; align-items:center; gap:8px; }
+.answer-notes { display:none; margin-top:10px; }
+.question-block.has-answer .answer-notes { display:block; }
+.compile-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+#compiled-yaml, #compiled-feedback-yaml { min-height:180px; }
+.copy-status, #answer-status, #feedback-status { color:var(--text-muted); }
+.chart-container { margin:18px 0; }
+@media (max-width: 860px) { .toc ol { columns:1; } .stat-grid { grid-template-columns:repeat(2,minmax(min(210px,100%),1fr)); } main { width:min(100% - 24px, 1180px); } }
+@media (max-width: 560px) { .stat-grid { grid-template-columns:1fr; } h1 { font-size:1.7rem; } table { min-width:640px; } }
+</style>
+</head>
+<body>
+<main>
+
+<!-- Section 1: Header + Status -->
+<h1>Four-Pipeline Workflow Design</h1>
+<div class="status">alignment_status: approved</div>
+<p class="lead">Formalizing four distinct workflow pipelines &mdash; Business AFPS, Devtool AFPS, VARD (Viral App Rapid Distribution), and ORD (OSS Rapid Distribution) &mdash; to support the "Apps as Distribution" thesis. Two domains (business, devtool) &times; two tempos (deliberate, rapid). This page presents the current state, proposed architecture, courses of action, and alignment gates for your review.</p>
+
+<!-- Section 2: TOC -->
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#thesis">Apps as Distribution Thesis</a></li>
+    <li><a href="#current-state">Current State</a></li>
+    <li><a href="#three-pipelines">The Four Pipelines Overview</a></li>
+    <li><a href="#pipeline-a">Pipeline A: Business AFPS</a></li>
+    <li><a href="#pipeline-b">Pipeline B: Devtool AFPS</a></li>
+    <li><a href="#pipeline-c">Pipeline C: VARD</a></li>
+    <li><a href="#pipeline-d">Pipeline D: ORD</a></li>
+    <li><a href="#graduation">Graduation Path</a></li>
+    <li><a href="#coa-a">COA A: Build All Four</a></li>
+    <li><a href="#coa-b">COA B: Rapid Pipelines First</a></li>
+    <li><a href="#coa-c">COA C: Unified Mode Flag + Rapid</a></li>
+    <li><a href="#coa-compare">COA Comparison</a></li>
+    <li><a href="#evidence">Evidence &amp; Assumptions</a></li>
+    <li><a href="#gates">Review Gates</a></li>
+    <li><a href="#compile">Compile YAML</a></li>
+  </ol>
+</nav>
+
+<!-- Section 3: Apps as Distribution Thesis -->
+<section id="thesis">
+  <div class="section-head"><h2>Apps as Distribution Thesis</h2></div>
+  <div class="section-feedback" data-section="Apps as Distribution Thesis" id="feedback-thesis">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment or a polished product &mdash; compounds brand, audience, and surface area. Two domains and two tempos produce a 2&times;2 matrix of four pipelines:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>Deliberate (~monthly)</th><th>Rapid (~weekly)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Business / Viral Apps</strong></td><td>Business AFPS</td><td>VARD (Viral App Rapid Distribution)</td></tr>
+        <tr><td><strong>Devtools / OSS</strong></td><td>Devtool AFPS</td><td>ORD (OSS Rapid Distribution)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul>
+    <li><strong>Rapid (VARD + ORD):</strong> Weekly shipping of small experiments. Volume generates signal. Winners graduate into their respective deliberate pipeline.</li>
+    <li><strong>Deliberate (Business AFPS + Devtool AFPS):</strong> ~Monthly shipping of deeper products. Full research and design cycle. Quality and positioning compound over time.</li>
+  </ul>
+
+  <div class="callout callout-green">
+    <strong>VARD flywheel (rapid, business):</strong> Ship viral app fast &rarr; collect signal (users, shares, engagement) &rarr; graduate winners into Business AFPS &rarr; deeper investment &rarr; brand compounds &rarr; next app ships to a larger audience.
+  </div>
+  <div class="callout callout-blue">
+    <strong>ORD flywheel (rapid, devtool):</strong> Ship OSS tool fast &rarr; collect signal (stars, installs, issues) &rarr; graduate winners into Devtool AFPS &rarr; deeper investment &rarr; next tool ships to a larger audience.
+  </div>
+  <div class="callout">
+    <strong>AFPS cycle (deliberate):</strong> Research deeply &rarr; validate with users &rarr; ship polished product (~monthly) &rarr; iterate on traction &rarr; compound through quality.
+  </div>
+
+  <h3>Why four pipelines?</h3>
+  <ul>
+    <li><strong>Two domains:</strong> Business/viral apps and devtools/OSS have different audiences, distribution channels, success metrics, and research needs. ORD tools live on npm/GitHub; VARD apps live on app stores, the web, or viral channels.</li>
+    <li><strong>Two tempos:</strong> Rapid ships weekly with minimal ceremony (3&ndash;4 steps). Deliberate ships monthly with full research and design (12&ndash;20+ steps). These are separate philosophies, not just different ceremony levels.</li>
+    <li><strong>Different artifacts:</strong> ORD produces an npm package + README. VARD produces a deployed app + landing page. AFPS produces specs, prototypes, UAT, roadmaps.</li>
+    <li><strong>Shared graduation paths:</strong> Rapid tools that show traction graduate into their domain&rsquo;s deliberate pipeline for full treatment.</li>
+    <li><strong>Existing infrastructure:</strong> Business AFPS is mature (40+ skills). Devtool has a strong back half (8 skills). VARD and ORD need to be built.</li>
+  </ul>
+</section>
+
+<!-- Section 4: Current State -->
+<section id="current-state">
+  <div class="section-head"><h2>Current State</h2></div>
+  <div class="section-feedback" data-section="Current State" id="feedback-current-state">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <h3>Business AFPS Pipeline (complete)</h3>
+  <pre>
+idea-scope-brief
+  &rarr; pack recommend/install
+  &rarr; business-discovery: customer-discovery &rarr; competitive-analysis
+  &rarr; customer-lifecycle: journey-map
+  &rarr; optional evidence lanes (growth, ops)
+  &rarr; user-flow-map &rarr; ui-interview &rarr; ux-variations &rarr; prototype
+  &rarr; uat &rarr; consolidate-variations
+  &rarr; research-roadmap &rarr; spec-interview &rarr; research-roadmap
+  &rarr; roadmap &rarr; plan-phase &rarr; run/delegate &rarr; ship &rarr; ship-end</pre>
+  <p>Spans 4 business packs (<code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>, <code>business-ops</code>) plus global skills. Fully operational with 40+ skills.</p>
+
+  <h3>Devtool Pack (back half only)</h3>
+  <div class="stat-grid">
+    <div><strong>8</strong><span>Existing skills</span></div>
+    <div><strong>1</strong><span>Orchestrator</span></div>
+    <div><strong>0</strong><span>Front-half skills</span></div>
+    <div><strong>v0.1&ndash;v0.4</strong><span>Version range</span></div>
+  </div>
+
+  <p>The devtool pack covers research-through-docs but lacks the front-half (idea scoping, discovery, competitive analysis, journey mapping) that Business AFPS provides via its discovery and lifecycle packs.</p>
+
+  <h4>Existing devtool skill chain</h4>
+  <pre>
+devtool-workflow (orchestrator)
+  &rarr; devtool-user-map          (research, v0.4)
+  &rarr; devtool-integration-map   (analysis, v0.2)
+  &rarr; devtool-dx-journey        (analysis, v0.2)
+  &rarr; devtool-adoption          (research, v0.4)
+  &rarr; devtool-positioning       (research, v0.4)
+  &rarr; devtool-monetization      (research, v0.4)
+  &rarr; devtool-docs-audit        (review, v0.1)</pre>
+
+  <h3>Rapid Pipelines (do not exist yet)</h3>
+  <p>No rapid-tempo workflows exist. Small tools and viral apps currently either go through the full Business AFPS (too heavy) or get built ad-hoc with no structured process. Both VARD (business/viral rapid) and ORD (devtool/OSS rapid) need to be built.</p>
+</section>
+
+<!-- Section 5: Four Pipelines Overview -->
+<section id="three-pipelines">
+  <div class="section-head"><h2>The Four Pipelines Overview</h2></div>
+  <div class="section-feedback" data-section="Four Pipelines Overview" id="feedback-three-pipelines">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>VARD</th><th>ORD</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Business / viral apps</td><td>Devtools / OSS</td><td>Business / viral apps</td><td>Devtools / OSS</td></tr>
+        <tr><td>Tempo</td><td>~Monthly (deliberate)</td><td>~Monthly (deliberate)</td><td>Weekly (rapid)</td><td>Weekly (rapid)</td></tr>
+        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Minimal (3&ndash;4 steps)</td><td>Minimal (3&ndash;4 steps)</td></tr>
+        <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Quick viral/market scan</td><td>Quick ecosystem scan</td></tr>
+        <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>Deployed app + landing page</td><td>npm package + README</td></tr>
+        <tr><td>Graduation from</td><td>VARD</td><td>ORD</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Graduation to</td><td>&mdash;</td><td>Business AFPS</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
+        <tr><td>Skills needed (new)</td><td>0</td><td>3&ndash;5 front-half</td><td>3&ndash;4</td><td>3&ndash;4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container" id="chart-pipeline-radar"></div>
+</section>
+
+<!-- Section 6: Pipeline A — Business AFPS -->
+<section id="pipeline-a">
+  <div class="section-head"><h2>Pipeline A: Business AFPS</h2></div>
+  <div class="section-feedback" data-section="Pipeline A: Business AFPS" id="feedback-pipeline-a">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>The existing durable business product pipeline. <strong>No changes needed.</strong> It receives graduates from VARD (viral apps that showed traction) and from Devtool AFPS (devtools that need full business treatment). Entry triggers: revenue potential, enterprise demand, or product complexity warranting full customer discovery, spec, prototype, and UAT.</p>
+
+  <h4>When a tool enters Business AFPS</h4>
+  <ul>
+    <li>VARD app has clear revenue potential or enterprise demand signals</li>
+    <li>User base is large enough to justify deep customer discovery</li>
+    <li>Product complexity requires spec &rarr; prototype &rarr; UAT cycle</li>
+    <li>Business model questions (pricing, packaging, channels) are material</li>
+  </ul>
+
+  <h4>Entry point from graduation</h4>
+  <p>Graduated tools enter at <code>/idea-scope-brief</code> with prior VARD/Devtool research artifacts linked as evidence. The brief skill detects existing artifacts and fast-tracks sections already covered.</p>
+</section>
+
+<!-- Section 7: Pipeline B — Devtool AFPS -->
+<section id="pipeline-b">
+  <div class="section-head"><h2>Pipeline B: Devtool AFPS</h2></div>
+  <div class="section-feedback" data-section="Pipeline B: Devtool AFPS" id="feedback-pipeline-b">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>The devtool pack has a strong back half (user-map through docs-audit) but lacks the front half that Business AFPS gets from its discovery and lifecycle packs. The proposed front half mirrors business-discovery&rsquo;s structure but is developer-specific.</p>
+
+  <h4>Proposed full pipeline</h4>
+  <pre>
+FRONT HALF (new):
+  devtool-idea-brief             &larr; scoped concept for a devtool
+  devtool-discovery              &larr; developer ICP, pain points, workflow context
+  devtool-competitive-scan       &larr; alternatives, ecosystem gaps
+
+EXISTING BACK HALF:
+  devtool-user-map               &larr; map users, buyers, champions
+  devtool-integration-map        &larr; integrations, setup, compatibility
+  devtool-dx-journey             &larr; install to production adoption
+  devtool-adoption               &larr; adoption loops, examples, templates
+  devtool-positioning            &larr; position vs alternatives
+  devtool-monetization           &larr; pricing, OSS strategy, team conversion
+  devtool-docs-audit             &larr; doc quality review
+
+POST-RESEARCH:
+  spec-interview &rarr; roadmap &rarr; plan-phase &rarr; run &rarr; ship</pre>
+
+  <div class="chart-container" id="chart-devtool-flow"></div>
+</section>
+
+<!-- Section 8: Pipeline C — VARD -->
+<section id="pipeline-c">
+  <div class="section-head"><h2>Pipeline C: VARD (Viral App Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline C: VARD" id="feedback-pipeline-c">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>A new rapid-tempo workflow for shipping small viral apps and consumer-facing tools as distribution touchpoints. Mirrors the ORD philosophy but for the business/consumer domain. Designed for 1&ndash;3 day cycle time. Minimum viable ceremony.</p>
+
+  <h4>Proposed VARD pipeline (3-step core)</h4>
+  <pre>
+1. vard-scan         Quick market scan: viral potential, audience, distribution channel.
+                     Output: 1-page scan doc with go/no-go recommendation.
+
+2. vard-align        Lightweight alignment: confirm scope, name, target audience, distribution.
+                     Output: Mini alignment page (3 gates max) or skip if solo.
+
+3. vard-ship         Build, deploy, announce.
+                     Output: Deployed app + landing page + social announcement.</pre>
+
+  <div class="callout">
+    <strong>Optional 4th step:</strong> <code>vard-traction</code> &mdash; check back after 1&ndash;2 weeks. Users, shares, engagement, revenue signals. Decide: iterate, graduate to Business AFPS, or archive.
+  </div>
+
+  <h4>How VARD differs from ORD</h4>
+  <ul>
+    <li><strong>Audience:</strong> End users / consumers vs. developers</li>
+    <li><strong>Distribution:</strong> App stores, web, social vs. npm, GitHub</li>
+    <li><strong>Success metrics:</strong> Users, shares, engagement vs. stars, installs, issues</li>
+    <li><strong>Scan focus:</strong> Viral mechanics, market timing vs. ecosystem gaps, existing tools</li>
+    <li><strong>Graduation target:</strong> Business AFPS vs. Devtool AFPS</li>
+  </ul>
+
+  <div class="chart-container" id="chart-time-to-ship"></div>
+</section>
+
+<!-- Section 8b: Pipeline D — ORD -->
+<section id="pipeline-d">
+  <div class="section-head"><h2>Pipeline D: ORD (OSS Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline D: ORD" id="feedback-pipeline-d">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>The devtool rapid-tempo workflow for shipping small OSS developer tools. Same rapid philosophy as VARD but targeting the developer ecosystem.</p>
+
+  <h4>Proposed ORD pipeline (3-step core)</h4>
+  <pre>
+1. ord-scan          Quick research: what exists, what&rsquo;s the gap, who cares?
+                     Output: 1-page scan doc with go/no-go recommendation.
+
+2. ord-align         Lightweight alignment: confirm scope, name, target user.
+                     Output: Mini alignment page (3 gates max) or skip if solo.
+
+3. ord-ship          Build, package, publish, announce.
+                     Output: npm package + GitHub repo + README + optional tweet.</pre>
+
+  <div class="callout">
+    <strong>Optional 4th step:</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Decide: iterate, graduate to Devtool AFPS, or archive.
+  </div>
+</section>
+
+<!-- Section 9: Graduation Path -->
+<section id="graduation">
+  <div class="section-head"><h2>Graduation Path</h2></div>
+  <div class="section-feedback" data-section="Graduation Path" id="feedback-graduation">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <p>Rapid-pipeline tools (VARD and ORD) that show traction graduate into their domain&rsquo;s deliberate pipeline. The graduation path depends on the tool&rsquo;s domain and ambition.</p>
+
+  <div class="chart-container" id="chart-graduation-funnel"></div>
+
+  <h4>Graduation triggers</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Signal</th><th>Threshold (suggested)</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>npm weekly downloads</td><td>&gt; 100 sustained</td><td>Consider graduation</td></tr>
+        <tr><td>GitHub stars</td><td>&gt; 50</td><td>Consider graduation</td></tr>
+        <tr><td>Issues filed by non-authors</td><td>&gt; 5 substantive</td><td>Strong signal</td></tr>
+        <tr><td>Enterprise inquiry / request</td><td>Any</td><td>Graduate to Business AFPS</td></tr>
+        <tr><td>Integration requests</td><td>&gt; 3</td><td>Graduate to Devtool AFPS</td></tr>
+        <tr><td>Revenue potential identified</td><td>Any</td><td>Graduate to Business AFPS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container" id="chart-graduation-flow"></div>
+
+  <h4>Graduation routing</h4>
+  <ul>
+    <li><strong>VARD &rarr; Business AFPS:</strong> Viral app has revenue potential, enterprise demand, or needs full customer discovery. Enter at <code>idea-scope-brief</code> with VARD scan/traction data as evidence.</li>
+    <li><strong>ORD &rarr; Devtool AFPS:</strong> OSS tool needs better DX, docs, integrations, or positioning. Enter at <code>devtool-idea-brief</code> (or <code>devtool-user-map</code> if front-half is not yet built).</li>
+    <li><strong>ORD &rarr; Business AFPS (cross-domain):</strong> Rare case where an OSS tool shows business/enterprise demand. Enter at <code>idea-scope-brief</code>.</li>
+    <li><strong>Devtool AFPS &rarr; Business AFPS:</strong> Devtool matures to need pricing strategy, enterprise ICP, go-to-market. Enter at <code>idea-scope-brief</code> with devtool research as evidence.</li>
+  </ul>
+</section>
+
+<!-- Section 10: COA A — Build All Four -->
+<section id="coa-a">
+  <div class="section-head"><h2>COA A: Build All Four Now</h2></div>
+  <div class="section-feedback" data-section="COA A: Build All Four" id="feedback-coa-a">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <div class="coa-card coa-a">
+    <h3><span class="tag tag-a">COA A</span> Build all four pipelines simultaneously</h3>
+    <p><strong>Philosophy:</strong> Full capability upfront. Build both rapid packs (VARD + ORD), the devtool front-half, and graduation routing all at once. Ship a complete four-pipeline system.</p>
+
+    <h4>New skills required</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pack</th><th>Skill</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>VARD</td><td><code>vard-scan</code></td><td>Quick market/viral scan and go/no-go</td></tr>
+          <tr><td>VARD</td><td><code>vard-align</code></td><td>Lightweight alignment page</td></tr>
+          <tr><td>VARD</td><td><code>vard-ship</code></td><td>Build, deploy, announce</td></tr>
+          <tr><td>VARD</td><td><code>vard-traction</code></td><td>Post-ship traction check</td></tr>
+          <tr><td>ORD</td><td><code>ord-scan</code></td><td>Quick ecosystem scan and go/no-go</td></tr>
+          <tr><td>ORD</td><td><code>ord-align</code></td><td>Lightweight alignment page</td></tr>
+          <tr><td>ORD</td><td><code>ord-ship</code></td><td>Build, package, publish</td></tr>
+          <tr><td>ORD</td><td><code>ord-traction</code></td><td>Post-ship traction check</td></tr>
+          <tr><td>Devtool</td><td><code>devtool-idea-brief</code></td><td>Scoped devtool concept</td></tr>
+          <tr><td>Devtool</td><td><code>devtool-discovery</code></td><td>Developer ICP and pain points</td></tr>
+          <tr><td>Devtool</td><td><code>devtool-competitive-scan</code></td><td>Alternative tools and gaps</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Effort estimate</h4>
+    <p>11 new skills + graduation routing in <code>afps-status</code> + pack metadata. ~5&ndash;7 days of skill authoring.</p>
+
+    <h4>Timeline</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Duration</th><th>Deliverable</th></tr></thead>
+        <tbody>
+          <tr><td>VARD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional VARD workflow</td></tr>
+          <tr><td>ORD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional ORD workflow</td></tr>
+          <tr><td>Devtool front-half (3 skills)</td><td>1&ndash;2 days</td><td>Complete devtool pipeline</td></tr>
+          <tr><td>Graduation routing</td><td>0.5 day</td><td>afps-status updates, cross-pack routing</td></tr>
+          <tr><td>Integration testing</td><td>0.5 day</td><td>End-to-end pipeline validation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warn"><strong>Risk:</strong> Building both rapid packs and the devtool front-half without real data. VARD and ORD share a structure but may diverge more than expected. The 3 devtool skills are modeled on business-discovery, but developer workflows may need different structures.</div>
+  </div>
+</section>
+
+<!-- Section 11: COA B — Rapid Pipelines First -->
+<section id="coa-b">
+  <div class="section-head"><h2>COA B: Rapid Pipelines First, Evolve Devtool</h2></div>
+  <div class="section-feedback" data-section="COA B: Rapid Pipelines First" id="feedback-coa-b">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <div class="coa-card coa-b">
+    <h3><span class="tag tag-b">COA B</span> Ship both rapid pipelines now, evolve devtool front-half on demand <em>(Recommended)</em></h3>
+    <p><strong>Philosophy:</strong> Fastest to value. Build VARD and ORD packs first (6 skills, sharing structure). Start shipping both viral apps and OSS tools immediately. Let real graduations reveal what the devtool front-half actually needs.</p>
+
+    <h4>Phase 1: VARD + ORD packs (immediate)</h4>
+    <ul>
+      <li>Build <code>vard-scan</code>, <code>vard-align</code>, <code>vard-ship</code> (business rapid)</li>
+      <li>Build <code>ord-scan</code>, <code>ord-align</code>, <code>ord-ship</code> (devtool rapid)</li>
+      <li>VARD and ORD share structure &mdash; build one, adapt the other</li>
+      <li>Graduation routing: manual initially (user runs <code>/idea-scope-brief</code> or <code>/devtool-workflow</code>)</li>
+    </ul>
+
+    <h4>Phase 2: Devtool front-half (on demand)</h4>
+    <ul>
+      <li>After 3&ndash;5 ORD tools ship, evaluate which ones need graduation</li>
+      <li>Build devtool front-half skills based on actual gaps encountered</li>
+      <li>May discover the existing devtool-user-map is a sufficient entry point</li>
+    </ul>
+
+    <h4>Phase 3: Graduation automation (later)</h4>
+    <ul>
+      <li>Add <code>vard-traction</code> and <code>ord-traction</code> for structured traction checking</li>
+      <li>Wire graduation triggers into <code>afps-status</code></li>
+    </ul>
+
+    <h4>Effort estimate</h4>
+    <p>Phase 1: 2&ndash;3 days (6 skills, shared structure). Phase 2: 1&ndash;2 days when needed. Phase 3: 0.5 day. Total: ~4&ndash;5.5 days, spread over weeks/months.</p>
+
+    <div class="callout callout-green"><strong>Why recommended:</strong> Both rapid pipelines ship fast because they share structure. Generates real data about what the devtool front-half needs before building it. Lowest risk of over-engineering. VARD and ORD can be adapted from the same skeleton. Phase 2 may turn out to be unnecessary.</div>
+  </div>
+</section>
+
+<!-- Section 12: COA C — Unified Mode Flag -->
+<section id="coa-c">
+  <div class="section-head"><h2>COA C: Unified Mode Flag + Rapid Packs</h2></div>
+  <div class="section-feedback" data-section="COA C: Unified Mode Flag + Rapid" id="feedback-coa-c">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <div class="coa-card coa-c">
+    <h3><span class="tag tag-c">COA C</span> Add mode flags to existing AFPS + build both rapid packs</h3>
+    <p><strong>Philosophy:</strong> One deliberate pipeline with mode flags, two separate rapid packs. Add a <code>--mode=business|devtool</code> flag to existing AFPS skills so they adapt per domain. Build VARD and ORD packs separately for rapid workflows.</p>
+
+    <h4>How it works</h4>
+    <ul>
+      <li><code>idea-scope-brief --mode=devtool</code> &rarr; developer-focused brief, skips consumer sections</li>
+      <li><code>customer-discovery --mode=devtool</code> &rarr; developer ICP template, DX-focused questions</li>
+      <li><code>competitive-analysis --mode=devtool</code> &rarr; ecosystem/alternatives focus</li>
+      <li>VARD and ORD packs exist separately for the rapid 3-step workflows</li>
+    </ul>
+
+    <h4>New work</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Item</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr><td>VARD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
+          <tr><td>ORD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
+          <tr><td>Mode flag infrastructure in AFPS skills</td><td>2&ndash;3 days</td></tr>
+          <tr><td>Devtool mode templates for 5&ndash;8 existing skills</td><td>1&ndash;2 days</td></tr>
+          <tr><td>Testing across modes</td><td>1 day</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Effort estimate</h4>
+    <p>6&ndash;10 days total. Highest effort because it touches existing stable skills and builds both rapid packs.</p>
+
+    <div class="callout callout-warn"><strong>Risk:</strong> Modifying 5&ndash;8 mature skills to support mode flags adds regression risk. Each skill becomes more complex. Mode-specific behavior is harder to test than separate skills. Could slow down iteration on the devtool path.</div>
+  </div>
+</section>
+
+<!-- Section 13: COA Comparison -->
+<section id="coa-compare">
+  <div class="section-head"><h2>COA Comparison</h2></div>
+  <div class="section-feedback" data-section="COA Comparison" id="feedback-coa-compare">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th><span class="tag tag-a">COA A</span> Build All</th><th><span class="tag tag-b">COA B</span> Rapid First</th><th><span class="tag tag-c">COA C</span> Mode Flags</th></tr></thead>
+      <tbody>
+        <tr><td>Time to first rapid tool</td><td>5&ndash;7 days</td><td><strong>2&ndash;3 days</strong></td><td>2&ndash;3 days</td></tr>
+        <tr><td>Total effort</td><td>5&ndash;7 days</td><td>4&ndash;5.5 days (spread)</td><td>6&ndash;10 days</td></tr>
+        <tr><td>Risk to existing skills</td><td>None</td><td>None</td><td><strong>High</strong> (modifies 5&ndash;8)</td></tr>
+        <tr><td>Data-driven devtool design</td><td>No</td><td><strong>Yes</strong></td><td>Partial</td></tr>
+        <tr><td>Upfront completeness</td><td><strong>Full</strong></td><td>Partial</td><td>Full</td></tr>
+        <tr><td>Over-engineering risk</td><td>High</td><td><strong>Low</strong></td><td>Medium</td></tr>
+        <tr><td>Maintenance complexity</td><td>11 new skills</td><td>6 now, more later</td><td>Mode logic in 8+ skills + 6 rapid</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Risk matrix</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Risk</th><th>Impact</th><th>COA A</th><th>COA B</th><th>COA C</th></tr></thead>
+      <tbody>
+        <tr><td>Over-build devtool front-half</td><td>Wasted effort</td><td>High</td><td>None</td><td>Medium</td></tr>
+        <tr><td>Break existing business skills</td><td>Pipeline disruption</td><td>None</td><td>None</td><td>High</td></tr>
+        <tr><td>Graduation friction</td><td>Slow graduation</td><td>Low</td><td>Medium (manual)</td><td>Low</td></tr>
+        <tr><td>Skill sprawl</td><td>Maintenance burden</td><td>High (11 at once)</td><td>Low (incremental)</td><td>Medium</td></tr>
+        <tr><td>Delayed rapid launch</td><td>Lost distribution momentum</td><td>Medium</td><td>None</td><td>Medium</td></tr>
+        <tr><td>VARD/ORD diverge more than expected</td><td>Duplicated maintenance</td><td>Medium</td><td>Low (adapt as needed)</td><td>Medium</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container" id="chart-coa-radar"></div>
+</section>
+
+<!-- Section 14: Evidence & Assumptions -->
+<section id="evidence">
+  <div class="section-head"><h2>Evidence &amp; Assumptions</h2></div>
+  <div class="section-feedback" data-section="Evidence and Assumptions" id="feedback-evidence">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <h3>Evidence</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Claim</th><th>Evidence</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Business AFPS is complete and operational</td><td>40+ skills across 4 packs, documented in canonical-workflow-report</td><td>High</td></tr>
+        <tr><td>Devtool pack covers research through docs</td><td>8 skills in packs/devtool/claude, v0.1&ndash;v0.4</td><td>High</td></tr>
+        <tr><td>Devtool pack lacks front-half</td><td>No idea-brief, discovery, or competitive skills in pack</td><td>High</td></tr>
+        <tr><td>No rapid workflow exists</td><td>No VARD or ORD pack or rapid-mode skills in repository</td><td>High</td></tr>
+        <tr><td>Business-discovery structure is a good model for devtool front-half</td><td>Similar shape: ICP &rarr; competitive &rarr; journey &rarr; positioning</td><td>Medium</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Assumptions</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Assumption</th><th>Risk if wrong</th><th>Validation approach</th></tr></thead>
+      <tbody>
+        <tr><td>Weekly rapid tool shipping is sustainable</td><td>VARD/ORD pipelines underused</td><td>Ship 3&ndash;5 tools through each, measure cadence</td></tr>
+        <tr><td>3-step rapid pipeline is enough ceremony</td><td>Quality or scoping issues</td><td>Retrospective after first 5 tools per pipeline</td></tr>
+        <tr><td>VARD and ORD share enough structure to build from one skeleton</td><td>More divergence than expected, rework needed</td><td>Build ORD first, adapt for VARD, measure delta</td></tr>
+        <tr><td>Traction signals are measurable</td><td>Graduation decisions are subjective</td><td>Define thresholds, track actuals</td></tr>
+        <tr><td>Devtool front-half needs differ from business</td><td>Unnecessary skill duplication</td><td>Let ORD graduations reveal actual gaps</td></tr>
+        <tr><td>Rapid tools will generate meaningful distribution</td><td>Thesis is wrong, effort wasted</td><td>Track aggregate engagement/downloads/stars after 10 tools across both pipelines</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Section 15: Review Gates -->
+<section id="gates">
+  <div class="section-head"><h2>Review Gates</h2></div>
+  <div class="section-feedback" data-section="Review Gates" id="feedback-gates">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+
+  <!-- Gate 1: Pipeline Architecture -->
+  <div class="gate question-block" data-section="Pipeline Architecture" data-gate-type="architecture" data-question-id="pipeline-architecture" data-target-path="">
+    <h3>Gate 1: Pipeline Architecture</h3>
+    <p>How many distinct pipelines should we formalize?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="pipeline-architecture" value="Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed"> <span>Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Three pipelines (Business AFPS + Devtool AFPS + one unified rapid pipeline)"> <span>Three pipelines (AFPS &times; 2 + one unified rapid pipeline)</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Two pipelines (Business AFPS + one rapid pipeline, devtool uses business)"> <span>Two pipelines (Business AFPS + one rapid, devtool uses business)</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 2: COA Selection -->
+  <div class="gate question-block" data-section="COA Selection" data-gate-type="recommended-path" data-question-id="coa-selection" data-target-path="">
+    <h3>Gate 2: COA Selection</h3>
+    <p>Which course of action should we pursue?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="coa-selection" value="COA B: Rapid Pipelines First, Evolve Devtool (recommended)"> <span>COA B: Rapid Pipelines First, Evolve Devtool (recommended)</span></label>
+      <label><input type="radio" name="coa-selection" value="COA A: Build All Four Now"> <span>COA A: Build All Four Now</span></label>
+      <label><input type="radio" name="coa-selection" value="COA C: Unified Mode Flag + Rapid Packs"> <span>COA C: Unified Mode Flag + Rapid Packs</span></label>
+      <label><input type="radio" name="coa-selection" value="Hybrid (specify in notes)"> <span>Hybrid (specify in notes)</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 3: Rapid Pipeline Ceremony Level -->
+  <div class="gate question-block" data-section="Rapid Ceremony" data-gate-type="ceremony-level" data-question-id="ord-ceremony" data-target-path="">
+    <h3>Gate 3: Rapid Pipeline Ceremony Level</h3>
+    <p>How many steps should the VARD and ORD pipelines have? (Same structure for both, different domain content.)</p>
+    <div class="radio-group">
+      <label><input type="radio" name="ord-ceremony" value="3 steps: scan, align, ship (minimal)"> <span>3 steps: scan, align, ship (minimal)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="4 steps: scan, align, ship, traction (with follow-up)"> <span>4 steps: scan, align, ship, traction (with follow-up)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="2 steps: scan+align combined, ship (ultra-minimal)"> <span>2 steps: scan+align combined, ship (ultra-minimal)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 4: Devtool Front-Half -->
+  <div class="gate question-block" data-section="Devtool Front-Half" data-gate-type="implementation-approach" data-question-id="devtool-front-half" data-target-path="">
+    <h3>Gate 4: Devtool AFPS Front-Half Approach</h3>
+    <p>When/how should the devtool front-half be built?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="devtool-front-half" value="On demand after ORD graduations reveal gaps (COA B approach)"> <span>On demand after ORD graduations reveal gaps (COA B approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Build new dedicated devtool skills now (COA A approach)"> <span>Build new dedicated devtool skills now (COA A approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Mode flags on existing business skills (COA C approach)"> <span>Mode flags on existing business skills (COA C approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Skip entirely — existing devtool-user-map is a sufficient entry point"> <span>Skip entirely &mdash; existing devtool-user-map is sufficient</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 5: Graduation Triggers -->
+  <div class="gate question-block" data-section="Graduation Triggers" data-gate-type="automation-level" data-question-id="graduation-triggers" data-target-path="">
+    <h3>Gate 5: Graduation Trigger Mechanism</h3>
+    <p>How should VARD/ORD-to-deliberate-pipeline graduation work?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="graduation-triggers" value="Manual — user decides when to graduate a tool"> <span>Manual &mdash; user decides when to graduate</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Semi-auto — traction skill recommends, user confirms"> <span>Semi-auto &mdash; traction skill recommends, user confirms</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Automated — afps-status detects traction thresholds and routes"> <span>Automated &mdash; afps-status detects and routes</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 6: Rapid Pack Location -->
+  <div class="gate question-block" data-section="Rapid Pack Location" data-gate-type="pack-structure" data-question-id="ord-pack-location" data-target-path="">
+    <h3>Gate 6: Rapid Pack Location</h3>
+    <p>Where should the VARD and ORD skills live?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="ord-pack-location" value="Two dedicated packs: packs/vard/ + packs/ord/"> <span>Two dedicated packs: <code>packs/vard/</code> + <code>packs/ord/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="One shared rapid pack: packs/rapid/ with vard-* and ord-* prefixes"> <span>One shared rapid pack: <code>packs/rapid/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="Domain packs: VARD in packs/business-rapid/, ORD in packs/devtool/"> <span>Domain packs: VARD in business, ORD in devtool</span></label>
+      <label><input type="radio" name="ord-pack-location" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+</section>
+
+<!-- Section 16: Compile YAML -->
+<section id="compile" class="compile-box">
+  <div class="section-head"><h2>Compile YAML</h2></div>
+  <div class="section-feedback" data-section="Compile YAML" id="feedback-compile">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Use feedback YAML for emphasis requests, concerns, or clarification before answering all gates. Use final answers YAML only when every required gate is answered.</p>
+  <div class="compile-actions"><button type="button" id="compile-feedback">Compile Feedback YAML</button><button type="button" id="copy-feedback">Copy YAML</button><span id="feedback-status"></span></div>
+  <textarea id="compiled-feedback-yaml" readonly></textarea>
+  <div class="compile-actions"><button type="button" id="compile-answers" disabled>Compile Answers</button><button type="button" id="copy-answers">Copy YAML</button><span id="answer-status"></span></div>
+  <textarea id="compiled-yaml" readonly></textarea>
+</section>
+</main>
+
+<script>
+const alignmentPage = 'alignment/workflow-design-three-pipelines.html';
+const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
+function yamlEscape(value) { return String(value || '').replace(/\n/g, '\n    '); }
+function selectedFeedbackEntries() {
+  return [...document.querySelectorAll('.section-feedback.has-feedback')].map(box => ({
+    section: box.dataset.section,
+    feedback: box.dataset.feedback,
+    notes: box.querySelector('.feedback-notes').value.trim(),
+    requested_agent_action: actionFor[box.dataset.feedback]
+  }));
+}
+function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
+function feedbackYaml(entries) {
+  const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
+  let y = `alignment_page: ${alignmentPage}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n`;
+  y += unanswered.length ? unanswered.map(q => `  - ${q}`).join('\n') + '\n' : '  []\n';
+  y += 'section_feedback:\n';
+  y += entries.length ? entries.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+function answersYaml() {
+  const gates = [...document.querySelectorAll('.gate')];
+  let y = `alignment_page: ${alignmentPage}\napproval_status: ready-for-agent-review\ngate_answers:\n`;
+  for (const g of gates) {
+    const checked = g.querySelector('input[type="radio"]:checked');
+    const answer = checked ? checked.value : '';
+    const status = answer === 'Need clarification' ? 'needs-clarification' : (answer === 'Other / None of the above' ? 'other' : 'answered');
+    const notes = g.querySelector('.answer-notes').value.trim();
+    y += `  - section: ${yamlEscape(g.dataset.section)}\n    gate_type: ${yamlEscape(g.dataset.gateType)}\n    status: ${status}\n    answer: ${yamlEscape(answer)}\n`;
+    if (notes) y += `    notes: ${yamlEscape(notes)}\n`;
+    if (g.dataset.targetPath) y += `    target_path: ${yamlEscape(g.dataset.targetPath)}\n`;
+  }
+  const feedback = selectedFeedbackEntries();
+  y += 'section_feedback:\n';
+  y += feedback.length ? feedback.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+async function copyText(text, statusEl, textarea) {
+  try { await navigator.clipboard.writeText(text); statusEl.textContent = 'Copied'; }
+  catch { if (textarea) { textarea.focus(); textarea.select(); } statusEl.textContent = 'Select text to copy'; }
+}
+function updateAnswerState() {
+  const remaining = unansweredQuestions();
+  const btn = document.getElementById('compile-answers');
+  btn.disabled = remaining.length > 0;
+  document.getElementById('answer-status').textContent = remaining.length ? `${remaining.length} required questions remaining` : 'All required questions answered';
+}
+document.querySelectorAll('.section-feedback button[data-feedback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active'); box.classList.remove('has-feedback','has-yaml'); delete box.dataset.feedback;
+    } else {
+      box.querySelectorAll('button[data-feedback]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); box.dataset.feedback = btn.dataset.feedback; box.classList.add('has-feedback'); box.classList.remove('has-yaml');
+    }
+  });
+});
+document.querySelectorAll('.compile-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    const entry = { section: box.dataset.section, feedback: box.dataset.feedback, notes: box.querySelector('.feedback-notes').value.trim(), requested_agent_action: actionFor[box.dataset.feedback] };
+    const y = feedbackYaml([entry]);
+    const area = box.querySelector('.local-yaml'); area.value = y; box.classList.add('has-yaml');
+    copyText(y, box.querySelector('.copy-status'), area);
+  });
+});
+document.querySelectorAll('.copy-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    copyText(box.querySelector('.local-yaml').value, box.querySelector('.copy-status'), box.querySelector('.local-yaml'));
+  });
+});
+document.querySelectorAll('.gate input[type="radio"]').forEach(r => {
+  r.addEventListener('change', () => { r.closest('.gate').classList.add('has-answer'); updateAnswerState(); });
+});
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  const y = feedbackYaml(selectedFeedbackEntries());
+  const area = document.getElementById('compiled-feedback-yaml'); area.value = y;
+  copyText(y, document.getElementById('feedback-status'), area);
+});
+document.getElementById('copy-feedback').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-feedback-yaml').value, document.getElementById('feedback-status'), document.getElementById('compiled-feedback-yaml'));
+});
+document.getElementById('compile-answers').addEventListener('click', () => {
+  const y = answersYaml();
+  const area = document.getElementById('compiled-yaml'); area.value = y;
+  copyText(y, document.getElementById('answer-status'), area);
+});
+document.getElementById('copy-answers').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-yaml').value, document.getElementById('answer-status'), document.getElementById('compiled-yaml'));
+});
+updateAnswerState();
+</script>
+
+<script>
+/**
+ * Alignment Chart Snippets — self-contained chart rendering for alignment pages.
+ */
+const alignChart = (() => {
+  const COLORS = ['--chart-1','--chart-2','--chart-3','--chart-4','--chart-5','--chart-6','--chart-7','--chart-8'];
+  const FALLBACK_COLORS = ['#58a6ff','#3fb950','#d29922','#bc8cff','#f85149','#79c0ff','#f0883e','#a5d6ff'];
+
+  function getColor(i) {
+    const style = getComputedStyle(document.documentElement);
+    const v = style.getPropertyValue(COLORS[i % COLORS.length]).trim();
+    return v || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+  }
+  function getTextColor() { return getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#c9d1d9'; }
+  function getMutedColor() { return getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e'; }
+  function getBorderColor() { return getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d'; }
+  function getSurfaceColor() { return getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#161b22'; }
+
+  function createToggle(container, canvas, table) {
+    const btn = document.createElement('button');
+    btn.textContent = 'View as table';
+    btn.style.cssText = 'margin:8px 0;padding:6px 14px;background:transparent;color:' + getColor(0) + ';border:1px solid ' + getBorderColor() + ';border-radius:4px;cursor:pointer;font-size:0.85rem;min-height:44px;';
+    btn.setAttribute('aria-label', 'Toggle between chart and table view');
+    let showingChart = true;
+    btn.addEventListener('click', () => {
+      showingChart = !showingChart;
+      canvas.hidden = !showingChart;
+      table.hidden = showingChart;
+      btn.textContent = showingChart ? 'View as table' : 'View as chart';
+    });
+    container.appendChild(btn);
+  }
+
+  function makeTableWrap(headers, rows) {
+    const wrap = document.createElement('div');
+    wrap.style.overflowX = 'auto';
+    const t = document.createElement('table');
+    t.style.cssText = 'width:100%;border-collapse:collapse;';
+    const thead = document.createElement('thead');
+    const hr = document.createElement('tr');
+    headers.forEach(h => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      th.style.cssText = 'padding:8px 12px;text-align:left;border-bottom:1px solid ' + getBorderColor() + ';background:' + getSurfaceColor() + ';color:#fff;';
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    t.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      row.forEach(cell => {
+        const td = document.createElement('td');
+        td.textContent = cell;
+        td.style.cssText = 'padding:6px 12px;border-bottom:1px solid ' + getBorderColor() + ';';
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    t.appendChild(tbody);
+    wrap.appendChild(t);
+    wrap.hidden = true;
+    return wrap;
+  }
+
+  function setAutoNarrative(container, text) {
+    if (!container.getAttribute('data-tts-narrative')) {
+      container.setAttribute('data-tts-narrative', text);
+    }
+  }
+
+  function ensureCanvas(container, w, h, ariaLabel) {
+    const c = document.createElement('canvas');
+    c.width = w || 600; c.height = h || 400;
+    c.style.cssText = 'max-width:100%;height:auto;';
+    c.setAttribute('aria-label', ariaLabel || 'Chart');
+    c.setAttribute('role', 'img');
+    container.appendChild(c);
+    return c;
+  }
+
+  function bar(container, data, opts = {}) {
+    const { horizontal = false, title = 'Bar Chart', width = 600, height = 400 } = opts;
+    const labels = data.map(d => d.label);
+    const values = data.map(d => d.value);
+    const max = Math.max(...values) * 1.15;
+    const ariaLabel = `${title}: bar chart with ${data.length} items. Highest: ${labels[values.indexOf(Math.max(...values))]} (${Math.max(...values)})`;
+    const c = ensureCanvas(container, width, height, ariaLabel);
+    const ctx = c.getContext('2d');
+    const pad = { top: 40, right: 20, bottom: 60, left: horizontal ? 120 : 50 };
+    const cw = width - pad.left - pad.right;
+    const ch = height - pad.top - pad.bottom;
+    ctx.fillStyle = getTextColor(); ctx.font = 'bold 14px system-ui, sans-serif'; ctx.fillText(title, pad.left, 24);
+    if (horizontal) {
+      const barH = ch / labels.length * 0.7; const gap = ch / labels.length * 0.3;
+      labels.forEach((label, i) => {
+        const y = pad.top + i * (barH + gap) + gap / 2; const bw = (values[i] / max) * cw;
+        ctx.fillStyle = getColor(i); ctx.fillRect(pad.left, y, bw, barH);
+        ctx.fillStyle = getMutedColor(); ctx.font = '12px system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.fillText(label, pad.left - 8, y + barH / 2 + 4);
+        ctx.textAlign = 'left'; ctx.fillStyle = getTextColor(); ctx.fillText(String(values[i]), pad.left + bw + 6, y + barH / 2 + 4);
+      });
+    } else {
+      const barW = cw / labels.length * 0.6; const gap = cw / labels.length * 0.4;
+      ctx.strokeStyle = getBorderColor(); ctx.beginPath(); ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top + ch); ctx.lineTo(pad.left + cw, pad.top + ch); ctx.stroke();
+      labels.forEach((label, i) => {
+        const x = pad.left + i * (barW + gap) + gap / 2; const bh = (values[i] / max) * ch;
+        ctx.fillStyle = getColor(i); ctx.fillRect(x, pad.top + ch - bh, barW, bh);
+        ctx.fillStyle = getMutedColor(); ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'center';
+        ctx.save(); ctx.translate(x + barW / 2, pad.top + ch + 14); if (label.length > 10) ctx.rotate(-0.4); ctx.fillText(label, 0, 0); ctx.restore();
+        ctx.fillStyle = getTextColor(); ctx.font = '12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(String(values[i]), x + barW / 2, pad.top + ch - bh - 6);
+      });
+    }
+    const table = makeTableWrap(['Label', 'Value'], data.map(d => [d.label, String(d.value)]));
+    container.appendChild(table); createToggle(container, c, table);
+    const sorted = [...data].sort((a, b) => b.value - a.value);
+    const top3 = sorted.slice(0, 3).map(d => `${d.label} (${d.value})`).join(', ');
+    setAutoNarrative(container, `${title}: ${data.length} items. Top values: ${top3}.`);
+  }
+
+  function radar(container, data, opts = {}) {
+    const { title = 'Radar Chart', size = 400, maxValue } = opts;
+    const axes = data.map(d => d.axis);
+    const sets = Array.isArray(data[0]?.sets) ? data[0].sets : [{ name: 'Values', values: data.map(d => d.value) }];
+    const max = maxValue || Math.max(...sets.flatMap(s => s.values)) * 1.15;
+    const n = axes.length;
+    const cx = size / 2, cy = size / 2, r = size * 0.35;
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', size); svg.setAttribute('height', size);
+    svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+    svg.setAttribute('aria-label', `${title}: radar chart with ${n} axes and ${sets.length} data sets`);
+    svg.setAttribute('role', 'img'); svg.style.maxWidth = '100%'; svg.style.height = 'auto';
+    const titleEl = document.createElementNS(ns, 'text');
+    titleEl.setAttribute('x', '12'); titleEl.setAttribute('y', '20');
+    titleEl.setAttribute('fill', getTextColor()); titleEl.setAttribute('font-size', '14');
+    titleEl.setAttribute('font-weight', 'bold'); titleEl.setAttribute('font-family', 'system-ui, sans-serif');
+    titleEl.textContent = title; svg.appendChild(titleEl);
+    for (let ring = 1; ring <= 4; ring++) {
+      const rr = (ring / 4) * r; let pts = [];
+      for (let i = 0; i < n; i++) { const angle = (Math.PI * 2 * i) / n - Math.PI / 2; pts.push(`${cx + rr * Math.cos(angle)},${cy + rr * Math.sin(angle)}`); }
+      const poly = document.createElementNS(ns, 'polygon'); poly.setAttribute('points', pts.join(' '));
+      poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', getBorderColor()); poly.setAttribute('stroke-width', '1'); svg.appendChild(poly);
+    }
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
+      const lx = cx + r * Math.cos(angle); const ly = cy + r * Math.sin(angle);
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', lx); line.setAttribute('y2', ly);
+      line.setAttribute('stroke', getBorderColor()); svg.appendChild(line);
+      const tx = cx + (r + 16) * Math.cos(angle); const ty = cy + (r + 16) * Math.sin(angle);
+      const label = document.createElementNS(ns, 'text'); label.setAttribute('x', tx); label.setAttribute('y', ty + 4);
+      label.setAttribute('fill', getMutedColor()); label.setAttribute('font-size', '11');
+      label.setAttribute('font-family', 'system-ui, sans-serif');
+      label.setAttribute('text-anchor', angle > Math.PI / 2 && angle < Math.PI * 1.5 ? 'end' : angle === Math.PI / 2 || angle === -Math.PI / 2 ? 'middle' : 'start');
+      label.textContent = axes[i]; svg.appendChild(label);
+    }
+    sets.forEach((s, si) => {
+      const color = getColor(si); let pts = [];
+      for (let i = 0; i < n; i++) { const angle = (Math.PI * 2 * i) / n - Math.PI / 2; const vr = (s.values[i] / max) * r; pts.push(`${cx + vr * Math.cos(angle)},${cy + vr * Math.sin(angle)}`); }
+      const poly = document.createElementNS(ns, 'polygon'); poly.setAttribute('points', pts.join(' '));
+      poly.setAttribute('fill', color); poly.setAttribute('fill-opacity', '0.15');
+      poly.setAttribute('stroke', color); poly.setAttribute('stroke-width', '2'); svg.appendChild(poly);
+      for (let i = 0; i < n; i++) {
+        const angle = (Math.PI * 2 * i) / n - Math.PI / 2; const vr = (s.values[i] / max) * r;
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', cx + vr * Math.cos(angle)); dot.setAttribute('cy', cy + vr * Math.sin(angle));
+        dot.setAttribute('r', '4'); dot.setAttribute('fill', color); svg.appendChild(dot);
+      }
+    });
+    container.appendChild(svg);
+    const headers = ['Axis', ...sets.map(s => s.name)]; const rows = axes.map((a, i) => [a, ...sets.map(s => String(s.values[i]))]);
+    const table = makeTableWrap(headers, rows); container.appendChild(table); createToggle(container, svg, table);
+    const summaries = sets.map(s => {
+      let hi = 0, lo = 0;
+      s.values.forEach((v, i) => { if (v > s.values[hi]) hi = i; if (v < s.values[lo]) lo = i; });
+      return `${s.name} highest on ${axes[hi]}, lowest on ${axes[lo]}`;
+    }).join('; ');
+    setAutoNarrative(container, `${title}: ${sets.length} profiles across ${n} axes. ${summaries}.`);
+  }
+
+  function funnel(container, data, opts = {}) {
+    const { title = 'Funnel', width = 500, height = 400 } = opts;
+    const max = data[0]?.value || 1;
+    const ariaLabel = `${title}: funnel chart with ${data.length} stages from ${data[0]?.label} (${data[0]?.value}) to ${data[data.length - 1]?.label} (${data[data.length - 1]?.value})`;
+    const c = ensureCanvas(container, width, height, ariaLabel);
+    const ctx = c.getContext('2d');
+    const pad = { top: 40, bottom: 20 }; const ch = height - pad.top - pad.bottom;
+    const stepH = ch / data.length; const centerX = width / 2;
+    ctx.fillStyle = getTextColor(); ctx.font = 'bold 14px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(title, centerX, 24);
+    data.forEach((d, i) => {
+      const w = (d.value / max) * (width * 0.8);
+      const nextW = i < data.length - 1 ? (data[i + 1].value / max) * (width * 0.8) : w * 0.8;
+      const y = pad.top + i * stepH;
+      ctx.fillStyle = getColor(i); ctx.beginPath();
+      ctx.moveTo(centerX - w / 2, y); ctx.lineTo(centerX + w / 2, y);
+      ctx.lineTo(centerX + nextW / 2, y + stepH); ctx.lineTo(centerX - nextW / 2, y + stepH);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '13px system-ui, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(`${d.label}: ${d.value}`, centerX, y + stepH / 2 + 5);
+      if (i > 0) {
+        const pct = ((d.value / data[i - 1].value) * 100).toFixed(0);
+        ctx.fillStyle = getMutedColor(); ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.fillText(`${pct}%`, centerX + w / 2 + 8, y + 12);
+      }
+    });
+    const rows = data.map((d, i) => [d.label, String(d.value), i > 0 ? ((d.value / data[i - 1].value) * 100).toFixed(1) + '%' : '100%']);
+    const table = makeTableWrap(['Stage', 'Count', 'Conversion'], rows);
+    container.appendChild(table); createToggle(container, c, table);
+    const convPct = ((data[data.length - 1].value / data[0].value) * 100).toFixed(0);
+    setAutoNarrative(container, `${title}: ${data.length} stages from ${data[0].label} (${data[0].value}) to ${data[data.length - 1].label} (${data[data.length - 1].value}), ${convPct}% overall conversion.`);
+  }
+
+  function flow(container, data, opts = {}) {
+    const { title = 'Flow Diagram', width = 700, height = 400 } = opts;
+    const { nodes, links } = data;
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', width); svg.setAttribute('height', height);
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('aria-label', `${title}: flow diagram with ${nodes.length} nodes and ${links.length} connections`);
+    svg.setAttribute('role', 'img'); svg.style.maxWidth = '100%'; svg.style.height = 'auto';
+    const titleEl = document.createElementNS(ns, 'text');
+    titleEl.setAttribute('x', '12'); titleEl.setAttribute('y', '24');
+    titleEl.setAttribute('fill', getTextColor()); titleEl.setAttribute('font-size', '14');
+    titleEl.setAttribute('font-weight', 'bold'); titleEl.setAttribute('font-family', 'system-ui, sans-serif');
+    titleEl.textContent = title; svg.appendChild(titleEl);
+    const nodeWidth = 24; const pad = { top: 40, bottom: 20, left: 30, right: 30 };
+    const layers = {}; nodes.forEach(n => { layers[n.layer] = layers[n.layer] || []; layers[n.layer].push(n); });
+    const layerKeys = Object.keys(layers).sort((a, b) => a - b);
+    const layerSpacing = (width - pad.left - pad.right - nodeWidth) / (layerKeys.length - 1 || 1);
+    const nodePositions = {};
+    layerKeys.forEach((lk, li) => {
+      const layerNodes = layers[lk]; const totalH = height - pad.top - pad.bottom;
+      const nodeH = totalH / (layerNodes.length + 1);
+      layerNodes.forEach((n, ni) => { nodePositions[n.id] = { x: pad.left + li * layerSpacing, y: pad.top + (ni + 1) * nodeH - nodeH / 2, h: Math.max(20, nodeH * 0.6) }; });
+    });
+    links.forEach((link, i) => {
+      const src = nodePositions[link.source]; const tgt = nodePositions[link.target]; if (!src || !tgt) return;
+      const path = document.createElementNS(ns, 'path');
+      const sx = src.x + nodeWidth; const sy = src.y; const tx = tgt.x; const ty = tgt.y; const mx = (sx + tx) / 2;
+      path.setAttribute('d', `M${sx},${sy} C${mx},${sy} ${mx},${ty} ${tx},${ty}`);
+      path.setAttribute('fill', 'none'); path.setAttribute('stroke', getColor(i % 8));
+      path.setAttribute('stroke-opacity', '0.4'); path.setAttribute('stroke-width', Math.max(2, Math.min(20, link.value || 4)));
+      svg.appendChild(path);
+    });
+    nodes.forEach((n, i) => {
+      const pos = nodePositions[n.id]; if (!pos) return;
+      const rect = document.createElementNS(ns, 'rect');
+      rect.setAttribute('x', pos.x); rect.setAttribute('y', pos.y - pos.h / 2);
+      rect.setAttribute('width', nodeWidth); rect.setAttribute('height', pos.h);
+      rect.setAttribute('fill', getColor(i % 8)); rect.setAttribute('rx', '3'); svg.appendChild(rect);
+      const label = document.createElementNS(ns, 'text');
+      label.setAttribute('x', pos.x + nodeWidth + 6); label.setAttribute('y', pos.y + 4);
+      label.setAttribute('fill', getTextColor()); label.setAttribute('font-size', '11');
+      label.setAttribute('font-family', 'system-ui, sans-serif');
+      label.textContent = n.name + (n.value != null ? ` (${n.value})` : ''); svg.appendChild(label);
+    });
+    container.appendChild(svg);
+    const headers = ['Source', 'Target', 'Value'];
+    const rows = links.map(l => [ nodes.find(n => n.id === l.source)?.name || l.source, nodes.find(n => n.id === l.target)?.name || l.target, String(l.value ?? '') ]);
+    const table = makeTableWrap(headers, rows); container.appendChild(table); createToggle(container, svg, table);
+    setAutoNarrative(container, `${title}: flow diagram with ${nodes.length} nodes and ${links.length} connections.`);
+  }
+
+  return { bar, radar, funnel, flow };
+})();
+</script>
+
+<script>
+// Chart 1: Pipeline Profile Radar (Section 5)
+(function() {
+  const container = document.getElementById('chart-pipeline-radar');
+  if (!container) return;
+  const data = [
+    { axis: 'Tempo', sets: [
+      { name: 'Business AFPS', values: [30, 95, 90, 95, 0, 30] },
+      { name: 'Devtool AFPS', values: [60, 60, 50, 70, 60, 60] },
+      { name: 'VARD', values: [95, 20, 20, 40, 95, 95] },
+      { name: 'ORD', values: [95, 20, 15, 30, 95, 95] }
+    ]},
+    { axis: 'Ceremony' },
+    { axis: 'Discovery depth' },
+    { axis: 'Output richness' },
+    { axis: 'Speed to ship' },
+    { axis: 'Iteration speed' }
+  ];
+  alignChart.radar(container, data, { title: 'Pipeline Profile Comparison', size: 460, maxValue: 100 });
+})();
+
+// Chart 2: Devtool AFPS Flow (Section 7)
+(function() {
+  const container = document.getElementById('chart-devtool-flow');
+  if (!container) return;
+  alignChart.flow(container, {
+    nodes: [
+      { id: 'brief', name: 'devtool-idea-brief', layer: 0 },
+      { id: 'disc', name: 'devtool-discovery', layer: 1 },
+      { id: 'comp', name: 'devtool-competitive-scan', layer: 2 },
+      { id: 'user', name: 'devtool-user-map', layer: 3 },
+      { id: 'integ', name: 'devtool-integration-map', layer: 3 },
+      { id: 'dx', name: 'devtool-dx-journey', layer: 4 },
+      { id: 'adopt', name: 'devtool-adoption', layer: 5 },
+      { id: 'pos', name: 'devtool-positioning', layer: 5 },
+      { id: 'mon', name: 'devtool-monetization', layer: 6 },
+      { id: 'docs', name: 'devtool-docs-audit', layer: 7 },
+      { id: 'spec', name: 'spec-interview', layer: 8 },
+      { id: 'ship', name: 'ship', layer: 9 }
+    ],
+    links: [
+      { source: 'brief', target: 'disc', value: 6 },
+      { source: 'disc', target: 'comp', value: 6 },
+      { source: 'comp', target: 'user', value: 4 },
+      { source: 'comp', target: 'integ', value: 4 },
+      { source: 'user', target: 'dx', value: 6 },
+      { source: 'integ', target: 'dx', value: 4 },
+      { source: 'dx', target: 'adopt', value: 4 },
+      { source: 'dx', target: 'pos', value: 4 },
+      { source: 'adopt', target: 'mon', value: 6 },
+      { source: 'pos', target: 'mon', value: 4 },
+      { source: 'mon', target: 'docs', value: 6 },
+      { source: 'docs', target: 'spec', value: 6 },
+      { source: 'spec', target: 'ship', value: 6 }
+    ]
+  }, { title: 'Proposed Devtool AFPS Pipeline', width: 900, height: 340 });
+})();
+
+// Chart 3: Time to Ship Bar (Section 8)
+(function() {
+  const container = document.getElementById('chart-time-to-ship');
+  if (!container) return;
+  alignChart.bar(container, [
+    { label: 'Business AFPS', value: 30 },
+    { label: 'Devtool AFPS', value: 14 },
+    { label: 'VARD', value: 3 },
+    { label: 'ORD', value: 3 }
+  ], { title: 'Typical Days to Ship', horizontal: true, width: 600, height: 280 });
+})();
+
+// Chart 4: Graduation Funnel (Section 9)
+(function() {
+  const container = document.getElementById('chart-graduation-funnel');
+  if (!container) return;
+  alignChart.funnel(container, [
+    { label: 'Rapid tools shipped (VARD + ORD)', value: 30 },
+    { label: 'Show initial traction', value: 12 },
+    { label: 'Meet graduation threshold', value: 6 },
+    { label: 'Graduate to deliberate pipeline', value: 4 }
+  ], { title: 'Expected Rapid Graduation Funnel (per quarter)', width: 500, height: 320 });
+})();
+
+// Chart 5: Graduation Flow (Section 9)
+(function() {
+  const container = document.getElementById('chart-graduation-flow');
+  if (!container) return;
+  alignChart.flow(container, {
+    nodes: [
+      { id: 'vard', name: 'VARD App', layer: 0 },
+      { id: 'ord', name: 'ORD Tool', layer: 0 },
+      { id: 'vard-traction', name: 'VARD Traction Check', layer: 1 },
+      { id: 'ord-traction', name: 'ORD Traction Check', layer: 1 },
+      { id: 'archive', name: 'Archive', layer: 2 },
+      { id: 'iterate', name: 'Iterate (stay rapid)', layer: 2 },
+      { id: 'business', name: 'Business AFPS', layer: 3 },
+      { id: 'devtool', name: 'Devtool AFPS', layer: 3 }
+    ],
+    links: [
+      { source: 'vard', target: 'vard-traction', value: 8 },
+      { source: 'ord', target: 'ord-traction', value: 8 },
+      { source: 'vard-traction', target: 'archive', value: 3 },
+      { source: 'vard-traction', target: 'iterate', value: 2 },
+      { source: 'vard-traction', target: 'business', value: 6 },
+      { source: 'ord-traction', target: 'archive', value: 3 },
+      { source: 'ord-traction', target: 'iterate', value: 2 },
+      { source: 'ord-traction', target: 'devtool', value: 6 },
+      { source: 'ord-traction', target: 'business', value: 2 }
+    ]
+  }, { title: 'Rapid Pipeline Graduation Routing', width: 900, height: 340 });
+})();
+
+// Chart 6: COA Profile Radar (Section 13)
+(function() {
+  const container = document.getElementById('chart-coa-radar');
+  if (!container) return;
+  const data = [
+    { axis: 'Speed to value', sets: [
+      { name: 'COA A: Build All', values: [40, 95, 25, 85, 60, 35] },
+      { name: 'COA B: Rapid First', values: [90, 55, 85, 50, 80, 90] },
+      { name: 'COA C: Mode Flags', values: [55, 80, 35, 70, 35, 50] }
+    ]},
+    { axis: 'Completeness' },
+    { axis: 'Low risk' },
+    { axis: 'Full devtool pipeline' },
+    { axis: 'Low maintenance' },
+    { axis: 'Data-driven design' }
+  ];
+  alignChart.radar(container, data, { title: 'COA Profile Comparison', size: 460, maxValue: 100 });
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script type="module" src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

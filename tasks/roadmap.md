@@ -1,3 +1,29 @@
+## Current Revision — Workflow Design Alignment Chart Clipping
+
+### Goal
+
+Revise `alignment/workflow-design-three-pipelines.html` so the rapid pipeline graduation routing chart in the Graduation Path section is fully visible and not cut off on the right side.
+
+### Plan
+
+1. Preserve invocation context and task tracking.
+   - [x] Capture the visible `investigate` invocation under `prompts/investigate/`.
+   - [x] Capture the visible Browser verification invocation under `prompts/browser/`.
+   - [x] Capture the visible Computer Use verification invocation under `prompts/computer-use/`.
+   - [x] Record the revision plan in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Investigate the layout bug.
+   - [x] Inspect the Graduation Path chart markup and CSS.
+   - [x] Reproduce or confirm the right-edge clipping at relevant viewport widths.
+   - [x] Identify the root cause and affected layout rules.
+3. Apply the minimal layout fix.
+   - [x] Update only the alignment page styles/markup needed to keep the chart within the viewport.
+   - [x] Add a lesson preventing future alignment-page chart clipping.
+4. Verify and ship.
+   - [x] Run targeted static checks and `git diff --check`.
+   - [x] Verify the alignment page visually in the browser.
+   - [x] Add review notes to `tasks/todo.md`.
+   - [x] Commit and push the intended tracked changes.
+
 ## Current Audit — Documentation Freshness And Cleanup
 
 ### Goal
