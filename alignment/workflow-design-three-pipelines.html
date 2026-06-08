@@ -917,6 +917,12 @@ const alignChart = (() => {
     return wrap;
   }
 
+  function setAutoNarrative(container, text) {
+    if (!container.getAttribute('data-tts-narrative')) {
+      container.setAttribute('data-tts-narrative', text);
+    }
+  }
+
   function ensureCanvas(container, w, h, ariaLabel) {
     const c = document.createElement('canvas');
     c.width = w || 600; c.height = h || 400;
@@ -960,6 +966,9 @@ const alignChart = (() => {
     }
     const table = makeTableWrap(['Label', 'Value'], data.map(d => [d.label, String(d.value)]));
     container.appendChild(table); createToggle(container, c, table);
+    const sorted = [...data].sort((a, b) => b.value - a.value);
+    const top3 = sorted.slice(0, 3).map(d => `${d.label} (${d.value})`).join(', ');
+    setAutoNarrative(container, `${title}: ${data.length} items. Top values: ${top3}.`);
   }
 
   function radar(container, data, opts = {}) {
@@ -1015,6 +1024,12 @@ const alignChart = (() => {
     container.appendChild(svg);
     const headers = ['Axis', ...sets.map(s => s.name)]; const rows = axes.map((a, i) => [a, ...sets.map(s => String(s.values[i]))]);
     const table = makeTableWrap(headers, rows); container.appendChild(table); createToggle(container, svg, table);
+    const summaries = sets.map(s => {
+      let hi = 0, lo = 0;
+      s.values.forEach((v, i) => { if (v > s.values[hi]) hi = i; if (v < s.values[lo]) lo = i; });
+      return `${s.name} highest on ${axes[hi]}, lowest on ${axes[lo]}`;
+    }).join('; ');
+    setAutoNarrative(container, `${title}: ${sets.length} profiles across ${n} axes. ${summaries}.`);
   }
 
   function funnel(container, data, opts = {}) {
@@ -1044,6 +1059,8 @@ const alignChart = (() => {
     const rows = data.map((d, i) => [d.label, String(d.value), i > 0 ? ((d.value / data[i - 1].value) * 100).toFixed(1) + '%' : '100%']);
     const table = makeTableWrap(['Stage', 'Count', 'Conversion'], rows);
     container.appendChild(table); createToggle(container, c, table);
+    const convPct = ((data[data.length - 1].value / data[0].value) * 100).toFixed(0);
+    setAutoNarrative(container, `${title}: ${data.length} stages from ${data[0].label} (${data[0].value}) to ${data[data.length - 1].label} (${data[data.length - 1].value}), ${convPct}% overall conversion.`);
   }
 
   function flow(container, data, opts = {}) {
@@ -1095,6 +1112,7 @@ const alignChart = (() => {
     const headers = ['Source', 'Target', 'Value'];
     const rows = links.map(l => [ nodes.find(n => n.id === l.source)?.name || l.source, nodes.find(n => n.id === l.target)?.name || l.target, String(l.value ?? '') ]);
     const table = makeTableWrap(headers, rows); container.appendChild(table); createToggle(container, svg, table);
+    setAutoNarrative(container, `${title}: flow diagram with ${nodes.length} nodes and ${links.length} connections.`);
   }
 
   return { bar, radar, funnel, flow };
@@ -1234,6 +1252,8 @@ const alignChart = (() => {
 
 
 
+
+
 <script>
 // --- Brief Me TTS ---
 /**
@@ -1267,7 +1287,17 @@ const alignTTS = (() => {
 
   function extractText(el) {
     const clone = el.cloneNode(true);
-    clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
+    clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar, .stat-grid').forEach(n => n.remove());
+    clone.querySelectorAll('.chart-container, .table-wrap').forEach(n => {
+      const narrative = n.getAttribute('data-tts-narrative');
+      if (narrative) {
+        const span = document.createElement('span');
+        span.textContent = ' ' + narrative + ' ';
+        n.replaceWith(span);
+      } else {
+        n.remove();
+      }
+    });
     let text = clone.textContent.replace(/\s+/g, ' ').trim();
     if (text.length > 2000) text = text.slice(0, 2000) + '... section truncated for brevity.';
     return text;

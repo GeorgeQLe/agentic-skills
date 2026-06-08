@@ -92,6 +92,12 @@ const alignChart = (() => {
     return wrap;
   }
 
+  function setAutoNarrative(container, text) {
+    if (!container.getAttribute('data-tts-narrative')) {
+      container.setAttribute('data-tts-narrative', text);
+    }
+  }
+
   function ensureCanvas(container, w, h, ariaLabel) {
     const c = document.createElement('canvas');
     c.width = w || 600;
@@ -170,6 +176,10 @@ const alignChart = (() => {
     const table = makeTableWrap(['Label', 'Value'], data.map(d => [d.label, String(d.value)]));
     container.appendChild(table);
     createToggle(container, c, table);
+
+    const sorted = [...data].sort((a, b) => b.value - a.value);
+    const top3 = sorted.slice(0, 3).map(d => `${d.label} (${d.value})`).join(', ');
+    setAutoNarrative(container, `${title}: ${data.length} items. Top values: ${top3}.`);
   }
 
   // --- Line Chart ---
@@ -243,6 +253,13 @@ const alignChart = (() => {
     const table = makeTableWrap(headers, rows);
     container.appendChild(table);
     createToggle(container, c, table);
+
+    const trends = series.map(s => {
+      const first = s.values[0], last = s.values[s.values.length - 1];
+      const dir = last > first ? 'rising' : last < first ? 'falling' : 'flat';
+      return `${s.name} ${dir}`;
+    }).join(', ');
+    setAutoNarrative(container, `${title}: ${series.length} series over ${labels.length} points. ${trends}.`);
   }
 
   // --- Radar Chart (SVG) ---
@@ -349,6 +366,13 @@ const alignChart = (() => {
     const table = makeTableWrap(headers, rows);
     container.appendChild(table);
     createToggle(container, svg, table);
+
+    const summaries = sets.map(s => {
+      let hi = 0, lo = 0;
+      s.values.forEach((v, i) => { if (v > s.values[hi]) hi = i; if (v < s.values[lo]) lo = i; });
+      return `${s.name} highest on ${axes[hi]}, lowest on ${axes[lo]}`;
+    }).join('; ');
+    setAutoNarrative(container, `${title}: ${sets.length} profiles across ${n} axes. ${summaries}.`);
   }
 
   // --- Quadrant/2x2 Plot ---
@@ -415,6 +439,13 @@ const alignChart = (() => {
     const table = makeTableWrap(['Item', xAxis, yAxis], data.map(d => [d.label, String(d.x), String(d.y)]));
     container.appendChild(table);
     createToggle(container, c, table);
+
+    const positions = data.map(d => {
+      const qx = d.x >= 50 ? 'high' : 'low';
+      const qy = d.y >= 50 ? 'high' : 'low';
+      return `${d.label} (${qx} ${xAxis}, ${qy} ${yAxis})`;
+    }).join(', ');
+    setAutoNarrative(container, `${title}: ${data.length} items plotted on ${xAxis} versus ${yAxis}. ${positions}.`);
   }
 
   // --- Funnel Chart ---
@@ -465,6 +496,9 @@ const alignChart = (() => {
     const table = makeTableWrap(['Stage', 'Count', 'Conversion'], rows);
     container.appendChild(table);
     createToggle(container, c, table);
+
+    const convPct = ((data[data.length - 1].value / data[0].value) * 100).toFixed(0);
+    setAutoNarrative(container, `${title}: ${data.length} stages from ${data[0].label} (${data[0].value}) to ${data[data.length - 1].label} (${data[data.length - 1].value}), ${convPct}% overall conversion.`);
   }
 
   // --- Flow / Sankey Diagram (SVG) ---
@@ -563,6 +597,8 @@ const alignChart = (() => {
     const table = makeTableWrap(headers, rows);
     container.appendChild(table);
     createToggle(container, svg, table);
+
+    setAutoNarrative(container, `${title}: flow diagram with ${nodes.length} nodes and ${links.length} connections.`);
   }
 
   // --- Ring / Donut Chart ---
@@ -612,6 +648,10 @@ const alignChart = (() => {
     const table = makeTableWrap(['Segment', 'Value', 'Percentage'], rows);
     container.appendChild(table);
     createToggle(container, c, table);
+
+    const topSegs = [...data].sort((a, b) => b.value - a.value).slice(0, 3)
+      .map(d => `${d.label} ${((d.value / total) * 100).toFixed(0)}%`).join(', ');
+    setAutoNarrative(container, `${title}: ${data.length} segments. Largest: ${topSegs}.`);
   }
 
   // --- Heatmap / Matrix ---
@@ -675,6 +715,8 @@ const alignChart = (() => {
     const table = makeTableWrap(headers, rows);
     container.appendChild(table);
     createToggle(container, c, table);
+
+    setAutoNarrative(container, `${title}: ${yLabels.length} rows by ${xLabels.length} columns, values ranging from ${min} to ${max}.`);
   }
 
   return { bar, line, radar, quadrant, funnel, flow, ring, heatmap };

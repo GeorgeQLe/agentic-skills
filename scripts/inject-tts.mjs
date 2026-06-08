@@ -15,6 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const ALIGNMENT_DIR = path.join(ROOT, 'alignment');
 
 const dryRun = process.argv.includes('--dry-run');
+const force = process.argv.includes('--force');
 const specificFile = process.argv.find(a => a.endsWith('.html'));
 
 const ttsSnippet = readFileSync(path.join(__dirname, 'alignment-tts-snippet.js'), 'utf8');
@@ -25,8 +26,20 @@ function inject(filePath) {
   let html = readFileSync(filePath, 'utf8');
 
   if (html.includes('alignTTS')) {
-    console.log(`  skip (already has TTS): ${rel}`);
-    return false;
+    if (force) {
+      const marker = '// --- Brief Me TTS ---';
+      const markerIdx = html.indexOf(marker);
+      if (markerIdx !== -1) {
+        const scriptStart = html.lastIndexOf('<script>', markerIdx);
+        const scriptEnd = html.indexOf('</script>', markerIdx);
+        if (scriptStart !== -1 && scriptEnd !== -1) {
+          html = html.slice(0, scriptStart) + html.slice(scriptEnd + '</script>'.length);
+        }
+      }
+    } else {
+      console.log(`  skip (already has TTS): ${rel}`);
+      return false;
+    }
   }
 
   const insertPoint = html.lastIndexOf('</body>');
