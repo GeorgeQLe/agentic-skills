@@ -251,6 +251,8 @@ normalize_pack() {
     repo|repo-maintenance|repo_maintenance) echo "repo-maintenance" ;;
     exec-profile|exec_profile|execprofile) echo "exec-profile" ;;
     alignment-page|alignment-page-admin|alignment_page_admin) echo "alignment-page-admin" ;;
+    vard|viral|viral-app|viral_app|rapid-app|rapid_app) echo "vard" ;;
+    ord|oss-rapid|oss_rapid|rapid-oss|rapid_oss|oss-dist|oss_dist) echo "ord" ;;
     pack|packs|"") return 1 ;;
     *) echo "$pack" ;;
   esac
@@ -274,6 +276,8 @@ project_type_for_pack() {
     devtool) echo "devtool" ;;
     creator-foundation|youtube-ops|creator-media|remotion) echo "creator-media" ;;
     project-fleet) echo "project-fleet" ;;
+    vard) echo "business-app" ;;
+    ord) echo "devtool" ;;
     *) return 1 ;;
   esac
 }
@@ -712,12 +716,14 @@ recommend() {
   elif [[ "$inferred_project_type" == "devtool" ]]; then
     echo "Recommended pack: devtool or a narrow business pack"
     echo "Use devtool for developer-facing tools/libraries; use business-discovery, customer-lifecycle, business-growth, or business-ops for SaaS/business work."
+    echo "For a quick OSS experiment (ship in days, not weeks), use ord instead."
     echo "PoketoWork kanban packs are hibernated during the Poketo.work rebuild."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   else
     echo "Recommended pack: business-discovery"
     echo "Add customer-lifecycle when the current phase needs journey, onboarding, conversion, transaction, retention, expansion, or lifecycle metrics work."
     echo "Add business-growth or business-ops only when the current phase needs them."
+    echo "For a quick viral app experiment (ship in days, not weeks), use vard instead."
     echo "PoketoWork kanban packs are hibernated during the Poketo.work rebuild."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   fi

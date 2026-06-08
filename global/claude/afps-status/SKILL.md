@@ -33,13 +33,18 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
    - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, and alignment pages under `alignment/`.
    - Execution artifacts: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases/`, and recent validation notes.
+   - Rapid pipeline artifacts: `research/vard-ship-log.md` (VARD experiments), `research/ord-ship-log.md` (ORD packages), and `alignment/vard-*.md` or `alignment/ord-*.md` alignment docs.
    - Git evidence: `git status --short`, current branch/upstream, last relevant commits, unpushed commits, and changed files.
 4. Reconcile evidence instead of trusting one file:
    - Distinguish missing artifacts, stale artifacts, contradictory artifacts, completed work, active implementation tasks, manual blockers, unvalidated implementation, and unshipped local changes.
    - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts.
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
-5. Classify AFPS stage:
+5. Detect rapid pipeline activity:
+   - If `research/vard-ship-log.md` exists, report VARD pipeline status: number of experiments shipped, most recent entry, and whether any show traction signals warranting graduation to Business AFPS.
+   - If `research/ord-ship-log.md` exists, report ORD pipeline status: number of packages published, most recent entry, and whether any show traction signals warranting graduation to Devtool AFPS.
+   - If `vard` or `ord` packs are enabled, note the active rapid pipeline alongside deliberate pipeline status.
+6. Classify AFPS stage:
    - `unscoped`: no concept brief or the concept is too unclear for customer discovery.
    - `concept-ready`: concept exists but discovery pack/skills are not enabled.
    - `discovery-needed`: concept exists and discovery skills are enabled, but customer discovery is absent or not specific enough.
@@ -69,7 +74,8 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 
 Produce a concise structured report with:
 
-- **Overview:** repo path, product/app focus, git status, enabled packs, and whether AFPS evidence is single-path or multi-path.
+- **Overview:** repo path, product/app focus, git status, enabled packs, active rapid pipelines (VARD/ORD), and whether AFPS evidence is single-path or multi-path.
+- **Rapid Pipeline Status** (if applicable): VARD and/or ORD experiment counts, latest shipment, traction signals, and graduation readiness.
 - **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status.
 - **AFPS Stage:** one stage label from the workflow above, with confidence and evidence.
 - **Contradictions And Gaps:** conflicting artifacts, missing product-path manifest updates, stale task queues, manual blockers, validation/shipping gaps, and uncertainty.
