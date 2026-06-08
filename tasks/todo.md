@@ -10,7 +10,7 @@
 ### Phase 2: Verification And Shipping
 - [x] Run targeted page/gate checks and `git diff --check`.
 - [x] Add review notes with root cause, fix, and verification results.
-- [ ] Commit and push the intended changes.
+- [x] Commit and push the intended changes.
 
 ### Review Notes
 - User claim validated: confirmed. `alignment/idea-scope-brief-npm-distribution.html` had deck-based installation content, but it was appended after the review gates and compile controls, so final YAML could omit the deck-install decision entirely.

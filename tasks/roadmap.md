@@ -18,7 +18,7 @@ Revise `alignment/idea-scope-brief-npm-distribution.html` so deck-based installa
 3. Verify and ship.
    - [x] Run targeted string/structure checks and `git diff --check`.
    - [x] Confirm the compiled gate list includes the new deck-installation gate.
-   - [ ] Commit and push the intended tracked changes while leaving unrelated work untouched.
+   - [x] Commit and push the intended tracked changes while leaving unrelated work untouched.
 
 ## Current Revision — Workflow Design Alignment Chart Clipping
 
