@@ -56,7 +56,7 @@ function extractText(el) {
     }
   });
   let text = clone.textContent.replace(/\s+/g, ' ').trim();
-  if (text.length > 2000) text = text.slice(0, 2000) + '... section truncated for brevity.';
+  if (text.length > 1200) text = text.slice(0, 1200) + '... section truncated for brevity.';
   return text;
 }
 
@@ -174,7 +174,6 @@ function stopCurrentAudio() {
 }
 
 async function speakKokoro(text, id, onEnd) {
-  if (!audioCtx) audioCtx = new AudioContext();
   if (audioCtx.state === 'suspended') await audioCtx.resume();
 
   const voice = getSelectedVoice();
@@ -182,34 +181,30 @@ async function speakKokoro(text, id, onEnd) {
   currentStream = streamState;
 
   try {
-    const stream = ttsInstance.stream(text, { voice, speed });
-    let lastEndTime = audioCtx.currentTime;
-
-    for await (const chunk of stream) {
-      if (streamState.abort || id !== skipId) return;
-      const samples = chunk.audio.data;
-      const buf = audioCtx.createBuffer(1, samples.length, 24000);
-      buf.getChannelData(0).set(samples);
-      const src = audioCtx.createBufferSource();
-      src.buffer = buf;
-      src.connect(audioCtx.destination);
-      const startAt = Math.max(audioCtx.currentTime, lastEndTime);
-      src.start(startAt);
-      lastEndTime = startAt + buf.duration;
-      currentSource = src;
-    }
-
+    const rawAudio = await ttsInstance.generate(text, { voice, speed });
     if (streamState.abort || id !== skipId) return;
 
-    const remaining = (lastEndTime || audioCtx.currentTime) - audioCtx.currentTime;
-    if (remaining > 0) {
-      await new Promise(resolve => setTimeout(resolve, remaining * 1000 + 50));
+    const samples = rawAudio.audio;
+    if (!samples || samples.length === 0) {
+      console.warn('Kokoro returned empty audio for section');
+      onEnd();
+      return;
     }
 
-    if (!streamState.abort && id === skipId) onEnd();
+    const sampleRate = rawAudio.sampling_rate || 24000;
+    const buf = audioCtx.createBuffer(1, samples.length, sampleRate);
+    buf.getChannelData(0).set(samples);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    src.onended = () => {
+      if (!streamState.abort && id === skipId) onEnd();
+    };
+    src.start();
+    currentSource = src;
   } catch (err) {
     if (!streamState.abort) {
-      console.warn('Kokoro streaming error:', err);
+      console.warn('Kokoro generate error:', err);
       onEnd();
     }
   }
@@ -236,6 +231,8 @@ function speakSection(idx) {
 }
 
 async function play() {
+  if (!audioCtx) audioCtx = new AudioContext();
+
   gatherSections();
   if (!sections.length) return;
 
