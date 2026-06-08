@@ -63,6 +63,24 @@ const alignTTS = (() => {
       const text = extractText(sec);
       if (text.length > 10) sections.push({ el: sec, label: heading, text: `${heading}. ${text}` });
     });
+    if (sections.length <= 1) {
+      const container = document.querySelector('main') || document.body;
+      const h2s = container.querySelectorAll('h2');
+      h2s.forEach(h2 => {
+        const heading = h2.textContent.trim();
+        const tempDiv = document.createElement('div');
+        tempDiv.appendChild(h2.cloneNode(true));
+        let sib = h2.nextElementSibling;
+        while (sib && sib.tagName !== 'H2') {
+          tempDiv.appendChild(sib.cloneNode(true));
+          sib = sib.nextElementSibling;
+        }
+        const text = extractText(tempDiv);
+        if (text.length > 10) {
+          sections.push({ el: h2.parentElement || h2, label: heading, text: `${heading}. ${text}` });
+        }
+      });
+    }
     if (!sections.length) {
       const body = extractText(document.querySelector('main') || document.body);
       if (body.length > 10) sections.push({ el: document.body, label: 'Page', text: body });

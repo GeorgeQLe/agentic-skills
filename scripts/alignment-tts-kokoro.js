@@ -77,6 +77,24 @@ function gatherSections() {
     const text = extractText(sec);
     if (text.length > 10) sections.push({ el: sec, label: heading, text: `${heading}. ${text}` });
   });
+  if (sections.length <= 1) {
+    const container = document.querySelector('main') || document.body;
+    const h2s = container.querySelectorAll('h2');
+    h2s.forEach(h2 => {
+      const heading = h2.textContent.trim();
+      const tempDiv = document.createElement('div');
+      tempDiv.appendChild(h2.cloneNode(true));
+      let sib = h2.nextElementSibling;
+      while (sib && sib.tagName !== 'H2') {
+        tempDiv.appendChild(sib.cloneNode(true));
+        sib = sib.nextElementSibling;
+      }
+      const text = extractText(tempDiv);
+      if (text.length > 10) {
+        sections.push({ el: h2.parentElement || h2, label: heading, text: `${heading}. ${text}` });
+      }
+    });
+  }
   if (!sections.length) {
     const body = extractText(document.querySelector('main') || document.body);
     if (body.length > 10) sections.push({ el: document.body, label: 'Page', text: body });
@@ -172,6 +190,26 @@ function stopCurrentAudio() {
   if (usingFallback) fallback.cancel();
 }
 
+function chunkText(text, maxLen) {
+  maxLen = maxLen || 1000;
+  if (text.length <= maxLen) return [text];
+  var chunks = [];
+  var remaining = text;
+  while (remaining.length > maxLen) {
+    var cut = -1;
+    var seps = ['. ', '? ', '! '];
+    for (var i = 0; i < seps.length; i++) {
+      var idx = remaining.lastIndexOf(seps[i], maxLen);
+      if (idx > cut) cut = idx + seps[i].length;
+    }
+    if (cut <= 0) cut = maxLen;
+    chunks.push(remaining.slice(0, cut).trim());
+    remaining = remaining.slice(cut).trim();
+  }
+  if (remaining) chunks.push(remaining);
+  return chunks;
+}
+
 async function speakKokoro(text, id, onEnd) {
   if (audioCtx.state === 'suspended') await audioCtx.resume();
 
@@ -179,28 +217,34 @@ async function speakKokoro(text, id, onEnd) {
   const streamState = { abort: false };
   currentStream = streamState;
 
+  const chunks = chunkText(text);
+
   try {
-    const rawAudio = await ttsInstance.generate(text, { voice, speed });
-    if (streamState.abort || id !== skipId) return;
+    for (let ci = 0; ci < chunks.length; ci++) {
+      if (streamState.abort || id !== skipId) return;
 
-    const samples = rawAudio.audio;
-    if (!samples || samples.length === 0) {
-      console.warn('Kokoro returned empty audio for section');
-      onEnd();
-      return;
+      const rawAudio = await ttsInstance.generate(chunks[ci], { voice, speed });
+      if (streamState.abort || id !== skipId) return;
+
+      const samples = rawAudio.audio;
+      if (!samples || samples.length === 0) continue;
+
+      const sampleRate = rawAudio.sampling_rate || 24000;
+      const buf = audioCtx.createBuffer(1, samples.length, sampleRate);
+      buf.getChannelData(0).set(samples);
+
+      await new Promise((resolve) => {
+        const src = audioCtx.createBufferSource();
+        src.buffer = buf;
+        src.connect(audioCtx.destination);
+        src.onended = resolve;
+        src.start();
+        currentSource = src;
+      });
+
+      if (streamState.abort || id !== skipId) return;
     }
-
-    const sampleRate = rawAudio.sampling_rate || 24000;
-    const buf = audioCtx.createBuffer(1, samples.length, sampleRate);
-    buf.getChannelData(0).set(samples);
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.connect(audioCtx.destination);
-    src.onended = () => {
-      if (!streamState.abort && id === skipId) onEnd();
-    };
-    src.start();
-    currentSource = src;
+    onEnd();
   } catch (err) {
     if (!streamState.abort) {
       console.warn('Kokoro generate error:', err);

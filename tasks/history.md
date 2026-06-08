@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-06-08 — TTS narration cutoff fix (chunking + h2 fallback)
+
+- Fixed Kokoro TTS silent truncation on long sections by adding `chunkText()` helper that splits at sentence boundaries (~1000 chars max) and iterating chunks sequentially in `speakKokoro()`.
+- Fixed missing sections on sectionless alignment pages by adding `<h2>` fallback gathering in `gatherSections()` when no `<section>` tags are found (both Kokoro and Web Speech engines).
+- Two files changed: `scripts/alignment-tts-kokoro.js` and `scripts/alignment-tts-snippet.js`.
+
 ## 2026-06-08 — Skills Showcase pack count coverage
 
 - Updated the Skills Showcase generator to include active nested pack skills such as framework subskills while excluding archives.
