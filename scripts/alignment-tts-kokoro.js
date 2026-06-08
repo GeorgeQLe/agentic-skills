@@ -10,7 +10,7 @@
 (function() {
 'use strict';
 
-const KOKORO_CDN = 'https://esm.sh/kokoro-js@1.1.0';
+const KOKORO_CDN = 'https://esm.sh/kokoro-js@1.2.1';
 const MODEL_ID = 'onnx-community/Kokoro-82M-v1.0-ONNX';
 const VOICES = [
   { id: 'af_heart', label: 'Heart' },
