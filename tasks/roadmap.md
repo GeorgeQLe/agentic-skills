@@ -1,3 +1,26 @@
+## Current Revision — Skillpacks npm Distribution Design
+
+### Goal
+
+Turn the approved npm-distribution alignment decision into a detailed design doc and implementation roadmap for `skillpacks`, without starting package implementation in this pass.
+
+### Plan
+
+1. Preserve invocation context and approval inputs.
+   - [x] Capture the visible `idea-scope-brief` approval YAML under `prompts/idea-scope-brief/`.
+   - [x] Read the approved alignment page and gate answers.
+   - [x] Inspect existing pack, deck, install, and versioning docs.
+2. Produce the design artifact.
+   - [x] Write `docs/skillpacks-npm-distribution.md`.
+   - [x] Preserve approved decisions: `skillpacks`, hybrid COA A first, skill-level pinning, deck presets first.
+   - [x] Add current npm registry preflight findings for `skillpacks` and `agentic-skills`.
+3. Track the implementation route.
+   - [x] Record current-phase work and review notes in `tasks/todo.md`.
+   - [x] Verify the doc contains the approved decisions, phase roadmap, and no implementation drift.
+4. Ship.
+   - [x] Run targeted verification and `git diff --check`.
+   - [x] Commit and push intended changes only, leaving unrelated worktree changes untouched.
+
 ## Current Revision — npm Distribution Deck Installation Gate
 
 ### Goal

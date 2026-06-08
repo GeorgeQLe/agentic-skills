@@ -1,3 +1,27 @@
+## Skillpacks npm Distribution Design
+
+### Phase 1: Approved Design Handoff
+- [x] Capture prompt history for the `idea-scope-brief` approval YAML.
+- [x] Read `alignment/idea-scope-brief-npm-distribution.html` and approved gate answers.
+- [x] Inspect existing deck, pack, install, and versioning docs.
+- [x] Check current npm registry status for `skillpacks`, `@skillpacks/cli`, `@skillpacks/core`, and `agentic-skills`.
+- [x] Write `docs/skillpacks-npm-distribution.md`.
+
+### Phase 2: Verification And Shipping
+- [x] Verify the design doc preserves the approved decisions and includes a detailed implementation roadmap.
+- [x] Run `git diff --check`.
+- [x] Commit and push intended changes.
+
+### Review Notes
+- Approved path: use `skillpacks` as the public npm/CLI name, start with one monolith package, keep skill-level pinning, expose deck installation as monolith presets first, and preserve a migration path toward scoped packages or registry tags.
+- Current registry preflight: `npm view skillpacks`, `npm view @skillpacks/cli`, and `npm view @skillpacks/core` returned `E404`; `npm view agentic-skills` returned an existing external package at `2.5.1`, so the old repo name should not be the npm package name.
+- Design artifact: `docs/skillpacks-npm-distribution.md`.
+- Scope control: no package implementation, no root `package.json`, no CLI code, and no GitHub Actions were added in this pass.
+- Verification passed: targeted key-string scan for approved decisions and all roadmap phases; ASCII scan confirmed the new design doc is ASCII-only; `git diff --check` passed.
+- Unrelated worktree item left untouched: `apps/skills-showcase/next-env.d.ts`.
+
+---
+
 ## npm Distribution Deck Installation Gate
 
 ### Phase 1: Investigation And Fix
