@@ -56,18 +56,18 @@
 - Rationale: manifest generation, CLI behavior, and package boundary validation share the same files and should be integrated in one lane.
 
 ### Phase 2: Deck Metadata And Manifest
-- [ ] Add `scripts/build-skillpacks-manifest.mjs`.
-- [ ] Generate `dist/skillpacks-manifest.json` from repository skill and pack sources.
+- [ ] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
+- [ ] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from repository skill and pack sources.
 - [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
 - [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
 - [ ] Include COA B package-list fields and COA C registry-tag fields for every deck.
-- [ ] Include `dist/skillpacks-manifest.json` in the npm package allowlist.
+- [ ] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the npm package allowlist.
 - [ ] Add `skillpacks list --json` using the manifest.
 - [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
 - [ ] Preserve `pack.sh` forwarding for all existing commands.
 
 ### Verification And Shipping
-- [ ] Run `node scripts/build-skillpacks-manifest.mjs --check`.
+- [ ] Run `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs --check`.
 - [ ] Verify `node packages/skillpacks/bin/skillpacks.mjs list --json`.
 - [ ] Verify temp consumer repo `install-deck vard`.
 - [ ] Verify temp consumer repo `install-deck business-afps` and `install-deck business-afps --full`.
@@ -78,6 +78,8 @@
 ### Review Notes
 - Prepared after Phase 0/1 shipped in `b9b78312`.
 - Real `npm publish` remains out of scope for this phase unless the user explicitly changes the scope and confirms the external publish action.
+- 2026-06-09 split re-audit corrected stale Phase 2 manifest paths to the package workspace (`packages/skillpacks/scripts/` and `packages/skillpacks/dist/`); manifest/deck implementation remains unstarted.
+- 2026-06-09 split re-audit found active `exec`, `ship`, `create-agentic-skill`, and `targeted-skill-builder` contracts still referenced removed root Skills Showcase scripts; archived/bumped those skill mirrors and rewrote refresh commands to `apps/skills-showcase/scripts/...`.
 - Unrelated pre-existing local changes remain in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, and `scripts/generate-skillmap-excalidraw.mjs`; do not touch them unless the user redirects.
 
 ---
@@ -596,9 +598,9 @@
 
 ### Next Step Plan — Skills Showcase Pack List Coverage
 - Scope: audit the Skills Showcase pack list/count presentation so every active pack is represented and counts match generated source data after the new competitive-analysis framework subskills increased the catalog size.
-- Files to inspect first: `apps/skills-showcase/app/packs`, `apps/skills-showcase/components`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, `scripts/generate-skills-showcase-data.mjs`, and any tests that reference pack counts or pack-card rendering.
+- Files to inspect first: `apps/skills-showcase/app/packs`, `apps/skills-showcase/components`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, `apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, and any tests that reference pack counts or pack-card rendering.
 - Approach: identify whether the incorrect counts are generated-data, UI grouping, static copy, or filtering issues; prefer deriving displayed counts directly from generated pack/skill data rather than maintaining parallel static numbers. Keep unrelated visual redesign backlog items out of scope.
-- Validation: run the relevant Skills Showcase unit/route tests if present, `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir apps/skills-showcase build`, targeted `rg` checks for stale hard-coded pack counts, and `git diff --check`.
+- Validation: run the relevant Skills Showcase unit/route tests if present, `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, `pnpm --dir apps/skills-showcase build`, targeted `rg` checks for stale hard-coded pack counts, and `git diff --check`.
 
 #### Review Notes — Skills Showcase Pack List Coverage
 - Updated `scripts/generate-skills-showcase-data.mjs` so active nested pack skills such as framework subskills are included while archive snapshots remain excluded.

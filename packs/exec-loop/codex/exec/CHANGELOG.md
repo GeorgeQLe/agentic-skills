@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-09
+
+- Updated Skills Showcase refresh commands to use app-owned generator and validator paths after the workspace split.
+
 ## v0.2
 
 - Stopped substituting PoketoWork kanban command variants in next-step recommendations while the kanban packs are hibernated.

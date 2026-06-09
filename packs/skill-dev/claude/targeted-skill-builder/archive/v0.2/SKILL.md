@@ -2,17 +2,15 @@
 name: targeted-skill-builder
 description: Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation
 type: execution
-version: v0.3
+version: v0.2
 argument-hint: "[workflow gap, correction, skill name, or capability request]"
 ---
 
 # Targeted Skill Builder
 
-Invoke as `$targeted-skill-builder`.
-
 Use this skill when the user wants a narrow, durable workflow improvement from the current prompt or conversation: a concrete problem, user correction, repeated bad recommendation, or capability gap that may deserve a new skill, an existing-skill update, or a reusable prompt/template.
 
-This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/Codex history by default. Treat broad session analysis as optional evidence only when the user explicitly asks for it. Use `$session-triage` first when one immediate issue, correction, repo incident, or suspected skill failure still needs verification before a skill change is designed.
+This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/Codex history by default. Treat broad session analysis as optional evidence only when the user explicitly asks for it. Use `/session-triage` first when one immediate issue, correction, repo incident, or suspected skill failure still needs verification before a skill change is designed.
 
 ## Process
 
@@ -31,7 +29,7 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - Use the current prompt and conversation context first.
    - Read a named skill file when provided.
    - Inspect user-provided files or paths when provided.
-   - Route to `$session-triage` when the user wants investigation of one immediate issue or the available evidence is not enough to verify the correction.
+   - Route to `/session-triage` when the user wants investigation of one immediate issue or the available evidence is not enough to verify the correction.
    - If examples are needed, ask for them or run a tightly scoped history query limited by path, skill name, date range, or exact phrase.
    - Do not scan all session history unless explicitly requested.
 5. Search existing skills for overlap before creating anything:
@@ -50,8 +48,8 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
 8. If creating or updating a repository skill:
    - Follow existing frontmatter conventions: `name`, specific `description`, `type`, `version`, and `argument-hint` when useful.
    - Keep `SKILL.md` concise and operational.
-   - Include clear trigger conditions, workflow steps, outputs, constraints, and next-step routing for mutation-capable skills.
-   - For Codex global skills, add `agents/openai.yaml` with display name, short description, default prompt, and implicit-invocation policy.
+   - Include clear trigger conditions, process steps, outputs, constraints, and next-step routing for mutation-capable skills.
+   - Mirror Codex when shared behavior is expected, and add Codex `agents/openai.yaml`.
    - Update `tests/harness/bench-coverage.ts` for every new repository skill or material skill behavior update.
    - Add/register a deterministic custom setup under `tests/layer4/setups/` when practical, or record an explicit blocked row with `blocked_reason` and `next_command` when coverage depends on unsafe or external conditions.
    - For custom setup work, include a deterministic output-quality rubric when practical. Prefer fixture fact coverage, concrete file/command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over broad prose judgments.
@@ -68,9 +66,9 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
     - `pnpm --dir tests bench:coverage`
     - Focused layer1 benchmark setup tests when `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, or `tests/layer4/setups/` changed.
     - If any tracked `SKILL.md` or `PACK.md` behavior or metadata changed, refresh the Skills Showcase data:
-      - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-      - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-      - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+      - `node scripts/generate-skills-showcase-data.mjs`
+      - `node scripts/generate-skills-showcase-github-data.mjs`
+      - `scripts/validate-skills-showcase-data.sh`
     - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website; update those files or record why no curated website copy changed.
     - Targeted `rg` checks for the behavior being changed.
     - `git diff --check`
@@ -103,9 +101,9 @@ From /Users/georgele/projects/tools/agentic-skills, run targeted-skill-builder f
 
 - Prefer the smallest durable workflow fix.
 - Do not create a broad meta-skill when a precise skill, existing-skill update, or reusable prompt solves the problem.
-- Do not route every idea to `$spec-interview`; use `$feature-interview` when the planning destination is uncertain.
-- Treat broad `$analyze-sessions` work as optional evidence for recurrence and trend analysis, not the default workflow.
-- Use `$session-triage` for one immediate issue, correction, repo incident, or suspected skill failure that needs verification before building or updating a skill.
+- Do not route every idea to `/spec-interview`; use `/feature-interview` when the planning destination is uncertain.
+- Treat broad `/analyze-sessions` work as optional evidence for recurrence and trend analysis, not the default workflow.
+- Use `/session-triage` for one immediate issue, correction, repo incident, or suspected skill failure that needs verification before building or updating a skill.
 - Do not read unrelated history, projects, or private files for examples without user direction.
 - Do not create or modify GitHub Actions workflows.
 

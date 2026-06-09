@@ -2,7 +2,7 @@
 name: exec
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
-version: v0.3
+version: v0.2
 argument-hint: "[--phase] [--execute-approved]"
 invocation: orchestrator
 ---
@@ -67,7 +67,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If errors cannot be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 11b. **Quality gate for non-trivial mutations:**
    - Apply `docs/quality-gate-contract.md` when the completed step changes source code, scripts, configuration, schemas, generated runtime assets, deploy behavior, workflow policy, validation rules, command surfaces, or multiple files.
-   - If the completed step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before shipping: run `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; include changed generated assets in the shipping boundary.
+   - If the completed step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before shipping: run `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`; include changed generated assets in the shipping boundary.
    - For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts. Update affected site files or record why no curated website copy changed.
    - Before commit/push, produce a diff-aware ship manifest for the exact shipping boundary. It must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
    - For non-trivial source changes, run a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.

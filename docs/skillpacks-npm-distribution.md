@@ -175,7 +175,7 @@ Business AFPS defaults to the first deliberate pack because current docs recomme
 Implementation rule:
 
 - Do not hard-code deck pack lists only inside the CLI command handler.
-- Generate deck metadata into `dist/skillpacks-manifest.json`.
+- Generate deck metadata into `packages/skillpacks/dist/skillpacks-manifest.json`.
 - Make `install-deck` a resolver over that manifest.
 - In COA A, the resolver forwards selected packs to `scripts/pack.sh install`.
 - In COA B, the resolver can install or recommend scoped package lists such as `@skillpacks/vard`.
@@ -190,7 +190,7 @@ Even though phase 1 starts as a monolith, it should generate a manifest before p
 Proposed file:
 
 ```text
-dist/skillpacks-manifest.json
+packages/skillpacks/dist/skillpacks-manifest.json
 ```
 
 Proposed shape:
@@ -237,7 +237,7 @@ Proposed shape:
 }
 ```
 
-The manifest should be generated from repository files, not hand-maintained. Start with a script such as `scripts/build-skillpacks-manifest.mjs`.
+The manifest should be generated from repository files, not hand-maintained. Start with a package-owned script such as `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
 
 Manifest consumers:
 
@@ -332,7 +332,7 @@ Goal: make the approved COA B/C deck behavior real while the initial package sti
 
 Tasks:
 
-- Add a generated `dist/skillpacks-manifest.json` inside the package staging boundary.
+- Add a generated `packages/skillpacks/dist/skillpacks-manifest.json` inside the package staging boundary.
 - Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` or extend package build to emit the manifest.
 - Add deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
 - Include package-list fields for COA B and registry-tag fields for COA C.
@@ -348,7 +348,7 @@ Exit criteria:
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
-- `dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
+- `packages/skillpacks/dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
 - Manifest validation passes from a clean checkout.
 
 ### Phase 3 - Node Port Parity

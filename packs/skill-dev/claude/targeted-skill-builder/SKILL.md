@@ -2,7 +2,7 @@
 name: targeted-skill-builder
 description: Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: "[workflow gap, correction, skill name, or capability request]"
 ---
 
@@ -66,9 +66,9 @@ This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/
     - `pnpm --dir tests bench:coverage`
     - Focused layer1 benchmark setup tests when `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, or `tests/layer4/setups/` changed.
     - If any tracked `SKILL.md` or `PACK.md` behavior or metadata changed, refresh the Skills Showcase data:
-      - `node scripts/generate-skills-showcase-data.mjs`
-      - `node scripts/generate-skills-showcase-github-data.mjs`
-      - `scripts/validate-skills-showcase-data.sh`
+      - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+      - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+      - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
     - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website; update those files or record why no curated website copy changed.
     - Targeted `rg` checks for the behavior being changed.
     - `git diff --check`

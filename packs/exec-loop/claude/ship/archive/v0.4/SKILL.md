@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.5
+version: v0.4
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -50,9 +50,9 @@ d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party 
 ### 1d. Skills Showcase freshness
 If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before commit:
 
-- `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-- `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-- `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+- `node scripts/generate-skills-showcase-data.mjs`
+- `node scripts/generate-skills-showcase-github-data.mjs`
+- `scripts/validate-skills-showcase-data.sh`
 
 Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
 

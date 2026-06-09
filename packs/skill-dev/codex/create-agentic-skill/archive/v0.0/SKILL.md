@@ -1,28 +1,30 @@
 ---
 name: create-agentic-skill
-description: Create or update a repo-managed skill inside this agentic-skills checkout under global/claude and optionally global/codex, then validate, commit, and push it
+description: Create or update a repo-managed skill inside this agentic-skills checkout under global/codex and optionally global/claude, then validate, commit, and push it
 type: execution
-version: v0.1
-argument-hint: <skill-name> [description] [--claude-only|--codex-only|--mirror]
+version: v0.0
+argument-hint: "<skill-name> [description] [--codex-only|--claude-only|--mirror]"
 ---
 
 # Create Agentic Skill
 
-Use this skill when the user wants to add or update a skill in the `agentic-skills` repository itself. This is the repo-managed counterpart to `create-local-skill`, which writes experimental user-local skills under `~/.claude/skills` or `~/.codex/skills`.
+Invoke as `$create-agentic-skill`.
+
+Use this skill when the user wants to add or update a skill in the `agentic-skills` repository itself. This is the repo-managed counterpart to `$create-local-skill`, which writes experimental user-local skills under `~/.codex/skills` or `~/.claude/skills`.
 
 ## Process
 
 1. **Confirm repository context.**
-   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `global/claude/`, and `global/codex/`.
+   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `global/codex/`, and `global/claude/`.
    - If the current repo is not `agentic-skills`, stop and ask for the checkout path.
    - Inspect `git status --short` and identify unrelated dirty files before editing.
 
 2. **Resolve skill identity.**
    - Parse `<skill-name>` as kebab-case.
    - Parse the description when provided; otherwise ask for a one-line description.
-   - Default to creating both `global/claude/<skill-name>/SKILL.md` and `global/codex/<skill-name>/SKILL.md` when the skill should exist for both agents.
-   - Honor `--claude-only`, `--codex-only`, or `--mirror`.
-   - If a local-only workflow is requested, route to `create-local-skill` instead.
+   - Default to creating both `global/codex/<skill-name>/SKILL.md` and `global/claude/<skill-name>/SKILL.md` when the skill should exist for both agents.
+   - Honor `--codex-only`, `--claude-only`, or `--mirror`.
+   - If a local-only workflow is requested, route to `$create-local-skill` instead.
 
 3. **Check for conflicts.**
    - Refuse to overwrite an existing unrelated skill without explicit user approval.
@@ -36,9 +38,9 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
      - `type`
      - `version`
      - optional `argument-hint`
-   - For Claude skills, use `## Process` when that matches existing Claude conventions.
-   - For mirrored Codex skills, include `Invoke as \`$<skill-name>\`.` after the title.
-   - Include clear workflow/process, output, and constraints sections.
+   - For Codex skills, include `Invoke as \`$<skill-name>\`.` after the title.
+   - For Claude skills, omit the Codex invocation line unless existing local convention requires it.
+   - Include clear `## Workflow`, `## Output`, and `## Constraints` sections.
    - Prefer durable procedure over one-off project notes.
 
 5. **Apply correction lessons when relevant.**
@@ -51,17 +53,17 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
    - When adding or materially updating a custom setup, include a deterministic quality rubric when practical. Score local fixture facts, concrete file/command references, expected next-route handoffs, specificity, and forbidden fabrications as appropriate for the skill.
    - If output quality cannot be scored reliably from local fixtures, record an explicit blocked/deferred quality note in the setup or coverage review instead of adding a weak subjective rubric.
    - If deterministic local coverage is not safe yet, record an explicit `blocked` row with `blocked_reason` and `next_command`.
-   - Use `/targeted-skill-builder <skill-name> benchmark coverage` when the coverage work needs a focused follow-up before the skill can ship.
+   - Use `$targeted-skill-builder <skill-name> benchmark coverage` when the coverage work needs a focused follow-up before the skill can ship.
    - Run `pnpm --dir tests bench:coverage` after updating the matrix.
 
 7. **Validate.**
    - Read back the new or updated `SKILL.md` files.
-   - Run search checks for old skill names, missing `version:`, missing Codex invocation lines in Codex skills, and accidental writes under `~/.claude/skills` or `~/.codex/skills`.
+   - Run `rg` checks for old skill names, missing `version:`, missing `Invoke as` in Codex skills, and accidental writes under `~/.codex/skills` or `~/.claude/skills`.
    - Run `pnpm --dir tests bench:coverage` and any focused setup tests changed for the new benchmark row.
    - If any tracked `SKILL.md` or `PACK.md` was created, deleted, renamed, or changed in behavior or metadata, refresh the Skills Showcase data before shipping:
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-     - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+     - `node scripts/generate-skills-showcase-data.mjs`
+     - `node scripts/generate-skills-showcase-github-data.mjs`
+     - `scripts/validate-skills-showcase-data.sh`
    - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website. Update the relevant site files or explicitly record why no curated website copy changed.
    - Confirm unrelated dirty files remain unstaged.
 
@@ -74,14 +76,14 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 ## Output
 
 - **Skill**: name and target paths created or updated
-- **Mode**: Claude, Codex, or mirrored
+- **Mode**: Codex, Claude, or mirrored
 - **Validation**: checks run and result
 - **Git**: commit hash and pushed branch
 - **Next Work**: exact follow-up, or `none` only when there is no useful follow-up
 
 ## Constraints
 
-- Do not write to `~/.claude/skills` or `~/.codex/skills`; that is `create-local-skill`.
+- Do not write to `~/.codex/skills` or `~/.claude/skills`; that is `$create-local-skill`.
 - Do not update README or generated references when they already have unrelated unstaged edits unless the user explicitly asks to include them.
 - Do not create pack-local skills unless the user asks for a pack path.
 - Do not leave repo-managed skill changes uncommitted or unpushed unless the user explicitly says not to ship.

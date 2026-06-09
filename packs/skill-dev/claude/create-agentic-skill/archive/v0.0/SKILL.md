@@ -2,7 +2,7 @@
 name: create-agentic-skill
 description: Create or update a repo-managed skill inside this agentic-skills checkout under global/claude and optionally global/codex, then validate, commit, and push it
 type: execution
-version: v0.1
+version: v0.0
 argument-hint: <skill-name> [description] [--claude-only|--codex-only|--mirror]
 ---
 
@@ -59,9 +59,9 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
    - Run search checks for old skill names, missing `version:`, missing Codex invocation lines in Codex skills, and accidental writes under `~/.claude/skills` or `~/.codex/skills`.
    - Run `pnpm --dir tests bench:coverage` and any focused setup tests changed for the new benchmark row.
    - If any tracked `SKILL.md` or `PACK.md` was created, deleted, renamed, or changed in behavior or metadata, refresh the Skills Showcase data before shipping:
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-     - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+     - `node scripts/generate-skills-showcase-data.mjs`
+     - `node scripts/generate-skills-showcase-github-data.mjs`
+     - `scripts/validate-skills-showcase-data.sh`
    - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website. Update the relevant site files or explicitly record why no curated website copy changed.
    - Confirm unrelated dirty files remain unstaged.
 

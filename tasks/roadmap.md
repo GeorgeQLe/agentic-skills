@@ -47,12 +47,12 @@ Add generated package metadata that makes deck installation COA B/C-shaped: a ma
 ### Plan
 
 1. Manifest generator.
-   - [ ] Add `scripts/build-skillpacks-manifest.mjs`.
-   - [ ] Generate `dist/skillpacks-manifest.json` from `global/`, `packs/`, `PACK.md`, and `SKILL.md` frontmatter.
+   - [ ] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
+   - [ ] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from `global/`, `packs/`, `PACK.md`, and `SKILL.md` frontmatter.
    - [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
    - [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps` with package-list and registry-tag fields.
 2. CLI integration.
-   - [ ] Include `dist/skillpacks-manifest.json` in the package allowlist.
+   - [ ] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the package allowlist.
    - [ ] Add `skillpacks list --json` using the manifest.
    - [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
    - [ ] Preserve `pack.sh` forwarding for all existing commands.
