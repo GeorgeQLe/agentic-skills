@@ -129,6 +129,10 @@ The alignment-page convention is authored in `docs/alignment-page-convention.md`
 
 **Glossary write-forward.** Skills with `type: research` or `type: analysis` automatically receive a glossary additions gate in their `ALIGNMENT-PAGE.md`. The gate renders proposed terms with per-term approve/edit/reject/flag controls. Only approved terms are appended to the target glossary during the confirmed-page write step.
 
+### Excalidraw Convention
+
+The Excalidraw styling convention is authored in `docs/excalidraw-convention.md`. All Excalidraw diagrams and inline SVG renderings in this project use sketchy/hand-drawn borders (`roughness: 1`) on shapes but clean system fonts on text (`fontFamily: 2` sans-serif for labels, `fontFamily: 3` monospace for code). Never use `fontFamily: 1` (Virgil). For HTML SVG, apply an `feTurbulence`+`feDisplacementMap` sketch filter to `rect, line, polygon` only — not to `<text>`. See the convention doc for the full filter snippet and rationale.
+
 ### Shipping Contract Template
 
 When a skill says "Follow the shared shipping contract convention", apply these rules:
