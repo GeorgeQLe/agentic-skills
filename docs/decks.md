@@ -146,4 +146,4 @@ The graduation signal differs by deck:
 
 ## npm Distribution
 
-When distributed via npm, decks map to install presets. See `alignment/idea-scope-brief-npm-distribution.html` for how each COA handles deck-based installation.
+When distributed via npm, decks map to package-list and registry-tag metadata that the CLI can materialize from the current backend. See `docs/skillpacks-npm-distribution.md` and `alignment/idea-scope-brief-npm-distribution.html` for the approved distribution route.

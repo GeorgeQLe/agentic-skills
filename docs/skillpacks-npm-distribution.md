@@ -9,7 +9,7 @@ Approved decisions:
 - Primary path: hybrid, starting with COA A and evolving toward COA B/C only when demand justifies it.
 - Public npm/CLI name: `skillpacks`.
 - Version granularity: skill-level versioning remains authoritative for user pinning.
-- Deck installation: monolith presets first, with a migration path to package lists or registry tags.
+- Deck installation: COA B/C-shaped metadata first. Decks should be represented as curated package lists and registry tags; the initial COA A monolith may materialize those selections locally, but deck behavior should not be hard-coded as monolith-only presets.
 - Artifact route: write the detailed design doc in `docs/` first, then use it as the implementation roadmap.
 
 Current npm check on 2026-06-08:
@@ -50,7 +50,8 @@ The npm path is additive until it proves stable.
 4. Preserve `scripts/pack.sh` while the npm CLI reaches parity.
 5. Keep the first npm release as one package.
 6. Add a generated manifest early so later COA B/C migration does not require inventing metadata twice.
-7. Avoid GitHub Actions; publishing remains an explicit local or agent-run command unless separately requested.
+7. Model decks as package-list and registry-tag metadata from the start, even while the first package ships as a monolith.
+8. Avoid GitHub Actions; publishing remains an explicit local or agent-run command unless separately requested.
 
 ## Package Architecture
 
@@ -140,31 +141,38 @@ Initial command map:
 | `skillpacks set-update-mode <mode>` | `scripts/pack.sh set-update-mode <mode>` | Keeps `warn`, `auto`, and `unset`. |
 | `skillpacks set-mode <mode>` | `scripts/pack.sh set-mode <mode>` | Keeps agent mode designation. |
 | `skillpacks init-global` | `init.sh` or Node equivalent | Installs global core skills to user-level roots. |
-| `skillpacks install-deck <deck>` | new resolver over `scripts/pack.sh install` | Installs deck presets. |
+| `skillpacks install-deck <deck>` | manifest deck resolver over `scripts/pack.sh install` | Installs the packs selected by deck metadata. |
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.
 
 ## Deck Installation
 
-Decks are not a new runtime primitive in phase 1. They are named presets that resolve to current pack installs.
+The approved deck answer points to COA B and COA C. That means decks should be modeled as installable package-list and registry-tag metadata, not as an implementation detail of the first monolith package.
 
-Supported deck names:
+Phase 1 can still run from the monolith package. The distinction is that `skillpacks install-deck <deck>` reads deck metadata from the manifest and then materializes that selection using the currently available backend. In the first release, that backend is the local monolith plus `scripts/pack.sh install`. Later, the same deck metadata can drive scoped package installs or registry tag resolution.
 
-| Deck | Phase 1 command | Underlying install |
-| --- | --- | --- |
-| VARD | `skillpacks install-deck vard` | `skillpacks install vard` |
-| ORD | `skillpacks install-deck ord` | `skillpacks install ord` |
-| Business AFPS | `skillpacks install-deck business-afps` | `skillpacks install business-discovery` |
-| Business AFPS full | `skillpacks install-deck business-afps --full` | `skillpacks install business-discovery customer-lifecycle business-growth business-ops` |
-| Devtool AFPS | `skillpacks install-deck devtool-afps` | `skillpacks install devtool` |
+Supported deck metadata:
+
+| Deck | CLI command | Package-list meaning | Registry tags |
+| --- | --- | --- | --- |
+| VARD | `skillpacks install-deck vard` | `vard` | `deck:vard` |
+| ORD | `skillpacks install-deck ord` | `ord` | `deck:ord` |
+| Business AFPS | `skillpacks install-deck business-afps` | `business-discovery` by default | `deck:business-afps`, `stage:discovery` |
+| Business AFPS full | `skillpacks install-deck business-afps --full` | `business-discovery`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
+| Devtool AFPS | `skillpacks install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
 
 Business AFPS defaults to the first deliberate pack because current docs recommend progressive installation. The `--full` flag can exist for users who intentionally want the whole deliberate lane.
 
-Future migration path:
+Implementation rule:
 
-- COA B can turn rapid decks into packages such as `@skillpacks/vard` and `@skillpacks/ord`, while deliberate decks remain curated package lists.
-- COA C can map decks to manifest tags such as `deck:vard`, `deck:ord`, `deck:business-afps`, and `deck:devtool-afps`.
-- The CLI command stays `skillpacks install-deck <deck>` so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
+- Do not hard-code deck pack lists only inside the CLI command handler.
+- Generate deck metadata into `dist/skillpacks-manifest.json`.
+- Make `install-deck` a resolver over that manifest.
+- In COA A, the resolver forwards selected packs to `scripts/pack.sh install`.
+- In COA B, the resolver can install or recommend scoped package lists such as `@skillpacks/vard`.
+- In COA C, the resolver can query skills by registry tags such as `deck:vard`.
+
+The CLI command stays `skillpacks install-deck <deck>` so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
 
 ## Manifest Design
 
@@ -309,19 +317,21 @@ Exit criteria:
 - `node bin/skillpacks.mjs refresh`, `status`, `doctor`, `pin`, and `unpin` match `scripts/pack.sh` behavior.
 - Existing `scripts/pack.sh` behavior is unchanged.
 
-### Phase 2 - Deck Presets And Manifest
+### Phase 2 - Deck Metadata And Manifest
 
-Goal: make the approved deck behavior real while preparing the migration path.
+Goal: make the approved COA B/C deck behavior real while the initial package still ships as a COA A monolith.
 
 Tasks:
 
 - Add a generated `dist/skillpacks-manifest.json`.
 - Add `scripts/build-skillpacks-manifest.mjs`.
 - Add deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
-- Implement `skillpacks install-deck <deck>`.
-- Implement `skillpacks install-deck business-afps --full`.
+- Include package-list fields for COA B and registry-tag fields for COA C.
+- Implement `skillpacks install-deck <deck>` as a manifest resolver.
+- Implement `skillpacks install-deck business-afps --full` from manifest metadata.
 - Add `skillpacks list --json` using the manifest.
 - Add validation that every deck references existing packs.
+- Add validation that deck package-list and registry-tag fields are present.
 - Add validation that every manifest skill path exists and has `version:`.
 
 Exit criteria:
@@ -329,6 +339,7 @@ Exit criteria:
 - `node bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
 - `node bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
 - `node bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
+- `dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
 - Manifest validation passes from a clean checkout.
 
 ### Phase 3 - Node Port Parity
@@ -398,7 +409,8 @@ Tasks:
 - Track install usage and maintenance pain from the monolith package.
 - Identify "hot packs" that deserve scoped packages.
 - Use manifest data to generate `@skillpacks/<pack>` package metadata experimentally.
-- Add registry-style tags for decks and skill categories.
+- Use deck package-list metadata to generate scoped package recommendations.
+- Use registry-style deck tags to support per-skill and category resolution.
 - Consider `@skillpacks/sdk` only after the manifest is stable and used by the CLI.
 
 Exit criteria:
@@ -475,6 +487,6 @@ Start with Phase 0 and Phase 1 in one implementation pass:
 1. Confirm publish rights for `skillpacks`.
 2. Add root package metadata and a thin CLI wrapper.
 3. Prove one temp-repo install from the wrapper.
-4. Add deck presets and manifest only after the wrapper is stable.
+4. Add deck metadata and the manifest resolver only after the wrapper is stable.
 
-This keeps the first implementation small while preserving the approved route toward deck presets, skill-level pinning, and later package/registry evolution.
+This keeps the first implementation small while preserving the approved route toward COA B/C deck semantics, skill-level pinning, and later package/registry evolution.

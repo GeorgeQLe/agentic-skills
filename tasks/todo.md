@@ -1,3 +1,25 @@
+## Skillpacks Deck Metadata Approval Revision
+
+### Phase 1: Design Revision
+- [x] Capture prompt history for the revised `idea-scope-brief` approval YAML.
+- [x] Compare the revised deck gate against the previously shipped npm roadmap.
+- [x] Update `docs/skillpacks-npm-distribution.md` so deck installation uses COA B/C-shaped package-list and registry-tag metadata.
+- [x] Update `docs/decks.md` so npm deck distribution no longer says decks simply map to install presets.
+
+### Phase 2: Verification And Shipping
+- [x] Verify revised deck wording and roadmap phase names with targeted searches.
+- [x] Run `git diff --check`.
+- [x] Commit and push intended changes.
+
+### Review Notes
+- New approval differs from the previously shipped roadmap: the overall route still starts with COA A, but the deck-installation gate now says `Other / None of the above` with notes `COA B and C`.
+- Updated `docs/skillpacks-npm-distribution.md` so deck installation is modeled as COA B/C-shaped package-list and registry-tag metadata that the first monolith CLI materializes through a manifest resolver.
+- Updated `docs/decks.md` so npm deck distribution no longer describes decks as simple install presets.
+- Scope control: no package implementation, no root `package.json`, no CLI code, and no GitHub Actions were added.
+- Verification passed: targeted `rg` scan for revised deck terms, roadmap phase naming, stale preset wording, and `git diff --check`.
+
+---
+
 ## Skillpacks npm Distribution Design
 
 ### Phase 1: Approved Design Handoff
@@ -13,7 +35,7 @@
 - [x] Commit and push intended changes.
 
 ### Review Notes
-- Approved path: use `skillpacks` as the public npm/CLI name, start with one monolith package, keep skill-level pinning, expose deck installation as monolith presets first, and preserve a migration path toward scoped packages or registry tags.
+- Approved path at original shipment: use `skillpacks` as the public npm/CLI name, start with one monolith package, keep skill-level pinning, and preserve a migration path toward scoped packages or registry tags. Revised by the later deck metadata approval above: deck installation should now be modeled as COA B/C package-list and registry-tag metadata that the monolith CLI materializes.
 - Current registry preflight: `npm view skillpacks`, `npm view @skillpacks/cli`, and `npm view @skillpacks/core` returned `E404`; `npm view agentic-skills` returned an existing external package at `2.5.1`, so the old repo name should not be the npm package name.
 - Design artifact: `docs/skillpacks-npm-distribution.md`.
 - Scope control: no package implementation, no root `package.json`, no CLI code, and no GitHub Actions were added in this pass.

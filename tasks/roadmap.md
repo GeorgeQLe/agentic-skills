@@ -1,3 +1,23 @@
+## Current Revision — Skillpacks Deck Metadata Approval
+
+### Goal
+
+Update the already-shipped `skillpacks` npm distribution design to honor the newer deck-installation approval: overall strategy still starts with COA A, but deck installation should be shaped by COA B/C package-list and registry-tag semantics.
+
+### Plan
+
+1. Preserve invocation context.
+   - [x] Capture the visible `idea-scope-brief` approval YAML under `prompts/idea-scope-brief/`.
+   - [x] Compare the new approval against the previously shipped roadmap prompt.
+2. Revise the design artifact.
+   - [x] Update `docs/skillpacks-npm-distribution.md` so deck installation is modeled as manifest metadata, not opaque monolith presets.
+   - [x] Keep COA A as the first package transport while making `install-deck` a resolver over COA B/C-compatible metadata.
+   - [x] Update the live deck documentation sentence that referenced npm install presets.
+3. Track and verify.
+   - [x] Record current-phase work in `tasks/todo.md`.
+   - [x] Verify the design doc contains the revised deck approval, manifest resolver, package-list fields, and registry-tag fields.
+   - [x] Run `git diff --check`.
+
 ## Current Revision — Skillpacks npm Distribution Design
 
 ### Goal
