@@ -1,0 +1,13 @@
+active_paths:
+  - skills-showcase
+
+product_paths:
+  - id: skills-showcase
+    label: Skills Showcase Deck-Builder
+    scope_path: research/skills-showcase/
+    status: active
+    source_skill: idea-scope-brief
+    reason: Rebuild gskillpacks.com from informational catalog to interactive deck-builder experience
+    pipeline_stage: idea-scope-brief
+    last_touched: "2026-06-09"
+    next_skill: /icp

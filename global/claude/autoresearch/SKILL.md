@@ -17,7 +17,7 @@ When the user wants to autonomously optimize a measurable codebase property: ben
 
 ## Preconditions
 
-- A `program.md` file exists (default: `./program.md`, or path from `$ARGUMENTS`)
+- A `program.md` file exists (default: `./program.md`, or path from `$ARGUMENTS`). If missing, recommend `/autoresearch-prep` to scaffold one.
 - Git working tree is clean (no uncommitted changes)
 - The metric command runs successfully and prints a parseable number
 
@@ -64,7 +64,7 @@ metric_timeout_seconds: <default 300>
 
 ### 0. Validate Preconditions
 
-1. Resolve `program.md` path from `$ARGUMENTS` (default: `./program.md`).
+1. Resolve `program.md` path from `$ARGUMENTS` (default: `./program.md`). If the file does not exist, stop and recommend `/autoresearch-prep`.
 2. Parse and validate required fields: `Metric.command`, `Metric.direction`, `Budget.max_iterations`, `Sandbox.files`.
 3. Verify git working tree is clean (`git status --porcelain` is empty). Stop if dirty.
 4. Create `.autoresearch/` directory if it does not exist.
