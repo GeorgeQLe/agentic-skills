@@ -197,6 +197,12 @@ export function fingerprintFiles(repoRoot, files) {
   return hash.digest("hex");
 }
 
+export function contentHash(repoRoot, relativePath) {
+  return createHash("sha256")
+    .update(readText(repoRoot, relativePath))
+    .digest("hex");
+}
+
 export function fileFingerprint(repoRoot, files) {
   const hash = createHash("sha256");
   for (const relativePath of files) {

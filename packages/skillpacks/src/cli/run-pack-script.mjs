@@ -9,6 +9,7 @@ const checkoutRoot = resolve(packageRoot, '..', '..');
 const packageJsonPath = join(packageRoot, 'package.json');
 const packScriptPath = resolvePackagedPath('scripts/pack.sh');
 const initScriptPath = resolvePackagedPath('init.sh');
+const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 
 function resolvePackagedPath(relativePath) {
   const packagedPath = join(packageRoot, relativePath);
@@ -57,6 +58,21 @@ function packageVersion() {
   return packageJson.version;
 }
 
+function readManifest() {
+  if (!existsSync(manifestPath)) {
+    throw new Error(
+      `manifest not found at ${manifestPath}. Run 'npm --workspace skillpacks run build:manifest' from a source checkout or reinstall skillpacks.`
+    );
+  }
+
+  try {
+    return JSON.parse(readFileSync(manifestPath, 'utf8'));
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(`failed to read manifest at ${manifestPath}: ${detail}`);
+  }
+}
+
 function commandExists(command) {
   const result = spawnSync(command, ['--version'], {
     stdio: 'ignore'
@@ -90,6 +106,56 @@ function runCommand(command, args, options = {}) {
   });
 }
 
+function printManifestJson(args) {
+  if (args.length !== 1 || args[0] !== '--json') {
+    throw new Error('list --json does not accept additional arguments');
+  }
+  console.log(JSON.stringify(readManifest(), null, 2));
+  return 0;
+}
+
+function availableDeckNames(manifest) {
+  return (manifest.decks || []).map((deck) => deck.name).sort();
+}
+
+function resolveDeckInstall(args) {
+  let deckName = null;
+  let full = false;
+
+  for (const arg of args) {
+    if (arg === '--full') {
+      full = true;
+      continue;
+    }
+    if (arg.startsWith('-')) {
+      throw new Error(`install-deck: unsupported flag '${arg}'. Supported flags: --full`);
+    }
+    if (deckName) {
+      throw new Error(`install-deck: unexpected argument '${arg}'`);
+    }
+    deckName = arg;
+  }
+
+  if (!deckName) {
+    throw new Error('install-deck requires a deck name');
+  }
+
+  const manifest = readManifest();
+  const deck = (manifest.decks || []).find((candidate) => candidate.name === deckName);
+  if (!deck) {
+    const available = availableDeckNames(manifest).join(', ') || '(none)';
+    throw new Error(`unknown deck '${deckName}'. Available decks: ${available}`);
+  }
+
+  const lane = full ? 'full' : 'default';
+  const packs = deck.package_list?.[lane] || (full ? deck.full_packs : deck.default_packs);
+  if (!Array.isArray(packs) || packs.length === 0) {
+    throw new Error(`deck '${deckName}' has no ${lane} package list in the manifest`);
+  }
+
+  return { deckName, lane, packs };
+}
+
 function usage() {
   console.log(`skillpacks ${packageVersion()}
 
@@ -98,10 +164,12 @@ Usage:
 
 Commands:
   list                         List available packs
+  list --json                  Print the packaged skillpacks manifest as JSON
   list-packs                   List enabled packs from .agents/project.json
   status                       Show project designation and installed skills
   recommend                    Recommend packs from repository signals
   install <name...>            Enable packs or individual skills
+  install-deck <deck> [--full] Enable packs selected by deck metadata
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
@@ -129,10 +197,23 @@ export async function runSkillpacksCli(args) {
     return 0;
   }
 
+  if (command === 'list' && rest.includes('--json')) {
+    return printManifestJson(rest);
+  }
+
   requireCommand('bash', 'Install bash before running skillpacks.');
 
   if (command === 'init-global') {
     return runCommand('bash', [initScriptPath, ...rest]);
+  }
+
+  if (command === 'install-deck') {
+    const deckInstall = resolveDeckInstall(rest);
+    requireCommand(
+      'jq',
+      'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
+    );
+    return runCommand('bash', [packScriptPath, 'install', ...deckInstall.packs]);
   }
 
   if (!PACK_COMMANDS.has(command)) {

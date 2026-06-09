@@ -47,20 +47,20 @@ Add generated package metadata that makes deck installation COA B/C-shaped: a ma
 ### Plan
 
 1. Manifest generator.
-   - [ ] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
-   - [ ] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from `global/`, `packs/`, `PACK.md`, and `SKILL.md` frontmatter.
-   - [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
-   - [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps` with package-list and registry-tag fields.
+   - [x] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
+   - [x] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from `global/`, `packs/`, `PACK.md`, and `SKILL.md` frontmatter.
+   - [x] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
+   - [x] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps` with package-list and registry-tag fields.
 2. CLI integration.
-   - [ ] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the package allowlist.
-   - [ ] Add `skillpacks list --json` using the manifest.
-   - [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
-   - [ ] Preserve `pack.sh` forwarding for all existing commands.
+   - [x] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the package allowlist.
+   - [x] Add `skillpacks list --json` using the manifest.
+   - [x] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
+   - [x] Preserve `pack.sh` forwarding for all existing commands.
 3. Validation.
-   - [ ] Add manifest `--check` validation for existing paths, version fields, deck pack references, package-list fields, and registry-tag fields.
-   - [ ] Add targeted tests or executable checks for manifest generation and deck install resolution.
-   - [ ] Run package dry-run and temp tarball install checks.
-   - [ ] Update generated showcase assets only if tracked skill/pack metadata changes.
+   - [x] Add manifest `--check` validation for existing paths, version fields, deck pack references, package-list fields, and registry-tag fields.
+   - [x] Add targeted executable checks for manifest generation and deck install resolution.
+   - [x] Run package dry-run and temp consumer install checks.
+   - [x] Avoid skill/pack catalog generated-data changes when tracked `SKILL.md` / `PACK.md` metadata does not change.
 
 ## Current Implementation - Skillpacks npm Distribution Phase 0/1
 

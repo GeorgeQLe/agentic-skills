@@ -56,30 +56,39 @@
 - Rationale: manifest generation, CLI behavior, and package boundary validation share the same files and should be integrated in one lane.
 
 ### Phase 2: Deck Metadata And Manifest
-- [ ] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
-- [ ] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from repository skill and pack sources.
-- [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
-- [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
-- [ ] Include COA B package-list fields and COA C registry-tag fields for every deck.
-- [ ] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the npm package allowlist.
-- [ ] Add `skillpacks list --json` using the manifest.
-- [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
-- [ ] Preserve `pack.sh` forwarding for all existing commands.
+- [x] Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
+- [x] Generate `packages/skillpacks/dist/skillpacks-manifest.json` from repository skill and pack sources.
+- [x] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
+- [x] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
+- [x] Include COA B package-list fields and COA C registry-tag fields for every deck.
+- [x] Include `packages/skillpacks/dist/skillpacks-manifest.json` in the npm package allowlist.
+- [x] Add `skillpacks list --json` using the manifest.
+- [x] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
+- [x] Preserve `pack.sh` forwarding for all existing commands.
 
 ### Verification And Shipping
-- [ ] Run `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs --check`.
-- [ ] Verify `node packages/skillpacks/bin/skillpacks.mjs list --json`.
-- [ ] Verify temp consumer repo `install-deck vard`.
-- [ ] Verify temp consumer repo `install-deck business-afps` and `install-deck business-afps --full`.
-- [ ] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
-- [ ] Run targeted package, routing, and generated-data checks as required by changed files.
-- [ ] Update review notes, history, ship manifest, commit, and push intended changes.
+- [x] Run `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs --check`.
+- [x] Verify `node packages/skillpacks/bin/skillpacks.mjs list --json`.
+- [x] Verify temp consumer repo `install-deck vard`.
+- [x] Verify temp consumer repo `install-deck business-afps` and `install-deck business-afps --full`.
+- [x] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
+- [x] Run targeted package, routing, and generated-data checks as required by changed files.
+- [x] Update review notes, history, and ship manifest.
+- [ ] Commit and push intended changes.
 
 ### Review Notes
 - Prepared after Phase 0/1 shipped in `b9b78312`.
 - Real `npm publish` remains out of scope for this phase unless the user explicitly changes the scope and confirms the external publish action.
 - 2026-06-09 split re-audit corrected stale Phase 2 manifest paths to the package workspace (`packages/skillpacks/scripts/` and `packages/skillpacks/dist/`); manifest/deck implementation remains unstarted.
 - 2026-06-09 split re-audit found active `exec`, `ship`, `create-agentic-skill`, and `targeted-skill-builder` contracts still referenced removed root Skills Showcase scripts; archived/bumped those skill mirrors and rewrote refresh commands to `apps/skills-showcase/scripts/...`.
+- Implemented package-owned manifest generation at `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` and generated `packages/skillpacks/dist/skillpacks-manifest.json` with 41 packs, 367 active skill records, and 4 deck records.
+- Manifest validation covers missing active skill paths, missing active skill versions, deck references to missing active pack directories, and missing package-list / registry-tag metadata. `devtool` and `game` are represented as active pack directories with null `PACK.md` metadata.
+- Added `skillpacks list --json` as a manifest read path while keeping `skillpacks list` forwarded to `pack.sh list`.
+- Added `skillpacks install-deck <deck> [--full]` as a manifest resolver over `bash scripts/pack.sh install ...`; `business-afps --full` selects `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops`.
+- Temp consumer checks passed from `/tmp`: `install-deck vard`, `install-deck business-afps`, `install-deck business-afps --full`, and `doctor` after each install. Negative checks for unknown deck and unsupported flag returned clear errors.
+- Package checks passed: `npm --workspace skillpacks run build:check`; parsed `npm pack packages/skillpacks/build --dry-run --json --silent` confirmed `dist/skillpacks-manifest.json` is included and `apps/`, `tasks/`, `prompts/`, `alignment/`, `tests/`, and `docs/history/` are excluded.
+- Repository integrity passed: manifest shape assertion, `node --check` for changed package/catalog scripts, `scripts/skill-pack-routing-audit.sh`, `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Skills Showcase validation refreshed GitHub proof data because `tasks/history.md` is one of its source inputs. Skill/pack catalog generated data and the benchmark matrix were rewritten by the validator but ended with no tracked diff.
 - Unrelated pre-existing local changes remain in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, and `scripts/generate-skillmap-excalidraw.mjs`; do not touch them unless the user redirects.
 
 ---

@@ -19,7 +19,8 @@ const checkMode = process.argv.includes("--check");
 
 const packageOwnedEntries = [
   { fromRoot: packageRoot, from: "bin", to: "bin" },
-  { fromRoot: packageRoot, from: "src", to: "src" }
+  { fromRoot: packageRoot, from: "src", to: "src" },
+  { fromRoot: packageRoot, from: "dist/skillpacks-manifest.json", to: "dist/skillpacks-manifest.json" }
 ];
 
 const repoOwnedEntries = [
@@ -38,6 +39,7 @@ const repoOwnedEntries = [
 const requiredBuildFiles = [
   "package.json",
   "bin/skillpacks.mjs",
+  "dist/skillpacks-manifest.json",
   "src/cli/run-pack-script.mjs",
   "scripts/pack.sh",
   "scripts/skill-links.sh",

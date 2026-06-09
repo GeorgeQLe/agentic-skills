@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-09 — Skillpacks deck manifest and CLI resolver
+
+- Added package-owned manifest generation at `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` and generated `packages/skillpacks/dist/skillpacks-manifest.json`.
+- Manifest output now records package metadata, source fingerprint, active packs, active skills with versions/content hashes/archive versions, and deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
+- Represented decks with both package-list and registry-tag fields so the current monolith CLI can materialize COA B/C-shaped metadata without starting the Phase 3 Node port.
+- Added `skillpacks list --json` as a manifest read path and `skillpacks install-deck <deck> [--full]` as a resolver that forwards selected packs to the existing `pack.sh install` backend.
+- Updated package staging and package allowlists so the generated manifest is required and included in the npm dry-run package boundary.
+- Real `npm publish` was not run.
+
 ## 2026-06-09 — Separate Skills Showcase from skillpacks package
 
 - Converted the repository root package metadata into a private `agentic-skills` workspace manifest with `apps/skills-showcase` and `packages/skillpacks` workspaces.
