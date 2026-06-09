@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-09 — autoresearch-prep skill
+
+- Created `global/claude/autoresearch-prep/` with SKILL.md (v0.0) and CHANGELOG.md.
+- Skill scaffolds a `program.md` for `/autoresearch` by auto-detecting codebase signals (benchmarks, tests, sandbox, excludes) and running a light interview for metric, research directions, and budget.
+- Updated `global/claude/autoresearch/SKILL.md` to recommend `/autoresearch-prep` when `program.md` is missing (preconditions bullet and step 0 validation).
+- Prompt history captured at `prompts/autoresearch-prep/skill-prompt-20260609-120000-initial-implementation.md`.
+- Skill archive audit passed with 0 violations.
+
 ## 2026-06-09 — Skillpacks deck manifest and CLI resolver
 
 - Added package-owned manifest generation at `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` and generated `packages/skillpacks/dist/skillpacks-manifest.json`.
