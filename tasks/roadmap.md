@@ -1,3 +1,32 @@
+## Current Implementation - Skillpacks npm Distribution Phase 2
+
+### Goal
+
+Add generated package metadata that makes deck installation COA B/C-shaped: a manifest with pack, skill, and deck metadata; a manifest validator; `skillpacks list --json`; and `skillpacks install-deck <deck>` materialized through the current monolith backend.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: manifest generation, CLI behavior, and package boundary validation share the same files and should be integrated in one lane.
+
+### Plan
+
+1. Manifest generator.
+   - [ ] Add `scripts/build-skillpacks-manifest.mjs`.
+   - [ ] Generate `dist/skillpacks-manifest.json` from `global/`, `packs/`, `PACK.md`, and `SKILL.md` frontmatter.
+   - [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
+   - [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps` with package-list and registry-tag fields.
+2. CLI integration.
+   - [ ] Include `dist/skillpacks-manifest.json` in the package allowlist.
+   - [ ] Add `skillpacks list --json` using the manifest.
+   - [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
+   - [ ] Preserve `pack.sh` forwarding for all existing commands.
+3. Validation.
+   - [ ] Add manifest `--check` validation for existing paths, version fields, deck pack references, package-list fields, and registry-tag fields.
+   - [ ] Add targeted tests or executable checks for manifest generation and deck install resolution.
+   - [ ] Run package dry-run and temp tarball install checks.
+   - [ ] Update generated showcase assets only if tracked skill/pack metadata changes.
+
 ## Current Implementation - Skillpacks npm Distribution Phase 0/1
 
 ### Goal

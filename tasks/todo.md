@@ -1,3 +1,36 @@
+## Skillpacks npm Distribution Phase 2
+
+### Execution Profile
+- Parallel mode: serial
+- Rationale: manifest generation, CLI behavior, and package boundary validation share the same files and should be integrated in one lane.
+
+### Phase 2: Deck Metadata And Manifest
+- [ ] Add `scripts/build-skillpacks-manifest.mjs`.
+- [ ] Generate `dist/skillpacks-manifest.json` from repository skill and pack sources.
+- [ ] Include pack names, skill names, tools, versions, content hashes, archive versions, source paths, and status.
+- [ ] Include deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
+- [ ] Include COA B package-list fields and COA C registry-tag fields for every deck.
+- [ ] Include `dist/skillpacks-manifest.json` in the npm package allowlist.
+- [ ] Add `skillpacks list --json` using the manifest.
+- [ ] Add `skillpacks install-deck <deck>` and `skillpacks install-deck business-afps --full`.
+- [ ] Preserve `pack.sh` forwarding for all existing commands.
+
+### Verification And Shipping
+- [ ] Run `node scripts/build-skillpacks-manifest.mjs --check`.
+- [ ] Verify `node bin/skillpacks.mjs list --json`.
+- [ ] Verify temp consumer repo `install-deck vard`.
+- [ ] Verify temp consumer repo `install-deck business-afps` and `install-deck business-afps --full`.
+- [ ] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
+- [ ] Run targeted package, routing, and generated-data checks as required by changed files.
+- [ ] Update review notes, history, ship manifest, commit, and push intended changes.
+
+### Review Notes
+- Prepared after Phase 0/1 shipped in `b9b78312`.
+- Real `npm publish` remains out of scope for this phase unless the user explicitly changes the scope and confirms the external publish action.
+- Unrelated pre-existing local changes remain in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, and `scripts/generate-skillmap-excalidraw.mjs`; do not touch them unless the user redirects.
+
+---
+
 ## Skillpacks npm Distribution Phase 0/1
 
 ### Execution Profile
