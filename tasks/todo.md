@@ -74,7 +74,7 @@
 - [x] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
 - [x] Run targeted package, routing, and generated-data checks as required by changed files.
 - [x] Update review notes, history, and ship manifest.
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ### Review Notes
 - Prepared after Phase 0/1 shipped in `b9b78312`.
