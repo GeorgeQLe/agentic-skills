@@ -1,3 +1,45 @@
+## Skillpacks npm Distribution Phase 0/1
+
+### Execution Profile
+- Parallel mode: serial
+- Rationale: package metadata, CLI wrapper, task docs, and verification all share the same shipping boundary.
+
+### Phase 0: Reservation And Preflight
+- [x] Capture prompt history for the `exec` invocation.
+- [x] Inspect approved npm distribution design and existing script contracts.
+- [x] Re-check safe npm registry/account information for `skillpacks` without publishing.
+- [x] Confirm package license metadata from current repository files.
+- [x] Document that real `npm publish` is out of scope for this pass.
+
+### Phase 1: Monolith Package And Thin CLI
+- [x] Add root `package.json` for `skillpacks`.
+- [x] Add `bin/skillpacks.mjs`.
+- [x] Add `src/cli/run-pack-script.mjs` or equivalent dispatcher.
+- [x] Forward current `pack.sh` commands while preserving consumer project `cwd`.
+- [x] Implement `init-global` by invoking packaged `init.sh`.
+- [x] Add dependency checks for `bash` and write-command `jq`.
+
+### Verification And Shipping
+- [x] Verify `node bin/skillpacks.mjs list`.
+- [x] Verify temp consumer repo install/status/doctor behavior.
+- [x] Run `npm pack --dry-run`.
+- [x] Run targeted existing repository checks appropriate for package metadata.
+- [x] Update review notes, history, commit, and push intended changes.
+
+### Review Notes
+- Added a root `skillpacks@0.1.0` npm package boundary with `bin/skillpacks.mjs`, `src/cli/run-pack-script.mjs`, and a narrow `files` allowlist.
+- The CLI delegates existing project-local commands to packaged `scripts/pack.sh` while preserving the consumer project's current working directory. `init-global` delegates to packaged `init.sh`.
+- Package metadata uses `license: UNLICENSED` because no repository `LICENSE` file exists. Real `npm publish` is intentionally out of scope until explicit publish approval, account readiness, and final package metadata are confirmed.
+- Safe npm preflight: `npm view skillpacks`, `npm view @skillpacks/cli`, and `npm view @skillpacks/core` returned `E404`; `npm whoami` returned `ENEEDAUTH`.
+- Local npm cache note: default `npm pack` hit root-owned files in `~/.npm`; validation used `npm_config_cache=/tmp/skillpacks-npm-cache` without changing home-directory ownership.
+- Package dry-run: 5,508 files, 9.24 MB package size, 53.33 MB unpacked size, zero denied files from `alignment/`, `prompts/`, `tasks/`, `apps/`, `tests/`, or `docs/history/`.
+- Packaged tarball install passed from `/tmp`: installed `quality-sweep` from `node_modules/skillpacks`, and `doctor` reported the installed Claude/Codex skill roots as `ok`.
+- Validation exposed and fixed packaged content gaps: `ord-ship` now recommends installing the `devtool` pack before graduating to `devtool-adoption`; ORD/VARD rapid deck skills now have benchmark coverage metadata.
+- Verification passed: CLI smoke, tarball install, `npm pack --dry-run`, Node syntax checks, routing audit, skill version audit, archive audit, dependency audit, benchmark coverage, focused `bench-coverage` layer1 tests, generated showcase validation, and `git diff --check`.
+- Unrelated pre-existing local changes are present in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, and `scripts/generate-skillmap-excalidraw.mjs`; this phase will not touch them.
+
+---
+
 ## Skillpacks Deck Metadata Approval Revision
 
 ### Phase 1: Design Revision

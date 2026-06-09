@@ -1,0 +1,39 @@
+{
+  "name": "skillpacks",
+  "version": "0.1.0",
+  "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
+  "type": "module",
+  "bin": {
+    "skillpacks": "bin/skillpacks.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "global/",
+    "packs/",
+    "scripts/pack.sh",
+    "scripts/skill-links.sh",
+    "docs/decks.md",
+    "docs/packs.md",
+    "docs/QUICKSTART.md",
+    "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "init.sh"
+  ],
+  "scripts": {
+    "pack:dry-run": "npm pack --dry-run",
+    "skillpacks:list": "node bin/skillpacks.mjs list"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "claude-code",
+    "codex",
+    "skills"
+  ],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  }
+}

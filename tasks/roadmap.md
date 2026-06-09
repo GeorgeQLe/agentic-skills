@@ -1,3 +1,38 @@
+## Current Implementation - Skillpacks npm Distribution Phase 0/1
+
+### Goal
+
+Make the first npm distribution artifact real without publishing: add root package metadata, add a thin `skillpacks` CLI wrapper over existing install scripts, prove it works locally and in a temp consumer project, and verify the npm tarball boundary.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: package metadata, CLI wrapper, task docs, and verification all share the same shipping boundary; parallel write lanes would add coordination cost without reducing risk.
+
+### Plan
+
+1. Preserve invocation and active task state.
+   - [x] Capture the visible `exec` invocation under `prompts/exec/`.
+   - [x] Inspect the approved npm distribution design and existing script contracts.
+   - [x] Record the active implementation phase in `tasks/todo.md`.
+2. Phase 0 preflight.
+   - [x] Re-check safe npm registry/account information for `skillpacks` without publishing.
+   - [x] Confirm license/package metadata choice based on repository files.
+   - [x] Document that real `npm publish` is out of scope for this pass.
+3. Phase 1 implementation.
+   - [x] Add root `package.json` for `skillpacks`.
+   - [x] Add `bin/skillpacks.mjs`.
+   - [x] Add `src/cli/run-pack-script.mjs` or equivalent dispatcher.
+   - [x] Forward current `pack.sh` commands while preserving consumer project `cwd`.
+   - [x] Implement `init-global` by invoking packaged `init.sh`.
+   - [x] Add dependency checks for `bash` and write-command `jq`.
+4. Verification and ship.
+   - [x] Verify `node bin/skillpacks.mjs list`.
+   - [x] Verify temp consumer repo install/status/doctor behavior.
+   - [x] Run `npm pack --dry-run`.
+   - [x] Run targeted existing repository checks appropriate for package metadata.
+   - [x] Update review notes, history, commit, and push intended changes.
+
 ## Current Revision — Skillpacks Deck Metadata Approval
 
 ### Goal

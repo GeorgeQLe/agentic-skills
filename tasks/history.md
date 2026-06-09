@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-08 — Skillpacks npm distribution Phase 0/1
+
+- Added root `skillpacks@0.1.0` package metadata and a zero-dependency `skillpacks` CLI entry point that delegates existing project-local commands to packaged `scripts/pack.sh`.
+- Implemented `init-global` delegation to packaged `init.sh`, plus `bash` and write-command `jq` dependency checks.
+- Proved direct checkout CLI usage, temp consumer project install/status/doctor, npm dry-run package boundary, and local tarball install from `/tmp`.
+- Fixed packaged validation gaps found during the pass: archived/bumped mirrored `ord-ship` to require installing the `devtool` pack before `devtool-adoption`, and added benchmark coverage rows for active ORD/VARD rapid deck skills.
+- Refreshed Skills Showcase generated data and benchmark matrix after skill metadata and coverage changes.
+- Real `npm publish` was not run because publishing requires explicit approval and npm auth is not configured on this machine.
+
 ## 2026-06-08 — TTS narration cutoff fix (chunking + h2 fallback)
 
 - Fixed Kokoro TTS silent truncation on long sections by adding `chunkText()` helper that splits at sentence boundaries (~1000 chars max) and iterating chunks sequentially in `speakKokoro()`.
