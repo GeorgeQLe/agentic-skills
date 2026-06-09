@@ -1,3 +1,38 @@
+## Current Implementation - Separate Skills Showcase From Skillpacks Package
+
+### Goal
+
+Keep one git repository while separating the public Skills Showcase app from the publishable `skillpacks` npm package. `global/` and `packs/` remain the canonical skill sources, with a shared internal catalog layer used by both consumers.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: workspace metadata, package staging, generator paths, and verification boundaries all share repository-level paths and should be integrated in one lane.
+
+### Plan
+
+1. Workspace setup.
+   - [x] Rewrite the root `package.json` as private workspace metadata for `agentic-skills`.
+   - [x] Add workspace recognition for `apps/skills-showcase` and `packages/skillpacks`.
+   - [x] Keep existing `pnpm --dir apps/skills-showcase ...` commands working during the transition.
+2. Package relocation.
+   - [x] Move the `skillpacks` CLI and source code under `packages/skillpacks/`.
+   - [x] Add `packages/skillpacks/package.json` with the publishable package metadata.
+   - [x] Add a package build script that stages only package-owned code, canonical skill sources, required install scripts, and selected docs into `packages/skillpacks/build/`.
+   - [x] Make source-checkout CLI execution and staged package execution both resolve `pack.sh` and `init.sh` correctly.
+3. Website relocation.
+   - [x] Move Skills Showcase data generators and validator under `apps/skills-showcase/scripts/`.
+   - [x] Keep generated outputs under `apps/skills-showcase/public/assets/`, the temporary `docs/skills-showcase/assets/` mirror, and the website-owned benchmark matrix.
+   - [x] Update commands, comments, and documentation to identify these files as website-owned.
+4. Shared catalog extraction.
+   - [x] Add `scripts/catalog/*.mjs` helpers for frontmatter parsing, pack/skill scanning, archive discovery, benchmark report discovery, and content hashing.
+   - [x] Update the website generators and package staging script to read through this internal catalog layer.
+   - [x] Keep the catalog layer read-only.
+5. Verification and shipping.
+   - [ ] Add package boundary checks so package verification does not mutate website-owned generated assets.
+   - [ ] Run package, website, repository integrity, boundary, and tarball exclusion checks.
+   - [ ] Record review notes in `tasks/todo.md` and history, then commit and push intended changes.
+
 ## Current Implementation - Skillpacks npm Distribution Phase 2
 
 ### Goal

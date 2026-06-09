@@ -1,3 +1,54 @@
+## Separate Skills Showcase From Skillpacks Package
+
+### Execution Profile
+- Parallel mode: serial
+- Rationale: workspace metadata, package relocation, generator paths, and boundary validation share repository-level files and generated outputs.
+
+### Phase 1: Workspace And Package Boundary
+- [x] Rewrite root `package.json` as private `agentic-skills` workspace metadata.
+- [x] Add workspace recognition for `apps/skills-showcase` and `packages/skillpacks`.
+- [x] Move `bin/skillpacks.mjs` and `src/cli/run-pack-script.mjs` into `packages/skillpacks/`.
+- [x] Add `packages/skillpacks/package.json`.
+- [x] Add `packages/skillpacks/scripts/build-package.mjs`.
+- [x] Ensure package staging excludes `apps/`, `tasks/`, `prompts/`, `alignment/`, `tests/`, and `docs/history/`.
+
+### Phase 2: Website Generators And Shared Catalog
+- [x] Move Skills Showcase generator and validator scripts into `apps/skills-showcase/scripts/`.
+- [x] Add a read-only shared catalog layer under `scripts/catalog/`.
+- [x] Update generators to read catalog helpers and continue writing website-owned generated outputs.
+- [x] Update docs and app copy to point at the app-owned generator commands.
+
+### Verification And Shipping
+- [x] Run `node packages/skillpacks/bin/skillpacks.mjs --version`.
+- [x] Run `node packages/skillpacks/bin/skillpacks.mjs list`.
+- [x] Run `node packages/skillpacks/scripts/build-package.mjs --check`.
+- [x] Run `npm pack packages/skillpacks/build --dry-run --json --silent`.
+- [x] Install the staged tarball in a temp consumer and run `skillpacks install quality-sweep` plus `skillpacks doctor`.
+- [x] Run `pnpm --dir apps/skills-showcase test`.
+- [x] Run `pnpm --dir apps/skills-showcase build`.
+- [x] Run `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`.
+- [x] Run `scripts/skill-pack-routing-audit.sh`, `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, and `git diff --check`.
+- [x] Verify package checks leave `apps/skills-showcase/`, `docs/skills-showcase/`, and `docs/benchmark-results-matrix.md` unchanged.
+- [x] Verify website validation leaves package staging and metadata unchanged.
+- [x] Confirm npm dry-run excludes `apps/`, `tasks/`, `prompts/`, `alignment/`, `tests/`, and `docs/history/`.
+- [x] Update review notes, history, ship manifest, commit, and push intended changes.
+
+### Review Notes
+- Implementation started from the approved separation plan: one repo, independent monorepo consumers, shared internal catalog, and no npm publish.
+- `node packages/skillpacks/bin/skillpacks.mjs --version`, `node packages/skillpacks/bin/skillpacks.mjs list`, and `node packages/skillpacks/scripts/build-package.mjs --check` passed during implementation.
+- Package staging uses tracked `global/` and `packs/` files only, selected repo install scripts/docs, and package-owned `bin/` and `src/`.
+- `npm pack packages/skillpacks/build --dry-run --json --silent` passed and reported no `apps/`, `tasks/`, `prompts/`, `alignment/`, `tests/`, or `docs/history/` entries.
+- Temp consumer package install passed from `/tmp`: installed `quality-sweep` from the staged `skillpacks-0.1.0.tgz`, and `doctor` reported `.claude/skills/quality-sweep` and `.codex/skills/quality-sweep` as `ok`.
+- `pnpm --dir apps/skills-showcase build` passed. The first app test run found a stale generated `apps/skills-showcase/alignment/animation-state-machine.html`; regenerated it with `pnpm --dir apps/skills-showcase exec jiti scripts/render-animation-state-machine-page.ts`, then `pnpm --dir apps/skills-showcase test` passed 12 files / 132 tests.
+- Made the GitHub proof generator deterministic by default: committed proof data uses local git evidence unless `SKILLS_SHOWCASE_REFRESH_GITHUB=1` is set for an ad hoc refresh. This fixed validator flakiness caused by public GitHub metadata availability changing between runs.
+- `pnpm --dir apps/skills-showcase validate:data` and root `npm run skills-showcase:validate-data` both passed with fresh generated data.
+- Boundary checks passed: package verification left website-owned generated assets unchanged, and website validation left package staging/metadata unchanged.
+- Integrity checks passed: `scripts/skill-pack-routing-audit.sh`, `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, script `node --check` commands, and `git diff --check`.
+- A CLI smoke run rewrote `.agents/project.json`; that project-designation churn was restored because it is not part of this migration.
+- Unrelated pre-existing local changes remain in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, and `scripts/generate-skillmap-excalidraw.mjs`; do not touch them unless the user redirects.
+
+---
+
 ## Skillpacks npm Distribution Phase 2
 
 ### Execution Profile
@@ -17,10 +68,10 @@
 
 ### Verification And Shipping
 - [ ] Run `node scripts/build-skillpacks-manifest.mjs --check`.
-- [ ] Verify `node bin/skillpacks.mjs list --json`.
+- [ ] Verify `node packages/skillpacks/bin/skillpacks.mjs list --json`.
 - [ ] Verify temp consumer repo `install-deck vard`.
 - [ ] Verify temp consumer repo `install-deck business-afps` and `install-deck business-afps --full`.
-- [ ] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
+- [ ] Run `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` and confirm manifest inclusion plus task/prompt/alignment/test exclusions.
 - [ ] Run targeted package, routing, and generated-data checks as required by changed files.
 - [ ] Update review notes, history, ship manifest, commit, and push intended changes.
 

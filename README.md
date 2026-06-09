@@ -145,14 +145,21 @@ agentic-skills/
 │   ├── project-fleet/{claude,codex}/<name>/SKILL.md
 │   └── *-kanban/{claude,codex}/<name>/SKILL.md
 ├── scripts/
+│   ├── catalog/
 │   ├── pack.sh
 │   ├── skill-deps.sh
 │   ├── skill-mirror-parity-audit.sh
 │   ├── skill-pack-routing-audit.sh
 │   └── skill-versions.sh
+├── apps/
+│   └── skills-showcase/
+├── packages/
+│   └── skillpacks/
 ├── init.sh
 └── docs/
 ```
+
+The repository root is private workspace metadata. The publishable `skillpacks` package lives in `packages/skillpacks/`, while the public Skills Showcase app and its data generators live in `apps/skills-showcase/`.
 
 ## Global Core
 

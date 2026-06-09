@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-09 — Separate Skills Showcase from skillpacks package
+
+- Converted the repository root package metadata into a private `agentic-skills` workspace manifest with `apps/skills-showcase` and `packages/skillpacks` workspaces.
+- Moved the publishable `skillpacks` CLI package into `packages/skillpacks/` with package-owned metadata, CLI source, and a staging build script.
+- Added a read-only shared catalog layer under `scripts/catalog/` for frontmatter parsing, active skill/pack discovery, archive versions, benchmark report discovery, and content hashing.
+- Moved Skills Showcase generators and validator into `apps/skills-showcase/scripts/` and kept generated outputs as website-owned assets: app public assets, the temporary docs mirror, and `docs/benchmark-results-matrix.md`.
+- Updated app copy and active docs to use app-local generation/validation commands and package-local npm paths.
+- Added package staging boundary checks so package verification fails if it mutates website-owned generated assets.
+- Regenerated the stale `apps/skills-showcase/alignment/animation-state-machine.html` reference page after the app test gate found it no longer matched the current animation model.
+- Real `npm publish` was not run; this migration only separates workspace/package boundaries and local verification gates.
+
 ## 2026-06-08 — Skillpacks npm distribution Phase 0/1
 
 - Added root `skillpacks@0.1.0` package metadata and a zero-dependency `skillpacks` CLI entry point that delegates existing project-local commands to packaged `scripts/pack.sh`.

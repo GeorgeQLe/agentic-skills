@@ -1,75 +1,29 @@
 #!/usr/bin/env node
 
-import { createHash } from "node:crypto";
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  activeSkillPaths,
+  compactText,
+  discoverBenchmarkReportPaths,
+  discoverBenchmarkRunReportPaths,
+  fingerprintFiles,
+  gitFiles,
+  listPacks,
+  parseSkill,
+  readJson as readCatalogJson,
+  readText as readCatalogText,
+  titleize
+} from "../../../scripts/catalog/index.mjs";
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const outputPath = path.join(repoRoot, "docs/skills-showcase/assets/skills-data.js");
 const appOutputPath = path.join(repoRoot, "apps/skills-showcase/public/assets/skills-data.js");
 const matrixOutputPath = path.join(repoRoot, "docs/benchmark-results-matrix.md");
 
-function gitFiles() {
-  const output = execFileSync("git", ["ls-files"], {
-    cwd: repoRoot,
-    encoding: "utf8"
-  });
-  return output.split("\n").filter(Boolean).sort();
-}
-
 function readText(relativePath) {
-  return readFileSync(path.join(repoRoot, relativePath), "utf8");
-}
-
-function parseFrontmatter(markdown) {
-  if (!markdown.startsWith("---\n")) {
-    return {};
-  }
-
-  const end = markdown.indexOf("\n---", 4);
-  if (end === -1) {
-    return {};
-  }
-
-  const frontmatter = markdown.slice(4, end).split("\n");
-  const fields = {};
-
-  for (const line of frontmatter) {
-    if (!line.trim() || line.trim().startsWith("#")) {
-      continue;
-    }
-
-    const match = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-    if (!match) {
-      continue;
-    }
-
-    const key = match[1];
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    fields[key] = value || null;
-  }
-
-  return fields;
-}
-
-function titleize(name) {
-  return name
-    .split(/[-_]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-function unique(values) {
-  return Array.from(new Set(values.filter(Boolean))).sort();
+  return readCatalogText(repoRoot, relativePath);
 }
 
 function parsePercent(value) {
@@ -77,25 +31,8 @@ function parsePercent(value) {
   return match ? Number(match[1]) : null;
 }
 
-function compactText(value, maxLength = 700) {
-  const clean = String(value || "")
-    .replace(/\r\n/g, "\n")
-    .replace(/\/(?:private\/)?var\/folders\/[^\s)`]+\/skill-test-[A-Za-z0-9_-]+\/?/g, "")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-  if (clean.length <= maxLength) return clean;
-  return `${clean.slice(0, maxLength - 1).trimEnd()}…`;
-}
-
 function readJson(relativePath) {
-  const absolutePath = path.join(repoRoot, relativePath);
-  if (!existsSync(absolutePath)) return null;
-  try {
-    return JSON.parse(readFileSync(absolutePath, "utf8"));
-  } catch {
-    return null;
-  }
+  return readCatalogJson(repoRoot, relativePath);
 }
 
 function parseMarkdownTableRows(text, heading) {
@@ -376,80 +313,9 @@ function buildWorkflowBenchmarks(benchmarkEvidence) {
   return result;
 }
 
-function skillTags({ name, type, scope, pack, platform }) {
-  const raw = [
-    type,
-    scope,
-    pack,
-    platform,
-    ...name.split(/[-_]+/).filter((part) => part.length > 2)
-  ];
-  return unique(raw).slice(0, 8);
-}
-
-function parseSkill(relativePath) {
-  const text = readText(relativePath);
-  const fields = parseFrontmatter(text);
-  const segments = relativePath.split("/");
-  const scope = segments[0] === "global" ? "global" : "pack";
-  const platform = scope === "global" ? segments[1] : segments[2];
-  const pack = scope === "global" ? null : segments[1];
-  const fallbackName = segments[segments.length - 2];
-  const name = fields.name || fallbackName;
-
-  return {
-    id: [scope, pack, platform, name].filter(Boolean).join("-"),
-    name,
-    title: titleize(name),
-    description: fields.description || null,
-    type: fields.type || null,
-    version: fields.version || null,
-    argumentHint: fields["argument-hint"] || null,
-    platform,
-    command: platform === "claude" ? `/${name}` : `$${name}`,
-    scope,
-    pack,
-    path: relativePath,
-    mirrorKey: name,
-    tags: skillTags({ name, type: fields.type, scope, pack, platform })
-  };
-}
-
-function parsePack(relativePath) {
-  const text = readText(relativePath);
-  const fields = parseFrontmatter(text);
-  const name = relativePath.split("/")[1];
-  const heading = text.match(/^#\s+(.+)$/m);
-  return {
-    name,
-    title: fields.name || (heading ? heading[1].trim() : titleize(name)),
-    description: fields.description || null,
-    path: relativePath
-  };
-}
-
-function fingerprintFor(files) {
-  const hash = createHash("sha256");
-  for (const relativePath of files) {
-    hash.update(relativePath);
-    hash.update("\0");
-    hash.update(readText(relativePath));
-    hash.update("\0");
-  }
-  return hash.digest("hex");
-}
-
 function generateBenchmarkMatrix(files, activeSkillNames) {
-  const runsDir = path.join(repoRoot, "tests/benchmarks/runs");
-  const reportPaths = existsSync(runsDir)
-    ? readdirSync(runsDir, { withFileTypes: true })
-        .filter((d) => d.isDirectory())
-        .map((d) => `tests/benchmarks/runs/${d.name}/report.json`)
-        .filter((p) => existsSync(path.join(repoRoot, p)))
-        .sort()
-    : [];
-  const curatedReports = files.filter((f) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
-  const reviewFiles = files.filter((f) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
+  const reportPaths = discoverBenchmarkRunReportPaths(repoRoot);
+  const { testReports: curatedReports, reviewReports: reviewFiles } = discoverBenchmarkReportPaths(files);
 
   const curatedBySkill = new Map();
   for (const rp of curatedReports) {
@@ -559,7 +425,7 @@ function generateBenchmarkMatrix(files, activeSkillNames) {
 
   let md = `# Benchmark Results Matrix
 
-> Generated by \`scripts/generate-skills-showcase-data.mjs\` on ${now}. Do not edit by hand.
+> Generated by \`apps/skills-showcase/scripts/generate-skills-showcase-data.mjs\` on ${now}. Do not edit by hand.
 
 This matrix tracks skills that already have persisted benchmark run data and grades. It is separate from the benchmark coverage registry in \`tests/harness/bench-coverage.ts\`, which tracks whether a skill has custom, generic, or blocked setup coverage.
 
@@ -614,56 +480,25 @@ Both fixtures require explicit user permission before any live GitHub operation 
 }
 
 function main() {
-  const files = gitFiles();
+  const files = gitFiles(repoRoot);
   const benchmarkEvidence = benchmarkEvidenceBySkill(files);
-  const skillPaths = files.filter((file) => {
-    return (
-      /^global\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
-      (
-        /^packs\/[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
-        !file.split("/").includes("archive")
-      )
-    );
-  });
-  const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
-  const benchmarkPaths = files.filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
-  const benchmarkReviewPaths = files.filter((file) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
+  const skillPaths = activeSkillPaths(files);
+  const { testReports: benchmarkPaths, reviewReports: benchmarkReviewPaths } = discoverBenchmarkReportPaths(files);
   const benchmarkDemoPaths = Array.from(benchmarkEvidence.values())
     .flatMap((evidence) => (evidence.demo ? [evidence.demo.runPath] : []))
     .filter((file) => files.includes(file));
+  const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
   const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths, ...benchmarkReviewPaths, ...benchmarkDemoPaths].sort();
 
   const skills = skillPaths
-    .map(parseSkill)
+    .map((skillPath) => parseSkill(repoRoot, skillPath))
     .map((skill) => {
       const evidence = benchmarkEvidence.get(skill.mirrorKey);
       return evidence ? { ...skill, benchmarkEvidence: evidence } : skill;
     })
     .sort((a, b) => a.path.localeCompare(b.path));
-  const packMetadata = new Map(packPaths.map((packPath) => {
-    const pack = parsePack(packPath);
-    return [pack.name, pack];
-  }));
-
-  const packs = Array.from(new Set([
-    ...packMetadata.keys(),
-    ...skills.map((skill) => skill.pack).filter(Boolean)
-  ]))
-    .sort()
-    .map((name) => {
-      const packSkills = skills.filter((skill) => skill.pack === name);
-      const metadata = packMetadata.get(name);
-      return {
-        name,
-        title: metadata ? metadata.title : titleize(name),
-        description: metadata ? metadata.description : null,
-        platforms: unique(packSkills.map((skill) => skill.platform)),
-        skillCount: packSkills.length,
-        path: metadata ? metadata.path : null
-      };
-    });
-
-  const sourceFingerprint = fingerprintFor(sourcePaths);
+  const packs = listPacks(repoRoot, files, skills);
+  const sourceFingerprint = fingerprintFiles(repoRoot, sourcePaths);
 
   const data = {
     generatedAt: "1970-01-01T00:00:00.000Z",
@@ -678,7 +513,7 @@ function main() {
   };
 
   const serialized = JSON.stringify(data, null, 2);
-  const contents = `// Generated by scripts/generate-skills-showcase-data.mjs. Do not edit by hand.\nwindow.SKILLS_SHOWCASE_DATA = ${serialized};\n`;
+  const contents = `// Generated by apps/skills-showcase/scripts/generate-skills-showcase-data.mjs. Do not edit by hand.\nwindow.SKILLS_SHOWCASE_DATA = ${serialized};\n`;
 
   mkdirSync(path.dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, contents);

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Validates that committed Skills Showcase generated assets are fresh.
-# Usage: scripts/validate-skills-showcase-data.sh
+# Validates that committed website-owned Skills Showcase generated assets are fresh.
+# Usage: apps/skills-showcase/scripts/validate-skills-showcase-data.sh
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 GENERATORS=(
-  "scripts/generate-skills-showcase-data.mjs"
-  "scripts/generate-skills-showcase-github-data.mjs"
+  "apps/skills-showcase/scripts/generate-skills-showcase-data.mjs"
+  "apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs"
 )
 
 GENERATED_ASSETS=(
@@ -40,7 +40,7 @@ done
 AFTER="$(fingerprint_assets)"
 
 if [[ "$BEFORE" != "$AFTER" ]]; then
-  echo "Skills Showcase generated data is stale."
+  echo "Skills Showcase website-owned generated data is stale."
   echo
   echo "Regenerated asset status:"
   git status --short -- "${GENERATED_ASSETS[@]}"
@@ -52,4 +52,4 @@ if [[ "$BEFORE" != "$AFTER" ]]; then
   exit 1
 fi
 
-echo "Skills Showcase generated data is fresh."
+echo "Skills Showcase website-owned generated data is fresh."

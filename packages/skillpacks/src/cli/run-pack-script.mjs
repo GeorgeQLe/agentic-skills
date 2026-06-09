@@ -1,13 +1,28 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = join(moduleDir, '..', '..');
+const packageRoot = resolve(moduleDir, '..', '..');
+const checkoutRoot = resolve(packageRoot, '..', '..');
 const packageJsonPath = join(packageRoot, 'package.json');
-const packScriptPath = join(packageRoot, 'scripts', 'pack.sh');
-const initScriptPath = join(packageRoot, 'init.sh');
+const packScriptPath = resolvePackagedPath('scripts/pack.sh');
+const initScriptPath = resolvePackagedPath('init.sh');
+
+function resolvePackagedPath(relativePath) {
+  const packagedPath = join(packageRoot, relativePath);
+  if (existsSync(packagedPath)) {
+    return packagedPath;
+  }
+
+  const checkoutPath = join(checkoutRoot, relativePath);
+  if (existsSync(checkoutPath)) {
+    return checkoutPath;
+  }
+
+  return packagedPath;
+}
 
 const PACK_COMMANDS = new Set([
   'list',

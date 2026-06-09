@@ -57,14 +57,15 @@ The npm path is additive until it proves stable.
 
 ### Package
 
-The root npm package should be named `skillpacks`.
+The publishable npm package is named `skillpacks` and lives under `packages/skillpacks/`. The repository root stays private workspace metadata for the monorepo.
 
-Proposed root `package.json` shape:
+Current package `package.json` shape:
 
 ```json
 {
   "name": "skillpacks",
   "version": "0.1.0",
+  "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {
     "skillpacks": "bin/skillpacks.mjs"
@@ -74,30 +75,36 @@ Proposed root `package.json` shape:
     "src/",
     "global/",
     "packs/",
-    "scripts/",
+    "scripts/pack.sh",
+    "scripts/skill-links.sh",
     "docs/decks.md",
     "docs/packs.md",
+    "docs/QUICKSTART.md",
+    "docs/skillpacks-npm-distribution.md",
     "README.md",
-    "LICENSE"
+    "AGENTS.md",
+    "CLAUDE.md",
+    "init.sh"
   ],
+  "license": "UNLICENSED",
   "engines": {
     "node": ">=18"
   }
 }
 ```
 
-The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
+The root `package.json` is private and declares workspaces for `apps/skills-showcase` and `packages/skillpacks`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
 
 ### CLI Entry Point
 
-`bin/skillpacks.mjs` should resolve the installed package root with `import.meta.url`, then dispatch commands into either:
+`packages/skillpacks/bin/skillpacks.mjs` resolves the installed package root with `import.meta.url`, then dispatches commands into either:
 
 - a thin wrapper around included repository scripts, for immediate parity; or
 - native Node modules under `src/cli/`, after the port is ready.
 
 Phase 1 should wrap existing scripts because `scripts/pack.sh` already owns install, remove, refresh, doctor, pin, unpin, status, and project-lock behavior.
 
-The wrapper must run `scripts/pack.sh` with the user's current working directory as the target project root. That preserves the current behavior where `.agents/project.json`, `.claude/skills`, and `.codex/skills` are written to the consumer project, not to the package install directory.
+The wrapper must run `scripts/pack.sh` with the user's current working directory as the target project root. That preserves the current behavior where `.agents/project.json`, `.claude/skills`, and `.codex/skills` are written to the consumer project, not to the package install directory. Source-checkout execution may fall back to the repository root; staged package execution should use files inside the package root.
 
 ### Included Repository Content
 
@@ -108,6 +115,8 @@ The npm tarball must include:
 - `scripts/pack.sh` and script helpers it sources, especially `scripts/skill-links.sh`.
 - `init.sh` or an equivalent `init-global` implementation.
 - deck and pack docs used for help output.
+
+The package build script at `packages/skillpacks/scripts/build-package.mjs` stages these files into `packages/skillpacks/build/` before `npm pack`. The staging step must not generate or mutate Skills Showcase assets.
 
 The tarball should exclude:
 
@@ -287,7 +296,7 @@ Tasks:
 - Decide whether the first release should be private dry-run only or public `0.1.0`.
 - Confirm license metadata for npm.
 - Confirm `jq` remains a documented dependency for write commands in phase 1.
-- Run `npm pack --dry-run` once the package file exists and verify the tarball excludes active-task artifacts.
+- Run `npm pack packages/skillpacks/build --dry-run --json --silent` once package staging exists and verify the tarball excludes active-task artifacts.
 
 Exit criteria:
 
@@ -301,20 +310,20 @@ Goal: publishable monolith package that delegates to current scripts.
 
 Tasks:
 
-- Add root `package.json` for `skillpacks`.
-- Add `bin/skillpacks.mjs`.
-- Add `src/cli/run-pack-script.mjs` or equivalent script dispatcher.
+- Add `packages/skillpacks/package.json` for `skillpacks`.
+- Add `packages/skillpacks/bin/skillpacks.mjs`.
+- Add `packages/skillpacks/src/cli/run-pack-script.mjs` or equivalent script dispatcher.
 - Implement command forwarding for existing `pack.sh` commands.
 - Implement `init-global` by invoking included `init.sh` or a small Node equivalent.
 - Preserve cwd as the consumer project root for all project-local writes.
 - Add dependency checks for `bash` and `jq` with actionable messages.
-- Add `npm pack --dry-run` verification.
+- Add package staging and `npm pack packages/skillpacks/build --dry-run --json --silent` verification.
 
 Exit criteria:
 
-- `node bin/skillpacks.mjs list` works from this repo.
-- `node bin/skillpacks.mjs install code-quality` works in a temp consumer repo.
-- `node bin/skillpacks.mjs refresh`, `status`, `doctor`, `pin`, and `unpin` match `scripts/pack.sh` behavior.
+- `node packages/skillpacks/bin/skillpacks.mjs list` works from this repo.
+- A tarball from `packages/skillpacks/build` can install `code-quality` in a temp consumer repo.
+- `node packages/skillpacks/bin/skillpacks.mjs refresh`, `status`, `doctor`, `pin`, and `unpin` match `scripts/pack.sh` behavior.
 - Existing `scripts/pack.sh` behavior is unchanged.
 
 ### Phase 2 - Deck Metadata And Manifest
@@ -323,8 +332,8 @@ Goal: make the approved COA B/C deck behavior real while the initial package sti
 
 Tasks:
 
-- Add a generated `dist/skillpacks-manifest.json`.
-- Add `scripts/build-skillpacks-manifest.mjs`.
+- Add a generated `dist/skillpacks-manifest.json` inside the package staging boundary.
+- Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` or extend package build to emit the manifest.
 - Add deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
 - Include package-list fields for COA B and registry-tag fields for COA C.
 - Implement `skillpacks install-deck <deck>` as a manifest resolver.
@@ -336,9 +345,9 @@ Tasks:
 
 Exit criteria:
 
-- `node bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
-- `node bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
-- `node bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
+- `node packages/skillpacks/bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
+- `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
+- `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
 - `dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
 - Manifest validation passes from a clean checkout.
 
@@ -424,8 +433,8 @@ Static checks:
 
 ```bash
 git diff --check
-node scripts/build-skillpacks-manifest.mjs --check
-npm pack --dry-run
+node packages/skillpacks/scripts/build-package.mjs --check
+npm pack packages/skillpacks/build --dry-run --json --silent
 ```
 
 Existing repository checks:
@@ -434,7 +443,7 @@ Existing repository checks:
 scripts/skill-versions.sh --missing
 scripts/skill-deps.sh --broken
 scripts/skill-pack-routing-audit.sh
-scripts/validate-skills-showcase-data.sh
+apps/skills-showcase/scripts/validate-skills-showcase-data.sh
 pnpm --dir tests bench:coverage
 ```
 
@@ -443,11 +452,11 @@ CLI temp-repo checks:
 ```bash
 TMPDIR=$(mktemp -d)
 cd "$TMPDIR"
-node /path/to/agentic-skills/bin/skillpacks.mjs install code-quality
-node /path/to/agentic-skills/bin/skillpacks.mjs status
-node /path/to/agentic-skills/bin/skillpacks.mjs doctor
-node /path/to/agentic-skills/bin/skillpacks.mjs install-deck vard
-node /path/to/agentic-skills/bin/skillpacks.mjs pin quality-sweep v0.0
+node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs install code-quality
+node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs status
+node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs doctor
+node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs install-deck vard
+node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs pin quality-sweep v0.0
 ```
 
 Published-package checks:
@@ -485,7 +494,7 @@ These should be answered before first publish, not before starting phase 1:
 Start with Phase 0 and Phase 1 in one implementation pass:
 
 1. Confirm publish rights for `skillpacks`.
-2. Add root package metadata and a thin CLI wrapper.
+2. Add workspace package metadata and a thin CLI wrapper under `packages/skillpacks`.
 3. Prove one temp-repo install from the wrapper.
 4. Add deck metadata and the manifest resolver only after the wrapper is stable.
 

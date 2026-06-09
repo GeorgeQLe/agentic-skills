@@ -71,9 +71,9 @@ Compact command index for all scripts in this repository.
 
 | Command | Description |
 | --- | --- |
-| `node scripts/generate-skills-showcase-data.mjs` | Generate skills showcase data |
-| `node scripts/generate-skills-showcase-github-data.mjs` | Generate GitHub proof data for showcase |
-| `scripts/validate-skills-showcase-data.sh` | Validate generated showcase data |
+| `pnpm --dir apps/skills-showcase generate:data` | Generate Skills Showcase app data and the temporary docs mirror |
+| `pnpm --dir apps/skills-showcase validate:data` | Validate website-owned generated showcase data |
+| `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` | Direct shell validator for generated showcase data freshness |
 
 ## Alignment Page Management
 

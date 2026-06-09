@@ -1,0 +1,3 @@
+packages:
+  - "apps/skills-showcase"
+  - "packages/skillpacks"

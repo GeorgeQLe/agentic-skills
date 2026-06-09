@@ -1,39 +1,17 @@
 {
-  "name": "skillpacks",
-  "version": "0.1.0",
-  "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
+  "name": "agentic-skills",
+  "private": true,
   "type": "module",
-  "bin": {
-    "skillpacks": "bin/skillpacks.mjs"
-  },
-  "files": [
-    "bin/",
-    "src/",
-    "global/",
-    "packs/",
-    "scripts/pack.sh",
-    "scripts/skill-links.sh",
-    "docs/decks.md",
-    "docs/packs.md",
-    "docs/QUICKSTART.md",
-    "README.md",
-    "AGENTS.md",
-    "CLAUDE.md",
-    "init.sh"
+  "workspaces": [
+    "apps/skills-showcase",
+    "packages/skillpacks"
   ],
   "scripts": {
-    "pack:dry-run": "npm pack --dry-run",
-    "skillpacks:list": "node bin/skillpacks.mjs list"
-  },
-  "keywords": [
-    "ai",
-    "agents",
-    "claude-code",
-    "codex",
-    "skills"
-  ],
-  "license": "UNLICENSED",
-  "engines": {
-    "node": ">=18"
+    "skillpacks:build": "npm --workspace skillpacks run build",
+    "skillpacks:list": "npm --workspace skillpacks run skillpacks:list",
+    "skillpacks:verify": "npm --workspace skillpacks run verify:package",
+    "skills-showcase:build": "pnpm --dir apps/skills-showcase build",
+    "skills-showcase:test": "pnpm --dir apps/skills-showcase test",
+    "skills-showcase:validate-data": "pnpm --dir apps/skills-showcase validate:data"
   }
 }
