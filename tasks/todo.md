@@ -21,8 +21,8 @@ Prepare the `skillpacks` npm package for a dry-run release by tightening package
 
 - [x] Step 4.1: Update package-included docs with npm usage, git-checkout usage, migration guidance, and package-version vs skill-version pinning troubleshooting.
 - [x] Step 4.2: Add or extend package-owned documentation contract tests for the Phase 4 release-readiness language.
-- [ ] Step 4.3: Run package staging, tarball dry-run inspection, and `npm publish --dry-run` locally without publishing.
-- [ ] Step 4.4: Record tarball/publish dry-run output in the ship manifest, update review notes, history, and ship intended Phase 4 changes only.
+- [x] Step 4.3: Run package staging, tarball dry-run inspection, and `npm publish --dry-run` locally without publishing.
+- [x] Step 4.4: Record tarball/publish dry-run output in the ship manifest, update review notes, history, and ship intended Phase 4 changes only.
 
 ### Step 4.1 Implementation Plan
 
@@ -66,6 +66,16 @@ Prepare the `skillpacks` npm package for a dry-run release by tightening package
 - Parse or inspect the JSON output to record package id, filename, packed/unpacked size, entry count, and denied-path absence (`alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, `docs/history/`).
 - Run `npm publish --dry-run` against `packages/skillpacks/build` without changing package access, creating tags, or publishing. If npm auth or registry access blocks the dry-run, stop and record the exact blocker; do not run real publish.
 - Run `git diff --check` and update review notes with dry-run evidence.
+
+### Step 4.3/4.4 Review Notes (2026-06-10)
+
+- Package staging passed: `npm --workspace skillpacks run build:check` reported `packages/skillpacks/dist/skillpacks-manifest.json` exact, staged 373 skills and 41 packs into `packages/skillpacks/build`, and passed the package staging boundary check. No package source or generated package artifacts changed.
+- Tarball dry-run inspection passed from `packages/skillpacks/` with a writable tmp cache: `npm_config_cache=/tmp/skillpacks-npm-cache npm pack ./build --dry-run --json --silent`. Parsed output: `skillpacks@0.1.0`, `skillpacks-0.1.0.tgz`, 2,348 entries, 5,220,684 bytes packed, 31,205,670 bytes unpacked.
+- Denied-path inspection of the tarball file list found no `alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, or `docs/history/` entries. Package-included docs present in the tarball: `README.md`, `docs/QUICKSTART.md`, `docs/decks.md`, `docs/packs.md`, and `docs/skillpacks-npm-distribution.md`.
+- Publish dry run passed from `packages/skillpacks/build`: `npm_config_cache=/tmp/skillpacks-npm-cache npm publish --dry-run --json`. npm printed `Publishing to https://registry.npmjs.org/ with tag latest and default access (dry-run)` and exited 0. Parsed output matched the tarball facts and included `shasum` `3c9748ca0b947cbd58a31e00e5e3f425e07ed076` and integrity `sha512-8rjxURX7+NKjo/BUV0BviODqq2XJusAb4oljpgqobG6ZxMJlJcfp/x0jcSKPzVX9077Lgp8CW8KnUe20v/V2vA==`.
+- No intended real publish was run. During a targeted review scan, an unsafe double-quoted `rg` pattern containing a Markdown command literal accidentally command-substituted `npm publish` from the repo root; that unintended command failed with `EROFS` before publication. A follow-up read-only registry check, `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache`, returned `E404` after sandbox escalation, confirming `skillpacks@*` is still absent from the registry. No tag, package access, or external release state was changed. Phase 5 still requires explicit user approval before any real publication.
+- Added a shell-safety lesson to `tasks/lessons.md`: do not put Markdown command literals with backticks inside double-quoted shell search patterns; use single quotes, escaping, or a pattern file.
+- Step 4.4 is marked complete in the same `$exec` run because it is the task-doc/history/manifest/ship work required by the `$exec` shipping contract after Step 4.3 completed cleanly; no separate source implementation remains.
 
 ---
 

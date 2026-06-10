@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-10 — Shell search patterns must not contain raw backticks
+
+- A targeted `rg` scan used a double-quoted pattern containing `` `npm publish` ``, so the shell performed command substitution and attempted to run `npm publish` from the repo root.
+- When scanning for literal command text that contains backticks, dollar signs, parentheses, or other shell-active characters, use single-quoted patterns, escape the characters, or put the pattern in a file. Do not place Markdown command literals inside double-quoted shell strings.
+- For any release-sensitive workflow, treat command-substitution mistakes as real safety incidents: capture the failed output, verify external state with a read-only registry query, and update the ship manifest before committing.
+
 ## 2026-06-10 — Research scope approval must precede synthesized research
 
 - Research-producing skills allowed Stage 1 to perform synthesized research and write working packets before the alignment page's research scope was approved.

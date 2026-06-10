@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 4 dry-run release checks
+
+- Ran package staging with `npm --workspace skillpacks run build:check`; the manifest check was exact, package staging included 373 skills and 41 packs, and the boundary check passed.
+- Ran `npm pack ./build --dry-run --json --silent` from `packages/skillpacks/` using `/tmp/skillpacks-npm-cache`; parsed output reported `skillpacks@0.1.0`, `skillpacks-0.1.0.tgz`, 2,348 entries, 5,220,684 bytes packed, and 31,205,670 bytes unpacked.
+- Verified the tarball file list contains package docs and no denied repo paths: no `alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, or `docs/history/` entries.
+- Ran `npm publish --dry-run --json` from `packages/skillpacks/build` using the same tmp cache; npm reported registry/tag/default access in dry-run mode and exited 0.
+- During a targeted review scan, an unsafe double-quoted search pattern containing a Markdown command literal accidentally command-substituted `npm publish` from the repo root; it failed with `EROFS` before publication.
+- Verified external registry state afterward with `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache` under sandbox escalation; npm returned `E404`, confirming `skillpacks@*` is still absent from the registry.
+- No npm package, tag, access setting, or external release state changed. Added a shell-safety lesson in `tasks/lessons.md`.
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 4 docs readiness
 
 - Scoped Phase 4 Documentation And Dry Run Release in `tasks/todo.md` and `tasks/roadmap.md` after Phase 3 completion.

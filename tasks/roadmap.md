@@ -101,20 +101,20 @@ Prepare the `skillpacks` npm package for a dry-run release by tightening package
    - [x] Add or extend package-owned tests that pin the release-readiness documentation language.
    - [x] Keep command ownership/dependency docs aligned with the CLI compatibility matrix.
 3. Dry-run release checks.
-   - [ ] Run package staging and tarball dry-run inspection.
-   - [ ] Run `npm publish --dry-run` locally without publishing.
-   - [ ] Record dry-run output in the ship manifest.
+   - [x] Run package staging and tarball dry-run inspection.
+   - [x] Run `npm publish --dry-run` locally without publishing.
+   - [x] Record dry-run output in the ship manifest.
 4. Ship.
-   - [ ] Run package docs tests, package staging checks, dry-run release checks, and whitespace checks.
-   - [ ] Update review notes and history.
-   - [ ] Commit and push intended Phase 4 changes only.
+   - [x] Run package docs tests, package staging checks, dry-run release checks, and whitespace checks.
+   - [x] Update review notes and history.
+   - [x] Commit and push intended Phase 4 changes only.
 
 ### Current Step
 
 - [x] Step 4.1: Documentation readiness.
 - [x] Step 4.2: Documentation contracts.
-- [ ] Step 4.3: Dry-run release checks.
-- [ ] Step 4.4: Ship.
+- [x] Step 4.3: Dry-run release checks.
+- [x] Step 4.4: Ship.
 
 ---
 
