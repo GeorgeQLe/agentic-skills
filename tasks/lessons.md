@@ -529,3 +529,10 @@
 - A pack drift report in the canonical `agentic-skills` repo sounded like the canonical skill sources were stale, even though `doctor` was reporting generated project-local copies under `.claude/skills` and `.codex/skills`.
 - When explaining `scripts/pack.sh doctor`, explicitly say that `stale` means the local managed install's recorded source hash no longer matches the canonical source directory.
 - In this repo, `packs/*` and `global/*` are the canonical sources; `.claude/skills/**` and `.codex/skills/**` are generated install roots that can fall behind until `scripts/pack.sh refresh` runs.
+
+## 2026-06-10 — "GitHub audit" prompts mean portfolio status briefings, not code review
+
+- The user wanted: a recurring briefing on Lexcorp progress across the app portfolio — searching GitHub for project status, shipping velocity, and content pipeline state to brief them.
+- The agent interpreted: a read-only code-quality audit of pushed/merged GitHub changes, and built a `github-audit` skill around diff review.
+- Signal missed: history prompts emphasized status/comparison framing ("status of my projects", "brief me", "compare against our local implementation"); the agent anchored on a single code-quality-worded Codex prompt instead of asking which sense of "audit" was meant when evidence was thin (≤10 matching prompts).
+- Rule: when designing a skill from sparse history evidence, confirm the workflow's purpose with the user before encoding it; for this user, "audit based on github" defaults to operating-status briefing (`/lexcorp-briefing` in agentic-skills-personal), not code review.
