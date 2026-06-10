@@ -23,17 +23,20 @@ function parseListFile(path: string): Set<string> {
   return names;
 }
 
-function walkSkillFiles(dir: string, out: string[] = []): string[] {
+function walkFilesNamed(name: string, dir: string, out: string[] = []): string[] {
   if (!existsSync(dir)) return out;
   for (const entry of readdirSync(dir)) {
     if (entry === "archive" || entry === "node_modules" || entry === ".git") continue;
     const abs = join(dir, entry);
     const stat = statSync(abs);
-    if (stat.isDirectory()) walkSkillFiles(abs, out);
-    if (stat.isFile() && entry === "SKILL.md") out.push(abs);
+    if (stat.isDirectory()) walkFilesNamed(name, abs, out);
+    if (stat.isFile() && entry === name) out.push(abs);
   }
   return out;
 }
+
+const walkSkillFiles = (dir: string) => walkFilesNamed("SKILL.md", dir);
+const walkBundleFiles = (dir: string) => walkFilesNamed("ALIGNMENT-PAGE.md", dir);
 
 function alignmentSectionBody(content: string): string | null {
   const m = content.match(/^(#{2,3}) Alignment Page$/m);
@@ -107,61 +110,88 @@ describe("alignment bespoke allowlist matches repo state", () => {
   });
 });
 
-describe("upgrade-alignment-page bespoke diagnostics", () => {
-  const tempRoots: string[] = [];
+const OUTPUT_PATH_RE = /alignment\/([A-Za-z0-9_-]+)-\{topic\}\.html/g;
 
-  afterEach(() => {
-    for (const root of tempRoots.splice(0)) rmSync(root, { recursive: true, force: true });
+describe("alignment bundle output paths match the owning skill", () => {
+  it("every active ALIGNMENT-PAGE.md references only its own alignment/{skill-name}-{topic}.html path", () => {
+    const bundles = [...walkBundleFiles(repoPath("global")), ...walkBundleFiles(repoPath("packs"))]
+      .filter((file) => /(^|\/)(codex|claude)\//.test(file));
+    expect(bundles.length, "active bundles found").toBeGreaterThan(0);
+
+    const violations: string[] = [];
+    for (const bundle of bundles) {
+      const skillName = bundle.split("/").slice(-2, -1)[0];
+      for (const match of readFileSync(bundle, "utf8").matchAll(OUTPUT_PATH_RE)) {
+        if (match[1] !== skillName) violations.push(`${bundle} -> ${match[0]}`);
+      }
+    }
+    expect(violations).toEqual([]);
   });
+});
 
-  const CONVENTION = [
-    "# Alignment Page Convention",
-    "",
-    "<!-- alignment-convention:start -->",
-    "Convention body for {skill-name}.",
-    "",
-    "{{SKILL_SPECIFIC_GATES}}",
-    "",
-    "{{SKILL_VISUAL_TIER}}",
-    "",
-    "{{SKILL_GLOSSARY_GATE}}",
-    "<!-- alignment-convention:end -->",
-    "",
-  ].join("\n");
+const tempRoots: string[] = [];
 
-  function makeFixtureRoot(): string {
-    const root = mkdtempSync(join(tmpdir(), "alignment-bespoke-"));
-    tempRoots.push(root);
-    mkdirSync(join(root, "docs"), { recursive: true });
-    mkdirSync(join(root, "scripts"), { recursive: true });
-    writeFileSync(join(root, "docs/alignment-page-convention.md"), CONVENTION);
-    return root;
-  }
+afterEach(() => {
+  for (const root of tempRoots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
 
-  function writeSkill(root: string, tool: "claude" | "codex", skillName: string, sectionBody: string): string {
-    const dir = join(root, "packs/fixture-pack", tool, skillName);
-    mkdirSync(dir, { recursive: true });
-    const relPath = `packs/fixture-pack/${tool}/${skillName}/SKILL.md`;
-    writeFileSync(
-      join(root, relPath),
-      `---\nname: ${skillName}\nversion: v0.0\n---\n\n# ${skillName}\n\n## Alignment Page\n\n${sectionBody}\n`,
-    );
-    return relPath;
-  }
+const CONVENTION = [
+  "# Alignment Page Convention",
+  "",
+  "<!-- alignment-convention:start -->",
+  "Convention body for {skill-name}. Output: `alignment/{skill-name}-{topic}.html`.",
+  "",
+  "{{SKILL_SPECIFIC_GATES}}",
+  "",
+  "{{SKILL_VISUAL_TIER}}",
+  "",
+  "{{SKILL_GLOSSARY_GATE}}",
+  "<!-- alignment-convention:end -->",
+  "",
+].join("\n");
 
-  const stubBody = (skillName: string) =>
-    `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
+function makeFixtureRoot(): string {
+  const root = mkdtempSync(join(tmpdir(), "alignment-bespoke-"));
+  tempRoots.push(root);
+  mkdirSync(join(root, "docs"), { recursive: true });
+  mkdirSync(join(root, "scripts"), { recursive: true });
+  writeFileSync(join(root, "docs/alignment-page-convention.md"), CONVENTION);
+  return root;
+}
 
-  const BESPOKE_BODY = "Hand-authored alignment rules for this skill. No generated stub here.";
+function writeSkill(root: string, tool: "claude" | "codex", skillName: string, sectionBody: string): string {
+  const dir = join(root, "packs/fixture-pack", tool, skillName);
+  mkdirSync(dir, { recursive: true });
+  const relPath = `packs/fixture-pack/${tool}/${skillName}/SKILL.md`;
+  writeFileSync(
+    join(root, relPath),
+    `---\nname: ${skillName}\nversion: v0.0\n---\n\n# ${skillName}\n\n## Alignment Page\n\n${sectionBody}\n`,
+  );
+  return relPath;
+}
 
-  function writeAllowlist(root: string, names: string[]): void {
-    writeFileSync(join(root, "scripts/alignment-bespoke-list.txt"), `${names.join("\n")}\n`);
-  }
+function writeBundle(root: string, tool: "claude" | "codex", skillName: string, content: string): string {
+  const relPath = `packs/fixture-pack/${tool}/${skillName}/ALIGNMENT-PAGE.md`;
+  mkdirSync(dirname(join(root, relPath)), { recursive: true });
+  writeFileSync(join(root, relPath), content);
+  return relPath;
+}
 
-  function runScript(root: string) {
-    return spawnSync(process.execPath, [SCRIPT, "--dry-run", "--root", root], { encoding: "utf8" });
-  }
+const stubBody = (skillName: string) =>
+  `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
 
+const BESPOKE_BODY = "Hand-authored alignment rules for this skill. No generated stub here.";
+
+function writeAllowlist(root: string, names: string[]): void {
+  writeFileSync(join(root, "scripts/alignment-bespoke-list.txt"), `${names.join("\n")}\n`);
+}
+
+function runScript(root: string, mode: "--dry-run" | "--write" = "--dry-run") {
+  const args = mode === "--dry-run" ? [SCRIPT, "--dry-run", "--root", root] : [SCRIPT, "--root", root];
+  return spawnSync(process.execPath, args, { encoding: "utf8" });
+}
+
+describe("upgrade-alignment-page bespoke diagnostics", () => {
   it("fails on a bespoke section missing from the allowlist", () => {
     const root = makeFixtureRoot();
     const claudePath = writeSkill(root, "claude", "stray-skill", BESPOKE_BODY);
@@ -218,5 +248,65 @@ describe("upgrade-alignment-page bespoke diagnostics", () => {
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Bespoke allowlist: 0 skills, exact");
+  });
+});
+
+describe("upgrade-alignment-page output path diagnostics", () => {
+  it("fails in dry-run on a bundle referencing another skill's output path", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "path-skill", stubBody("path-skill"));
+    writeSkill(root, "codex", "path-skill", stubBody("path-skill"));
+    const bundlePath = writeBundle(
+      root,
+      "claude",
+      "path-skill",
+      "# Alignment Page — path-skill\n\nOutput: `alignment/other-skill-{topic}.html`.\n",
+    );
+    writeBundle(root, "codex", "path-skill", "# Alignment Page — path-skill\n\nConvention body for path-skill. Output: `alignment/path-skill-{topic}.html`.\n");
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Output path drift:");
+    expect(result.stderr).toContain(`Foreign output path in ${bundlePath}`);
+    expect(result.stderr).toContain("alignment/other-skill-{topic}.html");
+    expect(result.stderr).toContain('owning skill is "path-skill"');
+    expect(result.stdout).toContain("Output paths: 2 bundles, DRIFT");
+  });
+
+  it("fails in write mode on a bespoke bundle referencing another skill's output path", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "hand-skill", BESPOKE_BODY);
+    writeSkill(root, "codex", "hand-skill", BESPOKE_BODY);
+    writeAllowlist(root, ["hand-skill"]);
+    const bundlePath = writeBundle(
+      root,
+      "claude",
+      "hand-skill",
+      "# Alignment Page — hand-skill\n\nOutput: `alignment/stolen-skill-{topic}.html`.\n",
+    );
+
+    const result = runScript(root, "--write");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Output path drift:");
+    expect(result.stderr).toContain(`Foreign output path in ${bundlePath}`);
+    expect(result.stderr).toContain("alignment/stolen-skill-{topic}.html");
+  });
+
+  it("passes on a clean tree after write-mode generation", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "clean-skill", stubBody("clean-skill"));
+    writeSkill(root, "codex", "clean-skill", stubBody("clean-skill"));
+
+    // Validation runs after the write loop, so it sees the bundles written
+    // by this same invocation.
+    const writeResult = runScript(root, "--write");
+    expect(writeResult.stderr).toBe("");
+    expect(writeResult.status).toBe(0);
+    expect(writeResult.stdout).toContain("Output paths: 2 bundles, exact");
+
+    const dryResult = runScript(root);
+    expect(dryResult.stderr).toBe("");
+    expect(dryResult.status).toBe(0);
+    expect(dryResult.stdout).toContain("Output paths: 2 bundles, exact");
   });
 });

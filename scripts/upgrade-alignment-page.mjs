@@ -359,6 +359,31 @@ for (const file of files) {
   }
 }
 
+// Path-consistency validation: every active ALIGNMENT-PAGE.md must reference
+// only its owning skill's `alignment/{skill-name}-{topic}.html` output path.
+// Archive copies (docs/history/archive/.../alignment/<name>-{topic}.html) end
+// with the same segment, so the check applies uniformly. Runs after the write
+// loop so write mode validates final on-disk state; a foreign name indicates a
+// stale, hand-edited, or mis-rendered bundle.
+const OUTPUT_PATH_RE = /alignment\/([A-Za-z0-9_-]+)-\{topic\}\.html/g;
+const pathDiagnostics = [];
+let bundlesChecked = 0;
+for (const file of files) {
+  const skillName = skillNameFor(file);
+  const bundlePath = join(dirname(`${repoRoot}/${file}`), "ALIGNMENT-PAGE.md");
+  if (!existsSync(bundlePath)) continue;
+  bundlesChecked += 1;
+  const foreignNames = new Set();
+  for (const match of readFileSync(bundlePath, "utf8").matchAll(OUTPUT_PATH_RE)) {
+    if (match[1] !== skillName) foreignNames.add(match[1]);
+  }
+  if (foreignNames.size) {
+    pathDiagnostics.push(
+      `Foreign output path in ${relative(repoRoot, bundlePath)} — references ${[...foreignNames].map((n) => `alignment/${n}-{topic}.html`).join(", ")} but the owning skill is "${skillName}". Regenerate the bundle or fix the hand-authored path.`,
+    );
+  }
+}
+
 // Failing diagnostics: bespoke classification must match the allowlist
 // exactly, and sibling mirrors must agree, in both dry-run and write mode.
 const diagnostics = [];
@@ -389,10 +414,16 @@ console.log(`Skipped by ${relative(repoRoot, skipPath)}: ${skipList}`);
 console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Out of scope: ${outOfScope}`);
 console.log(`Bespoke allowlist: ${bespokeAllowlist.size} skills, ${diagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Output paths: ${bundlesChecked} bundles, ${pathDiagnostics.length ? "DRIFT" : "exact"}`);
 
 if (diagnostics.length) {
   console.error("");
   console.error("Bespoke classification drift:");
   for (const diagnostic of diagnostics) console.error(`  - ${diagnostic}`);
-  process.exit(1);
 }
+if (pathDiagnostics.length) {
+  console.error("");
+  console.error("Output path drift:");
+  for (const diagnostic of pathDiagnostics) console.error(`  - ${diagnostic}`);
+}
+if (diagnostics.length || pathDiagnostics.length) process.exit(1);
