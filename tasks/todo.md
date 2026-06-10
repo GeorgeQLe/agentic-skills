@@ -833,3 +833,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [ ] [tests/layer4/helpers/disposable-repo.ts:107-126; git-fixture-sync.setup.ts:54-56] `cleanupRepo` runs `gh repo delete ${repoSlug} --yes` with `autoConfirm` hardwired to true and no validation of `repoSlug`; if `getGhUser()` falls back to `"unknown"` it targets `unknown/<name>`. Fix: assert `repoSlug` matches `^[\w.-]+/agentic-skills-bench-[\w.-]+$` and refuse when the user is `"unknown"`; switch to `execFileSync` (no shell).
 - [ ] [tests/layer4/helpers/disposable-repo.ts:49-75, 82] `createDisposableRepo` (and the sync setup's `sync-upstream-` clone) create temp dirs via `mkdtempSync` that are never removed — `cleanup()` only deletes the GitHub repo. A 100-run benchmark leaks 100+ cloned repos to disk. Fix: have `cleanup()` also `rmSync` the mkdtemp parent and the upstream clone dir.
 - [ ] [tests/harness/bench-persistence.ts:84-101] `findResumeableSession` sorts session dirs (`${skill}-${agent}-${randomUUID8}`) by the random id, not by time, so `--resume` can attach to an arbitrary older session and miscount cost/runs. Fix: sort by manifest `createdAt`/`updatedAt`, or timestamp-prefix the dir names.
+
+## Active — Claude Last-24h Usage Feedback
+
+- [x] Capture `$analyze-sessions` invocation prompt history.
+- [x] Parse full available Claude history for the last 24 hours.
+- [x] Inspect available Claude metadata for subagent, parallel-session, context, skill, and usage signals.
+- [x] Produce `alignment/analyze-sessions-claude-usage-feedback.html`.
+- [x] Record validation and final recommendation notes.
+
+### Review Notes — Claude Last-24h Usage Feedback
+- Confirmed the pasted Claude usage panel directionally from local logs, with an explicit caveat that provider-side dashboard weighting is not available locally.
+- Parsed `~/.claude/history.jsonl`, `~/.claude/projects/**/*.jsonl`, `~/.claude/projects/**/subagents/**/*.meta.json`, workflow journals, and `~/.claude/sessions/*.json`.
+- Key local findings: sessions with any subagent account for 67.6% raw token volume and 75.0% with a 0.1 cache-read weight; workflow-subagent is 14.3% raw; `Explore` is 4.4%, `general-purpose` 2.8%, and `Plan` 1.9%; high-context usage is 35.7% raw and 22.7% with a 0.1 cache-read weight.
+- Highest-impact recommendation: tighten workflow/deep-research fan-out with explicit depth modes, source/extractor/verifier caps, and a preview before spawning broad subagent sets.
+- Best new-skill candidate: a personal `project-portfolio-status` / GitHub portfolio status skill, kept out of general shared skills because the last-24h prompt explicitly framed it as personal to this user.
+- Produced and indexed the review page at `alignment/analyze-sessions-claude-usage-feedback.html`.
+- Validation passed: HTML parser smoke for the new page and `alignment/index.html`; targeted `rg` checks for category, alignment status, compile controls, and index link; structural count check for gates/feedback/tables/no embeds/viewport; `git diff --check`.
+- Browser open status: `node scripts/open-html-page.mjs alignment/analyze-sessions-claude-usage-feedback.html --browser auto` returned `blocked`; artifact verification still passed.

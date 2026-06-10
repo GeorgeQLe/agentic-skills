@@ -510,3 +510,11 @@ icp -> competitive-analysis -> journey-map -> positioning
 ### Non-Functional Requirements
 - No credentials in test fixtures or tracked files
 - Test suites must clean up after themselves (delete test boards/cards)
+
+## Current Plan — Claude Last-24h Usage Feedback
+
+1. Capture the `$analyze-sessions` invocation in prompt history.
+2. Parse the full available Claude history for the last 24 hours and inspect adjacent Claude usage metadata for subagent, parallel-session, context, and skill signals.
+3. Distinguish locally verified findings from dashboard-only claims that the available files do not expose.
+4. Produce a durable alignment report with skill and workflow recommendations, including whether to improve existing skills or add new ones.
+5. Verify generated artifacts and ship the intended tracked changes.

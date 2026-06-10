@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en" data-alignment-category="ops-analysis">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyze Sessions - Claude Usage Feedback</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.55; letter-spacing:0; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; max-width:100%; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2.15rem; line-height:1.15; }
+h2 { color:var(--accent); margin:0; font-size:1.35rem; }
+h3 { color:#fff; margin:24px 0 8px; font-size:1.05rem; }
+p { margin:12px 0; }
+a { color:var(--accent); }
+code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; }
+.lead { color:#fff; font-size:1.05rem; }
+.status { display:inline-flex; flex-wrap:wrap; gap:6px; min-height:44px; align-items:center; padding:10px 16px; border:1px solid var(--purple); color:#fff; background:#1c2333; margin:16px 0; }
+.toc, section, .compile-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.toc ol { margin:8px 0 0; columns:2; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,minmax(min(210px,100%),1fr)); gap:12px; margin:18px 0; }
+.stat-grid div { border:1px solid var(--border); background:#0f1623; padding:14px; border-radius:8px; }
+.stat-grid strong { display:block; color:#fff; font-size:1.25rem; }
+.stat-grid span { color:var(--text-muted); }
+.table-wrap { overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:8px; }
+table { border-collapse:collapse; width:100%; min-width:760px; }
+th,td { border-bottom:1px solid var(--border); padding:10px 12px; vertical-align:top; text-align:left; }
+th { background:#0f1623; color:#fff; }
+tr:last-child td { border-bottom:0; }
+ul,ol { padding-left:22px; }
+li { margin:4px 0; }
+.callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
+.warn { border-color:var(--orange); background:#2a2111; }
+.good { border-color:var(--green); background:#102618; }
+.section-feedback { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 16px; padding:10px; border:1px solid var(--border); border-radius:8px; background:#0f1623; }
+.section-feedback span { color:var(--text-muted); }
+button, .radio-group label { min-height:44px; padding:10px 16px; border-radius:6px; border:1px solid var(--border); background:#0d1117; color:var(--text); cursor:pointer; font:inherit; }
+button:hover, .radio-group label:hover { border-color:var(--accent); }
+button.active[data-feedback="emphasize"] { border-color:var(--green); color:#fff; background:#12351f; }
+button.active[data-feedback="down"] { border-color:var(--red); color:#fff; background:#351616; }
+button.active[data-feedback="needs-clarification"] { border-color:var(--orange); color:#fff; background:#33260f; }
+textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:10px; font:inherit; }
+.feedback-notes, .local-yaml, .local-yaml-actions { display:none; flex-basis:100%; }
+.section-feedback.has-feedback .feedback-notes, .section-feedback.has-feedback .local-yaml-actions { display:block; }
+.section-feedback.has-yaml .local-yaml { display:block; min-height:130px; }
+.question-block { background:#1c2333; border:1px solid var(--purple); padding:16px; border-radius:8px; margin:16px 0; }
+.radio-group { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.radio-group label { display:flex; align-items:center; gap:8px; }
+.answer-notes { display:none; margin-top:10px; }
+.question-block.has-answer .answer-notes { display:block; }
+.compile-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+#compiled-yaml, #compiled-feedback-yaml { min-height:180px; }
+.copy-status, #answer-status, #feedback-status { color:var(--text-muted); }
+@media (max-width: 860px) { .toc ol { columns:1; } .stat-grid { grid-template-columns:repeat(2,minmax(min(210px,100%),1fr)); } main { width:min(100% - 24px, 1180px); } }
+@media (max-width: 560px) { .stat-grid { grid-template-columns:1fr; } h1 { font-size:1.65rem; } table { min-width:680px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Claude Last-24h Usage Feedback</h1>
+  <p class="lead">Review of the pasted Claude usage panel against local Claude history, rich transcript logs, subagent metadata, and current session metadata.</p>
+  <div class="status"><strong>alignment_status:</strong> review <strong>generated:</strong> 2026-06-10 <strong>artifact:</strong> alignment/analyze-sessions-claude-usage-feedback.html</div>
+</header>
+
+<nav class="toc" aria-label="Table of Contents">
+  <h2>Table Of Contents</h2>
+  <ol>
+    <li><a href="#overview">Overview Stats</a></li>
+    <li><a href="#confirmation">Dashboard Confirmation</a></li>
+    <li><a href="#tokens">Token And Cost Check</a></li>
+    <li><a href="#subagents">Subagent Evidence</a></li>
+    <li><a href="#patterns">Recent Workflow Patterns</a></li>
+    <li><a href="#recommendations">Skill Recommendations</a></li>
+    <li><a href="#evidence">Evidence Matrix And Assumptions</a></li>
+    <li><a href="#gates">Review Gates</a></li>
+    <li><a href="#compile">Compile YAML</a></li>
+  </ol>
+</nav>
+
+<section id="overview">
+  <div class="section-head"><h2>Overview Stats</h2></div>
+  <div class="section-feedback" data-section="Overview Stats" id="feedback-overview">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>The local analysis window is anchored to the run timestamp: <code>2026-06-09T04:37:33Z</code> through <code>2026-06-10T04:37:33Z</code>. Claude compact history provided user prompt counts; rich per-project transcript JSONL files provided assistant usage, model, subagent, and context metadata.</p>
+  <div class="stat-grid">
+    <div><strong>954</strong><span>Claude transcript files scanned</span></div>
+    <div><strong>57</strong><span>Compact history user messages in window</span></div>
+    <div><strong>18</strong><span>Claude sessions with usage records</span></div>
+    <div><strong>4,490</strong><span>Assistant usage records in window</span></div>
+  </div>
+  <div class="stat-grid">
+    <div><strong>206,983,852</strong><span>Raw transcript token volume</span></div>
+    <div><strong>188,181,853</strong><span>Cache-read tokens</span></div>
+    <div><strong>48,442,913</strong><span>Raw sidechain/subagent tokens</span></div>
+    <div><strong>29,505,297</strong><span>Raw workflow-subagent tokens</span></div>
+  </div>
+  <div class="callout warn"><strong>Important caveat:</strong> the pasted usage panel is provider-side usage accounting. Local Claude logs expose token classes, context size, subagent metadata, and session timing, but they do not expose the exact dashboard weighting formula. Cache-read accounting changes the percentages materially, so exact confirmation is not possible from local files alone.</div>
+</section>
+
+<section id="confirmation">
+  <div class="section-head"><h2>Dashboard Confirmation</h2></div>
+  <div class="section-feedback" data-section="Dashboard Confirmation" id="feedback-confirmation">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Bottom line: the pasted panel is directionally confirmed. The exact percentages are not locally reproducible, but most rows have a close local analogue. The clearest confirmed rows are the subagent-type rows: <code>Explore</code>, <code>general-purpose</code>, and <code>Plan</code> match local metadata almost exactly.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Pasted panel claim</th><th>Local evidence</th><th>Verdict</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td>73% came from subagent-heavy sessions</td><td>Sessions with any subagent account for 67.6% of raw token volume. With a cache-read weight of 0.1, that becomes 75.0%. A stricter "sidechain &gt;= main" definition ranges from 3.9% raw to 64.0% when cache reads are excluded.</td><td>Directionally confirmed, exact definition unknown</td><td>The panel likely uses a billable-ish or provider-side weighting, not raw transcript tokens.</td></tr>
+        <tr><td>68% was while 4+ sessions ran in parallel</td><td>Current <code>~/.claude/sessions/*.json</code> windows show 4+ open sessions during most local usage, but this method overcounts because open session windows remain active while idle. Depending on raw/no-cache-read weighting, it reports 97.5-99.2%.</td><td>Parallelism confirmed, exact 68% not reproducible</td><td>The warning is credible, but local session files are too coarse to mirror the dashboard.</td></tr>
+        <tr><td>24% was at &gt;150k context</td><td>Raw transcript tokens from records with context &gt;150k are 35.7%. With a 0.1 cache-read weight, the share is 22.7%.</td><td>Confirmed as plausible</td><td>Long-context turns are a real driver. The exact share depends on cache-read weighting.</td></tr>
+        <tr><td>17% came from subagents under workflow-subagent</td><td>Local <code>agentType: workflow-subagent</code> accounts for 14.3% raw usage and 16.3% if cache reads are weighted at 0.5.</td><td>Confirmed as close</td><td>The workflow research harness is a measurable usage driver.</td></tr>
+        <tr><td>deep-research 14%</td><td>No local subagent metadata uses <code>agentType: deep-research</code>. The two workflow fan-outs were deep-research-style landing-page research workflows and account for 14.3% raw usage as <code>workflow-subagent</code>.</td><td>Likely dashboard-only classification</td><td>Treat this as a provider label layered over workflow fan-out behavior.</td></tr>
+        <tr><td>Explore 4%, general-purpose 2%, Plan 2%</td><td>Local raw token shares: <code>Explore</code> 4.4%, <code>general-purpose</code> 2.8%, <code>Plan</code> 1.9%.</td><td>Confirmed</td><td>These rows align with local subagent metadata.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Local Command Evidence</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command in last 24h</th><th>Count</th><th>Representative prompt</th></tr></thead>
+      <tbody>
+        <tr><td><code>/pack</code></td><td>4</td><td><code>/pack install youtube-video-prelaunch-audit</code>, <code>/pack install icon-fixer</code>, <code>/pack install ship-end</code></td></tr>
+        <tr><td><code>/clear</code></td><td>4</td><td>Context reset across content, gblock-party-redux, and agentic-skills sessions.</td></tr>
+        <tr><td><code>/resume</code></td><td>2</td><td>Two resumes in <code>gblock-party-redux</code>.</td></tr>
+        <tr><td><code>/status</code></td><td>2</td><td>Status checks in personal landing and gblock-party-redux sessions.</td></tr>
+        <tr><td><code>/youtube-video-prelaunch-audit</code></td><td>1</td><td>Audit request for a YouTube video URL.</td></tr>
+        <tr><td><code>/user-flow-map</code></td><td>1</td><td>Product flow mapping for personal workstation.</td></tr>
+        <tr><td><code>/session-triage</code></td><td>1</td><td>Brief-me model loading/backgrounding question.</td></tr>
+        <tr><td><code>/analyze-sessions</code></td><td>1</td><td>GitHub-based project status audit skill discussion.</td></tr>
+        <tr><td><code>/ship-end</code></td><td>1</td><td>Shipping the personal landing session.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="tokens">
+  <div class="section-head"><h2>Token And Cost Check</h2></div>
+  <div class="section-feedback" data-section="Token And Cost Check" id="feedback-tokens">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Claude rich transcript usage fields are per-assistant response records, not cumulative snapshots. The local total below is therefore the sum of assistant response usage in the selected window. It is a usage-volume proxy, not a dollar-cost estimate.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Token class</th><th>Total</th><th>Share of raw total</th></tr></thead>
+      <tbody>
+        <tr><td>Input tokens</td><td>1,565,183</td><td>0.8%</td></tr>
+        <tr><td>Cache creation input tokens</td><td>14,664,878</td><td>7.1%</td></tr>
+        <tr><td>Cache read input tokens</td><td>188,181,853</td><td>90.9%</td></tr>
+        <tr><td>Output tokens</td><td>2,571,938</td><td>1.2%</td></tr>
+        <tr><td>Raw total used for local shares</td><td>206,983,852</td><td>100.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Model</th><th>Raw token volume</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td><code>claude-fable-5</code></td><td>177,268,948</td><td>85.6%</td></tr>
+        <tr><td><code>claude-opus-4-6</code></td><td>29,714,904</td><td>14.4%</td></tr>
+        <tr><td><code>&lt;synthetic&gt;</code></td><td>0</td><td>0.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Top Projects By Raw Usage</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Project</th><th>Raw token volume</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td><code>/home/georgeqle/projects/static-web/prod/personal-landing</code></td><td>71,990,040</td><td>34.8%</td></tr>
+        <tr><td><code>/home/georgeqle/projects/sandbox/tools/agentic-coding-os</code></td><td>44,950,370</td><td>21.7%</td></tr>
+        <tr><td><code>/home/georgeqle/projects/web/dev/gblock-party-redux</code></td><td>29,714,904</td><td>14.4%</td></tr>
+        <tr><td><code>/home/georgeqle/projects/static-web/prod/lexcorp/war-room</code></td><td>23,187,555</td><td>11.2%</td></tr>
+        <tr><td><code>/home/georgeqle/projects/content</code></td><td>19,050,023</td><td>9.2%</td></tr>
+        <tr><td><code>/home/georgeqle/projects/tools/dev/agentic-skills</code></td><td>11,627,332</td><td>5.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><strong>Cost status:</strong> cost unavailable. The logs do not include direct structured cost fields, and no pricing table was supplied or verified for this run. This report does not estimate dollars from remembered pricing.</div>
+</section>
+
+<section id="subagents">
+  <div class="section-head"><h2>Subagent Evidence</h2></div>
+  <div class="section-feedback" data-section="Subagent Evidence" id="feedback-subagents">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>There were 228 subagent JSONL files with activity in the window. The largest usage driver was workflow research fan-out. Only two workflow groups accounted for all workflow-subagent raw tokens.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Subagent type</th><th>Raw token volume</th><th>Raw share</th><th>No-cache-read share</th><th>Usage records</th></tr></thead>
+      <tbody>
+        <tr><td><code>workflow-subagent</code></td><td>29,505,297</td><td>14.3%</td><td>39.0%</td><td>2,279</td></tr>
+        <tr><td><code>Explore</code></td><td>9,168,914</td><td>4.4%</td><td>11.9%</td><td>346</td></tr>
+        <tr><td><code>general-purpose</code></td><td>5,835,559</td><td>2.8%</td><td>2.7%</td><td>160</td></tr>
+        <tr><td><code>Plan</code></td><td>3,933,143</td><td>1.9%</td><td>4.0%</td><td>124</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Workflow group</th><th>Raw token volume</th><th>Share</th><th>Observed question</th></tr></thead>
+      <tbody>
+        <tr><td><code>wf_32bc8310-743</code></td><td>18,187,409</td><td>8.8%</td><td>YouTube-first creator personal landing pages; CTA strategy, funnel direction, social proof, and whether website-to-YouTube subscribe is a useful primary conversion surface.</td></tr>
+        <tr><td><code>wf_f8c8bb92-504</code></td><td>11,317,888</td><td>5.5%</td><td>Popular and high-converting build-in-public indie hacker / tech creator personal landing pages; above-fold content, CTA strategy, social proof, transparency widgets, and conversion lessons.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Subagent Prompt Terms</h3>
+  <p>Term hits in subagent prompts show a research-heavy pattern: <code>search</code> 767, <code>research</code> 426, <code>review</code> 319, <code>github</code> 210, <code>test</code> 167, <code>plan</code> 130, <code>validate</code> 76, <code>implement</code> 54, <code>audit</code> 50, <code>explore</code> 43.</p>
+</section>
+
+<section id="patterns">
+  <div class="section-head"><h2>Recent Workflow Patterns</h2></div>
+  <div class="section-feedback" data-section="Recent Workflow Patterns" id="feedback-patterns">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>The dominant pattern is not a single bad session. It is a combination of multiple active sessions, long-context work, and research fan-out. The last-24h top sessions are enough to explain the dashboard warning even when exact percentages differ.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Session</th><th>Project</th><th>Raw total</th><th>Subagent raw</th><th>Main raw</th><th>Distinct subagent paths</th></tr></thead>
+      <tbody>
+        <tr><td><code>7ee461db...</code></td><td>personal-landing</td><td>71,990,040</td><td>31,961,115</td><td>40,028,925</td><td>4</td></tr>
+        <tr><td><code>cb049e9f...</code></td><td>agentic-coding-os</td><td>43,175,147</td><td>0</td><td>43,175,147</td><td>0</td></tr>
+        <tr><td><code>452ab39d...</code></td><td>lexcorp/war-room</td><td>23,187,555</td><td>2,258,651</td><td>20,928,904</td><td>6</td></tr>
+        <tr><td><code>ec08938f...</code></td><td>gblock-party-redux</td><td>18,421,733</td><td>6,780,688</td><td>11,641,045</td><td>6</td></tr>
+        <tr><td><code>786176ee...</code></td><td>content</td><td>13,456,144</td><td>1,944,182</td><td>11,511,962</td><td>2</td></tr>
+        <tr><td><code>bb655678...</code></td><td>gblock-party-redux</td><td>6,258,798</td><td>3,653,920</td><td>2,604,878</td><td>3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Current Session Metadata</h3>
+  <p>Open Claude session metadata showed several simultaneous busy/waiting sessions during the run: content, agentic-coding-os, personal-landing, lexcorp/war-room, gblock-party-redux, and omega-war were active or recently updated around <code>2026-06-10T04:40Z</code>. This supports the parallelism warning even though the local files cannot reproduce the provider's exact 68% share.</p>
+</section>
+
+<section id="recommendations">
+  <div class="section-head"><h2>Skill Recommendations</h2></div>
+  <div class="section-feedback" data-section="Skill Recommendations" id="feedback-recommendations">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>The best improvement is not "avoid all subagents." Subagents are doing useful work. The fix is to make fan-out deliberate, budgeted, and mode-aware.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Recommendation</th><th>Type</th><th>Evidence</th><th>Validation expectation</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Add budget/depth controls to the workflow-subagent or deep-research harness: <code>--quick</code>, <code>--standard</code>, <code>--deep</code>, source caps, extractor caps, and adversarial verifier caps. Require a preview before spawning more than 5 subagents.</td><td>Skill improvement</td><td>Workflow-subagent accounts for 14.3% raw usage; two workflow groups spawned 228 active subagent files in the window.</td><td>Focused benchmark or fixture test proving default mode caps fan-out and deep mode documents why extra agents are needed.</td></tr>
+        <tr><td>2</td><td>Adjust Claude-facing subagent guidance from "throw more compute" to "budgeted delegation": independent lanes only, default cap of 2-4 exploratory subagents, ask/preview for broad research fan-out, and summarize cost/context risk before launch.</td><td>Standing instruction / skill contract</td><td>Pasted panel says 73% subagent-heavy; local any-subagent share is 67.6% raw and 75.0% with a 0.1 cache-read weight.</td><td>Layer1 contract scan on provision-agentic-config output and generated AGENTS/CLAUDE blocks.</td></tr>
+        <tr><td>3</td><td>Create or promote a personal <code>project-portfolio-status</code> skill for your GitHub/project audit habit: scan selected GitHub repos, local project roots, recent commits/PRs, deploy clues, and produce a brief portfolio status memo. This should remain personal because it depends on your repo map and priorities.</td><td>New personal skill</td><td>Last-24h <code>/analyze-sessions</code> prompt explicitly said the GitHub audit pattern is personal rather than generally useful. Subagent prompt terms also include <code>github</code> 210 times.</td><td>Fixture with 2-3 fake repos and expected status memo sections; no GitHub Actions.</td></tr>
+        <tr><td>4</td><td>Improve <code>analyze-sessions</code> with a Claude rich-transcript reconciliation mode: parse <code>~/.claude/projects/**/*.jsonl</code>, meta agent types, workflow journals, session files, and report provider-panel-compatible weighting variants.</td><td>Skill improvement</td><td>The current skill mentions Claude compact history but not rich Claude transcript parsing. This run needed rich transcripts to confirm subagent/context rows.</td><td>Layer1/parser fixture covering <code>isSidechain</code>, <code>agentType</code>, <code>workflow-subagent</code>, context &gt;150k, and stale <code>stats-cache.json</code>.</td></tr>
+        <tr><td>5</td><td>Add a context/session checkpoint helper: before heavy research or when context exceeds 150k, recommend <code>/compact</code>; when switching projects, recommend <code>/clear</code>; when 4+ sessions are active, suggest queueing or pausing idle sessions.</td><td>Plugin/hook or standing instruction</td><td>High-context local share is 22.7-35.7% depending on cache weighting; parallelism is materially present in current session metadata.</td><td>Non-mutating check that reports active sessions, context-risk signals, and suggested action without blocking simple tasks.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Highest-Impact Automations</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Automation</th><th>Manual prompts avoided</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td>Research fan-out budget gate</td><td>Dozens of source extraction and adversarial verifier subagents per heavy research run</td><td>Directly attacks workflow-subagent and dashboard deep-research usage without removing the research workflow.</td></tr>
+        <tr><td>Personal GitHub portfolio status skill</td><td>Repeated custom instructions for repo/project status audits</td><td>Keeps personal portfolio intelligence out of general-purpose skills while making your own workflow fast.</td></tr>
+        <tr><td>Analyze-sessions Claude rich transcript parser</td><td>Manual reconciliation work like this report</td><td>Turns provider-panel validation into a repeatable mode with transparent caveats.</td></tr>
+        <tr><td>Context/session checkpoint</td><td>Manual reminders to compact, clear, or queue sessions</td><td>Addresses the two non-skill warnings: high context and many active sessions.</td></tr>
+        <tr><td>Cheaper-model defaults for simple subagents</td><td>Manual model-selection decisions</td><td>The pasted panel explicitly recommends this; local subagent types show many Explore/Plan/general-purpose lanes suitable for cheaper models where the runner supports it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="section-head"><h2>Evidence Matrix And Assumptions</h2></div>
+  <div class="section-feedback" data-section="Evidence Matrix And Assumptions" id="feedback-evidence">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead>
+      <tbody>
+        <tr><td>The pasted usage panel is plausible but not exactly reproducible from local logs.</td><td>Local raw and cache-weighted shares bracket several pasted numbers; exact dashboard accounting formula is absent.</td><td>The panel is likely using provider-side weighting and classifications.</td><td>High</td><td>Provider dashboard is treated as an external calculation, not a local source.</td><td>Use local evidence for direction and recommendations, not exact percentage disputes.</td></tr>
+        <tr><td>Subagent usage is a real driver.</td><td>67.6% raw token volume in sessions with any subagent; 48.4M raw sidechain tokens; 228 active subagent files.</td><td>Subagents should become budgeted and mode-aware.</td><td>High</td><td>"Subagent-heavy" remains dashboard-defined.</td><td>Approve research fan-out budget controls before broad new research.</td></tr>
+        <tr><td>Workflow research fan-out is the most concrete optimization target.</td><td>Two workflow groups account for 29.5M raw tokens and 14.3% raw usage.</td><td>The high-leverage fix is source/search/extractor/verifier caps.</td><td>High</td><td>Deep-research is inferred from workflow behavior and dashboard label.</td><td>Improve workflow/deep-research before changing every skill.</td></tr>
+        <tr><td>Explore, general-purpose, and Plan dashboard rows are confirmed.</td><td>Local raw shares are 4.4%, 2.8%, and 1.9% respectively.</td><td>Local metadata aligns with pasted rows.</td><td>High</td><td>Raw token volume is the comparison basis.</td><td>These lanes are candidates for cheaper model defaults.</td></tr>
+        <tr><td>The GitHub project status audit habit is personal-skill shaped.</td><td>User prompt in the window explicitly says the GitHub audit pattern is personal rather than generally useful.</td><td>A personal skill or pack is better than generalizing it into the shared catalog.</td><td>High</td><td>Need final scope: current repo only vs portfolio-wide.</td><td>Approve a personal skill only after naming target repositories and output cadence.</td></tr>
+        <tr><td>High context is material.</td><td>&gt;150k context share is 35.7% raw and 22.7% under a 0.1 cache-read weight.</td><td>The pasted 24% is plausible under cache-discounted accounting.</td><td>Medium</td><td>Threshold uses local context calculation: input + cache creation + cache read.</td><td>Add compact/clear checkpoints for long sessions.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Coverage Gaps</h3>
+  <ul>
+    <li>The provider dashboard formula is not available in local logs.</li>
+    <li><code>~/.claude/stats-cache.json</code> is stale for this question; its <code>lastComputedDate</code> is <code>2026-04-17</code>.</li>
+    <li>Claude session files are coarse active-window metadata, so they overcount parallelism when idle sessions remain open.</li>
+    <li>No local <code>agentType: deep-research</code> exists; that label is inferred from dashboard classification and workflow research behavior.</li>
+    <li>Costs are unavailable because no direct cost fields or verified pricing table were used.</li>
+  </ul>
+</section>
+
+<section id="gates">
+  <div class="section-head"><h2>Review Gates</h2></div>
+  <div class="section-feedback" data-section="Review Gates" id="feedback-gates">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Answer these gates only after reviewing the evidence above. Feedback-only YAML can be compiled from any section feedback control before every required question is answered.</p>
+
+  <div class="gate question-block" data-section="Research Completeness" data-gate-type="research completeness" data-question-id="research-completeness" data-target-path="">
+    <h3>Research Completeness</h3>
+    <p>Is the local evidence sufficient to accept this as a directional confirmation of the pasted usage panel?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="research-completeness" value="Accept directional confirmation with dashboard-formula caveat"> <span>Accept directional confirmation with dashboard-formula caveat</span></label>
+      <label><input type="radio" name="research-completeness" value="Revise with a narrower time window"> <span>Revise with a narrower time window</span></label>
+      <label><input type="radio" name="research-completeness" value="Revise only after exporting provider dashboard details"> <span>Revise only after exporting provider dashboard details</span></label>
+      <label><input type="radio" name="research-completeness" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+      <label><input type="radio" name="research-completeness" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <div class="gate question-block" data-section="Recommended Path" data-gate-type="recommended path" data-question-id="recommended-path" data-target-path="">
+    <h3>Recommended Path</h3>
+    <p>Which improvement direction should be treated as the next approved path?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="recommended-path" value="Prioritize research fan-out budget controls"> <span>Prioritize research fan-out budget controls</span></label>
+      <label><input type="radio" name="recommended-path" value="Prioritize personal GitHub portfolio status skill"> <span>Prioritize personal GitHub portfolio status skill</span></label>
+      <label><input type="radio" name="recommended-path" value="Prioritize analyze-sessions Claude rich-transcript parser upgrade"> <span>Prioritize analyze-sessions Claude rich-transcript parser upgrade</span></label>
+      <label><input type="radio" name="recommended-path" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+      <label><input type="radio" name="recommended-path" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <div class="gate question-block" data-section="Assumptions And Confidence" data-gate-type="assumptions/confidence" data-question-id="assumptions-confidence" data-target-path="">
+    <h3>Assumptions/Confidence</h3>
+    <p>How should the dashboard/local mismatch be handled in future reports?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="assumptions-confidence" value="Report exact local metrics and label dashboard-only metrics as non-reproducible"> <span>Report exact local metrics and label dashboard-only metrics as non-reproducible</span></label>
+      <label><input type="radio" name="assumptions-confidence" value="Add multiple cache weighting variants to analyze-sessions output"> <span>Add multiple cache weighting variants to analyze-sessions output</span></label>
+      <label><input type="radio" name="assumptions-confidence" value="Require provider exports before confirming provider panel percentages"> <span>Require provider exports before confirming provider panel percentages</span></label>
+      <label><input type="radio" name="assumptions-confidence" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+      <label><input type="radio" name="assumptions-confidence" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <div class="gate question-block" data-section="Artifact Destination And Proposed File Changes" data-gate-type="artifact destination" data-question-id="artifact-destination" data-target-path="alignment/analyze-sessions-claude-usage-feedback.html">
+    <h3>Artifact Destination And Proposed File Changes</h3>
+    <p>Is this review artifact and its provenance/task tracking scope acceptable?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="artifact-destination" value="Accept this review page plus prompt and task tracking artifacts"> <span>Accept this review page plus prompt and task tracking artifacts</span></label>
+      <label><input type="radio" name="artifact-destination" value="After approval, also write a canonical Markdown report"> <span>After approval, also write a canonical Markdown report</span></label>
+      <label><input type="radio" name="artifact-destination" value="Keep only the review page and do not create more artifacts"> <span>Keep only the review page and do not create more artifacts</span></label>
+      <label><input type="radio" name="artifact-destination" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+      <label><input type="radio" name="artifact-destination" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <div class="gate question-block" data-section="Post-Approval Route" data-gate-type="post-approval route" data-question-id="post-approval-route" data-target-path="">
+    <h3>Post-Approval Route</h3>
+    <p>After final approval, what should happen next?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="post-approval-route" value="Confirm the page and stop with no downstream route"> <span>Confirm the page and stop with no downstream route</span></label>
+      <label><input type="radio" name="post-approval-route" value="Confirm the page and route to targeted-skill-builder for research fan-out budget controls"> <span>Confirm the page and route to targeted-skill-builder for research fan-out budget controls</span></label>
+      <label><input type="radio" name="post-approval-route" value="Confirm the page and route to targeted-skill-builder for personal GitHub portfolio status skill"> <span>Confirm the page and route to targeted-skill-builder for personal GitHub portfolio status skill</span></label>
+      <label><input type="radio" name="post-approval-route" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+      <label><input type="radio" name="post-approval-route" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+</section>
+
+<section id="compile" class="compile-box">
+  <div class="section-head"><h2>Compile YAML</h2></div>
+  <div class="section-feedback" data-section="Compile YAML" id="feedback-compile">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Use feedback YAML for emphasis requests, concerns, or clarification before answering all gates. Use final answers YAML only when every required gate is answered.</p>
+  <div class="compile-actions"><button type="button" id="compile-feedback">Compile Feedback YAML</button><button type="button" id="copy-feedback">Copy YAML</button><span id="feedback-status"></span></div>
+  <textarea id="compiled-feedback-yaml" readonly></textarea>
+  <div class="compile-actions"><button type="button" id="compile-answers">Compile Answers</button><button type="button" id="copy-answers">Copy YAML</button><span id="answer-status"></span></div>
+  <textarea id="compiled-yaml" readonly></textarea>
+</section>
+</main>
+
+<script>
+const alignmentPage = 'alignment/analyze-sessions-claude-usage-feedback.html';
+const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
+function yamlEscape(value) { return String(value || '').replace(/\n/g, '\n    '); }
+function selectedFeedbackEntries() {
+  return [...document.querySelectorAll('.section-feedback.has-feedback')].map(box => ({
+    section: box.dataset.section,
+    feedback: box.dataset.feedback,
+    notes: box.querySelector('.feedback-notes').value.trim(),
+    requested_agent_action: actionFor[box.dataset.feedback]
+  }));
+}
+function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
+function feedbackYaml(entries) {
+  const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
+  let y = `alignment_page: ${alignmentPage}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n`;
+  y += unanswered.length ? unanswered.map(q => `  - ${q}`).join('\n') + '\n' : '  []\n';
+  y += 'section_feedback:\n';
+  y += entries.length ? entries.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+function answersYaml() {
+  const gates = [...document.querySelectorAll('.gate')];
+  let y = `alignment_page: ${alignmentPage}\napproval_status: ready-for-agent-review\ngate_answers:\n`;
+  for (const g of gates) {
+    const checked = g.querySelector('input[type="radio"]:checked');
+    const answer = checked ? checked.value : '';
+    const status = answer === 'Need clarification' ? 'needs-clarification' : (answer === 'Other / None of the above' ? 'other' : 'answered');
+    const notes = g.querySelector('.answer-notes').value.trim();
+    y += `  - section: ${yamlEscape(g.dataset.section)}\n    gate_type: ${yamlEscape(g.dataset.gateType)}\n    status: ${status}\n    answer: ${yamlEscape(answer)}\n`;
+    if (notes) y += `    notes: ${yamlEscape(notes)}\n`;
+    if (g.dataset.targetPath) y += `    target_path: ${yamlEscape(g.dataset.targetPath)}\n`;
+  }
+  const feedback = selectedFeedbackEntries();
+  y += 'section_feedback:\n';
+  y += feedback.length ? feedback.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+async function copyText(text, statusEl, textarea) {
+  try { await navigator.clipboard.writeText(text); statusEl.textContent = 'Copied'; }
+  catch { if (textarea) { textarea.focus(); textarea.select(); } statusEl.textContent = 'Select text to copy'; }
+}
+function updateAnswerState() {
+  const remaining = unansweredQuestions();
+  const btn = document.getElementById('compile-answers');
+  btn.disabled = remaining.length > 0;
+  document.getElementById('answer-status').textContent = remaining.length ? `${remaining.length} required questions remaining` : 'All required questions answered';
+}
+document.querySelectorAll('.section-feedback button[data-feedback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active'); box.classList.remove('has-feedback','has-yaml'); delete box.dataset.feedback;
+    } else {
+      box.querySelectorAll('button[data-feedback]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); box.dataset.feedback = btn.dataset.feedback; box.classList.add('has-feedback'); box.classList.remove('has-yaml');
+    }
+  });
+});
+document.querySelectorAll('.compile-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    const entry = { section: box.dataset.section, feedback: box.dataset.feedback, notes: box.querySelector('.feedback-notes').value.trim(), requested_agent_action: actionFor[box.dataset.feedback] };
+    const y = feedbackYaml([entry]);
+    const area = box.querySelector('.local-yaml'); area.value = y; box.classList.add('has-yaml');
+    copyText(y, box.querySelector('.copy-status'), area);
+  });
+});
+document.querySelectorAll('.copy-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    copyText(box.querySelector('.local-yaml').value, box.querySelector('.copy-status'), box.querySelector('.local-yaml'));
+  });
+});
+document.querySelectorAll('.gate input[type="radio"]').forEach(r => {
+  r.addEventListener('change', () => { r.closest('.gate').classList.add('has-answer'); updateAnswerState(); });
+});
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  const y = feedbackYaml(selectedFeedbackEntries());
+  const area = document.getElementById('compiled-feedback-yaml'); area.value = y;
+  copyText(y, document.getElementById('feedback-status'), area);
+});
+document.getElementById('copy-feedback').addEventListener('click', () => copyText(document.getElementById('compiled-feedback-yaml').value, document.getElementById('feedback-status'), document.getElementById('compiled-feedback-yaml')));
+document.getElementById('compile-answers').addEventListener('click', () => {
+  const remaining = unansweredQuestions();
+  if (remaining.length) { remaining[0].scrollIntoView({behavior:'smooth', block:'center'}); updateAnswerState(); return; }
+  const y = answersYaml(); const area = document.getElementById('compiled-yaml'); area.value = y;
+  copyText(y, document.getElementById('answer-status'), area);
+});
+document.getElementById('copy-answers').addEventListener('click', () => copyText(document.getElementById('compiled-yaml').value, document.getElementById('answer-status'), document.getElementById('compiled-yaml')));
+updateAnswerState();
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
