@@ -13817,3 +13817,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added package-owned tests for direct pack names, aliases, comma-separated args, `pack:` prefixes, empty pack tokens, active skill fallback, unknown names, hibernated aliases, and early diagnostics without `bash`/`jq`.
 - Verified syntax checks, package-owned tests, temp-project install/remove smokes, package build/check, npm dry-run boundary assertion, and `git diff --check`.
 - Marked Step 3.2 complete and prepared Step 3.3 install/remove/refresh parity planning.
+
+## 2026-06-10 — Personal skills repo, lexcorp-briefing, daily publish routine
+
+- Created `agentic-skills-personal` (GitHub: GeorgeQLe/agentic-skills-personal) mirroring this repo's conventions: claude/codex mirrors, versioning/archive, CHANGELOG, symlink `init.sh`.
+- Seeded `github-audit`, then corrected course after user feedback: "github audits" means portfolio status briefings — captured in `tasks/lessons.md`.
+- Quality-checked the Codex-authored `lexcorp-briefing` skill (mirror parity, real source paths, snapshot script run end-to-end) and fixed two defects; shipped v0.1 `--publish` mode and the user's v0.2 portfolio-truth/lifecycle revisions.
+- Published first daily briefing and added a dedicated "Lexcorp Briefings" brain section to the personal website (`GeorgeQLe/me`) via its alignment-archive sync.
+- Created cloud routine "Lexcorp Daily Briefing" (trig_0126MbFu3LuG7u78vewvZusM, daily 10:23 UTC) running `/lexcorp-briefing --publish` with GitHub-evidence fallback.
