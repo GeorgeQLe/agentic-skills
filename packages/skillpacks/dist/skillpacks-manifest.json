@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.0"
   },
-  "source_fingerprint": "6b026ec48bd0e11fb162edf464421515559c92355886a81f6d887e4a842849f1",
+  "source_fingerprint": "f0e77538151ac19bc10655308e40521796357d0b8b5d447db125837221432045",
   "packs": [
     {
       "name": "agent-bridge",
@@ -784,9 +784,10 @@
         "youtube-search-positioning",
         "youtube-title-thumbnail-audit",
         "youtube-vid-research",
-        "youtube-video-audit"
+        "youtube-video-audit",
+        "youtube-video-prelaunch-audit"
       ],
-      "skill_count": 13
+      "skill_count": 14
     }
   ],
   "skills": [
@@ -816,6 +817,32 @@
       "content_sha256": "9fa099ce6a5eecfbf47b9c319269d25f7ec5537c2f51f2c71a978a45a77db198",
       "archive_versions": [],
       "command": "/animation-design-planner",
+      "deck_memberships": []
+    },
+    {
+      "id": "global-claude-autoresearch-prep",
+      "name": "autoresearch-prep",
+      "scope": "global",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "path": "global/claude/autoresearch-prep/SKILL.md",
+      "content_sha256": "a9bc4baa647d892b43e58d2cd36592b7bb78bca747461e8b6b81a0f6aac3b387",
+      "archive_versions": [],
+      "command": "/autoresearch-prep",
+      "deck_memberships": []
+    },
+    {
+      "id": "global-claude-autoresearch",
+      "name": "autoresearch",
+      "scope": "global",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "path": "global/claude/autoresearch/SKILL.md",
+      "content_sha256": "8a877a7276a37759aad91885a62a2e98fdd4e44b68e034084ffc39c3bf1808e5",
+      "archive_versions": [],
+      "command": "/autoresearch",
       "deck_memberships": []
     },
     {
@@ -6949,15 +6976,30 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-youtube-ops-claude-youtube-video-prelaunch-audit",
+      "name": "youtube-video-prelaunch-audit",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "claude",
+      "version": "v0.0",
+      "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
+      "content_sha256": "74324509740602e7efa9fa49f99eebdbbe5c8c550d4a2e2c90a01cf8fae84956",
+      "archive_versions": [],
+      "command": "/youtube-video-prelaunch-audit",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-youtube-ops-claude-youtube",
       "name": "youtube",
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
-      "content_sha256": "5621a3ad18a21d0b6a20234a859bc7c0620daf00c894b76067cdcfca38492f6c",
-      "archive_versions": [],
+      "content_sha256": "48b073df7719b64c3837b47ec9323c3218b29baad924ba63647271a718bb7499",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/youtube",
       "deck_memberships": []
     },
@@ -7167,15 +7209,30 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-youtube-ops-codex-youtube-video-prelaunch-audit",
+      "name": "youtube-video-prelaunch-audit",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "codex",
+      "version": "v0.0",
+      "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
+      "content_sha256": "df2d434500c080e256c0fca23a8bf83096bf7fafc5feb7fc8900639fd61c146b",
+      "archive_versions": [],
+      "command": "$youtube-video-prelaunch-audit",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-youtube-ops-codex-youtube",
       "name": "youtube",
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
-      "content_sha256": "d557608adc79bda3accec73bbfe0ec9232177f81796169729fffae3731a1fb61",
-      "archive_versions": [],
+      "content_sha256": "a40226fda488a419cc6248699926d616b0c1b61f59627eac6752316e43abc89a",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$youtube",
       "deck_memberships": []
     }

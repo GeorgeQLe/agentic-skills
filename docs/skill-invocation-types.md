@@ -375,6 +375,7 @@
 | `youtube-title-thumbnail-audit` | chained | after video publish | Title/thumbnail audit |
 | `youtube-vid-research` | primary | user | Individual video research |
 | `youtube-video-audit` | chained | after video publish | Published video audit |
+| `youtube-video-prelaunch-audit` | primary | user | Unlisted video launch-readiness review |
 
 ## Summary Statistics
 

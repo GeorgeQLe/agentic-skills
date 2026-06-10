@@ -295,7 +295,7 @@ Use owner exports, manual snapshots, public unauthenticated captures, and user-p
 YouTube ops:
 
 ```text
-youtube-audit, youtube-channel-audit, youtube-video-audit,
+youtube-audit, youtube-channel-audit, youtube-video-audit, youtube-video-prelaunch-audit,
 youtube-vid-research, youtube-competitive-research,
 youtube-title-thumbnail-audit, youtube-description-optimizer,
 youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,

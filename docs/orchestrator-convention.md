@@ -162,7 +162,7 @@ Thin Workflow Routers are stateless "what's next" advisors. They read project st
 
 ### Reference Implementations
 
-- `packs/youtube-ops/claude/youtube/` — full intent router with 12-row classification table, 4 named plays, status mode, cross-pack routing
+- `packs/youtube-ops/claude/youtube/` — full intent router with 13-row classification table, 4 named plays, status mode, cross-pack routing
 - `packs/devtool/claude/devtool-workflow/` — thin workflow router, project-type guard, implicit skill ordering
 - `packs/game/claude/game-workflow/` — thin workflow router, project-type guard, explicit three-phase skill ordering
 
@@ -227,7 +227,7 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 | `competitive-analysis` | business-discovery | A | 4 frameworks, market-structure/comparison modes, synthesis |
 | `positioning` | business-discovery | A | 5 frameworks, market/product modes, synthesis |
 | `journey-map` | customer-lifecycle | A | 5 frameworks, pre-product/product-exists modes, synthesis |
-| `youtube` | youtube-ops | B | 12-intent classification, 4 named plays, status mode |
+| `youtube` | youtube-ops | B | 13-intent classification, 4 named plays, status mode |
 | `devtool-workflow` | devtool | B (thin) | Project-type guard, implicit skill ordering |
 | `game-workflow` | game | B (thin) | Project-type guard, explicit three-phase ordering |
 | `animation-design-planner` | global | C | 5 framework subskills, codebase grep detection, inline guardrail injection |

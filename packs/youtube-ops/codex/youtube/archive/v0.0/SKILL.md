@@ -2,8 +2,8 @@
 name: youtube
 description: Intent-based router and play composer for youtube-ops skills — classifies what the user needs and recommends a single skill or queues a multi-step play for $exec
 type: router
-version: v0.1
-argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status"
+version: v0.0
+argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <video-url> | --intel <video-urls...> | --status"
 ---
 
 ## Pack Availability Guard
@@ -16,7 +16,7 @@ Invoke as `$youtube`.
 
 Entry point for the `youtube-ops` pack. Classifies the user's intent and either recommends a single skill or composes a multi-step "play" written to `tasks/todo.md` for `$exec` to drive.
 
-This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 13 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
+This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 12 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
 
 ## Modes
 
@@ -28,7 +28,6 @@ When invoked with natural language and no flags, classify the user's intent agai
 |--------|-------------|-----------|
 | Channel health | "audit", "how is my channel", channel URL | `$youtube-channel-audit` or suggest `--health` play |
 | Video diagnosis | "why did this video", single video URL | `$youtube-video-audit` |
-| Prelaunch review | "unlisted", "pre-release", "prelaunch", "ready to publish", "needs editing", "launch strategy", single unlisted video URL | `$youtube-video-prelaunch-audit` |
 | Video understanding | "watch this", "summarize", external URL | `$youtube-vid-research` |
 | Concept validation | "should I make", "video idea" | `$youtube-concept-research` or suggest `--concept` play |
 | Competitive analysis | "why did their video", "competitor" | `$youtube-competitive-research` |
@@ -62,13 +61,13 @@ Queue a concept validation play to `tasks/todo.md`:
 3. `$youtube-search-positioning`
 4. `$youtube-format-research` (only if `remotion` pack is enabled — mark optional if missing)
 
-### Mode D — Video Launch Play (`--launch <unlisted-video-url>`)
+### Mode D — Video Launch Play (`--launch <video-url>`)
 
-Queue a launch preparation play for an unlisted or scheduled video to `tasks/todo.md`. If the video is already public and the user asks why it performed a certain way, recommend `$youtube-video-audit` instead.
+Queue a launch preparation play to `tasks/todo.md`:
 
-1. `$youtube-video-prelaunch-audit <video-url>`
+1. `$youtube-video-audit <video-url>`
 2. `$youtube-title-thumbnail-audit`
-3. `$youtube-description-optimizer <video-url> --mode draft`
+3. `$youtube-description-optimizer <video-url>`
 
 ### Mode E — Competitive Intel Play (`--intel <video-urls...>`)
 
@@ -104,39 +103,9 @@ After writing the play, recommend `$exec` to begin execution.
 ```markdown
 ## YouTube Play: {Play Type} — {timestamp}
 
-- [ ] Step 1: `$<skill-name> <args>`
-- [ ] Step 2: `$<skill-name> <args>`
+- [ ] Step 1: `$skill-name <args>`
+- [ ] Step 2: `$skill-name <args>`
 ...
 ```
 
-## Approved Artifact Handoff
-
-After an approved play write or any direct artifact mutation:
-
-- List every created or updated synthesized artifact path, including `tasks/todo.md` when a play was written.
-- State the verification performed, such as readback, schema/check command, or why no executable verification applies for a Markdown-only routing artifact.
-- Check and report the relevant git status for intended artifacts when the project is a git repository. If intended artifacts are modified or untracked, make the next action shipping, committing, or an explicit dirty-artifact handoff before recommending downstream strategy work.
-- Do not imply the research workflow is complete while approved artifacts remain untracked or uncommitted unless the user explicitly asked not to ship.
-
-## Intent-Aware Routing
-
-Before applying the default next-step routing or writing a queued play, classify the user's immediate intent and route to the missing action that best serves that intent:
-
-- Strategy refresh: recommend the missing or stale positioning, programming, portfolio, metrics, or product-media artifact.
-- Recording prep: recommend the missing series spec, script, build proof, walkthrough guide, or validation artifact needed before recording.
-- Upload prep: recommend packaging, title/thumbnail, description, chapters, prelaunch review, or final metadata work before broader strategy work.
-- Performance review: recommend metrics, cadence, portfolio, peer benchmark, owner-analytics export, or post-publication video audit work before new content planning.
-- Owner analytics or private/manual platform evidence: route to an explicit manual/guide handoff instead of inventing unavailable metrics.
-- Dirty intended artifacts: route to shipping/commit/handoff first, not another creator strategy skill.
-
-Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
-
-## Next-Step Routing
-
-When Mode A recommends skills without writing files, the recommended next step is the selected youtube-ops skill or pack installation command shown in the routing response.
-
-After Mode B-E writes an approved play to `tasks/todo.md`, recommend `Recommended next command: $exec` to begin execution. If play writing is blocked by existing unfinished tasks, the next step is the user's append, replace, or abort decision.
-
-## Default Shipping Contract
-
-Follow the shared shipping contract convention in CLAUDE.md.
+Follow the shared shipping contract convention.

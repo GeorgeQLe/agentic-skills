@@ -232,7 +232,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
 | `creator-foundation` | Both | Creator evidence, dossier, positioning, programming, series, product-led media, metrics |
 | `creator-media` | Both | Compatibility alias for `creator-foundation` and `youtube-ops`; add `remotion` separately for production work |
-| `youtube-ops` | Both | YouTube audit, packaging, portfolio, benchmarking, search, cadence, external video research |
+| `youtube-ops` | Both | YouTube audit, prelaunch review, packaging, portfolio, benchmarking, search, cadence, external video research |
 | `remotion` | Both | Format research, scene-by-scene scripts, Remotion build specs and scaffolds |
 | `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, and spin-off workflows |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |

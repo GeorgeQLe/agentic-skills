@@ -1,5 +1,11 @@
 # youtube Changelog
 
+## v0.1 - 2026-06-09
+
+- Added routing for the new `/youtube-video-prelaunch-audit` skill.
+- Updated the `--launch` play to start with prelaunch readiness review for unlisted or scheduled videos instead of post-release performance audit.
+- Added shared creator-media artifact handoff and intent-aware routing sections for router play writes.
+
 ## v0.0
 
 - Initial release: intent-based router and play composer for youtube-ops pack
