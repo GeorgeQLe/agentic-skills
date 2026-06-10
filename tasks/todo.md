@@ -1,3 +1,43 @@
+## Current Implementation - Root Instructions for Direct Alignment Edits (Drift Plan Phase 2 Step 7)
+
+### Goal
+
+Update root alignment-page instructions so any direct edit to active `alignment/*.html` files (made without invoking a skill) is required to pass `node scripts/audit-alignment-pages.mjs` before shipping. This is ALIGNMENT-PAGE Bundling Drift Plan Phase 2 Step 7 — the final Phase 2 item. The audit itself shipped in Step 6; this step only wires the requirement into the root instruction surfaces.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: two root instruction files, an optional layer1 contract test, and the drift-plan checklist share one small documentation boundary.
+
+### Context
+
+- The audit (`scripts/audit-alignment-pages.mjs`, Step 6) is read-only: five checks (TTS include, `data-alignment-category`/`data-visual-tier` on `<html>`, viewport meta, embed prohibition, index integrity), named per-page diagnostics, `exact|DRIFT` summaries, exit 1 on drift, `--root` fixture support. It exits 0 on the current repo (41 active pages). Documented as the **Active-page audit** paragraph in `docs/alignment-page-convention.md`.
+- Root instruction surfaces: `CLAUDE.md` `### Alignment Page Template` (under `## Shared Skill Conventions`, line ~122) and `AGENTS.md` `### Alignment Page Convention` (line ~72). Both sections are below the provisioned `workflow.md` block marker ("Provisioned artifact: ... Verification: block appears exactly once."), i.e. in the hand-maintained shared-conventions region — confirm the edit lands outside any provisioned/generated block before writing.
+- Suggested wording (adapt per file's existing tone): after the existing convention pointer, add a sentence/short paragraph: direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit; TTS diagnostics route to `node scripts/inject-tts.mjs`, other diagnostics are manual fixes; archived pages under `docs/history/archive/` are out of scope.
+- Keep both mirrors consistent in substance (CLAUDE.md and AGENTS.md phrase conventions slightly differently — match each file's surrounding style rather than byte-duplicating).
+- Optional but recommended: a small layer1 contract test pinning the requirement language in both root files (e.g. extend an existing root-instruction test file or add a focused test asserting both files mention `audit-alignment-pages.mjs` in their alignment sections), so the instruction cannot silently regress. Check for an existing root-instruction contract test before creating a new file.
+- Gotcha: `CLAUDE.md`/`AGENTS.md` edits change agent-facing instructions only — no SKILL.md/PACK.md changes, so no Skills Showcase regeneration and no skill version bumps apply.
+- This completes Phase 2 of the drift plan; after checking off Step 7 there are no remaining Phase 2 items, so the ship that follows should note Phase 2 completion in the drift-plan section.
+
+### Steps
+
+- [ ] Add the direct-edit audit requirement to `CLAUDE.md` `### Alignment Page Template`, outside any provisioned block.
+- [ ] Add the equivalent requirement to `AGENTS.md` `### Alignment Page Convention`.
+- [ ] Add or extend a layer1 contract test pinning the requirement language in both root files (or record why existing coverage suffices).
+- [ ] Check off Phase 2 Step 7 in the ALIGNMENT-PAGE Bundling Drift Plan checklist, note Phase 2 completion, and record review notes.
+
+### Acceptance Criteria
+
+- Both root instruction files require `node scripts/audit-alignment-pages.mjs` for direct `alignment/*.html` edits, in their alignment sections.
+- `node scripts/audit-alignment-pages.mjs` and `node scripts/upgrade-alignment-page.mjs --check` still exit 0; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
+- `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done. This is the last Phase 2 drift-plan item.
+
+---
+
 ## Current Implementation - Direct Alignment HTML Edit Audit (Drift Plan Phase 2 Step 6)
 
 ### Goal
@@ -20,17 +60,26 @@ Add a scriptable audit for active `alignment/*.html` pages so direct edits made 
 
 ### Steps
 
-- [ ] Inventory current active `alignment/*.html` pages and measure each candidate check against them; pick the check set that is genuinely scriptable and either passes today or is worth fixing in this boundary.
-- [ ] Implement `scripts/audit-alignment-pages.mjs` with named per-page diagnostics, summary lines, shared exit 1, and `--root` fixture support.
-- [ ] Fix any current-page violations the audit surfaces (e.g. run `node scripts/inject-tts.mjs` for missing TTS includes) or explicitly exempt-and-document them.
-- [ ] Add layer1 coverage in a new `tests/layer1/audit-alignment-pages.test.ts`: repo-state run (exit 0) plus `--root` fixture tests for each diagnostic class and a clean tree.
-- [ ] Document the audit in `docs/alignment-page-convention.md` outside the generated-marker block; check off Phase 2 Step 6 in the drift-plan checklist and record review notes.
+- [x] Inventory current active `alignment/*.html` pages and measure each candidate check against them; pick the check set that is genuinely scriptable and either passes today or is worth fixing in this boundary.
+- [x] Implement `scripts/audit-alignment-pages.mjs` with named per-page diagnostics, summary lines, shared exit 1, and `--root` fixture support.
+- [x] Fix any current-page violations the audit surfaces (e.g. run `node scripts/inject-tts.mjs` for missing TTS includes) or explicitly exempt-and-document them.
+- [x] Add layer1 coverage in a new `tests/layer1/audit-alignment-pages.test.ts`: repo-state run (exit 0) plus `--root` fixture tests for each diagnostic class and a clean tree.
+- [x] Document the audit in `docs/alignment-page-convention.md` outside the generated-marker block; check off Phase 2 Step 6 in the drift-plan checklist and record review notes.
+
+### Review Notes (2026-06-10)
+
+- **Check set (all five candidates kept, all scriptable):** (1) TTS include — the `alignment-tts-kokoro.js` src tag must be present, not `type="module"`, with no inline/leftover `alignTTS` block (diagnostics route to `node scripts/inject-tts.mjs` / `--force`); (2) page metadata — `data-alignment-category` (research|product-design|utility|qa-meta|ops-analysis) and `data-visual-tier` (document|visual|prototype) on `<html>`, missing and invalid values both diagnosed; (3) viewport meta; (4) embed prohibition (`<object>`/`<iframe>`/`<embed>`); (5) index integrity — `alignment/index.html` exists, links every active page exactly once (duplicate and dangling entries diagnosed), every entry carries a `YYYY-MM-DD` date searched between the entry's anchor and its boundary (closing `</article>` for the card layout, else the next anchor, so a neighbor's date cannot mask an undated entry). `index.html` is exempt from the per-page TTS/metadata checks but held to viewport/embed rules.
+- **Script shape:** `scripts/audit-alignment-pages.mjs` is read-only (no fix mode), follows the Step 2-5 pattern — named per-page diagnostics grouped per check on stderr, summary lines `TTS include|Page metadata|Viewport meta|Embed prohibition|Index integrity: N, exact|DRIFT`, single shared exit 1, `--root <path>` for fixture trees. An empty/missing alignment dir exits 0; a missing index with active pages present is drift.
+- **In-boundary fixes (the audit surfaced real violations):** injected the TTS tag into `analyze-sessions-skill-gaps-manual-asks.html` via `inject-tts.mjs`; added `data-alignment-category` + `data-visual-tier="document"` to 36 pages per the convention's prefix rule (17 ops-analysis, 9 utility, 6 qa-meta, 2 research incl. `workflow-design-three-pipelines` matching its index grouping, 2 product-design — none have charts, so all document tier); added the missing `data-visual-tier` to the 2 pages that already had a category; added the 2 unindexed pages to `alignment/index.html` (`skillmap.html` product-design 2026-06-10, `devtool-docs-audit-docs-freshness.html` qa-meta 2026-06-08, dates from page-internal/git dates) and corrected the header/section counts (38→41). Attribute/index additions are minor metadata amendments, not page replacements, so no archive-first ceremony applied (the convention itself says to add missing attributes "on the next update").
+- **Tests:** new `tests/layer1/audit-alignment-pages.test.ts` (13 tests) — repo-state exit-0 run with exact summaries, clean fixture tree, empty tree, and a failing fixture per diagnostic class (missing/module/inline TTS, missing+invalid category/tier, missing viewport, iframe embed, missing index, unlinked page, duplicate+dangling entries, undated entry with a dated neighbor).
+- Documented the audit as an **Active-page audit** paragraph in `docs/alignment-page-convention.md` beside the Step 3/4 paragraphs, outside the generated-marker block; generator dry-run confirmed no bundle regeneration.
+- Validation: `node --check scripts/audit-alignment-pages.mjs`; `node scripts/audit-alignment-pages.mjs` exit 0 (41 active pages, all five checks exact, 41 index entries); focused vitest 13/13; full layer1 56 files / 2201 tests / 0 failed; `node scripts/upgrade-alignment-page.mjs --check` exit 0 (284 ownable, exact) and `--dry-run` exit 0; `git diff --check` clean.
 
 ### Acceptance Criteria
 
-- `node scripts/audit-alignment-pages.mjs` exits 0 on the current repo with per-check summary lines.
-- Each diagnostic class has a failing fixture test and the repo-state test passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
-- `node scripts/upgrade-alignment-page.mjs --check` still exits 0; `git diff --check` clean.
+- [x] `node scripts/audit-alignment-pages.mjs` exits 0 on the current repo with per-check summary lines.
+- [x] Each diagnostic class has a failing fixture test and the repo-state test passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed (56 files / 2201 tests).
+- [x] `node scripts/upgrade-alignment-page.mjs --check` still exits 0; `git diff --check` clean.
 
 ### Handoff
 
@@ -583,7 +632,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
 - [x] Add generated-bundle variant/drift validation against expected renderer output.
 - [x] Convert or explicitly test the remaining bespoke alignment sections (7 skills / 14 mirrors after the Step 1 `customer-discovery` conversion).
-- [ ] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
+- [x] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
 - [ ] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
 
 ### Review Notes
@@ -614,6 +663,10 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 ### Phase 2 Review Notes (Step 5, 2026-06-10)
 
 - Step 5 shipped: all 7 allowlisted bespoke skills (`consolidate-variations`, `prototype`, `spec-interview`, `ui-interview`, `ux-variations`, `uat`, `research-roadmap`) converted to the generated stub + bundled `ALIGNMENT-PAGE.md` in both mirrors, with version bumps, archives, and changelog entries. `prototype` keeps its custom prototype-first timing rule as hybrid bespoke prose beside the stub, pinned by layer1. The bespoke allowlist is now empty (mechanism and diagnostics unchanged). Repo: `Bespoke allowlist: 0 skills, exact`, `Generated bundles: 284 ownable, exact`. Full verdicts and validation in the "Bespoke Alignment Section Conversion/Testing (Drift Plan Phase 2 Step 5)" section above.
+
+### Phase 2 Review Notes (Step 6, 2026-06-10)
+
+- Step 6 shipped: `scripts/audit-alignment-pages.mjs` is the read-only convention gate for direct edits to active `alignment/*.html` pages — five checks (TTS include, category/tier data attributes, viewport meta, embed prohibition, index integrity) with named per-page diagnostics, `exact|DRIFT` summary lines, shared exit 1, and `--root` fixture support; enforced by `tests/layer1/audit-alignment-pages.test.ts` (repo-state run + 12 fixture tests). The audit surfaced and this boundary fixed: 1 missing TTS include, 36 pages missing both data attributes (+2 missing only the tier), and 2 pages absent from `alignment/index.html`. Current repo: 41 active pages, all checks exact. Full details in the "Direct Alignment HTML Edit Audit (Drift Plan Phase 2 Step 6)" section above. Step 7 (require the audit in root alignment-page instructions for direct HTML edits) remains queued.
 
 ---
 
