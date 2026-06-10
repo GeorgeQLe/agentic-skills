@@ -55,7 +55,7 @@ Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Ski
 
 ### Steps
 
-- [ ] Reconcile remaining P2 Skills Showcase count docs:
+- [x] Reconcile remaining P2 Skills Showcase count docs:
   - Define count terms from generated data: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, and display cards.
   - Update stale count references in current Skills Showcase docs and indexed alignment pages, including `tasks/pack-card-hierarchy.md`, `alignment/skillmap.html`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html` as confirmed by fresh scans.
   - Preserve historical counts only when explicitly labeled historical/prototype scope.
@@ -64,13 +64,20 @@ Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Ski
 
 ### Acceptance Criteria
 
-- [ ] Current count-bearing docs distinguish generated platform entries from unique mirrored skills, unique pack skills, unique global skills, packs, and any historical display-card scope.
-- [ ] Targeted scans no longer find unlabeled stale `157`, `156 pack skills`, or `38 packs` claims in current Skills Showcase docs/pages.
-- [ ] Alignment-page validation and whitespace checks pass.
+- [x] Current count-bearing docs distinguish generated platform entries from unique mirrored skills, unique pack skills, unique global skills, packs, and any historical display-card scope.
+- [x] Targeted scans no longer find unlabeled stale `157`, `156 pack skills`, or `38 packs` claims in current Skills Showcase docs/pages.
+- [x] Alignment-page validation and whitespace checks pass.
 
 ### Review Notes
 
-- Pending.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-194752-exec.md`.
+- Parsed current generated Skills Showcase data from `apps/skills-showcase/public/assets/skills-data.js`: 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 41 active packs, 39 skill-bearing packs, 354 pack platform entries, and 19 global platform entries.
+- Updated `scripts/generate-skillmap-excalidraw.mjs` so regenerated skill-map artifacts report generated inventory counts separately from the structural Claude-root map scope.
+- Regenerated `docs/skillmap.excalidraw` and `alignment/skillmap.html`, including current count summaries and explicit map-scope wording for the 157 repo-managed Claude pack roots.
+- Updated scoped Skills Showcase planning docs and indexed alignment pages so current generated counts are not mixed with the historical seven-set prototype display-card counts.
+- Replaced the lingering retired `/icp` handoff in the scoped Skills Showcase idea-brief page with `/customer-discovery` while the page was open for P2 count reconciliation.
+- Validation passed: `node --check scripts/generate-skillmap-excalidraw.mjs`; `node scripts/generate-skillmap-excalidraw.mjs`; targeted stale-count scan; targeted retired-route scan; `node scripts/audit-alignment-pages.mjs`; `node scripts/upgrade-alignment-page.mjs --check`; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` (14/14); and `git diff --check`.
+- Adversarial review found and fixed the initial stale `totalPacks` generator reference and a lingering unlabeled count phrase before final validation. Remaining dirty `skill-interview`, `ui-interview`, generated Skills Showcase data, and benchmark-matrix worktree changes are outside this `$exec` boundary and were left untouched.
 
 ---
 

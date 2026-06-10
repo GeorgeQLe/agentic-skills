@@ -38,11 +38,11 @@ Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Ski
 ### Plan
 
 1. Reconcile remaining P2 Skills Showcase count docs.
-   - [ ] Define count terms from generated data: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, and display cards.
-   - [ ] Update stale count references in current Skills Showcase docs and indexed alignment pages, including `tasks/pack-card-hierarchy.md`, `alignment/skillmap.html`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html` as confirmed by fresh scans.
-   - [ ] Preserve historical counts only when explicitly labeled historical/prototype scope.
-   - [ ] Run generated-data parsing, alignment-page audit, targeted count scans, and whitespace checks.
-   - [ ] Record review notes, update history, commit, and push intended changes only.
+   - [x] Define count terms from generated data: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, and display cards.
+   - [x] Update stale count references in current Skills Showcase docs and indexed alignment pages, including `tasks/pack-card-hierarchy.md`, `alignment/skillmap.html`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html` as confirmed by fresh scans.
+   - [x] Preserve historical counts only when explicitly labeled historical/prototype scope.
+   - [x] Run generated-data parsing, alignment-page audit, targeted count scans, and whitespace checks.
+   - [x] Record review notes, update history, commit, and push intended changes only.
 
 ### Acceptance Criteria
 

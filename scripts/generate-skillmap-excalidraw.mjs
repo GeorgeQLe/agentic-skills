@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readdirSync, writeFileSync, existsSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -7,6 +7,7 @@ const PACKS_DIR = join(ROOT, 'packs');
 const GLOBAL_DIR = join(ROOT, 'global', 'claude');
 const OUT = join(ROOT, 'docs', 'skillmap.excalidraw');
 const OUT_HTML = join(ROOT, 'alignment', 'skillmap.html');
+const SHOWCASE_DATA_JS = join(ROOT, 'apps', 'skills-showcase', 'public', 'assets', 'skills-data.js');
 
 // --- Data collection ---
 
@@ -30,6 +31,60 @@ function getAllPacks() {
 
 function getGlobalSkills() {
   return getSkills(GLOBAL_DIR);
+}
+
+function getShowcaseCounts() {
+  const fallback = {
+    platformEntries: 0,
+    sourceCount: 0,
+    activePacks: 0,
+    skillBearingPacks: 0,
+    uniqueMirroredSkills: 0,
+    uniquePackSkills: 0,
+    uniqueGlobalSkills: 0,
+    packPlatformEntries: 0,
+    globalPlatformEntries: 0,
+  };
+
+  if (!existsSync(SHOWCASE_DATA_JS)) return fallback;
+
+  const source = readFileSync(SHOWCASE_DATA_JS, 'utf8');
+  const match = source.match(/window\.SKILLS_SHOWCASE_DATA\s*=\s*(\{[\s\S]*\});?\s*$/);
+  if (!match) return fallback;
+
+  const data = JSON.parse(match[1]);
+  const skills = Array.isArray(data.skills) ? data.skills : [];
+  const uniqueMirroredSkills = new Set();
+  const uniquePackSkills = new Set();
+  const uniqueGlobalSkills = new Set();
+  const skillBearingPacks = new Set();
+  let packPlatformEntries = 0;
+  let globalPlatformEntries = 0;
+
+  for (const skill of skills) {
+    const key = skill.mirrorKey || skill.name;
+    if (key) uniqueMirroredSkills.add(key);
+    if (skill.scope === 'global') {
+      globalPlatformEntries += 1;
+      if (key) uniqueGlobalSkills.add(key);
+    } else {
+      packPlatformEntries += 1;
+      if (key) uniquePackSkills.add(key);
+      if (skill.pack) skillBearingPacks.add(skill.pack);
+    }
+  }
+
+  return {
+    platformEntries: Number(data.skillCount) || skills.length,
+    sourceCount: Number(data.sourceCount) || 0,
+    activePacks: Number(data.packCount) || (Array.isArray(data.packs) ? data.packs.length : 0),
+    skillBearingPacks: skillBearingPacks.size,
+    uniqueMirroredSkills: uniqueMirroredSkills.size,
+    uniquePackSkills: uniquePackSkills.size,
+    uniqueGlobalSkills: uniqueGlobalSkills.size,
+    packPlatformEntries,
+    globalPlatformEntries,
+  };
 }
 
 // --- Deck/domain mapping ---
@@ -288,9 +343,18 @@ function layoutRow(packDataMap, domainKeys, startX, startY, rowLabel) {
 
 const allPacks = getAllPacks();
 const globalSkills = getGlobalSkills();
+const showcaseCounts = getShowcaseCounts();
 
-const totalPacks = Object.keys(allPacks).length;
-const totalSkills = Object.values(allPacks).reduce((sum, s) => sum + s.length, 0);
+const mappedPacks = Object.keys(allPacks).length;
+const claudePackRoots = Object.values(allPacks).reduce((sum, s) => sum + s.length, 0);
+const activePacks = showcaseCounts.activePacks || mappedPacks;
+const uniquePackSkills = showcaseCounts.uniquePackSkills || claudePackRoots;
+const uniqueGlobalSkills = showcaseCounts.uniqueGlobalSkills || globalSkills.length;
+const platformEntries = showcaseCounts.platformEntries || claudePackRoots + globalSkills.length;
+const uniqueMirroredSkills = showcaseCounts.uniqueMirroredSkills || uniquePackSkills + uniqueGlobalSkills;
+const skillBearingPacks = showcaseCounts.skillBearingPacks || mappedPacks;
+const packPlatformEntries = showcaseCounts.packPlatformEntries || claudePackRoots;
+const globalPlatformEntries = showcaseCounts.globalPlatformEntries || globalSkills.length;
 
 const allElements = [];
 let curY = 40;
@@ -305,11 +369,11 @@ allElements.push(makeText(nextId('title'), startX, curY, 'agentic-skills — Ski
   width: 500,
 }));
 curY += 36;
-allElements.push(makeText(nextId('subtitle'), startX, curY, `${totalPacks} packs · ${totalSkills} pack skills · ${globalSkills.length} global skills`, {
+allElements.push(makeText(nextId('subtitle'), startX, curY, `${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueGlobalSkills} unique global skills · ${platformEntries} platform entries`, {
   fontSize: 14,
   fontFamily: 2,
   strokeColor: '#868e96',
-  width: 600,
+  width: 900,
 }));
 curY += 50;
 
@@ -545,7 +609,7 @@ function generateAlignmentHTML() {
 
   svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="24" font-weight="700" fill="#ffffff">agentic-skills — Skill Map</text>`;
   y += 24;
-  svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" fill="#8b949e">${totalPacks} packs · ${totalSkills} pack skills · ${globalSkills.length} global skills</text>`;
+  svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" fill="#8b949e">${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueGlobalSkills} unique global skills · ${platformEntries} platform entries</text>`;
   y += 44;
 
   const rows = [
@@ -692,7 +756,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <main>
 <header>
   <h1>Skill Map</h1>
-  <p class="lead">Visual overview of all ${totalPacks} packs, ${totalSkills} pack skills, and ${globalSkills.length} global skills in the agentic-skills system &mdash; organized by deck and domain.</p>
+  <p class="lead">Visual overview of the current generated Skills Showcase inventory: ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, and ${activePacks} active packs &mdash; organized by deck and domain.</p>
   <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; ${today} &nbsp; <strong>artifact:</strong>&nbsp; ${alignmentPage}</div>
 </header>
 
@@ -716,12 +780,15 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<div class="stat-grid" data-tts-narrative="The system contains ${totalPacks} packs holding ${totalSkills} pack skills, plus ${globalSkills.length} global skills. There are ${domainOrder.length} domains organized across 5 deck rows.">
-  <div><strong>${totalPacks}</strong><span>Packs</span></div>
-  <div><strong>${totalSkills}</strong><span>Pack skills</span></div>
-  <div><strong>${globalSkills.length}</strong><span>Global skills</span></div>
-  <div><strong>${domainOrder.length}</strong><span>Domains</span></div>
+<div class="stat-grid" data-tts-narrative="The generated inventory contains ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, ${activePacks} active packs, and ${skillBearingPacks} skill-bearing packs. The visual map below lists ${claudePackRoots} repo-managed Claude pack roots and ${globalSkills.length} global Claude roots.">
+  <div><strong>${platformEntries}</strong><span>Platform entries</span></div>
+  <div><strong>${uniqueMirroredSkills}</strong><span>Unique mirrored skills</span></div>
+  <div><strong>${uniquePackSkills}</strong><span>Unique pack skills</span></div>
+  <div><strong>${uniqueGlobalSkills}</strong><span>Unique global skills</span></div>
+  <div><strong>${activePacks}</strong><span>Active packs</span></div>
+  <div><strong>${skillBearingPacks}</strong><span>Skill-bearing packs</span></div>
 </div>
+<p>The counts above come from <code>apps/skills-showcase/public/assets/skills-data.js</code>. The SVG and pack index are a structural Claude-root map for the editable Excalidraw view; they list ${claudePackRoots} repo-managed Claude pack roots and ${globalSkills.length} global Claude roots rather than platform entries.</p>
 <h3>Domain Legend</h3>
 <div class="legend">
 ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" style="background:${d.fill};border:1.5px solid ${d.border}"></div>${esc(d.label)}</div>`).join('\n')}
@@ -740,7 +807,7 @@ ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" 
       <textarea class="local-yaml" readonly></textarea>
     </div>
 <p>All packs grouped by deck row (Rapid &rarr; Business AFPS &rarr; Devtool AFPS &rarr; Game AFPS &rarr; Support &rarr; Infrastructure &rarr; Global). Dashed arrows show graduation paths; solid arrows show canonical flow.</p>
-<div class="map-wrap" data-tts-narrative="The skill map shows ${totalPacks} packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business and creator packs, Devtool AFPS, Game AFPS, support and cross-cutting packs, infrastructure packs, and global skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
+<div class="map-wrap" data-tts-narrative="The skill map shows ${activePacks} active packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business and creator packs, Devtool AFPS, Game AFPS, support and cross-cutting packs, infrastructure packs, and global skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
 ${fullSvg}
 </div>
 <p style="color:var(--text-muted);font-size:0.85rem">Scroll horizontally to see all packs. Also available as <code>docs/skillmap.excalidraw</code> for editing in Excalidraw.</p>
@@ -757,7 +824,7 @@ ${fullSvg}
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<div class="table-wrap" data-tts-narrative="The pack index table lists all ${totalPacks} packs with their domain, skill count, and skill names.">
+<div class="table-wrap" data-tts-narrative="The pack index table lists all ${mappedPacks} repo-managed packs with their domain, Claude-root skill count, and Claude skill names. Current generated inventory counts are summarized above.">
 <table><thead><tr><th>Pack</th><th>Domain</th><th>Skills</th><th>Skill Names</th></tr></thead><tbody>
 ${statsRows}
 </tbody></table>
@@ -966,5 +1033,7 @@ const htmlSize = generateAlignmentHTML();
 
 console.log(`Generated ${OUT}`);
 console.log(`Generated ${OUT_HTML} (${(htmlSize / 1024).toFixed(1)} KB)`);
-console.log(`  ${totalPacks} packs, ${totalSkills} pack skills, ${globalSkills.length} global skills`);
+console.log(`  ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills`);
+console.log(`  ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, ${activePacks} active packs`);
+console.log(`  map scope: ${mappedPacks} repo-managed packs, ${claudePackRoots} Claude pack roots, ${globalSkills.length} global Claude roots`);
 console.log(`  ${allElements.length} Excalidraw elements`);

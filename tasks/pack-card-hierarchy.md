@@ -2,9 +2,10 @@
 
 ## Raw Inventory Summary
 
-- **157 unique skills** across **38 packs** (310 entries = 157 × 2 platforms)
-- Pack sizes range from 1 (agent-bridge, exec-profile) to 13 (business-ops)
-- Card count for display = **157 unique skill cards**
+- Current generated Skills Showcase data reports **373 platform entries** from generated rows: **354 pack platform entries** plus **19 global platform entries**.
+- De-duplicating generated rows by `mirrorKey` gives **190 unique mirrored skills**: **179 unique pack skills** plus **11 unique global skills**.
+- Generated pack metadata reports **41 active packs**, **39 skill-bearing packs**, and two active empty/alias packs (`business-app`, `creator-media`) that should not be counted as skill-bearing display packs.
+- The seven-set map below is a **historical prototype display-card map**. It groups **157 repo-managed Claude pack roots** into **7 display sets** from an earlier inventory snapshot; use it as layout inspiration, not as the current public inventory total.
 
 ## Step 1: Pack → AFPS Phase Coverage
 
@@ -69,7 +70,9 @@ Most packs are phase-specialized (1-2 phases). The business chain covers LAB-01 
 
 ---
 
-## Step 2: Proposed Set Groupings
+## Step 2: Historical Prototype Set Groupings
+
+This section preserves the original seven-set prototype display-card grouping. The card counts in this section are scoped to that historical prototype map, not the current generated Skills Showcase inventory.
 
 ### Design Constraints
 - Each set = 8–40 cards (sweet spot for a booster pack shelf)
@@ -229,15 +232,17 @@ Each sealed pack shows phase badge chips (e.g., "LAB-01 LAB-02") so the user can
 
 ## Verification Checklist
 
-- [x] **157 unique skills accounted for:** 14 + 21 + 24 + 16 + 19 + 31 + 32 = **157** ✓
+- [x] **157 historical prototype display cards accounted for:** 14 + 21 + 24 + 16 + 19 + 31 + 32 = **157** ✓
 - [x] **No set under 8 cards:** smallest = Market Intel (14) ✓
 - [x] **No set over 40 cards:** largest = Foundation (32) ✓
 - [x] **All 7 AFPS phases covered:** see matrix above ✓
-- [x] **Every pack assigned to exactly one set:** 38 packs distributed across 7 sets ✓
+- [x] **Every prototype display pack assigned to exactly one set:** the historical display snapshot covered 38 skill-bearing groupings in the seven-set layout ✓
 
 ---
 
 ## Implementation Data
+
+This TypeScript sketch is retained for the historical prototype grouping. Before using it in current Skills Showcase implementation work, regenerate deck/set data from `apps/skills-showcase/public/assets/skills-data.js` so the UI reflects 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, and 41 active packs.
 
 For `page.tsx`, replace `FEATURED_PACKS` with:
 

@@ -13985,3 +13985,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Folded in adjacent npm publication wording cleanup in README, Quickstart, decks, and the npm distribution design doc.
 - Added visible 2026-06-10 amendment markers to edited active alignment-page content.
 - Verified with targeted stale-route/install-wording/publication-wording scans, wrapper syntax and status/doctor smokes, active alignment-page audit, generated-bundle check, focused layer1 alignment test 14/14, and `git diff --check`. Real-home `doctor` reports pre-existing stale global installs; isolated-home `doctor` passes. Manifest: `tasks/ship-manifest-2026-06-10-p1-docs-remediation.md`.
+
+## 2026-06-10 — P2 Skills Showcase count reconciliation
+
+- Reconciled current Skills Showcase count-bearing docs and indexed pages around generated inventory terms: 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 41 active packs, 39 skill-bearing packs, 354 pack platform entries, and 19 global platform entries.
+- Updated `scripts/generate-skillmap-excalidraw.mjs` to compute generated inventory counts from `apps/skills-showcase/public/assets/skills-data.js`, then regenerated `docs/skillmap.excalidraw` and `alignment/skillmap.html` with generated-count summaries separated from the structural Claude-root map scope.
+- Preserved old 157/38/seven-set references only as explicitly historical prototype display-card scope in `tasks/pack-card-hierarchy.md`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html`.
+- Verified with generator syntax and regeneration, targeted stale-count and retired-route scans, active alignment-page audit, generated-bundle check, focused layer1 alignment test 14/14, and `git diff --check`. Manifest: `tasks/ship-manifest-2026-06-10-skills-showcase-count-reconciliation.md`.
