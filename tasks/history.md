@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.4
+
+- Ported `skillpacks doctor`, `pin`, `unpin`, and `prune` into package-owned Node code so those commands no longer require `bash` or `jq`.
+- Reused the existing managed-install helpers for content hashes, `.agentic-skills-managed` markers, pinned archive symlinks, stale/missing/unknown drift states, and unmanaged local directory safety.
+- Confirmed Node project lock behavior for lifecycle mutations: stale lock cleanup, command labels, and release on errors are covered by package-owned tests.
+- Kept `recommend`, `which`, `install-deck`, and packaged shell scripts available as compatibility/fallback surfaces for remaining closure work.
+- Fixed an adversarial-review finding before shipping: `doctor`, `pin`, and `unpin` now preserve `pack.sh` behavior by ignoring extra args instead of rejecting them.
+- Verified Node-vs-`pack.sh` parity in temp projects for `doctor`, `pin`, `unpin`, `prune --dry-run`, and `prune`.
+- Real `npm publish` was not run.
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.3
 
 - Ported `skillpacks install`, `remove`, and `refresh` lifecycle mutations into package-owned Node code after the existing alias/skill normalization step.

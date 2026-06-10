@@ -18,8 +18,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
    - [x] Port pack and individual skill install/remove/refresh logic.
    - [x] Preserve `.agentic-skills-managed` marker creation and content hash behavior.
 4. Locking and drift parity.
-   - [ ] Port `.agents/.pack.lock` handling.
-   - [ ] Port `doctor`, `pin`, `unpin`, and `prune`.
+   - [x] Port `.agents/.pack.lock` handling.
+   - [x] Port `doctor`, `pin`, `unpin`, and `prune`.
 5. Compatibility closure.
    - [ ] Keep `scripts/pack.sh` as a wrapper or tested fallback.
    - [ ] Run temp-repo parity tests against Node and bash paths before removing any fallback dependency.
@@ -29,7 +29,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 - [x] Step 3.1: Node Project Config Parity.
 - [x] Step 3.2: Pack Normalization And Alias Parity.
 - [x] Step 3.3: Install/Remove/Refresh Parity.
-- [ ] Step 3.4: Locking And Drift Parity.
+- [x] Step 3.4: Locking And Drift Parity.
+- [ ] Step 3.5: Compatibility Closure.
 
 ---
 

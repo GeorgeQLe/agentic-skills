@@ -281,6 +281,16 @@ function removeRepoSkillInstall(target) {
   return false;
 }
 
+function comparePathStrings(left, right) {
+  if (left < right) {
+    return -1;
+  }
+  if (left > right) {
+    return 1;
+  }
+  return 0;
+}
+
 function syncSkillLink(source, target) {
   if (existsSync(target)) {
     const stats = lstatSync(target);
@@ -374,6 +384,12 @@ function linkSkill(projectRoot, tool, skillName, sourceDir, config) {
 
 function enabledPacks(config) {
   return Array.isArray(config?.enabled_packs) ? config.enabled_packs : [];
+}
+
+function pinnedVersions(config) {
+  return config?.pinned_versions && typeof config.pinned_versions === 'object'
+    ? config.pinned_versions
+    : {};
 }
 
 function writePackProjectConfig(projectRoot, pack, packs) {
@@ -529,6 +545,173 @@ function enabledSkillEntries(config) {
   return Object.entries(config.enabled_skills);
 }
 
+function installedSkillTargets(projectRoot) {
+  const roots = TOOLS.map((tool) => targetRoot(projectRoot, tool));
+  const paths = [];
+
+  for (const root of roots) {
+    if (!existsSync(root)) {
+      continue;
+    }
+    for (const entry of readdirSync(root)) {
+      const fullPath = join(root, entry);
+      const stats = lstatSync(fullPath);
+      if (stats.isDirectory() || stats.isSymbolicLink()) {
+        paths.push(fullPath);
+      }
+    }
+  }
+
+  return paths.sort(comparePathStrings);
+}
+
+function relativeProjectPath(projectRoot, target) {
+  return relative(projectRoot, target);
+}
+
+function skillInstallStatus(target) {
+  const stats = lstatSync(target);
+  if (stats.isSymbolicLink()) {
+    const source = readlinkSync(target);
+    const version = skillSourceVersion(source);
+    return { status: 'pinned', recordedVersion: version, currentVersion: version };
+  }
+
+  if (!isManagedSkillDir(target)) {
+    return { status: 'not-managed', recordedVersion: '', currentVersion: '' };
+  }
+
+  const source = managedMarkerField(target, 'source');
+  const recordedSha = managedMarkerField(target, 'source_sha');
+  const recordedVersion = managedMarkerField(target, 'source_version');
+
+  if (!source || !existsSync(source) || !lstatSync(source).isDirectory()) {
+    return { status: 'missing-source', recordedVersion, currentVersion: '' };
+  }
+
+  const currentVersion = skillSourceVersion(source);
+  if (!recordedSha) {
+    return { status: 'unknown', recordedVersion, currentVersion };
+  }
+
+  const currentSha = skillContentSha(source);
+  return {
+    status: recordedSha === currentSha ? 'ok' : 'stale',
+    recordedVersion,
+    currentVersion
+  };
+}
+
+function projectSkillUpdatesMode(projectRoot) {
+  const config = readProjectConfig(projectRoot);
+  return config?.skill_updates?.mode || '';
+}
+
+function archiveSourceForSkill(skillEntry, version) {
+  return join(skillSourceDir(skillEntry), 'archive', version);
+}
+
+function findPackOrDie(manifest, skillName) {
+  const pack = findPackForSkill(manifest, skillName);
+  if (!pack) {
+    throw new Error(`Skill '${skillName}' not found in any pack`);
+  }
+  return pack;
+}
+
+function archiveVersionExists(manifest, pack, skillName, version) {
+  return TOOLS.some((tool) => {
+    const skill = findSkillEntry(manifest, pack, tool, skillName);
+    return skill && existsSync(join(archiveSourceForSkill(skill, version), 'SKILL.md'));
+  });
+}
+
+function requireExistingProjectConfig(projectRoot, message) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    throw new Error(message);
+  }
+  return config;
+}
+
+function writePinnedVersion(projectRoot, skillName, version) {
+  const config = requireExistingProjectConfig(projectRoot, 'No .agents/project.json found; install a pack first');
+  const next = { ...config };
+  next.pinned_versions = { ...pinnedVersions(config), [skillName]: version };
+  writeProjectConfig(projectRoot, next);
+}
+
+function deletePinnedVersion(projectRoot, skillName) {
+  const config = requireExistingProjectConfig(projectRoot, 'No .agents/project.json found');
+  const next = { ...config };
+
+  if (next.pinned_versions && typeof next.pinned_versions === 'object') {
+    const versions = { ...next.pinned_versions };
+    delete versions[skillName];
+    if (Object.keys(versions).length > 0) {
+      next.pinned_versions = versions;
+    } else {
+      delete next.pinned_versions;
+    }
+  }
+
+  writeProjectConfig(projectRoot, next);
+}
+
+function relinkPinnedSkill(projectRoot, manifest, pack, skillName, version) {
+  for (const tool of TOOLS) {
+    const skill = findSkillEntry(manifest, pack, tool, skillName);
+    if (!skill) {
+      continue;
+    }
+
+    const root = targetRoot(projectRoot, tool);
+    const source = archiveSourceForSkill(skill, version);
+    if (!existsSync(root) || !existsSync(source)) {
+      continue;
+    }
+
+    if (syncSkillInstall(source, join(root, skillName))) {
+      console.log(`Pinned .${tool}/skills/${skillName} -> ${source}`);
+    }
+  }
+}
+
+function relinkUnpinnedSkill(projectRoot, manifest, pack, skillName) {
+  for (const tool of TOOLS) {
+    const skill = findSkillEntry(manifest, pack, tool, skillName);
+    if (!skill) {
+      continue;
+    }
+
+    const root = targetRoot(projectRoot, tool);
+    const source = skillSourceDir(skill);
+    if (!existsSync(root) || !existsSync(source)) {
+      continue;
+    }
+
+    if (syncSkillInstall(source, join(root, skillName))) {
+      console.log(`Unpinned .${tool}/skills/${skillName} -> ${source}`);
+    }
+  }
+}
+
+function expectedSkillNames(manifest, config) {
+  const expected = new Set();
+
+  for (const pack of enabledPacks(config)) {
+    for (const skillName of uniquePackSkillNames(manifest, pack)) {
+      expected.add(skillName);
+    }
+  }
+
+  for (const [skillName] of enabledSkillEntries(config)) {
+    expected.add(skillName);
+  }
+
+  return expected;
+}
+
 export function printSessionReloadNotice() {
   console.log('');
   console.log('Skill installs changed. Claude Code and Codex may keep the skill list loaded when the current session started.');
@@ -544,6 +727,164 @@ export async function installResolved({ manifest, projectRoot = process.cwd(), p
     for (const skill of skills) {
       installSingleSkill(projectRoot, manifest, skill);
     }
+    printSessionReloadNotice();
+    return 0;
+  });
+}
+
+export function doctorProject({ projectRoot = process.cwd() } = {}) {
+  const mode = projectSkillUpdatesMode(projectRoot) || 'warn (default)';
+  console.log(`Project skill update mode: ${mode}`);
+  console.log('Skill install drift (.claude/skills, .codex/skills):');
+
+  let found = false;
+  let anyStale = false;
+  for (const target of installedSkillTargets(projectRoot)) {
+    const status = skillInstallStatus(target);
+    if (status.status === 'not-managed') {
+      continue;
+    }
+
+    found = true;
+    const rel = relativeProjectPath(projectRoot, target);
+    switch (status.status) {
+      case 'ok':
+        console.log(`  ok       ${rel}`);
+        break;
+      case 'pinned':
+        console.log(`  pinned   ${rel} (frozen ${status.recordedVersion || '?'})`);
+        break;
+      case 'unknown':
+        console.log(`  unknown  ${rel} — run refresh to enable drift tracking`);
+        break;
+      case 'missing-source':
+        console.log(`  missing  ${rel} — canonical source no longer exists`);
+        break;
+      case 'stale':
+        console.log(
+          `  STALE    ${rel} (${status.recordedVersion || '?'} -> ${status.currentVersion || '?'})`
+        );
+        anyStale = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  if (!found) {
+    console.log('  (no managed skill installs found)');
+  }
+
+  if (anyStale) {
+    console.log('');
+    console.log('Fix: scripts/pack.sh refresh');
+    return 1;
+  }
+
+  return 0;
+}
+
+export async function pinSkill({
+  manifest,
+  projectRoot = process.cwd(),
+  skillName,
+  version
+}) {
+  if (!skillName) {
+    throw new Error('pin requires a skill name');
+  }
+  if (!version) {
+    throw new Error('pin requires a version (e.g., v0.0)');
+  }
+
+  return withProjectLock(projectRoot, `pin ${skillName} ${version}`, async () => {
+    const pack = findPackOrDie(manifest, skillName);
+    if (!archiveVersionExists(manifest, pack, skillName, version)) {
+      throw new Error(`No archive/${version}/SKILL.md found for skill '${skillName}' in pack '${pack}'`);
+    }
+
+    writePinnedVersion(projectRoot, skillName, version);
+    relinkPinnedSkill(projectRoot, manifest, pack, skillName, version);
+    console.log(`Pinned ${skillName} to ${version}`);
+    return 0;
+  });
+}
+
+export async function unpinSkill({ manifest, projectRoot = process.cwd(), skillName }) {
+  if (!skillName) {
+    throw new Error('unpin requires a skill name');
+  }
+
+  return withProjectLock(projectRoot, `unpin ${skillName}`, async () => {
+    const pack = findPackOrDie(manifest, skillName);
+    deletePinnedVersion(projectRoot, skillName);
+    relinkUnpinnedSkill(projectRoot, manifest, pack, skillName);
+    console.log(`Unpinned ${skillName} (reverted to latest)`);
+    return 0;
+  });
+}
+
+export async function pruneProject({
+  manifest,
+  projectRoot = process.cwd(),
+  args = []
+}) {
+  let dryRun = false;
+  for (const arg of args) {
+    if (arg === '--dry-run') {
+      dryRun = true;
+      continue;
+    }
+    throw new Error(`prune: unknown option '${arg}'`);
+  }
+
+  return withProjectLock(projectRoot, 'prune', async () => {
+    const expected = expectedSkillNames(manifest, readProjectConfig(projectRoot));
+    let removed = 0;
+
+    for (const target of installedSkillTargets(projectRoot)) {
+      const status = skillInstallStatus(target);
+      if (status.status === 'not-managed') {
+        continue;
+      }
+
+      let reason = '';
+      if (status.status === 'missing-source') {
+        reason = 'source no longer exists';
+      } else if (!expected.has(basename(target))) {
+        reason = 'pack not enabled';
+      }
+
+      if (!reason) {
+        continue;
+      }
+
+      const rel = relativeProjectPath(projectRoot, target);
+      if (dryRun) {
+        console.log(`would remove  ${rel} (${reason})`);
+      } else if (removeRepoSkillInstall(target)) {
+        console.log(`removed  ${rel} (${reason})`);
+      } else if (lstatSync(target).isSymbolicLink()) {
+        unlinkSync(target);
+        console.log(`removed  ${rel} (${reason})`);
+      } else if (lstatSync(target).isDirectory()) {
+        rmSync(target, { recursive: true, force: true });
+        console.log(`removed  ${rel} (${reason})`);
+      } else {
+        console.error(`FAILED   ${rel} (${reason})`);
+      }
+
+      removed += 1;
+    }
+
+    if (removed === 0) {
+      console.log('Nothing to prune.');
+    } else if (dryRun) {
+      console.log(`${removed} orphan(s) found. Run without --dry-run to remove.`);
+    } else {
+      console.log(`${removed} orphan(s) removed.`);
+    }
+
     printSessionReloadNotice();
     return 0;
   });

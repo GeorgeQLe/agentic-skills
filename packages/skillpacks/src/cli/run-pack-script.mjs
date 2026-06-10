@@ -9,7 +9,15 @@ import {
   setUpdateMode
 } from './project-config.mjs';
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
-import { installResolved, refreshProject, removeResolved } from './lifecycle.mjs';
+import {
+  doctorProject,
+  installResolved,
+  pinSkill,
+  pruneProject,
+  refreshProject,
+  removeResolved,
+  unpinSkill
+} from './lifecycle.mjs';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -48,12 +56,6 @@ const PACK_COMMANDS = new Set([
   'unpin',
   'set-mode',
   'which'
-]);
-
-const JQ_WRITE_COMMANDS = new Set([
-  'prune',
-  'pin',
-  'unpin'
 ]);
 
 function packageVersion() {
@@ -284,14 +286,38 @@ export async function runSkillpacksCli(args) {
     });
   }
 
-  requireCommand('bash', 'Install bash before running skillpacks.');
-
-  if (JQ_WRITE_COMMANDS.has(command)) {
-    requireCommand(
-      'jq',
-      'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
-    );
+  if (command === 'doctor') {
+    return doctorProject({
+      projectRoot: process.cwd()
+    });
   }
+
+  if (command === 'prune') {
+    return pruneProject({
+      manifest: readManifest(),
+      projectRoot: process.cwd(),
+      args: rest
+    });
+  }
+
+  if (command === 'pin') {
+    return pinSkill({
+      manifest: readManifest(),
+      projectRoot: process.cwd(),
+      skillName: rest[0],
+      version: rest[1]
+    });
+  }
+
+  if (command === 'unpin') {
+    return unpinSkill({
+      manifest: readManifest(),
+      projectRoot: process.cwd(),
+      skillName: rest[0]
+    });
+  }
+
+  requireCommand('bash', 'Install bash before running skillpacks.');
 
   return runCommand('bash', [packScriptPath, command, ...rest]);
 }

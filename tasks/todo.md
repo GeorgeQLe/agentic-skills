@@ -102,11 +102,11 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 ### Step 3.4: Locking And Drift Parity
 
-- [ ] Confirm the Node project lock behavior now used by install/remove/refresh covers stale lock cleanup, lock release on errors, and command labeling for lifecycle mutations.
-- [ ] Port `skillpacks doctor` drift reporting to Node using the managed marker `source`, `source_version`, `source_sha`, pinned symlink behavior, and missing-source states from `scripts/skill-links.sh`.
-- [ ] Port `skillpacks pin` and `skillpacks unpin` to Node, preserving archive-version validation, `pinned_versions` project-config updates, relinking behavior, and existing error messages where practical.
-- [ ] Port `skillpacks prune` to Node, preserving `--dry-run`, orphan detection, unmanaged-directory safety, enabled-pack and individually enabled-skill awareness, and project-config cleanup behavior.
-- [ ] Keep `pack.sh` as the comparison oracle and fallback for any unported or ambiguous drift/lock behavior during this step.
+- [x] Confirm the Node project lock behavior now used by install/remove/refresh covers stale lock cleanup, lock release on errors, and command labeling for lifecycle mutations.
+- [x] Port `skillpacks doctor` drift reporting to Node using the managed marker `source`, `source_version`, `source_sha`, pinned symlink behavior, and missing-source states from `scripts/skill-links.sh`.
+- [x] Port `skillpacks pin` and `skillpacks unpin` to Node, preserving archive-version validation, `pinned_versions` project-config updates, relinking behavior, and existing error messages where practical.
+- [x] Port `skillpacks prune` to Node, preserving `--dry-run`, orphan detection, unmanaged-directory safety, enabled-pack and individually enabled-skill awareness, and project-config cleanup behavior.
+- [x] Keep `pack.sh` as the comparison oracle and fallback for any unported or ambiguous drift/lock behavior during this step.
 
 #### Step 3.4 Implementation Plan
 
@@ -117,9 +117,45 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 #### Step 3.4 Verification Plan
 
-- [ ] Run Node syntax checks for changed package CLI files.
+- [x] Run Node syntax checks for changed package CLI files.
+- [x] Run package-owned Node tests.
+- [x] Run temp-project parity checks comparing Node and `pack.sh` behavior for doctor, pin, unpin, and prune surfaces.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
+- [x] Run `git diff --check`.
+
+#### Step 3.4 Review Notes
+
+- Added Node-owned drift reporting, pin, unpin, and prune logic to `packages/skillpacks/src/cli/lifecycle.mjs`, reusing the Step 3.3 managed-install helpers for content hashes, archive symlinks, marker ownership, and unmanaged-directory safety.
+- Routed `skillpacks doctor`, `pin`, `unpin`, and `prune` through Node in `run-pack-script.mjs`; `recommend`, `which`, and `install-deck` remain on the `pack.sh` compatibility path.
+- Preserved shell-visible behavior for drift states: `ok`, `STALE`, `unknown`, `missing`, and `pinned`, including `doctor` returning non-zero only for stale installs and printing the existing `scripts/pack.sh refresh` fix hint.
+- Added package-owned tests that run with `PATH` emptied for stale lock cleanup, lock command labels, lock release on errors, doctor drift states, pin/unpin config preservation and relinking, prune dry-run/mutation behavior, unmanaged directory safety, and pack.sh-compatible ignored extra args for `doctor`/`pin`/`unpin`.
+- Temp-project oracle parity passed for direct Node CLI vs direct `scripts/pack.sh` on `doctor`, `pin`, `unpin`, `prune --dry-run`, and `prune`, including JSON config comparison and normalized doctor drift output.
+- Adversarial review found one compatibility drift: the first Node route rejected extra args for `doctor`, `pin`, and `unpin` while `pack.sh` ignored them. The route was patched back to shell-compatible behavior and covered by a regression test.
+- Validation passed: `node --check packages/skillpacks/src/cli/lifecycle.mjs`; `node --check packages/skillpacks/src/cli/run-pack-script.mjs`; `node --check packages/skillpacks/test/lifecycle.test.mjs`; `npm --workspace skillpacks run test:node` (31 tests); temp-project Node-vs-`pack.sh` parity harness; `npm --workspace skillpacks run build:check`; streaming npm dry-run boundary assertion with `/tmp/skillpacks-npm-cache` (2315 files, denied repo paths absent); and `git diff --check`.
+
+### Step 3.5: Compatibility Closure
+
+- [ ] Decide whether `scripts/pack.sh` should remain the canonical compatibility wrapper indefinitely or become a thin wrapper over the Node CLI for ported commands.
+- [ ] Route or document any remaining `pack.sh`-only commands: `recommend`, `which`, `install-deck`, and global init behavior.
+- [ ] Add a package-level compatibility matrix that states which commands are Node-owned, which are shell-backed, and which dependencies each path requires.
+- [ ] Run staged-package CLI parity from `packages/skillpacks/build` as well as source-checkout CLI parity before considering fallback dependency removal.
+- [ ] Keep real npm publish out of scope unless the user explicitly approves publication and npm auth is configured.
+
+#### Step 3.5 Implementation Plan
+
+- Files expected: modify `packages/skillpacks/src/cli/run-pack-script.mjs` only if command routing changes; otherwise update package docs such as `packages/skillpacks/README.md`, `packages/skillpacks/docs/QUICKSTART.md`, or the relevant package docs included in `packages/skillpacks/package.json`; add focused tests under `packages/skillpacks/test/` only for new routing or matrix-generation behavior; update task docs, history, and ship manifest.
+- Start by listing all current `skillpacks` commands from `run-pack-script.mjs` and classifying each as Node-owned, shell-backed, or external script-backed.
+- Compare that classification against `scripts/pack.sh` usage text and package docs so user-facing dependency claims are accurate.
+- If retaining shell fallback, make that explicit as a supported compatibility mode and avoid removing packaged `scripts/pack.sh` or `scripts/skill-links.sh`.
+- If routing additional commands through Node, add PATH-empty tests and direct shell oracle parity before switching the route.
+
+#### Step 3.5 Verification Plan
+
+- [ ] Run Node syntax checks for changed package CLI/test files.
 - [ ] Run package-owned Node tests.
-- [ ] Run temp-project parity checks comparing Node and `pack.sh` behavior for doctor, pin, unpin, and prune surfaces.
+- [ ] Run source-checkout command classification/parity checks for all documented commands.
+- [ ] Run staged-package command checks from `packages/skillpacks/build`.
 - [ ] Run `npm --workspace skillpacks run build:check`.
 - [ ] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
 - [ ] Run `git diff --check`.
