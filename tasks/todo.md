@@ -1,3 +1,45 @@
+## Current Implementation - Benchmark Harness Code Review Fixes (Expert-Review High Items)
+
+### Goal
+
+Resolve the 3 open High items from the 2026-05-29 `/expert-review` (the `## Code Review Fixes` section below). With ALIGNMENT-PAGE Bundling Drift Plan Phase 2 complete, these are the oldest unchecked substantive items in the pipeline, and one is a destructive-command safety issue.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: three small fixes in two benchmark-harness files plus their setup caller share one test-infrastructure boundary.
+
+### Context
+
+- The findings are 2026-05-29 review output; line numbers have drifted but all three issues were re-verified present on 2026-06-10:
+  1. **Unsafe repo deletion** — `tests/layer4/helpers/disposable-repo.ts` (`cleanupRepo`, `gh repo delete ${repoSlug} --yes` now at line ~149) runs with auto-confirm and no `repoSlug` validation; if `getGhUser()` falls back to `"unknown"` it targets `unknown/<name>`. Fix: assert `repoSlug` matches `^[\w.-]+\/agentic-skills-bench-[\w.-]+$`, refuse when the user segment is `"unknown"`, and switch to `execFileSync` (no shell interpolation). Also check `tests/layer4/setups/git-fixture-sync.setup.ts` (the caller) for the same slug assumptions.
+  2. **Temp-dir leak** — `createDisposableRepo` (`mkdtempSync` at line ~70) and the sync setup's `sync-upstream-` clone create temp dirs never removed; `cleanup()` only deletes the GitHub repo. Fix: have `cleanup()` also `rmSync` the mkdtemp parent and the upstream clone dir.
+  3. **Wrong resume-session ordering** — `tests/harness/bench-persistence.ts` `findResumeableSession` (line ~97) sorts session dirs (`${skill}-${agent}-${randomUUID8}`) by the random id, not time, so `--resume` can attach to an arbitrary older session and miscount cost/runs. Fix: sort by manifest `createdAt`/`updatedAt` (preferred over renaming dirs, which would break existing persisted sessions).
+- These are layer4/harness files: layer4 tests hit real GitHub via `gh` and are NOT part of routine validation. Do not run live layer4 benchmarks to validate; use unit-style tests or dry assertions. Check `tests/` for existing coverage of these helpers (e.g. `runner.test.ts`, any persistence tests) and extend where natural.
+- Layer1 must stay green: full `pnpm --dir tests exec vitest run --project layer1` is currently 56 files / 2202 tests / 0 failed.
+- These are test-infrastructure files — no SKILL.md/PACK.md changes, so no showcase regeneration and no skill version bumps.
+- After fixing, check off the three items under `## Code Review Fixes` → `### High (open)` below.
+
+### Steps
+
+- [ ] Harden `cleanupRepo` in `tests/layer4/helpers/disposable-repo.ts`: validate `repoSlug` against the bench-repo pattern, refuse `"unknown"` user, use `execFileSync` without a shell; align `tests/layer4/setups/git-fixture-sync.setup.ts` if it shares the deletion path.
+- [ ] Make `cleanup()` remove the `mkdtempSync` work dirs and the sync setup's upstream clone dir.
+- [ ] Sort resumeable sessions by manifest timestamp in `tests/harness/bench-persistence.ts` instead of directory-name order.
+- [ ] Add or extend focused tests for the three behaviors (no live GitHub calls); run full layer1; check off the three High items in `## Code Review Fixes`; record review notes.
+
+### Acceptance Criteria
+
+- `cleanupRepo` cannot delete a repo outside the `agentic-skills-bench-*` namespace and never targets an `unknown/...` slug; deletion no longer goes through a shell string.
+- A completed disposable-repo lifecycle leaves no `bench-*`/`sync-upstream-*` temp dirs behind.
+- `findResumeableSession` picks the most recently updated session deterministically.
+- Full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed; `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done.
+
+---
+
 ## Current Implementation - Root Instructions for Direct Alignment Edits (Drift Plan Phase 2 Step 7)
 
 ### Goal
@@ -21,16 +63,24 @@ Update root alignment-page instructions so any direct edit to active `alignment/
 
 ### Steps
 
-- [ ] Add the direct-edit audit requirement to `CLAUDE.md` `### Alignment Page Template`, outside any provisioned block.
-- [ ] Add the equivalent requirement to `AGENTS.md` `### Alignment Page Convention`.
-- [ ] Add or extend a layer1 contract test pinning the requirement language in both root files (or record why existing coverage suffices).
-- [ ] Check off Phase 2 Step 7 in the ALIGNMENT-PAGE Bundling Drift Plan checklist, note Phase 2 completion, and record review notes.
+- [x] Add the direct-edit audit requirement to `CLAUDE.md` `### Alignment Page Template`, outside any provisioned block.
+- [x] Add the equivalent requirement to `AGENTS.md` `### Alignment Page Convention`.
+- [x] Add or extend a layer1 contract test pinning the requirement language in both root files (or record why existing coverage suffices).
+- [x] Check off Phase 2 Step 7 in the ALIGNMENT-PAGE Bundling Drift Plan checklist, note Phase 2 completion, and record review notes.
+
+### Review Notes (2026-06-10)
+
+- **CLAUDE.md:** added a **Direct-edit audit.** paragraph to `### Alignment Page Template` (between the convention pointer and **Visual rendering tiers.**, matching the section's bolded-lead paragraph style): direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit; TTS-include diagnostics route to `node scripts/inject-tts.mjs`, all other diagnostics are manual fixes; archived pages under `docs/history/archive/` are out of scope.
+- **AGENTS.md:** added the equivalent requirement as a new bullet at the end of `### Alignment Page Convention`, matching that file's bullet style. Placement check: the section is a hand-maintained addition — its text does not appear in the `provision-agentic-config` AGENTS block (the provisioned block content ends before it per the skill's block definition), so the edit is outside provisioned content in both files. CLAUDE.md's section sits below the line-118 provisioned marker under `## Shared Skill Conventions`.
+- **Contract test:** no existing root-instruction contract test covered the alignment sections, so extended `tests/layer1/audit-alignment-pages.test.ts` (the audit's own test file) with a `root instruction contract for direct alignment edits` describe block: extracts each root file's alignment section (heading to next `##`/`###`) and pins `without invoking a skill`, `node scripts/audit-alignment-pages.mjs`, `(exit 0) before commit`, `node scripts/inject-tts.mjs`, and the `docs/history/archive/` exemption in both files. File now 14 tests.
+- This completes Drift Plan Phase 2 (Steps 1-7 all shipped); the drift-plan checklist below is updated and Phase 2 marked complete.
+- Validation: focused vitest 14/14; full layer1 56 files / 2202 tests / 0 failed; `node scripts/audit-alignment-pages.mjs` exit 0 (41 active pages, all checks exact); `node scripts/upgrade-alignment-page.mjs --check` exit 0 (284 ownable, exact); `git diff --check` clean.
 
 ### Acceptance Criteria
 
-- Both root instruction files require `node scripts/audit-alignment-pages.mjs` for direct `alignment/*.html` edits, in their alignment sections.
-- `node scripts/audit-alignment-pages.mjs` and `node scripts/upgrade-alignment-page.mjs --check` still exit 0; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
-- `git diff --check` clean.
+- [x] Both root instruction files require `node scripts/audit-alignment-pages.mjs` for direct `alignment/*.html` edits, in their alignment sections.
+- [x] `node scripts/audit-alignment-pages.mjs` and `node scripts/upgrade-alignment-page.mjs --check` still exit 0; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed (56 files / 2202 tests).
+- [x] `git diff --check` clean.
 
 ### Handoff
 
@@ -626,14 +676,14 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Assess the direct-edit/no-skill enforcement gap.
 - [x] Record the approval-ready plan before source implementation.
 
-### Phase 2: Fix Implementation - In Progress
+### Phase 2: Fix Implementation - Complete (2026-06-10)
 - [x] Make `packs/business-discovery/codex/customer-discovery/SKILL.md` generator-ownable and regenerate its stale `ALIGNMENT-PAGE.md`.
 - [x] Harden `scripts/upgrade-alignment-page.mjs` so sibling bundles cannot be skipped as bespoke without a failing diagnostic or explicit allowlist.
 - [x] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
 - [x] Add generated-bundle variant/drift validation against expected renderer output.
 - [x] Convert or explicitly test the remaining bespoke alignment sections (7 skills / 14 mirrors after the Step 1 `customer-discovery` conversion).
 - [x] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
-- [ ] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
+- [x] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
 
 ### Review Notes
 - Source of truth: `docs/alignment-page-convention.md`; renderer/sync tool: `scripts/upgrade-alignment-page.mjs`.
@@ -667,6 +717,11 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 ### Phase 2 Review Notes (Step 6, 2026-06-10)
 
 - Step 6 shipped: `scripts/audit-alignment-pages.mjs` is the read-only convention gate for direct edits to active `alignment/*.html` pages — five checks (TTS include, category/tier data attributes, viewport meta, embed prohibition, index integrity) with named per-page diagnostics, `exact|DRIFT` summary lines, shared exit 1, and `--root` fixture support; enforced by `tests/layer1/audit-alignment-pages.test.ts` (repo-state run + 12 fixture tests). The audit surfaced and this boundary fixed: 1 missing TTS include, 36 pages missing both data attributes (+2 missing only the tier), and 2 pages absent from `alignment/index.html`. Current repo: 41 active pages, all checks exact. Full details in the "Direct Alignment HTML Edit Audit (Drift Plan Phase 2 Step 6)" section above. Step 7 (require the audit in root alignment-page instructions for direct HTML edits) remains queued.
+
+### Phase 2 Review Notes (Step 7, 2026-06-10) — Phase 2 Complete
+
+- Step 7 shipped: both root instruction surfaces now require direct edits to active `alignment/*.html` pages made without invoking a skill to pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit, with TTS-include diagnostics routed to `node scripts/inject-tts.mjs` and archived pages exempt — a **Direct-edit audit.** paragraph in CLAUDE.md `### Alignment Page Template` and a matching bullet in AGENTS.md `### Alignment Page Convention`, both outside provisioned blocks. The requirement language is pinned in both files by a new root-instruction contract test in `tests/layer1/audit-alignment-pages.test.ts`. Full details in the "Root Instructions for Direct Alignment Edits (Drift Plan Phase 2 Step 7)" section above.
+- **Phase 2 is complete.** All seven steps shipped: generator-ownable Codex `customer-discovery` (1), bespoke allowlist hardening (2), output-path consistency validation (3), generated-bundle drift `--check` gate (4), bespoke section conversion to generated bundles (5), the read-only direct-edit audit (6), and root-instruction wiring of that audit (7). The convention is now enforced at every surface: generator runs, repo-state layer1 gates, and direct no-skill HTML edits.
 
 ---
 
