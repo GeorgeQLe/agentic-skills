@@ -2,7 +2,7 @@
 
 ## Approval Summary
 
-Source alignment page: `alignment/idea-scope-brief-npm-distribution.html`
+Source alignment page: `alignment/idea-scope-brief-npm-distribution.html` (historical strategy context). Current package usage reference: `alignment/skillpacks-npm-package-walkthrough.html`.
 
 Approved decisions:
 
@@ -331,7 +331,7 @@ cd ~/my-project
 ~/agentic-skills/scripts/pack.sh status
 ```
 
-After the first public package is published, npm users can install from the target project directory:
+With the published npm package, npm users can install from the target project directory:
 
 ```bash
 cd ~/my-project
@@ -369,7 +369,7 @@ npx skillpacks unpin quality-sweep
 
 If a pin fails because an archive version is unavailable, the installed npm package does not contain that archived skill snapshot. Upgrade to a package version that includes the archive, or use a source checkout at a commit that contains it.
 
-Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. `install-deck` still materializes through the packaged shell backend in this release candidate and therefore requires both `bash` and `jq`.
+Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. In the current `skillpacks@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
 
 ## Implementation Roadmap
 

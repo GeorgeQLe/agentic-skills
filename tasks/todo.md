@@ -1,3 +1,79 @@
+## Current Implementation - P1 Docs Remediation Pass
+
+### Goal
+
+Fix the P1 public documentation issues reported by the 2026-06-10 repo documentation alignment audit: managed-copy install wording, the missing root init helper path, retired `icp` executable routes in current guidance, and the old npm strategy page being indexed like current usage guidance.
+
+### Execution Profile
+
+- Parallel mode: serial writes after parallel read inventory.
+- Rationale: the pass touches cross-linked docs, alignment pages, a root launcher, task history, and validation notes; edits should land as one coherent remediation boundary.
+
+### Steps
+
+- [x] Add active task tracking and capture the visible `exec` invocation in prompt history.
+- [x] Remediate P1 docs and indexed pages:
+  - Replace active install wording that says global/project track-latest installs are symlinks with managed-copy/directory wording, while preserving symlink wording for pinned archive installs.
+  - Add the documented root `scripts/init-agentic-skills.sh` launcher wrapper so copy-paste helper commands work from the repo root.
+  - Replace retired executable `icp` handoffs in current docs, specs, and indexed alignment pages with `customer-discovery`, preserving `enterprise-icp` and `research/icp.md` artifact references.
+  - Mark `alignment/idea-scope-brief-npm-distribution.html` and its index card as historical/superseded for package usage, pointing readers to `alignment/skillpacks-npm-package-walkthrough.html`.
+- [x] Run targeted scans, alignment-page validation, wrapper smoke checks, and whitespace checks.
+- [x] Record review notes, update history, commit, and push intended remediation artifacts only.
+
+### Acceptance Criteria
+
+- [x] Root `scripts/init-agentic-skills.sh doctor` resolves and runs far enough to prove the documented path exists.
+- [x] Targeted scans find no stale executable `/icp` or `$icp` route in the edited current docs/pages, excluding intentional `enterprise-icp` and `research/icp.md` evidence references.
+- [x] Targeted scans find no active public-doc wording that says track-latest/global installs are symlinked or re-symlinked.
+- [x] The old npm strategy alignment page and index card visibly label the page as historical/superseded for package usage.
+- [x] `node scripts/audit-alignment-pages.mjs` and `git diff --check` pass.
+
+### Review Notes
+
+- Captured the visible `$exec` prompt in `prompts/exec/skill-prompt-20260610-193906-remediation-p1-docs.md`.
+- Added `scripts/init-agentic-skills.sh` as the documented root wrapper, delegating to the bundled init-agentic-skills launcher.
+- Updated public setup docs so active global installs are described as managed copies/directories with drift metadata; symlink wording is now reserved for pinned archive installs.
+- Replaced retired executable `/icp` and `$icp` routes in the scoped current docs, specs, and indexed alignment pages with `/customer-discovery` or `$customer-discovery`, while preserving `enterprise-icp` and `research/icp.md` evidence references.
+- Marked `alignment/idea-scope-brief-npm-distribution.html` and its index card as historical/superseded for current npm package usage, pointing readers to `alignment/skillpacks-npm-package-walkthrough.html`.
+- Folded in adjacent publication-wording cleanup for README, Quickstart, decks, and npm-distribution docs while the same current npm surfaces were open.
+- Added visible 2026-06-10 amendment markers to edited active alignment-page content.
+- Validation passed: targeted stale-route scan returned no scoped matches; targeted active-install wording scan returned no stale global/track-latest symlink wording; targeted future/release-candidate npm wording scan returned no matches; historical page label scan found the expected page/index labels; `bash -n scripts/init-agentic-skills.sh` passed; `scripts/init-agentic-skills.sh status` passed; `HOME=/tmp/agentic-skills-init-smoke scripts/init-agentic-skills.sh doctor` passed; `node scripts/audit-alignment-pages.mjs` passed; `node scripts/upgrade-alignment-page.mjs --check` passed; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` passed 14/14; `git diff --check` passed.
+- Real-home `scripts/init-agentic-skills.sh doctor` resolved through the new wrapper and reported pre-existing stale global installs, exiting 1 as expected for this machine state; the isolated-home smoke proves the wrapper command path itself is clean.
+
+---
+
+## Current Implementation - P2 Skills Showcase Count Reconciliation
+
+### Goal
+
+Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Skills Showcase planning docs and alignment pages still mix old 157/156/38 display-card counts with current generated inventory counts.
+
+### Execution Profile
+
+- Parallel mode: serial writes after targeted read inventory.
+- Rationale: count terms and count-bearing docs must be updated together so generated data, planning docs, and alignment pages agree.
+
+### Steps
+
+- [ ] Reconcile remaining P2 Skills Showcase count docs:
+  - Define count terms from generated data: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, and display cards.
+  - Update stale count references in current Skills Showcase docs and indexed alignment pages, including `tasks/pack-card-hierarchy.md`, `alignment/skillmap.html`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html` as confirmed by fresh scans.
+  - Preserve historical counts only when explicitly labeled historical/prototype scope.
+  - Run generated-data parsing, alignment-page audit, targeted count scans, and whitespace checks.
+  - Record review notes, update history, commit, and push intended changes only.
+
+### Acceptance Criteria
+
+- [ ] Current count-bearing docs distinguish generated platform entries from unique mirrored skills, unique pack skills, unique global skills, packs, and any historical display-card scope.
+- [ ] Targeted scans no longer find unlabeled stale `157`, `156 pack skills`, or `38 packs` claims in current Skills Showcase docs/pages.
+- [ ] Alignment-page validation and whitespace checks pass.
+
+### Review Notes
+
+- Pending.
+
+---
+
 ## Current Implementation - Repo Documentation Alignment Audit
 
 ### Goal

@@ -6,8 +6,8 @@ Compact command index for all scripts in this repository.
 
 | Command | Description |
 | --- | --- |
-| `./init.sh` | Symlink global core skills to `~/.claude/skills/` and `~/.codex/skills/` |
-| `./init.sh --uninstall` | Remove global symlinks that point back to this checkout |
+| `./init.sh` | Install managed global core skill directories to `~/.claude/skills/` and `~/.codex/skills/` |
+| `./init.sh --uninstall` | Remove repo-managed global skill installs that point back to this checkout |
 | `./init.sh --pin ship=v0.0` | Pin a global skill to an archived version during initialization |
 
 ## Project Packs

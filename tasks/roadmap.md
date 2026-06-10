@@ -1,3 +1,57 @@
+## Current Implementation - P1 Docs Remediation Pass
+
+### Goal
+
+Fix the P1 public documentation issues reported by the 2026-06-10 repo documentation alignment audit: managed-copy install wording, the missing root init helper path, retired `icp` executable routes in current guidance, and the old npm strategy page being indexed like current usage guidance.
+
+### Plan
+
+1. Track the remediation request.
+   - [x] Capture the visible `exec` invocation in `prompts/exec/`.
+   - [x] Add active roadmap and todo entries before substantive edits.
+2. Remediate P1 public-doc issues.
+   - [x] Update setup/troubleshooting/script docs so track-latest installs are described as managed copies/directories and pinned archives are the symlink case.
+   - [x] Add a root `scripts/init-agentic-skills.sh` wrapper that delegates to the bundled `init-agentic-skills` launcher.
+   - [x] Replace retired executable `icp` route examples in current docs, specs, and indexed alignment pages with `customer-discovery`, while preserving `enterprise-icp` and `research/icp.md` artifact references.
+   - [x] Mark the old npm distribution strategy page and index card as historical/superseded for package usage, with the current walkthrough as the usage reference.
+3. Verify and ship.
+   - [x] Run targeted drift scans for stale install wording, missing helper path, retired executable routes, and historical npm page labeling.
+   - [x] Run alignment-page audit, root wrapper smoke checks, and whitespace checks.
+   - [x] Record review notes, update history, commit, and push intended remediation artifacts only.
+
+### Acceptance Criteria
+
+- The documented root helper path exists and supports the documented subcommands.
+- Current public docs no longer describe active track-latest installs as symlinks.
+- Current route guidance points to `customer-discovery` instead of retired executable `icp`, except for intentional artifact references such as `research/icp.md` and separate skills such as `enterprise-icp`.
+- The old npm strategy page is still preserved but clearly marked historical/superseded for package usage in both the page and index.
+- Validation output is recorded with warnings fixed, explicitly accepted, or reported.
+
+---
+
+## Current Implementation - P2 Skills Showcase Count Reconciliation
+
+### Goal
+
+Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Skills Showcase planning docs and alignment pages still mix old 157/156/38 display-card counts with current generated inventory counts.
+
+### Plan
+
+1. Reconcile remaining P2 Skills Showcase count docs.
+   - [ ] Define count terms from generated data: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, and display cards.
+   - [ ] Update stale count references in current Skills Showcase docs and indexed alignment pages, including `tasks/pack-card-hierarchy.md`, `alignment/skillmap.html`, `apps/skills-showcase/docs/deck-builder-ux.md`, `research/skills-showcase/idea-brief.md`, `research/skills-showcase/idea-brief-interview.md`, and `alignment/idea-scope-brief-skills-showcase.html` as confirmed by fresh scans.
+   - [ ] Preserve historical counts only when explicitly labeled historical/prototype scope.
+   - [ ] Run generated-data parsing, alignment-page audit, targeted count scans, and whitespace checks.
+   - [ ] Record review notes, update history, commit, and push intended changes only.
+
+### Acceptance Criteria
+
+- Current count-bearing docs distinguish generated platform entries from unique mirrored skills, unique pack skills, unique global skills, packs, and any historical display-card scope.
+- Targeted scans no longer find unlabeled stale `157`, `156 pack skills`, or `38 packs` claims in current Skills Showcase docs/pages.
+- Alignment-page validation and whitespace checks pass.
+
+---
+
 ## Current Implementation - Repo Documentation Alignment Audit
 
 ### Goal

@@ -15,7 +15,7 @@ Decks sit on two axes: **domain** (business / consumer, developer / OSS, or game
 
 Rapid decks are for weekly experiments. Deliberate decks are for products that justify full discovery, lifecycle planning, and growth strategy.
 
-Source-checkout deck installs use the underlying pack commands shown below. After the first public npm package is published, the equivalent npm path is:
+Source-checkout deck installs use the underlying pack commands shown below. With the published npm package, the equivalent npm path is:
 
 ```bash
 npx skillpacks install-deck vard
@@ -26,7 +26,7 @@ npx skillpacks install-deck devtool-afps
 npx skillpacks install-deck game-afps
 ```
 
-In the current release candidate, npm deck materialization still uses the packaged shell backend, so `install-deck` requires `bash` and `jq`. Direct npm pack installs such as `npx skillpacks install devtool` are Node-owned and do not require `jq`.
+In the current `skillpacks@0.1.0` release, npm deck materialization still uses the packaged shell backend, so `install-deck` requires `bash` and `jq`. Direct npm pack installs such as `npx skillpacks install devtool` are Node-owned and do not require `jq`.
 
 ---
 

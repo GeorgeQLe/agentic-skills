@@ -282,7 +282,7 @@ If you are used to this Claude Code rhythm:
 
 1. `$idea-scope-brief`
 2. `$pack install business-discovery` for business/product concepts
-3. `$icp`
+3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`
 6. `$positioning`
@@ -308,7 +308,7 @@ The closest Codex translation is:
 
 1. `$idea-scope-brief`
 2. `$pack install business-discovery` for business/product concepts
-3. `$icp`
+3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`
 6. `$positioning`

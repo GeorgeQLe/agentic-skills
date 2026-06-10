@@ -42,7 +42,7 @@ cd ~/my-project
 
 ### npm CLI
 
-After the first public package is published, users can install from the current project directory without cloning this repository:
+With the published npm package, users can install from the current project directory without cloning this repository:
 
 ```bash
 cd ~/my-project
@@ -102,7 +102,7 @@ scripts/pack.sh remove design-system
 
 `scripts/pack.sh install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
-The npm CLI also supports equivalent project-local installs after publication: `npx skillpacks install <pack-or-skill>`, `npx skillpacks remove <pack-or-skill>`, `npx skillpacks refresh`, `npx skillpacks doctor`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
+The npm CLI also supports equivalent project-local installs: `npx skillpacks install <pack-or-skill>`, `npx skillpacks remove <pack-or-skill>`, `npx skillpacks refresh`, `npx skillpacks doctor`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
@@ -233,7 +233,7 @@ For SaaS, marketplaces, productivity tools, business applications, and enterpris
 Install only the current lane:
 
 ```text
-business-discovery: icp, enterprise-icp, competitive-analysis, customer-feedback,
+business-discovery: customer-discovery, enterprise-icp, competitive-analysis, customer-feedback,
 value-prop-canvas, lean-canvas, positioning
 
 customer-lifecycle: journey-map, onboarding-map, conversion-map,

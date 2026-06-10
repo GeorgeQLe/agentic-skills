@@ -14,7 +14,7 @@ Get from clone to a working skill in under 5 minutes.
 
 ### Source checkout
 
-Use the source checkout when you are developing this repository or before the public npm package is published:
+Use the source checkout when you are developing this repository or want global core skills installed directly from a local clone:
 
 ```bash
 git clone <this-repo-url> ~/agentic-skills
@@ -22,11 +22,11 @@ cd ~/agentic-skills
 ./init.sh
 ```
 
-`init.sh` symlinks the global core skills into `~/.claude/skills/` and `~/.codex/skills/`. Domain packs are not installed globally — that is intentional context hygiene.
+`init.sh` installs repo-managed global core skill directories into `~/.claude/skills/` and `~/.codex/skills/`. Track-latest installs are managed copies with drift metadata; pinned archived skills are the symlink case. Domain packs are not installed globally — that is intentional context hygiene.
 
 ### npm CLI
 
-After the first public package is published, use `npx skillpacks` from the project that should receive local skills:
+With the published npm package, use `npx skillpacks` from the project that should receive local skills:
 
 ```bash
 cd ~/my-project
@@ -47,7 +47,7 @@ cd ~/my-project
 ~/agentic-skills/scripts/pack.sh install business-discovery  # for SaaS/business apps
 ```
 
-With npm after publication:
+With npm:
 
 ```bash
 npx skillpacks install devtool
@@ -80,7 +80,7 @@ Source checkout:
 ~/agentic-skills/scripts/pack.sh status
 ```
 
-npm after publication:
+npm:
 
 ```bash
 npx skillpacks status

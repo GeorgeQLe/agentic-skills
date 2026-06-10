@@ -15,7 +15,7 @@ Symptom-led recovery for common issues.
 | Broken skill references | A skill references another that was moved or deleted | `./scripts/skill-deps.sh --broken` | Lists broken refs; fix or remove |
 | Missing version metadata | Skill lacks required version field | `./scripts/skill-versions.sh --missing` | Lists skills needing version bump |
 | Pinned skill archive missing | Archived version was deleted | `bash scripts/skill-archive-audit.sh --strict` | Lists integrity issues; restore archive or unpin |
-| Global skills stale | Global install older than repo | `./init.sh` | Re-symlinks global skills |
+| Global skills stale | Global install older than repo | `scripts/init-agentic-skills.sh doctor` then `./init.sh` | Re-copies managed global skills |
 
 ## Detailed Recovery Procedures
 
@@ -70,7 +70,7 @@ Pack commands use `.agents/.pack.lock` to prevent concurrent writes. If a previo
 Global skills (installed by `./init.sh`) can also drift after the repo is updated.
 
 1. Run `scripts/init-agentic-skills.sh doctor` to check global drift.
-2. Run `./init.sh` to re-symlink global skills.
+2. Run `./init.sh` to re-copy managed global skills.
 3. Restart your CLI session.
 
 ### Windows/WSL Issues
@@ -78,7 +78,7 @@ Global skills (installed by `./init.sh`) can also drift after the repo is update
 This tool requires a bash environment. On Windows, use WSL2 with a Linux-side clone.
 
 - Native PowerShell or cmd.exe is not supported.
-- Git Bash without developer mode may have unreliable symlinks.
+- Git Bash without developer mode may have unreliable pinned archive symlinks.
 - If opening HTML files from WSL fails, see the WSL file-opening guidance in CLAUDE.md.
 
 ### Validation Commands

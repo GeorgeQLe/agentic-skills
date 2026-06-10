@@ -210,6 +210,7 @@
         <blockquote>
           <p><strong>Date:</strong> 2026-05-24</p>
           <p><strong>Scope:</strong> current <code>agentic-skills</code> workflow contracts and workflow documentation as of the AFPS alignment/prototype routing updates. This report is an audit snapshot, not a new skill contract.</p>
+          <p><span class="pill">amended 2026-06-10</span> Retired executable <code>icp</code> route examples were updated to <code>customer-discovery</code>; historical artifact references such as <code>research/icp.md</code> remain intentionally preserved elsewhere.</p>
           <p><strong>Authoritative operating-model reference:</strong> <code>docs/operating-modes.md</code>.</p>
           <p><strong>Evidence sources:</strong> <code>README.md</code>, <code>docs/operating-modes.md</code>, <code>docs/packs.md</code>, <code>docs/skills-reference.md</code>, <code>docs/pack-workflow-matrix.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/skill-next-step-contracts.md</code>, <code>global/{claude,codex}/*/SKILL.md</code>, <code>packs/*/{claude,codex}/*/SKILL.md</code>, <code>tasks/roadmap.md</code>, <code>tasks/todo.md</code>, and <code>tasks/lessons.md</code>.</p>
         </blockquote>
@@ -289,7 +290,7 @@
         <pre><code>/idea-scope-brief
 /pack
 /pack install business-discovery        # when the discovery lane is missing
-/icp
+/customer-discovery
 /competitive-analysis
 /pack install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
@@ -317,7 +318,7 @@
         <pre><code>$idea-scope-brief
 $pack
 $pack install business-discovery
-$icp
+$customer-discovery
 $competitive-analysis
 $pack install customer-lifecycle
 $journey-map
@@ -468,7 +469,7 @@ $ship-end</code></pre>
         <ul>
           <li>Start with <code>idea-scope-brief</code> for raw ideas.</li>
           <li>Install narrow packs, not broad aliases, unless compatibility or context loading makes the alias desirable.</li>
-          <li>For business products, run ICP and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.</li>
+          <li>For business products, run customer discovery and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.</li>
           <li>Treat optional value, positioning, growth, monetization, and ops work as evidence lanes selected by risk and product type.</li>
           <li>Do not move non-trivial user-facing product work from idea directly to production spec or roadmap.</li>
           <li>Build and evaluate prototypes before production spec creation.</li>
@@ -482,9 +483,10 @@ $ship-end</code></pre>
 
       <section id="sequence">
         <h2>Current End-To-End Sequence</h2>
+        <p><span class="pill">amended 2026-06-10</span> This sequence now uses <code>customer-discovery</code> as the active business-discovery entry point.</p>
         <pre><code>idea-scope-brief
   -&gt; pack recommend/install
-  -&gt; business-discovery: icp -&gt; competitive-analysis
+  -&gt; business-discovery: customer-discovery -&gt; competitive-analysis
   -&gt; customer-lifecycle: journey-map
   -&gt; optional business-discovery/growth/ops evidence lanes
   -&gt; ux-variations

@@ -13978,3 +13978,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Published-package verification passed: `npx skillpacks@latest list`; fresh temp-project `install code-quality`; fresh temp-project `install quality-sweep`; fresh temp-project `install-deck game-afps`; published `doctor` on the code-quality temp project; and git-checkout `scripts/pack.sh list`.
 - Final docs/package validation passed after recording evidence: package tests 38/38, package build/check exact, and `git diff --check`.
 - Release execution notes: the agent-run publish from `packages/skillpacks/build` reached npm but required OTP (`EOTP`); the root-cwd retry produced npm's `Cannot read properties of null (reading 'prerelease')` bug because the repo root is private workspace metadata and not the publish root; the final publish completed after running from the staged build root. Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-phase5-publish.md`.
+
+## 2026-06-10 — P1 docs remediation pass
+
+- Fixed the P1 docs-audit issues: public setup docs now describe active installs as managed copies/directories with pinned archives as the symlink case; the documented root `scripts/init-agentic-skills.sh` helper exists; current route guidance in scoped docs/specs/indexed pages uses `customer-discovery` instead of retired executable `icp`; and the old npm distribution strategy page/index card are labeled historical/superseded for package usage.
+- Folded in adjacent npm publication wording cleanup in README, Quickstart, decks, and the npm distribution design doc.
+- Added visible 2026-06-10 amendment markers to edited active alignment-page content.
+- Verified with targeted stale-route/install-wording/publication-wording scans, wrapper syntax and status/doctor smokes, active alignment-page audit, generated-bundle check, focused layer1 alignment test 14/14, and `git diff --check`. Real-home `doctor` reports pre-existing stale global installs; isolated-home `doctor` passes. Manifest: `tasks/ship-manifest-2026-06-10-p1-docs-remediation.md`.
