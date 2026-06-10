@@ -8,6 +8,7 @@ import {
   setAgentMode,
   setUpdateMode
 } from './project-config.mjs';
+import { resolvePackCommandArgs } from './pack-normalization.mjs';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -49,8 +50,6 @@ const PACK_COMMANDS = new Set([
 ]);
 
 const JQ_WRITE_COMMANDS = new Set([
-  'install',
-  'remove',
   'refresh',
   'prune',
   'pin',
@@ -233,14 +232,14 @@ export async function runSkillpacksCli(args) {
     return setUpdateMode(rest[0]);
   }
 
-  requireCommand('bash', 'Install bash before running skillpacks.');
-
   if (command === 'init-global') {
+    requireCommand('bash', 'Install bash before running skillpacks.');
     return runCommand('bash', [initScriptPath, ...rest]);
   }
 
   if (command === 'install-deck') {
     const deckInstall = resolveDeckInstall(rest);
+    requireCommand('bash', 'Install bash before running skillpacks.');
     requireCommand(
       'jq',
       'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
@@ -252,6 +251,21 @@ export async function runSkillpacksCli(args) {
     usage();
     throw new Error(`unknown command '${command}'`);
   }
+
+  if (command === 'install' || command === 'remove') {
+    const resolved = resolvePackCommandArgs(command, rest, {
+      manifest: readManifest(),
+      projectRoot: process.cwd()
+    });
+    requireCommand('bash', 'Install bash before running skillpacks.');
+    requireCommand(
+      'jq',
+      'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
+    );
+    return runCommand('bash', [packScriptPath, command, ...resolved.args]);
+  }
+
+  requireCommand('bash', 'Install bash before running skillpacks.');
 
   if (JQ_WRITE_COMMANDS.has(command)) {
     requireCommand(
