@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-10 — Verify unchecked backlog items before routing them as next work
+
+- I routed the next command to a Skills Showcase drawer-close backlog item from `tasks/todo.md` without first verifying source, tests, and git history; the implementation already existed and the focused proof file was present locally but untracked.
+- Before recommending a stale-looking unchecked backlog item as next work, inspect the relevant source and recent history, and check for matching untracked proof files. If the work is already implemented, reconcile the task docs and commit missing proof instead of routing to repeat implementation.
+- Apply this especially after finishing an unrelated phase, where the next unchecked item may be a stale backlog entry rather than the logical continuation of the just-finished work.
+
 ## 2026-06-10 — Shell search patterns must not contain raw backticks
 
 - A targeted `rg` scan used a double-quoted pattern containing `` `npm publish` ``, so the shell performed command substitution and attempted to run `npm publish` from the repo root.

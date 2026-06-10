@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Drawer close visible top-left collapse verification
+
+- Verified the drawer-close visible top-left collapse behavior already exists in `apps/skills-showcase/src/components/PackOpener.tsx`; the close measurement uses the scrollable drawer viewport and picks the visible top-left `targetIndex` rather than always collapsing to card 0.
+- Confirmed git history: the visible target-selection logic was introduced before this session (`fcc302a5e`), with row-buffered collapse refinements in `37c22b11`.
+- Added and shipped the focused proof file `apps/skills-showcase/src/components/pack-opener-collapse-target.test.tsx`, which had been present locally but untracked.
+- Reconciled the stale unchecked backlog item in `tasks/todo.md` and added a lesson to verify unchecked backlog items against source/history before routing them as next work.
+- Validation passed: focused PackOpener collapse-target Vitest (4/4) and prototype close-sequence Vitest (7/7).
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 4 dry-run release checks
 
 - Ran package staging with `npm --workspace skillpacks run build:check`; the manifest check was exact, package staging included 373 skills and 41 packs, and the boundary check passed.
