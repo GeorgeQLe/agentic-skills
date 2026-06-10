@@ -13842,3 +13842,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Quality-checked the Codex-authored `lexcorp-briefing` skill (mirror parity, real source paths, snapshot script run end-to-end) and fixed two defects; shipped v0.1 `--publish` mode and the user's v0.2 portfolio-truth/lifecycle revisions.
 - Published first daily briefing and added a dedicated "Lexcorp Briefings" brain section to the personal website (`GeorgeQLe/me`) via its alignment-archive sync.
 - Created cloud routine "Lexcorp Daily Briefing" (trig_0126MbFu3LuG7u78vewvZusM, daily 10:23 UTC) running `/lexcorp-briefing --publish` with GitHub-evidence fallback.
+
+## 2026-06-10 — ALIGNMENT-PAGE bundling drift Phase 2 Steps 1-2
+
+- Reconciled Step 1 (make Codex `customer-discovery` generator-ownable) as completed incidentally by commit `8c655082`: sibling bundles are byte-identical and the generator dry-run is clean with bespoke count down from 15 to 14.
+- Hardened `scripts/upgrade-alignment-page.mjs` with an exact bespoke allowlist (`scripts/alignment-bespoke-list.txt`, 7 skills), failing diagnostics for unlisted bespoke sections, mixed generated/bespoke sibling pairs, and stale allowlist entries, plus a `--root` flag for fixture testing.
+- Added `tests/layer1/upgrade-alignment-page-bespoke.test.ts` (repo-state assertions + 5 behavioral fixture tests) and documented the allowlist in `docs/alignment-page-convention.md` outside the generated marker block.
+- Verified: syntax check, dry-run/write-mode generator runs (exit 0, no tracked diff), 13 focused layer1 tests, `git diff --check`.
+- Full layer1 run surfaced 18 pre-existing failures across 11 files (stale version pins and stale wording assertions) that reproduce identically at clean HEAD; planned their reconciliation as the next step instead of bundling judgment-heavy fixes into this boundary.
