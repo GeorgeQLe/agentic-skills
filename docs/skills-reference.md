@@ -139,12 +139,18 @@ runway-model, investor-update, reconcile-research, mvp-gap,
 scale-audit, platform-strategy, product-line
 ```
 
-## Game Pack
+## Game AFPS Pack
 
 Install in video game and playable entertainment projects:
 
 ```bash
 scripts/pack.sh install game
+```
+
+With the npm CLI, install the deck as:
+
+```bash
+skillpacks install-deck game-afps
 ```
 
 Skills:

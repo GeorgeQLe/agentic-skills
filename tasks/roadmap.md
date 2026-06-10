@@ -1,3 +1,27 @@
+## Current Implementation - Game AFPS Deck Model
+
+### Goal
+
+Add `game-afps` as a first-class deliberate deck over the existing `game` pack, so docs, install-deck manifest metadata, and skill-map visuals no longer treat game work as a Business AFPS sub-row.
+
+### Plan
+
+1. Update canonical deck docs and workflow docs.
+   - [x] Add Game AFPS to `docs/decks.md`.
+   - [x] Add Game AFPS to `docs/skillpacks-npm-distribution.md`.
+   - [x] Update live Skills Showcase research references from four decks to five decks.
+2. Update package metadata.
+   - [x] Add `game-afps` to `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
+   - [x] Add a package test that asserts Game AFPS resolves to the `game` pack and carries the right registry tags.
+3. Regenerate derived artifacts.
+   - [x] Regenerate `packages/skillpacks/dist/skillpacks-manifest.json`.
+   - [x] Regenerate package build docs/manifest if `build:check` requires it.
+   - [x] Regenerate skill-map artifacts after moving `game` into its own Game AFPS row.
+4. Verify and ship.
+   - [x] Run package tests and manifest/build checks.
+   - [x] Run whitespace checks and review the diff.
+   - [x] Commit and push the intended changes.
+
 ## Current Implementation - Skillpacks npm Distribution Phase 3
 
 ### Goal

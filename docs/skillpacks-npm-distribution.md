@@ -175,6 +175,7 @@ Supported deck metadata:
 | Business AFPS | `skillpacks install-deck business-afps` | `business-discovery` by default | `deck:business-afps`, `stage:discovery` |
 | Business AFPS full | `skillpacks install-deck business-afps --full` | `business-discovery`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
 | Devtool AFPS | `skillpacks install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
+| Game AFPS | `skillpacks install-deck game-afps` | `game` | `deck:game-afps` |
 
 Business AFPS defaults to the first deliberate pack because current docs recommend progressive installation. The `--full` flag can exist for users who intentionally want the whole deliberate lane.
 
@@ -238,6 +239,14 @@ Proposed shape:
       "domain": "business",
       "default_packs": ["business-discovery"],
       "full_packs": ["business-discovery", "customer-lifecycle", "business-growth", "business-ops"]
+    },
+    {
+      "name": "game-afps",
+      "label": "Game AFPS",
+      "tempo": "deliberate",
+      "domain": "game",
+      "default_packs": ["game"],
+      "full_packs": ["game"]
     }
   ]
 }
@@ -340,7 +349,7 @@ Tasks:
 
 - Add a generated `packages/skillpacks/dist/skillpacks-manifest.json` inside the package staging boundary.
 - Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` or extend package build to emit the manifest.
-- Add deck metadata for `vard`, `ord`, `business-afps`, and `devtool-afps`.
+- Add deck metadata for `vard`, `ord`, `business-afps`, `devtool-afps`, and `game-afps`.
 - Include package-list fields for COA B and registry-tag fields for COA C.
 - Implement `skillpacks install-deck <deck>` as a manifest resolver.
 - Implement `skillpacks install-deck business-afps --full` from manifest metadata.
@@ -354,6 +363,7 @@ Exit criteria:
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
+- `node packages/skillpacks/bin/skillpacks.mjs install-deck game-afps` installs the `game` pack.
 - `packages/skillpacks/dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
 - Manifest validation passes from a clean checkout.
 

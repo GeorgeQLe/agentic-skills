@@ -33,6 +33,14 @@ cd ~/my-project
 
 This creates `.agents/project.json` and project-local skill roots in `.claude/skills/` and `.codex/skills/`.
 
+If you are using the npm CLI, you can install a canonical deck instead:
+
+```bash
+npx skillpacks install-deck business-afps
+npx skillpacks install-deck devtool-afps
+npx skillpacks install-deck game-afps
+```
+
 ## 3. Reload Skills in Your CLI
 
 Skills are not hot-reloaded. After installing:

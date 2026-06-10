@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Game AFPS deck model
+
+- Added Game AFPS as a first-class deliberate deck backed by the existing `game` pack.
+- Updated deck docs, package-included docs, and live Skills Showcase research references from four canonical decks to five.
+- Added `game-afps` to the generated skillpacks manifest metadata and covered it with a package test.
+- Regenerated the skillpacks manifest and skill-map artifacts so game skills carry `deck_memberships: ["game-afps"]` and the visual map has a separate Game AFPS row.
+- Verified package tests, manifest/build check, tarball dry-run, temp `install-deck game-afps`, stale wording scan, and whitespace check.
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.5
 
 - Closed Phase 3 compatibility by keeping `scripts/pack.sh` as the supported git-checkout compatibility wrapper and packaged fallback, not a thin wrapper over the Node CLI.

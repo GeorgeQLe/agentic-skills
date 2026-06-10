@@ -78,6 +78,8 @@ scripts/pack.sh set-update-mode <mode>     # mode is one of: warn | auto | unset
 
 `doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below.
 
+The npm CLI can install canonical decks from manifest metadata: `skillpacks install-deck vard`, `skillpacks install-deck ord`, `skillpacks install-deck business-afps`, `skillpacks install-deck devtool-afps`, and `skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase.
+
 Assistant-native usage also supports guided setup:
 
 - Claude: run `/pack` with no arguments.
@@ -105,7 +107,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `business-ops` for assumptions, feedback/cohorts/retros, risks, runway, stakeholder updates, platform strategy, and research reconciliation.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
 - Use `agentic-skills-bench` when working in this repository and needing to verify or benchmark-test one skill with the local harness.
-- Use `game` for video games, prototypes, playable entertainment, and store-page/wishlist validation.
+- Use `game` for Game AFPS: video games, prototypes, playable entertainment, loop validation, playtests, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
 - Use `creator-foundation` for creator-media evidence foundations, dossiers, positioning, programming, series, product-led media mapping, and metrics review.
 - Use `youtube-ops` for YouTube channel/video audits, unlisted prelaunch reviews, external-video context, competitive research, packaging, metadata, portfolio, benchmarking, search, and cadence.

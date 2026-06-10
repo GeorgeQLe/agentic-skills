@@ -1,3 +1,38 @@
+## Current Implementation - Game AFPS Deck Model
+
+### Goal
+
+Add `game-afps` as a first-class deliberate deck backed by the existing `game` pack.
+
+### Current Phase
+
+- [x] Update `docs/decks.md`, `docs/skillpacks-npm-distribution.md`, and live Skills Showcase research references.
+- [x] Add `game-afps` to the skillpacks manifest generator and cover it with a package test.
+- [x] Split the skill-map generator so `game` appears under Game AFPS instead of Business AFPS.
+- [x] Regenerate package manifest/build and skill-map artifacts.
+- [x] Run verification and record review notes.
+
+### Verification Plan
+
+- [x] `npm --workspace skillpacks run test:node`
+- [x] `npm --workspace skillpacks run build:check`
+- [x] `node scripts/generate-skillmap-excalidraw.mjs`
+- [x] `npm --workspace skillpacks run pack:dry-run`
+- [x] Temp-project smoke: `skillpacks install-deck game-afps` then `skillpacks list-packs`
+- [x] Stale deck-model scan for old four-deck wording
+- [x] `git diff --check`
+
+### Review Notes
+
+- Added `game-afps` as a deliberate game deck backed by the existing `game` pack.
+- Updated package-included docs and current Skills Showcase research references from four canonical decks to five.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json`; all `game` pack skills now carry `deck_memberships: ["game-afps"]`.
+- Regenerated `docs/skillmap.excalidraw` and `alignment/skillmap.html`; `game` now appears under its own Game AFPS row instead of Business AFPS.
+- Added `packages/skillpacks/test/manifest.test.mjs` to assert Game AFPS deck metadata and membership.
+- Validation passed: package node tests, manifest/build check, tarball dry-run, temp `install-deck game-afps` smoke, stale wording scan, and whitespace check.
+
+---
+
 ## Current Implementation - Skillpacks npm Distribution Phase 3
 
 ### Goal

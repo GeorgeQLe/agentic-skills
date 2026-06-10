@@ -51,6 +51,16 @@ const deckDefinitions = [
     full_tags: ["deck:devtool-afps"]
   },
   {
+    name: "game-afps",
+    title: "Game AFPS",
+    domain: "game",
+    tempo: "deliberate",
+    default_packs: ["game"],
+    full_packs: ["game"],
+    tags: ["deck:game-afps"],
+    full_tags: ["deck:game-afps"]
+  },
+  {
     name: "ord",
     title: "ORD",
     domain: "devtool",

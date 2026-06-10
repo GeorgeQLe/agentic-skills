@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.0"
   },
-  "source_fingerprint": "bb34cc73a578c8b7fa4b0d1de723f53a9289c16084b6aa5c53ab7883898b2c90",
+  "source_fingerprint": "61f3e5146b1881d5f721ec050dcd9513057c9964b87ea998cbf5e30f52316e4f",
   "packs": [
     {
       "name": "agent-bridge",
@@ -4862,7 +4862,9 @@
         "v0.3"
       ],
       "command": "/game-audience",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-comparables",
@@ -4880,7 +4882,9 @@
         "v0.3"
       ],
       "command": "/game-comparables",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-core-loop",
@@ -4895,7 +4899,9 @@
         "v0.0"
       ],
       "command": "/game-core-loop",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-fantasy",
@@ -4913,7 +4919,9 @@
         "v0.3"
       ],
       "command": "/game-fantasy",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-genre-map",
@@ -4931,7 +4939,9 @@
         "v0.3"
       ],
       "command": "/game-genre-map",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-launch",
@@ -4949,7 +4959,9 @@
         "v0.3"
       ],
       "command": "/game-launch",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-playtest-metrics",
@@ -4964,7 +4976,9 @@
         "v0.0"
       ],
       "command": "/game-playtest-metrics",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-prototype-test",
@@ -4979,7 +4993,9 @@
         "v0.0"
       ],
       "command": "/game-prototype-test",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-roadmap",
@@ -4994,7 +5010,9 @@
         "v0.0"
       ],
       "command": "/game-roadmap",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-store-page-test",
@@ -5012,7 +5030,9 @@
         "v0.3"
       ],
       "command": "/game-store-page-test",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-claude-game-workflow",
@@ -5027,7 +5047,9 @@
         "v0.0"
       ],
       "command": "/game-workflow",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-audience",
@@ -5045,7 +5067,9 @@
         "v0.3"
       ],
       "command": "$game-audience",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-comparables",
@@ -5063,7 +5087,9 @@
         "v0.3"
       ],
       "command": "$game-comparables",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-core-loop",
@@ -5078,7 +5104,9 @@
         "v0.0"
       ],
       "command": "$game-core-loop",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-fantasy",
@@ -5096,7 +5124,9 @@
         "v0.3"
       ],
       "command": "$game-fantasy",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-genre-map",
@@ -5114,7 +5144,9 @@
         "v0.3"
       ],
       "command": "$game-genre-map",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-launch",
@@ -5132,7 +5164,9 @@
         "v0.3"
       ],
       "command": "$game-launch",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-playtest-metrics",
@@ -5147,7 +5181,9 @@
         "v0.0"
       ],
       "command": "$game-playtest-metrics",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-prototype-test",
@@ -5162,7 +5198,9 @@
         "v0.0"
       ],
       "command": "$game-prototype-test",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-roadmap",
@@ -5177,7 +5215,9 @@
         "v0.0"
       ],
       "command": "$game-roadmap",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-store-page-test",
@@ -5195,7 +5235,9 @@
         "v0.3"
       ],
       "command": "$game-store-page-test",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-game-codex-game-workflow",
@@ -5210,7 +5252,9 @@
         "v0.0"
       ],
       "command": "$game-workflow",
-      "deck_memberships": []
+      "deck_memberships": [
+        "game-afps"
+      ]
     },
     {
       "id": "pack-gitops-claude-commit-and-push-by-feature",
@@ -7477,6 +7521,40 @@
         ],
         "full": [
           "deck:devtool-afps"
+        ]
+      }
+    },
+    {
+      "name": "game-afps",
+      "title": "Game AFPS",
+      "domain": "game",
+      "tempo": "deliberate",
+      "default_packs": [
+        "game"
+      ],
+      "full_packs": [
+        "game"
+      ],
+      "tags": [
+        "deck:game-afps"
+      ],
+      "full_tags": [
+        "deck:game-afps"
+      ],
+      "package_list": {
+        "default": [
+          "game"
+        ],
+        "full": [
+          "game"
+        ]
+      },
+      "registry_tags": {
+        "default": [
+          "deck:game-afps"
+        ],
+        "full": [
+          "deck:game-afps"
         ]
       }
     },

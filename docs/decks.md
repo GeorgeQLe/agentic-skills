@@ -4,14 +4,14 @@ A **deck** is a named workflow sequence — a documentation and installation con
 
 A **workflow** is the runtime execution of a deck's skill sequence in a specific project.
 
-## The Four Decks
+## The Five Decks
 
-Decks sit on a 2×2 matrix of **domain** (business vs. devtool) and **tempo** (rapid vs. deliberate):
+Decks sit on two axes: **domain** (business / consumer, developer / OSS, or game / playable entertainment) and **tempo** (rapid vs. deliberate). Not every domain has both tempos yet.
 
-|  | Business / Consumer | Developer / OSS |
-| --- | --- | --- |
-| **Rapid** (days) | VARD | ORD |
-| **Deliberate** (weeks–months) | Business AFPS | Devtool AFPS |
+|  | Business / Consumer | Developer / OSS | Game / Playable Entertainment |
+| --- | --- | --- | --- |
+| **Rapid** (days) | VARD | ORD | Not defined yet |
+| **Deliberate** (weeks–months) | Business AFPS | Devtool AFPS | Game AFPS |
 
 Rapid decks are for weekly experiments. Deliberate decks are for products that justify full discovery, lifecycle planning, and growth strategy.
 
@@ -131,6 +131,31 @@ devtool-positioning -> devtool-adoption -> devtool-dx-journey -> devtool-docs-au
 
 ---
 
+## Game AFPS — Deliberate Game Development Pipeline
+
+**Tempo:** Deliberate (weeks to months)
+**Domain:** Video games and playable entertainment
+
+**Install:**
+
+```bash
+scripts/pack.sh install game
+```
+
+**Canonical chain:**
+
+```text
+game-audience -> game-fantasy -> game-genre-map -> game-comparables
+-> game-core-loop -> game-prototype-test -> game-playtest-metrics
+-> game-store-page-test -> game-launch -> game-roadmap
+```
+
+**Skills:** `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-playtest-metrics`, `game-store-page-test`, `game-launch`, `game-roadmap`, `game-workflow`.
+
+Game AFPS uses the AFPS tempo with game-specific proof gates: align on audience, fantasy, genre, and comparable expectations first; then validate the playable loop, playtest evidence, store-page promise, launch plan, and roadmap.
+
+---
+
 ## Graduation Path
 
 Rapid decks feed into deliberate decks when experiments prove out:
@@ -143,6 +168,8 @@ ORD  ──(traction)──> Devtool AFPS
 The graduation signal differs by deck:
 - **VARD → Business AFPS:** Users return, share organically, or revenue appears. The experiment justifies full customer discovery and lifecycle planning.
 - **ORD → Devtool AFPS:** npm downloads grow, GitHub stars accumulate, or issues from real users arrive. The package justifies full positioning, adoption strategy, and documentation depth.
+
+Game AFPS currently has no rapid feeder deck. Small game prototypes should either start directly with `game-audience` / `game-core-loop` inside the `game` pack or use Game AFPS when the concept warrants deliberate playtest-driven validation.
 
 ## npm Distribution
 

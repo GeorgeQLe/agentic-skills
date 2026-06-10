@@ -67,6 +67,8 @@ scripts/pack.sh remove design-system
 
 `scripts/pack.sh install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
+The npm CLI also supports deck installation from manifest metadata, including `skillpacks install-deck vard`, `skillpacks install-deck ord`, `skillpacks install-deck business-afps`, `skillpacks install-deck devtool-afps`, and `skillpacks install-deck game-afps`.
+
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.

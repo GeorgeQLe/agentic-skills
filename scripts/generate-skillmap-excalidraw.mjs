@@ -320,7 +320,7 @@ Object.assign(allPackPositions, row1.packPositions);
 curY = row1.nextY;
 
 // Row 2: Business AFPS
-const row2 = layoutRow(allPacks, ['business', 'creator', 'game'], startX, curY, 'Business AFPS');
+const row2 = layoutRow(allPacks, ['business', 'creator'], startX, curY, 'Business AFPS');
 allElements.push(...row2.elements);
 Object.assign(allPackPositions, row2.packPositions);
 curY = row2.nextY;
@@ -331,7 +331,13 @@ allElements.push(...row3.elements);
 Object.assign(allPackPositions, row3.packPositions);
 curY = row3.nextY;
 
-// Row 4: Support & Cross-cutting (split into sub-rows for width)
+// Row 4: Game AFPS
+const row4 = layoutRow(allPacks, ['game'], startX, curY, 'Game AFPS');
+allElements.push(...row4.elements);
+Object.assign(allPackPositions, row4.packPositions);
+curY = row4.nextY;
+
+// Row 5: Support & Cross-cutting (split into sub-rows for width)
 const row4a = layoutRow(allPacks, ['execution', 'code', 'product'], startX, curY, 'Support & Cross-cutting');
 allElements.push(...row4a.elements);
 Object.assign(allPackPositions, row4a.packPositions);
@@ -544,8 +550,9 @@ function generateAlignmentHTML() {
 
   const rows = [
     { domains: ['rapid_vard', 'rapid_ord'], label: 'Rapid Decks' },
-    { domains: ['business', 'creator', 'game'], label: 'Business AFPS' },
+    { domains: ['business', 'creator'], label: 'Business AFPS' },
     { domains: ['devtool'], label: 'Devtool AFPS' },
+    { domains: ['game'], label: 'Game AFPS' },
     { domains: ['execution', 'code', 'product'], label: 'Support & Cross-cutting' },
     { domains: ['alignment', 'session', 'skilldev'], label: '' },
   ];
@@ -709,7 +716,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<div class="stat-grid" data-tts-narrative="The system contains ${totalPacks} packs holding ${totalSkills} pack skills, plus ${globalSkills.length} global skills. There are ${domainOrder.length} domains organized across 4 decks.">
+<div class="stat-grid" data-tts-narrative="The system contains ${totalPacks} packs holding ${totalSkills} pack skills, plus ${globalSkills.length} global skills. There are ${domainOrder.length} domains organized across 5 deck rows.">
   <div><strong>${totalPacks}</strong><span>Packs</span></div>
   <div><strong>${totalSkills}</strong><span>Pack skills</span></div>
   <div><strong>${globalSkills.length}</strong><span>Global skills</span></div>
@@ -732,8 +739,8 @@ ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" 
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<p>All packs grouped by deck row (Rapid &rarr; Business AFPS &rarr; Devtool AFPS &rarr; Support &rarr; Infrastructure &rarr; Global). Dashed arrows show graduation paths; solid arrows show canonical flow.</p>
-<div class="map-wrap" data-tts-narrative="The skill map shows ${totalPacks} packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business, creator and game packs, Devtool AFPS, support and cross-cutting packs, infrastructure packs, and global skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
+<p>All packs grouped by deck row (Rapid &rarr; Business AFPS &rarr; Devtool AFPS &rarr; Game AFPS &rarr; Support &rarr; Infrastructure &rarr; Global). Dashed arrows show graduation paths; solid arrows show canonical flow.</p>
+<div class="map-wrap" data-tts-narrative="The skill map shows ${totalPacks} packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business and creator packs, Devtool AFPS, Game AFPS, support and cross-cutting packs, infrastructure packs, and global skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
 ${fullSvg}
 </div>
 <p style="color:var(--text-muted);font-size:0.85rem">Scroll horizontally to see all packs. Also available as <code>docs/skillmap.excalidraw</code> for editing in Excalidraw.</p>
@@ -768,10 +775,10 @@ ${statsRows}
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<div class="table-wrap" data-tts-narrative="Four decks sit on a two-by-two matrix of domain (business versus devtool) and tempo (rapid versus deliberate). VARD is rapid business, ORD is rapid devtool, Business AFPS is deliberate business, and Devtool AFPS is deliberate devtool.">
-<table><thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th></tr></thead><tbody>
-<tr><td><strong>Rapid</strong> (days)</td><td>VARD &mdash; 3 skills</td><td>ORD &mdash; 3 skills</td></tr>
-<tr><td><strong>Deliberate</strong> (weeks&ndash;months)</td><td>Business AFPS &mdash; 5 packs</td><td>Devtool AFPS &mdash; 1 pack, 8 skills</td></tr>
+<div class="table-wrap" data-tts-narrative="Five decks sit on a domain by tempo model. VARD is rapid business, ORD is rapid devtool, Business AFPS is deliberate business, Devtool AFPS is deliberate devtool, and Game AFPS is deliberate game development.">
+<table><thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th><th>Game / Playable Entertainment</th></tr></thead><tbody>
+<tr><td><strong>Rapid</strong> (days)</td><td>VARD &mdash; 3 skills</td><td>ORD &mdash; 3 skills</td><td>Not defined yet</td></tr>
+<tr><td><strong>Deliberate</strong> (weeks&ndash;months)</td><td>Business AFPS &mdash; 4 packs</td><td>Devtool AFPS &mdash; 1 pack, 8 skills</td><td>Game AFPS &mdash; 1 pack, 11 skills</td></tr>
 </tbody></table>
 </div>
 <h3>Graduation Paths</h3>
@@ -781,6 +788,8 @@ ${statsRows}
 </ul>
 <h3>Canonical Business Flow</h3>
 <p><code>business-discovery</code> &rarr; <code>customer-lifecycle</code> &rarr; <code>business-growth</code> &rarr; <code>business-ops</code></p>
+<h3>Canonical Game Flow</h3>
+<p><code>game-audience</code> &rarr; <code>game-fantasy</code> &rarr; <code>game-genre-map</code> &rarr; <code>game-comparables</code> &rarr; <code>game-core-loop</code> &rarr; <code>game-prototype-test</code> &rarr; <code>game-playtest-metrics</code> &rarr; <code>game-store-page-test</code> &rarr; <code>game-launch</code> &rarr; <code>game-roadmap</code></p>
 </section>
 
 <!-- =========================================================== -->
