@@ -1,3 +1,38 @@
+## Current Implementation - Alignment Pages Game AFPS Refresh
+
+### Goal
+
+Replace active alignment pages that still present the old four-pipeline/four-deck model with Game AFPS-aware pages, while preserving stable links, review gates, metadata, and TTS behavior.
+
+### Current Phase
+
+- [x] Inspect current active pages, index metadata, and task context.
+- [x] Archive original active pages to `docs/history/archive/2026-06-10/014646/alignment/`.
+- [x] Amend `alignment/workflow-design-three-pipelines.html` to the five-deck model.
+- [x] Amend `alignment/idea-scope-brief-npm-distribution.html` deck-installation content and gate for Game AFPS.
+- [x] Amend `alignment/idea-scope-brief-skills-showcase.html` deck-builder assumptions for five canonical decks.
+- [x] Refresh `alignment/index.html` metadata for the amended active pages.
+- [x] Add review notes and verify the replacement boundary.
+- [x] Commit and push intended changes only.
+
+### Verification Plan
+
+- [x] Confirm each changed active page has an archived original under `docs/history/archive/2026-06-10/014646/alignment/`.
+- [x] Confirm changed pages preserve core context, decisions, gates, assumptions, proposed file changes, and the TTS script include.
+- [x] Run stale wording scans for old four-deck/four-pipeline model text across active docs/research/scripts/package metadata/alignment pages.
+- [x] Run `git diff --check`.
+
+### Review Notes
+
+- Archived the three stale active pages before replacement at `docs/history/archive/2026-06-10/014646/alignment/`.
+- Updated the workflow-design active page from the obsolete matrix framing to the five-deck model: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS. The page preserves the original VARD/ORD/devtool COAs, gates, assumptions, and TTS include while adding a Game AFPS deck section and amendment note.
+- Updated the npm-distribution active page's deck-installation section and approval gate so monolith presets, package-list examples, and registry-tag examples all include `game-afps`.
+- Updated the Skills Showcase active page's deck-builder assumptions from the old deck count to five canonical decks and added Game AFPS to the visible deck cards.
+- Refreshed `alignment/index.html` so the workflow page appears as "Five-Deck Workflow Model" and the amended Skills Showcase page is linked from Product Design.
+- Verification passed: archive hashes match the original tracked files; changed-page content checks found required titles/context, Game AFPS content, gates, proposed file changes where present, alignmentPage constants, and TTS includes; exact stale wording scan passed for the requested old deck-model phrases; `git diff --check` passed.
+
+---
+
 ## Current Implementation - Layer1 Contract Test Reconciliation
 
 ### Goal

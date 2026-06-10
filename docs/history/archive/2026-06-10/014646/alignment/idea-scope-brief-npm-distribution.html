@@ -67,8 +67,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <header>
   <h1>Multi-Surface npm Distribution Strategy</h1>
   <p class="lead">Evolving agentic-skills from a git-clone skill repository into a multi-surface distribution system via npm packages and a programmatic SDK &mdash; while preserving the markdown-first skill authoring model.</p>
-  <div class="status"><strong>alignment_status:</strong>&nbsp; amended review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-08 &nbsp; <strong>amended:</strong>&nbsp; 2026-06-10 &nbsp; <strong>artifact:</strong>&nbsp; alignment/idea-scope-brief-npm-distribution.html</div>
-  <div class="callout callout-green"><strong>Amendment note:</strong> Superseded by the 2026-06-10 Game AFPS deck-model update. The active deck-installation model now includes VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.</div>
+  <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; 2026-06-08 &nbsp; <strong>artifact:</strong>&nbsp; alignment/idea-scope-brief-npm-distribution.html</div>
 </header>
 
 <nav class="toc" aria-label="Table of Contents"><h2>Table Of Contents</h2><ol>
@@ -565,14 +564,14 @@ const results = await registry.search('code quality')
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<p>The skill system uses five <strong>decks</strong> &mdash; named workflow sequences that guide which packs to install and in what order. Decks now cover business/consumer, developer/OSS, and game/playable entertainment domains across rapid and deliberate tempos, with Game AFPS backed by the existing <code>game</code> pack. See <code>docs/decks.md</code> for full details.</p>
+<p>The skill system uses four <strong>decks</strong> — named workflow sequences that guide which packs to install and in what order. Decks sit on a 2×2 matrix of domain (business vs. devtool) and tempo (rapid vs. deliberate). See <code>docs/decks.md</code> for full details.</p>
 
 <div class="table-wrap">
 <table>
-<thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th><th>Game / Playable Entertainment</th></tr></thead>
+<thead><tr><th></th><th>Business / Consumer</th><th>Developer / OSS</th></tr></thead>
 <tbody>
-<tr><td><strong>Rapid</strong> (days)</td><td>VARD</td><td>ORD</td><td>Not defined yet</td></tr>
-<tr><td><strong>Deliberate</strong> (weeks&ndash;months)</td><td>Business AFPS</td><td>Devtool AFPS</td><td>Game AFPS</td></tr>
+<tr><td><strong>Rapid</strong> (days)</td><td>VARD</td><td>ORD</td></tr>
+<tr><td><strong>Deliberate</strong> (weeks–months)</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
 </tbody>
 </table>
 </div>
@@ -585,8 +584,7 @@ const results = await registry.search('code quality')
 <pre>npx agentic-skills install-deck vard    # installs vard-scan, vard-align, vard-ship
 npx agentic-skills install-deck ord     # installs ord-scan, ord-align, ord-ship
 npx agentic-skills install-deck business-afps  # installs business-discovery + lifecycle + growth + ops skills
-npx agentic-skills install-deck devtool-afps   # installs devtool skills
-npx agentic-skills install-deck game-afps      # installs the game pack</pre>
+npx agentic-skills install-deck devtool-afps   # installs devtool skills</pre>
 <p>All skills ship in one package; the deck command just activates the relevant subset in the project config.</p>
 </div>
 
@@ -601,11 +599,8 @@ npm install @agentic-skills/ord
 
 # Business AFPS deck (progressive)
 npm install @agentic-skills/business-discovery
-npm install @agentic-skills/customer-lifecycle  # when ready
-
-# Game AFPS deck
-npm install @agentic-skills/game</pre>
-<p>Rapid decks are single packages. Business AFPS is a progressive multi-package sequence. Devtool AFPS and Game AFPS are backed by their domain packs.</p>
+npm install @agentic-skills/customer-lifecycle  # when ready</pre>
+<p>Rapid decks are single packages. Deliberate decks are multi-package sequences installed progressively.</p>
 </div>
 
 <div class="coa-card coa-c">
@@ -613,9 +608,7 @@ npm install @agentic-skills/game</pre>
 <p>Decks become tagged collections in the skill registry. Installing a deck pulls all skills with that tag:</p>
 <pre>agentic-skills install --deck vard      # pulls all skills tagged "vard"
 agentic-skills install --deck ord       # pulls all skills tagged "ord"
-agentic-skills install --deck business-afps  # pulls business AFPS packs progressively
-agentic-skills install --deck devtool-afps   # pulls devtool AFPS skills
-agentic-skills install --deck game-afps      # pulls game AFPS skills</pre>
+agentic-skills install --deck business  # pulls business-discovery skills, add more tags progressively</pre>
 <p>The registry maintains deck metadata: canonical order, graduation paths, and compatibility constraints.</p>
 </div>
 </section>
@@ -675,7 +668,7 @@ agentic-skills install --deck game-afps      # pulls game AFPS skills</pre>
 
     <div class="gate question-block" data-section="Deck-Based Installation" data-gate-type="candidate/verdict decisions" data-question-id="deck-based-installation" data-target-path="">
       <h3>Deck-Based Installation</h3>
-      <p>How should npm distribution expose deck installation for VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS?</p>
+      <p>How should npm distribution expose deck installation for VARD, ORD, Business AFPS, and Devtool AFPS?</p>
       <div class="radio-group">
         <label><input type="radio" name="deck-based-installation" value="COA A: install-deck presets from the monolith package"> <span>COA A: <code>install-deck</code> presets from the monolith package</span></label>
         <label><input type="radio" name="deck-based-installation" value="COA B: deck packages or curated package lists per deck"> <span>COA B: deck packages or curated package lists per deck</span></label>

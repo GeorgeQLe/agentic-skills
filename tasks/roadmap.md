@@ -1,3 +1,31 @@
+## Current Implementation - Alignment Pages Game AFPS Refresh
+
+### Goal
+
+Archive stale active alignment pages that still frame the workflow model as the old four-pipeline/four-deck matrix, then replace the active pages with Game AFPS-aware versions while preserving stable links, page-specific gates, metadata, and TTS behavior.
+
+### Plan
+
+1. Preserve the old active artifacts.
+   - [x] Archive `alignment/workflow-design-three-pipelines.html`.
+   - [x] Archive `alignment/idea-scope-brief-npm-distribution.html`.
+   - [x] Archive `alignment/idea-scope-brief-skills-showcase.html`.
+2. Refresh active alignment pages.
+   - [x] Update the workflow-design page to the five-deck model: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.
+   - [x] Update the npm distribution page's deck-installation section and gate to include Game AFPS.
+   - [x] Update the Skills Showcase deck-builder page to use five canonical decks.
+   - [x] Add visible amendment notes to the three active pages.
+3. Refresh index and task documentation.
+   - [x] Update `alignment/index.html` title/search metadata for the amended pages.
+   - [x] Record archive paths and replacement rationale in task history.
+4. Verify and ship.
+   - [x] Verify every active page has a matching archive copy.
+   - [x] Scan changed pages for preserved titles/context, decisions, gates, assumptions, proposed file changes, and TTS script.
+   - [x] Run stale deck wording scans and `git diff --check`.
+   - [x] Commit and push intended changes only.
+
+---
+
 ## Current Implementation - Game AFPS Deck Model
 
 ### Goal

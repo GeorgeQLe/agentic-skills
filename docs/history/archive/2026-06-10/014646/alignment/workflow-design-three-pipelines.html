@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Five-Deck Workflow Model — Alignment Page</title>
+<title>Four-Pipeline Workflow Design — Alignment Page</title>
 <style>
 :root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; --chart-1:#58a6ff; --chart-2:#3fb950; --chart-3:#d29922; --chart-4:#bc8cff; --chart-5:#f85149; --chart-6:#79c0ff; --chart-7:#f0883e; --chart-8:#a5d6ff; }
 * { box-sizing: border-box; }
@@ -67,10 +67,9 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <main>
 
 <!-- Section 1: Header + Status -->
-<h1>Five-Deck Workflow Model</h1>
-<div class="status">alignment_status: amended &nbsp; generated: 2026-06-08 &nbsp; amended: 2026-06-10</div>
-<p class="lead">Formalizing five workflow decks &mdash; VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS &mdash; to support the "Apps as Distribution" thesis while giving game work its own deliberate AFPS track. This page preserves the original VARD/ORD/devtool decisions and supersedes the old matrix with the Game AFPS deck-model update.</p>
-<div class="callout callout-green"><strong>Amendment note:</strong> Superseded by the 2026-06-10 Game AFPS deck-model update. The active model is now five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.</div>
+<h1>Four-Pipeline Workflow Design</h1>
+<div class="status">alignment_status: revision</div>
+<p class="lead">Formalizing four distinct workflow pipelines &mdash; Business AFPS, Devtool AFPS, VARD (Viral App Rapid Distribution), and ORD (OSS Rapid Distribution) &mdash; to support the "Apps as Distribution" thesis. Two domains (business, devtool) &times; two tempos (deliberate, rapid). This page presents the current state, proposed architecture, courses of action, and alignment gates for your review.</p>
 
 <!-- Section 2: TOC -->
 <nav class="toc">
@@ -78,14 +77,13 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
   <ol>
     <li><a href="#thesis">Apps as Distribution Thesis</a></li>
     <li><a href="#current-state">Current State</a></li>
-    <li><a href="#three-pipelines">The Five Decks Overview</a></li>
-    <li><a href="#pipeline-a">Deck A: Business AFPS</a></li>
-    <li><a href="#pipeline-b">Deck B: Devtool AFPS</a></li>
-    <li><a href="#pipeline-c">Deck C: VARD</a></li>
-    <li><a href="#pipeline-d">Deck D: ORD</a></li>
-    <li><a href="#deck-game-afps">Deck E: Game AFPS</a></li>
+    <li><a href="#three-pipelines">The Four Pipelines Overview</a></li>
+    <li><a href="#pipeline-a">Pipeline A: Business AFPS</a></li>
+    <li><a href="#pipeline-b">Pipeline B: Devtool AFPS</a></li>
+    <li><a href="#pipeline-c">Pipeline C: VARD</a></li>
+    <li><a href="#pipeline-d">Pipeline D: ORD</a></li>
     <li><a href="#graduation">Graduation Path</a></li>
-    <li><a href="#coa-a">COA A: Build All Deck Work</a></li>
+    <li><a href="#coa-a">COA A: Build All Four</a></li>
     <li><a href="#coa-b">COA B: Rapid Pipelines First</a></li>
     <li><a href="#coa-c">COA C: Unified Mode Flag + Rapid</a></li>
     <li><a href="#coa-compare">COA Comparison</a></li>
@@ -108,24 +106,21 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment, polished product, developer package, or playable game &mdash; compounds brand, audience, and surface area. The active deck model now recognizes three domains and two tempos, with five named decks currently defined:</p>
+  <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment or a polished product &mdash; compounds brand, audience, and surface area. Two domains and two tempos produce a 2&times;2 matrix of four pipelines:</p>
 
-  <div class="table-wrap" data-tts-narrative="The active deck model contains five decks. VARD and ORD are rapid distribution decks; Business AFPS, Devtool AFPS, and Game AFPS are deliberate AFPS decks. Game AFPS covers playable entertainment with the existing game pack.">
+  <div class="table-wrap">
     <table>
-      <thead><tr><th>Deck</th><th>Domain</th><th>Tempo</th><th>Current backing</th><th>Primary output</th></tr></thead>
+      <thead><tr><th></th><th>Deliberate (~monthly)</th><th>Rapid (~weekly)</th></tr></thead>
       <tbody>
-        <tr><td><strong>VARD</strong></td><td>Business / consumer apps</td><td>Rapid</td><td><code>packs/vard</code></td><td>Small shipped app plus distribution signal</td></tr>
-        <tr><td><strong>ORD</strong></td><td>Developer tools / OSS</td><td>Rapid</td><td><code>packs/ord</code></td><td>Published package, README, and ecosystem signal</td></tr>
-        <tr><td><strong>Business AFPS</strong></td><td>Business / consumer / SaaS products</td><td>Deliberate</td><td>Business discovery, lifecycle, growth, and ops packs</td><td>Validated product path, prototype, UAT, roadmap, and spec</td></tr>
-        <tr><td><strong>Devtool AFPS</strong></td><td>Developer tools, CLIs, libraries, SDKs</td><td>Deliberate</td><td><code>packs/devtool</code></td><td>Positioned developer product with adoption, DX, docs, and monetization evidence</td></tr>
-        <tr><td><strong>Game AFPS</strong></td><td>Video games and playable entertainment</td><td>Deliberate</td><td><code>packs/game</code></td><td>Audience, fantasy, genre, comparable, core-loop, playtest, store, launch, and roadmap evidence</td></tr>
+        <tr><td><strong>Business / Viral Apps</strong></td><td>Business AFPS</td><td>VARD (Viral App Rapid Distribution)</td></tr>
+        <tr><td><strong>Devtools / OSS</strong></td><td>Devtool AFPS</td><td>ORD (OSS Rapid Distribution)</td></tr>
       </tbody>
     </table>
   </div>
 
   <ul>
     <li><strong>Rapid (VARD + ORD):</strong> Weekly shipping of small experiments. Volume generates signal. Winners graduate into their respective deliberate pipeline.</li>
-    <li><strong>Deliberate AFPS decks:</strong> Business AFPS, Devtool AFPS, and Game AFPS use deeper research, validation, and planning cycles. Quality, positioning, playability, and launch readiness compound over time.</li>
+    <li><strong>Deliberate (Business AFPS + Devtool AFPS):</strong> ~Monthly shipping of deeper products. Full research and design cycle. Quality and positioning compound over time.</li>
   </ul>
 
   <div class="callout callout-green">
@@ -137,17 +132,14 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
   <div class="callout">
     <strong>AFPS cycle (deliberate):</strong> Research deeply &rarr; validate with users &rarr; ship polished product (~monthly) &rarr; iterate on traction &rarr; compound through quality.
   </div>
-  <div class="callout callout-blue">
-    <strong>Game AFPS cycle (deliberate, playable entertainment):</strong> Align on audience, fantasy, genre, and comparable expectations &rarr; validate core loop and playtest metrics &rarr; test store-page promise &rarr; plan launch and roadmap.
-  </div>
 
-  <h3>Why five decks?</h3>
+  <h3>Why four pipelines?</h3>
   <ul>
-    <li><strong>Three domains:</strong> Business/consumer apps, devtools/OSS, and playable entertainment have different audiences, proof gates, distribution channels, success metrics, and research needs. ORD tools live on npm/GitHub; VARD apps live on app stores, the web, or viral channels; Game AFPS work needs playability and store-page validation.</li>
-    <li><strong>Two tempos:</strong> Rapid ships in days with minimal ceremony. Deliberate AFPS ships over weeks or months with full research and validation. These are separate philosophies, not just different ceremony levels.</li>
-    <li><strong>Different artifacts:</strong> ORD produces an npm package + README. VARD produces a deployed app + landing page. Business and Devtool AFPS produce specs, prototypes, UAT, roadmaps, docs, and adoption evidence. Game AFPS produces audience/fantasy/genre evidence, core-loop proof, playtest metrics, store-page tests, launch plans, and roadmap decisions.</li>
+    <li><strong>Two domains:</strong> Business/viral apps and devtools/OSS have different audiences, distribution channels, success metrics, and research needs. ORD tools live on npm/GitHub; VARD apps live on app stores, the web, or viral channels.</li>
+    <li><strong>Two tempos:</strong> Rapid ships weekly with minimal ceremony (3&ndash;4 steps). Deliberate ships monthly with full research and design (12&ndash;20+ steps). These are separate philosophies, not just different ceremony levels.</li>
+    <li><strong>Different artifacts:</strong> ORD produces an npm package + README. VARD produces a deployed app + landing page. AFPS produces specs, prototypes, UAT, roadmaps.</li>
     <li><strong>Shared graduation paths:</strong> Rapid tools that show traction graduate into their domain&rsquo;s deliberate pipeline for full treatment.</li>
-    <li><strong>Existing infrastructure:</strong> Business AFPS is mature, Devtool AFPS has an active devtool pack, VARD and ORD now have rapid packs, and Game AFPS is backed by the existing game pack.</li>
+    <li><strong>Existing infrastructure:</strong> Business AFPS is mature (40+ skills). Devtool has a strong back half (8 skills). VARD and ORD need to be built.</li>
   </ul>
 </section>
 
@@ -198,17 +190,14 @@ devtool-workflow (orchestrator)
   &rarr; devtool-monetization      (research, v0.4)
   &rarr; devtool-docs-audit        (review, v0.1)</pre>
 
-  <h3>Rapid Decks (now active)</h3>
-  <p>The original review identified a missing rapid-tempo path. That gap has since been closed with active VARD and ORD packs, each using a scan &rarr; align &rarr; ship sequence. The remaining strategic question is how those rapid decks graduate into deliberate AFPS work and how much devtool front-half structure should be added before real ORD graduations create evidence.</p>
-
-  <h3>Game AFPS Deck (new active model)</h3>
-  <p>Game work now has a deliberate AFPS deck backed by the existing <code>game</code> pack. The active route starts with audience, fantasy, genre, and comparable alignment, then validates the core loop, prototype, playtest metrics, store-page promise, launch plan, and roadmap. Game AFPS currently has no rapid feeder deck.</p>
+  <h3>Rapid Pipelines (do not exist yet)</h3>
+  <p>No rapid-tempo workflows exist. Small tools and viral apps currently either go through the full Business AFPS (too heavy) or get built ad-hoc with no structured process. Both VARD (business/viral rapid) and ORD (devtool/OSS rapid) need to be built.</p>
 </section>
 
-<!-- Section 5: Five Decks Overview -->
+<!-- Section 5: Four Pipelines Overview -->
 <section id="three-pipelines">
-  <div class="section-head"><h2>The Five Decks Overview</h2></div>
-  <div class="section-feedback" data-section="Five Decks Overview" id="feedback-three-pipelines">
+  <div class="section-head"><h2>The Four Pipelines Overview</h2></div>
+  <div class="section-feedback" data-section="Four Pipelines Overview" id="feedback-three-pipelines">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -220,16 +209,16 @@ devtool-workflow (orchestrator)
 
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>Game AFPS</th><th>VARD</th><th>ORD</th></tr></thead>
+      <thead><tr><th>Dimension</th><th>Business AFPS</th><th>Devtool AFPS</th><th>VARD</th><th>ORD</th></tr></thead>
       <tbody>
-        <tr><td>Domain</td><td>Business / viral apps</td><td>Devtools / OSS</td><td>Games / playable entertainment</td><td>Business / viral apps</td><td>Devtools / OSS</td></tr>
-        <tr><td>Tempo</td><td>Deliberate</td><td>Deliberate</td><td>Deliberate</td><td>Rapid</td><td>Rapid</td></tr>
-        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Full game proof gates</td><td>Minimal (3 steps)</td><td>Minimal (3 steps)</td></tr>
-        <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Audience, fantasy, genre, comparables, playtests</td><td>Quick viral/market scan</td><td>Quick ecosystem scan</td></tr>
-        <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>Playable proof, store-page promise, launch plan, roadmap</td><td>Deployed app + landing page</td><td>npm package + README</td></tr>
-        <tr><td>Graduation from</td><td>VARD</td><td>ORD</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
-        <tr><td>Graduation to</td><td>&mdash;</td><td>Business AFPS</td><td>&mdash;</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
-        <tr><td>Backing packs</td><td>business-discovery, customer-lifecycle, business-growth, business-ops</td><td>devtool</td><td>game</td><td>vard</td><td>ord</td></tr>
+        <tr><td>Domain</td><td>Business / viral apps</td><td>Devtools / OSS</td><td>Business / viral apps</td><td>Devtools / OSS</td></tr>
+        <tr><td>Tempo</td><td>~Monthly (deliberate)</td><td>~Monthly (deliberate)</td><td>Weekly (rapid)</td><td>Weekly (rapid)</td></tr>
+        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Minimal (3&ndash;4 steps)</td><td>Minimal (3&ndash;4 steps)</td></tr>
+        <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Quick viral/market scan</td><td>Quick ecosystem scan</td></tr>
+        <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>Deployed app + landing page</td><td>npm package + README</td></tr>
+        <tr><td>Graduation from</td><td>VARD</td><td>ORD</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Graduation to</td><td>&mdash;</td><td>Business AFPS</td><td>Business AFPS</td><td>Devtool AFPS</td></tr>
+        <tr><td>Skills needed (new)</td><td>0</td><td>3&ndash;5 front-half</td><td>3&ndash;4</td><td>3&ndash;4</td></tr>
       </tbody>
     </table>
   </div>
@@ -237,10 +226,10 @@ devtool-workflow (orchestrator)
   <div class="chart-container" id="chart-pipeline-radar"></div>
 </section>
 
-<!-- Section 6: Deck A — Business AFPS -->
+<!-- Section 6: Pipeline A — Business AFPS -->
 <section id="pipeline-a">
-  <div class="section-head"><h2>Deck A: Business AFPS</h2></div>
-  <div class="section-feedback" data-section="Deck A: Business AFPS" id="feedback-pipeline-a">
+  <div class="section-head"><h2>Pipeline A: Business AFPS</h2></div>
+  <div class="section-feedback" data-section="Pipeline A: Business AFPS" id="feedback-pipeline-a">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -264,10 +253,10 @@ devtool-workflow (orchestrator)
   <p>Graduated tools enter at <code>/idea-scope-brief</code> with prior VARD/Devtool research artifacts linked as evidence. The brief skill detects existing artifacts and fast-tracks sections already covered.</p>
 </section>
 
-<!-- Section 7: Deck B — Devtool AFPS -->
+<!-- Section 7: Pipeline B — Devtool AFPS -->
 <section id="pipeline-b">
-  <div class="section-head"><h2>Deck B: Devtool AFPS</h2></div>
-  <div class="section-feedback" data-section="Deck B: Devtool AFPS" id="feedback-pipeline-b">
+  <div class="section-head"><h2>Pipeline B: Devtool AFPS</h2></div>
+  <div class="section-feedback" data-section="Pipeline B: Devtool AFPS" id="feedback-pipeline-b">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -301,10 +290,10 @@ POST-RESEARCH:
   <div class="chart-container" id="chart-devtool-flow"></div>
 </section>
 
-<!-- Section 8: Deck C — VARD -->
+<!-- Section 8: Pipeline C — VARD -->
 <section id="pipeline-c">
-  <div class="section-head"><h2>Deck C: VARD (Viral App Rapid Distribution)</h2></div>
-  <div class="section-feedback" data-section="Deck C: VARD" id="feedback-pipeline-c">
+  <div class="section-head"><h2>Pipeline C: VARD (Viral App Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline C: VARD" id="feedback-pipeline-c">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -314,7 +303,7 @@ POST-RESEARCH:
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <p>The rapid-tempo deck for shipping small viral apps and consumer-facing tools as distribution touchpoints. Mirrors the ORD philosophy but for the business/consumer domain. Designed for 1&ndash;3 day cycle time and minimum viable ceremony.</p>
+  <p>A new rapid-tempo workflow for shipping small viral apps and consumer-facing tools as distribution touchpoints. Mirrors the ORD philosophy but for the business/consumer domain. Designed for 1&ndash;3 day cycle time. Minimum viable ceremony.</p>
 
   <h4>Proposed VARD pipeline (3-step core)</h4>
   <pre>
@@ -343,10 +332,10 @@ POST-RESEARCH:
   <div class="chart-container" id="chart-time-to-ship"></div>
 </section>
 
-<!-- Section 8b: Deck D — ORD -->
+<!-- Section 8b: Pipeline D — ORD -->
 <section id="pipeline-d">
-  <div class="section-head"><h2>Deck D: ORD (OSS Rapid Distribution)</h2></div>
-  <div class="section-feedback" data-section="Deck D: ORD" id="feedback-pipeline-d">
+  <div class="section-head"><h2>Pipeline D: ORD (OSS Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Pipeline D: ORD" id="feedback-pipeline-d">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -372,30 +361,6 @@ POST-RESEARCH:
   <div class="callout">
     <strong>Optional 4th step:</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Decide: iterate, graduate to Devtool AFPS, or archive.
   </div>
-</section>
-
-<!-- Section 8c: Deck E — Game AFPS -->
-<section id="deck-game-afps">
-  <div class="section-head"><h2>Deck E: Game AFPS</h2></div>
-  <div class="section-feedback" data-section="Deck E: Game AFPS" id="feedback-deck-game-afps">
-    <span>Section feedback</span>
-    <button type="button" data-feedback="emphasize">Emphasize</button>
-    <button type="button" data-feedback="down">Thumbs down</button>
-    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
-    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
-    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
-    <textarea class="local-yaml" readonly></textarea>
-  </div>
-
-  <p>The deliberate AFPS deck for video games and playable entertainment. Game AFPS uses the AFPS tempo but replaces generic product proof with game-specific evidence: audience, fantasy, genre expectations, comparable games, core loop, prototype tests, playtest metrics, store-page promise, launch plan, and roadmap.</p>
-
-  <h4>Canonical Game AFPS chain</h4>
-  <pre>
-game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
-  &rarr; game-core-loop &rarr; game-prototype-test &rarr; game-playtest-metrics
-  &rarr; game-store-page-test &rarr; game-launch &rarr; game-roadmap</pre>
-
-  <div class="callout callout-blue"><strong>Game deck status:</strong> Game AFPS is already backed by <code>packs/game</code>. It does not require a new rapid feeder deck before use; small game prototypes can start directly inside the game pack when deliberate playtest-driven validation is warranted.</div>
 </section>
 
 <!-- Section 9: Graduation Path -->
@@ -443,10 +408,10 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
   </ul>
 </section>
 
-<!-- Section 10: COA A — Build Full Deck Coverage -->
+<!-- Section 10: COA A — Build All Four -->
 <section id="coa-a">
-  <div class="section-head"><h2>COA A: Build Full Deck Coverage Now</h2></div>
-  <div class="section-feedback" data-section="COA A: Build Full Deck Coverage" id="feedback-coa-a">
+  <div class="section-head"><h2>COA A: Build All Four Now</h2></div>
+  <div class="section-feedback" data-section="COA A: Build All Four" id="feedback-coa-a">
     <span>Section feedback</span>
     <button type="button" data-feedback="emphasize">Emphasize</button>
     <button type="button" data-feedback="down">Thumbs down</button>
@@ -457,8 +422,8 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
   </div>
 
   <div class="coa-card coa-a">
-    <h3><span class="tag tag-a">COA A</span> Build complete deck coverage simultaneously</h3>
-    <p><strong>Philosophy:</strong> Full capability upfront. Build both rapid packs (VARD + ORD), the devtool front-half, and graduation routing all at once while recognizing Game AFPS as an already backed deliberate deck. Ship a complete five-deck system.</p>
+    <h3><span class="tag tag-a">COA A</span> Build all four pipelines simultaneously</h3>
+    <p><strong>Philosophy:</strong> Full capability upfront. Build both rapid packs (VARD + ORD), the devtool front-half, and graduation routing all at once. Ship a complete four-pipeline system.</p>
 
     <h4>New skills required</h4>
     <div class="table-wrap">
@@ -694,14 +659,14 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
     <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <!-- Gate 1: Deck Architecture -->
-  <div class="gate question-block" data-section="Deck Architecture" data-gate-type="architecture" data-question-id="pipeline-architecture" data-target-path="">
-    <h3>Gate 1: Deck Architecture</h3>
-    <p>Which deck model should be treated as canonical now?</p>
+  <!-- Gate 1: Pipeline Architecture -->
+  <div class="gate question-block" data-section="Pipeline Architecture" data-gate-type="architecture" data-question-id="pipeline-architecture" data-target-path="">
+    <h3>Gate 1: Pipeline Architecture</h3>
+    <p>How many distinct pipelines should we formalize?</p>
     <div class="radio-group">
-      <label><input type="radio" name="pipeline-architecture" value="Five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS"> <span>Five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS</span></label>
-      <label><input type="radio" name="pipeline-architecture" value="Delay Game AFPS from canonical deck status until more game proof exists"> <span>Delay Game AFPS from canonical status until more game proof exists</span></label>
-      <label><input type="radio" name="pipeline-architecture" value="Unify rapid decks but keep the three deliberate AFPS decks"> <span>Unify rapid decks but keep the three deliberate AFPS decks</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed"> <span>Four pipelines (Business AFPS + Devtool AFPS + VARD + ORD) as proposed</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Three pipelines (Business AFPS + Devtool AFPS + one unified rapid pipeline)"> <span>Three pipelines (AFPS &times; 2 + one unified rapid pipeline)</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Two pipelines (Business AFPS + one rapid pipeline, devtool uses business)"> <span>Two pipelines (Business AFPS + one rapid, devtool uses business)</span></label>
       <label><input type="radio" name="pipeline-architecture" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
     </div>
     <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
@@ -713,7 +678,7 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
     <p>Which course of action should we pursue?</p>
     <div class="radio-group">
       <label><input type="radio" name="coa-selection" value="COA B: Rapid Pipelines First, Evolve Devtool (recommended)"> <span>COA B: Rapid Pipelines First, Evolve Devtool (recommended)</span></label>
-      <label><input type="radio" name="coa-selection" value="COA A: Build Full Deck Coverage Now"> <span>COA A: Build Full Deck Coverage Now</span></label>
+      <label><input type="radio" name="coa-selection" value="COA A: Build All Four Now"> <span>COA A: Build All Four Now</span></label>
       <label><input type="radio" name="coa-selection" value="COA C: Unified Mode Flag + Rapid Packs"> <span>COA C: Unified Mode Flag + Rapid Packs</span></label>
       <label><input type="radio" name="coa-selection" value="Hybrid (specify in notes)"> <span>Hybrid (specify in notes)</span></label>
     </div>
@@ -1160,7 +1125,7 @@ const alignChart = (() => {
 </script>
 
 <script>
-// Chart 1: Deck Profile Radar (Section 5)
+// Chart 1: Pipeline Profile Radar (Section 5)
 (function() {
   const container = document.getElementById('chart-pipeline-radar');
   if (!container) return;
@@ -1168,7 +1133,6 @@ const alignChart = (() => {
     { axis: 'Tempo', sets: [
       { name: 'Business AFPS', values: [30, 95, 90, 95, 0, 30] },
       { name: 'Devtool AFPS', values: [60, 60, 50, 70, 60, 60] },
-      { name: 'Game AFPS', values: [45, 85, 80, 85, 35, 55] },
       { name: 'VARD', values: [95, 20, 20, 40, 95, 95] },
       { name: 'ORD', values: [95, 20, 15, 30, 95, 95] }
     ]},
@@ -1178,7 +1142,7 @@ const alignChart = (() => {
     { axis: 'Speed to ship' },
     { axis: 'Iteration speed' }
   ];
-  alignChart.radar(container, data, { title: 'Deck Profile Comparison', size: 460, maxValue: 100 });
+  alignChart.radar(container, data, { title: 'Pipeline Profile Comparison', size: 460, maxValue: 100 });
 })();
 
 // Chart 2: Devtool AFPS Flow (Section 7)
@@ -1225,7 +1189,6 @@ const alignChart = (() => {
   alignChart.bar(container, [
     { label: 'Business AFPS', value: 30 },
     { label: 'Devtool AFPS', value: 14 },
-    { label: 'Game AFPS', value: 30 },
     { label: 'VARD', value: 3 },
     { label: 'ORD', value: 3 }
   ], { title: 'Typical Days to Ship', horizontal: true, width: 600, height: 280 });

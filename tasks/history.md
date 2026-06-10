@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-10 — Alignment pages Game AFPS refresh
+
+- Archived stale active alignment pages to `docs/history/archive/2026-06-10/014646/alignment/` before replacement: `workflow-design-three-pipelines.html`, `idea-scope-brief-npm-distribution.html`, and `idea-scope-brief-skills-showcase.html`.
+- Replaced the active workflow-design page's obsolete deck-model framing with the current five-deck model: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.
+- Preserved the workflow page's VARD/ORD/devtool COAs, review gates, assumptions, feedback YAML behavior, chart/TTS behavior, and stable filename while adding a visible Game AFPS amendment and deck section.
+- Updated the npm-distribution alignment page's deck-installation examples and gate to include `game-afps` across monolith preset, package-list, and registry-tag options.
+- Updated the Skills Showcase deck-builder alignment page so the UI concept uses five canonical decks and includes Game AFPS as the deliberate game deck.
+- Refreshed `alignment/index.html` metadata so active search/title entries no longer imply the obsolete workflow model.
+
 ## 2026-06-10 — Game AFPS deck model
 
 - Added Game AFPS as a first-class deliberate deck backed by the existing `game` pack.
