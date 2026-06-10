@@ -285,6 +285,13 @@ export function hibernatedPacksForSkill(skill) {
   return [...(HIBERNATED_SKILL_PACKS.get(skill) || [])];
 }
 
+export function hibernatedSkillNamesForPack(pack) {
+  return [...HIBERNATED_SKILL_PACKS.entries()]
+    .filter(([, packs]) => packs.includes(pack))
+    .map(([skill]) => skill)
+    .sort((a, b) => a.localeCompare(b));
+}
+
 export function tokenizePackArgs(args) {
   const tokens = [];
 

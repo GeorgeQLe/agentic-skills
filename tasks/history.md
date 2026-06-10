@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.3
+
+- Ported `skillpacks install`, `remove`, and `refresh` lifecycle mutations into package-owned Node code after the existing alias/skill normalization step.
+- Preserved managed copy behavior for `.claude/skills` and `.codex/skills`, including `.agentic-skills-managed` markers, `source_version`, `source_sha`, pinned archive symlinks, and unmanaged local directory safety.
+- Kept `pin`, `unpin`, `prune`, `doctor`, `recommend`, `which`, and `install-deck` on the `pack.sh` compatibility path for later parity work.
+- Added package-owned lifecycle tests that run with `PATH` emptied, proving install/remove/refresh no longer require `bash` or `jq`.
+- Verified Node-vs-`pack.sh` parity in temp projects for pack install, individual pinned install, pack remove, individual remove, hibernated stale remove, and refresh.
+- Fixed review findings before shipping: content-hash sort order now matches `LC_ALL=C sort`, and hibernated refresh diagnostics preserve the `pack.sh` safety language.
+- Real `npm publish` was not run.
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.1
 
 - Started Node Port Parity by adding package-owned `.agents/project.json` helpers and routing `skillpacks list-packs`, `status`, `set-mode`, and `set-update-mode` through Node without requiring `bash` or `jq`.

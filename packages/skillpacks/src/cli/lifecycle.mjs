@@ -1,0 +1,584 @@
+import { createHash } from 'node:crypto';
+import {
+  cpSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  readlinkSync,
+  rmSync,
+  symlinkSync,
+  unlinkSync,
+  writeFileSync
+} from 'node:fs';
+import { basename, dirname, join, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  canonicalHibernatedPack,
+  hibernatedPacksForSkill,
+  hibernatedSkillNamesForPack
+} from './pack-normalization.mjs';
+import {
+  inferProjectType,
+  readProjectConfig,
+  writeProjectConfig,
+  withProjectLock
+} from './project-config.mjs';
+
+const SKILL_LINK_MARKER = '.agentic-skills-managed';
+const HIBERNATED_ARCHIVE_RELATIVE_PATH = 'archive/hibernated-packs/2026-06-poketowork-rebuild';
+const HIBERNATED_REACTIVATION_TEXT =
+  'Reactivation requires a stable service/API, a known auth contract, and updated smoke tests.';
+const TOOLS = ['claude', 'codex'];
+const moduleDir = dirname(fileURLToPath(import.meta.url));
+const packageRoot = resolve(moduleDir, '..', '..');
+const checkoutRoot = resolve(packageRoot, '..', '..');
+
+function resolvePackagedPath(relativePath) {
+  const packagedPath = join(packageRoot, relativePath);
+  if (existsSync(packagedPath)) {
+    return packagedPath;
+  }
+
+  const checkoutPath = join(checkoutRoot, relativePath);
+  if (existsSync(checkoutPath)) {
+    return checkoutPath;
+  }
+
+  return packagedPath;
+}
+
+function projectTypeForPack(pack) {
+  if (
+    [
+      'business-discovery',
+      'customer-lifecycle',
+      'business-growth',
+      'business-ops',
+      'business-app',
+      'vard'
+    ].includes(pack)
+  ) {
+    return 'business-app';
+  }
+  if (pack === 'game') {
+    return 'game';
+  }
+  if (pack === 'devtool' || pack === 'ord') {
+    return 'devtool';
+  }
+  if (['creator-foundation', 'youtube-ops', 'creator-media', 'remotion'].includes(pack)) {
+    return 'creator-media';
+  }
+  if (pack === 'project-fleet') {
+    return 'project-fleet';
+  }
+  return null;
+}
+
+function activePackNames(manifest) {
+  return (manifest.packs || [])
+    .filter((pack) => pack.status === undefined || pack.status === 'active')
+    .map((pack) => pack.name)
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+function availablePacksInline(manifest) {
+  const names = activePackNames(manifest);
+  if (names.length === 0) {
+    return '(none)';
+  }
+
+  return names.reduce((output, name, index) => {
+    if (index === 0) {
+      return name;
+    }
+    return `${output}${index % 2 === 1 ? ',' : ' '}${name}`;
+  }, '');
+}
+
+function manifestSkills(manifest) {
+  return [...(manifest.skills || [])].sort((a, b) => {
+    return String(a.path || '').localeCompare(String(b.path || ''));
+  });
+}
+
+function activePackExists(manifest, packName) {
+  return activePackNames(manifest).includes(packName);
+}
+
+function packSkillEntries(manifest, packName, tool) {
+  return manifestSkills(manifest).filter((skill) => {
+    return skill.pack === packName && skill.platform === tool && skill.path;
+  });
+}
+
+function uniquePackSkillNames(manifest, packName) {
+  return [
+    ...new Set(
+      manifestSkills(manifest)
+        .filter((skill) => skill.pack === packName && skill.name)
+        .map((skill) => skill.name)
+    )
+  ].sort((a, b) => a.localeCompare(b));
+}
+
+function findPackForSkill(manifest, skillName) {
+  return manifestSkills(manifest).find((skill) => skill.name === skillName && skill.pack)?.pack || null;
+}
+
+function findSkillEntry(manifest, packName, tool, skillName) {
+  return manifestSkills(manifest).find((skill) => {
+    return skill.pack === packName && skill.platform === tool && skill.name === skillName && skill.path;
+  });
+}
+
+function hibernatedPackError(requested, pack) {
+  return new Error(
+    [
+      `ERROR: PoketoWork kanban pack '${pack}' is hibernated while Poketo.work is being rebuilt.`,
+      `Requested: ${requested}`,
+      `Archive: ${HIBERNATED_ARCHIVE_RELATIVE_PATH}/${pack}`,
+      HIBERNATED_REACTIVATION_TEXT,
+      `No active install is available. To clean up a stale project designation, run: scripts/pack.sh remove ${pack}`
+    ].join('\n')
+  );
+}
+
+function skillSourceDir(skillEntry) {
+  return resolvePackagedPath(dirname(skillEntry.path));
+}
+
+function targetRoot(projectRoot, tool) {
+  return join(projectRoot, `.${tool}`, 'skills');
+}
+
+function targetPath(projectRoot, tool, skillName) {
+  return join(targetRoot(projectRoot, tool), skillName);
+}
+
+function sha256(buffer) {
+  return createHash('sha256').update(buffer).digest('hex');
+}
+
+function listSkillContentFiles(sourceDir) {
+  const files = [];
+
+  function visit(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === 'archive' || entry.name === SKILL_LINK_MARKER) {
+        continue;
+      }
+      const fullPath = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        visit(fullPath);
+      } else if (entry.isFile()) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  visit(sourceDir);
+  return files.sort((a, b) => {
+    const left = relative(sourceDir, a);
+    const right = relative(sourceDir, b);
+    if (left < right) {
+      return -1;
+    }
+    if (left > right) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+function skillContentSha(sourceDir) {
+  const lines = listSkillContentFiles(sourceDir)
+    .map((filePath) => {
+      const fileHash = sha256(readFileSync(filePath));
+      return `${fileHash}  ${relative(sourceDir, filePath)}`;
+    })
+    .join('\n');
+  return sha256(`${lines}\n`);
+}
+
+function skillSourceVersion(sourceDir) {
+  const skillFile = join(sourceDir, 'SKILL.md');
+  if (!existsSync(skillFile)) {
+    return '';
+  }
+
+  const match = readFileSync(skillFile, 'utf8').match(/^version:\s*(.+)$/m);
+  if (!match) {
+    return '';
+  }
+
+  return match[1].trim().replace(/^"|"$/g, '');
+}
+
+function isArchiveSource(sourceDir) {
+  return basename(dirname(sourceDir)) === 'archive';
+}
+
+function isManagedSkillDir(target) {
+  return existsSync(target)
+    && !lstatSync(target).isSymbolicLink()
+    && lstatSync(target).isDirectory()
+    && existsSync(join(target, SKILL_LINK_MARKER));
+}
+
+function managedMarkerField(target, field) {
+  const markerPath = join(target, SKILL_LINK_MARKER);
+  if (!existsSync(markerPath)) {
+    return '';
+  }
+
+  const prefix = `${field}=`;
+  const line = readFileSync(markerPath, 'utf8')
+    .split(/\r?\n/)
+    .find((candidate) => candidate.startsWith(prefix));
+  return line ? line.slice(prefix.length) : '';
+}
+
+function sourceOwnedBySkillpacks(source) {
+  const ownedPrefixes = [
+    join(packageRoot, 'global', 'claude'),
+    join(packageRoot, 'global', 'codex'),
+    join(packageRoot, 'packs'),
+    join(checkoutRoot, 'global', 'claude'),
+    join(checkoutRoot, 'global', 'codex'),
+    join(checkoutRoot, 'packs')
+  ];
+
+  return ownedPrefixes.some((prefix) => source === prefix || source.startsWith(`${prefix}/`));
+}
+
+function removeRepoSkillInstall(target) {
+  if (!existsSync(target)) {
+    return false;
+  }
+
+  const stats = lstatSync(target);
+  if (stats.isSymbolicLink()) {
+    const source = readlinkSync(target);
+    if (sourceOwnedBySkillpacks(source)) {
+      unlinkSync(target);
+      return true;
+    }
+    return false;
+  }
+
+  if (isManagedSkillDir(target)) {
+    const source = managedMarkerField(target, 'source');
+    if (sourceOwnedBySkillpacks(source)) {
+      rmSync(target, { recursive: true, force: true });
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function syncSkillLink(source, target) {
+  if (existsSync(target)) {
+    const stats = lstatSync(target);
+    if (stats.isSymbolicLink()) {
+      if (readlinkSync(target) === source) {
+        return false;
+      }
+      unlinkSync(target);
+    } else if (isManagedSkillDir(target)) {
+      rmSync(target, { recursive: true, force: true });
+    } else {
+      console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
+      return false;
+    }
+  }
+
+  symlinkSync(source, target, 'dir');
+  return true;
+}
+
+function syncSkillInstall(source, target) {
+  if (isArchiveSource(source)) {
+    return syncSkillLink(source, target);
+  }
+
+  if (existsSync(target)) {
+    const stats = lstatSync(target);
+    if (stats.isSymbolicLink()) {
+      unlinkSync(target);
+    } else if (isManagedSkillDir(target)) {
+      rmSync(target, { recursive: true, force: true });
+    } else {
+      console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
+      return false;
+    }
+  }
+
+  mkdirSync(target, { recursive: true });
+  writeFileSync(
+    join(target, SKILL_LINK_MARKER),
+    [
+      `source=${source}`,
+      'managed_by=agentic-skills',
+      `source_version=${skillSourceVersion(source)}`,
+      `source_sha=${skillContentSha(source)}`
+    ].join('\n') + '\n'
+  );
+
+  for (const entry of readdirSync(source, { withFileTypes: true })) {
+    if (entry.name === 'archive') {
+      continue;
+    }
+    cpSync(join(source, entry.name), join(target, entry.name), {
+      recursive: true,
+      dereference: false
+    });
+  }
+
+  return true;
+}
+
+function effectiveSourceForSkill(sourceDir, skillName, config) {
+  const pinned = config?.pinned_versions?.[skillName];
+  if (!pinned) {
+    return { source: sourceDir, pinned: null, usingPinned: false };
+  }
+
+  const archivePath = join(sourceDir, 'archive', pinned);
+  if (existsSync(archivePath) && existsSync(join(archivePath, 'SKILL.md'))) {
+    return { source: archivePath, pinned, usingPinned: true };
+  }
+
+  console.error(`WARNING: pin ${skillName}=${pinned} but ${archivePath}/SKILL.md not found, using current`);
+  return { source: sourceDir, pinned, usingPinned: false };
+}
+
+function linkSkill(projectRoot, tool, skillName, sourceDir, config) {
+  const root = targetRoot(projectRoot, tool);
+  mkdirSync(root, { recursive: true });
+  const target = join(root, skillName);
+  const effective = effectiveSourceForSkill(sourceDir, skillName, config);
+
+  if (syncSkillInstall(effective.source, target)) {
+    if (effective.usingPinned) {
+      console.log(`Installed .${tool}/skills/${skillName} -> ${effective.source} (pinned ${effective.pinned})`);
+    } else {
+      console.log(`Installed .${tool}/skills/${skillName} -> ${effective.source}`);
+    }
+  }
+}
+
+function enabledPacks(config) {
+  return Array.isArray(config?.enabled_packs) ? config.enabled_packs : [];
+}
+
+function writePackProjectConfig(projectRoot, pack, packs) {
+  const existing = readProjectConfig(projectRoot);
+  const next = existing
+    ? { ...existing }
+    : {
+        project_type: projectTypeForPack(pack) || inferProjectType(projectRoot),
+        enabled_packs: [],
+        skill_pack_version: 1
+      };
+
+  if (!next.project_type) {
+    next.project_type = projectTypeForPack(pack) || inferProjectType(projectRoot);
+  }
+  next.enabled_packs = packs;
+  next.skill_pack_version = 1;
+  writeProjectConfig(projectRoot, next);
+}
+
+function installPack(projectRoot, manifest, pack) {
+  const hibernatedPack = canonicalHibernatedPack(pack);
+  if (hibernatedPack) {
+    throw hibernatedPackError(pack, hibernatedPack);
+  }
+  if (!activePackExists(manifest, pack)) {
+    throw new Error(`Unknown pack '${pack}'. Available packs: ${availablePacksInline(manifest)}`);
+  }
+
+  const config = readProjectConfig(projectRoot);
+  for (const tool of TOOLS) {
+    for (const skill of packSkillEntries(manifest, pack, tool)) {
+      linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config);
+    }
+  }
+
+  const packs = [...enabledPacks(readProjectConfig(projectRoot)), pack]
+    .filter((candidate, index, all) => all.indexOf(candidate) === index);
+  writePackProjectConfig(projectRoot, pack, packs);
+  console.log('Updated .agents/project.json');
+}
+
+function ensureProjectConfigForSkill(projectRoot) {
+  const existing = readProjectConfig(projectRoot);
+  if (existing) {
+    return { ...existing };
+  }
+
+  return {
+    project_type: inferProjectType(projectRoot),
+    enabled_packs: [],
+    skill_pack_version: 1
+  };
+}
+
+function installSingleSkill(projectRoot, manifest, skillName) {
+  const pack = findPackForSkill(manifest, skillName);
+  if (!pack) {
+    const hibernatedPacks = hibernatedPacksForSkill(skillName);
+    if (hibernatedPacks.length > 0) {
+      throw new Error(`ERROR: PoketoWork kanban skill '${skillName}' is archived in hibernated pack(s): ${hibernatedPacks.join(', ')}`);
+    }
+    throw new Error(`Skill '${skillName}' not found in any pack. Available packs: ${availablePacksInline(manifest)}`);
+  }
+
+  const config = readProjectConfig(projectRoot);
+  for (const tool of TOOLS) {
+    const skill = findSkillEntry(manifest, pack, tool, skillName);
+    if (skill) {
+      linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config);
+    }
+  }
+
+  const next = ensureProjectConfigForSkill(projectRoot);
+  const enabledSkills = next.enabled_skills && typeof next.enabled_skills === 'object'
+    ? { ...next.enabled_skills }
+    : {};
+  enabledSkills[skillName] = pack;
+  next.enabled_skills = enabledSkills;
+  writeProjectConfig(projectRoot, next);
+  console.log(`Updated .agents/project.json (skill: ${skillName} from pack: ${pack})`);
+}
+
+function removeEnabledSkill(projectRoot, skillName) {
+  const existing = readProjectConfig(projectRoot);
+  if (!existing) {
+    return;
+  }
+
+  const next = { ...existing };
+  if (next.enabled_skills && typeof next.enabled_skills === 'object') {
+    const enabledSkills = { ...next.enabled_skills };
+    delete enabledSkills[skillName];
+    if (Object.keys(enabledSkills).length > 0) {
+      next.enabled_skills = enabledSkills;
+    } else {
+      delete next.enabled_skills;
+    }
+  }
+  writeProjectConfig(projectRoot, next);
+}
+
+function removeSingleSkill(projectRoot, manifest, skillName) {
+  const config = readProjectConfig(projectRoot);
+  const enabledSkillPack = config?.enabled_skills?.[skillName];
+  const activePack = findPackForSkill(manifest, skillName);
+  const hibernatedPacks = hibernatedPacksForSkill(skillName);
+
+  if (!enabledSkillPack && !activePack && hibernatedPacks.length === 0) {
+    throw new Error(`Skill '${skillName}' not found in any pack`);
+  }
+
+  for (const tool of TOOLS) {
+    if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName))) {
+      console.log(`Removed .${tool}/skills/${skillName}`);
+    }
+  }
+
+  removeEnabledSkill(projectRoot, skillName);
+  console.log(`Updated .agents/project.json (removed skill: ${skillName})`);
+}
+
+function removePack(projectRoot, manifest, pack) {
+  let skillNames = [];
+  if (activePackExists(manifest, pack)) {
+    skillNames = uniquePackSkillNames(manifest, pack);
+  } else {
+    const hibernatedPack = canonicalHibernatedPack(pack) || pack;
+    skillNames = hibernatedSkillNamesForPack(hibernatedPack);
+    if (skillNames.length === 0) {
+      throw new Error(`Unknown pack '${pack}'. Available packs: ${availablePacksInline(manifest)}`);
+    }
+    pack = hibernatedPack;
+  }
+
+  for (const tool of TOOLS) {
+    for (const skillName of skillNames) {
+      if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName))) {
+        console.log(`Removed .${tool}/skills/${skillName}`);
+      }
+    }
+  }
+
+  const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => candidate !== pack);
+  writePackProjectConfig(projectRoot, pack, packs);
+  console.log('Updated .agents/project.json');
+}
+
+function enabledSkillEntries(config) {
+  if (!config?.enabled_skills || typeof config.enabled_skills !== 'object') {
+    return [];
+  }
+  return Object.entries(config.enabled_skills);
+}
+
+export function printSessionReloadNotice() {
+  console.log('');
+  console.log('Skill installs changed. Claude Code and Codex may keep the skill list loaded when the current session started.');
+  console.log('Claude Code: use /reload-skills to rescan skills. /clear starts a new empty-context conversation and can also pick up the refreshed registry. Restart Claude Code if .claude/skills did not exist when the session started or the skill is still invisible.');
+  console.log('Codex: start a fresh Codex CLI session if the $ skill list does not show newly installed or removed project-local skills.');
+}
+
+export async function installResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
+  return withProjectLock(projectRoot, `install ${[...packs, ...skills].join(' ')}`.trim(), async () => {
+    for (const pack of packs) {
+      installPack(projectRoot, manifest, pack);
+    }
+    for (const skill of skills) {
+      installSingleSkill(projectRoot, manifest, skill);
+    }
+    printSessionReloadNotice();
+    return 0;
+  });
+}
+
+export async function removeResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
+  return withProjectLock(projectRoot, `remove ${[...packs, ...skills].join(' ')}`.trim(), async () => {
+    for (const pack of packs) {
+      removePack(projectRoot, manifest, pack);
+    }
+    for (const skill of skills) {
+      removeSingleSkill(projectRoot, manifest, skill);
+    }
+    printSessionReloadNotice();
+    return 0;
+  });
+}
+
+export async function refreshProject({ manifest, projectRoot = process.cwd() }) {
+  return withProjectLock(projectRoot, 'refresh', async () => {
+    const config = readProjectConfig(projectRoot);
+    const packs = enabledPacks(config);
+    const skills = enabledSkillEntries(config).map(([skill]) => skill);
+
+    if (packs.length === 0 && skills.length === 0) {
+      throw new Error('No enabled packs or skills in .agents/project.json');
+    }
+
+    for (const pack of packs) {
+      installPack(projectRoot, manifest, pack);
+    }
+    for (const skill of skills) {
+      installSingleSkill(projectRoot, manifest, skill);
+    }
+    printSessionReloadNotice();
+    return 0;
+  });
+}

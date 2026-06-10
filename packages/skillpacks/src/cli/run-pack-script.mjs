@@ -9,6 +9,7 @@ import {
   setUpdateMode
 } from './project-config.mjs';
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
+import { installResolved, refreshProject, removeResolved } from './lifecycle.mjs';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -50,7 +51,6 @@ const PACK_COMMANDS = new Set([
 ]);
 
 const JQ_WRITE_COMMANDS = new Set([
-  'refresh',
   'prune',
   'pin',
   'unpin'
@@ -253,16 +253,35 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'install' || command === 'remove') {
+    const manifest = readManifest();
     const resolved = resolvePackCommandArgs(command, rest, {
+      manifest,
+      projectRoot: process.cwd()
+    });
+    if (command === 'install') {
+      return installResolved({
+        manifest,
+        projectRoot: process.cwd(),
+        packs: resolved.packs,
+        skills: resolved.skills
+      });
+    }
+    return removeResolved({
+      manifest,
+      projectRoot: process.cwd(),
+      packs: resolved.packs,
+      skills: resolved.skills
+    });
+  }
+
+  if (command === 'refresh') {
+    if (rest.length > 0) {
+      throw new Error('refresh does not accept arguments');
+    }
+    return refreshProject({
       manifest: readManifest(),
       projectRoot: process.cwd()
     });
-    requireCommand('bash', 'Install bash before running skillpacks.');
-    requireCommand(
-      'jq',
-      'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
-    );
-    return runCommand('bash', [packScriptPath, command, ...resolved.args]);
   }
 
   requireCommand('bash', 'Install bash before running skillpacks.');

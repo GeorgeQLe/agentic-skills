@@ -46,7 +46,7 @@ function readProjectConfigText(projectRoot) {
   return readFileSync(filePath, 'utf8');
 }
 
-function writeProjectConfig(projectRoot, config) {
+export function writeProjectConfig(projectRoot, config) {
   const filePath = projectFilePath(projectRoot);
   mkdirSync(dirname(filePath), { recursive: true });
   const tmpPath = `${filePath}.${process.pid}.tmp`;
@@ -133,7 +133,7 @@ async function acquireProjectLock(projectRoot, command) {
   throw new Error(`Timed out waiting for project pack lock at ${lockDir}`);
 }
 
-async function withProjectLock(projectRoot, command, fn) {
+export async function withProjectLock(projectRoot, command, fn) {
   const release = await acquireProjectLock(projectRoot, command);
   try {
     return await fn();
@@ -172,7 +172,7 @@ function hasFileWithinDepth(root, targetNames, maxDepth) {
   return visit(root, 0);
 }
 
-function inferProjectType(projectRoot) {
+export function inferProjectType(projectRoot) {
   if (
     projectRoot.includes('/games/') ||
     hasFileWithinDepth(projectRoot, ['godot', 'unity', 'unreal'], 2)

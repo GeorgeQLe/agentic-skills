@@ -15,8 +15,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
    - [x] Port pack alias normalization and hibernated-pack diagnostics.
    - [x] Keep `pack.sh` and Node command output aligned for supported aliases.
 3. Install/remove/refresh parity.
-   - [ ] Port pack and individual skill install/remove/refresh logic.
-   - [ ] Preserve `.agentic-skills-managed` marker creation and content hash behavior.
+   - [x] Port pack and individual skill install/remove/refresh logic.
+   - [x] Preserve `.agentic-skills-managed` marker creation and content hash behavior.
 4. Locking and drift parity.
    - [ ] Port `.agents/.pack.lock` handling.
    - [ ] Port `doctor`, `pin`, `unpin`, and `prune`.
@@ -28,7 +28,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 
 - [x] Step 3.1: Node Project Config Parity.
 - [x] Step 3.2: Pack Normalization And Alias Parity.
-- [ ] Step 3.3: Install/Remove/Refresh Parity.
+- [x] Step 3.3: Install/Remove/Refresh Parity.
+- [ ] Step 3.4: Locking And Drift Parity.
 
 ---
 

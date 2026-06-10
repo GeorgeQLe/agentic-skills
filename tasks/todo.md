@@ -64,12 +64,12 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 ### Step 3.3: Install/Remove/Refresh Parity
 
-- [ ] Port package-owned Node install logic for active packs while preserving `.claude/skills`, `.codex/skills`, `.agentic-skills-managed`, and content hash behavior from `scripts/pack.sh`.
-- [ ] Port package-owned Node install logic for individual skills, including active skill lookup, pinned-version source selection, and `enabled_skills` project-config updates.
-- [ ] Port package-owned Node remove logic for active packs, hibernated stale pack cleanup, and individual skills without removing unmanaged local skill directories.
-- [ ] Port package-owned Node refresh logic from `.agents/project.json`, including enabled packs and individually enabled skills.
-- [ ] Keep `pin`, `unpin`, `prune`, `doctor`, and any unresolved drift/lock commands on `pack.sh` unless this step's implementation proves the required helper can be safely shared.
-- [ ] Preserve `pack.sh` as a fallback or comparison oracle while implementing Node parity; do not remove the backend in this step.
+- [x] Port package-owned Node install logic for active packs while preserving `.claude/skills`, `.codex/skills`, `.agentic-skills-managed`, and content hash behavior from `scripts/pack.sh`.
+- [x] Port package-owned Node install logic for individual skills, including active skill lookup, pinned-version source selection, and `enabled_skills` project-config updates.
+- [x] Port package-owned Node remove logic for active packs, hibernated stale pack cleanup, and individual skills without removing unmanaged local skill directories.
+- [x] Port package-owned Node refresh logic from `.agents/project.json`, including enabled packs and individually enabled skills.
+- [x] Keep `pin`, `unpin`, `prune`, `doctor`, and any unresolved drift/lock commands on `pack.sh` unless this step's implementation proves the required helper can be safely shared.
+- [x] Preserve `pack.sh` as a fallback or comparison oracle while implementing Node parity; do not remove the backend in this step.
 
 #### Step 3.3 Implementation Plan
 
@@ -81,10 +81,45 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 #### Step 3.3 Verification Plan
 
+- [x] Run Node syntax checks for changed package CLI files.
+- [x] Run package-owned Node tests.
+- [x] Run temp-project parity checks comparing Node and `pack.sh` behavior for install/remove/refresh surfaces.
+- [x] Run a focused existing `pack.sh` install/remove regression if fallback behavior remains in the command path.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
+- [x] Run `git diff --check`.
+
+#### Step 3.3 Review Notes
+
+- Added `packages/skillpacks/src/cli/lifecycle.mjs` with package-owned Node install/remove/refresh operations for active packs and individual skills. It resolves sources from the packaged manifest, works from both source checkout and staged package roots, copies latest skills into `.claude/skills` and `.codex/skills`, symlinks pinned archive versions, writes `.agentic-skills-managed`, and preserves the `scripts/skill-links.sh` content-hash contract.
+- Routed `skillpacks install`, `remove`, and `refresh` through Node after the existing normalization step. `pin`, `unpin`, `prune`, `doctor`, `recommend`, `which`, and `install-deck` remain on the `pack.sh` compatibility path.
+- Reused the existing Node project lock/write helpers from `project-config.mjs`; install/remove/refresh now run without requiring `bash` or `jq`, while unported commands still enforce their existing dependencies.
+- Added package-owned lifecycle tests with `PATH` emptied. Coverage includes active pack install, individual pinned skill install, unmanaged local directory preservation on remove, individual skill removal, hibernated stale pack cleanup, refresh from `.agents/project.json`, and hibernated refresh diagnostics.
+- Temp-project parity checks passed for six Node-vs-`pack.sh` surfaces: pack install, individual pinned install, pack remove, individual remove, hibernated stale remove, and refresh. The comparison verifies parsed project config, installed file trees, symlinks, and marker hashes.
+- Adversarial review used changed-file self-review plus direct oracle parity against `pack.sh`, which is the targeted quality-sweep equivalent for this command-porting step. It found and fixed two issues before shipping: Node content hashing initially sorted paths with locale-sensitive ordering instead of the `LC_ALL=C sort` behavior from `skill-links.sh`; and `refresh` with a hibernated enabled pack initially had weaker diagnostics than `pack.sh`.
+- Validation passed: `node --check` for `lifecycle.mjs`, `run-pack-script.mjs`, `project-config.mjs`, `pack-normalization.mjs`, and `lifecycle.test.mjs`; `npm --workspace skillpacks run test:node` (25 tests); temp-project parity checks for the six install/remove/refresh surfaces; direct `pack.sh` install/remove coverage inside those parity checks; `npm --workspace skillpacks run build:check`; streaming npm dry-run boundary assertion with `/tmp/skillpacks-npm-cache` (2315 files, denied repo paths absent); and `git diff --check`.
+- The first npm dry-run parser attempt used a wrapper that could not handle the large npm JSON payload; validation was rerun through a streaming pipe and passed. No source change was needed for that harness issue.
+
+### Step 3.4: Locking And Drift Parity
+
+- [ ] Confirm the Node project lock behavior now used by install/remove/refresh covers stale lock cleanup, lock release on errors, and command labeling for lifecycle mutations.
+- [ ] Port `skillpacks doctor` drift reporting to Node using the managed marker `source`, `source_version`, `source_sha`, pinned symlink behavior, and missing-source states from `scripts/skill-links.sh`.
+- [ ] Port `skillpacks pin` and `skillpacks unpin` to Node, preserving archive-version validation, `pinned_versions` project-config updates, relinking behavior, and existing error messages where practical.
+- [ ] Port `skillpacks prune` to Node, preserving `--dry-run`, orphan detection, unmanaged-directory safety, enabled-pack and individually enabled-skill awareness, and project-config cleanup behavior.
+- [ ] Keep `pack.sh` as the comparison oracle and fallback for any unported or ambiguous drift/lock behavior during this step.
+
+#### Step 3.4 Implementation Plan
+
+- Files expected: modify `packages/skillpacks/src/cli/lifecycle.mjs`, `packages/skillpacks/src/cli/run-pack-script.mjs`, and package-owned tests under `packages/skillpacks/test/`; update task docs, history, and a ship manifest.
+- Start by reading `scripts/pack.sh` sections for `doctor`, `prune`, `pin_skill`, `unpin_skill`, and `skill_install_status` in `scripts/skill-links.sh`. Reuse the Node content-hash and managed-install helpers from Step 3.3 rather than duplicating behavior.
+- Add tests with `PATH` emptied for Node-owned `doctor`, `pin`, `unpin`, and `prune`, plus temp-project parity checks against direct `pack.sh` for ok/stale/unknown/missing-source/pinned states and prune dry-run vs mutation paths.
+- Keep `recommend`, `which`, `install-deck`, and any behavior not explicitly ported in Step 3.4 on the existing compatibility path.
+
+#### Step 3.4 Verification Plan
+
 - [ ] Run Node syntax checks for changed package CLI files.
 - [ ] Run package-owned Node tests.
-- [ ] Run temp-project parity checks comparing Node and `pack.sh` behavior for install/remove/refresh surfaces.
-- [ ] Run a focused existing `pack.sh` install/remove regression if fallback behavior remains in the command path.
+- [ ] Run temp-project parity checks comparing Node and `pack.sh` behavior for doctor, pin, unpin, and prune surfaces.
 - [ ] Run `npm --workspace skillpacks run build:check`.
 - [ ] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
 - [ ] Run `git diff --check`.
