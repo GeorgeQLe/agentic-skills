@@ -519,3 +519,10 @@ icp -> competitive-analysis -> journey-map -> positioning
 3. Distinguish locally verified findings from dashboard-only claims that the available files do not expose.
 4. Produce a durable alignment report with skill and workflow recommendations, including whether to improve existing skills or add new ones.
 5. Verify generated artifacts and ship the intended tracked changes.
+
+### Add-On Plan — Cost Translation
+
+1. Check the same Claude log scope for direct cost fields before estimating.
+2. Use only a freshly verified provider pricing table for token-to-cost math.
+3. Keep the report explicit that local logs support an API-equivalent estimate, not actual dashboard billing.
+4. Update the HTML with model, token-class, and top-project cost breakdowns, then validate the artifact.

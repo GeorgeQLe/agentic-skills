@@ -877,6 +877,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Produce `alignment/analyze-sessions-claude-usage-feedback.html`.
 - [x] Record validation and final recommendation notes.
 
+### Add-On Plan — Claude Usage Cost Translation
+
+- [x] Verify whether local Claude logs expose direct billed or estimated cost fields for the report window.
+- [x] Verify a current provider pricing table before estimating cost from tokens.
+- [x] Update `alignment/analyze-sessions-claude-usage-feedback.html` with actual-cost availability, estimated API-equivalent cost, formula assumptions, and cost breakdowns.
+- [x] Validate the edited HTML and record review notes.
+
+#### Review Notes — Claude Usage Cost Translation
+
+- Local Claude logs for the report window reproduced the original report totals exactly: 4,490 usage records and 206,983,852 raw transcript tokens.
+- No direct local invoice, subscription, credit, CCU, or dashboard dollar fields were found for the report window, so the HTML now labels actual billed cost as unavailable.
+- Added an estimated API-equivalent cost of $517.90 using Anthropic Claude API pricing verified on 2026-06-10: $477.21 for `claude-fable-5` and $40.68 for `claude-opus-4-6`.
+- Added model, token-class, and top-project cost breakdowns, plus caveats excluding managed-agent runtime, subscription-plan effects, private discounts, dashboard weighting, and provider-side adjustments.
+- Validation passed: structural HTML smoke for required cost text, feedback controls, review gates, compile section, table count, and no embeds; targeted `rg` checks for cost/source language; and `git diff --check` on the touched files.
+
 ### Review Notes — Claude Last-24h Usage Feedback
 - Confirmed the pasted Claude usage panel directionally from local logs, with an explicit caveat that provider-side dashboard weighting is not available locally.
 - Parsed `~/.claude/history.jsonl`, `~/.claude/projects/**/*.jsonl`, `~/.claude/projects/**/subagents/**/*.meta.json`, workflow journals, and `~/.claude/sessions/*.json`.
