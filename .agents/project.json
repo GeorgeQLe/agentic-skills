@@ -1,6 +1,25 @@
 {
   "project_type": "devtool",
-  "enabled_packs": ["agentic-skills-bench", "exec-loop", "code-debug", "skill-dev", "gitops", "session-analytics", "devtool", "business-discovery"],
+  "enabled_packs": [
+    "agentic-skills-bench",
+    "exec-loop",
+    "code-debug",
+    "skill-dev",
+    "gitops",
+    "session-analytics",
+    "devtool",
+    "business-discovery"
+  ],
   "skill_pack_version": 1,
-  "enabled_skills": {"ship-end":"exec-loop","sync":"gitops","analyze-sessions":"session-analytics","ship":"exec-loop","expert-review":"code-review","investigate":"code-debug","session-triage":"session-analytics","repo-glossary":"business-ops"}
+  "enabled_skills": {
+    "ship-end": "exec-loop",
+    "sync": "gitops",
+    "analyze-sessions": "session-analytics",
+    "ship": "exec-loop",
+    "expert-review": "code-review",
+    "investigate": "code-debug",
+    "session-triage": "session-analytics",
+    "repo-glossary": "business-ops",
+    "brainstorm": "product-design"
+  }
 }

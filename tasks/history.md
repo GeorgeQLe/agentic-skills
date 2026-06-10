@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-10 — Install product-design brainstorm skill
+
+- Installed the individual `brainstorm` skill from the `product-design` pack using `scripts/pack.sh install brainstorm`.
+- Updated `.agents/project.json` `enabled_skills` with `"brainstorm": "product-design"` without enabling the full `product-design` pack.
+- Created generated local skill roots under `.claude/skills/brainstorm` and `.codex/skills/brainstorm`; these remain uncommitted generated artifacts.
+- Captured the visible `$pack install brainstorm` invocation under `prompts/pack/`.
+
 ## 2026-06-10 — Alignment pages Game AFPS refresh
 
 - Archived stale active alignment pages to `docs/history/archive/2026-06-10/014646/alignment/` before replacement: `workflow-design-three-pipelines.html`, `idea-scope-brief-npm-distribution.html`, and `idea-scope-brief-skills-showcase.html`.
