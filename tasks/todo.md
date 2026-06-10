@@ -6,14 +6,17 @@
 - [x] Document date sourcing, preservation, missing-date derivation, and `new · YYYY-MM-DD` marker behavior.
 
 ### Phase 2: Regeneration And Shipping
-- [ ] Run `node scripts/upgrade-alignment-page.mjs --dry-run`.
-- [ ] Run `node scripts/upgrade-alignment-page.mjs`.
-- [ ] Re-run `node scripts/upgrade-alignment-page.mjs --dry-run` and confirm zero pending updates.
-- [ ] Run `git diff --check`.
-- [ ] Commit the doc and regenerated files together.
+- [x] Run `node scripts/upgrade-alignment-page.mjs --dry-run`.
+- [x] Run `node scripts/upgrade-alignment-page.mjs`.
+- [x] Re-run `node scripts/upgrade-alignment-page.mjs --dry-run` and confirm zero pending updates.
+- [x] Run `git diff --check`.
+- [x] Commit the doc and regenerated files together.
 
 ### Review Notes
-- Pending.
+- Updated the central alignment-index convention so entries require `YYYY-MM-DD` meta spans after links, preserve existing dates, derive missing dates from page internals or file history, and combine active `new` markers as `new · YYYY-MM-DD`.
+- Regenerated bundled `ALIGNMENT-PAGE.md` files from the canonical convention after previewing the 270-file fan-out.
+- Final generator verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run` reported `Updated: 0` and `Bundled files written: 0`.
+- Whitespace verification passed with `git diff --check`.
 
 ---
 

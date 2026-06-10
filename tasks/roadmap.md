@@ -12,12 +12,12 @@ Require central alignment index entries to carry dated metadata from each page's
    - [x] Preserve existing entry dates and define how to fill missing dates.
    - [x] Clarify `new` marker behavior with dated meta text.
 2. Regenerate and verify bundled docs.
-   - [ ] Preview bundle changes with `node scripts/upgrade-alignment-page.mjs --dry-run`.
-   - [ ] Regenerate bundled `ALIGNMENT-PAGE.md` files.
-   - [ ] Re-run dry-run and confirm no pending updates.
+   - [x] Preview bundle changes with `node scripts/upgrade-alignment-page.mjs --dry-run`.
+   - [x] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+   - [x] Re-run dry-run and confirm no pending updates.
 3. Ship.
-   - [ ] Review generated diff and run whitespace checks.
-   - [ ] Commit the convention and regenerated files together.
+   - [x] Review generated diff and run whitespace checks.
+   - [x] Commit the convention and regenerated files together.
 
 ## Current Implementation - Research Scope Approval Before Alignment Research
 
