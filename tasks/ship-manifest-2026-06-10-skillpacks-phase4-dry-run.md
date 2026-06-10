@@ -86,4 +86,4 @@ Revert the shipping commit to restore task status, history, manifest, and prompt
 
 ## Next command
 
-`$brainstorm`
+`$exec Drawer Close Visible Top-Left Collapse`
