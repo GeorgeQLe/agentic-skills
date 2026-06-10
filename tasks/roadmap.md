@@ -24,7 +24,7 @@ Audit the repository's documentation surfaces for inconsistencies across workflo
 5. Verify and ship intended work.
    - [x] Run relevant documentation and alignment validators.
    - [x] Run whitespace checks and review the diff.
-   - [ ] Commit and push intended audit artifacts without staging unrelated pre-existing work.
+   - [x] Commit and push intended audit artifacts without staging unrelated pre-existing work.
 
 ### Audit Summary
 
@@ -32,6 +32,7 @@ Audit the repository's documentation surfaces for inconsistencies across workflo
 - P1 issues: active install docs still use symlink wording; `scripts/init-agentic-skills.sh` is documented but missing at the root; retired `icp` route references remain in current docs and indexed alignment pages; the older npm strategy page remains indexed like current guidance despite stale package examples.
 - P2 issues: npm docs still include future/release-candidate wording after `skillpacks@0.1.0` publication; Skills Showcase count docs conflict with current generated data.
 - Deliverables: `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-documentation-alignment.html`, and an updated `alignment/index.html` entry.
+- Shipped in commit `73c828b6` on `master`; follow-up task-state cleanup recorded after push.
 
 ---
 

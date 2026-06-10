@@ -17,7 +17,7 @@ Audit all active repository documentation for alignment and report inconsistenci
 - [x] Cross-check consistency across commands, paths, terminology, versions, deck/pack counts, workflow rules, alignment conventions, and generated outputs.
 - [x] Write the audit report and review alignment page, then update `alignment/index.html`.
 - [x] Run validators, whitespace checks, and targeted scans.
-- [ ] Record review notes, commit, and push intended audit artifacts only.
+- [x] Record review notes, commit, and push intended audit artifacts only.
 
 ### Acceptance Criteria
 
@@ -36,6 +36,7 @@ Audit all active repository documentation for alignment and report inconsistenci
 - Validation passed: `node scripts/audit-alignment-pages.mjs` reported 45 active pages with exact TTS, metadata, viewport, embed, and index integrity; `node scripts/upgrade-alignment-page.mjs --check` reported generated bundles exact; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` passed 14/14 tests; `git diff --check` passed.
 - Targeted scans reconfirmed the reported drift rather than silently clearing it: retired `icp` routes remain in current docs/pages, and generated Skills Showcase data reports 373 entries / 190 unique mirrored skills / 179 unique pack skills / 11 unique global skills / 41 packs.
 - Optional browser-open check returned `blocked` from `node scripts/open-html-page.mjs alignment/devtool-docs-audit-documentation-alignment.html --browser auto`; file validation remained clean.
+- Shipped in commit `73c828b6` on `master`, followed by a task-state cleanup commit to mark this checklist complete after the push.
 
 ---
 
