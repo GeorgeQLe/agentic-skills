@@ -22,9 +22,12 @@ const VOICES = [
 ];
 const LS_VOICE_KEY = 'tts-kokoro-voice';
 const LS_SPEED_KEY = 'tts-kokoro-speed';
+const LS_USED_KEY = 'tts-kokoro-used';
+const FIRST_CHUNK_LEN = 250;
 
 let ttsInstance = null;
-let loadingTTS = false;
+let ttsLoadPromise = null;
+let progressHook = null;
 let usingFallback = false;
 let audioCtx = null;
 let sections = [];
@@ -161,20 +164,44 @@ async function loadKokoro(onProgress) {
   return instance;
 }
 
-async function ensureTTS(onProgress) {
-  if (ttsInstance) return ttsInstance;
-  if (loadingTTS) return null;
-  loadingTTS = true;
-  try {
-    ttsInstance = await loadKokoro(onProgress);
-    usingFallback = false;
-    return ttsInstance;
-  } catch (err) {
-    console.warn('Kokoro TTS failed to load, falling back to Web Speech API:', err);
-    usingFallback = true;
-    return null;
-  } finally {
-    loadingTTS = false;
+function reportProgress(pct) {
+  if (progressHook) progressHook(pct);
+}
+
+// Single shared load promise: a click during a background warm start waits on
+// the in-flight load instead of starting a second one (or worse, proceeding
+// with no instance).
+function ensureTTS(onProgress) {
+  if (onProgress) progressHook = onProgress;
+  if (ttsInstance) return Promise.resolve(ttsInstance);
+  if (!ttsLoadPromise) {
+    ttsLoadPromise = loadKokoro(reportProgress).then((instance) => {
+      ttsInstance = instance;
+      usingFallback = false;
+      try { localStorage.setItem(LS_USED_KEY, '1'); } catch (_) {}
+      return instance;
+    }).catch((err) => {
+      console.warn('Kokoro TTS failed to load, falling back to Web Speech API:', err);
+      usingFallback = true;
+      ttsLoadPromise = null;
+      return null;
+    });
+  }
+  return ttsLoadPromise;
+}
+
+// After the first successful use on this machine, preload the model during
+// idle time on later page loads so it is ready by the time the user clicks.
+// Gated by the localStorage flag so users who never click pay nothing.
+function warmStart() {
+  let used = null;
+  try { used = localStorage.getItem(LS_USED_KEY); } catch (_) {}
+  if (used !== '1') return;
+  const kick = () => { ensureTTS(null); };
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(kick, { timeout: 10000 });
+  } else {
+    setTimeout(kick, 3000);
   }
 }
 
@@ -190,21 +217,26 @@ function stopCurrentAudio() {
   if (usingFallback) fallback.cancel();
 }
 
-function chunkText(text, maxLen) {
+// The first chunk is kept short (firstLen) so audio starts after synthesizing
+// only a sentence or two; later chunks use maxLen and are prefetched during
+// playback, so their size never delays audio.
+function chunkText(text, maxLen, firstLen) {
   maxLen = maxLen || 1000;
-  if (text.length <= maxLen) return [text];
+  var limit = firstLen || maxLen;
+  if (text.length <= limit) return [text];
   var chunks = [];
   var remaining = text;
-  while (remaining.length > maxLen) {
+  while (remaining.length > limit) {
     var cut = -1;
     var seps = ['. ', '? ', '! '];
     for (var i = 0; i < seps.length; i++) {
-      var idx = remaining.lastIndexOf(seps[i], maxLen);
+      var idx = remaining.lastIndexOf(seps[i], limit);
       if (idx > cut) cut = idx + seps[i].length;
     }
-    if (cut <= 0) cut = maxLen;
+    if (cut <= 0) cut = limit;
     chunks.push(remaining.slice(0, cut).trim());
     remaining = remaining.slice(cut).trim();
+    limit = maxLen;
   }
   if (remaining) chunks.push(remaining);
   return chunks;
@@ -217,14 +249,26 @@ async function speakKokoro(text, id, onEnd) {
   const streamState = { abort: false };
   currentStream = streamState;
 
-  const chunks = chunkText(text);
+  const chunks = chunkText(text, 1000, FIRST_CHUNK_LEN);
+
+  // Pipelined synthesis: chunk N+1 generates while chunk N plays, so chunk
+  // boundaries are gapless. The .catch(noop) marks abandoned prefetches as
+  // handled when playback is aborted mid-flight.
+  const startGen = (i) => {
+    const p = ttsInstance.generate(chunks[i], { voice, speed });
+    p.catch(() => {});
+    return p;
+  };
 
   try {
+    let pending = startGen(0);
     for (let ci = 0; ci < chunks.length; ci++) {
       if (streamState.abort || id !== skipId) return;
 
-      const rawAudio = await ttsInstance.generate(chunks[ci], { voice, speed });
+      const rawAudio = await pending;
       if (streamState.abort || id !== skipId) return;
+
+      pending = ci + 1 < chunks.length ? startGen(ci + 1) : null;
 
       const samples = rawAudio.audio;
       if (!samples || samples.length === 0) continue;
@@ -478,6 +522,7 @@ function injectStyles() {
 function init() {
   injectStyles();
   injectButton();
+  warmStart();
   document.addEventListener('keydown', (e) => {
     if (e.target.matches('input, textarea, select')) return;
     if (e.key === ' ' && active) { e.preventDefault(); togglePause(); }
