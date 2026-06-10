@@ -13789,3 +13789,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Updated invocation taxonomy, orchestrator convention docs, benchmark coverage metadata, and layer1 regression coverage for the new parent/subskill contract.
 - Cleaned up benchmark harness coverage validation by accepting the current deterministic benchmark-test-skill wording and registering `repo-glossary` with the existing pack workflow fixture.
 - Refreshed Skills Showcase generated assets and prepared the next backlog plan for correcting pack-list/count coverage in the showcase.
+
+## 2026-06-10 — skillpacks npm distribution Phase 3 Step 3.2
+
+- Added package-owned Node pack normalization and hibernated PoketoWork kanban diagnostics for `skillpacks install` and `skillpacks remove`.
+- Routed install/remove argument resolution through Node while preserving `scripts/pack.sh` for the actual lifecycle mutations.
+- Added package-owned tests for direct pack names, aliases, comma-separated args, `pack:` prefixes, empty pack tokens, active skill fallback, unknown names, hibernated aliases, and early diagnostics without `bash`/`jq`.
+- Verified syntax checks, package-owned tests, temp-project install/remove smokes, package build/check, npm dry-run boundary assertion, and `git diff --check`.
+- Marked Step 3.2 complete and prepared Step 3.3 install/remove/refresh parity planning.

@@ -12,8 +12,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
    - [x] Preserve unrelated project config fields on writes.
    - [x] Add package-owned tests that run with `PATH` emptied to prove no shell/JQ dependency.
 2. Pack normalization and alias parity.
-   - [ ] Port pack alias normalization and hibernated-pack diagnostics.
-   - [ ] Keep `pack.sh` and Node command output aligned for supported aliases.
+   - [x] Port pack alias normalization and hibernated-pack diagnostics.
+   - [x] Keep `pack.sh` and Node command output aligned for supported aliases.
 3. Install/remove/refresh parity.
    - [ ] Port pack and individual skill install/remove/refresh logic.
    - [ ] Preserve `.agentic-skills-managed` marker creation and content hash behavior.
@@ -27,7 +27,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 ### Current Step
 
 - [x] Step 3.1: Node Project Config Parity.
-- [ ] Step 3.2: Pack Normalization And Alias Parity.
+- [x] Step 3.2: Pack Normalization And Alias Parity.
+- [ ] Step 3.3: Install/Remove/Refresh Parity.
 
 ---
 

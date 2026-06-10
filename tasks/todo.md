@@ -37,17 +37,54 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 ### Step 3.2: Pack Normalization And Alias Parity
 
-- [ ] Port pack alias normalization from `scripts/pack.sh` into package-owned Node code.
-- [ ] Include hibernated PoketoWork kanban pack and skill diagnostics with the same user-facing safety language.
-- [ ] Add CLI resolution coverage for direct pack names, aliases, comma-separated arguments, `pack:` prefixes, empty `pack`/`packs` tokens, unknown names, and hibernated aliases.
-- [ ] Keep lifecycle mutations on `pack.sh` after Node resolves and validates names unless the install/remove port is explicitly in scope for the next step.
-- [ ] Compare representative Node and `pack.sh` resolution behavior before changing install/remove execution.
+- [x] Port pack alias normalization from `scripts/pack.sh` into package-owned Node code.
+- [x] Include hibernated PoketoWork kanban pack and skill diagnostics with the same user-facing safety language.
+- [x] Add CLI resolution coverage for direct pack names, aliases, comma-separated arguments, `pack:` prefixes, empty `pack`/`packs` tokens, unknown names, and hibernated aliases.
+- [x] Keep lifecycle mutations on `pack.sh` after Node resolves and validates names unless the install/remove port is explicitly in scope for the next step.
+- [x] Compare representative Node and `pack.sh` resolution behavior before changing install/remove execution.
 
 #### Step 3.2 Verification Plan
 
+- [x] Run Node syntax checks for changed package CLI files.
+- [x] Run package-owned normalization tests.
+- [x] Run representative `skillpacks install`/unknown-name smoke checks against temp projects if CLI routing changes.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
+- [x] Run `git diff --check`.
+
+#### Step 3.2 Review Notes
+
+- Added `packages/skillpacks/src/cli/pack-normalization.mjs` with the `pack.sh` pack alias table, command-token splitting, active pack/skill lookup from the packaged manifest, enabled-skill lookup for `remove`, and PoketoWork kanban hibernation diagnostics.
+- Routed `skillpacks install` and `skillpacks remove` through Node normalization before requiring `bash`/`jq`, then continued to execute lifecycle mutations through `scripts/pack.sh` with canonical pack/skill arguments.
+- Preserved the command-specific hibernation behavior: `install` blocks hibernated pack/skill names with safety language, while `remove` resolves hibernated names for stale project cleanup.
+- Added package-owned Node tests covering direct names, aliases, comma-separated arguments, `pack:` prefixes, empty `pack`/`packs` tokens, active skill fallback, unknown names, hibernated pack aliases, hibernated skill aliases, and early CLI diagnostics without `bash`/`jq` on `PATH`.
+- Baseline and smoke behavior matched the representative `pack.sh` cases checked before the route change: `business` expands to the four business packs; `pack:code-quality,docs` installs `code-quality` and `docs-health`; unknown names report available packs; hibernated aliases report the PoketoWork rebuild safety language; and normalized `remove quality` cleaned up `code-quality` while preserving `docs-health`.
+- Validation passed: `node --check packages/skillpacks/src/cli/pack-normalization.mjs`; `node --check packages/skillpacks/src/cli/run-pack-script.mjs`; `node --check packages/skillpacks/test/pack-normalization.test.mjs`; `npm --workspace skillpacks run test:node` (18 tests); temp-project CLI smokes for `install pack:code-quality,docs`, `install business`, unknown install, hibernated install, `remove quality`, and project-config inspection; `npm --workspace skillpacks run build:check`; `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` plus parsed boundary assertion; and `git diff --check`.
+- Adversarial review checked command ordering, manifest dependence, hibernated cleanup parity, unknown-name output, token splitting, skill-vs-pack fallback order, and install/remove mutation boundaries. No source changes were needed after review.
+
+### Step 3.3: Install/Remove/Refresh Parity
+
+- [ ] Port package-owned Node install logic for active packs while preserving `.claude/skills`, `.codex/skills`, `.agentic-skills-managed`, and content hash behavior from `scripts/pack.sh`.
+- [ ] Port package-owned Node install logic for individual skills, including active skill lookup, pinned-version source selection, and `enabled_skills` project-config updates.
+- [ ] Port package-owned Node remove logic for active packs, hibernated stale pack cleanup, and individual skills without removing unmanaged local skill directories.
+- [ ] Port package-owned Node refresh logic from `.agents/project.json`, including enabled packs and individually enabled skills.
+- [ ] Keep `pin`, `unpin`, `prune`, `doctor`, and any unresolved drift/lock commands on `pack.sh` unless this step's implementation proves the required helper can be safely shared.
+- [ ] Preserve `pack.sh` as a fallback or comparison oracle while implementing Node parity; do not remove the backend in this step.
+
+#### Step 3.3 Implementation Plan
+
+- Files expected: modify `packages/skillpacks/src/cli/run-pack-script.mjs`; add or modify package-owned install/link helpers under `packages/skillpacks/src/cli/`; add package-owned tests under `packages/skillpacks/test/`; update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, and a ship manifest.
+- Start by reading `scripts/pack.sh` helpers for `sync_skill_install`, managed marker files, content hashing, pinned archive resolution, `install_pack`, `install_single_skill`, `remove_pack`, `remove_single_skill`, and `refresh`.
+- Build the Node helper around structured filesystem operations and the existing project-config helper rather than shelling out from helper internals.
+- Compare Node behavior against `pack.sh` in temp projects for one pack install, one individual skill install, one pack remove, one individual skill remove, one hibernated stale remove, and refresh from a project config before switching the CLI route.
+- Route only the commands implemented by this step through Node; keep unported lifecycle/drift commands on `pack.sh`.
+
+#### Step 3.3 Verification Plan
+
 - [ ] Run Node syntax checks for changed package CLI files.
-- [ ] Run package-owned normalization tests.
-- [ ] Run representative `skillpacks install`/unknown-name smoke checks against temp projects if CLI routing changes.
+- [ ] Run package-owned Node tests.
+- [ ] Run temp-project parity checks comparing Node and `pack.sh` behavior for install/remove/refresh surfaces.
+- [ ] Run a focused existing `pack.sh` install/remove regression if fallback behavior remains in the command path.
 - [ ] Run `npm --workspace skillpacks run build:check`.
 - [ ] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
 - [ ] Run `git diff --check`.
