@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the ux-variations-specific gates from the generator gate map.
+
 ## v0.13 - 2026-06-06
 
 - Clarified the normal AFPS route as `$user-flow-map` then `$ui-interview --requirements-only` before `$ux-variations --layout-mode`.

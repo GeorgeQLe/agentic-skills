@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the uat-specific gates from the generator gate map.
+- Gained the shared glossary additions gate from the convention (applies because the skill is `type: analysis`).
+
 ## v0.9 - 2026-06-07
 
 - Routed missing-discovery UAT handoffs from the retired `/icp` executable to `/customer-discovery` while preserving `research/icp.md` as evidence input.

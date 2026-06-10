@@ -290,7 +290,7 @@ describe("alignment page gate contract", () => {
       const content = conventionText(path);
       expect(content, `${path} report-only gates`).toContain("**Report-only research gates.**");
       expect(content, `${path} evidence coverage`).toContain("evidence coverage");
-      expect(content, `${path} recommended path`).toContain("recommended path");
+      expect(content, `${path} recommended output path`).toContain("recommended output path");
       expect(content, `${path} approval gates`).toContain("approval gates");
     }
   });

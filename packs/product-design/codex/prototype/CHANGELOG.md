@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the prototype-specific gates from the generator gate map.
+- Kept the prototype-first timing rule (prototype files may be created before the alignment page; the page is required before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes) as bespoke prose beside the stub.
+
 ## v0.10 - 2026-06-06
 
 - Added `specs/user-flow-*.md` as a preferred prototype input for screen ordering, route inventory, branches, states, failure/recovery paths, handoffs, and low-fidelity wireframe structure while preserving the existing UX/UI hard gate.

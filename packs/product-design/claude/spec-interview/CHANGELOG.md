@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the spec-interview-specific gates from the generator gate map.
+
 ## v0.9 - 2026-06-06
 
 - Read `specs/user-flow-*.md` as upstream evidence for screen order, routes, branches, states, failure/recovery paths, handoffs, and low-fidelity wireframe intent.

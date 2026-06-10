@@ -1,5 +1,9 @@
 # research-roadmap changelog (codex)
 
+## v0.16 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the research-roadmap-specific gates from the generator gate map.
+
 ## v0.15 - 2026-06-10
 
 - Changed the inline report-first alignment contract to require research-scope approval before synthesized documentation-health findings, queue recommendations, working packets, or canonical writes.

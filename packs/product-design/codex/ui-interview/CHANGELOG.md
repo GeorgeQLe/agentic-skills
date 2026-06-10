@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-10
+
+- Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the ui-interview-specific gates from the generator gate map.
+
 ## v0.11 - 2026-06-06
 
 - Prefer `specs/user-flow-*.md` as upstream flow-structure input for UI requirements and detailed UI specs.

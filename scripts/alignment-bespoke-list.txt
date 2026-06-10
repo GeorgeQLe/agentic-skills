@@ -10,16 +10,6 @@
 #
 # One skill name per line. Lines starting with # are comments.
 # Skill names match the directory basename (e.g. "spec-interview").
-
-# product-design
-consolidate-variations
-prototype
-spec-interview
-ui-interview
-ux-variations
-
-# product-testing
-uat
-
-# research-admin
-research-roadmap
+#
+# Currently empty: the last bespoke sections were converted to the generated
+# stub + bundled ALIGNMENT-PAGE.md on 2026-06-10 (Drift Plan Phase 2 Step 5).
