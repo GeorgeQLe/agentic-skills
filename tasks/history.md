@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 4 docs readiness
+
+- Scoped Phase 4 Documentation And Dry Run Release in `tasks/todo.md` and `tasks/roadmap.md` after Phase 3 completion.
+- Updated package-included docs with source-checkout and post-publish npm setup paths, migration notes, and package semver vs skill-level pinning troubleshooting.
+- Added package-owned documentation contract tests so Phase 4 release-readiness language remains present in `README.md`, Quickstart, packs/decks docs, and the npm distribution design.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` after package-included documentation changes and current repo skill metadata made the manifest stale.
+- Verified package tests, package staging, tarball dry-run, and whitespace checks; real `npm publish` was not run.
+
 ## 2026-06-10 — Install product-design brainstorm skill
 
 - Installed the individual `brainstorm` skill from the `product-design` pack using `scripts/pack.sh install brainstorm`.

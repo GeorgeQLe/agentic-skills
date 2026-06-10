@@ -298,6 +298,61 @@ Phase 1 must not change these contracts:
 
 After the Phase 3 port, `scripts/pack.sh` remains a supported compatibility wrapper instead of becoming a thin wrapper over the Node CLI. This preserves the long-lived git-checkout path while the npm package owns deterministic project-local lifecycle behavior.
 
+## Phase 4 Release-Readiness Notes
+
+Phase 4 prepares the package for a dry-run release only. It does not publish `skillpacks`, create npm tags, change package access, or replace the source-checkout setup path.
+
+### User Setup Paths
+
+Source-checkout users continue to install from a local clone:
+
+```bash
+git clone <this-repo-url> ~/agentic-skills
+cd ~/my-project
+~/agentic-skills/scripts/pack.sh install devtool
+~/agentic-skills/scripts/pack.sh status
+```
+
+After the first public package is published, npm users can install from the target project directory:
+
+```bash
+cd ~/my-project
+npx skillpacks install devtool
+npx skillpacks install code-quality
+npx skillpacks install-deck game-afps
+npx skillpacks status
+```
+
+Both paths write the same project-local contract: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. The CLI session reload requirements are unchanged: Claude Code needs `/reload-skills`, `/clear`, or a restart depending on when the local roots appeared; Codex needs a fresh session if the `$` skill list remains stale.
+
+### Migration From Checkout To npm
+
+An existing project can move from a local checkout workflow to the npm package by keeping `.agents/project.json` committed and running:
+
+```bash
+npx skillpacks refresh
+npx skillpacks doctor
+```
+
+`refresh` recreates generated local skill roots from the package snapshot and the existing project designation. `doctor` then reports whether managed installs are current, stale, missing, unknown, or pinned.
+
+Do not commit generated `.claude/skills/*` or `.codex/skills/*` roots during migration; they remain rebuildable consumer-project artifacts.
+
+### Version And Pinning Troubleshooting
+
+`skillpacks@<semver>` is the transport snapshot. It determines which active skill files and `archive/<version>/SKILL.md` snapshots are present in the installed package.
+
+Skill pins still use skill frontmatter versions:
+
+```bash
+npx skillpacks pin quality-sweep v0.0
+npx skillpacks unpin quality-sweep
+```
+
+If a pin fails because an archive version is unavailable, the installed npm package does not contain that archived skill snapshot. Upgrade to a package version that includes the archive, or use a source checkout at a commit that contains it.
+
+Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. `install-deck` still materializes through the packaged shell backend in this release candidate and therefore requires both `bash` and `jq`.
+
 ## Implementation Roadmap
 
 ### Phase 0 - Reservation And Preflight

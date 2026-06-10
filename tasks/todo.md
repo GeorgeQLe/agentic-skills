@@ -1,3 +1,74 @@
+## Current Implementation - Skillpacks npm Distribution Phase 4
+
+### Goal
+
+Prepare the `skillpacks` npm package for a dry-run release by tightening package-included documentation and verification without publishing to npm or changing the existing git-checkout setup path.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: package-included docs, package tests, task docs, and release dry-run notes share one package boundary.
+
+### Context
+
+- Source design: `docs/skillpacks-npm-distribution.md` `### Phase 4 - Documentation And Dry Run Release`.
+- Phase 3 is complete: Node-owned project-local commands no longer require `bash` or `jq`; `list`, `recommend`, and `which` remain shell-backed; `install-deck` remains hybrid shell materialization requiring `bash` and `jq`; `init-global` remains external script-backed.
+- Real `npm publish` is Phase 5 and requires explicit approval. Phase 4 may run `npm publish --dry-run` only; do not publish, tag, or change package access in this phase.
+- Package-included docs are staged by `packages/skillpacks/scripts/build-package.mjs`: `README.md`, `docs/QUICKSTART.md`, `docs/packs.md`, `docs/decks.md`, and `docs/skillpacks-npm-distribution.md`.
+- Unrelated local work exists in `apps/skills-showcase/next-env.d.ts` and `apps/skills-showcase/src/components/pack-opener-collapse-target.test.tsx`; leave it out of this shipping boundary unless it is proven necessary.
+
+### Steps
+
+- [x] Step 4.1: Update package-included docs with npm usage, git-checkout usage, migration guidance, and package-version vs skill-version pinning troubleshooting.
+- [x] Step 4.2: Add or extend package-owned documentation contract tests for the Phase 4 release-readiness language.
+- [ ] Step 4.3: Run package staging, tarball dry-run inspection, and `npm publish --dry-run` locally without publishing.
+- [ ] Step 4.4: Record tarball/publish dry-run output in the ship manifest, update review notes, history, and ship intended Phase 4 changes only.
+
+### Step 4.1 Implementation Plan
+
+- Files expected: `README.md`, `docs/QUICKSTART.md`, `docs/packs.md`, `docs/decks.md`, `docs/skillpacks-npm-distribution.md`, `packages/skillpacks/test/compatibility.test.mjs`, `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, and a ship manifest.
+- Add a root README section that separates "source checkout today" from "npm CLI after publication" and shows `npx skillpacks` usage without implying that Phase 4 publishes the package.
+- Update Quickstart to present both setup paths, verify with either `scripts/pack.sh status` or `npx skillpacks status`, and explain reload behavior is the same after local skill roots are written.
+- Update packs/decks docs with npm CLI equivalents for pack and deck installation while preserving `scripts/pack.sh` as the checkout path.
+- Add migration and troubleshooting language in `docs/skillpacks-npm-distribution.md`: package semver selects the transport snapshot, skill `version:` remains the pin target, archive availability depends on the installed package version, and `install-deck` still requires `bash`/`jq` in this release candidate.
+- Add or extend a package-owned docs test only if it helps keep this release language from drifting; otherwise record why docs-only review suffices.
+
+### Step 4.1 Verification Plan
+
+- Run package-owned docs/compatibility tests after edits.
+- Run `npm --workspace skillpacks run build:check` to ensure package-included docs stage cleanly and do not mutate website-owned assets.
+- Run `npm --workspace skillpacks run pack:dry-run` for a tarball boundary smoke if the package build remains current.
+- Run `git diff --check`.
+
+### Acceptance Criteria
+
+- [x] Package-included docs show both npm and git-checkout setup paths and do not claim a real publish happened.
+- [x] Migration/troubleshooting language explains npm package semver vs skill-level version pinning.
+- [x] Package docs contract tests and package staging checks pass.
+- No GitHub Actions workflow is introduced.
+
+### Review Notes (2026-06-10)
+
+- Added Phase 4 release-readiness docs across package-included surfaces: `README.md`, `docs/QUICKSTART.md`, `docs/packs.md`, `docs/decks.md`, and `docs/skillpacks-npm-distribution.md`.
+- Documentation now separates the source-checkout path available today from the npm path after first public publish; it shows `npx skillpacks` examples without claiming Phase 4 publishes the package.
+- Added migration and troubleshooting language: keep `.agents/project.json`, run `npx skillpacks refresh`/`doctor`, do not commit generated local skill roots, package semver selects the transport snapshot, and skill pins continue to use skill frontmatter `version:` / `archive/<version>/SKILL.md`.
+- Extended `packages/skillpacks/test/compatibility.test.mjs` with Phase 4 documentation contract tests for npm + checkout usage, migration language, package semver, skill-version pinning, and no-publish release-prep wording.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` because package build validation requires the package manifest to match current package-included docs and current repo skill metadata.
+- Validation passed: `npm --workspace skillpacks run test:node` (37/37), `npm --workspace skillpacks run build:check`, `npm --workspace skillpacks run pack:dry-run` (serial rerun; `skillpacks@0.1.0`, 2,348 entries, 5,220,684 bytes packed, 31,205,670 bytes unpacked), and `git diff --check`.
+- Adversarial review: targeted diff review plus scans for false publish claims, missing checkout path coverage, dependency claims, no-GitHub-Actions language, and package semver / skill-version pinning. One readability issue was fixed by splitting Quickstart checkout and npm verification commands into separate blocks.
+- Noted validation nuance: package staging and `npm pack` both touch `packages/skillpacks/build`, so dry-run package checks must run serially after `build:check`, not in parallel.
+
+### Step 4.3 Implementation Plan
+
+- Files expected: `tasks/todo.md`, `tasks/history.md`, a new or updated `tasks/ship-manifest-2026-06-10-skillpacks-phase4-docs.md`, and possibly `packages/skillpacks/dist/skillpacks-manifest.json` only if package metadata is stale again.
+- Run package staging first: `npm --workspace skillpacks run build:check`.
+- Run tarball inspection with the `/tmp` npm cache to avoid home-cache write failures in restricted environments: `npm_config_cache=/tmp/skillpacks-npm-cache npm pack ./build --dry-run --json --silent` from `packages/skillpacks/`.
+- Parse or inspect the JSON output to record package id, filename, packed/unpacked size, entry count, and denied-path absence (`alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, `docs/history/`).
+- Run `npm publish --dry-run` against `packages/skillpacks/build` without changing package access, creating tags, or publishing. If npm auth or registry access blocks the dry-run, stop and record the exact blocker; do not run real publish.
+- Run `git diff --check` and update review notes with dry-run evidence.
+
+---
+
 ## Current Implementation - Benchmark Harness Code Review Fixes (Expert-Review High Items)
 
 ### Goal

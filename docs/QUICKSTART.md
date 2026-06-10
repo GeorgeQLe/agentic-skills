@@ -10,7 +10,11 @@ Get from clone to a working skill in under 5 minutes.
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 
-## 1. Clone and Initialize
+## 1. Choose an Install Path
+
+### Source checkout
+
+Use the source checkout when you are developing this repository or before the public npm package is published:
 
 ```bash
 git clone <this-repo-url> ~/agentic-skills
@@ -19,6 +23,18 @@ cd ~/agentic-skills
 ```
 
 `init.sh` symlinks the global core skills into `~/.claude/skills/` and `~/.codex/skills/`. Domain packs are not installed globally — that is intentional context hygiene.
+
+### npm CLI
+
+After the first public package is published, use `npx skillpacks` from the project that should receive local skills:
+
+```bash
+cd ~/my-project
+npx skillpacks --version
+npx skillpacks list
+```
+
+The npm CLI does not install global core skills by default. It writes project-local pack configuration and skill roots in the current working directory.
 
 ## 2. Install a Pack in Your Project
 
@@ -31,9 +47,17 @@ cd ~/my-project
 ~/agentic-skills/scripts/pack.sh install business-discovery  # for SaaS/business apps
 ```
 
+With npm after publication:
+
+```bash
+npx skillpacks install devtool
+npx skillpacks install game
+npx skillpacks install business-discovery
+```
+
 This creates `.agents/project.json` and project-local skill roots in `.claude/skills/` and `.codex/skills/`.
 
-If you are using the npm CLI, you can install a canonical deck instead:
+The npm CLI can also install a canonical deck from manifest metadata:
 
 ```bash
 npx skillpacks install-deck business-afps
@@ -50,8 +74,16 @@ Skills are not hot-reloaded. After installing:
 
 ## 4. Verify the Installation
 
+Source checkout:
+
 ```bash
 ~/agentic-skills/scripts/pack.sh status
+```
+
+npm after publication:
+
+```bash
+npx skillpacks status
 ```
 
 Or from within Claude Code: run `/pack` with no arguments. From Codex: run `$pack`.
@@ -85,6 +117,17 @@ After running a skill, look for these artifacts:
 - `tasks/history.md` — shipped work log entry
 - A git commit with the skill's output
 - An alignment page in `alignment/` (for research skills)
+
+## Migration Notes
+
+Moving from a source checkout to npm does not change the project-local files. From the target project directory, run the npm command that matches your existing pack designation:
+
+```bash
+npx skillpacks refresh
+npx skillpacks doctor
+```
+
+`skillpacks@<semver>` selects the package snapshot. Skill pins remain skill-level pins, for example `npx skillpacks pin quality-sweep v0.0`. If a pinned archive version is not present in the installed npm package, upgrade the npm package or use a source checkout that contains that archive.
 
 ## What's Next
 

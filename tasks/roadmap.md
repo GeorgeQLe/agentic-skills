@@ -84,6 +84,38 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 - [x] Step 3.4: Locking And Drift Parity.
 - [x] Step 3.5: Compatibility Closure.
 
+## Current Implementation - Skillpacks npm Distribution Phase 4
+
+### Goal
+
+Prepare the `skillpacks` npm package for a dry-run release by tightening package-included documentation and verification without publishing to npm or changing the existing git-checkout setup path.
+
+### Phase 4 Plan
+
+1. Documentation readiness.
+   - [x] Update package-included docs with npm usage and git-checkout usage.
+   - [x] Add migration guidance for users moving from a local clone to `npx skillpacks`.
+   - [x] Add troubleshooting for npm package semver vs skill-level pinning.
+   - [x] Preserve explicit "no real publish in Phase 4" language.
+2. Documentation contracts.
+   - [x] Add or extend package-owned tests that pin the release-readiness documentation language.
+   - [x] Keep command ownership/dependency docs aligned with the CLI compatibility matrix.
+3. Dry-run release checks.
+   - [ ] Run package staging and tarball dry-run inspection.
+   - [ ] Run `npm publish --dry-run` locally without publishing.
+   - [ ] Record dry-run output in the ship manifest.
+4. Ship.
+   - [ ] Run package docs tests, package staging checks, dry-run release checks, and whitespace checks.
+   - [ ] Update review notes and history.
+   - [ ] Commit and push intended Phase 4 changes only.
+
+### Current Step
+
+- [x] Step 4.1: Documentation readiness.
+- [x] Step 4.2: Documentation contracts.
+- [ ] Step 4.3: Dry-run release checks.
+- [ ] Step 4.4: Ship.
+
 ---
 
 ## Current Implementation - Dated Alignment Index Entries

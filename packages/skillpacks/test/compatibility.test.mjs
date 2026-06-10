@@ -106,3 +106,39 @@ describe('skillpacks compatibility matrix', () => {
     );
   });
 });
+
+describe('skillpacks Phase 4 release-readiness docs', () => {
+  it('documents npm usage alongside the source-checkout path', () => {
+    const readme = readFileSync(join(repoRoot, 'README.md'), 'utf8');
+    const quickstart = readFileSync(join(repoRoot, 'docs/QUICKSTART.md'), 'utf8');
+    const packs = readFileSync(join(repoRoot, 'docs/packs.md'), 'utf8');
+    const decks = readFileSync(join(repoRoot, 'docs/decks.md'), 'utf8');
+
+    for (const [label, doc] of [
+      ['README.md', readme],
+      ['docs/QUICKSTART.md', quickstart],
+      ['docs/packs.md', packs]
+    ]) {
+      assert.match(doc, /scripts\/pack\.sh install/, `${label} should keep the checkout install path`);
+      assert.match(doc, /npx skillpacks install/, `${label} should document npm install usage`);
+    }
+
+    assert.match(decks, /npx skillpacks install-deck vard/, 'decks doc should document npm deck installs');
+    assert.match(decks, /scripts\/pack\.sh install vard/, 'decks doc should keep checkout deck installs');
+  });
+
+  it('documents migration and package-semver vs skill-version pinning', () => {
+    const docs = [
+      readFileSync(join(repoRoot, 'README.md'), 'utf8'),
+      readFileSync(join(repoRoot, 'docs/QUICKSTART.md'), 'utf8'),
+      readFileSync(join(repoRoot, 'docs/packs.md'), 'utf8'),
+      readFileSync(join(repoRoot, 'docs/skillpacks-npm-distribution.md'), 'utf8')
+    ].join('\n');
+
+    assert.match(docs, /npx skillpacks refresh/, 'migration should tell users how to refresh from npm');
+    assert.match(docs, /skillpacks@<semver>|skillpacks@0\.1\.0/, 'docs should explain npm package semver');
+    assert.match(docs, /skill(?:'s)? `version:`|skill frontmatter versions/, 'docs should explain skill-level versions');
+    assert.match(docs, /archive\/<version>\/SKILL\.md/, 'docs should explain archive availability for pins');
+    assert.match(docs, /Phase 4 prepares the package for a dry-run release only/, 'release prep should not imply publish');
+  });
+});

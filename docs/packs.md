@@ -53,6 +53,8 @@ In this model, `project_type` is the default designation for uncategorized work,
 
 ## Commands
 
+Source-checkout commands:
+
 ```bash
 scripts/pack.sh list
 scripts/pack.sh recommend
@@ -76,9 +78,26 @@ scripts/pack.sh doctor                     # read-only drift report; non-zero ex
 scripts/pack.sh set-update-mode <mode>     # mode is one of: warn | auto | unset
 ```
 
+npm CLI equivalents after publication:
+
+```bash
+npx skillpacks list
+npx skillpacks install game
+npx skillpacks install business-discovery
+npx skillpacks install devtool
+npx skillpacks install code-quality
+npx skillpacks remove game
+npx skillpacks refresh
+npx skillpacks status
+npx skillpacks doctor
+npx skillpacks set-update-mode <mode>
+```
+
+`npx skillpacks install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
+
 `doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below.
 
-The npm CLI can install canonical decks from manifest metadata: `skillpacks install-deck vard`, `skillpacks install-deck ord`, `skillpacks install-deck business-afps`, `skillpacks install-deck devtool-afps`, and `skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase.
+The npm CLI can install canonical decks from manifest metadata: `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase, so it requires `bash` and `jq`.
 
 Assistant-native usage also supports guided setup:
 
@@ -221,6 +240,8 @@ Do not install `packs/*` globally as a fallback; that recreates the context poll
 Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
 
 `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available. The npm `skillpacks` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
+
+To migrate an existing project from a local checkout workflow to npm after publication, keep `.agents/project.json` committed and run `npx skillpacks refresh` from that project. The generated `.claude/skills` and `.codex/skills` roots will be recreated from the package snapshot. If the project pins a skill version, the installed package must include that skill's `archive/<version>/SKILL.md`.
 
 Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`). If a previous pack command exits without releasing the lock and its recorded process is no longer running, the next pack command removes the stale lock automatically. If a live process still owns the lock, timeout errors include the owner metadata.
 

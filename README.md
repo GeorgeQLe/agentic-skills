@@ -19,6 +19,41 @@ This keeps game research out of B2B SaaS sessions, and keeps business-product as
 
 For a guided first-use walkthrough, see [`docs/QUICKSTART.md`](docs/QUICKSTART.md).
 
+## Install Paths
+
+### Source checkout
+
+The source-checkout path is available today and remains supported:
+
+```bash
+git clone <this-repo-url> ~/agentic-skills
+cd ~/agentic-skills
+./init.sh
+```
+
+Project-local packs are installed from the checkout:
+
+```bash
+cd ~/my-project
+~/agentic-skills/scripts/pack.sh install devtool
+~/agentic-skills/scripts/pack.sh install game
+~/agentic-skills/scripts/pack.sh status
+```
+
+### npm CLI
+
+After the first public package is published, users can install from the current project directory without cloning this repository:
+
+```bash
+cd ~/my-project
+npx skillpacks install devtool
+npx skillpacks install code-quality
+npx skillpacks install-deck game-afps
+npx skillpacks status
+```
+
+`npx skillpacks` writes the same project-local files as `scripts/pack.sh`: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. Package semver such as `skillpacks@0.1.0` selects the bundled skill snapshot; individual skill pins still use each skill's `version:` value through `skillpacks pin <skill> <version>`.
+
 ## Initialization
 
 ```bash
@@ -67,7 +102,7 @@ scripts/pack.sh remove design-system
 
 `scripts/pack.sh install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
-The npm CLI also supports deck installation from manifest metadata, including `skillpacks install-deck vard`, `skillpacks install-deck ord`, `skillpacks install-deck business-afps`, `skillpacks install-deck devtool-afps`, and `skillpacks install-deck game-afps`.
+The npm CLI also supports equivalent project-local installs after publication: `npx skillpacks install <pack-or-skill>`, `npx skillpacks remove <pack-or-skill>`, `npx skillpacks refresh`, `npx skillpacks doctor`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 

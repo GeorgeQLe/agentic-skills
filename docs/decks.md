@@ -15,6 +15,19 @@ Decks sit on two axes: **domain** (business / consumer, developer / OSS, or game
 
 Rapid decks are for weekly experiments. Deliberate decks are for products that justify full discovery, lifecycle planning, and growth strategy.
 
+Source-checkout deck installs use the underlying pack commands shown below. After the first public npm package is published, the equivalent npm path is:
+
+```bash
+npx skillpacks install-deck vard
+npx skillpacks install-deck ord
+npx skillpacks install-deck business-afps
+npx skillpacks install-deck business-afps --full
+npx skillpacks install-deck devtool-afps
+npx skillpacks install-deck game-afps
+```
+
+In the current release candidate, npm deck materialization still uses the packaged shell backend, so `install-deck` requires `bash` and `jq`. Direct npm pack installs such as `npx skillpacks install devtool` are Node-owned and do not require `jq`.
+
 ---
 
 ## VARD — Viral App Rapid Distribution
@@ -173,4 +186,4 @@ Game AFPS currently has no rapid feeder deck. Small game prototypes should eithe
 
 ## npm Distribution
 
-When distributed via npm, decks map to package-list and registry-tag metadata that the CLI can materialize from the current backend. See `docs/skillpacks-npm-distribution.md` and `alignment/idea-scope-brief-npm-distribution.html` for the approved distribution route.
+When distributed via npm, decks map to package-list and registry-tag metadata that the CLI can materialize from the current backend. The npm package semver selects the bundled deck and skill snapshot, while skill-level pins continue to use each skill's `version:` value. See `docs/skillpacks-npm-distribution.md` and `alignment/idea-scope-brief-npm-distribution.html` for the approved distribution route.
