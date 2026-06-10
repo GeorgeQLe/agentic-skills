@@ -25,6 +25,62 @@
 
 ---
 
+## YouTube Prelaunch Audit Skill
+
+### Phase 1: Scope And Implementation
+- [x] Capture prompt history for `targeted-skill-builder`, `create-agentic-skill`, and `skill-creator`.
+- [x] Confirm `$youtube-video-audit` belongs to the uninstalled `youtube-ops` pack.
+- [x] Read the current mirrored post-release `youtube-video-audit` contract.
+- [x] Inspect nearby YouTube pack routing and benchmark fixtures for minimal integration points.
+- [x] Add mirrored `youtube-video-prelaunch-audit` skill contracts.
+- [x] Update pack docs/router/coverage fixtures as needed.
+
+### Phase 2: Validation And Shipping
+- [x] Run focused metadata/version/invocation checks.
+- [x] Run `pnpm --dir tests bench:coverage`.
+- [x] Run focused layer1 benchmark setup tests if fixture definitions change.
+- [x] Refresh and validate Skills Showcase data for skill metadata changes.
+- [x] Run `git diff --check`.
+- [x] Add review notes, commit, and push intended changes only.
+
+### Review Notes
+- Added mirrored Codex and Claude `youtube-video-prelaunch-audit` skills under `packs/youtube-ops/` for unlisted/scheduled video readiness review.
+- Updated the `youtube` router `--launch` mode to prefer prelaunch review before public performance audit, with archive/changelog coverage for the v0.1 router behavior change.
+- Refreshed pack docs, skill references, generated Skills Showcase/catalog data, and benchmark coverage fixtures.
+- Validation passed: manifest check, benchmark coverage, focused layer1 benchmark setup tests, Skills Showcase data validation, version-field audit, and `git diff --check`.
+- Repo-wide dependency/routing audits still report pre-existing broad stale references outside this change; the new YouTube router no longer contributes the previous `youtube -> skill-name` false dependency.
+
+---
+
+## ALIGNMENT-PAGE Bundling Drift Plan
+
+### Phase 1: Investigation
+- [x] Capture prompt history for the `investigate` invocation.
+- [x] Map the shared convention source and generation/sync tooling.
+- [x] Audit current generated bundle drift and unique variants.
+- [x] Check positioning-specific template history and current divergence.
+- [x] Assess the direct-edit/no-skill enforcement gap.
+- [x] Record the approval-ready plan before source implementation.
+
+### Phase 2: Proposed Fix - Awaiting Approval
+- [ ] Make `packs/business-discovery/codex/customer-discovery/SKILL.md` generator-ownable and regenerate its stale `ALIGNMENT-PAGE.md`.
+- [ ] Harden `scripts/upgrade-alignment-page.mjs` so sibling bundles cannot be skipped as bespoke without a failing diagnostic or explicit allowlist.
+- [ ] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
+- [ ] Add generated-bundle variant/drift validation against expected renderer output.
+- [ ] Convert or explicitly test the 15 bespoke alignment sections.
+- [ ] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
+- [ ] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
+
+### Review Notes
+- Source of truth: `docs/alignment-page-convention.md`; renderer/sync tool: `scripts/upgrade-alignment-page.mjs`.
+- Current dry-run reports `Updated: 0` and `Bundled files written: 0`, but it misses one stale bundle because the Codex `customer-discovery` section is classified as bespoke.
+- Active bundle audit found 260 active `ALIGNMENT-PAGE.md` files and 133 normalized variants. The variant count is expected under today's generated skill-specific gates, but it contradicts the target model where only path substitution differs.
+- Current local feedback control phrases are present across active bundles, so the remaining drift is structural and enforcement-related rather than a broad missing-phrase recurrence.
+- Positioning currently has generated skill-specific gates; repo history did not confirm a separate pre-standard positioning template for local compile controls.
+- `upgrade-alignment-pages` is useful when invoked, but no current hook enforces the convention for direct manual edits of `alignment/*.html`.
+
+---
+
 ## Separate Skills Showcase From Skillpacks Package
 
 ### Execution Profile

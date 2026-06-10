@@ -22,7 +22,75 @@ Ensure active research-producing skill flows do not synthesize research before t
    - [x] Update focused layer1 tests for scope-approval-before-research behavior.
    - [x] Refresh generated showcase data if required by skill metadata changes.
    - [x] Run the requested generator, test, version, archive, dependency, showcase, and diff checks.
-   - [x] Commit and push the intended changes only.
+   - [ ] Commit and push the intended changes only.
+
+## Current Implementation - YouTube Prelaunch Audit Skill
+
+### Goal
+
+Create a mirrored `youtube-ops` pack skill for auditing unlisted pre-release YouTube videos before launch. The skill should decide whether a video needs further editing or polish and produce launch-readiness recommendations for title, thumbnail, description, chapters, social cross-sharing, and publish strategy.
+
+### Plan
+
+1. Preserve invocation context and inspect overlap.
+   - [x] Capture prompt history for the active skill-building workflows.
+   - [x] Locate the existing `youtube-video-audit` skill and confirm its post-release performance-audit scope.
+   - [x] Compare related YouTube pack skills for routing and naming overlap.
+2. Implement the pack skill.
+   - [x] Create mirrored Codex and Claude `youtube-video-prelaunch-audit` skill directories in `packs/youtube-ops/`.
+   - [x] Reuse the existing YouTube research-stage, feedback, alignment, handoff, and pack-availability conventions.
+   - [x] Update `PACK.md`, the YouTube router if needed, and benchmark coverage fixtures.
+3. Validate and ship.
+   - [x] Run focused skill metadata and route checks.
+   - [x] Run benchmark coverage validation and focused layer1 setup tests.
+   - [x] Refresh Skills Showcase data if required by changed skill metadata.
+   - [x] Update review notes, commit, and push intended changes only.
+
+## Current Investigation - ALIGNMENT-PAGE Bundling Drift
+
+### Goal
+
+Investigate why per-skill `ALIGNMENT-PAGE.md` bundles drift from the shared alignment-page convention, determine whether bundling can be consolidated, and propose a fix plan without implementing source changes until approved.
+
+### Findings
+
+1. The canonical convention is `docs/alignment-page-convention.md` between the `alignment-convention` markers. `scripts/upgrade-alignment-page.mjs` renders that block into sibling `ALIGNMENT-PAGE.md` files for alignment-producing skills, substituting `{skill-name}` and injecting skill-specific gates, visual tier, and glossary gates.
+2. The current generator is not a pure path-substitution renderer. After normalizing the output path/header slug, active `global/` and `packs/` bundles still produce 133 unique variants across 260 active `ALIGNMENT-PAGE.md` files because generated skill-specific gates are embedded in the files.
+3. The generator dry-run reports no generated drift, but a direct path audit found one current stale bundle: `packs/business-discovery/codex/customer-discovery/ALIGNMENT-PAGE.md` still says `icp` and uses `alignment/icp-{topic}.html`, while the skill now outputs `alignment/customer-discovery-{topic}.html`.
+4. That stale bundle is missed because `packs/business-discovery/codex/customer-discovery/SKILL.md` has a bespoke `## Alignment Page` paragraph. The generator only treats two exact section-opening patterns as ownable, so a sibling bundle can exist and remain stale while dry-run still passes.
+5. The retrospective claim that positioning had a separate pre-standard local-compile template is not supported as stated by current git history. Positioning has generated positioning-specific gates, but local per-section compile controls appear to have landed with the shared convention change rather than in an independently maintained positioning template.
+6. The "no skill invoked" gap is real. `upgrade-alignment-pages` can audit or upgrade existing HTML pages when explicitly invoked, but no hook or root instruction currently forces direct edits of `alignment/*.html` to consult the current convention.
+
+### Recommendation
+
+Keep per-skill bundles for the near-term because single-skill installs copy individual skill directories and need the load-on-demand convention to travel with the skill. Do not fully eliminate `ALIGNMENT-PAGE.md` copies until the installer/runtime has a shared-resource mechanism that also works for single-skill installs outside this repo.
+
+Consolidate by making the repo source of truth stricter instead of relying on silent regenerated copies:
+
+1. Treat generated `ALIGNMENT-PAGE.md` files as rendered artifacts owned by `scripts/upgrade-alignment-page.mjs`, and make drift checks fail when a sibling bundle is not generator-owned.
+2. Move toward a thinner generated wrapper where possible: the shared convention stays in `docs/alignment-page-convention.md`, while skill-specific exceptions are centralized as generator metadata instead of hand-maintained text.
+3. Convert or explicitly register bespoke alignment sections so they are either generated from the same convention or covered by dedicated tests.
+
+### Implementation Plan
+
+1. Fix the known stale bundle path by making the Codex `customer-discovery` alignment section generator-ownable and regenerating its `ALIGNMENT-PAGE.md`.
+2. Harden `scripts/upgrade-alignment-page.mjs` so an active skill cannot have a sibling `ALIGNMENT-PAGE.md` while being silently classified as bespoke. The script should either own and refresh it or fail with a clear diagnostic.
+3. Add a path-consistency validator: every active generated `ALIGNMENT-PAGE.md` must use the containing skill directory name in `alignment/{skill-name}-{topic}.html`.
+4. Add a variant/drift validator that compares every generated bundle with the generator's expected render, after the allowed path/header substitution and centralized skill metadata.
+5. Audit the 15 current bespoke `## Alignment Page` sections. Convert them to generated stubs where they are ordinary alignment producers; otherwise add an explicit allowlist plus tests for the local and bottom feedback controls.
+6. Address direct-edit non-conformance by adding an HTML alignment-page audit command or extending `upgrade-alignment-pages` with a scriptable check mode, then reference that check from root instructions for direct `alignment/*.html` edits.
+
+### Verification Plan
+
+1. `node scripts/upgrade-alignment-page.mjs`
+2. `node scripts/upgrade-alignment-page.mjs --dry-run`
+3. New path/variant audit command added by the implementation.
+4. Targeted layer1 tests for alignment gates, positioning alignment contract, and upgrade-alignment-pages behavior.
+5. `git diff --check`
+
+### Approval Gate
+
+No source fix has been implemented yet. Proceed only after approval of this plan.
 
 ## Current Implementation - Separate Skills Showcase From Skillpacks Package
 
