@@ -1,3 +1,38 @@
+## Current Implementation - Published Skillpacks npm Smoke Script
+
+### Goal
+
+Create a repeatable package-owned test script for the published `skillpacks` npm package that compiles the manual `/tmp` `npx` checks for installs, removals, doctor, and skill pin/unpin behavior.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: the script creates and mutates isolated temp projects; individual CLI calls must run in sequence inside each project to preserve expected state.
+
+### Steps
+
+- [x] Add `packages/skillpacks/scripts/verify-published-package.sh` with metadata, install, removal, doctor, pin/unpin, and unsupported-version-syntax assertions.
+- [x] Add npm entry points so the script can run as a package or root verification command.
+- [x] Run the new script against `skillpacks@latest` from npm.
+- [x] Run focused package tests and `git diff --check`.
+- [x] Record review notes, commit, and push intended changes only.
+
+### Acceptance Criteria
+
+- [x] `skillpacks@latest` metadata matches the local package name/version and MIT license.
+- [x] Published `list`, pack install, individual skill install, deck install, and `doctor` checks pass from `/tmp`.
+- [x] Published `remove` clears pack, individual-skill, and deck-backed installs.
+- [x] Published skill pin to `v0.0` and unpin back to latest pass, while direct `install skill@version` remains rejected.
+- [x] Repo working tree contains only intended tracked changes before commit.
+
+### Review Notes
+
+- Added `packages/skillpacks/scripts/verify-published-package.sh`, a package-owned published npm smoke script that resolves `skillpacks@latest` through `npx --package`, uses `/tmp/skillpacks-npm-cache`, and creates isolated temp projects for install, remove, pin/update, and unsupported syntax checks.
+- Added `npm --workspace skillpacks run verify:published` and root `npm run skillpacks:verify-published` entry points.
+- Published-package validation passed on 2026-06-10 with `skillpacks@latest=0.1.0`, `license=MIT`, and one published package version. The script verified `list`, `install code-quality`, `install quality-sweep`, `install-deck game-afps`, `doctor`, pack removal, individual skill removal, deck-backed `game` removal, `pin quality-sweep v0.0`, `unpin quality-sweep` back to `v0.1`, rejection of `install quality-sweep@v0.0`, and rejection of `pin` without a project config.
+- Final successful script run kept these temp projects for inspection: `/tmp/skillpacks-pack-install-3w1FJ4`, `/tmp/skillpacks-skill-install-EIUUqW`, `/tmp/skillpacks-deck-install-1jWFpk`, `/tmp/skillpacks-remove-pack-ZpwFZR`, `/tmp/skillpacks-remove-skill-SMDoUW`, `/tmp/skillpacks-remove-deck-nrsfzW`, `/tmp/skillpacks-pin-update-T77fjv`, and `/tmp/skillpacks-version-syntax-cxKixP`.
+- Additional validation passed: `bash -n packages/skillpacks/scripts/verify-published-package.sh`, `npm --workspace skillpacks run test:node` (38/38), and `git diff --check`.
+
 ## Current Implementation - Skillpacks npm Distribution Phase 5
 
 ### Goal

@@ -1,3 +1,32 @@
+## Current Implementation - Published Skillpacks npm Smoke Script
+
+### Goal
+
+Capture the manual `npx --package skillpacks@latest -- skillpacks ...` verification into a repeatable repo script that checks published-package install, remove, doctor, pin, and unpin behavior from isolated `/tmp` projects without using the local checkout as the CLI source.
+
+### Plan
+
+1. Add a package-owned smoke script.
+   - [x] Create a reusable script under `packages/skillpacks/scripts/`.
+   - [x] Resolve the published package through `npx --package skillpacks@latest`.
+   - [x] Use `/tmp/skillpacks-npm-cache` by default and isolated `mktemp` project directories.
+2. Cover the manual verification matrix.
+   - [x] Assert npm metadata against the package name/version/license.
+   - [x] Verify `list`, pack install, individual skill install, deck install, and `doctor`.
+   - [x] Verify pack, individual skill, and deck-backed pack removal.
+   - [x] Verify skill-level pin to `v0.0`, unpin back to latest, and unsupported direct `install name@version` syntax.
+3. Wire and validate.
+   - [x] Add npm script entry points for package and root invocation.
+   - [x] Run the new script against the published npm package.
+   - [x] Run focused package tests and whitespace checks.
+   - [x] Commit and push intended changes.
+
+### Acceptance Criteria
+
+- The script fails on any missing generated `.agents/project.json`, `.claude/skills/*/SKILL.md`, `.codex/skills/*/SKILL.md`, expected metadata, removal cleanup, or pin/unpin regression.
+- The script uses only `/tmp` temp projects and does not modify the local checkout except for tracked script/task/package metadata edits.
+- Temp directories are kept by default and printed for inspection.
+
 ## Current Implementation - Alignment Diff Highlighting Convention
 
 ### Goal
