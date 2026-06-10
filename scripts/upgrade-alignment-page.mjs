@@ -20,6 +20,13 @@ for (let i = 0; i < argv.length; i += 1) {
 }
 const repoRoot = rootOverride ? resolve(rootOverride) : dirname(dirname(fileURLToPath(import.meta.url)));
 const dryRun = flags.has("--dry-run");
+// --check: no writes; generated-bundle drift (stale/missing bundle or stale
+// SKILL.md stub for an ownable skill) becomes a failing diagnostic instead of
+// a pending-update preview. Plain --dry-run keeps exiting 0 on pending
+// updates so the edit-convention → preview → write workflow is preserved.
+const checkMode = flags.has("--check");
+const noWrites = dryRun || checkMode;
+const previewPrefix = checkMode ? "[check] " : dryRun ? "[dry-run] " : "";
 // --all is retained as a no-op alias: all alignment-producing skills are covered by default.
 
 const skipPath = `${repoRoot}/scripts/alignment-skip-list.txt`;
@@ -349,13 +356,49 @@ for (const file of files) {
   updated += 1;
   if (skillChanged) {
     const action = hasSectionRe.test(before) ? "replace" : "insert";
-    console.log(`${dryRun ? "[dry-run] " : ""}${action} stub ${file}`);
-    if (!dryRun) writeFileSync(abs, after);
+    console.log(`${previewPrefix}${action} stub ${file}`);
+    if (!noWrites) writeFileSync(abs, after);
   }
   if (bundleChanged) {
     bundlesWritten += 1;
-    console.log(`${dryRun ? "[dry-run] " : ""}write ${relative(repoRoot, bundlePath)}`);
-    if (!dryRun) writeFileSync(bundlePath, bundleContent);
+    console.log(`${previewPrefix}write ${relative(repoRoot, bundlePath)}`);
+    if (!noWrites) writeFileSync(bundlePath, bundleContent);
+  }
+}
+
+// Generated-bundle drift validation: every generator-owned (ownable) skill's
+// on-disk ALIGNMENT-PAGE.md must byte-equal the renderer's expected output,
+// and its SKILL.md stub paragraph must be current. Runs after the write loop
+// so write mode validates final on-disk state. Bespoke (allowlisted) and
+// skip-listed bundles have no expected render and are exempt — their path
+// consistency is still validated below. Drift here fails only in --check
+// mode; in --dry-run it is the legitimate pending-update preview.
+const bundleDiagnostics = [];
+let ownableChecked = 0;
+for (const [name, { ownableFiles, bespokeFiles }] of classification) {
+  // Mixed sibling pairs already fail via the bespoke diagnostics below.
+  if (bespokeFiles.length) continue;
+  for (const file of ownableFiles) {
+    ownableChecked += 1;
+    const abs = `${repoRoot}/${file}`;
+    const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
+    const relBundle = relative(repoRoot, bundlePath);
+    const expected = bundledContentFor(name, file);
+    if (!existsSync(bundlePath)) {
+      bundleDiagnostics.push(
+        `Missing generated bundle ${relBundle} for "${name}". Run node scripts/upgrade-alignment-page.mjs to generate it.`,
+      );
+    } else if (readFileSync(bundlePath, "utf8") !== expected) {
+      bundleDiagnostics.push(
+        `Stale generated bundle ${relBundle} for "${name}" — differs from expected renderer output. Never hand-edit a generated bundle; re-run node scripts/upgrade-alignment-page.mjs to regenerate it.`,
+      );
+    }
+    const content = readFileSync(abs, "utf8");
+    if (replaceOrInsert(content, name) !== content) {
+      bundleDiagnostics.push(
+        `Stale SKILL.md stub in ${file} for "${name}" — the alignment section's pointer/stub paragraph needs replacing. Run node scripts/upgrade-alignment-page.mjs to update it.`,
+      );
+    }
   }
 }
 
@@ -415,6 +458,7 @@ console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Out of scope: ${outOfScope}`);
 console.log(`Bespoke allowlist: ${bespokeAllowlist.size} skills, ${diagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Output paths: ${bundlesChecked} bundles, ${pathDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Generated bundles: ${ownableChecked} ownable, ${bundleDiagnostics.length ? "DRIFT" : "exact"}`);
 
 if (diagnostics.length) {
   console.error("");
@@ -426,4 +470,9 @@ if (pathDiagnostics.length) {
   console.error("Output path drift:");
   for (const diagnostic of pathDiagnostics) console.error(`  - ${diagnostic}`);
 }
-if (diagnostics.length || pathDiagnostics.length) process.exit(1);
+if (checkMode && bundleDiagnostics.length) {
+  console.error("");
+  console.error("Generated bundle drift:");
+  for (const diagnostic of bundleDiagnostics) console.error(`  - ${diagnostic}`);
+}
+if (diagnostics.length || pathDiagnostics.length || (checkMode && bundleDiagnostics.length)) process.exit(1);

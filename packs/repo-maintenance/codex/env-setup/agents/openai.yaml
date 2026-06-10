@@ -1,0 +1,7 @@
+interface:
+  display_name: "Env Setup"
+  short_description: "Scaffold local env file stubs without reading secrets"
+  default_prompt: "Use $env-setup to scaffold the local env file with required variable stubs, open it for filling in values, and verify completeness by key names only."
+
+policy:
+  allow_implicit_invocation: true

@@ -186,8 +186,8 @@ function writeAllowlist(root: string, names: string[]): void {
   writeFileSync(join(root, "scripts/alignment-bespoke-list.txt"), `${names.join("\n")}\n`);
 }
 
-function runScript(root: string, mode: "--dry-run" | "--write" = "--dry-run") {
-  const args = mode === "--dry-run" ? [SCRIPT, "--dry-run", "--root", root] : [SCRIPT, "--root", root];
+function runScript(root: string, mode: "--dry-run" | "--write" | "--check" = "--dry-run") {
+  const args = mode === "--write" ? [SCRIPT, "--root", root] : [SCRIPT, mode, "--root", root];
   return spawnSync(process.execPath, args, { encoding: "utf8" });
 }
 
@@ -308,5 +308,118 @@ describe("upgrade-alignment-page output path diagnostics", () => {
     expect(dryResult.stderr).toBe("");
     expect(dryResult.status).toBe(0);
     expect(dryResult.stdout).toContain("Output paths: 2 bundles, exact");
+  });
+});
+
+describe("upgrade-alignment-page generated-bundle drift check", () => {
+  it("exits 0 in --check mode on the current repo state", () => {
+    const result = spawnSync(process.execPath, [SCRIPT, "--check"], { encoding: "utf8" });
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toMatch(/Generated bundles: \d+ ownable, exact/);
+  });
+
+  it("fails in --check mode on a hand-edited generated bundle", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "drift-skill", stubBody("drift-skill"));
+    writeSkill(root, "codex", "drift-skill", stubBody("drift-skill"));
+    const bundlePath = writeBundle(
+      root,
+      "claude",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n\nHand-edited extra paragraph.\n",
+    );
+    writeBundle(
+      root,
+      "codex",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n",
+    );
+
+    const result = runScript(root, "--check");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Generated bundle drift:");
+    expect(result.stderr).toContain(`Stale generated bundle ${bundlePath} for "drift-skill"`);
+    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
+  });
+
+  it("fails in --check mode on a missing bundle for an ownable skill", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "bare-skill", stubBody("bare-skill"));
+    writeSkill(root, "codex", "bare-skill", stubBody("bare-skill"));
+
+    const result = runScript(root, "--check");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Generated bundle drift:");
+    expect(result.stderr).toContain('Missing generated bundle packs/fixture-pack/claude/bare-skill/ALIGNMENT-PAGE.md for "bare-skill"');
+    expect(result.stderr).toContain('Missing generated bundle packs/fixture-pack/codex/bare-skill/ALIGNMENT-PAGE.md for "bare-skill"');
+    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
+  });
+
+  it("fails in --check mode on a stale SKILL.md pointer paragraph", () => {
+    const root = makeFixtureRoot();
+    const claudePath = writeSkill(
+      root,
+      "claude",
+      "pointer-skill",
+      "Follow the shared Alignment Page convention in CLAUDE.md for all durable deliverables.",
+    );
+    writeSkill(root, "codex", "pointer-skill", stubBody("pointer-skill"));
+    writeBundle(
+      root,
+      "claude",
+      "pointer-skill",
+      "# Alignment Page — pointer-skill\n\nConvention body for pointer-skill. Output: `alignment/pointer-skill-{topic}.html`.\n",
+    );
+    writeBundle(
+      root,
+      "codex",
+      "pointer-skill",
+      "# Alignment Page — pointer-skill\n\nConvention body for pointer-skill. Output: `alignment/pointer-skill-{topic}.html`.\n",
+    );
+
+    const result = runScript(root, "--check");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Generated bundle drift:");
+    expect(result.stderr).toContain(`Stale SKILL.md stub in ${claudePath} for "pointer-skill"`);
+  });
+
+  it("passes in --check mode on a clean generated tree and exempts bespoke skills", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "clean-skill", stubBody("clean-skill"));
+    writeSkill(root, "codex", "clean-skill", stubBody("clean-skill"));
+    writeSkill(root, "claude", "hand-skill", BESPOKE_BODY);
+    writeSkill(root, "codex", "hand-skill", BESPOKE_BODY);
+    writeAllowlist(root, ["hand-skill"]);
+    runScript(root, "--write");
+
+    const result = runScript(root, "--check");
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Generated bundles: 2 ownable, exact");
+  });
+
+  it("keeps plain --dry-run at exit 0 on a stale fixture bundle", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "drift-skill", stubBody("drift-skill"));
+    writeSkill(root, "codex", "drift-skill", stubBody("drift-skill"));
+    writeBundle(
+      root,
+      "claude",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n\nHand-edited extra paragraph.\n",
+    );
+    writeBundle(
+      root,
+      "codex",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n",
+    );
+
+    const result = runScript(root, "--dry-run");
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("[dry-run] write packs/fixture-pack/claude/drift-skill/ALIGNMENT-PAGE.md");
+    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
   });
 });
