@@ -1,3 +1,30 @@
+## Current Implementation - P1/P2 Verification Rerun
+
+### Goal
+
+Rerun the already-shipped P1 docs remediation and P2 Skills Showcase count reconciliation checks from 2026-06-10, fixing only confirmed drift if the rerun finds it.
+
+### Plan
+
+1. Re-verify P1 docs remediation.
+   - [x] Capture the visible `$exec p1 and p2 again` invocation.
+   - [x] Re-run scoped stale-route, install-wording, publication-wording, historical-label, wrapper, alignment-page, generated-bundle, focused layer1, and whitespace checks.
+2. Re-verify P2 count reconciliation.
+   - [x] Re-run skill-map generator syntax and regeneration.
+   - [x] Re-run scoped stale-count and retired-route scans.
+   - [x] Confirm generated count terms still match current generated data.
+3. Record and ship.
+   - [x] Record the clean rerun in task docs, history, and ship manifest.
+   - [x] Leave P1/P2 remediation files unchanged when no drift is found.
+
+### Acceptance Criteria
+
+- P1/P2 rerun validations pass with no confirmed drift.
+- Only prompt/task/history/manifest artifacts change for this verification-only rerun.
+- Deploy decision is explicit and does not deploy production without confirmation.
+
+---
+
 ## Current Implementation - P1 Docs Remediation Pass
 
 ### Goal

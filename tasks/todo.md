@@ -1,3 +1,36 @@
+## Current Implementation - P1/P2 Verification Rerun
+
+### Goal
+
+Rerun the already-shipped P1 docs remediation and P2 Skills Showcase count reconciliation checks from 2026-06-10, fixing only confirmed drift if the rerun finds it.
+
+### Execution Profile
+
+- Parallel mode: serial verification and task-meta writes.
+- Rationale: P1/P2 share documentation and alignment-page surfaces; this rerun should not touch unrelated active work or advance to a new backlog item.
+
+### Steps
+
+- [x] Capture the visible `$exec p1 and p2 again` invocation in prompt history.
+- [x] Re-run P1 wrapper, route, install-wording, publication-wording, historical-label, alignment-page, generated-bundle, focused layer1, and whitespace checks.
+- [x] Re-run P2 skill-map generator, stale-count scan, retired-route scan, alignment-page, generated-bundle, focused layer1, and whitespace checks.
+- [x] Record the rerun result, manifest, deploy decision, and next route.
+
+### Acceptance Criteria
+
+- [x] P1 scoped scans remain clean, and the historical npm page/index labels are still present.
+- [x] P2 generated count terms still match current generated data, and scoped stale-count/retired-route scans remain clean.
+- [x] No P1/P2 remediation source or documentation drift is introduced by the rerun.
+
+### Review Notes
+
+- Rerun found no P1/P2 drift to fix.
+- `node scripts/generate-skillmap-excalidraw.mjs` regenerated `docs/skillmap.excalidraw` and `alignment/skillmap.html` without leaving a diff, reporting 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 41 active packs, 157 Claude pack roots, and 11 global Claude roots.
+- Validation passed: scoped P1 stale-route, active-install wording, post-publication wording, and historical-label scans; `bash -n scripts/init-agentic-skills.sh`; `scripts/init-agentic-skills.sh status`; isolated-home `scripts/init-agentic-skills.sh doctor`; `node --check scripts/generate-skillmap-excalidraw.mjs`; skill-map regeneration; scoped P2 stale-count and retired-route scans; `node scripts/audit-alignment-pages.mjs`; `node scripts/upgrade-alignment-page.mjs --check`; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` (14/14); and `git diff --check`.
+- Deploy skipped: `tasks/deploy.md` targets the Skills Showcase production app, but this rerun changed only task/prompt verification artifacts and no deploy-relevant app/runtime surface; production deploys also require explicit confirmation.
+
+---
+
 ## Current Implementation - P1 Docs Remediation Pass
 
 ### Goal
