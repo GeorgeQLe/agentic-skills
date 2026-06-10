@@ -21,6 +21,7 @@
     "session-triage": "session-analytics",
     "repo-glossary": "business-ops",
     "brainstorm": "product-design",
-    "user-flow-map": "product-design"
+    "user-flow-map": "product-design",
+    "ui-interview": "product-design"
   }
 }
