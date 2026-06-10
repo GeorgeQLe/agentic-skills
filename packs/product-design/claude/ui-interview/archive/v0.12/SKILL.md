@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.13
+version: v0.12
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -55,7 +55,6 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Tag each assumption with `[from spec]`, `[from codebase]`, `[from research]`, `[from artifact]`, or `[inferred]`.
    - Cover product and user context, pages and routes, primary tasks, navigation, hierarchy, layout grid, spatial density, component inventory, button and link semantics, form behavior, empty/loading/error/success states, responsive behavior, accessibility, visual language, implementation constraints, and the prototype-first boundary for new product or substantial feature work: what the user should be able to click through first, whether multiple route-based experiments should be built, what data can be fake, fixture-backed, or in-memory, and which infrastructure must be represented visually but not implemented yet.
    - Use AskUserQuestion to ask the user to confirm, correct, or flag assumptions before continuing.
-   - Deliver every manifest/checklist the user must confirm through a guaranteed-visible channel: attach the full manifest as the `preview` content of the confirmation question's options, or end the turn with the manifest as the final message text and ask for confirmation in the next turn. Never emit the manifest only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee that text emitted before a tool call is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview page by page**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
@@ -74,7 +73,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Constraints (real-time updates, offline support, accessibility requirements, performance budgets)
      - Content hierarchy (primary / secondary / tertiary information)
      - Relationships between data elements (parent-child, peer, reference, aggregate)
-   - Present a **Content Requirements Manifest** summarizing all pages, then use AskUserQuestion to confirm before writing deliverables. Deliver the manifest through the guaranteed-visible channel rule in step 3 (question option previews or turn-final text), never as mid-turn text only.
+   - Present a **Content Requirements Manifest** summarizing all pages, then use AskUserQuestion to confirm before writing deliverables.
    - Write `specs/ui-requirements-[topic].md` (content requirements) and `ui-requirements-[topic]-interview.md` (interview log).
    - After writing files, recommend `/ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `/ui-interview` (full mode, no flag) to proceed directly to a single deep UI specification.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `/user-flow-map [topic]` instead of inventing layout variants.
@@ -101,7 +100,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Coverage checkpoint**
    - Before concluding, use AskUserQuestion to present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.
-   - Deliver the checklist through the guaranteed-visible channel rule in step 3 (question option previews or turn-final text), never as mid-turn text only.
    - Ask whether anything is missing or should be revisited before writing deliverables.
 
 ## Deliverables

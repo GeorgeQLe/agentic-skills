@@ -1801,3 +1801,10 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Produced and indexed the review page at `alignment/analyze-sessions-claude-usage-feedback.html`.
 - Validation passed: HTML parser smoke for the new page and `alignment/index.html`; targeted `rg` checks for category, alignment status, compile controls, and index link; structural count check for gates/feedback/tables/no embeds/viewport; `git diff --check`.
 - Browser open status: `node scripts/open-html-page.mjs alignment/analyze-sessions-claude-usage-feedback.html --browser auto` returned `blocked`; artifact verification still passed.
+
+### Review Notes — ui-interview manifest visibility fix (2026-06-10)
+
+- Routed via `/targeted-skill-builder` per the approved session-triage fix plan: existing-skill update, ui-interview v0.12 → v0.13 (Claude + Codex pack mirrors), archives created with `scripts/skill-archive.sh`, CHANGELOGs updated, installed copies synced via `scripts/pack.sh refresh` (doctor: ok).
+- New contract: confirmation manifests/checklists (UI Assumptions Manifest, Content Requirements Manifest, coverage checkpoint) must use a guaranteed-visible channel — AskUserQuestion option previews or turn-final text (Claude); manifest as the final output of its own turn with next-turn confirmation (Codex).
+- Validation: `skill-deps.sh --broken` clean; `skill-versions.sh --missing` clean (423 skills); `git diff --check` clean; showcase data regenerated (`apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, ui-interview v0.13 present in `skills-data.js`). `skill-next-step-routing.sh --missing` reports a pre-existing ~120-file backlog untouched by this change. Bench coverage row for ui-interview already exists; no new layer4 setup — the change is a presentation-channel constraint not deterministically scoreable in layer1, recorded here as the deferred-quality rationale.
+- Follow-up flagged (not fixed): the same confirm-without-visible-manifest pattern exists in `packs/product-design/{claude,codex}/ux-variations` and `feature-interview`.

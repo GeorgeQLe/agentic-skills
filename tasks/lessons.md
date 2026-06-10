@@ -548,3 +548,10 @@
 - The agent interpreted: a read-only code-quality audit of pushed/merged GitHub changes, and built a `github-audit` skill around diff review.
 - Signal missed: history prompts emphasized status/comparison framing ("status of my projects", "brief me", "compare against our local implementation"); the agent anchored on a single code-quality-worded Codex prompt instead of asking which sense of "audit" was meant when evidence was thin (≤10 matching prompts).
 - Rule: when designing a skill from sparse history evidence, confirm the workflow's purpose with the user before encoding it; for this user, "audit based on github" defaults to operating-status briefing (`/lexcorp-briefing` in agentic-skills-personal), not code review.
+
+## 2026-06-10 — Confirmation gates must not reference mid-turn text
+
+- During `/ui-interview --requirements-only deck-creation`, the agent emitted the UI Assumptions Manifest before calling AskUserQuestion in the same turn; the harness does not guarantee that text emitted before a tool call is rendered, so the user was asked to confirm "the manifest above" without ever seeing it. The user's "Confirm as-is" answer was unsafe and had to be re-collected.
+- Rule: any manifest, checklist, or summary a confirmation question references must travel through a guaranteed-visible channel — embed it as the `preview` content of the question's options (Claude), or make it the final text of its own turn and ask the confirmation in the next turn (Codex one-question-per-turn cadence). Never rely on mid-turn text in a turn that ends with a tool call.
+- A confirmation question must never reference content the user has not been shown; if visibility is uncertain, re-present before re-asking.
+- Fixed in `ui-interview` v0.13 (steps 3, 4b, 6 in both mirrors). The same weak pattern exists in `ux-variations` and `feature-interview` (product-design pack) — flagged for a follow-up pass.

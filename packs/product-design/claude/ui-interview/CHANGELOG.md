@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-06-10
+
+- Required every confirmation manifest/checklist (UI Assumptions Manifest, Content Requirements Manifest, coverage checkpoint) to be delivered through a guaranteed-visible channel: AskUserQuestion option previews or turn-final message text, never mid-turn text in a turn that ends with a tool call. A confirmation question must never reference content the user has not been shown. Fixes the 2026-06-10 incident where the manifest was confirmed without ever rendering on screen.
+
 ## v0.12 - 2026-06-10
 
 - Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the ui-interview-specific gates from the generator gate map.

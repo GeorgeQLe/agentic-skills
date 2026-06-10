@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.13
+version: v0.12
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -75,7 +75,6 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Visual language, typography, color, iconography, and asset usage
      - Implementation constraints from the existing stack or design system
    - Ask the user to confirm, correct, or flag assumptions before continuing.
-   - Deliver every manifest/checklist the user must confirm through a guaranteed-visible channel: the manifest must be the final visible output of its own turn, with the confirmation question asked in the next turn (consistent with the one-question-per-turn cadence). Never emit the manifest only as mid-turn text in a turn that ends with a tool or command call — rendering does not guarantee that text emitted before a tool call is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview page by page**
    - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same page or interface decision, not to batch unrelated questions.
@@ -94,7 +93,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Constraints: real-time updates, offline support, accessibility requirements, performance budgets
      - Content hierarchy: primary, secondary, tertiary information
      - Relationships between data elements: parent-child, peer, reference, aggregate
-   - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm before writing deliverables. Deliver the manifest through the guaranteed-visible channel rule in step 3 (manifest as the final visible output of its own turn, confirmation in the next turn), never as mid-turn text only.
+   - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm before writing deliverables.
    - Write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`.
    - After writing files, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
@@ -121,7 +120,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Coverage checkpoint**
    - Before concluding, present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.
-   - Deliver the checklist through the guaranteed-visible channel rule in step 3 (checklist as the final visible output of its own turn, confirmation in the next turn), never as mid-turn text only.
    - Ask whether anything is missing or should be revisited before writing deliverables.
 
 ## Deliverables
