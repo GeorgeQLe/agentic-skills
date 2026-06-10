@@ -22,10 +22,17 @@ Resolve the 3 open High items from the 2026-05-29 `/expert-review` (the `## Code
 
 ### Steps
 
-- [ ] Harden `cleanupRepo` in `tests/layer4/helpers/disposable-repo.ts`: validate `repoSlug` against the bench-repo pattern, refuse `"unknown"` user, use `execFileSync` without a shell; align `tests/layer4/setups/git-fixture-sync.setup.ts` if it shares the deletion path.
-- [ ] Make `cleanup()` remove the `mkdtempSync` work dirs and the sync setup's upstream clone dir.
-- [ ] Sort resumeable sessions by manifest timestamp in `tests/harness/bench-persistence.ts` instead of directory-name order.
-- [ ] Add or extend focused tests for the three behaviors (no live GitHub calls); run full layer1; check off the three High items in `## Code Review Fixes`; record review notes.
+- [x] Harden `cleanupRepo` in `tests/layer4/helpers/disposable-repo.ts`: validate `repoSlug` against the bench-repo pattern, refuse `"unknown"` user, use `execFileSync` without a shell; align `tests/layer4/setups/git-fixture-sync.setup.ts` if it shares the deletion path. (Already shipped 2026-05-30 in `f7eb21cf`; verified present 2026-06-10.)
+- [x] Make `cleanup()` remove the `mkdtempSync` work dirs and the sync setup's upstream clone dir. (Already shipped 2026-05-30 in `f7eb21cf`; verified present 2026-06-10.)
+- [x] Sort resumeable sessions by manifest timestamp in `tests/harness/bench-persistence.ts` instead of directory-name order. (Already shipped 2026-05-30 in `f7eb21cf` as `pickResumeableManifest`; verified present 2026-06-10.)
+- [x] Add or extend focused tests for the three behaviors (no live GitHub calls); run full layer1; check off the three High items in `## Code Review Fixes`; record review notes. (Extended `tests/layer1/code-review-test-infra-fixes.test.ts` with gh-free `cleanupRepo` temp-dir reclaim tests; layer1 56 files / 2205 tests / 0 failed.)
+
+### Review Notes — Benchmark Harness Code Review Fixes
+
+- Finding: all three High items were already fixed on 2026-05-30 by commit `f7eb21cf` ("fix(bench-tests): guard destructive repo delete, stop temp-dir leaks, sort resume by time"), which landed `isSafeBenchRepoSlug` + `execFileSync` deletion in `tests/layer4/helpers/disposable-repo.ts`, `removeLocalDir` work-dir reclaim in `cleanupRepo` plus the inline `rmSync` of the `sync-upstream-` clone in `tests/layer4/setups/git-fixture-sync.setup.ts`, and timestamp-sorted `pickResumeableManifest` in `tests/harness/bench-persistence.ts` — with unit coverage in `tests/layer1/code-review-test-infra-fixes.test.ts`. The plan's "re-verified present on 2026-06-10" claim was wrong; only the `## Code Review Fixes` checkboxes were stale.
+- This step's delta: verified each fix against the acceptance criteria in source; extended `tests/layer1/code-review-test-infra-fixes.test.ts` with a `cleanupRepo` temp-dir reclaim describe block (unsafe-slug refusal and denied-confirm paths both remove the work dir before any `gh` call; missing dir tolerated) — closing the one coverage gap (item #5 had no direct test); reconciled the three High checkboxes and these plan steps.
+- Validation: focused test file 11/11 passed; full `pnpm --dir tests exec vitest run --project layer1` 56 files / 2205 tests / 0 failed (up from 2202 with the 3 new tests); no live layer4/GitHub calls made.
+- No SKILL.md/PACK.md changes — no showcase regeneration, no version bumps.
 
 ### Acceptance Criteria
 
@@ -1092,7 +1099,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Targeted route tests: `competitive-analysis-routing.test.ts` and `journey-map-routing.test.ts`
 - [x] Targeted route `rg` spot checks.
 - [x] `git diff --check`
-- [ ] `pnpm --dir tests test` — ran; still fails on existing unrelated layer1 repo issues listed below.
+- [x] `pnpm --dir tests test` — ran; still fails on existing unrelated layer1 repo issues listed below. (Reconciled 2026-06-10: the unrelated layer1 failures have since been fixed; full layer1 now passes — 56 files / 2205 tests / 0 failed.)
 - [x] Commit and push intended changes.
 
 ### Review Notes
@@ -1350,18 +1357,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [ ] On drawer close, collapse all cards onto the single visible top-left-most card (reverse of the fan-out animation on open) before animating the card back into the card pack. Use the visible top-left-most card rather than the absolute first card in the list because the user may have scrolled down before closing the drawer
 
 ### Next Step Plan — Drawer Close Visible Top-Left Collapse
+- Execution profile: serial; review-first (verify-and-reconcile before any source change). Rationale: one component boundary in the Skills Showcase prototype route; the backlog item may already be implemented (lesson from the bench-harness High items, where the plan assumed open issues that `f7eb21cf` had already fixed — verify against source and git history before writing new code).
 - Scope: verify and reconcile the drawer-close backlog item for the prototype pack animation. Current code already contains visible top-left target selection logic in `apps/skills-showcase/src/components/PackOpener.tsx`; the next pass should determine whether the backlog item is stale, partially implemented, or still missing proof.
 - Files to inspect first: `apps/skills-showcase/src/components/PackOpener.tsx`, `apps/skills-showcase/src/components/SealedPack.tsx`, `apps/skills-showcase/app/prototype/page.tsx`, `apps/skills-showcase/src/components/prototype-close-sequence.test.tsx`, and any debug/alignment artifacts under `apps/skills-showcase/alignment/` that describe the close sequence.
 - Approach: read the existing close phase chain (`closing-collapse` → `closing-apex` → `sheet-exiting` → `card-settling`), verify whether `PackOpener` already collapses to the visible top-left card after scroll, and add or update focused tests only if proof is missing. Keep the scope to close-collapse behavior; do not redesign the full pack drawer.
 - Validation: run focused prototype close-sequence tests, app typecheck/build if source changes, a local `/prototype` route check, and `git diff --check`. If the item is already implemented with sufficient tests, mark it complete with review notes instead of changing source.
+- Acceptance criteria: the backlog checkbox is either checked with proof (existing or new focused tests covering scroll-then-close picking the visible top-left card) or remains open with a concrete gap statement; layer1 stays at 0 failed; no unrelated drawer redesign.
+- Ship-one-step handoff contract: the next clear-context implementation session must implement only this step, validate it, then run `/ship` when done.
 
 ## Code Review Fixes
-> Generated by `/expert-review` on 2026-05-29. Critical and high-priority items resolved 2026-05-29–2026-05-30.
+> Generated by `/expert-review` on 2026-05-29. Critical and high-priority items resolved 2026-05-29–2026-05-30; the three High items below were verified resolved and their checkboxes reconciled on 2026-06-10.
 
-### High (open)
-- [ ] [tests/layer4/helpers/disposable-repo.ts:107-126; git-fixture-sync.setup.ts:54-56] `cleanupRepo` runs `gh repo delete ${repoSlug} --yes` with `autoConfirm` hardwired to true and no validation of `repoSlug`; if `getGhUser()` falls back to `"unknown"` it targets `unknown/<name>`. Fix: assert `repoSlug` matches `^[\w.-]+/agentic-skills-bench-[\w.-]+$` and refuse when the user is `"unknown"`; switch to `execFileSync` (no shell).
-- [ ] [tests/layer4/helpers/disposable-repo.ts:49-75, 82] `createDisposableRepo` (and the sync setup's `sync-upstream-` clone) create temp dirs via `mkdtempSync` that are never removed — `cleanup()` only deletes the GitHub repo. A 100-run benchmark leaks 100+ cloned repos to disk. Fix: have `cleanup()` also `rmSync` the mkdtemp parent and the upstream clone dir.
-- [ ] [tests/harness/bench-persistence.ts:84-101] `findResumeableSession` sorts session dirs (`${skill}-${agent}-${randomUUID8}`) by the random id, not by time, so `--resume` can attach to an arbitrary older session and miscount cost/runs. Fix: sort by manifest `createdAt`/`updatedAt`, or timestamp-prefix the dir names.
+### High (resolved 2026-05-30 in `f7eb21cf`; verified + coverage extended 2026-06-10)
+- [x] [tests/layer4/helpers/disposable-repo.ts:107-126; git-fixture-sync.setup.ts:54-56] `cleanupRepo` runs `gh repo delete ${repoSlug} --yes` with `autoConfirm` hardwired to true and no validation of `repoSlug`; if `getGhUser()` falls back to `"unknown"` it targets `unknown/<name>`. Fix: assert `repoSlug` matches `^[\w.-]+/agentic-skills-bench-[\w.-]+$` and refuse when the user is `"unknown"`; switch to `execFileSync` (no shell). — Fixed in `f7eb21cf` (`isSafeBenchRepoSlug` guard + `execFileSync`); covered by `tests/layer1/code-review-test-infra-fixes.test.ts`.
+- [x] [tests/layer4/helpers/disposable-repo.ts:49-75, 82] `createDisposableRepo` (and the sync setup's `sync-upstream-` clone) create temp dirs via `mkdtempSync` that are never removed — `cleanup()` only deletes the GitHub repo. A 100-run benchmark leaks 100+ cloned repos to disk. Fix: have `cleanup()` also `rmSync` the mkdtemp parent and the upstream clone dir. — Fixed in `f7eb21cf` (`removeLocalDir` in `cleanupRepo`, inline `rmSync` of the upstream clone in the sync setup); gh-free cleanup-path tests added 2026-06-10 in `tests/layer1/code-review-test-infra-fixes.test.ts`.
+- [x] [tests/harness/bench-persistence.ts:84-101] `findResumeableSession` sorts session dirs (`${skill}-${agent}-${randomUUID8}`) by the random id, not by time, so `--resume` can attach to an arbitrary older session and miscount cost/runs. Fix: sort by manifest `createdAt`/`updatedAt`, or timestamp-prefix the dir names. — Fixed in `f7eb21cf` (`pickResumeableManifest` sorts by manifest `updatedAt`/`createdAt`); covered by `tests/layer1/code-review-test-infra-fixes.test.ts`.
 
 ## Active — Claude Last-24h Usage Feedback
 
