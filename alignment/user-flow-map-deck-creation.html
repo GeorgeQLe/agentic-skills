@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="prototype">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User Flow Map — gskillpacks.com Deck Creation</title>
+<style>
+:root{
+  --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;
+  --accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff;
+  --chart-1:#58a6ff;--chart-2:#3fb950;--chart-3:#d29922;--chart-4:#bc8cff;
+  --chart-5:#f85149;--chart-6:#79c0ff;--chart-7:#f0883e;--chart-8:#a5d6ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.6}
+main{width:min(1080px,calc(100vw - 40px));margin:0 auto;padding:32px 0 64px;max-width:100%;overflow-wrap:break-word}
+h1{color:#fff;font-size:1.9rem;line-height:1.2;margin:0 0 10px}
+h2{color:var(--accent);font-size:1.4rem;margin:42px 0 12px}
+h3{color:#fff;font-size:1.12rem;margin:26px 0 10px}
+h4{color:var(--purple);font-size:1rem;margin:20px 0 8px}
+a{color:var(--accent)}
+code{background:#1c2128;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.92em}
+pre{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;font-size:.84rem;line-height:1.45;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+pre code{background:none;border:none;padding:0}
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th{background:var(--surface);color:#fff;text-align:left}
+th,td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.status-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:18px 0}
+.status-block .row{margin:3px 0}
+.status-block .k{color:var(--text-muted);display:inline-block;min-width:170px}
+.badge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.badge.review{background:#3a2d10;color:var(--orange);border:1px solid var(--orange)}
+.badge.proto{background:#231a35;color:var(--purple);border:1px solid var(--purple)}
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:22px 0}
+.toc ol{margin:8px 0 0;padding-left:22px}
+.toc li{margin:4px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.muted{color:var(--text-muted)}
+.callout{border-left:4px solid var(--accent);background:var(--surface);border-radius:0 8px 8px 0;padding:10px 16px;margin:14px 0}
+.callout.risk{border-left-color:var(--red)}
+.callout.decision{border-left-color:var(--green)}
+.preview-note{border:1px dashed var(--purple);border-radius:8px;background:#15101f;color:var(--purple);padding:8px 14px;margin:12px 0;font-size:.88rem}
+.gate{background:#1c2333;border:1px solid var(--purple);border-radius:8px;padding:14px 18px;margin:20px 0}
+.gate h4{margin-top:0}
+.q{margin:10px 0}
+.q .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;min-height:44px;border:1px solid var(--border);border-radius:8px;margin:6px 0;cursor:pointer;background:#161d2c}
+.q .opt:hover{border-color:var(--accent)}
+.q .opt input{margin-top:4px}
+.q textarea{width:100%;min-height:74px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit;margin:6px 0}
+.sec-fb{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.85rem}
+.sec-fb-label{color:var(--text-muted)}
+.fb-btn{background:var(--surface);color:var(--text-muted);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;font:inherit;font-size:.85rem;cursor:pointer}
+.fb-btn[data-fb="emphasize"].active{color:var(--green);border-color:var(--green)}
+.fb-btn[data-fb="down"].active{color:var(--red);border-color:var(--red)}
+.fb-btn[data-fb="needs-clarification"].active{color:var(--orange);border-color:var(--orange)}
+.fb-panel{flex-basis:100%;margin-top:6px}
+.fb-panel textarea{width:100%;min-height:70px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit}
+.local-yaml-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.local-yaml{width:100%;min-height:120px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+.sec-fb.bottom{margin-top:18px;border-top:1px dashed var(--border);padding-top:10px}
+button{font:inherit}
+.btn{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:#13233a;color:var(--accent);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.copy-status{color:var(--green);font-size:.85rem}
+.proto-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin:16px 0}
+.proto-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.proto-box svg{width:100%;height:auto;display:block}
+.readout{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;min-height:48px;font-size:.9rem;margin-top:10px}
+.readout .ph{color:var(--accent);font-weight:700}
+/* flow walkthrough */
+.wt-stage{position:relative;background:#0a0e13;border:1px solid var(--border);border-radius:8px;min-height:330px;padding:14px;max-width:100%}
+.wt-zone-label{color:var(--text-muted);font-size:.7rem;letter-spacing:.12em;margin-bottom:8px}
+.wt-bps{display:flex;flex-wrap:wrap;gap:10px}
+.wt-bp{width:128px;min-height:78px;background:linear-gradient(145deg,#1b2436,#141a26);border:1px solid var(--chart-1);border-radius:8px;color:#fff;font-size:.76rem;font-weight:700;padding:8px 10px;text-align:left;cursor:pointer}
+.wt-bp span{display:block;color:var(--text-muted);font-weight:400;font-size:.68rem;margin-top:4px}
+.wt-bp.ghost{opacity:.45;cursor:default}
+.wt-bp.custom{border-style:dashed;border-color:var(--chart-4);color:var(--chart-4)}
+.wt-shelf{margin-top:14px;background:#10151c;border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text-muted);font-size:.74rem}
+.wt-pack{display:inline-block;background:linear-gradient(160deg,#26203a,#181320);border:1px solid var(--chart-4);border-radius:6px;color:#fff;font-size:.72rem;padding:8px 12px;margin:4px 6px 2px 0;cursor:pointer}
+.wt-pack.glow{box-shadow:0 0 10px var(--chart-4);border-color:#e2c8ff}
+.wt-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#fff;font-size:.85rem;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:10px}
+.wt-cli{font-family:ui-monospace,Menlo,monospace;font-size:.74rem;color:var(--text-muted);background:#10151c;border:1px solid var(--border);border-radius:6px;padding:6px 10px}
+.wt-cli.unlocked{color:var(--chart-2);border-color:var(--chart-2)}
+.wt-cols{display:flex;gap:10px;flex-wrap:wrap}
+.wt-col{flex:1;min-width:110px;border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text-muted);font-size:.7rem}
+.wt-slot{display:flex;align-items:center;justify-content:center;text-align:center;min-height:64px;border:1px dashed var(--border);border-radius:6px;margin-top:6px;color:var(--text-muted);font-size:.68rem;padding:4px}
+.wt-slot.filled{border:1px solid var(--chart-2);background:linear-gradient(145deg,#15251b,#10181c);color:var(--chart-2)}
+.wt-slot.swapped{border:1px solid var(--chart-3);background:#241c0e;color:var(--chart-3)}
+.wt-overlay-row{margin-top:10px;border:1px dashed var(--border);border-radius:6px;padding:6px 10px;color:var(--text-muted);font-size:.7rem}
+.wt-fan{margin-top:12px;background:#11161f;border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.wt-fan-label{color:var(--text-muted);font-size:.68rem;letter-spacing:.1em;margin-bottom:6px}
+.wt-cards{display:flex;gap:8px;flex-wrap:wrap}
+.wt-card{width:92px;min-height:72px;background:linear-gradient(160deg,#202a3d,#161d2b);border:1px solid var(--chart-6);border-radius:7px;color:#fff;font-size:.64rem;padding:6px;text-align:left;cursor:pointer}
+.wt-card .cmd{color:var(--text-muted);display:block;margin-top:3px;font-family:ui-monospace,Menlo,monospace;font-size:.58rem}
+.wt-card.collected{opacity:.4;cursor:default}
+.wt-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.wt-stack{margin-top:12px;background:linear-gradient(145deg,#15251b,#10181c);border:1px solid var(--chart-2);border-radius:8px;padding:12px 14px}
+.wt-stack .cmdline{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--chart-2)}
+.compile-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:34px 0}
+.compile-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.yaml-out{width:100%;min-height:220px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+/* excalidraw-style sketch filter applies to shapes only, never text */
+#flow-svg rect,#flow-svg line,#flow-svg polygon{filter:url(#sketch)}
+#flow-svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+#flow-svg text.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+@media (max-width:860px){main{width:calc(100vw - 28px)}h1{font-size:1.6rem}}
+@media (max-width:560px){h1{font-size:1.35rem}.status-block .k{min-width:120px}.wt-cols{flex-direction:column}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>User Flow Map — gskillpacks.com Deck Creation</h1>
+  <p class="muted">Review alignment page for <code>/user-flow-map</code>. Flow structure only: screens, routes, actions, decisions, branches, states, failure paths, handoffs, and wireframe-level notes. No visual styling, no animation mechanics, no implementation plan.</p>
+  <div class="status-block">
+    <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
+    <div class="row"><span class="k">generated:</span> 2026-06-10</div>
+    <div class="row"><span class="k">skill:</span> user-flow-map v0.0 (product-design pack)</div>
+    <div class="row"><span class="k">product path:</span> <code>skills-showcase</code> (active in <code>research/.progress.yaml</code>)</div>
+    <div class="row"><span class="k">canonical destination:</span> <code>specs/skills-showcase/user-flow-deck-creation.md</code> + interview log — written only after approval</div>
+    <div class="row"><span class="k">upstream:</span> <code>apps/skills-showcase/docs/deck-builder-ux.md</code> (locked UX decisions) · <code>docs/decks.md</code> · animation plan Amendment 2 (routed the phase-slot question here)</div>
+    <div class="row"><span class="k">downstream:</span> <code>/ui-interview --requirements-only deck-creation</code> (after approval; requires <code>/pack install ui-interview</code>)</div>
+  </div>
+</header>
+
+<nav class="toc" id="toc">
+  <strong>Table of Contents</strong>
+  <ol>
+    <li><a href="#context">Context &amp; Evidence</a> <span class="muted">(gate: evidence coverage)</span></li>
+    <li><a href="#assumptions">Flow Assumptions Record</a> <span class="muted">(gate: assumptions)</span></li>
+    <li><a href="#pressure">Slot-Model Pressure-Test Resolution</a> <span class="muted">(gate: verdict)</span></li>
+    <li><a href="#persona">Persona, Goal &amp; Entry Points</a></li>
+    <li><a href="#happy">Happy Path + Interactive Walkthrough</a> <span class="muted">(gate: flow map)</span></li>
+    <li><a href="#branches">Branches &amp; Decision Points</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#screens">Screen/Route Inventory &amp; Per-Screen Matrix</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#states">State Coverage</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#failures">Failure/Recovery &amp; Handoffs</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#wireframes">Low-Fidelity Wireframe Notes</a> <span class="muted">(gate: wireframes)</span></li>
+    <li><a href="#risks">Open Questions, Risks &amp; Non-Goals</a></li>
+    <li><a href="#artifacts">Artifact Destination &amp; Proposed File Changes</a> <span class="muted">(gates)</span></li>
+    <li><a href="#route">Post-Approval Route</a> <span class="muted">(gate)</span></li>
+    <li><a href="#compile">Compile YAML</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1. CONTEXT ============ -->
+<section id="context">
+  <div class="sec-head"><h2>1. Context &amp; Evidence</h2>
+    <div class="sec-fb" data-section="Context & Evidence">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p><code>/user-flow-map</code> was invoked to map the full deck-creation flow on gskillpacks.com — landing on the table through deck completion and CLI unlock, covering preset (canonical) decks, customization (swap/overlay), and custom decks — and to pressure-test whether phase-labeled slots mirroring the canonical card list make building feel like a chore versus user-defined phases. That second question was explicitly routed here by Amendment 2 of the animation design plan.</p>
+  <div class="callout">Scope resolved to the active product path <code>skills-showcase</code>. Research evidence: <code>research/skills-showcase/idea-brief.md</code>. <strong>Gap:</strong> ICP and positioning have not run yet (manifest <code>next_skill: /icp</code>), so persona assumptions come from the idea brief, not validated research. The flow map carries this as a standing risk.</div>
+  <h3>Evidence behind load-bearing decisions</h3>
+  <div class="tbl"><table data-tts-narrative="Evidence table mapping eight load-bearing claims to their sources: locked UX decisions from deck-builder-ux.md, the five canonical decks from docs/decks.md, the install-deck CLI from the npm distribution doc, the phase-slot feedback from the animation plan amendment, and current app facts observed in the repository.">
+    <tr><th>Claim / decision</th><th>Evidence (observed)</th><th>Inference</th><th>Confidence</th></tr>
+    <tr><td>Entry is deck-first; site is one canvas with real URLs; add gesture is tap-to-add; slots are phase-labeled</td><td><code>apps/skills-showcase/docs/deck-builder-ux.md</code> — four decisions marked "Decided with user 2026-06-10"</td><td>The flow map composes these locked decisions into a full flow rather than re-deciding them</td><td>High</td></tr>
+    <tr><td>Five preset decks: VARD, ORD, Business AFPS, Devtool AFPS, Game AFPS; graduation VARD→Business AFPS, ORD→Devtool AFPS</td><td><code>docs/decks.md</code> domain × tempo grid and graduation paths</td><td>Preset deck inventory and graduation arrows are fixed inputs to the flow</td><td>High</td></tr>
+    <tr><td>Deck completion produces <code>npx skillpacks install-deck &lt;slug&gt;</code>; modified decks need an explicit pack list</td><td><code>docs/skillpacks-npm-distribution.md</code> — CLI maps deck slug → pack list via manifest</td><td>System decision D3 (canonical-intact check) is structural, not cosmetic</td><td>High</td></tr>
+    <tr><td>The phase-slot chore concern came from demo review, with choice valves already in the locked UX</td><td>Animation plan Amendment 2 (<code>alignment/animation-design-planner-deck-builder-transitions.html</code>): demo's 1:1 card-to-slot mapping "reads as building a deck is a chore with no choices"</td><td>The pressure-test must answer chore-vs-structure for preset decks, not re-litigate animation</td><td>High</td></tr>
+    <tr><td>User direction for this flow: preset decks with default phases, modifiable as needed</td><td>Terminal interview answer, 2026-06-10 (recorded verbatim in §2)</td><td>Resolution in §3 keeps default phase slots on presets and concentrates user-defined phases in custom decks</td><td>High (user-stated)</td></tr>
+    <tr><td>No deck routes exist today; deck-builder is greenfield page structure</td><td><code>apps/skills-showcase/app/</code> has <code>/</code>, <code>/workflows</code>, <code>/packs</code>, <code>/catalog</code>, <code>/benchmarks</code>, <code>/inspect</code>, <code>/follow</code>, <code>/prototype</code>; no <code>/deck/*</code> or <code>/card/*</code></td><td>The flow map defines target structure, archiving old pages per the idea brief</td><td>High (repo-observed)</td></tr>
+    <tr><td>Generated site data contains zero deck definitions</td><td><code>public/assets/skills-data.js</code> via <code>scripts/generate-skills-showcase-data.mjs</code> — no deck shapes</td><td>Deck data pipeline is a dependency for implementation; flagged in §11, out of flow-map scope</td><td>High (repo-observed)</td></tr>
+    <tr><td>Persistence is localStorage per deck slug; packs reseal per session; no accounts</td><td><code>deck-builder-ux.md</code> state &amp; persistence section</td><td>Resume, share, and failure paths must work without server state</td><td>High</td></tr>
+  </table></div>
+  <div class="gate" data-section="Context & Evidence" data-gate-type="evidence coverage">
+    <h4>Gate: evidence coverage</h4>
+    <div class="q" data-qlabel="Evidence coverage sufficient">
+      <p>Is this evidence base sufficient for a flow map, accepting the recorded gap that ICP/positioning have not run yet?</p>
+      <label class="opt"><input type="radio" name="q1" value="Sufficient — proceed on idea-brief personas"> Sufficient — proceed on idea-brief personas</label>
+      <label class="opt"><input type="radio" name="q1" value="Sufficient, but run /icp and /positioning before UI work"> Sufficient, but run <code>/icp</code> + positioning before UI work</label>
+      <label class="opt"><input type="radio" name="q1" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q1" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Context & Evidence">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. ASSUMPTIONS ============ -->
+<section id="assumptions">
+  <div class="sec-head"><h2>2. Flow Assumptions Record</h2>
+    <div class="sec-fb" data-section="Flow Assumptions Record">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>Confirmed in the terminal interview on 2026-06-10 ("Confirmed as-is"). The slot-model direction was answered verbatim: <em>"we have preset decks which users can modify as needed with default phases."</em> Mobile branch notes were explicitly included.</p>
+  <div class="tbl"><table data-tts-narrative="Nineteen confirmed flow assumptions grouped into persona and goal, entry points, happy path, branches, decisions, states, handoffs, and boundaries. Each is tagged with its source: research, artifact, user answer, or inferred.">
+    <tr><th>#</th><th>Assumption</th><th>Source</th></tr>
+    <tr><td>1</td><td>Primary persona: developer evaluating GSkillPacks who wants to assemble a workflow deck</td><td>[from research]</td></tr>
+    <tr><td>2</td><td>Secondary persona: existing user configuring a new repo fast</td><td>[from research]</td></tr>
+    <tr><td>3</td><td>First success = copyable <code>npx skillpacks install-deck …</code> or <code>project.json</code> download</td><td>[from artifact]</td></tr>
+    <tr><td>4</td><td>Primary entry: <code>/</code> table — 5 preset blueprints + pack shelf, deck-first</td><td>[from artifact — locked]</td></tr>
+    <tr><td>5</td><td>Hard-load entries: <code>/deck/[slug]</code>, <code>/card/[id]</code>, shared <code>/deck/custom?c=…</code></td><td>[from artifact]</td></tr>
+    <tr><td>6</td><td>Returning visitor: localStorage restores deck progress; packs reseal per session</td><td>[from artifact]</td></tr>
+    <tr><td>7</td><td>Redirects: <code>/catalog</code>→<code>/</code>, <code>/packs</code>→<code>/</code></td><td>[from artifact]</td></tr>
+    <tr><td>8</td><td>Happy path: table → blueprint morph → builder → ghost-slot tap → pack glow → tear → fan → tap-to-add / add-all → card flight → last core slot fills → stack-flip → CLI unlock → copy</td><td>[from artifact]</td></tr>
+    <tr><td>9</td><td>Preset decks ship with <strong>default phases</strong>; users modify as needed (swap/remove/overlay); modification produces a custom variant with explicit-pack-list CLI output</td><td>[user answer + artifact]</td></tr>
+    <tr><td>10</td><td><code>[Custom deck +]</code> = from-scratch building; user-defined phases live here</td><td>[from artifact]</td></tr>
+    <tr><td>11</td><td>Overlay row (code-review, gitops, …) is additive and never blocks unlock</td><td>[from artifact]</td></tr>
+    <tr><td>12</td><td>Shelf-first browsing is inspect-only; "add to deck" prompts deck choice</td><td>[from artifact]</td></tr>
+    <tr><td>13</td><td>Graduation arrows: VARD→Business AFPS, ORD→Devtool AFPS</td><td>[from artifact]</td></tr>
+    <tr><td>14</td><td>User decisions: deck choice, accept vs swap, overlays, name, share. System decisions: one-liner vs explicit pack-list CLI; unlock gated on core slots only</td><td>[from artifact]</td></tr>
+    <tr><td>15</td><td>Designed states: fresh table, partial ("🔒 N more to unlock"), complete, custom-converted, in-flight (optimistic commit, snap-to-end), restored session</td><td>[from artifact]</td></tr>
+    <tr><td>16</td><td>Not yet designed (added in this flow map): data-load failure, corrupt share URL / localStorage, clipboard failure, empty custom deck</td><td>[inferred]</td></tr>
+    <tr><td>17</td><td>Handoffs: web→terminal (copy CLI), web→repo (project.json), share URL; no accounts or server state</td><td>[from artifact]</td></tr>
+    <tr><td>18</td><td>Animation mechanics locked — flow work only decides slot targets; styling &amp; CLI internals out of scope</td><td>[from artifact]</td></tr>
+    <tr><td>19</td><td>Mobile: wireframe-level branch notes included</td><td>[user answer]</td></tr>
+  </table></div>
+  <div class="gate" data-section="Flow Assumptions Record" data-gate-type="assumptions/confidence">
+    <h4>Gate: assumptions record</h4>
+    <div class="q" data-qlabel="Assumptions record accurate">
+      <p>Does this record accurately capture the confirmed assumptions, including the verbatim slot-model direction?</p>
+      <label class="opt"><input type="radio" name="q2" value="Accurate — carry into the spec"> Accurate — carry into the spec</label>
+      <label class="opt"><input type="radio" name="q2" value="Accurate with corrections (see notes)"> Accurate with corrections (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q2" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the correction…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q2" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. PRESSURE TEST ============ -->
+<section id="pressure">
+  <div class="sec-head"><h2>3. Slot-Model Pressure-Test Resolution</h2>
+    <div class="sec-fb" data-section="Slot-Model Pressure-Test Resolution">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <h3>The question</h3>
+  <p>Do phase-labeled slots that mirror the canonical card list 1:1 make building a preset deck feel like a chore with no choices — and should phases instead be user-defined?</p>
+  <h3>Analysis</h3>
+  <p><strong>The chore risk is real but concentrated, not structural.</strong> Slot-by-slot interaction cost per preset deck: VARD 3 taps, ORD 3, Devtool AFPS 8, Game AFPS 11, Business AFPS ~35. Transcription fatigue lives almost entirely in Business AFPS; the locked UX already mitigates it there with stacked pack-slots and per-fan add-all.</p>
+  <p><strong>The genre distinction that matters: netdecking vs brewing.</strong> Deck-builder games separate copying a known list (netdecking — players want one-click import) from composing your own (brewing — players want freedom). Preset decks are netdecks: nobody wants to place a known-good list card by card. The chore is not the phase structure — it is being forced through per-card placement when the user has already made their one real decision ("I want this deck"). The fix is speed, not loosened structure.</p>
+  <p><strong>Why user-defined phases on preset decks would cost more than they give.</strong> (a) The one-line <code>npx skillpacks install-deck &lt;slug&gt;</code> contract depends on the preset staying canonical; editable phase structure forces every deck onto the explicit-pack-list path. (b) "The deck IS the pipeline" is the product's teaching mechanism — phase columns read left-to-right as execution order; user-defined phases delete the lesson. (c) Graduation arrows (VARD→Business AFPS, ORD→Devtool AFPS) connect canonical structures; they have no meaning between freeform trays.</p>
+  <div class="proto-box" data-tts-narrative="Bar chart comparing interaction cost per preset deck: slot-by-slot taps are 3 for VARD, 3 for ORD, 8 for Devtool AFPS, 11 for Game AFPS, and about 35 for Business AFPS, versus one decision per deck with the proposed deck-level Collect-all fast path.">
+    <div class="proto-controls"><strong>Interaction cost: slot-by-slot taps vs Collect-all decisions</strong><button type="button" class="btn toggle-table">View as table</button></div>
+    <canvas id="taps-chart" height="260" aria-label="Grouped bar chart comparing taps to complete each preset deck slot-by-slot (3, 3, 8, 11, 35) against decisions with the deck-level Collect-all fast path (1 each)."></canvas>
+    <div class="tbl chart-table" hidden><table>
+      <tr><th>Preset deck</th><th>Slot-by-slot taps</th><th>With deck-level Collect-all</th></tr>
+      <tr><td>VARD</td><td>3</td><td>1</td></tr>
+      <tr><td>ORD</td><td>3</td><td>1</td></tr>
+      <tr><td>Devtool AFPS</td><td>8</td><td>1</td></tr>
+      <tr><td>Game AFPS</td><td>11</td><td>1</td></tr>
+      <tr><td>Business AFPS</td><td>~35</td><td>1</td></tr>
+    </table></div>
+  </div>
+  <h3>Resolution (encodes the user's direction)</h3>
+  <div class="callout decision">
+    <p style="margin:6px 0"><strong>Preset decks keep default phase-labeled slots. Users modify as needed. User-defined phases live in custom decks.</strong></p>
+    <ul style="margin:6px 0">
+      <li><strong>Keep:</strong> phase-labeled slot columns mirroring each preset's canonical chain — the teaching artifact and the basis of the one-line CLI output.</li>
+      <li><strong>Add — speed valve:</strong> a deck-level <strong>Collect-all</strong> action ("Collect all N for this deck") that batches the whole preset in one decision. This is the netdeck import path and the primary chore killer. It extends the locked per-fan add-all across packs and needs a small animation-plan amendment (flight batching across sequential pack opens) — flagged in §11.</li>
+      <li><strong>Add — choice valve:</strong> <code>[Custom deck +]</code> is promoted to a first-class sixth tile on the table, not a buried affordance. Brewing is a peer entry point, with user-defined phases (add/rename/remove phase columns).</li>
+      <li><strong>Keep (locked):</strong> modification valves on presets — swap a suggested card or remove it, converting to a custom variant (editable name, explicit-pack-list CLI); freeform overlay row that never blocks unlock.</li>
+    </ul>
+  </div>
+  <p><strong>Consequence for the locked animation contracts:</strong> the card-flight <em>target</em> contract (slot identity/position) is unchanged — phase slots remain the targets. Only the new deck-level Collect-all needs animation-plan review; movement mechanics (optimistic commit, clone overlay, snap-to-end) are untouched.</p>
+  <div class="gate" data-section="Slot-Model Pressure-Test Resolution" data-gate-type="candidate/verdict decisions">
+    <h4>Gate: slot-model verdict</h4>
+    <div class="q" data-qlabel="Accept slot-model resolution">
+      <p>Accept this resolution — preset decks keep default phase slots with modification valves, deck-level Collect-all is added, and user-defined phases are scoped to custom decks?</p>
+      <label class="opt"><input type="radio" name="q3" value="Accept resolution as written"> Accept resolution as written</label>
+      <label class="opt"><input type="radio" name="q3" value="Accept, but drop the deck-level Collect-all addition"> Accept, but drop the deck-level Collect-all addition</label>
+      <label class="opt"><input type="radio" name="q3" value="Accept, but keep [Custom deck +] secondary, not a first-class tile"> Accept, but keep <code>[Custom deck +]</code> secondary, not a first-class tile</label>
+      <label class="opt"><input type="radio" name="q3" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q3" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Slot-Model Pressure-Test Resolution">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PERSONA & ENTRY ============ -->
+<section id="persona">
+  <div class="sec-head"><h2>4. Persona, Goal &amp; Entry Points</h2>
+    <div class="sec-fb" data-section="Persona, Goal & Entry Points">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table data-tts-narrative="Two personas. The Evaluator is a developer assessing GSkillPacks who needs to understand decks and reach an installed artifact. The Returner already knows the system and wants the fastest path to a pack list for a new repo.">
+    <tr><th>Persona</th><th>Goal</th><th>Success condition</th><th>Tempo</th></tr>
+    <tr><td><strong>Evaluator</strong> — developer assessing GSkillPacks for adoption <span class="muted">[provisional — ICP not yet run]</span></td><td>Understand what decks/packs/cards are and assemble a deck matching their workflow</td><td>Copies <code>npx skillpacks install-deck …</code> or downloads <code>project.json</code> for a deck they understand</td><td>Exploratory — inspects cards, reads phases, may browse shelf first</td></tr>
+    <tr><td><strong>Returner</strong> — existing user configuring a new repo</td><td>Fastest path to the right pack list</td><td>Same artifact, minimal interactions (Collect-all or unmodified preset)</td><td>Direct — knows the deck they want; speed valves exist for them</td></tr>
+  </table></div>
+  <h3>Entry points &amp; preconditions</h3>
+  <div class="tbl"><table data-tts-narrative="Six entry points: the table at the root URL, hard loads of deck and card URLs, shared custom-deck URLs, returning visits restored from localStorage, and legacy redirects from catalog and packs.">
+    <tr><th>ID</th><th>Entry</th><th>Trigger</th><th>Precondition</th><th>Lands on</th></tr>
+    <tr><td>E1</td><td><code>/</code> — the table</td><td>Organic, docs link, npm README, redirects</td><td>Skills data loads</td><td>S1 fresh (or restored) table</td></tr>
+    <tr><td>E2</td><td><code>/deck/[slug]</code> hard load</td><td>Shared preset link, docs deep link, refresh mid-build</td><td>Slug matches a preset deck</td><td>S2 builder open (no morph); invalid slug → F2</td></tr>
+    <tr><td>E3</td><td><code>/deck/custom?c=…</code></td><td>Shared custom/modified deck</td><td>Payload decodes to known card ids</td><td>S3 custom builder seeded from payload; corrupt → F3</td></tr>
+    <tr><td>E4</td><td><code>/card/[id]</code> standalone</td><td>SEO, shared card link</td><td>Card id exists</td><td>S5 standalone card page with "Open on the table" CTA → S1</td></tr>
+    <tr><td>E5</td><td>Return visit</td><td>Any URL above</td><td>localStorage has per-deck progress</td><td>Same screen with restored slots; packs resealed</td></tr>
+    <tr><td>E6</td><td><code>/catalog</code>, <code>/packs</code></td><td>Old bookmarks/links</td><td>—</td><td>Redirect to <code>/</code> (S1)</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 5. HAPPY PATH ============ -->
+<section id="happy">
+  <div class="sec-head"><h2>5. Happy Path + Interactive Walkthrough</h2>
+    <div class="sec-fb" data-section="Happy Path & Flow Map">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <h3>Happy path (preset deck, Evaluator)</h3>
+  <div class="tbl"><table data-tts-narrative="Nine ordered happy-path steps from landing on the table to copying the CLI command, each mapped to the screen where it happens.">
+    <tr><th>#</th><th>Step</th><th>Screen</th></tr>
+    <tr><td>1</td><td>Land on the table: 5 preset blueprints + <code>[Custom deck +]</code> tile, pack shelf below, graduation arrows between related blueprints</td><td>S1 <code>/</code></td></tr>
+    <tr><td>2</td><td>Tap a blueprint → blueprint-morph into the builder (URL becomes <code>/deck/[slug]</code>)</td><td>S1 → S2</td></tr>
+    <tr><td>3</td><td>Builder shows default phase columns with ghost-suggestion slots, empty overlay row, and the locked CLI panel ("🔒 N more to unlock")</td><td>S2</td></tr>
+    <tr><td>4</td><td>Tap a ghost slot → the shelf pack containing that card glows</td><td>S2</td></tr>
+    <tr><td>5</td><td>Tear the glowing pack open → fan drawer of its cards</td><td>S2 + S4</td></tr>
+    <tr><td>6</td><td>Tap wanted card(s), or "Collect all N" — optimistic commit, card flight to phase slot, slot fills and pulses, counter ticks</td><td>S4 → S2</td></tr>
+    <tr><td>7</td><td>Repeat 4–6 across packs, or use deck-level <strong>Collect-all</strong> to batch every remaining suggestion in one decision</td><td>S2/S4</td></tr>
+    <tr><td>8</td><td>Last core slot fills (all flights landed) → slots gather into a stacked deck, stack flips to the output panel</td><td>S2 → S6</td></tr>
+    <tr><td>9</td><td>Copy <code>npx skillpacks install-deck &lt;slug&gt;</code> (or download <code>project.json</code> / share / keep editing) → terminal handoff H1</td><td>S6</td></tr>
+  </table></div>
+
+  <h3>Interactive walkthrough (flow states, not motion)</h3>
+  <div class="preview-note">This is an ephemeral preview of <strong>flow structure</strong> — which screens, actions, and states connect. Motion timing/mechanics are owned by the approved animation plan and are deliberately not simulated. Not production code.</div>
+  <div class="proto-box" data-tts-narrative="Interactive click-through preview of the deck creation flow: tap the VARD blueprint, tap ghost slots, open the glowing pack, collect cards one by one or with Collect-all, optionally swap a suggestion to see the custom-variant conversion, and reach the CLI unlock panel.">
+    <div class="proto-controls">
+      <button type="button" class="btn" id="wt-reset">Reset preview</button>
+      <span class="muted" id="wt-crumb">screen: table (/)</span>
+    </div>
+    <div class="wt-stage" id="wt-stage"></div>
+    <div class="readout" id="wt-readout"><span class="ph">table</span> — Happy-path step 1. Tap the VARD blueprint to morph into its builder. Other blueprints are stubbed in this preview.</div>
+    <noscript><p class="muted">JavaScript is disabled — the walkthrough is unavailable. The happy-path table above and the flow diagram below carry the same information.</p></noscript>
+  </div>
+
+  <h3>Flow diagram (all screens &amp; transitions)</h3>
+  <div class="proto-box" data-tts-narrative="Flow diagram connecting the table, preset builder, custom builder, pack fan, card detail, deck picker, and output panel. The happy path runs table to builder to fan to output to terminal handoff; branch edges cover shelf-first browsing, custom decks, shared URLs, and keep-editing.">
+    <div class="proto-controls"><strong>Screens &amp; transitions</strong><button type="button" class="btn toggle-table">View as table</button></div>
+    <svg id="flow-svg" viewBox="0 0 1000 560" role="img" aria-label="Directed flow diagram with eight nodes: entry points feed the table; the table connects to the preset builder, custom builder, and inspect-only fan; the builder exchanges with the pack fan via open-pack and card-flight edges; the builder completes into the output panel which hands off to the terminal; the deck picker routes shelf-first adds into a builder.">
+      <defs>
+        <filter id="sketch"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0 0, 10 5, 0 10" fill="#8b949e"/></marker>
+      </defs>
+      <!-- nodes -->
+      <g>
+        <rect x="20" y="40" width="150" height="64" rx="10" fill="#161b22" stroke="#d29922" stroke-width="1.6"/>
+        <rect x="60" y="200" width="180" height="70" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="1.8"/>
+        <rect x="400" y="120" width="200" height="70" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="1.8"/>
+        <rect x="400" y="320" width="200" height="70" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="1.8"/>
+        <rect x="120" y="420" width="180" height="64" rx="10" fill="#161b22" stroke="#79c0ff" stroke-width="1.6"/>
+        <rect x="730" y="120" width="180" height="70" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="1.8"/>
+        <rect x="730" y="320" width="180" height="64" rx="10" fill="#161b22" stroke="#79c0ff" stroke-width="1.6"/>
+        <rect x="400" y="470" width="200" height="56" rx="10" fill="#161b22" stroke="#8b949e" stroke-width="1.4"/>
+        <!-- edges -->
+        <line x1="95" y1="104" x2="120" y2="200" stroke="#8b949e" stroke-width="1.4" marker-end="url(#arr)"/>
+        <line x1="240" y1="215" x2="400" y2="165" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="240" y1="250" x2="400" y2="340" stroke="#bc8cff" stroke-width="1.6" marker-end="url(#arr)"/>
+        <line x1="180" y1="270" x2="200" y2="420" stroke="#8b949e" stroke-width="1.4" marker-end="url(#arr)"/>
+        <line x1="470" y1="190" x2="240" y2="445" stroke="#79c0ff" stroke-width="1.6" marker-end="url(#arr)"/>
+        <line x1="300" y1="440" x2="430" y2="320" stroke="#79c0ff" stroke-width="1.6" marker-end="url(#arr)"/>
+        <line x1="600" y1="155" x2="730" y2="155" stroke="#3fb950" stroke-width="2" marker-end="url(#arr)"/>
+        <line x1="760" y1="190" x2="560" y2="190" stroke="#8b949e" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="500" y1="190" x2="500" y2="320" stroke="#58a6ff" stroke-width="1.6" marker-end="url(#arr)"/>
+        <line x1="540" y1="320" x2="540" y2="190" stroke="#3fb950" stroke-width="1.6" marker-end="url(#arr)"/>
+        <line x1="500" y1="390" x2="500" y2="470" stroke="#79c0ff" stroke-width="1.4" marker-end="url(#arr)"/>
+        <line x1="820" y1="190" x2="820" y2="320" stroke="#3fb950" stroke-width="1.6" marker-end="url(#arr)"/>
+      </g>
+      <!-- labels (clean fonts, never sketched) -->
+      <g fill="#c9d1d9" font-size="14">
+        <text x="95" y="66" text-anchor="middle" fill="#d29922" font-weight="700">Entries</text>
+        <text x="95" y="86" text-anchor="middle" class="mono" font-size="11">E1–E6</text>
+        <text x="150" y="228" text-anchor="middle" font-weight="700" fill="#fff">S1 Table</text>
+        <text x="150" y="248" text-anchor="middle" class="mono" font-size="12">/</text>
+        <text x="500" y="148" text-anchor="middle" font-weight="700" fill="#fff">S2 Preset builder</text>
+        <text x="500" y="168" text-anchor="middle" class="mono" font-size="12">/deck/[slug]</text>
+        <text x="500" y="348" text-anchor="middle" font-weight="700" fill="#fff">S3 Custom builder</text>
+        <text x="500" y="368" text-anchor="middle" class="mono" font-size="12">/deck/custom</text>
+        <text x="210" y="448" text-anchor="middle" font-weight="700" fill="#fff">S4 Pack fan</text>
+        <text x="210" y="468" text-anchor="middle" font-size="11" fill="#8b949e">client state</text>
+        <text x="820" y="148" text-anchor="middle" font-weight="700" fill="#fff">S6 Output panel</text>
+        <text x="820" y="168" text-anchor="middle" font-size="11" fill="#8b949e">deck back / CLI unlock</text>
+        <text x="820" y="346" text-anchor="middle" font-weight="700" fill="#fff">S5 Card detail</text>
+        <text x="820" y="364" text-anchor="middle" class="mono" font-size="11">/card/[id]</text>
+        <text x="500" y="492" text-anchor="middle" font-weight="700" fill="#fff">S7 Deck picker</text>
+        <text x="500" y="510" text-anchor="middle" font-size="11" fill="#8b949e">modal — shelf-first add</text>
+        <text x="305" y="172" font-size="11" fill="#58a6ff">tap blueprint (morph)</text>
+        <text x="285" y="305" font-size="11" fill="#bc8cff">[Custom deck +]</text>
+        <text x="92" y="350" font-size="11" fill="#8b949e">open pack (inspect-only)</text>
+        <text x="330" y="338" font-size="11" fill="#79c0ff">open pack / card flight</text>
+        <text x="612" y="142" font-size="11" fill="#3fb950">complete → stack flip</text>
+        <text x="600" y="208" font-size="11" fill="#8b949e">keep editing</text>
+        <text x="446" y="258" font-size="11" fill="#58a6ff">swap → custom variant</text>
+        <text x="556" y="262" font-size="11" fill="#3fb950">complete (≥1 card)</text>
+        <text x="508" y="436" font-size="11" fill="#79c0ff">add to deck → pick</text>
+        <text x="826" y="262" font-size="11" fill="#3fb950">inspect ⇄</text>
+        <text x="940" y="155" font-size="12" fill="#3fb950">→ H1 terminal</text>
+      </g>
+    </svg>
+    <div class="tbl chart-table" hidden><table>
+      <tr><th>From</th><th>To</th><th>Transition</th></tr>
+      <tr><td>E1–E6 entries</td><td>S1 Table (or direct to S2/S3/S5 on hard loads)</td><td>land / redirect / restore</td></tr>
+      <tr><td>S1 Table</td><td>S2 Preset builder</td><td>tap blueprint (blueprint-morph, URL → /deck/[slug])</td></tr>
+      <tr><td>S1 Table</td><td>S3 Custom builder</td><td>tap [Custom deck +]</td></tr>
+      <tr><td>S1 Table</td><td>S4 Pack fan</td><td>open pack shelf-first (inspect-only mode)</td></tr>
+      <tr><td>S4 Pack fan</td><td>S7 Deck picker</td><td>"add to deck" with no deck context</td></tr>
+      <tr><td>S7 Deck picker</td><td>S2/S3 builder</td><td>choose target deck; card commits</td></tr>
+      <tr><td>S2/S3 builder</td><td>S4 Pack fan</td><td>open pack; cards fly back to slots (card-flight)</td></tr>
+      <tr><td>S2 builder</td><td>S2 (custom variant)</td><td>swap/remove a suggestion → explicit-pack-list mode</td></tr>
+      <tr><td>S2/S3 builder</td><td>S6 Output panel</td><td>completion (preset: all core slots; custom: ≥1 card)</td></tr>
+      <tr><td>S6 Output panel</td><td>S2/S3 builder</td><td>keep editing</td></tr>
+      <tr><td>S6 Output panel</td><td>Terminal / repo / person</td><td>copy CLI (H1), project.json (H2), share URL (H3)</td></tr>
+      <tr><td>S2/S4/S5</td><td>S5 Card detail</td><td>inspect card (modal in flow, standalone via /card/[id])</td></tr>
+      <tr><td>S2/S3 builder</td><td>S1 Table</td><td>dismiss (morph back); progress kept in localStorage</td></tr>
+    </table></div>
+  </div>
+  <div class="gate" data-section="Happy Path & Flow Map" data-gate-type="flow map">
+    <h4>Gate: proposed flow map</h4>
+    <div class="q" data-qlabel="Accept proposed flow map">
+      <p>Do you accept the happy path and the screen/transition graph as the binding flow structure for the deck-creation experience?</p>
+      <label class="opt"><input type="radio" name="q4" value="Accept as proposed"> Accept as proposed</label>
+      <label class="opt"><input type="radio" name="q4" value="Accept with changes (see notes)"> Accept with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q4" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q4" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Happy Path & Flow Map">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. BRANCHES & DECISIONS ============ -->
+<section id="branches">
+  <div class="sec-head"><h2>6. Branches &amp; Decision Points</h2>
+    <div class="sec-fb" data-section="Branches & Decision Points">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <h3>Alternate paths</h3>
+  <div class="tbl"><table data-tts-narrative="Ten alternate paths branching off the happy path, including the new deck-level Collect-all fast path, preset modification that converts to a custom variant, overlay additions, from-scratch custom decks, shelf-first browsing, card inspection, resume, graduation, keep-editing, and sharing.">
+    <tr><th>ID</th><th>Branch</th><th>Diverges at</th><th>Behavior</th><th>Rejoins</th></tr>
+    <tr><td>B1</td><td><strong>Deck-level Collect-all</strong> <span class="badge proto" style="font-size:.7rem">new in this flow map</span></td><td>S2, any time core slots remain</td><td>One action batches every remaining suggested card: packs open in sequence, flights are staggered batches. Returner fast path; the netdeck import.</td><td>Happy path step 8</td></tr>
+    <tr><td>B2</td><td>Modify a preset (swap / remove)</td><td>S2, any filled or ghost slot</td><td>Replacing a suggestion or removing a card converts the deck to a <strong>custom variant</strong>: name becomes editable ("VARD — modified" default), CLI output switches to explicit pack list. Removal returns a slot to its ghost; unlock state recomputes.</td><td>Happy path step 8 (gate now evaluates current slots)</td></tr>
+    <tr><td>B3</td><td>Overlay additions</td><td>S2/S3 overlay row</td><td>Any card may be added to the freeform overlay row (e.g. code-review, gitops). Never blocks unlock; emits extra <code>install &lt;pack&gt;</code> lines in the output.</td><td>No divergence from gate logic</td></tr>
+    <tr><td>B4</td><td>Custom deck from scratch</td><td>S1 <code>[Custom deck +]</code> tile</td><td>Empty builder at <code>/deck/custom</code> with <strong>user-defined phases</strong>: starts with one unnamed phase column; add/rename/remove phases; freeform slots accept any card. Unlock gate: ≥1 card.</td><td>S6 with explicit-pack-list output and encoded share URL</td></tr>
+    <tr><td>B5</td><td>Shelf-first browsing</td><td>S1 pack shelf</td><td>Packs open in <strong>inspect-only mode</strong> (no deck context). Cards show "add to deck" which opens the deck picker (S7); choosing a deck navigates to its builder with the card committed.</td><td>S2/S3 mid-build</td></tr>
+    <tr><td>B6</td><td>Card inspection</td><td>S4 (flip), S2 slots (flip), anywhere via <code>/card/[id]</code></td><td>Flip shows stats/benchmark back. Standalone page (E4) is the SEO surface with a "Open on the table" CTA.</td><td>Where the user left off</td></tr>
+    <tr><td>B7</td><td>Dismiss &amp; resume</td><td>S2/S3, any time</td><td>Dismiss morphs back to the table; progress persists per deck slug in localStorage. Blueprints on S1 show progress badges ("2/3"). Packs reseal each session.</td><td>Re-entry at step 3 with restored slots</td></tr>
+    <tr><td>B8</td><td>Graduation</td><td>S1 arrows; S6 hint after completing VARD/ORD</td><td>Faint arrows VARD→Business AFPS and ORD→Devtool AFPS; tapping routes to the target preset's builder.</td><td>Step 2 for the graduated deck</td></tr>
+    <tr><td>B9</td><td>Keep editing after completion</td><td>S6</td><td>Stack unflips to the builder; swaps/overlays continue (may convert to custom variant per B2). Re-completion re-runs the gather without ceremony loss.</td><td>Step 8</td></tr>
+    <tr><td>B10</td><td>Share</td><td>S6</td><td>Unmodified preset → canonical URL <code>/deck/[slug]</code>. Modified/custom → <code>/deck/custom?c=…</code> URL-encoded card list + name.</td><td>Recipient enters at E2/E3</td></tr>
+  </table></div>
+  <h3>Decision points</h3>
+  <div class="tbl"><table data-tts-narrative="Ten decision points: six user decisions including deck choice, accept versus swap, overlays, naming, output choice, and shelf-first deck picking; four system decisions including the canonical-intact check, unlock gating, share URL form, and invalid-input fallbacks.">
+    <tr><th>ID</th><th>Type</th><th>Where</th><th>Decision</th><th>Branch rule</th></tr>
+    <tr><td>D1</td><td>User</td><td>S1</td><td>Preset blueprint vs <code>[Custom deck +]</code> vs browse shelf</td><td>→ S2 / S3 / B5</td></tr>
+    <tr><td>D2</td><td>User</td><td>S2 slot</td><td>Accept suggestion, swap, or leave empty</td><td>Swap/remove → B2 custom variant</td></tr>
+    <tr><td>D3</td><td>System</td><td>S2→S6</td><td><strong>Canonical-intact check:</strong> do filled slots exactly match the preset list?</td><td>Yes → one-line <code>install-deck &lt;slug&gt;</code>; no → explicit pack list</td></tr>
+    <tr><td>D4</td><td>System</td><td>S2/S3</td><td>Unlock gate</td><td>Preset: all core slots filled (overlay ignored). Custom: ≥1 card</td></tr>
+    <tr><td>D5</td><td>User</td><td>S2/S3</td><td>Add overlay cards?</td><td>B3; never affects D4</td></tr>
+    <tr><td>D6</td><td>User</td><td>S6</td><td>Copy CLI vs download project.json vs share vs keep editing</td><td>H1 / H2 / B10 / B9</td></tr>
+    <tr><td>D7</td><td>System</td><td>S6 share</td><td>Share URL form</td><td>Canonical slug if D3 passed; else encoded <code>?c=</code> payload</td></tr>
+    <tr><td>D8</td><td>User</td><td>S7</td><td>Which deck receives a shelf-first add?</td><td>Existing in-progress deck, fresh preset, or new custom</td></tr>
+    <tr><td>D9</td><td>System</td><td>E2/E3/E5</td><td>Input validity (slug, <code>?c=</code> payload, localStorage schema, card ids vs current data)</td><td>Invalid → F2/F3/F4/F7 recovery</td></tr>
+    <tr><td>D10</td><td>User</td><td>S1/S6</td><td>Follow a graduation arrow?</td><td>B8</td></tr>
+  </table></div>
+  <div class="gate" data-section="Branches & Decision Points" data-gate-type="branch/decision coverage">
+    <h4>Gate: branch &amp; decision coverage</h4>
+    <div class="q" data-qlabel="Branch and decision coverage complete">
+      <p>Are B1–B10 and D1–D10 the complete branch/decision set for v1, with nothing collapsed into "standard flow" language?</p>
+      <label class="opt"><input type="radio" name="q5" value="Complete for v1"> Complete for v1</label>
+      <label class="opt"><input type="radio" name="q5" value="Complete, with additions noted"> Complete, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q5" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing branch/decision…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q5" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Branches & Decision Points">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. SCREENS ============ -->
+<section id="screens">
+  <div class="sec-head"><h2>7. Screen/Route Inventory &amp; Per-Screen Matrix</h2>
+    <div class="sec-fb" data-section="Screen/Route Inventory & Per-Screen Matrix">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table data-tts-narrative="Seven screens: the table at root, the preset builder at deck slug URLs, the custom builder, the pack fan drawer as client state, the card detail modal and standalone page, the output panel as the completed deck's back face, and the deck-picker modal.">
+    <tr><th>ID</th><th>Screen</th><th>Route</th><th>Purpose</th><th>Inputs</th><th>Outputs / destinations</th><th>Evidence</th></tr>
+    <tr><td>S1</td><td>Table</td><td><code>/</code></td><td>Orient; choose a deck or browse packs</td><td>skills data, localStorage progress</td><td>S2, S3, S4 (inspect-only), S5</td><td>deck-builder-ux.md (deck-first, canvas)</td></tr>
+    <tr><td>S2</td><td>Preset builder</td><td><code>/deck/[slug]</code> — intercepting overlay over the table + real route for hard loads</td><td>Fill default phase slots; modify; reach unlock</td><td>preset definition, progress, shelf</td><td>S4, S5, S6, back to S1</td><td>deck-builder-ux.md (phase slots, ghosts, CLI lock)</td></tr>
+    <tr><td>S3</td><td>Custom builder</td><td><code>/deck/custom</code> (+ <code>?c=</code> seed)</td><td>From-scratch deck; user-defined phases</td><td>optional share payload, shelf</td><td>S4, S5, S6, back to S1</td><td>deck-builder-ux.md ([Custom deck +]); §3 resolution</td></tr>
+    <tr><td>S4</td><td>Pack fan drawer</td><td>client state (no route)</td><td>Open a pack; inspect/collect cards</td><td>pack contents, deck context (or none)</td><td>card flights to S2/S3; S7 when context-free; S5 flip</td><td>prototype flow (SealedPack/PackOpener/BottomSheet)</td></tr>
+    <tr><td>S5</td><td>Card detail</td><td>modal in-flow; standalone <code>/card/[id]</code></td><td>Inspect a skill: stats, benchmark evidence, command</td><td>card id</td><td>"add to deck" → S7/S2/S3; standalone CTA → S1</td><td>deck-builder-ux.md (card pages, SEO)</td></tr>
+    <tr><td>S6</td><td>Output panel</td><td>state within S2/S3 (deck back)</td><td>Deliver the artifact: CLI, project.json, share</td><td>completed deck composition, D3 result</td><td>H1/H2/H3; B9 back to builder</td><td>deck-builder-ux.md (completion, CLI unlock)</td></tr>
+    <tr><td>S7</td><td>Deck picker</td><td>modal (no route)</td><td>Route a shelf-first add to a deck</td><td>card being added, deck list + progress</td><td>S2/S3 with card committed; cancel → S4</td><td>deck-builder-ux.md (shelf browsable, add prompts deck selection)</td></tr>
+  </table></div>
+  <p class="muted">Kept outside this flow's scope: <code>/follow</code> and <code>/admin/newsletter</code> (unchanged), legacy showcase pages (archived once the deck-builder ships, per the idea brief). <code>/catalog</code> and <code>/packs</code> become redirects (E6).</p>
+
+  <h3>Per-screen action/state matrix</h3>
+  <div class="tbl"><table data-tts-narrative="Action and state matrix for all seven screens, listing available actions, navigation, disabled and blocked rules, validation, and required states for each.">
+    <tr><th>Screen</th><th>Actions</th><th>Navigation</th><th>Disabled / blocked rules</th><th>Validation</th><th>States</th></tr>
+    <tr><td><strong>S1 Table</strong></td><td>Tap blueprint; tap <code>[Custom deck +]</code>; open pack (inspect-only); tap graduation arrow; tap card progress badge</td><td>→ S2/S3/S4/S5</td><td>Blueprint taps ignored while a morph is in progress (animation contract); shelf packs never "tear" accidentally on scroll</td><td>—</td><td>loading (data fetch), fresh, restored (progress badges), data-error (F1), reduced-motion</td></tr>
+    <tr><td><strong>S2 Preset builder</strong></td><td>Tap ghost (glow source pack); tap filled slot (flip → inspect/remove); swap suggestion; deck-level Collect-all; open pack; add overlay card; rename (only after custom-variant conversion); copy CLI; share; download; dismiss</td><td>→ S4, S5, S6, S1</td><td>CLI copy disabled in locked state — button visible from first paint with "🔒 N more to unlock"; rename disabled while canonical; remove only from flipped slot back</td><td>Slot accepts only its suggested card unless swapping (B2); overlay accepts any card not already in the deck</td><td>empty, partial, in-flight, complete, custom-variant, restored, stale-data (F7), reduced-motion</td></tr>
+    <tr><td><strong>S3 Custom builder</strong></td><td>Name deck; add/rename/remove phase column; add any card to any slot; overlay adds; copy CLI; share (encoded); download; dismiss</td><td>→ S4, S5, S6, S1</td><td>CLI locked until ≥1 card (D4); phase removal with cards inside asks before discarding (destructive)</td><td>Duplicate cards rejected with notice; phase names length-capped</td><td>empty (helper text), partial, complete, seeded-from-share, corrupt-payload recovery (F3)</td></tr>
+    <tr><td><strong>S4 Pack fan</strong></td><td>Flip card; tap-to-add (deck context); per-fan "Collect all N"; "add to deck" (no context → S7); drag-dismiss</td><td>→ S2/S3 (flights), S5, S7</td><td>Re-tap of in-flight/collected card is a no-op; collected cards dimmed with "in deck ♦" badge; close mid-flight snaps flights to end (locked contract)</td><td>—</td><td>fanned, partially-collected, all-collected ("all in deck"), inspect-only, closing</td></tr>
+    <tr><td><strong>S5 Card detail</strong></td><td>Flip; "add to deck" / "in deck ♦"; copy command; (standalone) "Open on the table"</td><td>→ S7 or back; standalone → S1</td><td>"add to deck" hidden when card already in the active deck</td><td>Unknown card id on hard load → F2-style fallback</td><td>front, back (stats/benchmarks), standalone, in-deck</td></tr>
+    <tr><td><strong>S6 Output panel</strong></td><td>Copy CLI; download project.json; share; keep editing</td><td>→ S2/S3 (B9) or exit</td><td>Appears only after D4 passes and all flights have landed (locked contract)</td><td>Clipboard failure → F5 fallback</td><td>canonical output (one-liner), custom output (pack list + overlay lines), copied-confirmation, copy-failed</td></tr>
+    <tr><td><strong>S7 Deck picker</strong></td><td>Choose deck; create new custom; cancel</td><td>→ S2/S3 or back to S4</td><td>Decks already containing the card shown as "already in deck" (not selectable)</td><td>—</td><td>list (with progress per deck), empty-progress (all fresh)</td></tr>
+  </table></div>
+  <div class="gate" data-section="Screen/Route Inventory & Per-Screen Matrix" data-gate-type="coverage checkpoint">
+    <h4>Gate: screen inventory &amp; matrix</h4>
+    <div class="q" data-qlabel="Screen inventory and matrix complete">
+      <p>Is the seven-screen inventory with its action/state matrix the right v1 surface set (with <code>/follow</code> kept, old pages archived, <code>/catalog</code>+<code>/packs</code> redirected)?</p>
+      <label class="opt"><input type="radio" name="q6" value="Right surface set"> Right surface set</label>
+      <label class="opt"><input type="radio" name="q6" value="Right, with changes noted"> Right, with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q6" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q6" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Screen/Route Inventory & Per-Screen Matrix">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. STATES ============ -->
+<section id="states">
+  <div class="sec-head"><h2>8. State Coverage</h2>
+    <div class="sec-fb" data-section="State Coverage">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table data-tts-narrative="Required-state checklist mapping empty, loading, error, partial, success, permission, offline, validation, and edge states to where each appears in the flow and whether it was already designed or newly added by this flow map.">
+    <tr><th>State class</th><th>Where it appears</th><th>Status</th></tr>
+    <tr><td>Empty</td><td>S1 fresh table; S2 all-ghost builder; S3 empty custom deck with helper text ("add a card to unlock the CLI"); S7 all-fresh deck list</td><td>S3 helper newly designed; rest locked</td></tr>
+    <tr><td>Loading</td><td>S1 initial data load (single skeleton pass — data is one static JS asset)</td><td>Newly designed</td></tr>
+    <tr><td>Error</td><td>F1 data-load failure (retry panel); F2 bad slug; F3 corrupt payload; F5 clipboard denied</td><td>Newly designed</td></tr>
+    <tr><td>Partial</td><td>S2/S3 some-slots-filled with locked CLI counter ("🔒 N more to unlock"); S1 blueprint progress badges</td><td>Locked (deck-builder-ux.md)</td></tr>
+    <tr><td>Success</td><td>S6 unlocked output; copied-confirmation; per-slot fill pulse</td><td>Locked</td></tr>
+    <tr><td>Permission-denied</td><td>Only clipboard (F5) — site has no accounts or gated data</td><td>Newly designed</td></tr>
+    <tr><td>Offline</td><td>Static site: after first load everything except the initial fetch works offline; copy/download/share unaffected. Initial-load-offline is browser-default, explicitly out of scope</td><td>Scoped note</td></tr>
+    <tr><td>Validation</td><td>S3 duplicate-card rejection, phase-name cap; S2 slot accepts only suggestion unless swapping; D9 input validity</td><td>Newly designed</td></tr>
+    <tr><td>Edge — in-flight</td><td>Optimistic commit at tap; interruption snaps flights to end; completion defers until all flights land</td><td>Locked (animation contract)</td></tr>
+    <tr><td>Edge — restored</td><td>E5 localStorage restore; packs resealed; stale card ids pruned (F7)</td><td>Pruning newly designed</td></tr>
+    <tr><td>Edge — reduced motion</td><td>State parity required: every flow state reachable with flights/morphs replaced by fades (mechanics owned by animation plan)</td><td>Parity requirement stated here</td></tr>
+  </table></div>
+  <div class="gate" data-section="State Coverage" data-gate-type="state coverage">
+    <h4>Gate: state coverage</h4>
+    <div class="q" data-qlabel="State coverage complete">
+      <p>Does this state set cover v1, including the newly designed error/validation states?</p>
+      <label class="opt"><input type="radio" name="q7" value="Covers v1"> Covers v1</label>
+      <label class="opt"><input type="radio" name="q7" value="Covers v1, with additions noted"> Covers v1, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q7" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing state…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q7" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. FAILURES & HANDOFFS ============ -->
+<section id="failures">
+  <div class="sec-head"><h2>9. Failure/Recovery Paths &amp; Handoffs</h2>
+    <div class="sec-fb" data-section="Failure/Recovery Paths & Handoffs">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <h3>Failure &amp; recovery</h3>
+  <div class="tbl"><table data-tts-narrative="Ten failure paths with their recovery behavior, from data-load failure and invalid URLs through clipboard denial, mid-flight interruption, stale card ids, empty custom decks, offline notes, and reduced-motion parity.">
+    <tr><th>ID</th><th>Failure</th><th>Recovery</th></tr>
+    <tr><td>F1</td><td>Skills data fails to load (S1 or any hard load)</td><td>Error panel with retry; no interactive surfaces rendered half-broken. Table never renders from stale partial data</td></tr>
+    <tr><td>F2</td><td>Invalid deck slug at <code>/deck/[slug]</code>, or unknown card id at <code>/card/[id]</code></td><td>Redirect to <code>/</code> with a "deck/card not found" toast; no dead-end 404 inside the experience</td></tr>
+    <tr><td>F3</td><td>Corrupt or unparseable <code>?c=</code> share payload</td><td><code>/deck/custom</code> opens fresh and empty with a "couldn't read the shared deck" toast; salvageable known card ids are kept when partially parseable</td></tr>
+    <tr><td>F4</td><td>Corrupt or schema-mismatched localStorage</td><td>Versioned schema key; mismatch discards progress silently for that deck and starts fresh — never blocks entry</td></tr>
+    <tr><td>F5</td><td>Clipboard API denied/unavailable on copy</td><td>Command text auto-selects with a "press Ctrl+C / ⌘C" hint; download and share unaffected</td></tr>
+    <tr><td>F6</td><td>Interruption mid-flight (drawer close, builder dismiss, route change)</td><td>All flights snap to end; optimistic commits are kept — no rollback (locked animation contract)</td></tr>
+    <tr><td>F7</td><td>Restored progress references a card id no longer in the catalog (data updated between sessions)</td><td>Stale ids pruned at load; affected slots revert to ghosts; one notice ("1 card is no longer available"); unlock recomputes</td></tr>
+    <tr><td>F8</td><td>Custom deck completion attempted with zero cards</td><td>CLI stays locked (D4); helper text names the unlock condition instead of a dead button</td></tr>
+    <tr><td>F9</td><td>Offline after first load</td><td>Everything except the initial data fetch works; initial-load-offline is browser default (out of scope)</td></tr>
+    <tr><td>F10</td><td>Contradictory choice: swapping in a card already in the overlay row</td><td>Card moves from overlay to the phase slot (no duplicates); reverse direction (slot→overlay) via remove-then-add</td></tr>
+  </table></div>
+  <h3>Handoffs &amp; external/manual dependencies</h3>
+  <div class="tbl"><table data-tts-narrative="Five handoffs: copying the CLI command to a terminal, downloading project.json into a repo, sharing URLs between people, entering from the docs site, and the system dependency that custom decks require explicit pack lists because the CLI manifest only knows canonical deck slugs.">
+    <tr><th>ID</th><th>Handoff</th><th>Mechanism</th><th>Failure surface</th></tr>
+    <tr><td>H1</td><td>Web → terminal</td><td>Copy <code>npx skillpacks install-deck &lt;slug&gt;</code> (or explicit <code>install &lt;packs&gt;</code> list)</td><td>F5 clipboard; CLI-side errors are the CLI's scope, not the showcase's</td></tr>
+    <tr><td>H2</td><td>Web → repo</td><td>Download <code>project.json</code> mirroring <code>.agents/project.json</code> (<code>enabled_packs</code> + deck metadata)</td><td>Browser download permission (browser-default)</td></tr>
+    <tr><td>H3</td><td>Person → person</td><td>Share URL: canonical slug (D3 pass) or encoded <code>?c=</code> payload</td><td>F3 corrupt payload on the receiving side</td></tr>
+    <tr><td>H4</td><td>Docs/npm → showcase</td><td>Inbound links to <code>/</code>, <code>/deck/[slug]</code>, <code>/card/[id]</code></td><td>F2 invalid targets</td></tr>
+    <tr><td>H5</td><td>System dependency</td><td>Custom/modified decks must emit explicit pack lists — the CLI deck manifest only maps canonical slugs</td><td>Drift between showcase deck definitions and CLI manifest; flagged in §11 (shared data source needed)</td></tr>
+  </table></div>
+  <div class="gate" data-section="Failure/Recovery Paths & Handoffs" data-gate-type="failure/handoff coverage">
+    <h4>Gate: failure &amp; handoff coverage</h4>
+    <div class="q" data-qlabel="Failure and handoff coverage complete">
+      <p>Do F1–F10 and H1–H5 cover the failure and handoff surface for v1?</p>
+      <label class="opt"><input type="radio" name="q8" value="Covered for v1"> Covered for v1</label>
+      <label class="opt"><input type="radio" name="q8" value="Covered, with additions noted"> Covered, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q8" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing failure/handoff…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q8" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Failure/Recovery Paths & Handoffs">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. WIREFRAMES ============ -->
+<section id="wireframes">
+  <div class="sec-head"><h2>10. Low-Fidelity Wireframe Notes</h2>
+    <div class="sec-fb" data-section="Low-Fidelity Wireframe Notes">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p class="muted">Structural regions only — no styling, spacing, or visual design. Those belong to <code>/ui-interview</code> and later stages.</p>
+  <h3>S1 Table (<code>/</code>)</h3>
+  <pre aria-label="Wireframe sketch of the table screen">
+┌─ brand strip ──────────────────────────────────────────────┐
+│                                                            │
+│  BLUEPRINT ROW (primary)                                   │
+│  [VARD 2/3] [ORD] [Biz AFPS] [Devtool AFPS] [Game AFPS]    │
+│      └────traction──→ [Biz AFPS]   (faint arrows)          │
+│  [ + Custom deck ]   ← first-class sixth tile (§3)         │
+│                                                            │
+│  PACK SHELF (secondary, below the fold acceptable)         │
+│  ( 7 sealed boosters, horizontal scroll )                  │
+└────────────────────────────────────────────────────────────┘</pre>
+  <ul>
+    <li>Blueprints carry progress badges from localStorage; the badge is the resume affordance (B7).</li>
+    <li>Shelf packs open inspect-only from here (B5); no deck context implied.</li>
+  </ul>
+  <h3>S2 Preset builder (<code>/deck/[slug]</code>)</h3>
+  <pre aria-label="Wireframe sketch of the preset builder screen">
+┌─ deck name (editable only as custom variant)      [✕] ─────┐
+│  PHASE COLUMNS, left→right = execution order               │
+│  ┌ Scan ─┐  ┌ Align ─┐  ┌ Ship ─┐                          │
+│  │ ghost │  │ FILLED │  │ ghost │   ← ghost = suggestion   │
+│  └───────┘  └────────┘  └───────┘     outline + /command   │
+│  Business AFPS: column = stacked pack-slot w/ counter      │
+│  ─ overlay row (freeform, any card) ───────────────────    │
+│  [ Collect all N ]                ← deck-level (B1)        │
+│  CLI PANEL (persistent): 🔒 2 more to unlock │ [copy]      │
+│  ─ condensed shelf strip (packs reachable in-context) ──   │
+└────────────────────────────────────────────────────────────┘</pre>
+  <ul>
+    <li>CLI panel visible from first paint in locked state — the destination is never a surprise.</li>
+    <li>Tapping a ghost glows the source pack in the condensed shelf strip; the fan opens over the builder with slots still visible (flight targets).</li>
+  </ul>
+  <h3>S3 Custom builder (<code>/deck/custom</code>)</h3>
+  <pre aria-label="Wireframe sketch of the custom builder screen">
+┌─ [name your deck…]                                [✕] ─────┐
+│  ┌ Phase 1 (rename) ─┐  [+ add phase]                      │
+│  │ empty freeform    │   phases: add / rename / remove     │
+│  │ slots (any card)  │   (remove asks if cards inside)     │
+│  └───────────────────┘                                     │
+│  ─ overlay row ─────────────────────────────────────────   │
+│  CLI PANEL: 🔒 add a card to unlock │ explicit pack list    │
+└────────────────────────────────────────────────────────────┘</pre>
+  <h3>S4 Pack fan drawer</h3>
+  <pre aria-label="Wireframe sketch of the pack fan drawer">
+╔═ bottom sheet (drag-dismiss) ══════════════════════════════╗
+║  pack name · fan of cards (flip = inspect, tap = collect)  ║
+║  [card] [card] [card] [card]      [ Collect all 4 ]        ║
+║  inspect-only mode: tap → card detail, "add to deck" → S7  ║
+╚════════════════════════════════════════════════════════════╝</pre>
+  <h3>S5 Card detail / S6 Output / S7 Deck picker</h3>
+  <pre aria-label="Wireframe sketches of card detail, output panel, and deck picker">
+S5: [ card art/front | stats back: type, benchmark grade,    S6 (deck back):
+      version, /command, pack ]                               npx skillpacks install-deck vard   [copy]
+    [add to deck]  (standalone: [Open on the table])          + install code-review (overlay)
+                                                              [⬇ project.json] [share] [keep editing]
+S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck   [cancel]</pre>
+  <h3>Mobile branch notes (wireframe level)</h3>
+  <ul>
+    <li><strong>Slot strip pinned above the BottomSheet:</strong> when the fan is open on mobile, the active deck's slots condense to a pinned horizontal strip so flight targets stay visible (carries the locked animation constraint into layout structure).</li>
+    <li><strong>Tap-everything:</strong> all collection and navigation is tap-based; the tear gesture gets a tap-to-open equivalent (already in SealedPack). No interaction is drag-only.</li>
+    <li><strong>Phase columns become vertically stacked phase rows</strong> on narrow screens; left→right order becomes top→bottom; Business AFPS pack-stacks stay collapsed by default.</li>
+    <li><strong>Output panel becomes a full-width sheet;</strong> the command line wraps with a copy button adjacent, not trailing off-screen.</li>
+  </ul>
+  <div class="gate" data-section="Low-Fidelity Wireframe Notes" data-gate-type="wireframe notes">
+    <h4>Gate: wireframe notes</h4>
+    <div class="q" data-qlabel="Wireframe notes structural and sufficient">
+      <p>Are these structural notes right as handoff guidance for <code>/ui-interview</code> (and properly free of visual-design decisions)?</p>
+      <label class="opt"><input type="radio" name="q9" value="Right as handoff guidance"> Right as handoff guidance</label>
+      <label class="opt"><input type="radio" name="q9" value="Right, with changes noted"> Right, with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q9" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q9" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Low-Fidelity Wireframe Notes">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. RISKS ============ -->
+<section id="risks">
+  <div class="sec-head"><h2>11. Open Questions, Risks &amp; Non-Goals</h2>
+    <div class="sec-fb" data-section="Open Questions, Risks & Non-Goals">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table data-tts-narrative="Open questions and risks: collect-all motion mechanics needing an animation-plan amendment, the swap gesture detail deferred to ui-interview, custom phase editing depth, the Next.js intercepting-route spike, the unvalidated persona, the deck data pipeline, and CLI manifest drift.">
+    <tr><th>Item</th><th>Detail</th><th>Owner / where it resolves</th></tr>
+    <tr><td>Collect-all motion mechanics</td><td>Does deck-level Collect-all open packs sequentially (spectacle) or fly cards directly from the shelf (speed)? Either way it is a new trigger for the card-flight batching contract.</td><td>Small amendment to the animation design plan after this flow map is approved</td></tr>
+    <tr><td>Swap gesture detail</td><td>How does a user swap a filled slot's card — tap-while-occupied prompt from the fan, or a slot context action? Flow defines that swap exists and converts to custom variant (B2); the interaction detail is per-screen content design.</td><td><code>/ui-interview --requirements-only deck-creation</code></td></tr>
+    <tr><td>Custom phase editing depth</td><td>Proposed: add/rename/remove only; defer drag-reorder of phases out of v1.</td><td>Confirm in <code>/ui-interview</code></td></tr>
+    <tr><td>Next 16.2.6 intercepting routes</td><td>Client-state-first with shallow pushState is the routing decision; the spike is the top implementation risk (carried from the animation plan, not re-decided here).</td><td>First implementation task</td></tr>
+    <tr><td>Persona validation</td><td>Evaluator/Returner personas come from the idea brief; ICP and positioning have not run.</td><td><code>/icp</code> → positioning (business-discovery pack, installed)</td></tr>
+    <tr><td>Deck data pipeline</td><td><code>skills-data.js</code> has zero deck definitions; deck shapes must be added to <code>generate-skills-showcase-data.mjs</code> output and shared with the CLI manifest (H5 drift risk).</td><td>Implementation planning</td></tr>
+  </table></div>
+  <h3>Explicit non-goals</h3>
+  <ul>
+    <li>No visual styling, color, component design, or design tokens (downstream: <code>/ui-interview</code>, <code>/ux-variations --layout-mode</code>).</li>
+    <li>No animation mechanics — motion contracts stay owned by the approved animation plan; this flow only fixed slot <em>targets</em> and added the Collect-all trigger to be amended there.</li>
+    <li>No accounts, trading/progression systems, or server-side state.</li>
+    <li>No CLI behavior changes; <code>install-deck</code> semantics are an input, not an output.</li>
+    <li>No production architecture, database schemas, or implementation plans.</li>
+    <li>No mobile-specific spec beyond the wireframe branch notes in §10.</li>
+  </ul>
+</section>
+
+<!-- ============ 12. ARTIFACTS ============ -->
+<section id="artifacts">
+  <div class="sec-head"><h2>12. Artifact Destination &amp; Proposed File Changes</h2>
+    <div class="sec-fb" data-section="Artifact Destination & Proposed File Changes">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>Destination approval and mutation scope are separate decisions below (the destination is a path choice; the file-change set includes the index update and page confirmation).</p>
+  <div class="tbl"><table data-tts-narrative="Proposed file changes: two new spec files under specs slash skills-showcase, an update to the alignment index, and conversion of this page to confirmed after approval. New files need no archive snapshots.">
+    <tr><th>File</th><th>Change</th><th>Archive needed?</th></tr>
+    <tr><td><code>specs/skills-showcase/user-flow-deck-creation.md</code></td><td><strong>New</strong> — canonical flow spec containing §§2–11 content</td><td>No (new file)</td></tr>
+    <tr><td><code>specs/skills-showcase/user-flow-deck-creation-interview.md</code></td><td><strong>New</strong> — interview log: evidence consulted, assumptions checkpoint + answers (incl. verbatim slot-model direction), coverage checkpoint, remaining gaps</td><td>No (new file)</td></tr>
+    <tr><td><code>alignment/index.html</code></td><td>Update — dated entry for this page (already added with the review page)</td><td>No (index maintenance)</td></tr>
+    <tr><td><code>alignment/user-flow-map-deck-creation.html</code></td><td>Convert <code>review</code> → <code>confirmed</code> after approval (prior review page archived to <code>docs/history/archive/</code> first)</td><td>Yes (archive-first)</td></tr>
+  </table></div>
+  <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="artifact destination" data-target-path="specs/skills-showcase/user-flow-deck-creation.md">
+    <h4>Gate: artifact destination</h4>
+    <div class="q" data-qlabel="Approve spec destination">
+      <p>Write the canonical flow spec to <code>specs/skills-showcase/user-flow-deck-creation.md</code> (product-path-scoped), with the interview log beside it?</p>
+      <label class="opt"><input type="radio" name="q10" value="Approve destination"> Approve destination</label>
+      <label class="opt"><input type="radio" name="q10" value="Different path (see notes)"> Different path (name it in notes)</label>
+      <label class="opt"><input type="radio" name="q10" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the destination…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q10" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="proposed file changes">
+    <h4>Gate: proposed file changes</h4>
+    <div class="q" data-qlabel="Approve file change set">
+      <p>Approve the full mutation set above (two new spec files, index maintenance, page confirmation), executed only after final compiled YAML?</p>
+      <label class="opt"><input type="radio" name="q11" value="Approve file change set"> Approve file change set</label>
+      <label class="opt"><input type="radio" name="q11" value="Approve with changes (see notes)"> Approve with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q11" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q11" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13. ROUTE ============ -->
+<section id="route">
+  <div class="sec-head"><h2>13. Post-Approval Route</h2>
+    <div class="sec-fb" data-section="Post-Approval Route">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>The AFPS design route after an approved flow map is per-screen content requirements, then layout exploration: <code>/ui-interview --requirements-only deck-creation</code> → <code>/ux-variations --layout-mode</code>. The <code>ui-interview</code> skill is in the <code>product-design</code> pack, which is <strong>not installed</strong> (only <code>user-flow-map</code> and <code>brainstorm</code> are individually enabled) — so the route has an install prerequisite: <code>/pack install ui-interview</code> (or the full pack). A second, smaller follow-up is the animation-plan amendment for the Collect-all batching trigger (§11).</p>
+  <div class="gate" data-section="Post-Approval Route" data-gate-type="post-approval route">
+    <h4>Gate: post-approval route</h4>
+    <div class="q" data-qlabel="Choose post-approval route">
+      <p>After the spec is written, how should the work route?</p>
+      <label class="opt"><input type="radio" name="q12" value="/pack install ui-interview, then /ui-interview --requirements-only deck-creation"> <code>/pack install ui-interview</code>, then <code>/ui-interview --requirements-only deck-creation</code></label>
+      <label class="opt"><input type="radio" name="q12" value="Run /icp first to validate personas, then ui-interview"> Run <code>/icp</code> first to validate personas, then ui-interview</label>
+      <label class="opt"><input type="radio" name="q12" value="Hold — I will route manually"> Hold — I'll route manually</label>
+      <label class="opt"><input type="radio" name="q12" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the route…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q12" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14. COMPILE ============ -->
+<section id="compile" class="compile-section">
+  <h2 style="margin-top:0">14. Compile YAML</h2>
+  <p>Use <strong>Compile Feedback YAML</strong> to send emphasis requests, concerns, or clarification needs before answering every gate — feedback alone is a revision request, not approval. Use <strong>Compile Answers</strong> for final approval once all <span id="q-total">12</span> required questions are answered.</p>
+  <div class="compile-actions">
+    <button type="button" id="compile-feedback" class="btn">Compile Feedback YAML</button>
+    <button type="button" id="copy-feedback" class="btn">Copy YAML</button>
+    <span id="feedback-status" class="copy-status"></span>
+  </div>
+  <textarea id="feedback-yaml" class="yaml-out" readonly hidden></textarea>
+  <div class="compile-actions" id="answers-wrap">
+    <button type="button" id="compile-answers" class="btn primary" disabled>Compile Answers (12 unanswered)</button>
+    <button type="button" id="copy-answers" class="btn">Copy YAML</button>
+    <span id="answer-status" class="copy-status"></span>
+  </div>
+  <textarea id="answers-yaml" class="yaml-out" readonly hidden></textarea>
+</section>
+
+</main>
+<script>
+(function(){
+'use strict';
+var ALIGNMENT_PAGE = 'alignment/user-flow-map-deck-creation.html';
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#58a6ff'; }
+
+/* ---------- YAML helpers ---------- */
+function yq(s){
+  return '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r?\n/g,'\\n') + '"';
+}
+var FB_ACTION = { 'emphasize':'add-weight-to-section', 'down':'investigate-and-revise', 'needs-clarification':'clarify-before-approval' };
+
+function copyText(text, statusEl, textarea){
+  function fallback(){
+    if (textarea){ textarea.hidden = false; textarea.focus(); textarea.select(); }
+    if (statusEl) statusEl.textContent = 'Clipboard blocked — YAML selected below, copy manually.';
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      if (statusEl) statusEl.textContent = 'Copied to clipboard.';
+    }, fallback);
+  } else { fallback(); }
+}
+
+/* ---------- gate questions ---------- */
+var qBlocks = Array.prototype.slice.call(document.querySelectorAll('.gate .q'));
+
+qBlocks.forEach(function(q){
+  var other = q.querySelector('.other-input');
+  var clarify = q.querySelector('.clarify-input');
+  var notes = q.querySelector('.notes-input');
+  q.addEventListener('change', function(e){
+    if (!e.target || e.target.type !== 'radio') return;
+    var v = e.target.value;
+    if (other) other.hidden = (v !== '__other');
+    if (clarify) clarify.hidden = (v !== '__clarify');
+    if (notes) notes.hidden = (v === '__other' || v === '__clarify');
+    updateAnswerButton();
+  });
+});
+
+function unansweredQuestions(){
+  return qBlocks.filter(function(q){ return !q.querySelector('input[type=radio]:checked'); });
+}
+function updateAnswerButton(){
+  var btn = document.getElementById('compile-answers');
+  var n = unansweredQuestions().length;
+  btn.disabled = n > 0;
+  btn.textContent = n > 0 ? ('Compile Answers (' + n + ' unanswered)') : 'Compile Answers';
+}
+
+document.getElementById('answers-wrap').addEventListener('click', function(e){
+  var btn = document.getElementById('compile-answers');
+  if (!btn.disabled) return;
+  if (e.target === btn || btn.contains(e.target) || e.target.id === 'answers-wrap'){
+    var first = unansweredQuestions()[0];
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+});
+
+/* ---------- section feedback (top/bottom copies paired by data-section) ---------- */
+var fbAll = Array.prototype.slice.call(document.querySelectorAll('.sec-fb'));
+var fbGroups = {};
+fbAll.forEach(function(sec){
+  var key = sec.getAttribute('data-section');
+  (fbGroups[key] = fbGroups[key] || []).push(sec);
+});
+var groupKeys = Object.keys(fbGroups);
+
+function groupActive(key){
+  for (var i = 0; i < fbGroups[key].length; i++){
+    var a = fbGroups[key][i].querySelector('.fb-btn.active');
+    if (a) return a.getAttribute('data-fb');
+  }
+  return null;
+}
+function groupNotes(key){
+  var g = fbGroups[key], last = g._lastTyped;
+  if (last && last.value.trim()) return last.value.trim();
+  for (var i = 0; i < g.length; i++){
+    var v = g[i].querySelector('.fb-notes').value.trim();
+    if (v) return v;
+  }
+  return '';
+}
+function setGroupState(key, fb){
+  fbGroups[key].forEach(function(sec){
+    sec.querySelectorAll('.fb-btn').forEach(function(b){
+      b.classList.toggle('active', !!fb && b.getAttribute('data-fb') === fb);
+    });
+    sec.classList.toggle('has-feedback', !!fb);
+    if (fb) sec.dataset.feedback = fb; else delete sec.dataset.feedback;
+    var panel = sec.querySelector('.fb-panel');
+    panel.hidden = !fb;
+    if (!fb){
+      var ly = sec.querySelector('.local-yaml');
+      ly.hidden = true; ly.value = '';
+      sec.querySelector('.copy-status').textContent = '';
+    }
+  });
+}
+
+groupKeys.forEach(function(key){
+  fbGroups[key].forEach(function(sec){
+    sec.querySelector('.fb-notes').addEventListener('input', function(){
+      fbGroups[key]._lastTyped = this;
+    });
+    sec.querySelectorAll('.fb-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var fb = btn.getAttribute('data-fb');
+        setGroupState(key, btn.classList.contains('active') ? null : fb);
+      });
+    });
+    sec.querySelector('.compile-local-feedback').addEventListener('click', function(){
+      var entry = groupEntry(key);
+      if (!entry) return;
+      var yaml = feedbackYaml([entry]);
+      var ly = sec.querySelector('.local-yaml');
+      ly.value = yaml; ly.hidden = false;
+      copyText(yaml, sec.querySelector('.copy-status'), ly);
+    });
+    sec.querySelector('.copy-local-feedback').addEventListener('click', function(){
+      var ly = sec.querySelector('.local-yaml');
+      if (!ly.value){
+        var entry = groupEntry(key);
+        if (!entry) return;
+        ly.value = feedbackYaml([entry]); ly.hidden = false;
+      }
+      copyText(ly.value, sec.querySelector('.copy-status'), ly);
+    });
+  });
+});
+
+function groupEntry(key){
+  var fb = groupActive(key);
+  if (!fb) return null;
+  return { section: key, feedback: fb, notes: groupNotes(key) };
+}
+function allFeedbackEntries(){
+  return groupKeys.map(groupEntry).filter(Boolean);
+}
+
+function feedbackYaml(entries){
+  var y = '# Feedback-only YAML — a revision request, not approval.\n';
+  y += '# emphasize = add more weight/prominence/evidence/detail to the section or the point named in notes.\n';
+  y += '# down / needs-clarification = evaluate, investigate as needed, and amend the alignment page before asking again for approval.\n';
+  y += 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'feedback_status: revision-request\n';
+  y += 'approval_status: not-approved\n';
+  var un = unansweredQuestions();
+  if (un.length){
+    y += 'unanswered_required_questions:\n';
+    un.forEach(function(q){ y += '  - ' + yq(q.getAttribute('data-qlabel')) + '\n'; });
+  } else {
+    y += 'unanswered_required_questions: []\n';
+  }
+  y += 'section_feedback:\n';
+  entries.forEach(function(e){
+    y += '  - section: ' + yq(e.section) + '\n';
+    y += '    feedback: ' + e.feedback + '\n';
+    if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+    y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+  });
+  return y;
+}
+
+document.getElementById('compile-feedback').addEventListener('click', function(){
+  var entries = allFeedbackEntries();
+  var status = document.getElementById('feedback-status');
+  if (!entries.length){
+    status.textContent = 'No section feedback selected yet — pick emphasize / thumbs down / clarification on a section first.';
+    return;
+  }
+  var yaml = feedbackYaml(entries);
+  var out = document.getElementById('feedback-yaml');
+  out.value = yaml; out.hidden = false;
+  copyText(yaml, status, out);
+});
+document.getElementById('copy-feedback').addEventListener('click', function(){
+  var out = document.getElementById('feedback-yaml');
+  if (!out.value){
+    var entries = allFeedbackEntries();
+    if (!entries.length){ document.getElementById('feedback-status').textContent = 'Nothing to copy — no feedback selected.'; return; }
+    out.value = feedbackYaml(entries); out.hidden = false;
+  }
+  copyText(out.value, document.getElementById('feedback-status'), out);
+});
+
+/* ---------- compile answers ---------- */
+document.getElementById('compile-answers').addEventListener('click', function(){
+  if (unansweredQuestions().length) return;
+  var y = 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'approval_status: ready-for-agent-review\n';
+  y += 'gate_answers:\n';
+  qBlocks.forEach(function(q){
+    var gate = q.closest('.gate');
+    var checked = q.querySelector('input[type=radio]:checked');
+    var v = checked.value;
+    var status = 'answered', answer = v, notes = '';
+    if (v === '__other'){
+      status = 'other';
+      answer = q.querySelector('.other-input').value.trim() || '(no alternative text given)';
+    } else if (v === '__clarify'){
+      status = 'needs-clarification';
+      answer = 'Need clarification';
+      notes = q.querySelector('.clarify-input').value.trim();
+    } else {
+      notes = q.querySelector('.notes-input').value.trim();
+    }
+    y += '  - section: ' + yq(gate.getAttribute('data-section')) + '\n';
+    y += '    gate_type: ' + yq(gate.getAttribute('data-gate-type')) + '\n';
+    y += '    status: ' + status + '\n';
+    y += '    answer: ' + yq(answer) + '\n';
+    if (notes) y += '    notes: ' + yq(notes) + '\n';
+    var tp = gate.getAttribute('data-target-path');
+    if (tp) y += '    target_path: ' + yq(tp) + '\n';
+  });
+  var fb = allFeedbackEntries();
+  if (fb.length){
+    y += 'section_feedback:\n';
+    fb.forEach(function(e){
+      y += '  - section: ' + yq(e.section) + '\n';
+      y += '    feedback: ' + e.feedback + '\n';
+      if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+      y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+    });
+  } else {
+    y += 'section_feedback: []\n';
+  }
+  var out = document.getElementById('answers-yaml');
+  out.value = y; out.hidden = false;
+  copyText(y, document.getElementById('answer-status'), out);
+});
+document.getElementById('copy-answers').addEventListener('click', function(){
+  var out = document.getElementById('answers-yaml');
+  if (!out.value){ document.getElementById('answer-status').textContent = 'Compile answers first.'; return; }
+  copyText(out.value, document.getElementById('answer-status'), out);
+});
+
+/* ---------- view-as-table toggles ---------- */
+Array.prototype.slice.call(document.querySelectorAll('.proto-box')).forEach(function(box){
+  var table = box.querySelector('.chart-table');
+  var toggle = box.querySelector('.toggle-table');
+  if (!table || !toggle) return;
+  table.hidden = true;
+  toggle.addEventListener('click', function(){
+    table.hidden = !table.hidden;
+    toggle.textContent = table.hidden ? 'View as table' : 'Hide table';
+  });
+});
+
+/* ---------- taps chart (canvas, inline data) ---------- */
+(function(){
+  var canvas = document.getElementById('taps-chart');
+  if (!canvas || !canvas.getContext) return;
+  var DATA = [
+    { deck: 'VARD', taps: 3 },
+    { deck: 'ORD', taps: 3 },
+    { deck: 'Devtool AFPS', taps: 8 },
+    { deck: 'Game AFPS', taps: 11 },
+    { deck: 'Business AFPS', taps: 35 }
+  ];
+  var COLLECT_ALL = 1;
+  function draw(){
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.parentElement.clientWidth - 4;
+    var h = 260;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+    var padL = 36, padB = 40, padT = 18, padR = 8;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxV = 35;
+    ctx.strokeStyle = cssVar('--border'); ctx.fillStyle = cssVar('--text-muted');
+    ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    [0, 10, 20, 30].forEach(function(v){
+      var y = padT + plotH - (v / maxV) * plotH;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w - padR, y); ctx.stroke();
+      ctx.fillText(String(v), padL - 6, y + 4);
+    });
+    var groupW = plotW / DATA.length;
+    var barW = Math.min(34, groupW / 3);
+    DATA.forEach(function(d, i){
+      var cx = padL + groupW * i + groupW / 2;
+      var h1 = (d.taps / maxV) * plotH;
+      var h2 = (COLLECT_ALL / maxV) * plotH;
+      ctx.fillStyle = cssVar('--chart-5');
+      ctx.fillRect(cx - barW - 3, padT + plotH - h1, barW, h1);
+      ctx.fillStyle = cssVar('--chart-2');
+      ctx.fillRect(cx + 3, padT + plotH - h2, barW, h2);
+      ctx.fillStyle = cssVar('--text');
+      ctx.textAlign = 'center'; ctx.font = '11px sans-serif';
+      ctx.fillText(String(d.taps), cx - barW / 2 - 3, padT + plotH - h1 - 5);
+      ctx.fillText(String(COLLECT_ALL), cx + barW / 2 + 3, padT + plotH - h2 - 5);
+      ctx.fillStyle = cssVar('--text-muted');
+      ctx.fillText(d.deck, cx, h - padB + 16);
+    });
+    ctx.textAlign = 'left';
+    ctx.fillStyle = cssVar('--chart-5'); ctx.fillRect(padL, h - 14, 10, 10);
+    ctx.fillStyle = cssVar('--text-muted'); ctx.fillText('slot-by-slot taps', padL + 16, h - 5);
+    ctx.fillStyle = cssVar('--chart-2'); ctx.fillRect(padL + 140, h - 14, 10, 10);
+    ctx.fillStyle = cssVar('--text-muted'); ctx.fillText('deck-level Collect-all decisions', padL + 156, h - 5);
+  }
+  draw();
+  window.addEventListener('resize', draw);
+})();
+
+/* ---------- interactive flow walkthrough (preview only, no persistence) ---------- */
+(function(){
+  var stage = document.getElementById('wt-stage');
+  var readout = document.getElementById('wt-readout');
+  var crumb = document.getElementById('wt-crumb');
+  if (!stage) return;
+  var SLOTS = ['Scan', 'Align', 'Ship'];
+  var state;
+
+  function setReadout(phase, msg){
+    readout.innerHTML = '<span class="ph">' + phase + '</span> — ' + msg;
+  }
+  function reset(){
+    state = { screen: 'table', filled: [false, false, false], swapped: [false, false, false], fanOpen: false, custom: false, complete: false };
+    render();
+    setReadout('table', 'Happy-path step 1. Tap the VARD blueprint to morph into its builder. Other blueprints are stubbed in this preview.');
+  }
+  function filledCount(){ return state.filled.filter(Boolean).length; }
+  function maybeComplete(){
+    if (filledCount() === 3){ state.complete = true; }
+  }
+  function cliText(){
+    if (!state.complete) return '🔒 ' + (3 - filledCount()) + ' more to unlock';
+    return state.custom
+      ? 'npx skillpacks install &lt;pack-a&gt; &lt;pack-b&gt;  (explicit pack list — custom variant)'
+      : 'npx skillpacks install-deck vard';
+  }
+  function render(){
+    var html = '';
+    if (state.screen === 'table'){
+      crumb.textContent = 'screen: table (/)';
+      html += '<div class="wt-zone-label">S1 — THE TABLE</div><div class="wt-bps">';
+      html += '<button type="button" class="wt-bp" data-act="open-vard">VARD<span>Scan → Align → Ship · 3 cards</span></button>';
+      html += '<span class="wt-bp ghost">ORD<span>stub</span></span><span class="wt-bp ghost">Business AFPS<span>stub</span></span>';
+      html += '<span class="wt-bp ghost">Devtool AFPS<span>stub</span></span><span class="wt-bp ghost">Game AFPS<span>stub</span></span>';
+      html += '<span class="wt-bp custom">[ + Custom deck ]<span>user-defined phases (stub)</span></span>';
+      html += '</div><div class="wt-shelf">PACK SHELF — sealed boosters (inspect-only from here; stubbed in this preview)</div>';
+    } else {
+      crumb.textContent = state.complete ? 'screen: builder — output panel (/deck/vard)' : 'screen: builder (/deck/vard)';
+      html += '<div class="wt-head"><span>' + (state.custom ? 'VARD — modified <em style="color:var(--chart-3)">(custom variant — name editable)</em>' : 'VARD') + '</span>';
+      html += '<span class="wt-cli' + (state.complete ? ' unlocked' : '') + '">' + cliText() + '</span></div>';
+      html += '<div class="wt-cols">';
+      SLOTS.forEach(function(name, i){
+        var cls = state.filled[i] ? (state.swapped[i] ? 'wt-slot swapped' : 'wt-slot filled') : 'wt-slot';
+        var label = state.filled[i]
+          ? (state.swapped[i] ? 'swapped card ✦' : 'suggested card ♦')
+          : 'ghost: suggested card';
+        html += '<div class="wt-col">' + name + '<button type="button" class="' + cls + '" data-act="slot" data-i="' + i + '">' + label + '</button></div>';
+      });
+      html += '</div><div class="wt-overlay-row">overlay row — freeform additions (never blocks unlock; stubbed)</div>';
+      if (state.complete){
+        html += '<div class="wt-stack"><strong>Deck complete — stack flipped to output panel (S6)</strong><div class="cmdline">' + cliText() + '</div>';
+        html += '<div class="wt-actions"><button type="button" class="btn" data-act="copy">[copy]</button><button type="button" class="btn" data-act="keep">keep editing</button><span class="muted">[⬇ project.json] [share] — stubbed</span></div></div>';
+      } else if (state.fanOpen){
+        html += '<div class="wt-fan"><div class="wt-fan-label">S4 — PACK FAN (tap a card to collect; flight animation owned by the animation plan)</div><div class="wt-cards">';
+        SLOTS.forEach(function(name, i){
+          var cls = state.filled[i] ? 'wt-card collected' : 'wt-card';
+          html += '<button type="button" class="' + cls + '" data-act="card" data-i="' + i + '">' + name + ' card' + (state.filled[i] ? ' <em>in deck ♦</em>' : '') + '<span class="cmd">/suggested-' + name.toLowerCase() + '</span></button>';
+        });
+        html += '</div><div class="wt-actions"><button type="button" class="btn" data-act="collect-all">Collect all remaining (B1)</button><button type="button" class="btn" data-act="close-fan">close fan</button></div></div>';
+      } else {
+        html += '<div class="wt-shelf">condensed shelf strip — <button type="button" class="wt-pack glow" data-act="open-pack">✨ glowing pack (tear open)</button></div>';
+        html += '<div class="wt-actions">';
+        if (filledCount() > 0 && !state.custom) html += '<button type="button" class="btn" data-act="swap">swap a suggestion (B2)</button>';
+        html += '<button type="button" class="btn" data-act="dismiss">dismiss to table (B7)</button></div>';
+      }
+    }
+    stage.innerHTML = html;
+  }
+  stage.addEventListener('click', function(e){
+    var t = e.target.closest('[data-act]');
+    if (!t) return;
+    var act = t.getAttribute('data-act');
+    var i = +t.getAttribute('data-i');
+    if (act === 'open-vard'){ state.screen = 'builder'; setReadout('builder-open', 'Steps 2–3. Blueprint morphed to /deck/vard. Default phase columns with ghost suggestions; CLI panel visible but locked (D4).'); }
+    else if (act === 'slot'){ if (!state.filled[i]){ setReadout('builder-open', 'Step 4. Ghost slot tapped — the pack containing that card glows on the shelf strip.'); } else { state.filled[i] = false; state.swapped[i] = false; state.complete = false; setReadout('builder-open', 'B2 remove: filled slot flipped → removed. Slot back to ghost; unlock recomputes (D4).'); } }
+    else if (act === 'open-pack'){ state.fanOpen = true; setReadout('drawer-open', 'Step 5. Pack torn open — fan drawer over the builder; slots stay visible as flight targets.'); }
+    else if (act === 'card'){ if (!state.filled[i]){ state.filled[i] = true; maybeComplete(); setReadout(state.complete ? 'deck-complete' : 'drawer-open', state.complete ? 'Step 8. Last core slot filled — slots gather, stack flips to the output panel (S6).' : 'Step 6. Optimistic commit at tap; card flies to its phase slot; counter ticks. Re-tap is a no-op.'); if (state.complete) state.fanOpen = false; } }
+    else if (act === 'collect-all'){ state.filled = [true, true, true]; state.fanOpen = false; maybeComplete(); setReadout('deck-complete', 'B1 Collect-all: every remaining suggestion batched in one decision (staggered flights) → completion sequence.'); }
+    else if (act === 'close-fan'){ state.fanOpen = false; setReadout('builder-open', 'Fan closed. F6: any in-flight cards snap to end; commits kept.'); }
+    else if (act === 'swap'){ var idx = state.filled.indexOf(true); state.swapped[idx] = true; state.custom = true; setReadout('builder-open', 'B2/D3: suggestion swapped → deck converts to a custom variant. Name becomes editable; CLI output switches to an explicit pack list.'); }
+    else if (act === 'dismiss'){ state.screen = 'table'; state.fanOpen = false; setReadout('table', 'B7: dismissed mid-build. Progress kept (localStorage); blueprint will show a progress badge. Tap VARD to resume.'); }
+    else if (act === 'copy'){ setReadout('deck-complete', 'Step 9 / H1: command copied (F5 fallback: auto-select + Ctrl+C hint). Terminal handoff complete — this is first success.'); }
+    else if (act === 'keep'){ state.complete = false; setReadout('builder-open', 'B9 keep editing: stack unflips to the builder; swaps/overlays continue; re-completion re-runs the gather.'); }
+    render();
+    if (act === 'slot' && !state.filled[i] && !state.fanOpen){
+      var pack = stage.querySelector('[data-act="open-pack"]');
+      if (pack) pack.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+  });
+  document.getElementById('wt-reset').addEventListener('click', reset);
+  reset();
+})();
+
+updateAnswerButton();
+})();
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
