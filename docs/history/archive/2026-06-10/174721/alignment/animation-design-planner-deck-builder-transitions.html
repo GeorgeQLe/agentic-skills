@@ -138,7 +138,6 @@ button{font:inherit}
     <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
     <div class="row"><span class="k">generated:</span> 2026-06-10</div>
     <div class="row"><span class="k">amended:</span> 2026-06-10 — added directional motion demos to section 4 (user request); still in review. Prior page archived to <code>docs/history/archive/2026-06-10/173258/alignment/</code></div>
-    <div class="row"><span class="k">amended (2):</span> 2026-06-10 — responded to review feedback on the demos (demo-scope clarification + phase-slot model context); still in review. Prior page archived to <code>docs/history/archive/2026-06-10/174721/alignment/</code></div>
     <div class="row"><span class="k">skill:</span> animation-design-planner (motion-framer subskill — framer-motion 12.40 detected)</div>
     <div class="row"><span class="k">working packet:</span> <code>research/skills-showcase/_working/preliminary-animation-design-planner-research.md</code> (non-canonical)</div>
     <div class="row"><span class="k">canonical destination:</span> <code>apps/skills-showcase/docs/animation-plan-deck-builder.md</code> — written only after approval</div>
@@ -315,13 +314,6 @@ button{font:inherit}
     </div>
   </div>
   <div class="amend-note"><strong>Amended 2026-06-10:</strong> two directional motion demos added at user request, ahead of the timeline scrubbers. They mock the intended <em>feel</em> of each transition with plain CSS/JS — real implementation uses framer-motion layout springs, so easing and physics here are approximations of direction, sequencing, and continuity, not final tuning.</div>
-  <div class="amend-note"><strong>Amendment 2 (2026-06-10) — response to review feedback on the card-flight demo:</strong> reviewer flagged that the demo's five cards map 1:1 onto five mirrored phase slots, which reads as "building a deck is a chore with no choices," and asked whether phases should be user-defined.
-    <ul style="margin:8px 0 4px">
-      <li><strong>Demo scope:</strong> yes — the demo shows the card <em>movement</em> flow only. The 1:1 card→slot mirror is a demo simplification, not the deck model. This animation plan binds how cards travel, not which slots exist.</li>
-      <li><strong>What the locked UX design actually specifies</strong> (<code>deck-builder-ux.md</code>): ghost slots are <em>suggestions</em>, not requirements — a filled slot can be swapped, and replacing a suggestion converts the deck to a custom variant with an editable name and explicit CLI output. A freeform <strong>overlay row</strong> accepts any card. <strong>[Custom deck +]</strong> creates a deck with empty freeform phases — user-defined building exists there. <strong>Add-all</strong> ("Collect all N for this deck") exists precisely to kill the chore on big decks (13-card <code>business-ops</code> is one tap). Canonical decks mirror their card lists deliberately: the locked decision was "the deck teaches the pipeline as you build," and the build ritual converges on unlocking the <code>install-deck</code> command.</li>
-      <li><strong>Open question routed out of this plan:</strong> whether canonical decks should loosen toward user-defined phases challenges the locked "phase-labeled slots vs freeform tray" UX decision — that belongs to the deck-creation user-flow design (<code>/user-flow-map</code>, product-design pack), not this animation plan. If that work changes the slot model, the card-flight contract's <em>target</em> (slot identity/position) is re-reviewed here before implementation; the movement mechanics (optimistic commit, clone overlay, snap-to-end) are unaffected.</li>
-    </ul>
-  </div>
   <p class="preview-note">⚠ These are ephemeral previews, not production code. The demos show directional motion; the scrubbers show the phase timing data. All timings are design targets that pass through <code>dbg.scaleT</code> at implementation time. No state persists.</p>
   <noscript><p class="callout risk">JavaScript is disabled — the interactive demos and scrubbers will not render. The full phase data is available in the tables below each scrubber.</p></noscript>
 
@@ -363,7 +355,7 @@ button{font:inherit}
 
   <div class="proto-box" id="demo-cf">
     <h3 style="margin-top:0">Directional demo — card-flight</h3>
-    <p class="muted" style="font-size:.88rem">Tap any card in the fan: it dims with an "in deck ♦" badge the same frame (optimistic commit), a clone flies above the sheet to its slot, the slot fills and pulses, the counter ticks. <strong>Collect all</strong> staggers launches 70 ms apart. <strong>Dismiss mid-flight</strong> demos snap-to-end: clones vanish, slots force-fill, the counter reconciles to the committed size. Re-tapping a collected card is a no-op. <em>Scope note: this demo shows card movement only — the 1:1 card→slot mirror is a simplification, not the deck model (see Amendment 2 above; slots in the real design are suggestions with swap/overlay/custom-deck affordances).</em></p>
+    <p class="muted" style="font-size:.88rem">Tap any card in the fan: it dims with an "in deck ♦" badge the same frame (optimistic commit), a clone flies above the sheet to its slot, the slot fills and pulses, the counter ticks. <strong>Collect all</strong> staggers launches 70 ms apart. <strong>Dismiss mid-flight</strong> demos snap-to-end: clones vanish, slots force-fill, the counter reconciles to the committed size. Re-tapping a collected card is a no-op.</p>
     <div class="proto-controls">
       <button type="button" class="btn" id="cf-all">Collect all</button>
       <button type="button" class="btn" id="cf-snap">Dismiss mid-flight (snap-to-end)</button>
