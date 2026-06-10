@@ -20,6 +20,7 @@
     "investigate": "code-debug",
     "session-triage": "session-analytics",
     "repo-glossary": "business-ops",
-    "brainstorm": "product-design"
+    "brainstorm": "product-design",
+    "user-flow-map": "product-design"
   }
 }
