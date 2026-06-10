@@ -33,6 +33,46 @@ Replace active alignment pages that still present the old four-pipeline/four-dec
 
 ---
 
+## Current Implementation - Alignment Bundle Path-Consistency Validation (Drift Plan Phase 2 Step 3)
+
+### Goal
+
+Add path-consistency validation to `scripts/upgrade-alignment-page.mjs` so every generated `ALIGNMENT-PAGE.md` bundle references only its owning skill's output path `alignment/{skill-name}-{topic}.html`, with failing diagnostics in both dry-run and write mode. This is ALIGNMENT-PAGE Bundling Drift Plan Phase 2 Step 3 (see that section's Phase 2 checklist below).
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: generator changes, diagnostics, fixture tests, and docs share `scripts/upgrade-alignment-page.mjs` and the Step 2 test/allowlist conventions.
+
+### Context
+
+- The renderer substitutes `{skill-name}` into the bundled convention body (`scripts/upgrade-alignment-page.mjs` line ~74 `.replaceAll("{skill-name}", skillName)`) and into the SKILL.md stub Output line (`alignment/${skillName}-{topic}.html`). A generated bundle whose body mentions a different skill's `alignment/<other>-{topic}.html` path indicates a stale, hand-edited, or mis-rendered bundle.
+- Step 2 (shipped `120c731c`) established the diagnostic pattern to follow: collect violations, print failing diagnostics, exit 1 in both dry-run and write mode, and a summary line; plus `--root <path>` so layer1 tests can run the script against fixture trees.
+- Existing tests to extend, not duplicate: `tests/layer1/upgrade-alignment-page-bespoke.test.ts` (behavioral fixture tests via `--root`) and `tests/layer1/upgrade-alignment-pages.test.ts`. Bespoke-allowlisted skills (7, in `scripts/alignment-bespoke-list.txt`) own bespoke `ALIGNMENT-PAGE.md` files — decide explicitly whether path validation applies to bespoke bundles too (they still name their own skill's output path) or only generator-owned bundles; default recommendation: validate every active `ALIGNMENT-PAGE.md`'s `alignment/...-{topic}.html` references against the owning skill directory name, bespoke included, since the path contract is universal.
+- Known benign variation to handle: pages also reference archive paths like `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/{skill-name}-{topic}.html` — the validation should check the `{skill-name}` segment of `alignment/<name>-{topic}.html` occurrences (including inside archive paths), not require a fixed prefix.
+- Validation must compare against the skill directory name (the `name:` in SKILL.md frontmatter equals the directory name for active skills).
+
+### Steps
+
+- [ ] Add path-consistency validation to `scripts/upgrade-alignment-page.mjs`: scan each active `ALIGNMENT-PAGE.md` for `alignment/<name>-{topic}.html` occurrences and fail (exit 1, named diagnostic) when `<name>` does not match the owning skill, in dry-run and write mode.
+- [ ] Add a summary line reporting path-consistency status (mirroring the `Bespoke allowlist: N skills, exact|DRIFT` pattern).
+- [ ] Extend layer1 coverage: repo-state assertion (all active bundles consistent) plus `--root` fixture tests for a mismatched bundle (exit 1) and a clean tree (exit 0); decide placement in `upgrade-alignment-page-bespoke.test.ts` or a sibling test file.
+- [ ] Document the validation in `docs/alignment-page-convention.md` outside the generated-marker block.
+- [ ] Check off Phase 2 Step 3 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+
+### Acceptance Criteria
+
+- `node --check scripts/upgrade-alignment-page.mjs` passes.
+- `node scripts/upgrade-alignment-page.mjs --dry-run` exits 0 on the current repo (or surfaced violations are fixed/explained in the same boundary).
+- Focused layer1 vitest run for the alignment-page test files passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
+- `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done. Phase 2 Step 4 (generated-bundle variant/drift validation against expected renderer output) is queued after this step.
+
+---
+
 ## Current Implementation - Layer1 Contract Test Reconciliation
 
 ### Goal
