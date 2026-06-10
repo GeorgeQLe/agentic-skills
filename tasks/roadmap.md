@@ -21,8 +21,8 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
    - [x] Port `.agents/.pack.lock` handling.
    - [x] Port `doctor`, `pin`, `unpin`, and `prune`.
 5. Compatibility closure.
-   - [ ] Keep `scripts/pack.sh` as a wrapper or tested fallback.
-   - [ ] Run temp-repo parity tests against Node and bash paths before removing any fallback dependency.
+   - [x] Keep `scripts/pack.sh` as a wrapper or tested fallback.
+   - [x] Run temp-repo parity tests against Node and bash paths before removing any fallback dependency.
 
 ### Current Step
 
@@ -30,7 +30,7 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 - [x] Step 3.2: Pack Normalization And Alias Parity.
 - [x] Step 3.3: Install/Remove/Refresh Parity.
 - [x] Step 3.4: Locking And Drift Parity.
-- [ ] Step 3.5: Compatibility Closure.
+- [x] Step 3.5: Compatibility Closure.
 
 ---
 

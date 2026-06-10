@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.5
+
+- Closed Phase 3 compatibility by keeping `scripts/pack.sh` as the supported git-checkout compatibility wrapper and packaged fallback, not a thin wrapper over the Node CLI.
+- Documented the full `skillpacks` command matrix in package-included docs: Node-owned project commands, shell-backed discovery commands, hybrid `install-deck`, and external-script-backed `init-global`, including `bash` and `jq` requirements.
+- Updated package user docs so npm users see which commands no longer need `jq`, while git-checkout and deck materialization paths retain their shell dependency notes.
+- Added package-owned compatibility tests that parse the matrix and compare it against the CLI help/route structure.
+- Verified source-checkout and staged-package command smokes for the documented Node-owned, shell-backed, hybrid, and external-script-backed command surfaces.
+- Real `npm publish` was not run.
+
 ## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.4
 
 - Ported `skillpacks doctor`, `pin`, `unpin`, and `prune` into package-owned Node code so those commands no longer require `bash` or `jq`.

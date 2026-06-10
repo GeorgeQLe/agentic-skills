@@ -11,8 +11,9 @@ This keeps game research out of B2B SaaS sessions, and keeps business-product as
 
 ## Prerequisites
 
-- **bash** shell (macOS, Linux, or WSL on Windows)
-- **jq** for pack installation: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu)
+- **Node.js 18+** for the `skillpacks` npm CLI and package build.
+- **bash** shell (macOS, Linux, or WSL on Windows) for `./init.sh`, `scripts/pack.sh`, and the remaining shell-backed `skillpacks` commands.
+- **jq** for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `skillpacks` project commands do not require `jq`.
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 
@@ -115,7 +116,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
 }
 ```
 
-Pack commands preserve existing `project_scopes` and `notes` fields when `jq` is available.
+Git-checkout `scripts/pack.sh` commands preserve existing `project_scopes` and `notes` fields when `jq` is available. The npm `skillpacks` Node-owned commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`.
 
 Pack commands also write `.agents/.pack.lock` owner metadata and automatically remove stale locks whose recorded process is no longer running.
 

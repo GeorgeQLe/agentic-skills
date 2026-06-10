@@ -133,24 +133,30 @@ Skill-level archives inside `global/**/archive/` and `packs/**/archive/` must re
 
 ## CLI Surface
 
-Initial command map:
+Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-checkout compatibility wrapper and as the packaged shell fallback for commands that are not yet worth porting. Do not turn `pack.sh` into a thin wrapper over the Node CLI in this phase; that would make the old checkout path depend on the npm package internals before all discovery and init surfaces are ported. Revisit the decision only after `recommend`, `which`, `install-deck`, and global init behavior are either Node-owned or intentionally documented as permanent shell surfaces.
 
-| npm CLI | Current source of truth | Notes |
-| --- | --- | --- |
-| `skillpacks list` | `scripts/pack.sh list` | Lists available packs. |
-| `skillpacks recommend` | `scripts/pack.sh recommend` | Uses current repository signals. |
-| `skillpacks install <name...>` | `scripts/pack.sh install <name...>` | Accepts pack names and individual skill names. |
-| `skillpacks remove <name...>` | `scripts/pack.sh remove <name...>` | Preserves current lock and project file behavior. |
-| `skillpacks refresh` | `scripts/pack.sh refresh` | Recreates local roots from `.agents/project.json`. |
-| `skillpacks status` | `scripts/pack.sh status` | Shows project designation and local installs. |
-| `skillpacks doctor` | `scripts/pack.sh doctor` | Read-only drift report. |
-| `skillpacks pin <skill> <version>` | `scripts/pack.sh pin <skill> <version>` | Keeps current skill-level pin semantics. |
-| `skillpacks unpin <skill>` | `scripts/pack.sh unpin <skill>` | Returns skill to latest source in the installed package. |
-| `skillpacks which <skill>` | `scripts/pack.sh which <skill>` | Finds provider pack and install status. |
-| `skillpacks set-update-mode <mode>` | `scripts/pack.sh set-update-mode <mode>` | Keeps `warn`, `auto`, and `unset`. |
-| `skillpacks set-mode <mode>` | `scripts/pack.sh set-mode <mode>` | Keeps agent mode designation. |
-| `skillpacks init-global` | `init.sh` or Node equivalent | Installs global core skills to user-level roots. |
-| `skillpacks install-deck <deck>` | manifest deck resolver over `scripts/pack.sh install` | Installs the packs selected by deck metadata. |
+<!-- skillpacks-compatibility-matrix:start -->
+| Command | Owner | Backend | Requires bash | Requires jq | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `help / --help / --version` | Node-owned | `packages/skillpacks/src/cli/run-pack-script.mjs` | No | No | CLI help and version output from package metadata. |
+| `list --json` | Node-owned | Packaged manifest reader | No | No | Prints `dist/skillpacks-manifest.json`. |
+| `list-packs` | Node-owned | Project config reader | No | No | Reads `.agents/project.json` directly. |
+| `status` | Node-owned | Project config/status reader | No | No | Reports project designation and local roots. |
+| `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |
+| `set-update-mode <mode>` | Node-owned | Project config writer | No | No | Preserves sibling `skill_updates` fields. |
+| `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
+| `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
+| `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates local skill roots from `.agents/project.json`. |
+| `doctor` | Node-owned | Managed marker drift reader | No | No | Read-only drift report; exits non-zero for stale installs. |
+| `prune [--dry-run]` | Node-owned | Manifest plus lifecycle helpers | No | No | Removes only orphaned managed installs; keeps unmanaged directories. |
+| `pin <skill> <version>` | Node-owned | Manifest plus lifecycle helpers | No | No | Validates archive versions, updates `pinned_versions`, and relinks installs. |
+| `unpin <skill>` | Node-owned | Manifest plus lifecycle helpers | No | No | Clears the pin and relinks to latest packaged source. |
+| `list` | Shell-backed | Packaged `scripts/pack.sh list` | Yes | No | Lists available active packs from the packaged repo content. |
+| `recommend` | Shell-backed | Packaged `scripts/pack.sh recommend` | Yes | No | Uses existing repository-signal heuristics. |
+| `which <skill>` | Shell-backed | Packaged `scripts/pack.sh which` | Yes | Optional | `jq` improves individually enabled skill status; pack-level status has a grep/sed fallback. |
+| `install-deck <deck> [--full]` | Hybrid shell materialization | Node manifest resolver, then packaged `scripts/pack.sh install` | Yes | Yes | Deck metadata is Node-resolved, but installation still uses the compatibility install path. |
+| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs global core skills; `jq` preserves an existing global pin file when `--pin` updates it. |
+<!-- skillpacks-compatibility-matrix:end -->
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.
 
@@ -281,7 +287,7 @@ Phase 1 must not change these contracts:
 - Generated `.claude/skills` and `.codex/skills` roots remain uncommitted consumer-project artifacts.
 - Installed skill roots continue to use `.agentic-skills-managed` markers.
 
-After the Node CLI reaches parity, `scripts/pack.sh` can become a compatibility shim, but that is not necessary for the first npm release.
+After the Phase 3 port, `scripts/pack.sh` remains a supported compatibility wrapper instead of becoming a thin wrapper over the Node CLI. This preserves the long-lived git-checkout path while the npm package owns deterministic project-local lifecycle behavior.
 
 ## Implementation Roadmap
 
@@ -474,7 +480,7 @@ npx skillpacks@latest doctor
 | `skillpacks` package or scope cannot be claimed | Blocks approved public name | Resolve in phase 0 before implementation. |
 | npm package accidentally includes task/history/prompt artifacts | Bloated or sensitive package | Use `files` whitelist plus `npm pack --dry-run` validation. |
 | `pack.sh` assumes a git checkout | npm install breaks | Run it from the packaged script path and add temp-repo tests. |
-| `jq` is missing | Write commands fail | Keep current fail-fast behavior and document dependency in phase 1; remove in phase 3 Node port. |
+| `jq` is missing | Shell-backed write paths fail | Node-owned `skillpacks` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization. |
 | Skill-level pinning needs archives omitted from tarball | Pins break | Include skill-local `archive/**` while excluding global docs history. |
 | Existing git-checkout users regress | Adoption risk | Keep `init.sh` and `pack.sh` unchanged until Node parity is proven. |
 | CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `skillpacks` as the only npm package and bin name. |
@@ -484,7 +490,7 @@ npx skillpacks@latest doctor
 These should be answered before first publish, not before starting phase 1:
 
 - Is `skillpacks` the final npm package owner identity, or should the public package be `@skillpacks/cli` after an organization is created?
-- Should phase 1 require `jq`, or should the Node port of project-file writes happen before public publish?
+- Should `install-deck` remain a hybrid shell materialization path for the first public package, or should deck installation move fully to Node before publish?
 - Should `init-global` install only global core skills, or should it also offer an optional deck picker?
 - Should hibernated packs be excluded from the npm tarball entirely or included only to preserve explicit error messages?
 - Should package releases use `0.x` until several real consumer installs pass?

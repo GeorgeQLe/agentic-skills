@@ -4,8 +4,9 @@ Get from clone to a working skill in under 5 minutes.
 
 ## Prerequisites
 
-- **bash** shell (macOS, Linux, or WSL on Windows)
-- **jq** for pack installation: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu)
+- **Node.js 18+** for the `skillpacks` npm CLI and package build
+- **bash** shell (macOS, Linux, or WSL on Windows) for clone-based `./init.sh`, `scripts/pack.sh`, and remaining shell-backed `skillpacks` commands
+- **jq** for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `skillpacks install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 

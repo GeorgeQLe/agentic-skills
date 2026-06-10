@@ -136,11 +136,11 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 ### Step 3.5: Compatibility Closure
 
-- [ ] Decide whether `scripts/pack.sh` should remain the canonical compatibility wrapper indefinitely or become a thin wrapper over the Node CLI for ported commands.
-- [ ] Route or document any remaining `pack.sh`-only commands: `recommend`, `which`, `install-deck`, and global init behavior.
-- [ ] Add a package-level compatibility matrix that states which commands are Node-owned, which are shell-backed, and which dependencies each path requires.
-- [ ] Run staged-package CLI parity from `packages/skillpacks/build` as well as source-checkout CLI parity before considering fallback dependency removal.
-- [ ] Keep real npm publish out of scope unless the user explicitly approves publication and npm auth is configured.
+- [x] Decide whether `scripts/pack.sh` should remain the canonical compatibility wrapper indefinitely or become a thin wrapper over the Node CLI for ported commands.
+- [x] Route or document any remaining `pack.sh`-only commands: `recommend`, `which`, `install-deck`, and global init behavior.
+- [x] Add a package-level compatibility matrix that states which commands are Node-owned, which are shell-backed, and which dependencies each path requires.
+- [x] Run staged-package CLI parity from `packages/skillpacks/build` as well as source-checkout CLI parity before considering fallback dependency removal.
+- [x] Keep real npm publish out of scope unless the user explicitly approves publication and npm auth is configured.
 
 #### Step 3.5 Implementation Plan
 
@@ -152,13 +152,29 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 
 #### Step 3.5 Verification Plan
 
-- [ ] Run Node syntax checks for changed package CLI/test files.
-- [ ] Run package-owned Node tests.
-- [ ] Run source-checkout command classification/parity checks for all documented commands.
-- [ ] Run staged-package command checks from `packages/skillpacks/build`.
-- [ ] Run `npm --workspace skillpacks run build:check`.
-- [ ] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
-- [ ] Run `git diff --check`.
+- [x] Run Node syntax checks for changed package CLI/test files.
+- [x] Run package-owned Node tests.
+- [x] Run source-checkout command classification/parity checks for all documented commands.
+- [x] Run staged-package command checks from `packages/skillpacks/build`.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
+- [x] Run `git diff --check`.
+
+#### Step 3.5 Review Notes
+
+- Chose to keep `scripts/pack.sh` as the canonical git-checkout compatibility wrapper and as the packaged shell fallback instead of turning it into a thin wrapper over the Node CLI. This preserves the long-lived checkout path while the npm package owns deterministic project-local lifecycle behavior.
+- Added a package-included compatibility matrix to `docs/skillpacks-npm-distribution.md` that classifies every `skillpacks` command as Node-owned, shell-backed, hybrid shell materialization, or external script-backed, with explicit `bash` and `jq` requirements.
+- Documented the remaining shell surfaces: `list`, `recommend`, and `which` still use packaged `scripts/pack.sh`; `install-deck` resolves deck metadata in Node but materializes through `pack.sh install`; `init-global` invokes packaged `init.sh`.
+- Updated package-included user docs (`README.md`, `docs/QUICKSTART.md`, `docs/packs.md`) so npm users see that Node-owned project commands no longer require `jq`, while git-checkout `pack.sh` write commands and `install-deck` materialization still do.
+- Added `packages/skillpacks/test/compatibility.test.mjs` to parse the compatibility matrix and compare command ownership/dependencies against the CLI help and route structure.
+- Source-checkout and staged-package command smokes passed for documented Node-owned commands under an empty `PATH`, shell-backed `list`/`recommend`/`which`, hybrid `install-deck vard`, and `init-global --help`.
+- Adversarial review found one incomplete package-included dependency claim in `docs/packs.md`; it was patched to mention the npm Node-owned no-`jq` path. No CLI routing changes were needed.
+- Validation passed: `node --check packages/skillpacks/test/compatibility.test.mjs`; `node --check packages/skillpacks/src/cli/run-pack-script.mjs`; `npm --workspace skillpacks run test:node` (33 tests); final source/staged compatibility smoke harness; `npm --workspace skillpacks run build:check`; npm dry-run boundary assertion with `/tmp/skillpacks-npm-cache` (2315 files, denied repo paths absent); targeted stale dependency scan over package-included docs; and `git diff --check`.
+- Real `npm publish` was not run because publication remains out of scope without explicit user approval and npm auth confirmation.
+
+#### Next Work
+
+- Phase 3 is complete. The next npm-distribution work should either scope Phase 4 documentation/dry-run release prep from `docs/skillpacks-npm-distribution.md` or explicitly park the npm release track until publication is approved.
 
 ---
 
