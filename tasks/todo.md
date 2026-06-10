@@ -1,3 +1,49 @@
+## Current Implementation - Skillpacks npm Distribution Phase 5
+
+### Goal
+
+Publish the first stable public `skillpacks` npm package after release validation, then verify the published package can be used from a fresh project without cloning this repository.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: release validation, npm publication, external registry verification, task docs, and ship manifest updates share one release boundary and must be sequenced.
+
+### Context
+
+- Source design: `docs/skillpacks-npm-distribution.md` `### Phase 5 - First Publish`.
+- Phase 4 is complete: package docs, staging, tarball dry-run, and `npm publish --dry-run` all passed locally without publishing.
+- Current package identity: `packages/skillpacks/package.json` publishes `skillpacks@0.1.0` with `license: "UNLICENSED"`.
+- Real publication is an external registry action and remains gated by explicit user confirmation before `npm publish --access public` runs.
+- Existing unrelated local work: `apps/skills-showcase/next-env.d.ts`; leave it outside this release boundary.
+
+### Steps
+
+- [x] Step 5.1: Run release preflight: package tests, package staging, tarball inspection, registry state check, and whitespace checks.
+- [ ] Step 5.2: Confirm the external publish boundary, including `skillpacks@0.1.0`, public access, and current license metadata.
+- [ ] Step 5.3: Run `npm publish --access public` from the staged package build only after explicit confirmation.
+- [ ] Step 5.4: Verify the published package with `npx skillpacks@latest list` and fresh temp-project installs for one pack, one individual skill, and one deck.
+- [ ] Step 5.5: Record release evidence in the ship manifest, update history/review notes, commit, and push intended Phase 5 changes only.
+
+### Acceptance Criteria
+
+- [ ] `skillpacks@0.1.0` is installable from npm.
+- [ ] A fresh project can install packs without cloning this repository.
+- [ ] The git-checkout install path remains functional.
+- [ ] Validation output is recorded with warnings fixed, explicitly accepted, or unresolved.
+- [ ] Unrelated local work is not included in the shipping commit.
+
+### Review Notes (2026-06-10)
+
+- Step 5.1 release preflight passed for local/package checks: `npm --workspace skillpacks run test:node` passed 37/37 tests; `npm --workspace skillpacks run build:check` passed with manifest exact and staged 373 skills / 41 packs; tarball dry-run from `packages/skillpacks/` produced `skillpacks@0.1.0`, `skillpacks-0.1.0.tgz`, 2,348 entries, 5,270,913 bytes packed, 31,322,110 bytes unpacked, shasum `0c54b994a536ab81e81d15280828be83accd4299`, integrity `sha512-VAG945mrth32cVtbElFKvaG2mOKPAFUi1y/H0BwK30G6uyrQhTV23i5dH44Oaa2wuNpHD2VR79tcFVrjo4Amzg==`.
+- Denied-path tarball audit found zero entries under `alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, or `docs/history/`.
+- Registry state check: `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache` returned `E404`, so `skillpacks@*` is still unpublished from this machine's registry view.
+- Git-checkout path smoke passed: `scripts/pack.sh list` returned the active pack list. `git diff --check` passed.
+- Publish gate is blocked: sandboxed `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` first failed with `EAI_AGAIN`; escalated rerun reached the registry and returned `E401 Unauthorized`. No `npm publish`, tag, package access change, `npx` published-package verification, or temp-project install verification was run.
+- Next required action: authenticate npm for the account that should own `skillpacks`, then explicitly confirm publishing `skillpacks@0.1.0` from `packages/skillpacks/build` with public access and current `UNLICENSED` metadata.
+
+---
+
 ## Current Implementation - Alignment Diff Highlighting Convention
 
 ### Goal

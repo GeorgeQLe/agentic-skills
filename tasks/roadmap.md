@@ -139,6 +139,36 @@ Prepare the `skillpacks` npm package for a dry-run release by tightening package
 - [x] Step 4.3: Dry-run release checks.
 - [x] Step 4.4: Ship.
 
+## Current Implementation - Skillpacks npm Distribution Phase 5
+
+### Goal
+
+Publish the first stable public `skillpacks` npm package after release validation, then verify the published package can be used from a fresh project without cloning this repository.
+
+### Phase 5 Plan
+
+1. Release preflight.
+   - [x] Run package tests and package staging checks.
+   - [x] Inspect the staged tarball boundary and denied paths.
+   - [x] Re-check npm registry state for `skillpacks`.
+   - [x] Run whitespace checks.
+2. External publish gate.
+   - [ ] Confirm the exact publish boundary: `skillpacks@0.1.0`, public access, current `UNLICENSED` metadata, and `packages/skillpacks/build` as the publish root.
+   - [ ] Run `npm publish --access public` only after explicit confirmation.
+3. Published-package verification.
+   - [ ] Verify `npx skillpacks@latest list` against npm.
+   - [ ] In a fresh temp project, install one pack, one individual skill, and one deck from the published package.
+   - [ ] Verify the git-checkout install path remains functional.
+4. Ship.
+   - [ ] Record release evidence in a ship manifest.
+   - [ ] Update review notes and history.
+   - [ ] Commit and push intended Phase 5 changes only.
+
+### Current Step
+
+- [x] Step 5.1: Release preflight.
+- [ ] Step 5.2: External publish gate blocked on npm auth (`npm whoami` returned `E401 Unauthorized`) and explicit publish confirmation.
+
 ---
 
 ## Current Implementation - Dated Alignment Index Entries
