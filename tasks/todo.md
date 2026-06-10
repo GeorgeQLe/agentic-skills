@@ -1,3 +1,43 @@
+## Current Implementation - Direct Alignment HTML Edit Audit (Drift Plan Phase 2 Step 6)
+
+### Goal
+
+Add a scriptable audit for active `alignment/*.html` pages so direct edits made without invoking a skill can be checked against the alignment-page convention. Today the convention is only enforced when a skill or the generator runs; nothing validates a hand-edited page. This is ALIGNMENT-PAGE Bundling Drift Plan Phase 2 Step 6. Step 7 (wiring the audit into root alignment-page instructions) is a separate, queued step — do not implement it here.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: one new audit script, its layer1 tests, and a convention-doc paragraph share the Step 2-5 diagnostic/test conventions.
+
+### Context
+
+- Active pages live at repo-root `alignment/*.html` with the central index at `alignment/index.html`; archived pages live under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/` and are out of scope.
+- Follow the established generator diagnostic pattern from `scripts/upgrade-alignment-page.mjs` (Steps 2-4): collect named per-page diagnostics, print failing blocks to stderr, summary lines like `<Check>: N pages, exact|DRIFT`, single shared exit 1, and a `--root <path>` flag so layer1 can run fixture trees (mirror `tests/layer1/upgrade-alignment-page-bespoke.test.ts` helpers: fixture root + `runScript`).
+- Scriptable convention checks to consider (decide the exact set during implementation; the audit must exit 0 on the current repo, or surfaced violations must be fixed in the same boundary): (1) Brief Me TTS include — a `<script src="...scripts/alignment-tts-kokoro.js"></script>` tag before `</body>`, not inline, not `type="module"` (`scripts/inject-tts.mjs` is the idempotent fixer); (2) `data-alignment-category` (one of `research|product-design|utility|qa-meta|ops-analysis`) and `data-visual-tier` (one of `document|visual|prototype`) on the `<html>` element; (3) `<meta name="viewport" ...>` present; (4) index integrity — `alignment/index.html` exists, links every active `alignment/*.html` page except itself, has no duplicate entries for the same path, and every entry carries a `<span class="meta">` date (`YYYY-MM-DD`, optionally `new · YYYY-MM-DD`); (5) embed prohibition — no `<object>`, `<iframe>`, or `<embed>` elements.
+- Suggested shape: new `scripts/audit-alignment-pages.mjs` (read-only; no write/fix mode in this step — point diagnostics at `scripts/inject-tts.mjs` or manual fixes).
+- The convention text for each rule is in `docs/alignment-page-convention.md` (TTS/Brief Me, category/tier data attributes, responsive layout, central index dated entries, embed prohibition). Document the audit there outside the generated-marker block, like the Step 3/4 paragraphs.
+- Gotcha from Step 5: `tests/layer1/alignment-gates.test.ts` and `afps-alignment-preview-gates.test.ts` read bundles for convention phrases — unrelated here, but full layer1 must stay at 0 failed (currently 55 files / 2188 tests).
+
+### Steps
+
+- [ ] Inventory current active `alignment/*.html` pages and measure each candidate check against them; pick the check set that is genuinely scriptable and either passes today or is worth fixing in this boundary.
+- [ ] Implement `scripts/audit-alignment-pages.mjs` with named per-page diagnostics, summary lines, shared exit 1, and `--root` fixture support.
+- [ ] Fix any current-page violations the audit surfaces (e.g. run `node scripts/inject-tts.mjs` for missing TTS includes) or explicitly exempt-and-document them.
+- [ ] Add layer1 coverage in a new `tests/layer1/audit-alignment-pages.test.ts`: repo-state run (exit 0) plus `--root` fixture tests for each diagnostic class and a clean tree.
+- [ ] Document the audit in `docs/alignment-page-convention.md` outside the generated-marker block; check off Phase 2 Step 6 in the drift-plan checklist and record review notes.
+
+### Acceptance Criteria
+
+- `node scripts/audit-alignment-pages.mjs` exits 0 on the current repo with per-check summary lines.
+- Each diagnostic class has a failing fixture test and the repo-state test passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
+- `node scripts/upgrade-alignment-page.mjs --check` still exits 0; `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done. Phase 2 Step 7 (require the audit/convention check in root alignment-page instructions for direct HTML edits) is queued after this step.
+
+---
+
 ## Current Implementation - Bespoke Alignment Section Conversion/Testing (Drift Plan Phase 2 Step 5)
 
 ### Goal
@@ -21,17 +61,26 @@ Resolve the remaining hand-authored `## Alignment Page` sections: for each of th
 
 ### Steps
 
-- [ ] For each of the 7 bespoke skills, diff the bespoke `## Alignment Page` section (both mirrors) against the generated render (`bundledContentFor`) and record a convert/keep verdict with rationale.
-- [ ] Convert the "convert" set: stub paragraph in both mirrors, allowlist entries removed, generator write-mode run emitting bundles, version/archive handling per the `customer-discovery` precedent — one commit per the allowlist same-commit policy.
-- [ ] For the "keep" set: add layer1 contract tests pinning each bespoke section's invariants (own `alignment/{skill-name}-{topic}.html` path, gate language, mirror symmetry) in `tests/layer1/upgrade-alignment-page-bespoke.test.ts` or a sibling test file.
-- [ ] Run the generator (`--check`, `--dry-run`) and the full layer1 suite; update `docs/alignment-page-convention.md` only if the bespoke policy wording changes.
-- [ ] Check off Phase 2 Step 5 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+- [x] For each of the 7 bespoke skills, diff the bespoke `## Alignment Page` section (both mirrors) against the generated render (`bundledContentFor`) and record a convert/keep verdict with rationale.
+- [x] Convert the "convert" set: stub paragraph in both mirrors, allowlist entries removed, generator write-mode run emitting bundles, version/archive handling per the `customer-discovery` precedent — one commit per the allowlist same-commit policy.
+- [x] For the "keep" set: add layer1 contract tests pinning each bespoke section's invariants (own `alignment/{skill-name}-{topic}.html` path, gate language, mirror symmetry) in `tests/layer1/upgrade-alignment-page-bespoke.test.ts` or a sibling test file. (Keep set is empty — all 7 converted; the one genuinely custom behavior, prototype's timing rule, is retained as hybrid bespoke prose and pinned by `afps-alignment-preview-gates.test.ts` in both mirrors.)
+- [x] Run the generator (`--check`, `--dry-run`) and the full layer1 suite; update `docs/alignment-page-convention.md` only if the bespoke policy wording changes. (No policy wording change needed — allowlist mechanism unchanged, list is now empty.)
+- [x] Check off Phase 2 Step 5 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+
+### Review Notes (2026-06-10)
+
+- **Verdict: convert all 7.** Every bespoke section (mirror-identical in each pair) was a leading timing sentence plus stale, condensed copies of convention paragraphs (page layout, alignment gates, required questions, section feedback, feedback-only YAML, gate YAML, pre-approval stop) — older snapshots missing large parts of the current convention (lifecycle states, central alignment index, dark-mode/responsive contracts, TTS/Brief Me, browser open, staged research workflow, confirmed-page contract). The skill-specific render lists and question lists are subsumed by each skill's generator gate-map entry plus the convention's no-context-loss and required-inline-questions rules; `research-roadmap`'s extra research paragraphs are near-verbatim copies of the convention's report-only/research-quality/completeness/source-coverage paragraphs plus its gate-map translation entry.
+- **Hybrid for `prototype`.** Its custom timing rule ("Prototype files may be created before the alignment page… before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes") is genuinely custom behavior the gate map does not express; kept verbatim as bespoke prose beside the stub (journey-map hybrid precedent — generator preserves surrounding prose and still owns the bundle). Pinned in both mirrors by the updated `afps-alignment-preview-gates.test.ts`.
+- **Version handling.** The precedent conversions rode along behavioral bumps (`customer-discovery` v1.0/v1.1), so for consistency and because conversion materially extends each skill's alignment contract (full convention incl. TTS, index, lifecycle; `uat` additionally gains the glossary gate via `type: analysis`), all 7 got a decimal bump + `scripts/skill-archive.sh` archive + CHANGELOG entry in both mirrors: consolidate-variations v0.10, prototype v0.11, spec-interview v0.10, ui-interview v0.12, ux-variations v0.14, uat v0.10, research-roadmap v0.16.
+- **Allowlist + bundles.** All 7 entries removed from `scripts/alignment-bespoke-list.txt` (file kept with an explanatory comment, now empty); write-mode generator run emitted 14 new bundles. Repo now: `Bespoke allowlist: 0 skills, exact`, `Output paths: 284 bundles, exact`, `Generated bundles: 284 ownable, exact`.
+- **Test adaptations.** `afps-alignment-preview-gates.test.ts`: the locally-gated and prototype tests now assert the stub in SKILL.md and read the gate contract (plus each skill's named skill-specific gates) from the bundled `ALIGNMENT-PAGE.md`. `alignment-gates.test.ts`: one stale assertion updated from the bespoke phrasing "recommended path" to the convention's canonical "recommended output path" (conventionText already reads bundles). Repo-state allowlist tests auto-adapted to the empty list.
+- Validation: `node scripts/upgrade-alignment-page.mjs --check` exit 0; `--dry-run` exit 0 (`Updated: 0`); focused alignment vitest 53/53; full layer1 55 files / 2188 tests / 0 failed; `scripts/skill-versions.sh --missing` clean; `scripts/skill-archive-audit.sh --strict` clean; `git diff --check` clean.
 
 ### Acceptance Criteria
 
-- Every remaining allowlist entry has a recorded keep rationale and explicit test coverage; every converted skill has generated bundles in both mirrors and no allowlist entry.
-- `node scripts/upgrade-alignment-page.mjs --check` exits 0 (`Bespoke allowlist: N skills, exact`, `Generated bundles: M ownable, exact`).
-- Full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed; `git diff --check` clean.
+- [x] Every remaining allowlist entry has a recorded keep rationale and explicit test coverage; every converted skill has generated bundles in both mirrors and no allowlist entry. (Allowlist is empty; 14 bundles emitted.)
+- [x] `node scripts/upgrade-alignment-page.mjs --check` exits 0 (`Bespoke allowlist: 0 skills, exact`, `Generated bundles: 284 ownable, exact`).
+- [x] Full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed; `git diff --check` clean.
 
 ### Handoff
 
@@ -533,7 +582,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Harden `scripts/upgrade-alignment-page.mjs` so sibling bundles cannot be skipped as bespoke without a failing diagnostic or explicit allowlist.
 - [x] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
 - [x] Add generated-bundle variant/drift validation against expected renderer output.
-- [ ] Convert or explicitly test the remaining bespoke alignment sections (7 skills / 14 mirrors after the Step 1 `customer-discovery` conversion).
+- [x] Convert or explicitly test the remaining bespoke alignment sections (7 skills / 14 mirrors after the Step 1 `customer-discovery` conversion).
 - [ ] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
 - [ ] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
 
@@ -561,6 +610,10 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 ### Phase 2 Review Notes (Step 4, 2026-06-10)
 
 - Step 4 shipped: `scripts/upgrade-alignment-page.mjs --check` is the no-write repo-state gate for generated-bundle drift — exit 1 with named per-skill diagnostics (`Stale generated bundle`, `Missing generated bundle`, `Stale SKILL.md stub`) when an ownable skill's on-disk `ALIGNMENT-PAGE.md` differs from `bundledContentFor(...)` or its stub paragraph needs replacing, plus a `Generated bundles: N ownable, exact|DRIFT` summary line in every mode. Plain `--dry-run` still exits 0 on pending updates (preview workflow preserved); bespoke and skip-listed skills are exempt. Layer1 enforces the gate via a repo-state `--check` run and five `--root` fixture tests. Full details in the "Generated-Bundle Drift Validation (Drift Plan Phase 2 Step 4)" section above. Current repo: 270 ownable, exact.
+
+### Phase 2 Review Notes (Step 5, 2026-06-10)
+
+- Step 5 shipped: all 7 allowlisted bespoke skills (`consolidate-variations`, `prototype`, `spec-interview`, `ui-interview`, `ux-variations`, `uat`, `research-roadmap`) converted to the generated stub + bundled `ALIGNMENT-PAGE.md` in both mirrors, with version bumps, archives, and changelog entries. `prototype` keeps its custom prototype-first timing rule as hybrid bespoke prose beside the stub, pinned by layer1. The bespoke allowlist is now empty (mechanism and diagnostics unchanged). Repo: `Bespoke allowlist: 0 skills, exact`, `Generated bundles: 284 ownable, exact`. Full verdicts and validation in the "Bespoke Alignment Section Conversion/Testing (Drift Plan Phase 2 Step 5)" section above.
 
 ---
 
