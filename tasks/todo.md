@@ -1,3 +1,59 @@
+## Current Implementation - Skillpacks npm Distribution Phase 3
+
+### Goal
+
+Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project.json` reads and simple writes into the package-owned Node CLI while preserving `scripts/pack.sh` as the fallback for install/link/drift operations.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: CLI routing, project config writes, tests, package staging, and task docs share one package boundary and should be integrated in one lane.
+
+### Step 3.1: Node Project Config Parity
+
+- [x] Add a package-owned Node project-config helper for reading, validating, writing, and formatting `.agents/project.json`.
+- [x] Route `skillpacks list-packs`, `skillpacks status`, `skillpacks set-mode`, and `skillpacks set-update-mode` through Node without requiring `bash` or `jq`.
+- [x] Preserve existing project config fields when Node writes `agent_mode` or `skill_updates.mode`.
+- [x] Keep install/remove/refresh/pin/unpin/prune/doctor on the existing `pack.sh` compatibility path for this step.
+- [x] Add package-owned executable tests proving the Node-owned commands work without `bash` or `jq` on `PATH`.
+
+### Verification
+
+- [x] Run Node syntax checks for changed package CLI files.
+- [x] Run the package-owned Node tests.
+- [x] Run a focused existing `pack.sh` install regression to prove compatibility path behavior is unchanged.
+- [x] Run package build/check and npm dry-run boundary checks.
+- [x] Run `git diff --check`.
+
+### Review Notes
+
+- Added `packages/skillpacks/src/cli/project-config.mjs` with JSON parsing, atomic writes, Node-owned lock handling for the newly ported write commands, project-type inference for new `set-mode` files, and status/list output parity for simple project-config reads.
+- Routed `list-packs`, `status`, `set-mode`, and `set-update-mode` through Node before the bash dependency check. Install/remove/refresh/pin/unpin/prune/doctor and `install-deck` still use the tested `pack.sh` backend.
+- Added package-owned Node tests that temporarily empty `PATH` and prove the Node-owned commands do not require `bash` or `jq`. The tests cover enabled-pack listing, status output, agent-mode writes, new-file `set-mode`, `skill_updates.mode` writes, field preservation, and lock cleanup.
+- Validation caught an existing package dry-run bug: `npm pack build` resolved the registry package named `build`. Updated package scripts to use `npm pack ./build`, then verified the dry-run package is `skillpacks@0.1.0`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` because `build:check` required the manifest to match current package metadata and current repo skill metadata.
+- Validation passed: `node --check packages/skillpacks/src/cli/project-config.mjs`; `node --check packages/skillpacks/src/cli/run-pack-script.mjs`; `node --check packages/skillpacks/test/project-config.test.mjs`; `npm --workspace skillpacks run test:node` (6 tests); `pnpm --dir tests exec vitest run --project layer1 layer1/install.test.ts` (5 tests); `node packages/skillpacks/bin/skillpacks.mjs list`; `npm --workspace skillpacks run build:check`; `npm_config_cache=/tmp/skillpacks-npm-cache npm pack packages/skillpacks/build --dry-run --json --silent` plus parsed boundary assertion; and `git diff --check`.
+- Unrelated local modifications in `scripts/alignment-tts-kokoro.js` and `tests/layer1/alignment-tts-kokoro.test.ts` were left outside this ship boundary.
+
+### Step 3.2: Pack Normalization And Alias Parity
+
+- [ ] Port pack alias normalization from `scripts/pack.sh` into package-owned Node code.
+- [ ] Include hibernated PoketoWork kanban pack and skill diagnostics with the same user-facing safety language.
+- [ ] Add CLI resolution coverage for direct pack names, aliases, comma-separated arguments, `pack:` prefixes, empty `pack`/`packs` tokens, unknown names, and hibernated aliases.
+- [ ] Keep lifecycle mutations on `pack.sh` after Node resolves and validates names unless the install/remove port is explicitly in scope for the next step.
+- [ ] Compare representative Node and `pack.sh` resolution behavior before changing install/remove execution.
+
+#### Step 3.2 Verification Plan
+
+- [ ] Run Node syntax checks for changed package CLI files.
+- [ ] Run package-owned normalization tests.
+- [ ] Run representative `skillpacks install`/unknown-name smoke checks against temp projects if CLI routing changes.
+- [ ] Run `npm --workspace skillpacks run build:check`.
+- [ ] Run npm dry-run package boundary assertion with `/tmp/skillpacks-npm-cache`.
+- [ ] Run `git diff --check`.
+
+---
+
 ## Dated Alignment Index Entries
 
 ### Phase 1: Convention Update

@@ -1,3 +1,36 @@
+## Current Implementation - Skillpacks npm Distribution Phase 3
+
+### Goal
+
+Reduce the `skillpacks` npm package's dependency on bash/jq by porting deterministic project-config behavior to Node first, then keeping the remaining install/link/drift commands on the tested `pack.sh` fallback until parity is implemented in later steps.
+
+### Phase 3 Plan
+
+1. Node project config parity.
+   - [x] Add package-owned Node helpers for `.agents/project.json` reads and writes.
+   - [x] Route `list-packs`, `status`, `set-mode`, and `set-update-mode` through Node without requiring `bash` or `jq`.
+   - [x] Preserve unrelated project config fields on writes.
+   - [x] Add package-owned tests that run with `PATH` emptied to prove no shell/JQ dependency.
+2. Pack normalization and alias parity.
+   - [ ] Port pack alias normalization and hibernated-pack diagnostics.
+   - [ ] Keep `pack.sh` and Node command output aligned for supported aliases.
+3. Install/remove/refresh parity.
+   - [ ] Port pack and individual skill install/remove/refresh logic.
+   - [ ] Preserve `.agentic-skills-managed` marker creation and content hash behavior.
+4. Locking and drift parity.
+   - [ ] Port `.agents/.pack.lock` handling.
+   - [ ] Port `doctor`, `pin`, `unpin`, and `prune`.
+5. Compatibility closure.
+   - [ ] Keep `scripts/pack.sh` as a wrapper or tested fallback.
+   - [ ] Run temp-repo parity tests against Node and bash paths before removing any fallback dependency.
+
+### Current Step
+
+- [x] Step 3.1: Node Project Config Parity.
+- [ ] Step 3.2: Pack Normalization And Alias Parity.
+
+---
+
 ## Current Implementation - Dated Alignment Index Entries
 
 ### Goal

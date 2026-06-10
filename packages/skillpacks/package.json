@@ -28,9 +28,10 @@
     "build:check": "npm run build:manifest:check && node scripts/build-package.mjs --check",
     "build:manifest": "node scripts/build-skillpacks-manifest.mjs",
     "build:manifest:check": "node scripts/build-skillpacks-manifest.mjs --check",
-    "pack:dry-run": "npm pack build --dry-run --json --silent",
+    "pack:dry-run": "npm pack ./build --dry-run --json --silent",
     "skillpacks:list": "node bin/skillpacks.mjs list",
-    "verify:package": "node bin/skillpacks.mjs --version && node bin/skillpacks.mjs list && npm run build:check && npm pack build --dry-run --json --silent"
+    "test:node": "node --test test/*.test.mjs",
+    "verify:package": "node bin/skillpacks.mjs --version && node bin/skillpacks.mjs list && npm run build:check && npm pack ./build --dry-run --json --silent"
   },
   "keywords": [
     "ai",

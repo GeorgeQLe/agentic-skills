@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Skillpacks npm distribution Phase 3 Step 3.1
+
+- Started Node Port Parity by adding package-owned `.agents/project.json` helpers and routing `skillpacks list-packs`, `status`, `set-mode`, and `set-update-mode` through Node without requiring `bash` or `jq`.
+- Preserved `pack.sh` as the compatibility backend for install/remove/refresh/pin/unpin/prune/doctor and deck installation.
+- Added package-owned Node tests proving the Node-routed commands work with `PATH` emptied and preserve project config fields.
+- Fixed the package dry-run script to pack `./build` instead of resolving the registry package named `build`.
+- Regenerated the package manifest required by `build:check`; no real npm publish was run.
+
 ## 2026-06-09 — autoresearch-prep skill
 
 - Created `global/claude/autoresearch-prep/` with SKILL.md (v0.0) and CHANGELOG.md.

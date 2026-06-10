@@ -1,0 +1,193 @@
+import assert from 'node:assert/strict';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { afterEach, describe, it } from 'node:test';
+import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
+
+const tmpDirs = [];
+
+function makeTempProject() {
+  const dir = mkdtempSync(join(tmpdir(), 'skillpacks-project-config-'));
+  tmpDirs.push(dir);
+  return dir;
+}
+
+function writeProjectConfig(projectRoot, config) {
+  const filePath = join(projectRoot, '.agents/project.json');
+  mkdirSync(dirname(filePath), { recursive: true });
+  writeFileSync(filePath, `${JSON.stringify(config, null, 2)}\n`);
+}
+
+function readProjectConfig(projectRoot) {
+  return JSON.parse(readFileSync(join(projectRoot, '.agents/project.json'), 'utf8'));
+}
+
+async function runSkillpacks(projectRoot, args) {
+  const originalCwd = process.cwd();
+  const originalPath = process.env.PATH;
+  const originalLog = console.log;
+  const originalError = console.error;
+  let stdout = '';
+  let stderr = '';
+
+  console.log = (...parts) => {
+    stdout += `${parts.join(' ')}\n`;
+  };
+  console.error = (...parts) => {
+    stderr += `${parts.join(' ')}\n`;
+  };
+
+  try {
+    process.chdir(projectRoot);
+    process.env.PATH = '';
+    const exitCode = await runSkillpacksCli(args);
+    assert.equal(exitCode, 0, stderr);
+    return stdout;
+  } finally {
+    process.chdir(originalCwd);
+    if (originalPath === undefined) {
+      delete process.env.PATH;
+    } else {
+      process.env.PATH = originalPath;
+    }
+    console.log = originalLog;
+    console.error = originalError;
+  }
+}
+
+afterEach(() => {
+  for (const dir of tmpDirs) {
+    rmSync(dir, { recursive: true, force: true });
+  }
+  tmpDirs.length = 0;
+});
+
+describe('Node project config commands', () => {
+  it('prints enabled packs without bash or jq', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool', 'code-quality'],
+      skill_pack_version: 1
+    });
+
+    assert.equal(await runSkillpacks(dir, ['list-packs']), 'devtool\ncode-quality\n');
+  });
+
+  it('prints project status and individually installed skills without bash or jq', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['product-design'],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'design-system': 'product-design'
+      }
+    });
+    mkdirSync(join(dir, '.claude/skills/design-system'), { recursive: true });
+    mkdirSync(join(dir, '.codex/skills/design-system'), { recursive: true });
+
+    const output = await runSkillpacks(dir, ['status']);
+
+    assert.match(output, /Project designation:/);
+    assert.match(output, /"enabled_packs": \[/);
+    assert.match(output, /Installed local pack skills:/);
+    assert.match(output, /\.claude\/skills\/design-system/);
+    assert.match(output, /\.codex\/skills\/design-system/);
+    assert.match(output, /Individually installed skills:/);
+    assert.match(output, /design-system \(from pack: product-design\)/);
+  });
+
+  it('sets and unsets agent mode while preserving existing project fields', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      enabled_skills: {
+        investigate: 'code-debug'
+      },
+      pinned_versions: {
+        investigate: 'v0.0'
+      },
+      skill_updates: {
+        mode: 'warn',
+        channel: 'stable'
+      },
+      notes: ['keep me']
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-mode', 'hybrid']), 'Updated .agents/project.json\n');
+    let config = readProjectConfig(dir);
+    assert.equal(config.agent_mode, 'hybrid');
+    assert.deepEqual(config.enabled_packs, ['devtool']);
+    assert.deepEqual(config.enabled_skills, { investigate: 'code-debug' });
+    assert.deepEqual(config.pinned_versions, { investigate: 'v0.0' });
+    assert.deepEqual(config.skill_updates, { mode: 'warn', channel: 'stable' });
+    assert.deepEqual(config.notes, ['keep me']);
+    assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+
+    assert.equal(await runSkillpacks(dir, ['set-mode', 'unset']), 'Updated .agents/project.json\n');
+    config = readProjectConfig(dir);
+    assert.equal(Object.hasOwn(config, 'agent_mode'), false);
+    assert.deepEqual(config.notes, ['keep me']);
+  });
+
+  it('creates project config for set-mode when no project file exists', async () => {
+    const dir = makeTempProject();
+
+    assert.equal(await runSkillpacks(dir, ['set-mode', 'codex-only']), 'Updated .agents/project.json\n');
+
+    const config = readProjectConfig(dir);
+    assert.equal(config.project_type, 'business-app');
+    assert.deepEqual(config.enabled_packs, []);
+    assert.equal(config.skill_pack_version, 1);
+    assert.equal(config.agent_mode, 'codex-only');
+  });
+
+  it('sets and unsets update mode while preserving sibling update fields', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      skill_updates: {
+        channel: 'stable'
+      }
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-update-mode', 'auto']), 'Set skill_updates.mode to auto\n');
+    let config = readProjectConfig(dir);
+    assert.deepEqual(config.skill_updates, { channel: 'stable', mode: 'auto' });
+    assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+
+    assert.equal(await runSkillpacks(dir, ['set-update-mode', 'unset']), 'Set skill_updates.mode to unset\n');
+    config = readProjectConfig(dir);
+    assert.equal(Object.hasOwn(config, 'skill_updates'), false);
+  });
+
+  it('only changes skill_updates when setting update mode on an existing project file', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      custom_field: 'preserved'
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-update-mode', 'warn']), 'Set skill_updates.mode to warn\n');
+
+    const config = readProjectConfig(dir);
+    assert.deepEqual(config, {
+      custom_field: 'preserved',
+      skill_updates: {
+        mode: 'warn'
+      }
+    });
+  });
+});

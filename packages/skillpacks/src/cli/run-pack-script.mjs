@@ -2,6 +2,12 @@ import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  printEnabledPacks,
+  printProjectStatus,
+  setAgentMode,
+  setUpdateMode
+} from './project-config.mjs';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -47,10 +53,8 @@ const JQ_WRITE_COMMANDS = new Set([
   'remove',
   'refresh',
   'prune',
-  'set-update-mode',
   'pin',
-  'unpin',
-  'set-mode'
+  'unpin'
 ]);
 
 function packageVersion() {
@@ -199,6 +203,34 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'list' && rest.includes('--json')) {
     return printManifestJson(rest);
+  }
+
+  if (command === 'list-packs') {
+    if (rest.length > 0) {
+      throw new Error('list-packs does not accept arguments');
+    }
+    return printEnabledPacks();
+  }
+
+  if (command === 'status') {
+    if (rest.length > 0) {
+      throw new Error('status does not accept arguments');
+    }
+    return printProjectStatus();
+  }
+
+  if (command === 'set-mode') {
+    if (rest.length !== 1) {
+      throw new Error('set-mode requires exactly one mode: claude-only, codex-only, hybrid, or unset');
+    }
+    return setAgentMode(rest[0]);
+  }
+
+  if (command === 'set-update-mode') {
+    if (rest.length !== 1) {
+      throw new Error('set-update-mode requires exactly one mode: warn, auto, or unset');
+    }
+    return setUpdateMode(rest[0]);
   }
 
   requireCommand('bash', 'Install bash before running skillpacks.');
