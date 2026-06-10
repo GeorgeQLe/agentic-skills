@@ -40,6 +40,19 @@ let skipId = 0;
 let currentSource = null;
 let currentStream = null;
 let briefBtn = null;
+let cacheNoteShown = false;
+
+// Model weights persist between visits via Cache API origin storage, which is
+// unavailable or unreliable on file:// origins (notably file://wsl.localhost).
+// Log one informational line when a real load starts so re-downloads are
+// explainable from the console.
+function noteCacheCapability() {
+  if (cacheNoteShown) return;
+  cacheNoteShown = true;
+  if (typeof caches === 'undefined') {
+    console.info('Kokoro TTS: Cache API unavailable on this origin; the voice model may re-download on each visit. Serve this page over http://localhost for persistent caching.');
+  }
+}
 
 function getSelectedVoice() {
   return localStorage.getItem(LS_VOICE_KEY) || VOICES[0].id;
@@ -175,6 +188,7 @@ function ensureTTS(onProgress) {
   if (onProgress) progressHook = onProgress;
   if (ttsInstance) return Promise.resolve(ttsInstance);
   if (!ttsLoadPromise) {
+    noteCacheCapability();
     ttsLoadPromise = loadKokoro(reportProgress).then((instance) => {
       ttsInstance = instance;
       usingFallback = false;
@@ -197,7 +211,10 @@ function warmStart() {
   let used = null;
   try { used = localStorage.getItem(LS_USED_KEY); } catch (_) {}
   if (used !== '1') return;
-  const kick = () => { ensureTTS(null); };
+  const kick = () => {
+    console.info('Kokoro TTS: pre-warming voice model in background');
+    ensureTTS(null);
+  };
   if (typeof requestIdleCallback === 'function') {
     requestIdleCallback(kick, { timeout: 10000 });
   } else {
