@@ -1,5 +1,9 @@
 # research-roadmap changelog (codex)
 
+## v0.15 - 2026-06-10
+
+- Changed the inline report-first alignment contract to require research-scope approval before synthesized documentation-health findings, queue recommendations, working packets, or canonical writes.
+
 ## v0.14 - 2026-06-07
 
 - Routed fallback documentation queue examples and direct-command guidance from retired `$icp` to `$customer-discovery` while preserving `research/icp.md` as the output artifact.

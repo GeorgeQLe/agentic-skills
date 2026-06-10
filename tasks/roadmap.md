@@ -1,3 +1,29 @@
+## Current Implementation - Research Scope Approval Before Alignment Research
+
+### Goal
+
+Ensure active research-producing skill flows do not synthesize research before the user approves the alignment page's research scope. The scope is active `global/` and `packs/` source skills only, excluding archive snapshots, generated installed copies, and hibernated packs.
+
+### Plan
+
+1. Preserve context and audit the affected surface.
+   - [x] Capture prompt history for the active skill update.
+   - [x] Confirm repository context and working-tree state.
+   - [x] Re-read the shared alignment-page convention, existing tests, and active affected skill list.
+2. Implement the contract change.
+   - [x] Update `docs/alignment-page-convention.md` so Stage 1 is minimal scope discovery, not synthesized research.
+   - [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+   - [x] Patch active `SKILL.md` report-first and staged-research wording to require scope approval before synthesized research.
+3. Preserve skill version history.
+   - [x] Archive changed active `SKILL.md` files before version bumps.
+   - [x] Bump changed skill versions and update each skill `CHANGELOG.md`.
+   - [x] Add a lesson preventing research synthesis before alignment-scope approval.
+4. Validate and ship.
+   - [x] Update focused layer1 tests for scope-approval-before-research behavior.
+   - [x] Refresh generated showcase data if required by skill metadata changes.
+   - [x] Run the requested generator, test, version, archive, dependency, showcase, and diff checks.
+   - [x] Commit and push the intended changes only.
+
 ## Current Implementation - Separate Skills Showcase From Skillpacks Package
 
 ### Goal

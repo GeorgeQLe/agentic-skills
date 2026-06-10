@@ -21,10 +21,17 @@ describe("journey-map alignment preview contract", () => {
     for (const check of checks) {
       const content = readFileSync(check.path, "utf8");
 
-      expect(content, `${check.command} version`).toMatch(/^version: v0\.7$/m);
+      expect(content, `${check.command} version`).toMatch(/^version: v0\.11$/m);
       expect(content, `${check.command} report-first gate`).toContain("## Report-First Approval Gate");
-      expect(content, `${check.command} builds alignment preview first`).toContain(
-        "When stopping for approval, build and attempt to open the alignment preview page first",
+      expect(content, `${check.command} scope-first approval`).toContain("Default to scope-first approval");
+      expect(content, `${check.command} blocks synthesis before scope approval`).toContain(
+        "Do not perform synthesized research, rank candidates, make recommendations, or write working packets",
+      );
+      expect(content, `${check.command} builds scope alignment page first`).toContain(
+        "Build the `review` HTML alignment page before synthesized research",
+      );
+      expect(content, `${check.command} stops for research scope approval`).toContain(
+        "Stop for final compiled YAML approval of the research scope",
       );
       expect(content, `${check.command} suppresses downstream routing before approval`).toContain(
         "Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language.",

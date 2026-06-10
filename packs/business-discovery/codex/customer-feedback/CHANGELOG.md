@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
 ## v0.5 - 2026-06-06
 
 - Updated stale-ICP feedback routes from the retired `icp` command to `customer-discovery` while preserving `research/icp.md` context.

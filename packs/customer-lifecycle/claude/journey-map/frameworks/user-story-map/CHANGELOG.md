@@ -1,5 +1,9 @@
 # user-story-map changelog (claude)
 
+## v0.2 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
 ## v0.1 - 2026-06-06
 
 - Route missing customer-discovery prerequisite guidance to `/customer-discovery` instead of the retired `/icp` command while preserving `research/icp.md` as the evidence artifact name.

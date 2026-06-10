@@ -201,11 +201,13 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} include new page`).toContain("includes the newly written page");
       expect(content, `${path} update existing`).toContain("If the index exists, update it instead of blindly appending");
       expect(content, `${path} dedupe entries`).toContain("remove duplicate entries for the same page path");
-      expect(content, `${path} product-line sort`).toContain(
-        "group or sort index entries by product/product path first",
+      expect(content, `${path} category/product-line sort`).toContain(
+        "Group index entries by category first, then by product/product path within each category",
       );
       expect(content, `${path} progress manifest`).toContain("`product_paths[]`");
-      expect(content, `${path} flat organization`).toContain("In flat repositories, preserve the existing index organization");
+      expect(content, `${path} flat organization`).toContain(
+        "In flat repositories, group by category, then preserve the existing index organization",
+      );
     }
   });
 
@@ -298,23 +300,34 @@ describe("alignment page gate contract", () => {
     for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} staged research section`).toContain("**Staged research workflow.**");
-      expect(content, `${path} stage 1`).toContain("Stage 1 performs research and clarification");
+      expect(content, `${path} scope-first workflow`).toContain("scope-first three-stage approval workflow");
+      expect(content, `${path} stage 1 minimal discovery`).toContain("Stage 1 is minimal scope discovery only");
+      expect(content, `${path} review page before synthesis`).toContain(
+        "Build the `review` alignment page before synthesized research",
+      );
+      expect(content, `${path} scope yaml approval`).toContain("Stop for final compiled YAML approval of the research scope");
+      expect(content, `${path} no stage 1 synthesis`).toContain(
+        "Do not synthesize findings, rank candidates, recommend a path, or create working packets",
+      );
+      expect(content, `${path} old stage 1 research wording removed`).not.toContain(
+        "Stage 1 performs research and clarification",
+      );
       expect(content, `${path} flat working packet`).toMatch(
         /`research\/_working\/preliminary-[^`]+-research\.md`/,
       );
       expect(content, `${path} product-path working packet`).toMatch(
         /`research\/\{slug\}\/_working\/preliminary-[^`]+-research\.md`/,
       );
-      expect(content, `${path} no canonical stage 1 writes`).toContain(
-        "Do not create or update canonical research, spec, or task files in Stage 1",
+      expect(content, `${path} stage 2 waits for scope approval`).toContain(
+        "Stage 2 starts only after final compiled YAML approves the research scope",
       );
-      expect(content, `${path} stage 2`).toContain("Stage 2 consumes the working packet");
+      expect(content, `${path} stage 2 research`).toContain("Perform the synthesized research");
       expect(content, `${path} full preliminary packet`).toContain("renders the full preliminary packet");
       expect(content, `${path} feedback remains stage 2`).toContain(
         "Feedback-only YAML revises the working packet and review page, then remains in Stage 2",
       );
       expect(content, `${path} final yaml gating`).toContain(
-        "Stage 3 consumes final compiled YAML only when it has no unresolved `needs-clarification`",
+        "Stage 3 consumes final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`",
       );
       expect(content, `${path} archive working packet`).toContain(
         "archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`",
@@ -328,6 +341,12 @@ describe("alignment page gate contract", () => {
     for (const path of researchQualitySkills) {
       const content = conventionText(path);
       expect(content, `${path} research quality contract`).toContain("**Research quality contract.**");
+      expect(content, `${path} scope approval before synthesis`).toContain(
+        "do not synthesize research findings, recommendations, candidate rankings, or working packets until the user approves the research scope",
+      );
+      expect(content, `${path} minimal pre-approval discovery`).toContain(
+        "Before scope approval, do only minimal discovery needed to propose the research scope",
+      );
       expect(content, `${path} claim/evidence/inference split`).toContain("`claims` (what the report concludes), `evidence`");
       expect(content, `${path} no context loss`).toContain("**No context loss rule.**");
       expect(content, `${path} evidence matrix`).toContain("evidence matrix");
@@ -371,6 +390,16 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} copy button`).toContain('explicit "Copy YAML" button');
       expect(content, `${path} fallback`).toContain("fall back to selecting the textarea contents");
       expect(content, `${path} old click-to-copy-only contract`).not.toContain("Display the YAML in a read-only, click-to-copy textarea.");
+    }
+  });
+
+  it("does not leave unresolved generator tokens in bundled alignment-page conventions", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} no unresolved skill-specific gate token`).not.toContain("{{SKILL_SPECIFIC_GATES}}");
+      expect(content, `${path} no unresolved visual-tier token`).not.toContain("{{SKILL_VISUAL_TIER}}");
+      expect(content, `${path} no unresolved glossary token`).not.toContain("{{SKILL_GLOSSARY_GATE}}");
     }
   });
 

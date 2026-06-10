@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.14
+version: v0.15
 invocation: orchestrator
 ---
 
@@ -465,11 +465,11 @@ Build and attempt to open `alignment/research-roadmap-{topic}.html` before writi
 
 **Alignment gates.** Treat gates as explicit review sections inside the HTML page. Include evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and approval gates. Render documentation-health evidence, missing/stale artifact inventory, blocked prerequisites, priority queue rationale, pack-availability assumptions, proposed task-file changes, and the full proposed queue with no context loss from scan evidence.
 
-**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
+**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain proposed research scope, source plan, assumptions/confidence, recommended output path, proposed file changes, and approval gates before synthesized documentation-health conclusions, queue recommendations, canonical research, spec, or task files are created or updated.
 
 **Research-roadmap translation.** Separate observed file/path evidence from inferred documentation health conclusions. Include source coverage expectations for web research and repo research: competitors, pricing, user sentiment, positioning, integrations, and recent activity when web evidence is used; file/path evidence and a distinction between observed code facts and inferred product, workflow, or user conclusions when repo evidence is used.
 
-**Research quality contract.** Preserve `claims` (what the report concludes), `evidence`, `inference`, assumptions, confidence, alternatives considered, rejected or lower-confidence findings, source coverage gaps, and downstream implications in the page before approval. Include an evidence matrix, confidence/assumption register, and research completeness gate that asks whether the evidence is sufficient for the recommendation.
+**Research quality contract.** For research-roadmap outputs, do not synthesize research findings, recommendations, candidate rankings, or working packets until the user approves the research scope from the review alignment page. Before scope approval, do only minimal discovery needed to propose the research scope, source plan, assumptions, output paths, and approval questions. After scope approval, preserve `claims` (what the report concludes), `evidence`, `inference`, assumptions, confidence, alternatives considered, rejected or lower-confidence findings, source coverage gaps, and downstream implications in the page before approval. Include an evidence matrix, confidence/assumption register, and research completeness gate that asks whether the evidence is sufficient for the recommendation.
 
 **Research completeness gate.** Ask whether the evidence is sufficient for the recommendation, which claims need more support, and what missing context could change the queue.
 

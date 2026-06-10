@@ -1,5 +1,13 @@
 # positioning changelog (claude)
 
+## v0.13 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
+## v0.12 - 2026-06-09
+
+- Routed the hard ICP prerequisite from retired `/icp` to `/customer-discovery` while preserving `research/icp.md` as the expected artifact.
+
 ## v0.11 - 2026-06-06
 
 - Route completed positioning synthesis to `/user-flow-map` by default when the `product-design` pack is enabled, with `/pack install product-design` as the unavailable-pack fallback.

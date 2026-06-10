@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-10 — Research scope approval must precede synthesized research
+
+- Research-producing skills allowed Stage 1 to perform synthesized research and write working packets before the alignment page's research scope was approved.
+- Before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes, create a `review` alignment page from minimal scope discovery only and stop for final compiled YAML approving the research scope.
+- Treat pre-approval repo/source inspection as scope evidence only. Do not present it as findings, recommendations, or a preliminary deliverable until after scope approval.
+
 ## 2026-06-08 — New alignment-page addenda need matching gates before compile controls
 
 - A deck-based installation addendum was appended after the npm distribution alignment page's review gates and YAML compile controls, so reviewers could approve the page without making the new deck-install decision.

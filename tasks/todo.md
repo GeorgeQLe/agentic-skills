@@ -1,3 +1,30 @@
+## Research Scope Approval Before Alignment Research
+
+### Phase 1: Audit And Contract Update
+- [x] Capture prompt history for `create-agentic-skill`.
+- [x] Confirm repo context and preserve unrelated dirty files.
+- [x] Audit active `global/` and `packs/` source counts and old research-before-alignment wording.
+- [x] Rewrite the shared staged research workflow so minimal discovery produces the review alignment page before synthesized research.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Patch active `SKILL.md` report-first and staged workflow sections.
+
+### Phase 2: Versioning, Tests, And Shipping
+- [x] Archive and bump changed active skill versions.
+- [x] Update skill changelogs.
+- [x] Add the correction lesson.
+- [x] Update focused layer1 tests for the new approval gate.
+- [x] Refresh Skills Showcase generated data if required.
+- [x] Run required verification.
+- [x] Add review notes, commit, and push intended changes only.
+
+### Review Notes
+- Updated the canonical alignment-page convention and regenerated 270 bundled `ALIGNMENT-PAGE.md` files so Stage 1 is minimal scope discovery only, followed by final compiled YAML approval of research scope before synthesized findings or working packets.
+- Archived, bumped, and added changelog entries for active research-producing skills with hard-coded report-first/staged workflow text, including the bespoke `research-roadmap` inline contract.
+- Added the correction lesson in `tasks/lessons.md` and tightened layer1 coverage for scope approval before synthesis, old research-first wording, journey-map behavior, and unresolved generated-convention tokens.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, focused layer1 Vitest run (3 files / 304 tests), `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, active old-phrase audit, and `git diff --check`.
+
+---
+
 ## Separate Skills Showcase From Skillpacks Package
 
 ### Execution Profile

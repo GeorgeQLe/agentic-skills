@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
 ## v0.6 - 2026-06-07
 
 - Route missing customer-discovery prerequisites to `/customer-discovery` instead of the retired `/icp` executable.

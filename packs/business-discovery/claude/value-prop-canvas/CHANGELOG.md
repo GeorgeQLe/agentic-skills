@@ -1,5 +1,13 @@
 # value-prop-canvas changelog (claude)
 
+## v0.8 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
+## v0.7 - 2026-06-09
+
+- Routed the hard ICP prerequisite from retired `/icp` to `/customer-discovery` while preserving `research/icp.md` as the expected artifact.
+
 ## v0.6 - 2026-06-06
 
 - Return from optional value-proposition synthesis to `/user-flow-map` when upstream AFPS evidence exists and the product-design route is ready.

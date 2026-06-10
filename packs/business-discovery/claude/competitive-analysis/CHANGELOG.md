@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.16 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
 ## v0.15 - 2026-06-07
 
 - Refactored `/competitive-analysis` into a Pattern A framework-decomposition orchestrator with framework queueing and `--synthesize` mode.

@@ -1,5 +1,9 @@
 # repo-glossary Changelog
 
+## v0.2 - 2026-06-10
+
+- Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
+
 ## v0.1 — 2026-06-03
 
 - Added Codex mirror with `$repo-glossary` invocation and Codex display metadata.

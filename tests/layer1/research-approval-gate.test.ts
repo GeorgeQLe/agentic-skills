@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { globSync } from "glob";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import matter from "gray-matter";
 
 const ROOT_DIR = resolve(import.meta.dirname, "../..");
 
@@ -15,39 +14,46 @@ const skillFiles = [
 ].map((rel) => resolve(ROOT_DIR, rel));
 
 describe("research skill approval gates", () => {
-  const researchSkills = skillFiles.filter((filePath) => {
+  const stagedResearchSkills = skillFiles.filter((filePath) => {
     const raw = readFileSync(filePath, "utf-8");
-    const { data } = matter(raw);
-    return data.type === "research";
+    return raw.includes("## Report-First Approval Gate") || raw.includes("## Staged Research Workflow");
   });
 
-  it("finds research skills", () => {
-    expect(researchSkills.length).toBeGreaterThan(80);
+  it("finds staged research/report skills", () => {
+    expect(stagedResearchSkills.length).toBeGreaterThan(100);
   });
 
-  for (const filePath of researchSkills) {
+  for (const filePath of stagedResearchSkills) {
     const rel = filePath.replace(ROOT_DIR + "/", "");
 
-    it(`${rel} presents findings for approval before synthesized file writes`, () => {
+    it(`${rel} requires scope approval before synthesized research`, () => {
       const raw = readFileSync(filePath, "utf-8");
 
       expect(raw).toContain("## Report-First Approval Gate");
-      expect(raw).toMatch(/present findings[\s\S]*for user approval/i);
-      expect(raw).toMatch(/Do not write or overwrite synthesized deliverables/i);
-      expect(raw).toMatch(/until the user explicitly approves/i);
-      expect(raw).toMatch(/Raw evidence capture may be persisted before analysis/i);
+      expect(raw).toMatch(/Default to scope-first approval/i);
+      expect(raw).toMatch(/inspect only enough[\s\S]*to propose research scope/i);
+      expect(raw).toMatch(/Do not perform synthesized research/i);
+      expect(raw).toMatch(/until final compiled YAML approves the research scope/i);
+      expect(raw).toMatch(/label it as scope evidence, not findings/i);
+      expect(raw).not.toMatch(/Default to report-only: present findings/i);
     });
 
-    it(`${rel} uses staged working packets before canonical research writes`, () => {
+    it(`${rel} uses scope-first staged working packets before canonical research writes`, () => {
       const raw = readFileSync(filePath, "utf-8");
 
       expect(raw).toContain("## Staged Research Workflow");
-      expect(raw).toContain("1. **Stage 1 - Research and clarify.**");
+      expect(raw).toContain("1. **Stage 1 - Scope discovery and approval.**");
+      expect(raw).toContain("Build the `review` HTML alignment page before synthesized research");
+      expect(raw).toContain("Stop for final compiled YAML approval of the research scope");
+      expect(raw).toContain("Do not perform synthesized research, rank candidates, make recommendations, or write working packets");
+      expect(raw).not.toContain("1. **Stage 1 - Research and clarify.** Perform the research");
+      expect(raw).not.toContain("Perform the research, run required source/code checks");
       expect(raw).toContain("`research/_working/preliminary-<skill>-research.md`");
       expect(raw).toContain("`research/{slug}/_working/preliminary-<skill>-research.md`");
-      expect(raw).toContain("Do not create or update canonical research, spec, or task files in Stage 1");
-      expect(raw).toContain("2. **Stage 2 - Review alignment.**");
-      expect(raw).toContain("build the `review` HTML alignment page");
+      expect(raw).toContain("2. **Stage 2 - Research and artifact review.**");
+      expect(raw).toContain("Only after approved research-scope YAML");
+      expect(raw).toContain("perform the synthesized research");
+      expect(raw).toContain("Update the `review` HTML alignment page");
       expect(raw).toContain("Feedback-only YAML revises the working packet and page, then remains in Stage 2");
       expect(raw).toContain("3. **Stage 3 - Finalize approved artifacts.**");
       expect(raw).toContain("no unresolved `needs-clarification`, unresolved `down` feedback");

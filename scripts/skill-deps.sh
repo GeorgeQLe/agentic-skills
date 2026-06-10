@@ -12,7 +12,8 @@ MODE="${1:-default}"
 declare -A VALID_SKILLS
 mapfile -t SKILL_DIRS < <(
   find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
-    -mindepth 2 -maxdepth 5 -type f -name SKILL.md 2>/dev/null \
+    -mindepth 2 -type f -name SKILL.md 2>/dev/null \
+    -not -path '*/archive/*' \
     | sed 's#/SKILL.md$##' \
     | sort
 )
@@ -27,6 +28,31 @@ done
 # 2. For each SKILL.md, extract /skill-name and $skill-name refs using PCRE regex
 declare -A DEPS       # skill -> "dep1 dep2 dep3"
 declare -A BROKEN     # skill -> "bad1 bad2"
+declare -A IGNORED_REFS=(
+  # Runner/session commands, not skill directories.
+  [reload-skills]=1
+  [clear]=1
+
+  # Placeholders, path fragments, or route examples that look slash-prefixed.
+  [path]=1
+  [glob]=1
+  [tmp]=1
+  [skill-name]=1
+  [reports]=1
+  [research]=1
+  [benchmarks]=1
+  [plan]=1
+
+  # Explicitly negative, hibernated, or future route names documented in skills.
+  [analyze-session]=1
+  [exec-kanban]=1
+  [ship-kanban]=1
+  [ship-end-kanban]=1
+  [mono-migrate]=1
+
+  # Pack name used in prose; there is no direct /code-review skill command.
+  [code-review]=1
+)
 TOTAL_SKILLS=0
 SKILLS_WITH_DEPS=0
 BROKEN_COUNT=0
@@ -53,6 +79,7 @@ for dir in "${SKILL_DIRS[@]}"; do
     # Skip self-references
     [[ "$dep" == "$name" ]] && continue
     [[ "$dep" == "skill" ]] && continue
+    [[ -n "${IGNORED_REFS[$dep]+x}" ]] && continue
 
     # Deduplicate
     if [[ " $seen_deps $seen_broken " == *" $dep "* ]]; then
