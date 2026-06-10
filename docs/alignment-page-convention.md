@@ -2,6 +2,8 @@
 
 This file is the **single authoring source** for the alignment-page convention. It is bundled per-skill as `ALIGNMENT-PAGE.md` (load-on-demand) inside every alignment-producing skill directory; `scripts/upgrade-alignment-page.mjs` reads the marked block below and propagates it. **Edit the convention here only** — never hand-edit a generated `ALIGNMENT-PAGE.md`; re-run the generator instead. Replace `{skill-name}` with the skill's name and `{topic}` with a normalized topic slug. The `{{SKILL_SPECIFIC_GATES}}` token is filled per skill from the generator's gate map.
 
+**Bespoke allowlist.** A skill whose `## Alignment Page` section carries no generator-owned pointer/stub paragraph is classified bespoke: the generator preserves the section verbatim and does not bundle `ALIGNMENT-PAGE.md` for it. Intentionally bespoke skills must be listed in `scripts/alignment-bespoke-list.txt`, and the list is exact — the generator exits non-zero (in dry-run and write mode) on an unlisted bespoke section, on a stale allowlist entry with no bespoke section remaining, and on a mixed sibling pair where one mirror is generated and the other bespoke (even when allowlisted). Converting an allowlisted skill back to the generated stub requires updating both mirrors and removing its allowlist entry in the same commit.
+
 <!-- alignment-convention:start -->
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
 

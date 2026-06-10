@@ -1,11 +1,25 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "node:fs";
-import { dirname, relative, join } from "node:path";
+import { dirname, relative, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const args = new Set(process.argv.slice(2));
-const dryRun = args.has("--dry-run");
+const argv = process.argv.slice(2);
+let rootOverride = null;
+const flags = new Set();
+for (let i = 0; i < argv.length; i += 1) {
+  if (argv[i] === "--root") {
+    rootOverride = argv[i + 1];
+    i += 1;
+    if (!rootOverride) {
+      console.error("--root requires a path argument");
+      process.exit(1);
+    }
+  } else {
+    flags.add(argv[i]);
+  }
+}
+const repoRoot = rootOverride ? resolve(rootOverride) : dirname(dirname(fileURLToPath(import.meta.url)));
+const dryRun = flags.has("--dry-run");
 // --all is retained as a no-op alias: all alignment-producing skills are covered by default.
 
 const skipPath = `${repoRoot}/scripts/alignment-skip-list.txt`;
@@ -14,6 +28,18 @@ if (existsSync(skipPath)) {
   for (const rawLine of readFileSync(skipPath, "utf8").split(/\r?\n/)) {
     const line = rawLine.replace(/#.*/, "").trim();
     if (line) skippedNames.add(line);
+  }
+}
+
+// Skills whose `## Alignment Page` sections are intentionally hand-authored
+// in BOTH mirrors. This list is exact: unlisted bespoke sections, stale
+// entries, and mixed generated/bespoke sibling pairs are failing diagnostics.
+const bespokePath = `${repoRoot}/scripts/alignment-bespoke-list.txt`;
+const bespokeAllowlist = new Set();
+if (existsSync(bespokePath)) {
+  for (const rawLine of readFileSync(bespokePath, "utf8").split(/\r?\n/)) {
+    const line = rawLine.replace(/#.*/, "").trim();
+    if (line) bespokeAllowlist.add(line);
   }
 }
 
@@ -275,6 +301,16 @@ let outOfScope = 0;
 let bespoke = 0;
 let bundlesWritten = 0;
 
+// Per-skill-name classification across mirrors, so a half-converted pair or
+// an unlisted bespoke section cannot be skipped silently.
+const classification = new Map();
+function recordClassification(skillName, file, kind) {
+  if (!classification.has(skillName)) {
+    classification.set(skillName, { bespokeFiles: [], ownableFiles: [] });
+  }
+  classification.get(skillName)[kind].push(file);
+}
+
 for (const file of files) {
   const skillName = skillNameFor(file);
   if (skippedNames.has(skillName)) {
@@ -293,8 +329,10 @@ for (const file of files) {
   // Preserve hand-authored / hybrid alignment sections verbatim.
   if (!isOwnable(body)) {
     bespoke += 1;
+    recordClassification(skillName, file, "bespokeFiles");
     continue;
   }
+  recordClassification(skillName, file, "ownableFiles");
 
   // 1. Bundled, load-on-demand convention file beside the skill.
   const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
@@ -321,9 +359,40 @@ for (const file of files) {
   }
 }
 
+// Failing diagnostics: bespoke classification must match the allowlist
+// exactly, and sibling mirrors must agree, in both dry-run and write mode.
+const diagnostics = [];
+for (const [name, { bespokeFiles, ownableFiles }] of classification) {
+  if (bespokeFiles.length && ownableFiles.length) {
+    diagnostics.push(
+      `Mixed siblings for "${name}" — generated: ${ownableFiles.join(", ")}; bespoke: ${bespokeFiles.join(", ")}. Convert the bespoke mirror(s) to the generated stub paragraph or hand-author both mirrors.`,
+    );
+  } else if (bespokeFiles.length && !bespokeAllowlist.has(name)) {
+    diagnostics.push(
+      `Unlisted bespoke section for "${name}" in: ${bespokeFiles.join(", ")}. Add "${name}" to scripts/alignment-bespoke-list.txt if intentional, or restore the generated stub paragraph so the bundle stays in sync.`,
+    );
+  }
+}
+for (const name of bespokeAllowlist) {
+  const entry = classification.get(name);
+  if (!entry || entry.bespokeFiles.length === 0) {
+    diagnostics.push(
+      `Stale allowlist entry "${name}" in scripts/alignment-bespoke-list.txt — no bespoke alignment section found. Remove the entry.`,
+    );
+  }
+}
+
 console.log("");
 console.log(`Updated: ${updated}`);
 console.log(`Bundled files written: ${bundlesWritten}`);
 console.log(`Skipped by ${relative(repoRoot, skipPath)}: ${skipList}`);
 console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Out of scope: ${outOfScope}`);
+console.log(`Bespoke allowlist: ${bespokeAllowlist.size} skills, ${diagnostics.length ? "DRIFT" : "exact"}`);
+
+if (diagnostics.length) {
+  console.error("");
+  console.error("Bespoke classification drift:");
+  for (const diagnostic of diagnostics) console.error(`  - ${diagnostic}`);
+  process.exit(1);
+}

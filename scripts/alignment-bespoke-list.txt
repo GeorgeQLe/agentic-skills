@@ -1,0 +1,25 @@
+# Skills whose `## Alignment Page` sections are intentionally hand-authored
+# in BOTH mirrors (claude and codex). The generator preserves these sections
+# verbatim and does not bundle ALIGNMENT-PAGE.md for them.
+#
+# This list is exact: a bespoke section whose skill is not listed here, a
+# listed skill with no bespoke section remaining, or a skill with one mirror
+# generated and the other bespoke all fail `scripts/upgrade-alignment-page.mjs`.
+# Removing a skill from this list requires converting both mirrors to the
+# generated stub paragraph in the same commit.
+#
+# One skill name per line. Lines starting with # are comments.
+# Skill names match the directory basename (e.g. "spec-interview").
+
+# product-design
+consolidate-variations
+prototype
+spec-interview
+ui-interview
+ux-variations
+
+# product-testing
+uat
+
+# research-admin
+research-roadmap
