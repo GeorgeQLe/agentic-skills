@@ -142,3 +142,27 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
     assert.match(docs, /Phase 4 prepares the package for a dry-run release only/, 'release prep should not imply publish');
   });
 });
+
+describe('skillpacks npm package metadata', () => {
+  it('keeps public publish metadata in the package manifest', () => {
+    const packageJson = JSON.parse(
+      readFileSync(join(packageRoot, 'package.json'), 'utf8')
+    );
+
+    assert.equal(packageJson.license, 'MIT');
+    assert.equal(
+      packageJson.repository.url,
+      'git+https://github.com/GeorgeQLe/agentic-skills.git'
+    );
+    assert.equal(packageJson.repository.directory, 'packages/skillpacks');
+    assert.equal(
+      packageJson.bugs.url,
+      'https://github.com/GeorgeQLe/agentic-skills/issues'
+    );
+    assert.equal(
+      packageJson.homepage,
+      'https://github.com/GeorgeQLe/agentic-skills#readme'
+    );
+    assert.ok(packageJson.files.includes('LICENSE'), 'npm files should include LICENSE');
+  });
+});

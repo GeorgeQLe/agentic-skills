@@ -70,9 +70,19 @@ Current package `package.json` shape:
   "bin": {
     "skillpacks": "bin/skillpacks.mjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeQLe/agentic-skills.git",
+    "directory": "packages/skillpacks"
+  },
+  "bugs": {
+    "url": "https://github.com/GeorgeQLe/agentic-skills/issues"
+  },
+  "homepage": "https://github.com/GeorgeQLe/agentic-skills#readme",
   "files": [
     "bin/",
     "src/",
+    "dist/",
     "global/",
     "packs/",
     "scripts/pack.sh",
@@ -82,18 +92,19 @@ Current package `package.json` shape:
     "docs/QUICKSTART.md",
     "docs/skillpacks-npm-distribution.md",
     "README.md",
+    "LICENSE",
     "AGENTS.md",
     "CLAUDE.md",
     "init.sh"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   }
 }
 ```
 
-The root `package.json` is private and declares workspaces for `apps/skills-showcase` and `packages/skillpacks`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
+The root `package.json` is private and declares workspaces for `apps/skills-showcase` and `packages/skillpacks`. The public package uses the repository root MIT license and npm metadata links back to `https://github.com/GeorgeQLe/agentic-skills`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
 
 ### CLI Entry Point
 
@@ -364,7 +375,7 @@ Tasks:
 - Confirm npm account access for publishing `skillpacks`.
 - Reserve or create the `@skillpacks` npm organization if future scoped packages are desired.
 - Decide whether the first release should be private dry-run only or public `0.1.0`.
-- Confirm license metadata for npm.
+- Confirm MIT license metadata and npm repository/bugs/homepage links.
 - Confirm `jq` remains a documented dependency for write commands in phase 1.
 - Run `npm pack packages/skillpacks/build --dry-run --json --silent` once package staging exists and verify the tarball excludes active-task artifacts.
 
@@ -468,7 +479,7 @@ Goal: publish the first stable public package.
 Tasks:
 
 - Verify working tree is clean except intended release changes.
-- Run package tests and tarball validation.
+- Run package tests, tarball validation, and package metadata checks.
 - Run `npm publish --access public`.
 - Verify `npx skillpacks@latest list` against the published package.
 - Install into a fresh temp repo and verify one pack, one individual skill, and one deck.

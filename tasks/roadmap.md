@@ -152,8 +152,9 @@ Publish the first stable public `skillpacks` npm package after release validatio
    - [x] Inspect the staged tarball boundary and denied paths.
    - [x] Re-check npm registry state for `skillpacks`.
    - [x] Run whitespace checks.
+   - [x] Fix MIT license metadata, npm repository links, staged package metadata, and package metadata coverage.
 2. External publish gate.
-   - [ ] Confirm the exact publish boundary: `skillpacks@0.1.0`, public access, current `UNLICENSED` metadata, and `packages/skillpacks/build` as the publish root.
+   - [ ] Confirm the exact publish boundary: `skillpacks@0.1.0`, public access, MIT metadata, npm links, and `packages/skillpacks/build` as the publish root.
    - [ ] Run `npm publish --access public` only after explicit confirmation.
 3. Published-package verification.
    - [ ] Verify `npx skillpacks@latest list` against npm.
@@ -167,7 +168,8 @@ Publish the first stable public `skillpacks` npm package after release validatio
 ### Current Step
 
 - [x] Step 5.1: Release preflight.
-- [ ] Step 5.2: External publish gate blocked on npm auth (`npm whoami` returned `E401 Unauthorized`) and explicit publish confirmation.
+- [x] Step 5.1b: MIT metadata prepublish fix.
+- [ ] Step 5.2: External publish gate after metadata validation.
 
 ---
 

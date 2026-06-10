@@ -53,7 +53,7 @@ The release was advanced as far as safely possible without external account cred
 
 ## Residual Risk
 
-The package may still fail publication or post-publish install verification after npm auth is fixed. Public package metadata currently includes `license: "UNLICENSED"`; publish confirmation must explicitly accept or change that metadata before release.
+The package may still fail publication or post-publish install verification after npm auth is fixed. At the time of this blocked preflight, public package metadata still needed the planned MIT update before release.
 
 ## Rollback Note
 
@@ -61,4 +61,4 @@ No external release state changed. Roll back this task-doc update with `git reve
 
 ## Next Command
 
-Authenticate npm for the intended package owner, then rerun `$exec phase 5` with explicit confirmation to publish `skillpacks@0.1.0`.
+As of this blocked preflight: apply the MIT package metadata fix, authenticate npm for the intended package owner, then continue Phase 5 and publish `skillpacks@0.1.0`.

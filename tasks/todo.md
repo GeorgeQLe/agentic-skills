@@ -13,14 +13,15 @@ Publish the first stable public `skillpacks` npm package after release validatio
 
 - Source design: `docs/skillpacks-npm-distribution.md` `### Phase 5 - First Publish`.
 - Phase 4 is complete: package docs, staging, tarball dry-run, and `npm publish --dry-run` all passed locally without publishing.
-- Current package identity: `packages/skillpacks/package.json` publishes `skillpacks@0.1.0` with `license: "UNLICENSED"`.
+- Current package identity: `packages/skillpacks/package.json` should publish `skillpacks@0.1.0` with MIT license metadata and npm links back to `https://github.com/GeorgeQLe/agentic-skills`.
 - Real publication is an external registry action and remains gated by explicit user confirmation before `npm publish --access public` runs.
 - Existing unrelated local work: `apps/skills-showcase/next-env.d.ts`; leave it outside this release boundary.
 
 ### Steps
 
 - [x] Step 5.1: Run release preflight: package tests, package staging, tarball inspection, registry state check, and whitespace checks.
-- [ ] Step 5.2: Confirm the external publish boundary, including `skillpacks@0.1.0`, public access, and current license metadata.
+- [x] Step 5.1b: Fix publish metadata before release: root MIT `LICENSE`, package MIT metadata, npm repository/bugs/homepage links, staged package allowlist, and package metadata coverage.
+- [ ] Step 5.2: Confirm the external publish boundary, including `skillpacks@0.1.0`, public access, MIT license metadata, npm links, and `packages/skillpacks/build` as the publish root.
 - [ ] Step 5.3: Run `npm publish --access public` from the staged package build only after explicit confirmation.
 - [ ] Step 5.4: Verify the published package with `npx skillpacks@latest list` and fresh temp-project installs for one pack, one individual skill, and one deck.
 - [ ] Step 5.5: Record release evidence in the ship manifest, update history/review notes, commit, and push intended Phase 5 changes only.
@@ -40,7 +41,16 @@ Publish the first stable public `skillpacks` npm package after release validatio
 - Registry state check: `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache` returned `E404`, so `skillpacks@*` is still unpublished from this machine's registry view.
 - Git-checkout path smoke passed: `scripts/pack.sh list` returned the active pack list. `git diff --check` passed.
 - Publish gate is blocked: sandboxed `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` first failed with `EAI_AGAIN`; escalated rerun reached the registry and returned `E401 Unauthorized`. No `npm publish`, tag, package access change, `npx` published-package verification, or temp-project install verification was run.
-- Next required action: authenticate npm for the account that should own `skillpacks`, then explicitly confirm publishing `skillpacks@0.1.0` from `packages/skillpacks/build` with public access and current `UNLICENSED` metadata.
+- Next required action: fix the npm metadata to MIT, authenticate npm for the account that should own `skillpacks`, then publish `skillpacks@0.1.0` from `packages/skillpacks/build` with public access.
+
+### Review Notes - MIT Metadata Prepublish Fix (2026-06-10)
+
+- Added root `LICENSE` with MIT terms, changed `packages/skillpacks/package.json` to `license: "MIT"`, and added `repository`, `bugs`, and `homepage` metadata pointing to `https://github.com/GeorgeQLe/agentic-skills`.
+- Updated package staging so `packages/skillpacks/build` includes `LICENSE`, keeps the npm metadata links in staged `package.json`, and checks `LICENSE` as a required build file. Added package-owned metadata coverage in `packages/skillpacks/test/compatibility.test.mjs`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` because package metadata contributes to the manifest source fingerprint.
+- Validation passed: `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` returned `glexcorp`; `npm --workspace skillpacks run test:node` passed 38/38 tests; `npm --workspace skillpacks run build:check` passed with manifest exact, 373 skills, 41 packs, and package staging boundary clean.
+- Tarball dry-run passed from `packages/skillpacks/`: `skillpacks@0.1.0`, `skillpacks-0.1.0.tgz`, 2,349 files, 5,272,075 bytes packed, 31,323,992 bytes unpacked, shasum `9ab8925b5f8d3dc39f1caa9c50609fb8df6df1f2`, integrity `sha512-TyZFnm9HjaV8E0yTN1EPRuh1BZDWt/Hcn316omlXvAVhLFpWkP191BaKzw/wmCjRkEm14RF2WkWJ6XSlusDKHg==`; denied-path audit found zero entries under `alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, or `docs/history/`, and `LICENSE` was present.
+- Registry state check before publish still returned expected `E404` for `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache`. `git diff --check` passed.
 
 ---
 

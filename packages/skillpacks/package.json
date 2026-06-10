@@ -6,6 +6,15 @@
   "bin": {
     "skillpacks": "bin/skillpacks.mjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeQLe/agentic-skills.git",
+    "directory": "packages/skillpacks"
+  },
+  "bugs": {
+    "url": "https://github.com/GeorgeQLe/agentic-skills/issues"
+  },
+  "homepage": "https://github.com/GeorgeQLe/agentic-skills#readme",
   "files": [
     "bin/",
     "src/",
@@ -19,6 +28,7 @@
     "docs/QUICKSTART.md",
     "docs/skillpacks-npm-distribution.md",
     "README.md",
+    "LICENSE",
     "AGENTS.md",
     "CLAUDE.md",
     "init.sh"
@@ -40,7 +50,7 @@
     "codex",
     "skills"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   }

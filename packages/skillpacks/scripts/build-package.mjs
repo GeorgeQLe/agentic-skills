@@ -31,6 +31,7 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "docs/QUICKSTART.md", to: "docs/QUICKSTART.md" },
   { fromRoot: repoRoot, from: "docs/skillpacks-npm-distribution.md", to: "docs/skillpacks-npm-distribution.md" },
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
+  { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" },
   { fromRoot: repoRoot, from: "AGENTS.md", to: "AGENTS.md" },
   { fromRoot: repoRoot, from: "CLAUDE.md", to: "CLAUDE.md" },
   { fromRoot: repoRoot, from: "init.sh", to: "init.sh" }
@@ -44,6 +45,7 @@ const requiredBuildFiles = [
   "scripts/pack.sh",
   "scripts/skill-links.sh",
   "init.sh",
+  "LICENSE",
   "global/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"
 ];
@@ -107,6 +109,9 @@ function stagedPackageJson() {
     "description",
     "type",
     "bin",
+    "repository",
+    "bugs",
+    "homepage",
     "files",
     "keywords",
     "license",
