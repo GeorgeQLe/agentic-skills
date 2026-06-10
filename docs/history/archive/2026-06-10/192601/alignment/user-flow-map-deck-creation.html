@@ -30,13 +30,8 @@ th,td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
 .status-block .row{margin:3px 0}
 .status-block .k{color:var(--text-muted);display:inline-block;min-width:170px}
 .badge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:700}
-.badge.confirmed{background:#12261a;color:var(--green);border:1px solid var(--green)}
+.badge.review{background:#3a2d10;color:var(--orange);border:1px solid var(--orange)}
 .badge.proto{background:#231a35;color:var(--purple);border:1px solid var(--purple)}
-.badge.updated{background:#13233a;color:var(--accent);border:1px solid var(--accent);font-weight:600}
-.decision-record{background:#0f1722;border:1px solid var(--green);border-radius:8px;padding:10px 14px;margin:10px 0}
-.decision-record p{margin:6px 0}
-.decision-answer{color:var(--green)}
-.decision-source{font-size:.82rem}
 .toc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:22px 0}
 .toc ol{margin:8px 0 0;padding-left:22px}
 .toc li{margin:4px 0}
@@ -48,9 +43,28 @@ th,td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
 .preview-note{border:1px dashed var(--purple);border-radius:8px;background:#15101f;color:var(--purple);padding:8px 14px;margin:12px 0;font-size:.88rem}
 .gate{background:#1c2333;border:1px solid var(--purple);border-radius:8px;padding:14px 18px;margin:20px 0}
 .gate h4{margin-top:0}
+.q{margin:10px 0}
+.q .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;min-height:44px;border:1px solid var(--border);border-radius:8px;margin:6px 0;cursor:pointer;background:#161d2c}
+.q .opt:hover{border-color:var(--accent)}
+.q .opt input{margin-top:4px}
+.q textarea{width:100%;min-height:74px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit;margin:6px 0}
+.sec-fb{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.85rem}
+.sec-fb-label{color:var(--text-muted)}
+.fb-btn{background:var(--surface);color:var(--text-muted);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;font:inherit;font-size:.85rem;cursor:pointer}
+.fb-btn[data-fb="emphasize"].active{color:var(--green);border-color:var(--green)}
+.fb-btn[data-fb="down"].active{color:var(--red);border-color:var(--red)}
+.fb-btn[data-fb="needs-clarification"].active{color:var(--orange);border-color:var(--orange)}
+.fb-panel{flex-basis:100%;margin-top:6px}
+.fb-panel textarea{width:100%;min-height:70px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit}
+.local-yaml-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.local-yaml{width:100%;min-height:120px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+.sec-fb.bottom{margin-top:18px;border-top:1px dashed var(--border);padding-top:10px}
 button{font:inherit}
 .btn{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;cursor:pointer}
 .btn:hover{border-color:var(--accent)}
+.btn.primary{background:#13233a;color:var(--accent);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.copy-status{color:var(--green);font-size:.85rem}
 .proto-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin:16px 0}
 .proto-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .proto-box svg{width:100%;height:auto;display:block}
@@ -86,6 +100,8 @@ button{font:inherit}
 .wt-stack{margin-top:12px;background:linear-gradient(145deg,#15251b,#10181c);border:1px solid var(--chart-2);border-radius:8px;padding:12px 14px}
 .wt-stack .cmdline{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--chart-2)}
 .compile-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:34px 0}
+.compile-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.yaml-out{width:100%;min-height:220px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
 /* excalidraw-style sketch filter applies to shapes only, never text */
 #flow-svg rect,#flow-svg line,#flow-svg polygon{filter:url(#sketch)}
 #flow-svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
@@ -98,45 +114,52 @@ button{font:inherit}
 <main>
 <header>
   <h1>User Flow Map — gskillpacks.com Deck Creation</h1>
-  <p class="muted">Confirmed alignment page for <code>/user-flow-map</code>. Flow structure only: screens, routes, actions, decisions, branches, states, failure paths, handoffs, and wireframe-level notes. No visual styling, no animation mechanics, no implementation plan.</p>
+  <p class="muted">Review alignment page for <code>/user-flow-map</code>. Flow structure only: screens, routes, actions, decisions, branches, states, failure paths, handoffs, and wireframe-level notes. No visual styling, no animation mechanics, no implementation plan.</p>
   <div class="status-block">
-    <div class="row"><span class="k">alignment_status:</span> <span class="badge confirmed">confirmed</span> <span class="badge proto">prototype tier</span> <span class="badge updated">Updated — confirmed 2026-06-10</span></div>
-    <div class="row"><span class="k">generated:</span> 2026-06-10 (review)</div>
-    <div class="row"><span class="k">confirmed:</span> 2026-06-10</div>
+    <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
+    <div class="row"><span class="k">generated:</span> 2026-06-10</div>
     <div class="row"><span class="k">skill:</span> user-flow-map v0.0 (product-design pack)</div>
     <div class="row"><span class="k">product path:</span> <code>skills-showcase</code> (active in <code>research/.progress.yaml</code>)</div>
-    <div class="row"><span class="k">confirmed artifacts:</span> <code>specs/skills-showcase/user-flow-deck-creation.md</code> · <code>specs/skills-showcase/user-flow-deck-creation-interview.md</code></div>
-    <div class="row"><span class="k">approval source:</span> final compiled YAML, 12/12 gates answered, <code>section_feedback: []</code>, no needs-clarification, no requested edits (verbatim record in §14)</div>
-    <div class="row"><span class="k">prior review page:</span> archived at <code>docs/history/archive/2026-06-10/192601/alignment/user-flow-map-deck-creation.html</code></div>
+    <div class="row"><span class="k">canonical destination:</span> <code>specs/skills-showcase/user-flow-deck-creation.md</code> + interview log — written only after approval</div>
     <div class="row"><span class="k">upstream:</span> <code>apps/skills-showcase/docs/deck-builder-ux.md</code> (locked UX decisions) · <code>docs/decks.md</code> · animation plan Amendment 2 (routed the phase-slot question here)</div>
-    <div class="row"><span class="k">downstream:</span> <code>/ui-interview --requirements-only deck-creation</code> (requires <code>/pack install ui-interview</code>)</div>
-    <div class="row muted">This page is finished and current for the completed alignment cycle. It remains amendable: later research may change or extend these conclusions only by archiving this confirmed page first and highlighting the amendment against the preserved approval record.</div>
+    <div class="row"><span class="k">downstream:</span> <code>/ui-interview --requirements-only deck-creation</code> (after approval; requires <code>/pack install ui-interview</code>)</div>
   </div>
 </header>
 
 <nav class="toc" id="toc">
   <strong>Table of Contents</strong>
   <ol>
-    <li><a href="#context">Context &amp; Evidence</a> <span class="muted">(gate answered: evidence coverage)</span></li>
-    <li><a href="#assumptions">Flow Assumptions Record</a> <span class="muted">(gate answered: assumptions)</span></li>
-    <li><a href="#pressure">Slot-Model Pressure-Test Resolution</a> <span class="muted">(gate answered: verdict)</span></li>
+    <li><a href="#context">Context &amp; Evidence</a> <span class="muted">(gate: evidence coverage)</span></li>
+    <li><a href="#assumptions">Flow Assumptions Record</a> <span class="muted">(gate: assumptions)</span></li>
+    <li><a href="#pressure">Slot-Model Pressure-Test Resolution</a> <span class="muted">(gate: verdict)</span></li>
     <li><a href="#persona">Persona, Goal &amp; Entry Points</a></li>
-    <li><a href="#happy">Happy Path + Interactive Walkthrough</a> <span class="muted">(gate answered: flow map)</span></li>
-    <li><a href="#branches">Branches &amp; Decision Points</a> <span class="muted">(gate answered: coverage)</span></li>
-    <li><a href="#screens">Screen/Route Inventory &amp; Per-Screen Matrix</a> <span class="muted">(gate answered: coverage)</span></li>
-    <li><a href="#states">State Coverage</a> <span class="muted">(gate answered: coverage)</span></li>
-    <li><a href="#failures">Failure/Recovery &amp; Handoffs</a> <span class="muted">(gate answered: coverage)</span></li>
-    <li><a href="#wireframes">Low-Fidelity Wireframe Notes</a> <span class="muted">(gate answered: wireframes)</span></li>
+    <li><a href="#happy">Happy Path + Interactive Walkthrough</a> <span class="muted">(gate: flow map)</span></li>
+    <li><a href="#branches">Branches &amp; Decision Points</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#screens">Screen/Route Inventory &amp; Per-Screen Matrix</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#states">State Coverage</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#failures">Failure/Recovery &amp; Handoffs</a> <span class="muted">(gate: coverage)</span></li>
+    <li><a href="#wireframes">Low-Fidelity Wireframe Notes</a> <span class="muted">(gate: wireframes)</span></li>
     <li><a href="#risks">Open Questions, Risks &amp; Non-Goals</a></li>
-    <li><a href="#artifacts">Artifact Destination &amp; Proposed File Changes</a> <span class="muted">(gates answered)</span></li>
-    <li><a href="#route">Post-Approval Route</a> <span class="muted">(gate answered)</span></li>
-    <li><a href="#compile">Approval Record (final compiled YAML)</a></li>
+    <li><a href="#artifacts">Artifact Destination &amp; Proposed File Changes</a> <span class="muted">(gates)</span></li>
+    <li><a href="#route">Post-Approval Route</a> <span class="muted">(gate)</span></li>
+    <li><a href="#compile">Compile YAML</a></li>
   </ol>
 </nav>
 
 <!-- ============ 1. CONTEXT ============ -->
 <section id="context">
   <div class="sec-head"><h2>1. Context &amp; Evidence</h2>
+    <div class="sec-fb" data-section="Context & Evidence">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <p><code>/user-flow-map</code> was invoked to map the full deck-creation flow on gskillpacks.com — landing on the table through deck completion and CLI unlock, covering preset (canonical) decks, customization (swap/overlay), and custom decks — and to pressure-test whether phase-labeled slots mirroring the canonical card list make building feel like a chore versus user-defined phases. That second question was explicitly routed here by Amendment 2 of the animation design plan.</p>
   <div class="callout">Scope resolved to the active product path <code>skills-showcase</code>. Research evidence: <code>research/skills-showcase/idea-brief.md</code>. <strong>Gap:</strong> ICP and positioning have not run yet (manifest <code>next_skill: /icp</code>), so persona assumptions come from the idea brief, not validated research. The flow map carries this as a standing risk.</div>
@@ -153,11 +176,27 @@ button{font:inherit}
     <tr><td>Persistence is localStorage per deck slug; packs reseal per session; no accounts</td><td><code>deck-builder-ux.md</code> state &amp; persistence section</td><td>Resume, share, and failure paths must work without server state</td><td>High</td></tr>
   </table></div>
   <div class="gate" data-section="Context & Evidence" data-gate-type="evidence coverage">
-    <h4>Gate: evidence coverage <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Evidence coverage sufficient">
-      <p class="muted">Is this evidence base sufficient for a flow map, accepting the recorded gap that ICP/positioning have not run yet?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Sufficient — proceed on idea-brief personas</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: evidence coverage</h4>
+    <div class="q" data-qlabel="Evidence coverage sufficient">
+      <p>Is this evidence base sufficient for a flow map, accepting the recorded gap that ICP/positioning have not run yet?</p>
+      <label class="opt"><input type="radio" name="q1" value="Sufficient — proceed on idea-brief personas"> Sufficient — proceed on idea-brief personas</label>
+      <label class="opt"><input type="radio" name="q1" value="Sufficient, but run /icp and /positioning before UI work"> Sufficient, but run <code>/icp</code> + positioning before UI work</label>
+      <label class="opt"><input type="radio" name="q1" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q1" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Context & Evidence">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -165,6 +204,17 @@ button{font:inherit}
 <!-- ============ 2. ASSUMPTIONS ============ -->
 <section id="assumptions">
   <div class="sec-head"><h2>2. Flow Assumptions Record</h2>
+    <div class="sec-fb" data-section="Flow Assumptions Record">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <p>Confirmed in the terminal interview on 2026-06-10 ("Confirmed as-is"). The slot-model direction was answered verbatim: <em>"we have preset decks which users can modify as needed with default phases."</em> Mobile branch notes were explicitly included.</p>
   <div class="tbl"><table data-tts-narrative="Nineteen confirmed flow assumptions grouped into persona and goal, entry points, happy path, branches, decisions, states, handoffs, and boundaries. Each is tagged with its source: research, artifact, user answer, or inferred.">
@@ -190,11 +240,16 @@ button{font:inherit}
     <tr><td>19</td><td>Mobile: wireframe-level branch notes included</td><td>[user answer]</td></tr>
   </table></div>
   <div class="gate" data-section="Flow Assumptions Record" data-gate-type="assumptions/confidence">
-    <h4>Gate: assumptions record <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Assumptions record accurate">
-      <p class="muted">Does this record accurately capture the confirmed assumptions, including the verbatim slot-model direction?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Accurate — carry into the spec</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: assumptions record</h4>
+    <div class="q" data-qlabel="Assumptions record accurate">
+      <p>Does this record accurately capture the confirmed assumptions, including the verbatim slot-model direction?</p>
+      <label class="opt"><input type="radio" name="q2" value="Accurate — carry into the spec"> Accurate — carry into the spec</label>
+      <label class="opt"><input type="radio" name="q2" value="Accurate with corrections (see notes)"> Accurate with corrections (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q2" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the correction…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q2" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
     </div>
   </div>
 </section>
@@ -202,6 +257,17 @@ button{font:inherit}
 <!-- ============ 3. PRESSURE TEST ============ -->
 <section id="pressure">
   <div class="sec-head"><h2>3. Slot-Model Pressure-Test Resolution</h2>
+    <div class="sec-fb" data-section="Slot-Model Pressure-Test Resolution">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <h3>The question</h3>
   <p>Do phase-labeled slots that mirror the canonical card list 1:1 make building a preset deck feel like a chore with no choices — and should phases instead be user-defined?</p>
@@ -233,11 +299,28 @@ button{font:inherit}
   </div>
   <p><strong>Consequence for the locked animation contracts:</strong> the card-flight <em>target</em> contract (slot identity/position) is unchanged — phase slots remain the targets. Only the new deck-level Collect-all needs animation-plan review; movement mechanics (optimistic commit, clone overlay, snap-to-end) are untouched.</p>
   <div class="gate" data-section="Slot-Model Pressure-Test Resolution" data-gate-type="candidate/verdict decisions">
-    <h4>Gate: slot-model verdict <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Accept slot-model resolution">
-      <p class="muted">Accept this resolution — preset decks keep default phase slots with modification valves, deck-level Collect-all is added, and user-defined phases are scoped to custom decks?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Accept resolution as written</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: slot-model verdict</h4>
+    <div class="q" data-qlabel="Accept slot-model resolution">
+      <p>Accept this resolution — preset decks keep default phase slots with modification valves, deck-level Collect-all is added, and user-defined phases are scoped to custom decks?</p>
+      <label class="opt"><input type="radio" name="q3" value="Accept resolution as written"> Accept resolution as written</label>
+      <label class="opt"><input type="radio" name="q3" value="Accept, but drop the deck-level Collect-all addition"> Accept, but drop the deck-level Collect-all addition</label>
+      <label class="opt"><input type="radio" name="q3" value="Accept, but keep [Custom deck +] secondary, not a first-class tile"> Accept, but keep <code>[Custom deck +]</code> secondary, not a first-class tile</label>
+      <label class="opt"><input type="radio" name="q3" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q3" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Slot-Model Pressure-Test Resolution">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -245,6 +328,17 @@ button{font:inherit}
 <!-- ============ 4. PERSONA & ENTRY ============ -->
 <section id="persona">
   <div class="sec-head"><h2>4. Persona, Goal &amp; Entry Points</h2>
+    <div class="sec-fb" data-section="Persona, Goal & Entry Points">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <div class="tbl"><table data-tts-narrative="Two personas. The Evaluator is a developer assessing GSkillPacks who needs to understand decks and reach an installed artifact. The Returner already knows the system and wants the fastest path to a pack list for a new repo.">
     <tr><th>Persona</th><th>Goal</th><th>Success condition</th><th>Tempo</th></tr>
@@ -266,6 +360,17 @@ button{font:inherit}
 <!-- ============ 5. HAPPY PATH ============ -->
 <section id="happy">
   <div class="sec-head"><h2>5. Happy Path + Interactive Walkthrough</h2>
+    <div class="sec-fb" data-section="Happy Path & Flow Map">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <h3>Happy path (preset deck, Evaluator)</h3>
   <div class="tbl"><table data-tts-narrative="Nine ordered happy-path steps from landing on the table to copying the CLI command, each mapped to the screen where it happens.">
@@ -374,11 +479,27 @@ button{font:inherit}
     </table></div>
   </div>
   <div class="gate" data-section="Happy Path & Flow Map" data-gate-type="flow map">
-    <h4>Gate: proposed flow map <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Accept proposed flow map">
-      <p class="muted">Do you accept the happy path and the screen/transition graph as the binding flow structure for the deck-creation experience?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Accept as proposed</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: proposed flow map</h4>
+    <div class="q" data-qlabel="Accept proposed flow map">
+      <p>Do you accept the happy path and the screen/transition graph as the binding flow structure for the deck-creation experience?</p>
+      <label class="opt"><input type="radio" name="q4" value="Accept as proposed"> Accept as proposed</label>
+      <label class="opt"><input type="radio" name="q4" value="Accept with changes (see notes)"> Accept with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q4" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q4" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Happy Path & Flow Map">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -386,6 +507,17 @@ button{font:inherit}
 <!-- ============ 6. BRANCHES & DECISIONS ============ -->
 <section id="branches">
   <div class="sec-head"><h2>6. Branches &amp; Decision Points</h2>
+    <div class="sec-fb" data-section="Branches & Decision Points">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <h3>Alternate paths</h3>
   <div class="tbl"><table data-tts-narrative="Ten alternate paths branching off the happy path, including the new deck-level Collect-all fast path, preset modification that converts to a custom variant, overlay additions, from-scratch custom decks, shelf-first browsing, card inspection, resume, graduation, keep-editing, and sharing.">
@@ -416,11 +548,27 @@ button{font:inherit}
     <tr><td>D10</td><td>User</td><td>S1/S6</td><td>Follow a graduation arrow?</td><td>B8</td></tr>
   </table></div>
   <div class="gate" data-section="Branches & Decision Points" data-gate-type="branch/decision coverage">
-    <h4>Gate: branch &amp; decision coverage <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Branch and decision coverage complete">
-      <p class="muted">Are B1–B10 and D1–D10 the complete branch/decision set for v1, with nothing collapsed into "standard flow" language?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Complete for v1</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: branch &amp; decision coverage</h4>
+    <div class="q" data-qlabel="Branch and decision coverage complete">
+      <p>Are B1–B10 and D1–D10 the complete branch/decision set for v1, with nothing collapsed into "standard flow" language?</p>
+      <label class="opt"><input type="radio" name="q5" value="Complete for v1"> Complete for v1</label>
+      <label class="opt"><input type="radio" name="q5" value="Complete, with additions noted"> Complete, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q5" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing branch/decision…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q5" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Branches & Decision Points">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -428,6 +576,17 @@ button{font:inherit}
 <!-- ============ 7. SCREENS ============ -->
 <section id="screens">
   <div class="sec-head"><h2>7. Screen/Route Inventory &amp; Per-Screen Matrix</h2>
+    <div class="sec-fb" data-section="Screen/Route Inventory & Per-Screen Matrix">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <div class="tbl"><table data-tts-narrative="Seven screens: the table at root, the preset builder at deck slug URLs, the custom builder, the pack fan drawer as client state, the card detail modal and standalone page, the output panel as the completed deck's back face, and the deck-picker modal.">
     <tr><th>ID</th><th>Screen</th><th>Route</th><th>Purpose</th><th>Inputs</th><th>Outputs / destinations</th><th>Evidence</th></tr>
@@ -453,11 +612,27 @@ button{font:inherit}
     <tr><td><strong>S7 Deck picker</strong></td><td>Choose deck; create new custom; cancel</td><td>→ S2/S3 or back to S4</td><td>Decks already containing the card shown as "already in deck" (not selectable)</td><td>—</td><td>list (with progress per deck), empty-progress (all fresh)</td></tr>
   </table></div>
   <div class="gate" data-section="Screen/Route Inventory & Per-Screen Matrix" data-gate-type="coverage checkpoint">
-    <h4>Gate: screen inventory &amp; matrix <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Screen inventory and matrix complete">
-      <p class="muted">Is the seven-screen inventory with its action/state matrix the right v1 surface set (with <code>/follow</code> kept, old pages archived, <code>/catalog</code>+<code>/packs</code> redirected)?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Right surface set</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: screen inventory &amp; matrix</h4>
+    <div class="q" data-qlabel="Screen inventory and matrix complete">
+      <p>Is the seven-screen inventory with its action/state matrix the right v1 surface set (with <code>/follow</code> kept, old pages archived, <code>/catalog</code>+<code>/packs</code> redirected)?</p>
+      <label class="opt"><input type="radio" name="q6" value="Right surface set"> Right surface set</label>
+      <label class="opt"><input type="radio" name="q6" value="Right, with changes noted"> Right, with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q6" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q6" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Screen/Route Inventory & Per-Screen Matrix">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -465,6 +640,17 @@ button{font:inherit}
 <!-- ============ 8. STATES ============ -->
 <section id="states">
   <div class="sec-head"><h2>8. State Coverage</h2>
+    <div class="sec-fb" data-section="State Coverage">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <div class="tbl"><table data-tts-narrative="Required-state checklist mapping empty, loading, error, partial, success, permission, offline, validation, and edge states to where each appears in the flow and whether it was already designed or newly added by this flow map.">
     <tr><th>State class</th><th>Where it appears</th><th>Status</th></tr>
@@ -481,11 +667,16 @@ button{font:inherit}
     <tr><td>Edge — reduced motion</td><td>State parity required: every flow state reachable with flights/morphs replaced by fades (mechanics owned by animation plan)</td><td>Parity requirement stated here</td></tr>
   </table></div>
   <div class="gate" data-section="State Coverage" data-gate-type="state coverage">
-    <h4>Gate: state coverage <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="State coverage complete">
-      <p class="muted">Does this state set cover v1, including the newly designed error/validation states?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Covers v1</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: state coverage</h4>
+    <div class="q" data-qlabel="State coverage complete">
+      <p>Does this state set cover v1, including the newly designed error/validation states?</p>
+      <label class="opt"><input type="radio" name="q7" value="Covers v1"> Covers v1</label>
+      <label class="opt"><input type="radio" name="q7" value="Covers v1, with additions noted"> Covers v1, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q7" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing state…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q7" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
     </div>
   </div>
 </section>
@@ -493,6 +684,17 @@ button{font:inherit}
 <!-- ============ 9. FAILURES & HANDOFFS ============ -->
 <section id="failures">
   <div class="sec-head"><h2>9. Failure/Recovery Paths &amp; Handoffs</h2>
+    <div class="sec-fb" data-section="Failure/Recovery Paths & Handoffs">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <h3>Failure &amp; recovery</h3>
   <div class="tbl"><table data-tts-narrative="Ten failure paths with their recovery behavior, from data-load failure and invalid URLs through clipboard denial, mid-flight interruption, stale card ids, empty custom decks, offline notes, and reduced-motion parity.">
@@ -518,11 +720,27 @@ button{font:inherit}
     <tr><td>H5</td><td>System dependency</td><td>Custom/modified decks must emit explicit pack lists — the CLI deck manifest only maps canonical slugs</td><td>Drift between showcase deck definitions and CLI manifest; flagged in §11 (shared data source needed)</td></tr>
   </table></div>
   <div class="gate" data-section="Failure/Recovery Paths & Handoffs" data-gate-type="failure/handoff coverage">
-    <h4>Gate: failure &amp; handoff coverage <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Failure and handoff coverage complete">
-      <p class="muted">Do F1–F10 and H1–H5 cover the failure and handoff surface for v1?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Covered for v1</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: failure &amp; handoff coverage</h4>
+    <div class="q" data-qlabel="Failure and handoff coverage complete">
+      <p>Do F1–F10 and H1–H5 cover the failure and handoff surface for v1?</p>
+      <label class="opt"><input type="radio" name="q8" value="Covered for v1"> Covered for v1</label>
+      <label class="opt"><input type="radio" name="q8" value="Covered, with additions noted"> Covered, with additions (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q8" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the missing failure/handoff…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q8" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Failure/Recovery Paths & Handoffs">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -530,6 +748,17 @@ button{font:inherit}
 <!-- ============ 10. WIREFRAMES ============ -->
 <section id="wireframes">
   <div class="sec-head"><h2>10. Low-Fidelity Wireframe Notes</h2>
+    <div class="sec-fb" data-section="Low-Fidelity Wireframe Notes">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <p class="muted">Structural regions only — no styling, spacing, or visual design. Those belong to <code>/ui-interview</code> and later stages.</p>
   <h3>S1 Table (<code>/</code>)</h3>
@@ -597,11 +826,27 @@ S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck 
     <li><strong>Output panel becomes a full-width sheet;</strong> the command line wraps with a copy button adjacent, not trailing off-screen.</li>
   </ul>
   <div class="gate" data-section="Low-Fidelity Wireframe Notes" data-gate-type="wireframe notes">
-    <h4>Gate: wireframe notes <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Wireframe notes structural and sufficient">
-      <p class="muted">Are these structural notes right as handoff guidance for <code>/ui-interview</code> (and properly free of visual-design decisions)?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Right as handoff guidance</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: wireframe notes</h4>
+    <div class="q" data-qlabel="Wireframe notes structural and sufficient">
+      <p>Are these structural notes right as handoff guidance for <code>/ui-interview</code> (and properly free of visual-design decisions)?</p>
+      <label class="opt"><input type="radio" name="q9" value="Right as handoff guidance"> Right as handoff guidance</label>
+      <label class="opt"><input type="radio" name="q9" value="Right, with changes noted"> Right, with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q9" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q9" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+  <div class="sec-fb bottom" data-section="Low-Fidelity Wireframe Notes">
+    <span class="sec-fb-label">Section feedback (end of section):</span>
+    <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+    <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+    <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+    <div class="fb-panel" hidden>
+      <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+      <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+      <textarea class="local-yaml" readonly hidden></textarea>
     </div>
   </div>
 </section>
@@ -609,6 +854,17 @@ S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck 
 <!-- ============ 11. RISKS ============ -->
 <section id="risks">
   <div class="sec-head"><h2>11. Open Questions, Risks &amp; Non-Goals</h2>
+    <div class="sec-fb" data-section="Open Questions, Risks & Non-Goals">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <div class="tbl"><table data-tts-narrative="Open questions and risks: collect-all motion mechanics needing an animation-plan amendment, the swap gesture detail deferred to ui-interview, custom phase editing depth, the Next.js intercepting-route spike, the unvalidated persona, the deck data pipeline, and CLI manifest drift.">
     <tr><th>Item</th><th>Detail</th><th>Owner / where it resolves</th></tr>
@@ -633,6 +889,17 @@ S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck 
 <!-- ============ 12. ARTIFACTS ============ -->
 <section id="artifacts">
   <div class="sec-head"><h2>12. Artifact Destination &amp; Proposed File Changes</h2>
+    <div class="sec-fb" data-section="Artifact Destination & Proposed File Changes">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <p>Destination approval and mutation scope are separate decisions below (the destination is a path choice; the file-change set includes the index update and page confirmation).</p>
   <div class="tbl"><table data-tts-narrative="Proposed file changes: two new spec files under specs slash skills-showcase, an update to the alignment index, and conversion of this page to confirmed after approval. New files need no archive snapshots.">
@@ -643,20 +910,29 @@ S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck 
     <tr><td><code>alignment/user-flow-map-deck-creation.html</code></td><td>Convert <code>review</code> → <code>confirmed</code> after approval (prior review page archived to <code>docs/history/archive/</code> first)</td><td>Yes (archive-first)</td></tr>
   </table></div>
   <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="artifact destination" data-target-path="specs/skills-showcase/user-flow-deck-creation.md">
-    <h4>Gate: artifact destination <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Approve spec destination">
-      <p class="muted">Write the canonical flow spec to <code>specs/skills-showcase/user-flow-deck-creation.md</code> (product-path-scoped), with the interview log beside it?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Approve destination</p>
-      <p class="decision-answer"><strong>target_path:</strong> <code>specs/skills-showcase/user-flow-deck-creation.md</code></p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: artifact destination</h4>
+    <div class="q" data-qlabel="Approve spec destination">
+      <p>Write the canonical flow spec to <code>specs/skills-showcase/user-flow-deck-creation.md</code> (product-path-scoped), with the interview log beside it?</p>
+      <label class="opt"><input type="radio" name="q10" value="Approve destination"> Approve destination</label>
+      <label class="opt"><input type="radio" name="q10" value="Different path (see notes)"> Different path (name it in notes)</label>
+      <label class="opt"><input type="radio" name="q10" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the destination…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q10" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
     </div>
   </div>
   <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="proposed file changes">
-    <h4>Gate: proposed file changes <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Approve file change set">
-      <p class="muted">Approve the full mutation set above (two new spec files, index maintenance, page confirmation), executed only after final compiled YAML?</p>
-      <p class="decision-answer"><strong>Answered:</strong> Approve file change set</p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: proposed file changes</h4>
+    <div class="q" data-qlabel="Approve file change set">
+      <p>Approve the full mutation set above (two new spec files, index maintenance, page confirmation), executed only after final compiled YAML?</p>
+      <label class="opt"><input type="radio" name="q11" value="Approve file change set"> Approve file change set</label>
+      <label class="opt"><input type="radio" name="q11" value="Approve with changes (see notes)"> Approve with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q11" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q11" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
     </div>
   </div>
 </section>
@@ -664,89 +940,293 @@ S7: "Add /benchmark-card to…"  ▸ VARD (2/3)  ▸ ORD  ▸ + new custom deck 
 <!-- ============ 13. ROUTE ============ -->
 <section id="route">
   <div class="sec-head"><h2>13. Post-Approval Route</h2>
+    <div class="sec-fb" data-section="Post-Approval Route">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
   </div>
   <p>The AFPS design route after an approved flow map is per-screen content requirements, then layout exploration: <code>/ui-interview --requirements-only deck-creation</code> → <code>/ux-variations --layout-mode</code>. The <code>ui-interview</code> skill is in the <code>product-design</code> pack, which is <strong>not installed</strong> (only <code>user-flow-map</code> and <code>brainstorm</code> are individually enabled) — so the route has an install prerequisite: <code>/pack install ui-interview</code> (or the full pack). A second, smaller follow-up is the animation-plan amendment for the Collect-all batching trigger (§11).</p>
   <div class="gate" data-section="Post-Approval Route" data-gate-type="post-approval route">
-    <h4>Gate: post-approval route <span class="badge updated">Updated — confirmed 2026-06-10</span></h4>
-    <div class="decision-record" data-qlabel="Choose post-approval route">
-      <p class="muted">After the spec is written, how should the work route?</p>
-      <p class="decision-answer"><strong>Answered:</strong> <code>/pack install ui-interview</code>, then <code>/ui-interview --requirements-only deck-creation</code></p>
-      <p class="muted decision-source">Recorded from final compiled YAML · status: answered · 2026-06-10</p>
+    <h4>Gate: post-approval route</h4>
+    <div class="q" data-qlabel="Choose post-approval route">
+      <p>After the spec is written, how should the work route?</p>
+      <label class="opt"><input type="radio" name="q12" value="/pack install ui-interview, then /ui-interview --requirements-only deck-creation"> <code>/pack install ui-interview</code>, then <code>/ui-interview --requirements-only deck-creation</code></label>
+      <label class="opt"><input type="radio" name="q12" value="Run /icp first to validate personas, then ui-interview"> Run <code>/icp</code> first to validate personas, then ui-interview</label>
+      <label class="opt"><input type="radio" name="q12" value="Hold — I will route manually"> Hold — I'll route manually</label>
+      <label class="opt"><input type="radio" name="q12" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the route…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q12" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
     </div>
   </div>
 </section>
 
-<!-- ============ 14. APPROVAL RECORD ============ -->
+<!-- ============ 14. COMPILE ============ -->
 <section id="compile" class="compile-section">
-  <h2 style="margin-top:0">14. Approval Record <span class="badge updated">Updated — confirmed 2026-06-10</span></h2>
-  <p>Final compiled YAML received 2026-06-10: all 12 gates answered, <code>section_feedback: []</code>, no <code>needs-clarification</code>, no requested edits. The user's compiled YAML is preserved verbatim below as the read-only approval record. The compile controls that produced it were removed when this page converted from <code>review</code> to <code>confirmed</code>.</p>
-  <pre data-tts-narrative="Read-only approval record: the user's final compiled YAML approving all twelve gates with no section feedback, dated 2026-06-10."><code>alignment_page: alignment/user-flow-map-deck-creation.html
-approval_status: ready-for-agent-review
-gate_answers:
-  - section: "Context &amp; Evidence"
-    gate_type: "evidence coverage"
-    status: answered
-    answer: "Sufficient — proceed on idea-brief personas"
-  - section: "Flow Assumptions Record"
-    gate_type: "assumptions/confidence"
-    status: answered
-    answer: "Accurate — carry into the spec"
-  - section: "Slot-Model Pressure-Test Resolution"
-    gate_type: "candidate/verdict decisions"
-    status: answered
-    answer: "Accept resolution as written"
-  - section: "Happy Path &amp; Flow Map"
-    gate_type: "flow map"
-    status: answered
-    answer: "Accept as proposed"
-  - section: "Branches &amp; Decision Points"
-    gate_type: "branch/decision coverage"
-    status: answered
-    answer: "Complete for v1"
-  - section: "Screen/Route Inventory &amp; Per-Screen Matrix"
-    gate_type: "coverage checkpoint"
-    status: answered
-    answer: "Right surface set"
-  - section: "State Coverage"
-    gate_type: "state coverage"
-    status: answered
-    answer: "Covers v1"
-  - section: "Failure/Recovery Paths &amp; Handoffs"
-    gate_type: "failure/handoff coverage"
-    status: answered
-    answer: "Covered for v1"
-  - section: "Low-Fidelity Wireframe Notes"
-    gate_type: "wireframe notes"
-    status: answered
-    answer: "Right as handoff guidance"
-  - section: "Artifact Destination &amp; Proposed File Changes"
-    gate_type: "artifact destination"
-    status: answered
-    answer: "Approve destination"
-    target_path: "specs/skills-showcase/user-flow-deck-creation.md"
-  - section: "Artifact Destination &amp; Proposed File Changes"
-    gate_type: "proposed file changes"
-    status: answered
-    answer: "Approve file change set"
-  - section: "Post-Approval Route"
-    gate_type: "post-approval route"
-    status: answered
-    answer: "/pack install ui-interview, then /ui-interview --requirements-only deck-creation"
-section_feedback: []</code></pre>
-  <h3>What changed during confirmation</h3>
-  <ul>
-    <li>Canonical spec written to <code>specs/skills-showcase/user-flow-deck-creation.md</code> (new file — §§2–11 content transcribed faithfully).</li>
-    <li>Interview log written to <code>specs/skills-showcase/user-flow-deck-creation-interview.md</code> (new file).</li>
-    <li>The prior <code>review</code> page was archived to <code>docs/history/archive/2026-06-10/192601/alignment/user-flow-map-deck-creation.html</code>, then this page converted to <code>confirmed</code>: gate radio/textarea controls replaced with read-only answered-decision records, section-feedback and compile controls removed, this approval record added. No flow content changed — the deliverable sections above are exactly what was approved.</li>
-  </ul>
+  <h2 style="margin-top:0">14. Compile YAML</h2>
+  <p>Use <strong>Compile Feedback YAML</strong> to send emphasis requests, concerns, or clarification needs before answering every gate — feedback alone is a revision request, not approval. Use <strong>Compile Answers</strong> for final approval once all <span id="q-total">12</span> required questions are answered.</p>
+  <div class="compile-actions">
+    <button type="button" id="compile-feedback" class="btn">Compile Feedback YAML</button>
+    <button type="button" id="copy-feedback" class="btn">Copy YAML</button>
+    <span id="feedback-status" class="copy-status"></span>
+  </div>
+  <textarea id="feedback-yaml" class="yaml-out" readonly hidden></textarea>
+  <div class="compile-actions" id="answers-wrap">
+    <button type="button" id="compile-answers" class="btn primary" disabled>Compile Answers (12 unanswered)</button>
+    <button type="button" id="copy-answers" class="btn">Copy YAML</button>
+    <span id="answer-status" class="copy-status"></span>
+  </div>
+  <textarea id="answers-yaml" class="yaml-out" readonly hidden></textarea>
 </section>
 
 </main>
 <script>
 (function(){
 'use strict';
+var ALIGNMENT_PAGE = 'alignment/user-flow-map-deck-creation.html';
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#58a6ff'; }
+
+/* ---------- YAML helpers ---------- */
+function yq(s){
+  return '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r?\n/g,'\\n') + '"';
+}
+var FB_ACTION = { 'emphasize':'add-weight-to-section', 'down':'investigate-and-revise', 'needs-clarification':'clarify-before-approval' };
+
+function copyText(text, statusEl, textarea){
+  function fallback(){
+    if (textarea){ textarea.hidden = false; textarea.focus(); textarea.select(); }
+    if (statusEl) statusEl.textContent = 'Clipboard blocked — YAML selected below, copy manually.';
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      if (statusEl) statusEl.textContent = 'Copied to clipboard.';
+    }, fallback);
+  } else { fallback(); }
+}
+
+/* ---------- gate questions ---------- */
+var qBlocks = Array.prototype.slice.call(document.querySelectorAll('.gate .q'));
+
+qBlocks.forEach(function(q){
+  var other = q.querySelector('.other-input');
+  var clarify = q.querySelector('.clarify-input');
+  var notes = q.querySelector('.notes-input');
+  q.addEventListener('change', function(e){
+    if (!e.target || e.target.type !== 'radio') return;
+    var v = e.target.value;
+    if (other) other.hidden = (v !== '__other');
+    if (clarify) clarify.hidden = (v !== '__clarify');
+    if (notes) notes.hidden = (v === '__other' || v === '__clarify');
+    updateAnswerButton();
+  });
+});
+
+function unansweredQuestions(){
+  return qBlocks.filter(function(q){ return !q.querySelector('input[type=radio]:checked'); });
+}
+function updateAnswerButton(){
+  var btn = document.getElementById('compile-answers');
+  var n = unansweredQuestions().length;
+  btn.disabled = n > 0;
+  btn.textContent = n > 0 ? ('Compile Answers (' + n + ' unanswered)') : 'Compile Answers';
+}
+
+document.getElementById('answers-wrap').addEventListener('click', function(e){
+  var btn = document.getElementById('compile-answers');
+  if (!btn.disabled) return;
+  if (e.target === btn || btn.contains(e.target) || e.target.id === 'answers-wrap'){
+    var first = unansweredQuestions()[0];
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+});
+
+/* ---------- section feedback (top/bottom copies paired by data-section) ---------- */
+var fbAll = Array.prototype.slice.call(document.querySelectorAll('.sec-fb'));
+var fbGroups = {};
+fbAll.forEach(function(sec){
+  var key = sec.getAttribute('data-section');
+  (fbGroups[key] = fbGroups[key] || []).push(sec);
+});
+var groupKeys = Object.keys(fbGroups);
+
+function groupActive(key){
+  for (var i = 0; i < fbGroups[key].length; i++){
+    var a = fbGroups[key][i].querySelector('.fb-btn.active');
+    if (a) return a.getAttribute('data-fb');
+  }
+  return null;
+}
+function groupNotes(key){
+  var g = fbGroups[key], last = g._lastTyped;
+  if (last && last.value.trim()) return last.value.trim();
+  for (var i = 0; i < g.length; i++){
+    var v = g[i].querySelector('.fb-notes').value.trim();
+    if (v) return v;
+  }
+  return '';
+}
+function setGroupState(key, fb){
+  fbGroups[key].forEach(function(sec){
+    sec.querySelectorAll('.fb-btn').forEach(function(b){
+      b.classList.toggle('active', !!fb && b.getAttribute('data-fb') === fb);
+    });
+    sec.classList.toggle('has-feedback', !!fb);
+    if (fb) sec.dataset.feedback = fb; else delete sec.dataset.feedback;
+    var panel = sec.querySelector('.fb-panel');
+    panel.hidden = !fb;
+    if (!fb){
+      var ly = sec.querySelector('.local-yaml');
+      ly.hidden = true; ly.value = '';
+      sec.querySelector('.copy-status').textContent = '';
+    }
+  });
+}
+
+groupKeys.forEach(function(key){
+  fbGroups[key].forEach(function(sec){
+    sec.querySelector('.fb-notes').addEventListener('input', function(){
+      fbGroups[key]._lastTyped = this;
+    });
+    sec.querySelectorAll('.fb-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var fb = btn.getAttribute('data-fb');
+        setGroupState(key, btn.classList.contains('active') ? null : fb);
+      });
+    });
+    sec.querySelector('.compile-local-feedback').addEventListener('click', function(){
+      var entry = groupEntry(key);
+      if (!entry) return;
+      var yaml = feedbackYaml([entry]);
+      var ly = sec.querySelector('.local-yaml');
+      ly.value = yaml; ly.hidden = false;
+      copyText(yaml, sec.querySelector('.copy-status'), ly);
+    });
+    sec.querySelector('.copy-local-feedback').addEventListener('click', function(){
+      var ly = sec.querySelector('.local-yaml');
+      if (!ly.value){
+        var entry = groupEntry(key);
+        if (!entry) return;
+        ly.value = feedbackYaml([entry]); ly.hidden = false;
+      }
+      copyText(ly.value, sec.querySelector('.copy-status'), ly);
+    });
+  });
+});
+
+function groupEntry(key){
+  var fb = groupActive(key);
+  if (!fb) return null;
+  return { section: key, feedback: fb, notes: groupNotes(key) };
+}
+function allFeedbackEntries(){
+  return groupKeys.map(groupEntry).filter(Boolean);
+}
+
+function feedbackYaml(entries){
+  var y = '# Feedback-only YAML — a revision request, not approval.\n';
+  y += '# emphasize = add more weight/prominence/evidence/detail to the section or the point named in notes.\n';
+  y += '# down / needs-clarification = evaluate, investigate as needed, and amend the alignment page before asking again for approval.\n';
+  y += 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'feedback_status: revision-request\n';
+  y += 'approval_status: not-approved\n';
+  var un = unansweredQuestions();
+  if (un.length){
+    y += 'unanswered_required_questions:\n';
+    un.forEach(function(q){ y += '  - ' + yq(q.getAttribute('data-qlabel')) + '\n'; });
+  } else {
+    y += 'unanswered_required_questions: []\n';
+  }
+  y += 'section_feedback:\n';
+  entries.forEach(function(e){
+    y += '  - section: ' + yq(e.section) + '\n';
+    y += '    feedback: ' + e.feedback + '\n';
+    if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+    y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+  });
+  return y;
+}
+
+document.getElementById('compile-feedback').addEventListener('click', function(){
+  var entries = allFeedbackEntries();
+  var status = document.getElementById('feedback-status');
+  if (!entries.length){
+    status.textContent = 'No section feedback selected yet — pick emphasize / thumbs down / clarification on a section first.';
+    return;
+  }
+  var yaml = feedbackYaml(entries);
+  var out = document.getElementById('feedback-yaml');
+  out.value = yaml; out.hidden = false;
+  copyText(yaml, status, out);
+});
+document.getElementById('copy-feedback').addEventListener('click', function(){
+  var out = document.getElementById('feedback-yaml');
+  if (!out.value){
+    var entries = allFeedbackEntries();
+    if (!entries.length){ document.getElementById('feedback-status').textContent = 'Nothing to copy — no feedback selected.'; return; }
+    out.value = feedbackYaml(entries); out.hidden = false;
+  }
+  copyText(out.value, document.getElementById('feedback-status'), out);
+});
+
+/* ---------- compile answers ---------- */
+document.getElementById('compile-answers').addEventListener('click', function(){
+  if (unansweredQuestions().length) return;
+  var y = 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'approval_status: ready-for-agent-review\n';
+  y += 'gate_answers:\n';
+  qBlocks.forEach(function(q){
+    var gate = q.closest('.gate');
+    var checked = q.querySelector('input[type=radio]:checked');
+    var v = checked.value;
+    var status = 'answered', answer = v, notes = '';
+    if (v === '__other'){
+      status = 'other';
+      answer = q.querySelector('.other-input').value.trim() || '(no alternative text given)';
+    } else if (v === '__clarify'){
+      status = 'needs-clarification';
+      answer = 'Need clarification';
+      notes = q.querySelector('.clarify-input').value.trim();
+    } else {
+      notes = q.querySelector('.notes-input').value.trim();
+    }
+    y += '  - section: ' + yq(gate.getAttribute('data-section')) + '\n';
+    y += '    gate_type: ' + yq(gate.getAttribute('data-gate-type')) + '\n';
+    y += '    status: ' + status + '\n';
+    y += '    answer: ' + yq(answer) + '\n';
+    if (notes) y += '    notes: ' + yq(notes) + '\n';
+    var tp = gate.getAttribute('data-target-path');
+    if (tp) y += '    target_path: ' + yq(tp) + '\n';
+  });
+  var fb = allFeedbackEntries();
+  if (fb.length){
+    y += 'section_feedback:\n';
+    fb.forEach(function(e){
+      y += '  - section: ' + yq(e.section) + '\n';
+      y += '    feedback: ' + e.feedback + '\n';
+      if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+      y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+    });
+  } else {
+    y += 'section_feedback: []\n';
+  }
+  var out = document.getElementById('answers-yaml');
+  out.value = y; out.hidden = false;
+  copyText(y, document.getElementById('answer-status'), out);
+});
+document.getElementById('copy-answers').addEventListener('click', function(){
+  var out = document.getElementById('answers-yaml');
+  if (!out.value){ document.getElementById('answer-status').textContent = 'Compile answers first.'; return; }
+  copyText(out.value, document.getElementById('answer-status'), out);
+});
 
 /* ---------- view-as-table toggles ---------- */
 Array.prototype.slice.call(document.querySelectorAll('.proto-box')).forEach(function(box){
@@ -912,6 +1392,7 @@ Array.prototype.slice.call(document.querySelectorAll('.proto-box')).forEach(func
   reset();
 })();
 
+updateAnswerButton();
 })();
 </script>
 <script src="../scripts/alignment-tts-kokoro.js"></script>
