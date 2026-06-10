@@ -1,3 +1,44 @@
+## Current Implementation - Bespoke Alignment Section Conversion/Testing (Drift Plan Phase 2 Step 5)
+
+### Goal
+
+Resolve the remaining hand-authored `## Alignment Page` sections: for each of the 7 allowlisted bespoke skills, either convert both mirrors to the generated stub + bundled `ALIGNMENT-PAGE.md`, or keep them bespoke with explicit layer1 contract tests that pin their required convention invariants. This is ALIGNMENT-PAGE Bundling Drift Plan Phase 2 Step 5 (the checklist item's "15 bespoke alignment sections" count is stale — current state is 7 skills / 14 mirror sections after the Step 1 `customer-discovery` conversion).
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: per-skill convert/keep decisions share `scripts/alignment-bespoke-list.txt`, the generator, and the Step 2-4 test conventions in `tests/layer1/upgrade-alignment-page-bespoke.test.ts`.
+
+### Context
+
+- The 7 bespoke skills (from `scripts/alignment-bespoke-list.txt`): `consolidate-variations`, `prototype`, `spec-interview`, `ui-interview`, `ux-variations` (product-design pack), `uat` (product-testing), `research-roadmap` (research-admin). Each is bespoke in both claude and codex mirrors.
+- None of the 7 has any `ALIGNMENT-PAGE.md` bundle today — their alignment behavior lives entirely in the SKILL.md sections. All 7 already have skill-specific gate entries in the generator's gate map (`skillSpecificGates` in `scripts/upgrade-alignment-page.mjs`), so a generated render would carry their custom gates; conversion may be near content-equivalent. Compare each bespoke section against `bundledContentFor(name, file)` output before deciding.
+- Decision rule per skill: **convert** when the bespoke section's content is subsumed by the generated stub + gate-map render (replace the section body's prose with the stub paragraph in BOTH mirrors, remove the allowlist entry, run the generator in write mode to emit bundles — all in the same commit, per the allowlist policy in `docs/alignment-page-convention.md`); **keep bespoke** when the section encodes genuinely custom behavior (condensed gates, custom timing) the gate map cannot express — then add a layer1 contract test pinning its invariants (own output path, gate/approval language, both-mirror symmetry).
+- Check the Step 1 `customer-discovery` conversion (commit `8c655082`) for the conversion mechanics and whether a skill version bump + archive applied (CLAUDE.md skill-versioning rules: behavioral changes bump the decimal and archive via `scripts/skill-archive.sh`; pure section-to-stub conversion that preserves behavior may not). Decide and apply consistently.
+- After any conversion, the Step 4 `--check` gate and the repo-state allowlist tests auto-adapt (they re-derive bespoke classification from the repo); `node scripts/upgrade-alignment-page.mjs --check` must stay exit 0 and `Bespoke allowlist: N skills, exact` must reflect the reduced list.
+- If SKILL.md behavior/metadata changes, the Skills Showcase freshness rule applies at ship time (regenerate showcase data); pure stub swaps still change tracked SKILL.md files, so expect the showcase generators to run during `/ship`.
+- Boundary hygiene: a concurrent session shipped commits during the Step 4 session (see `tasks/ship-manifest-2026-06-10-generated-bundle-drift-check.md`, "Boundary anomaly"). Start by confirming `git status` is clean and `git log -3 --oneline` matches expectations before editing.
+
+### Steps
+
+- [ ] For each of the 7 bespoke skills, diff the bespoke `## Alignment Page` section (both mirrors) against the generated render (`bundledContentFor`) and record a convert/keep verdict with rationale.
+- [ ] Convert the "convert" set: stub paragraph in both mirrors, allowlist entries removed, generator write-mode run emitting bundles, version/archive handling per the `customer-discovery` precedent — one commit per the allowlist same-commit policy.
+- [ ] For the "keep" set: add layer1 contract tests pinning each bespoke section's invariants (own `alignment/{skill-name}-{topic}.html` path, gate language, mirror symmetry) in `tests/layer1/upgrade-alignment-page-bespoke.test.ts` or a sibling test file.
+- [ ] Run the generator (`--check`, `--dry-run`) and the full layer1 suite; update `docs/alignment-page-convention.md` only if the bespoke policy wording changes.
+- [ ] Check off Phase 2 Step 5 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+
+### Acceptance Criteria
+
+- Every remaining allowlist entry has a recorded keep rationale and explicit test coverage; every converted skill has generated bundles in both mirrors and no allowlist entry.
+- `node scripts/upgrade-alignment-page.mjs --check` exits 0 (`Bespoke allowlist: N skills, exact`, `Generated bundles: M ownable, exact`).
+- Full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed; `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done. Phase 2 Step 6 (scriptable audit for direct `alignment/*.html` edits) is queued after this step.
+
+---
+
 ## Current Implementation - Generated-Bundle Drift Validation (Drift Plan Phase 2 Step 4)
 
 ### Goal
@@ -492,7 +533,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Harden `scripts/upgrade-alignment-page.mjs` so sibling bundles cannot be skipped as bespoke without a failing diagnostic or explicit allowlist.
 - [x] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
 - [x] Add generated-bundle variant/drift validation against expected renderer output.
-- [ ] Convert or explicitly test the 15 bespoke alignment sections.
+- [ ] Convert or explicitly test the remaining bespoke alignment sections (7 skills / 14 mirrors after the Step 1 `customer-discovery` conversion).
 - [ ] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
 - [ ] Update root alignment-page instructions to require the audit/convention check for direct HTML edits.
 
