@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" data-alignment-category="ops-analysis">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill Gaps &amp; Manual Agent Asks — Session History Audit</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; overflow-wrap: break-word; }
+h1 { color: #fff; font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.4rem; margin-top: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+h3 { color: #fff; font-size: 1.1rem; margin-top: 1.5rem; }
+a { color: var(--accent); }
+.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; background: #1c2333; color: var(--purple); border: 1px solid var(--purple); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1rem; margin: 1rem 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card .value { font-size: 1.7rem; font-weight: 700; color: #fff; }
+.stat-card .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; }
+.stat-card.green .value { color: var(--green); }
+.stat-card.orange .value { color: var(--orange); }
+.stat-card.accent .value { color: var(--accent); }
+.stat-card.purple .value { color: var(--purple); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.6rem 0.8rem; border-bottom: 2px solid var(--border); }
+td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: rgba(88,166,255,0.05); }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem 0; }
+.toc ul { margin: 0.3rem 0; padding-left: 1.5rem; }
+.toc li { margin: 0.3rem 0; }
+.caveat { background: #1c2333; border-left: 3px solid var(--orange); padding: 0.8rem 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.9rem; }
+.example { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 0.5rem 0.8rem; margin: 0.4rem 0; font-size: 0.88rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0; }
+.question-block h4 { color: var(--purple); margin: 0 0 0.8rem; }
+.question-block label { padding: 0.5rem 0.8rem; margin: 0.3rem 0; border-radius: 4px; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 0.5rem; }
+.question-block label:hover { background: rgba(188,140,255,0.08); }
+.question-block textarea { width: 100%; box-sizing: border-box; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; font-size: 0.9rem; display: none; }
+.sec-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.fb-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+.fb-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 10px 16px; min-height: 44px; cursor: pointer; font-size: 0.82rem; }
+.fb-btn.active-emph { color: var(--green); border-color: var(--green); }
+.fb-btn.active-down { color: var(--red); border-color: var(--red); }
+.fb-btn.active-clar { color: var(--orange); border-color: var(--orange); }
+.fb-area { display: none; margin: 0.5rem 0 1rem; }
+.fb-area textarea { width: 100%; box-sizing: border-box; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; font-family: inherit; font-size: 0.9rem; }
+.fb-yaml { display: none; margin-top: 0.5rem; }
+.fb-yaml textarea { min-height: 110px; font-family: ui-monospace, Menlo, monospace; font-size: 0.8rem; }
+button.action { background: var(--accent); color: #0d1117; border: none; border-radius: 6px; padding: 10px 16px; min-height: 44px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+button.action:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+button.secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 10px 16px; min-height: 44px; cursor: pointer; font-size: 0.9rem; }
+.compile-out { width: 100%; box-sizing: border-box; min-height: 180px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.6rem; font-family: ui-monospace, Menlo, monospace; font-size: 0.8rem; margin-top: 0.7rem; display: none; }
+.copy-status { font-size: 0.85rem; color: var(--text-muted); margin-left: 0.6rem; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.78rem; border: 1px solid var(--border); color: var(--text-muted); }
+.tag.green { color: var(--green); border-color: var(--green); }
+.tag.red { color: var(--red); border-color: var(--red); }
+.tag.orange { color: var(--orange); border-color: var(--orange); }
+@media (max-width: 860px) { main { padding: 1.5rem 1rem; } }
+@media (max-width: 560px) { h1 { font-size: 1.4rem; } .stat-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Skill Gaps &amp; Manual Agent Asks — Session History Audit</h1>
+<p><span class="status-badge">alignment_status: review</span></p>
+<p>Full-history audit of Claude Code and Codex usage (12,300 user messages, Dec 2025 – Jun 2026) answering: <strong>where are the gaps in our skills, and what is still asked of agents manually?</strong> Headline: the biggest historical manual-ask families (commit/push, phase execution) were already eliminated by <code>/ship</code> and the exec-loop pack; the strongest remaining gap is <code>.env</code> scaffolding/secrets handoff (23 recent asks, no skill exists), followed by three convention-level gaps (findings verification, fix-plan routing, research freshness).</p>
+
+<div class="toc">
+<strong>Table of Contents</strong>
+<ul>
+<li><a href="#overview">1. Overview Stats</a></li>
+<li><a href="#tokens">2. Token &amp; Cost Check</a></li>
+<li><a href="#commands">3. Skill Command Usage</a></li>
+<li><a href="#closed">4. Closed Gaps (skills already working)</a></li>
+<li><a href="#open">5. Open Gaps — Recent Manual Asks</a></li>
+<li><a href="#notgaps">6. Buckets Judged Not Skill Gaps</a></li>
+<li><a href="#recs">7. Ranked Recommendations</a></li>
+<li><a href="#impact">8. Highest-Impact View</a></li>
+<li><a href="#evidence">9. Evidence Matrix</a></li>
+<li><a href="#confidence">10. Confidence &amp; Assumption Register</a></li>
+<li><a href="#glossary">11. Glossary Additions Gate</a></li>
+<li><a href="#artifacts">12. Artifact Destination &amp; Proposed File Changes</a></li>
+<li><a href="#route">13. Post-Approval Route</a></li>
+<li><a href="#compile">14. Compile (bottom)</a></li>
+</ul>
+</div>
+
+<h2 id="overview"><span class="sec-head"><span>1. Overview Stats</span><span class="fb-controls" data-fb-section="overview-stats"></span></span></h2>
+<div class="fb-area" id="fb-overview-stats"></div>
+<div class="stat-grid">
+<div class="stat-card"><div class="value">12,300</div><div class="label">user messages</div></div>
+<div class="stat-card accent"><div class="value">10,208 / 2,092</div><div class="label">Claude / Codex</div></div>
+<div class="stat-card"><div class="value">3,791</div><div class="label">sessions (3,095 / 696)</div></div>
+<div class="stat-card purple"><div class="value">75.6%</div><div class="label">freeform (non-command) prompts</div></div>
+<div class="stat-card orange"><div class="value">2,747</div><div class="label">short steering prompts (≤30 chars)</div></div>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Claude</th><th>Codex</th></tr>
+<tr><td>Date range</td><td>2025-12-13 → 2026-06-10</td><td>2026-01-09 → 2026-06-10</td></tr>
+<tr><td>Messages</td><td>10,208</td><td>2,092</td></tr>
+<tr><td>Sessions</td><td>3,095</td><td>696</td></tr>
+</table></div>
+<h3>Top projects by message volume</h3>
+<div class="table-wrap"><table>
+<tr><th>Project</th><th>Messages</th><th>Share</th></tr>
+<tr><td>experiments/metternich-engine</td><td>1,322</td><td>10.7%</td></tr>
+<tr><td>apps/bismarck-ai/v0.3/AWS</td><td>1,271</td><td>10.3%</td></tr>
+<tr><td>poke/monorepo</td><td>694</td><td>5.6%</td></tr>
+<tr><td>apps/bismarck-ai/v0.3/monorepo</td><td>694</td><td>5.6%</td></tr>
+<tr><td>web/dev/bismarck-ai/bismarck-v0.4</td><td>670</td><td>5.4%</td></tr>
+<tr><td>tools/dev/agentic-skills</td><td>621</td><td>5.0%</td></tr>
+<tr><td>web/dev/b4</td><td>423</td><td>3.4%</td></tr>
+<tr><td>poke/dev/poke-productivity-suite</td><td>370</td><td>3.0%</td></tr>
+<tr><td>loadoutworks (apps + web)</td><td>699</td><td>5.7%</td></tr>
+</table></div>
+<h3>Monthly trend (messages)</h3>
+<div class="table-wrap"><table>
+<tr><th>Month</th><th>Claude</th><th>Codex</th></tr>
+<tr><td>2025-12</td><td>663</td><td>—</td></tr>
+<tr><td>2026-01</td><td>3,640</td><td>335</td></tr>
+<tr><td>2026-02</td><td>1,577</td><td>14</td></tr>
+<tr><td>2026-03</td><td>2,208</td><td>—</td></tr>
+<tr><td>2026-04</td><td>1,136</td><td>1,359</td></tr>
+<tr><td>2026-05</td><td>733</td><td>228</td></tr>
+<tr><td>2026-06 (partial)</td><td>251</td><td>156</td></tr>
+</table></div>
+
+<h2 id="tokens"><span class="sec-head"><span>2. Token &amp; Cost Check</span><span class="fb-controls" data-fb-section="token-cost"></span></span></h2>
+<div class="fb-area" id="fb-token-cost"></div>
+<div class="stat-grid">
+<div class="stat-card accent"><div class="value">2.02B</div><div class="label">Codex total tokens (757 sessions)</div></div>
+<div class="stat-card"><div class="value">94%</div><div class="label">of Codex input was cached (1.889B / 2.007B)</div></div>
+<div class="stat-card purple"><div class="value">12.9M</div><div class="label">Codex output tokens (4.3M reasoning)</div></div>
+<div class="stat-card orange"><div class="value">unavailable</div><div class="label">dollar cost (no basis)</div></div>
+</div>
+<ul>
+<li><strong>Codex:</strong> 757 of 764 rollout files carried <code>token_count</code> events. Final cumulative session totals: total 2,020,107,036 · input 2,007,193,471 (cached 1,889,405,696) · output 12,913,565 (reasoning 4,319,262). Aggregated from final <code>total_token_usage</code> snapshots per session — no cumulative double-counting.</li>
+<li><strong>Claude:</strong> <code>history.jsonl</code> carries no usage metadata — token coverage gap for the Claude source.</li>
+<li><strong>Cost: unavailable.</strong> No cost fields in either log, no pricing table provided, no provider pricing verified this run. Per skill constraints, no estimate is made.</li>
+<li><strong>Model attribution:</strong> not recoverable from <code>session_meta</code> in this parse — model-level breakdown not stated.</li>
+</ul>
+
+<h2 id="commands"><span class="sec-head"><span>3. Skill Command Usage (all-time)</span><span class="fb-controls" data-fb-section="command-usage"></span></span></h2>
+<div class="fb-area" id="fb-command-usage"></div>
+<div class="table-wrap"><table>
+<tr><th>Command</th><th>Uses</th><th>Command</th><th>Uses</th></tr>
+<tr><td>/ship</td><td>857</td><td>/ship-then-plan</td><td>31</td></tr>
+<tr><td>/clear</td><td>552</td><td>/workflow</td><td>28</td></tr>
+<tr><td>/ship-end</td><td>266</td><td>/investigate</td><td>21</td></tr>
+<tr><td>/resume</td><td>166</td><td>/exec</td><td>20</td></tr>
+<tr><td>/usage</td><td>162</td><td>/expert-review</td><td>16</td></tr>
+<tr><td>/sync</td><td>124</td><td>/session-triage</td><td>14</td></tr>
+<tr><td>/run</td><td>121</td><td>/analyze-sessions</td><td>10</td></tr>
+<tr><td>/commit-and-push-by-feature</td><td>91</td><td>/pack</td><td>69</td></tr>
+</table></div>
+<p>Long tail: /plan-interview 58, business/research skills (icp, gtm, journey-map, positioning, monetization) in single digits each. Codex <code>$run</code> invocations dominate Codex skill use (360+ across skill-path variants), with <code>$ship</code>/<code>$sync</code> next — Codex adoption is concentrated on run/ship/sync.</p>
+
+<h2 id="closed"><span class="sec-head"><span>4. Closed Gaps — Manual Asks Skills Already Eliminated</span><span class="fb-controls" data-fb-section="closed-gaps"></span></span></h2>
+<div class="fb-area" id="fb-closed-gaps"></div>
+<p>The largest manual-ask families in history died out as skills were adopted — direct evidence the skill system works.</p>
+<div class="table-wrap"><table>
+<tr><th>Manual ask family</th><th>Volume</th><th>Timeline</th><th>Replaced by</th></tr>
+<tr><td>"update docs, commit and push" / "commit this" / "push it"</td><td>~552</td><td>Jan 274 → Feb 206 → Mar 72 → <strong>Apr+ 0</strong></td><td>/ship (857), /ship-end (266), /commit-and-push-by-feature (91)</td></tr>
+<tr><td>"implement phase N step N" / "phase N.N @docs/…plan.md"</td><td>~279</td><td>Jan 137 → Feb 111 → Mar 31 → <strong>Apr+ 0</strong></td><td>/ship-then-plan, /exec, exec-loop pack</td></tr>
+<tr><td>"deploy to staging"</td><td>59</td><td>Jan 40 → Feb 19 → <strong>Mar+ 0</strong></td><td>release-ops/deploy skill (now with deployment-history tracking); bismarck project also wound down — confounder noted</td></tr>
+<tr><td>"create a directory to house our new package"</td><td>44</td><td>Jan–Feb → <strong>Apr+ ~0</strong></td><td>monorepo pack (scaffold, mono-*)</td></tr>
+</table></div>
+<p>Verified follow-through: the user's 2026-04 ask — <em>"update the deploy skill so that it maintains a historical record of what commits were part of what deployments"</em> — <strong>was implemented</strong>: <code>packs/release-ops/claude/deploy/SKILL.md</code> now declares deployment history tracking in its description and body.</p>
+<div class="question-block" data-qid="q3" data-section="Closed Gaps" data-gate="candidate/verdict decisions">
+<h4>Q3 (required) — Do you confirm the closed-gap reading?</h4>
+<label><input type="radio" name="q3" value="Confirmed — these gaps are closed"> Confirmed — these gaps are closed</label>
+<label><input type="radio" name="q3" value="Partially — some still recur (notes)"> Partially — some still recur (explain in notes)</label>
+<label><input type="radio" name="q3" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q3" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="open"><span class="sec-head"><span>5. Open Gaps — Recent Manual Asks (Apr 1 – Jun 10, 2026)</span><span class="fb-controls" data-fb-section="open-gaps"></span></span></h2>
+<div class="fb-area" id="fb-open-gaps"></div>
+<p>Recent window: 3,863 messages, 1,892 freeform. Counts below are exact pattern matches with real examples from history.</p>
+
+<h3>5.1 <code>.env</code> scaffolding &amp; secrets handoff — <span class="tag red">23 recent · 69 all-time · no skill exists</span></h3>
+<p>Verified by inventory scan: no env-related skill in any pack. The pattern has a stable, automatable shape: derive required variables (from <code>.env.example</code> or code), scaffold <code>.env.local</code> with stubs, open it in VS Code (WSL-aware), <strong>never read secret values back</strong>. The repeated "don't look at it" warnings show the manual flow carries a recurring secret-exposure risk.</p>
+<div class="example">can you create the .env.local with the necessary variable stubs and then open it in vscode so I can drop it in?</div>
+<div class="example">can you open the .env.local in vscode? what do I need to add?</div>
+<div class="example">ok done, remember don't look at .env.local</div>
+<div class="example">no just tell me what's in .env.example. then I can add it back into .env.local. Do not edit or view the contents of .env.local</div>
+
+<h3>5.2 False-positive verification of findings — <span class="tag orange">10 recent · 15 all-time</span></h3>
+<p><code>expert-review</code> already has a built-in false-positive filter step (verified in its SKILL.md), but these asks follow <strong>ad-hoc</strong> audits, not skill runs.</p>
+<div class="example">can you audit the codebase and hunt for any best practice reasons to reduce lines of code in our codebase?</div>
+<div class="example">can you double check your findings for false positives?</div>
+<div class="example">can you double check these findings to ensure there are no false positives?</div>
+
+<h3>5.3 Findings → fix-plan handoff — <span class="tag orange">11 recent · 17 all-time</span></h3>
+<p>After any audit/review output, the user manually requests the fix plan.</p>
+<div class="example">yes create a plan to fix them all</div>
+<div class="example">can you create a plan to fix these?</div>
+<div class="example">should we not make a plan to fix the significant drift? Also the 14 items recommended?</div>
+
+<h3>5.4 Research data freshness — <span class="tag orange">explicit recurring correction (May 2026)</span></h3>
+<div class="example">for the research skills, they should be attempting to get as recent data points as possible, I've had multiple instances of very stale data.</div>
+<p>Grep across packs: only <code>pmf-engine</code> and <code>youtube-portfolio</code> carry recency language today.</p>
+
+<h3>5.5 Document consistency validation — <span class="tag">5 recent · 12 all-time</span></h3>
+<div class="example">can you go over and validate the document to ensure consistency and correctness across the document?</div>
+<div class="example">ok is that language consistent across all docs? create a plan to audit the docs and determine if there is anything we need to update</div>
+<p>docs-health pack (<code>hygiene</code>, <code>reconcile-dev-docs</code>) covers this but is <strong>not in this repo's <code>enabled_packs</code></strong> (verified in <code>.agents/project.json</code>) and likely absent in the other projects where the asks occurred. Coverage exists; adoption is the gap.</p>
+
+<h3>5.6 Open-in-VS-Code ergonomics — <span class="tag">22 recent</span></h3>
+<p>Heavily overlaps with 5.1 — most are <code>.env</code> opens. Covered if the env skill includes the WSL-aware open step already documented in CLAUDE.md.</p>
+
+<h3>5.7 Codex-side observations</h3>
+<ul>
+<li>51 recent "I agree with your recommendations" messages are <strong>Codex-only</strong> — approval steering at recommendation gates. Inherent to gate design, not a gap; a Codex-side compiled-answer flow would compress it if desired.</li>
+<li>38 recent manual git-ops asks on Codex vs 16 on Claude ("yes please and then commit it", "can you track and push the sync file") — Codex skill adoption lags outside run/ship/sync.</li>
+</ul>
+
+<h2 id="notgaps"><span class="sec-head"><span>6. Buckets Reviewed and Judged NOT Skill Gaps</span><span class="fb-controls" data-fb-section="not-gaps"></span></span></h2>
+<div class="fb-area" id="fb-not-gaps"></div>
+<div class="table-wrap"><table>
+<tr><th>Bucket</th><th>Recent freq</th><th>Why not a gap</th></tr>
+<tr><td>Design/UI tweak feedback</td><td>45 (all Claude)</td><td>Iterative taste feedback on animations/layout — inherently conversational; animation-design-planner + verify/run support it</td></tr>
+<tr><td>Video/recording/content</td><td>59</td><td>guided-walkthrough + youtube-ops packs own these flows; asks were in-flow direction, not repeated workflow shapes</td></tr>
+<tr><td>Research/investigate</td><td>102</td><td>Covered by /investigate, code-debug pack, deep-research, autoresearch</td></tr>
+<tr><td>"What's next / status"</td><td>22</td><td>Covered by codebase-status, afps-status, roadmap skills</td></tr>
+<tr><td>Run/restart dev server</td><td>6</td><td>Covered by /run; low frequency</td></tr>
+</table></div>
+
+<h2 id="recs"><span class="sec-head"><span>7. Ranked Recommendations</span><span class="fb-controls" data-fb-section="recommendations"></span></span></h2>
+<div class="fb-area" id="fb-recommendations"></div>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Pattern</th><th>Recent freq</th><th>Type</th><th>Suggested action</th><th>Owner surface</th><th>Validation</th></tr>
+<tr><td>1</td><td>.env scaffolding &amp; secrets handoff</td><td>23 (69 all-time)</td><td><strong>Skill</strong></td><td><code>env-setup</code>: scaffold .env.local stubs from .env.example/code, WSL-aware VS Code open, never read secrets</td><td>gitops or repo-maintenance pack</td><td>layer1 contract test (no secret reads; stub file produced)</td></tr>
+<tr><td>2</td><td>False-positive verify after ad-hoc audits</td><td>10</td><td>Standing instruction</td><td>Findings-verification convention: self-verify pass before presenting findings</td><td>CLAUDE.md / quality-gate contract doc</td><td>benchmark smoke on an audit prompt</td></tr>
+<tr><td>3</td><td>Findings → fix-plan handoff</td><td>11</td><td>Standing instruction</td><td>Extend shipping-contract routing: audits end with a plan-to-fix offer</td><td>CLAUDE.md shared conventions</td><td>skill-next-step-contracts doc check</td></tr>
+<tr><td>4</td><td>Research data freshness</td><td>recurring correction</td><td>Standing convention</td><td>Freshness contract bundled into research skills (current-year sources, date-stamped claims, stale-evidence flags)</td><td>docs/ + upgrade script</td><td>spot-check bundled skill text</td></tr>
+<tr><td>5</td><td>Doc consistency validation</td><td>5</td><td>Pack adoption</td><td><code>/pack install docs-health</code> in affected projects</td><td>docs-health pack</td><td>existing pack tests</td></tr>
+</table></div>
+<div class="question-block" data-qid="q4" data-section="Recommendation 1: env-setup skill" data-gate="candidate/verdict decisions">
+<h4>Q4 (required) — Recommendation 1: build the <code>env-setup</code> skill?</h4>
+<label><input type="radio" name="q4" value="Approve — build env-setup"> Approve — build env-setup as specified</label>
+<label><input type="radio" name="q4" value="Approve with changes (notes)"> Approve with changes (describe in notes)</label>
+<label><input type="radio" name="q4" value="Reject"> Reject — not worth a skill</label>
+<label><input type="radio" name="q4" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q4" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q5" data-section="Recommendations 2-4: conventions" data-gate="candidate/verdict decisions">
+<h4>Q5 (required) — Recommendations 2–4 (findings-verification, fix-plan routing, research freshness conventions)?</h4>
+<label><input type="radio" name="q5" value="Approve all three conventions"> Approve all three conventions</label>
+<label><input type="radio" name="q5" value="Approve a subset (notes)"> Approve a subset (name them in notes)</label>
+<label><input type="radio" name="q5" value="Reject all"> Reject all</label>
+<label><input type="radio" name="q5" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q5" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q6" data-section="Recommendation 5: docs-health adoption" data-gate="candidate/verdict decisions">
+<h4>Q6 (required) — Recommendation 5: adopt docs-health pack where doc-validation asks recur?</h4>
+<label><input type="radio" name="q6" value="Approve recommendation"> Approve — recommend /pack install docs-health</label>
+<label><input type="radio" name="q6" value="Reject"> Reject</label>
+<label><input type="radio" name="q6" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q6" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="impact"><span class="sec-head"><span>8. Highest-Impact View (avoided manual prompts)</span><span class="fb-controls" data-fb-section="impact"></span></span></h2>
+<div class="fb-area" id="fb-impact"></div>
+<ol>
+<li><strong>Historical win (already shipped):</strong> /ship + exec-loop eliminated ~830 manual commit/push/phase prompts — the single largest automation in the dataset.</li>
+<li><strong>env-setup skill</strong> — ~23 prompts/quarter avoided, plus removes a recurring secret-exposure risk surface.</li>
+<li><strong>Findings-verification convention</strong> — ~10/quarter avoided; improves audit quality everywhere at once.</li>
+<li><strong>Fix-plan routing</strong> — ~11/quarter avoided; pure convention change, zero new code.</li>
+<li><strong>Research freshness contract</strong> — prevents repeated stale-data corrections across all research skills.</li>
+</ol>
+
+<h2 id="evidence"><span class="sec-head"><span>9. Evidence Matrix</span><span class="fb-controls" data-fb-section="evidence-matrix"></span></span></h2>
+<div class="fb-area" id="fb-evidence-matrix"></div>
+<div class="table-wrap"><table>
+<tr><th>Claim</th><th>Evidence (source · observation · date)</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr>
+<tr><td>Manual commit/push asks are eliminated</td><td>history.jsonl · 552 matches Jan–Mar, 0 from Apr; /ship 857 uses starting Mar · Dec 2025–Jun 2026</td><td>Drop coincides exactly with /ship adoption month</td><td>High</td><td>No action needed on git-flow skills</td></tr>
+<tr><td>Manual phase-exec asks are eliminated</td><td>history.jsonl · 279 matches Jan–Mar, 0 from Apr · same window</td><td>exec-loop/plan skills replaced typed phase invocations</td><td>High</td><td>No action needed</td></tr>
+<tr><td>.env handoff is an uncovered recurring workflow</td><td>history.jsonl · 23 exact recent matches, 69 all-time; pack inventory scan shows no env skill · Apr–Jun 2026</td><td>Stable repeated shape + explicit safety concern → skill-shaped</td><td>High</td><td>Approve/reject building env-setup (Q4)</td></tr>
+<tr><td>Ad-hoc audits lack a verification pass</td><td>history.jsonl · 10 recent "false positives" follow-ups; expert-review SKILL.md already has the filter step · Apr 2026</td><td>Gap is in ad-hoc behavior, not the skill — convention-level fix</td><td>Medium-High</td><td>Approve/reject convention (Q5)</td></tr>
+<tr><td>Findings→fix-plan handoff is manual</td><td>history.jsonl · 11 recent "create a plan to fix" follow-ups · Apr–Jun 2026</td><td>Routing convention would absorb these</td><td>Medium-High</td><td>Approve/reject convention (Q5)</td></tr>
+<tr><td>Research skills lack a freshness rule</td><td>history.jsonl · explicit user correction May 2026 ("very stale data", "multiple instances"); grep shows recency language in only 2 skills</td><td>User explicitly says this recurs; coverage scan confirms absence</td><td>High (explicitly stated by user)</td><td>Approve/reject convention (Q5)</td></tr>
+<tr><td>Doc-validation asks are an adoption gap, not a coverage gap</td><td>.agents/project.json · docs-health absent from enabled_packs; pack contains hygiene + reconcile-dev-docs · Jun 2026</td><td>Skills exist; they were not installed where asked</td><td>Medium (other projects' pack state not directly inspected — inferred)</td><td>Approve/reject adoption rec (Q6)</td></tr>
+<tr><td>Deploy-history ask was already implemented</td><td>packs/release-ops/claude/deploy/SKILL.md · description + body declare deployment history tracking · Jun 2026</td><td>April user request landed</td><td>High</td><td>None — closes the loop</td></tr>
+</table></div>
+<div class="question-block" data-qid="q1" data-section="Evidence Matrix" data-gate="evidence coverage">
+<h4>Q1 (required) — Is the evidence base sufficient for these recommendations?</h4>
+<label><input type="radio" name="q1" value="Yes — sufficient"> Yes — sufficient for all five recommendations</label>
+<label><input type="radio" name="q1" value="Sufficient for #1 only"> Sufficient for the env-setup recommendation only; conventions need more evidence</label>
+<label><input type="radio" name="q1" value="No — deeper parsing needed (notes)"> No — need deeper parsing (e.g., Claude transcripts, per-project pack state) before acting</label>
+<label><input type="radio" name="q1" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q1" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q2" data-section="Research completeness" data-gate="research completeness">
+<h4>Q2 (required) — Could the missing context change the recommendations? (Claude token data, Codex model attribution, other projects' pack state were not parsed.)</h4>
+<label><input type="radio" name="q2" value="No — accept gaps as noted"> No — accept the coverage gaps as noted</label>
+<label><input type="radio" name="q2" value="Yes — parse Claude transcripts first"> Yes — parse Claude transcript token usage before confirming</label>
+<label><input type="radio" name="q2" value="Yes — inspect other projects' pack state first"> Yes — inspect other projects' pack state before confirming the adoption claims</label>
+<label><input type="radio" name="q2" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q2" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="confidence"><span class="sec-head"><span>10. Confidence &amp; Assumption Register</span><span class="fb-controls" data-fb-section="confidence-register"></span></span></h2>
+<div class="fb-area" id="fb-confidence-register"></div>
+<div class="table-wrap"><table>
+<tr><th>Conclusion</th><th>Status</th><th>What would change it</th></tr>
+<tr><td>env-setup is the top remaining skill gap</td><td>Evidence-backed (exact counts, inventory scan)</td><td>An existing env skill in an uninspected location, or the asks stopping naturally</td></tr>
+<tr><td>Closed-gap families stay closed</td><td>Evidence-backed (3 consecutive zero months)</td><td>Recurrence in future history</td></tr>
+<tr><td>"Deploy to staging" closure credit</td><td>Provisional — confounded by bismarck wind-down</td><td>A new deploy-heavy project re-surfacing the asks</td></tr>
+<tr><td>Doc-validation is an adoption gap</td><td>Provisional — other repos' pack state inferred, not inspected</td><td>Inspecting .agents/project.json in those repos</td></tr>
+<tr><td>Codex skill adoption lags Claude</td><td>Evidence-backed (manual git-ops 38 vs 16; command mix)</td><td>Codex history showing broader $-skill use</td></tr>
+<tr><td>Intent-bucket counts</td><td>Exact for shown patterns; buckets not mutually exhaustive (first-match keyword classification)</td><td>—</td></tr>
+</table></div>
+<h3>Alternatives considered</h3>
+<ul>
+<li><strong>One mega "audit-followups" skill</strong> (verify + fix-plan in one): rejected — the two behaviors apply at different moments and conventions reach ad-hoc work that skills don't.</li>
+<li><strong>Building a doc-consistency skill</strong>: rejected — docs-health already covers it; the gap is installation.</li>
+<li><strong>A Codex approval-YAML flow</strong> for the 51 "I agree" messages: deferred — gate steering is by design; surfaced as an observation, not a recommendation.</li>
+</ul>
+<h3>Source coverage gaps</h3>
+<ul>
+<li>Claude token usage and all dollar costs unavailable (no usage metadata in history.jsonl; no pricing basis).</li>
+<li>Codex model/provider attribution not recovered; token totals are aggregate only.</li>
+<li>Codex compact history lacks project paths; 764 sessions mapped via rollout <code>cwd</code>, remainder "(unknown)".</li>
+<li>Claude full transcripts (~/.claude/projects/*) were not parsed — history.jsonl user prompts only.</li>
+</ul>
+<h3>Downstream implications</h3>
+<ul>
+<li>Approving Rec 1 routes to skill-dev pack (installed ✓ per <code>.agents/project.json</code>) via targeted-skill-builder.</li>
+<li>Approving Recs 2–4 means edits to shared convention docs (CLAUDE.md template source / quality-gate contract / a new freshness convention doc + bundler), which propagate to many skills.</li>
+<li>Approving Rec 5 is a per-project action, not a repo change here.</li>
+</ul>
+
+<h2 id="glossary"><span class="sec-head"><span>11. Glossary Additions Gate</span><span class="fb-controls" data-fb-section="glossary-gate"></span></span></h2>
+<div class="fb-area" id="fb-glossary-gate"></div>
+<p>Proposed for <code>research/glossary.md</code> (flat repo — single parent glossary). Only approved terms are appended during the confirmed-page write step.</p>
+<div class="table-wrap"><table>
+<tr><th>Term</th><th>Definition</th><th>Source</th><th>Category</th></tr>
+<tr><td>manual ask</td><td>A recurring typed user instruction that a skill could perform end-to-end (e.g. "commit this and push")</td><td>analyze-sessions skill-gaps report</td><td>workflow</td></tr>
+<tr><td>steering prompt</td><td>A short (≤30 char) confirmation or direction message ("y", "continue", "push it") that drives an agent between skill steps</td><td>analyze-sessions skill-gaps report</td><td>workflow</td></tr>
+</table></div>
+<div class="question-block" data-qid="q7" data-section="Glossary: manual ask" data-gate="glossary additions">
+<h4>Q7 (required) — Term: "manual ask"</h4>
+<label><input type="radio" name="q7" value="Approve"> Approve</label>
+<label><input type="radio" name="q7" value="Edit (notes)"> Edit (provide wording in notes)</label>
+<label><input type="radio" name="q7" value="Reject"> Reject</label>
+<label><input type="radio" name="q7" value="Flag for /repo-glossary review"> Flag for /repo-glossary review</label>
+<label><input type="radio" name="q7" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q7" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q8" data-section="Glossary: steering prompt" data-gate="glossary additions">
+<h4>Q8 (required) — Term: "steering prompt"</h4>
+<label><input type="radio" name="q8" value="Approve"> Approve</label>
+<label><input type="radio" name="q8" value="Edit (notes)"> Edit (provide wording in notes)</label>
+<label><input type="radio" name="q8" value="Reject"> Reject</label>
+<label><input type="radio" name="q8" value="Flag for /repo-glossary review"> Flag for /repo-glossary review</label>
+<label><input type="radio" name="q8" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q8" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="artifacts"><span class="sec-head"><span>12. Artifact Destination &amp; Proposed File Changes</span><span class="fb-controls" data-fb-section="artifact-destination"></span></span></h2>
+<div class="fb-area" id="fb-artifact-destination"></div>
+<p>On approval (Stage 3), the proposed canonical writes are:</p>
+<ul>
+<li>Write the approved report to <code>research/analyze-sessions-skill-gaps-manual-asks.md</code> (flat research path, matching existing flat layout).</li>
+<li>Append approved glossary terms to <code>research/glossary.md</code> (create with standard header if missing).</li>
+<li>Archive the working packet <code>research/_working/preliminary-analyze-sessions-research.md</code> to <code>docs/history/archive/YYYY-MM-DD/HHMMSS/…</code> and remove the active copy.</li>
+<li>Convert this page to <code>confirmed</code> and update <code>alignment/index.html</code>.</li>
+</ul>
+<p>Already written this run (review-stage artifacts): this alignment page, the working packet, the prompt-history log <code>prompts/analyze-sessions/skill-prompt-20260610-020338-skill-gaps-manual-asks.md</code>, and the index entry.</p>
+<div class="question-block" data-qid="q9" data-section="Artifact Destination &amp; Proposed File Changes" data-gate="artifact destination" data-target="research/analyze-sessions-skill-gaps-manual-asks.md">
+<h4>Q9 (required) — Approve the canonical artifact destination and file-change scope above?</h4>
+<label><input type="radio" name="q9" value="Approve as proposed"> Approve as proposed</label>
+<label><input type="radio" name="q9" value="Different path (notes)"> Different canonical path (specify in notes)</label>
+<label><input type="radio" name="q9" value="Page-only — no canonical markdown"> Page-only — keep the alignment page, skip the canonical markdown report</label>
+<label><input type="radio" name="q9" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q9" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="route"><span class="sec-head"><span>13. Post-Approval Route</span><span class="fb-controls" data-fb-section="post-approval-route"></span></span></h2>
+<div class="fb-area" id="fb-post-approval-route"></div>
+<p>If Recommendation 1 is approved, the natural follow-up is the skill-dev pack's builder, parameterized with the gap (owner surface: gitops or repo-maintenance pack; validation: layer1 contract test asserting no secret reads and stub-file output). skill-dev is installed per <code>.agents/project.json</code>.</p>
+<div class="question-block" data-qid="q10" data-section="Post-Approval Route" data-gate="post-approval route">
+<h4>Q10 (required) — Route after this page is confirmed?</h4>
+<label><input type="radio" name="q10" value="Route to targeted-skill-builder for env-setup gap"> Route to <code>/targeted-skill-builder</code> with the env-setup gap</label>
+<label><input type="radio" name="q10" value="Conventions first, skill later"> Apply approved conventions first; defer the skill build</label>
+<label><input type="radio" name="q10" value="No follow-up"> No follow-up</label>
+<label><input type="radio" name="q10" value="__other__"> Other / None of the above</label>
+<label><input type="radio" name="q10" value="__clarify__"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="compile">14. Compile</h2>
+<div class="card">
+<p><strong>Feedback-only path:</strong> select emphasize / 👎 / clarify on any section above, add notes, then compile feedback YAML here (or locally under that section) — available even with gate questions unanswered.</p>
+<p style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+<button class="secondary" id="btn-fb-compile" disabled>Compile Feedback YAML</button>
+<span class="copy-status" id="fb-copy-status"></span>
+</p>
+<textarea class="compile-out" id="fb-yaml-out" readonly></textarea>
+<p style="margin-top:0.4rem;"><button class="secondary" id="btn-fb-copy" style="display:none;">Copy YAML</button></p>
+</div>
+<div class="card">
+<p><strong>Final approval path:</strong> answer all 10 required questions, then compile answers.</p>
+<p style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+<button class="action" id="btn-compile" disabled>Compile Answers</button>
+<span class="copy-status" id="remaining-status"></span>
+<span class="copy-status" id="copy-status"></span>
+</p>
+<textarea class="compile-out" id="yaml-out" readonly></textarea>
+<p style="margin-top:0.4rem;"><button class="secondary" id="btn-copy" style="display:none;">Copy YAML</button></p>
+</div>
+
+<script>
+(function(){
+var PAGE = 'alignment/analyze-sessions-skill-gaps-manual-asks.html';
+var QIDS = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10'];
+var fbState = {}; // section -> {type, notes}
+
+// --- gate question wiring ---
+document.querySelectorAll('.question-block').forEach(function(qb){
+  var notes = qb.querySelector('textarea[data-role="notes"]');
+  qb.querySelectorAll('input[type="radio"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      if (notes) {
+        notes.style.display = 'block';
+        if (r.value === '__other__') notes.placeholder = 'Describe your answer (free-form)';
+        else if (r.value === '__clarify__') notes.placeholder = 'What is unclear? (optional)';
+        else notes.placeholder = 'Additional notes (optional)';
+      }
+      updateRemaining();
+    });
+  });
+});
+
+function answered(){ return QIDS.filter(function(q){ return document.querySelector('input[name="'+q+'"]:checked'); }); }
+function updateRemaining(){
+  var rem = QIDS.length - answered().length;
+  var btn = document.getElementById('btn-compile');
+  var st = document.getElementById('remaining-status');
+  btn.disabled = rem > 0;
+  st.textContent = rem > 0 ? rem + ' required question(s) remaining' : 'All required questions answered';
+}
+document.getElementById('btn-compile').addEventListener('click', function(){
+  if (answered().length < QIDS.length) { scrollToFirstUnanswered(); return; }
+  var y = compileFinalYaml();
+  showYaml('yaml-out', 'btn-copy', 'copy-status', y);
+});
+function scrollToFirstUnanswered(){
+  for (var i=0;i<QIDS.length;i++){
+    if (!document.querySelector('input[name="'+QIDS[i]+'"]:checked')){
+      var el = document.querySelector('.question-block[data-qid="'+QIDS[i]+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth'});
+      return;
+    }
+  }
+}
+
+function yamlEscape(s){ return '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n') + '"'; }
+
+function sectionFeedbackYaml(entries){
+  var lines = [];
+  entries.forEach(function(e){
+    lines.push('  - section: ' + yamlEscape(e.section));
+    lines.push('    feedback: ' + e.type);
+    if (e.notes) lines.push('    notes: ' + yamlEscape(e.notes));
+    lines.push('    requested_agent_action: ' + (e.type === 'emphasize' ? 'add-weight-to-section' : e.type === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'));
+  });
+  return lines;
+}
+function collectFb(){
+  var out = [];
+  Object.keys(fbState).forEach(function(sec){
+    var s = fbState[sec];
+    if (!s || !s.type) return;
+    var ta = document.querySelector('#fb-' + cssId(sec) + ' textarea.fb-notes');
+    out.push({section: sec, type: s.type, notes: ta ? ta.value.trim() : ''});
+  });
+  return out;
+}
+function cssId(sec){ return sec; }
+
+function feedbackYaml(entries){
+  var rem = QIDS.length - answered().length;
+  var y = [];
+  y.push('alignment_page: ' + PAGE);
+  y.push('feedback_status: revision-request');
+  y.push('approval_status: not-approved');
+  y.push('unanswered_required_questions: ' + rem);
+  y.push('section_feedback:');
+  y = y.concat(sectionFeedbackYaml(entries));
+  y.push('# emphasize = revision request: add more weight/prominence/evidence/detail to the named section or point — not approval as-is.');
+  y.push('# down / needs-clarification = evaluate the feedback, investigate further when needed, amend the HTML alignment page, then ask again for final approval.');
+  return y.join('\n');
+}
+function compileFinalYaml(){
+  var y = [];
+  y.push('alignment_page: ' + PAGE);
+  y.push('approval_status: ready-for-agent-review');
+  y.push('answers:');
+  QIDS.forEach(function(q){
+    var qb = document.querySelector('.question-block[data-qid="'+q+'"]');
+    var sel = document.querySelector('input[name="'+q+'"]:checked');
+    var notes = qb.querySelector('textarea[data-role="notes"]');
+    var status = sel.value === '__other__' ? 'other' : sel.value === '__clarify__' ? 'needs-clarification' : 'answered';
+    var ans = sel.value === '__other__' ? 'other' : sel.value === '__clarify__' ? 'needs-clarification' : sel.value;
+    y.push('  - section: ' + yamlEscape(qb.getAttribute('data-section')));
+    y.push('    gate_type: ' + yamlEscape(qb.getAttribute('data-gate')));
+    y.push('    status: ' + status);
+    y.push('    answer: ' + yamlEscape(ans));
+    if (notes && notes.value.trim()) y.push('    notes: ' + yamlEscape(notes.value.trim()));
+    var tgt = qb.getAttribute('data-target');
+    if (tgt) y.push('    target_path: ' + yamlEscape(tgt));
+  });
+  var fb = collectFb();
+  if (fb.length) { y.push('section_feedback:'); y = y.concat(sectionFeedbackYaml(fb)); }
+  return y.join('\n');
+}
+function showYaml(outId, copyBtnId, statusId, text){
+  var out = document.getElementById(outId);
+  out.style.display = 'block'; out.value = text;
+  var cb = document.getElementById(copyBtnId); cb.style.display = 'inline-block';
+  tryCopy(text, statusId);
+  cb.onclick = function(){ tryCopy(text, statusId, out); };
+}
+function tryCopy(text, statusId, fallbackEl){
+  var st = document.getElementById(statusId);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){ st.textContent = 'Copied to clipboard'; },
+      function(){ fallbackSelect(fallbackEl, st); });
+  } else fallbackSelect(fallbackEl, st);
+}
+function fallbackSelect(el, st){
+  if (el) { el.focus(); el.select(); st.textContent = 'Clipboard blocked — YAML selected, press Ctrl+C'; }
+  else st.textContent = 'Clipboard unavailable — copy from the text box';
+}
+
+// --- section feedback controls ---
+document.querySelectorAll('.fb-controls').forEach(function(host){
+  var sec = host.getAttribute('data-fb-section');
+  var defs = [['emphasize','emphasize','active-emph'],['down','👎','active-down'],['needs-clarification','clarify','active-clar']];
+  defs.forEach(function(d){
+    var b = document.createElement('button');
+    b.className = 'fb-btn'; b.textContent = d[1]; b.type = 'button';
+    b.addEventListener('click', function(){
+      var area = document.getElementById('fb-' + sec);
+      var cur = fbState[sec] && fbState[sec].type;
+      host.querySelectorAll('.fb-btn').forEach(function(x){ x.classList.remove('active-emph','active-down','active-clar'); });
+      if (cur === d[0]) { fbState[sec] = null; area.style.display = 'none'; area.innerHTML = ''; }
+      else {
+        fbState[sec] = {type: d[0]};
+        b.classList.add(d[2]);
+        area.style.display = 'block';
+        area.innerHTML = '<textarea class="fb-notes" placeholder="Section feedback notes ('+d[0]+')"></textarea>' +
+          '<div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
+          '<button type="button" class="secondary fb-local-compile">Compile Feedback YAML</button>' +
+          '<button type="button" class="secondary fb-local-copy" style="display:none;">Copy YAML</button>' +
+          '<span class="copy-status fb-local-status"></span></div>' +
+          '<div class="fb-yaml"><textarea readonly></textarea></div>';
+        area.querySelector('.fb-local-compile').addEventListener('click', function(){
+          var entry = {section: sec, type: fbState[sec].type, notes: area.querySelector('.fb-notes').value.trim()};
+          var y = feedbackYaml([entry]);
+          var wrap = area.querySelector('.fb-yaml'); wrap.style.display = 'block';
+          var ta = wrap.querySelector('textarea'); ta.value = y;
+          var cp = area.querySelector('.fb-local-copy'); cp.style.display = 'inline-block';
+          var stEl = area.querySelector('.fb-local-status'); stEl.id = 'fb-st-' + sec;
+          tryCopy(y, stEl.id, ta);
+          cp.onclick = function(){ tryCopy(y, stEl.id, ta); };
+        });
+      }
+      updateFbButtons();
+    });
+    host.appendChild(b);
+  });
+});
+function updateFbButtons(){
+  var any = collectFb().length > 0 || Object.keys(fbState).some(function(k){ return fbState[k] && fbState[k].type; });
+  document.getElementById('btn-fb-compile').disabled = !any;
+}
+document.getElementById('btn-fb-compile').addEventListener('click', function(){
+  var y = feedbackYaml(collectFb());
+  showYaml('fb-yaml-out', 'btn-fb-copy', 'fb-copy-status', y);
+});
+updateRemaining();
+})();
+</script>
+</main>
+</body>
+</html>
