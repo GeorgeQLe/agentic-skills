@@ -18,6 +18,13 @@ Current npm check on 2026-06-08:
 - `npm view @skillpacks/cli --json` and `npm view @skillpacks/core --json` returned `E404`; that does not prove npm organization availability, but no packages under those names are visible.
 - `npm view agentic-skills --json` returned an existing external package at version `2.5.1`, so `agentic-skills` should not be used as this repo's public npm package name.
 
+Publication status on 2026-06-10:
+
+- `skillpacks@0.1.0` is published publicly on npm with `latest` pointing to `0.1.0`.
+- Package metadata uses `license: MIT`, repository `git+https://github.com/GeorgeQLe/agentic-skills.git`, `repository.directory: packages/skillpacks`, bugs URL `https://github.com/GeorgeQLe/agentic-skills/issues`, and homepage `https://github.com/GeorgeQLe/agentic-skills#readme`.
+- Registry tarball evidence: `skillpacks-0.1.0.tgz`, 2,349 files, 31,323,992 bytes unpacked, shasum `9ab8925b5f8d3dc39f1caa9c50609fb8df6df1f2`, integrity `sha512-TyZFnm9HjaV8E0yTN1EPRuh1BZDWt/Hcn316omlXvAVhLFpWkP191BaKzw/wmCjRkEm14RF2WkWJ6XSlusDKHg==`.
+- Published-package verification passed with `npx skillpacks@latest list`, temp-project `install code-quality`, temp-project `install quality-sweep`, temp-project `install-deck game-afps`, and the git-checkout `scripts/pack.sh list` path.
+
 ## Product Shape
 
 `skillpacks` becomes the public installer and CLI for this repository's markdown skill library. The first npm release should not restructure the repository into many packages. It should package the current repository content needed to install skills and expose a Node entry point that can drive the existing install model.

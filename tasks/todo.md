@@ -21,18 +21,18 @@ Publish the first stable public `skillpacks` npm package after release validatio
 
 - [x] Step 5.1: Run release preflight: package tests, package staging, tarball inspection, registry state check, and whitespace checks.
 - [x] Step 5.1b: Fix publish metadata before release: root MIT `LICENSE`, package MIT metadata, npm repository/bugs/homepage links, staged package allowlist, and package metadata coverage.
-- [ ] Step 5.2: Confirm the external publish boundary, including `skillpacks@0.1.0`, public access, MIT license metadata, npm links, and `packages/skillpacks/build` as the publish root.
-- [ ] Step 5.3: Run `npm publish --access public` from the staged package build only after explicit confirmation.
-- [ ] Step 5.4: Verify the published package with `npx skillpacks@latest list` and fresh temp-project installs for one pack, one individual skill, and one deck.
-- [ ] Step 5.5: Record release evidence in the ship manifest, update history/review notes, commit, and push intended Phase 5 changes only.
+- [x] Step 5.2: Confirm the external publish boundary, including `skillpacks@0.1.0`, public access, MIT license metadata, npm links, and `packages/skillpacks/build` as the publish root.
+- [x] Step 5.3: Run `npm publish --access public` from the staged package build only after explicit confirmation.
+- [x] Step 5.4: Verify the published package with `npx skillpacks@latest list` and fresh temp-project installs for one pack, one individual skill, and one deck.
+- [x] Step 5.5: Record release evidence in the ship manifest, update history/review notes, commit, and push intended Phase 5 changes only.
 
 ### Acceptance Criteria
 
-- [ ] `skillpacks@0.1.0` is installable from npm.
-- [ ] A fresh project can install packs without cloning this repository.
-- [ ] The git-checkout install path remains functional.
-- [ ] Validation output is recorded with warnings fixed, explicitly accepted, or unresolved.
-- [ ] Unrelated local work is not included in the shipping commit.
+- [x] `skillpacks@0.1.0` is installable from npm.
+- [x] A fresh project can install packs without cloning this repository.
+- [x] The git-checkout install path remains functional.
+- [x] Validation output is recorded with warnings fixed, explicitly accepted, or unresolved.
+- [x] Unrelated local work is not included in the shipping commit.
 
 ### Review Notes (2026-06-10)
 
@@ -51,6 +51,17 @@ Publish the first stable public `skillpacks` npm package after release validatio
 - Validation passed: `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` returned `glexcorp`; `npm --workspace skillpacks run test:node` passed 38/38 tests; `npm --workspace skillpacks run build:check` passed with manifest exact, 373 skills, 41 packs, and package staging boundary clean.
 - Tarball dry-run passed from `packages/skillpacks/`: `skillpacks@0.1.0`, `skillpacks-0.1.0.tgz`, 2,349 files, 5,272,075 bytes packed, 31,323,992 bytes unpacked, shasum `9ab8925b5f8d3dc39f1caa9c50609fb8df6df1f2`, integrity `sha512-TyZFnm9HjaV8E0yTN1EPRuh1BZDWt/Hcn316omlXvAVhLFpWkP191BaKzw/wmCjRkEm14RF2WkWJ6XSlusDKHg==`; denied-path audit found zero entries under `alignment/`, `tasks/`, `prompts/`, `apps/`, `tests/`, or `docs/history/`, and `LICENSE` was present.
 - Registry state check before publish still returned expected `E404` for `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache`. `git diff --check` passed.
+
+### Review Notes - Published Package Verification (2026-06-10)
+
+- Registry verification passed: `npm view skillpacks version --json --cache /tmp/skillpacks-npm-cache` returned `"0.1.0"`, and `dist-tags.latest` is `0.1.0`.
+- Published metadata verification passed: npm reports `license: MIT`, `repository.url: git+https://github.com/GeorgeQLe/agentic-skills.git`, `repository.directory: packages/skillpacks`, bugs URL `https://github.com/GeorgeQLe/agentic-skills/issues`, and homepage `https://github.com/GeorgeQLe/agentic-skills#readme`.
+- Registry dist evidence matches the prepublish dry-run: shasum `9ab8925b5f8d3dc39f1caa9c50609fb8df6df1f2`, integrity `sha512-TyZFnm9HjaV8E0yTN1EPRuh1BZDWt/Hcn316omlXvAVhLFpWkP191BaKzw/wmCjRkEm14RF2WkWJ6XSlusDKHg==`, 2,349 files, 31,323,992 bytes unpacked.
+- `npx -y --package skillpacks@latest -- skillpacks list` passed from `/tmp` and printed the active pack list.
+- Fresh temp-project npm installs passed: `install code-quality` wrote `.agents/project.json` with `enabled_packs: ["code-quality"]` and installed Claude/Codex skill roots; `install quality-sweep` wrote `enabled_skills: {"quality-sweep":"code-quality"}` and installed both roots; `install-deck game-afps` wrote `enabled_packs: ["game"]` and installed 11 Codex game skills including `game-workflow` and `game-audience`.
+- Published `doctor` passed in the code-quality temp project with four managed installs marked `ok`. Git-checkout smoke still passed: `scripts/pack.sh list` printed the active pack list.
+- Publish execution note: an agent-run `npm publish` from `packages/skillpacks/build` reached npm but returned `EOTP`; a later user-run publish completed the release after the root-cwd npm error was diagnosed as a wrong-directory command. No evidence shows any root package was published.
+- Final post-publish docs validation passed: `npm --workspace skillpacks run test:node` 38/38, `npm --workspace skillpacks run build:check`, and `git diff --check`.
 
 ---
 

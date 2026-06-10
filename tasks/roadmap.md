@@ -154,22 +154,25 @@ Publish the first stable public `skillpacks` npm package after release validatio
    - [x] Run whitespace checks.
    - [x] Fix MIT license metadata, npm repository links, staged package metadata, and package metadata coverage.
 2. External publish gate.
-   - [ ] Confirm the exact publish boundary: `skillpacks@0.1.0`, public access, MIT metadata, npm links, and `packages/skillpacks/build` as the publish root.
-   - [ ] Run `npm publish --access public` only after explicit confirmation.
+   - [x] Confirm the exact publish boundary: `skillpacks@0.1.0`, public access, MIT metadata, npm links, and `packages/skillpacks/build` as the publish root.
+   - [x] Run `npm publish --access public` only after explicit confirmation.
 3. Published-package verification.
-   - [ ] Verify `npx skillpacks@latest list` against npm.
-   - [ ] In a fresh temp project, install one pack, one individual skill, and one deck from the published package.
-   - [ ] Verify the git-checkout install path remains functional.
+   - [x] Verify `npx skillpacks@latest list` against npm.
+   - [x] In a fresh temp project, install one pack, one individual skill, and one deck from the published package.
+   - [x] Verify the git-checkout install path remains functional.
 4. Ship.
-   - [ ] Record release evidence in a ship manifest.
-   - [ ] Update review notes and history.
-   - [ ] Commit and push intended Phase 5 changes only.
+   - [x] Record release evidence in a ship manifest.
+   - [x] Update review notes and history.
+   - [x] Commit and push intended Phase 5 changes only.
 
 ### Current Step
 
 - [x] Step 5.1: Release preflight.
 - [x] Step 5.1b: MIT metadata prepublish fix.
-- [ ] Step 5.2: External publish gate after metadata validation.
+- [x] Step 5.2: External publish gate after metadata validation.
+- [x] Step 5.3: Public npm publish.
+- [x] Step 5.4: Published-package verification.
+- [x] Step 5.5: Commit and push post-publish evidence.
 
 ---
 
