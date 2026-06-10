@@ -13859,3 +13859,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added `tests/layer1/upgrade-alignment-page-bespoke.test.ts` (repo-state assertions + 5 behavioral fixture tests) and documented the allowlist in `docs/alignment-page-convention.md` outside the generated marker block.
 - Verified: syntax check, dry-run/write-mode generator runs (exit 0, no tracked diff), 13 focused layer1 tests, `git diff --check`.
 - Full layer1 run surfaced 18 pre-existing failures across 11 files (stale version pins and stale wording assertions) that reproduce identically at clean HEAD; planned their reconciliation as the next step instead of bundling judgment-heavy fixes into this boundary.
+
+## 2026-06-10 — Layer1 contract test reconciliation
+
+- Categorized all 18 pre-existing layer1 failures (11 files): every one was a stale test; zero regressed skill contracts, so no skill edits, archives, bumps, or showcase refreshes were needed.
+- Stale pins relaxed to bumped/well-formed version patterns (`pack` v0.4→v0.6, `uat-guide` v0.2→v0.3, `targeted-skill-builder` v0.2→v0.3, `prompt-history-backfill` v0.0→v0.1, `compile-central-alignment` v0.1→v0.2); mirror-parity now asserts cross-mirror version equality instead of exact pins.
+- Stale paths/wording updated for the deliberate `icp` → `customer-discovery` v1.0 orchestrator rewrite, the 2026-06-09 scope-first approval-gate rewrite, the workspace-split generator move to `apps/skills-showcase/scripts/`, and the legacy-aware prompt-history-backfill v0.1 path constraints.
+- `product-path-manifest` sweeps now exclude `invocation: sub-skill` framework files (orchestrator parents own full scope resolution) with a new light sub-skill scope-section test; the showcase benchmark demo example was repointed from the locally-pruned `pack` runs to the `skills` Codex demo.
+- Verified: full layer1 run 54 files / 2166 tests / 0 failed; `git diff --check` clean. Boundary: 11 layer1 test files + task docs only.

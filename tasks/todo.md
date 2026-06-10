@@ -56,17 +56,31 @@ Reconcile the 18 pre-existing failing layer1 contract tests (11 files) against c
 
 ### Steps
 
-- [ ] Categorize each of the 18 failures as stale-pin, stale-assertion, or regressed-skill using git history and session review notes.
-- [ ] Fix stale version pins (prefer the relaxed `v0\.\d+` pattern where exactness adds no contract value).
-- [ ] Update stale wording/path assertions to current repo reality (e.g. `apps/skills-showcase/scripts/` generator paths).
-- [ ] Restore any genuinely regressed skill contract language with archive + version bump + changelog, mirrored in both tools.
-- [ ] Run the full layer1 suite to zero failures and record per-test verdicts in review notes.
+- [x] Categorize each of the 18 failures as stale-pin, stale-assertion, or regressed-skill using git history and session review notes.
+- [x] Fix stale version pins (prefer the relaxed `v0\.\d+` pattern where exactness adds no contract value).
+- [x] Update stale wording/path assertions to current repo reality (e.g. `apps/skills-showcase/scripts/` generator paths).
+- [x] Restore any genuinely regressed skill contract language with archive + version bump + changelog, mirrored in both tools. (Not needed — zero regressed contracts found.)
+- [x] Run the full layer1 suite to zero failures and record per-test verdicts in review notes.
 
 ### Acceptance Criteria
 
-- `pnpm --dir tests exec vitest run --project layer1` → 0 failed.
-- Any skill edits pass `scripts/skill-versions.sh --missing` and `scripts/skill-archive-audit.sh --strict`; Skills Showcase data revalidated if SKILL.md files changed.
-- `git diff --check` clean.
+- [x] `pnpm --dir tests exec vitest run --project layer1` → 0 failed (54 files, 2166 tests; one new sub-skill contract test added).
+- [x] Any skill edits pass `scripts/skill-versions.sh --missing` and `scripts/skill-archive-audit.sh --strict`; Skills Showcase data revalidated if SKILL.md files changed. (No skill files edited, so these were not required.)
+- [x] `git diff --check` clean.
+
+### Review Notes (2026-06-10)
+
+All 18 failures were stale tests; none were regressed skill contracts, so no skill edits, archives, version bumps, or Skills Showcase data refreshes were needed. Boundary: the 11 `tests/layer1/*.test.ts` files only. Per-test verdicts:
+
+- **Stale version pins (relaxed to version-format/bumped-version patterns):** `pack-reload-contract` and `pack-shipping-boundary` pinned `pack` v0.4 (now v0.6 via deliberate changelog'd bumps); `pack-skill-mirror-parity` pinned `uat-guide` v0.2 (now v0.3 with archives v0.0–v0.2) — rewritten to assert both mirrors share one well-formed version instead of exact pins; `skill-reload-language` pinned `targeted-skill-builder` v0.2 (now v0.3); `prompt-history-backfill` pinned v0.0 (now v0.1, deliberate 2026-06-04 legacy-routing changelog) and its `--apply` path-constraint assertions updated to the current legacy-aware sentences; `compile-central-alignment` pinned v0.1 (now v0.2, deliberate 2026-06-06 category-grouping changelog) — v0.0 archive and v0.1 changelog assertions kept.
+- **Stale paths from the `icp` → `customer-discovery` rename (`ed1eba82`/`ebfc6438`, deliberate v1.0 orchestrator rewrite with archives + changelogs):** `afps-alignment-preview-gates`, `marketplace-side-handoff` (3 tests), and `product-path-manifest` ENOENT'd on `packs/business-discovery/*/icp/SKILL.md` — repointed to `customer-discovery` paths and `/customer-discovery`/`$customer-discovery` commands. The "hypotheses, not validated ICPs" wording became "hypotheses, not validated customer segments" in the same ship.
+- **Stale gate content from the 2026-06-09 scope-first approval rewrite (`8c655082`):** `afps-alignment-preview-gates` report-first assertions updated from the old preview-page gate ("build and attempt to open the alignment preview page first", "evidence coverage", "proposed file changes") to the current scope-first contract ("Default to scope-first approval", "final compiled YAML approves the research scope", "Stage 1 - Scope discovery and approval", "proposed canonical file changes"), verified present in all 8 mirrored skills.
+- **Stale mirror byte-equality:** the customer-discovery Codex mirror is a deliberately condensed orchestrator (v1.0 rewrite), so `marketplace-side-handoff` no longer asserts byte-equal preflight sections; it asserts the shared preflight core phrases in both mirrors plus byte-equality for the still-identical idea-scope-brief handoff section.
+- **Stale sweep contract vs the sub-skill pattern (`c691484b` orchestrator refactor):** `product-path-manifest` sweeps now exclude `invocation: sub-skill` framework files (competitive-analysis/customer-discovery/journey-map frameworks defer full scope resolution to their orchestrator parent) and a new test asserts every research sub-skill still carries a `Product-Path Scope Resolution` section. The monorepo-secondary assertion uses the common "Detect monorepo/app/package structure only as a secondary hint" phrasing (the Codex orchestrator condensed the longer clause). The schema-fields contract dropped customer-discovery (the orchestrator no longer enumerates the full manifest schema; the contract lives in the remaining pairs), and the flat-to-product-path icp migration test was rewritten to the current output contract (`research/{slug}/icp.md`, `research/icp.md`, `research/icp-search-log.md`, `research/.progress.yaml`). The git-branch disambiguation heuristic now exempts the screen-flow phrase "screen flow, decisions, branches, states" from the deliberate user-flow-map routing language in `ux-variations`.
+- **Stale generator path:** `benchmark-results-matrix` expected `Generated by `scripts/generate-skills-showcase-data.mjs``; the workspace split moved the generator to `apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`.
+- **Stale demo example:** `skills-showcase-benchmark-demo` pinned the `pack` Codex demo, but benchmark run dirs are gitignored/machine-local and the `pack-codex-*` runs no longer exist locally, so regenerated committed showcase data has no pack demo. Repointed to the `skills` Codex demo, which exists in committed data and has local run artifacts.
+
+Validation: full layer1 run 54 files / 2166 tests / 0 failed; `git diff --check` clean. An untracked `prompts/analyze-sessions/` file from a concurrent session was left outside this boundary.
 
 ### Handoff
 
