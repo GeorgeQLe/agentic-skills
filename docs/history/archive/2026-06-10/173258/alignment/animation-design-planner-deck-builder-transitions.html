@@ -76,52 +76,6 @@ button{font:inherit}
 .readout{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;min-height:64px;font-size:.92rem}
 .readout .ph{color:var(--accent);font-weight:700}
 .seq-btn.active{border-color:var(--accent);color:var(--accent)}
-/* motion demos */
-.proto-box{--dscale:1}
-.chk{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 8px;font-size:.85rem;color:var(--text-muted);cursor:pointer}
-.demo-stage{position:relative;background:#0a0e13;border:1px solid var(--border);border-radius:8px;overflow:hidden;height:320px;max-width:100%}
-.demo-zone-label{position:absolute;left:18px;top:12px;color:var(--text-muted);font-size:.7rem;letter-spacing:.12em}
-.demo-bp{position:absolute;width:122px;height:76px;background:linear-gradient(145deg,#1b2436,#141a26);border:1px solid var(--chart-1);border-radius:8px;color:#fff;font-size:.74rem;font-weight:700;padding:8px 10px;text-align:left;cursor:pointer;transition:opacity .1s}
-.demo-bp span{display:block;color:var(--text-muted);font-weight:400;font-size:.68rem;margin-top:4px}
-.demo-bp.ghost{opacity:.55;cursor:default}
-.demo-bp.claimed{opacity:0}
-.demo-shelf{position:absolute;left:18px;right:18px;bottom:14px;background:#10151c;border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text-muted);font-size:.72rem;letter-spacing:.06em}
-.demo-proxy{position:absolute;background:linear-gradient(145deg,#1b2436,#141a26);border:1px solid var(--chart-1);border-radius:8px;transition-property:left,top,width,height;transition-timing-function:cubic-bezier(.3,.9,.35,1);z-index:4}
-.demo-panel{position:absolute;inset:12px;background:#141a26;border:1px solid var(--chart-1);border-radius:8px;padding:12px 14px;z-index:3}
-.demo-panel.content-out .demo-panel-inner{opacity:0;transition:opacity .01s}
-.demo-panel-head{color:#fff;font-size:.8rem;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:10px}
-.demo-cols{display:flex;gap:8px}
-.demo-col{flex:1;border:1px solid var(--border);border-radius:6px;padding:6px;color:var(--text-muted);font-size:.66rem;min-width:0}
-.demo-col .demo-slot{display:block;height:54px;border:1px dashed var(--border);border-radius:6px;margin-top:6px}
-.demo-panel.stagger-in .demo-col{opacity:0;animation:demoFadeUp calc(.2s*var(--dscale)) both}
-.demo-panel.stagger-in .demo-col:nth-child(2){animation-delay:calc(.04s*var(--dscale))}
-.demo-panel.stagger-in .demo-col:nth-child(3){animation-delay:calc(.08s*var(--dscale))}
-.demo-panel.stagger-in .demo-col:nth-child(4){animation-delay:calc(.12s*var(--dscale))}
-.demo-panel.stagger-in .demo-col:nth-child(5){animation-delay:calc(.16s*var(--dscale))}
-.demo-panel.stagger-in .demo-panel-shelf{opacity:0;animation:demoFadeUp calc(.2s*var(--dscale)) calc(.2s*var(--dscale)) both}
-.demo-panel.no-stagger .demo-col,.demo-panel.no-stagger .demo-panel-shelf{animation:demoFadeUp calc(.12s*var(--dscale)) both}
-.demo-panel-shelf{margin-top:10px;background:#10151c;border:1px solid var(--chart-3);border-radius:6px;padding:6px 10px;color:var(--chart-3);font-size:.7rem}
-@keyframes demoFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.demo-rm-fade{animation:demoFadeUp calc(.12s*var(--dscale)) both}
-/* card-flight demo */
-.demo-slotbar{position:absolute;left:0;right:0;top:0;padding:10px 14px;border-bottom:1px solid var(--border);background:#0d1219;z-index:2}
-.demo-counter{color:#fff;font-size:.78rem;font-weight:700}
-.demo-slot-strip{display:flex;gap:8px;margin-top:8px}
-.demo-slot2{width:54px;height:74px;border:1px dashed var(--border);border-radius:6px;color:var(--text-muted);font-size:.6rem;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
-.demo-slot2.filled{border:1px solid var(--chart-2);background:linear-gradient(145deg,#15251b,#10181c);color:var(--chart-2)}
-.demo-slot2.pulse{animation:demoPulse calc(.25s*var(--dscale))}
-@keyframes demoPulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
-.demo-sheet2{position:absolute;left:8px;right:8px;bottom:0;height:158px;background:#11161f;border:1px solid var(--border);border-radius:12px 12px 0 0;padding:10px 14px;overflow:hidden}
-.demo-sheet-label{color:var(--text-muted);font-size:.68rem;letter-spacing:.1em}
-.demo-fan{position:relative;height:110px;margin-top:6px}
-.demo-card{position:absolute;width:66px;height:92px;background:linear-gradient(160deg,#202a3d,#161d2b);border:1px solid var(--chart-6);border-radius:7px;color:#fff;font-size:.6rem;padding:6px 6px;text-align:left;cursor:pointer;bottom:4px;transition:opacity .1s,filter .1s}
-.demo-card .cmd{color:var(--text-muted);display:block;margin-top:3px;font-family:ui-monospace,Menlo,monospace;font-size:.55rem}
-.demo-card.collected{opacity:.4;filter:grayscale(.6);cursor:default}
-.demo-card .badge-indeck{display:none;position:absolute;right:4px;top:4px;color:var(--chart-2);font-size:.62rem}
-.demo-card.collected .badge-indeck{display:block}
-.demo-clone{position:absolute;background:linear-gradient(160deg,#202a3d,#161d2b);border:1px solid var(--chart-6);border-radius:7px;z-index:6;transform-origin:top left;transition-property:transform;transition-timing-function:cubic-bezier(.3,.9,.35,1);pointer-events:none}
-.amend-note{border:1px solid var(--orange);border-left-width:4px;background:#241c0e;border-radius:0 8px 8px 0;padding:10px 16px;margin:14px 0}
-@media (max-width:560px){.demo-cols{flex-wrap:wrap}.demo-col{flex-basis:30%}}
 .compile-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:34px 0}
 .compile-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
 .yaml-out{width:100%;min-height:220px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
@@ -137,7 +91,6 @@ button{font:inherit}
   <div class="status-block">
     <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
     <div class="row"><span class="k">generated:</span> 2026-06-10</div>
-    <div class="row"><span class="k">amended:</span> 2026-06-10 — added directional motion demos to section 4 (user request); still in review. Prior page archived to <code>docs/history/archive/2026-06-10/173258/alignment/</code></div>
     <div class="row"><span class="k">skill:</span> animation-design-planner (motion-framer subskill — framer-motion 12.40 detected)</div>
     <div class="row"><span class="k">working packet:</span> <code>research/skills-showcase/_working/preliminary-animation-design-planner-research.md</code> (non-canonical)</div>
     <div class="row"><span class="k">canonical destination:</span> <code>apps/skills-showcase/docs/animation-plan-deck-builder.md</code> — written only after approval</div>
@@ -151,7 +104,7 @@ button{font:inherit}
     <li><a href="#context">Context &amp; Evidence</a></li>
     <li><a href="#contract-a">Motion Contract A — blueprint-morph</a> <span class="muted">(gate)</span></li>
     <li><a href="#contract-b">Motion Contract B — card-flight</a> <span class="muted">(gate)</span></li>
-    <li><a href="#scrubbers">Interactive: Motion Demos &amp; Phase Timeline Scrubbers</a> <span class="muted">(amended)</span></li>
+    <li><a href="#scrubbers">Interactive: Phase Timeline Scrubbers</a></li>
     <li><a href="#lifecycle">Lifecycle Ownership Map</a> <span class="muted">(gates: ownership, interruption semantics)</span></li>
     <li><a href="#machine">Interactive: State Machine Explorer</a></li>
     <li><a href="#storyboards">Storyboards &amp; Mechanism Decision</a></li>
@@ -300,8 +253,8 @@ button{font:inherit}
 
 <!-- ============ 4. SCRUBBERS ============ -->
 <section id="scrubbers">
-  <div class="sec-head"><h2>4. Interactive: Motion Demos &amp; Phase Timeline Scrubbers</h2>
-    <div class="sec-fb" data-section="Motion Demos & Phase Timeline Scrubbers">
+  <div class="sec-head"><h2>4. Interactive: Phase Timeline Scrubbers</h2>
+    <div class="sec-fb" data-section="Phase Timeline Scrubbers">
       <span class="sec-fb-label">Section feedback:</span>
       <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
       <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
@@ -313,80 +266,8 @@ button{font:inherit}
       </div>
     </div>
   </div>
-  <div class="amend-note"><strong>Amended 2026-06-10:</strong> two directional motion demos added at user request, ahead of the timeline scrubbers. They mock the intended <em>feel</em> of each transition with plain CSS/JS — real implementation uses framer-motion layout springs, so easing and physics here are approximations of direction, sequencing, and continuity, not final tuning.</div>
-  <p class="preview-note">⚠ These are ephemeral previews, not production code. The demos show directional motion; the scrubbers show the phase timing data. All timings are design targets that pass through <code>dbg.scaleT</code> at implementation time. No state persists.</p>
-  <noscript><p class="callout risk">JavaScript is disabled — the interactive demos and scrubbers will not render. The full phase data is available in the tables below each scrubber.</p></noscript>
-
-  <div class="proto-box" id="demo-bm">
-    <h3 style="margin-top:0">Directional demo — blueprint-morph</h3>
-    <p class="muted" style="font-size:.88rem">Tap the <strong>Devtool AFPS</strong> blueprint (or press Open). The chrome rectangle is the only continuously visible element; the blueprint sits at opacity 0 underneath while the panel owns the morph, and builder content staggers in only after the morph lands. Close runs the reverse: content vanishes near-instantly so the morph-back reads.</p>
-    <div class="proto-controls">
-      <button type="button" class="btn" id="bm-open">Open (tap blueprint)</button>
-      <button type="button" class="btn" id="bm-close" disabled>Close (dismiss)</button>
-      <label class="chk"><input type="checkbox" id="bm-slow"> Slow motion (4×)</label>
-      <label class="chk"><input type="checkbox" id="bm-rm"> Reduced motion</label>
-      <button type="button" class="btn" id="bm-reset">Reset</button>
-    </div>
-    <div class="demo-stage" id="bm-stage" aria-label="Interactive mock of the blueprint-morph transition: a small Devtool AFPS blueprint card on a game table expands into a full builder panel with five phase columns, then morphs back on close. Reduced-motion mode swaps the morph for a 120 millisecond crossfade.">
-      <div class="demo-table" id="bm-table">
-        <div class="demo-zone-label">DECKS (pick a blueprint)</div>
-        <button type="button" class="demo-bp" id="bm-bp" style="left:18px;top:34px">Devtool AFPS<span>deliberate · ▸ 8 cards</span></button>
-        <div class="demo-bp ghost" style="left:152px;top:34px">VARD<span>viral RD · ▸ 3 cards</span></div>
-        <div class="demo-bp ghost" style="left:286px;top:34px">Business AFPS<span>deliberate · ▸ 35 cards</span></div>
-        <div class="demo-shelf">THE SHELF&nbsp;&nbsp;▓vard▓ ▓ord▓ ▓devtool▓ ▓business-discovery▓ ▓game▓</div>
-      </div>
-      <div class="demo-panel" id="bm-panel" hidden>
-        <div class="demo-panel-inner">
-          <div class="demo-panel-head">Devtool AFPS — deliberate · developer · 0/8 collected&nbsp;&nbsp;<span class="muted">url: /deck/devtool-afps</span></div>
-          <div class="demo-cols">
-            <div class="demo-col">Position<span class="demo-slot"></span></div>
-            <div class="demo-col">Adopt<span class="demo-slot"></span></div>
-            <div class="demo-col">Journey<span class="demo-slot"></span></div>
-            <div class="demo-col">Docs<span class="demo-slot"></span></div>
-            <div class="demo-col">Monetize<span class="demo-slot"></span></div>
-          </div>
-          <div class="demo-panel-shelf">▓devtool▓ ← glowing (feeds this deck)</div>
-        </div>
-      </div>
-      <div class="demo-proxy" id="bm-proxy" hidden></div>
-    </div>
-    <div class="readout" id="bm-readout" style="margin-top:10px"><span class="ph">DeckFlowPhase: table</span> — tap the Devtool AFPS blueprint or press Open.</div>
-  </div>
-
-  <div class="proto-box" id="demo-cf">
-    <h3 style="margin-top:0">Directional demo — card-flight</h3>
-    <p class="muted" style="font-size:.88rem">Tap any card in the fan: it dims with an "in deck ♦" badge the same frame (optimistic commit), a clone flies above the sheet to its slot, the slot fills and pulses, the counter ticks. <strong>Collect all</strong> staggers launches 70 ms apart. <strong>Dismiss mid-flight</strong> demos snap-to-end: clones vanish, slots force-fill, the counter reconciles to the committed size. Re-tapping a collected card is a no-op.</p>
-    <div class="proto-controls">
-      <button type="button" class="btn" id="cf-all">Collect all</button>
-      <button type="button" class="btn" id="cf-snap">Dismiss mid-flight (snap-to-end)</button>
-      <label class="chk"><input type="checkbox" id="cf-slow"> Slow motion (4×)</label>
-      <label class="chk"><input type="checkbox" id="cf-rm"> Reduced motion</label>
-      <button type="button" class="btn" id="cf-reset">Reset</button>
-    </div>
-    <div class="demo-stage" id="cf-stage" aria-label="Interactive mock of the card-flight transition: five skill cards fanned in a bottom drawer fly one by one into a strip of phase slots pinned above the drawer when tapped, each slot filling and pulsing as its card lands while a deck counter ticks up. A snap-to-end button finishes all in-progress flights instantly.">
-      <div class="demo-slotbar">
-        <span class="demo-counter" id="cf-counter">0/5 collected</span>
-        <div class="demo-slot-strip" id="cf-slots">
-          <div class="demo-slot2" data-slot="0">Position</div>
-          <div class="demo-slot2" data-slot="1">Adopt</div>
-          <div class="demo-slot2" data-slot="2">Journey</div>
-          <div class="demo-slot2" data-slot="3">Docs</div>
-          <div class="demo-slot2" data-slot="4">Monetize</div>
-        </div>
-      </div>
-      <div class="demo-sheet2" id="cf-sheet">
-        <div class="demo-sheet-label">PACK: DEVTOOL (fan drawer)</div>
-        <div class="demo-fan" id="cf-fan">
-          <button type="button" class="demo-card" data-id="0" style="left:6%;transform:rotate(-5deg)">positioning<span class="cmd">/devtool-positioning</span><span class="badge-indeck">in deck ♦</span></button>
-          <button type="button" class="demo-card" data-id="1" style="left:24%;transform:rotate(-2deg)">adoption<span class="cmd">/devtool-adoption</span><span class="badge-indeck">in deck ♦</span></button>
-          <button type="button" class="demo-card" data-id="2" style="left:42%;transform:rotate(1deg)">dx-journey<span class="cmd">/devtool-dx-journey</span><span class="badge-indeck">in deck ♦</span></button>
-          <button type="button" class="demo-card" data-id="3" style="left:60%;transform:rotate(3deg)">docs-audit<span class="cmd">/devtool-docs-audit</span><span class="badge-indeck">in deck ♦</span></button>
-          <button type="button" class="demo-card" data-id="4" style="left:78%;transform:rotate(6deg)">monetization<span class="cmd">/devtool-monetization</span><span class="badge-indeck">in deck ♦</span></button>
-        </div>
-      </div>
-    </div>
-    <div class="readout" id="cf-readout" style="margin-top:10px">FlightRecords: none — tap a card in the fan, or press Collect all.</div>
-  </div>
+  <p class="preview-note">⚠ This is an ephemeral preview, not production code. Drag the slider to scrub each transition's phase timeline. All timings are design targets that pass through <code>dbg.scaleT</code> at implementation time. No state persists.</p>
+  <noscript><p class="callout risk">JavaScript is disabled — the interactive scrubbers will not render. The full phase data is available in the tables below each scrubber.</p></noscript>
 
   <div class="proto-box" id="scrub-bm">
     <h3 style="margin-top:0">blueprint-morph timeline</h3>
@@ -1280,225 +1161,6 @@ initScrubber('scrub-cf', [
     readout.textContent = 'Click a state node to inspect its transitions.';
   }
   box.querySelector('.reset-btn').addEventListener('click', reset);
-})();
-
-/* ---------- directional demo: blueprint-morph ---------- */
-(function(){
-  var box = document.getElementById('demo-bm');
-  var stage = document.getElementById('bm-stage');
-  var table = document.getElementById('bm-table');
-  var bp = document.getElementById('bm-bp');
-  var panel = document.getElementById('bm-panel');
-  var proxy = document.getElementById('bm-proxy');
-  var readout = document.getElementById('bm-readout');
-  var openBtn = document.getElementById('bm-open');
-  var closeBtn = document.getElementById('bm-close');
-  var slow = document.getElementById('bm-slow');
-  var rm = document.getElementById('bm-rm');
-  var timers = [];
-  var phase = 'table';
-
-  function s(){ return slow.checked ? 4 : 1; }
-  slow.addEventListener('change', function(){ box.style.setProperty('--dscale', s()); });
-  function after(ms, fn){ timers.push(setTimeout(fn, ms)); }
-  function setPhase(p, msg){
-    phase = p;
-    readout.innerHTML = '<span class="ph">DeckFlowPhase: ' + p + '</span>' + (msg ? ' — ' + msg : '');
-    openBtn.disabled = (p !== 'table');
-    closeBtn.disabled = (p !== 'builder-open');
-  }
-  function rectIn(elm){
-    var a = stage.getBoundingClientRect(), b = elm.getBoundingClientRect();
-    return { left: b.left - a.left, top: b.top - a.top, width: b.width, height: b.height };
-  }
-  function place(elm, r){
-    elm.style.left = r.left + 'px'; elm.style.top = r.top + 'px';
-    elm.style.width = r.width + 'px'; elm.style.height = r.height + 'px';
-  }
-  function panelRect(){ return { left: 12, top: 12, width: Math.max(stage.clientWidth - 24, 60), height: Math.max(stage.clientHeight - 24, 60) }; }
-
-  function open(){
-    if (phase !== 'table'){ readout.innerHTML += ' <strong style="color:var(--orange)">(tap ignored — only legal from table)</strong>'; return; }
-    if (rm.checked){
-      setPhase('blueprint-morphing', 'reduced motion: 120 ms crossfade, layoutId omitted; same callbacks, same order');
-      bp.classList.add('claimed');
-      panel.hidden = false; panel.classList.add('no-stagger');
-      after(120 * s(), function(){ setPhase('builder-open', 'content faded in with no stagger'); });
-      return;
-    }
-    setPhase('blueprint-morphing', 'pushState → /deck/devtool-afps; blueprint at opacity 0; chrome rectangle morphing (~450 ms)');
-    var src = rectIn(bp);
-    proxy.hidden = false; proxy.style.transitionDuration = '0ms'; place(proxy, src);
-    bp.classList.add('claimed');
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){
-      proxy.style.transitionDuration = (450 * s()) + 'ms';
-      place(proxy, panelRect());
-      after(450 * s() + 40, function(){
-        proxy.hidden = true;
-        panel.hidden = false; panel.classList.add('stagger-in');
-        setPhase('builder-open', 'onLayoutAnimationComplete fired; content stagger-in (slot columns then shelf, 40 ms stagger)');
-      });
-    }); });
-  }
-  function close(){
-    if (phase !== 'builder-open') return;
-    if (rm.checked){
-      setPhase('builder-dismissing', 'reduced motion: 120 ms crossfade back');
-      panel.hidden = true; panel.classList.remove('no-stagger', 'stagger-in');
-      after(120 * s(), function(){ bp.classList.remove('claimed'); setPhase('table', 'focus returns to the originating blueprint'); });
-      return;
-    }
-    setPhase('builder-dismissing', 'content fade-out 0.01 s → onExitComplete → blueprint reclaims layoutId → morph-back ~350 ms (flash-risk apex at completion)');
-    panel.classList.add('content-out');
-    after(30 * s(), function(){
-      panel.hidden = true; panel.classList.remove('stagger-in', 'content-out');
-      proxy.hidden = false; proxy.style.transitionDuration = '0ms'; place(proxy, panelRect());
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){
-        proxy.style.transitionDuration = (350 * s()) + 'ms';
-        place(proxy, rectIn(bp));
-        after(350 * s() + 40, function(){
-          proxy.hidden = true; bp.classList.remove('claimed');
-          setPhase('table', 'focus returns to the originating blueprint');
-        });
-      }); });
-    });
-  }
-  function reset(){
-    timers.forEach(clearTimeout); timers = [];
-    proxy.hidden = true; panel.hidden = true;
-    panel.classList.remove('stagger-in', 'content-out', 'no-stagger');
-    bp.classList.remove('claimed');
-    setPhase('table', 'tap the Devtool AFPS blueprint or press Open.');
-  }
-  bp.addEventListener('click', open);
-  openBtn.addEventListener('click', open);
-  closeBtn.addEventListener('click', close);
-  document.getElementById('bm-reset').addEventListener('click', reset);
-})();
-
-/* ---------- directional demo: card-flight ---------- */
-(function(){
-  var box = document.getElementById('demo-cf');
-  var stage = document.getElementById('cf-stage');
-  var fan = document.getElementById('cf-fan');
-  var counter = document.getElementById('cf-counter');
-  var readout = document.getElementById('cf-readout');
-  var slow = document.getElementById('cf-slow');
-  var rm = document.getElementById('cf-rm');
-  var cards = Array.prototype.slice.call(fan.querySelectorAll('.demo-card'));
-  var slots = Array.prototype.slice.call(document.querySelectorAll('#cf-slots .demo-slot2'));
-  var TOTAL = cards.length;
-  var committed = new Set();
-  var displayed = 0;
-  var states = {};      // id -> FlightRecord state
-  var clones = {};      // id -> clone element
-  var timers = [];
-
-  function s(){ return slow.checked ? 4 : 1; }
-  slow.addEventListener('change', function(){ box.style.setProperty('--dscale', s()); });
-  function after(ms, fn){ var t = setTimeout(fn, ms); timers.push(t); return t; }
-  function name(id){ return cards[id].firstChild.textContent; }
-  function updateCounter(){ counter.textContent = displayed + '/' + TOTAL + ' collected'; }
-  function renderStates(extra){
-    var parts = [];
-    for (var k in states) parts.push(name(Number(k)) + ': ' + states[k]);
-    readout.innerHTML = '<span class="ph">FlightRecords:</span> ' + (parts.length ? parts.join(' · ') : 'none') + (extra ? '<br>' + extra : '');
-  }
-  function rectIn(elm){
-    var a = stage.getBoundingClientRect(), b = elm.getBoundingClientRect();
-    return { left: b.left - a.left, top: b.top - a.top, width: b.width, height: b.height };
-  }
-  function setState(id, st, extra){ states[id] = st; renderStates(extra); }
-
-  function fillSlot(id, pulse){
-    var slot = slots[id];
-    slot.classList.add('filled');
-    slot.textContent = name(id);
-    if (pulse){
-      slot.classList.add('pulse');
-      after(250 * s() + 40, function(){ slot.classList.remove('pulse'); });
-    }
-  }
-  function land(id){
-    if (clones[id]){ clones[id].remove(); delete clones[id]; }
-    fillSlot(id, true);
-    displayed += 1; updateCounter();
-    setState(id, 'done', 'slot pulsed; displayedCount ticked on land.');
-  }
-  function launch(id){
-    if (!committed.has(id)) return; // cancelled by snap before launch
-    if (rm.checked){
-      setState(id, 'done', 'reduced motion: no clone; launch/land marks back-to-back; slot fills with a fade, no pulse.');
-      fillSlot(id, false);
-      displayed += 1; updateCounter();
-      return;
-    }
-    setState(id, 'measuring');
-    var card = cards[id];
-    var src = rectIn(card), dst = rectIn(slots[id]);
-    var clone = document.createElement('div');
-    clone.className = 'demo-clone';
-    clone.innerHTML = card.innerHTML;
-    clone.style.left = src.left + 'px'; clone.style.top = src.top + 'px';
-    clone.style.width = src.width + 'px'; clone.style.height = src.height + 'px';
-    clone.style.fontSize = '.6rem'; clone.style.color = '#fff'; clone.style.padding = '6px'; clone.style.textAlign = 'left';
-    clone.style.transitionDuration = '0ms';
-    stage.appendChild(clone);
-    clones[id] = clone;
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){
-      if (!clones[id]) return; // snapped during measure
-      setState(id, 'in-flight', 'clone in FlightLayer (fixed, pointer-events-none); fan card stays dimmed in place.');
-      clone.style.transitionDuration = (400 * s()) + 'ms';
-      var sx = dst.width / Math.max(src.width, 1), sy = dst.height / Math.max(src.height, 1);
-      clone.style.transform = 'translate(' + (dst.left - src.left) + 'px,' + (dst.top - src.top) + 'px) scale(' + sx + ',' + sy + ')';
-      after(400 * s() + 40, function(){
-        if (!clones[id]) return; // snapped mid-flight
-        setState(id, 'settling');
-        land(id);
-      });
-    }); });
-  }
-  function commit(id){
-    committed.add(id);
-    cards[id].classList.add('collected');
-    setState(id, 'queued', 'optimistic commit at tap frame: collectedCardIds + localStorage updated; fan card dimmed with badge.');
-  }
-  function tap(id){
-    if (committed.has(id)){
-      renderStates('<strong style="color:var(--orange)">re-tap of a collected/in-flight card is a no-op.</strong>');
-      return;
-    }
-    commit(id);
-    launch(id);
-  }
-  function collectAll(){
-    var ids = [];
-    for (var i = 0; i < TOTAL; i++) if (!committed.has(i)) ids.push(i);
-    if (!ids.length){ renderStates('nothing left to collect.'); return; }
-    ids.forEach(commit); // batch commits up front; animation is pure presentation
-    ids.forEach(function(id, i){ after(i * 70 * s(), function(){ launch(id); }); });
-  }
-  function snap(){
-    timers.forEach(clearTimeout); timers = [];
-    Object.keys(clones).forEach(function(k){ clones[k].remove(); delete clones[k]; });
-    committed.forEach(function(id){
-      if (states[id] !== 'done'){ fillSlot(id, false); states[id] = 'done'; }
-    });
-    displayed = committed.size; updateCounter();
-    renderStates('<strong style="color:var(--chart-5)">finishAllFlightsImmediately()</strong>: clones removed, slots forced filled, counter reconciled to committed size (' + committed.size + ').');
-  }
-  function reset(){
-    timers.forEach(clearTimeout); timers = [];
-    Object.keys(clones).forEach(function(k){ clones[k].remove(); delete clones[k]; });
-    committed.clear(); states = {}; displayed = 0; updateCounter();
-    cards.forEach(function(c){ c.classList.remove('collected'); });
-    slots.forEach(function(sl, i){ sl.classList.remove('filled', 'pulse'); sl.textContent = ['Position','Adopt','Journey','Docs','Monetize'][i]; });
-    readout.innerHTML = 'FlightRecords: none — tap a card in the fan, or press Collect all.';
-  }
-  cards.forEach(function(c){ c.addEventListener('click', function(){ tap(Number(c.getAttribute('data-id'))); }); });
-  document.getElementById('cf-all').addEventListener('click', collectAll);
-  document.getElementById('cf-snap').addEventListener('click', snap);
-  document.getElementById('cf-reset').addEventListener('click', reset);
 })();
 
 updateAnswerButton();
