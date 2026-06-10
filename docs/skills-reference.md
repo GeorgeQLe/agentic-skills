@@ -395,7 +395,7 @@ scripts/pack.sh install release-ops        # branch-lifecycle, deploy, release
 scripts/pack.sh install agent-work-admin   # plan-phase, roadmap, spec-drift
 scripts/pack.sh install code-maintenance   # migrate, update-packages
 scripts/pack.sh install docs-health        # hygiene, reconcile-dev-docs
-scripts/pack.sh install repo-maintenance   # bootstrap-repo
+scripts/pack.sh install repo-maintenance   # bootstrap-repo, env-setup
 ```
 
 Two engineering packs are **Claude-only** (no Codex mirror):

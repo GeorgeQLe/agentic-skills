@@ -315,6 +315,7 @@
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
 | `bootstrap-repo` | primary | user | New repo setup |
+| `env-setup` | primary | user | Project needs local env vars scaffolded |
 
 ### Pack: report-gen
 
