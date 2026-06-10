@@ -1,3 +1,29 @@
+## Current Implementation - Skillpacks npm Package Walkthrough Alignment Page
+
+### Goal
+
+Create a current document-tier alignment page that explains how to use the published `skillpacks` npm package today, while leaving the existing npm distribution strategy page as historical strategy context.
+
+### Plan
+
+1. Track the active work.
+   - [x] Add the active roadmap and todo entries before implementation.
+2. Add the walkthrough page.
+   - [x] Create `alignment/skillpacks-npm-package-walkthrough.html` with confirmed status, document-tier metadata, responsive viewport, TTS include, and current `skillpacks@0.1.0` / `latest` package status.
+   - [x] Cover prerequisites, first-use flow, generated files, remove/update flow, versioning, published-package verification, and troubleshooting.
+   - [x] Link to the current Markdown docs for deeper reference.
+3. Update the central index.
+   - [x] Add a dated Product Design & Spec card for the walkthrough page.
+   - [x] Keep index counts and metadata consistent with the existing card format.
+4. Verify and ship.
+   - [x] Run `node scripts/audit-alignment-pages.mjs`.
+   - [x] Run `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts`.
+   - [x] Run `git diff --check`.
+   - [x] Spot-check command examples and package-version wording.
+   - [x] Record review notes, commit, and push intended changes.
+
+---
+
 ## Current Implementation - Published Skillpacks npm Smoke Script
 
 ### Goal

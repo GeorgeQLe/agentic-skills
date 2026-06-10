@@ -1,3 +1,41 @@
+## Current Implementation - Skillpacks npm Package Walkthrough Alignment Page
+
+### Goal
+
+Create a current, confirmed document-tier alignment page for using the published `skillpacks` npm package, without changing the existing historical strategy page.
+
+### Execution Profile
+
+- Parallel mode: serial for file edits and validation.
+- Rationale: the new page, index, and task docs share one alignment-page integrity boundary.
+
+### Steps
+
+- [x] Add active task tracking to `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Create `alignment/skillpacks-npm-package-walkthrough.html` with required metadata, status, TTS include, and walkthrough content.
+- [x] Update `alignment/index.html` with one dated Product Design & Spec card.
+- [x] Run alignment audit, focused layer1 audit test, whitespace check, and content spot checks.
+- [x] Record review notes, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- [x] The new page is indexed exactly once and passes active alignment-page audit.
+- [x] The page uses `npx skillpacks` or `npx --package skillpacks@latest -- skillpacks` examples, with no stale `agentic-skills` npm examples.
+- [x] Package-version wording explicitly says npm currently has `skillpacks@0.1.0` and `latest` points to `0.1.0`, without claiming multiple published versions.
+- [x] Troubleshooting covers stale CLI skill registry, missing `jq` for deck installs, unsupported `install skill@version`, and pinned archive availability.
+
+### Review Notes
+
+- Added `alignment/skillpacks-npm-package-walkthrough.html` as a confirmed, document-tier Product Design alignment page with required viewport metadata, `data-alignment-category="product-design"`, `data-visual-tier="document"`, and the Brief Me TTS include.
+- The walkthrough covers prerequisites, first-use commands, generated project files, removal/update commands, npm package semver versus skill-level pins, the published-package verification script, and troubleshooting. It links to `README.md`, `docs/QUICKSTART.md`, `docs/packs.md`, `docs/decks.md`, `docs/skillpacks-npm-distribution.md`, and `packages/skillpacks/scripts/verify-published-package.sh`.
+- Updated `alignment/index.html` with one dated Product Design & Spec card, raised the active page count to 44, raised Product Design & Spec to 8, and moved the `new` marker to the walkthrough entry.
+- Registry spot-check before authoring: `npm view skillpacks version versions dist-tags.latest --json --cache /tmp/skillpacks-npm-cache` returned `version: 0.1.0`, `versions: ["0.1.0"]`, and `dist-tags.latest: 0.1.0`.
+- Validation passed: `node scripts/audit-alignment-pages.mjs` reported 44 active pages with exact TTS, metadata, viewport, embed, and index integrity; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` passed 14/14 tests; `git diff --check` passed.
+- Content spot checks passed: no stale `agentic-skills` npm command examples, no disallowed `npx skillpacks@latest` or `npx --package skillpacks@0.1.0` command examples, explicit `skillpacks@0.1.0` / `latest` status wording, unsupported `quality-sweep@v0.0` documented only as a rejected syntax, and no raw Markdown backticks left in the HTML.
+- Optional browser-open check returned `blocked` from `node scripts/open-html-page.mjs alignment/skillpacks-npm-package-walkthrough.html --browser auto`; validation remained clean.
+
+---
+
 ## Current Implementation - Published Skillpacks npm Smoke Script
 
 ### Goal

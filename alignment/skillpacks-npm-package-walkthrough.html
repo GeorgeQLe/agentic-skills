@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="document">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skillpacks npm Package Walkthrough</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+  --code-bg: #0b1320;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1120px, calc(100% - 32px));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 32px 0 56px;
+  overflow-wrap: break-word;
+}
+header {
+  padding: 24px 0 10px;
+}
+h1, h2, h3 {
+  color: #fff;
+  line-height: 1.2;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: 2.35rem;
+}
+h2 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 1.45rem;
+}
+h3 {
+  margin: 22px 0 8px;
+  font-size: 1.05rem;
+}
+p { margin: 12px 0; }
+a { color: var(--accent); }
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #e6edf3;
+  padding: 1px 5px;
+}
+pre {
+  margin: 12px 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #e6edf3;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+section, .toc, .status {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+section, .toc {
+  margin: 20px 0;
+  padding: 20px;
+}
+.lead {
+  color: #fff;
+  font-size: 1.05rem;
+  max-width: 860px;
+}
+.status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 10px;
+  margin: 18px 0;
+  padding: 14px;
+  background: #1c2333;
+  border-color: var(--purple);
+}
+.status div {
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.status strong {
+  color: #fff;
+}
+.status span, .muted {
+  color: var(--text-muted);
+}
+.toc ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.toc a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #11161d;
+  text-decoration: none;
+}
+.toc a:hover {
+  border-color: var(--accent);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 12px;
+}
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #11161d;
+  padding: 14px;
+}
+.panel strong {
+  color: #fff;
+}
+.callout {
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  background: #1c2333;
+  padding: 14px;
+  margin: 14px 0;
+}
+.callout.warn {
+  border-color: var(--orange);
+}
+.callout.ok {
+  border-color: var(--green);
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 14px 0;
+}
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  color: #fff;
+  background: #11161d;
+}
+tr:last-child td {
+  border-bottom: 0;
+}
+ul, ol {
+  padding-left: 22px;
+}
+li {
+  margin: 5px 0;
+}
+.refs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+.refs a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #11161d;
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  main { width: min(100% - 24px, 1120px); }
+}
+@media (max-width: 560px) {
+  h1 { font-size: 1.8rem; }
+  section, .toc { padding: 16px; }
+  table { min-width: 680px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Skillpacks npm Package Walkthrough</h1>
+    <p class="lead">A current reference for using the published <code>skillpacks</code> npm package from a project directory. The older npm distribution alignment page remains historical strategy context; this page describes the package users can run today.</p>
+    <div class="status" aria-label="Alignment status">
+      <div><strong>alignment_status: confirmed</strong><span>confirmed: 2026-06-10</span></div>
+      <div><strong>artifact</strong><span>alignment/skillpacks-npm-package-walkthrough.html</span></div>
+      <div><strong>npm package</strong><span><code>skillpacks@0.1.0</code>; <code>latest</code> points to <code>0.1.0</code></span></div>
+      <div><strong>record</strong><span>Current for this completed alignment cycle; later package changes should amend this page after archiving the prior version.</span></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Table of Contents">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#first-use">First-Use Flow</a></li>
+      <li><a href="#generated-files">Generated Files</a></li>
+      <li><a href="#removal-update">Removal And Update Flow</a></li>
+      <li><a href="#versioning">Versioning</a></li>
+      <li><a href="#verification">Verification Script</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+      <li><a href="#references">Reference Docs</a></li>
+    </ul>
+  </nav>
+
+  <section id="prerequisites">
+    <h2>Prerequisites</h2>
+    <div class="grid">
+      <div class="panel">
+        <strong>Node.js 18+</strong>
+        <p>Required for the npm CLI. The package declares <code>engines.node</code> as <code>&gt;=18</code>, and <code>npx skillpacks</code> runs the published package entry point.</p>
+      </div>
+      <div class="panel">
+        <strong>bash</strong>
+        <p>Required for shell-backed package commands, including <code>list</code>, <code>recommend</code>, <code>which</code>, <code>install-deck</code>, and <code>init-global</code>. Node-owned project commands do not use bash.</p>
+      </div>
+      <div class="panel">
+        <strong>jq</strong>
+        <p>Required only when the npm flow materializes a deck through <code>install-deck</code>. Direct npm installs such as <code>install</code>, <code>remove</code>, <code>refresh</code>, <code>doctor</code>, <code>prune</code>, <code>pin</code>, and <code>unpin</code> do not require <code>jq</code>.</p>
+      </div>
+      <div class="panel">
+        <strong>Claude Code or Codex</strong>
+        <p>Skills are discovered by the assistant after local skill roots exist. Claude Code should run <code>/reload-skills</code>, then <code>/clear</code> or restart if needed. Codex should start a fresh CLI session if the <code>$</code> skill list remains stale.</p>
+      </div>
+    </div>
+    <div class="callout ok">
+      <strong>Current npm state:</strong> Registry metadata checked on 2026-06-10 reports one published package version, <code>0.1.0</code>, with <code>latest</code> also set to <code>0.1.0</code>.
+    </div>
+  </section>
+
+  <section id="first-use">
+    <h2>First-Use Flow</h2>
+    <p>Run these from the project that should receive local skill roots. Pick the pack, skill, or deck that matches the project; the examples below show each supported install shape.</p>
+    <pre><code>cd ~/my-project
+npx skillpacks --version
+npx skillpacks list
+npx skillpacks install devtool
+npx skillpacks install quality-sweep
+npx skillpacks install-deck game-afps
+npx skillpacks status
+npx skillpacks doctor</code></pre>
+    <div class="table-wrap" data-tts-narrative="The first-use flow starts by checking the package version and available packs, then installs either a pack, a single skill, or a deck, and finishes with status and doctor checks.">
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Command</th><th>What It Proves</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Version</td><td><code>npx skillpacks --version</code></td><td>The npm package entry point is runnable on this machine.</td></tr>
+          <tr><td>Discover</td><td><code>npx skillpacks list</code></td><td>The packaged active pack list is visible.</td></tr>
+          <tr><td>Install a pack</td><td><code>npx skillpacks install devtool</code></td><td>A full pack can be enabled in the current project.</td></tr>
+          <tr><td>Install one skill</td><td><code>npx skillpacks install quality-sweep</code></td><td>A single skill can be enabled without installing its entire pack.</td></tr>
+          <tr><td>Install a deck</td><td><code>npx skillpacks install-deck game-afps</code></td><td>Deck metadata resolves to the backing pack selection, then materializes local skills.</td></tr>
+          <tr><td>Inspect state</td><td><code>npx skillpacks status</code></td><td>The project designation and local roots are readable.</td></tr>
+          <tr><td>Check drift</td><td><code>npx skillpacks doctor</code></td><td>Managed installs are checked for ok, stale, pinned, missing-source, or unknown state.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>When you need to force the published package selection instead of relying on an <code>npx</code> shorthand, use the explicit latest form:</p>
+    <pre><code>npx --package skillpacks@latest -- skillpacks list
+npx --package skillpacks@latest -- skillpacks doctor</code></pre>
+  </section>
+
+  <section id="generated-files">
+    <h2>Generated Files</h2>
+    <p>The npm CLI writes into the current project, not into this repository and not into the npm cache.</p>
+    <div class="table-wrap" data-tts-narrative="The generated files include the project designation file, local Claude and Codex skill roots, a transient pack lock, and managed markers inside generated skill directories.">
+      <table>
+        <thead>
+          <tr><th>Path</th><th>Purpose</th><th>Commit Guidance</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.agents/project.json</code></td><td>Tracks <code>enabled_packs</code>, <code>enabled_skills</code>, <code>pinned_versions</code>, project type, update mode, agent mode, and other preserved project metadata.</td><td>Commit it. This is the durable project designation.</td></tr>
+          <tr><td><code>.claude/skills/*</code></td><td>Generated Claude Code local skill roots with active <code>SKILL.md</code> files.</td><td>Do not commit generated roots; recreate with <code>refresh</code>.</td></tr>
+          <tr><td><code>.codex/skills/*</code></td><td>Generated Codex local skill roots with active <code>SKILL.md</code> files.</td><td>Do not commit generated roots; recreate with <code>refresh</code>.</td></tr>
+          <tr><td><code>.agents/.pack.lock</code></td><td>Owner metadata lock used while pack commands mutate local project files.</td><td>Transient. Stale locks with dead owner processes are removed by the next command.</td></tr>
+          <tr><td><code>.agentic-skills-managed</code></td><td>Managed marker inside generated skill roots. It records source identity, source version, and content hash for drift checks.</td><td>Generated with the local roots; do not hand-edit.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="removal-update">
+    <h2>Removal And Update Flow</h2>
+    <p>Use <code>remove</code> to change the project designation, then use <code>refresh</code> and <code>doctor</code> to reconcile local roots with the current designation and package snapshot.</p>
+    <pre><code>npx skillpacks remove devtool
+npx skillpacks refresh
+npx skillpacks doctor
+npx skillpacks prune --dry-run</code></pre>
+    <ul>
+      <li><code>remove &lt;pack-or-skill&gt;</code> clears the selected pack or single-skill enablement and removes managed local roots that belong to it.</li>
+      <li><code>refresh</code> recreates local roots from <code>.agents/project.json</code>, including any pins that are available in the installed package snapshot.</li>
+      <li><code>doctor</code> is read-only and exits non-zero when managed installs are stale or missing expected source.</li>
+      <li><code>prune --dry-run</code> previews orphaned managed installs that are no longer backed by the project designation.</li>
+    </ul>
+    <p>To update against the latest published package snapshot, run the explicit latest form from the target project:</p>
+    <pre><code>npx --package skillpacks@latest -- skillpacks refresh
+npx --package skillpacks@latest -- skillpacks doctor</code></pre>
+  </section>
+
+  <section id="versioning">
+    <h2>Versioning</h2>
+    <p>There are two version layers, and they answer different questions.</p>
+    <div class="table-wrap" data-tts-narrative="Package semver selects the bundled snapshot from npm. Skill pins select an archived skill version inside that package snapshot. The currently published npm package has only version 0.1.0.">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Command Shape</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>npm package semver</td><td><code>npx --package skillpacks@latest -- skillpacks status</code><br><code>skillpacks@0.1.0</code> package spec</td><td>Selects which bundled package snapshot npm downloads. Today, <code>latest</code> and <code>0.1.0</code> are the same published snapshot.</td></tr>
+          <tr><td>Skill-level pin</td><td><code>npx skillpacks pin quality-sweep v0.0</code><br><code>npx skillpacks unpin quality-sweep</code></td><td>Selects a skill archive version from inside the installed package and records it in <code>.agents/project.json</code> <code>pinned_versions</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>Unsupported syntax:</strong> <code>npx skillpacks install quality-sweep@v0.0</code> is intentionally rejected. Install the skill name first, then use <code>pin &lt;skill&gt; &lt;version&gt;</code>.
+    </div>
+  </section>
+
+  <section id="verification">
+    <h2>Verification Script</h2>
+    <p>The repository now has a published-package smoke script that exercises the npm package from isolated temp projects instead of using the local checkout as the CLI source.</p>
+    <pre><code>npm run skillpacks:verify-published</code></pre>
+    <div class="table-wrap" data-tts-narrative="The published verification script checks npm metadata, list, pack install, single-skill install, deck install, removals, doctor, pin and unpin behavior, unsupported direct version syntax, and temp directory behavior.">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Check</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>npm metadata</td><td>Confirms package name, expected version, <code>latest</code> dist-tag, MIT license, and that the expected version appears in the versions list. With only <code>0.1.0</code> published, package-version upgrade testing is skipped.</td></tr>
+          <tr><td>Install paths</td><td>Runs <code>list</code>, installs <code>code-quality</code>, installs <code>quality-sweep</code>, installs <code>game-afps</code>, and verifies expected <code>.agents/project.json</code>, Claude roots, and Codex roots.</td></tr>
+          <tr><td>Removal paths</td><td>Removes a pack, a single skill, and the deck-backed <code>game</code> pack, then verifies managed roots are gone and <code>doctor</code> reports no managed installs.</td></tr>
+          <tr><td>Version pins</td><td>Pins <code>quality-sweep</code> to <code>v0.0</code>, verifies the installed <code>SKILL.md</code> version and pinned doctor state, then unpins back to the latest packaged source.</td></tr>
+          <tr><td>Unsupported syntax</td><td>Verifies <code>install quality-sweep@v0.0</code> fails and that <code>pin</code> fails when no <code>.agents/project.json</code> exists.</td></tr>
+          <tr><td>Temp behavior</td><td>Uses <code>/tmp/skillpacks-npm-cache</code> and isolated <code>/tmp/skillpacks-*</code> projects. Temp projects are kept by default for inspection; set <code>SKILLPACKS_KEEP_TMP=0</code> for cleanup.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="troubleshooting">
+    <h2>Troubleshooting</h2>
+    <div class="table-wrap" data-tts-narrative="Troubleshooting covers stale assistant registries, missing jq for deck installs, unsupported direct skill version installs, and pinned archives that are absent from the selected package snapshot.">
+      <table>
+        <thead>
+          <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Installed skills do not appear in Claude Code or Codex.</td><td>The assistant skill registry is stale after local roots were written.</td><td>Claude Code: run <code>/reload-skills</code>, then <code>/clear</code>; restart if <code>.claude/skills</code> did not exist at session start or the skill is still invisible. Codex: start a fresh CLI session.</td></tr>
+          <tr><td><code>install-deck</code> fails because <code>jq</code> is missing.</td><td>Deck materialization still uses the packaged shell backend in the current package.</td><td>Install <code>jq</code>, then rerun <code>npx skillpacks install-deck &lt;deck&gt;</code>. Direct <code>install &lt;pack-or-skill&gt;</code> does not need <code>jq</code>.</td></tr>
+          <tr><td><code>npx skillpacks install quality-sweep@v0.0</code> fails.</td><td>Direct <code>skill@version</code> install syntax is unsupported.</td><td>Run <code>npx skillpacks install quality-sweep</code>, then <code>npx skillpacks pin quality-sweep v0.0</code>.</td></tr>
+          <tr><td>A pinned version cannot be installed.</td><td>The selected npm package snapshot does not include that skill's <code>archive/&lt;version&gt;/SKILL.md</code>.</td><td>Select a package snapshot that contains the archive, use <code>npx --package skillpacks@latest -- skillpacks refresh</code> if latest has it, or use a source checkout that contains the archive.</td></tr>
+          <tr><td><code>doctor</code> reports stale managed installs.</td><td>The installed local copy's managed marker no longer matches the packaged source hash.</td><td>Run <code>npx skillpacks refresh</code>, then <code>npx skillpacks doctor</code> again.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="references">
+    <h2>Reference Docs</h2>
+    <ul class="refs">
+      <li><a href="../README.md">Repository README</a></li>
+      <li><a href="../docs/QUICKSTART.md">Quickstart</a></li>
+      <li><a href="../docs/packs.md">Project-Local Skill Packs</a></li>
+      <li><a href="../docs/decks.md">Decks</a></li>
+      <li><a href="../docs/skillpacks-npm-distribution.md">Skillpacks npm Distribution Design</a></li>
+      <li><a href="../packages/skillpacks/scripts/verify-published-package.sh">Published Verification Script</a></li>
+    </ul>
+  </section>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
