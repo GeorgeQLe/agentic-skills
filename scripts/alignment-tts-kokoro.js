@@ -24,6 +24,10 @@ const LS_VOICE_KEY = 'tts-kokoro-voice';
 const LS_SPEED_KEY = 'tts-kokoro-speed';
 const LS_USED_KEY = 'tts-kokoro-used';
 const FIRST_CHUNK_LEN = 250;
+// Chunks are kept small so each synthesis call is short; PREFETCH_AHEAD chunks
+// generate during playback, absorbing slow-chunk variance without gaps.
+const MAX_CHUNK_LEN = 300;
+const PREFETCH_AHEAD = 2;
 
 let ttsInstance = null;
 let ttsLoadPromise = null;
@@ -59,9 +63,34 @@ function getSelectedVoice() {
   return localStorage.getItem(LS_VOICE_KEY) || VOICES[0].id;
 }
 
+// Block elements whose text should end as its own sentence. Raw textContent
+// flattening glues "<h3>Risks</h3><p>The main..." into one run-on sentence;
+// Kokoro derives sentence breaks and prosody from punctuation, so each block
+// boundary gets terminal punctuation if the text doesn't already have it.
+const BLOCK_TAGS = { P:1, LI:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1, TD:1, TH:1, TR:1, BLOCKQUOTE:1, DT:1, DD:1, FIGCAPTION:1, SUMMARY:1, DIV:1, PRE:1 };
+
+function textWithSentenceBreaks(root) {
+  let out = '';
+  const closeBlock = () => {
+    const t = out.replace(/\s+$/, '');
+    if (!t) { out = t; return; }
+    out = /[.!?:;,]$/.test(t) ? t + ' ' : t + '. ';
+  };
+  const walk = (node) => {
+    if (node.nodeType === 3) { out += node.textContent; return; }
+    if (node.nodeType !== 1) return;
+    node.childNodes.forEach(walk);
+    if (BLOCK_TAGS[node.tagName]) closeBlock();
+  };
+  walk(root);
+  return out.replace(/\s+/g, ' ').trim();
+}
+
 function extractText(el) {
   const clone = el.cloneNode(true);
-  clone.querySelectorAll('.section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
+  // h2 removed because callers prefix the section text with the heading label
+  // themselves — keeping it would read every heading twice.
+  clone.querySelectorAll('h2, .section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
   clone.querySelectorAll('.chart-container, .table-wrap, .stat-grid').forEach(n => {
     const narrative = n.getAttribute('data-tts-narrative');
     if (narrative) {
@@ -72,8 +101,26 @@ function extractText(el) {
       n.remove();
     }
   });
-  let text = clone.textContent.replace(/\s+/g, ' ').trim();
-  return text;
+  return textWithSentenceBreaks(clone);
+}
+
+// Text normalization: expand symbols and abbreviations the TTS front-end would
+// otherwise read as glyph names ("~" -> "tilde"). Order matters: the tilde
+// rule only fires before digits, since a bare ~ in a path really is "tilde".
+function normalizeForSpeech(text) {
+  return text
+    .replace(/~\s?(?=\d)/g, 'approximately ')
+    .replace(/\bv(\d+(?:\.\d+)+)/g, 'version $1')
+    .replace(/\be\.g\.,?/gi, 'for example,')
+    .replace(/\bi\.e\.,?/gi, 'that is,')
+    .replace(/\bvs\.?(?=\s)/gi, 'versus')
+    .replace(/\s*[—–]\s*/g, ', ')
+    .replace(/\s&\s/g, ' and ')
+    .replace(/→/g, ' to ')
+    .replace(/≥/g, ' at least ')
+    .replace(/≤/g, ' at most ')
+    .replace(/±/g, ' plus or minus ')
+    .replace(/\s{2,}/g, ' ');
 }
 
 function gatherSections() {
@@ -251,6 +298,19 @@ function chunkText(text, maxLen, firstLen) {
       var idx = remaining.lastIndexOf(seps[i], limit);
       if (idx > cut) cut = idx + seps[i].length;
     }
+    if (cut <= 0) {
+      // No sentence end within the limit: prefer a clause boundary, then a
+      // word boundary, before resorting to a hard mid-word cut.
+      var clauseSeps = [', ', '; ', ': '];
+      for (var j = 0; j < clauseSeps.length; j++) {
+        var cIdx = remaining.lastIndexOf(clauseSeps[j], limit);
+        if (cIdx > cut) cut = cIdx + clauseSeps[j].length;
+      }
+    }
+    if (cut <= 0) {
+      var sp = remaining.lastIndexOf(' ', limit);
+      if (sp > 0) cut = sp + 1;
+    }
     if (cut <= 0) cut = limit;
     chunks.push(remaining.slice(0, cut).trim());
     remaining = remaining.slice(cut).trim();
@@ -260,33 +320,70 @@ function chunkText(text, maxLen, firstLen) {
   return chunks;
 }
 
-async function speakKokoro(text, id, onEnd) {
+// One-entry cache for the next section's opening chunk, synthesized while the
+// current section's last chunk plays so section boundaries are gapless too.
+// Keyed by voice|speed|text so a stale prefetch (voice change, skip) is a
+// cache miss, never wrong audio.
+let sectionPrefetch = null;
+
+function genKey(text, voice, spd) {
+  return voice + '|' + spd + '|' + text;
+}
+
+function sectionSpeechText(sec) {
+  return normalizeForSpeech(sec.text);
+}
+
+function prefetchNextSection(idx) {
+  const next = sections[idx + 1];
+  if (!next || usingFallback || !ttsInstance) return;
+  const first = chunkText(sectionSpeechText(next), MAX_CHUNK_LEN, FIRST_CHUNK_LEN)[0];
+  const voice = getSelectedVoice();
+  const key = genKey(first, voice, speed);
+  if (sectionPrefetch && sectionPrefetch.key === key) return;
+  const p = ttsInstance.generate(first, { voice, speed });
+  p.catch(() => {});
+  sectionPrefetch = { key, promise: p };
+}
+
+async function speakKokoro(text, id, idx, onEnd) {
   if (audioCtx.state === 'suspended') await audioCtx.resume();
 
   const voice = getSelectedVoice();
   const streamState = { abort: false };
   currentStream = streamState;
 
-  const chunks = chunkText(text, 1000, FIRST_CHUNK_LEN);
+  const chunks = chunkText(text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN);
+  const gens = new Array(chunks.length).fill(null);
 
-  // Pipelined synthesis: chunk N+1 generates while chunk N plays, so chunk
-  // boundaries are gapless. The .catch(noop) marks abandoned prefetches as
-  // handled when playback is aborted mid-flight.
+  // Pipelined synthesis: while chunk N plays, chunks N+1..N+PREFETCH_AHEAD
+  // generate (serially inside the onnx session), so chunk boundaries are
+  // gapless even when one chunk synthesizes slower than the previous one
+  // plays. The .catch(noop) marks abandoned prefetches as handled when
+  // playback is aborted mid-flight.
   const startGen = (i) => {
-    const p = ttsInstance.generate(chunks[i], { voice, speed });
-    p.catch(() => {});
-    return p;
+    if (gens[i]) return gens[i];
+    const key = genKey(chunks[i], voice, speed);
+    if (sectionPrefetch && sectionPrefetch.key === key) {
+      gens[i] = sectionPrefetch.promise;
+      sectionPrefetch = null;
+      return gens[i];
+    }
+    gens[i] = ttsInstance.generate(chunks[i], { voice, speed });
+    gens[i].catch(() => {});
+    return gens[i];
   };
 
   try {
-    let pending = startGen(0);
     for (let ci = 0; ci < chunks.length; ci++) {
       if (streamState.abort || id !== skipId) return;
 
-      const rawAudio = await pending;
+      for (let k = ci; k < Math.min(ci + 1 + PREFETCH_AHEAD, chunks.length); k++) startGen(k);
+
+      const rawAudio = await gens[ci];
       if (streamState.abort || id !== skipId) return;
 
-      pending = ci + 1 < chunks.length ? startGen(ci + 1) : null;
+      if (ci === chunks.length - 1) prefetchNextSection(idx);
 
       const samples = rawAudio.audio;
       if (!samples || samples.length === 0) continue;
@@ -328,10 +425,11 @@ function speakSection(idx) {
     if (id === skipId && !paused && active) speakSection(currentIdx + 1);
   };
 
+  const speech = sectionSpeechText(sec);
   if (usingFallback) {
-    fallback.speak(sec.text, onEnd);
+    fallback.speak(speech, onEnd);
   } else {
-    speakKokoro(sec.text, id, onEnd);
+    speakKokoro(speech, id, idx, onEnd);
   }
 }
 
@@ -384,6 +482,7 @@ function togglePause() {
 
 function stop() {
   stopCurrentAudio();
+  sectionPrefetch = null;
   active = false;
   paused = false;
   currentIdx = -1;

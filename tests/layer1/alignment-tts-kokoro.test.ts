@@ -21,10 +21,27 @@ describe("alignment-tts-kokoro script", () => {
     expect(source).toContain("requestIdleCallback");
   });
 
-  it("pipelines synthesis with a short first chunk", () => {
+  it("pipelines synthesis with a short first chunk and small follow-up chunks", () => {
     expect(source).toContain("FIRST_CHUNK_LEN");
-    expect(source).toContain("chunkText(text, 1000, FIRST_CHUNK_LEN)");
+    expect(source).toContain("chunkText(text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN)");
+    expect(source).toContain("PREFETCH_AHEAD");
     expect(source).toContain("startGen(");
+  });
+
+  it("prefetches the next section's opening chunk during playback", () => {
+    expect(source).toContain("sectionPrefetch");
+    expect(source).toContain("prefetchNextSection(");
+  });
+
+  it("normalizes speech-hostile symbols before synthesis", () => {
+    expect(source).toContain("normalizeForSpeech");
+    expect(source).toContain("approximately");
+    expect(source).toContain("versus");
+  });
+
+  it("inserts sentence breaks at block boundaries instead of raw textContent", () => {
+    expect(source).toContain("textWithSentenceBreaks");
+    expect(source).not.toMatch(/clone\.textContent/);
   });
 
   it("shares a single in-flight load promise", () => {
