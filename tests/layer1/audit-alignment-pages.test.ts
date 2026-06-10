@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -261,5 +261,35 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Undated index entry for alignment/page-a.html");
     expect(result.stderr).not.toContain("Undated index entry for alignment/page-b.html");
+  });
+});
+
+// Drift Plan Phase 2 Step 7: direct edits to active alignment/*.html pages made
+// without invoking a skill must be required to pass the audit by both root
+// instruction files, in their alignment-convention sections.
+describe("root instruction contract for direct alignment edits", () => {
+  const rootSections = [
+    { path: "CLAUDE.md", heading: "### Alignment Page Template" },
+    { path: "AGENTS.md", heading: "### Alignment Page Convention" },
+  ];
+
+  function sectionText(path: string, heading: string): string {
+    const content = readFileSync(join(REPO_ROOT, path), "utf8");
+    const start = content.indexOf(heading);
+    expect(start, `${path} has section ${heading}`).toBeGreaterThanOrEqual(0);
+    const rest = content.slice(start + heading.length);
+    const next = rest.search(/^##/m);
+    return next === -1 ? rest : rest.slice(0, next);
+  }
+
+  it("requires the direct-edit audit to pass before commit in both root files", () => {
+    for (const { path, heading } of rootSections) {
+      const section = sectionText(path, heading);
+      expect(section, `${path} direct-edit scope`).toContain("without invoking a skill");
+      expect(section, `${path} audit command`).toContain("node scripts/audit-alignment-pages.mjs");
+      expect(section, `${path} pass requirement`).toContain("(exit 0) before commit");
+      expect(section, `${path} TTS fixer routing`).toContain("node scripts/inject-tts.mjs");
+      expect(section, `${path} archive exemption`).toContain("docs/history/archive/");
+    }
   });
 });
