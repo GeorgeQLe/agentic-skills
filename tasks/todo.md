@@ -1,3 +1,44 @@
+## Current Implementation - Generated-Bundle Drift Validation (Drift Plan Phase 2 Step 4)
+
+### Goal
+
+Add generated-bundle drift validation to `scripts/upgrade-alignment-page.mjs` so a generator-owned (ownable) skill's on-disk `ALIGNMENT-PAGE.md` that does not byte-equal the renderer's expected output (`bundledContentFor(skillName, skillPath)`) can fail loudly, instead of only appearing as a pending `Updated`/`Bundled files written` count that exits 0. This is ALIGNMENT-PAGE Bundling Drift Plan Phase 2 Step 4.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: generator flag/diagnostics, fixture tests, and docs share `scripts/upgrade-alignment-page.mjs` and the Step 2/3 test conventions in `tests/layer1/upgrade-alignment-page-bespoke.test.ts`.
+
+### Context
+
+- Today, a hand-edited or stale generated bundle shows up only as `bundleChanged` (a dry-run "write …" line and nonzero `Updated`/`Bundled files written` counts) and dry-run still exits 0; write mode silently overwrites it. Nothing fails on a committed stale bundle. `tests/layer1/upgrade-alignment-pages.test.ts` covers the `upgrade-alignment-pages` *skill* contract, not a repo-state regeneration gate — no existing test asserts `Updated: 0`.
+- Key design constraint: the legitimate workflow is edit `docs/alignment-page-convention.md` → `--dry-run` to preview the fan-out → write mode. Plain `--dry-run` previewing pending updates must keep exiting 0, or the preview step breaks. Recommended shape: add a `--check` flag (dry-run semantics, no writes) that exits 1 with a named diagnostic when any ownable skill's bundle differs from expected renderer output (or its SKILL.md stub needs replacing), plus a summary line mirroring Step 2/3 (e.g. `Generated bundles: N stale of M, exact|DRIFT`). The repo-state drift gate then lives in layer1 by running `--check` against the repo, exactly like the Step 3 path-consistency repo-state test.
+- Step 3 (this session) added the output-path validation pass and `Output paths: N bundles, exact|DRIFT`; Step 2 added the bespoke allowlist diagnostics and `--root <path>` for fixture trees. Follow the same pattern: collect diagnostics, print a failing block to stderr, share the single exit-1 at the end.
+- Fixture conventions to reuse (module-scope helpers in `tests/layer1/upgrade-alignment-page-bespoke.test.ts` after Step 3): `makeFixtureRoot`, `writeSkill`, `writeBundle`, `stubBody`, `writeAllowlist`, `runScript(root, mode)` — extend `runScript` for `--check` or add a variant.
+- Variant-count reduction is NOT in scope: the 133 normalized variants observed in Phase 1 are expected under per-skill gates/tiers/glossary tokens. The gate validates each generated bundle against its own expected render; bespoke bundles (allowlisted, no expected render) are exempt from this check.
+- Bundles for skip-listed or out-of-scope skills have no expected render either; decide explicitly (and document) whether `--check` ignores them or reports them — recommendation: ignore, since Step 3 already validates their path consistency and Step 6 (direct-edit audit) covers unmanaged drift.
+
+### Steps
+
+- [ ] Add a `--check` mode (or equivalent explicit flag) to `scripts/upgrade-alignment-page.mjs`: no writes; exit 1 with a named per-skill diagnostic when an ownable skill's `ALIGNMENT-PAGE.md` differs from `bundledContentFor(...)` or its SKILL.md stub paragraph needs replacing; plain `--dry-run` behavior unchanged (preview, exit 0 on pending updates).
+- [ ] Add a summary line for generated-bundle drift mirroring the Step 2/3 `exact|DRIFT` pattern.
+- [ ] Extend layer1 coverage in `tests/layer1/upgrade-alignment-page-bespoke.test.ts`: repo-state `--check` run against the repo (exit 0), fixture tests for a hand-edited generated bundle (`--check` exit 1, named diagnostic), a missing bundle for an ownable skill (`--check` exit 1), and a clean generated tree (`--check` exit 0); confirm plain `--dry-run` still exits 0 on a stale fixture bundle.
+- [ ] Document `--check` and the drift gate in `docs/alignment-page-convention.md` outside the generated-marker block.
+- [ ] Check off Phase 2 Step 4 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+
+### Acceptance Criteria
+
+- `node --check scripts/upgrade-alignment-page.mjs` passes.
+- `node scripts/upgrade-alignment-page.mjs --check` exits 0 on the current repo; `--dry-run` behavior is unchanged (exit 0 with pending-update preview on stale fixtures).
+- Focused layer1 vitest run for the alignment-page test files passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
+- `git diff --check` clean.
+
+### Handoff
+
+Ship-one-step contract: the next clear-context session must implement only this step, validate it, then run `/ship` when done. Phase 2 Step 5 (convert or explicitly test the bespoke alignment sections) is queued after this step.
+
+---
+
 ## Current Implementation - Alignment Pages Game AFPS Refresh
 
 ### Goal
@@ -54,18 +95,26 @@ Add path-consistency validation to `scripts/upgrade-alignment-page.mjs` so every
 
 ### Steps
 
-- [ ] Add path-consistency validation to `scripts/upgrade-alignment-page.mjs`: scan each active `ALIGNMENT-PAGE.md` for `alignment/<name>-{topic}.html` occurrences and fail (exit 1, named diagnostic) when `<name>` does not match the owning skill, in dry-run and write mode.
-- [ ] Add a summary line reporting path-consistency status (mirroring the `Bespoke allowlist: N skills, exact|DRIFT` pattern).
-- [ ] Extend layer1 coverage: repo-state assertion (all active bundles consistent) plus `--root` fixture tests for a mismatched bundle (exit 1) and a clean tree (exit 0); decide placement in `upgrade-alignment-page-bespoke.test.ts` or a sibling test file.
-- [ ] Document the validation in `docs/alignment-page-convention.md` outside the generated-marker block.
-- [ ] Check off Phase 2 Step 3 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
+- [x] Add path-consistency validation to `scripts/upgrade-alignment-page.mjs`: scan each active `ALIGNMENT-PAGE.md` for `alignment/<name>-{topic}.html` occurrences and fail (exit 1, named diagnostic) when `<name>` does not match the owning skill, in dry-run and write mode.
+- [x] Add a summary line reporting path-consistency status (mirroring the `Bespoke allowlist: N skills, exact|DRIFT` pattern).
+- [x] Extend layer1 coverage: repo-state assertion (all active bundles consistent) plus `--root` fixture tests for a mismatched bundle (exit 1) and a clean tree (exit 0); decide placement in `upgrade-alignment-page-bespoke.test.ts` or a sibling test file.
+- [x] Document the validation in `docs/alignment-page-convention.md` outside the generated-marker block.
+- [x] Check off Phase 2 Step 3 in the ALIGNMENT-PAGE Bundling Drift Plan section and record review notes.
 
 ### Acceptance Criteria
 
-- `node --check scripts/upgrade-alignment-page.mjs` passes.
-- `node scripts/upgrade-alignment-page.mjs --dry-run` exits 0 on the current repo (or surfaced violations are fixed/explained in the same boundary).
-- Focused layer1 vitest run for the alignment-page test files passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
-- `git diff --check` clean.
+- [x] `node --check scripts/upgrade-alignment-page.mjs` passes.
+- [x] `node scripts/upgrade-alignment-page.mjs --dry-run` exits 0 on the current repo (or surfaced violations are fixed/explained in the same boundary).
+- [x] Focused layer1 vitest run for the alignment-page test files passes; full `pnpm --dir tests exec vitest run --project layer1` stays at 0 failed.
+- [x] `git diff --check` clean.
+
+### Review Notes (2026-06-10)
+
+- Added an output-path validation pass to `scripts/upgrade-alignment-page.mjs` that runs after the write loop (so write mode validates final on-disk state): every `ALIGNMENT-PAGE.md` beside an active claude/codex `SKILL.md` is scanned for `alignment/<name>-{topic}.html` occurrences, and any `<name>` not equal to the owning skill directory name produces a `Foreign output path in <bundle>` diagnostic and exit 1 in both dry-run and write mode. Bespoke and skip-listed skills' bundles are validated too — the path contract is universal, per the plan's default recommendation. Archive-path references match the same trailing segment, so no fixed prefix is required.
+- Summary output gained an `Output paths: N bundles, exact|DRIFT` line mirroring the Step 2 `Bespoke allowlist` pattern; both diagnostic blocks now print before a single shared exit-1.
+- Extended `tests/layer1/upgrade-alignment-page-bespoke.test.ts` (no sibling file needed): hoisted the Step 2 fixture helpers to module scope, added a repo-state assertion (every active bundle references only its own output path, 270 bundles), and three `--root` fixture tests — foreign-path bundle in dry-run → exit 1 with named diagnostic and `DRIFT` summary; bespoke allowlisted bundle with a foreign path in write mode → exit 1 (write mode cannot regenerate bespoke bundles, so the diagnostic is the only guard); clean tree → write mode exit 0 (`Output paths: 2 bundles, exact`, validating self-written bundles) then dry-run exit 0. The fixture convention body now carries an `Output: alignment/{skill-name}-{topic}.html` line so generated fixture bundles exercise the check.
+- Documented the rule as an **Output path consistency** paragraph in `docs/alignment-page-convention.md`, beside the bespoke-allowlist paragraph and outside the generated-marker block; no bundle regeneration triggered.
+- Validation passed: `node --check scripts/upgrade-alignment-page.mjs`; `node scripts/upgrade-alignment-page.mjs --dry-run` exit 0 (`Output paths: 270 bundles, exact`); focused alignment-page vitest run (17 tests across both files); full layer1 suite 0 failed; `git diff --check` clean.
 
 ### Handoff
 
@@ -432,7 +481,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 ### Phase 2: Fix Implementation - In Progress
 - [x] Make `packs/business-discovery/codex/customer-discovery/SKILL.md` generator-ownable and regenerate its stale `ALIGNMENT-PAGE.md`.
 - [x] Harden `scripts/upgrade-alignment-page.mjs` so sibling bundles cannot be skipped as bespoke without a failing diagnostic or explicit allowlist.
-- [ ] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
+- [x] Add path consistency validation for `alignment/{skill-name}-{topic}.html` inside generated bundles.
 - [ ] Add generated-bundle variant/drift validation against expected renderer output.
 - [ ] Convert or explicitly test the 15 bespoke alignment sections.
 - [ ] Add or expose a scriptable audit for direct `alignment/*.html` edits where no skill is invoked.
@@ -454,6 +503,10 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Added `tests/layer1/upgrade-alignment-page-bespoke.test.ts`: repo-state assertions (allowlist exists, matches bespoke set computed directly from active `SKILL.md` files, every entry bespoke in both mirrors) plus five behavioral fixture tests via `--root` (unlisted bespoke → exit 1, mixed pair → exit 1, allowlisted symmetric pair → exit 0, stale entry → exit 1, clean stub-only repo → exit 0).
 - Documented the bespoke allowlist and diagnostics in `docs/alignment-page-convention.md` outside the generated-marker block; no bundle regeneration triggered.
 - Validation passed: `node --check scripts/upgrade-alignment-page.mjs`; `node scripts/upgrade-alignment-page.mjs --dry-run` (exit 0, `Bespoke allowlist: 7 skills, exact`); write-mode run with no tracked diff; focused layer1 vitest (13 tests across the new and existing alignment-page test files); `git diff --check`.
+
+### Phase 2 Review Notes (Step 3, 2026-06-10)
+
+- Step 3 shipped: `scripts/upgrade-alignment-page.mjs` now validates that every active `ALIGNMENT-PAGE.md` (generated, bespoke, and skip-listed alike) references only its owning skill's `alignment/{skill-name}-{topic}.html` output path, exiting 1 with `Foreign output path` diagnostics in both dry-run and write mode, plus an `Output paths: N bundles, exact|DRIFT` summary line. Coverage and full details in the "Alignment Bundle Path-Consistency Validation (Drift Plan Phase 2 Step 3)" section above. Current repo: 270 bundles, exact.
 
 ---
 
