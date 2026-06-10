@@ -1,3 +1,22 @@
+## Dated Alignment Index Entries
+
+### Phase 1: Convention Update
+- [x] Update the central alignment-index paragraph in `docs/alignment-page-convention.md`.
+- [x] Require dated index entries with `<span class="meta">YYYY-MM-DD</span>`.
+- [x] Document date sourcing, preservation, missing-date derivation, and `new · YYYY-MM-DD` marker behavior.
+
+### Phase 2: Regeneration And Shipping
+- [ ] Run `node scripts/upgrade-alignment-page.mjs --dry-run`.
+- [ ] Run `node scripts/upgrade-alignment-page.mjs`.
+- [ ] Re-run `node scripts/upgrade-alignment-page.mjs --dry-run` and confirm zero pending updates.
+- [ ] Run `git diff --check`.
+- [ ] Commit the doc and regenerated files together.
+
+### Review Notes
+- Pending.
+
+---
+
 ## Research Scope Approval Before Alignment Research
 
 ### Phase 1: Audit And Contract Update

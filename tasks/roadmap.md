@@ -1,3 +1,24 @@
+## Current Implementation - Dated Alignment Index Entries
+
+### Goal
+
+Require central alignment index entries to carry dated metadata from each page's alignment review/confirmation date, then regenerate bundled per-skill alignment convention docs from the canonical source.
+
+### Plan
+
+1. Update the canonical convention.
+   - [x] Revise `docs/alignment-page-convention.md` inside the `alignment-convention` markers.
+   - [x] Require `YYYY-MM-DD` dates in muted meta spans after index links.
+   - [x] Preserve existing entry dates and define how to fill missing dates.
+   - [x] Clarify `new` marker behavior with dated meta text.
+2. Regenerate and verify bundled docs.
+   - [ ] Preview bundle changes with `node scripts/upgrade-alignment-page.mjs --dry-run`.
+   - [ ] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+   - [ ] Re-run dry-run and confirm no pending updates.
+3. Ship.
+   - [ ] Review generated diff and run whitespace checks.
+   - [ ] Commit the convention and regenerated files together.
+
 ## Current Implementation - Research Scope Approval Before Alignment Research
 
 ### Goal

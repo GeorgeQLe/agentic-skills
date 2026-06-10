@@ -42,15 +42,16 @@ let currentStream = null;
 let briefBtn = null;
 let cacheNoteShown = false;
 
-// Model weights persist between visits via Cache API origin storage, which is
-// unavailable or unreliable on file:// origins (notably file://wsl.localhost).
-// Log one informational line when a real load starts so re-downloads are
-// explainable from the console.
+// Model weights persist between visits via Cache API origin storage. Verified
+// 2026-06-09 (instrumented probe, Windows Chrome on file://wsl.localhost):
+// caches IS available on file:// origins and entries persist across reloads
+// and browser restarts, so file:// pages do not re-download. Warn only when
+// the Cache API is genuinely absent — there a re-download per visit is certain.
 function noteCacheCapability() {
   if (cacheNoteShown) return;
   cacheNoteShown = true;
   if (typeof caches === 'undefined') {
-    console.info('Kokoro TTS: Cache API unavailable on this origin; the voice model may re-download on each visit. Serve this page over http://localhost for persistent caching.');
+    console.info('Kokoro TTS: Cache API unavailable on this origin; the voice model will re-download on each visit. Serve this page over http://localhost for persistent caching.');
   }
 }
 
