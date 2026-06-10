@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="prototype">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animation Design Plan — Deck-Builder blueprint-morph + card-flight</title>
+<style>
+:root{
+  --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;
+  --accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff;
+  --chart-1:#58a6ff;--chart-2:#3fb950;--chart-3:#d29922;--chart-4:#bc8cff;
+  --chart-5:#f85149;--chart-6:#79c0ff;--chart-7:#f0883e;--chart-8:#a5d6ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.6}
+main{width:min(1080px,calc(100vw - 40px));margin:0 auto;padding:32px 0 64px;max-width:100%;overflow-wrap:break-word}
+h1{color:#fff;font-size:1.9rem;line-height:1.2;margin:0 0 10px}
+h2{color:var(--accent);font-size:1.4rem;margin:42px 0 12px}
+h3{color:#fff;font-size:1.12rem;margin:26px 0 10px}
+h4{color:var(--purple);font-size:1rem;margin:20px 0 8px}
+a{color:var(--accent)}
+code{background:#1c2128;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.92em}
+pre{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;font-size:.88rem;line-height:1.5}
+pre code{background:none;border:none;padding:0}
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th{background:var(--surface);color:#fff;text-align:left}
+th,td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.status-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:18px 0}
+.status-block .row{margin:3px 0}
+.status-block .k{color:var(--text-muted);display:inline-block;min-width:170px}
+.badge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.badge.review{background:#3a2d10;color:var(--orange);border:1px solid var(--orange)}
+.badge.proto{background:#231a35;color:var(--purple);border:1px solid var(--purple)}
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:22px 0}
+.toc ol{margin:8px 0 0;padding-left:22px}
+.toc li{margin:4px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.never li{margin:4px 0}
+.never .nv{color:var(--red);font-weight:700}
+.muted{color:var(--text-muted)}
+.callout{border-left:4px solid var(--accent);background:var(--surface);border-radius:0 8px 8px 0;padding:10px 16px;margin:14px 0}
+.callout.risk{border-left-color:var(--red)}
+.callout.decision{border-left-color:var(--green)}
+.preview-note{border:1px dashed var(--purple);border-radius:8px;background:#15101f;color:var(--purple);padding:8px 14px;margin:12px 0;font-size:.88rem}
+/* gates */
+.gate{background:#1c2333;border:1px solid var(--purple);border-radius:8px;padding:14px 18px;margin:20px 0}
+.gate h4{margin-top:0}
+.q{margin:10px 0}
+.q .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;min-height:44px;border:1px solid var(--border);border-radius:8px;margin:6px 0;cursor:pointer;background:#161d2c}
+.q .opt:hover{border-color:var(--accent)}
+.q .opt input{margin-top:4px}
+.q textarea{width:100%;min-height:74px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit;margin:6px 0}
+/* section feedback */
+.sec-fb{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.85rem}
+.sec-fb-label{color:var(--text-muted)}
+.fb-btn{background:var(--surface);color:var(--text-muted);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;font:inherit;font-size:.85rem;cursor:pointer}
+.fb-btn[data-fb="emphasize"].active{color:var(--green);border-color:var(--green)}
+.fb-btn[data-fb="down"].active{color:var(--red);border-color:var(--red)}
+.fb-btn[data-fb="needs-clarification"].active{color:var(--orange);border-color:var(--orange)}
+.fb-panel{flex-basis:100%;margin-top:6px}
+.fb-panel textarea{width:100%;min-height:70px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit}
+.local-yaml-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.local-yaml{width:100%;min-height:120px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+button{font:inherit}
+.btn{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-height:44px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:#13233a;color:var(--accent);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.copy-status{color:var(--green);font-size:.85rem}
+/* interactive components */
+.proto-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin:16px 0}
+.proto-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.proto-box svg{width:100%;height:auto;display:block}
+.proto-box input[type=range]{width:100%;margin:10px 0;min-height:44px}
+.readout{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:10px 14px;min-height:64px;font-size:.92rem}
+.readout .ph{color:var(--accent);font-weight:700}
+.seq-btn.active{border-color:var(--accent);color:var(--accent)}
+.compile-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:34px 0}
+.compile-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.yaml-out{width:100%;min-height:220px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+@media (max-width:860px){main{width:calc(100vw - 28px)}h1{font-size:1.6rem}}
+@media (max-width:560px){h1{font-size:1.35rem}.status-block .k{min-width:120px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Animation Design Plan — Deck-Builder <code>blueprint-morph</code> + <code>card-flight</code></h1>
+  <p class="muted">Stage 2 review alignment page for <code>/animation-design-planner</code>. Planning run only: design/review artifacts, no implementation code, no new dependencies.</p>
+  <div class="status-block">
+    <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
+    <div class="row"><span class="k">generated:</span> 2026-06-10</div>
+    <div class="row"><span class="k">skill:</span> animation-design-planner (motion-framer subskill — framer-motion 12.40 detected)</div>
+    <div class="row"><span class="k">working packet:</span> <code>research/skills-showcase/_working/preliminary-animation-design-planner-research.md</code> (non-canonical)</div>
+    <div class="row"><span class="k">canonical destination:</span> <code>apps/skills-showcase/docs/animation-plan-deck-builder.md</code> — written only after approval</div>
+    <div class="row"><span class="k">upstream:</span> <code>apps/skills-showcase/docs/deck-builder-ux.md</code> (commit <code>6e2e6aec</code>)</div>
+  </div>
+</header>
+
+<nav class="toc" id="toc">
+  <strong>Table of Contents</strong>
+  <ol>
+    <li><a href="#context">Context &amp; Evidence</a></li>
+    <li><a href="#contract-a">Motion Contract A — blueprint-morph</a> <span class="muted">(gate)</span></li>
+    <li><a href="#contract-b">Motion Contract B — card-flight</a> <span class="muted">(gate)</span></li>
+    <li><a href="#scrubbers">Interactive: Phase Timeline Scrubbers</a></li>
+    <li><a href="#lifecycle">Lifecycle Ownership Map</a> <span class="muted">(gates: ownership, interruption semantics)</span></li>
+    <li><a href="#machine">Interactive: State Machine Explorer</a></li>
+    <li><a href="#storyboards">Storyboards &amp; Mechanism Decision</a></li>
+    <li><a href="#guardrails">Implementation Guardrails</a> <span class="muted">(gate: scope/non-goals)</span></li>
+    <li><a href="#debug">Debug-Harness Extension</a></li>
+    <li><a href="#proof">Proof Gate</a> <span class="muted">(gate: proof tooling)</span></li>
+    <li><a href="#risks">Assumptions &amp; Risk Register</a></li>
+    <li><a href="#artifacts">Artifact Destination &amp; Proposed File Changes</a> <span class="muted">(gates)</span></li>
+    <li><a href="#route">Post-Approval Route</a> <span class="muted">(gate)</span></li>
+    <li><a href="#compile">Compile YAML</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1. CONTEXT ============ -->
+<section id="context">
+  <div class="sec-head"><h2>1. Context &amp; Evidence</h2>
+    <div class="sec-fb" data-section="Context & Evidence">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>The deck-builder UX design (<code>apps/skills-showcase/docs/deck-builder-ux.md</code>, committed <code>6e2e6aec</code>) introduces two new framer-motion transitions that don't exist in the <code>/prototype</code> flow:</p>
+  <ul>
+    <li><strong>blueprint-morph</strong> — deck blueprint card on the table ⇄ builder overlay at <code>/deck/[slug]</code>.</li>
+    <li><strong>card-flight</strong> — fan card flies into a deck slot on tap, plus an add-all stagger variant.</li>
+  </ul>
+  <p><code>/animation-design-planner</code> was invoked to plan these before building — naming the visible motion contracts, lifecycle owner, state phases, and proof method so implementation doesn't start with local timing tweaks. Framework detected: framer-motion 12.40 (imported as <code>"framer-motion"</code>) → <code>motion-framer</code> subskill guardrails apply.</p>
+  <h3>Evidence behind the load-bearing decisions</h3>
+  <div class="tbl"><table>
+    <tr><th>Claim / decision</th><th>Evidence (observed)</th><th>Inference</th><th>Confidence</th></tr>
+    <tr><td>Both transitions are new compositions, not new primitives</td><td><code>docs/deck-builder-ux.md</code> design principle 3 ("Promote, don't rewrite"); existing primitives in <code>SealedPack.tsx</code>, <code>PackOpener.tsx</code>, <code>SkillCard.tsx</code>, <code>BottomSheet</code></td><td>The plan reuses layoutId morph + collapse-to-target motion; no new animation library surface needed</td><td>High</td></tr>
+    <tr><td>layoutId + declarative <code>animate</code> on transforms conflict</td><td><code>PackOpener.tsx:212-213</code> — existing workaround in the pack flow</td><td>Flight clones must be driven imperatively with motion values; slot cards (declarative pulses) never carry a layoutId</td><td>High (repo-observed)</td></tr>
+    <tr><td>Route-first close would break the morph-back</td><td>App Router route-change unmounts are not AnimatePresence-aware (framework behavior)</td><td>Client-state-first with shallow <code>pushState</code> is required; real <code>/deck/[slug]</code> route kept for hard loads/SEO</td><td>Medium — <strong>spike required on Next 16.2.6</strong> (see risk register)</td></tr>
+    <tr><td>Sheet children cannot paint above the slot strip</td><td>BottomSheet's z-50 stacking context in the prototype flow</td><td>Card-flight needs a portal clone overlay (FlightLayer) rather than unclipping the sheet</td><td>High</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 2. CONTRACT A ============ -->
+<section id="contract-a">
+  <div class="sec-head"><h2>2. Motion Contract A — blueprint-morph</h2>
+    <div class="sec-fb" data-section="Motion Contract A — blueprint-morph">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th style="width:170px">Trigger</th><td>Tap/click a deck blueprint on the table (<code>/</code>); close via Back button or dismiss affordance.</td></tr>
+    <tr><th>Start → end</th><td>Small blueprint card on the table → full builder panel (<code>/deck/[slug]</code>) with phase slots; reverse on close. URL changes both ways.</td></tr>
+    <tr><th>Focal / continuity element</th><td>The blueprint card chrome is the single visually continuous rectangle (shared <code>layoutId="deck-blueprint-${slug}"</code>); builder content (slot columns, header, shelf glow) staggers in <em>after</em> the morph lands.</td></tr>
+  </table></div>
+  <h3>Never list</h3>
+  <ul class="never">
+    <li><span class="nv">Never:</span> double-vision — blueprint and panel both visible at full opacity.</li>
+    <li><span class="nv">Never:</span> flash at morph-back.</li>
+    <li><span class="nv">Never:</span> builder content popping before the morph completes.</li>
+    <li><span class="nv">Never:</span> table scroll jump.</li>
+    <li><span class="nv">Never:</span> focus loss — focus moves to the builder heading on open, returns to the originating blueprint on close.</li>
+    <li><span class="nv">Never:</span> URL/visual desync.</li>
+  </ul>
+  <h3>Interruption rules</h3>
+  <ul>
+    <li>Blueprint taps ignored unless phase is <code>table</code>.</li>
+    <li>Dismiss legal only from <code>builder-open</code> — plus dismiss-during-<code>blueprint-morphing</code>, which retargets the layout morph from its current projected position.</li>
+    <li>Hard load of <code>/deck/[slug]</code> skips the open morph (no origin) but still morphs back on close, because the table renders underneath.</li>
+  </ul>
+
+  <div class="gate" data-section="Motion Contract A — blueprint-morph" data-gate-type="motion-contract">
+    <h4>Gate: blueprint-morph contract acceptance</h4>
+    <div class="q" data-qlabel="Accept blueprint-morph motion contract">
+      <p>Do you accept the blueprint-morph visible motion contract (trigger, continuity element, never list, interruption rules) as the binding spec for implementation?</p>
+      <label class="opt"><input type="radio" name="q1" value="Accept as specified"> Accept as specified</label>
+      <label class="opt"><input type="radio" name="q1" value="Accept with changes (see notes)"> Accept with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q1" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q1" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. CONTRACT B ============ -->
+<section id="contract-b">
+  <div class="sec-head"><h2>3. Motion Contract B — card-flight</h2>
+    <div class="sec-fb" data-section="Motion Contract B — card-flight">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th style="width:170px">Trigger</th><td>Tap an uncollected card in the open fan drawer; "Collect all N" triggers the staggered batch variant.</td></tr>
+    <tr><th>Start → end</th><td>Card visually leaves the fan, flies above the sheet to its phase slot, slot fills and pulses once, deck counter ticks; the fan card is dimmed with an "in deck ♦" badge from the tap frame onward.</td></tr>
+    <tr><th>Focal element</th><td>The flying clone; the slot is the continuity target (pinned visible above the sheet on mobile).</td></tr>
+  </table></div>
+  <h3>Never list</h3>
+  <ul class="never">
+    <li><span class="nv">Never:</span> double-vision — full-opacity fan card while the clone flies.</li>
+    <li><span class="nv">Never:</span> clone clipped by the sheet's overflow or painted under the scrim/slot strip.</li>
+    <li><span class="nv">Never:</span> slot filling before the clone lands (reduced motion excepted).</li>
+    <li><span class="nv">Never:</span> counter desync after interruptions.</li>
+    <li><span class="nv">Never:</span> accidental collect from an inspect tap — flip and fly remain separate affordances.</li>
+  </ul>
+  <h3>Interruption rules</h3>
+  <ul>
+    <li>Re-tap of an in-flight or collected card is a no-op.</li>
+    <li>Concurrent flights of different cards are allowed.</li>
+    <li>Drawer close or builder dismiss mid-flight snaps all flights to end (no cancel/rollback) before proceeding.</li>
+    <li>Deck-complete sequence defers until all flights land.</li>
+  </ul>
+
+  <div class="gate" data-section="Motion Contract B — card-flight" data-gate-type="motion-contract">
+    <h4>Gate: card-flight contract acceptance</h4>
+    <div class="q" data-qlabel="Accept card-flight motion contract">
+      <p>Do you accept the card-flight visible motion contract (trigger, focal element, never list, interruption rules), including the add-all stagger variant, as the binding spec for implementation?</p>
+      <label class="opt"><input type="radio" name="q2" value="Accept as specified"> Accept as specified</label>
+      <label class="opt"><input type="radio" name="q2" value="Accept with changes (see notes)"> Accept with changes (describe in notes)</label>
+      <label class="opt"><input type="radio" name="q2" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q2" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. SCRUBBERS ============ -->
+<section id="scrubbers">
+  <div class="sec-head"><h2>4. Interactive: Phase Timeline Scrubbers</h2>
+    <div class="sec-fb" data-section="Phase Timeline Scrubbers">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p class="preview-note">⚠ This is an ephemeral preview, not production code. Drag the slider to scrub each transition's phase timeline. All timings are design targets that pass through <code>dbg.scaleT</code> at implementation time. No state persists.</p>
+  <noscript><p class="callout risk">JavaScript is disabled — the interactive scrubbers will not render. The full phase data is available in the tables below each scrubber.</p></noscript>
+
+  <div class="proto-box" id="scrub-bm">
+    <h3 style="margin-top:0">blueprint-morph timeline</h3>
+    <div class="proto-controls">
+      <button type="button" class="btn seq-btn" data-seq="0">Open sequence</button>
+      <button type="button" class="btn seq-btn" data-seq="1">Close sequence</button>
+      <button type="button" class="btn reset-btn">Reset</button>
+      <button type="button" class="btn toggle-table">View as table</button>
+    </div>
+    <svg class="scrub-svg" viewBox="0 0 960 130" role="img" aria-label="Phase timeline for the blueprint-morph transition: open sequence is tap commit, then a 450 millisecond layout spring morph, then the phase flip to builder-open, then a 200 millisecond content stagger-in; close sequence is a 10 millisecond content fade-out, onExitComplete handing the layoutId back, a 350 millisecond morph-back flagged as the flash-risk apex, then table restored with focus."></svg>
+    <input type="range" min="0" max="690" value="0" step="2" aria-label="Scrub blueprint-morph timeline position in milliseconds">
+    <div class="readout"></div>
+    <div class="tbl scrub-table"><table>
+      <thead><tr><th>Sequence</th><th>Phase</th><th>Window (ms)</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td>Open</td><td>Tap commit</td><td>0–20</td><td><code>pushState</code>; blueprint claims opacity 0; panel claims <code>layoutId</code></td></tr>
+        <tr><td>Open</td><td>Layout spring morph</td><td>20–470</td><td>~450 ms framer layout spring; chrome rectangle morphs table card → panel</td></tr>
+        <tr><td>Open</td><td>Phase flip</td><td>470–490</td><td><code>onLayoutAnimationComplete</code> (one-shot ref) → <code>builder-open</code></td></tr>
+        <tr><td>Open</td><td>Content stagger-in</td><td>490–690</td><td>Slot columns then shelf, ~200 ms total, 40 ms stagger</td></tr>
+        <tr><td>Close</td><td>Content fade-out</td><td>0–10</td><td>Near-instant (0.01 s) so the morph reads</td></tr>
+        <tr><td>Close</td><td>layoutId handback</td><td>10–30</td><td>AnimatePresence <code>onExitComplete</code> → blueprint reclaims id</td></tr>
+        <tr><td>Close</td><td>Morph-back (apex)</td><td>30–380</td><td>~350 ms; completion frame is the flash-risk apex</td></tr>
+        <tr><td>Close</td><td>Table restored</td><td>380–400</td><td>Phase → <code>table</code>; focus returns to originating blueprint</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="proto-box" id="scrub-cf">
+    <h3 style="margin-top:0">card-flight timeline</h3>
+    <div class="proto-controls">
+      <button type="button" class="btn seq-btn" data-seq="0">Single tap</button>
+      <button type="button" class="btn seq-btn" data-seq="1">Add-all (13-card worst case)</button>
+      <button type="button" class="btn reset-btn">Reset</button>
+      <button type="button" class="btn toggle-table">View as table</button>
+    </div>
+    <svg class="scrub-svg" viewBox="0 0 960 130" role="img" aria-label="Phase timeline for the card-flight transition: single tap is an optimistic commit and fan-card dim at tap time, a measure step with optional scroll-into-view, a 400 millisecond spring flight of the portal clone, then landing with slot pulse and counter tick; the add-all variant staggers launches 70 milliseconds apart with a roughly 840 millisecond launch tail and the last landing near 1.5 seconds."></svg>
+    <input type="range" min="0" max="698" value="0" step="2" aria-label="Scrub card-flight timeline position in milliseconds">
+    <div class="readout"></div>
+    <div class="tbl scrub-table"><table>
+      <thead><tr><th>Sequence</th><th>Phase</th><th>Window (ms)</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td>Single tap</td><td>Tap commit</td><td>0–16</td><td>Optimistic commit (<code>collectedCardIds</code> + localStorage); fan card dims with "in deck ♦" badge, same frame</td></tr>
+        <tr><td>Single tap</td><td>Measure</td><td>16–48</td><td>Measure source rect; if slot off-screen, <code>scrollIntoView({behavior:"instant"})</code> then re-measure next rAF</td></tr>
+        <tr><td>Single tap</td><td>Clone flight</td><td>48–448</td><td>Clone mounts in FlightLayer at source rect; imperative <code>animate()</code> x/y/scale, spring <code>{stiffness: 260, damping: 26}</code> (~400 ms)</td></tr>
+        <tr><td>Single tap</td><td>Land + pulse</td><td>448–698</td><td><code>.then()</code>: clone removed, slot ghost→filled, declarative pulse <code>scale [1, 1.08, 1]</code> ~250 ms, counter ticks</td></tr>
+        <tr><td>Add-all</td><td>Staggered launches</td><td>0–840</td><td>Filtered queue, 70 ms stagger per flight (13-card worst case ≈ 0.84 s launch tail)</td></tr>
+        <tr><td>Add-all</td><td>Last clone in flight</td><td>840–1240</td><td>Concurrent flights overlap; each follows the single-tap spring</td></tr>
+        <tr><td>Add-all</td><td>Last land + batch-complete</td><td>1240–1490</td><td>Final pulse; batch-complete via decrement ref; single tap is a batch of 1</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ 5. LIFECYCLE ============ -->
+<section id="lifecycle">
+  <div class="sec-head"><h2>5. Lifecycle Ownership Map</h2>
+    <div class="sec-fb" data-section="Lifecycle Ownership Map">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>Hierarchical composition; the existing <code>PackFlowPhase</code> machine is nested <strong>unchanged</strong>:</p>
+<pre><code>DeckTableShell (client; rendered by both app/page.tsx and app/deck/[slug]/page.tsx)
+├── owns DeckFlowPhase: table → blueprint-morphing → builder-open → builder-dismissing → table
+├── owns activeDeck + collectedCardIds (localStorage-backed, per slug)
+├── one &lt;LayoutGroup&gt; wrapping table + builder
+├── TableSurface (always mounted)
+├── BuilderPanel (AnimatePresence; mounted while activeDeck != null)
+│   └── BuilderPackFlow — PackFlowPhase owner extracted from PrototypeInner
+│       (sealed → opening-apex → drawer-open → closing-* chain, verbatim)
+│       └── owns flights Map&lt;cardId, FlightRecord&gt; (parallel records, NOT a scalar phase:
+│           queued → measuring → in-flight → settling → done per record)
+└── FlightLayer (fixed inset-0, pointer-events-none, z-[70]) — flight clones</code></pre>
+
+  <div class="callout decision">
+    <strong>Routing decision (load-bearing):</strong> the morph is client-state-first; the URL syncs via shallow <code>window.history.pushState</code> (+ popstate listener), because App Router route-change unmounts are not AnimatePresence-aware — a route-first intercepting-route close would unmount the builder before the blueprint can reclaim the layoutId. <code>/deck/[slug]</code> exists as a real route for hard loads/SEO and renders the same shell with <code>initialDeckSlug</code>.
+  </div>
+  <div class="callout risk">
+    <strong>Spike first (~30 min):</strong> confirm shallow <code>pushState</code> + <code>usePathname</code>/popstate behavior on Next 16.2.6 — flagged as the top pre-implementation risk.
+  </div>
+
+  <h3>Identity rules</h3>
+  <ul>
+    <li>Fan cards keyed by <code>skill.id</code>, never filtered/reordered on collect (preserves PackOpener's fan/collapse math).</li>
+    <li>Flight clones keyed <code>flight-${skill.id}</code>, max one per card.</li>
+    <li>Slots keyed <code>${deckSlug}:${slotId}</code>.</li>
+    <li>Exactly one mounted owner of <code>deck-blueprint-${slug}</code> at a time — source stays mounted at opacity 0, the SealedPack pattern.</li>
+  </ul>
+
+  <h3>Commit timing</h3>
+  <p><strong>Optimistic</strong> — <code>collectedCardIds</code> + localStorage commit at tap time; animation is pure presentation; a presentation-level <code>displayedCount</code> ticks on flight-land and reconciles on any interrupt. No rollback paths exist.</p>
+
+  <h3>Interruption rule</h3>
+  <p><code>finishAllFlightsImmediately()</code> (snap-to-end: stop controls, remove clones, force slots filled, reconcile counter) runs before any drawer close or builder dismiss. Back/dismiss with the drawer open uses a <strong>fast drawer teardown</strong> (BottomSheet's existing 0.01s <code>fadeExit</code> path, skip the collapse ritual) so leaving feels immediate.</p>
+
+  <div class="gate" data-section="Lifecycle Ownership Map" data-gate-type="lifecycle-ownership">
+    <h4>Gate: lifecycle ownership &amp; routing</h4>
+    <div class="q" data-qlabel="Approve lifecycle ownership map and routing decision">
+      <p>Do you approve the hierarchical ownership map (DeckTableShell owns <code>DeckFlowPhase</code>; the existing <code>PackFlowPhase</code> machine nests unchanged) and the client-state-first routing decision (shallow <code>pushState</code>, with the Next 16.2.6 spike run before implementation)?</p>
+      <label class="opt"><input type="radio" name="q3" value="Approve — shell ownership + pushState routing, spike first"> Approve — shell ownership + pushState routing, spike first</label>
+      <label class="opt"><input type="radio" name="q3" value="Approve ownership map, but use route-first navigation (see notes)"> Approve ownership map, but use route-first navigation (explain in notes)</label>
+      <label class="opt"><input type="radio" name="q3" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q3" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+
+  <div class="gate" data-section="Lifecycle Ownership Map" data-gate-type="interruption-semantics">
+    <h4>Gate: interruption semantics &amp; commit timing</h4>
+    <div class="q" data-qlabel="Approve snap-to-end interruptions and optimistic commit">
+      <p>Do you approve snap-to-end interruption handling (<code>finishAllFlightsImmediately()</code> before any close/dismiss; fast drawer teardown on back) and the optimistic commit model (state + localStorage commit at tap time, no rollback paths)?</p>
+      <label class="opt"><input type="radio" name="q4" value="Approve both"> Approve both</label>
+      <label class="opt"><input type="radio" name="q4" value="Approve optimistic commit; change interruption handling (see notes)"> Approve optimistic commit; change interruption handling (notes)</label>
+      <label class="opt"><input type="radio" name="q4" value="Approve interruption handling; change commit timing (see notes)"> Approve interruption handling; change commit timing (notes)</label>
+      <label class="opt"><input type="radio" name="q4" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q4" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. STATE MACHINE ============ -->
+<section id="machine">
+  <div class="sec-head"><h2>6. Interactive: State Machine Explorer</h2>
+    <div class="sec-fb" data-section="State Machine Explorer">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p class="preview-note">⚠ This is an ephemeral preview, not production code. Click a state node to highlight its legal transitions and guards. The <code>DeckFlowPhase</code> chain is the new shell machine; the <code>FlightRecord</code> chain is per-card (a Map of parallel records, not a scalar phase). No state persists.</p>
+  <noscript><p class="callout risk">JavaScript is disabled — the interactive diagram will not render. The full transition data is in the table below.</p></noscript>
+  <div class="proto-box" id="machine-box">
+    <div class="proto-controls">
+      <button type="button" class="btn reset-btn">Reset</button>
+      <button type="button" class="btn toggle-table">View as table</button>
+    </div>
+    <svg id="machine-svg" viewBox="0 0 960 360" role="img" aria-label="State machine diagram with two chains. DeckFlowPhase: table to blueprint-morphing on blueprint tap, blueprint-morphing to builder-open on layout animation complete, builder-open to builder-dismissing on back or dismiss, builder-dismissing back to table on morph-back complete, plus a retarget edge from blueprint-morphing directly to builder-dismissing and a hard-load entry directly into builder-open. FlightRecord per card: queued, measuring, in-flight, settling, done, with a snap-to-end edge from every non-done state to done."></svg>
+    <div class="readout" id="machine-readout">Click a state node to inspect its transitions.</div>
+    <div class="tbl scrub-table" id="machine-table"><table>
+      <thead><tr><th>Machine</th><th>From</th><th>To</th><th>Trigger / guard</th></tr></thead>
+      <tbody>
+        <tr><td>DeckFlowPhase</td><td>table</td><td>blueprint-morphing</td><td>Blueprint tap — taps ignored unless phase is <code>table</code></td></tr>
+        <tr><td>DeckFlowPhase</td><td>blueprint-morphing</td><td>builder-open</td><td><code>onLayoutAnimationComplete</code> (one-shot ref)</td></tr>
+        <tr><td>DeckFlowPhase</td><td>blueprint-morphing</td><td>builder-dismissing</td><td>Dismiss-during-morph — retargets the layout morph from its current projected position</td></tr>
+        <tr><td>DeckFlowPhase</td><td>builder-open</td><td>builder-dismissing</td><td>Back/dismiss (only legal here); runs <code>finishAllFlightsImmediately()</code> + fast drawer teardown first</td></tr>
+        <tr><td>DeckFlowPhase</td><td>builder-dismissing</td><td>table</td><td>Morph-back <code>onLayoutAnimationComplete</code>; focus restored to originating blueprint</td></tr>
+        <tr><td>DeckFlowPhase</td><td>(hard load)</td><td>builder-open</td><td>Direct load of <code>/deck/[slug]</code> — no origin, open morph skipped; close still morphs back</td></tr>
+        <tr><td>FlightRecord</td><td>queued</td><td>measuring</td><td>Dequeue (add-all stagger 70 ms) or immediate for single tap</td></tr>
+        <tr><td>FlightRecord</td><td>measuring</td><td>in-flight</td><td>Source rect measured (scrollIntoView + re-measure next rAF if slot off-screen); clone mounts in FlightLayer</td></tr>
+        <tr><td>FlightRecord</td><td>in-flight</td><td>settling</td><td>Imperative spring resolves (<code>.then()</code>); clone removed; slot ghost→filled</td></tr>
+        <tr><td>FlightRecord</td><td>settling</td><td>done</td><td>Pulse complete; <code>displayedCount</code> ticks</td></tr>
+        <tr><td>FlightRecord</td><td>any non-done</td><td>done</td><td><code>finishAllFlightsImmediately()</code> — snap-to-end, counter reconciled</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ 7. STORYBOARDS ============ -->
+<section id="storyboards">
+  <div class="sec-head"><h2>7. Storyboards &amp; Mechanism Decision</h2>
+    <div class="sec-fb" data-section="Storyboards & Mechanism Decision">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p class="muted">All timings pass through <code>dbg.scaleT</code> and are debug-speed scalable.</p>
+  <h3>blueprint-morph open</h3>
+  <ol>
+    <li>Tap → <code>pushState</code> + blueprint claims opacity 0 / panel claims layoutId.</li>
+    <li>Layout spring morph (~450 ms, framer layout spring).</li>
+    <li><code>onLayoutAnimationComplete</code> (one-shot ref) → <code>builder-open</code>.</li>
+    <li>Content stagger-in (slot columns then shelf, ~200 ms, 40 ms stagger).</li>
+  </ol>
+  <h3>blueprint-morph close</h3>
+  <ol>
+    <li>Content near-instant fade-out (0.01 s, so the morph reads).</li>
+    <li>AnimatePresence <code>onExitComplete</code> → blueprint reclaims id.</li>
+    <li>Morph-back (~350 ms) → <code>onLayoutAnimationComplete</code> → <code>table</code>, focus restored.</li>
+  </ol>
+  <p class="callout risk"><strong>Morph-back completion frame is the flash-risk apex.</strong> It gets a dedicated gate step in the debug harness and a named manual slow-motion check in the proof gate.</p>
+  <h3>card-flight</h3>
+  <ol>
+    <li>Tap → optimistic commit + fan card dims (same frame).</li>
+    <li>Measure source rect; if the target slot is off-screen, <code>scrollIntoView({behavior:"instant"})</code> then re-measure next rAF.</li>
+    <li>Clone mounts in FlightLayer at source rect.</li>
+    <li>Imperative <code>animate()</code> x/y/scale to slot rect, spring <code>{stiffness: 260, damping: 26}</code> (~400 ms).</li>
+    <li><code>.then()</code>: clone removed, slot ghost→filled, declarative pulse <code>scale [1, 1.08, 1]</code> ~250 ms, counter ticks.</li>
+  </ol>
+  <p><strong>Add-all:</strong> filtered queue, 70 ms stagger per flight (13-card worst case ≈ 0.84 s launch tail), batch-complete via decrement ref; single tap is a batch of 1.</p>
+  <div class="callout decision">
+    <strong>Mechanism decision — portal clone overlay (FlightLayer):</strong> the real fan card must stay in the fan as the dimmed badge, and a sheet child can never paint above the slot strip outside the sheet's z-50 stacking context; clone + fixed layer needs no unclipping and no scroll-offset math. The layoutId+declarative-animate conflict (<code>PackOpener.tsx:212-213</code>) is why the clone is driven imperatively with motion values, and why slot cards (which need declarative pulses) never carry a layoutId.
+  </div>
+</section>
+
+<!-- ============ 8. GUARDRAILS ============ -->
+<section id="guardrails">
+  <div class="sec-head"><h2>8. Implementation Guardrails (motion-framer subskill + baseline)</h2>
+    <div class="sec-fb" data-section="Implementation Guardrails">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <ul>
+    <li><strong>Transform/opacity only;</strong> the morph animates the panel chrome rectangle, never the slot grid layout; no filter/shadow animation.</li>
+    <li>BuilderPanel's layoutId container takes no declarative <code>animate</code> on transforms; content motion lives on child wrappers.</li>
+    <li><strong>AnimatePresence placement:</strong> BuilderPanel's presence is owned by DeckTableShell (the component that decides mounting), mode <code>sync</code>; BottomSheet keeps its existing presence handling.</li>
+    <li><strong>Reduced motion</strong> (<code>useReducedMotion()</code>, read once in the shell): same state chain and callbacks fire in the same order (debug/test parity), durations degrade — blueprint-morph becomes a 120 ms opacity crossfade with layoutId omitted; card-flight mounts no clone, launch/land marks fire back-to-back, slot fills with a 120 ms fade, no pulse, add-all has no stagger. Retrofitting the existing pack flow is a named follow-up, out of scope.</li>
+    <li><strong>Pointer events:</strong> FlightLayer <code>pointer-events-none</code>; scrim/dismiss disabled during <code>blueprint-morphing</code> and <code>builder-dismissing</code>; focus management per contract A.</li>
+  </ul>
+
+  <div class="gate" data-section="Implementation Guardrails" data-gate-type="scope/non-goals">
+    <h4>Gate: scope / non-goals</h4>
+    <div class="q" data-qlabel="Confirm reduced-motion retrofit stays out of scope">
+      <p>The two new transitions ship with full reduced-motion behavior, but retrofitting <code>prefers-reduced-motion</code> support onto the <em>existing</em> pack flow (SealedPack tear, fan-out, collapse) is a named follow-up and out of scope for this plan. Confirm?</p>
+      <label class="opt"><input type="radio" name="q5" value="Confirmed — retrofit stays out of scope"> Confirmed — retrofit stays out of scope (named follow-up)</label>
+      <label class="opt"><input type="radio" name="q5" value="Pull the reduced-motion retrofit into this work"> Pull the reduced-motion retrofit into this work</label>
+      <label class="opt"><input type="radio" name="q5" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q5" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. DEBUG HARNESS ============ -->
+<section id="debug">
+  <div class="sec-head"><h2>9. Debug-Harness Extension</h2>
+    <div class="sec-fb" data-section="Debug-Harness Extension">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>New step arrays in <code>steps.ts</code> (+ nodes/lanes <code>deck-shell</code>, <code>builder</code>, <code>flight-layer</code> and runtime slices in <code>animationMachine.ts</code>):</p>
+  <div class="tbl"><table>
+    <tr><th>Step array</th><th>Steps</th></tr>
+    <tr><td><code>DECK_OPEN_STEPS</code></td><td><code>blueprint-tap</code> → <code>url-push</code> → <code>builder-mount</code> → <code>blueprint-morph-in</code> (gate) → <code>builder-content-in</code></td></tr>
+    <tr><td><code>DECK_CLOSE_STEPS</code></td><td><code>dismiss-trigger</code> → <code>flights-flushed</code> (cond.) → <code>drawer-fast-teardown</code> (cond.) → <code>builder-exit</code> (gate) → <code>blueprint-morph-out</code> (gate, apex) → <code>table-restored</code></td></tr>
+    <tr><td><code>FLIGHT_STEPS</code></td><td><code>flight-tap</code> → <code>flight-measure</code> → <code>flight-launch</code> (gate) → <code>flight-land</code> (gate) → <code>flight-batch-complete</code></td></tr>
+  </table></div>
+  <p>New debug drivers: <code>openDeck</code>, <code>dismissDeck</code>, <code>flyCard</code>, <code>flyAll</code>, extended <code>reset</code>. All new transitions pass through <code>dbg.scaleT</code>.</p>
+</section>
+
+<!-- ============ 10. PROOF GATE ============ -->
+<section id="proof">
+  <div class="sec-head"><h2>10. Proof Gate</h2>
+    <div class="sec-fb" data-section="Proof Gate">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p class="muted">User direction during planning: add Playwright at implementation time.</p>
+  <h3>Vitest sequence tests <span class="muted">(existing pattern — mocked debug <code>report()</code> channel, mocked <code>getBoundingClientRect</code>)</span></h3>
+  <ul>
+    <li>Morph open/close phase order.</li>
+    <li>Flight optimistic-commit + interrupt reconciliation (close-mid-flight leaves counter == collected size).</li>
+    <li>Re-tap no-op.</li>
+    <li>Hard-load <code>/deck/[slug]</code> enters <code>builder-open</code> without morph.</li>
+  </ul>
+  <h3>Playwright <span class="muted">(devDependency added in the deck-builder implementation phase, local runs only — no GitHub Actions)</span></h3>
+  <ul>
+    <li>Screenshots at each phase boundary.</li>
+    <li>Video of morph open/close and a 3-card add-all.</li>
+    <li>Assert no frame shows double-vision or a clipped clone.</li>
+    <li>A <code>prefers-reduced-motion</code> project run asserting crossfade/instant-fill behavior.</li>
+  </ul>
+  <h3>Manual slow-motion review <span class="muted">(at <code>--debug-speed</code> 0.25)</span></h3>
+  <ul>
+    <li>Morph-back apex frame (flash risk).</li>
+    <li>Clone z-order over scrim/sheet/slot strip.</li>
+    <li>Perceived continuity of the chrome rectangle.</li>
+    <li>Interruption feel (back-during-flight).</li>
+  </ul>
+  <p class="callout"><strong>Acceptance:</strong> every "never" item in contracts A/B has a corresponding automated or named-manual check; <code>onExitComplete</code>-dependent cleanup verified to run after exit, not during.</p>
+
+  <div class="gate" data-section="Proof Gate" data-gate-type="proof-tooling">
+    <h4>Gate: proof tooling</h4>
+    <div class="q" data-qlabel="Confirm Playwright devDependency at implementation time">
+      <p>Confirm adding Playwright as a devDependency during the deck-builder implementation phase (local runs only, no GitHub Actions), alongside the Vitest sequence tests and the named manual slow-motion checks?</p>
+      <label class="opt"><input type="radio" name="q6" value="Confirmed — add Playwright at implementation time"> Confirmed — add Playwright at implementation time</label>
+      <label class="opt"><input type="radio" name="q6" value="Vitest + manual review only; no Playwright"> Vitest + manual review only; no Playwright</label>
+      <label class="opt"><input type="radio" name="q6" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe your alternative…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q6" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. RISKS ============ -->
+<section id="risks">
+  <div class="sec-head"><h2>11. Assumptions &amp; Risk Register</h2>
+    <div class="sec-fb" data-section="Assumptions & Risk Register">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>Risk / assumption</th><th>Status</th><th>Mitigation</th><th>What would change the plan</th></tr>
+    <tr><td><strong>Next 16 shallow-pushState spike</strong> — shallow <code>window.history.pushState</code> + <code>usePathname</code>/popstate behavior on Next 16.2.6</td><td><span style="color:var(--red)">Load-bearing, unproven</span></td><td>~30 min spike before any implementation</td><td>If shallow pushState fights the App Router, the routing layer is redesigned (e.g. full client-canvas with route only on hard load) before any animation work starts</td></tr>
+    <tr><td>Morph legibility across extreme aspect-ratio change (small blueprint → full panel)</td><td>Provisional</td><td>Chrome-rectangle-only morph; content staggers in after landing</td><td>If the morph still reads poorly at slow motion, fall back to scale+fade with a shorter morph distance</td></tr>
+    <tr><td>Mobile slot-strip scroll-then-measure timing (scrollIntoView → re-measure next rAF)</td><td>Provisional</td><td>Manual device check in the proof gate</td><td>If measurement races persist, pin the slot strip during flights</td></tr>
+    <tr><td>Scroll drift during a ~400 ms flight (user scrolls while clone is mid-air)</td><td>Accepted limitation</td><td>Documented; clone targets the rect measured at launch</td><td>Only revisit if real-device review finds it disorienting</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 12. ARTIFACTS ============ -->
+<section id="artifacts">
+  <div class="sec-head"><h2>12. Artifact Destination &amp; Proposed File Changes</h2>
+    <div class="sec-fb" data-section="Artifact Destination & Proposed File Changes">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <h3>This run created (already committed with this page)</h3>
+  <div class="tbl"><table>
+    <tr><th>Path</th><th>Action</th></tr>
+    <tr><td><code>prompts/animation-design-planner/skill-prompt-20260610-135323-deck-builder-transitions.md</code></td><td>create — prompt history log</td></tr>
+    <tr><td><code>research/skills-showcase/_working/preliminary-animation-design-planner-research.md</code></td><td>create — Stage 1 working packet (non-canonical)</td></tr>
+    <tr><td><code>alignment/animation-design-planner-deck-builder-transitions.html</code></td><td>create — this review page</td></tr>
+    <tr><td><code>alignment/index.html</code></td><td>update — add entry under Product Design &amp; Spec</td></tr>
+  </table></div>
+  <h3>Post-approval mutations (a later turn, only after final compiled YAML)</h3>
+  <div class="tbl"><table>
+    <tr><th>Path</th><th>Action</th></tr>
+    <tr><td><code>apps/skills-showcase/docs/animation-plan-deck-builder.md</code></td><td>create — canonical animation plan (this page's content, post-feedback)</td></tr>
+    <tr><td><code>docs/history/archive/YYYY-MM-DD/HHMMSS/research/skills-showcase/_working/…</code></td><td>archive — working packet moved out of the active tree</td></tr>
+    <tr><td><code>alignment/animation-design-planner-deck-builder-transitions.html</code></td><td>convert — <code>review</code> → <code>confirmed</code> (prior page archived first)</td></tr>
+  </table></div>
+  <p class="muted">No implementation files, no dependencies, and no changes to the unrelated in-flight skillpacks work in the tree.</p>
+
+  <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="artifact destination" data-target-path="apps/skills-showcase/docs/animation-plan-deck-builder.md">
+    <h4>Gate: artifact destination</h4>
+    <div class="q" data-qlabel="Approve canonical plan destination">
+      <p>Approve <code>apps/skills-showcase/docs/animation-plan-deck-builder.md</code> as the canonical destination for the approved animation plan (written only after approval, next to <code>deck-builder-ux.md</code>)?</p>
+      <label class="opt"><input type="radio" name="q7" value="Approve destination"> Approve destination</label>
+      <label class="opt"><input type="radio" name="q7" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Name the destination you prefer…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q7" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+
+  <div class="gate" data-section="Artifact Destination & Proposed File Changes" data-gate-type="proposed file changes">
+    <h4>Gate: proposed file changes</h4>
+    <div class="q" data-qlabel="Approve file-change scope and timing">
+      <p>Approve the file-change scope and timing: this run's four review artifacts now, and the post-approval mutation set (archive the working packet, write the canonical plan, confirm this page) only after final compiled YAML?</p>
+      <label class="opt"><input type="radio" name="q8" value="Approve scope and timing as listed"> Approve scope and timing as listed</label>
+      <label class="opt"><input type="radio" name="q8" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the scope change…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q8" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13. ROUTE ============ -->
+<section id="route">
+  <div class="sec-head"><h2>13. Post-Approval Route</h2>
+    <div class="sec-fb" data-section="Post-Approval Route">
+      <span class="sec-fb-label">Section feedback:</span>
+      <button type="button" class="fb-btn" data-fb="emphasize">Emphasize</button>
+      <button type="button" class="fb-btn" data-fb="down">Thumbs down</button>
+      <button type="button" class="fb-btn" data-fb="needs-clarification">Clarification needed</button>
+      <div class="fb-panel" hidden>
+        <textarea class="fb-notes" placeholder="Feedback notes (optional)"></textarea>
+        <div class="local-yaml-actions"><button type="button" class="btn compile-local-feedback">Compile Feedback YAML</button><button type="button" class="btn copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="local-yaml" readonly hidden></textarea>
+      </div>
+    </div>
+  </div>
+  <p>After approval, the natural next step is the deck-builder implementation handoff: the canonical plan plus <code>deck-builder-ux.md</code> become the spec inputs, with the Next 16.2.6 pushState spike as the first implementation task.</p>
+  <div class="gate" data-section="Post-Approval Route" data-gate-type="post-approval route">
+    <h4>Gate: post-approval route</h4>
+    <div class="q" data-qlabel="Choose post-approval route">
+      <p>After the canonical plan is written, how should the work route?</p>
+      <label class="opt"><input type="radio" name="q9" value="Hand off to /exec for deck-builder implementation (spike first)"> Hand off to <code>/exec</code> for deck-builder implementation (spike first)</label>
+      <label class="opt"><input type="radio" name="q9" value="Hold — I will route manually"> Hold — I'll route manually</label>
+      <label class="opt"><input type="radio" name="q9" value="__other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Describe the route…" hidden></textarea>
+      <label class="opt"><input type="radio" name="q9" value="__clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear? (optional)" hidden></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)" hidden></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14. COMPILE ============ -->
+<section id="compile" class="compile-section">
+  <h2 style="margin-top:0">14. Compile YAML</h2>
+  <p>Use <strong>Compile Feedback YAML</strong> to send emphasis requests, concerns, or clarification needs before answering every gate — feedback alone is a revision request, not approval. Use <strong>Compile Answers</strong> for final approval once all <span id="q-total">9</span> required questions are answered.</p>
+  <div class="compile-actions">
+    <button type="button" id="compile-feedback" class="btn">Compile Feedback YAML</button>
+    <button type="button" id="copy-feedback" class="btn">Copy YAML</button>
+    <span id="feedback-status" class="copy-status"></span>
+  </div>
+  <textarea id="feedback-yaml" class="yaml-out" readonly hidden></textarea>
+  <div class="compile-actions" id="answers-wrap">
+    <button type="button" id="compile-answers" class="btn primary" disabled>Compile Answers (9 unanswered)</button>
+    <button type="button" id="copy-answers" class="btn">Copy YAML</button>
+    <span id="answer-status" class="copy-status"></span>
+  </div>
+  <textarea id="answers-yaml" class="yaml-out" readonly hidden></textarea>
+</section>
+
+</main>
+<script>
+(function(){
+'use strict';
+var ALIGNMENT_PAGE = 'alignment/animation-design-planner-deck-builder-transitions.html';
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#58a6ff'; }
+function chart(i){ return cssVar('--chart-' + ((i % 8) + 1)); }
+
+/* ---------- YAML helpers ---------- */
+function yq(s){
+  return '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r?\n/g,'\\n') + '"';
+}
+var FB_ACTION = { 'emphasize':'add-weight-to-section', 'down':'investigate-and-revise', 'needs-clarification':'clarify-before-approval' };
+
+function copyText(text, statusEl, textarea){
+  function fallback(){
+    if (textarea){ textarea.hidden = false; textarea.focus(); textarea.select(); }
+    if (statusEl) statusEl.textContent = 'Clipboard blocked — YAML selected below, copy manually.';
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      if (statusEl) statusEl.textContent = 'Copied to clipboard.';
+    }, fallback);
+  } else { fallback(); }
+}
+
+/* ---------- gate questions ---------- */
+var qBlocks = Array.prototype.slice.call(document.querySelectorAll('.gate .q'));
+
+qBlocks.forEach(function(q){
+  var other = q.querySelector('.other-input');
+  var clarify = q.querySelector('.clarify-input');
+  var notes = q.querySelector('.notes-input');
+  q.addEventListener('change', function(e){
+    if (!e.target || e.target.type !== 'radio') return;
+    var v = e.target.value;
+    if (other) other.hidden = (v !== '__other');
+    if (clarify) clarify.hidden = (v !== '__clarify');
+    if (notes) notes.hidden = (v === '__other' || v === '__clarify');
+    updateAnswerButton();
+  });
+});
+
+function unansweredQuestions(){
+  return qBlocks.filter(function(q){ return !q.querySelector('input[type=radio]:checked'); });
+}
+function updateAnswerButton(){
+  var btn = document.getElementById('compile-answers');
+  var n = unansweredQuestions().length;
+  btn.disabled = n > 0;
+  btn.textContent = n > 0 ? ('Compile Answers (' + n + ' unanswered)') : 'Compile Answers';
+}
+
+document.getElementById('answers-wrap').addEventListener('click', function(e){
+  var btn = document.getElementById('compile-answers');
+  if (!btn.disabled) return;
+  if (e.target === btn || btn.contains(e.target) || e.target.id === 'answers-wrap'){
+    var first = unansweredQuestions()[0];
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+});
+
+/* ---------- section feedback ---------- */
+var fbSections = Array.prototype.slice.call(document.querySelectorAll('.sec-fb'));
+
+fbSections.forEach(function(sec){
+  var panel = sec.querySelector('.fb-panel');
+  var buttons = Array.prototype.slice.call(sec.querySelectorAll('.fb-btn'));
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wasActive = btn.classList.contains('active');
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      if (wasActive){
+        panel.hidden = true;
+        var ly = sec.querySelector('.local-yaml');
+        ly.hidden = true; ly.value = '';
+        sec.querySelector('.copy-status').textContent = '';
+      } else {
+        btn.classList.add('active');
+        panel.hidden = false;
+      }
+    });
+  });
+  sec.querySelector('.compile-local-feedback').addEventListener('click', function(){
+    var entry = sectionFeedbackEntry(sec);
+    if (!entry) return;
+    var yaml = feedbackYaml([entry]);
+    var ly = sec.querySelector('.local-yaml');
+    ly.value = yaml; ly.hidden = false;
+    copyText(yaml, sec.querySelector('.copy-status'), ly);
+  });
+  sec.querySelector('.copy-local-feedback').addEventListener('click', function(){
+    var ly = sec.querySelector('.local-yaml');
+    if (!ly.value){
+      var entry = sectionFeedbackEntry(sec);
+      if (!entry) return;
+      ly.value = feedbackYaml([entry]); ly.hidden = false;
+    }
+    copyText(ly.value, sec.querySelector('.copy-status'), ly);
+  });
+});
+
+function sectionFeedbackEntry(sec){
+  var active = sec.querySelector('.fb-btn.active');
+  if (!active) return null;
+  return {
+    section: sec.getAttribute('data-section'),
+    feedback: active.getAttribute('data-fb'),
+    notes: sec.querySelector('.fb-notes').value.trim()
+  };
+}
+function allFeedbackEntries(){
+  return fbSections.map(sectionFeedbackEntry).filter(Boolean);
+}
+
+function feedbackYaml(entries){
+  var y = '# Feedback-only YAML — a revision request, not approval.\n';
+  y += '# emphasize = add more weight/prominence/evidence/detail to the section or the point named in notes.\n';
+  y += '# down / needs-clarification = evaluate, investigate as needed, and amend the alignment page before asking again for approval.\n';
+  y += 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'feedback_status: revision-request\n';
+  y += 'approval_status: not-approved\n';
+  var un = unansweredQuestions();
+  if (un.length){
+    y += 'unanswered_required_questions:\n';
+    un.forEach(function(q){ y += '  - ' + yq(q.getAttribute('data-qlabel')) + '\n'; });
+  } else {
+    y += 'unanswered_required_questions: []\n';
+  }
+  y += 'section_feedback:\n';
+  entries.forEach(function(e){
+    y += '  - section: ' + yq(e.section) + '\n';
+    y += '    feedback: ' + e.feedback + '\n';
+    if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+    y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+  });
+  return y;
+}
+
+document.getElementById('compile-feedback').addEventListener('click', function(){
+  var entries = allFeedbackEntries();
+  var status = document.getElementById('feedback-status');
+  if (!entries.length){
+    status.textContent = 'No section feedback selected yet — pick emphasize / thumbs down / clarification on a section first.';
+    return;
+  }
+  var yaml = feedbackYaml(entries);
+  var out = document.getElementById('feedback-yaml');
+  out.value = yaml; out.hidden = false;
+  copyText(yaml, status, out);
+});
+document.getElementById('copy-feedback').addEventListener('click', function(){
+  var out = document.getElementById('feedback-yaml');
+  if (!out.value){
+    var entries = allFeedbackEntries();
+    if (!entries.length){ document.getElementById('feedback-status').textContent = 'Nothing to copy — no feedback selected.'; return; }
+    out.value = feedbackYaml(entries); out.hidden = false;
+  }
+  copyText(out.value, document.getElementById('feedback-status'), out);
+});
+
+/* ---------- compile answers ---------- */
+document.getElementById('compile-answers').addEventListener('click', function(){
+  if (unansweredQuestions().length) return;
+  var y = 'alignment_page: ' + ALIGNMENT_PAGE + '\n';
+  y += 'approval_status: ready-for-agent-review\n';
+  y += 'gate_answers:\n';
+  qBlocks.forEach(function(q){
+    var gate = q.closest('.gate');
+    var checked = q.querySelector('input[type=radio]:checked');
+    var v = checked.value;
+    var status = 'answered', answer = v, notes = '';
+    if (v === '__other'){
+      status = 'other';
+      answer = q.querySelector('.other-input').value.trim() || '(no alternative text given)';
+    } else if (v === '__clarify'){
+      status = 'needs-clarification';
+      answer = 'Need clarification';
+      notes = q.querySelector('.clarify-input').value.trim();
+    } else {
+      notes = q.querySelector('.notes-input').value.trim();
+    }
+    y += '  - section: ' + yq(gate.getAttribute('data-section')) + '\n';
+    y += '    gate_type: ' + yq(gate.getAttribute('data-gate-type')) + '\n';
+    y += '    status: ' + status + '\n';
+    y += '    answer: ' + yq(answer) + '\n';
+    if (notes) y += '    notes: ' + yq(notes) + '\n';
+    var tp = gate.getAttribute('data-target-path');
+    if (tp) y += '    target_path: ' + yq(tp) + '\n';
+  });
+  var fb = allFeedbackEntries();
+  if (fb.length){
+    y += 'section_feedback:\n';
+    fb.forEach(function(e){
+      y += '  - section: ' + yq(e.section) + '\n';
+      y += '    feedback: ' + e.feedback + '\n';
+      if (e.notes) y += '    notes: ' + yq(e.notes) + '\n';
+      y += '    requested_agent_action: ' + FB_ACTION[e.feedback] + '\n';
+    });
+  } else {
+    y += 'section_feedback: []\n';
+  }
+  var out = document.getElementById('answers-yaml');
+  out.value = y; out.hidden = false;
+  copyText(y, document.getElementById('answer-status'), out);
+});
+document.getElementById('copy-answers').addEventListener('click', function(){
+  var out = document.getElementById('answers-yaml');
+  if (!out.value){ document.getElementById('answer-status').textContent = 'Compile answers first.'; return; }
+  copyText(out.value, document.getElementById('answer-status'), out);
+});
+
+/* ---------- view-as-table toggles (charts default visible, tables hidden by JS) ---------- */
+Array.prototype.slice.call(document.querySelectorAll('.proto-box')).forEach(function(box){
+  var table = box.querySelector('.scrub-table');
+  var toggle = box.querySelector('.toggle-table');
+  if (!table || !toggle) return;
+  table.hidden = true;
+  toggle.addEventListener('click', function(){
+    table.hidden = !table.hidden;
+    toggle.textContent = table.hidden ? 'View as table' : 'Hide table';
+  });
+});
+
+/* ---------- timeline scrubber component ---------- */
+var SVG_NS = 'http://www.w3.org/2000/svg';
+function el(name, attrs, text){
+  var node = document.createElementNS(SVG_NS, name);
+  for (var k in attrs) node.setAttribute(k, attrs[k]);
+  if (text != null) node.textContent = text;
+  return node;
+}
+
+function initScrubber(rootId, datasets){
+  var root = document.getElementById(rootId);
+  var svg = root.querySelector('.scrub-svg');
+  var range = root.querySelector('input[type=range]');
+  var readout = root.querySelector('.readout');
+  var seqBtns = Array.prototype.slice.call(root.querySelectorAll('.seq-btn'));
+  var current = 0;
+
+  function ds(){ return datasets[current]; }
+
+  function draw(){
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var d = ds(), total = d.total;
+    var x0 = 16, x1 = 944, w = x1 - x0, y = 38, h = 40;
+    d.segments.forEach(function(seg, i){
+      var sx = x0 + (seg.start / total) * w;
+      var sw = Math.max(((seg.end - seg.start) / total) * w, 4);
+      var color = seg.risk ? cssVar('--chart-5') : chart(i);
+      svg.appendChild(el('rect', {x:sx, y:y, width:sw, height:h, rx:4, fill:color, 'fill-opacity':.78, stroke:color}));
+      var label = el('text', {x:sx + 2, y:(i % 2 ? y + h + 18 : y - 10), fill:cssVar('--text'), 'font-size':'12'}, seg.name);
+      svg.appendChild(label);
+    });
+    // axis ticks
+    [0, .25, .5, .75, 1].forEach(function(f){
+      var tx = x0 + f * w;
+      svg.appendChild(el('line', {x1:tx, y1:y + h, x2:tx, y2:y + h + 6, stroke:cssVar('--border')}));
+      svg.appendChild(el('text', {x:tx - 10, y:y + h + 34, fill:cssVar('--text-muted'), 'font-size':'11'}, Math.round(f * total) + 'ms'));
+    });
+    // playhead
+    var t = Number(range.value);
+    var px = x0 + Math.min(t / total, 1) * w;
+    svg.appendChild(el('line', {x1:px, y1:y - 18, x2:px, y2:y + h + 10, stroke:'#fff', 'stroke-width':2}));
+    svg.appendChild(el('circle', {cx:px, cy:y - 18, r:5, fill:'#fff'}));
+    updateReadout(t);
+  }
+
+  function updateReadout(t){
+    var d = ds();
+    var seg = null;
+    for (var i = 0; i < d.segments.length; i++){
+      if (t >= d.segments[i].start && t <= d.segments[i].end){ seg = d.segments[i]; break; }
+    }
+    if (!seg) seg = d.segments[d.segments.length - 1];
+    readout.innerHTML = '<span class="ph">' + d.name + ' · ' + seg.name + '</span> — t=' + t + 'ms<br>' + seg.desc + (seg.risk ? ' <strong style="color:var(--chart-5)">⚠ flash-risk apex</strong>' : '');
+  }
+
+  function setSeq(i){
+    current = i;
+    seqBtns.forEach(function(b, j){ b.classList.toggle('active', j === i); });
+    range.max = ds().total;
+    range.value = 0;
+    draw();
+  }
+
+  range.addEventListener('input', draw);
+  seqBtns.forEach(function(b, i){ b.addEventListener('click', function(){ setSeq(i); }); });
+  root.querySelector('.reset-btn').addEventListener('click', function(){ setSeq(0); });
+  setSeq(0);
+}
+
+initScrubber('scrub-bm', [
+  { name:'Open', total:690, segments:[
+    {name:'Tap commit', start:0, end:20, desc:'pushState; blueprint claims opacity 0; panel claims layoutId.'},
+    {name:'Layout spring morph', start:20, end:470, desc:'~450 ms framer layout spring — the chrome rectangle morphs table card → panel.'},
+    {name:'Phase flip', start:470, end:490, desc:'onLayoutAnimationComplete (one-shot ref) → builder-open.'},
+    {name:'Content stagger-in', start:490, end:690, desc:'Slot columns then shelf, ~200 ms, 40 ms stagger.'}
+  ]},
+  { name:'Close', total:400, segments:[
+    {name:'Content fade-out', start:0, end:10, desc:'Near-instant (0.01 s) so the morph reads.'},
+    {name:'layoutId handback', start:10, end:30, desc:'AnimatePresence onExitComplete → blueprint reclaims the id.'},
+    {name:'Morph-back', start:30, end:380, desc:'~350 ms morph back to the table card. Completion frame is the flash-risk apex.', risk:true},
+    {name:'Table restored', start:380, end:400, desc:'Phase → table; focus returns to the originating blueprint.'}
+  ]}
+]);
+
+initScrubber('scrub-cf', [
+  { name:'Single tap', total:698, segments:[
+    {name:'Tap commit', start:0, end:16, desc:'Optimistic commit (collectedCardIds + localStorage); fan card dims with "in deck ♦" badge, same frame.'},
+    {name:'Measure', start:16, end:48, desc:'Measure source rect; if slot off-screen, scrollIntoView({behavior:"instant"}) then re-measure next rAF.'},
+    {name:'Clone flight', start:48, end:448, desc:'Clone mounts in FlightLayer at source rect; imperative animate() x/y/scale, spring {stiffness: 260, damping: 26} (~400 ms).'},
+    {name:'Land + pulse', start:448, end:698, desc:'.then(): clone removed, slot ghost→filled, pulse scale [1, 1.08, 1] ~250 ms, counter ticks.'}
+  ]},
+  { name:'Add-all (13 cards)', total:1490, segments:[
+    {name:'Staggered launches', start:0, end:840, desc:'Filtered queue, 70 ms stagger per flight; 13-card worst case ≈ 0.84 s launch tail.'},
+    {name:'Last clone in flight', start:840, end:1240, desc:'Concurrent flights overlap; each follows the single-tap spring (~400 ms).'},
+    {name:'Last land + batch-complete', start:1240, end:1490, desc:'Final pulse; batch-complete via decrement ref. Single tap is a batch of 1.'}
+  ]}
+]);
+
+/* ---------- state machine explorer ---------- */
+(function(){
+  var svg = document.getElementById('machine-svg');
+  var readout = document.getElementById('machine-readout');
+  var box = document.getElementById('machine-box');
+
+  var nodes = [
+    {id:'table', label:'table', x:90, y:80, machine:'DeckFlowPhase'},
+    {id:'blueprint-morphing', label:'blueprint-morphing', x:330, y:80, machine:'DeckFlowPhase'},
+    {id:'builder-open', label:'builder-open', x:600, y:80, machine:'DeckFlowPhase'},
+    {id:'builder-dismissing', label:'builder-dismissing', x:600, y:180, machine:'DeckFlowPhase'},
+    {id:'hard-load', label:'hard load /deck/[slug]', x:850, y:40, machine:'entry', entry:true},
+    {id:'queued', label:'queued', x:90, y:300, machine:'FlightRecord'},
+    {id:'measuring', label:'measuring', x:270, y:300, machine:'FlightRecord'},
+    {id:'in-flight', label:'in-flight', x:450, y:300, machine:'FlightRecord'},
+    {id:'settling', label:'settling', x:630, y:300, machine:'FlightRecord'},
+    {id:'done', label:'done', x:810, y:300, machine:'FlightRecord'}
+  ];
+  var edges = [
+    {from:'table', to:'blueprint-morphing', label:'blueprint tap (only from table)'},
+    {from:'blueprint-morphing', to:'builder-open', label:'onLayoutAnimationComplete (one-shot)'},
+    {from:'blueprint-morphing', to:'builder-dismissing', label:'dismiss-during-morph → retarget from projected position'},
+    {from:'builder-open', to:'builder-dismissing', label:'back/dismiss; finishAllFlightsImmediately() + fast drawer teardown first'},
+    {from:'builder-dismissing', to:'table', label:'morph-back complete; focus restored'},
+    {from:'hard-load', to:'builder-open', label:'no origin — open morph skipped; close still morphs back'},
+    {from:'queued', to:'measuring', label:'dequeue (70 ms add-all stagger; immediate for single tap)'},
+    {from:'measuring', to:'in-flight', label:'source rect measured; clone mounts in FlightLayer'},
+    {from:'in-flight', to:'settling', label:'spring resolves (.then); clone removed; slot fills'},
+    {from:'settling', to:'done', label:'pulse complete; displayedCount ticks'},
+    {from:'queued', to:'done', label:'snap-to-end: finishAllFlightsImmediately()', snap:true},
+    {from:'measuring', to:'done', label:'snap-to-end: finishAllFlightsImmediately()', snap:true},
+    {from:'in-flight', to:'done', label:'snap-to-end: finishAllFlightsImmediately()', snap:true}
+  ];
+  function nodeById(id){ return nodes.filter(function(n){ return n.id === id; })[0]; }
+
+  var defs = el('defs', {});
+  var marker = el('marker', {id:'arrow', viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'});
+  marker.appendChild(el('path', {d:'M 0 0 L 10 5 L 0 10 z', fill:cssVar('--text-muted')}));
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  svg.appendChild(el('text', {x:16, y:24, fill:cssVar('--accent'), 'font-size':'13', 'font-weight':'700'}, 'DeckFlowPhase (DeckTableShell)'));
+  svg.appendChild(el('text', {x:16, y:252, fill:cssVar('--accent'), 'font-size':'13', 'font-weight':'700'}, 'FlightRecord (per card — Map of parallel records)'));
+
+  var edgeEls = [];
+  edges.forEach(function(e){
+    var a = nodeById(e.from), b = nodeById(e.to);
+    var midY = (a.y + b.y) / 2;
+    var path;
+    if (e.snap){
+      var dipY = a.y + 46 + (a.x % 60) / 4;
+      path = el('path', {d:'M ' + a.x + ' ' + (a.y + 18) + ' Q ' + ((a.x + b.x) / 2) + ' ' + (dipY + 30) + ' ' + b.x + ' ' + (b.y + 18), fill:'none', stroke:cssVar('--chart-5'), 'stroke-dasharray':'5 4', 'marker-end':'url(#arrow)', 'stroke-opacity':.55});
+    } else if (a.y === b.y){
+      path = el('path', {d:'M ' + (a.x + 78) + ' ' + a.y + ' L ' + (b.x - 78) + ' ' + b.y, fill:'none', stroke:cssVar('--text-muted'), 'marker-end':'url(#arrow)'});
+    } else {
+      path = el('path', {d:'M ' + a.x + ' ' + (a.y + (b.y > a.y ? 18 : -18)) + ' L ' + b.x + ' ' + (b.y - (b.y > a.y ? 18 : -18)), fill:'none', stroke:cssVar('--text-muted'), 'marker-end':'url(#arrow)'});
+    }
+    if (e.from === 'builder-dismissing' && e.to === 'table'){
+      path.setAttribute('d', 'M 522 180 Q 90 200 90 98');
+    }
+    svg.appendChild(path);
+    edgeEls.push({edge:e, elem:path});
+  });
+
+  var nodeEls = [];
+  nodes.forEach(function(n){
+    var g = el('g', {cursor:'pointer', tabindex:'0', role:'button', 'aria-label':'State ' + n.label});
+    var fill = n.entry ? '#10151c' : cssVar('--surface');
+    var stroke = n.machine === 'FlightRecord' ? cssVar('--chart-4') : (n.entry ? cssVar('--chart-3') : cssVar('--chart-1'));
+    var rect = el('rect', {x:n.x - 78, y:n.y - 18, width:156, height:36, rx:18, fill:fill, stroke:stroke, 'stroke-width':1.5, 'stroke-dasharray':n.entry ? '4 3' : 'none'});
+    g.appendChild(rect);
+    g.appendChild(el('text', {x:n.x, y:n.y + 5, fill:cssVar('--text'), 'font-size':'12', 'text-anchor':'middle'}, n.label));
+    svg.appendChild(g);
+    nodeEls.push({node:n, g:g, rect:rect, baseStroke:stroke});
+    function select(){
+      nodeEls.forEach(function(ne){ ne.rect.setAttribute('stroke-width', 1.5); ne.rect.setAttribute('stroke', ne.baseStroke); });
+      edgeEls.forEach(function(ee){ ee.elem.setAttribute('stroke-width', 1); ee.elem.setAttribute('stroke-opacity', ee.edge.snap ? .35 : .45); });
+      rect.setAttribute('stroke-width', 3);
+      rect.setAttribute('stroke', '#fff');
+      var outs = edges.filter(function(e){ return e.from === n.id; });
+      var ins = edges.filter(function(e){ return e.to === n.id; });
+      edgeEls.forEach(function(ee){
+        if (ee.edge.from === n.id || ee.edge.to === n.id){
+          ee.elem.setAttribute('stroke-width', 2.5);
+          ee.elem.setAttribute('stroke-opacity', 1);
+        }
+      });
+      var html = '<span class="ph">' + n.label + '</span> <span class="muted">(' + n.machine + ')</span>';
+      if (outs.length) html += '<br><strong>Out:</strong> ' + outs.map(function(e){ return '→ ' + e.to + ' — ' + e.label; }).join('<br>&nbsp;&nbsp;&nbsp;&nbsp;');
+      if (ins.length) html += '<br><strong>In:</strong> ' + ins.map(function(e){ return e.from + ' → — ' + e.label; }).join('<br>&nbsp;&nbsp;&nbsp;');
+      readout.innerHTML = html;
+    }
+    g.addEventListener('click', select);
+    g.addEventListener('keydown', function(ev){ if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); select(); } });
+  });
+
+  function reset(){
+    nodeEls.forEach(function(ne){ ne.rect.setAttribute('stroke-width', 1.5); ne.rect.setAttribute('stroke', ne.baseStroke); });
+    edgeEls.forEach(function(ee){ ee.elem.setAttribute('stroke-width', 1); ee.elem.setAttribute('stroke-opacity', ee.edge.snap ? .55 : 1); });
+    readout.textContent = 'Click a state node to inspect its transitions.';
+  }
+  box.querySelector('.reset-btn').addEventListener('click', reset);
+})();
+
+updateAnswerButton();
+})();
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
