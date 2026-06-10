@@ -1,265 +1,224 @@
-# Devtool Docs Audit - Documentation Freshness And Cleanup (2026-06-08)
+# Devtool Docs Audit - Repo Documentation Alignment (2026-06-10)
 
-Scope: current repository documentation for the `agentic-skills` shared skill library, with emphasis on whether live docs still match the current install model, pack model, AFPS routing, generated-data contract, and historical/archive boundaries.
+Scope: active repository documentation for `agentic-skills`, including root docs, `docs/`, active `research/` and `specs/`, active alignment pages, package/generated documentation, task tracking docs, and current skill contracts where they define public behavior.
 
-This audit treats tracked skill contracts, prompt logs, benchmark reports, generated data, and historical archives as documentation-like files, but it prioritizes surfaces a maintainer or adopter is likely to trust as current: root Markdown, `docs/`, active `research/`, active `specs/`, `PACK.md`, active `SKILL.md`, and generated showcase assets.
+This audit treats archived skill versions, dated task manifests, prompt logs, and conversation logs as historical evidence unless an active index or current document points readers to them as current guidance.
 
 ## Executive Verdict
 
-P0: none. The core skill catalog is structurally healthy: dependency, routing, version, benchmark-coverage, and alignment-stub checks passed.
+P0: none. The structural documentation gates passed: active alignment pages pass the repo audit, generated alignment bundles are exact, and the current `skillpacks` package walkthrough is structurally valid.
 
-P1: public setup docs still mix the old symlink/install model with the current managed-copy/init model. This is the highest-impact freshness issue because it changes how users reason about refresh, checkout moves, pinned installs, and stale skills.
+P1: public setup docs still mix the old symlink install model with the current managed-copy model. This affects how users understand refresh, drift, pinned installs, and checkout moves.
 
-P1: several live workflow docs still route to the retired executable `icp` command. Active skill contracts and newer canonical docs use `customer-discovery`.
+P1: several current docs and indexed alignment pages still route users to the retired `icp` executable instead of `customer-discovery`.
 
-P1: `docs/` mixes current reference material with old reports/proposals that should either be marked historical or moved under `docs/history/archive/`.
+P1: docs reference a root helper at `scripts/init-agentic-skills.sh`, but that file does not exist. The real helper is bundled under each `init-agentic-skills` skill mirror.
 
-P1: this workspace has ignored local residue under `packs/poketowork-kanban/` that makes `scripts/pack.sh list` expose a hibernated pack. Clean checkouts should not have this, but the local residue is misleading and should be removed.
+P1: the old npm strategy alignment page is still indexed as a normal product-design page even though the current walkthrough explicitly says it is historical. That page still contains stale `agentic-skills` / `@agentic-skills/*` npm examples.
 
-P2: the script reference claims to be an all-script index but omits root scripts and points at a missing root `scripts/init-agentic-skills.sh` path.
+P2: public npm docs still contain future-facing or release-candidate wording after `skillpacks@0.1.0` was published.
 
-P2: active packs `devtool` and `game` lack `PACK.md`, while most newer packs have one. They remain installable, but their pack-level metadata is weaker than the rest of the repo.
-
-P2: generated Skills Showcase proof data was stale at audit time; the validator regenerated proof-data source fingerprints. After rerunning the two generators, validation passed.
+P2: Skills Showcase inventory counts are stale across planning docs and alignment pages. Current generated data reports 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, and 41 packs; older docs still say 157 skills or 156 pack skills.
 
 ## Findings
 
-### P1 - Setup Docs Teach The Old Install Model
+### P1 - Setup Docs Mix Symlink And Managed-Copy Install Models
 
-Claim: the public docs still describe global and project-local installs as symlinks in several places, but the current implementation installs track-latest skills as managed directories with a `.agentic-skills-managed` marker. Pinned archive installs are the symlink case.
+Claim: current install code copies active skills into managed directories and reserves symlinks for pinned archive installs, but public docs still describe active installs as symlinks.
 
 Evidence:
 
-- `scripts/skill-links.sh` writes `.agentic-skills-managed`, records `source`, `source_version`, and `source_sha`, and copies active skill source files with `cp -R`.
-- `scripts/skill-links.sh` only uses `ln -sfn` through `sync_skill_link`, which is used for archive/pinned installs.
-- `global/{claude,codex}/init-agentic-skills/SKILL.md` correctly says active installs are repo-managed directories and pinned installs intentionally point at `archive/<version>`.
-- `docs/QUICKSTART.md:20` says `init.sh` symlinks global core skills.
-- `docs/troubleshooting.md:18` and `docs/troubleshooting.md:73` describe `./init.sh` as re-symlinking global skills.
-- `docs/scripts-reference.md:10` says `./init.sh --uninstall` removes global symlinks.
-- Active devtool research files still contain older `install.sh` and symlink claims, even though most include a terminology note.
+- `scripts/skill-links.sh:119-156` routes active installs through `sync_skill_install`, copies files with `cp -R`, skips `archive/`, and writes managed marker data.
+- `scripts/skill-links.sh:123-125` uses `sync_skill_link` only when the source is under `archive/`, which is the pinned case.
+- `init.sh:146-150` installs active global skills through `sync_skill_install`.
+- `docs/QUICKSTART.md:25` says `init.sh` symlinks global core skills.
+- `docs/troubleshooting.md:18` says `./init.sh` re-symlinks global skills.
+- `docs/troubleshooting.md:73` says to run `./init.sh` to re-symlink global skills.
+- `docs/scripts-reference.md:9-10` says `./init.sh` symlinks globals and `--uninstall` removes global symlinks.
+- Active research docs such as `research/devtool-user-map.md` and `research/devtool-integration-map.md` still describe the install system as symlink-based.
 
-Inference: a user can still install successfully, but the mental model is stale. Managed copies make stale detection and `refresh` meaningful; symlink wording implies checkout moves should immediately affect consumers, which is no longer true for track-latest installs.
-
-Decision impact: update live setup/troubleshooting docs to say "repo-managed skill roots" or "managed copies" by default, and reserve "symlink" for pinned archive installs. Treat older devtool research artifacts as historical unless reconciled.
+Impact: users may misunderstand drift detection and refresh behavior. Managed copies can go stale and need `refresh`; pinned symlinks are intentionally frozen. Symlink-first wording implies checkout moves immediately affect active installs, which is no longer true.
 
 Recommended cleanup:
 
-- Update `docs/QUICKSTART.md`, `docs/troubleshooting.md`, `docs/scripts-reference.md`, and any README wording that implies active installs are symlinks.
-- Reconcile or archive stale devtool research chain files before presenting them as examples.
-- Keep `docs/packs.md` as the canonical detailed install-drift model because it already describes managed copies correctly in the drift section.
+- Update `docs/QUICKSTART.md`, `docs/troubleshooting.md`, and `docs/scripts-reference.md` to say active installs are repo-managed copies/directories.
+- Reserve "symlink" for pinned archive installs and explicitly call out that pinned installs are frozen.
+- Add a brief note to old devtool research files that their install-model observations are historical, or archive them.
 
-### P1 - Global Init Helper Path Is Documented As A Missing Root Script
+### P1 - Documented Root Init Helper Path Is Missing
 
-Claim: live docs refer to `scripts/init-agentic-skills.sh`, but no such root script exists.
+Claim: multiple docs recommend `scripts/init-agentic-skills.sh`, but the repository has no root script at that path.
 
 Evidence:
 
-- `test -f scripts/init-agentic-skills.sh` returned missing.
-- Actual helper scripts live at:
+- `test -f scripts/init-agentic-skills.sh` exits `1`.
+- Existing helpers are:
   - `global/claude/init-agentic-skills/scripts/init-agentic-skills.sh`
   - `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh`
 - `docs/scripts-reference.md:55-59` lists `scripts/init-agentic-skills.sh doctor|hook|set-pref|show-prefs`.
-- `docs/packs.md:243-245` and `docs/operating-modes.md:45` also refer to `scripts/init-agentic-skills.sh`.
-- The user-facing skill commands `/init-agentic-skills` and `$init-agentic-skills` delegate to the bundled helper correctly.
+- `docs/troubleshooting.md:72` says to run `scripts/init-agentic-skills.sh doctor`.
+- `docs/packs.md:266-268` recommends `scripts/init-agentic-skills.sh hook`, `set-pref`, `show-prefs`, and `doctor`.
+- `docs/operating-modes.md:45` says drift is surfaced by `scripts/init-agentic-skills.sh doctor`.
+- The active `init-agentic-skills` skill contracts delegate to `scripts/init-agentic-skills.sh`, so the mismatch exists in skill docs too unless the launcher resolves the bundled script at runtime.
 
-Inference: the skill works, but the CLI-external path in public docs is broken. This is a direct copy-paste failure.
-
-Decision impact: choose one of two fixes:
-
-1. Add a root wrapper `scripts/init-agentic-skills.sh` that delegates to the managed helper, then keep current docs.
-2. Update docs to prefer `/init-agentic-skills` / `$init-agentic-skills` and, where a direct path is needed, name the bundled helper path explicitly.
-
-The simpler user experience is the root wrapper, but that is implementation work, not part of this audit.
-
-### P1 - Live AFPS Docs Still Reference Retired `icp` Command
-
-Claim: active skill contracts and canonical docs have moved the executable route to `customer-discovery`, but multiple live docs still present `icp` as the route.
-
-Evidence:
-
-- Active source roots exist at `packs/business-discovery/{claude,codex}/customer-discovery`; no active `packs/business-discovery/*/icp` roots exist.
-- `packs/business-discovery/PACK.md` and `docs/skills-reference.md` correctly list `customer-discovery`.
-- `docs/skill-next-step-contracts.md` correctly defines the default AFPS route starting with `customer-discovery`.
-- `README.md:191` still lists `business-discovery: icp, enterprise-icp, ...`.
-- `docs/pack-workflow-matrix.md:45` still says `Default business-product route: icp -> competitive-analysis -> ...`.
-- `docs/codex-workflow.md:285` and `docs/codex-workflow.md:311` still show `$icp` in the workflow sequence.
-- `docs/skill-routing-map.html` still uses `icp` as a graph node and route target.
-- `docs/workflow-refactor-proposal.html` contains many `/icp` references and appears to be an old proposal rather than current reference documentation.
-
-Inference: the source contracts are healthier than the live docs. The stale references are likely remnants after the customer-discovery rename cleanup.
-
-Decision impact: update the current workflow docs, and archive old proposal/map files if they are not actively maintained.
+Impact: copy-paste commands in current docs fail from the repo root.
 
 Recommended cleanup:
 
-- Update `README.md`, `docs/pack-workflow-matrix.md`, and `docs/codex-workflow.md` from `icp` command routes to `customer-discovery`.
-- Regenerate or hand-update `docs/skill-routing-map.html`; if it is no longer maintained, move it to `docs/history/archive/`.
-- Move `docs/workflow-refactor-proposal.html` to `docs/history/archive/` unless it is explicitly revalidated as current.
-- Preserve `enterprise-icp` and `research/icp.md` references when they name the active enterprise skill or the canonical customer-discovery output artifact.
+- Choose one canonical path strategy:
+  - add a root wrapper `scripts/init-agentic-skills.sh`, or
+  - update docs to prefer `/init-agentic-skills` and `$init-agentic-skills`, with the bundled helper path only for maintainers.
+- If the root wrapper is added, keep `docs/scripts-reference.md` as-is after updating install-model wording.
 
-### P1 - Historical Reports Sit Beside Current Reference Docs
+### P1 - Retired `icp` Executable Still Appears In Current Guidance
 
-Claim: the top-level `docs/` directory mixes current reference docs with old reports, validation logs, and proposals.
+Claim: active source contracts and newer routing docs use `customer-discovery`, but several current docs and indexed alignment pages still tell users to run `icp`.
 
 Evidence:
 
-- `docs/` root has 23 files.
-- Current-looking reference docs include `QUICKSTART.md`, `packs.md`, `skills-reference.md`, `operating-modes.md`, `troubleshooting.md`, `skill-next-step-contracts.md`, `orchestrator-convention.md`, `alignment-page-convention.md`, and `quality-gate-contract.md`.
-- Historical/report-like files in the same root include:
-  - `docs/kanban-test-results.md`: dated 2026-03-27, references production Neon/Poketo board verification for hibernated kanban workflows.
-  - `docs/workflow-refactor-proposal.html`: old AFPS proposal with stale `/icp` routes.
-  - `docs/skill-routing-map.html`: current-looking route visualization, but stale for `customer-discovery`.
-- `docs/phases/` stores early phase records, while `tasks/phases/` stores later phase archives, including another `phase-9.md`.
-- Root files `design-system-interview.md`, `ui-consolidate-skills-showcase-interview.md`, and `sync.md` are completed session artifacts, not durable entry points.
-- `specs/drift-report.md` is active under `specs/`, but the latest top section is from 2026-05-11 and predates later hibernation/routing work.
+- Active source roots exist at `packs/business-discovery/{claude,codex}/customer-discovery`; there are no active `packs/business-discovery/*/icp` roots.
+- `docs/skill-next-step-contracts.md:75` routes concept-validation proceed states to `customer-discovery`.
+- `README.md:236` lists `business-discovery: icp, enterprise-icp, ...`.
+- `docs/codex-workflow.md:285` and `docs/codex-workflow.md:311` include `$icp` in the product workflow sequence.
+- `docs/pack-workflow-matrix.md:47` says the default business-product route starts with `icp`.
+- `alignment/canonical-workflow-report.html:320` includes `$icp`; `alignment/canonical-workflow-report.html:487` says `business-discovery: icp -> competitive-analysis`. This page is indexed in `alignment/index.html`.
+- `research/skills-showcase/idea-brief.md:117` and `research/skills-showcase/idea-brief.md:122` recommend `/icp`.
+- `specs/skills-showcase/user-flow-deck-creation.md:14` and `:322` carry `next_skill: /icp` and `/icp -> positioning`.
+- `alignment/user-flow-map-deck-creation.html:142` and `:619` repeat the same `/icp` route, and that page is indexed as a current confirmed flow.
 
-Inference: the repo already has an archive convention, but not every completed report has been moved there. The risk is that maintainers treat historical outputs as current contracts.
-
-Decision impact: create a clear doc taxonomy and move dated/completed reports out of active reference paths.
+Impact: users following current workflow docs can invoke a retired command or build new specs against a stale route.
 
 Recommended cleanup:
 
-- Keep current references in `docs/` root.
-- Move old reports/proposals to `docs/history/archive/YYYY-MM-DD/HHMMSS/`.
-- Move root session artifacts into `docs/history/archive/` or a narrower `docs/history/session-artifacts/` location.
-- Regenerate `specs/drift-report.md` or move the old report under history and create a fresh report.
+- Replace executable-route examples with `/customer-discovery` or `$customer-discovery`.
+- Preserve `enterprise-icp` and `research/icp.md` only where they name the active enterprise skill or canonical evidence artifact.
+- Update indexed alignment pages or mark old pages as historical if the route should not be treated as current.
 
-### P1 - Local Hibernated Kanban Residue Misleads Pack Listing
+### P1 - Old npm Strategy Page Is Still Presented Like Current Guidance
 
-Claim: this workspace has ignored local residue under `packs/poketowork-kanban/` that makes pack discovery look stale even though tracked docs say the pack is hibernated.
+Claim: `alignment/skillpacks-npm-package-walkthrough.html` is the current package reference, but `alignment/idea-scope-brief-npm-distribution.html` remains indexed as a normal product-design page and still contains stale package names and commands.
 
 Evidence:
 
-- `scripts/pack.sh install poketowork-kanban` correctly failed with the hibernation error and pointed to `archive/hibernated-packs/2026-06-poketowork-rebuild/poketowork-kanban`.
-- `scripts/pack.sh which poketo-kanban` reported `poketo-kanban` as provided by pack `poketowork-kanban`.
-- Because ignored local files existed under `packs/poketowork-kanban/`, `scripts/pack.sh install poketo-kanban` found an apparent active skill source and installed it. That accidental install was removed during the audit with `scripts/pack.sh remove poketo-kanban`; `.agents/project.json` returned to its prior diff-free state.
-- `git ls-files packs/poketowork-kanban` returned no tracked files.
-- `git status --short --ignored packs/poketowork-kanban` showed the path as ignored.
-- `git clean -ndX packs/poketowork-kanban` reported `Would remove packs/poketowork-kanban/`.
+- `alignment/skillpacks-npm-package-walkthrough.html:220-226` says it is the current reference for the published `skillpacks` npm package and that the older npm distribution alignment page is historical strategy context.
+- `alignment/index.html:37-40` indexes the current walkthrough, but `alignment/index.html:57-60` also indexes `Multi-Surface npm Distribution Strategy` without a historical label.
+- `alignment/idea-scope-brief-npm-distribution.html:68-71` has status `amended review`; the amendment only mentions the Game AFPS deck model, not that the page is superseded for package usage.
+- `alignment/idea-scope-brief-npm-distribution.html:230-251` still uses `npx agentic-skills`, `npm install -g agentic-skills`, and `npx agentic-skills` delegation examples.
+- `alignment/idea-scope-brief-npm-distribution.html:585-618` still uses `npx agentic-skills install-deck ...`, `@agentic-skills/*`, and `agentic-skills install --deck ...`.
+- `docs/skillpacks-npm-distribution.md:5-13` still names the old page as the source alignment page while approving `skillpacks` as the public package name.
 
-Inference: this is not a tracked-doc contradiction; it is local ignored residue that changes command behavior in this workspace. It also exposes a robustness gap in pack discovery: an ignored directory without `PACK.md` can still affect `list` and skill-name install resolution.
-
-Decision impact: clean the local ignored directory and consider hardening `pack.sh` to ignore pack dirs without `PACK.md` or to apply the hibernated-skill guard before active-source lookup.
+Impact: two indexed pages make conflicting currentness claims. A reader can land on the old page and copy commands for the wrong package name.
 
 Recommended cleanup:
 
-- Remove ignored local residue: `git clean -fdX packs/poketowork-kanban` after explicit approval.
-- Add a pack discovery guard so hibernated skill names cannot be installed by stale local residue.
+- Add a prominent historical/superseded warning to the old page and update its index card text.
+- Or archive the old page and leave only the walkthrough as the active usage reference.
+- Keep `docs/skillpacks-npm-distribution.md` as the implementation record, but make clear which parts are historical decision evidence versus current usage.
 
-### P2 - Script Reference Is Not A Complete Script Index
+### P2 - npm Publication Docs Still Use Future/Release-Candidate Wording
 
-Claim: `docs/scripts-reference.md` calls itself a compact command index for all scripts, but it omits several root scripts and includes the missing `scripts/init-agentic-skills.sh` path.
-
-Evidence:
-
-- Root `scripts/` currently includes files such as `detect-secrets.sh`, `save-conversation.sh`, `ship-quality-gate.sh`, `skill-links.sh`, `skill-next-step-routing.sh`, `alignment-chart-snippets.js`, and `generate-skills-showcase-*`.
-- `docs/scripts-reference.md` covers common install, pack, hygiene, testing, showcase, and alignment commands.
-- It does not include every root script and does not label internal helper scripts separately.
-
-Inference: the page is useful, but its title and missing direct paths create avoidable confusion.
-
-Decision impact: either rename it to "Common Scripts Reference" or expand it into a true all-script table with `public`, `maintenance`, `internal helper`, and `generated asset` categories.
-
-### P2 - Active Packs `devtool` And `game` Lack `PACK.md`
-
-Claim: most active packs now carry `PACK.md`, but `devtool` and `game` do not.
+Claim: some public docs still read as pre-publication even though `skillpacks@0.1.0` is now published.
 
 Evidence:
 
-- `for d in packs/*; do [ -f "$d/PACK.md" ] || echo "$d"; done` reported `packs/devtool`, `packs/game`, and local ignored `packs/poketowork-kanban`.
-- `devtool` and `game` both contain active mirrored `SKILL.md` files.
-- `README.md`, `docs/packs.md`, and `docs/skills-reference.md` document both packs.
+- `docs/skillpacks-npm-distribution.md:21-26` says `skillpacks@0.1.0` is published publicly and `latest` points to `0.1.0`.
+- `README.md:45` says "After the first public package is published" before showing current npm commands.
+- `README.md:105` says npm supports equivalent installs "after publication".
+- `docs/QUICKSTART.md:17` says source checkout is for use before the public package is published.
+- `docs/QUICKSTART.md:29`, `:50`, and `:83` still frame npm usage as "after publication".
+- `docs/decks.md:18` says "After the first public npm package is published".
+- `docs/decks.md:29` says "In the current release candidate".
+- `docs/skillpacks-npm-distribution.md:372` still calls the shell-backed deck path "this release candidate".
 
-Inference: this is not a command failure, but it leaves two major active packs without pack-local documentation.
+Impact: users can read the npm package as not yet public or as still in a release-candidate phase, while current docs and verification say it is published.
 
-Decision impact: add `PACK.md` for `devtool` and `game`, using `docs/skills-reference.md` as the source of truth.
+Recommended cleanup:
 
-### P2 - Skills Showcase Generated Proof Data Was Stale
+- Update public docs to "With the published npm package" or "For npm users".
+- Replace "release candidate" with "current `skillpacks@0.1.0` release" when describing `install-deck` still requiring `bash` and `jq`.
 
-Claim: the Skills Showcase generated proof data was stale at audit time, then refreshed successfully.
+### P2 - Skills Showcase Counts Are Stale Or Ambiguous
+
+Claim: planning and alignment docs use old display-card counts, while generated data has moved to a larger mirrored inventory.
 
 Evidence:
 
-- The first `scripts/validate-skills-showcase-data.sh` run regenerated assets and then failed with `Skills Showcase generated data is stale`.
-- The only tracked generated diffs were one-line `sourceFingerprint` updates in:
-  - `docs/skills-showcase/assets/github-proof-data.js`
-  - `apps/skills-showcase/public/assets/github-proof-data.js`
-- After running `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh` passed with `Skills Showcase generated data is fresh`.
-- `pnpm --dir tests bench:coverage` passed with `Benchmark coverage matrix valid (185 skills)`.
+- `apps/skills-showcase/public/assets/skills-data.js:5-7` reports `sourceCount: 545`, `skillCount: 373`, and `packCount: 41`.
+- Parsing the generated data yields 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 41 packs, 188 Claude entries, and 185 Codex entries.
+- `tasks/pack-card-hierarchy.md:5-7` says 157 unique skills across 38 packs and 157 display cards.
+- `tasks/pack-card-hierarchy.md:232-236` says 157 skills and 38 packs are accounted for.
+- `alignment/skillmap.html:58`, `:82`, and `:119` say 41 packs, 156 pack skills, and 11 global skills.
+- `apps/skills-showcase/docs/deck-builder-ux.md:103` says the SEO detail surface is for all 157 skills.
+- `research/skills-showcase/idea-brief.md:44`, `research/skills-showcase/idea-brief-interview.md:9`, and `alignment/idea-scope-brief-skills-showcase.html:234-238` repeat the 157-skills claim.
 
-Inference: generated catalog content appears structurally healthy. The final audit boundary includes the regenerated proof-data fingerprint updates.
+Impact: implementers cannot tell whether counts refer to mirrored platform entries, unique skill names, display cards, pack skills, or global skills. This is likely to break deck-builder copy, SEO claims, and QA expectations.
 
-Decision impact: commit the refreshed generated proof data with this audit boundary if the audit artifacts are shipped.
+Recommended cleanup:
+
+- Define canonical count terms: platform entries, unique mirrored skills, unique pack skills, unique global skills, active packs, display cards.
+- Regenerate or amend Skills Showcase planning docs to use the selected count.
+- If 157 was an earlier prototype-card scope, label it historical.
+
+### P3 - Historical Docs Are Preserved But Not Always Labeled As Historical
+
+Claim: the repo intentionally keeps historical alignment and task artifacts, but some are discoverable through active indexes without enough status context.
+
+Evidence:
+
+- `alignment/index.html` still indexes older workflow analysis pages such as `canonical-workflow-report.html` and the old npm strategy page.
+- `docs/workflow-refactor-proposal.html` remains in `docs/` root and contains old `/icp` examples.
+- `docs/skill-routing-map.html` remains a current-looking HTML doc in `docs/`, though its maintenance status is unclear.
+
+Impact: preserving history is fine; presenting history as current guidance creates false inconsistencies.
+
+Recommended cleanup:
+
+- Keep historical content intact, but label it as historical in the page header and index card.
+- Move old proposals and non-current maps under `docs/history/archive/` when they are no longer maintained.
 
 ## Current / Needs Update / Archive Matrix
 
 | Surface | Classification | Action |
 | --- | --- | --- |
-| `README.md` | Needs update | Fix `icp` route and active install wording. |
-| `docs/QUICKSTART.md` | Needs update | Replace symlink wording with managed-copy wording. |
-| `docs/packs.md` | Mostly current | Fix missing root `scripts/init-agentic-skills.sh` references; keep drift model. |
-| `docs/skills-reference.md` | Mostly current | Keep; use as source for `devtool` and `game` `PACK.md`. |
-| `docs/canonical-workflow-report.md` | Current | Keep as canonical AFPS route reference. |
-| `docs/skill-next-step-contracts.md` | Current | Keep as routing contract reference. |
-| `docs/codex-workflow.md` | Needs update | Replace `$icp` route examples with `$customer-discovery`. |
+| `README.md` | Needs update | Replace retired `icp` in business-discovery list; refresh npm publication wording. |
+| `docs/QUICKSTART.md` | Needs update | Replace symlink and future-publication wording. |
+| `docs/troubleshooting.md` | Needs update | Replace re-symlink wording and fix missing init helper path. |
+| `docs/scripts-reference.md` | Needs update | Fix managed-copy wording and missing root init helper path, or add the wrapper. |
+| `docs/packs.md` | Mostly current | Fix root init helper path references. |
+| `docs/operating-modes.md` | Needs update | Fix root init helper path reference. |
+| `docs/decks.md` | Needs update | Replace future npm and release-candidate wording. |
+| `docs/codex-workflow.md` | Needs update | Replace `$icp` examples with `$customer-discovery`. |
 | `docs/pack-workflow-matrix.md` | Needs update | Replace default `icp` route with `customer-discovery`. |
-| `docs/skill-routing-map.html` | Needs update or archive | Regenerate with `customer-discovery`, or archive if not maintained. |
-| `docs/workflow-refactor-proposal.html` | Archive candidate | Move under `docs/history/archive/` as old proposal. |
-| `docs/kanban-test-results.md` | Archive candidate | Move under history; hibernated workflow proof is no longer active reference. |
-| `docs/phases/*` | Archive/rationalize candidate | Merge with or move under phase-history convention; avoid overlap with `tasks/phases/`. |
-| `docs/scripts-reference.md` | Needs update | Fix root init path and either cover all scripts or rename scope. |
-| `docs/troubleshooting.md` | Needs update | Fix managed-copy wording and global drift helper path. |
-| `docs/test-harness.md` | Needs update | Prefer `pnpm --dir tests ...` commands in copy-paste examples. |
-| `research/devtool-*.md` | Historical or needs reconciliation | Several contain dated `install.sh` notes and stale symlink facts. |
-| `research/devtool-docs-audit-2026-06-04.md` | Archive candidate | Older dated audit can move under `docs/history/archive/`. |
-| `specs/drift-report.md` | Needs regenerate or archive | Latest active report predates later hibernation and routing cleanup. |
-| Root interview/session files | Archive candidate | Move `design-system-interview.md`, `ui-consolidate-skills-showcase-interview.md`, and `sync.md` out of repo root. |
-| `packs/devtool/PACK.md` | Missing | Add pack-level docs. |
-| `packs/game/PACK.md` | Missing | Add pack-level docs. |
-| Ignored `packs/poketowork-kanban/` | Local cleanup | Remove ignored residue after approval. |
-
-## Recommended Cleanup Order
-
-1. Fix live copy-paste blockers:
-   - `scripts/init-agentic-skills.sh` path issue.
-   - managed-copy vs symlink wording.
-   - `$icp` / `/icp` route examples in active docs.
-2. Commit the regenerated Skills Showcase proof-data updates produced during this audit.
-3. Archive or relabel historical docs in active-looking locations:
-   - `docs/workflow-refactor-proposal.html`
-   - `docs/kanban-test-results.md`
-   - `docs/phases/*`
-   - root session artifacts
-   - older dated `research/devtool-docs-audit-2026-06-04.md`
-4. Add missing `PACK.md` files for `devtool` and `game`.
-5. Regenerate `specs/drift-report.md` with current repo evidence or move the old report to history.
-6. Harden `scripts/pack.sh` against ignored hibernated-pack residue.
+| `docs/skill-next-step-contracts.md` | Current | Keep as routing source of truth. |
+| `docs/skillpacks-npm-distribution.md` | Mostly current | Keep publication evidence; clarify source page is historical and replace release-candidate wording. |
+| `alignment/skillpacks-npm-package-walkthrough.html` | Current | Keep as active usage reference. |
+| `alignment/idea-scope-brief-npm-distribution.html` | Historical or needs amendment | Add superseded warning/index text or archive. |
+| `alignment/canonical-workflow-report.html` | Needs update or historical label | Contains stale `icp` route but remains indexed. |
+| `alignment/user-flow-map-deck-creation.html` | Needs update | Replace `/icp` handoff with `/customer-discovery`. |
+| `specs/skills-showcase/*` | Needs update | Replace `/icp` route handoffs and stale count references. |
+| `tasks/pack-card-hierarchy.md` | Historical or needs update | Reconcile 157/38 counts against generated data. |
+| `alignment/skillmap.html` | Needs regenerate or source clarification | Reconcile 156 pack skills against generated 179 unique pack skills. |
+| Old research chain docs | Historical or needs note | Add historical status for symlink-era integration observations. |
 
 ## Verification
 
 | Check | Result |
 | --- | --- |
-| `git ls-files '*.md' '*.html' '*.mdx' '*.rst' '*.txt' \| wc -l` | 2,972 tracked documentation-like files. |
-| `git ls-files '*.md' '*.html' '*.mdx' '*.rst' '*.txt' \| awk ...` | Largest groups: `packs` 1902, `prompts` 239, `benchmark` 170, `archive` 166, `conversations` 143, `global` 131, `docs` 59, `tasks` 56, `alignment` 36, `specs` 28, `research` 10. |
-| `scripts/skill-deps.sh --broken` | Passed: no broken references found. |
-| `scripts/skill-pack-routing-audit.sh` | Passed: no cross-pack recommendation gaps found. |
-| `scripts/skill-versions.sh --missing` | Passed: all 405 skills have a version field. |
-| `node scripts/upgrade-alignment-page.mjs --dry-run` | Passed: `Updated: 0`, `Bundled files written: 0`. |
-| `pnpm --dir tests bench:coverage` | Passed: benchmark coverage matrix valid for 185 skills. |
-| First `scripts/validate-skills-showcase-data.sh` run | Failed after regenerating stale proof-data fingerprints. |
-| Final `scripts/validate-skills-showcase-data.sh` run after the two generator commands | Passed: `Skills Showcase generated data is fresh`. |
-| `scripts/pack.sh install poketowork-kanban` | Correctly blocked as hibernated. |
-| `scripts/pack.sh install poketo-kanban` | Unexpectedly succeeded due local ignored residue; removed with `scripts/pack.sh remove poketo-kanban`. |
-| `git clean -ndX packs/poketowork-kanban` | Dry-run reported it would remove the ignored local residue. |
+| `node scripts/audit-alignment-pages.mjs` | Passed before new page creation: 44 active pages, exact TTS include, page metadata, viewport, embed prohibition, and index integrity. |
+| `node scripts/upgrade-alignment-page.mjs --check` | Passed: `Updated: 0`, `Bundled files written: 0`, `Output paths: 284 bundles, exact`, `Generated bundles: 284 ownable, exact`. |
+| `test -f scripts/init-agentic-skills.sh` | Failed with exit `1`, confirming missing root helper. |
+| `ls global/{claude,codex}/init-agentic-skills/scripts` | Confirmed both bundled helper scripts exist. |
+| Generated Skills Showcase data parse | Confirmed 373 entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 41 packs. |
+| Targeted `rg` scans | Found active drift for symlink wording, missing helper path, retired `icp` routes, future npm wording, and stale counts. |
 
-Full test suite was not run. The audit produced documentation/report artifacts and used targeted repo integrity checks instead.
+Final validation for the new audit artifacts is recorded in `tasks/todo.md` after the report and alignment page are written.
 
 ## Source Coverage Gaps
 
-- No web research was performed; this was a repo-internal documentation audit.
-- The audit did not read every one of the 2,972 documentation-like files. It sampled and scanned by doc surface, command names, route names, installer terms, archive boundaries, and validation scripts.
-- It did not mutate cleanup candidates beyond writing this report, the prompt history, task tracking, the alignment page, and regenerated proof-data assets required by validation.
+- No web research was performed; this is a repo-internal documentation alignment audit.
+- I did not read every historical prompt, conversation, archived skill version, or task manifest. Those are treated as historical unless active docs point to them.
+- This audit reports inconsistencies and recommended cleanup; it does not mutate the underlying public docs beyond replacing the audit report and adding the review page.
 
 ## Recommended Next Skill
 
-Recommended next skill: `$exec` to implement the first cleanup slice after approving the cleanup order above.
+Recommended next skill: `$exec` with a scoped remediation phase that fixes the P1 public-doc issues first: managed-copy wording, root init helper path, retired `icp` routes, and npm strategy current/historical labeling.

@@ -1,3 +1,40 @@
+## Current Implementation - Repo Documentation Alignment Audit
+
+### Goal
+
+Audit the repository's documentation surfaces for inconsistencies across workflow rules, skill packaging, npm usage, deck/pack naming, alignment-page conventions, generated artifacts, and project tracking docs.
+
+### Plan
+
+1. Track the audit request.
+   - [x] Capture the visible `devtool-docs-audit` invocation in `prompts/devtool-docs-audit/`.
+   - [x] Add active roadmap and todo entries before substantive audit work.
+2. Inventory documentation surfaces.
+   - [x] Enumerate Markdown, HTML alignment, package docs, skill docs, prompt/task docs, and generated docs that should be checked.
+   - [x] Identify canonical sources versus generated or historical artifacts to avoid false positives.
+3. Cross-check likely drift vectors.
+   - [x] Compare CLI command names and npm/package usage across root docs, package docs, skill docs, and alignment pages.
+   - [x] Compare deck/pack names and counts across docs, manifests, generated maps, and package tests.
+   - [x] Compare alignment-page convention requirements across canonical docs, generated bundles, active HTML pages, and audit scripts.
+   - [x] Compare workflow/git/shipping instructions across `AGENTS.md`, `CLAUDE.md`, and repo docs.
+4. Produce audit artifacts.
+   - [x] Write findings-first documentation audit output.
+   - [x] Build a `review` alignment page with evidence matrix, assumptions, gaps, and approval/feedback controls.
+   - [x] Update the central alignment index and task review notes.
+5. Verify and ship intended work.
+   - [x] Run relevant documentation and alignment validators.
+   - [x] Run whitespace checks and review the diff.
+   - [ ] Commit and push intended audit artifacts without staging unrelated pre-existing work.
+
+### Audit Summary
+
+- Found no P0 documentation failure.
+- P1 issues: active install docs still use symlink wording; `scripts/init-agentic-skills.sh` is documented but missing at the root; retired `icp` route references remain in current docs and indexed alignment pages; the older npm strategy page remains indexed like current guidance despite stale package examples.
+- P2 issues: npm docs still include future/release-candidate wording after `skillpacks@0.1.0` publication; Skills Showcase count docs conflict with current generated data.
+- Deliverables: `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-documentation-alignment.html`, and an updated `alignment/index.html` entry.
+
+---
+
 ## Current Implementation - Skillpacks npm Package Walkthrough Alignment Page
 
 ### Goal

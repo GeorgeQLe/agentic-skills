@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Documentation alignment audit
+
+- Ran a repo-internal documentation consistency audit using `devtool-docs-audit` and captured the visible prompt under `prompts/devtool-docs-audit/`.
+- Replaced `research/devtool-docs-audit.md` with the current findings-first audit and added `alignment/devtool-docs-audit-documentation-alignment.html` as a QA/meta review page.
+- Updated `alignment/index.html` to 45 active pages and added the new audit page under QA & Meta-Skill Improvement.
+- Confirmed no P0 issue. P1 findings: setup docs still use active-install symlink wording, `scripts/init-agentic-skills.sh` is documented but missing at the root, retired `icp` routes remain in current docs/indexed pages, and the old npm strategy page is still indexed as current-looking despite stale package examples. P2 findings: npm docs retain future/release-candidate wording, and Skills Showcase counts conflict with generated data.
+- Validation passed: alignment audit, alignment bundle check, focused layer1 alignment-page test, targeted scans, and `git diff --check`.
+
 ## 2026-06-10 — Drawer close visible top-left collapse verification
 
 - Verified the drawer-close visible top-left collapse behavior already exists in `apps/skills-showcase/src/components/PackOpener.tsx`; the close measurement uses the scrollable drawer viewport and picks the visible top-left `targetIndex` rather than always collapsing to card 0.

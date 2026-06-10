@@ -1,3 +1,44 @@
+## Current Implementation - Repo Documentation Alignment Audit
+
+### Goal
+
+Audit all active repository documentation for alignment and report inconsistencies, evidence, confidence, and recommended remediation.
+
+### Execution Profile
+
+- Parallel mode: parallel reads for inventory and evidence gathering; serial writes for audit artifacts and verification.
+- Rationale: the audit touches many docs, but the final report, alignment page, index, and task notes should be updated as one coherent review artifact.
+
+### Steps
+
+- [x] Capture the visible `devtool-docs-audit` invocation in prompt history.
+- [x] Add active task tracking to `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inventory active documentation and distinguish canonical, generated, package-included, alignment, historical, and working artifacts.
+- [x] Cross-check consistency across commands, paths, terminology, versions, deck/pack counts, workflow rules, alignment conventions, and generated outputs.
+- [x] Write the audit report and review alignment page, then update `alignment/index.html`.
+- [x] Run validators, whitespace checks, and targeted scans.
+- [ ] Record review notes, commit, and push intended audit artifacts only.
+
+### Acceptance Criteria
+
+- [x] Findings are backed by file/path evidence and distinguish confirmed issues from assumptions or coverage gaps.
+- [x] The audit covers root docs, package docs, skill docs, alignment pages, task docs, and generated docs where relevant.
+- [x] The alignment page contains the full audit content, evidence matrix, confidence register, source gaps, and review gates.
+- [x] Verification includes the active alignment-page audit and targeted consistency scans.
+
+### Review Notes
+
+- Wrote the current findings-first audit to `research/devtool-docs-audit.md`.
+- Added `alignment/devtool-docs-audit-documentation-alignment.html` with required viewport metadata, QA/meta category, document visual tier, evidence matrix, confidence register, source gaps, review gates, compile controls, and TTS include.
+- Updated `alignment/index.html` from 44 to 45 active pages and QA & Meta-Skill Improvement from 6 to 7 entries.
+- Confirmed P1 inconsistencies: public setup docs still use symlink/re-symlink wording for active installs; `scripts/init-agentic-skills.sh` is documented but missing at the repo root; active docs and indexed alignment pages still route to retired `icp`; the old npm strategy page remains indexed as current-looking despite stale `agentic-skills` package examples.
+- Confirmed P2 inconsistencies: some npm docs still use future/release-candidate wording after `skillpacks@0.1.0` publication; Skills Showcase counts still cite 157 or 156 while generated data reports 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 global unique skills, and 41 packs.
+- Validation passed: `node scripts/audit-alignment-pages.mjs` reported 45 active pages with exact TTS, metadata, viewport, embed, and index integrity; `node scripts/upgrade-alignment-page.mjs --check` reported generated bundles exact; `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts` passed 14/14 tests; `git diff --check` passed.
+- Targeted scans reconfirmed the reported drift rather than silently clearing it: retired `icp` routes remain in current docs/pages, and generated Skills Showcase data reports 373 entries / 190 unique mirrored skills / 179 unique pack skills / 11 unique global skills / 41 packs.
+- Optional browser-open check returned `blocked` from `node scripts/open-html-page.mjs alignment/devtool-docs-audit-documentation-alignment.html --browser auto`; file validation remained clean.
+
+---
+
 ## Current Implementation - Skillpacks npm Package Walkthrough Alignment Page
 
 ### Goal

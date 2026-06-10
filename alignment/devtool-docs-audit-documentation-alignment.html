@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repository Documentation Alignment Audit</title>
+<style>
+:root {
+  --bg:#0d1117;
+  --surface:#161b22;
+  --surface-2:#0f1624;
+  --border:#30363d;
+  --text:#c9d1d9;
+  --muted:#8b949e;
+  --accent:#58a6ff;
+  --green:#3fb950;
+  --yellow:#d29922;
+  --red:#f85149;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  line-height:1.55;
+  letter-spacing:0;
+}
+main { width:min(1180px,calc(100vw - 40px)); margin:0 auto; padding:34px 0 70px; }
+header { border-bottom:1px solid var(--border); padding-bottom:20px; margin-bottom:24px; }
+h1 { margin:0 0 10px; color:#fff; font-size:2.1rem; line-height:1.15; }
+h2 { margin:34px 0 14px; color:#fff; font-size:1.35rem; border-bottom:1px solid var(--border); padding-bottom:8px; }
+h3 { margin:24px 0 10px; color:#fff; font-size:1.08rem; }
+p, li { max-width:82ch; }
+a { color:var(--accent); }
+code { background:#0b1018; border:1px solid var(--border); border-radius:4px; padding:1px 4px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em; }
+pre { background:#0b1018; border:1px solid var(--border); border-radius:8px; padding:14px; overflow:auto; }
+table { width:100%; border-collapse:collapse; min-width:760px; }
+th, td { border:1px solid var(--border); padding:10px 12px; vertical-align:top; }
+th { background:#111927; color:#fff; text-align:left; }
+.lead { color:var(--muted); font-size:1.05rem; margin:0 0 16px; }
+.status, .toc, .callout, .question, .compile { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
+.status { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.status strong { display:block; color:#fff; }
+.status span { color:var(--muted); font-size:.92rem; }
+.toc ol { margin:0; padding-left:22px; columns:2; }
+.callout { border-left:4px solid var(--accent); background:var(--surface-2); margin:18px 0; }
+.pill { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:2px 8px; font-size:.78rem; font-weight:700; margin-right:6px; }
+.p1 { color:#fff; background:rgba(248,81,73,.22); border-color:rgba(248,81,73,.65); }
+.p2 { color:#fff; background:rgba(210,153,34,.22); border-color:rgba(210,153,34,.65); }
+.p3 { color:#fff; background:rgba(88,166,255,.18); border-color:rgba(88,166,255,.55); }
+.ok { color:#fff; background:rgba(63,185,80,.18); border-color:rgba(63,185,80,.55); }
+.table-wrap { overflow-x:auto; margin:14px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+.card { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
+.card strong { color:#fff; }
+.question label { display:block; margin:8px 0; }
+textarea, .compile-output {
+  width:100%;
+  min-height:90px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#0b1018;
+  color:var(--text);
+  padding:10px;
+  font:inherit;
+}
+button { border:1px solid var(--border); border-radius:8px; background:#1f6feb; color:#fff; padding:9px 12px; font:inherit; cursor:pointer; }
+button.secondary { background:#21262d; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin:12px 0; }
+@media (max-width:760px) {
+  main { width:min(100vw - 24px,1180px); padding-top:24px; }
+  h1 { font-size:1.7rem; }
+  .toc ol { columns:1; }
+  table { min-width:680px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Repository Documentation Alignment Audit</h1>
+    <p class="lead">Findings-first review of active documentation consistency across install model, helper paths, workflow routes, npm publication status, Skills Showcase counts, and alignment-page currentness.</p>
+    <div class="status" aria-label="Alignment status">
+      <div><strong>alignment_status: review</strong><span>Generated 2026-06-10</span></div>
+      <div><strong>skill</strong><span>devtool-docs-audit</span></div>
+      <div><strong>report</strong><span><code>research/devtool-docs-audit.md</code></span></div>
+      <div><strong>artifact</strong><span><code>alignment/devtool-docs-audit-documentation-alignment.html</code></span></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Table of Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#verdict">Executive Verdict</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#matrix">Current / Needs Update / Archive Matrix</a></li>
+      <li><a href="#evidence">Evidence Matrix</a></li>
+      <li><a href="#confidence">Assumptions And Confidence</a></li>
+      <li><a href="#gaps">Source Gaps</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Controls</a></li>
+    </ol>
+  </nav>
+
+  <section id="verdict" data-tts-narrative="The audit found no P0 documentation failure. The highest impact issues are public setup model drift, retired icp routes, a missing documented init helper path, and a stale npm strategy page still indexed as current.">
+    <h2>Executive Verdict</h2>
+    <div class="grid">
+      <div class="card"><span class="pill ok">P0</span><strong>None found.</strong><p>Structural documentation gates passed before this page was added: active alignment pages audited cleanly and generated alignment bundles were exact.</p></div>
+      <div class="card"><span class="pill p1">P1</span><strong>Setup model drift.</strong><p>Public setup docs still describe active installs as symlinks, while current code installs active skills as managed copies and reserves symlinks for pinned archives.</p></div>
+      <div class="card"><span class="pill p1">P1</span><strong>Retired route drift.</strong><p>Current docs and indexed alignment pages still route to <code>icp</code>, even though active contracts use <code>customer-discovery</code>.</p></div>
+      <div class="card"><span class="pill p1">P1</span><strong>Missing helper path.</strong><p><code>scripts/init-agentic-skills.sh</code> is documented, but no root script exists at that path.</p></div>
+      <div class="card"><span class="pill p1">P1</span><strong>Stale npm strategy page.</strong><p>The old npm distribution page remains indexed like current guidance and contains stale <code>agentic-skills</code> package examples.</p></div>
+      <div class="card"><span class="pill p2">P2</span><strong>Freshness drift.</strong><p>Some npm wording still says "after publication" or "release candidate"; Skills Showcase count docs still use old 157/156-count language.</p></div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <h2>Findings</h2>
+
+    <h3><span class="pill p1">P1</span> Setup Docs Mix Symlink And Managed-Copy Models</h3>
+    <p>Current code installs active skills as managed directories and writes <code>.agentic-skills-managed</code> metadata. Pinned archive installs are the symlink case. Public docs still say active global setup symlinks skills.</p>
+    <ul>
+      <li><code>scripts/skill-links.sh:119-156</code> copies active skill files and skips <code>archive/</code>.</li>
+      <li><code>scripts/skill-links.sh:123-125</code> uses symlinks for archive sources.</li>
+      <li><code>init.sh:146-150</code> installs active global skills through <code>sync_skill_install</code>.</li>
+      <li><code>docs/QUICKSTART.md:25</code>, <code>docs/troubleshooting.md:18</code>, <code>docs/troubleshooting.md:73</code>, and <code>docs/scripts-reference.md:9-10</code> still use symlink/re-symlink wording.</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> use "repo-managed copies/directories" for active installs, and reserve "symlink" for pinned archive installs.</p>
+
+    <h3><span class="pill p1">P1</span> Documented Root Init Helper Path Is Missing</h3>
+    <p>Docs recommend <code>scripts/init-agentic-skills.sh</code>, but the root file is absent. The helper exists only under the mirrored <code>init-agentic-skills</code> skill directories.</p>
+    <ul>
+      <li><code>test -f scripts/init-agentic-skills.sh</code> exits <code>1</code>.</li>
+      <li>Existing helper paths: <code>global/claude/init-agentic-skills/scripts/init-agentic-skills.sh</code> and <code>global/codex/init-agentic-skills/scripts/init-agentic-skills.sh</code>.</li>
+      <li>Current docs reference the missing root path in <code>docs/scripts-reference.md:55-59</code>, <code>docs/troubleshooting.md:72</code>, <code>docs/packs.md:266-268</code>, and <code>docs/operating-modes.md:45</code>.</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> add a root wrapper or update user-facing docs to prefer <code>/init-agentic-skills</code> and <code>$init-agentic-skills</code>.</p>
+
+    <h3><span class="pill p1">P1</span> Retired <code>icp</code> Executable Still Appears In Current Guidance</h3>
+    <p>Active routing has moved to <code>customer-discovery</code>, but several current docs still say <code>icp</code> or <code>/icp</code>.</p>
+    <ul>
+      <li><code>docs/skill-next-step-contracts.md:75</code> routes concept-validation proceed states to <code>customer-discovery</code>.</li>
+      <li><code>README.md:236</code> lists <code>business-discovery: icp</code>.</li>
+      <li><code>docs/codex-workflow.md:285</code> and <code>:311</code> include <code>$icp</code>.</li>
+      <li><code>docs/pack-workflow-matrix.md:47</code> starts the default route with <code>icp</code>.</li>
+      <li><code>alignment/canonical-workflow-report.html:320</code> and <code>:487</code> still include <code>$icp</code> / <code>business-discovery: icp</code>, and the page is indexed.</li>
+      <li><code>research/skills-showcase/idea-brief.md:117</code>, <code>specs/skills-showcase/user-flow-deck-creation.md:14</code>, and <code>alignment/user-flow-map-deck-creation.html:619</code> still route through <code>/icp</code>.</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> replace executable routes with <code>customer-discovery</code> while preserving <code>enterprise-icp</code> and <code>research/icp.md</code> where they are intentional names.</p>
+
+    <h3><span class="pill p1">P1</span> Old npm Strategy Page Is Still Presented Like Current Guidance</h3>
+    <p>The current package walkthrough explicitly says the old npm distribution alignment page is historical strategy context, but the old page remains indexed as a normal product-design page and still contains stale package examples.</p>
+    <ul>
+      <li><code>alignment/skillpacks-npm-package-walkthrough.html:220-226</code> says it is the current reference and the old page is historical.</li>
+      <li><code>alignment/index.html:57-60</code> indexes <code>Multi-Surface npm Distribution Strategy</code> without a historical label.</li>
+      <li><code>alignment/idea-scope-brief-npm-distribution.html:230-251</code> uses <code>npx agentic-skills</code> and <code>npm install -g agentic-skills</code>.</li>
+      <li><code>alignment/idea-scope-brief-npm-distribution.html:585-618</code> uses <code>npx agentic-skills install-deck</code>, <code>@agentic-skills/*</code>, and <code>agentic-skills install --deck</code>.</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> add a prominent superseded warning and historical index text, or archive the old page.</p>
+
+    <h3><span class="pill p2">P2</span> npm Publication Docs Still Use Future/Release-Candidate Wording</h3>
+    <p><code>docs/skillpacks-npm-distribution.md:21-26</code> says <code>skillpacks@0.1.0</code> is published publicly, but several public docs still read as pre-publication or release-candidate guidance.</p>
+    <ul>
+      <li><code>README.md:45</code> and <code>:105</code> say npm usage is after publication.</li>
+      <li><code>docs/QUICKSTART.md:17</code>, <code>:29</code>, <code>:50</code>, and <code>:83</code> use before/after-publication language.</li>
+      <li><code>docs/decks.md:18</code> says "After the first public npm package is published"; <code>docs/decks.md:29</code> says "current release candidate".</li>
+      <li><code>docs/skillpacks-npm-distribution.md:372</code> still calls the shell-backed deck path "this release candidate".</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> switch to "With the published npm package" and "current <code>skillpacks@0.1.0</code> release".</p>
+
+    <h3><span class="pill p2">P2</span> Skills Showcase Counts Are Stale Or Ambiguous</h3>
+    <p>Generated data now reports a larger mirrored inventory than older planning docs.</p>
+    <ul>
+      <li><code>apps/skills-showcase/public/assets/skills-data.js:5-7</code> reports <code>sourceCount: 545</code>, <code>skillCount: 373</code>, and <code>packCount: 41</code>.</li>
+      <li>A generated-data parse yielded 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, 188 Claude entries, and 185 Codex entries.</li>
+      <li><code>tasks/pack-card-hierarchy.md:5-7</code> still says 157 unique skills across 38 packs.</li>
+      <li><code>alignment/skillmap.html:58</code>, <code>:82</code>, and <code>:119</code> say 41 packs, 156 pack skills, and 11 global skills.</li>
+      <li><code>apps/skills-showcase/docs/deck-builder-ux.md:103</code>, <code>research/skills-showcase/idea-brief.md:44</code>, and <code>alignment/idea-scope-brief-skills-showcase.html:234-238</code> repeat the old 157 count.</li>
+    </ul>
+    <p><strong>Recommended cleanup:</strong> define canonical count terms and regenerate or relabel older Skills Showcase docs.</p>
+
+    <h3><span class="pill p3">P3</span> Historical Docs Are Preserved But Not Always Labeled</h3>
+    <p>Historical content can remain, but index cards and headers need to make currentness explicit. The old npm strategy page, <code>alignment/canonical-workflow-report.html</code>, and <code>docs/workflow-refactor-proposal.html</code> are examples where stale content is discoverable outside archive paths.</p>
+  </section>
+
+  <section id="matrix">
+    <h2>Current / Needs Update / Archive Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Surface</th><th>Classification</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><code>README.md</code></td><td>Needs update</td><td>Replace retired <code>icp</code> in business-discovery list; refresh npm publication wording.</td></tr>
+          <tr><td><code>docs/QUICKSTART.md</code></td><td>Needs update</td><td>Replace symlink and future-publication wording.</td></tr>
+          <tr><td><code>docs/troubleshooting.md</code></td><td>Needs update</td><td>Replace re-symlink wording and fix missing init helper path.</td></tr>
+          <tr><td><code>docs/scripts-reference.md</code></td><td>Needs update</td><td>Fix managed-copy wording and missing root init helper path, or add the wrapper.</td></tr>
+          <tr><td><code>docs/packs.md</code></td><td>Mostly current</td><td>Fix root init helper path references.</td></tr>
+          <tr><td><code>docs/operating-modes.md</code></td><td>Needs update</td><td>Fix root init helper path reference.</td></tr>
+          <tr><td><code>docs/decks.md</code></td><td>Needs update</td><td>Replace future npm and release-candidate wording.</td></tr>
+          <tr><td><code>docs/codex-workflow.md</code></td><td>Needs update</td><td>Replace <code>$icp</code> examples.</td></tr>
+          <tr><td><code>docs/pack-workflow-matrix.md</code></td><td>Needs update</td><td>Replace default <code>icp</code> route.</td></tr>
+          <tr><td><code>docs/skill-next-step-contracts.md</code></td><td>Current</td><td>Keep as routing source of truth.</td></tr>
+          <tr><td><code>alignment/skillpacks-npm-package-walkthrough.html</code></td><td>Current</td><td>Keep as active package usage reference.</td></tr>
+          <tr><td><code>alignment/idea-scope-brief-npm-distribution.html</code></td><td>Historical or amend</td><td>Add superseded warning/index text or archive.</td></tr>
+          <tr><td><code>alignment/canonical-workflow-report.html</code></td><td>Needs update or label</td><td>Contains stale <code>icp</code> route but remains indexed.</td></tr>
+          <tr><td><code>alignment/user-flow-map-deck-creation.html</code></td><td>Needs update</td><td>Replace <code>/icp</code> handoff.</td></tr>
+          <tr><td><code>tasks/pack-card-hierarchy.md</code></td><td>Historical or update</td><td>Reconcile 157/38 counts against generated data.</td></tr>
+          <tr><td><code>alignment/skillmap.html</code></td><td>Needs regenerate or source clarification</td><td>Reconcile 156 pack skills against generated 179 unique pack skills.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <h2>Evidence Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Impact</th><th>Confidence</th></tr></thead>
+        <tbody>
+          <tr><td>Active installs are managed copies, not symlink-first.</td><td><code>scripts/skill-links.sh:119-156</code>, <code>init.sh:146-150</code>.</td><td>Refresh and drift docs need managed-copy language.</td><td>High</td></tr>
+          <tr><td>Root init helper path is missing.</td><td><code>test -f scripts/init-agentic-skills.sh</code> exits <code>1</code>; bundled helper scripts exist under <code>global/{claude,codex}/...</code>.</td><td>Copy-paste commands fail.</td><td>High</td></tr>
+          <tr><td><code>icp</code> executable is retired in active route guidance.</td><td>Current source root is <code>customer-discovery</code>; active route contract points to <code>customer-discovery</code>.</td><td>Readers can invoke or spec against a retired command.</td><td>High</td></tr>
+          <tr><td>Old npm strategy page conflicts with current package walkthrough.</td><td>Current walkthrough says old page is historical; old page still indexed and contains stale package examples.</td><td>Wrong npm package commands are discoverable.</td><td>High</td></tr>
+          <tr><td>Publication wording is stale.</td><td>Published status in <code>docs/skillpacks-npm-distribution.md</code>; future/RC wording in README, Quickstart, Decks.</td><td>Users may think npm is not live.</td><td>Medium</td></tr>
+          <tr><td>Skills Showcase counts are stale or ambiguous.</td><td>Generated data parse versus 157/156-count docs.</td><td>Implementation and SEO copy can drift.</td><td>High</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="confidence">
+    <h2>Assumptions And Confidence</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Assumption</th><th>Confidence</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Archived skill versions and old task manifests should not be counted as current docs unless indexed or referenced by current docs.</td><td>High</td><td>The repo keeps history intentionally, and active archive directories are out of normal user paths.</td></tr>
+          <tr><td><code>customer-discovery</code> is the current executable replacement for <code>icp</code>.</td><td>High</td><td>Active source roots and route contracts use <code>customer-discovery</code>.</td></tr>
+          <tr><td>The generated Skills Showcase data is the canonical current inventory source for website counts.</td><td>Medium-high</td><td>It is generated and used by the app, but the report still recommends defining count terms before changing copy.</td></tr>
+          <tr><td>The old npm strategy page should remain as historical decision evidence rather than be deleted.</td><td>Medium</td><td>The current walkthrough calls it historical strategy context; archival versus warning label is a product-doc decision.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="gaps">
+    <h2>Source Gaps</h2>
+    <ul>
+      <li>No web research was performed; this is a repo-internal documentation alignment audit.</li>
+      <li>The audit did not read every historical prompt, conversation, archived skill version, or task manifest.</li>
+      <li>The audit reports inconsistencies and recommended cleanup; it does not mutate underlying public docs beyond this report and review page.</li>
+    </ul>
+  </section>
+
+  <section id="gates">
+    <h2>Review Gates</h2>
+    <div class="question" data-question-block>
+      <p><strong>Gate 1: Remediation Priority</strong></p>
+      <label><input type="radio" name="priority" value="p1-batch" data-required="true" data-section="Review Gates" data-gate-type="priority" data-answer="Fix all P1 public-doc issues first" data-target-path="tasks/todo.md"> Fix all P1 public-doc issues first.</label>
+      <label><input type="radio" name="priority" value="routes-first" data-required="true" data-section="Review Gates" data-gate-type="priority" data-answer="Fix retired route references first" data-target-path="tasks/todo.md"> Fix retired route references first.</label>
+      <label><input type="radio" name="priority" value="setup-first" data-required="true" data-section="Review Gates" data-gate-type="priority" data-answer="Fix setup/install docs first" data-target-path="tasks/todo.md"> Fix setup/install docs first.</label>
+      <textarea class="answer-notes" data-notes-for="priority" placeholder="Optional priority notes"></textarea>
+    </div>
+    <div class="question" data-question-block>
+      <p><strong>Gate 2: Init Helper Path Strategy</strong></p>
+      <label><input type="radio" name="init-helper" value="wrapper" data-required="true" data-section="Review Gates" data-gate-type="path strategy" data-answer="Add root wrapper script" data-target-path="docs/scripts-reference.md"> Add a root wrapper script and keep docs simple.</label>
+      <label><input type="radio" name="init-helper" value="docs-only" data-required="true" data-section="Review Gates" data-gate-type="path strategy" data-answer="Update docs to use skill command and bundled helper paths" data-target-path="docs/scripts-reference.md"> Update docs to use skill commands and bundled helper paths.</label>
+      <textarea class="answer-notes" data-notes-for="init-helper" placeholder="Optional path strategy notes"></textarea>
+    </div>
+    <div class="question" data-question-block>
+      <p><strong>Gate 3: Historical Page Handling</strong></p>
+      <label><input type="radio" name="history" value="label" data-required="true" data-section="Review Gates" data-gate-type="history handling" data-answer="Label historical pages in place" data-target-path="alignment/index.html"> Label historical pages in place.</label>
+      <label><input type="radio" name="history" value="archive" data-required="true" data-section="Review Gates" data-gate-type="history handling" data-answer="Archive superseded pages" data-target-path="alignment/index.html"> Archive superseded pages.</label>
+      <textarea class="answer-notes" data-notes-for="history" placeholder="Optional historical-page notes"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile">
+    <h2>Compile Controls</h2>
+    <p>Compile selected gate answers into YAML for the next remediation pass.</p>
+    <div class="actions">
+      <button type="button" id="compile-yaml">Compile YAML</button>
+      <button type="button" class="secondary" id="copy-yaml">Copy YAML</button>
+    </div>
+    <textarea id="yaml-output" class="compile-output" aria-label="Compiled feedback YAML"></textarea>
+    <p id="compile-status" aria-live="polite"></p>
+  </section>
+</main>
+
+<script>
+const output = document.getElementById('yaml-output');
+function yamlEscape(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+function compileYaml() {
+  const answers = [];
+  document.querySelectorAll('input[type="radio"]:checked').forEach((input) => {
+    const notes = document.querySelector(`[data-notes-for="${input.name}"]`);
+    answers.push({
+      gate: input.dataset.gateType || input.name,
+      section: input.dataset.section || '',
+      answer: input.dataset.answer || input.value,
+      target: input.dataset.targetPath || '',
+      notes: notes ? notes.value.trim() : ''
+    });
+  });
+  const lines = [
+    'alignment_feedback:',
+    '  artifact: "alignment/devtool-docs-audit-documentation-alignment.html"',
+    '  report: "research/devtool-docs-audit.md"',
+    '  generated_at: "2026-06-10"',
+    '  answers:'
+  ];
+  if (!answers.length) {
+    lines.push('    []');
+  } else {
+    answers.forEach((answer) => {
+      lines.push('    - gate: "' + yamlEscape(answer.gate) + '"');
+      lines.push('      section: "' + yamlEscape(answer.section) + '"');
+      lines.push('      answer: "' + yamlEscape(answer.answer) + '"');
+      lines.push('      target_path: "' + yamlEscape(answer.target) + '"');
+      lines.push('      notes: "' + yamlEscape(answer.notes) + '"');
+    });
+  }
+  output.value = lines.join('\n') + '\n';
+  document.getElementById('compile-status').textContent = 'YAML compiled.';
+}
+document.getElementById('compile-yaml').addEventListener('click', compileYaml);
+document.getElementById('copy-yaml').addEventListener('click', async () => {
+  if (!output.value) compileYaml();
+  try {
+    await navigator.clipboard.writeText(output.value);
+    document.getElementById('compile-status').textContent = 'YAML copied to clipboard.';
+  } catch (error) {
+    output.focus();
+    output.select();
+    document.getElementById('compile-status').textContent = 'Clipboard blocked; YAML selected for manual copy.';
+  }
+});
+</script>
+
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
