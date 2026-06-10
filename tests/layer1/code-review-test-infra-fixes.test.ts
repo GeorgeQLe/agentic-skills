@@ -1,12 +1,19 @@
 import { describe, it, expect } from "vitest";
+import { mkdtempSync, writeFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 
-import { isSafeBenchRepoSlug } from "../layer4/helpers/disposable-repo.js";
+import {
+  isSafeBenchRepoSlug,
+  cleanupRepo,
+} from "../layer4/helpers/disposable-repo.js";
 import { pickResumeableManifest } from "../harness/bench-persistence.js";
 import type { SessionManifest } from "../harness/bench-types.js";
 
-// Code Review test-infra fixes (#4 slug guard, #6 resumeable session sort).
-// These cover the pure logic; the surrounding fs/gh side effects in layer4 run
-// only under the gated live benchmark project.
+// Code Review test-infra fixes (#4 slug guard, #5 temp-dir reclaim, #6
+// resumeable session sort). These cover the pure logic plus the gh-free
+// cleanup paths; the live gh side effects in layer4 run only under the gated
+// live benchmark project.
 
 describe("isSafeBenchRepoSlug (#4 destructive-delete guard)", () => {
   it("accepts a real owner with the bench prefix", () => {
@@ -38,6 +45,52 @@ describe("isSafeBenchRepoSlug (#4 destructive-delete guard)", () => {
   it("refuses a missing owner segment", () => {
     expect(isSafeBenchRepoSlug("agentic-skills-bench-sync-1234")).toBe(false);
     expect(isSafeBenchRepoSlug("/agentic-skills-bench-sync-1234")).toBe(false);
+  });
+});
+
+describe("cleanupRepo temp-dir reclaim (#5 leak fix)", () => {
+  // Both paths below return before any `gh` invocation (unsafe slug is
+  // refused pre-confirm; denial is honored pre-delete), so they exercise the
+  // local-dir reclaim without touching the network.
+
+  const tempDirWithMarker = (): string => {
+    const dir = mkdtempSync(join(tmpdir(), "bench-leak-test-"));
+    writeFileSync(join(dir, "marker.txt"), "leak check", "utf-8");
+    return dir;
+  };
+
+  it("removes the work dir even when the slug is refused as unsafe", async () => {
+    const dir = tempDirWithMarker();
+    const result = await cleanupRepo(
+      "https://github.com/unknown/agentic-skills-bench-sync-1234",
+      () => Promise.resolve(true),
+      dir,
+    );
+    expect(result.status).toBe("infrastructure-blocked");
+    expect(existsSync(dir)).toBe(false);
+  });
+
+  it("removes the work dir even when deletion is denied", async () => {
+    const dir = tempDirWithMarker();
+    const result = await cleanupRepo(
+      "https://github.com/octocat/agentic-skills-bench-sync-1234",
+      () => Promise.resolve(false),
+      dir,
+    );
+    expect(result).toEqual({
+      status: "infrastructure-blocked",
+      reason: "User denied repository deletion",
+    });
+    expect(existsSync(dir)).toBe(false);
+  });
+
+  it("tolerates a missing or already-removed work dir", async () => {
+    const result = await cleanupRepo(
+      "https://github.com/unknown/agentic-skills-bench-sync-1234",
+      () => Promise.resolve(true),
+      join(tmpdir(), "bench-leak-test-does-not-exist"),
+    );
+    expect(result.status).toBe("infrastructure-blocked");
   });
 });
 
