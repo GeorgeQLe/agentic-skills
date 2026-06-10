@@ -1,3 +1,45 @@
+## Current Implementation - Alignment Diff Highlighting Convention
+
+### Goal
+
+Clarify the alignment-page convention so updates to existing HTML alignment pages use visible diff/change highlighting in the rendered page, rather than relying only on prose that says a change happened.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: one canonical convention paragraph fans out through generated per-skill `ALIGNMENT-PAGE.md` files, and the generated output should be reviewed as one boundary.
+
+### Context
+
+- Canonical source: `docs/alignment-page-convention.md` between the `alignment-convention` markers.
+- Generated bundles: per-skill `ALIGNMENT-PAGE.md` files rendered by `scripts/upgrade-alignment-page.mjs`.
+- Current convention already has a short `Diff highlighting on updates` clause, but it does not explicitly require a rendered visual marker in the HTML.
+- Existing unrelated local work: `apps/skills-showcase/next-env.d.ts`; leave it outside this change.
+
+### Steps
+
+- [x] Tighten the canonical `Diff highlighting on updates` clause so changed HTML content must be visually marked.
+- [x] Preview and regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Run generator checks and whitespace checks; review the generated diff.
+- [x] Record review notes, then commit and push intended changes only.
+
+### Acceptance Criteria
+
+- [x] The convention requires visible rendered change indicators in updated alignment HTML pages.
+- [x] Generated bundles are exact after regeneration.
+- [x] `git diff --check` is clean.
+- [x] Unrelated local work is not included in the commit.
+
+### Review Notes (2026-06-10)
+
+- Updated `docs/alignment-page-convention.md` inside the generated convention block: existing alignment-page updates must visibly mark changed content in the rendered HTML, using in-place badges, borders/backgrounds, `<ins>`/`<del>` markup, or side-by-side before/after comparisons as appropriate.
+- Clarified that a top-level change summary alone is not enough unless the changed content is also marked where the reader reviews it, and that stale change markers should be removed or refreshed on later updates.
+- Regenerated 284 generated per-skill `ALIGNMENT-PAGE.md` bundles from the canonical source. A sampled generated diff (`global/codex/idea-scope-brief/ALIGNMENT-PAGE.md`) matches the canonical paragraph with the expected skill-specific output path substitutions.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --dry-run` previewed 284 writes with exact output paths, `node scripts/upgrade-alignment-page.mjs` regenerated them, `node scripts/upgrade-alignment-page.mjs --check` reported 284 ownable bundles exact, and `git diff --check` was clean.
+- Targeted propagation scan found the new rendered-HTML requirement in the canonical convention and generated bundles. Existing unrelated local work in `apps/skills-showcase/next-env.d.ts` was left unstaged and outside the commit boundary.
+
+---
+
 ## Current Implementation - Skillpacks npm Distribution Phase 4
 
 ### Goal

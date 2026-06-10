@@ -1,3 +1,26 @@
+## Current Implementation - Alignment Diff Highlighting Convention
+
+### Goal
+
+Clarify the shared alignment-page convention so any update to an existing HTML alignment page visibly highlights the changed content in the rendered page, making it obvious that the page was amended from a prior version.
+
+### Plan
+
+1. Update the canonical convention.
+   - [x] Revise `docs/alignment-page-convention.md` inside the `alignment-convention` markers.
+   - [x] Make clear that change indicators must be visible in the HTML itself.
+   - [x] Define acceptable treatments such as inline badges, highlighted blocks, or side-by-side before/after sections.
+2. Regenerate bundled docs.
+   - [x] Preview bundle changes with `node scripts/upgrade-alignment-page.mjs --dry-run`.
+   - [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical source.
+   - [x] Confirm generated bundles are exact with `node scripts/upgrade-alignment-page.mjs --check`.
+3. Verify and ship.
+   - [x] Run whitespace/diff checks and focused convention verification.
+   - [x] Review the diff for unintended generated drift.
+   - [x] Commit and push the intended changes only.
+
+---
+
 ## Current Implementation - Alignment Pages Game AFPS Refresh
 
 ### Goal
