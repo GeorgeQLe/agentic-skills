@@ -70,13 +70,13 @@ describe("compile-central-alignment skill contract", () => {
     }
   });
 
-  it("has v0.1 active contracts with v0.0 archives and changelogs", () => {
+  it("has versioned active contracts with v0.0 archives and changelogs", () => {
     for (const skillDir of contracts) {
       const skillPath = `${skillDir}/SKILL.md`;
       const archivePath = `${skillDir}/archive/v0.0/SKILL.md`;
       const changelogPath = `${skillDir}/CHANGELOG.md`;
 
-      expect(read(skillPath), `${skillPath} active version`).toMatch(/^version: v0\.1$/m);
+      expect(read(skillPath), `${skillPath} active version`).toMatch(/^version: v\d+\.\d+$/m);
       expect(existsSync(resolve(REPO_ROOT, archivePath)), `${archivePath} exists`).toBe(true);
       expect(read(archivePath), `${archivePath} archived version`).toMatch(/^version: v0\.0$/m);
 

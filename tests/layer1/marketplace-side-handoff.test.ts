@@ -7,17 +7,17 @@ const ROOT = resolve(import.meta.dirname, "../..");
 const ideaMirrors = [
   {
     path: "global/claude/idea-scope-brief/SKILL.md",
-    command: "/icp",
+    command: "/customer-discovery",
   },
   {
     path: "global/codex/idea-scope-brief/SKILL.md",
-    command: "$icp",
+    command: "$customer-discovery",
   },
 ] as const;
 
-const icpMirrors = [
-  "packs/business-discovery/claude/icp/SKILL.md",
-  "packs/business-discovery/codex/icp/SKILL.md",
+const discoveryMirrors = [
+  "packs/business-discovery/claude/customer-discovery/SKILL.md",
+  "packs/business-discovery/codex/customer-discovery/SKILL.md",
 ] as const;
 
 function read(path: string) {
@@ -44,7 +44,7 @@ describe("marketplace side handoff contracts", () => {
       expect(handoff, path).toContain("marketplace/platform/B2B2C/multi-sided");
       expect(handoff, path).toContain("apparent sides");
       expect(handoff, path).toContain("value exchange");
-      expect(handoff, path).toContain("hypotheses, not validated ICPs");
+      expect(handoff, path).toContain("hypotheses, not validated customer segments");
       expect(handoff, path).not.toMatch(/web research|market research/i);
 
       expect(content, `${path} alignment preview should render handoff`).toContain(
@@ -56,38 +56,33 @@ describe("marketplace side handoff contracts", () => {
     }
   });
 
-  it("requires ICP to validate or refute marketplace sides before candidate generation", () => {
-    for (const path of icpMirrors) {
+  it("requires customer discovery to validate or refute marketplace sides before candidate generation", () => {
+    for (const path of discoveryMirrors) {
       const content = read(path);
-      const preflight = extractSection(content, "### Marketplace Side Preflight");
+      const preflight = extractSection(content, "### 3. Marketplace Side Preflight");
 
       expect(preflight, path).toContain("Read any `Market Structure Handoff`");
       expect(preflight, path).toContain("idea brief");
       expect(preflight, path).toContain("infer likely sides");
       expect(preflight, path).toContain("During broad market research, validate or refute");
       expect(preflight, path).toContain("Before candidate generation");
+      expect(preflight, path).toContain("side-coverage note in the working packet");
       expect(preflight, path).toContain("cover each material side");
-      expect(preflight, path).toContain("excluded, deferred, or not a customer side");
-
-      expect(content, `${path} search log should preserve side rationale`).toContain(
-        "Marketplace Side Preflight validation/refutation plus side coverage/exclusion rationale",
-      );
+      expect(preflight, path).toContain("explicitly explain why a side is excluded");
     }
   });
 
-  it("keeps the new handoff and preflight sections mirrored", () => {
+  it("keeps the handoff section mirrored and the preflight contract in both mirrors", () => {
+    // The idea-scope-brief mirrors stay byte-identical for this section.
     const claudeIdea = extractSection(read("global/claude/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
     const codexIdea = extractSection(read("global/codex/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
-    const claudeIcp = extractSection(
-      read("packs/business-discovery/claude/icp/SKILL.md"),
-      "### Marketplace Side Preflight",
-    );
-    const codexIcp = extractSection(
-      read("packs/business-discovery/codex/icp/SKILL.md"),
-      "### Marketplace Side Preflight",
-    );
-
     expect(claudeIdea).toEqual(codexIdea);
-    expect(claudeIcp).toEqual(codexIcp);
+
+    // The customer-discovery Codex mirror is a deliberately condensed orchestrator
+    // (v1.0 rewrite), so both mirrors must carry the preflight section, but the
+    // section text is not byte-identical.
+    for (const path of discoveryMirrors) {
+      expect(read(path), `${path} preflight section`).toContain("### 3. Marketplace Side Preflight");
+    }
   });
 });

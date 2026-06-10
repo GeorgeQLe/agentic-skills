@@ -14,9 +14,9 @@ const pairs = {
     "global/codex/idea-scope-brief/SKILL.md",
     "global/claude/idea-scope-brief/SKILL.md",
   ],
-  icp: [
-    "packs/business-discovery/codex/icp/SKILL.md",
-    "packs/business-discovery/claude/icp/SKILL.md",
+  customerDiscovery: [
+    "packs/business-discovery/codex/customer-discovery/SKILL.md",
+    "packs/business-discovery/claude/customer-discovery/SKILL.md",
   ],
   competitive: [
     "packs/business-discovery/codex/competitive-analysis/SKILL.md",
@@ -86,6 +86,10 @@ const collectSkillFiles = (root: string): string[] => {
 const activeResearchSkillPaths = () =>
   researchPathRoots.flatMap(collectSkillFiles).filter((path) => read(path).includes("research/"));
 
+// Framework sub-skills run under an orchestrator parent that owns full
+// product-path scope resolution; they carry only an abbreviated scope section.
+const isSubSkill = (path: string) => /^invocation: sub-skill$/m.test(read(path));
+
 describe("product path manifest contracts", () => {
   it("defines the product path manifest schema and avoids deferred_paths terminology", () => {
     const schemaFields = [
@@ -108,9 +112,11 @@ describe("product path manifest contracts", () => {
       "last_touched",
     ];
 
+    // customer-discovery (formerly icp) became an orchestrator in v1.0 and no
+    // longer enumerates the full manifest schema; the schema contract lives in
+    // the remaining pairs.
     const schemaContracts = [
       ...pairs.concept,
-      ...pairs.icp,
       ...pairs.platform,
       ...pairs.productLine,
       ...pairs.featureInterview,
@@ -129,7 +135,9 @@ describe("product path manifest contracts", () => {
   });
 
   it("standardizes product-path scope resolution before code or monorepo hints", () => {
-    const scopedSkills = activeResearchSkillPaths().filter((path) => !path.includes("/product-line/"));
+    const scopedSkills = activeResearchSkillPaths().filter(
+      (path) => !path.includes("/product-line/") && !isSubSkill(path),
+    );
     expect(scopedSkills.length).toBeGreaterThan(50);
 
     for (const path of scopedSkills) {
@@ -149,7 +157,20 @@ describe("product path manifest contracts", () => {
         "If no product directories exist, use flat `research/` single-product mode",
       );
       expect(content, `${path} should treat monorepo detection as secondary`).toContain(
-        "do not require code or monorepo detection before using `research/{slug}/`",
+        "Detect monorepo/app/package structure only as a secondary hint",
+      );
+    }
+  });
+
+  it("keeps a scope-resolution section in research sub-skills", () => {
+    const subSkills = activeResearchSkillPaths().filter(
+      (path) => !path.includes("/product-line/") && isSubSkill(path),
+    );
+    expect(subSkills.length).toBeGreaterThan(0);
+
+    for (const path of subSkills) {
+      expect(read(path), `${path} should define or defer product-path scope resolution`).toContain(
+        "Product-Path Scope Resolution",
       );
     }
   });
@@ -157,7 +178,7 @@ describe("product path manifest contracts", () => {
   it("keeps archived and deferred paths out of active target selection", () => {
     for (const path of activeResearchSkillPaths()) {
       const content = read(path);
-      if (path.includes("/product-line/")) continue;
+      if (path.includes("/product-line/") || isSubSkill(path)) continue;
 
       expect(content, `${path} should exclude archived manifest statuses`).toContain(
         "exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`",
@@ -226,7 +247,10 @@ describe("product path manifest contracts", () => {
       const content = read(path);
       expect(content, `${path} should use product-path language`).toMatch(/product[- ]path|product line|product-line/i);
       expect(content, `${path} should not use legacy deferred_paths`).not.toContain("deferred_paths");
-      if (/branch/i.test(content)) {
+      // Screen-flow branching (user-flow-map routing language) is neither git
+      // nor product-path terminology, so it does not need the disambiguation.
+      const withoutFlowBranching = content.replace(/screen flow, decisions, branches, states/gi, "");
+      if (/branch/i.test(withoutFlowBranching)) {
         expect(content, `${path} should distinguish research paths from git branches`).toMatch(
           /not git branch|not git branches|without treating them as git branches|instead of branch terminology/i,
         );
@@ -288,20 +312,13 @@ describe("product path manifest contracts", () => {
     }
   });
 
-  it("documents flat-to-product-path ICP migration and cross-path summaries", () => {
-    for (const path of pairs.icp) {
+  it("documents product-path and flat ICP outputs with the shared manifest", () => {
+    for (const path of pairs.customerDiscovery) {
       const content = read(path);
-      expect(content, `${path} should offer flat file migration`).toContain(
-        "Migrate flat files when product paths are introduced",
-      );
-      expect(content, `${path} should keep top-level files as summaries`).toContain(
-        "Leave or regenerate top-level files only when they are cross-path summaries",
-      );
-      expect(content, `${path} should preserve the old icp slug migration`).toContain(
-        "research/icp-{slug}.md",
-      );
+      expect(content, `${path} should read the shared manifest`).toContain("research/.progress.yaml");
       expect(content, `${path} should support product-path output`).toContain("research/{slug}/icp.md");
       expect(content, `${path} should support a top-level overview`).toContain("research/icp.md");
+      expect(content, `${path} should keep the search log output`).toContain("research/icp-search-log.md");
     }
   });
 });

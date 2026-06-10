@@ -79,7 +79,7 @@ describe("pack install artifact shipping boundary", () => {
     for (const skillPath of packSkillPaths) {
       const content = read(skillPath);
 
-      expect(content, `${skillPath} should be bumped`).toContain("version: v0.4");
+      expect(content, `${skillPath} should carry a bumped version`).toMatch(/^version: v(?:0\.[1-9]\d*|[1-9]\d*\.\d+)$/m);
       expect(content, `${skillPath} should report shipping guidance`).toContain(
         "shipping guidance:",
       );

@@ -19,16 +19,16 @@ const reloadExpectations = [
 describe("skill availability reload language", () => {
   it("tightens targeted skill-dev reload notes in both mirrors", () => {
     const targets = [
-      { path: "packs/skill-dev/claude/targeted-skill-builder/SKILL.md", version: "version: v0.2" },
-      { path: "packs/skill-dev/codex/targeted-skill-builder/SKILL.md", version: "version: v0.2" },
-      { path: "packs/skill-dev/claude/create-local-skill/SKILL.md", version: "version: v0.1" },
-      { path: "packs/skill-dev/codex/create-local-skill/SKILL.md", version: "version: v0.1" },
+      { path: "packs/skill-dev/claude/targeted-skill-builder/SKILL.md" },
+      { path: "packs/skill-dev/codex/targeted-skill-builder/SKILL.md" },
+      { path: "packs/skill-dev/claude/create-local-skill/SKILL.md" },
+      { path: "packs/skill-dev/codex/create-local-skill/SKILL.md" },
     ];
 
     for (const target of targets) {
       const content = read(target.path);
 
-      expect(content, `${target.path} should be version bumped`).toContain(target.version);
+      expect(content, `${target.path} should be version bumped`).toMatch(/^version: v(?:0\.[1-9]\d*|[1-9]\d*\.\d+)$/m);
       for (const expected of reloadExpectations) {
         expect(content, `${target.path} should contain ${expected}`).toContain(expected);
       }

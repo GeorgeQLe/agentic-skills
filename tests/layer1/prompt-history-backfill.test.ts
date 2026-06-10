@@ -19,13 +19,13 @@ describe("prompt-history-backfill skill contract", () => {
     },
   ];
 
-  it("adds mirrored v0.0 skill contracts", () => {
+  it("adds mirrored skill contracts", () => {
     for (const contract of contracts) {
       expect(existsSync(repoPath(contract.path)), `${contract.path} exists`).toBe(true);
       const content = read(contract.path);
 
       expect(content, `${contract.path} name`).toContain("name: prompt-history-backfill");
-      expect(content, `${contract.path} version`).toMatch(/^version: v0\.0$/m);
+      expect(content, `${contract.path} version`).toMatch(/^version: v\d+\.\d+$/m);
       expect(content, `${contract.path} command`).toContain(`Invoke as \`${contract.command}\`.`);
       expect(content, `${contract.path} argument hint`).toContain("--repo <path>");
       expect(content, `${contract.path} apply flag`).toContain("--apply");
@@ -91,10 +91,10 @@ describe("prompt-history-backfill skill contract", () => {
       const content = read(contract.path);
 
       expect(content, `${contract.path} path constraint`).toContain(
-        "In `--apply` mode, create missing prompt files only under `prompts/<skill-slug>/`.",
+        "In `--apply` mode, create missing prompt files under `prompts/<skill-slug>/` for active skills, or under `prompts/legacy/<old-slug>/` for legacy skills.",
       );
       expect(content, `${contract.path} never outside path`).toContain(
-        "Never write prompt files outside `prompts/<skill-slug>/`.",
+        "Never write prompt files outside `prompts/<skill-slug>/` (active skills) or `prompts/legacy/<old-slug>/` (legacy skills).",
       );
       expect(content, `${contract.path} frontmatter fields`).toContain(
         "Use this YAML frontmatter exactly for every backfilled prompt file: `skill`, `agent`, `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.",

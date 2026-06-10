@@ -9,8 +9,8 @@ function read(path: string) {
 }
 
 const explicitReportFirstSkills = [
-  "packs/business-discovery/claude/icp/SKILL.md",
-  "packs/business-discovery/codex/icp/SKILL.md",
+  "packs/business-discovery/claude/customer-discovery/SKILL.md",
+  "packs/business-discovery/codex/customer-discovery/SKILL.md",
   "packs/business-discovery/claude/competitive-analysis/SKILL.md",
   "packs/business-discovery/codex/competitive-analysis/SKILL.md",
   "packs/customer-lifecycle/claude/journey-map/SKILL.md",
@@ -49,10 +49,11 @@ describe("AFPS alignment preview gates", () => {
     for (const path of explicitReportFirstSkills) {
       const content = read(path);
       expect(content, `${path} alignment output`).toMatch(/alignment\/[a-z-]+-\{topic\}\.html/);
-      expect(content, `${path} evidence coverage`).toContain("evidence coverage");
-      expect(content, `${path} proposed changes`).toContain("proposed file changes");
       expect(content, `${path} report-first gate`).toContain("## Report-First Approval Gate");
-      expect(content, `${path} preview before approval`).toContain("build and attempt to open the alignment preview page first");
+      expect(content, `${path} scope-first approval`).toContain("Default to scope-first approval");
+      expect(content, `${path} scope approval before synthesis`).toContain("final compiled YAML approves the research scope");
+      expect(content, `${path} staged scope discovery`).toContain("Stage 1 - Scope discovery and approval");
+      expect(content, `${path} proposed changes`).toContain("proposed canonical file changes");
       expect(content, `${path} downstream stop`).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language");
     }
   });

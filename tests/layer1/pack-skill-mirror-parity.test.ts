@@ -8,17 +8,14 @@ const mirroredSkills = [
   {
     pack: "knowledge-check",
     skill: "quiz-me",
-    version: "v0.0",
   },
   {
     pack: "guided-walkthrough",
     skill: "uat-guide",
-    version: "v0.2",
   },
   {
     pack: "alignment-loop",
     skill: "taste-calibration",
-    version: "v0.0",
   },
 ] as const;
 
@@ -33,6 +30,8 @@ function skillPath(pack: string, agent: "claude" | "codex", skill: string): stri
 describe("pack skill mirror parity", () => {
   it("has active Claude and Codex SKILL.md files for quiz-me, uat-guide, and taste-calibration", () => {
     for (const mirror of mirroredSkills) {
+      const versions: string[] = [];
+
       for (const agent of ["claude", "codex"] as const) {
         const relativePath = skillPath(mirror.pack, agent, mirror.skill);
         const absolutePath = resolve(REPO_ROOT, relativePath);
@@ -42,8 +41,13 @@ describe("pack skill mirror parity", () => {
 
         const content = read(relativePath);
         expect(content, `${relativePath} name`).toMatch(new RegExp(`^name: ${mirror.skill}$`, "m"));
-        expect(content, `${relativePath} version`).toMatch(new RegExp(`^version: ${mirror.version}$`, "m"));
+
+        const version = content.match(/^version: (v\d+\.\d+)$/m)?.[1];
+        expect(version, `${relativePath} version`).toBeTruthy();
+        versions.push(version!);
       }
+
+      expect(versions[0], `${mirror.skill} mirrors should share one version`).toBe(versions[1]);
 
       const codexOpenAiMetadata = resolve(
         REPO_ROOT,
