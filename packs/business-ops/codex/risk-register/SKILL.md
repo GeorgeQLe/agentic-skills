@@ -2,7 +2,7 @@
 name: risk-register
 description: Broad risk assessment — key-person, technical, regulatory, competitive, financial, and execution risks beyond product/market
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"financial\"]"
 interview_depth: light
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Risk Register — Systematic Risk Assessment
 

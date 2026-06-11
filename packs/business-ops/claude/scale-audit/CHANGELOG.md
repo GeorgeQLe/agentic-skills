@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-10
+
+- Added npm-aware install-route guidance for business-ops cross-pack recommendations, preserving `/pack install <pack>` inside Claude Code while offering `npx skillpacks install <pack>` from the project shell.
+
 ## v0.3 - 2026-06-06
 
 - Route enterprise blockers with missing flow/design shape to `/user-flow-map` before UI requirements, layout variations, and production specs.

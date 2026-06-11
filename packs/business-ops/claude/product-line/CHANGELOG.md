@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-10
+
+- Added npm-aware install-route guidance for business-ops cross-pack recommendations, preserving `/pack install <pack>` inside Claude Code while offering `npx skillpacks install <pack>` from the project shell.
+
 ## v0.3 - 2026-06-07
 
 - Route missing product-path manifest guidance to `/customer-discovery` instead of the retired `/icp` executable.
