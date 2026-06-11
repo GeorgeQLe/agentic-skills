@@ -131,7 +131,9 @@ Only after the page is converted to `confirmed` and canonical files are written,
 
 ### Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ui-interview-{topic}.html`. The page is built pre-approval in `review` state per step 7, before any canonical spec write, and converts to `confirmed` only after final compiled YAML approval and canonical writes.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ui-interview-{topic}.html`.
+
+The page is built pre-approval in `review` state per step 7, before any canonical spec write, and converts to `confirmed` only after final compiled YAML approval and canonical writes.
 
 ## Constraints
 
