@@ -7,11 +7,11 @@ const HIBERNATED_REACTIVATION_TEXT =
 const PACK_ALIAS_GROUPS = [
   {
     aliases: ['business', 'business_app', 'businessapp', 'product', 'saas', 'business-app'],
-    packs: ['business-discovery', 'customer-lifecycle', 'business-growth', 'business-ops']
+    packs: ['business-research', 'customer-lifecycle', 'business-growth', 'business-ops']
   },
   {
-    aliases: ['business-discovery', 'discovery', 'customer-discovery', 'customer_discovery'],
-    packs: ['business-discovery']
+    aliases: ['business-research', 'business-discovery', 'discovery', 'research'],
+    packs: ['business-research']
   },
   {
     aliases: [
@@ -350,6 +350,33 @@ function skillPackMap(manifest) {
   return map;
 }
 
+function fuzzyMatchSkills(token, skillPacks) {
+  const suffix = [];
+  const prefix = [];
+  const substring = [];
+
+  for (const [skill, pack] of skillPacks) {
+    if (skill === token) continue;
+    if (skill.endsWith(`-${token}`)) {
+      suffix.push({ skill, pack });
+    } else if (skill.startsWith(`${token}-`)) {
+      prefix.push({ skill, pack });
+    } else if (skill.includes(token)) {
+      substring.push({ skill, pack });
+    }
+  }
+
+  if (suffix.length > 0) return suffix;
+  if (prefix.length > 0) return prefix;
+  if (substring.length > 0) return substring;
+  return [];
+}
+
+function fuzzyMatchError(token, matches) {
+  const lines = matches.map((m) => `  ${m.skill} (${m.pack})`).join('\n');
+  return new Error(`Ambiguous skill name '${token}'. Did you mean:\n${lines}`);
+}
+
 function enabledSkillPackMap(projectRoot) {
   const config = readProjectConfig(projectRoot);
   if (!config?.enabled_skills || typeof config.enabled_skills !== 'object') {
@@ -363,7 +390,7 @@ function allPacksExist(packs, activePacks) {
 }
 
 function unknownNameError(token, manifest) {
-  return new Error(`Unknown pack or skill '${token}'. Available packs: ${availablePacksInline(manifest)}`);
+  return new Error(`Unknown pack or skill '${token}'. Available packs: ${availablePacksInline(manifest)}\nRun 'npx skillpacks list' to see all available skills.`);
 }
 
 function hibernatedPackError(requested, pack) {
@@ -412,6 +439,16 @@ function resolveInstallToken(token, context) {
     throw hibernatedSkillError(token, hibernatedSkillPacks);
   }
 
+  const fuzzyMatches = fuzzyMatchSkills(token, context.skillPacks);
+  if (fuzzyMatches.length === 1) {
+    console.error(`Resolved '${token}' → '${fuzzyMatches[0].skill}'`);
+    context.skills.push(fuzzyMatches[0].skill);
+    return;
+  }
+  if (fuzzyMatches.length > 1) {
+    throw fuzzyMatchError(token, fuzzyMatches);
+  }
+
   throw unknownNameError(token, context.manifest);
 }
 
@@ -442,6 +479,16 @@ function resolveRemoveToken(token, context) {
   if (hibernatedSkillPacks.length > 0) {
     context.skills.push(token);
     return;
+  }
+
+  const fuzzyMatches = fuzzyMatchSkills(token, context.skillPacks);
+  if (fuzzyMatches.length === 1) {
+    console.error(`Resolved '${token}' → '${fuzzyMatches[0].skill}'`);
+    context.skills.push(fuzzyMatches[0].skill);
+    return;
+  }
+  if (fuzzyMatches.length > 1) {
+    throw fuzzyMatchError(token, fuzzyMatches);
   }
 
   throw unknownNameError(token, context.manifest);

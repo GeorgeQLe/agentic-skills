@@ -58,13 +58,13 @@ describe('pack normalization helpers', () => {
     assert.deepEqual(normalizePack('code-quality'), ['code-quality']);
     assert.deepEqual(normalizePack('quality'), ['code-quality']);
     assert.deepEqual(normalizePack('business'), [
-      'business-discovery',
+      'business-research',
       'customer-lifecycle',
       'business-growth',
       'business-ops'
     ]);
     assert.deepEqual(normalizePack('product'), [
-      'business-discovery',
+      'business-research',
       'customer-lifecycle',
       'business-growth',
       'business-ops'
@@ -99,7 +99,7 @@ describe('pack command argument resolution', () => {
       'docs-health'
     ]);
     assert.deepEqual(resolvePackCommandArgs('install', ['business'], { manifest }).args, [
-      'business-discovery',
+      'business-research',
       'customer-lifecycle',
       'business-growth',
       'business-ops'
@@ -166,6 +166,51 @@ describe('pack command argument resolution', () => {
     assert.deepEqual(resolved.packs, []);
     assert.deepEqual(resolved.skills, ['local-only-skill']);
     assert.deepEqual(resolved.args, ['local-only-skill']);
+  });
+});
+
+describe('fuzzy skill resolution', () => {
+  it('resolves customer-discovery as a skill, not a pack', () => {
+    const resolved = resolvePackCommandArgs('install', ['customer-discovery'], { manifest });
+
+    assert.deepEqual(resolved.packs, []);
+    assert.deepEqual(resolved.skills, ['customer-discovery']);
+  });
+
+  it('fuzzy-resolves icp to enterprise-icp', () => {
+    const resolved = resolvePackCommandArgs('install', ['icp'], { manifest });
+
+    assert.deepEqual(resolved.packs, []);
+    assert.deepEqual(resolved.skills, ['enterprise-icp']);
+  });
+
+  it('throws ambiguous error for multi-match fuzzy tokens', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['canvas'], { manifest }),
+      /Ambiguous skill name 'canvas'\. Did you mean:/
+    );
+  });
+
+  it('throws unknown error with help text for no-match tokens', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['zzz-nonexistent'], { manifest }),
+      /Run 'npx skillpacks list' to see all available skills\./
+    );
+  });
+
+  it('exact skill match takes priority over fuzzy', () => {
+    const resolved = resolvePackCommandArgs('install', ['enterprise-icp'], { manifest });
+
+    assert.deepEqual(resolved.packs, []);
+    assert.deepEqual(resolved.skills, ['enterprise-icp']);
+  });
+
+  it('fuzzy-resolves on remove as well', () => {
+    const dir = makeTempProject();
+    const resolved = resolvePackCommandArgs('remove', ['icp'], { manifest, projectRoot: dir });
+
+    assert.deepEqual(resolved.packs, []);
+    assert.deepEqual(resolved.skills, ['enterprise-icp']);
   });
 });
 

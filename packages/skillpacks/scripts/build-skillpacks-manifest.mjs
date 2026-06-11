@@ -35,8 +35,8 @@ const deckDefinitions = [
     title: "Business AFPS",
     domain: "business",
     tempo: "deliberate",
-    default_packs: ["business-discovery"],
-    full_packs: ["business-discovery", "customer-lifecycle", "business-growth", "business-ops"],
+    default_packs: ["business-research"],
+    full_packs: ["business-research", "customer-lifecycle", "business-growth", "business-ops"],
     tags: ["deck:business-afps", "stage:discovery"],
     full_tags: ["deck:business-afps", "stage:discovery", "lane:full"]
   },

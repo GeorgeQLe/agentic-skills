@@ -18,7 +18,7 @@ const pagePath = join(repoRoot, 'alignment', 'skills-inventory.html');
 const PACK_CATEGORY = {
   'agent-bridge': 'ops', 'agent-work-admin': 'ops', 'agentic-skills-bench': 'ops',
   'alignment-loop': 'product', 'alignment-page-admin': 'ops',
-  'business-discovery': 'business', 'business-growth': 'business', 'business-ops': 'business',
+  'business-research': 'business', 'business-growth': 'business', 'business-ops': 'business',
   'code-debug': 'code', 'code-maintenance': 'code', 'code-quality': 'code', 'code-review': 'code',
   'context-transfer': 'ops',
   'creator-foundation': 'media', 'customer-lifecycle': 'business',

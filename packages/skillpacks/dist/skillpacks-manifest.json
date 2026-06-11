@@ -2,9 +2,9 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
-  "source_fingerprint": "58f1ab32a81f8425a066e591ce2db8cbea155adb1409c2260abf18bcd2410e91",
+  "source_fingerprint": "9bf91d77cc195523cf4dbd34902edab8b8efd2bd815b6206389963dd55e164b6",
   "packs": [
     {
       "name": "agent-bridge",
@@ -103,43 +103,6 @@
       "skill_count": 0
     },
     {
-      "name": "business-discovery",
-      "title": "Business Discovery Pack",
-      "description": null,
-      "path": "packs/business-discovery",
-      "metadata_path": "packs/business-discovery/PACK.md",
-      "status": "active",
-      "tools": [
-        "claude",
-        "codex"
-      ],
-      "skills": [
-        "category-design",
-        "competitive-analysis",
-        "customer-discovery",
-        "customer-feedback",
-        "enterprise-icp",
-        "feature-pricing-matrix",
-        "five-rings",
-        "four-forces",
-        "jtbd-needs",
-        "jtbd-positioning",
-        "lean-canvas",
-        "moore-positioning",
-        "obviously-awesome",
-        "pmf-engine",
-        "porter-five-forces",
-        "positioning",
-        "seven-dimensions",
-        "strategic-canvas",
-        "strategic-group-map",
-        "swot",
-        "value-prop-canvas",
-        "w3-hypothesis"
-      ],
-      "skill_count": 22
-    },
-    {
       "name": "business-growth",
       "title": "Business Growth Pack",
       "description": null,
@@ -189,6 +152,43 @@
         "scale-audit"
       ],
       "skill_count": 13
+    },
+    {
+      "name": "business-research",
+      "title": "Business Research Pack",
+      "description": null,
+      "path": "packs/business-research",
+      "metadata_path": "packs/business-research/PACK.md",
+      "status": "active",
+      "tools": [
+        "claude",
+        "codex"
+      ],
+      "skills": [
+        "category-design",
+        "competitive-analysis",
+        "customer-discovery",
+        "customer-feedback",
+        "enterprise-icp",
+        "feature-pricing-matrix",
+        "five-rings",
+        "four-forces",
+        "jtbd-needs",
+        "jtbd-positioning",
+        "lean-canvas",
+        "moore-positioning",
+        "obviously-awesome",
+        "pmf-engine",
+        "porter-five-forces",
+        "positioning",
+        "seven-dimensions",
+        "strategic-canvas",
+        "strategic-group-map",
+        "swot",
+        "value-prop-canvas",
+        "w3-hypothesis"
+      ],
+      "skill_count": 22
     },
     {
       "name": "code-debug",
@@ -1481,966 +1481,6 @@
       "deck_memberships": []
     },
     {
-      "id": "pack-business-discovery-claude-feature-pricing-matrix",
-      "name": "feature-pricing-matrix",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
-      "content_sha256": "dadd96fdc5da21caaa054cbb5b6c3332d96c1ff80b00ad6108dd3b97283a820b",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/feature-pricing-matrix",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-porter-five-forces",
-      "name": "porter-five-forces",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
-      "content_sha256": "2e6502b2ca562e31c1942ef969703021ea00e4df8848b2a1127adf14b35b7255",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/porter-five-forces",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-strategic-group-map",
-      "name": "strategic-group-map",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
-      "content_sha256": "7bb9ef50aeab70da5d800a53baab89f18625b6f0c05bdb3d67e386e216a4376b",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/strategic-group-map",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-swot",
-      "name": "swot",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/competitive-analysis/frameworks/swot/SKILL.md",
-      "content_sha256": "be6a8afee9d227bd7f7d1355ed4ce7ea493b5ad44488dab1af5d2bc3304ff3a0",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/swot",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-competitive-analysis",
-      "name": "competitive-analysis",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.17",
-      "path": "packs/business-discovery/claude/competitive-analysis/SKILL.md",
-      "content_sha256": "5235ba6a372c6517036c5fdcc2d2ca3fd582eaa7b05c2d375e09da0d3a342193",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.12",
-        "v0.13",
-        "v0.14",
-        "v0.15",
-        "v0.16",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9"
-      ],
-      "command": "/competitive-analysis",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-five-rings",
-      "name": "five-rings",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/five-rings/SKILL.md",
-      "content_sha256": "6d2c55ff31cc4201e42d63310dcc165e5df079a1c780c7b65b616cc1ae5833b5",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/five-rings",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-four-forces",
-      "name": "four-forces",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/four-forces/SKILL.md",
-      "content_sha256": "023a323c3adbe9f13d4f1370beedc10b0d210047781cfe1f656a9f4c35479b68",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/four-forces",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-jtbd-needs",
-      "name": "jtbd-needs",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/jtbd-needs/SKILL.md",
-      "content_sha256": "53d1aa598eafac804f4f8cc3ec99410c9ba298f0ce3877e8e0046e31cc14af00",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/jtbd-needs",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-pmf-engine",
-      "name": "pmf-engine",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/pmf-engine/SKILL.md",
-      "content_sha256": "269228fa4c30e2a58825ce5b4367215a01de852681272cbdffd3afbdecd06c5a",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/pmf-engine",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-seven-dimensions",
-      "name": "seven-dimensions",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/seven-dimensions/SKILL.md",
-      "content_sha256": "f06319ff86be0fc513ac1d9dec9800cc1bbd55f5292b3a4a2a926d6337457b4e",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/seven-dimensions",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-w3-hypothesis",
-      "name": "w3-hypothesis",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.2",
-      "path": "packs/business-discovery/claude/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
-      "content_sha256": "f98dfe631c57833bed761041098b8d4153a5dd1e7a646e66f3d7a77956bb0d0f",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "/w3-hypothesis",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-customer-discovery",
-      "name": "customer-discovery",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v1.2",
-      "path": "packs/business-discovery/claude/customer-discovery/SKILL.md",
-      "content_sha256": "17f7ee6c7a8c015e6048631d71552519b6c49a911f7c5738176972e8002b5fcb",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9",
-        "v1.0",
-        "v1.1"
-      ],
-      "command": "/customer-discovery",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-customer-feedback",
-      "name": "customer-feedback",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.7",
-      "path": "packs/business-discovery/claude/customer-feedback/SKILL.md",
-      "content_sha256": "1e10a03fbe12a3680decf20d36e03d6ac2246836c3fbb76597141ebd50ec0033",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6"
-      ],
-      "command": "/customer-feedback",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-enterprise-icp",
-      "name": "enterprise-icp",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.8",
-      "path": "packs/business-discovery/claude/enterprise-icp/SKILL.md",
-      "content_sha256": "c7dd4b877ef00d80ca123ea6171ba00d81636d6a3f809987aebcdd646114b167",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7"
-      ],
-      "command": "/enterprise-icp",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-lean-canvas",
-      "name": "lean-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.9",
-      "path": "packs/business-discovery/claude/lean-canvas/SKILL.md",
-      "content_sha256": "9814b111e891f3e31e13f8c9810f5db564c84277ffbcf4d6f5467d41aa715137",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8"
-      ],
-      "command": "/lean-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-category-design",
-      "name": "category-design",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.6",
-      "path": "packs/business-discovery/claude/positioning/frameworks/category-design/SKILL.md",
-      "content_sha256": "e6db1fad2dad14776c38af6857ad670fd0d9c4c349e5c670961736fcc5e7300b",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "/category-design",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-jtbd-positioning",
-      "name": "jtbd-positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.6",
-      "path": "packs/business-discovery/claude/positioning/frameworks/jtbd-positioning/SKILL.md",
-      "content_sha256": "a642afe64870a86ed04b318c34c07a538b408a95b01c686bad67ad9c71a62397",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "/jtbd-positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-moore-positioning",
-      "name": "moore-positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.6",
-      "path": "packs/business-discovery/claude/positioning/frameworks/moore-positioning/SKILL.md",
-      "content_sha256": "bfe8ca27c3edc7958072f99198cb491900810ccb2cc5671b01c4ddbab6b000d2",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "/moore-positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-obviously-awesome",
-      "name": "obviously-awesome",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.6",
-      "path": "packs/business-discovery/claude/positioning/frameworks/obviously-awesome/SKILL.md",
-      "content_sha256": "345f582bb2f22f45d92ce1815adb218de55f21e05ef087664f490e6650996d61",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "/obviously-awesome",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-strategic-canvas",
-      "name": "strategic-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.6",
-      "path": "packs/business-discovery/claude/positioning/frameworks/strategic-canvas/SKILL.md",
-      "content_sha256": "c1ec3c8f764d7b512e4ff184902d48bb5415e854d438a5d7b82aaf19103d03fd",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "/strategic-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-positioning",
-      "name": "positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.14",
-      "path": "packs/business-discovery/claude/positioning/SKILL.md",
-      "content_sha256": "0b1a7ef482f630f8dcfe472382e8f72c603263ed157ce58d910728628bcad509",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.12",
-        "v0.13",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9"
-      ],
-      "command": "/positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-claude-value-prop-canvas",
-      "name": "value-prop-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "claude",
-      "version": "v0.9",
-      "path": "packs/business-discovery/claude/value-prop-canvas/SKILL.md",
-      "content_sha256": "df95b944bcc969e2803c783848b164ea0e7499d2e4521ac162f27d61fb9cd852",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8"
-      ],
-      "command": "/value-prop-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-feature-pricing-matrix",
-      "name": "feature-pricing-matrix",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
-      "content_sha256": "54bfa17e6c78e1dbfc856b72a402bc1cd38ad52b9f3e9a55fc2ac216005d8237",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$feature-pricing-matrix",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-porter-five-forces",
-      "name": "porter-five-forces",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
-      "content_sha256": "38d5036146a2d1b67e72efabe6de0178c8d99ca374c0dcd47d31c41b32f608dd",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$porter-five-forces",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-strategic-group-map",
-      "name": "strategic-group-map",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
-      "content_sha256": "c86c760d6d47bde5a621925d18098ecf786cb99c14ced86b77aec74e86dcbef1",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$strategic-group-map",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-swot",
-      "name": "swot",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/competitive-analysis/frameworks/swot/SKILL.md",
-      "content_sha256": "6f35bef3dfe685607d3715e3fcc570ff551e64bc3970ed11465e5cf0f458504e",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$swot",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-competitive-analysis",
-      "name": "competitive-analysis",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.17",
-      "path": "packs/business-discovery/codex/competitive-analysis/SKILL.md",
-      "content_sha256": "4efd06d451d4e74631216cde4accacd82a5c7c780c5a5980c7d74691923398c4",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.12",
-        "v0.13",
-        "v0.14",
-        "v0.15",
-        "v0.16",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9"
-      ],
-      "command": "$competitive-analysis",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-five-rings",
-      "name": "five-rings",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/five-rings/SKILL.md",
-      "content_sha256": "32dae771b1fa3a986b6745fdb3bef10df0c8ce4ef84175c19a7248944dc00410",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$five-rings",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-four-forces",
-      "name": "four-forces",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/four-forces/SKILL.md",
-      "content_sha256": "445a6d433367cee754539d3093a388aa07ea453a3014096604ed92f03996dfdd",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$four-forces",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-jtbd-needs",
-      "name": "jtbd-needs",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/jtbd-needs/SKILL.md",
-      "content_sha256": "72f407e5e0d734b891bd96768d8e96e844e93c7dc7f1b393f3656783dd65c47b",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$jtbd-needs",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-pmf-engine",
-      "name": "pmf-engine",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/pmf-engine/SKILL.md",
-      "content_sha256": "b7baca1de3fb102e9c51fb1c994bd064b2074980a4aa3876bf1f836b7030d478",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$pmf-engine",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-seven-dimensions",
-      "name": "seven-dimensions",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/seven-dimensions/SKILL.md",
-      "content_sha256": "2e57bf92f2f8199c2facccbee46747262fa98ce3c4042f88191b306f77725121",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$seven-dimensions",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-w3-hypothesis",
-      "name": "w3-hypothesis",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.2",
-      "path": "packs/business-discovery/codex/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
-      "content_sha256": "33e81d8bb3d4ab6856260d617f363ce357a8839178e516d88d01dffcd7d7dcc5",
-      "archive_versions": [
-        "v0.0",
-        "v0.1"
-      ],
-      "command": "$w3-hypothesis",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-customer-discovery",
-      "name": "customer-discovery",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v1.2",
-      "path": "packs/business-discovery/codex/customer-discovery/SKILL.md",
-      "content_sha256": "4aa5b4f7e97664d5fcb28c8988b47ff5c0bf2c14ce80d69dd82fbb8da75d8d89",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9",
-        "v1.0",
-        "v1.1"
-      ],
-      "command": "$customer-discovery",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-customer-feedback",
-      "name": "customer-feedback",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.7",
-      "path": "packs/business-discovery/codex/customer-feedback/SKILL.md",
-      "content_sha256": "704460b9dfc5b9e7908df842a1e1e79abe1fb6adab8a280d3374f6ba9d528723",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6"
-      ],
-      "command": "$customer-feedback",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-enterprise-icp",
-      "name": "enterprise-icp",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.8",
-      "path": "packs/business-discovery/codex/enterprise-icp/SKILL.md",
-      "content_sha256": "ec86577aad546770596f779fecbef9ff1dc78f76834c0f5c9710c87163ca90a5",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7"
-      ],
-      "command": "$enterprise-icp",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-lean-canvas",
-      "name": "lean-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.9",
-      "path": "packs/business-discovery/codex/lean-canvas/SKILL.md",
-      "content_sha256": "7358861f51193f28884dedb7f33033f18d547df2329da3fd384766847ca856f1",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8"
-      ],
-      "command": "$lean-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-category-design",
-      "name": "category-design",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.6",
-      "path": "packs/business-discovery/codex/positioning/frameworks/category-design/SKILL.md",
-      "content_sha256": "23465e4221473c8b66b7aca71565819a8feef47a9fc63c0e32ce851758a011e3",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "$category-design",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-jtbd-positioning",
-      "name": "jtbd-positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.6",
-      "path": "packs/business-discovery/codex/positioning/frameworks/jtbd-positioning/SKILL.md",
-      "content_sha256": "fdea99e01716d75383c99503cf41439bfdf8992bb343dfb848764e09c7bd859a",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "$jtbd-positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-moore-positioning",
-      "name": "moore-positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.6",
-      "path": "packs/business-discovery/codex/positioning/frameworks/moore-positioning/SKILL.md",
-      "content_sha256": "665ba9dde6b40f72f223408d8d3028f4f3f40a97aa8731d1284730baf54d2ced",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "$moore-positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-obviously-awesome",
-      "name": "obviously-awesome",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.6",
-      "path": "packs/business-discovery/codex/positioning/frameworks/obviously-awesome/SKILL.md",
-      "content_sha256": "ae4641eb909e3f81341bf454c44c26f77c82ce770dca540033c8ec7e1bbb9dc8",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "$obviously-awesome",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-strategic-canvas",
-      "name": "strategic-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.6",
-      "path": "packs/business-discovery/codex/positioning/frameworks/strategic-canvas/SKILL.md",
-      "content_sha256": "242ffd5909b0d22709f0c8d58f2c19896b134192d4a9cea708fd9c4581ba04a8",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5"
-      ],
-      "command": "$strategic-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-positioning",
-      "name": "positioning",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.14",
-      "path": "packs/business-discovery/codex/positioning/SKILL.md",
-      "content_sha256": "d02bfbb6fd3b3e26a0cd830f95e92df7937272d08be211096a8d2972ce20de4d",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.10",
-        "v0.11",
-        "v0.12",
-        "v0.13",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8",
-        "v0.9"
-      ],
-      "command": "$positioning",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
-      "id": "pack-business-discovery-codex-value-prop-canvas",
-      "name": "value-prop-canvas",
-      "scope": "pack",
-      "pack": "business-discovery",
-      "platform": "codex",
-      "version": "v0.9",
-      "path": "packs/business-discovery/codex/value-prop-canvas/SKILL.md",
-      "content_sha256": "3697181a0dea78bc51ccc1798e68392314a04582376a2655f05301adfbc7723c",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2",
-        "v0.3",
-        "v0.4",
-        "v0.5",
-        "v0.6",
-        "v0.7",
-        "v0.8"
-      ],
-      "command": "$value-prop-canvas",
-      "deck_memberships": [
-        "business-afps"
-      ]
-    },
-    {
       "id": "pack-business-growth-claude-experiment",
       "name": "experiment",
       "scope": "pack",
@@ -3340,6 +2380,966 @@
         "v0.3"
       ],
       "command": "$scale-audit",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-feature-pricing-matrix",
+      "name": "feature-pricing-matrix",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
+      "content_sha256": "dadd96fdc5da21caaa054cbb5b6c3332d96c1ff80b00ad6108dd3b97283a820b",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/feature-pricing-matrix",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-porter-five-forces",
+      "name": "porter-five-forces",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
+      "content_sha256": "2e6502b2ca562e31c1942ef969703021ea00e4df8848b2a1127adf14b35b7255",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/porter-five-forces",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-strategic-group-map",
+      "name": "strategic-group-map",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
+      "content_sha256": "7bb9ef50aeab70da5d800a53baab89f18625b6f0c05bdb3d67e386e216a4376b",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/strategic-group-map",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-swot",
+      "name": "swot",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/competitive-analysis/frameworks/swot/SKILL.md",
+      "content_sha256": "be6a8afee9d227bd7f7d1355ed4ce7ea493b5ad44488dab1af5d2bc3304ff3a0",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/swot",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-competitive-analysis",
+      "name": "competitive-analysis",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.17",
+      "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
+      "content_sha256": "5235ba6a372c6517036c5fdcc2d2ca3fd582eaa7b05c2d375e09da0d3a342193",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.12",
+        "v0.13",
+        "v0.14",
+        "v0.15",
+        "v0.16",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9"
+      ],
+      "command": "/competitive-analysis",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-five-rings",
+      "name": "five-rings",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/five-rings/SKILL.md",
+      "content_sha256": "6d2c55ff31cc4201e42d63310dcc165e5df079a1c780c7b65b616cc1ae5833b5",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/five-rings",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-four-forces",
+      "name": "four-forces",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/four-forces/SKILL.md",
+      "content_sha256": "023a323c3adbe9f13d4f1370beedc10b0d210047781cfe1f656a9f4c35479b68",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/four-forces",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-jtbd-needs",
+      "name": "jtbd-needs",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/jtbd-needs/SKILL.md",
+      "content_sha256": "53d1aa598eafac804f4f8cc3ec99410c9ba298f0ce3877e8e0046e31cc14af00",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/jtbd-needs",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-pmf-engine",
+      "name": "pmf-engine",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/pmf-engine/SKILL.md",
+      "content_sha256": "269228fa4c30e2a58825ce5b4367215a01de852681272cbdffd3afbdecd06c5a",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/pmf-engine",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-seven-dimensions",
+      "name": "seven-dimensions",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/seven-dimensions/SKILL.md",
+      "content_sha256": "f06319ff86be0fc513ac1d9dec9800cc1bbd55f5292b3a4a2a926d6337457b4e",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/seven-dimensions",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-w3-hypothesis",
+      "name": "w3-hypothesis",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.2",
+      "path": "packs/business-research/claude/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
+      "content_sha256": "f98dfe631c57833bed761041098b8d4153a5dd1e7a646e66f3d7a77956bb0d0f",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "/w3-hypothesis",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-customer-discovery",
+      "name": "customer-discovery",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v1.2",
+      "path": "packs/business-research/claude/customer-discovery/SKILL.md",
+      "content_sha256": "17f7ee6c7a8c015e6048631d71552519b6c49a911f7c5738176972e8002b5fcb",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9",
+        "v1.0",
+        "v1.1"
+      ],
+      "command": "/customer-discovery",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-customer-feedback",
+      "name": "customer-feedback",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.7",
+      "path": "packs/business-research/claude/customer-feedback/SKILL.md",
+      "content_sha256": "1e10a03fbe12a3680decf20d36e03d6ac2246836c3fbb76597141ebd50ec0033",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6"
+      ],
+      "command": "/customer-feedback",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-enterprise-icp",
+      "name": "enterprise-icp",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.8",
+      "path": "packs/business-research/claude/enterprise-icp/SKILL.md",
+      "content_sha256": "c7dd4b877ef00d80ca123ea6171ba00d81636d6a3f809987aebcdd646114b167",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7"
+      ],
+      "command": "/enterprise-icp",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-lean-canvas",
+      "name": "lean-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.9",
+      "path": "packs/business-research/claude/lean-canvas/SKILL.md",
+      "content_sha256": "9814b111e891f3e31e13f8c9810f5db564c84277ffbcf4d6f5467d41aa715137",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8"
+      ],
+      "command": "/lean-canvas",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-category-design",
+      "name": "category-design",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.6",
+      "path": "packs/business-research/claude/positioning/frameworks/category-design/SKILL.md",
+      "content_sha256": "e6db1fad2dad14776c38af6857ad670fd0d9c4c349e5c670961736fcc5e7300b",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "/category-design",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-jtbd-positioning",
+      "name": "jtbd-positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.6",
+      "path": "packs/business-research/claude/positioning/frameworks/jtbd-positioning/SKILL.md",
+      "content_sha256": "a642afe64870a86ed04b318c34c07a538b408a95b01c686bad67ad9c71a62397",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "/jtbd-positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-moore-positioning",
+      "name": "moore-positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.6",
+      "path": "packs/business-research/claude/positioning/frameworks/moore-positioning/SKILL.md",
+      "content_sha256": "bfe8ca27c3edc7958072f99198cb491900810ccb2cc5671b01c4ddbab6b000d2",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "/moore-positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-obviously-awesome",
+      "name": "obviously-awesome",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.6",
+      "path": "packs/business-research/claude/positioning/frameworks/obviously-awesome/SKILL.md",
+      "content_sha256": "345f582bb2f22f45d92ce1815adb218de55f21e05ef087664f490e6650996d61",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "/obviously-awesome",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-strategic-canvas",
+      "name": "strategic-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.6",
+      "path": "packs/business-research/claude/positioning/frameworks/strategic-canvas/SKILL.md",
+      "content_sha256": "c1ec3c8f764d7b512e4ff184902d48bb5415e854d438a5d7b82aaf19103d03fd",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "/strategic-canvas",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-positioning",
+      "name": "positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.14",
+      "path": "packs/business-research/claude/positioning/SKILL.md",
+      "content_sha256": "0b1a7ef482f630f8dcfe472382e8f72c603263ed157ce58d910728628bcad509",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.12",
+        "v0.13",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9"
+      ],
+      "command": "/positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-claude-value-prop-canvas",
+      "name": "value-prop-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "claude",
+      "version": "v0.9",
+      "path": "packs/business-research/claude/value-prop-canvas/SKILL.md",
+      "content_sha256": "df95b944bcc969e2803c783848b164ea0e7499d2e4521ac162f27d61fb9cd852",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8"
+      ],
+      "command": "/value-prop-canvas",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-feature-pricing-matrix",
+      "name": "feature-pricing-matrix",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
+      "content_sha256": "54bfa17e6c78e1dbfc856b72a402bc1cd38ad52b9f3e9a55fc2ac216005d8237",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$feature-pricing-matrix",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-porter-five-forces",
+      "name": "porter-five-forces",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
+      "content_sha256": "38d5036146a2d1b67e72efabe6de0178c8d99ca374c0dcd47d31c41b32f608dd",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$porter-five-forces",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-strategic-group-map",
+      "name": "strategic-group-map",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
+      "content_sha256": "c86c760d6d47bde5a621925d18098ecf786cb99c14ced86b77aec74e86dcbef1",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$strategic-group-map",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-swot",
+      "name": "swot",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/competitive-analysis/frameworks/swot/SKILL.md",
+      "content_sha256": "6f35bef3dfe685607d3715e3fcc570ff551e64bc3970ed11465e5cf0f458504e",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$swot",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-competitive-analysis",
+      "name": "competitive-analysis",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.17",
+      "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
+      "content_sha256": "4efd06d451d4e74631216cde4accacd82a5c7c780c5a5980c7d74691923398c4",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.12",
+        "v0.13",
+        "v0.14",
+        "v0.15",
+        "v0.16",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9"
+      ],
+      "command": "$competitive-analysis",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-five-rings",
+      "name": "five-rings",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/five-rings/SKILL.md",
+      "content_sha256": "32dae771b1fa3a986b6745fdb3bef10df0c8ce4ef84175c19a7248944dc00410",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$five-rings",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-four-forces",
+      "name": "four-forces",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/four-forces/SKILL.md",
+      "content_sha256": "445a6d433367cee754539d3093a388aa07ea453a3014096604ed92f03996dfdd",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$four-forces",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-jtbd-needs",
+      "name": "jtbd-needs",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/jtbd-needs/SKILL.md",
+      "content_sha256": "72f407e5e0d734b891bd96768d8e96e844e93c7dc7f1b393f3656783dd65c47b",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$jtbd-needs",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-pmf-engine",
+      "name": "pmf-engine",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md",
+      "content_sha256": "b7baca1de3fb102e9c51fb1c994bd064b2074980a4aa3876bf1f836b7030d478",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$pmf-engine",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-seven-dimensions",
+      "name": "seven-dimensions",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/seven-dimensions/SKILL.md",
+      "content_sha256": "2e57bf92f2f8199c2facccbee46747262fa98ce3c4042f88191b306f77725121",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$seven-dimensions",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-w3-hypothesis",
+      "name": "w3-hypothesis",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.2",
+      "path": "packs/business-research/codex/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
+      "content_sha256": "33e81d8bb3d4ab6856260d617f363ce357a8839178e516d88d01dffcd7d7dcc5",
+      "archive_versions": [
+        "v0.0",
+        "v0.1"
+      ],
+      "command": "$w3-hypothesis",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-customer-discovery",
+      "name": "customer-discovery",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v1.2",
+      "path": "packs/business-research/codex/customer-discovery/SKILL.md",
+      "content_sha256": "4aa5b4f7e97664d5fcb28c8988b47ff5c0bf2c14ce80d69dd82fbb8da75d8d89",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9",
+        "v1.0",
+        "v1.1"
+      ],
+      "command": "$customer-discovery",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-customer-feedback",
+      "name": "customer-feedback",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.7",
+      "path": "packs/business-research/codex/customer-feedback/SKILL.md",
+      "content_sha256": "704460b9dfc5b9e7908df842a1e1e79abe1fb6adab8a280d3374f6ba9d528723",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6"
+      ],
+      "command": "$customer-feedback",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-enterprise-icp",
+      "name": "enterprise-icp",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.8",
+      "path": "packs/business-research/codex/enterprise-icp/SKILL.md",
+      "content_sha256": "ec86577aad546770596f779fecbef9ff1dc78f76834c0f5c9710c87163ca90a5",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7"
+      ],
+      "command": "$enterprise-icp",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-lean-canvas",
+      "name": "lean-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.9",
+      "path": "packs/business-research/codex/lean-canvas/SKILL.md",
+      "content_sha256": "7358861f51193f28884dedb7f33033f18d547df2329da3fd384766847ca856f1",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8"
+      ],
+      "command": "$lean-canvas",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-category-design",
+      "name": "category-design",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.6",
+      "path": "packs/business-research/codex/positioning/frameworks/category-design/SKILL.md",
+      "content_sha256": "23465e4221473c8b66b7aca71565819a8feef47a9fc63c0e32ce851758a011e3",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "$category-design",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-jtbd-positioning",
+      "name": "jtbd-positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.6",
+      "path": "packs/business-research/codex/positioning/frameworks/jtbd-positioning/SKILL.md",
+      "content_sha256": "fdea99e01716d75383c99503cf41439bfdf8992bb343dfb848764e09c7bd859a",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "$jtbd-positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-moore-positioning",
+      "name": "moore-positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.6",
+      "path": "packs/business-research/codex/positioning/frameworks/moore-positioning/SKILL.md",
+      "content_sha256": "665ba9dde6b40f72f223408d8d3028f4f3f40a97aa8731d1284730baf54d2ced",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "$moore-positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-obviously-awesome",
+      "name": "obviously-awesome",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.6",
+      "path": "packs/business-research/codex/positioning/frameworks/obviously-awesome/SKILL.md",
+      "content_sha256": "ae4641eb909e3f81341bf454c44c26f77c82ce770dca540033c8ec7e1bbb9dc8",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "$obviously-awesome",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-strategic-canvas",
+      "name": "strategic-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.6",
+      "path": "packs/business-research/codex/positioning/frameworks/strategic-canvas/SKILL.md",
+      "content_sha256": "242ffd5909b0d22709f0c8d58f2c19896b134192d4a9cea708fd9c4581ba04a8",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5"
+      ],
+      "command": "$strategic-canvas",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-positioning",
+      "name": "positioning",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.14",
+      "path": "packs/business-research/codex/positioning/SKILL.md",
+      "content_sha256": "d02bfbb6fd3b3e26a0cd830f95e92df7937272d08be211096a8d2972ce20de4d",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.10",
+        "v0.11",
+        "v0.12",
+        "v0.13",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8",
+        "v0.9"
+      ],
+      "command": "$positioning",
+      "deck_memberships": [
+        "business-afps"
+      ]
+    },
+    {
+      "id": "pack-business-research-codex-value-prop-canvas",
+      "name": "value-prop-canvas",
+      "scope": "pack",
+      "pack": "business-research",
+      "platform": "codex",
+      "version": "v0.9",
+      "path": "packs/business-research/codex/value-prop-canvas/SKILL.md",
+      "content_sha256": "3697181a0dea78bc51ccc1798e68392314a04582376a2655f05301adfbc7723c",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3",
+        "v0.4",
+        "v0.5",
+        "v0.6",
+        "v0.7",
+        "v0.8"
+      ],
+      "command": "$value-prop-canvas",
       "deck_memberships": [
         "business-afps"
       ]
@@ -5916,6 +5916,7 @@
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -5938,7 +5939,8 @@
       "path": "packs/product-design/claude/design-system/SKILL.md",
       "content_sha256": "9f634420b80c27b3c8b96626bcf3c1e74203db9b0afc29c50809c85e5a889c7a",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/design-system",
       "deck_memberships": []
@@ -5957,7 +5959,8 @@
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/feature-interview",
       "deck_memberships": []
@@ -5975,6 +5978,7 @@
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6000,6 +6004,7 @@
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6028,6 +6033,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6050,7 +6056,8 @@
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "content_sha256": "36351fa1938359a993365d31fe58cc3116af195d2920a65f3346c6cff1952204",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -6072,6 +6079,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6112,6 +6120,7 @@
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6153,7 +6162,8 @@
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$feature-interview",
       "deck_memberships": []
@@ -6171,6 +6181,7 @@
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6196,6 +6207,7 @@
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6224,6 +6236,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6246,7 +6259,8 @@
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "content_sha256": "e82b64114494023a8ee5e5de877040e2935e777941aef8c67153d97d487ee9a8",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []
@@ -6268,6 +6282,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7686,10 +7701,10 @@
       "domain": "business",
       "tempo": "deliberate",
       "default_packs": [
-        "business-discovery"
+        "business-research"
       ],
       "full_packs": [
-        "business-discovery",
+        "business-research",
         "customer-lifecycle",
         "business-growth",
         "business-ops"
@@ -7705,10 +7720,10 @@
       ],
       "package_list": {
         "default": [
-          "business-discovery"
+          "business-research"
         ],
         "full": [
-          "business-discovery",
+          "business-research",
           "customer-lifecycle",
           "business-growth",
           "business-ops"

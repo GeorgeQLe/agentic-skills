@@ -1,6 +1,6 @@
-# Business Discovery Pack
+# Business Research Pack
 
-Project-local workflows for early business and product discovery.
+Project-local workflows for business and product research and discovery.
 
 Install this pack when a project needs customer discovery, enterprise buyer mapping, competitive analysis, customer feedback synthesis, positioning, or optional value proposition / lean canvas synthesis.
 

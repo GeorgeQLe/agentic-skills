@@ -92,7 +92,7 @@ function getShowcaseCounts() {
 const DOMAINS = {
   rapid_vard:   { label: 'VARD (Rapid)', packs: ['vard'], fill: '#fff3bf', border: '#fab005' },
   rapid_ord:    { label: 'ORD (Rapid)', packs: ['ord'], fill: '#fff3bf', border: '#fab005' },
-  business:     { label: 'Business', packs: ['business-discovery', 'customer-lifecycle', 'business-growth', 'business-ops', 'business-app'], fill: '#d3f9d8', border: '#2f9e44' },
+  business:     { label: 'Business', packs: ['business-research', 'customer-lifecycle', 'business-growth', 'business-ops', 'business-app'], fill: '#d3f9d8', border: '#2f9e44' },
   creator:      { label: 'Creator', packs: ['creator-foundation', 'creator-media', 'youtube-ops'], fill: '#ffe3e3', border: '#e03131' },
   game:         { label: 'Game', packs: ['game'], fill: '#e5dbff', border: '#7950f2' },
   devtool:      { label: 'Devtool', packs: ['devtool'], fill: '#d0ebff', border: '#228be6' },
@@ -501,11 +501,11 @@ function arrowBetween(fromPack, toPack, label, style) {
 }
 
 // Graduation arrows (dashed)
-arrowBetween('vard', 'business-discovery', 'graduate', 'dashed');
+arrowBetween('vard', 'business-research', 'graduate', 'dashed');
 arrowBetween('ord', 'devtool', 'graduate', 'dashed');
 
 // Canonical business flow (solid)
-arrowBetween('business-discovery', 'customer-lifecycle', '', 'solid');
+arrowBetween('business-research', 'customer-lifecycle', '', 'solid');
 arrowBetween('customer-lifecycle', 'business-growth', '', 'solid');
 arrowBetween('business-growth', 'business-ops', '', 'solid');
 
@@ -656,9 +656,9 @@ function generateAlignmentHTML() {
     if (!fp || !tp) return '';
     return svgArrow(fp.x + fp.w / 2, fp.y + fp.h, tp.x + tp.w / 2, tp.y, dashed, label);
   }
-  svgContent += svgArrowBetween('vard', 'business-discovery', 'graduate', true);
+  svgContent += svgArrowBetween('vard', 'business-research', 'graduate', true);
   svgContent += svgArrowBetween('ord', 'devtool', 'graduate', true);
-  svgContent += svgArrowBetween('business-discovery', 'customer-lifecycle', '', false);
+  svgContent += svgArrowBetween('business-research', 'customer-lifecycle', '', false);
   svgContent += svgArrowBetween('customer-lifecycle', 'business-growth', '', false);
   svgContent += svgArrowBetween('business-growth', 'business-ops', '', false);
 
@@ -855,7 +855,7 @@ ${statsRows}
   <li><strong>ORD &rarr; Devtool AFPS:</strong> When an OSS package gains traction (npm downloads, stars, issues), graduate to full positioning, adoption strategy, and documentation depth.</li>
 </ul>
 <h3>Canonical Business Flow</h3>
-<p><code>business-discovery</code> &rarr; <code>customer-lifecycle</code> &rarr; <code>business-growth</code> &rarr; <code>business-ops</code></p>
+<p><code>business-research</code> &rarr; <code>customer-lifecycle</code> &rarr; <code>business-growth</code> &rarr; <code>business-ops</code></p>
 <h3>Canonical Game Flow</h3>
 <p><code>game-audience</code> &rarr; <code>game-fantasy</code> &rarr; <code>game-genre-map</code> &rarr; <code>game-comparables</code> &rarr; <code>game-core-loop</code> &rarr; <code>game-prototype-test</code> &rarr; <code>game-playtest-metrics</code> &rarr; <code>game-store-page-test</code> &rarr; <code>game-launch</code> &rarr; <code>game-roadmap</code></p>
 </section>

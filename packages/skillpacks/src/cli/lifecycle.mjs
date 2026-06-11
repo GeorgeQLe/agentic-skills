@@ -52,7 +52,7 @@ function resolvePackagedPath(relativePath) {
 function projectTypeForPack(pack) {
   if (
     [
-      'business-discovery',
+      'business-research',
       'customer-lifecycle',
       'business-growth',
       'business-ops',
