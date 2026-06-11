@@ -1,0 +1,9 @@
+[
+  {
+    "path": "valid/source-checkout-allowed/SKILL.md",
+    "reason": "Fixture proving source-checkout-only maintenance text may retain scripts/pack.sh install without npm package guidance.",
+    "scope": "source-checkout-only",
+    "evidence": "This maintenance-only fixture runs from a local source checkout.",
+    "expires_after": "fixture"
+  }
+]

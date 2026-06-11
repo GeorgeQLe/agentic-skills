@@ -14042,3 +14042,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Chose the validation shape for npm-aware skill install-route remediation before touching the 220 active `SKILL.md` candidates: add a dedicated active-skill scanner, keep `scripts/skill-pack-routing-audit.sh` scoped to cross-pack guard correctness, and use fixture-backed layer1 coverage for the scanner contract.
 - Defined the scanner modes, P1 coverage requirement, deck-route distinction, and structured source-checkout-only/internal allowlist shape directly in `tasks/todo.md` so the next implementation step is executable without re-deciding the design.
 - No active `SKILL.md`, `PACK.md`, script, generated Skills Showcase, package build, or runtime files changed in this decision-only boundary. Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-install-routing-validation-design.md`.
+
+## 2026-06-10 — Skillpacks install-route validation implementation
+
+- Added `scripts/skill-install-routing-audit.sh`, a focused active-skill scanner with `--active`, `--report`, and `--fixtures <dir>` modes for npm-aware pack/skill/deck install-route wording.
+- Added fixture-backed coverage for valid runner-specific pack guards, missing-skill fallbacks, source-checkout-only allowlisting, valid deck installs, invalid in-agent-only routes, invalid generic `pack install`, missing allowlist evidence, and deck installs incorrectly routed through `npx skillpacks install <deck>`.
+- Added `tests/layer1/skill-install-routing-audit.test.ts` so fixture behavior and 14/14 P1 coverage are pinned without making the known 220 active findings fail the layer1 suite before remediation.
+- Verification passed: script syntax, fixture mode, active report mode (383 active files, 14/14 P1 coverage, 220 findings, exit 0), expected-red active strict mode (220 findings), existing cross-pack routing audit, focused layer1 test 2/2, and `git diff --check`. Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-install-routing-validation-implementation.md`.

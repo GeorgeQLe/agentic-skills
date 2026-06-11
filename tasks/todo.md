@@ -103,7 +103,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - `--fixtures <dir>` scans fixture cases and exits non-zero when valid examples fail, invalid examples pass, deck installs are treated as ordinary pack installs, or source-checkout-only exceptions lack explicit allowlist evidence.
   - Required allowlist shape: a structured JSON file or embedded fixture object with one entry per exception: `path`, `reason`, `scope` (`source-checkout-only`, `internal-maintenance`, or `fixture`), `evidence`, and optional `expires_after`. The scanner must fail on stale allowlist entries that no longer match active text.
   - Required distinction: `npx skillpacks install-deck <deck>` satisfies only deck-route guidance; it must not satisfy pack or individual skill install guidance that needs `npx skillpacks install <pack-or-skill>`.
-- [ ] Implement the validation rule and initial fixtures:
+- [x] Implement the validation rule and initial fixtures:
   - Create `scripts/skill-install-routing-audit.sh` using the decision above.
   - Build the scanner around active `SKILL.md` files in `global/` and `packs/`; exclude `archive/**` and do not scan generated package build output under `packages/skillpacks/build`.
   - Include the 14 P1 global files from `research/skillpack-cli-routing-audit.md` as a required coverage list, and fail if any are missing from the active scan inventory.
@@ -117,7 +117,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - Invalid deck text where `npx skillpacks install <deck>` is used instead of `npx skillpacks install-deck <deck>`.
   - Add a focused layer1 test, for example `tests/layer1/skill-install-routing-audit.test.ts`, that runs fixture mode and pins the P1 coverage inventory without making the known active 220-file debt fail the whole layer1 suite yet.
   - Do not edit active `SKILL.md` files, archives, changelogs, Skills Showcase data, or generated package build output in this step.
-- [ ] Verify this slice:
+- [x] Verify this slice:
   - Run `bash -n scripts/skill-install-routing-audit.sh`.
   - Run the new fixture validation and confirm it passes.
   - Run active report mode and confirm it reports the known pre-remediation debt without failing the command.
@@ -128,6 +128,23 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - [ ] Prepare the next remediation slice:
   - Update `tasks/todo.md` with the P1 global skill edit batch after canonical wording and validation are in place.
   - Carry forward the skill-versioning requirement for every changed `SKILL.md`: `scripts/skill-archive.sh <skill-dir>`, frontmatter `version` bump, and `CHANGELOG.md` update where applicable.
+  - Include the 14 P1 targets explicitly:
+    - `global/claude/afps-status/SKILL.md`
+    - `global/claude/codebase-status/SKILL.md`
+    - `global/claude/idea-scope-brief/SKILL.md`
+    - `global/claude/init-agentic-skills/SKILL.md`
+    - `global/claude/pack/SKILL.md`
+    - `global/claude/provision-agentic-config/SKILL.md`
+    - `global/claude/skills/SKILL.md`
+    - `global/codex/afps-status/SKILL.md`
+    - `global/codex/codebase-status/SKILL.md`
+    - `global/codex/idea-scope-brief/SKILL.md`
+    - `global/codex/init-agentic-skills/SKILL.md`
+    - `global/codex/pack/SKILL.md`
+    - `global/codex/provision-agentic-config/SKILL.md`
+    - `global/codex/skills/SKILL.md`
+  - Plan the P1 edit batch as its own next `$exec` step; do not edit active `SKILL.md` files during this planning-only step.
+  - The P1 implementation plan must include a targeted post-edit check that no P1 file remains in `scripts/skill-install-routing-audit.sh --report`, while full `--active` may still fail until P2/P3 are remediated.
 
 ### Acceptance Criteria
 
@@ -149,6 +166,18 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - Added `docs/skillpacks-install-routing-contract.md` as the canonical wording matrix for the npm-aware install-route remediation.
 - The contract preserves runner-specific in-agent routes (`/pack` for Claude and `$pack` for Codex), keeps `scripts/pack.sh` for source-checkout maintenance, adds `npx skillpacks install <pack-or-skill>` for package consumers, and reserves `npx skillpacks install-deck <deck>` for curated decks.
 - Decided the validation shape: add a dedicated active-skill scanner plus fixture-backed layer1 coverage, keep the existing cross-pack routing audit unchanged, and use a structured allowlist only for explicit source-checkout-only/internal exceptions.
+- Added `scripts/skill-install-routing-audit.sh` with `--active`, `--report`, and `--fixtures <dir>` modes.
+- The scanner reads active `SKILL.md` files under `global/` and `packs/`, excludes `archive/**`, pins the 14 P1 global files as required coverage, strips YAML frontmatter before matching install-route wording, distinguishes pack/skill installs from deck installs, and validates structured allowlist entries for source-checkout-only/internal exceptions.
+- Added fixture coverage under `tests/fixtures/skill-install-routing/` for valid Claude/Codex pack guards, missing-skill fallbacks, source-checkout-only allowlisting, valid deck install wording, invalid in-agent-only routes, invalid source-checkout-only text without allowlist evidence, invalid generic `pack install`, and invalid deck routing through `npx skillpacks install <deck>`.
+- Added `tests/layer1/skill-install-routing-audit.test.ts` to run fixture mode and confirm the P1 coverage inventory through `--report` without making the known active debt fail layer1 yet.
+- Verification passed:
+  - `bash -n scripts/skill-install-routing-audit.sh`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` (11 fixture `SKILL.md` files, 6 expected invalid findings, exit 0)
+  - `scripts/skill-install-routing-audit.sh --report` (383 active `SKILL.md` files, 14/14 P1 coverage, 220 findings, exit 0)
+  - `scripts/skill-install-routing-audit.sh --active` (expected pre-remediation failure: 220 findings)
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` (2 passed)
+  - `git diff --check`
 - No active `SKILL.md` or `PACK.md` content changed in this step, so skill versioning, changelog updates, and Skills Showcase refresh are not required until the later remediation batches.
 
 ---

@@ -79,9 +79,9 @@ This roadmap schedules the remediation described in `research/skillpack-cli-rout
 ### Remediation Phases
 
 1. Canonical wording and validation design.
-   - [ ] Define runner-specific dual-route wording for Claude, Codex, individual skill installs, pack installs, source-checkout maintenance, and deck installs.
-   - [ ] Decide and implement the focused validation rule that prevents install-route text from omitting `npx skillpacks install` or `npx skillpacks install-deck` unless explicitly allowlisted.
-   - [ ] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack availability guards unless extending it is cleaner than adding a dedicated npm-route check.
+   - [x] Define runner-specific dual-route wording for Claude, Codex, individual skill installs, pack installs, source-checkout maintenance, and deck installs.
+   - [x] Decide and implement the focused validation rule that prevents install-route text from omitting `npx skillpacks install` or `npx skillpacks install-deck` unless explicitly allowlisted.
+   - [x] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack availability guards unless extending it is cleaner than adding a dedicated npm-route check.
 2. P1 global routing/install skills.
    - [ ] Update the 14 global files listed in the audit: `pack`, `skills`, `init-agentic-skills`, `provision-agentic-config`, `afps-status`, `codebase-status`, and `idea-scope-brief` for both Claude and Codex where present.
    - [ ] Preserve runner syntax exactly: Claude gets `/pack ...`; Codex gets `$pack ...`; shell guidance gets `npx skillpacks ...`.
