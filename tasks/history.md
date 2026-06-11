@@ -14129,3 +14129,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed for targeted business-growth report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 140 later P2/P3 findings.
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-221208-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-business-growth.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P2 creator-foundation remediation
+
+- Updated the creator-foundation P2 bucket from `research/skillpack-cli-routing-audit.md`: 8 mirrored `creator-evidence-schema`, `creator-metrics-review`, `creator-platform-capability-matrix`, and `creator-positioning` skills now include `npx skillpacks install <pack>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.
+- Archived every prior active `SKILL.md`, bumped all eight active targets to v0.5, and updated all eight target `CHANGELOG.md` files.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; generated versions and fingerprints changed, while non-generated showcase copy did not need manual updates.
+- Validation passed for targeted creator-foundation report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 110 later P2/P3 findings.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260611-023424-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-creator-foundation.md`.

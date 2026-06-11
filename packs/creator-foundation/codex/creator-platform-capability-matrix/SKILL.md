@@ -2,7 +2,7 @@
 name: creator-platform-capability-matrix
 description: Map creator platforms to free/manual evidence sources, available fields, audit depth, operational risk, and recommended next skill
 type: research
-version: v0.4
+version: v0.5
 argument-hint: "[creator or project slug]"
 interview_depth: none
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Creator Platform Capability Matrix
 
@@ -176,4 +176,3 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

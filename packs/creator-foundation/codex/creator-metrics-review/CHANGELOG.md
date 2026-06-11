@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-11
+
+- Added npm-aware install-route wording to the Pack Availability Guard while preserving the Codex in-agent `$pack install <pack>` route.
+
 ## v0.4 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.

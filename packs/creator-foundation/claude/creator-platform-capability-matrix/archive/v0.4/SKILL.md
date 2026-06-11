@@ -1,19 +1,20 @@
 ---
-name: creator-metrics-review
-description: Review creator-media performance over time using raw YouTube evidence, portfolio metrics, programming goals, and explicit follow-up decisions
+name: creator-platform-capability-matrix
+description: Map creator platforms to free/manual evidence sources, available fields, audit depth, operational risk, and recommended next skill
 type: research
-version: v0.5
-argument-hint: "[channel slug] [--period monthly|quarterly]"
+version: v0.4
+argument-hint: "[creator or project slug]"
 interview_depth: none
+visual_tier: visual
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Creator Metrics Review
+# Creator Platform Capability Matrix
 
-Invoke as `$creator-metrics-review`.
+Invoke as `/creator-platform-capability-matrix`.
 
 ## Report-First Approval Gate
 
@@ -44,30 +45,96 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
-## Inputs
+## Process
 
-- Preferred creator context when present: `research/creator-presence/<slug>.md`, especially for cross-platform performance, audience/community signals, and stale-positioning checks.
-- Raw metadata under `research/youtube/data/<slug>/`.
-- Channel audit, portfolio, positioning, programming, series specs, and product-led media map when present.
-- Optional prior metrics reviews.
+1. Identify the creator, project, and platforms in scope from the user request and repo context.
+2. Prefer free, open-source, owner-provided, and manual evidence paths. Do not require paid APIs, privileged platform programs, logged-in scraping, or access-control bypasses.
+3. Write `research/creator-platforms/capability-matrix.md`.
+4. Include a row for every platform in the baseline matrix, even when no evidence is currently available.
+5. Add extra platform rows only when the repo or user request gives a concrete reason.
 
-## Output
+## Baseline Platforms
 
-Create the `research/youtube/` directory if it does not exist.
+Include these rows:
 
-Write `research/youtube/metrics-review-<slug>-YYYY-MM-DD.md` with:
+- LinkedIn personal profile
+- LinkedIn company page
+- Personal website/blog
+- Newsletter
+- Podcast
+- GitHub
+- X/Threads/Instagram/TikTok
+- Bluesky/Mastodon
 
-- Period covered and evidence paths.
-- KPI table: videos published, views, median views, views/day, views/minute, likes, comments, top-video concentration, transcript coverage.
-- Series and pillar performance.
-- Portfolio drift: whether videos still match the intended roles.
-- Wins, misses, and ambiguous signals.
-- Decisions: keep, stop, refresh, investigate, or specify.
-- Follow-up tasks routed by execution semantics:
-  - Strategy/research -> creator-media skills.
-  - Implementation or repo docs -> `tasks/todo.md`.
-  - Human-only platform actions -> `tasks/manual-todo.md`.
-  - Recurring review cadence -> `tasks/recurring-todo.md`.
+## Collection Methods
+
+Classify every evidence source with one or more of these collection methods:
+
+- `export`: owner-provided platform export, CSV, ZIP, or analytics download.
+- `manual_snapshot`: user-saved page, screenshot, CSV, Markdown note, copied post text, or manually captured URL list.
+- `rss_feed`: RSS, Atom, JSON feed, podcast feed, sitemap, or newsletter feed.
+- `public_page_capture`: public unauthenticated page capture with polite retrieval.
+- `open_source_tool`: OSS tooling such as feed parsers, Playwright screenshots, `trafilatura`, or allowed public-media tools.
+- `free_api`: official free API or public protocol with no paid dependency.
+
+## Matrix Columns
+
+The matrix must include these columns:
+
+- Platform
+- Content types
+- Evidence sources
+- Collection methods
+- Likely fields
+- Missing fields
+- Metric availability
+- Body availability
+- Media availability
+- Transcript availability
+- Peer benchmarking practicality
+- Operational risk
+- Audit depth
+- Recommended next skill
+
+## Platform Guidance
+
+- LinkedIn personal profile: start with owner export plus manual snapshots, public unauthenticated page captures, and user-provided files. Treat profile analytics, search appearances, connection data, private messages, private contacts, relationship data, and sensitive account fields as unavailable unless the owner provides already-redacted evidence.
+- LinkedIn company page: start with owner/admin export plus manual snapshots and public unauthenticated page captures. Treat company/page analytics and API fields as unavailable unless owner-provided or already authorized. Treat official LinkedIn API use as a later authorized lane only when credentials, permissions, and scope are already in place.
+- Personal website/blog: prefer RSS, sitemap, and public page capture for body text and metadata.
+- Newsletter: prefer export, RSS, and public archives. Treat subscribers and private analytics as owner-only.
+- Podcast: prefer RSS, public show pages, and manual transcripts. Do not invent transcripts.
+- GitHub: use public API, public repo evidence, and manual repo notes for projects and proof assets.
+- X/Threads/Instagram/TikTok: prefer manual snapshots and exports. Treat metrics as owner-only unless public counters are visible.
+- Bluesky/Mastodon: use public protocol/API where available and respect instance or service limits.
+
+## LinkedIn Baseline
+
+For LinkedIn rows, the default collection lane is owner exports, manual snapshots, public unauthenticated page captures, and user-provided files. Do not attempt logged-in scraping, bot-protection bypass, paywall access, access-control circumvention, or private-data collection.
+
+Before any LinkedIn analysis, require redaction or exclusion of private contacts, private messages, relationship data, sensitive account data, unrelated personal information, and any employer/customer confidential material. If the only available LinkedIn source is high-risk, stop and ask for an owner export, manual snapshot, public unauthenticated capture, or redacted user-provided file.
+
+## Operational Risk
+
+Classify each row as:
+
+- `low`: export, user-supplied files, RSS/feed, public protocol/API, or public repo evidence.
+- `medium`: public page capture or OSS tooling where platform limits, robots rules, or stale snapshots need care.
+- `high`: access-controlled, bot-protected, logged-in, paywalled, private, or ToS-sensitive surfaces.
+
+High-risk rows must recommend manual snapshots, owner exports, or stopping for user-provided evidence instead of automated capture.
+
+## Output Requirements
+
+Create the `research/creator-platforms/` directory if it does not exist.
+
+`research/creator-platforms/capability-matrix.md` must contain:
+
+- Scope and capture date.
+- Source assumptions and exclusions.
+- The full capability matrix.
+- Evidence gaps by platform.
+- Recommended collection order.
+- Recommended next skill.
 
 ## Approved Artifact Handoff
 
@@ -94,14 +161,17 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/creator-metrics-review-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/creator-platform-capability-matrix-{topic}.html`.
 
 ## Constraints
 
-- Do not treat one video as a trend.
-- State metric gaps explicitly.
-- Use the dossier when present as preferred creator context for cross-platform signals; preserve raw YouTube evidence as the source of YouTube performance claims.
-- Do not perform external account actions or channel changes.
+- Do not mutate external accounts or collect private data.
+- Do not bypass bot protections, rate limits, paywalls, login walls, or access controls.
+- Do not use logged-in LinkedIn scraping, paid API dependency, bot-protection bypass, access-control circumvention, or private-data collection as a baseline path.
+- Do not imply YouTube-equivalent metrics, transcripts, thumbnails, or benchmarking are available for every platform.
+- Record missing metrics, missing bodies, and missing transcripts as evidence gaps.
+- Require LinkedIn private contacts, messages, relationship data, sensitive account data, and unrelated personal information to be redacted or excluded before analysis.
+- Cite repo paths and source URLs when available.
 
 ## Default Shipping Contract
 

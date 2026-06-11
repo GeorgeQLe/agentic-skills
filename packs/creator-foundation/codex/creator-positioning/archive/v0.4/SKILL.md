@@ -1,19 +1,19 @@
 ---
-name: creator-metrics-review
-description: Review creator-media performance over time using raw YouTube evidence, portfolio metrics, programming goals, and explicit follow-up decisions
+name: creator-positioning
+description: Define a creator or founder-media channel's audience promise, category, differentiated wedge, proof, and anti-positioning
 type: research
-version: v0.5
-argument-hint: "[channel slug] [--period monthly|quarterly]"
-interview_depth: none
+version: v0.4
+argument-hint: "[channel slug or audit path]"
+interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Creator Metrics Review
+# Creator Positioning
 
-Invoke as `$creator-metrics-review`.
+Invoke as `$creator-positioning`.
 
 ## Report-First Approval Gate
 
@@ -46,28 +46,25 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Inputs
 
-- Preferred creator context when present: `research/creator-presence/<slug>.md`, especially for cross-platform performance, audience/community signals, and stale-positioning checks.
-- Raw metadata under `research/youtube/data/<slug>/`.
-- Channel audit, portfolio, positioning, programming, series specs, and product-led media map when present.
-- Optional prior metrics reviews.
+- Prefer `research/creator-presence/<slug>.md` when present for cross-platform career, public promise, proof asset, and owned-presence context.
+- Prefer `research/youtube/channel-audit-<slug>.md`, `portfolio-<slug>.md`, and `peer-benchmark-<slug>.md`.
+- Read product/company context when present: `README.md`, `research/**`, `specs/**`, and product docs.
+- If no channel evidence or dossier exists, run `$youtube-channel-audit` for YouTube-only work or `$creator-presence-dossier` for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
 
 ## Output
 
 Create the `research/youtube/` directory if it does not exist.
 
-Write `research/youtube/metrics-review-<slug>-YYYY-MM-DD.md` with:
+Write `research/youtube/creator-positioning-<slug>.md` with:
 
-- Period covered and evidence paths.
-- KPI table: videos published, views, median views, views/day, views/minute, likes, comments, top-video concentration, transcript coverage.
-- Series and pillar performance.
-- Portfolio drift: whether videos still match the intended roles.
-- Wins, misses, and ambiguous signals.
-- Decisions: keep, stop, refresh, investigate, or specify.
-- Follow-up tasks routed by execution semantics:
-  - Strategy/research -> creator-media skills.
-  - Implementation or repo docs -> `tasks/todo.md`.
-  - Human-only platform actions -> `tasks/manual-todo.md`.
-  - Recurring review cadence -> `tasks/recurring-todo.md`.
+- Current audience promise.
+- Best-fit viewer segment and non-viewer.
+- Category or subcategory the channel should be understood within.
+- Differentiated wedge and why it is credible.
+- Proof assets: videos, founder experience, product evidence, community evidence.
+- Anti-positioning: topics, formats, and promises to avoid.
+- One-sentence positioning statement.
+- Implications for `$content-programming` and `$series-spec`.
 
 ## Approved Artifact Handoff
 
@@ -94,14 +91,14 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/creator-metrics-review-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/creator-positioning-{topic}.html`.
 
 ## Constraints
 
-- Do not treat one video as a trend.
-- State metric gaps explicitly.
-- Use the dossier when present as preferred creator context for cross-platform signals; preserve raw YouTube evidence as the source of YouTube performance claims.
-- Do not perform external account actions or channel changes.
+- Position from evidence; do not invent credentials or audience demand.
+- Treat the dossier as an optional preferred creator context source, not a replacement for YouTube audit evidence when the work is channel-only.
+- Prefer a narrow owned wedge over a broad generic creator promise.
+- If the evidence supports multiple incompatible positions, present the trade-off and recommend one.
 
 ## Default Shipping Contract
 

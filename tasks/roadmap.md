@@ -202,8 +202,8 @@ This roadmap schedules the remediation described in `research/skillpack-cli-rout
    - [ ] Replace repeated pack-availability guard language across the pack-skill buckets listed in the audit.
    - [ ] Apply the canonical wording consistently across mirrored Claude/Codex pack skills.
    - [ ] Avoid one oversized commit by grouping related pack buckets into reviewable batches.
-   - Progress shipped: `agent-work-admin`, top-level `business-discovery`, nested `business-discovery` framework, `business-growth`, and `business-ops` buckets.
-   - Next bucket: `creator-foundation`.
+   - Progress shipped: `agent-work-admin`, top-level `business-discovery`, nested `business-discovery` framework, `business-growth`, `business-ops`, and `creator-foundation` buckets.
+   - Next bucket: `customer-lifecycle`.
 4. P3 bespoke high-traffic follow-up route sections.
    - [ ] Sweep high-traffic workflow skills with custom follow-up route language: `customer-discovery`, `competitive-analysis`, `journey-map`, `positioning`, `user-flow-map`, `ui-interview`, `ux-variations`, `roadmap`, `plan-phase`, `ship`, and `ship-end`.
    - [ ] Distinguish pack installs from deck installs; use `npx skillpacks install-deck <deck>` only when the desired install unit is a deck.
