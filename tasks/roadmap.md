@@ -27,6 +27,32 @@ Audit all active repo skills for install-routing text that needs to reflect the 
 
 ---
 
+## Current Implementation - Prompt History Artifact Reconciliation
+
+### Goal
+
+Confirm the pack routing-audit prompt-history artifact is already tracked, then capture the current `$ship` invocation so the repository has no orphaned prompt files.
+
+### Plan
+
+1. Inspect and classify the leftover artifact.
+   - [x] Read `prompts/pack/skill-prompt-20260610-195858-skillpack-routing-audit.md`.
+   - [x] Confirm it is prompt-history bookkeeping only and contains no obvious secret.
+   - [x] Confirm it is already tracked in `7ac9ebc3 docs: audit skillpacks cli routing gaps`.
+2. Record this `$ship` invocation.
+   - [x] Create the `prompts/ship/` capture for `$ship`.
+3. Ship the bookkeeping boundary.
+   - [x] Update task/history notes and manifest.
+   - [x] Commit and push only prompt/task/history/manifest files.
+
+### Acceptance Criteria
+
+- Prompt-history artifacts are tracked and pushed.
+- No source, generated runtime, skill metadata, package, or deploy surface is included.
+- Deploy is skipped unless the shipped boundary is deploy-relevant and explicitly authorized.
+
+---
+
 ## Current Implementation - P1/P2 Verification Rerun
 
 ### Goal

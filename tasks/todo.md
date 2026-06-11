@@ -34,6 +34,40 @@ Audit all active repo skills for install-routing text that needs to reflect the 
 
 ---
 
+## Current Implementation - Prompt History Artifact Reconciliation
+
+### Goal
+
+Confirm the pack routing-audit prompt-history artifact is already tracked, then capture the current `$ship` invocation so the repository has no orphaned prompt files.
+
+### Execution Profile
+
+- Parallel mode: serial task/prompt bookkeeping.
+- Rationale: this boundary is prompt-history and task-history only; no source, generated runtime asset, package metadata, or deploy surface should change.
+
+### Steps
+
+- [x] Inspect `prompts/pack/skill-prompt-20260610-195858-skillpack-routing-audit.md` for scope and obvious secret risk.
+- [x] Confirm the pack prompt artifact is already tracked in `7ac9ebc3 docs: audit skillpacks cli routing gaps`.
+- [x] Capture the visible `$ship` invocation in `prompts/ship/`.
+- [x] Record the prompt-history reconciliation in task docs, history, and a ship manifest.
+- [x] Run whitespace/staged-boundary checks, commit, and push the prompt-history boundary.
+
+### Acceptance Criteria
+
+- [x] The pack prompt-history file is tracked, and the `$ship` prompt-history file is pushed with this boundary.
+- [x] No source, generated runtime, skill metadata, package, or deploy files are included.
+- [x] Validation and deploy decisions are explicit.
+
+### Review Notes
+
+- The pack prompt contains only the visible request to audit skill routing for the new npm package `skillpack` CLI installs; no secrets or credentials were present. It is already tracked in `7ac9ebc3`.
+- The shipping boundary is limited to `prompts/ship/skill-prompt-20260610-200044-ship-pack-prompt.md`, `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, and `tasks/ship-manifest-2026-06-10-prompt-history-reconciliation.md`.
+- Validation passed: `git diff --check`; staged diff/name review; `git diff --cached --check`.
+- Deploy skipped: `tasks/deploy.md` targets the Skills Showcase production app, while this boundary changes only prompt/task/history artifacts and no deploy-relevant runtime surface.
+
+---
+
 ## Current Implementation - P1/P2 Verification Rerun
 
 ### Goal

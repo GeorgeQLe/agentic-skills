@@ -13999,3 +13999,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - P1 remained clean: scoped stale-route, active-install wording, post-publication wording, historical-label, root wrapper syntax/status/isolated-doctor, active alignment-page audit, generated-bundle check, focused layer1 alignment test, and whitespace checks all passed.
 - P2 remained clean: skill-map generator syntax/regeneration, scoped stale-count scan, scoped retired-route scan, active alignment-page audit, generated-bundle check, focused layer1 alignment test, and whitespace checks all passed. Regeneration reported 373 platform entries, 190 unique mirrored skills, 179 unique pack skills, 11 unique global skills, and 41 active packs without leaving a diff in the skill-map artifacts.
 - No P1/P2 remediation source or documentation files needed changes. Deploy skipped because the deploy contract targets the Skills Showcase production app, while this rerun changed only task/prompt verification artifacts and no deploy-relevant runtime surface. Manifest: `tasks/ship-manifest-2026-06-10-p1-p2-verification-rerun.md`.
+
+## 2026-06-10 — Prompt history artifact reconciliation
+
+- Confirmed the pack prompt-history capture for the request to audit skill routing for new npm package `skillpack` CLI installs is already tracked in `7ac9ebc3`.
+- Captured the visible `$ship` invocation and skill context in `prompts/ship/`.
+- No source, generated runtime, skill metadata, package, or deploy files were changed in this shipping boundary. Validation was limited to diff/whitespace and staged-boundary review. Deploy skipped because this was prompt/task bookkeeping only. Manifest: `tasks/ship-manifest-2026-06-10-prompt-history-reconciliation.md`.
