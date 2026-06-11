@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-11 — Remove acceptEdits / showClearContextOnPlanAccept config requirements
+
+- Removed the `defaultMode: "acceptEdits"` and `showClearContextOnPlanAccept` settings gate from the ship skill (`packs/exec-loop/claude/ship/SKILL.md`) — auto mode now handles plan-mode transitions natively, so the workaround settings writes are no longer needed.
+- Removed the auto-mode `EnterPlanMode` denial workaround paragraph and the `acceptEdits` constraint from ship skill constraints.
+- Updated `tasks/lessons.md` to remove the `showClearContextOnPlanAccept`/`defaultMode` references and the `EnterPlanMode` denial lesson.
+- Removed the `clear-context-on-accept` negative guard from `CLAUDE.md`, `AGENTS.md`, and both provision skill templates (claude + codex).
+- Removed `defaultMode: "acceptEdits"` and `showClearContextOnPlanAccept: true` from `.claude/settings.local.json` (untracked, local-only).
+- Refreshed managed install copies via `scripts/pack.sh refresh`; `.claude/skills/ship/SKILL.md` matches canonical source.
+
 ## 2026-06-11 — Skillpacks CLI routing P2 product-design remediation
 
 - Updated the product-design P2 bucket from `research/skillpack-cli-routing-audit.md`: 15 active Claude/Codex product-design skills now include `npx skillpacks install ...` alternatives while preserving Claude `/pack install ...` and Codex `$pack install ...` routes.
