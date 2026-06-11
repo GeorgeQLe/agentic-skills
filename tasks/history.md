@@ -14005,3 +14005,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Confirmed the pack prompt-history capture for the request to audit skill routing for new npm package `skillpack` CLI installs is already tracked in `7ac9ebc3`.
 - Captured the visible `$ship` invocation and skill context in `prompts/ship/`.
 - No source, generated runtime, skill metadata, package, or deploy files were changed in this shipping boundary. Validation was limited to diff/whitespace and staged-boundary review. Deploy skipped because this was prompt/task bookkeeping only. Manifest: `tasks/ship-manifest-2026-06-10-prompt-history-reconciliation.md`.
+
+## 2026-06-10 — Planned Skillpacks CLI routing P1 remediation
+
+- Added the next executable task for the routing audit findings: update P1 global installer/discovery/status/provisioning skills to mention both runner-local `/pack`/`$pack` routes and the published npm `npx skillpacks install` shell route.
+- The plan scopes 14 global Claude/Codex skill files, requires archive/version/changelog handling, generated Skills Showcase refresh, focused npm-route validation, existing skill integrity checks, and a normal ship manifest before commit.
+- Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-cli-routing-p1-plan.md`.

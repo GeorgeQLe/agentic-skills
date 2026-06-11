@@ -1,3 +1,34 @@
+## Current Implementation - Skillpacks CLI Routing Remediation P1
+
+### Goal
+
+Update the highest-impact global installer, discovery, status, and provisioning skills so their missing-pack / install-route guidance mentions both in-agent `/pack` or `$pack` routes and the published npm `npx skillpacks` shell route.
+
+### Plan
+
+1. Update P1 global skill install-route wording.
+   - [ ] Archive and version-bump changed global skill directories before editing active `SKILL.md` files.
+   - [ ] Add runner-specific npm route wording to the P1 global Claude/Codex skill list from `research/skillpack-cli-routing-audit.md`.
+   - [ ] Preserve source-checkout `scripts/pack.sh` wording where it is intentionally about local repo maintenance.
+   - [ ] Update changelogs for every changed skill.
+2. Add focused validation.
+   - [ ] Add or update a small script/layer1 test that requires `npx skillpacks install` in the P1 install-route surfaces.
+   - [ ] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack guard correctness.
+3. Refresh and verify generated surfaces.
+   - [ ] Regenerate and validate Skills Showcase data after SKILL.md changes.
+   - [ ] Run skill version/archive/dependency/routing checks and whitespace checks.
+4. Ship.
+   - [ ] Record review notes, history, and ship manifest.
+   - [ ] Commit and push the intended P1 remediation boundary.
+
+### Acceptance Criteria
+
+- P1 global skills provide both in-agent and published npm install routes where relevant.
+- Claude and Codex mirrors preserve correct command syntax.
+- Changed skills have archives, version bumps, changelogs, generated showcase refresh, and focused regression coverage.
+
+---
+
 ## Current Implementation - Skillpacks CLI Routing Audit
 
 ### Goal
