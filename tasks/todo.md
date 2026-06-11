@@ -583,7 +583,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - The Skills Showcase build updated `apps/skills-showcase/next-env.d.ts` as a mode-specific build side effect; that unrelated generated diff was restored before shipping.
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-220256-exec.md`.
 
-- [ ] Remediate P2 business-growth skill install-routing wording:
+- [x] Remediate P2 business-growth skill install-routing wording:
   - Scope: update only the next P2 bucket from `research/skillpack-cli-routing-audit.md`: business-growth skills in both Claude and Codex mirrors. Do not edit business-ops, creator-foundation, customer-lifecycle, or later P2/P3 buckets in this step.
   - Targets:
     - `packs/business-growth/claude/experiment/SKILL.md` and `packs/business-growth/codex/experiment/SKILL.md` (`version: v0.4` -> `v0.5`)
@@ -608,6 +608,78 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
     - Confirm no business-growth target remains in the report with `rg 'packs/business-growth/(claude|codex)/(experiment|growth-model|gtm|hook-model|landing-copy|metrics|monetization|pmf-assessment)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
     - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 140 remaining findings if no other files change.
+  - Regression checks:
+    - `bash -n scripts/skill-install-routing-audit.sh`
+    - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+    - `bash scripts/skill-pack-routing-audit.sh`
+    - `bash scripts/skill-versions.sh --missing`
+    - `bash scripts/skill-archive-audit.sh --strict`
+    - `bash scripts/skill-deps.sh --broken`
+    - `node scripts/upgrade-alignment-page.mjs --check`
+    - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+    - `pnpm --dir apps/skills-showcase build`
+    - `git diff --check`
+  - Ship with a manifest that distinguishes expected remaining install-routing debt from unexpected regressions.
+
+### P2 Business-Growth Remediation Review
+
+- Archived prior active `SKILL.md` files for all 16 business-growth targets before editing:
+  - Claude and Codex mirrors for `experiment` v0.4, `growth-model` v0.6, `gtm` v0.9, `hook-model` v0.6, `landing-copy` v0.6, `metrics` v0.3, `monetization` v0.9, and `pmf-assessment` v0.7.
+- Bumped active versions to the planned targets and updated all 16 target `CHANGELOG.md` files:
+  - `experiment` v0.5, `growth-model` v0.7, `gtm` v0.10, `hook-model` v0.7, `landing-copy` v0.7, `metrics` v0.4, `monetization` v0.10, and `pmf-assessment` v0.8 for both Claude and Codex.
+- Updated only the `Pack Availability Guard` install-route wording: Claude text keeps `/pack install <pack>`, Codex text keeps `$pack install <pack>`, and both now include `npx skillpacks install <pack>` from the project shell.
+- Preserved each skill's research, growth-modeling, GTM, pricing, metrics, approval, alignment-page, glossary, and next-step routing semantics.
+- Fixed an intermediate mechanical replacement issue in the Codex guard wording before validation; final Codex guard text was rechecked with targeted `rg` and diff review.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata/content changes. Public generated version fields and fingerprints changed; curated showcase copy, catalog grouping, workflow animation text, and proof receipt copy did not need manual edits because non-generated showcase source has no hardcoded versions or stale copy for these 16 updates.
+- Targeted P2 report gate passed: `scripts/skill-install-routing-audit.sh --report` reports 383 active files, 14/14 P1 coverage, 140 remaining findings, and no `packs/business-growth/{claude,codex}/{experiment,growth-model,gtm,hook-model,landing-copy,metrics,monetization,pmf-assessment}/SKILL.md` paths.
+- Expected-red strict active audit now reports 140 remaining findings, all deferred to later P2/P3 remediation slices. The first remaining group is the `business-ops` pack.
+- Verification passed:
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `bash -n scripts/skill-install-routing-audit.sh`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` (11 fixture `SKILL.md` files, 6 expected invalid findings, exit 0)
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-deps.sh --broken`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` (2 passed)
+  - `scripts/skill-install-routing-audit.sh --active` (expected-red: 140 remaining non-business-growth findings)
+  - `pnpm --dir apps/skills-showcase build`
+  - `git diff --check`
+- The Skills Showcase build updated `apps/skills-showcase/next-env.d.ts` as a mode-specific build side effect; that unrelated generated diff was restored before shipping.
+- Final staging status contains no unrelated tracked or untracked files after restoring the known `apps/skills-showcase/next-env.d.ts` build side effect.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-221208-exec.md`.
+
+- [ ] Remediate P2 business-ops skill install-routing wording:
+  - Scope: update only the next P2 bucket from `research/skillpack-cli-routing-audit.md`: business-ops skills in both Claude and Codex mirrors. Do not edit creator-foundation, customer-lifecycle, devtool, or later P2/P3 buckets in this step.
+  - Targets:
+    - `packs/business-ops/claude/burn-rate/SKILL.md` and `packs/business-ops/codex/burn-rate/SKILL.md` (`version: v0.3` -> `v0.4`)
+    - `packs/business-ops/claude/cohort-review/SKILL.md` and `packs/business-ops/codex/cohort-review/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/business-ops/claude/investor-update/SKILL.md` and `packs/business-ops/codex/investor-update/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/business-ops/claude/mvp-gap/SKILL.md` and `packs/business-ops/codex/mvp-gap/SKILL.md` (`version: v0.7` -> `v0.8`)
+    - `packs/business-ops/claude/platform-strategy/SKILL.md` and `packs/business-ops/codex/platform-strategy/SKILL.md` (`version: v0.8` -> `v0.9`)
+    - `packs/business-ops/claude/product-line/SKILL.md` and `packs/business-ops/codex/product-line/SKILL.md` (`version: v0.3` -> `v0.4`)
+    - `packs/business-ops/claude/reconcile-research/SKILL.md` and `packs/business-ops/codex/reconcile-research/SKILL.md` (`version: v0.7` -> `v0.8`)
+    - `packs/business-ops/claude/retro/SKILL.md` and `packs/business-ops/codex/retro/SKILL.md` (`version: v0.3` -> `v0.4`)
+    - `packs/business-ops/claude/risk-register/SKILL.md` and `packs/business-ops/codex/risk-register/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/business-ops/claude/runway-model/SKILL.md` and `packs/business-ops/codex/runway-model/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/business-ops/claude/scale-audit/SKILL.md` and `packs/business-ops/codex/scale-audit/SKILL.md` (`version: v0.3` -> `v0.4`)
+  - Before editing each target, run `scripts/skill-archive.sh <skill-dir>` so the current active `SKILL.md` is copied to `archive/<old-version>/SKILL.md`.
+  - Update `Pack Availability Guard` wording and any in-file install-route recommendations that remain flagged for these same target files using `docs/skillpacks-install-routing-contract.md`:
+    - Claude-facing text keeps `/pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Codex-facing text keeps `$pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Preserve each skill's financial, operating, research reconciliation, risk, platform, product-line, approval, alignment-page, glossary, and next-step routing semantics.
+  - Update each target's `CHANGELOG.md` with the new version entry and summarize the npm-aware install-route wording change.
+  - Refresh generated Skills Showcase data after active `SKILL.md` metadata/content changes:
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+    - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - Targeted post-edit gate:
+    - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
+    - Confirm no business-ops target remains in the report with `rg 'packs/business-ops/(claude|codex)/(burn-rate|cohort-review|investor-update|mvp-gap|platform-strategy|product-line|reconcile-research|retro|risk-register|runway-model|scale-audit)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
+    - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 118 remaining findings if no other files change.
   - Regression checks:
     - `bash -n scripts/skill-install-routing-audit.sh`
     - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`

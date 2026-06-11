@@ -14111,3 +14111,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed for targeted framework report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 156 later P2/P3 findings.
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-220256-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-business-discovery-frameworks.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P2 business-growth remediation
+
+- Updated the business-growth P2 bucket from `research/skillpack-cli-routing-audit.md`: 16 mirrored `experiment`, `growth-model`, `gtm`, `hook-model`, `landing-copy`, `metrics`, `monetization`, and `pmf-assessment` skills now include `npx skillpacks install <pack>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.
+- Archived every prior active `SKILL.md`, bumped the planned versions, and updated all 16 target `CHANGELOG.md` files.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; generated versions and fingerprints changed, while non-generated showcase copy did not need manual updates.
+- Validation passed for targeted business-growth report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 140 later P2/P3 findings.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-221208-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-business-growth.md`.

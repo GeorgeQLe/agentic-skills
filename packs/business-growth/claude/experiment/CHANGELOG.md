@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-10
+
+- Added npm-aware install-route guidance to the Pack Availability Guard while preserving the runner-specific `/pack install <pack>` route.
+
 ## v0.4 - 2026-06-07
 
 - Routed invalidated customer-fit assumptions to `/customer-discovery` instead of the retired `/icp` executable while preserving `research/icp.md` evidence usage.
