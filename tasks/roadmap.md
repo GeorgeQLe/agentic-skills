@@ -1,3 +1,55 @@
+## Current Implementation - VARD/ORD Scan Staged Research Contract
+
+### Goal
+
+Upgrade the active VARD and ORD scan skills so they follow the strict scope-first staged research lifecycle already required for business-discovery research skills.
+
+### Scope
+
+- Active skill targets:
+  - `packs/vard/codex/vard-scan/SKILL.md`
+  - `packs/vard/claude/vard-scan/SKILL.md`
+  - `packs/ord/codex/ord-scan/SKILL.md`
+  - `packs/ord/claude/ord-scan/SKILL.md`
+- Required behavior:
+  - Stage 1 performs only minimal scope discovery and creates a `review` alignment page.
+  - Stage 2 writes a preliminary `_working` research packet only after scope approval.
+  - Stage 3 archives the working packet, writes the approved canonical scan artifact, and confirms the page.
+  - Product-path variants use `research/{slug}/_working/...` and `research/{slug}/...` paths.
+
+### Plan
+
+1. Record task/prompt history.
+   - [x] Capture the visible user invocation under `prompts/create-agentic-skill/`.
+   - [x] Add active roadmap and todo tracking before implementation.
+2. Inspect and archive.
+   - [ ] Read the four active scan skills and the reference staged research pattern.
+   - [ ] Run `scripts/skill-archive.sh` for the four scan skill directories.
+3. Implement the staged contract.
+   - [ ] Bump each active scan skill from `version: v0.0` to `version: v0.1`.
+   - [ ] Add `Report-First Approval Gate`, `Staged Research Workflow`, and `Evidence And Feedback Handling`.
+   - [ ] Preserve lightweight VARD/ORD scan criteria while moving candidate ranking into approved preliminary packets.
+   - [ ] Add the standard `## Alignment Page` stub.
+   - [ ] Add `CHANGELOG.md` entries for v0.1 in each skill directory.
+4. Regenerate and verify.
+   - [ ] Run `node scripts/upgrade-alignment-page.mjs`.
+   - [ ] Refresh Skills Showcase generated data if active `SKILL.md` behavior/metadata changes require it.
+   - [ ] Run generated bundle drift, active `type: research` staged-workflow audit, targeted marker scans, archive/changelog checks, and whitespace checks.
+5. Ship.
+   - [ ] Record review notes in `tasks/todo.md`.
+   - [ ] Stage only intended files.
+   - [ ] Commit and push on `master`.
+
+### Acceptance Criteria
+
+- All four active scan skills include the staged research markers and preliminary packet paths.
+- The active `type: research` audit reports 138 active research skills and 0 non-compliant skills.
+- Generated `ALIGNMENT-PAGE.md` files exist for all four scan skill directories and pass exact drift check.
+- Archive snapshots and changelog entries exist for each bumped skill.
+- Recommended next command remains `vard-align` or `ord-align`, but only after final approval and canonical artifact write.
+
+---
+
 ## Current Implementation - Skillpacks CLI Routing Remediation
 
 ### Goal

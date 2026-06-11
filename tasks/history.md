@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-11 — VARD/ORD staged scan workflow
+
+- Captured the visible create-agentic-skill invocation under `prompts/create-agentic-skill/`.
+- Archived and bumped the mirrored active scan skills: `packs/vard/{codex,claude}/vard-scan` and `packs/ord/{codex,claude}/ord-scan` from v0.0 to v0.1.
+- Added strict staged research contracts to all four scan skills: scope-review alignment page before synthesized research, preliminary `_working` research packet after scope approval, artifact-review alignment page, and approved canonical scan artifact after final approval.
+- Preserved the lightweight VARD/ORD candidate filters while moving candidate ranking, top-pick selection, and `vard-align`/`ord-align` next-command routing behind final artifact approval.
+- Added changelogs, generated sibling `ALIGNMENT-PAGE.md` bundles, and refreshed Skills Showcase generated data/proof assets.
+- Validation passed: alignment bundle check, active staged research audit (138 active `type: research`, 0 non-compliant), targeted marker/archive/changelog scans, Skills Showcase data validation, focused research approval-gate layer1 test (285 passed), benchmark coverage, and `git diff --check`.
+
 ## 2026-06-10 — Skillpacks install-route wording contract
 
 - Captured the visible `$exec` invocation under `prompts/exec/`.

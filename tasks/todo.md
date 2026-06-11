@@ -1,3 +1,55 @@
+## Current Implementation - VARD/ORD Scan Staged Research Contract
+
+### Goal
+
+Make `$vard-scan` / `/vard-scan` and `$ord-scan` / `/ord-scan` scope-first research skills: scope review page first, preliminary working packet after scope approval, approval page for the candidate artifact, then canonical write after approval.
+
+### Execution Profile
+
+- Parallel mode: parallel reads and independent verification scans; serial writes for skill files, generated bundles, changelogs, and task docs.
+- Rationale: four mirrored skill contracts need consistent language and archive/version handling, and generated alignment bundles must come from the canonical generator.
+
+### Steps
+
+- [x] Capture the visible user invocation in prompt history.
+- [x] Write active roadmap/todo plan from the supplied implementation plan.
+- [x] Inspect the four target scan skills and staged research reference language.
+- [x] Archive the four v0.0 scan skills with `scripts/skill-archive.sh`.
+- [x] Update the four active scan skills to v0.1 with strict staged research, evidence/feedback, and alignment-page stub sections.
+- [x] Add or update `CHANGELOG.md` for each scan skill.
+- [x] Generate sibling `ALIGNMENT-PAGE.md` bundles with `node scripts/upgrade-alignment-page.mjs`.
+- [x] Run generated-bundle drift, active research compliance, targeted marker, archive/changelog, showcase, and whitespace checks.
+- [x] Commit and push the intended boundary on `master`.
+
+### Acceptance Criteria
+
+- [x] All four active scan skills contain `## Report-First Approval Gate`, `## Staged Research Workflow`, `Stage 1 - Scope discovery and approval`, and the appropriate `preliminary-*-scan-research.md` path.
+- [x] Active `type: research` audit reports 138 active research skills and 0 non-compliant skills.
+- [x] Generated `ALIGNMENT-PAGE.md` bundles exist beside all four active scan skills and pass exact drift check.
+- [x] Archive snapshots and `CHANGELOG.md` files exist for all four v0.1 skill bumps.
+- [x] `git diff --check` passes.
+
+### Review Notes
+
+- Archived v0.0 snapshots for all four scan skill directories before editing active contracts.
+- Bumped VARD/ORD scan contracts to v0.1 and added strict staged research: Stage 1 scope-review page only, Stage 2 preliminary `_working` packet, Stage 3 archive working packet plus approved canonical scan artifact.
+- Preserved lightweight VARD/ORD scan criteria while moving candidate ranking and top-pick recommendations behind artifact approval.
+- Generated four sibling `ALIGNMENT-PAGE.md` bundles from `node scripts/upgrade-alignment-page.mjs`; no generated bundle was hand-edited.
+- Refreshed Skills Showcase generated data and proof assets after active skill metadata changed. Curated showcase copy, grouping, workflow animation text, and proof receipt copy needed no manual edits because titles, descriptions, pack grouping, and public proof copy are unchanged apart from generated versions/fingerprints.
+- Verification passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - Active staged research audit: 138 active `type: research` skills, 0 non-compliant
+  - Targeted marker scans for report-first, staged workflow, explicit VARD/ORD preliminary packet paths, changelogs, archives, and generated bundles
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts` (285 passed)
+  - `pnpm --dir tests bench:coverage`
+  - `git diff --check`
+- A broader exploratory audit also found eight pre-existing competitive-analysis framework skills without `## Evidence And Feedback Handling`; those are outside this task's stated scope and were not changed.
+
+---
+
 ## Current Implementation - Skillpacks CLI Routing Remediation: Canonical Wording And Validation
 
 ### Goal
