@@ -29,20 +29,43 @@ Define the canonical npm-aware install-route wording and add the first regressio
   - Source-checkout maintenance: keep `scripts/pack.sh install <pack-or-skill>` and add the npm route only when the target reader may be outside this checkout.
   - Deck install: use `npx skillpacks install-deck <deck>` and do not phrase deck installs as pack or individual skill installs.
   - Durable contract: `docs/skillpacks-install-routing-contract.md`.
-- [ ] Decide the validation shape:
+- [x] Decide the validation shape:
   - Read `docs/skillpacks-install-routing-contract.md`, `research/skillpack-cli-routing-audit.md`, `scripts/skill-pack-routing-audit.sh`, and existing layer1 routing-test patterns.
   - Decide whether the npm-route guard should be a dedicated script, a layer1 test, or both; prefer a dedicated active-skill scan script if it keeps failure output actionable for broad remediation batches.
   - Define the allowlist shape for source-checkout-only/internal text before implementation so exceptions are explicit and reviewable.
   - Prefer a focused script or layer1 test that scans active `SKILL.md` files, excludes `archive/**`, and reports install-route text that lacks the required `npx skillpacks` alternative.
   - Allowlist truly internal/source-checkout-only maintenance text with comments or structured fixtures so exceptions are auditable.
   - Keep `scripts/skill-pack-routing-audit.sh` as the cross-pack guard correctness check unless the new npm-route assertion fits cleanly without weakening that script's scope.
+  - Decision: add a dedicated focused script, tentatively `scripts/skill-install-routing-audit.sh`, implemented as a Bash wrapper around an embedded Node scanner like `scripts/skill-pack-routing-audit.sh`.
+  - Decision: keep `scripts/skill-pack-routing-audit.sh` unchanged and scoped to cross-pack recommendation guard correctness. The new script owns npm-aware install-route wording.
+  - Decision: add a layer1 wrapper test only for the fixture/contract behavior at first, not as a repository-wide active strict gate until the staged remediation has removed the known 220 active failures.
+  - Required script modes:
+    - `--active` scans active `SKILL.md` files under `global/` and `packs/`, excluding every `archive/**` path, and exits non-zero for install-route text missing the required npm route unless allowlisted.
+    - `--report` prints the same active findings but exits zero so broad remediation batches can inspect current debt without blocking a pre-remediation ship.
+    - `--fixtures <dir>` scans fixture cases and exits non-zero when valid examples fail, invalid examples pass, deck installs are treated as ordinary pack installs, or source-checkout-only exceptions lack explicit allowlist evidence.
+  - Required allowlist shape: a structured JSON file or embedded fixture object with one entry per exception: `path`, `reason`, `scope` (`source-checkout-only`, `internal-maintenance`, or `fixture`), `evidence`, and optional `expires_after`. The scanner must fail on stale allowlist entries that no longer match active text.
+  - Required distinction: `npx skillpacks install-deck <deck>` satisfies only deck-route guidance; it must not satisfy pack or individual skill install guidance that needs `npx skillpacks install <pack-or-skill>`.
 - [ ] Implement the validation rule and initial fixtures:
-  - Include the P1 global files from the audit as required coverage.
-  - Include representative `Pack Availability Guard` boilerplate examples for later P2 migration.
-  - Include a deck-route fixture or assertion that distinguishes `npx skillpacks install-deck <deck>` from `npx skillpacks install <pack-or-skill>`.
+  - Create `scripts/skill-install-routing-audit.sh` using the decision above.
+  - Build the scanner around active `SKILL.md` files in `global/` and `packs/`; exclude `archive/**` and do not scan generated package build output under `packages/skillpacks/build`.
+  - Include the 14 P1 global files from `research/skillpack-cli-routing-audit.md` as a required coverage list, and fail if any are missing from the active scan inventory.
+  - Trigger on install-route wording including `/pack install`, `$pack install`, generic `pack install`, `scripts/pack.sh install`, `Pack Availability Guard`, `Missing Skill Fallback`, and `install-deck`.
+  - Require `npx skillpacks install` for pack or individual skill install guidance, and require `npx skillpacks install-deck` for deck guidance.
+  - Add fixtures under `tests/fixtures/skill-install-routing/` for:
+    - Claude and Codex valid dual-route `Pack Availability Guard` boilerplate.
+    - Missing-skill fallback text with `/pack` or `$pack` plus `npx skillpacks install <pack-or-skill>`.
+    - Source-checkout-only `scripts/pack.sh install` text that passes only with an explicit allowlist entry.
+    - Invalid pack/skill install text that mentions only `/pack`, `$pack`, or `scripts/pack.sh`.
+    - Invalid deck text where `npx skillpacks install <deck>` is used instead of `npx skillpacks install-deck <deck>`.
+  - Add a focused layer1 test, for example `tests/layer1/skill-install-routing-audit.test.ts`, that runs fixture mode and pins the P1 coverage inventory without making the known active 220-file debt fail the whole layer1 suite yet.
+  - Do not edit active `SKILL.md` files, archives, changelogs, Skills Showcase data, or generated package build output in this step.
 - [ ] Verify this slice:
-  - Run the new focused validation and confirm it fails/passes in the intended mode for the current staged scope.
+  - Run `bash -n scripts/skill-install-routing-audit.sh`.
+  - Run the new fixture validation and confirm it passes.
+  - Run active report mode and confirm it reports the known pre-remediation debt without failing the command.
+  - Optionally run active strict mode and record the expected pre-remediation failure count, but do not treat that expected red output as a regression until the remediation phases remove the debt.
   - Run `bash scripts/skill-pack-routing-audit.sh`.
+  - Run the focused layer1 test for `skill-install-routing-audit`.
   - Run `git diff --check`.
 - [ ] Prepare the next remediation slice:
   - Update `tasks/todo.md` with the P1 global skill edit batch after canonical wording and validation are in place.
@@ -64,8 +87,10 @@ Define the canonical npm-aware install-route wording and add the first regressio
 ### Review Notes
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-201246-exec.md`.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-201743-exec.md`.
 - Added `docs/skillpacks-install-routing-contract.md` as the canonical wording matrix for the npm-aware install-route remediation.
 - The contract preserves runner-specific in-agent routes (`/pack` for Claude and `$pack` for Codex), keeps `scripts/pack.sh` for source-checkout maintenance, adds `npx skillpacks install <pack-or-skill>` for package consumers, and reserves `npx skillpacks install-deck <deck>` for curated decks.
+- Decided the validation shape: add a dedicated active-skill scanner plus fixture-backed layer1 coverage, keep the existing cross-pack routing audit unchanged, and use a structured allowlist only for explicit source-checkout-only/internal exceptions.
 - No active `SKILL.md` or `PACK.md` content changed in this step, so skill versioning, changelog updates, and Skills Showcase refresh are not required until the later remediation batches.
 
 ---

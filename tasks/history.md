@@ -14026,3 +14026,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added the next executable task for the routing audit findings: update P1 global installer/discovery/status/provisioning skills to mention both runner-local `/pack`/`$pack` routes and the published npm `npx skillpacks install` shell route.
 - The plan scopes 14 global Claude/Codex skill files, requires archive/version/changelog handling, generated Skills Showcase refresh, focused npm-route validation, existing skill integrity checks, and a normal ship manifest before commit.
 - Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-cli-routing-p1-plan.md`.
+
+## 2026-06-10 — Skillpacks install-route validation design
+
+- Chose the validation shape for npm-aware skill install-route remediation before touching the 220 active `SKILL.md` candidates: add a dedicated active-skill scanner, keep `scripts/skill-pack-routing-audit.sh` scoped to cross-pack guard correctness, and use fixture-backed layer1 coverage for the scanner contract.
+- Defined the scanner modes, P1 coverage requirement, deck-route distinction, and structured source-checkout-only/internal allowlist shape directly in `tasks/todo.md` so the next implementation step is executable without re-deciding the design.
+- No active `SKILL.md`, `PACK.md`, script, generated Skills Showcase, package build, or runtime files changed in this decision-only boundary. Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-install-routing-validation-design.md`.
