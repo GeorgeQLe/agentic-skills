@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.14 - 2026-06-10
+
+- Reaffirmed inline turn-final text as the only primary delivery channel for every confirmation manifest/checklist/checkpoint: the content renders as the final message text of its own turn with the confirmation question in the next turn, never mid-turn text in a turn that ends with a tool or command call.
+- Retrofitted the 3-phase research lifecycle into both modes (full and requirements-only): new step 7 routes the draft through a working packet at `research/_working/preliminary-ui-interview-research.md` (or the product-path-scoped equivalent), builds `alignment/ui-interview-{topic}.html` pre-approval in `review` state, treats all checkpoint confirmations as non-final, keeps feedback-only YAML revisions pre-approval, and forbids routing recommendations before final compiled YAML.
+- Gated canonical writes: `specs/ui-[topic].md` / `specs/ui-requirements-[topic].md` and interview logs are written only after final compiled YAML approval, then the working packet is archived to `docs/history/archive/`, the active packet removed, and the page converted to `confirmed`. Routing recommendations now trigger only after the page is `confirmed`.
+
 ## v0.13 - 2026-06-10
 
 - Required every confirmation manifest/checklist (UI Assumptions Manifest, Content Requirements Manifest, coverage checkpoint) to be the final visible output of its own turn, with the confirmation question asked in the next turn — never mid-turn text in a turn that ends with a tool or command call. A confirmation question must never reference content the user has not been shown. Fixes the 2026-06-10 incident where the manifest was confirmed without ever rendering on screen.

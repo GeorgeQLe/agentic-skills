@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.14
+version: v0.13
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 interview_depth: full
 ---
@@ -61,7 +61,6 @@ When product path `{slug}` is active, read and write research under `research/{s
      - non-goals
      - riskiest unknowns
    - Ask the user to confirm, correct, or flag assumptions before writing.
-   - Deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 ### Market Structure Handoff
 

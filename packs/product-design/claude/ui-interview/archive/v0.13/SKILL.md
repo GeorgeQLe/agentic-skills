@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.14
+version: v0.13
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -55,7 +55,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Tag each assumption with `[from spec]`, `[from codebase]`, `[from research]`, `[from artifact]`, or `[inferred]`.
    - Cover product and user context, pages and routes, primary tasks, navigation, hierarchy, layout grid, spatial density, component inventory, button and link semantics, form behavior, empty/loading/error/success states, responsive behavior, accessibility, visual language, implementation constraints, and the prototype-first boundary for new product or substantial feature work: what the user should be able to click through first, whether multiple route-based experiments should be built, what data can be fake, fixture-backed, or in-memory, and which infrastructure must be represented visually but not implemented yet.
    - Use AskUserQuestion to ask the user to confirm, correct, or flag assumptions before continuing.
-   - Deliver every manifest/checklist/checkpoint the user must confirm inline as the final message text of its own turn; ask the confirmation question in the next turn. AskUserQuestion option previews may mirror the content as a supplement but are never the sole channel. Never emit it only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
+   - Deliver every manifest/checklist the user must confirm through a guaranteed-visible channel: attach the full manifest as the `preview` content of the confirmation question's options, or end the turn with the manifest as the final message text and ask for confirmation in the next turn. Never emit the manifest only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee that text emitted before a tool call is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview page by page**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
@@ -74,12 +74,11 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Constraints (real-time updates, offline support, accessibility requirements, performance budgets)
      - Content hierarchy (primary / secondary / tertiary information)
      - Relationships between data elements (parent-child, peer, reference, aggregate)
-   - Present a **Content Requirements Manifest** summarizing all pages, then use AskUserQuestion to confirm. Deliver the manifest per the inline visibility rule in step 3 (turn-final message text of its own turn; confirmation question in the next turn; option previews only as a supplementary mirror), never as mid-turn text only.
-   - This manifest confirmation is non-final: it only confirms the requirements draft is ready for the pre-approval lifecycle in step 7. Route all writes through that lifecycle — working packet at `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md`), then a `review`-state `alignment/ui-interview-{topic}.html` page rendering the Content Requirements Manifest as the candidate/verdict gate, then final compiled YAML approval.
-   - Only after final compiled YAML approval, write `specs/ui-requirements-[topic].md` (content requirements) and `ui-requirements-[topic]-interview.md` (interview log), archive the working packet, and convert the page to `confirmed` per step 7.
-   - Only after the page is converted to `confirmed` and canonical files are written, recommend `/ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `/ui-interview` (full mode, no flag) to proceed directly to a single deep UI specification.
+   - Present a **Content Requirements Manifest** summarizing all pages, then use AskUserQuestion to confirm before writing deliverables. Deliver the manifest through the guaranteed-visible channel rule in step 3 (question option previews or turn-final text), never as mid-turn text only.
+   - Write `specs/ui-requirements-[topic].md` (content requirements) and `ui-requirements-[topic]-interview.md` (interview log).
+   - After writing files, recommend `/ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `/ui-interview` (full mode, no flag) to proceed directly to a single deep UI specification.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `/user-flow-map [topic]` instead of inventing layout variants.
-   - Stop. Do not continue to step 5 or beyond; the pre-approval lifecycle in step 7 and the requirements deliverables above are the only remaining work in this mode.
+   - Stop. Do not continue to step 5 or beyond.
 
 5. **Full UI specification** (no `--content-only` flag):
 
@@ -102,36 +101,23 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Coverage checkpoint**
    - Before concluding, use AskUserQuestion to present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.
-   - Deliver the checklist per the inline visibility rule in step 3 (turn-final message text of its own turn; confirmation question in the next turn; option previews only as a supplementary mirror), never as mid-turn text only.
-   - Ask whether anything is missing or should be revisited before building the alignment page.
-   - This confirmation is non-final: it only establishes that the draft is ready for the pre-approval lifecycle in step 7. It does not authorize canonical spec writes.
-
-7. **Build pre-approval alignment page**
-   - Before writing any canonical `specs/ui-[topic].md`, `specs/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
-   - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the full working packet — manifest, page-by-page decisions, coverage checkpoint, proposed canonical file destinations — and the approval gates.
-   - Attempt to open the page in the browser and point the user at the repo-relative path.
-   - Treat every AskUserQuestion checkpoint confirmation in steps 3–6 as non-final; each only confirms the draft is ready for review. Only final compiled YAML from the alignment page authorizes canonical writes.
-   - When feedback-only YAML is provided, revise the working packet and the alignment page, then ask again; the work stays pre-approval.
-   - Before final compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved canonical files have been written.
+   - Deliver the checklist through the guaranteed-visible channel rule in step 3 (question option previews or turn-final text), never as mid-turn text only.
+   - Ask whether anything is missing or should be revisited before writing deliverables.
 
 ## Deliverables
 
-Before writing anything in this section, verify the alignment page has final compiled YAML approval. Do not write canonical UI specs or interview logs until `alignment/ui-interview-{topic}.html` has been reviewed and the user has provided final compiled YAML approval; checkpoint confirmations are not final approval and do not authorize these writes.
-
 - Write the completed UI specification to `specs/ui-[topic].md`.
 - Write the interview log to `ui-[topic]-interview.md`.
-
-After the canonical files are written, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, and convert the alignment page from `review` to `confirmed`.
 
 The UI specification must include source evidence, the confirmed UI Assumptions Manifest, page inventory, route map, global shell rules, page-by-page anatomy, component inventory, control inventory, link inventory, layout and responsive rules, visual style direction, interaction states, accessibility requirements, implementation notes, open questions, risks, and non-goals. For new product interfaces or substantial feature interfaces, include a prototype-first section naming the first clickable journey, experiment route map when multiple alternatives should be tested, fake/fixture data, visually mocked infrastructure states, deferred production infrastructure, and the evidence required before implementation planning promotes any deferred infrastructure.
 
 The interview log must include the manifest, every question asked, options and recommendations presented, user responses, final decisions, and notable changes from the initial draft, current implementation, or artifact.
 
-Only after the page is converted to `confirmed` and canonical files are written, recommend `/ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — if the interface is ready to sequence into work.
+After writing files, recommend `/ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — if the interface is ready to sequence into work.
 
 ### Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ui-interview-{topic}.html`. The page is built pre-approval in `review` state per step 7, before any canonical spec write, and converts to `confirmed` only after final compiled YAML approval and canonical writes.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ui-interview-{topic}.html`.
 
 ## Constraints
 

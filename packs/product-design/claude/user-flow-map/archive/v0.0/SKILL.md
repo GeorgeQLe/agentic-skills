@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.1
+version: v0.0
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 interview_depth: full
 visual_tier: prototype
@@ -10,13 +10,13 @@ visual_tier: prototype
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # User Flow Map
 
-Invoke as `$user-flow-map`.
+Invoke as `/user-flow-map`.
 
-Use this skill after positioning and before UI/layout/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. This skill defines what screens and transitions exist before `$ui-interview --requirements-only` defines per-screen content requirements and before `$ux-variations --layout-mode` explores visual/layout alternatives.
+Use this skill after positioning and before UI/layout/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. This skill defines what screens and transitions exist before `/ui-interview --requirements-only` defines per-screen content requirements and before `/ux-variations --layout-mode` explores visual/layout alternatives.
 
 This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action."
 
@@ -45,11 +45,11 @@ Read available evidence before asking deep questions:
 - Existing `specs/`, including `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ui-*.md`, and `specs/ux-variations-*.md`.
 - Existing route files, component files, app shells, navigation config, screenshots, wireframes, mockups, and design artifacts when present.
 
-If `research/positioning.md` is missing for a business-product flow, recommend `$positioning` first. If `product-design` is not enabled, recommend `$pack install product-design`.
+If `research/positioning.md` is missing for a business-product flow, recommend `/positioning` first. If `product-design` is not enabled, recommend `/pack install product-design`.
 
 ### 2. Flow Assumptions Checkpoint
 
-Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call — then ask the user to confirm, correct, or flag it in the next turn. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
+Before deep probing, present a concise **Flow Assumptions Checkpoint** and ask the user to confirm, correct, or flag it. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
 
 Cover:
 
@@ -85,7 +85,7 @@ Build the flow map at workflow level, not visual-design level:
 
 ### 4. Coverage Checkpoint
 
-Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool or command call):
+Before writing deliverables, present a **Flow Coverage Checkpoint**:
 
 - Persona and goal covered.
 - Entry points covered.
@@ -99,7 +99,7 @@ Before writing deliverables, present a **Flow Coverage Checkpoint** inline as th
 - Wireframe-level notes covered.
 - Layout/styling non-goals preserved.
 
-In the next turn, ask whether any flow branch, state, or handoff is missing before writing.
+Ask whether any flow branch, state, or handoff is missing before writing.
 
 ## Deliverables
 
@@ -122,7 +122,7 @@ The user-flow spec must include:
 - Handoffs and external/manual dependencies.
 - Low-fidelity wireframe notes per screen.
 - Open questions, risks, and explicit non-goals.
-- Downstream handoff to `$ui-interview --requirements-only [topic]`.
+- Downstream handoff to `/ui-interview --requirements-only [topic]`.
 
 The interview log must include:
 
@@ -133,7 +133,7 @@ The interview log must include:
 
 After approved files are written, recommend:
 
-> Recommended next command: `$ui-interview --requirements-only [topic]`
+> Recommended next command: `/ui-interview --requirements-only [topic]`
 
 ## Alignment Page
 
@@ -152,7 +152,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Keep this skill before UI layout and prototype work in the AFPS route.
 - Do not produce high-fidelity mockups, component styling, color palettes, design systems, production architecture, database schemas, or implementation plans.
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
-- Do not route directly to `$ux-variations` from an approved flow map; route to `$ui-interview --requirements-only` first.
+- Do not route directly to `/ux-variations` from an approved flow map; route to `/ui-interview --requirements-only` first.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 
 ## Default Shipping Contract

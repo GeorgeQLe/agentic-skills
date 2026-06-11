@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.14
+version: v0.15
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 visual_tier: prototype
 ---
@@ -61,6 +61,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Tag assumptions with `[from spec]`, `[from codebase]`, `[from research]`, `[from artifact]`, or `[inferred]`.
    - Cover target users, usage context, first-run moment, activation event, "aha" threshold, typical repeat-use workflow, sharing and collaboration assumptions, permissions, return triggers, notifications, re-engagement assumptions, handoffs, pain points, locked versus open decisions, evaluation criteria, required variant breadth, prototype fidelity, implementation budget, success metrics, and selection method.
    - Use AskUserQuestion to ask the user to confirm, correct, or flag assumptions before proceeding.
+   - Deliver every manifest/checklist/checkpoint the user must confirm inline as the final message text of its own turn; ask the confirmation question in the next turn. AskUserQuestion option previews may mirror the content as a supplement but are never the sole channel. Never emit it only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview for variation goals**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
@@ -134,8 +135,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Include a UAT handoff checklist: target task for each variant, success criteria, side-by-side comparison questions, evidence to capture, tradeoffs to notice, and readiness criteria for `/consolidate-variations`.
 
 9. **Coverage checkpoint**
-   - Before concluding, use AskUserQuestion to summarize the variants, decision criteria, and experiment plan.
-   - Ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
+   - Before concluding, summarize the variants, decision criteria, and experiment plan inline as the final message text of its own turn.
+   - In the next turn, use AskUserQuestion to ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
 
 ## Deliverables
 

@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.10
+version: v0.11
 argument-hint: "[optional-topic-override] [--ideas]"
 interview_depth: full
 ---
@@ -69,7 +69,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - What **fake data needs to become real** — hardcoded lists, mock APIs, placeholder content
      - What **missing infrastructure** is needed — database, auth, payments, analytics, deployment
      - What **error/empty states** the prototype skips vs what production needs
-   - Present the checkpoint with the first AskUserQuestion turn and immediately include 1 to 3 focused interview questions. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
+   - Deliver the checkpoint inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool call. In the next turn, use AskUserQuestion to ask the user to confirm or correct it and include the first 1 to 3 focused interview questions so momentum is kept. Option previews may mirror the checkpoint as a supplement but are never the sole channel. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 
 3. **Screen-by-screen prototype walkthrough:**
@@ -91,7 +91,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 5. **Cover all areas:**
    - Continue until you have thoroughly covered: implementation goals, technical architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries.
-   - **Coverage checkpoint** — Before concluding, use AskUserQuestion to present a structured summary: list each area covered with the key decisions made and the evidence or reasoning that supported each decision. Then ask: "Does this cover everything? Any areas we should revisit or that I missed?"
+   - **Coverage checkpoint** — Before concluding, present a structured summary inline as the final message text of its own turn: list each area covered with the key decisions made and the evidence or reasoning that supported each decision. In the next turn, use AskUserQuestion to ask: "Does this cover everything? Any areas we should revisit or that I missed?"
 
 6. **Write outputs:**
    - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if it doesn't exist) where `topic` is a short kebab-case summary.

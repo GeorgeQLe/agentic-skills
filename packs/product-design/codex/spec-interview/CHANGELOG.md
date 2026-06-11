@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11 - 2026-06-10
+
+- Assumptions Checkpoint now renders inline as the final message text of its own turn (never only as mid-turn text before a tool or command call); the next turn asks the user to confirm or correct it together with one focused interview question, keeping momentum.
+- Coverage checkpoint split across two turns: the structured summary is delivered as turn-final text, with the confirmation question asked in the following turn. Applies the Manifest Visibility Rule in docs/interview-convention.md.
+
 ## v0.10 - 2026-06-10
 
 - Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the spec-interview-specific gates from the generator gate map.

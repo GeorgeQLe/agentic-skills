@@ -2,7 +2,7 @@
 name: skill-interview
 description: Interview the user to define the characteristics of a skill they want created
 type: planning
-version: v0.2
+version: v0.1
 argument-hint: "[skill-name-or-topic]"
 interview_depth: full
 ---
@@ -33,7 +33,7 @@ Use this skill when the user wants to create or substantially redesign a skill b
      - `[from codebase]` — derived from repository conventions or test harnesses
      - `[inferred]` — a default judgment that needs confirmation
    - Bias toward assumptions that affect trigger rules, allowed side effects, deliverables, verification, benchmarkability, and next-step routing.
-   - Deliver the checkpoint inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool call. In the next turn, use AskUserQuestion to ask the user to confirm or correct it and include the first 1 to 3 focused interview questions so momentum is kept. Option previews may mirror the checkpoint as a supplement but are never the sole channel.
+   - Present the checkpoint with the first AskUserQuestion turn and immediately include 1 to 3 focused interview questions.
    - If an `[inferred]` assumption is corrected, preserve the correction in the interview log and final brief.
 
 4. **Interview material decisions.**
@@ -59,8 +59,8 @@ Use this skill when the user wants to create or substantially redesign a skill b
    - For repo-managed skills, include benchmark coverage expectations in the brief.
 
 6. **Coverage checkpoint.**
-   - Before concluding, summarize each covered area with the decision made and source evidence, delivered inline as the final message text of its own turn.
-   - In the next turn, use AskUserQuestion to ask: "Does this cover the skill you want, or is there any behavior, boundary, or output we should revisit?"
+   - Before concluding, use AskUserQuestion to summarize each covered area with the decision made and source evidence.
+   - Ask: "Does this cover the skill you want, or is there any behavior, boundary, or output we should revisit?"
    - Do not write final deliverables until the user confirms the checkpoint or provides final corrections.
 
 7. **Write deliverables.**

@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.15
+version: v0.14
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 visual_tier: prototype
 ---
@@ -91,7 +91,6 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Prototype fidelity and implementation budget
      - Success metrics and selection method
    - Ask the user to confirm, correct, or flag assumptions before proceeding.
-   - Deliver every manifest/checklist/checkpoint the user must confirm inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview for variation goals**
    - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same variation decision, not to batch unrelated questions.
@@ -222,8 +221,8 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Readiness criteria for `$consolidate-variations`
 
 9. **Coverage checkpoint**
-   - Before concluding, summarize the variants, the decision criteria, and the proposed experiment plan inline as the final message text of its own turn.
-   - In the next turn, ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
+   - Before concluding, summarize the variants, the decision criteria, and the proposed experiment plan.
+   - Ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
 
 ## Deliverables
 

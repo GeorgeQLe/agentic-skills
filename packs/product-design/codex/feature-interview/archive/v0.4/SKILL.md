@@ -2,22 +2,24 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.5
+version: v0.4
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 interview_depth: full
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Feature Interview
 
+Invoke as `$feature-interview`.
+
 Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill. This skill is also the primary entry point for post-ship feature work, where scope determines the re-entry depth into the pipeline.
 
-This is narrower than `/spec-interview`: it performs the same assumption surfacing and user interrogation needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `/investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
+This is narrower than `$spec-interview`: it performs the same assumption surfacing and user interrogation needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `$investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
 
-Use `/feature-interview` especially after a production spec already exists and the user wants to add, adjust, or triage a smaller feature. In post-spec use, treat existing specs as the baseline contract: prefer a scoped add-on spec or a tightly bounded update to an existing spec over re-running `/spec-interview` for the whole product. Only route to `/spec-interview` when the existing spec is absent, obsolete, or too incomplete to support the new feature decision.
+Use `$feature-interview` especially after a production spec already exists and the user wants to add, adjust, or triage a smaller feature. In post-spec use, treat existing specs as the baseline contract: prefer a scoped add-on spec or a tightly bounded update to an existing spec over re-running `$spec-interview` for the whole product. Only route to `$spec-interview` when the existing spec is absent, obsolete, or too incomplete to support the new feature decision.
 
 ## Process
 
@@ -58,8 +60,8 @@ When product path `{slug}` is active, read and write research under `research/{s
 4. Match the feature against existing planning artifacts:
    - Identify whether the repo is in a post-spec state: one or more credible `specs/*.md`, `spec.md`, or `docs/specifications/*.md` files already define the product or area this feature extends.
    - Identify whether the feature is already fully represented in an existing spec, partially represented in a spec, should become a scoped add-on spec, is only present as an idea/research gap, or is already sequenced in the roadmap.
-   - In post-spec state, default to `update existing spec` or `new smaller-scope add-on spec` as the planning destination. Do not discard the existing spec baseline or route back to full `/spec-interview` unless the existing spec is stale, contradicted, or missing the product area needed to make the decision.
-   - If it duplicates planned work, stop and recommend the existing route (`/roadmap` (requires agent-work-admin pack), `/plan-phase N` (requires agent-work-admin pack), `/exec` (requires exec-loop pack), or `/ship` (requires exec-loop pack)) with evidence.
+   - In post-spec state, default to `update existing spec` or `new smaller-scope add-on spec` as the planning destination. Do not discard the existing spec baseline or route back to full `$spec-interview` unless the existing spec is stale, contradicted, or missing the product area needed to make the decision.
+   - If it duplicates planned work, stop and recommend the existing route (`$roadmap`, `$plan-phase N`, `$exec`, or `$ship`) with evidence.
 5. Present a **Feature Evidence Brief + Assumptions Manifest** before probing:
    - Evidence sources: files, docs, research artifacts, task docs, and git history consulted.
    - Claim validation: verdict for each factual claim or hypothesis, with concise evidence.
@@ -77,9 +79,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Prototype-first gate for product and feature work: state whether the next artifact should be `multiple route experiments`, `single clickable prototype`, `production implementation`, or `research/spec only`. If there is no accepted prototype or user-approved infrastructure opt-in, recommend route experiments or a clickable prototype and explicitly defer database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability.
    - Risks and unknowns: ambiguity, integration risk, user-facing risk, external dependencies, and what breaks if the assumption is wrong.
    Tag each assumption with `[from idea]`, `[from spec]`, `[from codebase]`, `[from research]`, `[from roadmap]`, `[from git]`, or `[inferred]`.
-   Deliver the brief and manifest inline as the final message text of their own turn; ask the step 6 confirmation in the next turn. AskUserQuestion option previews may mirror the content as a supplement but are never the sole channel. Never emit the brief only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee mid-turn text is shown.
-6. In the turn after the brief is shown, ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it. A confirmation question must never reference content the user has not been shown.
-7. Interview in focused passes, 1 to 3 questions per turn. If the session is already in Plan mode and there are 2-3 concrete options, prefer `request_user_input`; otherwise ask concise direct questions.
+6. Ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it.
+7. Interview in focused passes. Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions. If the session is already in Plan mode and there are 2-3 concrete options for the current decision, prefer `request_user_input`; otherwise ask one concise direct question.
 8. Cover only the areas needed to choose and prepare the planning destination:
    - Intent and success criteria.
    - Target users, jobs, and journey/design implications.
@@ -97,18 +98,18 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Scope to include now and explicitly defer.
    - For user-facing product or feature work, confirm the prototype-first decision: what users can click through first, whether multiple experiments should live on separate routes, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into a later production phase.
    - Scope triage for post-ship features:
-     - Small (config, copy, toggle) → `/spec-interview` + `/exec` directly
-     - Medium (new component, screen, workflow) → single-variation mini-prototype (`/prototype --variant 1`)
-     - Large (new product area, major redesign) → full pipeline starting at `/ux-variations`
+     - Small (config, copy, toggle) → `$spec-interview` + `$exec` directly
+     - Medium (new component, screen, workflow) → single-variation mini-prototype (`$prototype --variant 1`)
+     - Large (new product area, major redesign) → full pipeline starting at `$ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.
-   Deliver the checkpoint inline as the final message text of its own turn; in the next turn, ask: "Does this destination, priority, and scope match what you want?"
+   Ask: "Does this destination, priority, and scope match what you want?"
 
 ## Deliverables
 
 After confirmation, write the minimum durable artifact needed:
 
-- New spec: write `specs/[topic].md` using the `/spec-interview` canonical section headings.
+- New spec: write `specs/[topic].md` using the `$spec-interview` canonical section headings.
 - Add-on spec: write `specs/[parent-topic]-[feature-topic].md` or the repo's equivalent scoped path. State the parent spec it extends, the inherited assumptions, what is intentionally out of scope because the parent spec already owns it, and the exact integration points back to the parent.
 - Existing spec update: archive the existing canonical spec first, then update only the relevant sections.
 - Research or journey update: archive the existing canonical research/journey document first when replacing or substantively rewriting sections, then make the smallest scoped update. If the missing research requires a named skill, write the interview log and recommend that skill instead of inventing unsupported research.
@@ -127,8 +128,10 @@ Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/
 - Questions asked and answers received.
 - Options and recommendations presented.
 - Planning Destination + Priority Checkpoint and confirmed decision.
-- Post-spec relationship: parent spec, add-on spec path, or updated spec section, including why this path is smaller and safer than re-running full `/spec-interview`.
+- Post-spec relationship: parent spec, add-on spec path, or updated spec section, including why this path is smaller and safer than re-running full `$spec-interview`.
 - The exact next command for sequencing.
+
+When replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>` before editing it.
 
 ### Alignment Page
 
@@ -137,12 +140,11 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Constraints
 
 - Do not default to a new spec when an existing spec should be updated.
-- Do not route post-spec feature additions back to full `/spec-interview` by default. Use `/feature-interview` to create a scoped add-on spec or update the existing spec unless the baseline spec is missing or unfit.
+- Do not route post-spec feature additions back to full `$spec-interview` by default. Use `$feature-interview` to create a scoped add-on spec or update the existing spec unless the baseline spec is missing or unfit.
 - Do not update roadmap or task sequencing until the planning destination and priority are confirmed by the user.
 - Do not produce a full implementation spec unless the interview proves a new or rewritten spec is the right destination.
-- Do not route brainstorm ideas directly to `/spec-interview`; use `/feature-interview` for triage unless the user explicitly asks for a full spec.
-- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `/investigate` (requires code-debug pack); if it uncovers buildable planned work, route through `/roadmap` (requires agent-work-admin pack), `/plan-phase` (requires agent-work-admin pack), or `/exec` (requires exec-loop pack).
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- Do not route brainstorm ideas directly to `$spec-interview`; use `$feature-interview` for triage unless the user explicitly asks for a full spec.
+- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `$investigate`; if it uncovers buildable planned work, route through `$roadmap`, `$plan-phase`, or `$exec`.
 
 ## Default Shipping Contract
 

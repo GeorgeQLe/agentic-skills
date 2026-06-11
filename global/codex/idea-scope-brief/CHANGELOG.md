@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.14 - 2026-06-10
+
+- Idea Assumptions Manifest now renders inline as the final message text of its own turn, with the confirmation question asked in the following turn, never only as mid-turn text before a tool or command call. Applies the Manifest Visibility Rule in docs/interview-convention.md.
+
 ## v0.13 - 2026-06-11
 
 - Added npm-aware install-route alternatives to downstream pack recommendations while preserving Codex `$pack install` routes.

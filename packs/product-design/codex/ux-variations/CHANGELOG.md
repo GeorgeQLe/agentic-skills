@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.15 - 2026-06-10
+
+- Added the inline manifest visibility rule to the assumptions manifest step: every confirmation manifest/checklist/checkpoint renders as the final message text of its own turn with the confirmation question in the next turn, never only as mid-turn text before a tool or command call.
+- Coverage checkpoint split across two turns: the variants/criteria/experiment-plan summary is delivered as turn-final text, with the confirmation question asked in the following turn. Applies the Manifest Visibility Rule in docs/interview-convention.md.
+
 ## v0.14 - 2026-06-10
 
 - Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the ux-variations-specific gates from the generator gate map.

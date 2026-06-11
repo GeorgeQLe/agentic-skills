@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.14 - 2026-06-10
+
+- Made inline turn-final text the default delivery channel for every confirmation manifest/checklist/checkpoint: the content renders as the final message text of its own turn with the confirmation question in the next turn; AskUserQuestion option previews are demoted to a supplementary mirror and are never the sole channel. Supersedes the v0.13 either/or framing.
+- Retrofitted the 3-phase research lifecycle into both modes (full and requirements-only): new step 7 routes the draft through a working packet at `research/_working/preliminary-ui-interview-research.md` (or the product-path-scoped equivalent), builds `alignment/ui-interview-{topic}.html` pre-approval in `review` state, treats all checkpoint confirmations as non-final, keeps feedback-only YAML revisions pre-approval, and forbids routing recommendations before final compiled YAML.
+- Gated canonical writes: `specs/ui-[topic].md` / `specs/ui-requirements-[topic].md` and interview logs are written only after final compiled YAML approval, then the working packet is archived to `docs/history/archive/`, the active packet removed, and the page converted to `confirmed`. Routing recommendations now trigger only after the page is `confirmed`.
+
 ## v0.13 - 2026-06-10
 
 - Required every confirmation manifest/checklist (UI Assumptions Manifest, Content Requirements Manifest, coverage checkpoint) to be delivered through a guaranteed-visible channel: AskUserQuestion option previews or turn-final message text, never mid-turn text in a turn that ends with a tool call. A confirmation question must never reference content the user has not been shown. Fixes the 2026-06-10 incident where the manifest was confirmed without ever rendering on screen.

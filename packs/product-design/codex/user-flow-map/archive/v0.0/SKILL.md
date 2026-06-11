@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.1
+version: v0.0
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 interview_depth: full
 visual_tier: prototype
@@ -49,7 +49,7 @@ If `research/positioning.md` is missing for a business-product flow, recommend `
 
 ### 2. Flow Assumptions Checkpoint
 
-Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call — then ask the user to confirm, correct, or flag it in the next turn. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
+Before deep probing, present a concise **Flow Assumptions Checkpoint** and ask the user to confirm, correct, or flag it. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
 
 Cover:
 
@@ -85,7 +85,7 @@ Build the flow map at workflow level, not visual-design level:
 
 ### 4. Coverage Checkpoint
 
-Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool or command call):
+Before writing deliverables, present a **Flow Coverage Checkpoint**:
 
 - Persona and goal covered.
 - Entry points covered.
@@ -99,7 +99,7 @@ Before writing deliverables, present a **Flow Coverage Checkpoint** inline as th
 - Wireframe-level notes covered.
 - Layout/styling non-goals preserved.
 
-In the next turn, ask whether any flow branch, state, or handoff is missing before writing.
+Ask whether any flow branch, state, or handoff is missing before writing.
 
 ## Deliverables
 

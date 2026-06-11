@@ -127,7 +127,7 @@ The alignment-page convention is authored in `docs/alignment-page-convention.md`
 
 **Visual rendering tiers.** Each alignment page has a rendering tier declared via `visual_tier` in SKILL.md frontmatter: `document` (default — text/tables only), `visual` (adds inline Canvas/SVG charts using `scripts/alignment-chart-snippets.js` as reference), or `prototype` (adds interactive components). The upgrade script injects tier-appropriate guidance into each skill's `ALIGNMENT-PAGE.md`.
 
-**Interview depth.** Skills declare `interview_depth` in SKILL.md frontmatter: `full` (4-phase terminal interview before alignment page), `light` (1-3 context questions + findings validation), or `none` (direct to research). The interview convention is defined in `docs/interview-convention.md`. All interviewing happens in the terminal before the alignment page is built.
+**Interview depth.** Skills declare `interview_depth` in SKILL.md frontmatter: `full` (4-phase terminal interview before alignment page), `light` (1-3 context questions + findings validation), or `none` (direct to research). The interview convention is defined in `docs/interview-convention.md`. All interviewing happens in the terminal before the alignment page is built. Confirmation manifests/checklists render inline as turn-final message text per the Manifest Visibility Rule in `docs/interview-convention.md`.
 
 **Glossary write-forward.** Skills with `type: research` or `type: analysis` automatically receive a glossary additions gate in their `ALIGNMENT-PAGE.md`. The gate renders proposed terms with per-term approve/edit/reject/flag controls. Only approved terms are appended to the target glossary during the confirmed-page write step.
 

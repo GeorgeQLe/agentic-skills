@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.11
+version: v0.10
 argument-hint: "[--ideas]"
 interview_depth: full
 ---
@@ -68,7 +68,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - What **fake data needs to become real** — hardcoded lists, mock APIs, placeholder content
      - What **missing infrastructure** is needed — database, auth, payments, analytics, deployment
      - What **error/empty states** the prototype skips vs what production needs
-   - Deliver the checkpoint inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call. In the next turn, ask the user to confirm or correct it together with one focused interview question so momentum is kept. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
+   - Immediately follow the checkpoint with one focused interview question. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 
 3. **Screen-by-screen prototype walkthrough:**
@@ -95,7 +95,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 5. **Cover all areas:**
    - Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
-   - **Coverage checkpoint** — Before concluding, present a structured summary inline as the final message text of its own turn: list each area covered with key decisions made and the evidence/reasoning that supported each. In the next turn, ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
+   - **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
 

@@ -2,7 +2,7 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.4
+version: v0.5
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 interview_depth: full
 ---
@@ -79,7 +79,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Prototype-first gate for product and feature work: state whether the next artifact should be `multiple route experiments`, `single clickable prototype`, `production implementation`, or `research/spec only`. If there is no accepted prototype or user-approved infrastructure opt-in, recommend route experiments or a clickable prototype and explicitly defer database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability.
    - Risks and unknowns: ambiguity, integration risk, user-facing risk, external dependencies, and what breaks if the assumption is wrong.
    Tag each assumption with `[from idea]`, `[from spec]`, `[from codebase]`, `[from research]`, `[from roadmap]`, `[from git]`, or `[inferred]`.
-6. Ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it.
+   Deliver the brief and manifest inline as the final message text of their own turn; ask the step 6 confirmation in the next turn. Never emit the brief only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown.
+6. In the turn after the brief is shown, ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it. A confirmation question must never reference content the user has not been shown.
 7. Interview in focused passes. Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions. If the session is already in Plan mode and there are 2-3 concrete options for the current decision, prefer `request_user_input`; otherwise ask one concise direct question.
 8. Cover only the areas needed to choose and prepare the planning destination:
    - Intent and success criteria.
@@ -103,7 +104,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - Large (new product area, major redesign) → full pipeline starting at `$ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.
-   Ask: "Does this destination, priority, and scope match what you want?"
+   Deliver the checkpoint inline as the final message text of its own turn; in the next turn, ask: "Does this destination, priority, and scope match what you want?"
 
 ## Deliverables
 

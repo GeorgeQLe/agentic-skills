@@ -2,14 +2,12 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.14
+version: v0.13
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 interview_depth: full
 ---
 
 # Idea Scope Brief
-
-Invoke as `$idea-scope-brief`.
 
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-customer-discovery: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
@@ -40,8 +38,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/customer focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
    - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `scope_path`, `status`, `source_skill`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$customer-discovery <path/audience>`; if `business-discovery` is not enabled, recommend `$pack install business-discovery` inside Codex, or `npx skillpacks install business-discovery` from the project shell, before `$customer-discovery`.
-   - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, before `$product-line`.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/customer-discovery <path/audience>`; if `business-discovery` is not enabled, recommend `/pack install business-discovery` inside Claude Code, or `npx skillpacks install business-discovery` from the project shell, before `/customer-discovery`.
+   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `/pack install business-ops` inside Claude Code, or `npx skillpacks install business-ops` from the project shell, before `/product-line`.
 
 2. **Keep the boundary clear**
    - Do not run customer discovery, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
@@ -61,7 +59,6 @@ When product path `{slug}` is active, read and write research under `research/{s
      - non-goals
      - riskiest unknowns
    - Ask the user to confirm, correct, or flag assumptions before writing.
-   - Deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 ### Market Structure Handoff
 
@@ -72,8 +69,8 @@ During the Idea Assumptions Manifest, if the concept appears marketplace/platfor
 - Keep the source tag for each side as `[from prompt]`, `[from repo]`, or `[inferred]` unless the user provides a correction.
 - If the concept appears single-sided, omit the handoff or state that no marketplace/platform/B2B2C/multi-sided handoff is apparent.
 
-4. **Interview until concept-ready**
-   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+4. **Interview until idea-ready**
+   - Ask 1 to 3 focused questions per turn.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -130,14 +127,14 @@ The idea brief must include:
 - `## Customer Discovery Readiness`
 - `## Next Steps`
 
-The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute.
+The `## Customer Discovery Readiness` section must state whether the concept is ready for `/customer-discovery`, what inputs `/customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `/customer-discovery` to validate or refute.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` inside Codex, or `npx skillpacks install business-discovery` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If `business-discovery` or the compatibility `business-app` alias is enabled: `$customer-discovery`
-- If the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell.
-- If project type is unclear: `$pack recommend`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery` inside Claude Code, or `npx skillpacks install business-discovery` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `/customer-discovery`
+- If the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle` inside Claude Code, or `npx skillpacks install customer-lifecycle` from the project shell.
+- If project type is unclear: `/pack recommend`
 
 Include 1-3 other options only when they are materially useful.
 
@@ -149,7 +146,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `$scaffold` requires the monorepo pack (`$pack install monorepo` inside Codex, or `npx skillpacks install monorepo` from the project shell).
+- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `/scaffold` requires the monorepo pack (`/pack install monorepo` inside Claude Code, or `npx skillpacks install monorepo` from the project shell).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing idea brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. Write only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.

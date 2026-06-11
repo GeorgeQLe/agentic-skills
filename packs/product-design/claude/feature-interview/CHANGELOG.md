@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5 - 2026-06-10
+
+- Feature Evidence Brief + Assumptions Manifest now renders inline as the final message text of its own turn, with the step 6 confirmation asked in the following turn; AskUserQuestion option previews are a supplementary mirror only, never the sole channel.
+- Planning Destination + Priority Checkpoint split across two turns: the checkpoint is delivered as turn-final text, with the confirmation question asked in the following turn. Applies the Manifest Visibility Rule in docs/interview-convention.md.
+
 ## v0.4 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.
