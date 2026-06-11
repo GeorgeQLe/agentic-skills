@@ -86,12 +86,15 @@ function textWithSentenceBreaks(root) {
   return out.replace(/\s+/g, ' ').trim();
 }
 
+// h2 stripped because callers prefix the section text with the heading label
+// themselves — keeping it would read every heading twice.
+const STRIP_SELECTOR = 'h2, .section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar';
+const NARRATIVE_SELECTOR = '.chart-container, .table-wrap, .stat-grid';
+
 function extractText(el) {
   const clone = el.cloneNode(true);
-  // h2 removed because callers prefix the section text with the heading label
-  // themselves — keeping it would read every heading twice.
-  clone.querySelectorAll('h2, .section-feedback, .question-block, .gate, .compile-box, .radio-group, .answer-notes, .local-yaml, .local-yaml-actions, .compile-actions, button, textarea, input, .tts-bar').forEach(n => n.remove());
-  clone.querySelectorAll('.chart-container, .table-wrap, .stat-grid').forEach(n => {
+  clone.querySelectorAll(STRIP_SELECTOR).forEach(n => n.remove());
+  clone.querySelectorAll(NARRATIVE_SELECTOR).forEach(n => {
     const narrative = n.getAttribute('data-tts-narrative');
     if (narrative) {
       const span = document.createElement('span');
@@ -102,6 +105,62 @@ function extractText(el) {
     }
   });
   return textWithSentenceBreaks(clone);
+}
+
+// Live-DOM counterpart of extractText: same text rules, but each block-level
+// flush is emitted as {el, text} against the LIVE element, so spoken chunks
+// can be mapped back to the blocks they came from for follow-along highlight.
+function extractSegments(rootEl) {
+  const segments = [];
+  let buf = '';
+  const punctuate = (t) => /[.!?:;,]$/.test(t) ? t : t + '.';
+  const flush = (el, addPunct) => {
+    const t = buf.replace(/\s+/g, ' ').trim();
+    buf = '';
+    if (!t) return;
+    segments.push({ el, text: addPunct ? punctuate(t) : t });
+  };
+  const walk = (node) => {
+    if (node.nodeType === 3) { buf += node.textContent; return; }
+    if (node.nodeType !== 1) return;
+    if (node.matches(STRIP_SELECTOR)) return;
+    if (node.matches(NARRATIVE_SELECTOR)) {
+      const narrative = node.getAttribute('data-tts-narrative');
+      if (!narrative) return;
+      flush(node.parentElement || rootEl, true);
+      segments.push({ el: node, text: punctuate(narrative.replace(/\s+/g, ' ').trim()) });
+      return;
+    }
+    node.childNodes.forEach(walk);
+    if (BLOCK_TAGS[node.tagName]) flush(node, true);
+  };
+  rootEl.childNodes.forEach(walk);
+  // Trailing inline text directly under the root; legacy extractText adds no
+  // terminal punctuation here unless the root itself is a block element.
+  flush(rootEl, !!BLOCK_TAGS[rootEl.tagName]);
+  return segments;
+}
+
+// Join {el, text} segments into one section string with [start,end) offsets,
+// so chunk offsets from chunkTextWithOffsets map back to live elements.
+function joinSegments(segs) {
+  let text = '';
+  const segments = [];
+  segs.forEach(s => {
+    if (text) text += ' ';
+    const start = text.length;
+    text += s.text;
+    segments.push({ el: s.el, start, end: text.length });
+  });
+  return { text, segments };
+}
+
+function buildSectionSource(sectionEl, headingLabel, headingEl) {
+  const segs = extractSegments(sectionEl);
+  // Synthetic heading segment replaces the `${heading}. ${text}` prefix so the
+  // heading element highlights while its label is spoken.
+  segs.unshift({ el: headingEl || sectionEl, text: headingLabel + '.' });
+  return joinSegments(segs);
 }
 
 // Text normalization: expand symbols and abbreviations the TTS front-end would
@@ -132,14 +191,21 @@ function gatherSections() {
   const leadText = lead?.textContent?.trim() || '';
   const introEl = header || h1?.parentElement || document.querySelector('main') || document.body;
   if (title) {
-    sections.push({ el: introEl, label: 'Introduction', text: `${title}. ${leadText}` });
+    const introSegs = [{ el: h1 || introEl, text: `${title}.` }];
+    if (lead && leadText) introSegs.push({ el: lead, text: leadText });
+    const src = joinSegments(introSegs);
+    sections.push({ el: introEl, label: 'Introduction', text: src.text, segments: src.segments });
   }
   document.querySelectorAll('section').forEach(sec => {
     const id = sec.id;
     if (id === 'compile' || id === 'review-gates') return;
-    const heading = sec.querySelector('h2')?.textContent?.trim() || 'Section';
-    const text = extractText(sec);
-    if (text.length > 10) sections.push({ el: sec, label: heading, text: `${heading}. ${text}` });
+    const h2 = sec.querySelector('h2');
+    const heading = h2?.textContent?.trim() || 'Section';
+    const src = buildSectionSource(sec, heading, h2);
+    // Body length gate: same >10 threshold as before, measured past the
+    // synthetic heading segment.
+    const bodyLen = Math.max(0, src.text.length - src.segments[0].end - 1);
+    if (bodyLen > 10) sections.push({ el: sec, label: heading, text: src.text, segments: src.segments });
   });
   if (sections.length <= 1) {
     const container = document.querySelector('main') || document.body;
@@ -155,21 +221,67 @@ function gatherSections() {
       }
       const text = extractText(tempDiv);
       if (text.length > 10) {
-        sections.push({ el: h2.parentElement || h2, label: heading, text: `${heading}. ${text}` });
+        const el = h2.parentElement || h2;
+        const full = `${heading}. ${text}`;
+        // Clone-based fallback: one whole-section segment (no follow-along).
+        sections.push({ el, label: heading, text: full, segments: [{ el, start: 0, end: full.length }] });
       }
     });
   }
   if (!sections.length) {
     const body = extractText(document.querySelector('main') || document.body);
-    if (body.length > 10) sections.push({ el: document.body, label: 'Page', text: body });
+    if (body.length > 10) {
+      sections.push({ el: document.body, label: 'Page', text: body, segments: [{ el: document.body, start: 0, end: body.length }] });
+    }
   }
 }
 
-function highlight(el) {
+function reducedMotion() {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function highlight(el, scroll) {
+  if (scroll === undefined) scroll = true;
   document.querySelectorAll('.tts-active-section').forEach(e => e.classList.remove('tts-active-section'));
   if (el) {
     el.classList.add('tts-active-section');
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (scroll) el.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  } else {
+    clearChunkHighlight();
+  }
+}
+
+// --- Follow-along chunk highlight ---
+
+let chunkEls = [];
+
+function clearChunkHighlight() {
+  chunkEls.forEach(el => el.classList.remove('tts-active-chunk'));
+  chunkEls = [];
+}
+
+// Already roughly centered (middle ~60% of the viewport)? Skip the scroll —
+// consecutive chunks inside one long block would otherwise jitter.
+function inMidViewport(el) {
+  const r = el.getBoundingClientRect();
+  const vh = window.innerHeight;
+  return r.top >= vh * 0.2 && r.bottom <= vh * 0.8;
+}
+
+function highlightChunk(sec, chunk) {
+  if (!sec.segments) return;
+  const els = [];
+  sec.segments.forEach(s => {
+    if (s.start >= chunk.end || s.end <= chunk.start) return;
+    let el = s.el;
+    if (el.tagName === 'TD' || el.tagName === 'TH') el = el.closest('tr') || el;
+    if (!els.includes(el)) els.push(el);
+  });
+  chunkEls.forEach(el => { if (!els.includes(el)) el.classList.remove('tts-active-chunk'); });
+  els.forEach(el => el.classList.add('tts-active-chunk'));
+  chunkEls = els;
+  if (els[0] && !inMidViewport(els[0])) {
+    els[0].scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
   }
 }
 
@@ -280,18 +392,27 @@ function stopCurrentAudio() {
     currentSource = null;
   }
   if (usingFallback) fallback.cancel();
+  clearChunkHighlight();
 }
 
 // The first chunk is kept short (firstLen) so audio starts after synthesizing
 // only a sentence or two; later chunks use maxLen and are prefetched during
-// playback, so their size never delays audio.
-function chunkText(text, maxLen, firstLen) {
+// playback, so their size never delays audio. Each chunk carries its [start,
+// end) offsets into the input text so it can be mapped back to segments.
+function chunkTextWithOffsets(text, maxLen, firstLen) {
   maxLen = maxLen || 1000;
   var limit = firstLen || maxLen;
-  if (text.length <= limit) return [text];
+  if (text.length <= limit) return [{ text: text, start: 0, end: text.length }];
   var chunks = [];
-  var remaining = text;
-  while (remaining.length > limit) {
+  var pos = 0;
+  var push = (from, to) => {
+    // Offset-aware trim: advance past leading/trailing whitespace.
+    while (from < to && /\s/.test(text[from])) from++;
+    while (to > from && /\s/.test(text[to - 1])) to--;
+    if (to > from) chunks.push({ text: text.slice(from, to), start: from, end: to });
+  };
+  while (text.length - pos > limit) {
+    var remaining = text.slice(pos);
     var cut = -1;
     var seps = ['. ', '? ', '! '];
     for (var i = 0; i < seps.length; i++) {
@@ -300,8 +421,9 @@ function chunkText(text, maxLen, firstLen) {
     }
     if (cut <= 0) {
       // No sentence end within the limit: prefer a clause boundary, then a
-      // word boundary, before resorting to a hard mid-word cut.
-      var clauseSeps = [', ', '; ', ': '];
+      // word boundary, before resorting to a hard mid-word cut. Em/en dashes
+      // are clause boundaries too (they read as pauses).
+      var clauseSeps = [', ', '; ', ': ', ' — ', ' – '];
       for (var j = 0; j < clauseSeps.length; j++) {
         var cIdx = remaining.lastIndexOf(clauseSeps[j], limit);
         if (cIdx > cut) cut = cIdx + clauseSeps[j].length;
@@ -312,11 +434,12 @@ function chunkText(text, maxLen, firstLen) {
       if (sp > 0) cut = sp + 1;
     }
     if (cut <= 0) cut = limit;
-    chunks.push(remaining.slice(0, cut).trim());
-    remaining = remaining.slice(cut).trim();
+    push(pos, pos + cut);
+    pos += cut;
+    while (pos < text.length && /\s/.test(text[pos])) pos++;
     limit = maxLen;
   }
-  if (remaining) chunks.push(remaining);
+  push(pos, text.length);
   return chunks;
 }
 
@@ -330,6 +453,8 @@ function genKey(text, voice, spd) {
   return voice + '|' + spd + '|' + text;
 }
 
+// Speech normalization happens per chunk (not whole-section) so chunk offsets
+// keep pointing into the raw section text the segments were built from.
 function sectionSpeechText(sec) {
   return normalizeForSpeech(sec.text);
 }
@@ -337,23 +462,25 @@ function sectionSpeechText(sec) {
 function prefetchNextSection(idx) {
   const next = sections[idx + 1];
   if (!next || usingFallback || !ttsInstance) return;
-  const first = chunkText(sectionSpeechText(next), MAX_CHUNK_LEN, FIRST_CHUNK_LEN)[0];
+  const first = chunkTextWithOffsets(next.text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN)[0];
+  if (!first) return;
+  const spoken = normalizeForSpeech(first.text);
   const voice = getSelectedVoice();
-  const key = genKey(first, voice, speed);
+  const key = genKey(spoken, voice, speed);
   if (sectionPrefetch && sectionPrefetch.key === key) return;
-  const p = ttsInstance.generate(first, { voice, speed });
+  const p = ttsInstance.generate(spoken, { voice, speed });
   p.catch(() => {});
   sectionPrefetch = { key, promise: p };
 }
 
-async function speakKokoro(text, id, idx, onEnd) {
+async function speakKokoro(sec, id, idx, onEnd) {
   if (audioCtx.state === 'suspended') await audioCtx.resume();
 
   const voice = getSelectedVoice();
   const streamState = { abort: false };
   currentStream = streamState;
 
-  const chunks = chunkText(text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN);
+  const chunks = chunkTextWithOffsets(sec.text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN);
   const gens = new Array(chunks.length).fill(null);
 
   // Pipelined synthesis: while chunk N plays, chunks N+1..N+PREFETCH_AHEAD
@@ -363,13 +490,14 @@ async function speakKokoro(text, id, idx, onEnd) {
   // playback is aborted mid-flight.
   const startGen = (i) => {
     if (gens[i]) return gens[i];
-    const key = genKey(chunks[i], voice, speed);
+    const spoken = normalizeForSpeech(chunks[i].text);
+    const key = genKey(spoken, voice, speed);
     if (sectionPrefetch && sectionPrefetch.key === key) {
       gens[i] = sectionPrefetch.promise;
       sectionPrefetch = null;
       return gens[i];
     }
-    gens[i] = ttsInstance.generate(chunks[i], { voice, speed });
+    gens[i] = ttsInstance.generate(spoken, { voice, speed });
     gens[i].catch(() => {});
     return gens[i];
   };
@@ -397,6 +525,8 @@ async function speakKokoro(text, id, idx, onEnd) {
         src.buffer = buf;
         src.connect(audioCtx.destination);
         src.onended = resolve;
+        // Highlight when audio starts, not when synthesis starts.
+        highlightChunk(sec, chunks[ci]);
         src.start();
         currentSource = src;
       });
@@ -418,18 +548,20 @@ function speakSection(idx) {
   currentIdx = idx;
   const id = ++skipId;
   const sec = sections[idx];
-  highlight(sec.el);
+  // Kokoro path: no section-start scroll — chunk 0 contains the heading, so
+  // its center-scroll lands at the section top without a double scroll. The
+  // fallback stays section-level, so it keeps the section-start scroll.
+  highlight(sec.el, usingFallback);
   updateStatus();
 
   const onEnd = () => {
     if (id === skipId && !paused && active) speakSection(currentIdx + 1);
   };
 
-  const speech = sectionSpeechText(sec);
   if (usingFallback) {
-    fallback.speak(speech, onEnd);
+    fallback.speak(sectionSpeechText(sec), onEnd);
   } else {
-    speakKokoro(speech, id, idx, onEnd);
+    speakKokoro(sec, id, idx, onEnd);
   }
 }
 
@@ -625,8 +757,16 @@ function injectStyles() {
       font-size: 0.85rem; cursor: pointer;
     }
     .tts-active-section {
-      outline: 2px solid var(--accent, #58a6ff); outline-offset: 4px;
+      outline: 1px solid rgba(88,166,255,0.45); outline-offset: 4px;
       transition: outline-color 0.3s;
+    }
+    /* background (not box-shadow) so tr highlighting renders reliably */
+    .tts-active-chunk {
+      background: rgba(88,166,255,0.14); border-radius: 4px;
+      transition: background 0.25s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tts-active-chunk { transition: none; }
     }
     @media (max-width: 560px) {
       .tts-bar { gap: 4px; padding: 8px; }
