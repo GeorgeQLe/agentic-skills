@@ -36,17 +36,23 @@ Make `$vard-scan` / `/vard-scan` and `$ord-scan` / `/ord-scan` scope-first resea
 - Preserved lightweight VARD/ORD scan criteria while moving candidate ranking and top-pick recommendations behind artifact approval.
 - Generated four sibling `ALIGNMENT-PAGE.md` bundles from `node scripts/upgrade-alignment-page.mjs`; no generated bundle was hand-edited.
 - Refreshed Skills Showcase generated data and proof assets after active skill metadata changed. Curated showcase copy, grouping, workflow animation text, and proof receipt copy needed no manual edits because titles, descriptions, pack grouping, and public proof copy are unchanged apart from generated versions/fingerprints.
+- Captured the current `$exec` invocation and visible pasted skill context in `prompts/exec/skill-prompt-20260610-202327-exec.md`.
 - Verification passed:
   - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/upgrade-alignment-page.mjs --dry-run`
   - Active staged research audit: 138 active `type: research` skills, 0 non-compliant
-  - Targeted marker scans for report-first, staged workflow, explicit VARD/ORD preliminary packet paths, changelogs, archives, and generated bundles
+  - Targeted marker, artifact, and runner-command scans for report-first, staged workflow, explicit VARD/ORD preliminary packet paths, changelogs, archives, generated bundles, and Claude/Codex route syntax
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-deps.sh --broken`
+  - `bash scripts/skill-pack-routing-audit.sh`
   - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
   - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
   - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
-  - `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts` (285 passed)
-  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir apps/skills-showcase build`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` (26 passed)
   - `git diff --check`
-- A broader exploratory audit also found eight pre-existing competitive-analysis framework skills without `## Evidence And Feedback Handling`; those are outside this task's stated scope and were not changed.
+- A broader exploratory `bash scripts/skill-mirror-parity-audit.sh` run found 28 unrelated pre-existing heading-drift failures and did not name the VARD/ORD scan skills. The script has no scoped mode, so target-specific marker, artifact, and runner-command scans were used as the adversarial review for this boundary.
 
 ---
 

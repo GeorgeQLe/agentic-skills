@@ -23,22 +23,22 @@ Upgrade the active VARD and ORD scan skills so they follow the strict scope-firs
    - [x] Capture the visible user invocation under `prompts/create-agentic-skill/`.
    - [x] Add active roadmap and todo tracking before implementation.
 2. Inspect and archive.
-   - [ ] Read the four active scan skills and the reference staged research pattern.
-   - [ ] Run `scripts/skill-archive.sh` for the four scan skill directories.
+   - [x] Read the four active scan skills and the reference staged research pattern.
+   - [x] Run `scripts/skill-archive.sh` for the four scan skill directories.
 3. Implement the staged contract.
-   - [ ] Bump each active scan skill from `version: v0.0` to `version: v0.1`.
-   - [ ] Add `Report-First Approval Gate`, `Staged Research Workflow`, and `Evidence And Feedback Handling`.
-   - [ ] Preserve lightweight VARD/ORD scan criteria while moving candidate ranking into approved preliminary packets.
-   - [ ] Add the standard `## Alignment Page` stub.
-   - [ ] Add `CHANGELOG.md` entries for v0.1 in each skill directory.
+   - [x] Bump each active scan skill from `version: v0.0` to `version: v0.1`.
+   - [x] Add `Report-First Approval Gate`, `Staged Research Workflow`, and `Evidence And Feedback Handling`.
+   - [x] Preserve lightweight VARD/ORD scan criteria while moving candidate ranking into approved preliminary packets.
+   - [x] Add the standard `## Alignment Page` stub.
+   - [x] Add `CHANGELOG.md` entries for v0.1 in each skill directory.
 4. Regenerate and verify.
-   - [ ] Run `node scripts/upgrade-alignment-page.mjs`.
-   - [ ] Refresh Skills Showcase generated data if active `SKILL.md` behavior/metadata changes require it.
-   - [ ] Run generated bundle drift, active `type: research` staged-workflow audit, targeted marker scans, archive/changelog checks, and whitespace checks.
+   - [x] Run `node scripts/upgrade-alignment-page.mjs`.
+   - [x] Refresh Skills Showcase generated data if active `SKILL.md` behavior/metadata changes require it.
+   - [x] Run generated bundle drift, active `type: research` staged-workflow audit, targeted marker scans, archive/changelog checks, and whitespace checks.
 5. Ship.
-   - [ ] Record review notes in `tasks/todo.md`.
-   - [ ] Stage only intended files.
-   - [ ] Commit and push on `master`.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [x] Stage only intended files.
+   - [x] Commit and push on `master`.
 
 ### Acceptance Criteria
 
@@ -47,6 +47,10 @@ Upgrade the active VARD and ORD scan skills so they follow the strict scope-firs
 - Generated `ALIGNMENT-PAGE.md` files exist for all four scan skill directories and pass exact drift check.
 - Archive snapshots and changelog entries exist for each bumped skill.
 - Recommended next command remains `vard-align` or `ord-align`, but only after final approval and canonical artifact write.
+
+### Completion Notes
+
+- Completed in the VARD/ORD staged scan workflow boundary. Validation covered generated bundle drift, 138 active research skills with 0 staged-workflow non-compliance, target marker/path scans, skill version/archive/dependency/routing hygiene, Skills Showcase data validation, app build, focused alignment-gates layer1 tests, and whitespace.
 
 ---
 

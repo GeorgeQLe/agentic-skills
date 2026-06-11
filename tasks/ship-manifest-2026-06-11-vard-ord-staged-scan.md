@@ -9,6 +9,7 @@ Implement the supplied plan to upgrade the four active VARD/ORD scan research sk
 ## Changed Files
 
 - `prompts/create-agentic-skill/skill-prompt-20260610-201912-vard-ord-staged-scan.md`
+- `prompts/exec/skill-prompt-20260610-202327-exec.md`
 - `packs/vard/codex/vard-scan/SKILL.md`
 - `packs/vard/codex/vard-scan/CHANGELOG.md`
 - `packs/vard/codex/vard-scan/ALIGNMENT-PAGE.md`
@@ -37,7 +38,7 @@ Implement the supplied plan to upgrade the four active VARD/ORD scan research sk
 
 ## Per-File Purpose
 
-- Prompt history: captures the visible user invocation that triggered the repo-managed skill update.
+- Prompt history: captures the visible user invocations that triggered the repo-managed skill update and this `$exec` validation/shipping pass.
 - Active VARD/ORD scan `SKILL.md` files: bump to v0.1 and add report-first approval, staged research, evidence/feedback handling, explicit preliminary packet paths, canonical artifact paths, and alignment-page stubs.
 - Changelogs and archives: satisfy skill versioning by preserving v0.0 and documenting v0.1 behavior.
 - Generated `ALIGNMENT-PAGE.md` bundles: provide the standard alignment-page instructions beside each scan skill.
@@ -54,20 +55,24 @@ Implement the supplied plan to upgrade the four active VARD/ORD scan research sk
 ## Tests Run
 
 - `node scripts/upgrade-alignment-page.mjs` - wrote 4 generated bundles.
-- `node scripts/upgrade-alignment-page.mjs --check` - passed with 0 updates.
+- `node scripts/upgrade-alignment-page.mjs --check` - passed with 0 updates, 288 ownable bundles exact.
+- `node scripts/upgrade-alignment-page.mjs --dry-run` - passed with 0 updates and 288 ownable bundles exact.
 - Active staged research audit - passed: 138 active `type: research` skills, 0 non-compliant.
-- Targeted `rg` marker scans for report-first gate, staged workflow, explicit VARD/ORD preliminary packet paths, changelogs, archives, and generated bundles - passed.
+- Targeted marker, artifact, and runner-command scans for report-first gate, staged workflow, explicit VARD/ORD preliminary packet paths, changelogs, archives, generated bundles, and Claude/Codex route syntax - passed.
+- `bash scripts/skill-versions.sh --missing` - passed, all 423 skills have a version field.
+- `bash scripts/skill-archive-audit.sh --strict` - passed, 383 skills checked, 0 violations.
+- `bash scripts/skill-deps.sh --broken` - passed, no broken references.
+- `bash scripts/skill-pack-routing-audit.sh` - passed, no cross-pack recommendation gaps.
 - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs` - generated 373 skills and 41 packs.
 - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs` - generated proof assets.
 - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` - passed.
-- `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts` - passed, 285 tests.
-- `pnpm --dir tests bench:coverage` - passed, 195 skills.
+- `pnpm --dir apps/skills-showcase build` - passed; Next.js built 15 static pages and the dynamic tRPC route.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` - passed, 26 tests.
 - `git diff --check` - passed.
 
 ## Skipped Tests
 
-- Full Skills Showcase app build was skipped because this boundary changes generated catalog/proof data and skill text, not React source, app routing, package code, or browser behavior. The showcase-owned generated-data validator is the relevant executable gate.
-- Full test suite was skipped because the focused research approval-gate layer1 test covers the changed staged workflow contract and benchmark coverage validates skill registry coverage.
+- Full test suite was skipped because the active research compliance scan, target-specific marker/artifact/runner scans, focused alignment-gates layer1 test, skill hygiene checks, generated-data validator, and Skills Showcase build cover the changed skill contracts and generated app data without expanding into unrelated packages.
 - Deploy was skipped. The task is a repo skill-contract update with generated static data refresh; production deployment is outside the user request and requires explicit deploy confirmation.
 
 ## Adversarial Review
@@ -77,11 +82,12 @@ Implement the supplied plan to upgrade the four active VARD/ORD scan research sk
 - Checked that Stage 3 removes active `_working` packets and writes canonical scan artifacts only after clean final artifact approval.
 - Checked generated showcase data: public command syntax now shows `$vard-scan` and `$ord-scan` for Codex, while Claude keeps slash commands.
 - Checked curated Skills Showcase copy, catalog grouping, workflow animation text, and proof receipt copy; no manual copy edits were needed because titles, descriptions, grouping, and proof copy did not change apart from generated versions/fingerprints.
+- Exploratory `bash scripts/skill-mirror-parity-audit.sh` failed on 28 unrelated pre-existing heading-drift pairs and did not name VARD/ORD. The script has no scoped mode, so target-specific marker, artifact, and runner-command scans were used as the boundary review.
 
 ## Residual Risk
 
-- An exploratory broader audit found eight pre-existing competitive-analysis framework skills without `## Evidence And Feedback Handling`. They are outside this task's stated staged-workflow non-compliance scope and were not changed.
-- The working tree also contains an unrelated untracked `prompts/exec/skill-prompt-20260610-202327-exec.md` file that is intentionally excluded from this commit.
+- The broad mirror parity audit remains red on 28 unrelated pre-existing heading-drift pairs outside the VARD/ORD scan skills. Future mirror-parity remediation should either update the allowlist or fix those pairs directly; this boundary did not broaden into that repo-wide cleanup.
+- Full layer1/full test-suite coverage was not run; the risk is an unrelated test catching generated data or alignment convention drift outside the targeted VARD/ORD path. The focused checks above cover the changed skill contracts and generated showcase assets.
 
 ## Rollback Note
 
