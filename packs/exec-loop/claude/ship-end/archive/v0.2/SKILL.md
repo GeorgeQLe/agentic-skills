@@ -2,7 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.3
+version: v0.2
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -80,16 +80,16 @@ Rules:
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, outstanding session work, or the absence of any remaining work. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` inside Claude Code or `npx skillpacks install agent-bridge` from the project shell first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
+  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
   - Claude-only or orchestration-heavy work → recommend `/exec`.
   - Codex-only execution → recommend `$exec`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` inside Claude Code or `npx skillpacks install guided-walkthrough` from the project shell first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
-  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` inside Claude Code or `npx skillpacks install docs-health` from the project shell first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code or `npx skillpacks install <pack-name>` from the project shell as the prerequisite.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message.
 - Do NOT modify CLAUDE.md. CLAUDE.md is for project conventions and config only — not progress tracking.
 - Progress and active work go in `tasks/todo.md`. Completed work history goes in `tasks/history.md`.

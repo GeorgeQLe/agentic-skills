@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-11
+
+- Added npm CLI install alternatives to cross-pack next-step routing fallback wording while preserving Codex `$pack install` recommendations.
+
 ## v0.5 - 2026-06-09
 
 - Updated Skills Showcase refresh commands to use app-owned generator and validator paths after the workspace split.

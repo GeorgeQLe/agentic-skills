@@ -2,7 +2,7 @@
 name: exec
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
 type: execution
-version: v0.4
+version: v0.3
 argument-hint: "[--phase]"
 invocation: orchestrator
 ---
@@ -160,7 +160,7 @@ Rules:
 
 
 ## Constraints
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code or `npx skillpacks install <pack-name>` from the project shell as the prerequisite.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - **One step (or one phase). That's it.** Then stop and let the user decide what's next.
 - **Always enter plan mode before executing.** The user must approve the approach first.
 - Keep context footprint minimal — don't read the entire codebase, only files relevant to this work.

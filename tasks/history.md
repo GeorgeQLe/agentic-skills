@@ -14157,3 +14157,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed for targeted customer-lifecycle report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 86 later P2/P3 findings.
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-224353-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-customer-lifecycle.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P2 exec-loop remediation
+
+- Updated the exec-loop P2 bucket from `research/skillpack-cli-routing-audit.md`: five Claude/Codex `exec`, `ship`, and `ship-end` contracts now include `npx skillpacks install <pack>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.
+- Archived every prior active target `SKILL.md`, bumped the planned versions, and updated all five target `CHANGELOG.md` files.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; generated versions and fingerprints changed, while non-generated showcase copy did not need manual updates.
+- Validation passed for targeted exec-loop report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 67 later P2/P3 findings.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260611-002710-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-exec-loop.md`.

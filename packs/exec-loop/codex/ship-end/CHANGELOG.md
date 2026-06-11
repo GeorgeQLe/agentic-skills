@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-11
+
+- Added npm CLI install alternatives to cross-pack wrap-up routing fallback wording while preserving Codex `$pack install` recommendations.
+
 ## v0.0
 
 - Archived previous skill contract.

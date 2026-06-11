@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-11
+
+- Added the npm CLI install alternative to cross-pack recommendation fallback wording while preserving the Claude `/pack install` route.
+
 ## v0.3 - 2026-06-09
 
 - Updated Skills Showcase refresh commands to use app-owned generator and validator paths after the workspace split.
