@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-11 — Ship-end CLI module and alignment artifact cleanup
+
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260611-131120-ship-end.md`.
+- Added the missing `packages/skillpacks/src/cli/update-check.mjs` module required by the tracked `packages/skillpacks/bin/skillpacks.mjs` entrypoint, repairing clean-checkout package execution for the existing update-check import.
+- Finished two previously untracked active alignment pages by adding metadata, injecting Kokoro TTS, and indexing them in `alignment/index.html`: `alignment/analyze-sessions-afps-workflow-patterns.html` and `alignment/uat-card-pack-migration.html`.
+- Included the previously untracked analyze-sessions prompt artifact for the AFPS workflow-patterns report.
+- Reconciled stale task bookkeeping for the install-destination output correction; it had already shipped as `4ed32869 fix(skillpacks): show install destinations only`.
+- Validation passed: package syntax checks, `npm --workspace skillpacks run test:node` (50 passed), `npm --workspace skillpacks run build:check`, full active alignment-page audit, package CLI list smoke, and `git diff --check`.
+- Deploy follow-up: `tasks/deploy.md` exists, but `$deploy` is not installed. `scripts/pack.sh which deploy` reports the skill is provided by the uninstalled `release-ops` pack.
+- Manifest: `tasks/ship-manifest-2026-06-11-ship-end-cli-alignment-cleanup.md`.
+
 ## 2026-06-11 — Remove acceptEdits / showClearContextOnPlanAccept config requirements
 
 - Removed the `defaultMode: "acceptEdits"` and `showClearContextOnPlanAccept` settings gate from the ship skill (`packs/exec-loop/claude/ship/SKILL.md`) — auto mode now handles plan-mode transitions natively, so the workaround settings writes are no longer needed.

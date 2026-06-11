@@ -1,3 +1,44 @@
+## Current Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
+
+### Goal
+
+Finish the `$ship-end` wrap-up by committing and pushing the current local artifacts on `master`, while fixing the clean-checkout CLI dependency gap and making previously untracked alignment pages pass the active-page audit.
+
+### Scope
+
+- Include the missing `packages/skillpacks/src/cli/update-check.mjs` module already imported by the tracked `packages/skillpacks/bin/skillpacks.mjs`.
+- Finish and index the untracked active alignment pages:
+  - `alignment/analyze-sessions-afps-workflow-patterns.html`
+  - `alignment/uat-card-pack-migration.html`
+- Include the related prompt-history artifacts under `prompts/`.
+- Update task/history/manifest files for this shipping boundary.
+- Out of scope: changing the published package version, altering the update-check behavior beyond adding the missing module, or deploying the Skills Showcase without an available deploy skill.
+
+### Plan
+
+1. Capture and inspect.
+   - [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+   - [x] Inspect git status, unpushed commits, task docs, manual tasks, advisory tasks, and deploy contract.
+   - [x] Identify that the tracked CLI entrypoint imports an untracked `update-check.mjs` module.
+2. Repair active artifacts.
+   - [x] Add alignment-page metadata, TTS includes, and index entries for the two untracked alignment pages.
+   - [x] Verify the alignment-page audit passes for the active page set.
+   - [x] Reconcile stale task bookkeeping for the already-shipped install-destination output correction.
+3. Validate and ship.
+   - [x] Run package syntax/package tests, alignment audit, whitespace checks, and ship-boundary review.
+   - [x] Record history and the quality-gate manifest.
+   - [x] Commit and push intended files on `master`.
+
+### Acceptance Criteria
+
+- A clean checkout has the `update-check.mjs` module required by `packages/skillpacks/bin/skillpacks.mjs`.
+- `npm --workspace skillpacks run test:node` passes with the shipped source tree.
+- The active alignment-page audit passes with the two new pages indexed.
+- Prompt-history artifacts for the shipped skill invocations are tracked.
+- No generated local skill roots under `.claude/skills/**` or `.codex/skills/**` are staged.
+
+---
+
 ## Current Implementation - Strict Exact Skillpacks Install Resolution
 
 ### Goal

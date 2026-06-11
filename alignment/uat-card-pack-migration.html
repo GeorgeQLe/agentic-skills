@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UAT: Card Pack Migration + Deck Builder</title>
+<style>
+:root {
+  --ink: #111827;
+  --muted: #5B6472;
+  --bg: #F7F8F5;
+  --teal: #00D4AA;
+  --coral: #ff6b6b;
+  --section-bg: #ffffff;
+  --border: #e5e7eb;
+  --code-bg: #f3f4f6;
+  --gate-bg: #fffbeb;
+  --gate-border: #fbbf24;
+  --feedback-bg: #f0fdf4;
+  --feedback-border: #86efac;
+  --reject-bg: #fef2f2;
+  --reject-border: #fca5a5;
+  --clarify-bg: #eff6ff;
+  --clarify-border: #93c5fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.35rem; margin: 2rem 0 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--teal); }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+h4 { font-size: 0.95rem; margin: 1rem 0 0.4rem; color: var(--muted); }
+p, li { color: var(--ink); }
+.summary { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+.section { background: var(--section-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.toc { background: var(--section-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+.toc h2 { margin-top: 0; font-size: 1.1rem; border: none; padding: 0; }
+.toc ul { list-style: none; padding: 0; }
+.toc li { margin: 0.3rem 0; }
+.toc a { color: var(--teal); text-decoration: none; font-size: 0.9rem; }
+.toc a:hover { text-decoration: underline; }
+code { background: var(--code-bg); padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.88em; font-family: 'Fira Code', 'SF Mono', monospace; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+th { background: var(--code-bg); font-weight: 600; }
+ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+li { margin: 0.25rem 0; }
+
+/* Gate styling */
+.gate { background: var(--gate-bg); border: 1px solid var(--gate-border); border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0; }
+.gate-title { font-weight: 700; color: #92400e; margin-bottom: 0.75rem; font-size: 0.95rem; }
+.gate-question { margin-bottom: 0.75rem; }
+.gate-question label { display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.9rem; }
+.gate-options { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.gate-options button {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.gate-options button:hover { border-color: var(--teal); }
+.gate-options button.selected { background: var(--teal); color: white; border-color: var(--teal); }
+.gate-options button.selected-reject { background: var(--coral); color: white; border-color: var(--coral); }
+textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  margin-top: 0.25rem;
+}
+textarea:focus { outline: 2px solid var(--teal); border-color: transparent; }
+
+/* Section feedback */
+.section-feedback { display: flex; gap: 0.4rem; margin-top: 0.75rem; }
+.section-feedback button {
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+.section-feedback button:hover { opacity: 0.8; }
+.section-feedback button.fb-emphasize.active { background: var(--feedback-bg); border-color: var(--feedback-border); }
+.section-feedback button.fb-reject.active { background: var(--reject-bg); border-color: var(--reject-border); }
+.section-feedback button.fb-clarify.active { background: var(--clarify-bg); border-color: var(--clarify-border); }
+.feedback-area { margin-top: 0.5rem; display: none; }
+.feedback-area.visible { display: block; }
+.feedback-local-compile { margin-top: 0.5rem; display: none; }
+.feedback-local-compile.visible { display: flex; gap: 0.5rem; align-items: center; }
+.feedback-local-compile button { padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 0.8rem; }
+.feedback-local-yaml { width: 100%; min-height: 80px; font-family: 'Fira Code', monospace; font-size: 0.8rem; background: var(--code-bg); margin-top: 0.35rem; }
+
+/* Bottom compile */
+.compile-section { background: var(--section-bg); border: 2px solid var(--teal); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
+.compile-section h2 { border: none; margin-top: 0; }
+.btn-compile {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 0.75rem;
+  margin-top: 0.5rem;
+  transition: all 0.15s;
+}
+.btn-feedback-compile { background: #d1fae5; color: #065f46; }
+.btn-feedback-compile:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-answers-compile { background: var(--teal); color: white; }
+.btn-answers-compile:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-copy { padding: 0.35rem 0.85rem; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 0.85rem; margin-left: 0.5rem; }
+.yaml-output { width: 100%; min-height: 200px; font-family: 'Fira Code', monospace; font-size: 0.8rem; background: var(--code-bg); margin-top: 0.75rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem; }
+.status-msg { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+
+/* Journey card */
+.journey { background: var(--section-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; }
+.journey h4 { color: var(--ink); font-size: 1rem; margin: 0 0 0.5rem; }
+.journey .meta { display: grid; grid-template-columns: 120px 1fr; gap: 0.25rem 0.75rem; font-size: 0.88rem; margin-bottom: 0.75rem; }
+.journey .meta dt { color: var(--muted); font-weight: 600; }
+.journey .meta dd { margin: 0; }
+.journey ol { padding-left: 1.25rem; }
+.journey ol li { margin: 0.3rem 0; font-size: 0.9rem; }
+.criteria { list-style: none; padding: 0; }
+.criteria li { padding: 0.2rem 0; font-size: 0.88rem; }
+.criteria li::before { content: "[ ] "; font-family: monospace; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>UAT: Card Pack Migration + Deck Builder</h1>
+<p class="summary">User acceptance testing plan for migrating card pack animations from the <code>/prototype</code> debug harness to production routes (<code>/</code>, <code>/packs</code>, <code>/catalog</code>) and introducing a Hearthstone-inspired deck builder on gskillpacks.com.</p>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#evidence">1. Evidence &amp; Source Coverage</a></li>
+    <li><a href="#personas">2. Target User Personas</a></li>
+    <li><a href="#gate-evidence">Gate: Evidence Sufficiency</a></li>
+    <li><a href="#journeys-pack">3. Card Pack Migration Journeys</a></li>
+    <li><a href="#journeys-deck">4. Deck Builder Journeys</a></li>
+    <li><a href="#journeys-cross">5. Cross-Cutting Journeys</a></li>
+    <li><a href="#gate-criteria">Gate: Acceptance Criteria Review</a></li>
+    <li><a href="#gate-scope">Gate: Scope &amp; Non-Goals</a></li>
+    <li><a href="#gate-files">Gate: Proposed File Changes</a></li>
+    <li><a href="#gate-coverage">Gate: Coverage Checkpoint</a></li>
+    <li><a href="#gate-approval">Gate: Final Approval</a></li>
+    <li><a href="#compile">Compile Section</a></li>
+  </ul>
+</nav>
+
+<!-- Section 1: Evidence -->
+<div class="section" id="evidence">
+  <h2>1. Evidence &amp; Source Coverage</h2>
+
+  <h3>Current Implementation State</h3>
+  <table>
+    <tr><th>Surface</th><th>Status</th><th>Source</th></tr>
+    <tr><td>Sealed pack tear-to-open</td><td>Implemented in prototype</td><td><code>src/components/SealedPack.tsx</code> &mdash; drag-X gesture, curl effect, threshold trigger</td></tr>
+    <tr><td>Card fan-out</td><td>Implemented in prototype</td><td><code>src/components/PackOpener.tsx</code> &mdash; spring-based fan offsets, rotation jitter</td></tr>
+    <tr><td>Card flip with benchmark grades</td><td>Implemented in prototype</td><td><code>src/components/SkillCard.tsx</code> + <code>CardFace.tsx</code> &mdash; 3D rotateY, A/B/C grade display</td></tr>
+    <tr><td>Bottom sheet drawer</td><td>Implemented in prototype</td><td><code>src/components/BottomSheet.tsx</code> &mdash; slide-up, drag-to-dismiss, scrim</td></tr>
+    <tr><td>Close sequence (7 phases)</td><td>Implemented in prototype</td><td><code>animationMachine.ts</code> &mdash; sealed &rarr; opening-apex &rarr; drawer-open &rarr; closing-collapse &rarr; closing-apex &rarr; sheet-exiting &rarr; card-settling</td></tr>
+    <tr><td>Debug harness</td><td>Live at <code>/prototype</code></td><td><code>app/prototype/page.tsx</code> &mdash; DebugProvider, DebugPanel, imperative drivers</td></tr>
+    <tr><td>Homepage</td><td>Static layout</td><td><code>app/page.tsx</code> &mdash; hero blueprint panel, CTA links, no card pack UI</td></tr>
+    <tr><td>/packs page</td><td>Static layout</td><td><code>app/packs/page.tsx</code> &mdash; filter buttons, static pack summary, no animations</td></tr>
+    <tr><td>/catalog page</td><td>Static layout</td><td><code>app/catalog/page.tsx</code> &mdash; search/filter, static rows, no card interactions</td></tr>
+    <tr><td>Deck builder</td><td>Not implemented</td><td>Roadmap references VARD, ORD, Business AFPS, Devtool AFPS decks with manifest metadata</td></tr>
+  </table>
+
+  <h3>Research Evidence Used</h3>
+  <ul>
+    <li><code>research/devtool-user-map.md</code> &mdash; 3 persona shapes: solo builder, repo-embedded contributor, hybrid-mode orchestrator</li>
+    <li><code>research/devtool-dx-journey.md</code> &mdash; install &rarr; quickstart &rarr; first success &rarr; error recovery &rarr; production adoption</li>
+    <li><code>specs/skills-showcase-website.md</code> &mdash; site goals, IA, animation system, visual language</li>
+    <li><code>specs/ui-skills-showcase-website.md</code> &mdash; page inventory, component inventory, responsive behavior</li>
+    <li><code>specs/ui-final-skills-showcase.md</code> &mdash; playful blueprint theme consolidation, coral/teal accents</li>
+    <li><code>tasks/roadmap.md</code> &mdash; deck metadata (VARD, ORD, Business AFPS, Devtool AFPS), <code>skillpacks install-deck</code></li>
+  </ul>
+
+  <h3>Evidence Gaps</h3>
+  <ul>
+    <li><strong>Deck builder UX spec does not exist yet.</strong> The roadmap defines deck metadata and CLI install semantics, but no visual spec describes drag-and-drop deck building, card slot layouts, or workflow sequence validation in the browser.</li>
+    <li><strong>No user testing data from the prototype.</strong> The <code>/prototype</code> page exists but no recorded usability observations are available.</li>
+    <li><strong>Mobile touch behavior is untested.</strong> The SealedPack drag gesture uses framer-motion drag, but no touch-device testing evidence exists.</li>
+  </ul>
+
+  <div class="section-feedback" data-section="evidence">
+    <button class="fb-emphasize" onclick="toggleFeedback(this, 'emphasize')">Emphasize</button>
+    <button class="fb-reject" onclick="toggleFeedback(this, 'down')">Flag concern</button>
+    <button class="fb-clarify" onclick="toggleFeedback(this, 'needs-clarification')">Needs clarification</button>
+  </div>
+  <div class="feedback-area" data-section="evidence">
+    <textarea placeholder="Notes on evidence coverage..."></textarea>
+    <div class="feedback-local-compile">
+      <button onclick="compileLocalFeedback(this, 'evidence')">Compile Feedback YAML</button>
+      <button onclick="copyLocalFeedback(this, 'evidence')">Copy YAML</button>
+    </div>
+    <textarea class="feedback-local-yaml" data-section="evidence" readonly></textarea>
+  </div>
+</div>
+
+<!-- Section 2: Personas -->
+<div class="section" id="personas">
+  <h2>2. Target User Personas</h2>
+
+  <h3>Persona A: Developer Evaluating Skillpacks</h3>
+  <dl class="journey meta">
+    <dt>Role</dt><dd>Solo builder or DX lead considering agentic-skills adoption</dd>
+    <dt>Job-to-be-done</dt><dd>Understand what skills are available, see benchmark quality evidence, decide whether to adopt specific packs</dd>
+    <dt>Context</dt><dd>Arrives from GitHub README, LexCorp, or search. Has 5-10 minutes of attention. Needs to see value before installing anything.</dd>
+    <dt>Acceptance threshold</dt><dd>Can find a relevant pack, open it, read card details including benchmark grades, and understand the skill's purpose within 2 minutes per pack</dd>
+  </dl>
+
+  <h3>Persona B: Content Creator Browsing Collections</h3>
+  <dl class="journey meta">
+    <dt>Role</dt><dd>Non-technical or semi-technical user exploring the catalog visually</dd>
+    <dt>Job-to-be-done</dt><dd>Browse skill collections, understand categories at a glance, share interesting finds</dd>
+    <dt>Context</dt><dd>Arrives from YouTube, X/Twitter, or Discord. Drawn by card aesthetics. May not install anything but should leave understanding what G Skillpacks offers.</dd>
+    <dt>Acceptance threshold</dt><dd>Can navigate between packs, open and close multiple packs without confusion, understand skill categories from card visuals alone</dd>
+  </dl>
+
+  <h3>Persona C: Power User Building Workflow Decks</h3>
+  <dl class="journey meta">
+    <dt>Role</dt><dd>Experienced agentic-skills user who already runs plan &rarr; run &rarr; ship cycles</dd>
+    <dt>Job-to-be-done</dt><dd>Compose custom workflow sequences by dragging skill cards into named decklists (VARD, ORD, Business AFPS, Devtool AFPS)</dd>
+    <dt>Context</dt><dd>Knows the pack system. Wants to visualize and share their workflow combos. Expects Hearthstone-style collection management.</dd>
+    <dt>Acceptance threshold</dt><dd>Can build a deck of 5+ skills, reorder them, see the workflow sequence validated, and persist the deck across page reloads</dd>
+  </dl>
+
+  <div class="section-feedback" data-section="personas">
+    <button class="fb-emphasize" onclick="toggleFeedback(this, 'emphasize')">Emphasize</button>
+    <button class="fb-reject" onclick="toggleFeedback(this, 'down')">Flag concern</button>
+    <button class="fb-clarify" onclick="toggleFeedback(this, 'needs-clarification')">Needs clarification</button>
+  </div>
+  <div class="feedback-area" data-section="personas">
+    <textarea placeholder="Notes on personas..."></textarea>
+    <div class="feedback-local-compile">
+      <button onclick="compileLocalFeedback(this, 'personas')">Compile Feedback YAML</button>
+      <button onclick="copyLocalFeedback(this, 'personas')">Copy YAML</button>
+    </div>
+    <textarea class="feedback-local-yaml" data-section="personas" readonly></textarea>
+  </div>
+</div>
+
+<!-- Gate: Evidence Sufficiency -->
+<div class="gate" id="gate-evidence">
+  <div class="gate-title">Gate: Evidence Sufficiency</div>
+  <div class="gate-question" data-gate="evidence-sufficient">
+    <label>Is the available evidence sufficient to write UAT journeys for all three surfaces (card pack animations, site migration, deck builder)?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'yes')">Yes, proceed</button>
+      <button onclick="selectGate(this, 'yes-with-assumptions')">Yes, but flag deck builder assumptions</button>
+      <button onclick="selectGate(this, 'no')">No, need more research first</button>
+    </div>
+    <textarea placeholder="Notes on evidence gaps or assumptions to flag..."></textarea>
+  </div>
+  <p style="font-size: 0.85rem; color: var(--muted);">Note: The deck builder has no visual UX spec. UAT journeys for it will be based on the Hearthstone-inspired concept description and deck metadata from the roadmap. These journeys test the <em>concept</em> acceptance, not pixel-perfect implementation.</p>
+</div>
+
+<!-- Section 3: Card Pack Migration Journeys -->
+<div class="section" id="journeys-pack">
+  <h2>3. Card Pack Migration Journeys</h2>
+
+  <div class="journey">
+    <h4>Journey 1: First-Visit Pack Discovery (Persona A)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Understand what skill packs exist and what they contain</dd>
+      <dt>Trigger</dt><dd>Developer clicks "Explore the Library" from homepage hero or navigates to <code>/packs</code></dd>
+      <dt>Setup</dt><dd>Fresh browser session, no prior visits, desktop viewport (1280px+)</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Land on homepage. Verify the hero section loads with card pack visual elements (not the old static blueprint panel).</li>
+      <li>Identify at least 3 sealed packs visible on the page without scrolling (or within one scroll on smaller viewports).</li>
+      <li>Hover over a sealed pack. Verify the pack shows a visual affordance that it can be opened (cursor change, hover lift, or label).</li>
+      <li>Click a sealed pack to open it. Observe: does the tear-to-open animation play? Does the pack visually "unseal"?</li>
+      <li>Wait for the card fan-out animation. Count the cards revealed. Verify the fan-out completes without visual glitches (no overlapping cards stuck mid-animation, no cards appearing outside the viewport).</li>
+      <li>Read the first card's front face. Verify: skill name is legible, type badge is visible, benchmark grade (A/B/C) is displayed if the skill has benchmark data, command syntax is shown.</li>
+      <li>Click a card to flip it. Verify: the 3D flip animation is smooth (no visual tearing), the back face shows description, platform, scope, pack, version, and tags.</li>
+      <li>Click the card again to flip back to front.</li>
+      <li>Close the pack (tap scrim, drag drawer down, or use close affordance). Verify the full close sequence plays: cards collapse to a stack, stack rises to apex, bottom sheet slides out, card settles back to sealed position.</li>
+      <li>Verify the pack now shows an "opened" visual state (torn envelope, different styling from unopened packs).</li>
+      <li>Navigate to <code>/catalog</code>. Verify skills from the opened pack are browseable in the catalog view.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Sealed packs are visually distinguishable and named</li>
+      <li>Tear-to-open animation completes in under 800ms with no frame drops visible to the eye</li>
+      <li>Card fan-out displays all pack skills without overflow or clipping</li>
+      <li>Card front face shows: name, type, command, benchmark grade (when available), description preview</li>
+      <li>Card flip animation is smooth 3D rotation (no z-fighting or flicker)</li>
+      <li>Close sequence completes all 4 phases (collapse, apex rise, sheet exit, card settle) without stalling</li>
+      <li>Opened pack retains its opened visual state after closing</li>
+      <li>Total time from click-to-open to all cards visible is under 1.5 seconds</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Cards appear instantly without animation (animation system not wired up)</li>
+      <li>Pack opens but close button/gesture is not discoverable within 5 seconds</li>
+      <li>Benchmark grade is missing on cards that have benchmark data in the source</li>
+      <li>Text on cards is too small to read without zooming (below 10px effective)</li>
+      <li>Animation stutters or janks (visible frame drops during fan-out or close)</li>
+      <li>Pack opens and the browser becomes unresponsive or sluggish</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Screen recording of full open &rarr; browse &rarr; flip &rarr; close cycle (include browser FPS overlay if possible)</li>
+      <li>Screenshot of card front face showing benchmark grade</li>
+      <li>Screenshot of card back face showing full metadata</li>
+      <li>Note: time from click to all cards visible</li>
+      <li>Note: any animation frame drops or visual glitches</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"As a developer evaluating whether to adopt this skill library, did the pack-opening experience help you understand what's inside each pack? Would you open a second pack, or would you switch to a list/table view?"</em></p>
+  </div>
+
+  <div class="journey">
+    <h4>Journey 2: Touch-Device Pack Interaction (Persona B)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Browse and open skill packs on a phone or tablet</dd>
+      <dt>Trigger</dt><dd>Content creator taps a link from X/Twitter or Discord on their phone</dd>
+      <dt>Setup</dt><dd>Mobile device or tablet (real device preferred, simulator acceptable). iOS Safari and Android Chrome. Portrait orientation.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Load the homepage on mobile. Verify sealed packs render in a scrollable layout (not cut off or overlapping).</li>
+      <li>Attempt the tear gesture: place finger on a sealed pack and drag horizontally. Verify the tear/curl visual effect follows the finger position.</li>
+      <li>Complete the tear past the threshold. Verify the pack opens and the bottom sheet slides up with the card fan-out.</li>
+      <li>Scroll through the cards in the drawer. Verify scrolling is smooth and does not accidentally dismiss the drawer.</li>
+      <li>Tap a card to flip it. Verify the tap target is large enough (44px minimum) and the flip triggers reliably on first tap.</li>
+      <li>Attempt to dismiss the drawer by dragging it down. Verify the drag-to-dismiss threshold feels natural (not too sensitive, not too stiff).</li>
+      <li>Rotate the device to landscape. Verify the layout reflows without breaking the card grid or cutting off content.</li>
+      <li>Open a different pack. Verify the previous pack shows its opened state.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Tear gesture works with touch (not just mouse drag)</li>
+      <li>Bottom sheet does not conflict with browser pull-to-refresh or back gesture</li>
+      <li>Card tap targets meet 44px minimum touch target size</li>
+      <li>Drawer scroll does not accidentally dismiss the drawer</li>
+      <li>Cards are legible without pinch-to-zoom on a 375px-wide viewport</li>
+      <li>Orientation change does not break layout or lose open/close state</li>
+      <li>No iOS Safari rubber-banding conflicts with the bottom sheet drag</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Tear gesture does not register on touch devices (mouse-only implementation)</li>
+      <li>Drawer dismisses when user tries to scroll card content</li>
+      <li>Cards overlap or stack incorrectly on small viewports</li>
+      <li>Text requires pinch-to-zoom to read</li>
+      <li>Pull-to-refresh fires when dragging the tear gesture upward</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Screen recording on iOS Safari and Android Chrome</li>
+      <li>Screenshot of card layout at 375px width</li>
+      <li>Note: which touch gestures conflicted with browser defaults (if any)</li>
+      <li>Note: was the tear direction intuitive without instruction?</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"Did you understand how to open a pack without reading instructions? Did any gesture feel like it was fighting the phone's native behavior (scrolling, back, refresh)?"</em></p>
+  </div>
+
+  <div class="journey">
+    <h4>Journey 3: Multi-Pack Browse &amp; Compare (Persona A)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Open multiple packs, compare skills across them, find a specific skill</dd>
+      <dt>Trigger</dt><dd>Developer wants to compare the "Market Intel" and "Domain Decks" sets to decide which packs to install</dd>
+      <dt>Setup</dt><dd>Desktop browser. At least 2 packs with overlapping skill types available.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Open the "Market Intel" pack. Note which skills are inside (names, types, grades).</li>
+      <li>Close the pack. Verify the close animation completes cleanly.</li>
+      <li>Open the "Domain Decks" pack. Note skills inside.</li>
+      <li>Close the pack.</li>
+      <li>Verify both packs now show their opened state visually.</li>
+      <li>Attempt to open both packs simultaneously (click one while another is open). Verify the app handles this gracefully: either queues the second open, prevents it with feedback, or transitions smoothly.</li>
+      <li>Navigate to <code>/catalog</code>. Search for a skill name seen in one of the opened packs. Verify the catalog search returns the expected skill.</li>
+      <li>Navigate back to <code>/packs</code>. Verify opened-pack state persists across navigation.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Opening and closing 3+ packs in sequence produces no stale state or stuck animations</li>
+      <li>Attempting to open a second pack while one is open does not crash or produce a blank screen</li>
+      <li>Opened-pack visual state persists across same-session navigation (packs &rarr; catalog &rarr; packs)</li>
+      <li>No memory leak observable after opening/closing 5+ packs (page remains responsive)</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Page becomes sluggish after opening 3+ packs</li>
+      <li>Opened state resets when navigating away and back</li>
+      <li>Two drawers open simultaneously, overlapping</li>
+      <li>Animation state gets stuck (e.g., permanently in "closing-collapse" phase)</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Note: number of packs opened before any performance degradation</li>
+      <li>Screenshot showing multiple packs in opened state</li>
+      <li>Note: behavior when attempting to open a second pack while one is displayed</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"After browsing 3+ packs, did you feel you could compare skills across packs effectively? Was there anything that made comparing packs harder than it should be?"</em></p>
+  </div>
+
+  <div class="journey">
+    <h4>Journey 4: Animation Performance Under Load (Persona A)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Verify animations run at 60fps with no jank on representative hardware</dd>
+      <dt>Trigger</dt><dd>QA pass before production deployment</dd>
+      <dt>Setup</dt><dd>Chrome DevTools Performance panel open. Test on: (1) modern desktop, (2) mid-range laptop with CPU throttling 4x, (3) mobile device or emulated mobile with CPU throttling 6x.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Open Chrome DevTools Performance panel. Enable CPU throttling at 4x slowdown.</li>
+      <li>Start recording. Open a pack with the largest skill count (Foundation or Forge set).</li>
+      <li>Observe the fan-out animation in the performance trace. Check for long frames (&gt;16.6ms).</li>
+      <li>Flip 3 cards in sequence while recording.</li>
+      <li>Close the pack and observe the close sequence in the trace.</li>
+      <li>Stop recording. Analyze the flame chart for layout thrashing, excessive paint, or JS long tasks during animations.</li>
+      <li>Repeat at 6x CPU throttle to simulate low-end mobile.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>No animation frame exceeds 32ms (allowing one dropped frame) at 4x CPU throttle on desktop</li>
+      <li>Fan-out animation for packs with 10+ cards completes without visible stutter</li>
+      <li>Card flip animation maintains 30fps minimum at 6x CPU throttle</li>
+      <li>No layout thrashing (repeated forced reflow) during any animation phase</li>
+      <li>Total JS heap does not grow by more than 5MB after 5 open/close cycles</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Visible jank during fan-out on a modern desktop without throttling</li>
+      <li>Performance trace shows forced synchronous layouts during animation</li>
+      <li>Memory grows monotonically with each open/close cycle (leak)</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Chrome Performance trace export (.json) for the full open &rarr; browse &rarr; close cycle at 4x throttle</li>
+      <li>Screenshot of flame chart highlighting longest frame during fan-out</li>
+      <li>Memory snapshot before and after 5 open/close cycles</li>
+      <li>Note: max frame duration observed at each throttle level</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"At what throttle level did the animations start to feel sluggish? Which specific animation phase was worst?"</em></p>
+  </div>
+
+  <div class="section-feedback" data-section="journeys-pack">
+    <button class="fb-emphasize" onclick="toggleFeedback(this, 'emphasize')">Emphasize</button>
+    <button class="fb-reject" onclick="toggleFeedback(this, 'down')">Flag concern</button>
+    <button class="fb-clarify" onclick="toggleFeedback(this, 'needs-clarification')">Needs clarification</button>
+  </div>
+  <div class="feedback-area" data-section="journeys-pack">
+    <textarea placeholder="Notes on card pack journeys..."></textarea>
+    <div class="feedback-local-compile">
+      <button onclick="compileLocalFeedback(this, 'journeys-pack')">Compile Feedback YAML</button>
+      <button onclick="copyLocalFeedback(this, 'journeys-pack')">Copy YAML</button>
+    </div>
+    <textarea class="feedback-local-yaml" data-section="journeys-pack" readonly></textarea>
+  </div>
+</div>
+
+<!-- Section 4: Deck Builder Journeys -->
+<div class="section" id="journeys-deck">
+  <h2>4. Deck Builder Journeys</h2>
+  <p style="font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem;"><strong>Note:</strong> No visual UX spec exists for the deck builder. These journeys test concept acceptance based on the Hearthstone-inspired description and VARD/ORD/AFPS deck metadata from the roadmap. Implementation details (layout, slot count, drag mechanics) are assumptions subject to the evidence gate above.</p>
+
+  <div class="journey">
+    <h4>Journey 5: First Deck Creation (Persona C)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Build a custom workflow deck representing their preferred skill sequence</dd>
+      <dt>Trigger</dt><dd>Power user navigates to a "Deck Builder" or "Build a Deck" entry point from the packs or catalog page</dd>
+      <dt>Setup</dt><dd>Desktop browser. User has browsed at least 2 packs. 4 deck slots available: VARD, ORD, Business AFPS, Devtool AFPS.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Find the deck builder entry point. Verify it is discoverable from the main navigation or the packs page (not hidden in a submenu or requiring a direct URL).</li>
+      <li>See the 4 available deck templates (VARD, ORD, Business AFPS, Devtool AFPS). Verify each has a name, a short description of its workflow purpose, and a visual theme.</li>
+      <li>Select the "Devtool AFPS" deck to start building.</li>
+      <li>Browse available skill cards in a sidebar or panel. Verify skills are filterable by pack, type, or search.</li>
+      <li>Drag a skill card from the available pool into the deck. Verify: drag feedback is visible (card follows cursor, drop zone highlights), the card snaps into a slot on drop.</li>
+      <li>Add 4 more skills to the deck (5 total). Verify the deck shows skills in the order they were added.</li>
+      <li>Reorder a skill by dragging it to a different position in the deck. Verify the reorder animation is smooth and the new order persists.</li>
+      <li>Remove a skill by dragging it out of the deck or using a remove affordance. Verify the slot empties and remaining skills reflow.</li>
+      <li>Verify the deck shows a workflow sequence indicator: arrows or connectors between skills showing the execution order.</li>
+      <li>Save the deck (or verify it auto-saves). Navigate away and return. Verify the deck contents persist.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Deck builder is reachable within 2 clicks from the homepage</li>
+      <li>All 4 deck templates are visible with names and descriptions</li>
+      <li>Drag-and-drop works for adding, reordering, and removing cards</li>
+      <li>Deck displays skills in sequence order with visual connectors</li>
+      <li>Deck state persists across page navigation (localStorage or equivalent)</li>
+      <li>Each deck can hold at least 8 skill cards</li>
+      <li>Duplicate skills in the same deck are prevented or flagged</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>No discoverable entry point to the deck builder from production pages</li>
+      <li>Drag-and-drop does not work (cards not draggable, no drop zones)</li>
+      <li>Deck state is lost on page refresh</li>
+      <li>No visual distinction between the 4 deck types</li>
+      <li>Skills can be added but not reordered</li>
+      <li>No visual feedback during drag (card disappears or doesn't follow cursor)</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Screen recording of full deck creation flow: browse &rarr; drag &rarr; drop &rarr; reorder &rarr; remove &rarr; save</li>
+      <li>Screenshot of completed deck with 5+ skills showing sequence order</li>
+      <li>Screenshot of deck after page reload (persistence check)</li>
+      <li>Note: time to build a 5-skill deck from scratch</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"Did the deck-building experience feel like composing a workflow, or just collecting cards into a list? Did the deck template themes (VARD, ORD, etc.) help you understand what kind of workflow you were building?"</em></p>
+  </div>
+
+  <div class="journey">
+    <h4>Journey 6: Deck Workflow Validation (Persona C)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Verify that the deck's skill sequence represents a valid workflow chain</dd>
+      <dt>Trigger</dt><dd>Power user finishes building a deck and wants to validate it makes sense as a workflow</dd>
+      <dt>Setup</dt><dd>A deck with 5+ skills already built. Include at least one skill that would be out of sequence (e.g., <code>/ship</code> before <code>/plan</code>).</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>View the completed deck. Look for workflow validation indicators (green checkmarks, warning icons, sequence arrows).</li>
+      <li>Deliberately place a skill out of canonical order (e.g., add <code>/ship</code> as the first skill, before any planning skill).</li>
+      <li>Check whether the deck builder shows a warning or suggestion about the out-of-order placement.</li>
+      <li>Correct the order. Verify the warning resolves.</li>
+      <li>Add a skill from a pack not associated with the deck's theme (e.g., a game pack skill in a Devtool AFPS deck). Check whether the deck builder flags or permits cross-pack skills.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Deck shows visual sequence indicators (arrows, numbers, or connectors between cards)</li>
+      <li>Out-of-order skills produce a visible warning (not a hard block — users can override)</li>
+      <li>Cross-pack skills are permitted but visually distinguished</li>
+      <li>Canonical chain order is documented or shown as a reference within the builder</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>No validation feedback whatsoever (deck is just an unordered collection)</li>
+      <li>Validation is so strict it blocks valid creative combinations</li>
+      <li>No visual reference for what the canonical chain looks like</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Screenshot of deck with out-of-order skill showing warning state</li>
+      <li>Screenshot of deck with cross-pack skill showing visual distinction</li>
+      <li>Note: was the validation helpful or annoying?</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"Did the validation help you understand the canonical workflow order, or did it feel like an arbitrary constraint? Would you want stricter or looser validation?"</em></p>
+  </div>
+
+  <div class="section-feedback" data-section="journeys-deck">
+    <button class="fb-emphasize" onclick="toggleFeedback(this, 'emphasize')">Emphasize</button>
+    <button class="fb-reject" onclick="toggleFeedback(this, 'down')">Flag concern</button>
+    <button class="fb-clarify" onclick="toggleFeedback(this, 'needs-clarification')">Needs clarification</button>
+  </div>
+  <div class="feedback-area" data-section="journeys-deck">
+    <textarea placeholder="Notes on deck builder journeys..."></textarea>
+    <div class="feedback-local-compile">
+      <button onclick="compileLocalFeedback(this, 'journeys-deck')">Compile Feedback YAML</button>
+      <button onclick="copyLocalFeedback(this, 'journeys-deck')">Copy YAML</button>
+    </div>
+    <textarea class="feedback-local-yaml" data-section="journeys-deck" readonly></textarea>
+  </div>
+</div>
+
+<!-- Section 5: Cross-Cutting Journeys -->
+<div class="section" id="journeys-cross">
+  <h2>5. Cross-Cutting Journeys</h2>
+
+  <div class="journey">
+    <h4>Journey 7: Homepage-to-Deck Full Funnel (Persona A)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Complete the full discovery-to-engagement funnel: land on homepage, explore packs, build a deck, understand the product value</dd>
+      <dt>Trigger</dt><dd>Developer arrives from GitHub README link</dd>
+      <dt>Setup</dt><dd>Fresh browser session. Desktop viewport. No prior visits.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Land on homepage. Within the first viewport, identify what G Skillpacks is and what the primary action is.</li>
+      <li>Click the primary CTA. Verify it leads to an interactive experience (not a static page).</li>
+      <li>Open one pack. Read 2-3 cards. Close the pack.</li>
+      <li>Navigate to the deck builder (from nav or in-page link).</li>
+      <li>Build a small deck (3 skills). Verify the deck reflects what you browsed.</li>
+      <li>Navigate to <code>/catalog</code>. Search for a specific skill by name. Verify it appears.</li>
+      <li>Navigate to <code>/follow</code>. Verify the page has working links to GitHub, YouTube, Discord, LexCorp.</li>
+      <li>Return to the homepage. Verify the page state is consistent (opened packs still shown as opened).</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>Full funnel (homepage &rarr; packs &rarr; deck builder &rarr; catalog &rarr; follow &rarr; home) completes without errors</li>
+      <li>Page transitions between routes are fast (&lt;300ms for Next.js client navigation)</li>
+      <li>No stale state: opened packs remain opened, deck contents persist</li>
+      <li>Tester can articulate what G Skillpacks is after completing the funnel</li>
+      <li>Back button navigation works correctly at every step</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Homepage still shows the old static blueprint panel with no card pack elements</li>
+      <li>Navigation between routes causes full page reloads (migration incomplete)</li>
+      <li>State is lost during navigation (packs reset to sealed, deck empties)</li>
+      <li>Dead links or 404 pages in the flow</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Full-flow screen recording from homepage landing to return</li>
+      <li>Note: time to complete the full funnel</li>
+      <li>Note: any point where the tester felt confused or lost</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"After completing the full loop, could you explain to someone else what G Skillpacks is and why they might want it? What was the most compelling moment in the experience? What was the weakest?"</em></p>
+  </div>
+
+  <div class="journey">
+    <h4>Journey 8: Accessibility &amp; Reduced Motion (Persona B)</h4>
+    <dl class="meta">
+      <dt>User goal</dt><dd>Navigate the full pack-opening experience using keyboard only and with reduced motion enabled</dd>
+      <dt>Trigger</dt><dd>Accessibility audit before production launch</dd>
+      <dt>Setup</dt><dd>Desktop browser. Enable <code>prefers-reduced-motion: reduce</code> in OS or DevTools. Disconnect mouse.</dd>
+    </dl>
+    <h4>Task Sequence</h4>
+    <ol>
+      <li>Tab through the page. Verify all sealed packs are focusable and have visible focus indicators.</li>
+      <li>Press Enter or Space on a focused pack. Verify the pack opens (with reduced or no animation).</li>
+      <li>Tab through the revealed cards in the drawer. Verify each card is focusable.</li>
+      <li>Press Enter on a card. Verify it flips (with reduced or no animation).</li>
+      <li>Press Escape. Verify the drawer closes and focus returns to the pack that was opened.</li>
+      <li>Verify all animations are either eliminated or reduced to simple opacity/position transitions (no spring physics, no 3D transforms).</li>
+      <li>Enable a screen reader (VoiceOver on macOS, NVDA on Windows). Verify pack names, skill names, and state changes are announced.</li>
+    </ol>
+    <h4>Acceptance Criteria</h4>
+    <ul class="criteria">
+      <li>All interactive elements are keyboard-reachable via Tab</li>
+      <li>Focus indicators are visible on every focusable element</li>
+      <li>Enter/Space opens packs, flips cards, and activates buttons</li>
+      <li>Escape closes the drawer and returns focus to the triggering element</li>
+      <li><code>prefers-reduced-motion</code> eliminates spring physics and 3D transforms</li>
+      <li>Screen reader announces pack name when opened, skill name when card is focused, and "flipped"/"unflipped" state on card interaction</li>
+      <li>No content is only conveyed through animation (text fallbacks exist)</li>
+    </ul>
+    <h4>Non-Acceptance Signals</h4>
+    <ul>
+      <li>Packs cannot be opened via keyboard at all</li>
+      <li>Focus trap: keyboard user gets stuck inside the drawer with no escape</li>
+      <li>Reduced motion setting is ignored (full spring animations still play)</li>
+      <li>Screen reader announces nothing meaningful on pack open or card flip</li>
+    </ul>
+    <h4>Evidence to Capture</h4>
+    <ul>
+      <li>Screen recording of keyboard-only navigation through open &rarr; browse &rarr; flip &rarr; close</li>
+      <li>Screenshot of focus indicator on a sealed pack</li>
+      <li>Screenshot of reduced-motion state (what does the "open" look like without animation?)</li>
+      <li>Screen reader transcript or recording of announcements during pack interaction</li>
+    </ul>
+    <h4>Tester Notes Prompt</h4>
+    <p><em>"Could you accomplish everything a mouse user can with keyboard alone? Did any interaction feel like it was designed only for mouse/touch?"</em></p>
+  </div>
+
+  <div class="section-feedback" data-section="journeys-cross">
+    <button class="fb-emphasize" onclick="toggleFeedback(this, 'emphasize')">Emphasize</button>
+    <button class="fb-reject" onclick="toggleFeedback(this, 'down')">Flag concern</button>
+    <button class="fb-clarify" onclick="toggleFeedback(this, 'needs-clarification')">Needs clarification</button>
+  </div>
+  <div class="feedback-area" data-section="journeys-cross">
+    <textarea placeholder="Notes on cross-cutting journeys..."></textarea>
+    <div class="feedback-local-compile">
+      <button onclick="compileLocalFeedback(this, 'journeys-cross')">Compile Feedback YAML</button>
+      <button onclick="copyLocalFeedback(this, 'journeys-cross')">Copy YAML</button>
+    </div>
+    <textarea class="feedback-local-yaml" data-section="journeys-cross" readonly></textarea>
+  </div>
+</div>
+
+<!-- Gate: Acceptance Criteria Review -->
+<div class="gate" id="gate-criteria">
+  <div class="gate-title">Gate: Acceptance Criteria Review</div>
+  <div class="gate-question" data-gate="criteria-acceptable">
+    <label>Are the acceptance criteria and non-acceptance signals concrete and testable enough for manual UAT?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'yes')">Yes, criteria are testable</button>
+      <button onclick="selectGate(this, 'adjust')">Need adjustments</button>
+      <button onclick="selectGate(this, 'too-strict')">Too strict for current stage</button>
+    </div>
+    <textarea placeholder="Which criteria need adjustment?"></textarea>
+  </div>
+</div>
+
+<!-- Gate: Scope & Non-Goals -->
+<div class="gate" id="gate-scope">
+  <div class="gate-title">Gate: Scope &amp; Non-Goals</div>
+  <div class="gate-question" data-gate="scope-correct">
+    <label>Is the UAT scope correct? Should any surface be added or removed?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'yes')">Scope is correct</button>
+      <button onclick="selectGate(this, 'add-surface')">Add a surface</button>
+      <button onclick="selectGate(this, 'remove-surface')">Remove a surface</button>
+    </div>
+    <textarea placeholder="What to add or remove..."></textarea>
+  </div>
+  <h4 style="margin-top: 1rem;">Explicit Non-Goals for This UAT</h4>
+  <ul>
+    <li>Automated end-to-end tests (Playwright, Cypress) &mdash; this is manual UAT only</li>
+    <li>Backend/API testing &mdash; no backend exists for deck persistence (localStorage only)</li>
+    <li>Newsletter capture testing &mdash; covered by existing Phase 38 manual tasks</li>
+    <li>Workflow animation (TUI player) &mdash; separate surface, not part of card pack migration</li>
+    <li>Benchmark data generation accuracy &mdash; covered by <code>validate-skills-showcase-data.sh</code></li>
+    <li><code>/prototype</code> debug harness regression &mdash; it should remain functional but is not a production surface</li>
+  </ul>
+</div>
+
+<!-- Gate: Proposed File Changes -->
+<div class="gate" id="gate-files">
+  <div class="gate-title">Gate: Proposed File Changes</div>
+  <div class="gate-question" data-gate="files-approved">
+    <label>Are the proposed deliverable files and their locations correct?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'yes')">Approved</button>
+      <button onclick="selectGate(this, 'adjust')">Need path/content adjustments</button>
+    </div>
+    <textarea placeholder="Path or content adjustments..."></textarea>
+  </div>
+  <table>
+    <tr><th>File</th><th>Action</th><th>Content</th></tr>
+    <tr><td><code>research/uat-plan.md</code></td><td>Create</td><td>Full UAT plan with 8 journeys, persona definitions, evidence sources, acceptance criteria, result log templates</td></tr>
+    <tr><td><code>tasks/manual-todo.md</code></td><td>Update <code>## UAT Journeys</code></td><td>8 human-run journey checklist items referencing <code>research/uat-plan.md</code></td></tr>
+    <tr><td><code>alignment/uat-card-pack-migration.html</code></td><td>Already written</td><td>This page</td></tr>
+  </table>
+</div>
+
+<!-- Gate: Coverage Checkpoint -->
+<div class="gate" id="gate-coverage">
+  <div class="gate-title">Gate: Coverage Checkpoint</div>
+  <div class="gate-question" data-gate="coverage-complete">
+    <label>Do the 8 journeys cover all three major surfaces adequately?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'yes')">Coverage is adequate</button>
+      <button onclick="selectGate(this, 'gaps')">Coverage gaps exist</button>
+    </div>
+    <textarea placeholder="What's missing?"></textarea>
+  </div>
+  <table>
+    <tr><th>Surface</th><th>Journeys</th><th>Coverage</th></tr>
+    <tr><td>Card pack animations</td><td>J1 (desktop open/close), J2 (touch), J4 (performance)</td><td>Happy path, touch, perf profiling</td></tr>
+    <tr><td>Site migration</td><td>J3 (multi-pack), J7 (full funnel), J8 (a11y)</td><td>State persistence, cross-route nav, keyboard/screen reader</td></tr>
+    <tr><td>Deck builder</td><td>J5 (creation), J6 (validation)</td><td>Build flow, sequence validation, persistence</td></tr>
+    <tr><td>Cross-cutting</td><td>J7 (full funnel), J8 (a11y)</td><td>End-to-end flow, reduced motion, screen reader</td></tr>
+  </table>
+</div>
+
+<!-- Gate: Final Approval -->
+<div class="gate" id="gate-approval">
+  <div class="gate-title">Gate: Final Approval</div>
+  <div class="gate-question" data-gate="final-approval">
+    <label>Approve writing the UAT plan and manual task items?</label>
+    <div class="gate-options">
+      <button onclick="selectGate(this, 'approved')">Approved &mdash; write deliverables</button>
+      <button onclick="selectGate(this, 'revise')">Revise alignment page first</button>
+      <button onclick="selectGate(this, 'block')">Block &mdash; need more research</button>
+    </div>
+    <textarea placeholder="Final notes..."></textarea>
+  </div>
+</div>
+
+<!-- Compile Section -->
+<div class="compile-section" id="compile">
+  <h2>Compile Section</h2>
+  <p style="font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem;">Use "Compile Feedback YAML" for revision requests on specific sections. Use "Compile Answers" when all required gates have selections to approve or reject the deliverables.</p>
+
+  <button class="btn-compile btn-feedback-compile" id="btn-feedback-compile" onclick="compileFeedbackYaml()" disabled>Compile Feedback YAML</button>
+  <button class="btn-compile btn-answers-compile" id="btn-answers-compile" onclick="compileAnswersYaml()" disabled>Compile Answers</button>
+
+  <div id="compile-status" class="status-msg"></div>
+  <textarea class="yaml-output" id="compile-output" readonly></textarea>
+  <button class="btn-copy" id="btn-copy-yaml" onclick="copyYaml()" style="margin-top: 0.5rem;">Copy YAML</button>
+</div>
+
+<script>
+const ALIGNMENT_PAGE = 'alignment/uat-card-pack-migration.html';
+
+// State tracking
+const gateSelections = {};
+const sectionFeedbackState = {};
+
+function selectGate(btn, value) {
+  const question = btn.closest('.gate-question');
+  const gateId = question.dataset.gate;
+  question.querySelectorAll('.gate-options button').forEach(b => {
+    b.classList.remove('selected', 'selected-reject');
+  });
+  btn.classList.add(value === 'no' || value === 'block' || value === 'revise' ? 'selected-reject' : 'selected');
+  gateSelections[gateId] = {
+    value,
+    notes: question.querySelector('textarea')?.value || ''
+  };
+  updateCompileButtons();
+}
+
+function toggleFeedback(btn, type) {
+  const section = btn.closest('.section-feedback').dataset.section;
+  const wasActive = btn.classList.contains('active');
+
+  btn.closest('.section-feedback').querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  const feedbackArea = btn.closest('.section-feedback').nextElementSibling;
+  const localCompile = feedbackArea.querySelector('.feedback-local-compile');
+
+  if (wasActive) {
+    feedbackArea.classList.remove('visible');
+    localCompile.classList.remove('visible');
+    delete sectionFeedbackState[section];
+  } else {
+    btn.classList.add('active');
+    feedbackArea.classList.add('visible');
+    localCompile.classList.add('visible');
+    sectionFeedbackState[section] = type;
+  }
+  updateCompileButtons();
+}
+
+function getActionForFeedback(type) {
+  if (type === 'emphasize') return 'add-weight-to-section';
+  if (type === 'down') return 'investigate-and-revise';
+  return 'clarify-before-approval';
+}
+
+function buildFeedbackEntries() {
+  const entries = [];
+  for (const [section, type] of Object.entries(sectionFeedbackState)) {
+    const area = document.querySelector(`.feedback-area[data-section="${section}"]`);
+    const notes = area ? area.querySelector('textarea:not(.feedback-local-yaml)')?.value || '' : '';
+    entries.push({
+      section,
+      feedback: type,
+      notes,
+      requested_agent_action: getActionForFeedback(type)
+    });
+  }
+  return entries;
+}
+
+function compileLocalFeedback(btn, section) {
+  const type = sectionFeedbackState[section];
+  if (!type) return;
+  const area = document.querySelector(`.feedback-area[data-section="${section}"]`);
+  const notes = area.querySelector('textarea:not(.feedback-local-yaml)')?.value || '';
+
+  const requiredGates = document.querySelectorAll('.gate-question[data-gate]');
+  const unanswered = [];
+  requiredGates.forEach(g => {
+    if (!gateSelections[g.dataset.gate]) unanswered.push(g.dataset.gate);
+  });
+
+  const yaml = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    'feedback_status: revision-request',
+    'approval_status: not-approved',
+    `unanswered_required_questions:`,
+    ...unanswered.map(q => `  - ${q}`),
+    'section_feedback:',
+    `  - section: "${section}"`,
+    `    feedback: ${type}`,
+    `    notes: "${notes.replace(/"/g, '\\"')}"`,
+    `    requested_agent_action: ${getActionForFeedback(type)}`
+  ].join('\n');
+
+  const yamlArea = area.querySelector('.feedback-local-yaml');
+  yamlArea.value = yaml;
+  yamlArea.style.display = 'block';
+}
+
+function copyLocalFeedback(btn, section) {
+  const area = document.querySelector(`.feedback-area[data-section="${section}"]`);
+  const yamlArea = area.querySelector('.feedback-local-yaml');
+  copyToClipboard(yamlArea.value);
+}
+
+function compileFeedbackYaml() {
+  const entries = buildFeedbackEntries();
+  if (!entries.length) return;
+
+  const requiredGates = document.querySelectorAll('.gate-question[data-gate]');
+  const unanswered = [];
+  requiredGates.forEach(g => {
+    if (!gateSelections[g.dataset.gate]) unanswered.push(g.dataset.gate);
+  });
+
+  const yaml = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    'feedback_status: revision-request',
+    'approval_status: not-approved',
+    'unanswered_required_questions:',
+    ...unanswered.map(q => `  - ${q}`),
+    'section_feedback:',
+    ...entries.flatMap(e => [
+      `  - section: "${e.section}"`,
+      `    feedback: ${e.feedback}`,
+      `    notes: "${e.notes.replace(/"/g, '\\"')}"`,
+      `    requested_agent_action: ${e.requested_agent_action}`
+    ])
+  ].join('\n');
+
+  document.getElementById('compile-output').value = yaml;
+  document.getElementById('compile-status').textContent = 'Feedback YAML compiled.';
+  copyToClipboard(yaml);
+}
+
+function compileAnswersYaml() {
+  const requiredGates = ['evidence-sufficient', 'criteria-acceptable', 'scope-correct', 'files-approved', 'coverage-complete', 'final-approval'];
+  const missing = requiredGates.filter(g => !gateSelections[g]);
+  if (missing.length) {
+    document.getElementById('compile-status').textContent = `Missing answers: ${missing.join(', ')}`;
+    return;
+  }
+
+  const gateYaml = requiredGates.map(g => {
+    const sel = gateSelections[g];
+    return [
+      `  - section: "${g}"`,
+      `    gate_type: required`,
+      `    status: answered`,
+      `    decision: ${sel.value}`,
+      `    notes: "${(sel.notes || '').replace(/"/g, '\\"')}"`
+    ].join('\n');
+  });
+
+  const feedbackEntries = buildFeedbackEntries();
+  const feedbackYaml = feedbackEntries.length ? [
+    'section_feedback:',
+    ...feedbackEntries.flatMap(e => [
+      `  - section: "${e.section}"`,
+      `    feedback: ${e.feedback}`,
+      `    notes: "${e.notes.replace(/"/g, '\\"')}"`,
+      `    requested_agent_action: ${e.requested_agent_action}`
+    ])
+  ] : [];
+
+  const approvedFiles = ['research/uat-plan.md', 'tasks/manual-todo.md'];
+
+  const yaml = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    'approval_status: ready-for-agent-review',
+    'gates:',
+    ...gateYaml,
+    `approved_file_changes:`,
+    ...approvedFiles.map(f => `  - ${f}`),
+    ...feedbackYaml
+  ].join('\n');
+
+  document.getElementById('compile-output').value = yaml;
+  document.getElementById('compile-status').textContent = 'Answers compiled. Copied to clipboard.';
+  copyToClipboard(yaml);
+}
+
+function copyYaml() {
+  const yaml = document.getElementById('compile-output').value;
+  copyToClipboard(yaml);
+}
+
+function copyToClipboard(text) {
+  if (!text) return;
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('compile-status').textContent = 'Copied to clipboard.';
+    }).catch(() => {
+      document.getElementById('compile-output').select();
+      document.getElementById('compile-status').textContent = 'Auto-copy failed. Text selected — use Cmd/Ctrl+C.';
+    });
+  } catch {
+    document.getElementById('compile-output').select();
+    document.getElementById('compile-status').textContent = 'Auto-copy failed. Text selected — use Cmd/Ctrl+C.';
+  }
+}
+
+function updateCompileButtons() {
+  const hasFeedback = Object.keys(sectionFeedbackState).length > 0;
+  document.getElementById('btn-feedback-compile').disabled = !hasFeedback;
+
+  const requiredGates = ['evidence-sufficient', 'criteria-acceptable', 'scope-correct', 'files-approved', 'coverage-complete', 'final-approval'];
+  const allAnswered = requiredGates.every(g => gateSelections[g]);
+  document.getElementById('btn-answers-compile').disabled = !allAnswered;
+}
+
+// Update gate notes on textarea input
+document.querySelectorAll('.gate-question textarea').forEach(ta => {
+  ta.addEventListener('input', () => {
+    const gateId = ta.closest('.gate-question').dataset.gate;
+    if (gateSelections[gateId]) {
+      gateSelections[gateId].notes = ta.value;
+    }
+  });
+});
+</script>
+
+
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

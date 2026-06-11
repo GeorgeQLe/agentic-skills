@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="document">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFPS Workflow Patterns — Session Analysis</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; overflow-wrap: break-word; max-width: 100%; }
+h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.4rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 2.5rem; }
+h3 { color: #fff; font-size: 1.15rem; margin-top: 1.5rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.status-badge { display: inline-block; background: var(--purple); color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.85rem; margin-left: 8px; }
+.summary-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem 0; }
+.toc ul { list-style: none; padding-left: 0; margin: 0.5rem 0; }
+.toc li { margin: 0.35rem 0; }
+.toc li::before { content: "→ "; color: var(--text-muted); }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 10px 12px; border: 1px solid var(--border); font-size: 0.9rem; }
+td { padding: 8px 12px; border: 1px solid var(--border); font-size: 0.9rem; }
+tr:nth-child(even) td { background: rgba(22,27,34,0.5); }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1rem; margin: 1rem 0; }
+.metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.metric-card .value { font-size: 2rem; font-weight: 700; color: #fff; }
+.metric-card .label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+.bar-chart { margin: 1rem 0; }
+.bar-row { display: flex; align-items: center; margin: 6px 0; gap: 8px; flex-wrap: wrap; }
+.bar-label { min-width: 140px; font-size: 0.85rem; color: var(--text-muted); }
+.bar-fill { height: 24px; border-radius: 4px; min-width: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.8rem; color: #fff; font-weight: 600; }
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.question-block h4 { color: var(--purple); margin: 0 0 0.75rem 0; font-size: 1rem; }
+.question-block label { display: block; padding: 6px 10px; margin: 4px 0; border-radius: 6px; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+.question-block label:hover { background: rgba(88,166,255,0.08); }
+.question-block input[type="radio"] { accent-color: var(--accent); }
+.question-block textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin-top: 6px; min-height: 60px; font-family: inherit; display: none; resize: vertical; }
+.question-block textarea.visible { display: block; }
+.feedback-ctrl { display: inline-flex; gap: 4px; margin-left: 12px; }
+.feedback-ctrl button { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 0.8rem; color: var(--text-muted); min-height: 44px; }
+.feedback-ctrl button:hover { border-color: var(--text-muted); }
+.feedback-ctrl button.active-emphasize { color: var(--green); border-color: var(--green); }
+.feedback-ctrl button.active-down { color: var(--red); border-color: var(--red); }
+.feedback-ctrl button.active-clarify { color: var(--orange); border-color: var(--orange); }
+.section-feedback-area { margin: 0.5rem 0 1rem 0; display: none; }
+.section-feedback-area.visible { display: block; }
+.section-feedback-area textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px; min-height: 60px; font-family: inherit; resize: vertical; }
+.section-feedback-area .local-yaml { margin-top: 8px; }
+.section-feedback-area .local-yaml textarea { font-family: monospace; font-size: 0.8rem; min-height: 80px; }
+.section-feedback-area .local-yaml button { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; cursor: pointer; margin: 4px 4px 4px 0; min-height: 44px; }
+.compile-section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+.compile-section button { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 10px 20px; cursor: pointer; font-size: 0.95rem; margin: 6px 6px 6px 0; min-height: 44px; }
+.compile-section button:disabled { opacity: 0.4; cursor: not-allowed; }
+.compile-section button.feedback-btn { background: var(--purple); }
+.compile-section textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-family: monospace; font-size: 0.8rem; min-height: 120px; margin-top: 8px; resize: vertical; }
+.copy-status { color: var(--green); font-size: 0.85rem; margin-left: 8px; display: none; }
+.highlight { color: var(--orange); font-weight: 600; }
+.claim { border-left: 3px solid var(--accent); padding-left: 12px; margin: 0.75rem 0; }
+.evidence { border-left: 3px solid var(--green); padding-left: 12px; margin: 0.5rem 0; font-size: 0.9rem; }
+.inference { border-left: 3px solid var(--orange); padding-left: 12px; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-muted); }
+@media (max-width: 860px) { main { padding: 1.5rem 1rem; } .bar-label { min-width: 100px; } }
+@media (max-width: 560px) { main { padding: 1rem 0.75rem; } h1 { font-size: 1.4rem; } .metric-card .value { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>AFPS Workflow Patterns <span class="status-badge">review</span></h1>
+<p>Cross-session analysis of how agentic-skills (AFPS) workflows are used — activity trends, skill chains, reactive vs. proactive balance, and automation opportunities.</p>
+<p style="color: var(--text-muted); font-size: 0.85rem;">Generated 2026-06-09 &bull; Source: Claude history (633 messages / 274 sessions) &bull; Codex: 0 direct AFPS sessions (skills consumed from downstream projects)</p>
+
+<nav class="toc">
+<strong>Table of Contents</strong>
+<ul>
+<li><a href="#overview">Overview Stats</a></li>
+<li><a href="#monthly">Monthly Activity Trend</a></li>
+<li><a href="#skills">Skill Usage Breakdown</a></li>
+<li><a href="#session-types">Session Type Classification</a></li>
+<li><a href="#workflows">Workflow Sequences &amp; Chains</a></li>
+<li><a href="#themes">Recurring Themes</a></li>
+<li><a href="#reactive">Reactive vs. Proactive Balance</a></li>
+<li><a href="#june-spike">June Investigation Spike</a></li>
+<li><a href="#evidence">Evidence Matrix</a></li>
+<li><a href="#confidence">Confidence &amp; Assumptions</a></li>
+<li><a href="#recommendations">Recommendations</a></li>
+<li><a href="#gates">Approval Gates</a></li>
+<li><a href="#compile">Compile Section</a></li>
+</ul>
+</nav>
+
+<!-- ===== OVERVIEW ===== -->
+<h2 id="overview">Overview Stats
+<span class="feedback-ctrl" data-section="overview">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="overview">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div class="metric-grid">
+<div class="metric-card"><div class="value">633</div><div class="label">Claude Messages</div></div>
+<div class="metric-card"><div class="value">274</div><div class="label">Claude Sessions</div></div>
+<div class="metric-card"><div class="value">65 days</div><div class="label">Active Period</div></div>
+<div class="metric-card"><div class="value">~9.7/day</div><div class="label">Avg Messages</div></div>
+</div>
+
+<div class="summary-box">
+<strong>Source comparison:</strong> All AFPS work runs through <strong>Claude Code</strong>. Zero Codex sessions target the agentic-skills CWD directly — Codex consumes AFPS skills from downstream project directories (2,849 Codex prompts reference skill-related terms). The AFPS repo is a Claude-first development environment.
+</div>
+
+<p><strong>Token &amp; cost:</strong> Claude history.jsonl does not include token usage or cost metadata. Cost is <strong>unavailable</strong> from this data source.</p>
+
+<!-- ===== MONTHLY ===== -->
+<h2 id="monthly">Monthly Activity Trend
+<span class="feedback-ctrl" data-section="monthly">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="monthly">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div class="bar-chart">
+<div class="bar-row"><span class="bar-label">April 2026</span><div class="bar-fill" style="width: 48%; background: var(--accent);">135</div></div>
+<div class="bar-row"><span class="bar-label">May 2026</span><div class="bar-fill" style="width: 79%; background: var(--accent);">221</div></div>
+<div class="bar-row"><span class="bar-label">June 2026 (9 days)</span><div class="bar-fill" style="width: 100%; background: var(--green);">277</div></div>
+</div>
+
+<div class="claim"><strong>Claim:</strong> AFPS activity is accelerating — June already exceeds full-month totals in 9 days (277 vs. 221 in May), driven by card-pack animation debugging and convention hardening.</div>
+<div class="evidence"><strong>Evidence:</strong> Monthly message counts from Claude history.jsonl. June top skills: /investigate(29), /ship-end(10), /pack(5), /exec(5).</div>
+<div class="inference"><strong>Inference:</strong> The June spike is investigation-heavy — reactive work on card-pack animations is pulling volume up. Proactive convention work (excalidraw, alignment pages, narration) also contributes.</div>
+
+<!-- ===== SKILLS ===== -->
+<h2 id="skills">Skill Usage Breakdown
+<span class="feedback-ctrl" data-section="skills">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="skills">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Skill</th><th>Count</th><th>% of Skill Calls</th><th>Role</th></tr>
+<tr><td>/ship</td><td>43</td><td>22%</td><td>Primary shipping workflow</td></tr>
+<tr><td>/investigate</td><td>33</td><td>17%</td><td>Bug hunting &amp; root-cause analysis</td></tr>
+<tr><td>/analyze-sessions</td><td>22</td><td>11%</td><td>Meta — understanding own workflow</td></tr>
+<tr><td>/ship-end</td><td>21</td><td>11%</td><td>Session wrap-up &amp; push</td></tr>
+<tr><td>/run</td><td>9</td><td>5%</td><td>Dev server &amp; preview</td></tr>
+<tr><td>/pack</td><td>8</td><td>4%</td><td>Pack management</td></tr>
+<tr><td>/exec</td><td>5</td><td>3%</td><td>Plan step execution</td></tr>
+<tr><td>/reconcile-dev-docs</td><td>4</td><td>2%</td><td>Doc drift correction</td></tr>
+<tr><td>/targeted-skill-builder</td><td>3</td><td>2%</td><td>Skill creation from gap</td></tr>
+<tr><td>/devtool-docs-audit</td><td>3</td><td>2%</td><td>Docs quality audit</td></tr>
+<tr><td>Others (20 skills)</td><td>42</td><td>21%</td><td>Long tail — 1-2 uses each</td></tr>
+</table>
+</div>
+
+<div class="claim"><strong>Claim:</strong> The AFPS workflow is dominated by a ship→investigate→analyze cycle. /ship and /ship-end together account for 33% of all skill calls — shipping is the most frequent structured activity.</div>
+<div class="evidence"><strong>Evidence:</strong> 43 /ship + 21 /ship-end = 64 shipping calls out of ~193 total skill invocations (excluding /clear and /resume).</div>
+
+<!-- ===== SESSION TYPES ===== -->
+<h2 id="session-types">Session Type Classification
+<span class="feedback-ctrl" data-section="session-types">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="session-types">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div class="bar-chart">
+<div class="bar-row"><span class="bar-label">Single-message</span><div class="bar-fill" style="width: 100%; background: var(--text-muted);">73</div></div>
+<div class="bar-row"><span class="bar-label">Shipping</span><div class="bar-fill" style="width: 81%; background: var(--green);">59</div></div>
+<div class="bar-row"><span class="bar-label">Investigation</span><div class="bar-fill" style="width: 45%; background: var(--red);">33</div></div>
+<div class="bar-row"><span class="bar-label">General work</span><div class="bar-fill" style="width: 44%; background: var(--accent);">32</div></div>
+<div class="bar-row"><span class="bar-label">Pack management</span><div class="bar-fill" style="width: 41%; background: var(--orange);">30</div></div>
+<div class="bar-row"><span class="bar-label">Alignment pages</span><div class="bar-fill" style="width: 32%; background: var(--purple);">23</div></div>
+<div class="bar-row"><span class="bar-label">Session analysis</span><div class="bar-fill" style="width: 26%; background: var(--accent);">19</div></div>
+<div class="bar-row"><span class="bar-label">Conventions</span><div class="bar-fill" style="width: 5%; background: var(--text-muted);">4</div></div>
+<div class="bar-row"><span class="bar-label">Skill development</span><div class="bar-fill" style="width: 3%; background: var(--text-muted);">2</div></div>
+</div>
+
+<div class="claim"><strong>Claim:</strong> Sessions are short and focused. 81% (222/274) are 1-3 messages. Only 3% (8) exceed 7 messages. The workflow pattern is: open session → do one thing → ship or close.</div>
+<div class="evidence"><strong>Evidence:</strong> 141 sessions with 1 message, 81 with 2-3, 45 with 4-7, 7 with 8-15, 1 with 16+.</div>
+<div class="inference"><strong>Inference:</strong> This is a rapid-fire cadence — not deep multi-turn exploration. You treat Claude Code sessions as focused task slots, with /ship or /ship-end as the closing gate.</div>
+
+<!-- ===== WORKFLOWS ===== -->
+<h2 id="workflows">Workflow Sequences &amp; Chains
+<span class="feedback-ctrl" data-section="workflows">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="workflows">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<p>Most sessions use 0-1 skills — chaining is rare because sessions are short. Observed multi-skill chains:</p>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Transition</th><th>Count</th><th>Pattern</th></tr>
+<tr><td>/analyze-sessions → /ship-end</td><td>2</td><td>Analyze then close the session</td></tr>
+<tr><td>/analyze-sessions → /analyze-sessions</td><td>2</td><td>Iterative refinement of analysis</td></tr>
+<tr><td>/investigate → /analyze-sessions</td><td>1</td><td>Bug → check if pattern is recurring</td></tr>
+<tr><td>/analyze-sessions → /targeted-skill-builder</td><td>1</td><td>Find gap → build skill for it</td></tr>
+<tr><td>/session-triage → /targeted-skill-builder</td><td>1</td><td>Diagnose incident → build prevention</td></tr>
+<tr><td>/benchmark-test-skill → /benchmark-agent-review</td><td>1</td><td>Test then review benchmark</td></tr>
+<tr><td>/spec-interview → /roadmap</td><td>1</td><td>Spec → plan</td></tr>
+<tr><td>/spec-drift → /reconcile-dev-docs</td><td>1</td><td>Detect drift → fix docs</td></tr>
+</table>
+</div>
+
+<div class="claim"><strong>Claim:</strong> The AFPS workflow is implicitly sequential but not explicitly chained. You rely on skill recommendations ("Recommended next command") rather than pre-defined pipelines. The routing works but is manual — you choose the next step each time.</div>
+
+<!-- ===== THEMES ===== -->
+<h2 id="themes">Recurring Themes
+<span class="feedback-ctrl" data-section="themes">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="themes">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Theme</th><th>Messages</th><th>Example Prompts</th></tr>
+<tr><td>Skill creation/editing</td><td>113</td><td>"verify all codex skills say not to ship to feature branch", "why do we have both agentic-skills and claude-skills"</td></tr>
+<tr><td>Pack management</td><td>43</td><td>"which workshops would be of value", "they should live in the creator media pack"</td></tr>
+<tr><td>Planning/roadmap</td><td>37</td><td>"plan-phases should be renamed plan-phase", "gap once done with plan interview"</td></tr>
+<tr><td>Alignment pages</td><td>36</td><td>"create test environment for alignment-loop pack", "html is perfect, not asking for template"</td></tr>
+<tr><td>Investigation/debug</td><td>29</td><td>"card sinks back into the card pack", "long pause on drawer close"</td></tr>
+<tr><td>Docs/convention</td><td>25</td><td>"should that be in claude/agents md for all cases", "excalidraw convention for agents"</td></tr>
+<tr><td>Shipping/deploy</td><td>18</td><td>"verify all codex skills", "create skill that wraps manual blockers"</td></tr>
+<tr><td>Session analysis</td><td>10</td><td>"did we not have a conversation about this before?", "why is that not in the history?"</td></tr>
+<tr><td>Benchmarking</td><td>8</td><td>"update benchmarks and add test setups for new skills"</td></tr>
+<tr><td>Skillmap/excalidraw</td><td>6</td><td>"excalidraw graphic explaining packs and skills", "handwritten styling for borders only"</td></tr>
+</table>
+</div>
+
+<h3>Repeated prompts</h3>
+<ul>
+<li><strong>"can you run the install script?"</strong> — 3 occurrences</li>
+<li><strong>"can you run the dev server?"</strong> — 3 occurrences</li>
+<li><strong>"the sync skill should flag if the version number..."</strong> — 2 occurrences</li>
+<li><strong>"can we add to the alignment page that we can flag..."</strong> — 2 occurrences</li>
+</ul>
+
+<!-- ===== REACTIVE ===== -->
+<h2 id="reactive">Reactive vs. Proactive Balance
+<span class="feedback-ctrl" data-section="reactive">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="reactive">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div class="metric-grid">
+<div class="metric-card"><div class="value" style="color: var(--green);">58%</div><div class="label">Proactive (create/build/plan)</div></div>
+<div class="metric-card"><div class="value" style="color: var(--red);">41%</div><div class="label">Reactive (investigate/fix/debug)</div></div>
+</div>
+
+<div class="claim"><strong>Claim:</strong> Overall balance is healthy — more proactive than reactive. However, June has flipped: investigation dominates (29 /investigate calls in 9 days vs. 33 total in 65 days). The card-pack animation work created a reactive debt spiral.</div>
+
+<!-- ===== JUNE SPIKE ===== -->
+<h2 id="june-spike">June Investigation Spike
+<span class="feedback-ctrl" data-section="june-spike">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="june-spike">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<p>88% of all /investigate calls (29/33) occurred in June. The dominant driver was <strong>card-pack animation debugging</strong> — a sustained multi-session bug chase from Jun 3–5:</p>
+
+<ul>
+<li>"animation performance regression" (Jun 3)</li>
+<li>"long pause on drawer close after cards consolidate" (Jun 4)</li>
+<li>"card sinks back into the card pack" (Jun 4)</li>
+<li>"two distinctly animating cards on drawer close" (Jun 4)</li>
+<li>"card hovering above card pack in final step" (Jun 4)</li>
+<li>"pulling card out of pack inconsistently triggers drawer" (Jun 5)</li>
+</ul>
+
+<div class="claim"><strong>Claim:</strong> The card-pack animation work created a debugging marathon. Each /investigate found a fix but revealed the next visual bug — a cascading chain of 12+ sequential investigations over 2 days. This is the single largest reactive time sink in AFPS history.</div>
+<div class="inference"><strong>Inference:</strong> Visual animation work is uniquely hard for the current AFPS workflow — each bug requires human visual verification, the agent can't see the result, and fixes cascade. A visual regression test or screenshot diffing step could break this pattern.</div>
+
+<!-- ===== EVIDENCE ===== -->
+<h2 id="evidence">Evidence Matrix
+<span class="feedback-ctrl" data-section="evidence">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="evidence">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Claim</th><th>Source</th><th>Evidence</th><th>Confidence</th><th>Assumption</th></tr>
+<tr><td>Activity accelerating</td><td>Claude history.jsonl</td><td>135 → 221 → 277 (9d) monthly messages</td><td>High</td><td>June pace sustained (31 msgs/day)</td></tr>
+<tr><td>Ship-dominated workflow</td><td>Claude history.jsonl</td><td>64 shipping skill calls (33% of total)</td><td>High</td><td>None</td></tr>
+<tr><td>Short focused sessions</td><td>Claude history.jsonl</td><td>81% of sessions ≤ 3 messages</td><td>High</td><td>None</td></tr>
+<tr><td>Claude-first for AFPS</td><td>Codex rollouts</td><td>0 Codex sessions in agentic-skills CWD</td><td>High</td><td>Codex cwd metadata is complete</td></tr>
+<tr><td>Animation reactive spiral</td><td>Claude history.jsonl</td><td>12+ sequential /investigate calls Jun 3–5 on card animations</td><td>High</td><td>None</td></tr>
+<tr><td>Manual skill routing</td><td>Skill transition data</td><td>Max chain frequency is 2; most sessions single-skill</td><td>Medium</td><td>Some chains lost across session boundaries</td></tr>
+<tr><td>Convention maturation phase</td><td>Recent prompts</td><td>Excalidraw convention, narration, alignment page improvements all in last 3 days</td><td>Medium</td><td>Conventions will stabilize</td></tr>
+</table>
+</div>
+
+<!-- ===== CONFIDENCE ===== -->
+<h2 id="confidence">Confidence &amp; Assumptions
+<span class="feedback-ctrl" data-section="confidence">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="confidence">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<ul>
+<li><strong>Evidence-backed:</strong> Message counts, skill counts, session lengths, monthly trends, session type distribution.</li>
+<li><strong>Provisional:</strong> Reactive/proactive classification (keyword-based, may misclassify some messages). Session type categories overlap when a session touches multiple themes.</li>
+<li><strong>Missing:</strong> Token usage and cost data (not in Claude history.jsonl). Cross-session workflow chains (a skill recommended at the end of session A may be invoked in session B — this linkage is lost). Codex AFPS work is invisible from CWD matching alone.</li>
+<li><strong>Would change conclusions:</strong> If token/cost data showed that /investigate sessions consume 5× more tokens than /ship sessions, the reactive cost would be even more significant than message counts suggest.</li>
+</ul>
+
+<!-- ===== RECOMMENDATIONS ===== -->
+<h2 id="recommendations">Recommendations
+<span class="feedback-ctrl" data-section="recommendations">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="recommendations">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+
+</div>
+
+<div style="overflow-x: auto">
+<table>
+<tr><th>Pattern</th><th>Frequency</th><th>Type</th><th>Suggestion</th><th>Avoided Manual Prompts</th></tr>
+<tr><td>"run install script" / "run dev server"</td><td>6</td><td>Standing instruction</td><td>Add to CLAUDE.md: auto-detect when install/dev-server is needed and run without prompting</td><td>~6/month</td></tr>
+<tr><td>Animation visual bug cascade</td><td>12+ in 2 days</td><td>Skill / convention</td><td>Screenshot-diff verification step in /investigate for HTML prototype work; break reactive spiral</td><td>~8-10 per visual feature</td></tr>
+<tr><td>Session-end shipping</td><td>64 calls</td><td>Standing instruction</td><td>Already covered by shipping contract — working well</td><td>N/A (working)</td></tr>
+<tr><td>Analyze → build skill</td><td>3 chains</td><td>Skill routing</td><td>Working as designed: /analyze-sessions → /targeted-skill-builder pipeline is functional</td><td>N/A (working)</td></tr>
+<tr><td>Convention creation from ad-hoc decisions</td><td>~8</td><td>Convention</td><td>Gate in skill-building flow: "is this a one-off or a convention?" — if convention, route to docs</td><td>~3-4/month</td></tr>
+</table>
+</div>
+
+<h3>Top 5 by impact</h3>
+<ol>
+<li><strong>Visual verification for prototypes</strong> — Screenshot/diff step in /investigate for HTML work. Breaks the "fix → new visual bug" spiral. Est. 8-10 prompts avoided per visual feature.</li>
+<li><strong>Auto install/dev-server detection</strong> — Standing instruction to run install/dev without asking. Est. 6 prompts/month avoided.</li>
+<li><strong>Convention-detection gate</strong> — When a decision looks reusable, auto-suggest writing a convention doc. Est. 3-4/month.</li>
+<li><strong>Cross-session chain tracking</strong> — Persist "Recommended next command" across sessions so the next session picks up where the last left off. Reduces context loss.</li>
+<li><strong>Codex AFPS visibility</strong> — Tag Codex sessions consuming AFPS skills with origin pack metadata so /analyze-sessions can track downstream adoption.</li>
+</ol>
+
+<!-- ===== GATES ===== -->
+<h2 id="gates">Approval Gates
+<span class="feedback-ctrl" data-section="gates">
+<button onclick="toggleFeedback(this,'emphasize')" title="Emphasize">↑</button>
+<button onclick="toggleFeedback(this,'down')" title="Flag concern">↓</button>
+<button onclick="toggleFeedback(this,'clarify')" title="Need clarification">?</button>
+</span>
+</h2>
+<div class="section-feedback-area" data-section="gates">
+<textarea placeholder="Notes on this section..."></textarea>
+<div class="local-yaml"><button onclick="compileLocalFeedback(this)">Compile Feedback YAML</button> <button onclick="copyLocalYaml(this)">Copy YAML</button><span class="copy-status">Copied!</span><textarea readonly></textarea></div>
+</div>
+
+<!-- Gate 1: Evidence Coverage -->
+<div class="question-block" data-gate="evidence-coverage">
+<h4>Gate: Evidence Coverage</h4>
+<p>Is the evidence sufficient for these workflow pattern conclusions?</p>
+<label><input type="radio" name="q-evidence" value="sufficient" onchange="handleRadio(this)"> Yes, evidence is sufficient</label>
+<label><input type="radio" name="q-evidence" value="more-data" onchange="handleRadio(this)"> Need more data — specify what's missing</label>
+<label><input type="radio" name="q-evidence" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<label><input type="radio" name="q-evidence" value="needs-clarification" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="notes-area" placeholder="Additional notes..."></textarea>
+</div>
+
+<!-- Gate 2: Scope -->
+<div class="question-block" data-gate="scope">
+<h4>Gate: Scope &amp; Non-Goals</h4>
+<p>Does this analysis cover the AFPS workflow areas you wanted to understand?</p>
+<label><input type="radio" name="q-scope" value="covers" onchange="handleRadio(this)"> Yes, scope is right</label>
+<label><input type="radio" name="q-scope" value="expand" onchange="handleRadio(this)"> Expand — specify what's missing</label>
+<label><input type="radio" name="q-scope" value="narrow" onchange="handleRadio(this)"> Too broad — focus on specific area</label>
+<label><input type="radio" name="q-scope" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<label><input type="radio" name="q-scope" value="needs-clarification" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="notes-area" placeholder="Additional notes..."></textarea>
+</div>
+
+<!-- Gate 3: Recommendations -->
+<div class="question-block" data-gate="recommendations">
+<h4>Gate: Recommendation Priority</h4>
+<p>Which recommendation should be acted on first?</p>
+<label><input type="radio" name="q-rec" value="visual-verification" onchange="handleRadio(this)"> Visual verification for prototypes (highest-impact)</label>
+<label><input type="radio" name="q-rec" value="auto-install" onchange="handleRadio(this)"> Auto install/dev-server detection</label>
+<label><input type="radio" name="q-rec" value="convention-gate" onchange="handleRadio(this)"> Convention-detection gate</label>
+<label><input type="radio" name="q-rec" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<label><input type="radio" name="q-rec" value="needs-clarification" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="notes-area" placeholder="Additional notes..."></textarea>
+</div>
+
+<!-- Gate 4: Artifact Destination -->
+<div class="question-block" data-gate="artifact-destination">
+<h4>Gate: Artifact Destination &amp; Proposed File Changes</h4>
+<p>Approve the output location for this analysis report.</p>
+<label><input type="radio" name="q-artifact" value="approve" onchange="handleRadio(this)"> Approve: alignment/analyze-sessions-afps-workflow-patterns.html</label>
+<label><input type="radio" name="q-artifact" value="different-path" onchange="handleRadio(this)"> Use a different path</label>
+<label><input type="radio" name="q-artifact" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<label><input type="radio" name="q-artifact" value="needs-clarification" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="notes-area" placeholder="Additional notes..."></textarea>
+</div>
+
+<!-- ===== COMPILE ===== -->
+<h2 id="compile">Compile Section</h2>
+
+<div class="compile-section">
+<p id="unanswered-count" style="color: var(--orange);">4 required questions unanswered</p>
+
+<button class="feedback-btn" id="compile-feedback-btn" onclick="compileFeedbackYaml()" disabled>Compile Feedback YAML</button>
+<button id="compile-answers-btn" onclick="compileAnswersYaml()" disabled>Compile Answers</button>
+<span class="copy-status" id="compile-copy-status">Copied!</span>
+
+<textarea id="compile-output" readonly placeholder="YAML output will appear here after compilation..."></textarea>
+<button onclick="copyCompileYaml()" style="background: var(--surface); border: 1px solid var(--border); margin-top: 4px;">Copy YAML</button>
+<span class="copy-status" id="copy-btn-status">Copied!</span>
+</div>
+
+</main>
+
+<script>
+const PAGE_PATH = 'alignment/analyze-sessions-afps-workflow-patterns.html';
+
+// Section feedback
+function toggleFeedback(btn, type) {
+  const ctrl = btn.closest('.feedback-ctrl');
+  const section = ctrl.dataset.section;
+  const area = document.querySelector(`.section-feedback-area[data-section="${section}"]`);
+  const wasActive = btn.classList.contains(`active-${type}`);
+  ctrl.querySelectorAll('button').forEach(b => {
+    b.className = '';
+  });
+  if (wasActive) {
+    area.classList.remove('visible');
+    btn.dataset.feedbackType = '';
+  } else {
+    btn.classList.add(`active-${type}`);
+    btn.dataset.feedbackType = type;
+    area.classList.add('visible');
+  }
+  updateCompileButtons();
+}
+
+function getActiveFeedback() {
+  const entries = [];
+  document.querySelectorAll('.feedback-ctrl').forEach(ctrl => {
+    const activeBtn = ctrl.querySelector('button[class*="active-"]');
+    if (!activeBtn) return;
+    const section = ctrl.dataset.section;
+    const type = activeBtn.dataset.feedbackType;
+    const area = document.querySelector(`.section-feedback-area[data-section="${section}"]`);
+    const notes = area ? area.querySelector('textarea:not([readonly])').value.trim() : '';
+    const actionMap = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', clarify: 'clarify-before-approval' };
+    entries.push({ section, feedback: type, notes: notes || null, requested_agent_action: actionMap[type] });
+  });
+  return entries;
+}
+
+function compileLocalFeedback(btn) {
+  const area = btn.closest('.section-feedback-area');
+  const section = area.dataset.section;
+  const ctrl = document.querySelector(`.feedback-ctrl[data-section="${section}"]`);
+  const activeBtn = ctrl.querySelector('button[class*="active-"]');
+  if (!activeBtn) return;
+  const type = activeBtn.dataset.feedbackType;
+  const notes = area.querySelector('textarea:not([readonly])').value.trim();
+  const actionMap = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', clarify: 'clarify-before-approval' };
+  const unanswered = getUnansweredCount();
+  const yaml = `alignment_page: ${PAGE_PATH}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions: ${unanswered}\nsection_feedback:\n  - section: "${section}"\n    feedback: "${type}"\n    notes: ${notes ? '"' + notes.replace(/"/g, '\\"') + '"' : 'null'}\n    requested_agent_action: "${actionMap[type]}"`;
+  const yamlArea = area.querySelector('.local-yaml textarea');
+  yamlArea.value = yaml;
+  tryClipboard(yaml, area.querySelector('.copy-status'));
+}
+
+function copyLocalYaml(btn) {
+  const area = btn.closest('.local-yaml');
+  const yaml = area.querySelector('textarea').value;
+  tryClipboard(yaml, area.querySelector('.copy-status'));
+}
+
+// Gate questions
+function handleRadio(radio) {
+  const block = radio.closest('.question-block');
+  const textarea = block.querySelector('.notes-area');
+  if (radio.value === 'other' || radio.value === 'needs-clarification') {
+    textarea.classList.add('visible');
+    textarea.placeholder = radio.value === 'needs-clarification' ? 'What needs clarification?' : 'Your input...';
+  } else {
+    textarea.classList.add('visible');
+    textarea.placeholder = 'Additional notes (optional)...';
+  }
+  updateCompileButtons();
+}
+
+function getUnansweredCount() {
+  const questions = ['q-evidence', 'q-scope', 'q-rec', 'q-artifact'];
+  return questions.filter(q => !document.querySelector(`input[name="${q}"]:checked`)).length;
+}
+
+function updateCompileButtons() {
+  const unanswered = getUnansweredCount();
+  const countEl = document.getElementById('unanswered-count');
+  const answersBtn = document.getElementById('compile-answers-btn');
+  const feedbackBtn = document.getElementById('compile-feedback-btn');
+  countEl.textContent = unanswered === 0 ? 'All questions answered — ready to compile' : `${unanswered} required question${unanswered > 1 ? 's' : ''} unanswered`;
+  countEl.style.color = unanswered === 0 ? 'var(--green)' : 'var(--orange)';
+  answersBtn.disabled = unanswered > 0;
+  if (unanswered > 0) {
+    answersBtn.onclick = () => {
+      const questions = ['q-evidence', 'q-scope', 'q-rec', 'q-artifact'];
+      for (const q of questions) {
+        if (!document.querySelector(`input[name="${q}"]:checked`)) {
+          document.querySelector(`input[name="${q}"]`).closest('.question-block').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    };
+  } else {
+    answersBtn.onclick = compileAnswersYaml;
+  }
+  const hasFeedback = getActiveFeedback().length > 0;
+  feedbackBtn.disabled = !hasFeedback;
+}
+
+function compileFeedbackYaml() {
+  const entries = getActiveFeedback();
+  if (!entries.length) return;
+  const unanswered = getUnansweredCount();
+  let yaml = `alignment_page: ${PAGE_PATH}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions: ${unanswered}\nsection_feedback:`;
+  entries.forEach(e => {
+    yaml += `\n  - section: "${e.section}"\n    feedback: "${e.feedback}"\n    notes: ${e.notes ? '"' + e.notes.replace(/"/g, '\\"') + '"' : 'null'}\n    requested_agent_action: "${e.requested_agent_action}"`;
+  });
+  document.getElementById('compile-output').value = yaml;
+  tryClipboard(yaml, document.getElementById('compile-copy-status'));
+}
+
+function compileAnswersYaml() {
+  const gates = [
+    { name: 'q-evidence', section: 'Evidence Coverage', gate_type: 'evidence-coverage' },
+    { name: 'q-scope', section: 'Scope & Non-Goals', gate_type: 'scope' },
+    { name: 'q-rec', section: 'Recommendation Priority', gate_type: 'recommendations' },
+    { name: 'q-artifact', section: 'Artifact Destination & Proposed File Changes', gate_type: 'artifact-destination' },
+  ];
+  let yaml = `alignment_page: ${PAGE_PATH}\napproval_status: ready-for-agent-review\ngates:`;
+  gates.forEach(g => {
+    const checked = document.querySelector(`input[name="${g.name}"]:checked`);
+    if (!checked) return;
+    const block = checked.closest('.question-block');
+    const notes = block.querySelector('.notes-area').value.trim();
+    const status = checked.value === 'other' ? 'other' : checked.value === 'needs-clarification' ? 'needs-clarification' : 'answered';
+    yaml += `\n  - section: "${g.section}"\n    gate_type: "${g.gate_type}"\n    status: "${status}"\n    answer: "${checked.value}"`;
+    if (notes) yaml += `\n    notes: "${notes.replace(/"/g, '\\"')}"`;
+    if (g.gate_type === 'artifact-destination') yaml += `\n    target_path: "${PAGE_PATH}"`;
+  });
+  const feedback = getActiveFeedback();
+  if (feedback.length) {
+    yaml += '\nsection_feedback:';
+    feedback.forEach(e => {
+      yaml += `\n  - section: "${e.section}"\n    feedback: "${e.feedback}"\n    notes: ${e.notes ? '"' + e.notes.replace(/"/g, '\\"') + '"' : 'null'}\n    requested_agent_action: "${e.requested_agent_action}"`;
+    });
+  }
+  document.getElementById('compile-output').value = yaml;
+  tryClipboard(yaml, document.getElementById('compile-copy-status'));
+}
+
+function copyCompileYaml() {
+  const yaml = document.getElementById('compile-output').value;
+  tryClipboard(yaml, document.getElementById('copy-btn-status'));
+}
+
+function tryClipboard(text, statusEl) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (statusEl) { statusEl.style.display = 'inline'; setTimeout(() => statusEl.style.display = 'none', 2000); }
+    }).catch(() => fallbackSelect(text, statusEl));
+  } else {
+    fallbackSelect(text, statusEl);
+  }
+}
+
+function fallbackSelect(text, statusEl) {
+  const ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); if (statusEl) { statusEl.style.display = 'inline'; setTimeout(() => statusEl.style.display = 'none', 2000); } } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+updateCompileButtons();
+</script>
+
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

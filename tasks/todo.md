@@ -1,3 +1,37 @@
+## Current Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
+
+### Goal
+
+Finish the `$ship-end` wrap-up by committing and pushing the current local artifacts on `master`, while fixing the clean-checkout CLI dependency gap and making previously untracked alignment pages pass the active-page audit.
+
+### Steps
+
+- [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+- [x] Inspect git status, branch/upstream state, unpushed commits, task docs, manual tasks, advisory tasks, and deploy contract.
+- [x] Identify that tracked `packages/skillpacks/bin/skillpacks.mjs` imports a missing untracked `packages/skillpacks/src/cli/update-check.mjs` module.
+- [x] Add required metadata, TTS includes, and index entries for `alignment/analyze-sessions-afps-workflow-patterns.html` and `alignment/uat-card-pack-migration.html`.
+- [x] Re-run the active alignment-page audit successfully.
+- [x] Reconcile stale task bookkeeping for the already-shipped install-destination output correction.
+- [x] Run final package, alignment, and whitespace validation.
+- [x] Record history and the quality-gate ship manifest.
+- [x] Commit and push intended files on `master`.
+
+### Review Notes
+
+- The working tree had no modified tracked source files and no unpushed commits at the start of `$ship-end`, but it did have five untracked artifacts.
+- `packages/skillpacks/bin/skillpacks.mjs` was already tracked at `HEAD` with an import of `../src/cli/update-check.mjs`, while `packages/skillpacks/src/cli/update-check.mjs` was not tracked. This makes the untracked file part of the necessary clean-checkout shipping boundary.
+- `alignment/analyze-sessions-afps-workflow-patterns.html` and `alignment/uat-card-pack-migration.html` initially failed `node scripts/audit-alignment-pages.mjs` for missing TTS includes, missing `data-alignment-category` / `data-visual-tier`, and missing `alignment/index.html` entries.
+- Added `data-alignment-category="ops-analysis"` and `data-visual-tier="document"` to the AFPS workflow analysis page.
+- Added `data-alignment-category="qa-meta"` and `data-visual-tier="document"` to the UAT card-pack migration page.
+- Ran `node scripts/inject-tts.mjs` for each page and updated `alignment/index.html` from 46 to 48 pages.
+- Scoped active alignment audit now passes: 48 active pages, TTS include exact, page metadata exact, viewport meta exact, embed prohibition exact, and index integrity exact.
+- `tasks/todo.md` had a stale unchecked install-destination output shipping item. `git log` shows it already shipped in `4ed32869 fix(skillpacks): show install destinations only`, so the checkbox was reconciled.
+- Validation passed: `node --check packages/skillpacks/src/cli/update-check.mjs`; `node --check packages/skillpacks/bin/skillpacks.mjs`; `npm --workspace skillpacks run test:node` (50 passed); `npm --workspace skillpacks run build:check`; `node scripts/audit-alignment-pages.mjs`; `npm --workspace skillpacks run skillpacks:list`; `git diff --check`.
+- Ship manifest: `tasks/ship-manifest-2026-06-11-ship-end-cli-alignment-cleanup.md`.
+- Deploy follow-up: `tasks/deploy.md` exists, but `$deploy` is not installed. `scripts/pack.sh which deploy` reports the skill is provided by the uninstalled `release-ops` pack.
+
+---
+
 ## Current Implementation - Strict Exact Skillpacks Install Resolution
 
 ### Goal
@@ -3265,7 +3299,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Remove package source paths from Node lifecycle install/pin/unpin messages.
 - [x] Update lifecycle tests for destination-only output.
 - [x] Verify package syntax, tests, build check, and whitespace.
-- [ ] Commit and push the CLI output correction.
+- [x] Commit and push the CLI output correction.
 
 ### Review Notes — skillpacks install destination output
 
@@ -3273,6 +3307,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Pinned installs now report `Installed .<tool>/skills/<skill> (pinned <version>)`; explicit `pin` and `unpin` output now reports destination plus `(version)` or `(latest)`.
 - Added regression assertions that install, pinned install, refresh, pin, and unpin stdout do not contain ` -> ` source arrows.
 - Validation passed: `node --check packages/skillpacks/src/cli/lifecycle.mjs`; `node --check packages/skillpacks/test/lifecycle.test.mjs`; `npm --workspace skillpacks run test:node`; `npm --workspace skillpacks run build:check`; `git diff --check`.
+- Shipping status reconciled during `$ship-end`: already pushed as `4ed32869 fix(skillpacks): show install destinations only`.
 
 - [x] Rename afps-status stage `icp-needed` → `discovery-needed`
 
