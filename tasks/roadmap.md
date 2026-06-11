@@ -1132,3 +1132,10 @@ icp -> competitive-analysis -> journey-map -> positioning
 2. Use only a freshly verified provider pricing table for token-to-cost math.
 3. Keep the report explicit that local logs support an API-equivalent estimate, not actual dashboard billing.
 4. Update the HTML with model, token-class, and top-project cost breakdowns, then validate the artifact.
+
+## Current Plan — skillpacks refresh target version output
+
+1. Trace `npx skillpacks refresh` through the package-owned Node CLI and confirm where package semver is available.
+2. Add refresh output that states the bundled `skillpacks` package version applied to local skill roots.
+3. Cover the output in the focused lifecycle refresh test.
+4. Verify package tests and syntax checks, then record the install replacement behavior for the user.

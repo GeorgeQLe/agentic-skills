@@ -85,6 +85,12 @@ function activePackNames(manifest) {
     .sort((a, b) => a.localeCompare(b));
 }
 
+function manifestPackageLabel(manifest) {
+  const name = manifest?.package?.name || 'skillpacks';
+  const version = manifest?.package?.version || 'unknown';
+  return `${name}@${version}`;
+}
+
 function availablePacksInline(manifest) {
   const names = activePackNames(manifest);
   if (names.length === 0) {
@@ -919,6 +925,7 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
     for (const skill of skills) {
       installSingleSkill(projectRoot, manifest, skill);
     }
+    console.log(`Refreshed project skills to ${manifestPackageLabel(manifest)}.`);
     printSessionReloadNotice();
     return 0;
   });

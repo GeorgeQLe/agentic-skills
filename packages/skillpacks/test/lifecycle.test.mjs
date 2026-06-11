@@ -249,13 +249,25 @@ describe('Node lifecycle commands', () => {
         'devtool-adoption': 'devtool'
       }
     });
+    writeManagedInstall(
+      dir,
+      'claude',
+      'quality-sweep',
+      join(repoRoot, 'packs/code-quality/claude/quality-sweep')
+    );
 
     const { stdout } = await runSkillpacks(dir, ['refresh']);
 
+    const packageVersion = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).version;
+    assert.equal(stdout.includes(`Refreshed project skills to skillpacks@${packageVersion}.`), true);
     assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
     assert.match(stdout, /Installed \.codex\/skills\/devtool-adoption/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'devtool-adoption')), true);
+    assert.notEqual(
+      readFileSync(join(skillPath(dir, 'claude', 'quality-sweep'), 'SKILL.md'), 'utf8'),
+      'stale\n'
+    );
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'devtool-adoption': 'devtool' });
   });

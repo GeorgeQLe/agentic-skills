@@ -2957,6 +2957,24 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Refreshed Skills Showcase generated data after tracked `SKILL.md` metadata changed. The successful Next.js build updated `apps/skills-showcase/next-env.d.ts` from dev route types to build route types.
 - Validation passed: boundary-aware active-file retired-route scan, `pnpm --dir tests exec vitest run --project layer1 layer1/remaining-packs-customer-discovery-routing.test.ts layer1/research-roadmap-routing.test.ts`, `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-deps.sh --broken`, `scripts/skill-pack-routing-audit.sh`, `node scripts/upgrade-alignment-page.mjs --dry-run`, sequential Skills Showcase data generation, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
 - Adversarial review: changed-file self-review plus targeted active-route scans verified the diff stayed limited to command handoffs, version/changelog/archive updates, generated showcase data, build-generated type metadata, prompt history, task tracking, and regression tests; no diff renamed ICP artifacts or changed non-route remaining-pack behavior.
+
+## Active — skillpacks refresh target version output
+
+- [x] Trace `npx skillpacks refresh` through the package-owned Node CLI.
+- [x] Add refresh output that names the bundled target `skillpacks` version.
+- [x] Add focused lifecycle test coverage for the new output.
+- [x] Verify package tests and syntax checks.
+- [x] Record review notes, including whether refresh removes old installed skill copies.
+
+### Review Notes — skillpacks refresh target version output
+
+- Added a successful-refresh summary line in `packages/skillpacks/src/cli/lifecycle.mjs`: `Refreshed project skills to skillpacks@<package-version>.`
+- The version comes from the packaged manifest metadata, so `npx skillpacks@latest refresh` reports the npm snapshot that was actually applied.
+- Extended the lifecycle refresh test to assert the new line and prove an existing managed `.claude/skills/quality-sweep` copy is replaced during refresh.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` because `npm --workspace skillpacks run build:check` found it stale against the current checkout.
+- Replacement behavior: refresh removes old managed skill installs before copying the package version into `.claude/skills` and `.codex/skills`; unmanaged directories are not removed and are skipped with a warning.
+- Validation passed: `node --check packages/skillpacks/src/cli/lifecycle.mjs`; `node --check packages/skillpacks/test/lifecycle.test.mjs`; `npm --workspace skillpacks run test:node`; `npm --workspace skillpacks run build:check`; `git diff --check`.
+
 - [x] Rename afps-status stage `icp-needed` → `discovery-needed`
 
 ## Future Work
