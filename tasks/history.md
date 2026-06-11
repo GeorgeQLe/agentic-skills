@@ -14102,3 +14102,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed for targeted P2 report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 200 later P2/P3 findings.
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-212655-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-agent-work-admin.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P2 business-discovery framework remediation
+
+- Updated the nested business-discovery framework P2 bucket from `research/skillpack-cli-routing-audit.md`: 30 mirrored competitive-analysis, customer-discovery, and positioning framework skills now include `npx skillpacks install <pack>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.
+- Archived every prior active `SKILL.md`, bumped competitive-analysis and customer-discovery frameworks to v0.2, bumped positioning frameworks to v0.6, and updated all target `CHANGELOG.md` files.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; `skills-data.js` had no final diff for these non-public framework subskills, while proof data was refreshed from current history.
+- Validation passed for targeted framework report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 156 later P2/P3 findings.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-220256-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-business-discovery-frameworks.md`.

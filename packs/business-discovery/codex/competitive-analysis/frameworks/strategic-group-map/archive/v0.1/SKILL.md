@@ -1,0 +1,105 @@
+---
+name: strategic-group-map
+description: Strategic group map competitive analysis - cluster competitors by market axes and identify segment whitespace
+type: research
+version: v0.1
+invocation: sub-skill
+parent: competitive-analysis
+---
+
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
+# Strategic Group Map - Competitive Cluster Analysis
+
+Invoke from the parent queue as `$competitive-analysis/frameworks/strategic-group-map`.
+
+This is a framework subskill for `$competitive-analysis`. It maps competitors into strategic groups using evidence-backed axes so the parent synthesis can reason about clusters, crowded zones, and whitespace. It must not emit downstream next-step routing.
+
+## Report-First Approval Gate
+
+Default to scope-first approval: before synthesized research, inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions in a `review` alignment page plus a concise conversation summary.
+
+Do not perform synthesized research, rank candidates, make recommendations, or write working packets or canonical deliverables until final compiled YAML approves the research scope. Minimal pre-approval discovery may identify available files, source categories, and open questions; label it as scope evidence, not findings.
+
+After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
+
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
+## Staged Research Workflow
+
+Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
+
+1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
+2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page with the full preliminary packet, evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
+3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
+
+Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
+
+## Prerequisites
+
+- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `$competitive-analysis` first and stop.
+- **Soft**: Existing competitive framework outputs, positioning research, journey research, customer feedback, and specs.
+
+## Product-Path Scope Resolution
+
+Use the parent `competitive-analysis` product-path scope when present. Otherwise resolve scope from `research/.progress.yaml` and active non-archived paths before writing under `research/{slug}/`.
+
+## Process
+
+1. Load seeded competitors and use web search to broaden the competitor list enough for meaningful clustering.
+2. Select 2-3 evidence-backed axes, such as:
+   - enterprise vs SMB
+   - high-service vs self-serve
+   - broad platform vs focused workflow
+   - premium vs low-cost
+   - incumbent suite vs specialist tool
+3. Place competitors on the map only when evidence supports their position.
+4. Identify clusters, crowded zones, underserved segments, and competitors that blur categories.
+5. Record axis uncertainty and alternative maps when the market does not fit one clean 2x2.
+6. Present findings before writing and incorporate factual corrections.
+
+## Output
+
+### `research/competitive-analysis-strategic-group-map.md` (or `research/{slug}/competitive-analysis-strategic-group-map.md`)
+
+```markdown
+# Strategic Group Map
+
+> Based on: [parent context, sources]
+> Date: [current date]
+> Methodology: Strategic Group Mapping
+
+## Axis Selection
+| Axis | Why It Matters | Evidence | Confidence |
+|------|----------------|----------|------------|
+
+## Competitor Placement
+| Competitor | Axis 1 Position | Axis 2 Position | Group | Evidence | Confidence |
+|------------|-----------------|-----------------|-------|----------|------------|
+
+## Strategic Groups
+[Named clusters, shared traits, and how they compete]
+
+## Whitespace And Crowded Zones
+[Underserved spaces and over-served clusters]
+
+## Evidence Matrix
+| Claim | Source | Evidence Type | Confidence |
+|-------|--------|---------------|------------|
+```
+
+## Constraints
+
+- Do not force a 2x2 when the market needs a table or multiple maps; explain the limitation.
+- Competitor placement must cite evidence.
+- This is a sub-skill; do not emit `Recommended next skill` or `Recommended next command`.
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/strategic-group-map-{topic}.html`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.

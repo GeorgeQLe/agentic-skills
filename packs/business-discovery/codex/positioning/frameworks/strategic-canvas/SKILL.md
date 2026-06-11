@@ -2,14 +2,14 @@
 name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, apply Four Actions Framework (eliminate/reduce/raise/create)
 type: research
-version: v0.5
+version: v0.6
 invocation: sub-skill
 parent: positioning
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Strategic Canvas — Blue Ocean Value Curve Analysis
 

@@ -2,14 +2,14 @@
 name: pmf-engine
 description: Vohra/Supan PMF Engine - evaluate existing user data with Sean Ellis PMF signal, very-disappointed segmentation, retention/usage evidence, and High-Expectation Customer synthesis
 type: research
-version: v0.1
+version: v0.2
 invocation: sub-skill
 parent: customer-discovery
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # PMF Engine - Vohra/Supan Product-Market Fit Analysis
 

@@ -517,7 +517,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - Temporarily stashed unrelated dirty manifest-visibility work in `CLAUDE.md`, `docs/interview-convention.md`, `packs/product-design/**`, `packs/skill-dev/**`, and `prompts/ui-interview/**` to validate this boundary cleanly. Restore those stashes after the scoped commit/push.
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260611-015300-exec.md`.
 
-- [ ] Remediate P2 business-discovery framework skill install-routing wording:
+- [x] Remediate P2 business-discovery framework skill install-routing wording:
   - Scope: update only the nested business-discovery framework skills that remain at the top of `scripts/skill-install-routing-audit.sh --report`; do not edit top-level business-discovery skills, other P2 buckets, or P3 bespoke follow-up route sections.
   - Targets:
     - Competitive-analysis frameworks, both Claude and Codex mirrors, `version: v0.1` -> `v0.2`: `feature-pricing-matrix`, `porter-five-forces`, `strategic-group-map`, and `swot`.
@@ -537,6 +537,77 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
     - Confirm no nested business-discovery framework target remains in the report with `rg 'packs/business-discovery/(claude|codex)/(competitive-analysis/frameworks/(feature-pricing-matrix|porter-five-forces|strategic-group-map|swot)|customer-discovery/frameworks/(five-rings|four-forces|jtbd-needs|pmf-engine|seven-dimensions|w3-hypothesis)|positioning/frameworks/(category-design|jtbd-positioning|moore-positioning|obviously-awesome|strategic-canvas))/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
     - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 156 remaining findings if no other files change.
+  - Regression checks:
+    - `bash -n scripts/skill-install-routing-audit.sh`
+    - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+    - `bash scripts/skill-pack-routing-audit.sh`
+    - `bash scripts/skill-versions.sh --missing`
+    - `bash scripts/skill-archive-audit.sh --strict`
+    - `bash scripts/skill-deps.sh --broken`
+    - `node scripts/upgrade-alignment-page.mjs --check`
+    - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+    - `pnpm --dir apps/skills-showcase build`
+    - `git diff --check`
+  - Ship with a manifest that distinguishes expected remaining install-routing debt from unexpected regressions.
+
+### P2 Business-Discovery Framework Remediation Review
+
+- Archived prior active `SKILL.md` files for all 30 nested business-discovery framework targets before editing:
+  - Competitive-analysis frameworks: `feature-pricing-matrix`, `porter-five-forces`, `strategic-group-map`, and `swot` for both Claude and Codex.
+  - Customer-discovery frameworks: `five-rings`, `four-forces`, `jtbd-needs`, `pmf-engine`, `seven-dimensions`, and `w3-hypothesis` for both Claude and Codex.
+  - Positioning frameworks: `category-design`, `jtbd-positioning`, `moore-positioning`, `obviously-awesome`, and `strategic-canvas` for both Claude and Codex.
+- Bumped active versions to the planned targets and updated all 30 target `CHANGELOG.md` files:
+  - Competitive-analysis and customer-discovery frameworks moved from `v0.1` to `v0.2`.
+  - Positioning frameworks moved from `v0.5` to `v0.6`.
+- Updated only the `Pack Availability Guard` install-route wording: Claude text keeps `/pack install <pack>`, Codex text keeps `$pack install <pack>`, and both now include `npx skillpacks install <pack>` from the project shell.
+- Preserved each framework's research method, approval gates, alignment-page behavior, glossary behavior, and next-step routing semantics.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata/content changes. `skills-data.js` had no final diff for this slice because these framework subskills are not public showcase entries; generated proof data was refreshed with current task history.
+- Targeted P2 report gate passed: `scripts/skill-install-routing-audit.sh --report` reports 383 active files, 14/14 P1 coverage, 156 remaining findings, and no nested business-discovery framework target paths.
+- Expected-red strict active audit now reports 156 remaining findings, all deferred to later P2/P3 remediation slices. The first remaining group is the `business-growth` pack.
+- Diff-aware review found the first mechanical changelog insertion missed the 12 customer-discovery framework changelogs because those files use skill-specific H1 headings instead of `# Changelog`; the missing entries were added before final validation.
+- Verification passed:
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `bash -n scripts/skill-install-routing-audit.sh`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` (11 fixture `SKILL.md` files, 6 expected invalid findings, exit 0)
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-deps.sh --broken`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` (2 passed)
+  - `scripts/skill-install-routing-audit.sh --active` (expected-red: 156 remaining non-business-discovery-framework findings)
+  - `pnpm --dir apps/skills-showcase build`
+  - `git diff --check`
+- The Skills Showcase build updated `apps/skills-showcase/next-env.d.ts` as a mode-specific build side effect; that unrelated generated diff was restored before shipping.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-220256-exec.md`.
+
+- [ ] Remediate P2 business-growth skill install-routing wording:
+  - Scope: update only the next P2 bucket from `research/skillpack-cli-routing-audit.md`: business-growth skills in both Claude and Codex mirrors. Do not edit business-ops, creator-foundation, customer-lifecycle, or later P2/P3 buckets in this step.
+  - Targets:
+    - `packs/business-growth/claude/experiment/SKILL.md` and `packs/business-growth/codex/experiment/SKILL.md` (`version: v0.4` -> `v0.5`)
+    - `packs/business-growth/claude/growth-model/SKILL.md` and `packs/business-growth/codex/growth-model/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `packs/business-growth/claude/gtm/SKILL.md` and `packs/business-growth/codex/gtm/SKILL.md` (`version: v0.9` -> `v0.10`)
+    - `packs/business-growth/claude/hook-model/SKILL.md` and `packs/business-growth/codex/hook-model/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `packs/business-growth/claude/landing-copy/SKILL.md` and `packs/business-growth/codex/landing-copy/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `packs/business-growth/claude/metrics/SKILL.md` and `packs/business-growth/codex/metrics/SKILL.md` (`version: v0.3` -> `v0.4`)
+    - `packs/business-growth/claude/monetization/SKILL.md` and `packs/business-growth/codex/monetization/SKILL.md` (`version: v0.9` -> `v0.10`)
+    - `packs/business-growth/claude/pmf-assessment/SKILL.md` and `packs/business-growth/codex/pmf-assessment/SKILL.md` (`version: v0.7` -> `v0.8`)
+  - Before editing each target, run `scripts/skill-archive.sh <skill-dir>` so the current active `SKILL.md` is copied to `archive/<old-version>/SKILL.md`.
+  - Update `Pack Availability Guard` wording and any in-file install-route recommendations that remain flagged for these same target files using `docs/skillpacks-install-routing-contract.md`:
+    - Claude-facing text keeps `/pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Codex-facing text keeps `$pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Preserve each skill's research, growth-modeling, GTM, pricing, metrics, approval, alignment-page, glossary, and next-step routing semantics.
+  - Update each target's `CHANGELOG.md` with the new version entry and summarize the npm-aware install-route wording change.
+  - Refresh generated Skills Showcase data after active `SKILL.md` metadata/content changes:
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+    - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - Targeted post-edit gate:
+    - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
+    - Confirm no business-growth target remains in the report with `rg 'packs/business-growth/(claude|codex)/(experiment|growth-model|gtm|hook-model|landing-copy|metrics|monetization|pmf-assessment)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
+    - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 140 remaining findings if no other files change.
   - Regression checks:
     - `bash -n scripts/skill-install-routing-audit.sh`
     - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
