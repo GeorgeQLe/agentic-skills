@@ -46,6 +46,7 @@ Add a package-native `skillpacks init` path that installs the existing global-sc
   - `npm --workspace skillpacks run build:manifest:check`
   - `npm --workspace skillpacks run build:check`
   - `git diff --check`
+- Follow-up status verification on 2026-06-11 confirmed current `master` still has `skillpacks init` routed through Node-owned project-local base install, `init-global` preserved for user-home globals, and local smoke output writing `base_skills: true` plus 19 base skill directories.
 
 ---
 
