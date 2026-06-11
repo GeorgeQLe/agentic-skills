@@ -12,8 +12,17 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
 ### Steps
 
 - [x] Inspect existing task state, audit/test conventions, and prior staged-research validation history.
-- [ ] Add task plan artifacts for this implementation pass without overwriting unrelated local task/prompt changes.
+- [x] Add task plan artifacts for this implementation pass without overwriting unrelated local task/prompt changes.
 - [ ] Implement `scripts/researchish-skill-lifecycle-audit.mjs` with human summary and `--json` modes.
+  - First inspect any existing local `scripts/researchish-skill-lifecycle-audit.mjs` before editing; a local untracked copy was present when this planning step ran, so the next executor should reuse or reconcile that work instead of recreating the file blindly.
+  - Keep the script read-only in normal operation: default mode prints Markdown to stdout, `--json` prints machine-readable data to stdout, and neither mode writes reports or modifies skill files.
+  - Support `--root <path>` for fixture tests and repository-state checks.
+  - Collect active `SKILL.md` files under `global/` and `packs/`, excluding every `archive/**`, `.git/**`, and `node_modules/**` path.
+  - Parse frontmatter fields needed for classification: `name`, `type`, `invocation`, `version`, `visual_tier`, and `interview_depth` when present.
+  - Detect lifecycle signals from the active skill body and sibling files: `type: research`, staged-research marker set, `research/` output language, `_working` packet language, sibling `ALIGNMENT-PAGE.md`, and membership in `scripts/alignment-skip-list.txt`.
+  - Classify every in-scope active skill into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
+  - Include enough JSON detail for tests and the later report: totals, category counts, per-skill category, flags/signals, missing staged markers, non-research `research/` language findings, skip-list bundle candidates, and semantically suspicious marker-compliant research skills.
+  - Do not remediate active `SKILL.md` files in this implementation step unless the current task is explicitly advanced past report generation and review.
 - [ ] Generate `research/researchish-skill-lifecycle-audit.md` from the script output.
 - [ ] Add focused layer1 audit coverage for JSON shape, staged-research marker compliance, skip-list bundle exclusions, and non-research `_working` misuse.
 - [ ] Review audit findings and apply only focused remediation needed by the report.
@@ -36,6 +45,13 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
 - The audit script is read-only in default and `--json` modes.
 - Remediation, if needed, is grounded in the written report rather than ad hoc editing.
 - Verification proves the audit and any remediated skill lifecycle behavior works.
+
+### Planning Artifact Review
+
+- Confirmed `tasks/roadmap.md` and this active `tasks/todo.md` already contain the Research-ish Skill Lifecycle Audit plan and acceptance criteria.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-204536-exec.md`.
+- Detected existing local untracked script work at `scripts/researchish-skill-lifecycle-audit.mjs`; left it untouched and unstaged during this planning-only step.
+- Expanded the next implementation step with concrete script behavior, read-only mode requirements, active skill inventory scope, lifecycle signals, classification categories, JSON output expectations, and the no-ad-hoc-remediation guard.
 
 ---
 

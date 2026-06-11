@@ -14057,3 +14057,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Left the concurrent Research-ish Skill Lifecycle Audit task-plan additions intact; that queue item now appears above the Skillpacks routing section and may be the globally first unchecked task.
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-203845-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-handoff.md`.
+
+## 2026-06-11 — Research-ish lifecycle audit planning artifacts
+
+- Completed the planning-only task artifact step for the Research-ish Skill Lifecycle Audit.
+- Expanded the next implementation step in `tasks/todo.md` with concrete script behavior, read-only mode requirements, inventory scope, lifecycle signals, classification categories, JSON output expectations, and the no-ad-hoc-remediation guard.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-204536-exec.md`.
+- Detected existing local untracked script work at `scripts/researchish-skill-lifecycle-audit.mjs`; left it untouched and unstaged so the next implementation step can inspect/reuse it deliberately.
+- Manifest: `tasks/ship-manifest-2026-06-11-researchish-lifecycle-planning.md`.
