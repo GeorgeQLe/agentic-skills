@@ -31,7 +31,7 @@ Validate the pack-refresh/global-skill update gap and, if confirmed, add a proje
    - [x] Run focused package tests and package manifest/build checks.
    - [x] Run `git diff --check`.
    - [x] Record review notes in `tasks/todo.md`.
-   - [ ] Commit and push intended changes on `master`.
+   - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
