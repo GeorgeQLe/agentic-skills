@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.0"
   },
-  "source_fingerprint": "17d2b63bbc895eb4369c0b879938b4d12eebe51324f69546e4d305a2b1c34bf2",
+  "source_fingerprint": "58f1ab32a81f8425a066e591ce2db8cbea155adb1409c2260abf18bcd2410e91",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1186,9 +1186,9 @@
       "scope": "pack",
       "pack": "agent-work-admin",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "path": "packs/agent-work-admin/claude/roadmap/SKILL.md",
-      "content_sha256": "7e97b4e2cae28df9f328b46d7afe90bc922ae68eb14753da9bbd809e7c4e3f16",
+      "content_sha256": "dc337daa59b10dadc36b6bf366c041d209c113112e87389b0f1c04d5d1fc6111",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1197,7 +1197,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/roadmap",
       "deck_memberships": []
@@ -1240,9 +1241,9 @@
       "scope": "pack",
       "pack": "agent-work-admin",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "path": "packs/agent-work-admin/codex/roadmap/SKILL.md",
-      "content_sha256": "7e18727806e6af2a937e8a910bc2ad45b14c10b0b084d15b1194cd0e88012b3e",
+      "content_sha256": "b21b838e928d3e060f84864824ec7dcadc8d1fad9e0d80d4c4da8a729141ccff",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1251,7 +1252,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$roadmap",
       "deck_memberships": []
@@ -1436,11 +1438,12 @@
       "scope": "pack",
       "pack": "alignment-page-admin",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/alignment-page-admin/claude/upgrade-alignment-pages/SKILL.md",
-      "content_sha256": "7c6e050c95f3dbaa507dda6210ec18eb6f097d5dc2e2fd6fade07d81bc5d80f1",
+      "content_sha256": "15a286c13570ec55887f75dca00792bf2eabe24c35ce48df6ebe5ef64d8c0c8f",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/upgrade-alignment-pages",
       "deck_memberships": []
@@ -1467,11 +1470,12 @@
       "scope": "pack",
       "pack": "alignment-page-admin",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/alignment-page-admin/codex/upgrade-alignment-pages/SKILL.md",
-      "content_sha256": "048e4d3a30f55bdf1465ebd6f654d4c367e5341f84fc63e4b342b390308d6291",
+      "content_sha256": "054e5e473cf349137639076a60a9b1443f8bd47ecd9358a86728fd9f0ee80e4c",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$upgrade-alignment-pages",
       "deck_memberships": []

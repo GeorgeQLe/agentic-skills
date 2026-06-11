@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-11 — Skillpacks manifest refresh after alignment contract updates
+
+- Resumed the earlier `$exec phase 3` request after the repository had already advanced past Skillpacks npm Phase 3, Phase 4, and Phase 5.
+- Confirmed the Phase 3 Node port is already present in history and code: package tests cover Node-owned install/remove/refresh, project config, lock handling, pin/unpin, doctor, prune, and normalization behavior.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json` after later alignment-page skill version bumps made the package manifest stale.
+- Captured the visible `$exec phase 3` prompt under `prompts/exec/skill-prompt-20260609-143214-phase-3.md`.
+- Validation passed: `npm --workspace skillpacks run test:node` (38/38), `npm --workspace skillpacks run build:check`, and `npm --workspace skillpacks run pack:dry-run`.
+- Main working tree note: the original checkout still has unrelated unresolved conflicts in `alignment/skillmap.html`, `docs/skillmap.excalidraw`, `tasks/roadmap.md`, and `tasks/todo.md`; this manifest refresh shipped from a clean temporary worktree to avoid resolving unrelated user changes.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-manifest-refresh.md`.
+
 ## 2026-06-11 - Skillpacks CLI routing P2 devtool remediation
 
 - Updated the devtool P2 bucket from `research/skillpack-cli-routing-audit.md`: mirrored `devtool-adoption`, `devtool-dx-journey`, `devtool-integration-map`, `devtool-monetization`, `devtool-positioning`, `devtool-user-map`, and `devtool-workflow` now include `npx skillpacks install ...` alternatives while preserving Claude `/pack install`, Codex `$pack install`, and source-checkout `scripts/pack.sh install devtool` routes where valid.
