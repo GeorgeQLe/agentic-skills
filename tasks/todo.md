@@ -1,3 +1,54 @@
+## Current Implementation - Local Merge Conflict Resolution
+
+### Goal
+
+Resolve local merge conflicts from the upstream/stashed-change integration without losing the current generated skillmap inventory, then verify and ship the intended tracked changes.
+
+### Execution Profile
+
+- Parallel mode: parallel reads and validation scans; serial conflict resolution, generated artifact refresh, task docs, and shipping.
+- Rationale: the conflicts were limited to generated skillmap artifacts and task state, so the safest path was to preserve upstream task docs, regenerate generated files from current source, and avoid unrelated untracked local pages.
+
+### Steps
+
+- [x] Capture the visible `$exec resolve local merge conflicts` invocation under `prompts/exec/`.
+- [x] Inspect unmerged stages and confirm the task-doc conflicts were stale stash snippets versus current upstream state.
+- [x] Resolve `tasks/roadmap.md` and `tasks/todo.md` to the upstream side.
+- [x] Regenerate `docs/skillmap.excalidraw` and `alignment/skillmap.html` from `scripts/generate-skillmap-excalidraw.mjs`.
+- [x] Re-anchor the local branch on `origin/master` after confirming the pulled package manifest change was already upstream.
+- [x] Preserve sketchy rectangles/arrows in the generator while keeping text clean in Excalidraw output.
+- [x] Run conflict-marker, unmerged-path, syntax, generated-output, Excalidraw-shape, scoped alignment-page, and whitespace checks.
+- [x] Record review notes, history, and ship manifest.
+- [x] Commit and push intended files on the primary branch.
+
+### Acceptance Criteria
+
+- No unmerged paths or conflict markers remain.
+- Task docs preserve current upstream state instead of reintroducing stale stashed snippets.
+- Skillmap generated artifacts reflect the current source inventory, including `poketowork-kanban` containing `poketo-kanban`.
+- Excalidraw text remains clean while rectangles and arrows use sketchy styling.
+- Alignment-page validation passes for the tracked `alignment/skillmap.html` boundary.
+- Unrelated untracked local pages remain outside the shipping boundary.
+
+### Review Notes
+
+- Resolved all local merge conflicts. `tasks/roadmap.md` and `tasks/todo.md` matched upstream after resolution, so no task-doc conflict content was carried forward from the stale stash.
+- Regenerated `docs/skillmap.excalidraw` and `alignment/skillmap.html`; the map now reports 158 repo-managed Claude pack roots and includes `poketowork-kanban` -> `poketo-kanban`.
+- Updated `scripts/generate-skillmap-excalidraw.mjs` so Excalidraw rectangles/arrows and SVG shapes get sketch styling, while text elements keep `roughness: 0`.
+- Left unrelated untracked local files unstaged: `alignment/analyze-sessions-afps-workflow-patterns.html`, `alignment/uat-card-pack-migration.html`, and `prompts/analyze-sessions/skill-prompt-20260609-120000-afps-workflow-patterns.md`.
+- Validation passed:
+  - `node scripts/generate-skillmap-excalidraw.mjs`
+  - `node --check scripts/generate-skillmap-excalidraw.mjs`
+  - Excalidraw JSON structural check for clean text and sketchy rectangle/arrow elements
+  - `rg -n '^(<<<<<<<|=======|>>>>>>>)' alignment/skillmap.html docs/skillmap.excalidraw tasks/roadmap.md tasks/todo.md` returned no matches
+  - `git diff --name-only --diff-filter=U` returned no unmerged paths
+  - `git diff --check`
+  - scoped clean-worktree `node scripts/audit-alignment-pages.mjs` passed with only this skillmap patch applied
+- The primary worktree `node scripts/audit-alignment-pages.mjs` run remains blocked by unrelated untracked alignment pages that are missing TTS includes, page metadata, and index entries; those pages were not part of this conflict-resolution boundary.
+- Ship manifest: `tasks/ship-manifest-2026-06-11-local-merge-conflicts.md`.
+
+---
+
 ## Current Implementation - Alignment Compile Responses Convention
 
 ### Goal

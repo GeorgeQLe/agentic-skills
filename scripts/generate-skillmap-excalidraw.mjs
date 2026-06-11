@@ -125,7 +125,7 @@ function makeRect(id, x, y, w, h, opts = {}) {
     fillStyle: 'solid',
     strokeWidth: opts.strokeWidth || 1,
     strokeStyle: opts.strokeStyle || 'solid',
-    roughness: 0,
+    roughness: 1,
     opacity: 100,
     groupIds: opts.groupIds || [],
     frameId: null,
@@ -200,7 +200,7 @@ function makeArrow(id, points, opts = {}) {
     fillStyle: 'solid',
     strokeWidth: opts.strokeWidth || 2,
     strokeStyle: opts.strokeStyle || 'solid',
-    roughness: 0,
+    roughness: 1,
     opacity: 100,
     groupIds: [],
     frameId: null,
@@ -668,7 +668,8 @@ function generateAlignmentHTML() {
     maxX = Math.max(maxX, p.x + p.w + 40);
   }
 
-  const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${maxX} ${y}" width="100%" height="auto" style="background:#0d1117;border-radius:8px">${svgContent}</svg>`;
+  const sketchDefs = `<defs><filter id="sketchy" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="3" seed="2" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/></filter></defs><style>rect,line,polygon{filter:url(#sketchy)}</style>`;
+  const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${maxX} ${y}" width="100%" height="auto" style="background:#0d1117;border-radius:8px">${sketchDefs}${svgContent}</svg>`;
 
   // Domain legend data
   const legendDomains = [
