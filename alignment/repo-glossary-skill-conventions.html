@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="document">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repo Glossary — Skill Conventions Vocabulary — Scope Review</title>
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;}
+main{max-width:1180px;margin:0 auto;padding:32px 20px 64px;overflow-wrap:break-word;}
+h1,h2,h3{color:#fff;line-height:1.2;} h2{border-top:1px solid var(--border);padding-top:28px;margin-top:32px;color:var(--accent);}
+a{color:var(--accent);} code,pre{background:#111827;border:1px solid var(--border);border-radius:6px;} code{padding:1px 5px;} pre{padding:16px;overflow:auto;white-space:pre-wrap;}
+.toc,.summary,.gate,.question,.section-feedback,.compile,.status{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin:16px 0;}
+.toc ul{columns:2;} .muted{color:var(--text-muted);} .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:4px 10px;margin:2px;color:var(--text-muted);}
+table{width:100%;border-collapse:collapse;} th,td{border:1px solid var(--border);padding:10px;vertical-align:top;} th{background:var(--surface);color:#fff;text-align:left;}
+.table-wrap{overflow-x:auto;margin:12px 0;} label{display:block;min-height:44px;padding:10px 16px;margin:6px 0;border:1px solid var(--border);border-radius:6px;background:#0f1520;} input[type="radio"]{margin-right:8px;}
+.question{background:#1c2333;border-color:var(--purple);} .question p{margin-top:0;color:#fff;}
+textarea{box-sizing:border-box;width:100%;min-height:86px;margin-top:8px;background:#0f1520;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font:inherit;}
+button{min-height:44px;padding:10px 16px;margin:8px 8px 8px 0;background:#1f6feb;color:#fff;border:1px solid #388bfd;border-radius:6px;cursor:pointer;} button.secondary{background:#21262d;border-color:var(--border);}
+.section-feedback{border-color:#26384f;} .section-feedback > span{display:block;color:var(--text-muted);margin-bottom:6px;} .yaml-output{min-height:120px;}
+.section-feedback label{display:inline-block;margin-right:6px;}
+label.active-emphasize{border-color:var(--green);color:var(--green);} label.active-down{border-color:var(--red);color:var(--red);} label.active-needs-clarification{border-color:var(--orange);color:var(--orange);}
+.status strong{color:var(--purple);} .count-grid{display:grid;grid-template-columns:repeat(4,minmax(min(210px,100%),1fr));gap:10px;} .metric{background:#0f1520;border:1px solid var(--border);border-radius:8px;padding:14px;}
+.flexhead{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+@media (max-width:860px){.toc ul{columns:1;} .count-grid{grid-template-columns:repeat(2,minmax(min(210px,100%),1fr));}}
+@media (max-width:560px){main{padding:20px 12px 48px;} .count-grid{grid-template-columns:1fr;} th,td{padding:8px;}}
+</style>
+</head>
+<body><main>
+<h1>Repo Glossary — Skill Conventions Vocabulary — Scope Review</h1>
+<div class="status"><strong>alignment_status:</strong> review (Stage 1 of 3 — research-scope approval)<br><strong>approval state:</strong> waiting for feedback-only YAML or final compiled YAML<br><strong>blocked until final approval:</strong> synthesized research, working-packet regeneration, canonical <code>research/glossary.md</code> writes, archival of the stale 2026-06-05 run</div>
+
+<section class="summary" id="summary"><h2>Summary</h2>
+<div class="section-feedback" data-section="Summary" id="fb-summary"><span>Section feedback</span><label><input type="radio" name="fb-summary" value="emphasize" data-feedback-section="Summary"> Emphasize</label><label><input type="radio" name="fb-summary" value="down" data-feedback-section="Summary"> Flag concern</label><label><input type="radio" name="fb-summary" value="needs-clarification" data-feedback-section="Summary"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-summary" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('summary')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('summary')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-summary"></textarea></div></div>
+<p>This Stage 1 page proposes the research scope for a bootstrap glossary audit. The user asked for an audit of <em>all conventions, stages, phases, and steps involved with the skills</em> and for the glossary to be updated with those terms so skill language and function stay consistent. No <code>research/glossary.md</code> exists anywhere in the repo, so this run operates in bootstrap mode: every discovered term will be a proposed addition. A prior <code>repo-glossary</code> run (2026-06-05) stalled at Stage 2 with an unapproved 36-term working packet whose scope is now stale — it predates the <code>skills-showcase</code> product path and the newest convention docs. This run proposes to merge and supersede it.</p>
+<div class="count-grid"><div class="metric"><strong>25</strong><br>docs/*.md convention &amp; reference docs</div><div class="metric"><strong>39</strong><br>packs/*/PACK.md</div><div class="metric"><strong>13</strong><br>research markdown docs (11 flat + 2 scoped)</div><div class="metric"><strong>193</strong><br>canonical claude SKILL.md files (frontmatter vocabulary)</div></div>
+<div class="count-grid" style="margin-top:10px"><div class="metric"><strong>36 + 14</strong><br>terms + acronyms in stale 2026-06-05 draft</div><div class="metric"><strong>0</strong><br>existing glossary terms (bootstrap mode)</div><div class="metric"><strong>1</strong><br>active product path (skills-showcase)</div><div class="metric"><strong>8</strong><br>required scope questions on this page</div></div>
+</section>
+
+<section class="toc" id="toc"><h2>Table of Contents</h2><ul>
+<li><a href="#scope-resolution">Product-Path Scope Resolution</a></li>
+<li><a href="#research-scope">Proposed Research Scope &amp; Non-Goals</a></li>
+<li><a href="#source-plan">Source Plan</a></li>
+<li><a href="#prior-run">Prior Run &amp; Supersession</a></li>
+<li><a href="#assumptions">Assumptions &amp; Confidence</a></li>
+<li><a href="#glossary-format">Glossary Format &amp; Hierarchy</a></li>
+<li><a href="#artifact-destination">Artifact Destination</a></li>
+<li><a href="#file-changes">Proposed File Changes</a></li>
+<li><a href="#compile">Compile YAML</a></li>
+</ul></section>
+
+<section class="gate" id="scope-resolution"><h2>Product-Path Scope Resolution</h2>
+<div class="section-feedback" data-section="Product-Path Scope Resolution" id="fb-scope-resolution"><span>Section feedback</span><label><input type="radio" name="fb-scope-resolution" value="emphasize" data-feedback-section="Product-Path Scope Resolution"> Emphasize</label><label><input type="radio" name="fb-scope-resolution" value="down" data-feedback-section="Product-Path Scope Resolution"> Flag concern</label><label><input type="radio" name="fb-scope-resolution" value="needs-clarification" data-feedback-section="Product-Path Scope Resolution"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-scope-resolution" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('scope-resolution')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('scope-resolution')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-scope-resolution"></textarea></div></div>
+<p><strong>Scope evidence</strong> (not findings): <code>research/.progress.yaml</code> declares exactly one active product path, <code>skills-showcase</code> (Skills Showcase Deck-Builder, <code>scope_path: research/skills-showcase/</code>, stage <code>idea-scope-brief</code>). No glossary file exists at <code>research/glossary.md</code>, <code>research/skills-showcase/glossary.md</code>, or anywhere else in the repo (verified by repo-wide search). The term corpus for this audit is repo-level — CLAUDE.md, convention docs, pack manifests, and SKILL.md files — not product-path research, so this run resolves to <strong>cross-path parent-glossary mode</strong>: the write target is the parent <code>research/glossary.md</code>.</p>
+<div class="question" id="qwrap-scope-mode" data-question-block><p><strong>Q1 — Confirm scope resolution: target the parent glossary in cross-path mode?</strong></p>
+<label><input type="radio" name="scope-mode" value="parent" data-required="true" data-section="Product-Path Scope Resolution" data-gate-type="product-path scope" data-answer="Cross-path parent mode — target research/glossary.md (recommended)" data-target-path="research/glossary.md"> Cross-path parent mode — target <code>research/glossary.md</code> (Recommended: the corpus is repo-level convention vocabulary shared by all paths)</label>
+<label><input type="radio" name="scope-mode" value="scoped" data-required="true" data-section="Product-Path Scope Resolution" data-gate-type="product-path scope" data-answer="Scoped mode — target research/skills-showcase/glossary.md" data-target-path="research/skills-showcase/glossary.md"> Scoped mode — target <code>research/skills-showcase/glossary.md</code> instead</label>
+<label><input type="radio" name="scope-mode" value="other" data-required="true" data-section="Product-Path Scope Resolution" data-gate-type="product-path scope" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="scope-mode" value="needs-clarification" data-required="true" data-section="Product-Path Scope Resolution" data-gate-type="product-path scope" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="scope-mode" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="research-scope"><h2>Proposed Research Scope &amp; Non-Goals</h2>
+<div class="section-feedback" data-section="Proposed Research Scope" id="fb-research-scope"><span>Section feedback</span><label><input type="radio" name="fb-research-scope" value="emphasize" data-feedback-section="Proposed Research Scope"> Emphasize</label><label><input type="radio" name="fb-research-scope" value="down" data-feedback-section="Proposed Research Scope"> Flag concern</label><label><input type="radio" name="fb-research-scope" value="needs-clarification" data-feedback-section="Proposed Research Scope"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-research-scope" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('research-scope')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('research-scope')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-research-scope"></textarea></div></div>
+<p>Extract, define, and propose for glossary approval the project-specific vocabulary a reader needs to understand how skills work, with emphasis on the lifecycle words the user named (conventions, stages, phases, steps). Candidate term families to research in Stage 2 (these are scope candidates, not conclusions):</p>
+<div class="table-wrap" data-tts-narrative="A table listing nine candidate term families for Stage 2 research, from lifecycle units through glossary-system vocabulary, with example terms for each."><table><thead><tr><th>Term family</th><th>Example candidate terms</th></tr></thead><tbody>
+<tr><td>Lifecycle units</td><td>Stage (staged research workflow 1–3), Step (skill-internal procedure), Phase (roadmap/plan + interview phases), Mode (operating, operational, detection)</td></tr>
+<tr><td>Alignment &amp; approval artifacts</td><td>Alignment page, review/confirmed/amended, working packet, gate, compiled YAML vs feedback-only YAML, visual tier, archive-first</td></tr>
+<tr><td>Interview vocabulary</td><td>Interview depth (full/light/none), assumptions manifest, coverage checkpoint, findings validation, Manifest Visibility Rule</td></tr>
+<tr><td>Quality &amp; shipping</td><td>Quality gate, ship manifest, shipping contract, residual risk, adversarial review, report-first approval gate</td></tr>
+<tr><td>Orchestration</td><td>Orchestrator, framework sub-skill, intent router, play, synthesis mode, invocation type (primary/chained/sub-skill/orchestrator)</td></tr>
+<tr><td>Packs &amp; distribution</td><td>Pack, deck, overlay pack, drift, pinning, managed marker, install routes (in-agent / project shell / source-checkout / deck)</td></tr>
+<tr><td>Operating model</td><td>Operating mode (claude-only/codex-only/hybrid), approval packet lifecycle (draft/approved/consumed/stale/superseded), pack emphasis</td></tr>
+<tr><td>Product workflow</td><td>AFPS, prototype gate, canonical product route, product path, execution profile, fork detection</td></tr>
+<tr><td>Glossary system</td><td>Write-forward, shadowed term, confirmed-override, scoped vs parent glossary, Scope column, bootstrap mode</td></tr>
+</tbody></table></div>
+<p><strong>Also in scope:</strong> re-validating the 36 terms and 14 acronyms from the stale 2026-06-05 draft against current docs, and the 3 terminology conflicts it flagged. Term-name overloads found during research (e.g. multiple meanings of "phase", "mode", "gate", "manifest") will be surfaced as conflicting-term entries with disambiguated definitions.</p>
+<p><strong>Non-goals:</strong> no edits to source docs, SKILL.md files, or conventions (report-and-glossary only); no renaming or reconciling of inconsistent vocabulary in skills (that is follow-up work the glossary enables); no scoped <code>skills-showcase</code> glossary creation unless selected in Q6.</p>
+<div class="question" id="qwrap-research-scope" data-question-block><p><strong>Q2 — Approve the research scope?</strong></p>
+<label><input type="radio" name="research-scope" value="full" data-required="true" data-section="Proposed Research Scope" data-gate-type="research scope" data-answer="Approve full scope: convention/lifecycle vocabulary plus re-validation of the 2026-06-05 draft terms"> Approve full scope — convention &amp; lifecycle vocabulary plus re-validation of the prior draft's 36 terms + 14 acronyms (Recommended)</label>
+<label><input type="radio" name="research-scope" value="conventions-only" data-required="true" data-section="Proposed Research Scope" data-gate-type="research scope" data-answer="Conventions-only: research new convention/lifecycle terms; carry prior draft terms forward unreviewed as proposed"> Conventions-only — research the new term families; carry prior draft terms forward as-is</label>
+<label><input type="radio" name="research-scope" value="other" data-required="true" data-section="Proposed Research Scope" data-gate-type="research scope" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="research-scope" value="needs-clarification" data-required="true" data-section="Proposed Research Scope" data-gate-type="research scope" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="research-scope" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="source-plan"><h2>Source Plan</h2>
+<div class="section-feedback" data-section="Source Plan" id="fb-source-plan"><span>Section feedback</span><label><input type="radio" name="fb-source-plan" value="emphasize" data-feedback-section="Source Plan"> Emphasize</label><label><input type="radio" name="fb-source-plan" value="down" data-feedback-section="Source Plan"> Flag concern</label><label><input type="radio" name="fb-source-plan" value="needs-clarification" data-feedback-section="Source Plan"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-source-plan" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('source-plan')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('source-plan')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-source-plan"></textarea></div></div>
+<div class="table-wrap" data-tts-narrative="A table of seven source classes planned for Stage 2 term extraction, covering agent contracts, convention docs, pack manifests, skill frontmatter, enforcement scripts, research docs, and the prior draft."><table><thead><tr><th>Source class</th><th>Count</th><th>What gets extracted</th></tr></thead><tbody>
+<tr><td>Root agent contracts</td><td>2</td><td><code>CLAUDE.md</code>, <code>AGENTS.md</code> — shared skill conventions, glossary/shipping/scope rules</td></tr>
+<tr><td>Convention &amp; reference docs <code>docs/*.md</code></td><td>25</td><td>Named stages/phases/steps/gates/tiers/modes, contract terms, taxonomy values (incl. <code>alignment-page-convention</code>, <code>interview-convention</code>, <code>orchestrator-convention</code>, <code>quality-gate-contract</code>, <code>operating-modes</code>, <code>skill-anatomy</code>, <code>decks</code>, <code>packs</code>)</td></tr>
+<tr><td>Pack manifests <code>packs/*/PACK.md</code></td><td>39</td><td>Pack names, domain/overlay roles, pack-specific jargon</td></tr>
+<tr><td>SKILL.md frontmatter &amp; shared sections</td><td>193</td><td>Field vocabulary (<code>type</code>, <code>invocation</code>, <code>interview_depth</code>, <code>visual_tier</code>, <code>parent</code>) and observed values; shared section names (Staged Research Workflow, Report-First Approval Gate, Pack Availability Guard)</td></tr>
+<tr><td>Enforcement scripts <code>scripts/</code></td><td>~18</td><td>Diagnostic vocabulary (drift states, lifecycle categories, manifest fields) — names only, no execution</td></tr>
+<tr><td>Research docs <code>research/*.md</code> + <code>research/skills-showcase/*.md</code></td><td>13</td><td>Domain terms introduced by past research skills (read-only)</td></tr>
+<tr><td>Prior draft</td><td>1</td><td><code>research/_working/preliminary-repo-glossary-research.md</code> (2026-06-05) — 36 terms, 14 acronyms, 3 conflicts to re-validate</td></tr>
+</tbody></table></div>
+<div class="question" id="qwrap-source-plan" data-question-block><p><strong>Q3 — Approve the source plan?</strong></p>
+<label><input type="radio" name="source-plan" value="approve" data-required="true" data-section="Source Plan" data-gate-type="source plan" data-answer="Approve all seven source classes"> Approve all seven source classes (Recommended)</label>
+<label><input type="radio" name="source-plan" value="trim" data-required="true" data-section="Source Plan" data-gate-type="source plan" data-answer="Trim source classes (see notes)"> Trim — drop or limit classes named in notes</label>
+<label><input type="radio" name="source-plan" value="other" data-required="true" data-section="Source Plan" data-gate-type="source plan" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="source-plan" value="needs-clarification" data-required="true" data-section="Source Plan" data-gate-type="source plan" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="source-plan" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="prior-run"><h2>Prior Run &amp; Supersession</h2>
+<div class="section-feedback" data-section="Prior Run &amp; Supersession" id="fb-prior-run"><span>Section feedback</span><label><input type="radio" name="fb-prior-run" value="emphasize" data-feedback-section="Prior Run &amp; Supersession"> Emphasize</label><label><input type="radio" name="fb-prior-run" value="down" data-feedback-section="Prior Run &amp; Supersession"> Flag concern</label><label><input type="radio" name="fb-prior-run" value="needs-clarification" data-feedback-section="Prior Run &amp; Supersession"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-prior-run" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('prior-run')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('prior-run')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-prior-run"></textarea></div></div>
+<p>The 2026-06-05 run left two active artifacts that this run would supersede:</p>
+<div class="table-wrap" data-tts-narrative="A table of the two stale artifacts from the 2026-06-05 run: the unapproved working packet and its Stage 2 review page, with why each is stale."><table><thead><tr><th>Stale artifact</th><th>State</th><th>Why stale</th></tr></thead><tbody>
+<tr><td><code>research/_working/preliminary-repo-glossary-research.md</code></td><td>Unapproved Stage 2 working packet</td><td>Declares "no <code>.progress.yaml</code>, no product paths" — both now false; misses newer convention docs (interview, orchestrator, decks, install-routing) and all lifecycle vocabulary</td></tr>
+<tr><td><code>alignment/repo-glossary-flat-research.html</code></td><td>Review page stalled awaiting approval</td><td>Renders the stale packet; scope resolution ("flat research/ mode") no longer matches the repo</td></tr>
+</tbody></table></div>
+<p>Proposal: when the Stage 2 packet is regenerated, archive the stale review page to <code>docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/repo-glossary-flat-research.html</code>, remove its index entry, and regenerate the working packet at the same path (its prior content is merged, so nothing is lost). Per the archive-first rule nothing is deleted — both artifacts remain retrievable from the archive.</p>
+<div class="question" id="qwrap-prior-run" data-question-block><p><strong>Q4 — Supersede the stale 2026-06-05 artifacts?</strong></p>
+<label><input type="radio" name="prior-run" value="supersede" data-required="true" data-section="Prior Run &amp; Supersession" data-gate-type="prior-run supersession" data-answer="Supersede: merge prior draft, regenerate packet, archive stale review page at Stage 2" data-target-path="docs/history/archive"> Supersede — merge the draft, regenerate the packet, archive the stale page (Recommended)</label>
+<label><input type="radio" name="prior-run" value="keep" data-required="true" data-section="Prior Run &amp; Supersession" data-gate-type="prior-run supersession" data-answer="Keep both stale artifacts active alongside the new run"> Keep both stale artifacts active alongside this run</label>
+<label><input type="radio" name="prior-run" value="other" data-required="true" data-section="Prior Run &amp; Supersession" data-gate-type="prior-run supersession" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="prior-run" value="needs-clarification" data-required="true" data-section="Prior Run &amp; Supersession" data-gate-type="prior-run supersession" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="prior-run" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="assumptions"><h2>Assumptions &amp; Confidence</h2>
+<div class="section-feedback" data-section="Assumptions &amp; Confidence" id="fb-assumptions"><span>Section feedback</span><label><input type="radio" name="fb-assumptions" value="emphasize" data-feedback-section="Assumptions &amp; Confidence"> Emphasize</label><label><input type="radio" name="fb-assumptions" value="down" data-feedback-section="Assumptions &amp; Confidence"> Flag concern</label><label><input type="radio" name="fb-assumptions" value="needs-clarification" data-feedback-section="Assumptions &amp; Confidence"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-assumptions" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('assumptions')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('assumptions')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-assumptions"></textarea></div></div>
+<div class="table-wrap" data-tts-narrative="A register of five scope assumptions with their source tags and confidence levels, all high or medium confidence."><table><thead><tr><th>#</th><th>Assumption</th><th>Source</th><th>Confidence</th></tr></thead><tbody>
+<tr><td>1</td><td>Bootstrap mode is correct — no glossary file exists anywhere in the repo</td><td>[from repo] repo-wide filename search</td><td>High</td></tr>
+<tr><td>2</td><td>The user's goal is reader understanding plus future language consistency, so lifecycle/convention vocabulary (Stage, Phase, Step, Gate, Mode, tiers) belongs in the glossary alongside domain terms</td><td>[from prompt] "help me understand … make our skills consistent in language and function"</td><td>Medium</td></tr>
+<tr><td>3</td><td>Single active product path ⇒ the parent glossary should omit the Scope column until a second path activates</td><td>[from repo] <code>research/.progress.yaml</code>; CLAUDE.md Glossary Convention</td><td>High</td></tr>
+<tr><td>4</td><td>The 2026-06-05 draft's terms are mostly still valid but need re-validation against docs added or changed since (interview/orchestrator/decks/install-routing conventions)</td><td>[from repo] draft date vs doc modification dates</td><td>Medium</td></tr>
+<tr><td>5</td><td>The in-flight staged changes from another session (creator-foundation v0.5 bumps + ship manifest awaiting <code>/ship</code>) are out of scope and must not be committed by this run</td><td>[from git] staged tree + <code>tasks/ship-manifest-2026-06-11-…</code></td><td>High</td></tr>
+</tbody></table></div>
+<div class="question" id="qwrap-assumptions" data-question-block><p><strong>Q5 — Is the assumptions register accurate?</strong></p>
+<label><input type="radio" name="assumptions" value="confirm" data-required="true" data-section="Assumptions &amp; Confidence" data-gate-type="assumptions/confidence" data-answer="Confirm all five assumptions"> Confirm all five assumptions (Recommended)</label>
+<label><input type="radio" name="assumptions" value="correct" data-required="true" data-section="Assumptions &amp; Confidence" data-gate-type="assumptions/confidence" data-answer="Correct one or more assumptions (see notes)"> Correct one or more — details in notes</label>
+<label><input type="radio" name="assumptions" value="other" data-required="true" data-section="Assumptions &amp; Confidence" data-gate-type="assumptions/confidence" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="assumptions" value="needs-clarification" data-required="true" data-section="Assumptions &amp; Confidence" data-gate-type="assumptions/confidence" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="assumptions" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="glossary-format"><h2>Glossary Format &amp; Hierarchy</h2>
+<div class="section-feedback" data-section="Glossary Format &amp; Hierarchy" id="fb-glossary-format"><span>Section feedback</span><label><input type="radio" name="fb-glossary-format" value="emphasize" data-feedback-section="Glossary Format &amp; Hierarchy"> Emphasize</label><label><input type="radio" name="fb-glossary-format" value="down" data-feedback-section="Glossary Format &amp; Hierarchy"> Flag concern</label><label><input type="radio" name="fb-glossary-format" value="needs-clarification" data-feedback-section="Glossary Format &amp; Hierarchy"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-glossary-format" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('glossary-format')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('glossary-format')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-glossary-format"></textarea></div></div>
+<p>Proposed format: the standard glossary header with Terms (<code>| Term | Definition | Source | Category | Status |</code>), Acronyms, and Recently Added tables. With one active product path the Scope column is omitted; it gets added when a second path activates. The scoped <code>research/skills-showcase/glossary.md</code> is <em>not</em> created in this run — it inherits the parent automatically and gets created the first time a skills-showcase research skill writes a scoped term.</p>
+<div class="question" id="qwrap-glossary-format" data-question-block><p><strong>Q6 — Approve the glossary format plan?</strong></p>
+<label><input type="radio" name="glossary-format" value="flat-parent" data-required="true" data-section="Glossary Format &amp; Hierarchy" data-gate-type="glossary format" data-answer="Parent glossary without Scope column; no scoped glossary yet" data-target-path="research/glossary.md"> Parent glossary without Scope column; defer the scoped glossary (Recommended)</label>
+<label><input type="radio" name="glossary-format" value="with-scope" data-required="true" data-section="Glossary Format &amp; Hierarchy" data-gate-type="glossary format" data-answer="Include the Scope column now" data-target-path="research/glossary.md"> Include the Scope column now (anticipating more product paths)</label>
+<label><input type="radio" name="glossary-format" value="also-scoped" data-required="true" data-section="Glossary Format &amp; Hierarchy" data-gate-type="glossary format" data-answer="Also create empty scoped research/skills-showcase/glossary.md" data-target-path="research/skills-showcase/glossary.md"> Also scaffold an empty <code>research/skills-showcase/glossary.md</code> now</label>
+<label><input type="radio" name="glossary-format" value="other" data-required="true" data-section="Glossary Format &amp; Hierarchy" data-gate-type="glossary format" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="glossary-format" value="needs-clarification" data-required="true" data-section="Glossary Format &amp; Hierarchy" data-gate-type="glossary format" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="glossary-format" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="artifact-destination"><h2>Artifact Destination</h2>
+<div class="section-feedback" data-section="Artifact Destination" id="fb-artifact-destination"><span>Section feedback</span><label><input type="radio" name="fb-artifact-destination" value="emphasize" data-feedback-section="Artifact Destination"> Emphasize</label><label><input type="radio" name="fb-artifact-destination" value="down" data-feedback-section="Artifact Destination"> Flag concern</label><label><input type="radio" name="fb-artifact-destination" value="needs-clarification" data-feedback-section="Artifact Destination"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-artifact-destination" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('artifact-destination')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('artifact-destination')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-artifact-destination"></textarea></div></div>
+<div class="table-wrap" data-tts-narrative="A table mapping each pipeline stage to its artifact destination: this scope page, the Stage 2 working packet, and the Stage 3 canonical glossary."><table><thead><tr><th>Artifact</th><th>Path</th><th>Written at</th></tr></thead><tbody>
+<tr><td>Scope/review alignment page</td><td><code>alignment/repo-glossary-skill-conventions.html</code> (this page; updated in place at Stage 2, converted to confirmed at Stage 3)</td><td>Stage 1 (now)</td></tr>
+<tr><td>Working packet (non-canonical)</td><td><code>research/_working/preliminary-repo-glossary-research.md</code> (regenerated, merging the 2026-06-05 draft)</td><td>Stage 2</td></tr>
+<tr><td>Canonical glossary</td><td><code>research/glossary.md</code> (new file, bootstrap)</td><td>Stage 3, after final approval</td></tr>
+</tbody></table></div>
+<div class="question" id="qwrap-artifact-destination" data-question-block><p><strong>Q7 — Approve these artifact destinations?</strong></p>
+<label><input type="radio" name="artifact-destination" value="approve" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Approve all three artifact destinations" data-target-path="research/glossary.md"> Approve all three destinations (Recommended)</label>
+<label><input type="radio" name="artifact-destination" value="change" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Change one or more destinations (see notes)"> Change one or more — details in notes</label>
+<label><input type="radio" name="artifact-destination" value="other" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="artifact-destination" value="needs-clarification" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="artifact-destination" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="gate" id="file-changes"><h2>Proposed File Changes</h2>
+<div class="section-feedback" data-section="Proposed File Changes" id="fb-file-changes"><span>Section feedback</span><label><input type="radio" name="fb-file-changes" value="emphasize" data-feedback-section="Proposed File Changes"> Emphasize</label><label><input type="radio" name="fb-file-changes" value="down" data-feedback-section="Proposed File Changes"> Flag concern</label><label><input type="radio" name="fb-file-changes" value="needs-clarification" data-feedback-section="Proposed File Changes"> Clarification needed</label><div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-file-changes" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('file-changes')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('file-changes')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-file-changes"></textarea></div></div>
+<p>Downstream mutation scope across the remaining stages. Already written in Stage 1: this page, its <code>alignment/index.html</code> entry, and the prompt-history capture <code>prompts/repo-glossary/skill-prompt-20260610-223754-skill-conventions-audit.md</code> (committed on <code>master</code> per the shipping contract, excluding the other session's staged work).</p>
+<div class="table-wrap" data-tts-narrative="A table of six allowed file mutations across Stages 2 and 3, including page updates, packet regeneration, archive moves, the new glossary, and index updates. Source docs are never modified."><table><thead><tr><th>Stage</th><th>Mutation</th></tr></thead><tbody>
+<tr><td>Stage 2</td><td>Update this alignment page in place with full findings + per-term gates (with diff highlighting)</td></tr>
+<tr><td>Stage 2</td><td>Regenerate <code>research/_working/preliminary-repo-glossary-research.md</code> (merged content)</td></tr>
+<tr><td>Stage 2</td><td>Archive <code>alignment/repo-glossary-flat-research.html</code> → <code>docs/history/archive/…</code>; update <code>alignment/index.html</code> (if Q4 approves supersession)</td></tr>
+<tr><td>Stage 3</td><td>Write <code>research/glossary.md</code> with user-approved terms only; archive + remove the working packet</td></tr>
+<tr><td>Stage 3</td><td>Convert this page to <code>confirmed</code>; refresh its index entry date</td></tr>
+<tr><td>All</td><td>Commit and push each stage's files on <code>master</code>, never including the other session's staged creator-foundation work. <strong>Never modified:</strong> source docs, SKILL.md files, research docs, conventions</td></tr>
+</tbody></table></div>
+<div class="question" id="qwrap-file-changes" data-question-block><p><strong>Q8 — Approve this mutation scope?</strong></p>
+<label><input type="radio" name="file-changes" value="approve" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Approve the full Stage 2 + Stage 3 mutation set"> Approve the full Stage 2 + Stage 3 mutation set (Recommended)</label>
+<label><input type="radio" name="file-changes" value="restrict" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Restrict mutations (see notes)"> Restrict — limits named in notes</label>
+<label><input type="radio" name="file-changes" value="other" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Other / None of the above"> Other / None of the above</label>
+<label><input type="radio" name="file-changes" value="needs-clarification" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Need clarification"> Need clarification</label>
+<textarea class="answer-notes" data-notes-for="file-changes" placeholder="Optional notes, edits, or clarification request"></textarea></div>
+</section>
+
+<section class="compile" id="compile"><h2>Compile YAML</h2>
+<p>Use <strong>Compile Feedback YAML</strong> to send emphasis requests, concerns, or clarification needs before answering every question. Use <strong>Compile Answers</strong> for final research-scope approval once all 8 required questions are answered.</p>
+<p id="remaining" class="muted"></p>
+<div><button type="button" class="secondary" onclick="compileFeedback('all')">Compile Feedback YAML</button><button type="button" onclick="compileAnswers()">Compile Answers</button><button type="button" class="secondary" onclick="copyCompiled()">Copy YAML</button></div>
+<textarea readonly class="yaml-output" id="compiled-yaml" aria-label="Compiled YAML output"></textarea>
+</section>
+
+<script>
+const alignmentPage = 'alignment/repo-glossary-skill-conventions.html';
+function escYaml(s) { s = String(s == null ? '' : s); return JSON.stringify(s); }
+function selectedRequiredGroups() {
+  const names = Array.from(new Set(Array.from(document.querySelectorAll('input[data-required="true"]')).map(i => i.name)));
+  return names.map(name => ({name, checked: document.querySelector('input[name="' + CSS.escape(name) + '"]:checked')}));
+}
+function noteFor(name) {
+  const el = document.querySelector('textarea[data-notes-for="' + CSS.escape(name) + '"]');
+  return el ? el.value.trim() : '';
+}
+function answerObject(group) {
+  const i = group.checked;
+  let status = 'answered';
+  if (i.value === 'other') status = 'other';
+  if (i.value === 'needs-clarification') status = 'needs-clarification';
+  return {section: i.dataset.section, gate_type: i.dataset.gateType, status, answer: i.dataset.answer || i.value, notes: noteFor(group.name), target_path: i.dataset.targetPath || ''};
+}
+function actionFor(v) { return v === 'emphasize' ? 'add-weight-to-section' : (v === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'); }
+function sectionFeedbackObjects(sectionId) {
+  const selected = [];
+  document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+    if (!r.checked) return;
+    const wrapper = r.closest('.section-feedback');
+    if (sectionId !== 'all' && wrapper && wrapper.id !== 'fb-' + sectionId) return;
+    const notes = wrapper ? (wrapper.querySelector('.feedback-notes')?.value.trim() || '') : '';
+    selected.push({section: r.dataset.feedbackSection, feedback: r.value, notes, requested_agent_action: actionFor(r.value)});
+  });
+  return selected;
+}
+function yamlFromFeedback(items) {
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions: ' + selectedRequiredGroups().filter(g => !g.checked).length + '\nsection_feedback:\n';
+  if (!items.length) y += '  []\n';
+  items.forEach(item => {
+    y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n';
+    if (item.feedback === 'emphasize') y += '    intent: "revision request: add more weight, prominence, evidence, or detail to this section or the point named in notes; not approval as-is"\n';
+    else y += '    intent: "revision request: evaluate feedback, investigate when needed, and amend the page before asking again for final approval"\n';
+  });
+  return y;
+}
+function compileFeedback(sectionId) {
+  const yaml = yamlFromFeedback(sectionFeedbackObjects(sectionId));
+  if (sectionId === 'all') { document.getElementById('compiled-yaml').value = yaml; }
+  else { const out = document.getElementById('fb-yaml-' + sectionId); if (out) out.value = yaml; }
+  tryCopy(yaml);
+}
+function compileAnswers() {
+  const groups = selectedRequiredGroups();
+  const missing = groups.filter(g => !g.checked);
+  updateRemaining();
+  if (missing.length) {
+    const el = document.getElementById('qwrap-' + missing[0].name) || document.querySelector('input[name="' + CSS.escape(missing[0].name) + '"]').closest('.question');
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    return;
+  }
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\napproval_status: ready-for-agent-review\nanswers:\n';
+  groups.map(answerObject).forEach(a => {
+    y += '  - section: ' + escYaml(a.section) + '\n    gate_type: ' + escYaml(a.gate_type) + '\n    status: ' + escYaml(a.status) + '\n    answer: ' + escYaml(a.answer) + '\n';
+    if (a.notes) y += '    notes: ' + escYaml(a.notes) + '\n';
+    if (a.target_path) y += '    target_path: ' + escYaml(a.target_path) + '\n';
+  });
+  const fb = sectionFeedbackObjects('all');
+  y += 'section_feedback:\n';
+  if (!fb.length) y += '  []\n';
+  fb.forEach(item => { y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n'; });
+  document.getElementById('compiled-yaml').value = y;
+  tryCopy(y);
+}
+function tryCopy(text) { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => {}); }
+function copyCompiled() { const el = document.getElementById('compiled-yaml'); tryCopy(el.value); el.focus(); el.select(); }
+function copyLocalFeedback(sectionId) { const el = document.getElementById('fb-yaml-' + sectionId); if (el) { tryCopy(el.value); el.focus(); el.select(); } }
+function updateRemaining() {
+  const n = selectedRequiredGroups().filter(g => !g.checked).length;
+  document.getElementById('remaining').textContent = n ? (n + ' required questions unanswered') : 'All required questions answered';
+}
+document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+  r.addEventListener('click', function () {
+    const wrapper = this.closest('.section-feedback');
+    if (this.dataset.wasChecked === 'true') {
+      this.checked = false; this.dataset.wasChecked = 'false';
+      wrapper.querySelector('.fb-body').hidden = true;
+      wrapper.dataset.feedback = '';
+    } else {
+      wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => { o.dataset.wasChecked = 'false'; });
+      this.dataset.wasChecked = 'true';
+      wrapper.querySelector('.fb-body').hidden = false;
+      wrapper.dataset.feedback = this.value;
+      wrapper.classList.add('has-feedback');
+    }
+    wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => {
+      const lbl = o.closest('label');
+      lbl.classList.remove('active-emphasize', 'active-down', 'active-needs-clarification');
+      if (o.checked) lbl.classList.add('active-' + o.value);
+    });
+    if (!wrapper.querySelector('input[data-feedback-section]:checked')) wrapper.classList.remove('has-feedback');
+  });
+});
+document.addEventListener('change', updateRemaining); updateRemaining();
+</script>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body></html>
