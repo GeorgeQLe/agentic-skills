@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-11 — Deck-builder animation approval and routing spike
+
+- Captured the visible `/exec` handoff and final animation-plan approval YAML in `prompts/exec/skill-prompt-20260611-142531-deck-builder-implementation.md` and `prompts/animation-design-planner/skill-prompt-20260611-142531-deck-builder-approval.md`.
+- Finalized the approved deck-builder animation artifact: archived the prior review page, moved the non-canonical working packet out of active research, wrote `apps/skills-showcase/docs/animation-plan-deck-builder.md`, converted `alignment/animation-design-planner-deck-builder-transitions.html` to confirmed, and marked its index entry confirmed.
+- Added a minimal hidden Skills Showcase routing spike at `/prototype/deck-routing-spike` plus `/deck/[slug]` hard-load support to prove the approved plan's load-bearing `window.history.pushState` assumption before building the full deck-builder.
+- Added local Playwright proof tooling and two spike tests for shallow `pushState`/`usePathname`/Back behavior and hard-loaded deck routes.
+- Fixed the initial Playwright finding by moving random mount-id generation out of the server-rendered client tree and asserting stable mount identity rather than an exact dev Strict Mode mount count.
+- Validation passed: Skills Showcase typecheck, production build, unit tests (136 passed), Playwright spike tests (2 passed), active alignment-page audit, and `git diff --check`.
+- Deploy follow-up: no production deploy was run because deployment was explicitly out of scope for the approved spike.
+- Manifest: `tasks/ship-manifest-2026-06-11-deck-builder-routing-spike.md`.
+
 ## 2026-06-11 — Ship-end CLI module and alignment artifact cleanup
 
 - Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260611-131120-ship-end.md`.

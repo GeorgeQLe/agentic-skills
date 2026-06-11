@@ -1,3 +1,77 @@
+## Current Implementation - Deck-Builder Animation Approval And Routing Spike
+
+### Goal
+
+Consume the approved `animation-design-planner` response for the deck-builder transitions, write the canonical animation plan, convert the alignment page to confirmed, then execute only the first implementation spike: prove whether shallow `window.history.pushState` keeps a shared client shell mounted while `usePathname` and `popstate` update correctly on Next 16.2.6.
+
+### Execution Profile
+
+- Parallel mode: parallel reads and validation scans only.
+- Serial mode: artifact finalization, app spike edits, dependency/test wiring, task docs, history, manifest, commit, and push.
+- Rationale: this step touches an approved alignment artifact plus app routing behavior. Keep writes in one coherent boundary so the confirmed approval record, canonical plan, and spike result cannot drift.
+
+### Scope
+
+- Approved artifact finalization:
+  - `apps/skills-showcase/docs/animation-plan-deck-builder.md`
+  - `alignment/animation-design-planner-deck-builder-transitions.html`
+  - `alignment/index.html`
+  - `docs/history/archive/2026-06-11/142531/...`
+  - `research/skills-showcase/_working/preliminary-animation-design-planner-research.md`
+- Prompt history for this invocation:
+  - `prompts/exec/skill-prompt-20260611-142531-deck-builder-implementation.md`
+  - `prompts/animation-design-planner/skill-prompt-20260611-142531-deck-builder-approval.md`
+- Minimal app spike only:
+  - hidden/implementation-spike deck routing surface and local proof hooks
+  - Playwright local proof setup if dependency installation succeeds
+- Out of scope: full deck-builder UI, pack-opening retrofit, card-flight implementation, homepage replacement, production deploy, GitHub Actions, and unrelated P2 install-routing remediation.
+
+### Steps
+
+- [x] Read `$exec`, `animation-design-planner` approval handling, task docs, app docs, and the approved alignment page.
+- [x] Capture the visible invocation under `prompts/exec/` and `prompts/animation-design-planner/`.
+- [x] Record this active roadmap/todo plan before implementation.
+- [x] Archive the current review page and non-canonical working packet under `docs/history/archive/2026-06-11/142531/`.
+- [x] Write the approved canonical animation plan to `apps/skills-showcase/docs/animation-plan-deck-builder.md`.
+- [x] Convert `alignment/animation-design-planner-deck-builder-transitions.html` from `review` to `confirmed`, preserving the approval YAML and replacing active approval controls with read-only decision records.
+- [x] Update `alignment/index.html` so the deck-builder animation entry reflects confirmed status.
+- [x] Add the smallest route spike that can prove shallow `pushState` + `usePathname` + `popstate` behavior with `/deck/[slug]` hard-load support.
+- [x] Add local Playwright proof for the spike if the Playwright dependency can be installed in the app workspace.
+- [x] Run focused validation: typecheck/build or targeted app tests, Playwright spike test when available, alignment-page audit, and `git diff --check`.
+- [x] Record review notes, history, and a quality-gate ship manifest.
+- [x] Commit and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Final compiled YAML with `approval_status: ready-for-agent-review` and `section_feedback: []` is preserved in the confirmed alignment page.
+- The working packet is removed from the active research tree and archived under `docs/history/archive/2026-06-11/142531/`.
+- `apps/skills-showcase/docs/animation-plan-deck-builder.md` captures the accepted motion contracts, lifecycle ownership, guardrails, proof gate, risks, and implementation handoff.
+- The routing spike demonstrates whether native `pushState` updates `usePathname` without unmounting the shared shell, and whether browser Back produces the expected `popstate`/path state.
+- Any Playwright setup stays local to implementation proof and does not add or modify GitHub Actions.
+- Unrelated `tasks/todo.md` P2 install-routing debt remains untouched.
+
+### Review Notes
+
+- Captured the visible approval/handoff prompt in `prompts/exec/skill-prompt-20260611-142531-deck-builder-implementation.md` and `prompts/animation-design-planner/skill-prompt-20260611-142531-deck-builder-approval.md`.
+- Archived the prior review page and moved the non-canonical working packet to `docs/history/archive/2026-06-11/142531/`.
+- Wrote the approved canonical animation plan to `apps/skills-showcase/docs/animation-plan-deck-builder.md`; it preserves the accepted `blueprint-morph` and `card-flight` contracts, lifecycle ownership, interruption semantics, proof gate, risks, and `/exec` spike handoff.
+- Converted `alignment/animation-design-planner-deck-builder-transitions.html` from active review to confirmed, preserving the final compiled YAML with all 9 gates answered and `section_feedback: []`; `alignment/index.html` now marks the entry confirmed.
+- Added the minimal hidden routing spike at `/prototype/deck-routing-spike` plus hard-load support at `/deck/[slug]`, with a client shell that exposes mount identity, `usePathname`, `popstate`, and active-deck state.
+- Added local Playwright proof tooling under `apps/skills-showcase/` only; no GitHub Actions or production deploy flow was added.
+- First Playwright run failed usefully: a random mount id was rendered before hydration and dev Strict Mode made the mount counter unsuitable as an exact `1` assertion. The spike now assigns mount ids after hydration and the proof asserts stable mount identity across native `pushState` and browser Back.
+- Validation passed:
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase build`
+  - `pnpm --dir apps/skills-showcase test` (13 files, 136 tests passed)
+  - `pnpm --dir apps/skills-showcase test:e2e` (2 Playwright tests passed)
+  - `node scripts/audit-alignment-pages.mjs` (48 active pages; exact TTS, metadata, viewport, embed prohibition, and index integrity)
+  - `git diff --check`
+- Browser plugin spot-check could not be run because tool discovery returned no callable Browser tools in this session; the Playwright browser proof covered the hidden local route directly.
+- Deploy follow-up: production deploy stayed out of scope per the approved plan. `tasks/deploy.md` remains the deploy contract for a later Skills Showcase deploy.
+- Ship manifest: `tasks/ship-manifest-2026-06-11-deck-builder-routing-spike.md`.
+
+---
+
 ## Current Implementation - Idea-Scope-Brief Deck-Fit Routing
 
 ### Goal

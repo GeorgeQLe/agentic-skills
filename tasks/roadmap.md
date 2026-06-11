@@ -1,3 +1,46 @@
+## Current Implementation - Deck-Builder Animation Approval And Routing Spike
+
+### Goal
+
+Consume the approved `animation-design-planner` response for the deck-builder transitions, write the canonical animation plan, convert the alignment page to confirmed, then execute the first deck-builder implementation spike: prove whether shallow `window.history.pushState` keeps a shared client shell mounted while `usePathname` and `popstate` update correctly on Next 16.2.6.
+
+### Scope
+
+- Finalize approved animation artifacts: archive the review page/working packet, write `apps/skills-showcase/docs/animation-plan-deck-builder.md`, confirm `alignment/animation-design-planner-deck-builder-transitions.html`, and update `alignment/index.html`.
+- Add prompt-history records for the current `/exec` and animation-plan approval handoff.
+- Add only a minimal route spike and proof harness for shallow pushState behavior.
+- Do not implement the full deck-builder, card-flight animation, pack-opening retrofit, homepage replacement, deploy flow, GitHub Actions, or unrelated install-routing debt.
+
+### Plan
+
+1. Capture and orient.
+   - [x] Read `$exec`, `animation-design-planner` approval handling, task docs, app docs, and the approved alignment page.
+   - [x] Capture the visible invocation under `prompts/exec/` and `prompts/animation-design-planner/`.
+   - [x] Record this roadmap and active todo before implementation.
+2. Finalize approved artifacts.
+   - [x] Archive the current review page and non-canonical working packet under `docs/history/archive/2026-06-11/142531/`.
+   - [x] Write `apps/skills-showcase/docs/animation-plan-deck-builder.md` from the approved page content and gate answers.
+   - [x] Convert `alignment/animation-design-planner-deck-builder-transitions.html` to confirmed with read-only decision records and the approval YAML preserved.
+   - [x] Update `alignment/index.html` to mark the entry confirmed.
+3. Execute the first implementation spike.
+   - [x] Add the smallest route spike that proves shallow `pushState`, `usePathname`, `popstate`, and `/deck/[slug]` hard-load behavior.
+   - [x] Add Playwright as local implementation proof tooling if dependency installation succeeds.
+   - [x] Add a Playwright spike test or document a dependency/install blocker before shipping.
+4. Validate and ship.
+   - [x] Run focused app validation, Playwright proof when available, the active alignment-page audit, and `git diff --check`.
+   - [x] Record review notes, history, and a quality-gate ship manifest.
+   - [x] Commit and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- The approved animation plan is canonical in `apps/skills-showcase/docs/animation-plan-deck-builder.md`.
+- The active alignment page is confirmed and preserves the exact final approval YAML.
+- The non-canonical working packet no longer remains in active `research/skills-showcase/_working/`.
+- The routing spike produces executable proof for the load-bearing Next 16.2.6 pushState assumption or records a concrete blocker/redesign trigger.
+- No full deck-builder implementation or unrelated P2 install-routing work is included.
+
+---
+
 ## Current Implementation - Idea-Scope-Brief Deck-Fit Routing
 
 ### Goal
