@@ -1,3 +1,49 @@
+## Current Implementation - Idea-Scope-Brief Deck-Fit Routing
+
+### Goal
+
+Update `$idea-scope-brief` so completed idea briefs recommend the closest workflow deck, preferring repo-saved deck config when present and falling back to the canonical decks: `vard`, `ord`, `business-afps`, `devtool-afps`, and `game-afps`.
+
+### Scope
+
+- Active skill contract: `global/codex/idea-scope-brief/SKILL.md`.
+- Skill archive/version/changelog for `v0.16`.
+- Prompt history for this `$targeted-skill-builder` invocation.
+- Generated Skills Showcase data because an active `SKILL.md` behavior changed.
+- Out of scope: adding a new deck runtime primitive, reading browser localStorage, or changing pack/deck installer implementation.
+
+### Plan
+
+1. Capture and inspect.
+   - [x] Read `$targeted-skill-builder`, active lessons, current `idea-scope-brief`, deck docs, repo config, and task docs.
+   - [x] Capture the visible invocation under `prompts/targeted-skill-builder/`.
+   - [x] Record this roadmap and active todo before implementation.
+2. Update the skill contract.
+   - [x] Archive `global/codex/idea-scope-brief/SKILL.md` with `scripts/skill-archive.sh`.
+   - [x] Bump `version:` from `v0.15` to `v0.16`.
+   - [x] Add a `Deck Fit Handoff` rule that reads canonical deck metadata and `.agents/project.json` `saved_decks` / `decks`.
+   - [x] Rank deck candidates by domain, tempo, and concept signals.
+   - [x] Make high-confidence deck fit the primary `## Next Steps` recommendation, with canonical deck installs using `npx skillpacks install-deck <deck>`.
+   - [x] Keep downstream research routing as secondary context after deck selection.
+   - [x] Update `CHANGELOG.md` for `v0.16`.
+3. Validate and ship.
+   - [x] Run focused route text checks and `./scripts/skill-install-routing-audit.sh`.
+   - [x] Run standard skill validation and benchmark coverage.
+   - [x] Regenerate and validate Skills Showcase data.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [ ] Commit and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- A completed idea brief can recommend the best-fit deck as the primary next command when confidence is high.
+- Saved repo deck candidates from `.agents/project.json` are considered before canonical fallback decks.
+- Canonical deck recommendations use `npx skillpacks install-deck <deck>`.
+- Customized saved deck recommendations give explicit pack install guidance unless they preserve a canonical slug.
+- Game, lightweight OSS/devtool, deliberate devtool, rapid consumer/business, and deliberate business concepts have explicit default deck routing examples.
+
+---
+
 ## Current Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
 
 ### Goal

@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.16
+version: v0.15
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 interview_depth: full
 ---
@@ -31,8 +31,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
-   - Read canonical deck metadata from `docs/decks.md` when present and from skillpacks manifest `decks[]` metadata when available. Use deck fields such as `name`, `title`, `domain`, `tempo`, `default_packs`, and `full_packs` as routing evidence.
-   - Read repo-saved deck candidates from `.agents/project.json` before canonical fallbacks. Recognize top-level `saved_decks` and `decks` fields when present; entries may be strings or objects with fields such as `name`, `slug`, `title`, `domain`, `tempo`, `packs`, `install`, `install_command`, `description`, or `notes`.
    - Read README, CLAUDE.md, AGENTS.md, existing `research/`, `specs/`, and task docs when present.
    - Determine whether the current directory is already a bootstrapped project. Treat it as bootstrapped when it has meaningful `README.md` plus `AGENTS.md` or `CLAUDE.md`; treat it as unbootstrapped when those are missing, placeholder-only, or the user is describing an idea outside any project repo.
    - If `$ARGUMENTS` contains a rough idea, use it as the starting draft.
@@ -74,31 +72,6 @@ During the Idea Assumptions Manifest, if the concept appears marketplace/platfor
 - Keep the source tag for each side as `[from prompt]`, `[from repo]`, or `[inferred]` unless the user provides a correction.
 - If the concept appears single-sided, omit the handoff or state that no marketplace/platform/B2B2C/multi-sided handoff is apparent.
 
-### Deck Fit Handoff
-
-During the Idea Assumptions Manifest and final idea brief, add a compact `Deck Fit Handoff` that routes the concept to the closest workflow deck when confidence is high:
-
-1. **Build candidates**
-   - Prefer saved repo candidates from `.agents/project.json` `saved_decks` or `decks` when present. Rank them against the concept before canonical fallbacks.
-   - Fall back to the canonical deck set from `docs/decks.md` or skillpacks manifest metadata: `vard`, `ord`, `business-afps`, `devtool-afps`, and `game-afps`.
-   - Treat a saved deck as canonical only when its `name` or `slug` preserves one of the canonical slugs and the entry does not materially override its packs or install command.
-2. **Rank by domain, tempo, and concept signals**
-   - Domain: route video games, prototypes, playable entertainment, game engines, store-page tests, playtests, and game assets to `game-afps`; route SDKs, CLIs, APIs, libraries, npm packages, OSS utilities, infrastructure products, developer platforms, and documentation-first developer workflows to developer decks; route SaaS, marketplaces, productivity apps, internal/admin tools, business workflows, and consumer apps to business/consumer decks.
-   - Tempo: route day/week experiments, quick viral app tests, lightweight npm/CLI/library ideas, and low-investment distribution probes to rapid decks; route products, platforms, SDK/API strategies, SaaS/business concepts, lifecycle/growth work, or anything needing weeks/months of validation to deliberate decks.
-   - Evidence priority: user prompt and interview corrections outrank repo defaults; existing research/spec/task files outrank inferred code shape; `.agents/project.json project_type` is a tie-breaker, not the primary signal.
-   - Confidence is high only when domain and tempo both match and no strong contrary signal remains. If confidence is not high, do not force a deck as the primary command; use the fallback routing rules in `## Next Steps`.
-3. **Default canonical examples**
-   - Game or playable entertainment concept -> `game-afps`.
-   - Lightweight OSS/devtool/npm/CLI/library idea -> `ord`.
-   - Deliberate devtool/platform/SDK/API product -> `devtool-afps`.
-   - Rapid consumer/business experiment -> `vard`.
-   - Deliberate business/SaaS/consumer product -> `business-afps`.
-4. **Render the handoff**
-   - Include deck slug/title, source (`saved_decks`, `decks`, `docs/decks.md`, or manifest), domain fit, tempo fit, confidence, key evidence signals, and the install command.
-   - For canonical decks, the primary install command is `npx skillpacks install-deck <deck>`.
-   - For customized saved decks, do not use `install-deck` unless they preserve a canonical slug as described above. Use the saved `install_command` / `install` when present, or explicit pack install guidance such as `npx skillpacks install <pack...>` when the saved entry lists packs.
-   - After a deck recommendation exists, keep downstream skill routing as secondary context only. For example, name the likely first post-install skill (`$customer-discovery`, `$devtool-positioning`, `$ord-scan`, `$vard-scan`, or `$game-audience`) without making it the primary command.
-
 4. **Interview until concept-ready**
    - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
    - Resolve only concept-level ambiguity:
@@ -118,7 +91,7 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
 
 6. **Build pre-approval alignment preview**
    - Before writing any canonical `research/**/idea-brief.md`, `research/**/idea-brief-interview.md`, legacy flat `research/idea-brief-{slug}.md` variant, or `research/.progress.yaml`, build `alignment/idea-scope-brief-{topic}.html` as the review artifact.
-   - The HTML page must render the Idea/Concept Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates, including any Market Structure Handoff and Deck Fit Handoff.
+   - The HTML page must render the Idea/Concept Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates, including any Market Structure Handoff.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
    - Treat coverage-checkpoint confirmation as non-final; it only confirms the draft scope is ready to preview. Only final compiled YAML from the alignment page authorizes canonical writes.
    - Before compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved artifacts below have been written or updated.
@@ -155,24 +128,16 @@ The idea brief must include:
 - `## Non-Goals`
 - `## Assumptions And Unknowns`
 - `## Customer Discovery Readiness`
-- `## Deck Fit Handoff`
 - `## Next Steps`
 
-The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute. If a high-confidence Deck Fit Handoff exists, explain that deck installation is the primary next command and customer discovery or other first workflow skills are secondary post-install context.
-
-The `## Deck Fit Handoff` section must state the best candidate deck, whether it came from saved repo config or canonical fallback metadata, the confidence level, the domain/tempo signals, the install command, and the likely first post-install skill. If no deck has high confidence, state the strongest candidates and why fallback routing is safer.
+The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If Deck Fit Handoff confidence is high for a canonical deck: `npx skillpacks install-deck <deck>`.
-- If Deck Fit Handoff confidence is high for a customized saved deck with an explicit install command: use that exact saved install command.
-- If Deck Fit Handoff confidence is high for a customized saved deck with a pack list but no install command: `npx skillpacks install <pack...>`.
-- If no deck has high confidence and the concept appears to be a business app or user-facing product while the business research lane is not enabled: `$pack install business-research` inside Codex, or `npx skillpacks install business-research` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If no deck has high confidence and `business-research` or the compatibility `business-app` alias is enabled: `$customer-discovery`.
-- If no deck has high confidence and the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell.
-- If no deck has high confidence and project type is unclear: `$pack recommend`.
-
-When a deck primary command is available, downstream research, discovery, or first-workflow skill routing must appear only as secondary context, not as the primary command.
+- If the concept appears to be a business app or user-facing product and the business research lane is not enabled: `$pack install business-research` inside Codex, or `npx skillpacks install business-research` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-research` or the compatibility `business-app` alias is enabled: `$customer-discovery`
+- If the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell.
+- If project type is unclear: `$pack recommend`
 
 Include 1-3 other options only when they are materially useful.
 

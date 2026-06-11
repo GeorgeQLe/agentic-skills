@@ -1,5 +1,11 @@
 # idea-scope-brief Changelog
 
+## v0.16 - 2026-06-11
+
+- Added Deck Fit Handoff routing so completed idea briefs prefer matching saved repo decks from `.agents/project.json` `saved_decks` / `decks`, then fall back to canonical decks (`vard`, `ord`, `business-afps`, `devtool-afps`, `game-afps`).
+- Updated `## Next Steps` to make high-confidence deck installs the primary command, using `npx skillpacks install-deck <deck>` for canonical decks and explicit pack install guidance for customized saved decks.
+- Added default routing examples for game, rapid OSS/devtool, deliberate devtool, rapid business/consumer, and deliberate business/SaaS concepts.
+
 ## v0.15 - 2026-06-11
 
 - Updated downstream business research pack checks from `business-discovery` to `business-research` after the pack rename.

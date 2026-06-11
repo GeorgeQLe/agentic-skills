@@ -1,3 +1,49 @@
+## Current Implementation - Idea-Scope-Brief Deck-Fit Routing
+
+### Goal
+
+Teach `$idea-scope-brief` to route completed idea briefs to the closest workflow deck before lower-level research-pack routing when a deck fit is clear.
+
+### Steps
+
+- [x] Read `$targeted-skill-builder`, active lessons, current `idea-scope-brief`, `docs/decks.md`, `.agents/project.json`, and task docs.
+- [x] Capture the visible invocation under `prompts/targeted-skill-builder/`.
+- [x] Record this active roadmap/todo plan before implementation.
+- [x] Archive current `global/codex/idea-scope-brief/SKILL.md`.
+- [x] Update `idea-scope-brief` to `v0.16` with deck-fit handoff and next-step routing.
+- [x] Update `global/codex/idea-scope-brief/CHANGELOG.md`.
+- [x] Run focused and standard skill validation.
+- [x] Regenerate and validate Skills Showcase data.
+- [x] Run `git diff --check`.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Archived `global/codex/idea-scope-brief/SKILL.md` v0.15 to `global/codex/idea-scope-brief/archive/v0.15/SKILL.md`.
+- Bumped the active Codex skill to `version: v0.16` and added `Deck Fit Handoff` guidance that reads canonical deck metadata from `docs/decks.md` / skillpacks manifest `decks[]`, then prefers repo-saved `.agents/project.json` `saved_decks` or `decks` when present.
+- Added domain/tempo ranking rules and explicit canonical examples: `game-afps`, `ord`, `devtool-afps`, `vard`, and `business-afps`.
+- Updated `## Next Steps` so high-confidence canonical deck routes use `npx skillpacks install-deck <deck>` as the primary command, customized saved decks use explicit saved or pack install guidance, and downstream research/workflow skills stay secondary context after deck selection.
+- Updated the existing `idea-scope-brief` benchmark setup to require `npx skillpacks install-deck business-afps` for the deliberate Poketo Core business/SaaS fixture.
+- Regenerated Skills Showcase generated data; `idea-scope-brief` now appears as v0.16 in both app and docs copies, and proof data refreshed its source fingerprint/recent history entries.
+- Validation passed:
+  - `rg -n 'Deck Fit|install-deck|game-afps|ord|saved_decks|decks' global/codex/idea-scope-brief/SKILL.md`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-archive-audit.sh --strict`
+  - `pnpm --dir tests bench:coverage`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` (79 passed)
+  - `git diff --check`
+- Validation notes:
+  - `./scripts/skill-install-routing-audit.sh` without args exits with usage; reran as `./scripts/skill-install-routing-audit.sh --active`.
+  - `./scripts/skill-install-routing-audit.sh --active` reports 42 existing npm-install-route findings, none in `global/codex/idea-scope-brief/SKILL.md`; the same 42 findings reproduce at clean `HEAD` in `/tmp/agentic-skills-baseline-20260611`.
+  - `./scripts/skill-next-step-routing.sh --missing` reports the same existing repo-wide missing-route list at clean `HEAD`; no `idea-scope-brief` active or archived file appears in the failure list.
+
+---
+
 ## Current Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
 
 ### Goal
