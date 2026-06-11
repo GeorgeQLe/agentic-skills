@@ -1,5 +1,9 @@
 # journey-map changelog (claude)
 
+## v0.13 - 2026-06-11
+
+- Added npm-aware install-route guidance to pack availability checks and cross-pack next-step recommendations while preserving runner-specific in-agent pack install commands.
+
 ## v0.12 - 2026-06-11
 
 - Reclassified the active orchestrator as `type: research` because it already uses the staged research lifecycle and writes approved journey-map research artifacts.

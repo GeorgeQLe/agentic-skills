@@ -2,7 +2,7 @@
 name: onboarding-map
 description: Plan signup, setup, activation, first success, onboarding drop-offs, and time-to-value for each lifecycle persona
 type: analysis
-version: v0.3
+version: v0.4
 argument-hint: "[optional: app, persona, or onboarding segment]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill.
 
 # Onboarding Map
 

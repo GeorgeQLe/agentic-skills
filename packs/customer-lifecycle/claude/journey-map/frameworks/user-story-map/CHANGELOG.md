@@ -1,5 +1,9 @@
 # user-story-map changelog (claude)
 
+## v0.3 - 2026-06-11
+
+- Added npm-aware install-route guidance to the Pack Availability Guard while preserving runner-specific in-agent pack install commands.
+
 ## v0.2 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.

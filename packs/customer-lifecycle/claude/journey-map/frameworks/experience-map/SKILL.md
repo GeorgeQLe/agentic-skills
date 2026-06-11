@@ -2,14 +2,14 @@
 name: experience-map
 description: Adaptive Path experience map — emotional arc with doing/thinking/feeling layers, pain/delight moments, and channel transitions
 type: research
-version: v0.2
+version: v0.3
 invocation: sub-skill
 parent: journey-map
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Experience Map — Adaptive Path Analysis
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-11
+
+- Added npm-aware install-route guidance to the Pack Availability Guard while preserving runner-specific in-agent pack install commands.
+
 ## v0.3 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.

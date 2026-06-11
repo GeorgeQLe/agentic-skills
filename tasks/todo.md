@@ -787,7 +787,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260611-023424-exec.md`.
 - Ship manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-creator-foundation.md`.
 
-- [ ] Remediate P2 customer-lifecycle skill install-routing wording:
+- [x] Remediate P2 customer-lifecycle skill install-routing wording:
   - Scope: update only the next P2 bucket from `research/skillpack-cli-routing-audit.md`: customer-lifecycle skills and nested journey-map framework skills in both Claude and Codex mirrors. Do not edit devtool, exec-loop, product-design, youtube-ops, or later P2/P3 buckets in this step.
   - Targets:
     - `packs/customer-lifecycle/claude/conversion-map/SKILL.md` and `packs/customer-lifecycle/codex/conversion-map/SKILL.md` (`version: v0.3` -> `v0.4`)
@@ -816,6 +816,77 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
     - Confirm no customer-lifecycle target remains in the report with `rg 'packs/customer-lifecycle/(claude|codex)/(conversion-map|expansion-map|journey-map|journey-map/frameworks/(customer-journey-canvas|experience-map|jtbd-timeline|service-blueprint|user-story-map)|lifecycle-metrics|onboarding-map|retention-map|transaction-map)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
     - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 86 remaining findings if no other files change.
+  - Regression checks:
+    - `bash -n scripts/skill-install-routing-audit.sh`
+    - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+    - `bash scripts/skill-pack-routing-audit.sh`
+    - `bash scripts/skill-versions.sh --missing`
+    - `bash scripts/skill-archive-audit.sh --strict`
+    - `bash scripts/skill-deps.sh --broken`
+    - `node scripts/upgrade-alignment-page.mjs --check`
+    - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+    - `pnpm --dir apps/skills-showcase build`
+    - `git diff --check`
+  - Ship with a manifest that distinguishes expected remaining install-routing debt from unexpected regressions.
+
+### P2 Customer-Lifecycle Remediation Review
+
+- Archived prior active `SKILL.md` files for all 24 customer-lifecycle targets before editing:
+  - Claude and Codex mirrors for `conversion-map`, `expansion-map`, `journey-map`, five journey-map framework subskills, `lifecycle-metrics`, `onboarding-map`, `retention-map`, and `transaction-map`.
+- Bumped active versions to the planned targets:
+  - `conversion-map`, `expansion-map`, `lifecycle-metrics`, `onboarding-map`, `retention-map`, and `transaction-map` v0.4 for both Claude and Codex.
+  - `journey-map` v0.13 for both Claude and Codex.
+  - `customer-journey-canvas`, `experience-map`, `jtbd-timeline`, `service-blueprint`, and `user-story-map` v0.3 for both Claude and Codex.
+- Updated all 24 target `CHANGELOG.md` files.
+- Updated install-route guidance to preserve Claude `/pack install ...`, Codex `$pack install ...`, and add `npx skillpacks install ...` from the project shell.
+- Also updated `journey-map` cross-pack next-step recommendations for `business-discovery`, `product-design`, and `business-growth` so those specific pack installs include npm CLI alternatives.
+- Preserved lifecycle mapping, journey/framework method, approval, alignment-page, glossary, and next-step routing semantics outside install-route wording.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata/content changes. Public generated versions and fingerprints changed; curated showcase copy, catalog grouping, workflow animation text, and proof receipt copy did not need manual edits because non-generated showcase source has no hardcoded customer-lifecycle target names or versions.
+- Targeted P2 report gate passed: `scripts/skill-install-routing-audit.sh --report` reports 383 active files, 14/14 P1 coverage, 86 remaining findings, and no `packs/customer-lifecycle/{claude,codex}/.../SKILL.md` target paths.
+- Expected-red strict active audit now reports 86 remaining findings, all deferred to later P2/P3 remediation slices. The first remaining group is the `devtool` pack.
+- Verification passed:
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `bash -n scripts/skill-install-routing-audit.sh`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` (11 fixture `SKILL.md` files, 6 expected invalid findings, exit 0)
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-deps.sh --broken`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` (2 passed)
+  - `scripts/skill-install-routing-audit.sh --active` (expected-red: 86 remaining non-customer-lifecycle findings)
+  - `pnpm --dir apps/skills-showcase build`
+- The Skills Showcase build updated `apps/skills-showcase/next-env.d.ts` as a mode-specific build side effect; that unrelated generated diff was restored before shipping.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-224353-exec.md`.
+- Ship manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-customer-lifecycle.md`.
+
+- [ ] Remediate P2 devtool skill install-routing wording:
+  - Scope: update only the next P2 bucket from `research/skillpack-cli-routing-audit.md`: devtool pack skills in both Claude and Codex mirrors. Do not edit exec-loop, product-design, youtube-ops, or later P2/P3 buckets in this step.
+  - Targets:
+    - `packs/devtool/claude/devtool-adoption/SKILL.md` and `packs/devtool/codex/devtool-adoption/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `packs/devtool/claude/devtool-dx-journey/SKILL.md` and `packs/devtool/codex/devtool-dx-journey/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/devtool/claude/devtool-integration-map/SKILL.md` and `packs/devtool/codex/devtool-integration-map/SKILL.md` (`version: v0.2` -> `v0.3`)
+    - `packs/devtool/claude/devtool-monetization/SKILL.md` and `packs/devtool/codex/devtool-monetization/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `packs/devtool/claude/devtool-positioning/SKILL.md` and `packs/devtool/codex/devtool-positioning/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `packs/devtool/claude/devtool-user-map/SKILL.md` and `packs/devtool/codex/devtool-user-map/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `packs/devtool/claude/devtool-workflow/SKILL.md` and `packs/devtool/codex/devtool-workflow/SKILL.md` (`version: v0.1` -> `v0.2`)
+  - Before editing each target, run `scripts/skill-archive.sh <skill-dir>` so the current active `SKILL.md` is copied to `archive/<old-version>/SKILL.md`.
+  - Update install-route guidance using `docs/skillpacks-install-routing-contract.md`:
+    - Claude-facing text keeps `/pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Codex-facing text keeps `$pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Source-checkout `scripts/pack.sh install devtool` text in `devtool-workflow` should also mention `npx skillpacks install devtool` for package consumers unless a specific source-checkout-only exception is explicitly justified.
+    - Preserve each skill's developer-facing research workflow, artifact requirements, approval, alignment-page, and next-step routing semantics outside install-route wording.
+  - Update each target's `CHANGELOG.md` with the new version entry and summarize the npm-aware install-route wording change.
+  - Refresh generated Skills Showcase data after active `SKILL.md` metadata/content changes:
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+    - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - Targeted post-edit gate:
+    - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
+    - Confirm no devtool target remains in the report with `rg 'packs/devtool/(claude|codex)/(devtool-adoption|devtool-dx-journey|devtool-integration-map|devtool-monetization|devtool-positioning|devtool-user-map|devtool-workflow)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
+    - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this slice it should report 72 remaining findings if no other files change.
   - Regression checks:
     - `bash -n scripts/skill-install-routing-audit.sh`
     - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
