@@ -14049,3 +14049,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added fixture-backed coverage for valid runner-specific pack guards, missing-skill fallbacks, source-checkout-only allowlisting, valid deck installs, invalid in-agent-only routes, invalid generic `pack install`, missing allowlist evidence, and deck installs incorrectly routed through `npx skillpacks install <deck>`.
 - Added `tests/layer1/skill-install-routing-audit.test.ts` so fixture behavior and 14/14 P1 coverage are pinned without making the known 220 active findings fail the layer1 suite before remediation.
 - Verification passed: script syntax, fixture mode, active report mode (383 active files, 14/14 P1 coverage, 220 findings, exit 0), expected-red active strict mode (220 findings), existing cross-pack routing audit, focused layer1 test 2/2, and `git diff --check`. Manifest: `tasks/ship-manifest-2026-06-10-skillpacks-install-routing-validation-implementation.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P1 remediation handoff
+
+- Completed the planning-only `$exec` step that prepares the next P1 global skill edit batch without modifying active `SKILL.md`, changelog, archive, generated Skills Showcase, or package files.
+- Updated `tasks/todo.md` with a self-contained P1 follow-up `$exec` step for the 14 global Claude/Codex routing and installer skills, including exact version bumps, archive/changelog requirements, npm-aware wording rules, Skills Showcase refresh, targeted P1 report filtering, and regression commands.
+- Left the concurrent Research-ish Skill Lifecycle Audit task-plan additions intact; that queue item now appears above the Skillpacks routing section and may be the globally first unchecked task.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-203845-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-handoff.md`.

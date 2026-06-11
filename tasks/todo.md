@@ -1,3 +1,44 @@
+## Current Implementation - Research-ish Skill Lifecycle Audit
+
+### Goal
+
+Implement the research-ish skill lifecycle audit plan from the prior agent: add a read-only classifier, write the audit report, add focused regression tests, and remediate only confirmed lifecycle/type drift after the inventory exists.
+
+### Execution Profile
+
+- Parallel mode: parallel reads and independent validation scans; serial writes for scripts, tests, report, skill versioning, generated bundles, task docs, and shipping.
+- Rationale: the audit spans hundreds of active skills, but source mutations must remain reviewable and preserve skill-version/archive contracts.
+
+### Steps
+
+- [x] Inspect existing task state, audit/test conventions, and prior staged-research validation history.
+- [ ] Add task plan artifacts for this implementation pass without overwriting unrelated local task/prompt changes.
+- [ ] Implement `scripts/researchish-skill-lifecycle-audit.mjs` with human summary and `--json` modes.
+- [ ] Generate `research/researchish-skill-lifecycle-audit.md` from the script output.
+- [ ] Add focused layer1 audit coverage for JSON shape, staged-research marker compliance, skip-list bundle exclusions, and non-research `_working` misuse.
+- [ ] Review audit findings and apply only focused remediation needed by the report.
+- [ ] If active `SKILL.md` files change, run `scripts/skill-archive.sh <skill-dir>`, bump versions, update changelogs, and regenerate `ALIGNMENT-PAGE.md` bundles only through `node scripts/upgrade-alignment-page.mjs`.
+- [ ] If active `SKILL.md` or `PACK.md` files change, refresh and validate Skills Showcase generated data.
+- [ ] Run required checks:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts`
+  - New layer1 audit test
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-deps.sh --broken`
+  - `git diff --check`
+- [ ] Record review notes, ship manifest, task history, and commit/push intended changes.
+
+### Acceptance Criteria
+
+- Every in-scope active skill is classified into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
+- The report includes category counts, misclassified skills, non-research `research/` output language, alignment-page skip-list candidates, and semantically suspicious marker-compliant research skills.
+- The audit script is read-only in default and `--json` modes.
+- Remediation, if needed, is grounded in the written report rather than ad hoc editing.
+- Verification proves the audit and any remediated skill lifecycle behavior works.
+
+---
+
 ## Current Implementation - VARD/ORD Scan Staged Research Contract
 
 ### Goal
@@ -125,7 +166,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
   - Run `bash scripts/skill-pack-routing-audit.sh`.
   - Run the focused layer1 test for `skill-install-routing-audit`.
   - Run `git diff --check`.
-- [ ] Prepare the next remediation slice:
+- [x] Prepare the next remediation slice:
   - Update `tasks/todo.md` with the P1 global skill edit batch after canonical wording and validation are in place.
   - Carry forward the skill-versioning requirement for every changed `SKILL.md`: `scripts/skill-archive.sh <skill-dir>`, frontmatter `version` bump, and `CHANGELOG.md` update where applicable.
   - Include the 14 P1 targets explicitly:
@@ -145,6 +186,49 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - `global/codex/skills/SKILL.md`
   - Plan the P1 edit batch as its own next `$exec` step; do not edit active `SKILL.md` files during this planning-only step.
   - The P1 implementation plan must include a targeted post-edit check that no P1 file remains in `scripts/skill-install-routing-audit.sh --report`, while full `--active` may still fail until P2/P3 are remediated.
+- [ ] Remediate P1 global skill install-routing wording:
+  - Scope: update only the 14 P1 global routing and installer skills from `research/skillpack-cli-routing-audit.md`; do not begin P2/P3 pack-wide remediation in this step.
+  - Targets:
+    - `global/claude/afps-status/SKILL.md` (`version: v0.1` -> `v0.2`)
+    - `global/claude/codebase-status/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `global/claude/idea-scope-brief/SKILL.md` (`version: v0.12` -> `v0.13`)
+    - `global/claude/init-agentic-skills/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `global/claude/pack/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `global/claude/provision-agentic-config/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `global/claude/skills/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `global/codex/afps-status/SKILL.md` (`version: v0.1` -> `v0.2`)
+    - `global/codex/codebase-status/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `global/codex/idea-scope-brief/SKILL.md` (`version: v0.12` -> `v0.13`)
+    - `global/codex/init-agentic-skills/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `global/codex/pack/SKILL.md` (`version: v0.6` -> `v0.7`)
+    - `global/codex/provision-agentic-config/SKILL.md` (`version: v0.5` -> `v0.6`)
+    - `global/codex/skills/SKILL.md` (`version: v0.5` -> `v0.6`)
+  - Before editing each target, run `scripts/skill-archive.sh <skill-dir>` so the current active `SKILL.md` is copied to `archive/<old-version>/SKILL.md`.
+  - Update install guidance using `docs/skillpacks-install-routing-contract.md`:
+    - Claude-facing text keeps `/pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Codex-facing text keeps `$pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Source-checkout maintenance text keeps `scripts/pack.sh install <pack-or-skill>` and adds package-consumer wording where the reader may be outside this checkout.
+    - Do not introduce deck wording unless a target already discusses deck installs; deck installs use `npx skillpacks install-deck <deck>`.
+  - Update each target's `CHANGELOG.md` with the new version entry and summarize the npm-aware install-route wording change.
+  - Refresh generated Skills Showcase data after the active `SKILL.md` metadata/content changes:
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+    - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files only if the P1 wording/versions make public copy stale, otherwise record why no curated copy changed.
+  - Targeted post-edit gate:
+    - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
+    - Confirm no P1 path remains in the report with `rg 'global/(claude|codex)/(afps-status|codebase-status|idea-scope-brief|init-agentic-skills|pack|provision-agentic-config|skills)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
+    - Full `scripts/skill-install-routing-audit.sh --active` may still fail on non-P1 debt until later P2/P3 remediation; record the remaining count if run.
+  - Regression checks:
+    - `bash -n scripts/skill-install-routing-audit.sh`
+    - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+    - `bash scripts/skill-pack-routing-audit.sh`
+    - `bash scripts/skill-versions.sh --missing`
+    - `bash scripts/skill-archive-audit.sh --strict`
+    - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+    - `pnpm --dir apps/skills-showcase build`
+    - `git diff --check`
+  - Ship with a manifest that distinguishes expected remaining non-P1 install-routing debt from unexpected regressions.
 
 ### Acceptance Criteria
 
@@ -158,11 +242,14 @@ Define the canonical npm-aware install-route wording and add the first regressio
 
 - Reframed the active todo from a P1 source-edit batch to the smaller first remediation slice requested by the roadmap plan.
 - No active `SKILL.md` files, generated Skills Showcase assets, or source tests are changed by this planning update.
+- Prepared the next P1 implementation batch as its own unchecked `$exec` step, including the 14 global targets, exact version bump expectations, archive/changelog requirements, Skills Showcase refresh, targeted P1 audit gate, and regression commands.
+- Note: a concurrent Research-ish Skill Lifecycle Audit task plan now appears above this Skillpacks routing section; the P1 batch remains the next Skillpacks CLI routing remediation step even if another task-doc queue item is globally first.
 
 ### Review Notes
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-201246-exec.md`.
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-201743-exec.md`.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-203845-exec.md`.
 - Added `docs/skillpacks-install-routing-contract.md` as the canonical wording matrix for the npm-aware install-route remediation.
 - The contract preserves runner-specific in-agent routes (`/pack` for Claude and `$pack` for Codex), keeps `scripts/pack.sh` for source-checkout maintenance, adds `npx skillpacks install <pack-or-skill>` for package consumers, and reserves `npx skillpacks install-deck <deck>` for curated decks.
 - Decided the validation shape: add a dedicated active-skill scanner plus fixture-backed layer1 coverage, keep the existing cross-pack routing audit unchanged, and use a structured allowlist only for explicit source-checkout-only/internal exceptions.

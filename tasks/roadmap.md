@@ -1,3 +1,59 @@
+## Current Implementation - Research-ish Skill Lifecycle Audit
+
+### Goal
+
+Add a read-only audit for active research-ish skills, generate the inventory report, then remediate only confirmed lifecycle/type drift in focused batches.
+
+### Scope
+
+- Active skill files under `global/**/SKILL.md` and `packs/**/SKILL.md`, excluding `archive/**`.
+- Research-ish inclusion signals:
+  - `type: research`
+  - alignment-page behavior
+  - `research/` output language
+  - `_working` packet language
+  - canonical research/report artifact writes
+- Out of scope for this pass:
+  - Archived skill snapshots.
+  - Broad all-skill remediation unless the research-ish heuristic misses obvious lifecycle violations.
+  - P1/P2/P3 install-routing remediation already tracked separately.
+
+### Plan
+
+1. Build the audit inventory.
+   - [ ] Add `scripts/researchish-skill-lifecycle-audit.mjs`.
+   - [ ] Support default human summary mode without file writes.
+   - [ ] Support `--json` machine-readable output for tests.
+   - [ ] Classify each in-scope skill into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
+2. Write the report.
+   - [ ] Generate `research/researchish-skill-lifecycle-audit.md` from audit output.
+   - [ ] Include counts by category.
+   - [ ] List every `misclassified` skill.
+   - [ ] List every non-research skill with `research/` output language.
+   - [ ] List every alignment-page skill that appears to belong in `scripts/alignment-skip-list.txt`.
+   - [ ] List every marker-compliant `type: research` skill that is semantically suspicious.
+3. Add regression coverage.
+   - [ ] Add layer1 coverage for staged markers, skip-list bundles, non-research `_working` misuse, and stable JSON categories/counts.
+   - [ ] Keep the audit script read-only except when report generation is explicitly redirected by the agent.
+4. Remediate after the report exists.
+   - [ ] For true research producers, keep or add the 4-step staged workflow.
+   - [ ] For document/planning/analysis skills, keep alignment pages but remove research `_working` packet requirements.
+   - [ ] For utility/shipping/execution skills, remove alignment-page behavior and add skip-list entries when appropriate.
+   - [ ] For misclassified skills, change `type:` to the correct existing category while preserving intended behavior.
+5. Validate and ship.
+   - [ ] Run generated alignment bundle, layer1, archive/version/dependency, showcase, and whitespace checks.
+   - [ ] Commit and push intended source, report, task, and generated-data changes on the primary branch.
+
+### Acceptance Criteria
+
+- The audit script can be run as `node scripts/researchish-skill-lifecycle-audit.mjs` and `node scripts/researchish-skill-lifecycle-audit.mjs --json`.
+- The report at `research/researchish-skill-lifecycle-audit.md` is generated from current active skill data.
+- Layer1 tests cover the audit's output shape and lifecycle invariants.
+- Any active `SKILL.md` changes follow archive, version bump, changelog, and generated `ALIGNMENT-PAGE.md` rules.
+- Required validation commands either pass or have clearly documented pre-existing/accepted residual risk.
+
+---
+
 ## Current Implementation - VARD/ORD Scan Staged Research Contract
 
 ### Goal
