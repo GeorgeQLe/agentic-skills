@@ -1,3 +1,54 @@
+## Current Implementation - Alignment Compile Responses Convention
+
+### Goal
+
+Unify generated alignment-page response compilation so answered gate questions and selected section feedback compile through one bottom `Compile Responses` action, while local section feedback controls stay hidden until a section feedback choice is selected.
+
+### Scope
+
+- Canonical convention: `docs/alignment-page-convention.md` inside the `alignment-convention` block.
+- Generated bundles: active generated `ALIGNMENT-PAGE.md` files refreshed only through `node scripts/upgrade-alignment-page.mjs`.
+- Focused tests:
+  - `tests/layer1/alignment-gates.test.ts`
+  - `tests/layer1/upgrade-alignment-pages.test.ts`
+- Prompt/task history for this `exec` invocation.
+
+### Plan
+
+1. Capture and plan.
+   - [x] Read active repo instructions, lessons, task docs, and relevant alignment-page/test context.
+   - [x] Capture the visible invocation under `prompts/exec/`.
+   - [x] Record this active roadmap/todo plan before implementation.
+2. Update the canonical convention.
+   - [x] Replace the separate bottom `Compile Feedback YAML` and `Compile Answers` model with one bottom `Compile Responses` control.
+   - [x] Define compiled responses as a mixed YAML payload containing answered gates, selected `section_feedback`, and unanswered required gate count/status for partial responses.
+   - [x] Preserve partial response behavior when at least one gate answer or one section feedback item exists.
+   - [x] Keep final approval limited to `approval_status: ready-for-agent-review` only when all required gates are answered and no unresolved negative or clarification feedback remains.
+   - [x] Require local section feedback textarea, local compile/copy controls, and read-only YAML output to be hidden until emphasize, thumbs-down, or clarification is selected for that section.
+   - [x] Require confirmed pages to remove the final `Compile Responses` button, response counters, input controls, and approval-blocking UI.
+3. Regenerate and cover.
+   - [x] Run `node scripts/upgrade-alignment-page.mjs`.
+   - [x] Update focused layer1 assertions for unified response compilation, local feedback visibility, generated bundle wording, and upgrade-page feature wording.
+4. Validate and ship.
+   - [x] Run `node scripts/upgrade-alignment-page.mjs --check`.
+   - [x] Run `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`.
+   - [x] Run `pnpm --dir tests exec vitest run --project layer1 layer1/upgrade-alignment-pages.test.ts`.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes, history, and ship manifest.
+   - [x] Commit and push intended files on the primary branch.
+
+### Acceptance Criteria
+
+- Review pages describe one bottom `Compile Responses` control instead of separate bottom compile-feedback and compile-answer controls.
+- Compiled response YAML may contain both gate answers and section feedback while preserving the existing gate-answer and `section_feedback` shapes.
+- Users can compile partial responses before all required gates are answered when at least one gate answer or one section feedback choice exists.
+- Final approval remains blocked unless every required gate is answered and there are no unresolved negative or clarification feedback items.
+- Local section feedback UI is hidden until its section feedback button is selected and hides again when deselected.
+- Confirmed pages preserve approval records but remove final response compilation controls and approval-blocking UI.
+- Generated bundles are in sync with the canonical convention.
+
+---
+
 ## Current Implementation - Alignment Browser-Open Fallback Contract
 
 ### Goal

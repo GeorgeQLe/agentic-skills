@@ -14095,6 +14095,16 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-203845-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-handoff.md`.
 
+## 2026-06-11 — Alignment compile responses convention
+
+- Updated the canonical alignment-page convention so review pages use one bottom `Compile Responses` control for answered gate questions plus selected section feedback.
+- Regenerated 288 generated `ALIGNMENT-PAGE.md` bundles from `docs/alignment-page-convention.md`.
+- Updated active bespoke roadmap alignment contracts and `upgrade-alignment-pages` audit wording with archive/version/changelog handling.
+- Refreshed Skills Showcase generated assets after active skill version/content changes.
+- Validation passed for generated bundle drift, focused layer1 alignment tests, skill archive/version/dependency checks, Skills Showcase data validation, active stale dual-button scan, and whitespace.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260611-020009-alignment-compile-responses.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-alignment-compile-responses.md`.
+
 ## 2026-06-11 — Research-ish lifecycle audit planning artifacts
 
 - Completed the planning-only task artifact step for the Research-ish Skill Lifecycle Audit.

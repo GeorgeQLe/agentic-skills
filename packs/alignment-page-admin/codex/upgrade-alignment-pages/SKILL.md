@@ -2,7 +2,7 @@
 name: upgrade-alignment-pages
 description: Audit and explicitly upgrade generated alignment/*.html review pages to the current local alignment-page standard while preserving page-specific context
 type: ops
-version: v0.1
+version: v0.2
 argument-hint: "[--repo <path>] [--apply] [alignment/*.html...]"
 ---
 
@@ -35,7 +35,7 @@ Use this skill when a repository already has generated `alignment/*.html` review
 2. Load local standards:
    - Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, and active bundled `ALIGNMENT-PAGE.md` files found under `global/`, `packs/`, `.claude/skills/`, and `.codex/skills/`.
    - Treat those local files as read-only standards. Do not fetch external standards.
-   - Extract the current required HTML behaviors: dark-mode styling, inline approval gates, section feedback controls, feedback-only YAML, final answer YAML, copy fallback behavior, unanswered-question handling, archive-before-replace behavior, and diff/change highlighting for updates.
+   - Extract the current required HTML behaviors: dark-mode styling, inline approval gates, section feedback controls, local section feedback YAML, unified response YAML, copy fallback behavior, unanswered-question handling, archive-before-replace behavior, and diff/change highlighting for updates.
 
 3. Audit every selected page:
    - Read the whole HTML file before judging it.

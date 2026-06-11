@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-11
+
+- Updated the inline alignment-page response model to use one bottom `Compile Responses` control with local section feedback YAML hidden until a section feedback choice is selected.
+
 ## v0.8 - 2026-06-10
 
 - Added npm-aware install-route alternatives to pack availability guidance while preserving Claude `/pack install` syntax.

@@ -89,7 +89,7 @@ const activeAlignmentSkillFiles = [...activeSkillFiles("global"), ...activeSkill
     if (!/^#{2,3} Alignment Page$/m.test(content)) return false;
     // Bundled skills carry the convention in ALIGNMENT-PAGE.md; bespoke
     // skip-listed skills keep the full contract inline.
-    return hasBundle(path) || content.includes("**Gate YAML contract.**");
+    return hasBundle(path) || content.includes("**Gate YAML contract.**") || content.includes("**Response YAML contract.**");
   })
   .sort();
 
@@ -119,7 +119,7 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} gates`).toContain("**Alignment gates.**");
       expect(content, `${path} required gate types`).toContain("evidence coverage, assumptions/confidence, scope/non-goals");
       expect(content, `${path} required questions`).toContain("**Required inline questions.**");
-      expect(content, `${path} yaml contract`).toContain("**Gate YAML contract.**");
+      expect(content, `${path} yaml contract`).toMatch(/\*\*(Gate|Response) YAML contract\.\*\*/);
       expect(content, `${path} yaml fields`).toContain("`section`, `gate_type`, `status`");
       expect(content, `${path} in-page assumptions`).toContain("assumptions/confidence");
       expect(content, `${path} proposed file changes`).toContain("proposed file changes");
@@ -229,7 +229,7 @@ describe("alignment page gate contract", () => {
         "Confirmed pages must not keep these as required input controls",
       );
       expect(content, `${path} review compile controls`).toContain(
-        'In `review` pages, at the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button',
+        'In `review` pages, at the bottom of the page, include an ordinary in-flow compile section with a single "Compile Responses" button',
       );
       expect(content, `${path} review pre-approval stop`).toContain(
         "While an alignment page is in `review`, the next action is review of the HTML alignment page",
@@ -248,7 +248,7 @@ describe("alignment page gate contract", () => {
       );
       expect(content, `${path} finished amendable language`).toContain("finished but amendable language");
       expect(content, `${path} remove gate ui`).toContain(
-        'Remove required gate-question controls, the final "Compile Answers" button, unanswered-question counters',
+        'Remove required gate-question controls, section feedback input controls, local compile/copy controls, local read-only YAML outputs, the final "Compile Responses" button, response counters',
       );
       expect(content, `${path} preserve approval record`).toContain("Preserve the full research and approval record");
       expect(content, `${path} preserve evidence`).toContain(
@@ -305,7 +305,9 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} review page before synthesis`).toContain(
         "Build the `review` alignment page before synthesized research",
       );
-      expect(content, `${path} scope yaml approval`).toContain("Stop for final compiled YAML approval of the research scope");
+      expect(content, `${path} scope yaml approval`).toContain(
+        "Stop for final compiled response YAML approval of the research scope",
+      );
       expect(content, `${path} no stage 1 synthesis`).toContain(
         "Do not synthesize findings, rank candidates, recommend a path, or create working packets",
       );
@@ -319,15 +321,15 @@ describe("alignment page gate contract", () => {
         /`research\/\{slug\}\/_working\/preliminary-[^`]+-research\.md`/,
       );
       expect(content, `${path} stage 2 waits for scope approval`).toContain(
-        "Stage 2 starts only after final compiled YAML approves the research scope",
+        "Stage 2 starts only after final compiled response YAML approves the research scope",
       );
       expect(content, `${path} stage 2 research`).toContain("Perform the synthesized research");
       expect(content, `${path} full preliminary packet`).toContain("renders the full preliminary packet");
       expect(content, `${path} feedback remains stage 2`).toContain(
-        "Feedback-only YAML revises the working packet and review page, then remains in Stage 2",
+        "Partial compiled responses revise the working packet and review page, then remain in Stage 2",
       );
       expect(content, `${path} final yaml gating`).toContain(
-        "Stage 3 consumes final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`",
+        "Stage 3 consumes final compiled response YAML for artifact approval only when it has `approval_status: ready-for-agent-review`",
       );
       expect(content, `${path} archive working packet`).toContain(
         "archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`",
@@ -431,16 +433,27 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("allows feedback-only YAML before final gate answers are complete", () => {
-    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
-    for (const path of activeAlignmentSkillFiles) {
+  it("allows partial compiled responses before final gate answers are complete", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
-      expect(content, `${path} feedback-only contract`).toContain("**Feedback-only YAML contract.**");
-      expect(content, `${path} compile feedback`).toContain("Compile Feedback YAML");
-      expect(content, `${path} early enable`).toContain("even if required inline gate questions are unanswered");
-      expect(content, `${path} revision status`).toContain("`feedback_status: revision-request`");
-      expect(content, `${path} not approved`).toContain("`approval_status: not-approved`");
+      expect(content, `${path} response contract`).toContain("**Response YAML contract.**");
+      expect(content, `${path} compile responses`).toContain('single "Compile Responses" button');
+      expect(content, `${path} early enable`).toContain(
+        "Enable it as soon as at least one gate question has an answer or at least one section-feedback control is selected",
+      );
+      expect(content, `${path} partial responses before final answers`).toContain(
+        "do not require every required gate question to be answered before compiling partial responses",
+      );
+      expect(content, `${path} response status`).toContain("`response_status` (`partial` or `complete`)");
+      expect(content, `${path} not approved`).toContain(
+        "`approval_status` (`not-approved` or `ready-for-agent-review`)",
+      );
+      expect(content, `${path} gate status`).toContain("`required_gate_status` (`incomplete` or `complete`)");
       expect(content, `${path} unanswered questions`).toContain("`unanswered_required_questions`");
+      expect(content, `${path} ready only when complete`).toContain(
+        "Set `approval_status: ready-for-agent-review` only when every required gate is answered",
+      );
       expect(content, `${path} emphasize feedback value`).toContain("`feedback` (`emphasize`, `down`, or `needs-clarification`)");
       expect(content, `${path} requested action`).toContain("`requested_agent_action`");
       expect(content, `${path} emphasize action`).toContain("add-weight-to-section");
@@ -449,8 +462,8 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} clarification action`).toContain("clarify-before-approval");
       expect(content, `${path} stale up feedback value`).not.toContain("`feedback` (`up`, `down`, or `needs-clarification`)");
       expect(content, `${path} stale accept action`).not.toContain("accept-as-is");
-      expect(content, `${path} do not require gates for feedback`).toContain(
-        "Do not require the user to answer every gate before sending emphasis requests, negative feedback, or clarification needs",
+      expect(content, `${path} do not require gates for partial responses`).toContain(
+        "Do not require the user to answer every gate before sending emphasis requests, negative feedback, clarification needs, or other partial responses",
       );
     }
   });
@@ -472,12 +485,19 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("keeps feedback-only YAML both local to selected sections and aggregated at the bottom", () => {
-    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
-    for (const path of activeAlignmentSkillFiles) {
+  it("keeps local feedback YAML hidden until a section feedback choice is selected", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
-      expect(content, `${path} dual feedback placement`).toContain(
-        "Provide feedback-only YAML in two places: locally under each selected section-feedback textarea, and globally in the bottom compile section",
+      expect(content, `${path} local feedback contract`).toContain("**Section feedback YAML contract.**");
+      expect(content, `${path} local feedback hidden by default`).toContain(
+        "The section feedback textarea, local compile/copy controls, and local read-only YAML output are hidden by default",
+      );
+      expect(content, `${path} local feedback revealed`).toContain(
+        'Selecting any one feedback choice reveals a multi-line section-feedback textarea plus local "Compile Feedback YAML", "Copy YAML", and read-only YAML controls',
+      );
+      expect(content, `${path} local feedback hidden on deselect`).toContain(
+        "deselecting the active choice hides the textarea, local compile/copy controls, and local read-only YAML output again",
       );
       expect(content, `${path} local feedback textarea`).toContain("section-feedback textarea");
       expect(content, `${path} separate from gate inputs`).toMatch(
@@ -487,16 +507,16 @@ describe("alignment page gate contract", () => {
         /even when (the same section )?(also )?has (required )?gate questions/,
       );
       expect(content, `${path} local yaml textarea`).toContain(
-        "read-only YAML textarea directly under that section",
+        "a read-only YAML textarea directly under that section's feedback textarea",
       );
       expect(content, `${path} local single feedback entry`).toContain(
         "single selected section-feedback entry",
       );
-      expect(content, `${path} bottom aggregated feedback`).toContain(
-        'The bottom "Compile Feedback YAML" control generates the same YAML shape but aggregates every selected section-feedback entry on the page',
+      expect(content, `${path} no bottom feedback yaml control`).not.toContain(
+        'The bottom "Compile Feedback YAML" control',
       );
-      expect(content, `${path} no sticky bottom feedback`).toContain(
-        "Do not render the bottom feedback compile controls as a sticky or fixed banner",
+      expect(content, `${path} no global feedback-only path`).not.toContain(
+        "globally in the bottom compile section",
       );
       expect(content, `${path} old bottom feedback ban removed`).not.toContain(
         "Do not place a global feedback-only compile/output banner at the bottom of the page",
@@ -507,31 +527,30 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("keeps final answer compilation at the bottom of the page", () => {
-    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
-    for (const path of activeAlignmentSkillFiles) {
+  it("keeps one unified response compilation control at the bottom of the page", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
-      expect(content, `${path} bottom compile answers`).toMatch(
-        /(?:In `review` pages, at|At) the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button.*separate "Compile Answers" button/,
-      );
-      expect(content, `${path} bottom compile section`).toMatch(
-        /(?:In `review` pages, at|At) the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button/,
+      expect(content, `${path} bottom compile responses`).toContain(
+        'In `review` pages, at the bottom of the page, include an ordinary in-flow compile section with a single "Compile Responses" button',
       );
       expect(content, `${path} no persistent banner`).toContain(
         "The bottom compile section must not be sticky, fixed, floating, or styled as a persistent banner",
       );
+      expect(content, `${path} no separate bottom answers`).not.toContain('separate "Compile Answers" button');
+      expect(content, `${path} no bottom compile feedback`).not.toContain('bottom "Compile Feedback YAML" control');
     }
   });
 
   it("requires compiled YAML to identify the source alignment page", () => {
-    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
-    for (const path of activeAlignmentSkillFiles) {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} feedback alignment_page`).toMatch(
         /The local feedback compile generates YAML with `alignment_page: alignment\/[^`]+\.html`, `feedback_status: revision-request`/,
       );
-      expect(content, `${path} final alignment_page`).toMatch(
-        /`alignment_page: alignment\/[^`]+\.html`, `approval_status: ready-for-agent-review`/,
+      expect(content, `${path} response alignment_page`).toMatch(
+        /mixed response payload with `alignment_page: alignment\/[^`]+\.html`, `response_status`/,
       );
       expect(content, `${path} repo-relative path source`).toMatch(
         /Populate `alignment_page` from the known repo-relative output path used to write the HTML page/,
@@ -565,7 +584,7 @@ describe("alignment page gate contract", () => {
         "Follow the shared Alignment Page convention in CLAUDE.md",
       );
       const page = bundled(path);
-      expect(page, `${path} bundle has gate contract`).toContain("**Gate YAML contract.**");
+      expect(page, `${path} bundle has response contract`).toContain("**Response YAML contract.**");
       expect(page, `${path} bundle has required questions`).toContain("**Required inline questions.**");
     }
     expect(bundled("global/claude/idea-scope-brief/SKILL.md"), "idea-scope-brief gates").toContain(
