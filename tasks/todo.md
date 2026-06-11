@@ -2975,6 +2975,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Replacement behavior: refresh removes old managed skill installs before copying the package version into `.claude/skills` and `.codex/skills`; unmanaged directories are not removed and are skipped with a warning.
 - Validation passed: `node --check packages/skillpacks/src/cli/lifecycle.mjs`; `node --check packages/skillpacks/test/lifecycle.test.mjs`; `npm --workspace skillpacks run test:node`; `npm --workspace skillpacks run build:check`; `git diff --check`.
 
+## Active — skillpacks install destination output
+
+- [x] Record lesson from user correction about transient source-path output.
+- [x] Remove package source paths from Node lifecycle install/pin/unpin messages.
+- [x] Update lifecycle tests for destination-only output.
+- [x] Verify package syntax, tests, build check, and whitespace.
+- [ ] Commit and push the CLI output correction.
+
+### Review Notes — skillpacks install destination output
+
+- Changed Node lifecycle output so install/refresh reports `Installed .claude/skills/<skill>` and `Installed .codex/skills/<skill>` without the package source path.
+- Pinned installs now report `Installed .<tool>/skills/<skill> (pinned <version>)`; explicit `pin` and `unpin` output now reports destination plus `(version)` or `(latest)`.
+- Added regression assertions that install, pinned install, refresh, pin, and unpin stdout do not contain ` -> ` source arrows.
+- Validation passed: `node --check packages/skillpacks/src/cli/lifecycle.mjs`; `node --check packages/skillpacks/test/lifecycle.test.mjs`; `npm --workspace skillpacks run test:node`; `npm --workspace skillpacks run build:check`; `git diff --check`.
+
 - [x] Rename afps-status stage `icp-needed` → `discovery-needed`
 
 ## Future Work

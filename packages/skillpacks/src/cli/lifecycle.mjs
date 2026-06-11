@@ -381,9 +381,9 @@ function linkSkill(projectRoot, tool, skillName, sourceDir, config) {
 
   if (syncSkillInstall(effective.source, target)) {
     if (effective.usingPinned) {
-      console.log(`Installed .${tool}/skills/${skillName} -> ${effective.source} (pinned ${effective.pinned})`);
+      console.log(`Installed .${tool}/skills/${skillName} (pinned ${effective.pinned})`);
     } else {
-      console.log(`Installed .${tool}/skills/${skillName} -> ${effective.source}`);
+      console.log(`Installed .${tool}/skills/${skillName}`);
     }
   }
 }
@@ -678,7 +678,7 @@ function relinkPinnedSkill(projectRoot, manifest, pack, skillName, version) {
     }
 
     if (syncSkillInstall(source, join(root, skillName))) {
-      console.log(`Pinned .${tool}/skills/${skillName} -> ${source}`);
+      console.log(`Pinned .${tool}/skills/${skillName} (${version})`);
     }
   }
 }
@@ -697,7 +697,7 @@ function relinkUnpinnedSkill(projectRoot, manifest, pack, skillName) {
     }
 
     if (syncSkillInstall(source, join(root, skillName))) {
-      console.log(`Unpinned .${tool}/skills/${skillName} -> ${source}`);
+      console.log(`Unpinned .${tool}/skills/${skillName} (latest)`);
     }
   }
 }

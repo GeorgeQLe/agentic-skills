@@ -152,8 +152,9 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['install', 'quality']);
 
-    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep -> .*packs\/code-quality\/claude\/quality-sweep/);
-    assert.match(stdout, /Installed \.codex\/skills\/quality-sweep -> .*packs\/code-quality\/codex\/quality-sweep/);
+    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.match(stdout, /Installed \.codex\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, / -> /);
     assert.match(stdout, /Updated \.agents\/project\.json/);
     assert.match(stdout, /Skill installs changed/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
@@ -178,7 +179,8 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
 
-    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep -> .*archive\/v0\.0 \(pinned v0\.0\)/);
+    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep \(pinned v0\.0\)/);
+    assert.doesNotMatch(stdout, / -> /);
     assert.match(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
     assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), true);
     assert.match(readlinkSync(skillPath(dir, 'claude', 'quality-sweep')), /packs\/code-quality\/claude\/quality-sweep\/archive\/v0\.0$/);
@@ -262,6 +264,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(stdout.includes(`Refreshed project skills to skillpacks@${packageVersion}.`), true);
     assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
     assert.match(stdout, /Installed \.codex\/skills\/devtool-adoption/);
+    assert.doesNotMatch(stdout, / -> /);
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'devtool-adoption')), true);
     assert.notEqual(
@@ -370,8 +373,9 @@ describe('Node lifecycle commands', () => {
 
     const pinned = await runSkillpacks(dir, ['pin', 'quality-sweep', 'v0.0']);
 
-    assert.match(pinned.stdout, /Pinned \.claude\/skills\/quality-sweep -> .*archive\/v0\.0/);
+    assert.match(pinned.stdout, /Pinned \.claude\/skills\/quality-sweep \(v0\.0\)/);
     assert.match(pinned.stdout, /Pinned quality-sweep to v0\.0/);
+    assert.doesNotMatch(pinned.stdout, / -> /);
     assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), true);
     assert.match(readlinkSync(skillPath(dir, 'claude', 'quality-sweep')), /archive\/v0\.0$/);
     assert.deepEqual(readProjectConfig(dir).pinned_versions, { 'quality-sweep': 'v0.0' });
@@ -379,8 +383,9 @@ describe('Node lifecycle commands', () => {
 
     const unpinned = await runSkillpacks(dir, ['unpin', 'quality-sweep']);
 
-    assert.match(unpinned.stdout, /Unpinned \.claude\/skills\/quality-sweep -> .*packs\/code-quality\/claude\/quality-sweep/);
+    assert.match(unpinned.stdout, /Unpinned \.claude\/skills\/quality-sweep \(latest\)/);
     assert.match(unpinned.stdout, /Unpinned quality-sweep \(reverted to latest\)/);
+    assert.doesNotMatch(unpinned.stdout, / -> /);
     assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), false);
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
     assert.equal(Object.hasOwn(readProjectConfig(dir), 'pinned_versions'), false);

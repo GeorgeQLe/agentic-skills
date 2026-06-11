@@ -1139,3 +1139,10 @@ icp -> competitive-analysis -> journey-map -> positioning
 2. Add refresh output that states the bundled `skillpacks` package version applied to local skill roots.
 3. Cover the output in the focused lifecycle refresh test.
 4. Verify package tests and syntax checks, then record the install replacement behavior for the user.
+
+## Current Plan — skillpacks install destination output
+
+1. Remove transient package source paths from Node-owned install, refresh, pin, and unpin messages.
+2. Keep output focused on `.claude/skills/<name>` and `.codex/skills/<name>` destinations, with pin/latest status where relevant.
+3. Add lifecycle test assertions that normal install, pinned install, refresh, pin, and unpin output do not contain source arrows.
+4. Run package syntax checks, node tests, build check, and whitespace validation before shipping.
