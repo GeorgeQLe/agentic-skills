@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-10 — Skillpacks CLI routing remediation plan correction
+
+- Captured the visible pack-skill remediation-planning prompt under `prompts/pack/`.
+- Reframed the active roadmap from a P1-only implementation handoff to the full `research/skillpack-cli-routing-audit.md` remediation program: 220 active skills, 14 P1 global routing/install files, P2 repeated `Pack Availability Guard` boilerplate, P3 bespoke high-traffic follow-up route sections, and final validation/shipping.
+- Reframed `tasks/todo.md` as the first executable slice: define canonical dual-route wording and implement validation that prevents install-route text from omitting `npx skillpacks install` or `npx skillpacks install-deck` where relevant.
+- No active `SKILL.md` files or generated Skills Showcase assets were changed in this planning boundary.
+
 ## 2026-06-10 — Documentation alignment audit
 
 - Ran a repo-internal documentation consistency audit using `devtool-docs-audit` and captured the visible prompt under `prompts/devtool-docs-audit/`.

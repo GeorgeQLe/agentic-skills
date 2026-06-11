@@ -1,67 +1,61 @@
-## Current Implementation - Skillpacks CLI Routing Remediation P1
+## Current Implementation - Skillpacks CLI Routing Remediation: Canonical Wording And Validation
 
 ### Goal
 
-Update the highest-impact global installer, discovery, status, and provisioning skills so their missing-pack / install-route guidance mentions both in-agent `/pack` or `$pack` routes and the published npm `npx skillpacks` shell route.
+Define the canonical npm-aware install-route wording and add the first regression check before touching the 220 active `SKILL.md` remediation candidates from `research/skillpack-cli-routing-audit.md`.
 
 ### Execution Profile
 
-- Parallel mode: serial.
-- Rationale: the P1 files are mirrored Claude/Codex skill contracts with version/archive requirements, prompt-history implications, generated Skills Showcase assets, and route wording that should stay semantically aligned across mirrors.
+- Parallel mode: serial writes, parallel reads allowed.
+- Rationale: the wording contract must be settled before large mirrored skill edits begin, and the validation rule should prevent broad remediation from drifting back to `/pack`, `$pack`, or `scripts/pack.sh` only.
 
 ### Source Context
 
 - Audit report: `research/skillpack-cli-routing-audit.md`.
-- Current npm install contract:
+- Audit inventory: 383 active skill files scanned; 220 active skills need npm-aware routing wording; 14 global routing/install skills are P1.
+- Current install-route contract:
   - Claude in-agent route: `/pack install <pack-or-skill>`.
   - Codex in-agent route: `$pack install <pack-or-skill>`.
-  - Shell route from a target project: `npx skillpacks install <pack-or-skill>`.
+  - Project shell route: `npx skillpacks install <pack-or-skill>`.
   - Deck shell route: `npx skillpacks install-deck <deck>`.
-  - Source-checkout route remains `scripts/pack.sh install <pack-or-skill>`.
-- P1 files from the audit:
-  - `global/claude/afps-status/SKILL.md`
-  - `global/claude/codebase-status/SKILL.md`
-  - `global/claude/idea-scope-brief/SKILL.md`
-  - `global/claude/init-agentic-skills/SKILL.md`
-  - `global/claude/pack/SKILL.md`
-  - `global/claude/provision-agentic-config/SKILL.md`
-  - `global/claude/skills/SKILL.md`
-  - `global/codex/afps-status/SKILL.md`
-  - `global/codex/codebase-status/SKILL.md`
-  - `global/codex/idea-scope-brief/SKILL.md`
-  - `global/codex/init-agentic-skills/SKILL.md`
-  - `global/codex/pack/SKILL.md`
-  - `global/codex/provision-agentic-config/SKILL.md`
-  - `global/codex/skills/SKILL.md`
+  - Source-checkout route: `scripts/pack.sh install <pack-or-skill>`.
 
 ### Steps
 
-- [ ] Update P1 global skill install-route wording:
-  - Archive and version-bump any changed `SKILL.md` with `scripts/skill-archive.sh <skill-dir>` before editing active content.
-  - Use runner-specific wording: Claude should keep `/pack install ...` and add `npx skillpacks install ...`; Codex should keep `$pack install ...` and add `npx skillpacks install ...`.
-  - Preserve `scripts/pack.sh` as the source-checkout route where the skill is explicitly about repository-local maintenance.
-  - Update each changed skill's `CHANGELOG.md`.
-  - Refresh Skills Showcase generated data after SKILL.md changes: `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`.
-- [ ] Add or update focused validation for P1 npm install-route wording:
-  - Prefer a small script or layer1 test that scans the P1 file list and requires `npx skillpacks install` where install-routing text is present.
-  - Keep the existing `scripts/skill-pack-routing-audit.sh` as the cross-pack guard check; do not repurpose it unless the new assertion fits cleanly.
-- [ ] Run validation and ship:
-  - `scripts/skill-versions.sh --missing`
-  - `scripts/skill-archive-audit.sh --strict`
-  - `scripts/skill-deps.sh --broken`
-  - `scripts/skill-pack-routing-audit.sh`
-  - Any new focused npm-route validation from this step.
-  - Skills Showcase data validation commands listed above.
-  - `git diff --check`
-  - Record review notes, update history, create ship manifest, commit, and push.
+- [ ] Define the canonical wording matrix:
+  - Claude pack install: keep `/pack install <pack>` and add `npx skillpacks install <pack>`.
+  - Codex pack install: keep `$pack install <pack>` and add `npx skillpacks install <pack>`.
+  - Individual skill install: keep `/pack install <skill>` or `$pack install <skill>` and add `npx skillpacks install <skill>`.
+  - Source-checkout maintenance: keep `scripts/pack.sh install <pack-or-skill>` and add the npm route only when the target reader may be outside this checkout.
+  - Deck install: use `npx skillpacks install-deck <deck>` and do not phrase deck installs as pack or individual skill installs.
+- [ ] Decide the validation shape:
+  - Prefer a focused script or layer1 test that scans active `SKILL.md` files, excludes `archive/**`, and reports install-route text that lacks the required `npx skillpacks` alternative.
+  - Allowlist truly internal/source-checkout-only maintenance text with comments or structured fixtures so exceptions are auditable.
+  - Keep `scripts/skill-pack-routing-audit.sh` as the cross-pack guard correctness check unless the new npm-route assertion fits cleanly without weakening that script's scope.
+- [ ] Implement the validation rule and initial fixtures:
+  - Include the P1 global files from the audit as required coverage.
+  - Include representative `Pack Availability Guard` boilerplate examples for later P2 migration.
+  - Include a deck-route fixture or assertion that distinguishes `npx skillpacks install-deck <deck>` from `npx skillpacks install <pack-or-skill>`.
+- [ ] Verify this slice:
+  - Run the new focused validation and confirm it fails/passes in the intended mode for the current staged scope.
+  - Run `bash scripts/skill-pack-routing-audit.sh`.
+  - Run `git diff --check`.
+- [ ] Prepare the next remediation slice:
+  - Update `tasks/todo.md` with the P1 global skill edit batch after canonical wording and validation are in place.
+  - Carry forward the skill-versioning requirement for every changed `SKILL.md`: `scripts/skill-archive.sh <skill-dir>`, frontmatter `version` bump, and `CHANGELOG.md` update where applicable.
 
 ### Acceptance Criteria
 
-- P1 global skills no longer present install-route guidance that only names `/pack`, `$pack`, or `scripts/pack.sh` when the published npm route is also relevant.
-- Claude and Codex mirrors preserve correct runner syntax and do not swap slash/dollar commands.
-- Version archives and changelogs exist for every changed skill directory.
-- Generated Skills Showcase data is refreshed and validated.
-- Focused validation prevents the P1 global install-route wording from regressing back to source-checkout-only guidance.
+- The canonical wording explicitly preserves `/pack`, `$pack`, and `scripts/pack.sh` where they are still valid while adding npm CLI alternatives.
+- The validation distinguishes pack or individual skill installs from deck installs.
+- P1, P2, and P3 remediation remains sequenced from `research/skillpack-cli-routing-audit.md`; this slice does not attempt the whole 220-skill migration.
+- No active `SKILL.md` remediation begins until the wording contract and regression check are in place.
+- Review notes state whether Skills Showcase refresh is unnecessary for this slice or required by any later `SKILL.md` metadata/content changes.
+
+### Planning Update Review
+
+- Reframed the active todo from a P1 source-edit batch to the smaller first remediation slice requested by the roadmap plan.
+- No active `SKILL.md` files, generated Skills Showcase assets, or source tests are changed by this planning update.
 
 ---
 

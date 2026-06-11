@@ -1,31 +1,64 @@
-## Current Implementation - Skillpacks CLI Routing Remediation P1
+## Current Implementation - Skillpacks CLI Routing Remediation
 
 ### Goal
 
-Update the highest-impact global installer, discovery, status, and provisioning skills so their missing-pack / install-route guidance mentions both in-agent `/pack` or `$pack` routes and the published npm `npx skillpacks` shell route.
+Migrate active skill install-routing language so users see the published npm CLI paths alongside the existing in-agent and source-checkout routes:
 
-### Plan
+- Pack or individual skill install from a project shell: `npx skillpacks install <pack-or-skill>`.
+- Deck install from a project shell: `npx skillpacks install-deck <deck>`.
 
-1. Update P1 global skill install-route wording.
-   - [ ] Archive and version-bump changed global skill directories before editing active `SKILL.md` files.
-   - [ ] Add runner-specific npm route wording to the P1 global Claude/Codex skill list from `research/skillpack-cli-routing-audit.md`.
-   - [ ] Preserve source-checkout `scripts/pack.sh` wording where it is intentionally about local repo maintenance.
-   - [ ] Update changelogs for every changed skill.
-2. Add focused validation.
-   - [ ] Add or update a small script/layer1 test that requires `npx skillpacks install` in the P1 install-route surfaces.
-   - [ ] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack guard correctness.
-3. Refresh and verify generated surfaces.
-   - [ ] Regenerate and validate Skills Showcase data after SKILL.md changes.
-   - [ ] Run skill version/archive/dependency/routing checks and whitespace checks.
-4. Ship.
-   - [ ] Record review notes, history, and ship manifest.
-   - [ ] Commit and push the intended P1 remediation boundary.
+This roadmap schedules the remediation described in `research/skillpack-cli-routing-audit.md`; it does not perform the skill text migration itself.
+
+### Scope
+
+- Audit basis: `research/skillpack-cli-routing-audit.md`.
+- Active skill files scanned by the audit: 383.
+- Active skill files needing npm-aware install-routing wording: 220.
+- P1 global routing/install files: 14 mirrored Claude/Codex skill contracts.
+- Existing routes remain valid and must be preserved where relevant:
+  - Claude in-agent route: `/pack install <pack-or-skill>`.
+  - Codex in-agent route: `$pack install <pack-or-skill>`.
+  - Source-checkout route: `scripts/pack.sh install <pack-or-skill>`.
+
+### Remediation Phases
+
+1. Canonical wording and validation design.
+   - [ ] Define runner-specific dual-route wording for Claude, Codex, individual skill installs, pack installs, source-checkout maintenance, and deck installs.
+   - [ ] Decide and implement the focused validation rule that prevents install-route text from omitting `npx skillpacks install` or `npx skillpacks install-deck` unless explicitly allowlisted.
+   - [ ] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack availability guards unless extending it is cleaner than adding a dedicated npm-route check.
+2. P1 global routing/install skills.
+   - [ ] Update the 14 global files listed in the audit: `pack`, `skills`, `init-agentic-skills`, `provision-agentic-config`, `afps-status`, `codebase-status`, and `idea-scope-brief` for both Claude and Codex where present.
+   - [ ] Preserve runner syntax exactly: Claude gets `/pack ...`; Codex gets `$pack ...`; shell guidance gets `npx skillpacks ...`.
+   - [ ] Preserve `scripts/pack.sh` where the text is explicitly about source-checkout maintenance.
+3. P2 repeated `Pack Availability Guard` boilerplate.
+   - [ ] Replace repeated pack-availability guard language across the pack-skill buckets listed in the audit.
+   - [ ] Apply the canonical wording consistently across mirrored Claude/Codex pack skills.
+   - [ ] Avoid one oversized commit by grouping related pack buckets into reviewable batches.
+4. P3 bespoke high-traffic follow-up route sections.
+   - [ ] Sweep high-traffic workflow skills with custom follow-up route language: `customer-discovery`, `competitive-analysis`, `journey-map`, `positioning`, `user-flow-map`, `ui-interview`, `ux-variations`, `roadmap`, `plan-phase`, `ship`, and `ship-end`.
+   - [ ] Distinguish pack installs from deck installs; use `npx skillpacks install-deck <deck>` only when the desired install unit is a deck.
+5. Final validation and shipping.
+   - [ ] Run skill version, archive, dependency, routing, and whitespace checks.
+   - [ ] Refresh Skills Showcase data if any `SKILL.md` metadata or content changes affect generated showcase surfaces.
+   - [ ] Record review notes, task history, and shipping metadata.
+   - [ ] Commit and push the intended remediation batches.
+
+### Skill Versioning Requirement
+
+Every remediation batch that changes an active `SKILL.md` must follow the repo skill-versioning rules before commit:
+
+- Archive the current skill version with `scripts/skill-archive.sh <skill-dir>` before editing active content.
+- Bump the active `SKILL.md` frontmatter `version` for substantive wording changes.
+- Update that skill directory's `CHANGELOG.md` where applicable.
+- Keep archive snapshots out of active-skill routing scans unless the validation intentionally audits historical files.
 
 ### Acceptance Criteria
 
-- P1 global skills provide both in-agent and published npm install routes where relevant.
-- Claude and Codex mirrors preserve correct command syntax.
-- Changed skills have archives, version bumps, changelogs, generated showcase refresh, and focused regression coverage.
+- The remediation plan references `research/skillpack-cli-routing-audit.md` and covers all 220 flagged active skills, not only the P1 global files.
+- P1, P2, and P3 remediation phases are sequenced, checkable, and small enough for reviewable commits.
+- Future implementation preserves `/pack`, `$pack`, and `scripts/pack.sh` source-checkout routes while adding npm CLI alternatives.
+- Future implementation distinguishes pack installs from deck installs.
+- Focused validation prevents future install-route guidance from regressing to in-agent-only or source-checkout-only wording when the npm CLI route is relevant.
 
 ---
 
