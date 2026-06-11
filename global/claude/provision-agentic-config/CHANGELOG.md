@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.6 - 2026-06-11
+
+- Updated generated missing-skill fallback blocks to include `npx skillpacks install <pack-or-skill>` alongside runner-specific pack install routes.
+
 ## v0.5
 
 - Tightened generated missing-skill fallback guidance to recommend runner-specific pack install commands and post-install reload paths: Claude Code `/reload-skills`, `/clear`, then restart fallback; Codex fresh session when `$` discovery remains stale.

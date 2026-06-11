@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
@@ -57,17 +57,17 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - `reconcile-needed`: artifacts conflict enough that the next step should be reconciliation before new research or implementation.
 6. Choose the next route with these rules:
    - No concept brief or unclear concept: `/idea-scope-brief`
-   - Concept exists but business discovery is missing: `/pack install business-discovery`
+   - Concept exists but business discovery is missing: `/pack install business-discovery` inside Claude Code, or `npx skillpacks install business-discovery` from the project shell.
    - Concept exists and discovery is enabled, but no customer-discovery evidence: `/customer-discovery`
    - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `/competitive-analysis`, `/value-prop-canvas`, or `/positioning`
-   - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or the required pack install first, such as `/pack install customer-lifecycle` or `/pack install business-growth`
+   - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or the required pack install first, such as `/pack install customer-lifecycle` inside Claude Code or `npx skillpacks install customer-lifecycle` from the project shell, or `/pack install business-growth` inside Claude Code or `npx skillpacks install business-growth` from the project shell.
    - Research/specs exist but task queue is stale or absent: `/roadmap`
    - Clear executable task exists: `/exec`
    - Implementation is done but unvalidated, dirty, uncommitted, unpushed, or otherwise unshipped: `/ship`
    - Contradictory research/spec/task evidence: `/reconcile-research` when business-ops is enabled, `/spec-drift` when agent-work-admin is enabled, otherwise `/codebase-status` with a focused prompt naming the contradiction.
 7. Validate command availability before recommending pack-local routes:
    - Use `scripts/pack.sh list-packs` when present to detect enabled packs.
-   - If the best command lives in an uninstalled pack, recommend the pack install command instead of the unavailable command.
+   - If the best command lives in an uninstalled pack, recommend the pack install command instead of the unavailable command: `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell.
    - If `scripts/pack.sh` is missing or pack lookup fails, silently fall back to the global/default route and mention the degraded lookup only if it changes confidence.
 
 ## Output

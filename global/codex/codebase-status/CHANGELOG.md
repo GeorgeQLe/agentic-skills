@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-11
+
+- Added npm-aware install-route alternatives to pack-local status recommendations while preserving Codex `$pack install` prerequisites.
+
 ## v0.5 - 2026-06-06
 
 - Updated the canonical AFPS route string to start with `customer-discovery` while preserving `research/icp.md` as the evidence artifact check.

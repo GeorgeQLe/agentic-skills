@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.6
+version: v0.7
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -24,13 +24,13 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
      - Classify likely packs using the pack selection rules below.
      - Present a concise recommendation with evidence.
      - Use AskUserQuestion to ask which pack or packs to install. Include the recommended pack first. Include kanban only as an explicit opt-in when there is evidence of PoketoWork usage or the user asked for kanban.
-     - After the user confirms, run `scripts/pack.sh install <pack...>`.
+     - After the user confirms, run the source-checkout helper `scripts/pack.sh install <pack...>`. For package consumers outside this checkout, the equivalent project-shell route is `npx skillpacks install <pack...>`.
      - If the user cancels or asks for more detail, do not install anything.
 3. Run the matching helper command from this skill library's bundled launcher for explicit commands:
    - `scripts/pack.sh list`
    - `scripts/pack.sh status`
    - `scripts/pack.sh recommend`
-   - `scripts/pack.sh install <pack-or-skill>`
+   - `scripts/pack.sh install <pack-or-skill>` (source checkout) or `npx skillpacks install <pack-or-skill>` (published package from the project shell)
    - `scripts/pack.sh remove <pack-or-skill>`
    - `scripts/pack.sh refresh`
    - `scripts/pack.sh which <skill>`
@@ -55,7 +55,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Pack installs use repo-managed skill roots that point back to this skill-library repository and exclude archived skill snapshots by default.
 - The bundled launcher resolves copied managed installs through `.agentic-skills-managed` provenance before delegating to the repository-level pack manager.
 - `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
-- `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack.
+- `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack. Package consumers use `npx skillpacks install <name>` for the same pack-or-skill resolution from the project shell.
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.
 - `scripts/pack.sh refresh` recreates project-local skill roots from `.agents/project.json`; it does not by itself force an active CLI skill registry to reload.
 - Claude Code watches skill files under existing `.claude/skills` roots and supports `/reload-skills` to rescan skills and commands during a session. If a newly installed skill is not visible, run `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up the refreshed registry. Restart Claude Code if the top-level `.claude/skills` directory did not exist when the session started or the skill is still invisible.
@@ -65,8 +65,8 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 When a name passed to `install` or `remove` doesn't match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
 
-- `pack install customer-discovery` — installs only the `customer-discovery` skill from `business-discovery`, not the whole pack.
-- `pack install code-review customer-discovery` — installs the `code-review` pack (all skills) plus the individual `customer-discovery` skill.
+- `pack install customer-discovery` inside Claude Code, or `npx skillpacks install customer-discovery` from the project shell — installs only the `customer-discovery` skill from `business-discovery`, not the whole pack.
+- `pack install code-review customer-discovery` inside Claude Code, or `npx skillpacks install code-review customer-discovery` from the project shell — installs the `code-review` pack (all skills) plus the individual `customer-discovery` skill.
 - `pack remove customer-discovery` — removes only the `customer-discovery` skill root and its `enabled_skills` entry.
 
 Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
@@ -154,7 +154,7 @@ When a task clearly names a scoped path, route to that scope's `project_type` an
 When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
-2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <skill>` (for just that skill) or `/pack install <pack>` (for the full pack), and note the post-install reload path: `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
+2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <skill>` for just that skill, `/pack install <pack>` for the full pack, or `npx skillpacks install <pack-or-skill>` from the project shell, and note the post-install reload path: `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
 3. If found in an **installed pack**: the skill should already be available — suggest the same reload path to pick up the local skill roots.
 4. If **not found in any pack**: suggest `/skills` to browse available skills or `/skills search <keyword>` to search.
 

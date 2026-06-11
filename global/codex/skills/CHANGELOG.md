@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-11
+
+- Added npm-aware install-route alternatives to available-but-not-installed skill guidance while preserving Codex `$pack install` routes.
+
 ## v0.5
 
 - Updated the Discovery & Market Fit catalog examples to list `customer-discovery` as the standard business-discovery route while preserving `enterprise-icp`.

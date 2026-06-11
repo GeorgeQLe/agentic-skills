@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.5
+version: v0.6
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -35,7 +35,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 
    | Stage | Skills (pack in parentheses; no label = global) |
    |-------|--------|
-   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>`, `pack remove <pack-or-skill>`, `pack which <skill>` |
+   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>` (or project shell: `npx skillpacks install <pack-or-skill>`), `pack remove <pack-or-skill>`, `pack which <skill>` |
    | Discovery & Market Fit | `customer-discovery` (business-discovery), `enterprise-icp` (business-discovery) |
    | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
    | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
@@ -84,7 +84,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    - Under each heading, list installed/global primary and chained skills as `/<name> — <description>  [type]`.
    - Show orchestrator skills with an `⚙` prefix: `⚙ /<name> — <description>  [type]`.
    - Show sub-skills indented under their parent skill (identified by the `parent:` frontmatter field or by living under a `frameworks/` directory). Format: `  ↳ /<name> — <description>  [sub-skill]`. If the parent is not in the same group, place sub-skills in a "Sub-skills" subsection at the end of the parent's group.
-   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`/pack install <skill>\` or \`/pack install <pack>\``.
+   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`/pack install <skill>\` or \`/pack install <pack>\` inside Claude Code, or \`npx skillpacks install <pack-or-skill>\` from the project shell`.
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** installed (M sub-skills), **P skills** available via packs` (or `**N skills** matching "<keyword>"`).
 

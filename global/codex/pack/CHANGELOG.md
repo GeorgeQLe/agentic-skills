@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-11
+
+- Added published `npx skillpacks install` alternatives to pack and individual-skill install guidance while preserving source-checkout `scripts/pack.sh` and Codex `$pack` routes.
+
 ## v0.6
 
 - Updated individual business-discovery skill install/remove examples to use `customer-discovery` as the tracked skill name.

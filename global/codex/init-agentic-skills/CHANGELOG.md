@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-11
+
+- Added npm-aware project-shell pack install guidance alongside Codex `$pack install` guidance for project-local domain workflows.
+
 ## v0.6
 
 - Replace generic fresh-session guidance with the runner-specific skill reload path: Claude Code `/reload-skills`, `/clear`, then restart fallback; Codex fresh CLI session when `$` discovery remains stale.

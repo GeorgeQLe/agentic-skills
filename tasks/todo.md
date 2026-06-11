@@ -238,7 +238,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - `global/codex/skills/SKILL.md`
   - Plan the P1 edit batch as its own next `$exec` step; do not edit active `SKILL.md` files during this planning-only step.
   - The P1 implementation plan must include a targeted post-edit check that no P1 file remains in `scripts/skill-install-routing-audit.sh --report`, while full `--active` may still fail until P2/P3 are remediated.
-- [ ] Remediate P1 global skill install-routing wording:
+- [x] Remediate P1 global skill install-routing wording:
   - Scope: update only the 14 P1 global routing and installer skills from `research/skillpack-cli-routing-audit.md`; do not begin P2/P3 pack-wide remediation in this step.
   - Targets:
     - `global/claude/afps-status/SKILL.md` (`version: v0.1` -> `v0.2`)
@@ -282,13 +282,76 @@ Define the canonical npm-aware install-route wording and add the first regressio
     - `git diff --check`
   - Ship with a manifest that distinguishes expected remaining non-P1 install-routing debt from unexpected regressions.
 
+### P1 Remediation Review
+
+- Archived the prior active `SKILL.md` files for all 14 P1 global targets before editing:
+  - Claude: `afps-status` v0.1, `codebase-status` v0.5, `idea-scope-brief` v0.12, `init-agentic-skills` v0.6, `pack` v0.6, `provision-agentic-config` v0.5, and `skills` v0.5.
+  - Codex: `afps-status` v0.1, `codebase-status` v0.5, `idea-scope-brief` v0.12, `init-agentic-skills` v0.6, `pack` v0.6, `provision-agentic-config` v0.5, and `skills` v0.5.
+- Bumped the active versions to the planned P1 targets and updated every target `CHANGELOG.md`.
+- Updated install-route guidance to preserve Claude `/pack install ...`, Codex `$pack install ...`, and source-checkout `scripts/pack.sh install ...` where valid while adding `npx skillpacks install ...` package-consumer alternatives.
+- Updated `provision-agentic-config` generated block templates from `v0.5` to `v0.6` and added npm-aware missing-skill fallback wording to both embedded Claude and AGENTS blocks.
+- Refreshed Skills Showcase generated data and proof assets after active `SKILL.md` metadata/content changes. Curated showcase copy, catalog grouping, workflow animation text, and proof receipt copy did not need manual edits because the public titles, descriptions, grouping, and proof content are unchanged; generated versions and fingerprints changed as expected.
+- Targeted P1 report gate passed: `scripts/skill-install-routing-audit.sh --report` reports 383 active files, 14/14 P1 coverage, 206 remaining findings, and no P1 target paths.
+- Expected-red strict active audit now reports 206 non-P1 findings, all deferred to the P2/P3 remediation sequence.
+- Verification passed:
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `bash -n scripts/skill-install-routing-audit.sh`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` (11 fixture `SKILL.md` files, 6 expected invalid findings, exit 0)
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-deps.sh --broken`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` (2 passed)
+  - `pnpm --dir apps/skills-showcase build`
+  - `git diff --check`
+- The Skills Showcase build updated `apps/skills-showcase/next-env.d.ts` as a mode-specific build side effect; that unrelated generated diff was restored before shipping.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-210336-exec.md`.
+
+- [ ] Remediate P2 agent-work-admin skill install-routing wording:
+  - Scope: update only the first P2 bucket from `research/skillpack-cli-routing-audit.md`; do not begin other P2 buckets or P3 bespoke follow-up routes in this step.
+  - Targets:
+    - `packs/agent-work-admin/claude/plan-phase/SKILL.md` (`version: v0.1` -> `v0.2`)
+    - `packs/agent-work-admin/claude/roadmap/SKILL.md` (`version: v0.7` -> `v0.8`)
+    - `packs/agent-work-admin/claude/spec-drift/SKILL.md` (`version: v0.1` -> `v0.2`)
+    - `packs/agent-work-admin/codex/plan-phase/SKILL.md` (`version: v0.1` -> `v0.2`)
+    - `packs/agent-work-admin/codex/roadmap/SKILL.md` (`version: v0.7` -> `v0.8`)
+    - `packs/agent-work-admin/codex/spec-drift/SKILL.md` (`version: v0.1` -> `v0.2`)
+  - Before editing each target, run `scripts/skill-archive.sh <skill-dir>` so the current active `SKILL.md` is copied to `archive/<old-version>/SKILL.md`.
+  - Update pack-availability and install-route guidance using `docs/skillpacks-install-routing-contract.md`:
+    - Claude-facing text keeps `/pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Codex-facing text keeps `$pack install <pack-or-skill>` and adds `npx skillpacks install <pack-or-skill>` from the project shell.
+    - Do not change task execution, roadmap, or spec-drift behavior beyond the install-route wording needed by the audit.
+  - Update each target's `CHANGELOG.md` with the new version entry and summarize the npm-aware install-route wording change.
+  - Refresh generated Skills Showcase data after active `SKILL.md` metadata/content changes:
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+    - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+    - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - Targeted post-edit gate:
+    - Run `scripts/skill-install-routing-audit.sh --report > /tmp/skill-install-routing-report.txt`.
+    - Confirm no agent-work-admin target remains in the report with `rg 'packs/agent-work-admin/(claude|codex)/(plan-phase|roadmap|spec-drift)/SKILL.md' /tmp/skill-install-routing-report.txt` returning no matches.
+    - Full `scripts/skill-install-routing-audit.sh --active` is expected to remain red on later P2/P3 debt; after this bucket it should report 200 remaining findings if no other files changed.
+  - Regression checks:
+    - `bash -n scripts/skill-install-routing-audit.sh`
+    - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+    - `bash scripts/skill-pack-routing-audit.sh`
+    - `bash scripts/skill-versions.sh --missing`
+    - `bash scripts/skill-archive-audit.sh --strict`
+    - `bash scripts/skill-deps.sh --broken`
+    - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+    - `pnpm --dir apps/skills-showcase build`
+    - `git diff --check`
+  - Ship with a manifest that distinguishes expected remaining install-routing debt from unexpected regressions.
+
 ### Acceptance Criteria
 
 - The canonical wording explicitly preserves `/pack`, `$pack`, and `scripts/pack.sh` where they are still valid while adding npm CLI alternatives.
 - The validation distinguishes pack or individual skill installs from deck installs.
 - P1, P2, and P3 remediation remains sequenced from `research/skillpack-cli-routing-audit.md`; this slice does not attempt the whole 220-skill migration.
-- No active `SKILL.md` remediation begins until the wording contract and regression check are in place.
-- Review notes state whether Skills Showcase refresh is unnecessary for this slice or required by any later `SKILL.md` metadata/content changes.
+- Active `SKILL.md` remediation uses the established wording contract and regression check instead of ad hoc edits.
+- Review notes state whether Skills Showcase refresh is unnecessary or required for each remediation slice.
 
 ### Planning Update Review
 

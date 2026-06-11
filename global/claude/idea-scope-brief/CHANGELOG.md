@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.13 - 2026-06-11
+
+- Added npm-aware install-route alternatives to downstream pack recommendations while preserving Claude `/pack install` routes.
+
 ## v0.12 - 2026-06-06
 
 - Updated downstream discovery routing from the retired short-form command to `/customer-discovery`, including readiness wording, product-path next-skill hints, and business-discovery fallback text.

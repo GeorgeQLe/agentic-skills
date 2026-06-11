@@ -14075,3 +14075,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-204536-exec.md`.
 - Detected existing local untracked script work at `scripts/researchish-skill-lifecycle-audit.mjs`; left it untouched and unstaged so the next implementation step can inspect/reuse it deliberately.
 - Manifest: `tasks/ship-manifest-2026-06-11-researchish-lifecycle-planning.md`.
+
+## 2026-06-11 — Skillpacks CLI routing P1 global remediation
+
+- Updated the 14 P1 global Claude/Codex routing and installer skills from `research/skillpack-cli-routing-audit.md` to include `npx skillpacks install <pack-or-skill>` alternatives while preserving runner-local `/pack install` and `$pack install` routes plus source-checkout `scripts/pack.sh` guidance where valid.
+- Archived every prior active `SKILL.md`, bumped the planned versions, and updated each target `CHANGELOG.md`.
+- Refreshed Skills Showcase generated data/proof assets after the active skill metadata changes; public generated versions and fingerprints changed, while curated showcase copy/grouping/proof text stayed valid.
+- Validation passed for targeted P1 install-routing report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 206 non-P1 P2/P3 findings.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-210336-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-global.md`.
