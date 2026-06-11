@@ -2,7 +2,7 @@
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
 type: execution
-version: v0.2
+version: v0.1
 argument-hint: <type> <name> (e.g. "package utils" or "app admin-dashboard")
 ---
 
@@ -20,7 +20,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
 
 2. **Learn the project's conventions:**
    - Read `.agents/project.json` when present. If it is missing, run or recommend `/pack recommend` and include the likely project type in the scaffold plan.
-   - If this scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` from this source checkout, or `npx skillpacks install <pack>` from the new project shell when using the published package, after the root exists.
+   - If this scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` after the root exists.
    - Read `CLAUDE.md` and `AGENTS.md` for project structure and conventions.
    - Read the monorepo config (`turbo.json`, `pnpm-workspace.yaml`, or equivalent).
    - Identify the directory pattern:
@@ -76,7 +76,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
 ## Next-Step Routing
 
 - If the scaffold was created as part of an active roadmap/phase, recommend `/exec` to continue the current implementation step.
-- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `/customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `/pack install business-discovery` inside Claude Code, or `npx skillpacks install business-discovery` from the project shell.
+- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `/customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `/pack install business-discovery`.
 - If the scaffold is for a non-product package with no pending roadmap item, recommend `/roadmap` or `/plan-phase` only when implementation sequencing is missing.
 
 ## Constraints

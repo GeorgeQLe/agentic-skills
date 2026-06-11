@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-11
+
+- Added npm-aware Pack Availability Guard wording while preserving Claude `/pack install` routing.
+
 ## v0.3 - 2026-06-06
 
 - Route unclear acceptance criteria caused by missing flow, states, recovery, or handoffs to `/user-flow-map`.

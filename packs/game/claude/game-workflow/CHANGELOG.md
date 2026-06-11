@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-11
+
+- Added npm-aware game pack install guidance while preserving the source-checkout install path.
+
 ## v0.0
 
 - Archived previous skill contract.

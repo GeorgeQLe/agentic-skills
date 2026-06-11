@@ -2,7 +2,7 @@
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
 type: execution
-version: v0.2
+version: v0.1
 ---
 
 # Scaffold
@@ -17,7 +17,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 
 1. Parse the type (package/app) and name from arguments.
 2. Check `.agents/project.json`. If it is missing, run or recommend `$pack recommend` and include the likely project type in the scaffold plan.
-3. If the scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` from this source checkout, or `npx skillpacks install <pack>` from the new project shell when using the published package, after the root exists.
+3. If the scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` after the root exists.
 4. Learn conventions from CLAUDE.md, AGENTS.md, `.agents/project.json`, and monorepo config.
 5. Find the most recently created package/app as a template.
 6. Present the scaffold plan and wait for approval. Use `update_plan` to track the work; use `request_user_input` only if the session is already in Plan mode and a structured choice would help.
@@ -33,7 +33,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 ## Next-Step Routing
 
 - If the scaffold was created as part of an active roadmap/phase, recommend `$exec` to continue the current implementation step.
-- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `$customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `$pack install business-discovery` inside Codex, or `npx skillpacks install business-discovery` from the project shell.
+- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `$customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `$pack install business-discovery`.
 - If the scaffold is for a non-product package with no pending roadmap item, recommend `$roadmap` or `$plan-phase` only when implementation sequencing is missing.
 
 ## Constraints

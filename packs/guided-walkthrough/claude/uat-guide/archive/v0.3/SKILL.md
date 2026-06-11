@@ -2,14 +2,14 @@
 name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
-version: v0.4
+version: v0.3
 argument-hint: "[optional: journey number, journey name, or 'next']"
 visual_tier: prototype
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, before the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` before the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # UAT Guide
 
@@ -134,7 +134,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - **Don't invent acceptance criteria** — use only the criteria defined in the UAT plan. If criteria are missing or unclear because flow, states, recovery, or handoff structure is underspecified, recommend `/user-flow-map` (product-design pack); use `/ux-variations --layout-mode` (product-design pack) only when the missing decision is layout alternatives.
 - **Handle all product surface types** — web apps get click-by-click, CLIs get command-by-command, APIs get request-by-request, hybrids get mixed. Detect from codebase context; don't assume web.
 - **Prerequisite: UAT plan must exist** — if `research/uat-plan.md` is missing, stop immediately and recommend `/uat` (product-testing pack).
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Default Shipping Contract
 

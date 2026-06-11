@@ -2,7 +2,7 @@
 name: ord-ship
 description: Publish to npm, create README, set up repo, and log the shipment
 type: ops
-version: v0.2
+version: v0.1
 interview_depth: none
 ---
 
@@ -51,7 +51,7 @@ End with:
 ```md
 **Shipped:** <package name> — <npm URL>
 **Next work:** monitor adoption for 1-2 weeks, then decide: iterate, graduate to Devtool AFPS, or move on
-**Recommended next command:** /ord-scan (next experiment) or /pack install devtool inside Claude Code, or npx skillpacks install devtool from the project shell, then /devtool-adoption (graduate)
+**Recommended next command:** /ord-scan (next experiment) or /pack install devtool then /devtool-adoption (graduate)
 ```
 
 ## Constraints
