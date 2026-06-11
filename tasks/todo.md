@@ -1,3 +1,71 @@
+## Current Implementation - Alignment Browser-Open Fallback Contract
+
+### Goal
+
+Update the shared generated alignment-page Browser open contract after the `$youtube-channel-audit @georgele` triage showed that generated `ALIGNMENT-PAGE.md` files assume `scripts/open-html-page.mjs` exists and do not instruct agents to prefer the WSL PowerShell browser bridge before `xdg-open`.
+
+### Execution Profile
+
+- Parallel mode: parallel reads and targeted validation scans; serial writes for prompt/task docs, canonical convention, generated bundles, tests, and shipping.
+- Rationale: the Browser open paragraph is shared across many generated bundles, so the source edit must be small and generator-driven.
+
+### Steps
+
+- [x] Read `$targeted-skill-builder`, `$session-triage`, existing WSL browser-open lesson, task docs, and the alignment-page convention/generator context.
+- [x] Capture the visible invocation under `prompts/targeted-skill-builder/`.
+- [x] Update `docs/alignment-page-convention.md` Browser open wording to require:
+  - check `scripts/open-html-page.mjs` exists before running it;
+  - if the helper is missing or fails and the environment is WSL with Windows PowerShell available, open a `file://wsl.localhost/<distro>/...` URI through `/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe`;
+  - then try `xdg-open` when available;
+  - report `failed` with the absolute HTML path when all attempts fail.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles with `node scripts/upgrade-alignment-page.mjs`.
+- [x] Add or update focused layer1 assertions for the Browser open fallback wording.
+- [x] Run validation:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - focused layer1 test for generated alignment convention
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - Skills Showcase generation/validation if generated skill bundle changes affect showcased skill data
+  - targeted `rg` checks for the new fallback wording
+  - `git diff --check`
+- [x] Record review notes and ship with a commit/push on `master`.
+
+### Acceptance Criteria
+
+- Active generated Browser open instructions do not require a missing helper script as the only opening path.
+- WSL browser opening prefers the Windows PowerShell `file://wsl.localhost/<distro>/...` fallback before `xdg-open`.
+- The final handoff status/path semantics remain explicit.
+- Generated bundle drift check passes after regeneration.
+
+### Review Notes
+
+- Captured the visible `$targeted-skill-builder` invocation context in `prompts/targeted-skill-builder/skill-prompt-20260610-214444-browser-open-fallback.md`.
+- Updated `docs/alignment-page-convention.md` so Browser open now checks for `scripts/open-html-page.mjs` before running it, prefers WSL PowerShell with `file://wsl.localhost/${WSL_DISTRO_NAME:-Ubuntu}/<absolute-linux-path>` before `xdg-open`, and requires absolute-path reporting for `blocked` or `failed`.
+- Regenerated 288 active generated `ALIGNMENT-PAGE.md` bundles through `node scripts/upgrade-alignment-page.mjs`.
+- Added focused layer1 assertions in `tests/layer1/alignment-gates.test.ts` for helper existence, WSL bridge, fallback ordering, status values, and blocked/failed path reporting.
+- Verified PowerShell fallback availability and replayed an existing alignment HTML page through `/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe`; the command exited 0.
+- Validation passed:
+  - `bash init.sh`
+  - `node scripts/upgrade-alignment-page.mjs --check` in the main worktree before unrelated concurrent edits appeared, and again in a clean temporary worktree with only this browser-open patch applied
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` (26 passed)
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/upgrade-alignment-page-bespoke.test.ts` (17 passed)
+  - `bash scripts/skill-deps.sh --broken`
+  - `bash scripts/skill-versions.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - targeted `rg` checks for the fallback wording
+  - `test -f scripts/open-html-page.mjs`
+  - `test -x /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe`
+  - `grep -qi microsoft /proc/version`
+  - `git diff --check`
+- `bash scripts/skill-next-step-routing.sh --missing` failed with the repository's existing missing-routing inventory, including many active and archived `SKILL.md` files. This boundary did not edit any intended `SKILL.md`; the failure is documented as pre-existing routing debt, not caused by the Browser open convention change.
+- A final `node scripts/upgrade-alignment-page.mjs --check` rerun in the primary worktree failed only because a concurrent unrelated edit changed `packs/product-design/claude/ui-interview/SKILL.md` after this patch was generated. The intended browser-open patch was reapplied to a clean temporary worktree and passed the generator check there.
+- Skills Showcase data was not regenerated for this boundary because no intended `SKILL.md` or `PACK.md` metadata/content changed. Existing dirty showcase files in the worktree are unrelated and were left unstaged.
+
+---
+
 ## Current Implementation - Research-ish Skill Lifecycle Audit
 
 ### Goal

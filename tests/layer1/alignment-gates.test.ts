@@ -408,10 +408,21 @@ describe("alignment page gate contract", () => {
     for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} browser open section`).toContain("**Browser open.**");
+      expect(content, `${path} helper existence check`).toContain("if `scripts/open-html-page.mjs` exists");
       expect(content, `${path} opener command`).toContain("node scripts/open-html-page.mjs");
       expect(content, `${path} browser auto`).toContain("--browser auto");
+      expect(content, `${path} WSL bridge`).toContain("file://wsl.localhost/${WSL_DISTRO_NAME:-Ubuntu}/<absolute-linux-path>");
+      expect(content, `${path} PowerShell bridge`).toContain(
+        "/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe",
+      );
+      expect(content, `${path} xdg fallback order`).toContain(
+        "Try `xdg-open <absolute-linux-path>` only after the helper path and WSL PowerShell bridge",
+      );
       expect(content, `${path} statuses`).toContain(
         "`focused`, `opened`, `fallback-opened`, `blocked`, or `failed`",
+      );
+      expect(content, `${path} blocked path reporting`).toContain(
+        "include the absolute path when the status is `blocked` or `failed`",
       );
       expect(content, `${path} blocked continuation`).toContain("Continue when opening is `blocked`");
       expect(content, `${path} old generic open instruction`).not.toContain(

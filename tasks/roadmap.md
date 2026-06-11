@@ -1,3 +1,52 @@
+## Current Implementation - Alignment Browser-Open Fallback Contract
+
+### Goal
+
+Patch the shared generated alignment-page browser-open contract so skills do not fail or choose the wrong fallback when a target repository lacks `scripts/open-html-page.mjs`, especially under WSL where Windows browser bridging is available.
+
+### Scope
+
+- Canonical convention: `docs/alignment-page-convention.md`.
+- Generated bundles: active generated `ALIGNMENT-PAGE.md` files under `global/` and `packs/` as produced by `scripts/upgrade-alignment-page.mjs`; installed copies are refreshed by runner install/pack-refresh flows.
+- Regression coverage: focused layer1 coverage for the new Browser open wording.
+- Evidence basis: current user-provided `$session-triage` report for `$youtube-channel-audit @georgele` browser-open failure and existing WSL lesson in `tasks/lessons.md`.
+
+### Plan
+
+1. Capture context and plan.
+   - [x] Read the active `$targeted-skill-builder` and `$session-triage` contracts.
+   - [x] Read relevant lessons and task state.
+   - [x] Capture the visible invocation under `prompts/targeted-skill-builder/`.
+   - [x] Record this plan and the active todo before implementation.
+2. Patch the durable contract.
+   - [x] Update the canonical Browser open paragraph in `docs/alignment-page-convention.md`.
+   - [x] Make the fallback order explicit: helper script when present, WSL PowerShell `file://wsl.localhost/<distro>/...` bridge when available, `xdg-open` when available, then `failed` with absolute path.
+   - [x] Preserve existing status reporting semantics: `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
+3. Regenerate and cover.
+   - [x] Run `node scripts/upgrade-alignment-page.mjs` to refresh generated bundles.
+   - [x] Add or update focused layer1 checks that pin the fallback contract.
+4. Validate and ship.
+   - [x] Run generated bundle drift checks, skill hygiene checks, focused tests, showcase refresh if needed, and whitespace checks.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [ ] Commit and push intended files on `master`.
+
+### Acceptance Criteria
+
+- Generated `ALIGNMENT-PAGE.md` Browser open text no longer assumes `scripts/open-html-page.mjs` exists in every target repo.
+- The contract requires WSL Windows-browser fallback before Linux `xdg-open`.
+- The fallback uses a browser-friendly `file://wsl.localhost/<distro>/...` URI when possible and reports the final status/path.
+- Focused tests prove the canonical and generated wording include the helper-existence gate and WSL fallback.
+- Validation commands pass or any residual failure is clearly documented with evidence.
+
+### Completion Notes
+
+- Patched the canonical Browser open contract and regenerated 288 generated `ALIGNMENT-PAGE.md` bundles.
+- Added layer1 assertions for the helper existence check, WSL PowerShell `file://wsl.localhost` fallback, xdg-open fallback order, and blocked/failed absolute-path reporting.
+- Verified the WSL PowerShell fallback command against an existing alignment HTML page; the command exited 0.
+- Did not refresh Skills Showcase data in this boundary because no intended `SKILL.md` or `PACK.md` metadata/content changed.
+
+---
+
 ## Current Implementation - Research-ish Skill Lifecycle Audit
 
 ### Goal
