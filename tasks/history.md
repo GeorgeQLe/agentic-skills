@@ -8,7 +8,7 @@
 - Archived and reclassified the four confirmed misclassified staged producers: mirrored `repo-glossary` v0.2 -> v0.3 and mirrored `journey-map` v0.11 -> v0.12, changing only `type: analysis` to `type: research` and updating changelogs.
 - Regenerated alignment bundles through the canonical generator; no bundle files changed. Refreshed Skills Showcase generated data and proof fingerprints after active skill metadata changed.
 - Post-remediation live audit reports 142 active `type: research` skills and 0 misclassified skills. Broader direct-utility alignment-page candidates remain as report-backed follow-up inventory rather than automatic heuristic edits.
-- Validation passed: alignment bundle check, focused research approval gate and research-ish audit layer1 tests, skill archive/version/dependency audits, Skills Showcase data validation, and `git diff --check`.
+- Validation passed: alignment bundle check, focused research approval gate and research-ish audit layer1 tests, skill archive/version/dependency audits, Skills Showcase data validation, Skills Showcase production build, and `git diff --check`.
 
 ## 2026-06-11 — VARD/ORD staged scan workflow
 

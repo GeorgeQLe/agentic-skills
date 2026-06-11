@@ -66,6 +66,7 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
   - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
   - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
   - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `pnpm --dir apps/skills-showcase build`
   - `git diff --check`
 
 ### Ship Manifest
@@ -74,8 +75,8 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
 - **Changed files:** Added `scripts/researchish-skill-lifecycle-audit.mjs`, `research/researchish-skill-lifecycle-audit.md`, `tests/layer1/researchish-skill-lifecycle-audit.test.ts`, four archive snapshots, four active `SKILL.md` metadata updates, four changelog updates, refreshed Skills Showcase generated assets, and task history/todo/roadmap docs.
 - **Per-file purpose:** Script classifies active research-ish skills; report preserves the pre-remediation inventory; test pins lifecycle invariants; `repo-glossary` and `journey-map` metadata now match existing staged research behavior; archives/changelogs satisfy skill versioning; generated assets publish the new type/version metadata; task docs record execution and review.
 - **User-goal mapping:** The audit report found four deterministic lifecycle/type conflicts, and the remediation corrected only those report-backed conflicts while leaving heuristic candidate queues visible for later review.
-- **Tests run:** `node scripts/upgrade-alignment-page.mjs --check`; focused research approval gate and research-ish audit layer1 tests; skill archive/version/dependency audits; Skills Showcase generation and validation; `git diff --check`.
-- **Skipped tests:** Full layer1 and app build were not rerun because the functional surface changed only a read-only audit script plus skill metadata, and the targeted layer1 tests cover the affected contracts.
+- **Tests run:** `node scripts/upgrade-alignment-page.mjs --check`; focused research approval gate and research-ish audit layer1 tests; skill archive/version/dependency audits; Skills Showcase generation and validation; Skills Showcase production build; `git diff --check`.
+- **Skipped tests:** Full layer1 was not rerun because the functional surface changed only a read-only audit script plus skill metadata, and the targeted layer1 tests cover the affected contracts.
 - **Adversarial review:** Final diff review confirmed active `SKILL.md` changes are limited to `type` and `version`, generated-data changes are the expected type/version/tag/fingerprint updates, and the pre-remediation report remains an inventory snapshot rather than being overwritten after fixes.
 - **Residual risk:** The report intentionally leaves 36 direct-utility alignment-page candidates and 107 non-research `research/` language findings as review inventory; those are heuristic classifications and need a separate semantic pass before any broad skill edits.
 - **Rollback note:** Revert the shipping commit to remove the audit script/report/test and restore the four active skill metadata changes; archive snapshots can remain harmless or be removed in the same revert if the version bump is rolled back.
