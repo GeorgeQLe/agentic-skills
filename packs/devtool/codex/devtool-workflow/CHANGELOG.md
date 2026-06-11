@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-11
+
+- Added npm-aware devtool pack install wording while preserving the source-checkout `scripts/pack.sh install devtool` route.
+
 ## v0.0
 
 - Archived previous skill contract.

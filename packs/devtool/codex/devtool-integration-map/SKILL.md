@@ -2,7 +2,7 @@
 name: devtool-integration-map
 description: Use only for developer-facing products; map integrations, ecosystems, setup surfaces, and compatibility constraints
 type: analysis
-version: v0.2
+version: v0.3
 interview_depth: none
 visual_tier: visual
 ---
@@ -23,7 +23,7 @@ After writing the artifact, recommend the next contextual skill:
 
 1. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
 2. Otherwise, follow the default devtool sequence: `$devtool-dx-journey` after this skill.
-3. If the sequence is ambiguous or multiple devtool artifacts are stale: check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `$pack install research-admin` first; if `research-admin` is enabled, recommend `$research-roadmap` — to rebuild the ordered documentation queue.
+3. If the sequence is ambiguous or multiple devtool artifacts are stale: check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `$pack install research-admin` inside Codex, or `npx skillpacks install research-admin` from the project shell; if `research-admin` is enabled, recommend `$research-roadmap` — to rebuild the ordered documentation queue.
 
 ## Task Classification
 
@@ -42,4 +42,3 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

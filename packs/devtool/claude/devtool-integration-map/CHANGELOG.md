@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-11
+
+- Added npm-aware install-route wording for the `research-admin` fallback while preserving the Claude `/pack install` route.
+
 ## v0.0
 
 - Archived previous skill contract.

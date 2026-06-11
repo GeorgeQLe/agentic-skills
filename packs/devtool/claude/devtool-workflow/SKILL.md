@@ -2,7 +2,7 @@
 name: devtool-workflow
 description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products
 type: planning
-version: v0.1
+version: v0.2
 invocation: orchestrator
 interview_depth: none
 visual_tier: visual
@@ -15,7 +15,7 @@ Use this skill when the project is primarily developer-facing.
 ## Process
 
 1. Read `.agents/project.json` and confirm `project_type` is `devtool`.
-2. If the devtool pack is not enabled, run `scripts/pack.sh install devtool`.
+2. If the devtool pack is not enabled, install it with `scripts/pack.sh install devtool` from this source checkout, or `npx skillpacks install devtool` from the project shell when using the published package.
 3. Route research through developer workflow, integration, DX, adoption, positioning, monetization, and docs checks.
 
 ## Output
@@ -29,4 +29,3 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

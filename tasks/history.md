@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-11 - Skillpacks CLI routing P2 devtool remediation
+
+- Updated the devtool P2 bucket from `research/skillpack-cli-routing-audit.md`: mirrored `devtool-adoption`, `devtool-dx-journey`, `devtool-integration-map`, `devtool-monetization`, `devtool-positioning`, `devtool-user-map`, and `devtool-workflow` now include `npx skillpacks install ...` alternatives while preserving Claude `/pack install`, Codex `$pack install`, and source-checkout `scripts/pack.sh install devtool` routes where valid.
+- Archived every prior active `SKILL.md`, bumped the planned versions, and updated each target `CHANGELOG.md`.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; generated versions and fingerprints changed, while non-generated showcase copy did not need manual updates.
+- Validation passed for targeted devtool report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 72 later P2/P3 findings.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-225209-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-devtool.md`.
+
 ## 2026-06-11 — Skillpacks CLI routing P2 business-ops remediation
 
 - Updated the business-ops P2 bucket from `research/skillpack-cli-routing-audit.md`: mirrored `burn-rate`, `cohort-review`, `investor-update`, `mvp-gap`, `platform-strategy`, `product-line`, `reconcile-research`, `retro`, `risk-register`, `runway-model`, and `scale-audit` now include `npx skillpacks install <pack>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.

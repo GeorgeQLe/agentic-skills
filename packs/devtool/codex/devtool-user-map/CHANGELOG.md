@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-11
+
+- Added npm-aware install-route wording for the `research-admin` fallback while preserving the Codex `$pack install` route.
+
 ## v0.5 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
