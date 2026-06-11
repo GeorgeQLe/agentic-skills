@@ -2,34 +2,34 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.2
-argument-hint: "[phase-number] [--no-tdd]"
+version: v0.1
 invocation: sub-skill
 parent: exec
 ---
 
 # Plan Phase
 
-Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. Invoked just-in-time — either manually, by `/roadmap` (to seed Phase 1), or by `/ship` (exec-loop pack) and `/exec` (exec-loop pack) when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
+Invoke as `$plan-phase`.
+
+Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. Invoked just-in-time — either manually, by `$roadmap` (to seed Phase 1), or by `$ship` and `$exec` when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
 
 ## Prerequisites
 
-- `tasks/roadmap.md` must exist. If it does not, stop and tell the user to run `/roadmap` (or `/research-roadmap` (research-admin pack) → `/roadmap` if no spec exists).
+- `tasks/roadmap.md` must exist. If it does not, stop and tell the user to run `$roadmap` (or `$research-roadmap` (research-admin pack) → `$roadmap` if no spec exists).
 - The target phase must already have a Goal, Scope, and Acceptance Criteria in the roadmap.
 
 ## Input
 
-Read `$ARGUMENTS`:
+Read arguments:
 
-- If `$ARGUMENTS` is a phase number (e.g., `2`), plan that phase.
-- If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section yet).
-- If `$ARGUMENTS` contains `--no-tdd`, use `tests-after` for this phase regardless of other signals.
+- If arguments contain a phase number (e.g., `2`), plan that phase.
+- If arguments are empty, plan the **first phase that has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section yet).
+- If arguments contain `--no-tdd`, use `tests-after` for this phase regardless of other signals.
 
 Read:
 
 - `tasks/roadmap.md` for the target phase's Goal, Scope, and Acceptance Criteria.
 - `specs/` (or `spec.md`) for the detailed requirements referenced by the phase's scope.
-- `prototypes/*/consolidated/` when present as a visual reference alongside written specs.
 - The codebase as needed to understand existing code, patterns, and which files to modify.
 - The roadmap phase's `Parallelization` and `Coordination Notes` fields, if present.
 
@@ -39,8 +39,8 @@ Read:
 
 Check in order:
 
-1. If `$ARGUMENTS` contains `--no-tdd`, use `tests-after`.
-2. If `CLAUDE.md` has a `## Test Strategy` section, follow the project default.
+1. If arguments contain `--no-tdd`, use `tests-after`.
+2. If `AGENTS.md` or `CLAUDE.md` has a `## Test Strategy` section, follow the project default.
 3. Otherwise, classify the phase:
    - **`tdd`**: stable interfaces, APIs, data models, business logic with known contracts, payment/auth flows
    - **`tests-after`**: UI components, prototyping, exploratory features, design-in-flux work
@@ -73,7 +73,7 @@ Add this section before implementation steps:
 
 **Subagent lanes:**
 - Lane: [lane-name]
-  - Agent: explore | general-purpose
+  - Agent: explorer | worker | default
   - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
   - Mode: read-only | write | review
   - Scope: [bounded task]
@@ -85,12 +85,19 @@ Add this section before implementation steps:
 ```
 
 For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
-
-For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths, explicit `Must not edit:` boundaries, and deterministic `Branch:` values that are not `main` or `master` — `/exec` (exec-loop pack) auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG, push lane branches, open PRs, and enforce write-boundary integration. The phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
+For `agent-team`, every write lane must have a deterministic `Branch:` value that is not `main` or `master`, and the phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
 
 ### Break the Phase into Steps
 
 Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The structure depends on the test strategy:
+
+For new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience phases, apply a prototype-first planning gate before writing steps:
+
+- If there is no accepted clickable journey yet and the current roadmap phase combines prototype exploration with production implementation, stop and re-scope the current work into a distinct prototype/experiment phase before writing implementation steps. Prefer `Phase 0: Prototype Experiments` when the project convention allows it; otherwise make the next phase explicitly prototype-only and push production implementation later.
+- If the roadmap/spec does not explicitly approve durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, or production observability for the current phase, keep those items in a later "eventual production infrastructure" backlog and plan the current phase as a clickable local/static prototype with fake, fixture, or in-memory data.
+- For new feature prototypes or uncertain product surfaces, plan multiple small experiments on separate clickable routes such as `/experiments/<variant>` or project-native equivalents. Each route should test a distinct workflow, layout, density, copy, navigation, or interaction hypothesis without sharing hidden production infrastructure.
+- Include a calibration step before any infrastructure promotion: the user must be able to try one journey and record what felt wrong, slow, generic, too dense, too sparse, off-brand, or workflow-breaking.
+- Promote infrastructure into the current phase only when the phase is explicitly production hardening, the user has approved that infrastructure, or the core prototype cannot test the primary interaction without it. State the evidence in the phase notes.
 
 **For `tdd` phases:**
 ```
@@ -105,7 +112,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 **Subagent lanes:**
 - Lane: [lane-name or none]
-  - Agent: explore | general-purpose
+  - Agent: explorer | worker | default
   - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
   - Mode: read-only | write | review
   - Scope: [bounded task]
@@ -151,7 +158,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 **Subagent lanes:**
 - Lane: [lane-name or none]
-  - Agent: explore | general-purpose
+  - Agent: explorer | worker | default
   - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
   - Mode: read-only | write | review
   - Scope: [bounded task]
@@ -190,7 +197,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 **Subagent lanes:**
 - Lane: [lane-name or none]
-  - Agent: explore | general-purpose
+  - Agent: explorer | worker | default
   - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
   - Mode: read-only | write | review
   - Scope: [bounded task]
@@ -234,14 +241,14 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 Classify each step or follow-up as exactly one of:
 
-- **automated** — Claude executes it as implementation or verification work in `tasks/todo.md`.
+- **automated** — the agent executes it as implementation or verification work in `tasks/todo.md`.
 - **manual** — a human-only external action tied to an automated step in `tasks/manual-todo.md`.
 - **record** — a one-time, non-blocking record or measurement that should happen only after a condition becomes true in `tasks/record-todo.md`.
 - **recurring** — cadence-based operational, research, or maintenance work in `tasks/recurring-todo.md`.
 
 Use the narrowest classification that can execute without losing context:
 
-- If Claude can do it by editing repo files, running local commands, using an approved CLI/MCP/API integration, or writing a script with already-available credentials, classify it as **automated**.
+- If the agent can do it by editing repo files, running local commands, using an approved CLI/MCP/API integration, or writing a script with already-available credentials, classify it as **automated**.
 - If the work is blocked only because a secret, account, payment method, approval, hardware device, or human judgment/evidence is missing, classify only that missing prerequisite as **manual**.
 - If one item mixes human and automatable work, split it: the human-gated prerequisite goes to `tasks/manual-todo.md`; the repo/code/config/test follow-up stays in `tasks/todo.md`.
 
@@ -301,7 +308,7 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Record Tasks — [Project Name]
 
-   > These tasks are non-blocking records or measurements. Do not execute them through `/exec` (exec-loop pack) unless promoted to `tasks/todo.md`.
+   > These tasks are non-blocking records or measurements. Do not execute them through `$exec` unless promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Source: [phase/spec/criterion]
@@ -319,11 +326,11 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Recurring Tasks — [Project Name]
 
-   > These tasks recur on a cadence. Do not execute them through `/exec` (exec-loop pack) unless a due run is promoted to `tasks/todo.md`.
+   > These tasks recur on a cadence. Do not execute them through `$exec` unless a due run is promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
-     - Owner/agent: [human, `/skill`, or agent role]
+     - Owner/agent: [human, `$skill`, or agent role]
      - Scope: [project/app/area]
      - Trigger: [time, release, data threshold, user request]
      - Last run: [date or never]
@@ -347,33 +354,33 @@ Rules:
 - Make the next work item primary. Derive it from the first executable step in `tasks/todo.md`, any matching blocker in `tasks/manual-todo.md`, or the phase's verification/setup gap. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` inside Claude Code, or `npx skillpacks install agent-bridge` from the project shell, first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
-  - Claude-only or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `/pack install exec-loop` inside Claude Code, or `npx skillpacks install exec-loop` from the project shell, first; if `exec-loop` is enabled, recommend `/exec`.
-  - Codex-only execution → recommend `$exec`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` inside Claude Code, or `npx skillpacks install guided-walkthrough` from the project shell, first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
-  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` inside Claude Code, or `npx skillpacks install docs-health` from the project shell, first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
+  - Codex skill invocation (`$plan-phase`, `$exec`) → recommend the matching `$...` command.
+  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `$pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `$delegate $exec`.
+  - Claude slash invocation (`/plan-phase`, `/exec`, `/delegate`) or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `$pack install exec-loop` first; if `exec-loop` is enabled, recommend the matching `/...` route.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `$pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `$guide` — or a Claude-guided manual step rather than `$exec`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `$pack install docs-health` first; if `docs-health` is enabled, recommend `$reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `$pack install <pack-name>` to the recommendation.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
-- **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `/roadmap`.
-- **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `/roadmap`'s decisions. Only add implementation detail beneath them.
-- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `/exec` (exec-loop pack) and `/ship` (exec-loop pack).
+- **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `$roadmap`.
+- **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `$roadmap`'s decisions. Only add implementation detail beneath them.
+- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `$exec` and `$ship`.
 - Every milestone must have specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Do not generate standalone cleanup/refactor steps that are conditional on validation finding drift. Fold those checks into the Green validation step and only create a separate follow-up when there is known concrete remediation work.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
-- The `### Execution Profile` must be decision-complete enough for `/exec` (exec-loop pack) to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
+- The `### Execution Profile` must be decision-complete enough for `$exec` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after presenting the plan and proceeding under implicit approval.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Agent-team write lanes must not target `main` or `master`; each lane gets its own GitHub branch and must return branch, commit SHA, validation evidence, and PR URL before consolidation.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
 - Agent-executable work MUST NOT appear in `tasks/manual-todo.md` — it goes in `tasks/todo.md` or an implementation skill.
 - Non-blocking record tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/record-todo.md` unless explicitly promoted.
 - Recurring obligations MUST NOT appear in `tasks/todo.md` by default — they go in `tasks/recurring-todo.md` unless a due run is current execution work.
-- Do NOT put plans in `CLAUDE.md` or `docs/plan.md`.
+- Do NOT put plans in `AGENTS.md`, `CLAUDE.md`, or `docs/plan.md`.
 
 ## Default Shipping Contract
 

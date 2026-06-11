@@ -2,13 +2,13 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.7
+version: v0.8
 argument-hint: "[--existing] [path-to-spec]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Roadmap - Task Pipeline Manager
 
@@ -172,7 +172,7 @@ User-facing specs exist, but one or more required design-planning artifacts are 
 - `specs/ux-variations-*.md` — run `$ux-variations --layout-mode` after user-flow and UI requirements to compare layout approaches.
 - `specs/ui-*.md` — run `$ui-interview` only when a full UI specification is still needed after layout selection.
 
-For `$journey-map` (customer-lifecycle pack), `$user-flow-map`, `$ui-interview`, and `$ux-variations`, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
+For `$journey-map` (customer-lifecycle pack), `$user-flow-map`, `$ui-interview`, and `$ux-variations`, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, before the skill.
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 

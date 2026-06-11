@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-10
+
+- Added npm-aware install-route alternatives to pack availability guidance while preserving Codex `$pack install` syntax.
+
 ## v0.7 - 2026-06-06
 
 - Add `user-flow-map`, requirements-only UI interview, and layout-mode UX variations to the user-facing design-gate queue.

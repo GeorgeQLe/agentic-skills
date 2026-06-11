@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.2
+version: v0.1
 argument-hint: "[phase-number] [--no-tdd]"
 invocation: sub-skill
 parent: exec
@@ -347,16 +347,16 @@ Rules:
 - Make the next work item primary. Derive it from the first executable step in `tasks/todo.md`, any matching blocker in `tasks/manual-todo.md`, or the phase's verification/setup gap. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` inside Claude Code, or `npx skillpacks install agent-bridge` from the project shell, first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
-  - Claude-only or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `/pack install exec-loop` inside Claude Code, or `npx skillpacks install exec-loop` from the project shell, first; if `exec-loop` is enabled, recommend `/exec`.
+  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
+  - Claude-only or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `/pack install exec-loop` first; if `exec-loop` is enabled, recommend `/exec`.
   - Codex-only execution → recommend `$exec`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` inside Claude Code, or `npx skillpacks install guided-walkthrough` from the project shell, first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
-  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` inside Claude Code, or `npx skillpacks install docs-health` from the project shell, first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
 - **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `/roadmap`.
 - **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `/roadmap`'s decisions. Only add implementation detail beneath them.

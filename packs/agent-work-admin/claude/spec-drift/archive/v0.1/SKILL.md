@@ -2,13 +2,13 @@
 name: spec-drift
 description: Audit specs against codebase — find unimplemented features, diverged implementations, and undocumented code
 type: analysis
-version: v0.2
+version: v0.1
 argument-hint: "[audit|fix] [spec-file|all]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Spec Drift — Spec-to-Code Conformance Audit
 
@@ -186,7 +186,7 @@ Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core
 
 ## Constraints
 
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
 - **Never auto-resolve Errors.** Errors always require user input on whether the code or spec is correct.
 - **Show evidence.** Every finding must include the spec quote + code reference (file:line).
