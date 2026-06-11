@@ -22,13 +22,17 @@ Define the canonical npm-aware install-route wording and add the first regressio
 
 ### Steps
 
-- [ ] Define the canonical wording matrix:
+- [x] Define the canonical wording matrix:
   - Claude pack install: keep `/pack install <pack>` and add `npx skillpacks install <pack>`.
   - Codex pack install: keep `$pack install <pack>` and add `npx skillpacks install <pack>`.
   - Individual skill install: keep `/pack install <skill>` or `$pack install <skill>` and add `npx skillpacks install <skill>`.
   - Source-checkout maintenance: keep `scripts/pack.sh install <pack-or-skill>` and add the npm route only when the target reader may be outside this checkout.
   - Deck install: use `npx skillpacks install-deck <deck>` and do not phrase deck installs as pack or individual skill installs.
+  - Durable contract: `docs/skillpacks-install-routing-contract.md`.
 - [ ] Decide the validation shape:
+  - Read `docs/skillpacks-install-routing-contract.md`, `research/skillpack-cli-routing-audit.md`, `scripts/skill-pack-routing-audit.sh`, and existing layer1 routing-test patterns.
+  - Decide whether the npm-route guard should be a dedicated script, a layer1 test, or both; prefer a dedicated active-skill scan script if it keeps failure output actionable for broad remediation batches.
+  - Define the allowlist shape for source-checkout-only/internal text before implementation so exceptions are explicit and reviewable.
   - Prefer a focused script or layer1 test that scans active `SKILL.md` files, excludes `archive/**`, and reports install-route text that lacks the required `npx skillpacks` alternative.
   - Allowlist truly internal/source-checkout-only maintenance text with comments or structured fixtures so exceptions are auditable.
   - Keep `scripts/skill-pack-routing-audit.sh` as the cross-pack guard correctness check unless the new npm-route assertion fits cleanly without weakening that script's scope.
@@ -56,6 +60,13 @@ Define the canonical npm-aware install-route wording and add the first regressio
 
 - Reframed the active todo from a P1 source-edit batch to the smaller first remediation slice requested by the roadmap plan.
 - No active `SKILL.md` files, generated Skills Showcase assets, or source tests are changed by this planning update.
+
+### Review Notes
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260610-201246-exec.md`.
+- Added `docs/skillpacks-install-routing-contract.md` as the canonical wording matrix for the npm-aware install-route remediation.
+- The contract preserves runner-specific in-agent routes (`/pack` for Claude and `$pack` for Codex), keeps `scripts/pack.sh` for source-checkout maintenance, adds `npx skillpacks install <pack-or-skill>` for package consumers, and reserves `npx skillpacks install-deck <deck>` for curated decks.
+- No active `SKILL.md` or `PACK.md` content changed in this step, so skill versioning, changelog updates, and Skills Showcase refresh are not required until the later remediation batches.
 
 ---
 

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-10 — Skillpacks install-route wording contract
+
+- Captured the visible `$exec` invocation under `prompts/exec/`.
+- Added `docs/skillpacks-install-routing-contract.md` as the canonical wording matrix for npm-aware install-route remediation.
+- Checked off the first current remediation step and expanded the next validation-shape step so a fresh session can decide the focused scan/test approach before editing active `SKILL.md` files.
+- Verified the contract with targeted route phrase scans, `bash scripts/skill-pack-routing-audit.sh`, and `git diff --check`.
+- No active `SKILL.md` or `PACK.md` files changed, so skill versioning and Skills Showcase refresh were not required for this step.
+
 ## 2026-06-10 — Skillpacks CLI routing remediation plan correction
 
 - Captured the visible pack-skill remediation-planning prompt under `prompts/pack/`.
