@@ -28,6 +28,7 @@ Included in this shipping boundary:
 - `docs/skills-showcase/assets/skills-data.js`
 - `apps/skills-showcase/public/assets/github-proof-data.js`
 - `docs/skills-showcase/assets/github-proof-data.js`
+- `apps/skills-showcase/next-env.d.ts`
 - `prompts/exec/skill-prompt-20260611-020009-alignment-compile-responses.md`
 - `tasks/roadmap.md`
 - `tasks/todo.md`
@@ -63,13 +64,13 @@ The supplied plan asked for the canonical convention, generated bundles, focused
 - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs` - passed.
 - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs` - passed.
 - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` - passed.
+- `pnpm --dir apps/skills-showcase build` - passed.
 - Active-file stale dual-button scan excluding archives - passed with no matches.
 - `git diff --check` - passed.
 
 ## Skipped Tests
 
 - Full layer1 was not run because the changed executable surface is covered by the focused alignment convention and upgrade-page tests, plus generator drift validation across all generated bundles.
-- Skills Showcase app build was not run because the showcase changes are generated data/version/fingerprint updates; the showcase data validator regenerated and verified the website-owned generated assets.
 
 ## Adversarial Review
 
