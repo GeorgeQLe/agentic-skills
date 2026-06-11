@@ -1,5 +1,9 @@
 # customer-discovery changelog (claude)
 
+## v1.2 - 2026-06-11
+
+- Added npm-aware install-route guidance so unavailable-pack fallbacks keep `/pack install` while also offering `npx skillpacks install <pack>` from the project shell.
+
 ## v1.1 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.

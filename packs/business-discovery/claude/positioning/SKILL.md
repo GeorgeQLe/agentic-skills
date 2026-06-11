@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.13
+version: v0.14
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 interview_depth: light
 visual_tier: visual
@@ -11,7 +11,7 @@ invocation: orchestrator
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Positioning — Orchestrator
 
@@ -216,7 +216,7 @@ Stop — user runs `/exec`.
 Include 3–5 applicable items with "Recommended + Other options" framing:
 
 - IF no `research/journey-map.md`: check for `customer-lifecycle` pack → recommend `/journey-map`
-- DEFAULT: check `.agents/project.json.enabled_packs` for `product-design` — if not enabled, recommend `/pack install product-design`; if enabled, recommend `/user-flow-map [positioning-backed product direction]`
+- DEFAULT: check `.agents/project.json.enabled_packs` for `product-design` — if not enabled, recommend `/pack install product-design` inside Claude Code, or `npx skillpacks install product-design` from the project shell; if enabled, recommend `/user-flow-map [positioning-backed product direction]`
 - IF solution-customer fit is weak/disputed: `/value-prop-canvas`
 - IF revenue/channels/cost/defensibility risks exposed: `/lean-canvas`
 - IF no `research/gtm.md`: check for `business-growth` pack → recommend `/gtm`

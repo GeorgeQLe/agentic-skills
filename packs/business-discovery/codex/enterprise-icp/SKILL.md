@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.7
+version: v0.8
 argument-hint: "[optional: target industry or market segment]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Enterprise ICP — Multi-Stakeholder Discovery Interview
 
@@ -93,14 +93,14 @@ Other options:
 - ...
 
 **Recommendation priority** (first applicable becomes the recommendation):
-1. IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — evaluate whether the codebase meets enterprise deal-killer requirements
-2. Otherwise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — map the multi-stakeholder journey before building
+1. IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$scale-audit` — evaluate whether the codebase meets enterprise deal-killer requirements
+2. Otherwise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — map the multi-stakeholder journey before building
 
 **Other options** (include all applicable items not chosen as recommended, based on which files exist):
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate codebase against enterprise requirements
-- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — Map enterprise stakeholder journeys
-- IF no `research/journey-map.md` and `research/icp.md` exists: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map general user journeys
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate codebase against enterprise requirements
+- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — Map enterprise stakeholder journeys
+- IF no `research/journey-map.md` and `research/icp.md` exists: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map general user journeys
 - `$competitive-analysis` — Research enterprise competitive landscape (if no `research/competitive-analysis.md`)
 
 ## Task Classification

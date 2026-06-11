@@ -195,13 +195,15 @@ This roadmap schedules the remediation described in `research/skillpack-cli-rout
    - [x] Decide and implement the focused validation rule that prevents install-route text from omitting `npx skillpacks install` or `npx skillpacks install-deck` unless explicitly allowlisted.
    - [x] Keep `scripts/skill-pack-routing-audit.sh` focused on cross-pack availability guards unless extending it is cleaner than adding a dedicated npm-route check.
 2. P1 global routing/install skills.
-   - [ ] Update the 14 global files listed in the audit: `pack`, `skills`, `init-agentic-skills`, `provision-agentic-config`, `afps-status`, `codebase-status`, and `idea-scope-brief` for both Claude and Codex where present.
-   - [ ] Preserve runner syntax exactly: Claude gets `/pack ...`; Codex gets `$pack ...`; shell guidance gets `npx skillpacks ...`.
-   - [ ] Preserve `scripts/pack.sh` where the text is explicitly about source-checkout maintenance.
+   - [x] Update the 14 global files listed in the audit: `pack`, `skills`, `init-agentic-skills`, `provision-agentic-config`, `afps-status`, `codebase-status`, and `idea-scope-brief` for both Claude and Codex where present.
+   - [x] Preserve runner syntax exactly: Claude gets `/pack ...`; Codex gets `$pack ...`; shell guidance gets `npx skillpacks ...`.
+   - [x] Preserve `scripts/pack.sh` where the text is explicitly about source-checkout maintenance.
 3. P2 repeated `Pack Availability Guard` boilerplate.
    - [ ] Replace repeated pack-availability guard language across the pack-skill buckets listed in the audit.
    - [ ] Apply the canonical wording consistently across mirrored Claude/Codex pack skills.
    - [ ] Avoid one oversized commit by grouping related pack buckets into reviewable batches.
+   - Progress shipped: `agent-work-admin` bucket and top-level `business-discovery` skills.
+   - Next bucket: nested `business-discovery` framework skills.
 4. P3 bespoke high-traffic follow-up route sections.
    - [ ] Sweep high-traffic workflow skills with custom follow-up route language: `customer-discovery`, `competitive-analysis`, `journey-map`, `positioning`, `user-flow-map`, `ui-interview`, `ux-variations`, `roadmap`, `plan-phase`, `ship`, and `ship-end`.
    - [ ] Distinguish pack installs from deck installs; use `npx skillpacks install-deck <deck>` only when the desired install unit is a deck.

@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.1
+version: v1.2
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 interview_depth: full
@@ -11,7 +11,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Customer Discovery — Orchestrator
 
@@ -324,9 +324,9 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 - ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
 - IF no `specs/` directory or it's empty: `/competitive-analysis` — Map the competitive landscape for this ICP's market
-- IF `specs/` exist but no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `/pack install customer-lifecycle`; if enabled, recommend `/journey-map`
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if not enabled, recommend `/pack install business-ops`; if enabled, recommend `/mvp-gap`
-- IF `research/competitive-analysis.md` exists: check `.agents/project.json.enabled_packs` for `product-design` — if not enabled, recommend `/pack install product-design`; if enabled, recommend `/brainstorm`
+- IF `specs/` exist but no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `/pack install customer-lifecycle` inside Claude Code, or `npx skillpacks install customer-lifecycle` from the project shell; if enabled, recommend `/journey-map`
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if not enabled, recommend `/pack install business-ops` inside Claude Code, or `npx skillpacks install business-ops` from the project shell; if enabled, recommend `/mvp-gap`
+- IF `research/competitive-analysis.md` exists: check `.agents/project.json.enabled_packs` for `product-design` — if not enabled, recommend `/pack install product-design` inside Claude Code, or `npx skillpacks install product-design` from the project shell; if enabled, recommend `/brainstorm`
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
