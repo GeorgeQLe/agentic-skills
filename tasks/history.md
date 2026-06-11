@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-11 — Research-ish skill lifecycle audit
+
+- Added `scripts/researchish-skill-lifecycle-audit.mjs`, a read-only classifier for active research-ish skills under `global/**/SKILL.md` and `packs/**/SKILL.md` excluding archives, with Markdown and compact `--json` output.
+- Generated the pre-remediation inventory report at `research/researchish-skill-lifecycle-audit.md`; it captured 383 active skills, 315 in-scope skills, 138 active `type: research` skills, 4 misclassified staged producers, non-research `research/` language, skip-list candidates, and suspicious marker-compliant research skills.
+- Added layer1 coverage for audit JSON shape, staged research marker compliance, alignment skip-list bundle exclusions, and non-research generic `_working` misuse.
+- Archived and reclassified the four confirmed misclassified staged producers: mirrored `repo-glossary` v0.2 -> v0.3 and mirrored `journey-map` v0.11 -> v0.12, changing only `type: analysis` to `type: research` and updating changelogs.
+- Regenerated alignment bundles through the canonical generator; no bundle files changed. Refreshed Skills Showcase generated data and proof fingerprints after active skill metadata changed.
+- Post-remediation live audit reports 142 active `type: research` skills and 0 misclassified skills. Broader direct-utility alignment-page candidates remain as report-backed follow-up inventory rather than automatic heuristic edits.
+- Validation passed: alignment bundle check, focused research approval gate and research-ish audit layer1 tests, skill archive/version/dependency audits, Skills Showcase data validation, and `git diff --check`.
+
 ## 2026-06-11 — VARD/ORD staged scan workflow
 
 - Captured the visible create-agentic-skill invocation under `prompts/create-agentic-skill/`.

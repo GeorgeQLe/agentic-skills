@@ -1,5 +1,9 @@
 # journey-map changelog (codex)
 
+## v0.12 - 2026-06-11
+
+- Reclassified the active orchestrator as `type: research` because it already uses the staged research lifecycle and writes approved journey-map research artifacts.
+
 ## v0.11 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.

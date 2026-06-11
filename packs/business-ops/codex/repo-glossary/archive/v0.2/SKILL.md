@@ -1,8 +1,8 @@
 ---
 name: repo-glossary
 description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, shadows, inheritance gaps, and cross-path divergences across research docs
-type: research
-version: v0.3
+type: analysis
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"tooling\", \"business\", \"workflow\"]"
 ---
 

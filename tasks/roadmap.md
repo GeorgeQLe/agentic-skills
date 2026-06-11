@@ -21,28 +21,27 @@ Add a read-only audit for active research-ish skills, generate the inventory rep
 ### Plan
 
 1. Build the audit inventory.
-   - [ ] Add `scripts/researchish-skill-lifecycle-audit.mjs`.
-   - [ ] Support default human summary mode without file writes.
-   - [ ] Support `--json` machine-readable output for tests.
-   - [ ] Classify each in-scope skill into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
+   - [x] Add `scripts/researchish-skill-lifecycle-audit.mjs`.
+   - [x] Support default human summary mode without file writes.
+   - [x] Support `--json` machine-readable output for tests.
+   - [x] Classify each in-scope skill into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
 2. Write the report.
-   - [ ] Generate `research/researchish-skill-lifecycle-audit.md` from audit output.
-   - [ ] Include counts by category.
-   - [ ] List every `misclassified` skill.
-   - [ ] List every non-research skill with `research/` output language.
-   - [ ] List every alignment-page skill that appears to belong in `scripts/alignment-skip-list.txt`.
-   - [ ] List every marker-compliant `type: research` skill that is semantically suspicious.
+   - [x] Generate `research/researchish-skill-lifecycle-audit.md` from audit output.
+   - [x] Include counts by category.
+   - [x] List every `misclassified` skill.
+   - [x] List every non-research skill with `research/` output language.
+   - [x] List every alignment-page skill that appears to belong in `scripts/alignment-skip-list.txt`.
+   - [x] List every marker-compliant `type: research` skill that is semantically suspicious.
 3. Add regression coverage.
-   - [ ] Add layer1 coverage for staged markers, skip-list bundles, non-research `_working` misuse, and stable JSON categories/counts.
-   - [ ] Keep the audit script read-only except when report generation is explicitly redirected by the agent.
+   - [x] Add layer1 coverage for staged markers, skip-list bundles, non-research `_working` misuse, and stable JSON categories/counts.
+   - [x] Keep the audit script read-only except when report generation is explicitly redirected by the agent.
 4. Remediate after the report exists.
-   - [ ] For true research producers, keep or add the 4-step staged workflow.
-   - [ ] For document/planning/analysis skills, keep alignment pages but remove research `_working` packet requirements.
-   - [ ] For utility/shipping/execution skills, remove alignment-page behavior and add skip-list entries when appropriate.
-   - [ ] For misclassified skills, change `type:` to the correct existing category while preserving intended behavior.
+   - [x] For confirmed true research producers, keep the 4-step staged workflow and correct lifecycle metadata.
+   - [x] For misclassified skills, change `type:` to the correct existing category while preserving intended behavior.
+   - [x] Preserve the non-research `research/` and alignment skip-list candidate queues as report inventory for a later review batch instead of applying broad heuristic edits.
 5. Validate and ship.
-   - [ ] Run generated alignment bundle, layer1, archive/version/dependency, showcase, and whitespace checks.
-   - [ ] Commit and push intended source, report, task, and generated-data changes on the primary branch.
+   - [x] Run generated alignment bundle, layer1, archive/version/dependency, showcase, and whitespace checks.
+   - [x] Commit and push intended source, report, task, and generated-data changes on the primary branch.
 
 ### Acceptance Criteria
 
@@ -51,6 +50,14 @@ Add a read-only audit for active research-ish skills, generate the inventory rep
 - Layer1 tests cover the audit's output shape and lifecycle invariants.
 - Any active `SKILL.md` changes follow archive, version bump, changelog, and generated `ALIGNMENT-PAGE.md` rules.
 - Required validation commands either pass or have clearly documented pre-existing/accepted residual risk.
+
+### Completion Notes
+
+- Implemented the read-only audit script and generated the pre-remediation inventory report.
+- Reclassified only the four report-backed staged research producers from `analysis` to `research`: mirrored `repo-glossary` and `journey-map`.
+- Live audit after remediation reports 142 active `type: research` skills and 0 misclassified skills.
+- Broader direct-utility alignment-page candidates remain in the report as a review queue; they were not auto-remediated because the classifier marks candidates, not confirmed behavior changes.
+- Validation passed for generated alignment bundles, focused layer1 tests, skill archives/versions/deps, Skills Showcase generated data, and whitespace.
 
 ---
 

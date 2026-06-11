@@ -1,14 +1,12 @@
 ---
 name: repo-glossary
 description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, shadows, inheritance gaps, and cross-path divergences across research docs
-type: research
-version: v0.3
+type: analysis
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"tooling\", \"business\", \"workflow\"]"
 ---
 
 # Repo Glossary — Glossary Audit & Reconciliation
-
-Invoke as `$repo-glossary`.
 
 Scans all research documents, CLAUDE.md, and docs for domain-specific terminology, then audits the shared glossary for accuracy, conflicts, staleness, shadows, inheritance gaps, and cross-path divergences. In multi-path repos, glossaries form a two-level hierarchy: a parent glossary (`research/glossary.md`) with shared terms and scoped glossaries (`research/{slug}/glossary.md`) that inherit parent terms and can override them. This is the look-back complement to the write-forward glossary convention: research skills add terms during their alignment flow, and this skill periodically reviews the full glossary hierarchy for drift and gaps.
 
@@ -188,11 +186,11 @@ If a target glossary does not exist, create it with the appropriate standard for
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF conflicting terms remain unresolved: `$repo-glossary` — Re-run to resolve remaining conflicts
-- IF assumption-tracker exists and references undefined terms: `$assumption-tracker` — Update assumption register with clarified terminology
-- IF research docs have many undefined terms: run more research skills to build context, then `$repo-glossary` again
-- IF glossary is comprehensive: `$reconcile-research` — Check cross-document consistency now that terms are aligned
-- ALWAYS: `$research-roadmap` — Check overall project status
+- IF conflicting terms remain unresolved: `/repo-glossary` — Re-run to resolve remaining conflicts
+- IF assumption-tracker exists and references undefined terms: `/assumption-tracker` — Update assumption register with clarified terminology
+- IF research docs have many undefined terms: run more research skills to build context, then `/repo-glossary` again
+- IF glossary is comprehensive: `/reconcile-research` — Check cross-document consistency now that terms are aligned
+- ALWAYS: `/research-roadmap` — Check overall project status
 
 ## Report-First Approval Gate
 

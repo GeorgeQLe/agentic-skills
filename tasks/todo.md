@@ -13,7 +13,7 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
 
 - [x] Inspect existing task state, audit/test conventions, and prior staged-research validation history.
 - [x] Add task plan artifacts for this implementation pass without overwriting unrelated local task/prompt changes.
-- [ ] Implement `scripts/researchish-skill-lifecycle-audit.mjs` with human summary and `--json` modes.
+- [x] Implement `scripts/researchish-skill-lifecycle-audit.mjs` with human summary and `--json` modes.
   - First inspect any existing local `scripts/researchish-skill-lifecycle-audit.mjs` before editing; a local untracked copy was present when this planning step ran, so the next executor should reuse or reconcile that work instead of recreating the file blindly.
   - Keep the script read-only in normal operation: default mode prints Markdown to stdout, `--json` prints machine-readable data to stdout, and neither mode writes reports or modifies skill files.
   - Support `--root <path>` for fixture tests and repository-state checks.
@@ -23,12 +23,12 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
   - Classify every in-scope active skill into exactly one category: `staged-research`, `alignment-document`, `direct-utility`, or `misclassified`.
   - Include enough JSON detail for tests and the later report: totals, category counts, per-skill category, flags/signals, missing staged markers, non-research `research/` language findings, skip-list bundle candidates, and semantically suspicious marker-compliant research skills.
   - Do not remediate active `SKILL.md` files in this implementation step unless the current task is explicitly advanced past report generation and review.
-- [ ] Generate `research/researchish-skill-lifecycle-audit.md` from the script output.
-- [ ] Add focused layer1 audit coverage for JSON shape, staged-research marker compliance, skip-list bundle exclusions, and non-research `_working` misuse.
-- [ ] Review audit findings and apply only focused remediation needed by the report.
-- [ ] If active `SKILL.md` files change, run `scripts/skill-archive.sh <skill-dir>`, bump versions, update changelogs, and regenerate `ALIGNMENT-PAGE.md` bundles only through `node scripts/upgrade-alignment-page.mjs`.
-- [ ] If active `SKILL.md` or `PACK.md` files change, refresh and validate Skills Showcase generated data.
-- [ ] Run required checks:
+- [x] Generate `research/researchish-skill-lifecycle-audit.md` from the script output.
+- [x] Add focused layer1 audit coverage for JSON shape, staged-research marker compliance, skip-list bundle exclusions, and non-research `_working` misuse.
+- [x] Review audit findings and apply only focused remediation needed by the report.
+- [x] If active `SKILL.md` files change, run `scripts/skill-archive.sh <skill-dir>`, bump versions, update changelogs, and regenerate `ALIGNMENT-PAGE.md` bundles only through `node scripts/upgrade-alignment-page.mjs`.
+- [x] If active `SKILL.md` or `PACK.md` files change, refresh and validate Skills Showcase generated data.
+- [x] Run required checks:
   - `node scripts/upgrade-alignment-page.mjs --check`
   - `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts`
   - New layer1 audit test
@@ -36,7 +36,7 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
   - `bash scripts/skill-versions.sh --missing`
   - `bash scripts/skill-deps.sh --broken`
   - `git diff --check`
-- [ ] Record review notes, ship manifest, task history, and commit/push intended changes.
+- [x] Record review notes, ship manifest, task history, and commit/push intended changes.
 
 ### Acceptance Criteria
 
@@ -45,6 +45,41 @@ Implement the research-ish skill lifecycle audit plan from the prior agent: add 
 - The audit script is read-only in default and `--json` modes.
 - Remediation, if needed, is grounded in the written report rather than ad hoc editing.
 - Verification proves the audit and any remediated skill lifecycle behavior works.
+
+### Implementation Review
+
+- Added `scripts/researchish-skill-lifecycle-audit.mjs` as a read-only active-skill classifier with Markdown and compact `--json` output.
+- Wrote the pre-remediation inventory report to `research/researchish-skill-lifecycle-audit.md`. It captured 383 active skills, 315 research-ish in-scope skills, 138 active `type: research` skills, and 4 misclassified staged producers.
+- Remediated only the four report-backed misclassifications by preserving their staged research behavior and changing frontmatter `type` to `research`: mirrored `repo-glossary` and `journey-map`.
+- Archived the prior active `SKILL.md` files with `scripts/skill-archive.sh`, bumped `repo-glossary` to v0.3 and `journey-map` to v0.12, and updated the four changelogs.
+- Regenerated alignment-page bundles through `node scripts/upgrade-alignment-page.mjs`; no bundled files changed.
+- Refreshed Skills Showcase generated data after active skill metadata changes. Curated showcase copy, grouping, workflow animation text, and proof receipts needed no manual edits because public title/description/grouping stayed stable; generated type/version/tags and fingerprints changed.
+- Post-remediation live audit reports 383 active skills, 315 in-scope skills, 142 active `type: research` skills, and 0 misclassified skills.
+- Kept broader non-research `research/` language and direct-utility alignment-page candidates as report inventory for a later review batch; those findings are heuristic and were not safe to auto-edit in this focused remediation.
+- Verification passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts` (285 passed)
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/researchish-skill-lifecycle-audit.test.ts` (4 passed)
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-deps.sh --broken`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `git diff --check`
+
+### Ship Manifest
+
+- **User goal:** Implement the prior research-ish skill lifecycle audit plan end to end: script, report, tests, focused remediation, verification, and shipping.
+- **Changed files:** Added `scripts/researchish-skill-lifecycle-audit.mjs`, `research/researchish-skill-lifecycle-audit.md`, `tests/layer1/researchish-skill-lifecycle-audit.test.ts`, four archive snapshots, four active `SKILL.md` metadata updates, four changelog updates, refreshed Skills Showcase generated assets, and task history/todo/roadmap docs.
+- **Per-file purpose:** Script classifies active research-ish skills; report preserves the pre-remediation inventory; test pins lifecycle invariants; `repo-glossary` and `journey-map` metadata now match existing staged research behavior; archives/changelogs satisfy skill versioning; generated assets publish the new type/version metadata; task docs record execution and review.
+- **User-goal mapping:** The audit report found four deterministic lifecycle/type conflicts, and the remediation corrected only those report-backed conflicts while leaving heuristic candidate queues visible for later review.
+- **Tests run:** `node scripts/upgrade-alignment-page.mjs --check`; focused research approval gate and research-ish audit layer1 tests; skill archive/version/dependency audits; Skills Showcase generation and validation; `git diff --check`.
+- **Skipped tests:** Full layer1 and app build were not rerun because the functional surface changed only a read-only audit script plus skill metadata, and the targeted layer1 tests cover the affected contracts.
+- **Adversarial review:** Final diff review confirmed active `SKILL.md` changes are limited to `type` and `version`, generated-data changes are the expected type/version/tag/fingerprint updates, and the pre-remediation report remains an inventory snapshot rather than being overwritten after fixes.
+- **Residual risk:** The report intentionally leaves 36 direct-utility alignment-page candidates and 107 non-research `research/` language findings as review inventory; those are heuristic classifications and need a separate semantic pass before any broad skill edits.
+- **Rollback note:** Revert the shipping commit to remove the audit script/report/test and restore the four active skill metadata changes; archive snapshots can remain harmless or be removed in the same revert if the version bump is rolled back.
+- **Next command:** `$exec`
 
 ### Planning Artifact Review
 
