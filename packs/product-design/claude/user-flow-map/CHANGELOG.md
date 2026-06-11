@@ -1,5 +1,9 @@
 # user-flow-map changelog (claude)
 
+## v0.2 - 2026-06-11
+
+- Added npm-aware install-route wording for product-design pack availability while preserving Claude `/pack install ...` routes.
+
 ## v0.1 - 2026-06-10
 
 - Flow Assumptions Checkpoint and Flow Coverage Checkpoint now render inline as the final message text of their own turn, with the confirmation question asked in the following turn; AskUserQuestion option previews are a supplementary mirror only, never the sole channel. Applies the Manifest Visibility Rule in docs/interview-convention.md.

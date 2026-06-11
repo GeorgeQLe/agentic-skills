@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.16 - 2026-06-11
+
+- Added npm-aware install-route wording for product-testing and cross-pack recommendations while preserving Claude `/pack install ...` routes.
+
 ## v0.15 - 2026-06-10
 
 - Added the inline manifest visibility rule to the assumptions manifest step: every confirmation manifest/checklist/checkpoint renders as the final message text of its own turn with the confirmation question in the next turn; AskUserQuestion option previews are a supplementary mirror only, never the sole channel.

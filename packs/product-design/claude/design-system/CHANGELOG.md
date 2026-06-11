@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-11
+
+- Added npm-aware install-route wording for cross-pack recommendations while preserving Claude `/pack install ...` routes.
+
 ## v0.0
 
 - Archived previous skill contract.

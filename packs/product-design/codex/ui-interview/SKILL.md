@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.14
+version: v0.15
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -97,7 +97,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm. Deliver the manifest per the inline visibility rule in step 3 (turn-final message text of its own turn; confirmation question in the next turn), never as mid-turn text only.
    - This manifest confirmation is non-final: it only confirms the requirements draft is ready for the pre-approval lifecycle in step 7. Route all writes through that lifecycle — working packet at `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active), then a `review`-state `alignment/ui-interview-{topic}.html` page rendering the Content Requirements Manifest as the candidate/verdict gate, then final compiled YAML approval.
    - Only after final compiled YAML approval, write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`, archive the working packet, and convert the page to `confirmed` per step 7.
-   - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
+   - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` inside Codex, or `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
    - Stop. Do not continue to step 5 or beyond; the pre-approval lifecycle in step 7 and the requirements deliverables above are the only remaining work in this mode.
 
@@ -168,7 +168,7 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
+Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` inside Codex, or `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
 
 ### Alignment Page
 
@@ -182,7 +182,7 @@ The page is built pre-approval in `review` state per step 7, before any canonica
 - Do not collapse UI detail into generic phrases such as "standard dashboard layout" or "normal form behavior."
 - Do not create high-fidelity implementation plans until the page anatomy and control behavior are decision-complete.
 - Do not treat visual polish as separate from implementation. Size, spacing, hierarchy, and responsive behavior must be specified well enough for a developer to build.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `$pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `$pack install <pack-name>` inside Codex, or `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Archive-First Replacement Policy
 

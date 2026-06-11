@@ -1,5 +1,9 @@
 # user-flow-map changelog (codex)
 
+## v0.2 - 2026-06-11
+
+- Added npm-aware install-route wording for product-design pack availability while preserving Codex `$pack install ...` routes.
+
 ## v0.1 - 2026-06-10
 
 - Flow Assumptions Checkpoint and Flow Coverage Checkpoint now render inline as the final message text of their own turn, with the confirmation question asked in the following turn, never only as mid-turn text before a tool or command call. Applies the Manifest Visibility Rule in docs/interview-convention.md.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-11
+
+- Added npm-aware install-route wording for pack availability and cross-pack recommendations while preserving Claude `/pack install ...` routes.
+
 ## v0.5 - 2026-06-10
 
 - Feature Evidence Brief + Assumptions Manifest now renders inline as the final message text of its own turn, with the step 6 confirmation asked in the following turn; AskUserQuestion option previews are a supplementary mirror only, never the sole channel.

@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.14
+version: v0.15
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -127,7 +127,7 @@ The UI specification must include source evidence, the confirmed UI Assumptions 
 
 The interview log must include the manifest, every question asked, options and recommendations presented, user responses, final decisions, and notable changes from the initial draft, current implementation, or artifact.
 
-Only after the page is converted to `confirmed` and canonical files are written, recommend `/ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — if the interface is ready to sequence into work.
+Only after the page is converted to `confirmed` and canonical files are written, recommend `/ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` inside Claude Code, or `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `/roadmap` — if the interface is ready to sequence into work.
 
 ### Alignment Page
 
@@ -141,7 +141,7 @@ The page is built pre-approval in `review` state per step 7, before any canonica
 - Do not collapse UI detail into generic phrases such as "standard dashboard layout" or "normal form behavior."
 - Do not create implementation plans until the page anatomy and control behavior are decision-complete.
 - Do not treat visual polish as separate from implementation. Size, spacing, hierarchy, and responsive behavior must be specified well enough for a developer to build.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Archive-First Replacement Policy
 

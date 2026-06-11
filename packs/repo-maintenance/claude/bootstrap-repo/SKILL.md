@@ -2,7 +2,7 @@
 name: bootstrap-repo
 description: Initialize or reset a repository README and agent workflow docs from a short project brief
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: "<project brief>"
 ---
 
@@ -56,7 +56,7 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
 
 7. **Route research-first after product bootstrap:**
    - If this is a product, app, SaaS, dashboard, internal tool, marketplace, website, or other user-facing restart, rebuild market and lifecycle alignment from the high-level concept before UI requirements or prototypes.
-   - Check `.agents/project.json.enabled_packs` when present. If `business-discovery` is not enabled, recommend `/pack install business-discovery` before `/customer-discovery`. If `customer-lifecycle` is not enabled, include `/pack install customer-lifecycle` before `/journey-map`.
+   - Check `.agents/project.json.enabled_packs` when present. If `business-research` is not enabled, recommend `/pack install business-research` inside Claude Code, or `npx skillpacks install business-research` from the project shell, before `/customer-discovery`. If `customer-lifecycle` is not enabled, include `/pack install customer-lifecycle` before `/journey-map`.
    - When required packs are available, recommend `/customer-discovery <concept>` as the next command. After `/customer-discovery`, the intended sequence is `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> prototype work.
    - If current, accepted `research/icp.md`, `research/competitive-analysis.md`, and `research/journey-map.md` already exist from the fresh reset but positioning is missing, then recommend `/positioning <topic>`.
    - If positioning exists but a flow map is missing, recommend `/user-flow-map <topic>`.
@@ -76,7 +76,7 @@ Bootstrapped repository
 - AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
 - Verification: [commands/checks run]
-- Recommended next command: [/pack install business-discovery | /pack install customer-lifecycle | /pack install product-design | /customer-discovery <concept> | /positioning <topic> | /user-flow-map <topic> | /ui-interview --requirements-only <topic> | /ux-variations --layout-mode <topic> | /roadmap | /exec]
+- Recommended next command: [/pack install business-research | /pack install customer-lifecycle | /pack install product-design | /customer-discovery <concept> | /positioning <topic> | /user-flow-map <topic> | /ui-interview --requirements-only <topic> | /ux-variations --layout-mode <topic> | /roadmap | /exec]
 ```
 
 ## Constraints

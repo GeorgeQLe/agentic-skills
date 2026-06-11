@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-11 — Skillpacks CLI routing P2 product-design remediation
+
+- Updated the product-design P2 bucket from `research/skillpack-cli-routing-audit.md`: 15 active Claude/Codex product-design skills now include `npx skillpacks install ...` alternatives while preserving Claude `/pack install ...` and Codex `$pack install ...` routes.
+- Archived every prior active product-design target `SKILL.md`, bumped the planned versions, and updated all 15 target `CHANGELOG.md` files.
+- Fixed current-HEAD pack rename fallout found by validation: `codebase-status`, `idea-scope-brief`, and `bootstrap-repo` now check/recommend `business-research` instead of stale `business-discovery`; archived/bumped the six affected Claude/Codex skills and updated changelogs.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes; generated versions and fingerprints changed, while non-generated showcase copy did not need manual updates.
+- Validation passed for targeted product-design report filtering, fixture and layer1 scanner coverage, cross-pack routing, skill versions, archive strictness, skill dependencies, generated alignment bundle drift, Skills Showcase data validation/build, and whitespace. The active strict install-routing audit remains expected-red with 42 later P2/P3 findings.
+- Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260611-093504-exec.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-product-design.md`.
+
 ## 2026-06-11 — Skillpacks manifest refresh after alignment contract updates
 
 - Resumed the earlier `$exec phase 3` request after the repository had already advanced past Skillpacks npm Phase 3, Phase 4, and Phase 5.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-06-11
+
+- Added npm-aware install-route wording for agent-work-admin and cross-pack recommendations while preserving Claude `/pack install ...` routes.
+
 ## v0.14 - 2026-06-10
 
 - Made inline turn-final text the default delivery channel for every confirmation manifest/checklist/checkpoint: the content renders as the final message text of its own turn with the confirmation question in the next turn; AskUserQuestion option previews are demoted to a supplementary mirror and are never the sole channel. Supersedes the v0.13 either/or framing.

@@ -2,14 +2,14 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.11
+version: v0.12
 argument-hint: "[optional-topic-override] [--ideas]"
 interview_depth: full
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 ## Prototype Gate
 
@@ -46,9 +46,9 @@ When product path `{slug}` is active, read and write research under `research/{s
    - For `business-app`, read `research/icp.md` when present and ground solution decisions against the ICP.
    - For `game`, read game research artifacts when present: `research/game-audience.md`, `research/game-fantasy.md`, `research/game-core-loop.md`.
    - For `devtool`, read devtool research artifacts when present: `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, `research/devtool-integration-map.md`.
-   - If project type is missing or mismatched, recommend `/pack recommend` or `/pack install <pack>` before doing domain-specific planning.
+   - If project type is missing or mismatched, recommend `/pack recommend`, `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell before doing domain-specific planning.
    - If `research/idea-brief.md`, `research/icp.md`, or `research/journey-map.md` exists in a business-app project, treat them as source evidence: does this implementation fit the concept constraints, user and customer journey, path to aha, conversion path, retention loop, champion dynamics, technical sophistication, and provisioning/onboarding model?
-   - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `/pack install customer-lifecycle` before `/journey-map`.
+   - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `/pack install customer-lifecycle` inside Claude Code, or `npx skillpacks install customer-lifecycle` from the project shell, before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
    - Read `specs/user-flow-*.md` when present as upstream evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, and low-fidelity wireframe intent.
@@ -126,7 +126,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - One to three focused questions per turn, not more.
 - Do not re-interview on ICP topics already covered in `research/icp.md`.
 - Do not conclude the interview without explicit user confirmation that all areas are addressed.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Ideas Mode (`--ideas`)
 

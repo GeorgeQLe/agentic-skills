@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-06-11
+
+- Added npm-aware install-route wording for agent-work-admin and cross-pack recommendations while preserving Codex `$pack install ...` routes.
+
 ## v0.14 - 2026-06-10
 
 - Reaffirmed inline turn-final text as the only primary delivery channel for every confirmation manifest/checklist/checkpoint: the content renders as the final message text of its own turn with the confirmation question in the next turn, never mid-turn text in a turn that ends with a tool or command call.

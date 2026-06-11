@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-11
+
+- Added npm-aware install-route wording for pack, customer-lifecycle, and cross-pack recommendations while preserving Claude `/pack install ...` routes.
+
 ## v0.11 - 2026-06-10
 
 - Assumptions Checkpoint now renders inline as the final message text of its own turn (never only as mid-turn text before a tool call); the next turn asks the user to confirm or correct it together with the first 1 to 3 focused interview questions, keeping momentum. AskUserQuestion option previews may mirror the checkpoint as a supplement but are never the sole channel.

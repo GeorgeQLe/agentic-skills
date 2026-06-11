@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-11
+
+- Updated optional business research detour pack checks from `business-discovery` to `business-research` after the pack rename.
+
 ## v0.6 - 2026-06-11
 
 - Added npm-aware install-route alternatives to pack-local status recommendations while preserving Codex `$pack install` prerequisites.

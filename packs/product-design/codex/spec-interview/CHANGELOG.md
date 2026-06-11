@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-11
+
+- Added npm-aware install-route wording for pack and customer-lifecycle recommendations while preserving Codex `$pack install ...` routes.
+
 ## v0.11 - 2026-06-10
 
 - Assumptions Checkpoint now renders inline as the final message text of its own turn (never only as mid-turn text before a tool or command call); the next turn asks the user to confirm or correct it together with one focused interview question, keeping momentum.
