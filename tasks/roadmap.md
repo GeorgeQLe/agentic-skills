@@ -32,7 +32,7 @@ Update `$idea-scope-brief` so completed idea briefs recommend the closest workfl
    - [x] Regenerate and validate Skills Showcase data.
    - [x] Run `git diff --check`.
    - [x] Record review notes in `tasks/todo.md`.
-   - [ ] Commit and push intended changes on the primary branch.
+   - [x] Commit and push intended changes on the primary branch.
 
 ### Acceptance Criteria
 

@@ -16,7 +16,7 @@ Teach `$idea-scope-brief` to route completed idea briefs to the closest workflow
 - [x] Regenerate and validate Skills Showcase data.
 - [x] Run `git diff --check`.
 - [x] Record review notes.
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ### Review Notes
 
@@ -26,6 +26,7 @@ Teach `$idea-scope-brief` to route completed idea briefs to the closest workflow
 - Updated `## Next Steps` so high-confidence canonical deck routes use `npx skillpacks install-deck <deck>` as the primary command, customized saved decks use explicit saved or pack install guidance, and downstream research/workflow skills stay secondary context after deck selection.
 - Updated the existing `idea-scope-brief` benchmark setup to require `npx skillpacks install-deck business-afps` for the deliberate Poketo Core business/SaaS fixture.
 - Regenerated Skills Showcase generated data; `idea-scope-brief` now appears as v0.16 in both app and docs copies, and proof data refreshed its source fingerprint/recent history entries.
+- Shipped implementation commit: `434ddbb5 feat(idea-scope-brief): add deck fit routing`.
 - Validation passed:
   - `rg -n 'Deck Fit|install-deck|game-afps|ord|saved_decks|decks' global/codex/idea-scope-brief/SKILL.md`
   - `./scripts/skill-versions.sh --missing`
