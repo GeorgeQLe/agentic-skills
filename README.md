@@ -46,13 +46,15 @@ With the published npm package, users can install from the current project direc
 
 ```bash
 cd ~/my-project
+npx skillpacks init
 npx skillpacks install devtool
 npx skillpacks install code-quality
 npx skillpacks install-deck game-afps
+npx skillpacks refresh
 npx skillpacks status
 ```
 
-`npx skillpacks` writes the same project-local files as `scripts/pack.sh`: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. Package semver such as `skillpacks@0.1.0` selects the bundled skill snapshot; individual skill pins still use each skill's `version:` value through `skillpacks pin <skill> <version>`.
+`npx skillpacks init` installs the base skills for the current repository as project-local roots. `npx skillpacks install <pack-or-skill>` adds domain packs or individual pack skills. Both write project-local files: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. Package semver such as `skillpacks@0.1.0` selects the bundled skill snapshot; `npx skillpacks refresh` recreates enabled base skills and packs from that snapshot. Individual skill pins still use each skill's `version:` value through `skillpacks pin <skill> <version>`.
 
 ## Initialization
 
@@ -60,12 +62,14 @@ npx skillpacks status
 ./init.sh
 ```
 
-`init.sh` initializes only the global core skills:
+`init.sh` initializes only user-home global core skills:
 
-- `global/claude/*` → `~/.claude/skills/*`
-- `global/codex/*` → `~/.codex/skills/*`
+- `global/claude/*` -> `~/.claude/skills/*`
+- `global/codex/*` -> `~/.codex/skills/*`
 
 It does **not** install `packs/*` globally.
+
+For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init-global` only when you explicitly want user-home global installs.
 
 To remove repo-managed global skill installs:
 

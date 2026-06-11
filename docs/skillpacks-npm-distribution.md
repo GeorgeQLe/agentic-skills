@@ -32,12 +32,15 @@ Publication status on 2026-06-10:
 The initial user experience should be:
 
 ```bash
+npx skillpacks init
 npx skillpacks install business-discovery
 npx skillpacks install-deck vard
 npx skillpacks status
 npx skillpacks doctor
 npx skillpacks refresh
 ```
+
+`npx skillpacks init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx skillpacks refresh` update base skills from the current package snapshot instead of depending on user-home global installs.
 
 Existing users keep using:
 
@@ -162,9 +165,10 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `status` | Node-owned | Project config/status reader | No | No | Reports project designation and local roots. |
 | `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |
 | `set-update-mode <mode>` | Node-owned | Project config writer | No | No | Preserves sibling `skill_updates` fields. |
+| `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs global-scope manifest entries as project-local base skills and records `base_skills: true`. |
 | `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
 | `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
-| `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates local skill roots from `.agents/project.json`. |
+| `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates enabled base skills, packs, and individual skill roots from `.agents/project.json`. |
 | `doctor` | Node-owned | Managed marker drift reader | No | No | Read-only drift report; exits non-zero for stale installs. |
 | `prune [--dry-run]` | Node-owned | Manifest plus lifecycle helpers | No | No | Removes only orphaned managed installs; keeps unmanaged directories. |
 | `pin <skill> <version>` | Node-owned | Manifest plus lifecycle helpers | No | No | Validates archive versions, updates `pinned_versions`, and relinks installs. |
@@ -173,7 +177,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `recommend` | Shell-backed | Packaged `scripts/pack.sh recommend` | Yes | No | Uses existing repository-signal heuristics. |
 | `which <skill>` | Shell-backed | Packaged `scripts/pack.sh which` | Yes | Optional | `jq` improves individually enabled skill status; pack-level status has a grep/sed fallback. |
 | `install-deck <deck> [--full]` | Hybrid shell materialization | Node manifest resolver, then packaged `scripts/pack.sh install` | Yes | Yes | Deck metadata is Node-resolved, but installation still uses the compatibility install path. |
-| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs global core skills; `jq` preserves an existing global pin file when `--pin` updates it. |
+| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs user-home global core skills; `jq` preserves an existing global pin file when `--pin` updates it. |
 <!-- skillpacks-compatibility-matrix:end -->
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.

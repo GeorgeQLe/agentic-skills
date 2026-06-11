@@ -31,10 +31,11 @@ With the published npm package, use `npx skillpacks` from the project that shoul
 ```bash
 cd ~/my-project
 npx skillpacks --version
+npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI does not install global core skills by default. It writes project-local pack configuration and skill roots in the current working directory.
+The npm CLI does not install user-home global skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run.
 
 ## 2. Install a Pack in Your Project
 
@@ -50,12 +51,13 @@ cd ~/my-project
 With npm:
 
 ```bash
+npx skillpacks init
 npx skillpacks install devtool
 npx skillpacks install game
 npx skillpacks install business-discovery
 ```
 
-This creates `.agents/project.json` and project-local skill roots in `.claude/skills/` and `.codex/skills/`.
+This creates `.agents/project.json` and project-local skill roots in `.claude/skills/` and `.codex/skills/`. `init` is the base-skill step; `install` is the domain-pack or individual-pack-skill step.
 
 The npm CLI can also install a canonical deck from manifest metadata:
 

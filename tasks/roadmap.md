@@ -1,3 +1,48 @@
+## Current Implementation - Skillpacks Project-Local Base Init
+
+### Goal
+
+Validate the pack-refresh/global-skill update gap and, if confirmed, add a project-local `npx skillpacks init` path that installs base skills into the target repository so package refreshes can update them without relying on user-home global skill installs.
+
+### Scope
+
+- npm CLI lifecycle code under `packages/skillpacks/src/cli/`.
+- Focused package tests under `packages/skillpacks/test/`.
+- npm distribution docs: `docs/QUICKSTART.md`, `docs/skillpacks-npm-distribution.md`, and `README.md`.
+- Prompt/task history for this `$investigate` invocation.
+- Out of scope: removing source-checkout `./init.sh`, renaming the authoring `global/` directory, or changing unrelated dirty worktree files.
+
+### Plan
+
+1. Capture and investigate.
+   - [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+   - [x] Read active lessons and relevant task docs.
+   - [x] Inspect current `skillpacks` CLI, pack lifecycle, init, docs, and git history.
+   - [x] Validate whether `refresh` touches global/user-home skills.
+2. Implement project-local base init.
+   - [x] Add a Node-owned `skillpacks init` command that installs global-scope skills as project-local base skills under `.claude/skills` and `.codex/skills`.
+   - [x] Track base installation in `.agents/project.json` so `skillpacks refresh` rebuilds base skills from the current package snapshot.
+   - [x] Make `doctor` and `prune` account for project-local base skills without deleting unmanaged user content.
+   - [x] Keep `init-global` as the explicit user-home global install path.
+3. Document and cover.
+   - [x] Add focused lifecycle tests for base init, refresh, and prune expectations.
+   - [x] Update npm distribution docs and quickstart wording to explain base versus global install paths.
+4. Validate and ship.
+   - [x] Run focused package tests and package manifest/build checks.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [ ] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `npx skillpacks init` installs base/global-scope skills into the current project's local `.claude/skills` and `.codex/skills` roots.
+- `.agents/project.json` records that base skills are enabled.
+- `npx skillpacks refresh` refreshes enabled packs, individually enabled skills, and enabled base skills from the installed package snapshot.
+- `npx skillpacks init-global` remains available for users who explicitly want user-home global installs.
+- Tests prove the base install and refresh behavior without requiring bash or jq.
+
+---
+
 ## Current Implementation - Alignment Compile Responses Convention
 
 ### Goal

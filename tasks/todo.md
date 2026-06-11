@@ -1,3 +1,54 @@
+## Current Implementation - Skillpacks Project-Local Base Init
+
+### Goal
+
+Add a package-native `skillpacks init` path that installs the existing global-scope core skills as project-local base skills, then make `skillpacks refresh` update those base skills alongside packs.
+
+### Execution Profile
+
+- Parallel mode: parallel reads, history checks, and validation scans.
+- Serial mode: lifecycle edits, docs/tests, generated manifest/build checks, task docs, and shipping.
+- Rationale: the install plane is shared by Claude and Codex local skill roots, so lifecycle changes need one coherent config contract.
+
+### Steps
+
+- [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+- [x] Inspect the current npm CLI, source-checkout init, pack lifecycle, docs, and git history.
+- [x] Validate user claims:
+  - [x] `pack refresh` and `npx skillpacks refresh` rebuild only project-local roots from `.agents/project.json`.
+  - [x] npm users currently need `init-global` for user-home global installs.
+  - [x] a project-local base install model is the cleaner package-refresh path than making pack refresh mutate global user-home skills.
+- [x] Add `skillpacks init` to install base skills locally.
+- [x] Track base enablement in `.agents/project.json` and refresh it.
+- [x] Update doctor/prune/status behavior for base skills.
+- [x] Add package lifecycle tests.
+- [x] Update README and npm distribution docs.
+- [x] Run focused validation and whitespace checks.
+- [x] Record review notes and ship intended changes.
+
+### Acceptance Criteria
+
+- `skillpacks init` creates `.agents/project.json` and local base skill roots from manifest `scope: global` entries.
+- `skillpacks refresh` refreshes base skills from the current package snapshot.
+- `skillpacks prune` keeps base skills when base is enabled and removes them when no longer expected.
+- Source-checkout `./init.sh` and `skillpacks init-global` remain explicit global/user-home install paths.
+
+### Review Notes
+
+- Confirmed the user's observation: `pack refresh` and `npx skillpacks refresh` only rebuilt project-local skill roots from `.agents/project.json`; user-home global skills were handled separately by `init-agentic-skills update` / `init-global`.
+- Implemented the cleaner npm paradigm: `skillpacks init` installs manifest `scope: global` entries as project-local base skills and records `base_skills: true`.
+- Updated `skillpacks refresh` to rebuild enabled base skills alongside enabled packs and individual skills from the current package snapshot.
+- Updated prune expectations so base skills are retained when `base_skills: true` is present and pruned only when no longer declared.
+- Kept `skillpacks init-global` and source-checkout `./init.sh` as explicit user-home global install paths.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` after the manifest check exposed a small pre-existing generated-hash drift.
+- Validation passed:
+  - `npm --workspace skillpacks run test:node` (47 passed)
+  - `npm --workspace skillpacks run build:manifest:check`
+  - `npm --workspace skillpacks run build:check`
+  - `git diff --check`
+
+---
+
 ## Current Implementation - Local Merge Conflict Resolution
 
 ### Goal

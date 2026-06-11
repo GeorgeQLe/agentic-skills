@@ -121,11 +121,27 @@ function packSkillEntries(manifest, packName, tool) {
   });
 }
 
+function baseSkillEntries(manifest, tool) {
+  return manifestSkills(manifest).filter((skill) => {
+    return skill.scope === 'global' && skill.platform === tool && skill.path;
+  });
+}
+
 function uniquePackSkillNames(manifest, packName) {
   return [
     ...new Set(
       manifestSkills(manifest)
         .filter((skill) => skill.pack === packName && skill.name)
+        .map((skill) => skill.name)
+    )
+  ].sort((a, b) => a.localeCompare(b));
+}
+
+function uniqueBaseSkillNames(manifest) {
+  return [
+    ...new Set(
+      manifestSkills(manifest)
+        .filter((skill) => skill.scope === 'global' && skill.name)
         .map((skill) => skill.name)
     )
   ].sort((a, b) => a.localeCompare(b));
@@ -392,6 +408,10 @@ function enabledPacks(config) {
   return Array.isArray(config?.enabled_packs) ? config.enabled_packs : [];
 }
 
+function baseSkillsEnabled(config) {
+  return config?.base_skills === true;
+}
+
 function pinnedVersions(config) {
   return config?.pinned_versions && typeof config.pinned_versions === 'object'
     ? config.pinned_versions
@@ -414,6 +434,40 @@ function writePackProjectConfig(projectRoot, pack, packs) {
   next.enabled_packs = packs;
   next.skill_pack_version = 1;
   writeProjectConfig(projectRoot, next);
+}
+
+function writeBaseProjectConfig(projectRoot) {
+  const existing = readProjectConfig(projectRoot);
+  const next = existing
+    ? { ...existing }
+    : {
+        project_type: inferProjectType(projectRoot),
+        enabled_packs: [],
+        skill_pack_version: 1
+      };
+
+  if (!next.project_type) {
+    next.project_type = inferProjectType(projectRoot);
+  }
+  if (!Array.isArray(next.enabled_packs)) {
+    next.enabled_packs = [];
+  }
+  next.base_skills = true;
+  next.skill_pack_version = 1;
+  writeProjectConfig(projectRoot, next);
+}
+
+function installBaseSkills(projectRoot, manifest, config = readProjectConfig(projectRoot)) {
+  const skillNames = uniqueBaseSkillNames(manifest);
+  if (skillNames.length === 0) {
+    throw new Error('No base skills found in the packaged manifest');
+  }
+
+  for (const tool of TOOLS) {
+    for (const skill of baseSkillEntries(manifest, tool)) {
+      linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config);
+    }
+  }
 }
 
 function installPack(projectRoot, manifest, pack) {
@@ -705,6 +759,12 @@ function relinkUnpinnedSkill(projectRoot, manifest, pack, skillName) {
 function expectedSkillNames(manifest, config) {
   const expected = new Set();
 
+  if (baseSkillsEnabled(config)) {
+    for (const skillName of uniqueBaseSkillNames(manifest)) {
+      expected.add(skillName);
+    }
+  }
+
   for (const pack of enabledPacks(config)) {
     for (const skillName of uniquePackSkillNames(manifest, pack)) {
       expected.add(skillName);
@@ -723,6 +783,17 @@ export function printSessionReloadNotice() {
   console.log('Skill installs changed. Claude Code and Codex may keep the skill list loaded when the current session started.');
   console.log('Claude Code: use /reload-skills to rescan skills. /clear starts a new empty-context conversation and can also pick up the refreshed registry. Restart Claude Code if .claude/skills did not exist when the session started or the skill is still invisible.');
   console.log('Codex: start a fresh Codex CLI session if the $ skill list does not show newly installed or removed project-local skills.');
+}
+
+export async function initProject({ manifest, projectRoot = process.cwd() }) {
+  return withProjectLock(projectRoot, 'init', async () => {
+    installBaseSkills(projectRoot, manifest);
+    writeBaseProjectConfig(projectRoot);
+    console.log('Updated .agents/project.json (base skills enabled)');
+    console.log(`Initialized project base skills to ${manifestPackageLabel(manifest)}.`);
+    printSessionReloadNotice();
+    return 0;
+  });
 }
 
 export async function installResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
@@ -783,7 +854,7 @@ export function doctorProject({ projectRoot = process.cwd() } = {}) {
 
   if (anyStale) {
     console.log('');
-    console.log('Fix: scripts/pack.sh refresh');
+    console.log('Fix: npx skillpacks refresh (or scripts/pack.sh refresh from a source checkout)');
     return 1;
   }
 
@@ -914,11 +985,15 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
     const config = readProjectConfig(projectRoot);
     const packs = enabledPacks(config);
     const skills = enabledSkillEntries(config).map(([skill]) => skill);
+    const base = baseSkillsEnabled(config);
 
-    if (packs.length === 0 && skills.length === 0) {
+    if (!base && packs.length === 0 && skills.length === 0) {
       throw new Error('No enabled packs or skills in .agents/project.json');
     }
 
+    if (base) {
+      installBaseSkills(projectRoot, manifest, config);
+    }
     for (const pack of packs) {
       installPack(projectRoot, manifest, pack);
     }

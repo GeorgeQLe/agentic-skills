@@ -147,6 +147,24 @@ afterEach(() => {
 });
 
 describe('Node lifecycle commands', () => {
+  it('initializes project-local base skills without installing user-home globals', async () => {
+    const dir = makeTempProject();
+
+    const { stdout } = await runSkillpacks(dir, ['init']);
+
+    assert.match(stdout, /Installed \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Installed \.codex\/skills\/afps-status/);
+    assert.match(stdout, /Updated \.agents\/project\.json \(base skills enabled\)/);
+    assert.match(stdout, /Initialized project base skills to skillpacks@/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'afps-status')), true);
+    assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*global\/claude\/codebase-status/);
+    assert.equal(readProjectConfig(dir).base_skills, true);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+  });
+
   it('installs active packs without bash or jq and writes managed markers', async () => {
     const dir = makeTempProject();
 
@@ -275,6 +293,55 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'devtool-adoption': 'devtool' });
   });
 
+  it('refreshes enabled base skills from the current package snapshot', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      base_skills: true
+    });
+    writeManagedInstall(
+      dir,
+      'claude',
+      'codebase-status',
+      join(repoRoot, 'global/claude/codebase-status')
+    );
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Installed \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Installed \.codex\/skills\/pack/);
+    assert.match(stdout, /Refreshed project skills to skillpacks@/);
+    assert.notEqual(
+      readFileSync(join(skillPath(dir, 'claude', 'codebase-status'), 'SKILL.md'), 'utf8'),
+      'stale\n'
+    );
+    assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
+    assert.equal(readProjectConfig(dir).base_skills, true);
+  });
+
+  it('keeps base skills during prune only while base skills are enabled', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['init']);
+
+    const kept = await runSkillpacks(dir, ['prune']);
+
+    assert.match(kept.stdout, /Nothing to prune\./);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), true);
+
+    const config = readProjectConfig(dir);
+    delete config.base_skills;
+    writeProjectConfig(dir, config);
+
+    const pruned = await runSkillpacks(dir, ['prune']);
+
+    assert.match(pruned.stdout, /removed  \.claude\/skills\/codebase-status \(pack not enabled\)/);
+    assert.match(pruned.stdout, /orphan\(s\) removed\./);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), false);
+  });
+
   it('rejects hibernated enabled pack refresh with pack.sh safety language', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {
@@ -358,7 +425,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /unknown  \.codex\/skills\/unknown-skill — run refresh to enable drift tracking/);
     assert.match(stdout, /missing  \.claude\/skills\/missing-skill — canonical source no longer exists/);
     assert.match(stdout, /STALE    \.claude\/skills\/stale-skill \(v0\.0 -> v9\.0\)/);
-    assert.match(stdout, /Fix: scripts\/pack\.sh refresh/);
+    assert.match(stdout, /Fix: npx skillpacks refresh \(or scripts\/pack\.sh refresh from a source checkout\)/);
   });
 
   it('pins and unpins skills without bash or jq while preserving project config fields', async () => {

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "5221b05f1f3b6907bb677af5147725108ad6ac83c97a6883785a687d8dd79864",
+  "source_fingerprint": "0d09ecd13a0789336df3e55f3a604fb9b5df3f5d31bd0f614cb3b60279d990ec",
   "packs": [
     {
       "name": "agent-bridge",
@@ -960,7 +960,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "global/claude/provision-agentic-config/SKILL.md",
-      "content_sha256": "3b1dfde7c731b158a3eb6df73dba50cee683dfe5a3c7f798e941bd16f0662332",
+      "content_sha256": "fdf3eaa63b00f5c291a7edcaa564fe34ffa9cc9b1936ee0d9195f1588de68035",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1121,7 +1121,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "global/codex/provision-agentic-config/SKILL.md",
-      "content_sha256": "b5cb8e701839158b0dfff2da5b6856aadf8cf1b885fcb47eff1c19f2cbc1768b",
+      "content_sha256": "a79b7436f1d6ee8a4efea1f0e1c7f07c07e5369880d71af27f8e0b5618b1eae7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4935,7 +4935,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/exec-loop/claude/ship/SKILL.md",
-      "content_sha256": "bba42a5cc7d4d935e99e7dba55d5b469ae4f995da223985d6f3aa380b6a7bd97",
+      "content_sha256": "ceb33887f8debd67286d8822fa13dc5ac92db5f2e3c3f8a3329f0c59bcf0d416",
       "archive_versions": [
         "v0.0",
         "v0.1",

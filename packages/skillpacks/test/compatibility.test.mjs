@@ -14,6 +14,7 @@ const expectedMatrix = new Map([
   ['status', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],

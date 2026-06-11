@@ -11,6 +11,7 @@ import {
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
 import {
   doctorProject,
+  initProject,
   installResolved,
   pinSkill,
   pruneProject,
@@ -175,6 +176,7 @@ Commands:
   recommend                    Recommend packs from repository signals
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
+  init                         Install base skills into this project
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
@@ -247,6 +249,16 @@ export async function runSkillpacksCli(args) {
       'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
     );
     return runCommand('bash', [packScriptPath, 'install', ...deckInstall.packs]);
+  }
+
+  if (command === 'init') {
+    if (rest.length > 0) {
+      throw new Error('init does not accept arguments');
+    }
+    return initProject({
+      manifest: readManifest(),
+      projectRoot: process.cwd()
+    });
   }
 
   if (!PACK_COMMANDS.has(command)) {
