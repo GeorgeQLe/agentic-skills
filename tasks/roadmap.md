@@ -1,3 +1,32 @@
+## Current Implementation - Skillpacks CLI Routing Audit
+
+### Goal
+
+Audit all active repo skills for install-routing text that needs to reflect the published `skillpacks` npm CLI install path.
+
+### Plan
+
+1. Inventory active skill files.
+   - [x] Enumerate active `SKILL.md` files under `global/` and `packs/`, excluding `archive/**`.
+   - [x] Identify install-routing, pack-availability guard, and missing-skill fallback references.
+2. Cross-check current npm contract.
+   - [x] Confirm current docs define `npx skillpacks install <pack-or-skill>` and `npx skillpacks install-deck <deck>` as the package install routes.
+   - [x] Confirm existing source-checkout routes remain valid.
+3. Produce audit inventory.
+   - [x] Classify core routing skills separately from repeated pack-availability guard updates.
+   - [x] Write the findings and remediation order to `research/skillpack-cli-routing-audit.md`.
+4. Verify.
+   - [x] Run targeted active-skill route scans.
+   - [x] Run the existing cross-pack routing audit.
+
+### Acceptance Criteria
+
+- The audit distinguishes current npm CLI routing gaps from cross-pack recommendation gaps.
+- The inventory includes active global and pack skills, excluding archived skill snapshots.
+- Recommended remediation order identifies the highest-impact skills first.
+
+---
+
 ## Current Implementation - P1/P2 Verification Rerun
 
 ### Goal

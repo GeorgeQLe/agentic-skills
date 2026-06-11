@@ -1,3 +1,39 @@
+## Current Implementation - Skillpacks CLI Routing Audit
+
+### Goal
+
+Audit all active repo skills for install-routing text that needs to reflect the published `skillpacks` npm CLI install path.
+
+### Execution Profile
+
+- Parallel mode: parallel reads for inventory and evidence, serial report/task writes.
+- Rationale: this is an audit-only pass across many active skill files; source remediation should be a separate, staged mutation after the install wording is accepted.
+
+### Steps
+
+- [x] Capture the visible `pack`-skill invocation in prompt history.
+- [x] Enumerate active `SKILL.md` files under `global/` and `packs/`, excluding archives.
+- [x] Confirm the current npm install contract from repo docs and package metadata.
+- [x] Scan active skills for old install-route text and missing npm `skillpacks` alternatives.
+- [x] Write the audit inventory and remediation order to `research/skillpack-cli-routing-audit.md`.
+- [x] Run targeted scans and the existing cross-pack routing audit.
+
+### Acceptance Criteria
+
+- [x] Findings identify which skills need npm CLI install-routing updates.
+- [x] Core routing skills are separated from repeated pack-availability guard updates.
+- [x] Verification distinguishes npm CLI wording drift from existing cross-pack guard correctness.
+
+### Review Notes
+
+- Scanned 383 active `SKILL.md` files under `global/` and `packs/`, excluding `archive/**`.
+- Found 220 active skills with install-routing or pack-availability guard language that does not mention `npx skillpacks install` or `skillpacks install-deck`.
+- Found 0 active skill files already mentioning `npx skillpacks` or `skillpacks install`.
+- Existing `scripts/skill-pack-routing-audit.sh` passed, confirming the drift is not missing cross-pack guards; it is stale install-route wording inside active skills.
+- Wrote the full grouped inventory and remediation order to `research/skillpack-cli-routing-audit.md`.
+
+---
+
 ## Current Implementation - P1/P2 Verification Rerun
 
 ### Goal
