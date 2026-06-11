@@ -1,3 +1,52 @@
+## Current Implementation - Strict Exact Skillpacks Install Resolution
+
+### Goal
+
+Fix `npx skillpacks install exec` so it installs the exact `exec` skill, and make install resolution strict exact-only for active skill names, active pack names, and active pack titles.
+
+### Execution Profile
+
+- Parallel mode: parallel reads, targeted source/test inspection, and validation scans.
+- Serial mode: resolver edits, tests, task docs, and shipping.
+- Rationale: install resolution is a shared CLI contract, so the source change should stay small and verified at both resolver and lifecycle levels.
+
+### Steps
+
+- [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+- [x] Read active repo lessons and task docs.
+- [x] Validate current `exec` install behavior and recent resolver history.
+- [x] Update install resolution to exact skill, exact pack slug, or exact pack title only.
+- [x] Preserve remove alias/fuzzy cleanup behavior.
+- [x] Add focused resolver tests for strict install behavior.
+- [x] Add lifecycle regression coverage for `skillpacks install exec`.
+- [x] Run focused and package validation.
+- [x] Record review notes and ship intended changes.
+
+### Acceptance Criteria
+
+- `skillpacks install exec` installs the individual `exec` skill.
+- `skillpacks install exec-loop` installs the `exec-loop` pack.
+- `skillpacks install "Exec Loop Pack"` installs the `exec-loop` pack by exact title.
+- Install aliases and fuzzy skill names are rejected.
+- Existing remove convenience behavior remains intact.
+
+### Review Notes
+
+- Confirmed the user's root-cause claim: current `resolveInstallToken()` checked `normalizePack(token)` before exact skill names, and a live resolver check showed `install exec` resolving to `packs:["exec-loop"]`.
+- Added strict install matching in `packages/skillpacks/src/cli/pack-normalization.mjs`: exact active skill name, exact active pack slug, exact active pack title, then hibernated safety diagnostics and unknown-name failure.
+- Added exact pack-title support using trimmed/collapsed whitespace and case-insensitive title comparison. `Exec Loop Pack` now resolves to `exec-loop`; partial title matches remain unknown.
+- Left remove behavior on the existing alias/fuzzy path for cleanup. Focused tests still prove `remove icp` fuzzy-resolves and ambiguous remove tokens report suggestions.
+- Added resolver coverage for `exec`, `exec-loop`, exact title matching, rejected `quality` alias, rejected `icp` fuzzy token, exact `enterprise-icp`, and hibernated diagnostics.
+- Added lifecycle coverage proving `runSkillpacksCli(['install', 'exec'])` installs `.claude/skills/exec` and `.codex/skills/exec`, leaves `enabled_packs` empty, and does not install `ship`/`ship-end` from the full `exec-loop` pack.
+- Validation passed:
+  - `node --test packages/skillpacks/test/pack-normalization.test.mjs` (20 passed)
+  - `node --test packages/skillpacks/test/lifecycle.test.mjs` (17 passed)
+  - `npm --workspace skillpacks run test:node` (50 passed)
+  - `git diff --check`
+- `packages/skillpacks` has no plain `test` script, so the available package-level `test:node` script was run instead of `pnpm --dir packages/skillpacks test`.
+
+---
+
 ## Current Implementation - Skillpacks Project-Local Base Init
 
 ### Goal

@@ -1,3 +1,50 @@
+## Current Implementation - Strict Exact Skillpacks Install Resolution
+
+### Goal
+
+Fix `npx skillpacks install exec` so install resolution prefers the exact `exec` skill over the `exec-loop` pack alias, and make install resolution strict: exact active skill name, exact active pack name, or exact active pack title only.
+
+### Scope
+
+- Install/remove argument resolution in `packages/skillpacks/src/cli/pack-normalization.mjs`.
+- Focused package tests in `packages/skillpacks/test/pack-normalization.test.mjs` and `packages/skillpacks/test/lifecycle.test.mjs`.
+- Prompt/task history for this `$investigate` invocation.
+- Out of scope: changing remove alias/fuzzy cleanup behavior, pack lifecycle install/link mechanics, or unrelated dirty worktree files.
+
+### Plan
+
+1. Capture and validate.
+   - [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+   - [x] Read active lessons and task docs.
+   - [x] Inspect install resolution code, tests, and recent history.
+   - [x] Validate the `exec` alias/skill precedence claim against the current manifest.
+2. Implement strict install resolution.
+   - [x] Resolve install tokens by exact active skill name first.
+   - [x] Resolve exact active pack slugs next.
+   - [x] Resolve exact active pack titles using trimmed/collapsed whitespace title matching.
+   - [x] Preserve hibernated pack/skill safety diagnostics before unknown-name failure.
+   - [x] Leave remove behavior unchanged.
+3. Cover regressions.
+   - [x] Add unit coverage for `exec`, `exec-loop`, exact pack title, rejected aliases, rejected fuzzy names, and exact skill names.
+   - [x] Add lifecycle coverage proving `skillpacks install exec` installs the individual `exec` skill and does not enable `exec-loop`.
+4. Validate and ship.
+   - [x] Run focused Node test files.
+   - [x] Run the package test script if available.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [x] Commit and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- `install exec` resolves to `{ packs: [], skills: ['exec'] }`.
+- `install exec-loop` resolves to `{ packs: ['exec-loop'], skills: [] }`.
+- `install "Exec Loop Pack"` resolves to `{ packs: ['exec-loop'], skills: [] }`.
+- Install aliases such as `quality` and fuzzy names such as `icp` fail with `Unknown pack or skill`.
+- Exact skill names such as `enterprise-icp` still install.
+- Remove keeps its existing alias/fuzzy cleanup behavior.
+
+---
+
 ## Current Implementation - Skillpacks Project-Local Base Init
 
 ### Goal

@@ -320,6 +320,56 @@ function activePackNames(manifest) {
     .sort((a, b) => a.localeCompare(b));
 }
 
+function normalizePackTitle(title) {
+  return String(title || '').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function activePackTitleMap(manifest) {
+  const map = new Map();
+
+  for (const pack of manifest.packs || []) {
+    if (!pack.name || (pack.status !== undefined && pack.status !== 'active')) {
+      continue;
+    }
+
+    const title = normalizePackTitle(pack.title);
+    if (!title || map.has(title)) {
+      continue;
+    }
+    map.set(title, pack.name);
+  }
+
+  return map;
+}
+
+function packTitleToken(raw, activePackTitles) {
+  let token = String(raw).trim().replace(/,$/, '');
+  if (token.startsWith('pack:')) {
+    token = token.slice('pack:'.length);
+  }
+  if (!token || token === 'pack' || token === 'packs') {
+    return null;
+  }
+
+  const title = token.replace(/\s+/g, ' ').trim();
+  return activePackTitles.has(normalizePackTitle(title)) ? title : null;
+}
+
+function tokenizeInstallArgs(args, activePackTitles) {
+  const tokens = [];
+
+  for (const raw of args) {
+    const titleToken = packTitleToken(raw, activePackTitles);
+    if (titleToken) {
+      tokens.push(titleToken);
+      continue;
+    }
+    tokens.push(...tokenizePackArgs([raw]));
+  }
+
+  return tokens;
+}
+
 function availablePacksInline(manifest) {
   const names = activePackNames(manifest);
   if (names.length === 0) {
@@ -418,35 +468,30 @@ function hibernatedSkillError(skill, packs) {
 }
 
 function resolveInstallToken(token, context) {
-  const hibernatedPack = canonicalHibernatedPack(token);
-  if (hibernatedPack) {
-    throw hibernatedPackError(token, hibernatedPack);
-  }
-
-  const normalizedPacks = normalizePack(token);
-  if (allPacksExist(normalizedPacks, context.activePacks)) {
-    context.packs.push(...normalizedPacks);
-    return;
-  }
-
   if (context.skillPacks.has(token)) {
     context.skills.push(token);
     return;
   }
 
+  if (context.activePacks.has(token)) {
+    context.packs.push(token);
+    return;
+  }
+
+  const titlePack = context.activePackTitles.get(normalizePackTitle(token));
+  if (titlePack) {
+    context.packs.push(titlePack);
+    return;
+  }
+
+  const hibernatedPack = canonicalHibernatedPack(token);
+  if (hibernatedPack) {
+    throw hibernatedPackError(token, hibernatedPack);
+  }
+
   const hibernatedSkillPacks = hibernatedPacksForSkill(token);
   if (hibernatedSkillPacks.length > 0) {
     throw hibernatedSkillError(token, hibernatedSkillPacks);
-  }
-
-  const fuzzyMatches = fuzzyMatchSkills(token, context.skillPacks);
-  if (fuzzyMatches.length === 1) {
-    console.error(`Resolved '${token}' → '${fuzzyMatches[0].skill}'`);
-    context.skills.push(fuzzyMatches[0].skill);
-    return;
-  }
-  if (fuzzyMatches.length > 1) {
-    throw fuzzyMatchError(token, fuzzyMatches);
   }
 
   throw unknownNameError(token, context.manifest);
@@ -505,6 +550,7 @@ export function resolvePackCommandArgs(command, args, options) {
   const context = {
     manifest: options.manifest,
     activePacks: new Set(activePackNames(options.manifest)),
+    activePackTitles: activePackTitleMap(options.manifest),
     skillPacks: skillPackMap(options.manifest),
     enabledSkillPacks: command === 'remove'
       ? enabledSkillPackMap(options.projectRoot || process.cwd())
@@ -513,7 +559,9 @@ export function resolvePackCommandArgs(command, args, options) {
     skills: []
   };
 
-  const tokens = tokenizePackArgs(args);
+  const tokens = command === 'install'
+    ? tokenizeInstallArgs(args, context.activePackTitles)
+    : tokenizePackArgs(args);
   for (const token of tokens) {
     if (command === 'install') {
       resolveInstallToken(token, context);

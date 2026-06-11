@@ -168,7 +168,7 @@ describe('Node lifecycle commands', () => {
   it('installs active packs without bash or jq and writes managed markers', async () => {
     const dir = makeTempProject();
 
-    const { stdout } = await runSkillpacks(dir, ['install', 'quality']);
+    const { stdout } = await runSkillpacks(dir, ['install', 'code-quality']);
 
     assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
     assert.match(stdout, /Installed \.codex\/skills\/quality-sweep/);
@@ -182,6 +182,23 @@ describe('Node lifecycle commands', () => {
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_sha=[a-f0-9]{64}$/m);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
     assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+  });
+
+  it('installs the exact exec skill without enabling the exec-loop pack', async () => {
+    const dir = makeTempProject();
+
+    const { stdout } = await runSkillpacks(dir, ['install', 'exec']);
+
+    assert.match(stdout, /Installed \.claude\/skills\/exec/);
+    assert.match(stdout, /Installed \.codex\/skills\/exec/);
+    assert.doesNotMatch(stdout, /Installed \.claude\/skills\/ship/);
+    assert.doesNotMatch(stdout, /Installed \.codex\/skills\/ship/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'exec')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'exec')), true);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'ship')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'ship-end')), false);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { exec: 'exec-loop' });
   });
 
   it('installs individual pinned skills as archive symlinks and tracks enabled skills', async () => {

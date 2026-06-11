@@ -87,27 +87,26 @@ describe('pack normalization helpers', () => {
 });
 
 describe('pack command argument resolution', () => {
-  it('resolves install direct pack names, aliases, comma args, and pack prefixes', () => {
+  it('resolves install exact pack names, exact pack titles, comma args, and pack prefixes', () => {
     assert.deepEqual(resolvePackCommandArgs('install', ['code-quality'], { manifest }).args, [
       'code-quality'
     ]);
-    assert.deepEqual(resolvePackCommandArgs('install', ['quality'], { manifest }).args, [
-      'code-quality'
-    ]);
-    assert.deepEqual(resolvePackCommandArgs('install', ['pack:code-quality,docs'], { manifest }).args, [
+    assert.deepEqual(resolvePackCommandArgs('install', ['pack:code-quality,docs-health'], { manifest }).args, [
       'code-quality',
       'docs-health'
     ]);
-    assert.deepEqual(resolvePackCommandArgs('install', ['business'], { manifest }).args, [
-      'business-research',
-      'customer-lifecycle',
-      'business-growth',
-      'business-ops'
-    ]);
+    const titled = resolvePackCommandArgs('install', ['Exec Loop Pack'], { manifest });
+    assert.deepEqual(titled.packs, ['exec-loop']);
+    assert.deepEqual(titled.skills, []);
+    assert.deepEqual(titled.args, ['exec-loop']);
+
+    const normalizedTitle = resolvePackCommandArgs('install', [' exec   loop pack '], { manifest });
+    assert.deepEqual(normalizedTitle.packs, ['exec-loop']);
+    assert.deepEqual(normalizedTitle.skills, []);
   });
 
   it('skips empty pack tokens but rejects calls with no resolved pack or skill', () => {
-    assert.deepEqual(resolvePackCommandArgs('install', ['pack', 'packs', 'pack:', 'quality'], { manifest }).args, [
+    assert.deepEqual(resolvePackCommandArgs('install', ['pack', 'packs', 'pack:', 'code-quality'], { manifest }).args, [
       'code-quality'
     ]);
     assert.throws(
@@ -116,12 +115,35 @@ describe('pack command argument resolution', () => {
     );
   });
 
-  it('resolves active skill names after pack aliases miss', () => {
-    const resolved = resolvePackCommandArgs('install', ['quality-sweep'], { manifest });
+  it('resolves exact active skill names before pack names and titles', () => {
+    const resolved = resolvePackCommandArgs('install', ['exec'], { manifest });
 
     assert.deepEqual(resolved.packs, []);
-    assert.deepEqual(resolved.skills, ['quality-sweep']);
-    assert.deepEqual(resolved.args, ['quality-sweep']);
+    assert.deepEqual(resolved.skills, ['exec']);
+    assert.deepEqual(resolved.args, ['exec']);
+
+    const exactSkill = resolvePackCommandArgs('install', ['enterprise-icp'], { manifest });
+    assert.deepEqual(exactSkill.packs, []);
+    assert.deepEqual(exactSkill.skills, ['enterprise-icp']);
+  });
+
+  it('resolves exact active pack names without alias expansion', () => {
+    const resolved = resolvePackCommandArgs('install', ['exec-loop'], { manifest });
+
+    assert.deepEqual(resolved.packs, ['exec-loop']);
+    assert.deepEqual(resolved.skills, []);
+    assert.deepEqual(resolved.args, ['exec-loop']);
+  });
+
+  it('rejects install aliases and fuzzy skill names with unknown-name diagnostics', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['quality'], { manifest }),
+      /Unknown pack or skill 'quality'\./
+    );
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['icp'], { manifest }),
+      /Unknown pack or skill 'icp'\./
+    );
   });
 
   it('rejects unknown names with available active pack diagnostics', () => {
@@ -177,17 +199,10 @@ describe('fuzzy skill resolution', () => {
     assert.deepEqual(resolved.skills, ['customer-discovery']);
   });
 
-  it('fuzzy-resolves icp to enterprise-icp', () => {
-    const resolved = resolvePackCommandArgs('install', ['icp'], { manifest });
-
-    assert.deepEqual(resolved.packs, []);
-    assert.deepEqual(resolved.skills, ['enterprise-icp']);
-  });
-
-  it('throws ambiguous error for multi-match fuzzy tokens', () => {
+  it('rejects ambiguous fuzzy install tokens as unknown names', () => {
     assert.throws(
       () => resolvePackCommandArgs('install', ['canvas'], { manifest }),
-      /Ambiguous skill name 'canvas'\. Did you mean:/
+      /Unknown pack or skill 'canvas'\./
     );
   });
 
@@ -211,6 +226,15 @@ describe('fuzzy skill resolution', () => {
 
     assert.deepEqual(resolved.packs, []);
     assert.deepEqual(resolved.skills, ['enterprise-icp']);
+  });
+
+  it('throws ambiguous fuzzy errors on remove', () => {
+    const dir = makeTempProject();
+
+    assert.throws(
+      () => resolvePackCommandArgs('remove', ['canvas'], { manifest, projectRoot: dir }),
+      /Ambiguous skill name 'canvas'\. Did you mean:/
+    );
   });
 });
 
