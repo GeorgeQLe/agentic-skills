@@ -42,6 +42,16 @@ npx skillpacks refresh
 
 `npx skillpacks init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx skillpacks refresh` update base skills from the current package snapshot instead of depending on user-home global installs.
 
+When a user explicitly wants user-home global core skills from the npm package snapshot, the compatibility path is:
+
+```bash
+npx skillpacks init --global
+# Backward-compatible spelling:
+npx skillpacks init-global
+```
+
+Both global init forms invoke the packaged `init.sh` and keep the global surface limited to core skills. Domain packs remain project-local only.
+
 Existing users keep using:
 
 ```bash
@@ -166,6 +176,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |
 | `set-update-mode <mode>` | Node-owned | Project config writer | No | No | Preserves sibling `skill_updates` fields. |
 | `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs global-scope manifest entries as project-local base skills and records `base_skills: true`. |
+| `init --global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs user-home global core skills from the package snapshot; strips `--global` and forwards remaining args to `init.sh`. |
 | `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
 | `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
 | `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates enabled base skills, packs, and individual skill roots from `.agents/project.json`. |
@@ -177,7 +188,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `recommend` | Shell-backed | Packaged `scripts/pack.sh recommend` | Yes | No | Uses existing repository-signal heuristics. |
 | `which <skill>` | Shell-backed | Packaged `scripts/pack.sh which` | Yes | Optional | `jq` improves individually enabled skill status; pack-level status has a grep/sed fallback. |
 | `install-deck <deck> [--full]` | Hybrid shell materialization | Node manifest resolver, then packaged `scripts/pack.sh install` | Yes | Yes | Deck metadata is Node-resolved, but installation still uses the compatibility install path. |
-| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs user-home global core skills; `jq` preserves an existing global pin file when `--pin` updates it. |
+| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Backward-compatible alias for `init --global`; `jq` preserves an existing global pin file when `--pin` updates it. |
 <!-- skillpacks-compatibility-matrix:end -->
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.

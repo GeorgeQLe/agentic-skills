@@ -15,6 +15,7 @@ const expectedMatrix = new Map([
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['init --global [args...]', { owner: 'External script-backed', bash: 'Yes', jq: 'Optional' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -102,8 +103,13 @@ describe('skillpacks compatibility matrix', () => {
     );
     assert.match(
       cliSource,
-      /if \(command === 'init-global'\) \{[\s\S]*requireCommand\('bash'/,
+      /if \(command === 'init-global'\) \{[\s\S]*return runGlobalInit\(rest\)/,
       'init-global should remain explicitly documented as external script-backed'
+    );
+    assert.match(
+      cliSource,
+      /if \(command === 'init'\) \{[\s\S]*if \(rest\[0\] === '--global'\) \{[\s\S]*return runGlobalInit\(rest\.slice\(1\)\)/,
+      'init --global should route to the same external script-backed global init path'
     );
   });
 });

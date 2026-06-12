@@ -42,13 +42,13 @@ function readProjectConfig(projectRoot) {
   return JSON.parse(readFileSync(projectConfigPath(projectRoot), 'utf8'));
 }
 
-async function runSkillpacks(projectRoot, args) {
-  const result = await runSkillpacksRaw(projectRoot, args);
+async function runSkillpacks(projectRoot, args, options = {}) {
+  const result = await runSkillpacksRaw(projectRoot, args, options);
   assert.equal(result.exitCode, 0, result.stderr);
   return result;
 }
 
-async function runSkillpacksRaw(projectRoot, args) {
+async function runSkillpacksRaw(projectRoot, args, options = {}) {
   const originalCwd = process.cwd();
   const originalPath = process.env.PATH;
   const originalLog = console.log;
@@ -65,7 +65,7 @@ async function runSkillpacksRaw(projectRoot, args) {
 
   try {
     process.chdir(projectRoot);
-    process.env.PATH = '';
+    process.env.PATH = options.path ?? '';
     const exitCode = await runSkillpacksCli(args);
     return { exitCode, stdout, stderr };
   } finally {
@@ -163,6 +163,52 @@ describe('Node lifecycle commands', () => {
     assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*global\/claude\/codebase-status/);
     assert.equal(readProjectConfig(dir).base_skills, true);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+  });
+
+  it('routes init --global through packaged init.sh and forwards remaining args', async () => {
+    const dir = makeTempProject();
+    const fakeBin = join(dir, 'bin');
+    const argsFile = join(dir, 'bash-args.txt');
+    mkdirSync(fakeBin, { recursive: true });
+    writeFileSync(
+      join(fakeBin, 'bash'),
+      [
+        '#!/bin/sh',
+        'if [ "$1" = "--version" ]; then',
+        '  exit 0',
+        'fi',
+        'printf "%s\\n" "$@" > "$SKILLPACKS_FAKE_BASH_ARGS"'
+      ].join('\n') + '\n',
+      { mode: 0o755 }
+    );
+
+    const originalArgsFile = process.env.SKILLPACKS_FAKE_BASH_ARGS;
+    process.env.SKILLPACKS_FAKE_BASH_ARGS = argsFile;
+    try {
+      await runSkillpacks(dir, ['init', '--global', '--help'], { path: fakeBin });
+    } finally {
+      if (originalArgsFile === undefined) {
+        delete process.env.SKILLPACKS_FAKE_BASH_ARGS;
+      } else {
+        process.env.SKILLPACKS_FAKE_BASH_ARGS = originalArgsFile;
+      }
+    }
+
+    assert.deepEqual(readFileSync(argsFile, 'utf8').trim().split('\n'), [
+      join(repoRoot, 'init.sh'),
+      '--help'
+    ]);
+    assert.equal(existsSync(projectConfigPath(dir)), false);
+  });
+
+  it('rejects unsupported init arguments', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['init', '--bad']);
+
+    assert.match(error.message, /init does not accept arguments/);
+    assert.match(error.message, /--global/);
+    assert.equal(existsSync(projectConfigPath(dir)), false);
   });
 
   it('installs active packs without bash or jq and writes managed markers', async () => {

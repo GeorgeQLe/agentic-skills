@@ -112,6 +112,11 @@ function runCommand(command, args, options = {}) {
   });
 }
 
+function runGlobalInit(args) {
+  requireCommand('bash', 'Install bash before running skillpacks.');
+  return runCommand('bash', [initScriptPath, ...args]);
+}
+
 function printManifestJson(args) {
   if (args.length !== 1 || args[0] !== '--json') {
     throw new Error('list --json does not accept additional arguments');
@@ -177,6 +182,7 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
+  init --global [args...]      Install user-home global core skills with packaged init.sh
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
@@ -186,7 +192,7 @@ Commands:
   unpin <skill>                Revert a pinned skill to latest
   set-mode <mode>              Set project agent mode
   which <skill>                Show which pack provides a skill
-  init-global [args...]        Install global core skills with packaged init.sh
+  init-global [args...]        Alias for init --global
 
 Project-local commands write to the current working directory.`);
 }
@@ -237,8 +243,7 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'init-global') {
-    requireCommand('bash', 'Install bash before running skillpacks.');
-    return runCommand('bash', [initScriptPath, ...rest]);
+    return runGlobalInit(rest);
   }
 
   if (command === 'install-deck') {
@@ -252,8 +257,13 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'init') {
+    if (rest[0] === '--global') {
+      return runGlobalInit(rest.slice(1));
+    }
     if (rest.length > 0) {
-      throw new Error('init does not accept arguments');
+      throw new Error(
+        "init does not accept arguments except '--global'. Use 'skillpacks init --global' for user-home global core skills."
+      );
     }
     return initProject({
       manifest: readManifest(),

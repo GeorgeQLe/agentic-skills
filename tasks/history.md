@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-12 — Skillpacks `init --global` alias
+
+- Added the npm CLI compatibility alias `skillpacks init --global`, routing it through the same packaged `init.sh` global-core path as the existing `init-global` command while preserving project-local `skillpacks init` behavior.
+- Kept unsupported `init` arguments rejected before any shell-backed path runs.
+- Updated CLI help and public docs to distinguish project-local base-skill init from user-home global-core init, and documented `init-global` as the backward-compatible spelling.
+- Added lifecycle coverage for `init --global --help` forwarding to `init.sh --help` without touching user-home installs, and for `init --bad` rejection.
+- Validation passed: `npm --workspace skillpacks run test:node` (57 passed), `npm --workspace skillpacks run build:check`, direct `runSkillpacksCli(['init', '--global', '--help'])`, `npm --workspace skillpacks run verify:package`, and `git diff --check`.
+- Real global init without `--help` was not run because it mutates user-home skill roots; the unchanged `init.sh` backend is covered through the existing `init-global` route and the new alias forwarding test.
+- Manifest: `tasks/ship-manifest-2026-06-12-skillpacks-init-global-alias.md`.
+
 ## 2026-06-12 — Skillpacks 0.1.1 publish-readiness pass
 
 - Implemented the inherited readiness plan for `skillpacks@0.1.1` without running a real publish.

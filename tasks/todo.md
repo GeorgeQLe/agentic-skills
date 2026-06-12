@@ -1,3 +1,73 @@
+## Current Implementation - Skillpacks Init Global Alias
+
+### Goal
+
+Add a compatibility alias so `npx skillpacks init --global` performs the same user-home global core install path as `npx skillpacks init-global`, while `npx skillpacks init` continues to initialize project-local base skills.
+
+### Execution Profile
+
+- Parallel mode: file reads and targeted source/test inspection only.
+- Serial mode: CLI routing edits, docs/help updates, tests, package build checks, task notes, manifest, commit, and push.
+- Rationale: the change affects the public npm CLI command surface, so routing and tests should land in one coherent package boundary.
+
+### Scope
+
+- `packages/skillpacks/src/cli/run-pack-script.mjs` init/init-global routing and help text.
+- `packages/skillpacks/test/lifecycle.test.mjs` lifecycle regression coverage for the new alias and existing init behavior.
+- Public CLI docs/help references that describe init/global initialization.
+- Generated staged package artifacts under `packages/skillpacks/build/` if package build validation requires regeneration.
+- Prompt/task history and ship manifest for this `$exec` invocation.
+
+### Out of Scope
+
+- Changing `init-global` semantics.
+- Installing domain packs globally.
+- Fetching GitHub or updating a source checkout from `init --global`.
+- Real npm publish, dist-tag, package access, or GitHub Actions changes.
+
+### Steps
+
+- [x] Capture the visible invocation under `prompts/exec/`.
+- [x] Record this roadmap/todo plan before implementation.
+- [x] Inspect current init/init-global routing, help/docs, lifecycle fixtures, and package build behavior.
+- [x] Route `skillpacks init --global` to the packaged `init.sh` global-core install path used by `init-global`.
+- [x] Preserve `skillpacks init` project-local behavior and rejection of unsupported `init` arguments.
+- [x] Update CLI help/docs to show `init`, `init --global`, and `init-global` clearly.
+- [x] Add lifecycle/CLI regression tests for `init --global --help`, `init --bad`, and plain `init`.
+- [x] Run `npm --workspace skillpacks run test:node`.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run `git diff --check`.
+- [x] Perform diff-aware self-review and record the quality-gate ship manifest.
+- [x] Record review notes, history, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `skillpacks init --global --help` reaches packaged `init.sh --help`.
+- `skillpacks init --bad` still errors.
+- `skillpacks init` still installs project-local base skills.
+- `skillpacks init-global` remains supported.
+- Help/docs distinguish project-local init from user-home global-core init.
+- Package validation passes before shipping.
+
+### Review Notes
+
+- Added a shared `runGlobalInit()` helper in `packages/skillpacks/src/cli/run-pack-script.mjs` and routed both `skillpacks init-global ...` and `skillpacks init --global ...` through packaged `init.sh`.
+- `skillpacks init --global --help` strips the `--global` compatibility flag and forwards `--help` to `init.sh`; the lifecycle test verifies this with a fake `bash` runner so user-home skill roots are not touched.
+- `skillpacks init --bad` still errors before any shell-backed path runs, and the test verifies no `.agents/project.json` is created.
+- Existing plain `skillpacks init` project-local coverage still verifies base skills install locally, `base_skills: true` is recorded, and `enabled_packs` remains empty.
+- Updated CLI help, README, Quickstart, skills reference, and the npm distribution compatibility matrix to distinguish project-local `init` from user-home global-core `init --global` / `init-global`.
+- Package staging was refreshed by validation and the ignored `packages/skillpacks/build/` copy contains the new alias behavior; no tracked build artifacts changed.
+- Validation passed:
+  - `npm --workspace skillpacks run test:node` (57 tests passed)
+  - `npm --workspace skillpacks run build:check`
+  - `node -e "import('./packages/skillpacks/src/cli/run-pack-script.mjs').then(async ({ runSkillpacksCli }) => { process.exitCode = await runSkillpacksCli(['init', '--global', '--help']); })"`
+  - `npm --workspace skillpacks run verify:package` (dry-run tarball `skillpacks@0.1.1`, 2,570 entries)
+  - `git diff --check`
+- Real `skillpacks init --global` without `--help` was intentionally not run because it writes managed global skill installs under the current user's home directory. The route uses the unchanged `init.sh` path already used by `init-global`.
+- Ship manifest: `tasks/ship-manifest-2026-06-12-skillpacks-init-global-alias.md`.
+
+---
+
 ## Current Implementation - Skillpacks 0.1.1 Publish Readiness
 
 ### Goal

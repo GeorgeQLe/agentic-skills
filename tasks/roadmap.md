@@ -1,3 +1,47 @@
+## Current Implementation - Skillpacks Init Global Alias
+
+### Goal
+
+Add a compatibility alias so `npx skillpacks init --global` performs the same user-home global core install path as `npx skillpacks init-global`, while preserving project-local behavior for `npx skillpacks init`.
+
+### Scope
+
+- Update `packages/skillpacks/src/cli/run-pack-script.mjs` to route `init --global` to the existing packaged global init implementation.
+- Keep unsupported `init` arguments rejected.
+- Update CLI help and public package docs for `init`, `init --global`, and `init-global`.
+- Add lifecycle/CLI coverage for the new alias and unchanged behaviors.
+- Refresh staged package artifacts if build validation requires it.
+- Record prompt/task history and quality-gate shipping evidence.
+
+### Plan
+
+1. Capture and inspect.
+   - [x] Capture the visible invocation under `prompts/exec/`.
+   - [x] Read current init/init-global routing, docs/help, tests, and package scripts.
+   - [x] Record this roadmap/todo plan before implementation.
+2. Implement the alias.
+   - [x] Route `skillpacks init --global` to packaged `init.sh` through the same global-core path as `init-global`.
+   - [x] Preserve `skillpacks init` project-local install behavior.
+   - [x] Preserve rejection for unsupported `init` arguments such as `--bad`.
+   - [x] Update help/docs without changing global install semantics.
+3. Validate and ship.
+   - [x] Add targeted lifecycle/CLI regression tests.
+   - [x] Run `npm --workspace skillpacks run test:node`.
+   - [x] Run `npm --workspace skillpacks run build:check`.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes, history, and quality-gate manifest.
+   - [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `skillpacks init --global --help` reaches packaged `init.sh --help`.
+- `skillpacks init --bad` still errors.
+- `skillpacks init` still installs project-local base skills.
+- `skillpacks init-global` remains available for backward compatibility.
+- Documentation clearly states that global init installs only global core skills from the package snapshot.
+
+---
+
 ## Current Implementation - Skillpacks 0.1.1 Publish Readiness
 
 ### Goal

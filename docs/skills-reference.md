@@ -15,7 +15,7 @@ Installs only:
 
 It does not install domain packs globally.
 
-For npm consumers, `npx skillpacks init` installs these same global-scope base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Use `npx skillpacks init-global` only when user-home global installs are explicitly desired.
+For npm consumers, `npx skillpacks init` installs these same global-scope base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when user-home global core installs are explicitly desired.
 
 ## Project Pack Commands
 

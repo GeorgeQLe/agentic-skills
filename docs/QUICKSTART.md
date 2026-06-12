@@ -35,7 +35,7 @@ npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI does not install user-home global skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run.
+The npm CLI does not install user-home global skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`). Domain packs are never installed globally.
 
 ## 2. Install a Pack in Your Project
 

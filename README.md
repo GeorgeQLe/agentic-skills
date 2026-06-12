@@ -69,7 +69,7 @@ npx skillpacks status
 
 It does **not** install `packs/*` globally.
 
-For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init-global` only when you explicitly want user-home global installs.
+For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when you explicitly want user-home global core installs from the package snapshot. Domain packs are never installed globally.
 
 To remove repo-managed global skill installs:
 
