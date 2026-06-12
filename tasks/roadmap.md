@@ -1967,3 +1967,11 @@ icp -> competitive-analysis -> journey-map -> positioning
 2. Keep output focused on `.claude/skills/<name>` and `.codex/skills/<name>` destinations, with pin/latest status where relevant.
 3. Add lifecycle test assertions that normal install, pinned install, refresh, pin, and unpin output do not contain source arrows.
 4. Run package syntax checks, node tests, build check, and whitespace validation before shipping.
+
+## Current Investigation — Research Skills Alignment Convention Audit
+
+1. Capture the `$investigate` invocation and preserve a narrow task trace.
+2. Identify the canonical HTML alignment-page convention source and generated bundled files.
+3. Define the active research-skill set from repo metadata and non-archive skill roots.
+4. Audit each research skill for generated `ALIGNMENT-PAGE.md` presence, `SKILL.md` alignment-page handoff, staged research workflow language where applicable, category/tier/index/feedback/confirmation/TTS requirements, and drift from the canonical convention.
+5. Run the available convention validation scripts/tests and report confirmed compliance, violations, and prevention checks.

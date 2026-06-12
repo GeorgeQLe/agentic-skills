@@ -4063,3 +4063,20 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Validation: layer1 vitest green (codex-interview-cadence, research-approval-gate, alignment-gates, pack-skill-mirror-parity, bench-setups — 405+79 tests); `skill-deps.sh --broken` clean; `skill-versions.sh --missing` clean (439 skills); `git diff --check` clean; `pack.sh refresh` + `./init.sh` run; showcase data regenerated with ui-interview v0.14 visible in `skills-data.js`. Alignment-gates initially flagged generator drift because the lifecycle sentence was appended to the generator-owned stub paragraph; fixed by moving it to its own paragraph.
 - Incident: a concurrent Codex `$exec` session stashed this session's uncommitted work (`codex-temp-unrelated-*` stashes) and later deleted restored untracked files; recovered via `git stash apply` + `git checkout --`, then protected with an immediate commit/push (5a7895f8). Lesson recorded in `tasks/lessons.md`.
 - In-flight deck-creation interview: next manifest must be delivered inline turn-final with confirmation in the following turn; remaining rounds → coverage checkpoint → packet at `research/skills-showcase/_working/preliminary-ui-interview-research.md` → review page `alignment/ui-interview-deck-creation.html` → final YAML → `specs/skills-showcase/ui-requirements-deck-creation.md` confirmed. Resumes when the user re-engages that session.
+
+## Active — Research Skills Alignment Convention Audit
+
+- [x] Capture `$investigate` invocation prompt history.
+- [x] Identify canonical HTML alignment-page convention source and active research-skill set.
+- [x] Audit active research skills for convention compliance and generated-file drift.
+- [x] Run available alignment-page validation scripts/tests.
+- [x] Record review notes and findings.
+
+### Review Notes — Research Skills Alignment Convention Audit
+
+- Canonical source confirmed: `docs/alignment-page-convention.md` between the `alignment-convention` markers, propagated by `scripts/upgrade-alignment-page.mjs` into sibling `ALIGNMENT-PAGE.md` files for active source skills under `global/` and `packs/`.
+- Active source audit found 142 non-archive `type: research` skills across Claude/Codex mirrors. All 142 have `## Alignment Page`, sibling `ALIGNMENT-PAGE.md`, the generated stub pointing to the bundle, `## Report-First Approval Gate`, `## Staged Research Workflow`, scope-first pre-research approval, structured HTML working-packet rendering, working-packet archive/removal, and confirmed-page conversion language.
+- Bundled convention audit for those 142 research skills found all 142 include central index maintenance, research quality, no-context-loss, research completeness, source coverage, section feedback YAML, response YAML, confirmed-page, pre-approval stop, and Brief Me TTS requirements.
+- Installed Codex-copy audit found 42 `.codex/skills` `type: research` skills; all 42 matched the same core checks.
+- Ambiguity noted: 20 `type: analysis` source skills lack alignment sections/bundles, but they are operational or diagnostic analysis skills rather than metadata-classified `type: research` skills. Treating every `analysis` skill as a research skill would expand the convention scope and needs a separate taxonomy decision.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --check`; `node scripts/audit-alignment-pages.mjs`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/research-approval-gate.test.ts layer1/audit-alignment-pages.test.ts` (3 files / 325 tests).
