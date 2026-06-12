@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.17
+version: v0.16
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 interview_depth: full
 visual_tier: prototype
@@ -129,8 +129,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 7. **Build pre-approval alignment page**
    - Before writing any canonical `specs/ui-[topic].md`, `specs/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
    - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the full working packet — manifest, page-by-page decisions, coverage checkpoint, proposed canonical file destinations — and the approval gates.
-   - At the top of the page, include a plain-language **Interview stage** explainer naming the invocation, whether the run is requirements-only or full UI mode, what user/agent interview work has already happened or was inferred from approved upstream evidence, and what the reviewer should do next. If requirements were synthesized primarily from approved specs or code evidence rather than live Q&A, say so directly and route missing answers through section feedback or a resumed interview instead of implying the interview is complete.
-   - Render the working packet as structured HTML, not as a raw Markdown preview: headings become sections, lists stay readable lists, and every Markdown table becomes an HTML `<table>` inside a `.table-wrap` container with a concise `data-tts-narrative`. A raw Markdown `<pre><code>` dump may appear only as a supplemental source view after the rendered packet, never as the primary review surface.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
    - Treat every checkpoint confirmation in steps 3–6 as non-final; each only confirms the draft is ready for review. Only final compiled YAML from the alignment page authorizes canonical writes.
    - When feedback-only YAML is provided, revise the working packet and the alignment page, then ask again; the work stays pre-approval.

@@ -372,7 +372,10 @@ describe("alignment page gate contract", () => {
   });
 
   it("preserves skill-specific gate language", () => {
-    expect(conventionText("packs/product-design/codex/ui-interview/SKILL.md")).toContain("Render surfaced assumptions, the UI or content requirements manifest");
+    const uiInterviewConvention = conventionText("packs/product-design/codex/ui-interview/SKILL.md");
+    expect(uiInterviewConvention).toContain("Render surfaced assumptions, the UI or content requirements manifest");
+    expect(uiInterviewConvention).toContain("plain-language Interview Stage section");
+    expect(uiInterviewConvention).toContain("do not use a single raw Markdown `<pre><code>` block as the primary review surface");
     expect(conventionText("packs/product-design/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
     expect(conventionText("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
     expect(conventionText("packs/research-admin/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");

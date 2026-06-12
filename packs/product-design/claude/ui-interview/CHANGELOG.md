@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.17 - 2026-06-12
+
+- Required pre-approval alignment pages to state the current interview stage in plain language and to distinguish requirements-only review from a live page-by-page interview.
+- Required working packets to render as structured HTML sections/lists/tables, with raw Markdown previews allowed only as supplemental source views.
+
 ## v0.16 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

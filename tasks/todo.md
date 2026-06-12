@@ -1,3 +1,48 @@
+## Current Implementation - UI Interview Alignment Review Clarity
+
+### Goal
+
+Clarify the current `ui-interview` requirements review page and future generated `ui-interview` alignment guidance so reviewers can tell what interview stage they are in and can read the working packet without parsing raw Markdown tables.
+
+### Current Checklist
+
+- [x] Read the active `ui-interview` skill instructions and bundled alignment-page contract.
+- [x] Capture the visible user prompt under `prompts/ui-interview/`.
+- [x] Inspect `alignment/ui-interview-skill-execution-handoff.html` and the working packet.
+- [x] Record this remediation plan before implementation.
+- [x] Update `ui-interview` alignment generation guidance for interview-stage clarity and structured packet rendering.
+- [x] Archive and replace the active review page with readable HTML sections/tables.
+- [x] Keep canonical UI requirements specs unwritten before approval.
+- [x] Run focused validation and record review notes.
+- [x] Commit and push intended changes.
+
+### Acceptance Criteria
+
+- The review page answers whether this is a live agent/user interview or a requirements-only alignment review.
+- The full packet remains present, but not as the primary raw Markdown preview.
+- Tables render as HTML tables inside overflow wrappers.
+- Existing approval/feedback YAML behavior still works.
+- `specs/skills-showcase/ui-requirements-skill-execution-handoff.md` and companion interview log are still absent.
+
+### Review Notes
+
+- Answered the workflow ambiguity directly in `alignment/ui-interview-skill-execution-handoff.html`: `ui-interview` is normally an agent/user interview, while this artifact is a `--requirements-only` review page generated from approved upstream flow evidence and repo context.
+- Replaced the primary raw Markdown packet preview with rendered HTML sections, lists, and real HTML tables in overflow wrappers. Kept raw Markdown only as a collapsed supplemental source view.
+- Archived the prior active page at `docs/history/archive/2026-06-12/104926/alignment/ui-interview-skill-execution-handoff.html`.
+- Bumped `ui-interview` source mirrors to `v0.17`, archived `v0.16`, and regenerated the two generated `ALIGNMENT-PAGE.md` bundles.
+- Added a focused `alignment-gates` regression for the `ui-interview` Interview Stage and no-primary-raw-Markdown contract.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/audit-alignment-pages.mjs`
+  - inline script syntax check for `alignment/ui-interview-skill-execution-handoff.html`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` (26 tests passed)
+  - `git diff --check`
+  - canonical UI requirements files remain absent
+- Also attempted `pnpm --dir tests test:layer1 -- alignment-gates`; that command ran the full layer1 suite and failed on existing unrelated repository-state issues such as missing business-discovery paths and stale provision-version expectations, so the exact file command above is the valid focused result for this change.
+- Opened the updated page via `node scripts/open-html-page.mjs alignment/ui-interview-skill-execution-handoff.html --browser auto`.
+
+---
+
 ## Current Implementation - Skillpacks Install Route And Agent Doc Migration
 
 ### Goal

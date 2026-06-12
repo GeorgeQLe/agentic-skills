@@ -1,3 +1,56 @@
+## Current Implementation - UI Interview Alignment Review Clarity
+
+### Goal
+
+Make the current `ui-interview` requirements review page and future `ui-interview` alignment pages clearer: the user should immediately understand whether they are reviewing a requirements-only draft or participating in the live interview, and Markdown tables should be rendered as readable HTML instead of a raw Markdown preview block.
+
+### Scope
+
+- Active review page: `alignment/ui-interview-skill-execution-handoff.html`.
+- Active working packet: `research/skills-showcase/_working/preliminary-ui-interview-research.md`.
+- `ui-interview` alignment-page generation contract through `scripts/upgrade-alignment-page.mjs`.
+- Active `ui-interview` skill version/archive/changelog if the skill contract changes.
+- Focused tests/audits covering the new contract and active alignment page validity.
+
+### Out of Scope
+
+- Changing the approved requirements substance.
+- Writing canonical `specs/skills-showcase/ui-requirements-skill-execution-handoff*.md` before final compiled YAML approval.
+- Redesigning the whole alignment-page convention across every skill.
+- GitHub Actions.
+
+### Plan
+
+1. Confirm the failure mode.
+   - [x] Read active `ui-interview` instructions and bundled alignment contract.
+   - [x] Capture the visible prompt under `prompts/ui-interview/`.
+   - [x] Inspect the current `ui-interview` review page and working packet.
+2. Patch the contract.
+   - [x] Add `ui-interview`-specific alignment guidance requiring a visible interview-stage explainer.
+   - [x] Require structured HTML rendering of the working packet sections, especially Markdown tables.
+   - [x] Preserve the no-context-loss requirement without using one raw `<pre><code>` Markdown dump as the primary review surface.
+3. Patch the active review page.
+   - [x] Archive the current active page before replacement.
+   - [x] Convert the full working packet from raw Markdown preview into readable HTML sections and tables.
+   - [x] Add a clear review-stage answer: `requirements-only` review now, full interview only when the skill is run interactively or rerun without `--requirements-only`.
+   - [x] Keep canonical UI requirements files unwritten.
+4. Verify and ship.
+   - [x] Run generated-bundle drift checks.
+   - [x] Run alignment-page audit.
+   - [x] Run focused tests.
+   - [x] Run `git diff --check`.
+   - [x] Record review notes, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- The active page no longer uses the full working packet raw Markdown block as the primary review surface.
+- Markdown tables from the working packet render as HTML tables with horizontal overflow wrappers and TTS narratives.
+- The page states the current `ui-interview` lifecycle stage in plain language.
+- The page preserves approval gates and review-state behavior.
+- Canonical UI requirements files remain absent until final compiled YAML approval.
+
+---
+
 ## Current Implementation - Skillpacks Install Route And Agent Doc Migration
 
 ### Goal

@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — UI interview review pages need stage clarity and rendered packets
+
+- A `ui-interview --requirements-only` alignment page preserved the full working packet only as a raw Markdown `<pre><code>` preview, making tables hard to parse and leaving the reviewer unclear whether the page represented a live agent/user interview or a requirements review artifact.
+- Future `ui-interview` review pages must state the interview stage near the top: whether the run is requirements-only or full UI mode, what interview work already happened or was inferred from approved upstream evidence, and whether the next action is section feedback, compiled approval YAML, or resuming the interview.
+- Render working packets as structured HTML sections, lists, and tables. Keep raw Markdown only as supplemental source context after the rendered packet, never as the primary review surface.
+
 ## 2026-06-10 — Verify unchecked backlog items before routing them as next work
 
 - I routed the next command to a Skills Showcase drawer-close backlog item from `tasks/todo.md` without first verifying source, tests, and git history; the implementation already existed and the focused proof file was present locally but untracked.
