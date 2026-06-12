@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, queue framework research, and synthesize market landscape findings
 type: research
-version: v0.17
+version: v0.18
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 interview_depth: light
@@ -11,7 +11,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Competitive Analysis — Orchestrator
 
@@ -167,12 +167,12 @@ Build the report-first alignment page before writing. Only after final compiled 
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
 
-1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
 2. IF no `research/positioning.md`: `$positioning` — frame the market category and alternatives after journey evidence shows where value is delivered
-3. IF no `specs/user-flow-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$user-flow-map [top journey-backed market gap or positioning opportunity]` — map flow structure before UI requirements, layout variants, and production specification
+3. IF no `specs/user-flow-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$user-flow-map [top journey-backed market gap or positioning opportunity]` — map flow structure before UI requirements, layout variants, and production specification
 4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `$value-prop-canvas` — validate contested solution-fit evidence as an optional detour
-5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` inside Codex, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps
-6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found
+5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps
+6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found
 
 Use this format in the output:
 
@@ -181,13 +181,13 @@ Use this format in the output:
 **Recommended:** `[first matching command above]` — [reason grounded in this analysis]
 
 Other options:
-- `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell, or `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended; check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell; if enabled, recommend `$journey-map`)
+- `npx skillpacks install customer-lifecycle` from the project shell, or `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended; check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell; if enabled, recommend `$journey-map`)
 - `$positioning` — frame the market category and competitive alternatives after journey evidence exists (if no `research/positioning.md` and not recommended)
-- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$user-flow-map [top journey-backed market gap or positioning opportunity]` — map flow structure before UI requirements, layout variants, and production specification (if positioning exists and not recommended)
+- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$user-flow-map [top journey-backed market gap or positioning opportunity]` — map flow structure before UI requirements, layout variants, and production specification (if positioning exists and not recommended)
 - `$value-prop-canvas` — optional detour only when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work
-- check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` inside Codex, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
-- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
-- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
+- check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
+- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
+- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
 
 Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
 

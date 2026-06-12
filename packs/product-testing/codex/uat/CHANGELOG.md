@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.10 - 2026-06-10
 
 - Converted the hand-authored alignment-page section to the generator-owned stub plus a bundled `ALIGNMENT-PAGE.md`; the page contract now follows the full shared convention (lifecycle states, central alignment index, section feedback, gate/feedback YAML, TTS, browser open) with the uat-specific gates from the generator gate map.

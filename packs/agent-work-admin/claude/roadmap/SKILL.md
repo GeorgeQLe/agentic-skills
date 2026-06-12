@@ -2,13 +2,13 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.9
+version: v0.10
 argument-hint: "[--existing] [path-to-spec]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Roadmap - Task Pipeline Manager
 
@@ -226,7 +226,7 @@ User-facing specs exist, but one or more required design-planning artifacts are 
 - `specs/ux-variations-*.md` — run `/ux-variations --layout-mode` (product-design pack) after user-flow and UI requirements to compare layout approaches.
 - `specs/ui-*.md` — run `/ui-interview` (product-design pack) only when a full UI specification is still needed after layout selection.
 
-For `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ui-interview` (product-design pack), and `/ux-variations` (product-design pack), apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, before the skill.
+For `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ui-interview` (product-design pack), and `/ux-variations` (product-design pack), apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `npx skillpacks install <pack>` from the project shell, before the skill.
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
@@ -448,7 +448,7 @@ Build and attempt to open `alignment/roadmap-{topic}.html` before writing or rep
 
 ## Constraints
 
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.
 - **Always interview for new roadmaps.** Do not produce a roadmap without user input on priorities and sequencing when building one from scratch (State B).
 - **Respect existing specs.** Do not modify files in `specs/` (or `spec.md`) — the roadmap references specs, it doesn't rewrite them.
 - **Phase headers must use `## Phase N: [Title]` format** for compatibility with `/exec` (exec-loop pack), `/ship` (exec-loop pack), and phase transition logic.

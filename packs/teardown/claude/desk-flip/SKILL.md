@@ -2,7 +2,7 @@
 name: desk-flip
 description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via /bootstrap-repo reset or new-repo bootstrap
 type: execution
-version: v0.3
+version: v0.4
 argument-hint: "<project-path>"
 ---
 
@@ -66,7 +66,7 @@ Always desk-flip. If the user invoked it, the decision to restart is already mad
    - Recommend the appropriate `/bootstrap-repo` (repo-maintenance pack) command with the recommended bootstrap input from the report.
    - Do NOT create the new repo or run `/bootstrap-repo` — the user does this.
    - After bootstrap, route product/app restarts into the research-first alignment workflow using the high-level concept seed as input: `/customer-discovery` to define who this is for, `/competitive-analysis` to map the market, `/journey-map` to map lifecycle and task flow, `/positioning` to lock the product direction, `/user-flow-map` to map screen flow, `/ui-interview --requirements-only` to define content/actions/states, `/ux-variations --layout-mode` to explore layouts, then prototype work, `/uat --variant-evaluation`, and `/consolidate-variations` before `/spec-interview` or `/roadmap`.
-   - If the business-discovery or customer-lifecycle packs are not enabled in the fresh repo, recommend `/pack install business-discovery` and `/pack install customer-lifecycle` before the research sequence.
+   - If the business-discovery or customer-lifecycle packs are not enabled in the fresh repo, recommend `npx skillpacks install business-discovery` and `npx skillpacks install customer-lifecycle` before the research sequence.
 
 ## Output
 
@@ -89,7 +89,7 @@ Desk-flipped: <project name>
 - Do not commit or push (the report is informational, not a meaningful mutation to ship).
 - Do not delete, archive, or rename anything in the old repo during desk-flip. Only the downstream `/bootstrap-repo --reset-existing` step may perform archival after the user chooses that route.
 - If the project has no specs, docs, or meaningful git history, produce the report anyway but note the thin evidence in each section.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 
 ## Alignment Page
@@ -100,4 +100,4 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Do NOT commit or push. The only side effect is `desk-flip-report.md` written to the project root.
 - **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** /bootstrap-repo (repo-maintenance pack) --reset-existing <brief>` for in-place restarts, or `/bootstrap-repo` (repo-maintenance pack) `<brief>` only when a separate new repo is explicitly the right path.
-- **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `/customer-discovery`, then `/competitive-analysis`, `/journey-map`, `/positioning`, `/user-flow-map`, `/ui-interview --requirements-only`, `/ux-variations --layout-mode`, and prototype work. Mention `/pack install business-discovery`, `/pack install customer-lifecycle`, or `/pack install product-design` first if those packs are not enabled.
+- **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `/customer-discovery`, then `/competitive-analysis`, `/journey-map`, `/positioning`, `/user-flow-map`, `/ui-interview --requirements-only`, `/ux-variations --layout-mode`, and prototype work. Mention `npx skillpacks install business-discovery`, `npx skillpacks install customer-lifecycle`, or `npx skillpacks install product-design` first if those packs are not enabled.

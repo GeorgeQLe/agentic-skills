@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.7 - 2026-06-11
 
 - Added published `npx skillpacks install` alternatives to pack and individual-skill install guidance while preserving source-checkout `scripts/pack.sh` and Codex `$pack` routes.

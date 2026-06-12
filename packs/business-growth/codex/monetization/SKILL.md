@@ -2,7 +2,7 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: v0.10
+version: v0.11
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Monetization — Revenue & Pricing Strategy
 
@@ -195,16 +195,16 @@ Other options:
 1. IF no `research/gtm.md`: recommend `$gtm` — pricing needs a go-to-market plan to reach the customers who'll pay
 2. IF `research/gtm.md` exists but predates this analysis: recommend `$gtm` — GTM pricing references are now stale and need updating
 3. IF no `research/metrics.md`: recommend `$metrics` — define metrics to track whether the monetization strategy is working
-4. IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — plan the build with monetization milestones
+4. IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — plan the build with monetization milestones
 
 **Other options** (include all applicable items not chosen as recommended):
 - IF no `research/gtm.md`: `$gtm` — Build go-to-market plan with pricing from this strategy
 - IF `research/gtm.md` exists but predates this analysis: `$gtm` — Update GTM with refined pricing strategy
 - IF no `research/metrics.md`: `$metrics` — Define metrics to track monetization health (conversion, expansion, churn)
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map the journey to validate where pricing gates belong
-- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — Plan the build with monetization milestones
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — Check if the product delivers enough value to charge
-- IF product is live and revenue exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$runway-model` — Track actual financial performance against these estimates
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `npx skillpacks install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map the journey to validate where pricing gates belong
+- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — Plan the build with monetization milestones
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — Check if the product delivers enough value to charge
+- IF product is live and revenue exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` first; if `business-ops` is enabled, recommend `$runway-model` — Track actual financial performance against these estimates
 
 ### 9. Final Review & Write
 

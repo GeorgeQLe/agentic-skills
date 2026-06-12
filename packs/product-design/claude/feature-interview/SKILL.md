@@ -2,14 +2,14 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.6
+version: v0.7
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 interview_depth: full
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Feature Interview
 
@@ -142,7 +142,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not produce a full implementation spec unless the interview proves a new or rewritten spec is the right destination.
 - Do not route brainstorm ideas directly to `/spec-interview`; use `/feature-interview` for triage unless the user explicitly asks for a full spec.
 - Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `/investigate` (requires code-debug pack); if it uncovers buildable planned work, route through `/roadmap` (requires agent-work-admin pack), `/plan-phase` (requires agent-work-admin pack), or `/exec` (requires exec-loop pack).
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, before the target skill.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Default Shipping Contract
 

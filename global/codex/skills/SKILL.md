@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.6
+version: v0.7
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -35,7 +35,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 
    | Stage | Skills |
    |-------|--------|
-   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>` (or project shell: `npx skillpacks install <pack-or-skill>`), `pack remove <pack-or-skill>`, `pack which <skill>` |
+   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `npx skillpacks install <pack-or-skill>` (or project shell: `npx skillpacks install <pack-or-skill>`), `pack remove <pack-or-skill>`, `pack which <skill>` |
    | Discovery & Market Fit | `customer-discovery`, `enterprise-icp` |
    | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
    | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |
@@ -83,7 +83,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    - Under each heading, list installed/global primary and chained skills as `$<name> — <description>  [type]`.
    - Show orchestrator skills with an `⚙` prefix: `⚙ $<name> — <description>  [type]`.
    - Show sub-skills indented under their parent skill (identified by the `parent:` frontmatter field or by living under a `frameworks/` directory). Format: `  ↳ $<name> — <description>  [sub-skill]`. If the parent is not in the same group, place sub-skills in a "Sub-skills" subsection at the end of the parent's group.
-   - For available-but-not-installed pack skills, list as `$<name> — <description>  [type]  ⚠ requires \`$pack install <skill>\` or \`$pack install <pack>\` inside Codex, or \`npx skillpacks install <pack-or-skill>\` from the project shell`.
+   - For available-but-not-installed pack skills, list as `$<name> — <description>  [type]  ⚠ requires \`npx skillpacks install <skill>\` or \`npx skillpacks install <pack>\` inside Codex, or \`npx skillpacks install <pack-or-skill>\` from the project shell`.
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** installed (M sub-skills), **P skills** available via packs` (or `**N skills** matching "<keyword>"`).
 

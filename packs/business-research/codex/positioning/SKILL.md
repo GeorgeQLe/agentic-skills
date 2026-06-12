@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.14
+version: v0.15
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 interview_depth: light
 visual_tier: visual
@@ -11,7 +11,7 @@ invocation: orchestrator
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Positioning — Orchestrator
 
@@ -185,7 +185,7 @@ Stop — user runs `$exec`.
 ### 6. Next Steps (after synthesis only)
 
 - IF no journey-map: check for `customer-lifecycle` pack → recommend `$journey-map`
-- DEFAULT: check for `product-design` pack → if enabled, recommend `$user-flow-map [positioning-backed product direction]`; if not enabled, recommend `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell
+- DEFAULT: check for `product-design` pack → if enabled, recommend `$user-flow-map [positioning-backed product direction]`; if not enabled, recommend `npx skillpacks install product-design` from the project shell
 - IF solution-customer fit weak/disputed: `$value-prop-canvas`
 - IF business-model risks: `$lean-canvas`
 - IF no GTM: check for `business-growth` pack → recommend `$gtm`

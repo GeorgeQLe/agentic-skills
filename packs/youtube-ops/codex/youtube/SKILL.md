@@ -2,13 +2,13 @@
 name: youtube
 description: Intent-based router and play composer for youtube-ops skills — classifies what the user needs and recommends a single skill or queues a multi-step play for $exec
 type: router
-version: v0.1
+version: v0.2
 argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json` `enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json` `enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # YouTube — Intent Router & Play Composer
 
@@ -41,7 +41,7 @@ When invoked with natural language and no flags, classify the user's intent agai
 | General audit | "full audit", "everything" | `$youtube-audit` |
 | Format/production | "format", "editing", "pacing" | `$youtube-format-research` (remotion pack) |
 
-When routing to `youtube-format-research`, verify the `remotion` pack is enabled in `.agents/project.json` `enabled_packs`. If not, note that `$pack install remotion` is required first.
+When routing to `youtube-format-research`, verify the `remotion` pack is enabled in `.agents/project.json` `enabled_packs`. If not, note that `npx skillpacks install remotion` is required first.
 
 ### Mode B — Channel Health Play (`--health <channel>`)
 

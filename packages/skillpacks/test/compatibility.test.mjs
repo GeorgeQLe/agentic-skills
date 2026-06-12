@@ -20,6 +20,8 @@ const expectedMatrix = new Map([
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['doctor', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['doctor --fix', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['doctor --fix --agent-docs [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['prune [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['pin <skill> <version>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['unpin <skill>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -131,7 +133,8 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
     }
 
     assert.match(decks, /npx skillpacks install-deck vard/, 'decks doc should document npm deck installs');
-    assert.match(decks, /scripts\/pack\.sh install vard/, 'decks doc should keep checkout deck installs');
+    assert.match(decks, /npx skillpacks install-deck business-afps/, 'decks doc should use install-deck for canonical decks');
+    assert.doesNotMatch(decks, /npx skillpacks install <deck>/, 'decks doc must not model decks as generic pack installs');
   });
 
   it('documents migration and package-semver vs skill-version pinning', () => {

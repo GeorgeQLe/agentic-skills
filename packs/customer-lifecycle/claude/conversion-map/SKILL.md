@@ -2,7 +2,7 @@
 name: conversion-map
 description: Plan evaluation, trial, pricing decision, objections, buyer roles, and conversion triggers
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[optional: app, segment, or conversion motion]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill.
 
 # Conversion Map
 

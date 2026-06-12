@@ -2,7 +2,7 @@
 name: init-agentic-skills
 description: Initialize this agentic-skills checkout on a developer machine by running the repository init script, verify global managed skill installs, uninstall repo-managed installs when requested, and route project-local pack setup to the pack skill. Use when Claude needs to make all global agentic-skills skills available on the current machine, repair stale installs, confirm initialization status, or explain how to enable packs for a project.
 type: ops
-version: v0.7
+version: v0.8
 argument-hint: "[init|status|doctor|update|latest|--uninstall]"
 ---
 
@@ -22,7 +22,7 @@ Initialize this `agentic-skills` checkout on the current machine by installing g
 2. Report the initializer command, the Claude and Codex skill directories, installed/skipped counts, and warnings about non-repo-managed collisions.
 3. Explain pack access separately:
    - Do not install `packs/*` globally.
-   - In the project that needs domain workflows, run `/pack` for guided setup, `/pack install <pack-or-skill>` inside Claude Code for an explicit pack or individual pack skill, or `npx skillpacks install <pack-or-skill>` from the project shell.
+   - In the project that needs domain workflows, run `/pack` for guided setup, or `npx skillpacks install <pack-or-skill>` from the project shell for an explicit pack or individual pack skill.
    - If a project already has `.agents/project.json`, use `/pack refresh` after this global initialization to recreate local pack skill roots.
 4. If the active session still cannot see a newly installed or refreshed skill, report the skill-visibility reload path:
    - Claude Code: run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible.

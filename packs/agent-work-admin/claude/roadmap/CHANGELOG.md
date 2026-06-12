@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.9 - 2026-06-11
 
 - Updated the inline alignment-page response model to use one bottom `Compile Responses` control with local section feedback YAML hidden until a section feedback choice is selected.

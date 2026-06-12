@@ -4,6 +4,7 @@ import {
   lstatSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   readlinkSync,
   rmSync,
@@ -137,6 +138,53 @@ function writeStaleLock(projectRoot) {
   writeFileSync(join(dir, 'pid'), '999999999\n');
   writeFileSync(join(dir, 'started_at'), '2026-01-01T00:00:00.000Z\n');
   writeFileSync(join(dir, 'command'), 'skillpacks install stale\n');
+}
+
+function provisionNote(fileName) {
+  return `Provisioned artifact: ./${fileName}. Source: workflow.md. Verification: block appears exactly once.`;
+}
+
+function provisionDoc(fileName, options = {}) {
+  const version = options.version ?? 'v0.5';
+  const body = options.body ?? 'legacy generated line';
+  return [
+    options.prefix ?? '',
+    `<!-- provision-agentic-config ${version} -->`,
+    '## Workflow Orchestration',
+    body,
+    provisionNote(fileName),
+    '',
+    options.suffix ?? ''
+  ].join('\n');
+}
+
+function writeAgentDocs(projectRoot, options = {}) {
+  writeFileSync(
+    join(projectRoot, 'AGENTS.md'),
+    provisionDoc('AGENTS.md', {
+      prefix: options.agentsPrefix,
+      suffix: options.agentsSuffix,
+      body: options.agentsBody,
+      version: options.agentsVersion
+    })
+  );
+  writeFileSync(
+    join(projectRoot, 'CLAUDE.md'),
+    provisionDoc('CLAUDE.md', {
+      prefix: options.claudePrefix,
+      suffix: options.claudeSuffix,
+      body: options.claudeBody,
+      version: options.claudeVersion
+    })
+  );
+}
+
+function backupFiles(projectRoot) {
+  const backupDir = join(projectRoot, '.agents/backups');
+  if (!existsSync(backupDir)) {
+    return [];
+  }
+  return readdirSync(backupDir).sort();
 }
 
 afterEach(() => {
@@ -491,6 +539,165 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Fix: npx skillpacks refresh \(or scripts\/pack\.sh refresh from a source checkout\)/);
   });
 
+  it('keeps plain doctor read-only for skill roots and agent docs', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'quality-sweep']);
+    writeAgentDocs(dir);
+    const beforeAgents = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+    const beforeClaude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8');
+    writeFileSync(join(skillPath(dir, 'claude', 'quality-sweep'), 'SKILL.md'), 'stale\n');
+    const beforeSkill = readFileSync(join(skillPath(dir, 'claude', 'quality-sweep'), 'SKILL.md'), 'utf8');
+    const markerPath = join(skillPath(dir, 'claude', 'quality-sweep'), '.agentic-skills-managed');
+    const beforeMarker = readFileSync(markerPath, 'utf8').replace(/^source_sha=.*$/m, 'source_sha=outdated');
+    writeFileSync(markerPath, beforeMarker);
+
+    const { exitCode, stdout } = await runSkillpacksRaw(dir, ['doctor']);
+
+    assert.equal(exitCode, 1);
+    assert.match(stdout, /STALE    \.claude\/skills\/quality-sweep/);
+    assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), beforeAgents);
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), beforeClaude);
+    assert.equal(readFileSync(join(skillPath(dir, 'claude', 'quality-sweep'), 'SKILL.md'), 'utf8'), beforeSkill);
+    assert.equal(readFileSync(markerPath, 'utf8'), beforeMarker);
+    assert.deepEqual(backupFiles(dir), []);
+  });
+
+  it('doctor --fix cleans generated skill roots without touching agent docs', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1,
+      pinned_versions: {
+        'quality-sweep': 'v0.0'
+      }
+    });
+    writeAgentDocs(dir);
+    const beforeAgents = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+    const beforeClaude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8');
+    mkdirSync(join(dir, '.claude/skills'), { recursive: true });
+    symlinkSync(
+      join(repoRoot, 'packs/code-quality/claude/quality-sweep/archive/v0.0'),
+      skillPath(dir, 'claude', 'quality-sweep'),
+      'dir'
+    );
+    symlinkSync(
+      join(repoRoot, 'packs/code-quality/claude/extract-shared-types'),
+      skillPath(dir, 'claude', 'extract-shared-types'),
+      'dir'
+    );
+    writeManagedInstall(
+      dir,
+      'codex',
+      'orphan-skill',
+      join(repoRoot, 'packs/code-quality/codex/quality-sweep')
+    );
+    mkdirSync(skillPath(dir, 'codex', 'local-skill'), { recursive: true });
+    const localLinkSource = join(dir, 'local-link-source');
+    mkdirSync(localLinkSource, { recursive: true });
+    symlinkSync(localLinkSource, skillPath(dir, 'codex', 'local-link'), 'dir');
+
+    const { stdout } = await runSkillpacks(dir, ['doctor', '--fix']);
+
+    assert.match(stdout, /Doctor fix: generated skill-root cleanup/);
+    assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), true);
+    assert.equal(lstatSync(skillPath(dir, 'claude', 'extract-shared-types')).isSymbolicLink(), false);
+    assert.match(marker(dir, 'claude', 'extract-shared-types'), /^managed_by=agentic-skills$/m);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'orphan-skill')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'local-skill')), true);
+    assert.equal(lstatSync(skillPath(dir, 'codex', 'local-link')).isSymbolicLink(), true);
+    assert.equal(readlinkSync(skillPath(dir, 'codex', 'local-link')), localLinkSource);
+    assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), beforeAgents);
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), beforeClaude);
+    assert.deepEqual(backupFiles(dir), []);
+  });
+
+  it('doctor --fix --agent-docs --dry-run prints diffs and writes nothing', async () => {
+    const dir = makeTempProject();
+    writeAgentDocs(dir);
+    const beforeAgents = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+    const beforeClaude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8');
+
+    const { stdout } = await runSkillpacks(dir, ['doctor', '--fix', '--agent-docs', '--dry-run']);
+
+    assert.match(stdout, /--- AGENTS\.md/);
+    assert.match(stdout, /\+\+\+ CLAUDE\.md/);
+    assert.match(stdout, /Dry run: no files written\./);
+    assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), beforeAgents);
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), beforeClaude);
+    assert.deepEqual(backupFiles(dir), []);
+  });
+
+  it('doctor --fix --agent-docs backs up and replaces only marked provision blocks', async () => {
+    const dir = makeTempProject();
+    writeAgentDocs(dir, {
+      agentsPrefix: 'agents prefix byte-for-byte',
+      agentsSuffix: 'agents suffix byte-for-byte',
+      claudePrefix: 'claude prefix byte-for-byte',
+      claudeSuffix: 'claude suffix byte-for-byte'
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['doctor', '--fix', '--agent-docs']);
+
+    assert.match(stdout, /Agent docs changed:/);
+    assert.match(stdout, /AGENTS\.md \(backup: \.agents\/backups\/AGENTS\.md\./);
+    assert.match(stdout, /CLAUDE\.md \(backup: \.agents\/backups\/CLAUDE\.md\./);
+    const agents = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+    const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8');
+    assert.equal(agents.startsWith('agents prefix byte-for-byte\n'), true);
+    assert.equal(agents.endsWith('agents suffix byte-for-byte'), true);
+    assert.equal(claude.startsWith('claude prefix byte-for-byte\n'), true);
+    assert.equal(claude.endsWith('claude suffix byte-for-byte'), true);
+    assert.doesNotMatch(agents, /legacy generated line/);
+    assert.doesNotMatch(claude, /legacy generated line/);
+    assert.match(agents, /npx skillpacks install <pack-or-skill>/);
+    assert.match(claude, /npx skillpacks install <pack-or-skill>/);
+    assert.deepEqual(
+      backupFiles(dir).map((file) => file.replace(/\.\d{8}T\d{6}Z\.bak$/, '.TIMESTAMP.bak')),
+      ['AGENTS.md.TIMESTAMP.bak', 'CLAUDE.md.TIMESTAMP.bak']
+    );
+  });
+
+  it('doctor --fix --agent-docs refuses unsafe provision marker states without backups', async () => {
+    const cases = [
+      {
+        name: 'missing marker',
+        agents: 'no generated block\n',
+        message: /AGENTS\.md: missing provision-agentic-config marker/
+      },
+      {
+        name: 'duplicate markers',
+        agents: `${provisionDoc('AGENTS.md')}\n<!-- provision-agentic-config v0.5 -->\n`,
+        message: /AGENTS\.md: duplicate provision-agentic-config markers/
+      },
+      {
+        name: 'malformed boundary',
+        agents: '<!-- provision-agentic-config v0.5 -->\n## Workflow Orchestration\nmissing footer\n',
+        message: /AGENTS\.md: malformed provision block boundary/
+      },
+      {
+        name: 'unknown marker',
+        agents: provisionDoc('AGENTS.md', { version: 'v9.9' }),
+        message: /AGENTS\.md: unknown provision-agentic-config version v9\.9/
+      }
+    ];
+
+    for (const testCase of cases) {
+      const dir = makeTempProject();
+      writeFileSync(join(dir, 'AGENTS.md'), testCase.agents);
+      writeFileSync(join(dir, 'CLAUDE.md'), provisionDoc('CLAUDE.md'));
+      const beforeAgents = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+      const beforeClaude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8');
+
+      const error = await runSkillpacksExpectError(dir, ['doctor', '--fix', '--agent-docs']);
+
+      assert.match(error.message, testCase.message, testCase.name);
+      assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), beforeAgents);
+      assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), beforeClaude);
+      assert.deepEqual(backupFiles(dir), []);
+    }
+  });
+
   it('pins and unpins skills without bash or jq while preserving project config fields', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {
@@ -522,7 +729,7 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(dir).notes, ['preserve me']);
   });
 
-  it('keeps pack.sh-compatible extra args ignored for doctor, pin, and unpin', async () => {
+  it('rejects unsupported doctor args while keeping pack.sh-compatible pin and unpin extras', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {
       project_type: 'devtool',
@@ -530,8 +737,8 @@ describe('Node lifecycle commands', () => {
       skill_pack_version: 1
     });
 
-    const doctor = await runSkillpacks(dir, ['doctor', 'ignored']);
-    assert.match(doctor.stdout, /Skill install drift/);
+    const doctorError = await runSkillpacksExpectError(dir, ['doctor', 'ignored']);
+    assert.match(doctorError.message, /doctor: unknown option 'ignored'/);
 
     await runSkillpacks(dir, ['pin', 'quality-sweep', 'v0.0', 'ignored']);
     assert.deepEqual(readProjectConfig(dir).pinned_versions, { 'quality-sweep': 'v0.0' });
@@ -558,14 +765,19 @@ describe('Node lifecycle commands', () => {
     );
     writeManagedInstall(dir, 'codex', 'missing-source-skill', join(dir, 'missing-source'));
     mkdirSync(skillPath(dir, 'claude', 'local-skill'), { recursive: true });
+    const localLinkSource = join(dir, 'local-link-source');
+    mkdirSync(localLinkSource, { recursive: true });
+    symlinkSync(localLinkSource, skillPath(dir, 'claude', 'local-link'), 'dir');
 
     const dryRun = await runSkillpacks(dir, ['prune', '--dry-run']);
 
     assert.match(dryRun.stdout, /would remove  \.claude\/skills\/orphan-skill \(pack not enabled\)/);
     assert.match(dryRun.stdout, /would remove  \.codex\/skills\/missing-source-skill \(source no longer exists\)/);
     assert.match(dryRun.stdout, /2 orphan\(s\) found\. Run without --dry-run to remove\./);
+    assert.doesNotMatch(dryRun.stdout, /local-link/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'orphan-skill')), true);
     assert.equal(existsSync(skillPath(dir, 'claude', 'local-skill')), true);
+    assert.equal(lstatSync(skillPath(dir, 'claude', 'local-link')).isSymbolicLink(), true);
 
     const pruned = await runSkillpacks(dir, ['prune']);
 
@@ -576,5 +788,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(dir, 'claude', 'orphan-skill')), false);
     assert.equal(existsSync(skillPath(dir, 'codex', 'missing-source-skill')), false);
     assert.equal(existsSync(skillPath(dir, 'claude', 'local-skill')), true);
+    assert.equal(lstatSync(skillPath(dir, 'claude', 'local-link')).isSymbolicLink(), true);
+    assert.equal(readlinkSync(skillPath(dir, 'claude', 'local-link')), localLinkSource);
   });
 });

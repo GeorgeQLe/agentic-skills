@@ -2,14 +2,14 @@
 name: jtbd-needs
 description: Ulwick/Christensen JTBD — identify jobs, map desired outcomes, score importance vs satisfaction, and segment ICP candidates by unmet needs
 type: research
-version: v0.2
+version: v0.3
 invocation: sub-skill
 parent: customer-discovery
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # JTBD Needs — Ulwick/Christensen Outcome-Driven Innovation
 

@@ -1,3 +1,130 @@
+## Current Implementation - Skillpacks Install Route And Agent Doc Migration
+
+### Goal
+
+Make `npx skillpacks install <pack-or-skill>` the standard active install route and add safe opt-in agent-doc migration to `npx skillpacks doctor --fix --agent-docs`.
+
+### Current Checklist
+
+- [x] Read the active `pack` skill instructions.
+- [x] Capture visible invocation prompt history.
+- [x] Inspect `skillpacks` lifecycle CLI, provision templates, docs, routing audit, and fixtures.
+- [x] Record scoped roadmap/todo plan before implementation.
+- [x] Implement `doctor --fix` generated skill-root cleanup without agent-doc mutation.
+- [x] Implement `doctor --fix --agent-docs [--dry-run]` with marker validation, unified diff output, backups, and exact file reporting.
+- [x] Update root/provision/package install guidance to prefer `npx skillpacks install <pack-or-skill>`.
+- [x] Update active skill install guidance with version archive/changelog discipline.
+- [x] Update routing audit and fixtures for unallowlisted `/pack install` / `$pack install` failures.
+- [x] Add lifecycle tests for doctor read-only behavior, cleanup, dry-run, backups, preservation, and refusal cases.
+- [x] Run required routing/package verification.
+- [x] Record review notes, commit, and push intended changes unless blocked.
+
+### Acceptance Criteria
+
+- Plain `doctor` writes nothing.
+- `doctor --fix` cleans generated roots only.
+- `doctor --fix --agent-docs --dry-run` prints diffs and writes nothing.
+- `doctor --fix --agent-docs` backs up and replaces only recognized generated blocks.
+- User-authored text outside generated blocks is byte-preserved.
+- Unsafe or unknown agent-doc markers are refused.
+- Active routing audit enforces the npm install route as the standard.
+
+### Review Notes
+
+- Implemented `npx skillpacks doctor --fix` as generated skill-root cleanup only; agent docs remain untouched unless `--agent-docs` is explicitly provided.
+- Implemented `npx skillpacks doctor --fix --agent-docs [--dry-run]` with recognized generated provision-block replacement, refusal for unsafe marker states, unified diff preview, timestamped backups under `.agents/backups/`, and exact changed-file reporting.
+- Migrated active install guidance to `npx skillpacks install <pack-or-skill>` across root generated blocks, provision templates, package docs, routing contracts, fixtures, and active skill contracts; legacy `/pack` / `$pack` install guidance remains only in archived or explicitly legacy/source-checkout contexts.
+- Applied active skill versioning by archiving prior `SKILL.md` snapshots, bumping versions, and updating `CHANGELOG.md` entries for changed active skills.
+- Updated routing audit coverage so active unallowlisted `/pack install` / `$pack install` recommendations fail.
+- Verification passed:
+  - `scripts/skill-install-routing-audit.sh --active`
+  - `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+  - `npm --workspace skillpacks run test:node` (62 tests passed)
+  - `npm --workspace skillpacks run build:check`
+  - `npm --workspace skillpacks run verify:package`
+  - `git diff --check`
+  - `bash scripts/skill-pack-routing-audit.sh`
+
+---
+
+## Current Validation - Pack Skill Sunset Readiness
+
+### Goal
+
+Validate whether active skills still depend on `$pack` / `scripts/pack.sh` for pack or skill installation before deciding whether the `pack` skill can be archived and sunset.
+
+### Current Checklist
+
+- [x] Load the `pack` skill instructions.
+- [x] Capture visible invocation prompt history.
+- [x] Record scoped validation plan.
+- [x] Search active skill contracts and user-facing docs for pack-install dependencies.
+- [x] Classify remaining references as blockers, cleanup, archives, generated artifacts, or self-references.
+- [x] Run verification commands.
+- [x] Record review notes and sunset recommendation.
+
+### Review Notes
+
+- Recommendation: do not archive or sunset the `pack` skill yet. Active skill contracts still use `/pack install` and `$pack install` as in-agent routes.
+- Current canonical policy blocks sunset: `docs/skillpacks-install-routing-contract.md` says to preserve `/pack`, `$pack`, and source-checkout `scripts/pack.sh` routes while adding `npx skillpacks install` alternatives.
+- Active scan evidence:
+  - `rg -l '(/pack install|\$pack install|scripts/pack\.sh install)' global packs --glob 'SKILL.md' --glob '!**/archive/**' | wc -l` -> 220 active skill files still mention pack install routes.
+  - `rg -l 'npx skillpacks install' global packs --glob 'SKILL.md' --glob '!**/archive/**' | wc -l` -> 178 active skill files mention the npm install route.
+  - 42 active skill files contain pack-install guidance without the required npm alternative.
+- `scripts/skill-install-routing-audit.sh --active` scanned 383 active `SKILL.md` files and failed with 42 `missing-npm-install-route` findings, mostly in `product-testing`, `remotion`, `research-admin`, `session-analytics`, `teardown`, and `youtube-ops`.
+- `scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing` passed the fixture expectation set: 11 fixture files scanned, 6 expected invalid-fixture findings.
+- Package implementation status:
+  - `packages/skillpacks/src/cli/lifecycle.mjs` owns direct `skillpacks install` pack and individual-skill lifecycle in Node.
+  - `packages/skillpacks/src/cli/run-pack-script.mjs` still implements `skillpacks install-deck` by resolving deck metadata and running packaged `scripts/pack.sh install ...`, so shell pack lifecycle is not fully retired.
+- Project guardrails still reference pack fallback: `AGENTS.md` and `CLAUDE.md` both instruct missing-skill resolution through `scripts/pack.sh which` and `$pack install` / `/pack install`.
+- Sunset path: first change the install-route contract to make `npx skillpacks install <pack-or-skill>` the primary/only active install route, migrate active `SKILL.md` files with version/archive/changelog discipline, update `AGENTS.md` / `CLAUDE.md` fallback language, move `install-deck` off `scripts/pack.sh`, then archive the `pack` skill.
+
+---
+
+## Current Planning - Skills Showcase Skill Execution Handoff Flow
+
+### Goal
+
+Build only the review-state alignment page for `$user-flow-map skills-showcase skill-execution-handoff`; hold canonical spec and interview-log writes until final compiled YAML approval.
+
+### Current Checklist
+
+- [x] Capture visible invocation prompt history.
+- [x] Read active skill instructions and project guardrails.
+- [x] Resolve active product path: `skills-showcase`.
+- [x] Inspect relevant research/spec/app evidence.
+- [x] Record scoped roadmap/todo plan.
+- [x] User reviews Flow Assumptions Checkpoint.
+- [x] Map flow after confirmation.
+- [x] Carry the corrected persona wording into the proposed flow content.
+- [x] Build `alignment/user-flow-map-skill-execution-handoff.html` in `review` state with the full proposed spec and interview log inline.
+- [x] Update `alignment/index.html`.
+- [x] Confirm no canonical `specs/skills-showcase/user-flow-skill-execution-handoff*.md` files are written in review state.
+- [x] Run `node scripts/audit-alignment-pages.mjs`.
+- [x] Run `git diff --check`.
+- [x] Record review notes and shipping status.
+
+### Review Notes
+
+- Product path resolved from `research/.progress.yaml`: `skills-showcase`.
+- Existing confirmed deck-creation spec is upstream evidence, not a file to replace.
+- `product-design` is enabled in `.agents/project.json`; downstream `$ui-interview` is available.
+- User confirmed the Flow Assumptions Checkpoint as-is on 2026-06-12.
+- Coverage was reviewed in the prior conversation context, and the current handoff plan supersedes direct canonical writes with an alignment-first review page.
+- Canonical destinations are proposed only: `specs/skills-showcase/user-flow-skill-execution-handoff.md` and `specs/skills-showcase/user-flow-skill-execution-handoff-interview.md`.
+- Review page approval must arrive as compiled YAML with `approval_status: ready-for-agent-review` before those files are written or the page is converted to `confirmed`.
+- Built `alignment/user-flow-map-skill-execution-handoff.html` in `review` state with the proposed spec, proposed interview log, evidence context, and active gates rendered inline.
+- Updated `alignment/index.html` to include the new review page under Product Design & Spec.
+- Verification passed:
+  - `node scripts/audit-alignment-pages.mjs` -> 49 active pages, TTS exact, metadata exact, viewport exact, embed prohibition exact, index integrity exact.
+  - `git diff --check`
+  - `test ! -e specs/skills-showcase/user-flow-skill-execution-handoff.md`
+  - `test ! -e specs/skills-showcase/user-flow-skill-execution-handoff-interview.md`
+  - `git diff --name-only -- specs/skills-showcase/user-flow-deck-creation.md specs/skills-showcase/user-flow-deck-creation-interview.md` returned no files.
+- Browser open: `node scripts/open-html-page.mjs alignment/user-flow-map-skill-execution-handoff.html --browser auto` opened the page via macOS after approval; the initial sandboxed attempt was blocked.
+
+---
+
 ## Current Implementation - Skillpacks Init Global Alias
 
 ### Goal

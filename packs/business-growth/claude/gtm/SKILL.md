@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.10
+version: v0.11
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # GTM — Go-to-Market Planning
 
@@ -140,12 +140,12 @@ Continue until the user confirms. Only then proceed to writing.
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
 
 - IF no `research/growth-model.md`: `/growth-model` — Design compounding growth loops to make the GTM strategy sustainable
-- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with launch milestones from above
+- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with launch milestones from above
 - IF no `research/metrics.md`: `/metrics` — Define success metrics for the launch goals
 - IF open questions need research: `/experiment [top question]` — Validate the most critical open question
 - IF `tasks/roadmap.md` exists: `/exec` — Start executing — the GTM plan is set
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey to validate funnel assumptions
-- IF no `research/positioning.md`: check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Define strategic positioning — messaging should flow from positioning
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `npx skillpacks install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/positioning.md`: check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `npx skillpacks install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item

@@ -2,7 +2,7 @@
 name: landing-copy
 description: Generate or audit landing page copy grounded in upstream research — hero, benefits, social proof, pricing, FAQ, and CTAs
 type: research
-version: v0.7
+version: v0.8
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 interview_depth: full
 visual_tier: prototype
@@ -10,7 +10,7 @@ visual_tier: prototype
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Landing Copy — Research-Grounded Landing Page Copy
 

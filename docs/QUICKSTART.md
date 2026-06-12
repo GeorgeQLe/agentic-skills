@@ -43,18 +43,16 @@ Navigate to any project repository and install the pack that matches your domain
 
 ```bash
 cd ~/my-project
-~/agentic-skills/scripts/pack.sh install devtool    # for developer tools
-~/agentic-skills/scripts/pack.sh install game        # for games
-~/agentic-skills/scripts/pack.sh install business-discovery  # for SaaS/business apps
+npx skillpacks init
+npx skillpacks install devtool    # for developer tools
+npx skillpacks install game        # for games
+npx skillpacks install business-discovery  # for SaaS/business apps
 ```
 
-With npm:
+From a source checkout, the equivalent compatibility route is:
 
 ```bash
-npx skillpacks init
-npx skillpacks install devtool
-npx skillpacks install game
-npx skillpacks install business-discovery
+~/agentic-skills/scripts/pack.sh install devtool
 ```
 
 This creates `.agents/project.json` and project-local skill roots in `.claude/skills/` and `.codex/skills/`. `init` is the base-skill step; `install` is the domain-pack or individual-pack-skill step.

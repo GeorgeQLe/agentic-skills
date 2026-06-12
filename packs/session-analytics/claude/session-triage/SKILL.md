@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -85,7 +85,7 @@ Produce a structured report with:
 - Do not create or suggest `/analyze-session`; use `/session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Default Shipping Contract
 

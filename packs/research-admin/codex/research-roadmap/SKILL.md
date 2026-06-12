@@ -2,13 +2,13 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.16
+version: v0.17
 invocation: orchestrator
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Research Roadmap - Documentation Queue Manager
 
@@ -57,7 +57,7 @@ Otherwise, continue with the standard process starting at step 1.
    - devtool: SDK, CLI, API, library, infra, docs, examples, or package-first developer workflow
    - business-app: SaaS, marketplace, productivity, workflow, enterprise, or user-facing app
 4. If the project type cannot be inferred, default to `business-app`.
-5. If an expected pack is not installed, add a priority todo for `$pack install <pack>` before pack-specific research todos.
+5. If an expected pack is not installed, add a priority todo for `npx skillpacks install <pack>` before pack-specific research todos.
 
 ### 2. Resolve Documentation Roots
 
@@ -221,7 +221,7 @@ Order immediately actionable todo items so the user can complete documentation w
 8. Missing or stale roadmap/task docs.
 9. Reconciliation items when conflicting docs are detected.
 
-Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `$pack install <pack>` before the skill:
+Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `npx skillpacks install <pack>` before the skill:
 
 When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent activation, add `$product-line review` as a priority queue item to prompt portfolio review.
 

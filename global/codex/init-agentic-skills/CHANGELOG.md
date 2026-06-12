@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.7 - 2026-06-11
 
 - Added npm-aware project-shell pack install guidance alongside Codex `$pack install` guidance for project-local domain workflows.

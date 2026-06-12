@@ -2,14 +2,14 @@
 name: creator-positioning
 description: Define a creator or founder-media channel's audience promise, category, differentiated wedge, proof, and anti-positioning
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[channel slug or audit path]"
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Creator Positioning
 

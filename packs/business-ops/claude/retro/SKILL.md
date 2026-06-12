@@ -2,14 +2,14 @@
 name: retro
 description: Strategic decision retrospective — review research decisions against actual outcomes, update confidence levels
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Retro — Strategic Decision Retrospective
 

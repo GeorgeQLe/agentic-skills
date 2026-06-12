@@ -2,14 +2,14 @@
 name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
-version: v0.4
+version: v0.5
 interview_depth: none
 visual_tier: visual
 ---
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Scale Audit — Enterprise Production Readiness
 

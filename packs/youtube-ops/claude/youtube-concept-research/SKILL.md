@@ -2,14 +2,14 @@
 name: youtube-concept-research
 description: Research a proposed YouTube video concept against successful direct and adjacent content, then extract evidence-backed lessons, concept variants, packaging directions, and differentiated execution guidance
 type: research
-version: v0.4
+version: v0.5
 argument-hint: "\"<video concept>\" [--channel <slug>] [--comparables N] [--angle search|browse|packaging|retention|format|all]"
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # YouTube Concept Research
 

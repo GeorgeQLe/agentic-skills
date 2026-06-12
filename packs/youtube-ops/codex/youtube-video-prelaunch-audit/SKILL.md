@@ -2,14 +2,14 @@
 name: youtube-video-prelaunch-audit
 description: Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, packaging, title, description, chapters, publish settings, launch timing, and social cross-sharing strategy
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]"
 interview_depth: none
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # YouTube Video Prelaunch Audit
 
@@ -261,7 +261,7 @@ After writing the approved artifact and completing the artifact handoff checks, 
 
 Default recommendation: `$youtube-description-optimizer` when the main remaining work is description, chapters, pinned comment, metadata, or launch copy; `$youtube-title-thumbnail-audit` when title/thumbnail packaging needs a deeper channel or peer comparison; `$youtube-format-research` from the `remotion` pack when the video should be re-edited for pacing, format, visual rhythm, or production grammar; otherwise `$youtube-video-audit` after the video is public and enough time has passed to evaluate performance.
 
-Before recommending `$youtube-format-research`, verify the `remotion` pack is enabled in `.agents/project.json.enabled_packs`. If it is missing, recommend `$pack install remotion` first.
+Before recommending `$youtube-format-research`, verify the `remotion` pack is enabled in `.agents/project.json.enabled_packs`. If it is missing, recommend `npx skillpacks install remotion` first.
 
 ## Alignment Page
 

@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.17 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.16 - 2026-06-11
 
 - Added Deck Fit Handoff routing so completed idea briefs prefer matching saved repo decks from `.agents/project.json` `saved_decks` / `decks`, then fall back to canonical decks (`vard`, `ord`, `business-afps`, `devtool-afps`, `game-afps`).

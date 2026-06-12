@@ -6,4 +6,4 @@ version: v0.0
 
 ### Missing Skill Fallback
 
-If found in an uninstalled pack, recommend `/pack install <skill>` for just that skill, `/pack install <pack>` for the full pack, or `npx skillpacks install <pack-or-skill>` from the project shell.
+If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack.

@@ -20,20 +20,20 @@ For npm consumers, `npx skillpacks init` installs these same global-scope base s
 ## Project Pack Commands
 
 ```bash
-scripts/pack.sh list
-scripts/pack.sh recommend
-scripts/pack.sh install <pack-or-skill>
-scripts/pack.sh remove <pack-or-skill>
-scripts/pack.sh which <skill>
-scripts/pack.sh refresh
-scripts/pack.sh status
+npx skillpacks list
+npx skillpacks recommend
+npx skillpacks install <pack-or-skill>
+npx skillpacks remove <pack-or-skill>
+npx skillpacks which <skill>
+npx skillpacks refresh
+npx skillpacks status
 ```
 
 Project designation is stored in `.agents/project.json`.
 
 `install <name>` accepts either a pack name or a skill name from any pack. Pack names install all skills in that pack; skill names install only that one local skill and store `{skill: pack}` provenance under `.agents/project.json` `enabled_skills`.
 
-`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+`npx skillpacks list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
 `refresh` recreates project-local skill roots from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
@@ -93,7 +93,7 @@ All other formerly-global skills now live in domain packs — see [Moved Skills]
 
 ### `delegate` (moved to the `agent-bridge` pack)
 
-`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `scripts/pack.sh install agent-bridge` (or `scripts/pack.sh install delegate`).
+`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `npx skillpacks install agent-bridge` (or `npx skillpacks install delegate`).
 
 `/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `packs/agent-bridge/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
 
@@ -102,10 +102,10 @@ All other formerly-global skills now live in domain packs — see [Moved Skills]
 Install the narrow business lane needed for the current phase:
 
 ```bash
-scripts/pack.sh install business-discovery
-scripts/pack.sh install customer-lifecycle
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
+npx skillpacks install business-discovery
+npx skillpacks install customer-lifecycle
+npx skillpacks install business-growth
+npx skillpacks install business-ops
 ```
 
 `business-app` remains a compatibility alias that installs all four.
@@ -146,13 +146,13 @@ scale-audit, platform-strategy, product-line
 Install in video game and playable entertainment projects:
 
 ```bash
-scripts/pack.sh install game
+npx skillpacks install game
 ```
 
 With the npm CLI, install the deck as:
 
 ```bash
-skillpacks install-deck game-afps
+npx skillpacks install-deck game-afps
 ```
 
 Skills:
@@ -176,7 +176,7 @@ game-audience -> game-fantasy -> game-genre-map -> game-comparables
 Install in developer-facing tools, SDKs, CLIs, APIs, libraries, and infrastructure products:
 
 ```bash
-scripts/pack.sh install devtool
+npx skillpacks install devtool
 ```
 
 Skills:
@@ -200,7 +200,7 @@ devtool-user-map -> devtool-integration-map -> devtool-dx-journey
 Install alongside a domain pack when a project needs behavior-preserving code health refactors:
 
 ```bash
-scripts/pack.sh install code-quality
+npx skillpacks install code-quality
 ```
 
 Skills:
@@ -220,7 +220,7 @@ quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-ch
 Install when working in this repository and measuring one skill with the local verify and benchmark harness:
 
 ```bash
-scripts/pack.sh install agentic-skills-bench
+npx skillpacks install agentic-skills-bench
 ```
 
 Skills:
@@ -240,7 +240,7 @@ benchmark-test-skill <skill> -> benchmark-agent-review <skill> when subjective a
 Install in pnpm workspace monorepos that may use Turborepo and need package-aware planning, guarded execution, and scoped shipping:
 
 ```bash
-scripts/pack.sh install monorepo
+npx skillpacks install monorepo
 ```
 
 Skills:
@@ -277,8 +277,8 @@ Use `scope: package-scoped` for work contained to declared packages, `scope: cro
 Install the narrow creator-media lane needed for the current phase:
 
 ```bash
-scripts/pack.sh install creator-foundation
-scripts/pack.sh install youtube-ops
+npx skillpacks install creator-foundation
+npx skillpacks install youtube-ops
 ```
 
 `creator-media` remains a compatibility alias that installs both.
@@ -317,7 +317,7 @@ Use `remotion` for format analysis, video scripting, and Remotion build planning
 Install in control repositories that manage downstream repo portfolios or spin-offs:
 
 ```bash
-scripts/pack.sh install project-fleet
+npx skillpacks install project-fleet
 ```
 
 Skills:
@@ -337,7 +337,7 @@ clone-spec-store -> project-fleet -> spin-off
 Install when a project needs lightweight operator-agent calibration before the full spec-interview pipeline:
 
 ```bash
-scripts/pack.sh install alignment-loop
+npx skillpacks install alignment-loop
 ```
 
 Skills:
@@ -357,7 +357,7 @@ taste-calibration -> destination-doc -> vertical-slice-splitter -> implementatio
 Install in projects that need Remotion-oriented video production:
 
 ```bash
-scripts/pack.sh install remotion
+npx skillpacks install remotion
 ```
 
 Skills:
@@ -389,15 +389,15 @@ Hibernated skill surfaces include `brainstorm-kanban`, `spec-interview-kanban`, 
 The pack reorg moved the engineering, git, release, and plan-tracking skills out of global core into narrow packs. Each `Skills:` list is the authoritative on-disk skill set for that pack.
 
 ```bash
-scripts/pack.sh install code-debug        # debug, investigate, trace
-scripts/pack.sh install code-review        # dead-code, expert-review, regression-check, slim-audit
-scripts/pack.sh install exec-loop          # exec, ship, ship-end
-scripts/pack.sh install gitops             # commit-and-push-by-feature, sync
-scripts/pack.sh install release-ops        # branch-lifecycle, deploy, release
-scripts/pack.sh install agent-work-admin   # plan-phase, roadmap, spec-drift
-scripts/pack.sh install code-maintenance   # migrate, update-packages
-scripts/pack.sh install docs-health        # hygiene, reconcile-dev-docs
-scripts/pack.sh install repo-maintenance   # bootstrap-repo, env-setup
+npx skillpacks install code-debug        # debug, investigate, trace
+npx skillpacks install code-review        # dead-code, expert-review, regression-check, slim-audit
+npx skillpacks install exec-loop          # exec, ship, ship-end
+npx skillpacks install gitops             # commit-and-push-by-feature, sync
+npx skillpacks install release-ops        # branch-lifecycle, deploy, release
+npx skillpacks install agent-work-admin   # plan-phase, roadmap, spec-drift
+npx skillpacks install code-maintenance   # migrate, update-packages
+npx skillpacks install docs-health        # hygiene, reconcile-dev-docs
+npx skillpacks install repo-maintenance   # bootstrap-repo, env-setup
 ```
 
 Two engineering packs are **Claude-only** (no Codex mirror):
@@ -408,26 +408,26 @@ Two engineering packs are **Claude-only** (no Codex mirror):
 ## Product, Design & Walkthrough Packs
 
 ```bash
-scripts/pack.sh install product-design       # brainstorm, consolidate-variations, design-system,
+npx skillpacks install product-design       # brainstorm, consolidate-variations, design-system,
                                               #   feature-interview, prototype, spec-interview,
                                               #   ui-interview, user-flow-map, ux-variations
-scripts/pack.sh install product-testing      # dogfood, uat
-scripts/pack.sh install guided-walkthrough   # guide, uat-guide
-scripts/pack.sh install website-polish       # icon-handler
-scripts/pack.sh install knowledge-check      # quiz-me
+npx skillpacks install product-testing      # dogfood, uat
+npx skillpacks install guided-walkthrough   # guide, uat-guide
+npx skillpacks install website-polish       # icon-handler
+npx skillpacks install knowledge-check      # quiz-me
 ```
 
 ## Research, Sessions, Context & Skill-Dev Packs
 
 ```bash
-scripts/pack.sh install research-admin        # research-roadmap
-scripts/pack.sh install session-analytics     # analyze-sessions, session-triage
-scripts/pack.sh install skill-dev             # create-agentic-skill, create-local-skill,
+npx skillpacks install research-admin        # research-roadmap
+npx skillpacks install session-analytics     # analyze-sessions, session-triage
+npx skillpacks install skill-dev             # create-agentic-skill, create-local-skill,
                                               #   skill-interview, targeted-skill-builder
-scripts/pack.sh install context-transfer      # handoff
-scripts/pack.sh install teardown              # decommission, desk-flip
-scripts/pack.sh install report-gen            # report-website
-scripts/pack.sh install alignment-page-admin  # compile-central-alignment
+npx skillpacks install context-transfer      # handoff
+npx skillpacks install teardown              # decommission, desk-flip
+npx skillpacks install report-gen            # report-website
+npx skillpacks install alignment-page-admin  # compile-central-alignment
 ```
 
 ## Moved Skills
@@ -437,10 +437,10 @@ Former global business/product skills now live in narrower project packs. `busin
 Prefer one of:
 
 ```bash
-scripts/pack.sh install business-discovery
-scripts/pack.sh install customer-lifecycle
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
+npx skillpacks install business-discovery
+npx skillpacks install customer-lifecycle
+npx skillpacks install business-growth
+npx skillpacks install business-ops
 ```
 
 The 53-skill global catalog was split into 22 narrower packs in the pack reorg. The engineering and workflow skills that used to be global now live in the packs above — `code-debug`, `code-review`, `exec-loop`, `gitops`, `release-ops`, `agent-bridge`, `agent-work-admin`, `code-maintenance`, `docs-health`, and `repo-maintenance` — and `affected`/`scaffold` moved into `monorepo`. Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.

@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from UX variation and UI specs — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.12
+version: v0.13
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -171,7 +171,7 @@ prototypes/{topic}/
 
 After prototypes are built, recommend:
 
-> Recommended next command: `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `$pack install product-testing` inside Codex, or `npx skillpacks install product-testing` from the project shell, first)
+> Recommended next command: `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 

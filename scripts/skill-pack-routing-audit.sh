@@ -46,7 +46,7 @@ for (const file of globalSkillFiles) {
 const refRe = /(?:^|[\s`"'(|>:,])([/$])([a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:\-*]|\])/g;
 const recommendationRe = /(recommend(?:ed|s|ing)?|run|route to|handoff to|next command|next skill|default recommendation|tell the user)/i;
 const ignoreRe = /(default flow|full sequence|canonical chains|sequence below)/i;
-const guardRe = /## Pack Availability Guard[\s\S]*?enabled_packs[\s\S]*?(?:\$pack install <pack>|\/pack install <pack>)/;
+const guardRe = /## Pack Availability Guard[\s\S]*?enabled_packs[\s\S]*?npx skillpacks install <pack>/;
 const explicitDependencyPacks = new Set([
   "agent-bridge",
   "agent-work-admin",

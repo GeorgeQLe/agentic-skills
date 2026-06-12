@@ -53,44 +53,40 @@ In this model, `project_type` is the default designation for uncategorized work,
 
 ## Commands
 
-Source-checkout commands:
-
-```bash
-scripts/pack.sh list
-scripts/pack.sh recommend
-scripts/pack.sh install game
-scripts/pack.sh install business-discovery
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
-scripts/pack.sh install devtool
-scripts/pack.sh install creator-foundation
-scripts/pack.sh install youtube-ops
-scripts/pack.sh install code-quality
-scripts/pack.sh install agentic-skills-bench
-scripts/pack.sh install monorepo
-scripts/pack.sh install remotion
-scripts/pack.sh install project-fleet
-scripts/pack.sh install alignment-loop
-scripts/pack.sh remove game
-scripts/pack.sh refresh
-scripts/pack.sh status
-scripts/pack.sh doctor                     # read-only drift report; non-zero exit if any install is stale
-scripts/pack.sh set-update-mode <mode>     # mode is one of: warn | auto | unset
-```
-
-npm CLI equivalents after publication:
+npm CLI commands:
 
 ```bash
 npx skillpacks list
+npx skillpacks recommend
 npx skillpacks install game
 npx skillpacks install business-discovery
+npx skillpacks install business-growth
+npx skillpacks install business-ops
 npx skillpacks install devtool
+npx skillpacks install creator-foundation
+npx skillpacks install youtube-ops
 npx skillpacks install code-quality
+npx skillpacks install agentic-skills-bench
+npx skillpacks install monorepo
+npx skillpacks install remotion
+npx skillpacks install project-fleet
+npx skillpacks install alignment-loop
 npx skillpacks remove game
 npx skillpacks refresh
 npx skillpacks status
 npx skillpacks doctor
+npx skillpacks doctor --fix
+npx skillpacks doctor --fix --agent-docs --dry-run
 npx skillpacks set-update-mode <mode>
+```
+
+Source-checkout equivalents remain available from a local clone:
+
+```bash
+scripts/pack.sh list
+scripts/pack.sh install game
+scripts/pack.sh refresh
+scripts/pack.sh status
 ```
 
 `npx skillpacks install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
@@ -147,7 +143,7 @@ For the full workflow/dependency matrix, see [`docs/pack-workflow-matrix.md`](pa
 The `monorepo` pack is an execution overlay for pnpm workspace repositories. It targets repositories with `pnpm-workspace.yaml` and optionally `turbo.json`.
 
 ```bash
-scripts/pack.sh install monorepo
+npx skillpacks install monorepo
 ```
 
 Skills:
@@ -190,7 +186,7 @@ Use `scope: package-scoped` when work is contained to declared package paths, `s
 The `remotion` pack contains the production path that turns reference-video research and creator-media strategy into Remotion-ready artifacts.
 
 ```bash
-scripts/pack.sh install remotion
+npx skillpacks install remotion
 ```
 
 Skills:
@@ -208,7 +204,7 @@ youtube-format-research -> video-script -> video-build
 Install it alongside `creator-foundation` and, when YouTube evidence is needed, `youtube-ops` for the full path from channel evidence, positioning, programming, or product-led media strategy into production:
 
 ```bash
-scripts/pack.sh install creator-foundation youtube-ops remotion
+npx skillpacks install creator-foundation youtube-ops remotion
 ```
 
 ## Alignment Loop Pack
@@ -216,7 +212,7 @@ scripts/pack.sh install creator-foundation youtube-ops remotion
 The `alignment-loop` pack is a lightweight planning on-ramp for projects that need shared taste and intent before a full specification cycle.
 
 ```bash
-scripts/pack.sh install alignment-loop
+npx skillpacks install alignment-loop
 ```
 
 Skills:
@@ -237,7 +233,7 @@ If a tool does not discover project-local `.claude/skills` or `.codex/skills`, u
 
 Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
 
-Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
+Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `npx skillpacks refresh` or, from a source checkout, `scripts/pack.sh refresh`.
 
 `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available. The npm `skillpacks` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
 
@@ -284,10 +280,10 @@ For teams adopting agentic-skills across multiple developers:
 Business/product workflows that used to be globally installed now live in narrow business packs. Prefer the current lane:
 
 ```bash
-scripts/pack.sh install business-discovery
-scripts/pack.sh install customer-lifecycle
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
+npx skillpacks install business-discovery
+npx skillpacks install customer-lifecycle
+npx skillpacks install business-growth
+npx skillpacks install business-ops
 ```
 
 `business-app` remains a compatibility alias that installs all four. Creator-media and YouTube work is split between `creator-foundation`, `youtube-ops`, and `remotion`; fleet/portfolio work lives in `project-fleet`.

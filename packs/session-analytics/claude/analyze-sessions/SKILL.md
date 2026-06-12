@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 interview_depth: none
 visual_tier: visual
@@ -119,7 +119,7 @@ Produce a structured report with:
 - Do not diagnose one immediate issue here; route it to `/session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If one source is missing or unreadable, report that clearly and continue with the other source instead of guessing.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Alignment Page
 

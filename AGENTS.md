@@ -1,9 +1,9 @@
-<!-- provision-agentic-config v0.5 -->
+<!-- provision-agentic-config v0.7 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately — don't keep pushing
+- If something goes sideways, STOP and re-plan immediately - don't keep pushing
 - Verification is mandatory, but routine no-op verification runs inside the active execution/shipping step. Enter plan mode for non-trivial remediation or new work discovered by verification, not for validation that already has clear commands and no expected source changes.
 - Write detailed specs upfront to reduce ambiguity
 - In Codex: use `update_plan` in Default mode and `request_user_input` only when already in Plan mode
@@ -30,25 +30,19 @@
 ### 5. Demand Elegance (Balanced)
 - For non-trivial changes: pause and ask "is there a more elegant way?"
 - If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes — don't over-engineer
+- Skip this for simple, obvious fixes - don't over-engineer
 - Challenge your own work before presenting it
 
 ### 6. Autonomous Bug Fixing
 - When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests — then resolve them
+- Point at logs, errors, failing tests - then resolve them
 - Zero context switching required from the user
 - Go fix failing tests without being told how
 
 ### Missing Skill Fallback
-- When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-- If found in an uninstalled pack, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
-- If found in an installed pack, suggest the same reload path to pick up the local skill roots.
-- If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
-
-### Project Pack Command Resolution
 - If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
-- Check `packs/*/codex/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
-- In this repository, `$benchmark-test-skill` lives under `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
+- Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
+- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale. If found in an installed pack, suggest the same reload path. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ### Prompt History
 - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
@@ -88,7 +82,7 @@
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-- **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Codex `$exec` ships by default (validates, commits, pushes, plans next) — use `$ship` only to package existing work or unpushed commits.
+- **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 
 ## Windows/WSL File Opening

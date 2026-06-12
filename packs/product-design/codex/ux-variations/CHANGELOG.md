@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.16 - 2026-06-11
 
 - Added npm-aware install-route wording for product-testing recommendations while preserving Codex `$pack install ...` routes.

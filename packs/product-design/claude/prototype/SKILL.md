@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from UX variation and UI specs — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.12
+version: v0.13
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -171,7 +171,7 @@ prototypes/{topic}/
 
 After prototypes are built, recommend:
 
-> Recommended next command: `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` inside Claude Code, or `npx skillpacks install product-testing` from the project shell, first)
+> Recommended next command: `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 
@@ -183,7 +183,7 @@ The user should interact with each prototype variation hands-on before consolida
 - Do not skip variations. Build all variations defined in the spec unless `--variant N` is provided.
 - Do not choose a winning variation or recommend consolidation. That is the user's decision after UAT evaluation.
 - Do not modify specs, research documents, or task files. Only create files in the `prototypes/` directory.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `/pack install <pack-name>` inside Claude Code, or `npx skillpacks install <pack-name>` from the project shell, before the target skill.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Alignment Page
 

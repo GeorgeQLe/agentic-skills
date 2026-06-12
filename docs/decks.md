@@ -15,7 +15,7 @@ Decks sit on two axes: **domain** (business / consumer, developer / OSS, or game
 
 Rapid decks are for weekly experiments. Deliberate decks are for products that justify full discovery, lifecycle planning, and growth strategy.
 
-Source-checkout deck installs use the underlying pack commands shown below. With the published npm package, the equivalent npm path is:
+Install decks through the npm CLI:
 
 ```bash
 npx skillpacks install-deck vard
@@ -38,7 +38,7 @@ In the current `skillpacks@0.1.0` release, npm deck materialization still uses t
 **Install:**
 
 ```bash
-scripts/pack.sh install vard
+npx skillpacks install-deck vard
 ```
 
 **Canonical chain:**
@@ -55,7 +55,7 @@ vard-scan -> vard-align -> vard-ship
 **Graduation:** When an experiment shows traction, graduate to Business AFPS:
 
 ```bash
-scripts/pack.sh install business-discovery
+npx skillpacks install business-discovery
 ```
 
 Then start the deliberate pipeline with `/idea-scope-brief` or `/customer-discovery`.
@@ -70,7 +70,7 @@ Then start the deliberate pipeline with `/idea-scope-brief` or `/customer-discov
 **Install:**
 
 ```bash
-scripts/pack.sh install ord
+npx skillpacks install-deck ord
 ```
 
 **Canonical chain:**
@@ -87,7 +87,7 @@ ord-scan -> ord-align -> ord-ship
 **Graduation:** When a package gains traction (stars, downloads, issues), graduate to Devtool AFPS:
 
 ```bash
-scripts/pack.sh install devtool
+npx skillpacks install devtool
 ```
 
 Then start the deliberate pipeline with `/devtool-adoption` or `/devtool-positioning`.
@@ -102,15 +102,15 @@ Then start the deliberate pipeline with `/devtool-adoption` or `/devtool-positio
 **Install:**
 
 ```bash
-scripts/pack.sh install business-discovery
+npx skillpacks install-deck business-afps
 ```
 
 Add packs progressively as the product matures:
 
 ```bash
-scripts/pack.sh install customer-lifecycle   # after ICP + competitive analysis
-scripts/pack.sh install business-growth      # after lifecycle evidence
-scripts/pack.sh install business-ops         # for ongoing operations
+npx skillpacks install customer-lifecycle   # after ICP + competitive analysis
+npx skillpacks install business-growth      # after lifecycle evidence
+npx skillpacks install business-ops         # for ongoing operations
 ```
 
 **Canonical chain:**
@@ -131,7 +131,7 @@ See `docs/pack-workflow-matrix.md` for the full default route with optional deto
 **Install:**
 
 ```bash
-scripts/pack.sh install devtool
+npx skillpacks install-deck devtool-afps
 ```
 
 **Canonical chain:**
@@ -152,7 +152,7 @@ devtool-positioning -> devtool-adoption -> devtool-dx-journey -> devtool-docs-au
 **Install:**
 
 ```bash
-scripts/pack.sh install game
+npx skillpacks install-deck game-afps
 ```
 
 **Canonical chain:**

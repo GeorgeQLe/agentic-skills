@@ -36,6 +36,7 @@ const P1_REQUIRED_FILES = [
 const VALID_ALLOWLIST_SCOPES = new Set([
   "source-checkout-only",
   "internal-maintenance",
+  "legacy-agent-route",
   "fixture",
 ]);
 
@@ -172,6 +173,14 @@ function hasAllowlistedSourceCheckoutOnly(relPath, text, allowlistEntries) {
   });
 }
 
+function hasAllowlistedLegacyAgentRoute(relPath, text, allowlistEntries) {
+  return allowlistEntries.some((entry) => {
+    return entry.path === relPath
+      && ["legacy-agent-route", "internal-maintenance", "fixture"].includes(entry.scope)
+      && text.includes(entry.evidence);
+  });
+}
+
 function scanFile(relPath, text, allowlistEntries) {
   const findings = [];
   const scanText = stripFrontmatterForScan(text);
@@ -202,6 +211,15 @@ function scanFile(relPath, text, allowlistEntries) {
     && !hasDeckInstallHeading
     && !hasInstallDeckText
     && !hasWrongDeckRoute;
+
+  if (hasAgentOrGenericInstall && !hasAllowlistedLegacyAgentRoute(relPath, text, allowlistEntries)) {
+    findings.push({
+      relPath,
+      line: lineNumberFor(scanText, /\/pack install|\$pack install|(^|[^/$.a-zA-Z0-9_-])pack install(?:\s+[`<a-z0-9_$/-]|`|<|$)/),
+      code: "legacy-agent-install-route",
+      message: "active install guidance must use npx skillpacks install unless a legacy agent route is explicitly allowlisted",
+    });
+  }
 
   if (hasPackInstallGuidance && !hasNpmInstall) {
     const allowed = sourceCheckoutOnly && hasAllowlistedSourceCheckoutOnly(relPath, text, allowlistEntries);

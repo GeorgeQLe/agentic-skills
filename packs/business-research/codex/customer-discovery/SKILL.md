@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.2
+version: v1.3
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 interview_depth: full
@@ -11,7 +11,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Customer Discovery — Orchestrator
 
@@ -247,9 +247,9 @@ Recommend the first matching condition as **Recommended**, remaining as **Other 
 
 - ALWAYS: `$competitive-analysis` — Research competitors and market gaps for this ICP
 - IF no `specs/`: `$competitive-analysis` — Map the competitive landscape
-- IF `specs/` exist but no `research/journey-map.md`: check pack availability for `customer-lifecycle`, recommend `$journey-map` if enabled, or `$pack install customer-lifecycle` inside Codex, or `npx skillpacks install customer-lifecycle` from the project shell if not enabled
-- IF codebase exists: check pack availability for `business-ops`, recommend `$mvp-gap` if enabled, or `$pack install business-ops` inside Codex, or `npx skillpacks install business-ops` from the project shell if not enabled
-- IF `research/competitive-analysis.md` exists: check pack availability for `product-design`, recommend `$brainstorm` if enabled, or `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell if not enabled
+- IF `specs/` exist but no `research/journey-map.md`: check pack availability for `customer-lifecycle`, recommend `$journey-map` if enabled, or `npx skillpacks install customer-lifecycle` from the project shell if not enabled
+- IF codebase exists: check pack availability for `business-ops`, recommend `$mvp-gap` if enabled, or `npx skillpacks install business-ops` from the project shell if not enabled
+- IF `research/competitive-analysis.md` exists: check pack availability for `product-design`, recommend `$brainstorm` if enabled, or `npx skillpacks install product-design` from the project shell if not enabled
 
 ### 10. Downstream Impact Check
 

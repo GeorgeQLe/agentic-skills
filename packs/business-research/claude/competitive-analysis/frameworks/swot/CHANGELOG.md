@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.2 - 2026-06-10
 
 - Added npm-aware `npx skillpacks install <pack>` wording to the Pack Availability Guard while preserving runner-specific in-agent pack install routes.

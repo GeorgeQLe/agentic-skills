@@ -6,6 +6,7 @@ packs/poketowork-kanban/claude/poketo-kanban/scripts/node_modules/
 .codex
 .claude/skills/
 .agents/approved-plan.json
+.agents/backups/
 tests/runs/
 tests/benchmarks/
 packages/skillpacks/build/

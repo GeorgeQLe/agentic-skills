@@ -1,5 +1,9 @@
 # journey-map changelog (codex)
 
+## v0.14 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.13 - 2026-06-11
 
 - Added npm-aware install-route guidance to pack availability checks and cross-pack next-step recommendations while preserving runner-specific in-agent pack install commands.

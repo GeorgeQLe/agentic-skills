@@ -2,7 +2,7 @@
 name: expansion-map
 description: Plan account expansion, upgrades, seat growth, referrals, advocacy, and land-and-expand paths
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[optional: app, segment, or expansion motion]"
 interview_depth: full
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill.
 
 # Expansion Map
 

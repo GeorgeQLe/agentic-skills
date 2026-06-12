@@ -82,37 +82,37 @@ To remove repo-managed global skill installs:
 Project packs are enabled per repository.
 
 ```bash
-scripts/pack.sh list
-scripts/pack.sh recommend
-scripts/pack.sh install business-discovery
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
-scripts/pack.sh install game
-scripts/pack.sh install devtool
-scripts/pack.sh install creator-foundation
-scripts/pack.sh install youtube-ops
-scripts/pack.sh install code-quality
-scripts/pack.sh install agentic-skills-bench
-scripts/pack.sh install monorepo
-scripts/pack.sh install remotion
-scripts/pack.sh install project-fleet
-scripts/pack.sh install alignment-loop
-scripts/pack.sh install design-system
-scripts/pack.sh which design-system
-scripts/pack.sh status
-scripts/pack.sh remove game
-scripts/pack.sh remove design-system
+npx skillpacks list
+npx skillpacks recommend
+npx skillpacks install business-discovery
+npx skillpacks install business-growth
+npx skillpacks install business-ops
+npx skillpacks install game
+npx skillpacks install devtool
+npx skillpacks install creator-foundation
+npx skillpacks install youtube-ops
+npx skillpacks install code-quality
+npx skillpacks install agentic-skills-bench
+npx skillpacks install monorepo
+npx skillpacks install remotion
+npx skillpacks install project-fleet
+npx skillpacks install alignment-loop
+npx skillpacks install design-system
+npx skillpacks which design-system
+npx skillpacks status
+npx skillpacks remove game
+npx skillpacks remove design-system
 ```
 
-`scripts/pack.sh install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
+`npx skillpacks install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
-The npm CLI also supports equivalent project-local installs: `npx skillpacks install <pack-or-skill>`, `npx skillpacks remove <pack-or-skill>`, `npx skillpacks refresh`, `npx skillpacks doctor`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
+For source-checkout development, `scripts/pack.sh install <pack-or-skill>` remains supported from a local clone. The npm CLI also supports `npx skillpacks refresh`, `npx skillpacks doctor`, `npx skillpacks doctor --fix`, `npx skillpacks doctor --fix --agent-docs --dry-run`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
-`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
+`npx skillpacks which <skill>` shows which pack provides a skill and whether it is installed. `npx skillpacks refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
 
 Pack installation creates local repo-managed skill roots in the current project. Active installs expose the canonical `SKILL.md` and exclude `archive/`:
 
@@ -224,7 +224,7 @@ afps-status
 
 ### `delegate` moved to the `agent-bridge` pack
 
-`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `scripts/pack.sh install agent-bridge`. It remains **Claude-only** with no Codex mirror.
+`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `npx skillpacks install agent-bridge`. It remains **Claude-only** with no Codex mirror.
 
 `/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `packs/agent-bridge/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
 
@@ -251,7 +251,7 @@ burn-rate, runway-model, investor-update, reconcile-research,
 mvp-gap, scale-audit, platform-strategy
 ```
 
-`scripts/pack.sh install business-app` remains a compatibility alias that installs all four, but narrow installs are preferred for context size.
+`npx skillpacks install business-app` remains a compatibility alias that installs all four, but narrow installs are preferred for context size.
 
 
 ### Game
@@ -295,7 +295,7 @@ youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis
 ```
 
-`scripts/pack.sh install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
+`npx skillpacks install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
 
 LinkedIn-first evidence work uses the `creator-foundation` matrix/schema/dossier path:
 
@@ -352,7 +352,7 @@ extract-shared-types, quality-sweep
 For pnpm workspace monorepos that may use Turborepo and need package-aware execution, guardrails, and shipping.
 
 ```bash
-scripts/pack.sh install monorepo
+npx skillpacks install monorepo
 ```
 
 ```text
@@ -388,10 +388,10 @@ PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Their
 Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 ```bash
-scripts/pack.sh install business-discovery
-scripts/pack.sh install customer-lifecycle
-scripts/pack.sh install business-growth
-scripts/pack.sh install business-ops
+npx skillpacks install business-discovery
+npx skillpacks install customer-lifecycle
+npx skillpacks install business-growth
+npx skillpacks install business-ops
 ```
 
 Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.

@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.6
+version: v0.7
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.6 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.7 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.6 -->
+   <!-- provision-agentic-config v0.7 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -74,7 +74,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
 
    ### Missing Skill Fallback
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-   - If found in an uninstalled pack, recommend `/pack install <skill>` for just that skill, `/pack install <pack>` for the full pack, or `npx skillpacks install <pack-or-skill>` from the project shell, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+   - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
    - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
 
@@ -86,6 +86,16 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
    - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
    - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
+
+   ### Skill Versioning
+   - Every SKILL.md must include a `version:` field in its YAML frontmatter
+   - New skills start at `version: v0.0`
+   - Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
+   - Refactors or full overhauls of a skill do NOT bump the version; only substantive behavior/output changes do
+   - When bumping a version, archive the current SKILL.md to `archive/<old-version>/SKILL.md` in the same commit
+   - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
+   - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
+
 
    ## Task Management
 
@@ -135,7 +145,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.6 -->
+   <!-- provision-agentic-config v0.7 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -178,7 +188,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
 
    ### Missing Skill Fallback
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-   - If found in an uninstalled pack, recommend `$pack install <skill>` for just that skill, `$pack install <pack>` for the full pack, or `npx skillpacks install <pack-or-skill>` from the project shell, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+   - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
    - If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
@@ -190,6 +200,23 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
    - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
    - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
+
+   ### Skill Versioning
+   - Every SKILL.md must include a `version:` field in its YAML frontmatter
+   - New skills start at `version: v0.0`
+   - Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
+   - Refactors or full overhauls of a skill do NOT bump the version; only substantive behavior/output changes do
+   - When bumping a version, archive the current SKILL.md to `archive/<old-version>/SKILL.md` in the same commit
+   - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
+   - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
+
+
+   ### Alignment Page Convention
+   - The alignment-page convention is **bundled per-skill** as `ALIGNMENT-PAGE.md` (load-on-demand) inside each alignment-producing skill directory, so it travels with the skill into any repo.
+   - It is authored canonically in `docs/alignment-page-convention.md` (between the `alignment-convention` markers) and propagated by `scripts/upgrade-alignment-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated `ALIGNMENT-PAGE.md`.
+   - A skill's `## Alignment Page` section is a short stub that points at the sibling `ALIGNMENT-PAGE.md`; codex bundled files use the same content as claude.
+   - Direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
+
 
    ## Task Management
 

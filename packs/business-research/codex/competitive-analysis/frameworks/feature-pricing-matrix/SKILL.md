@@ -2,14 +2,14 @@
 name: feature-pricing-matrix
 description: Feature and pricing matrix competitive analysis - compare capabilities, packages, proof points, and pricing models
 type: research
-version: v0.2
+version: v0.3
 invocation: sub-skill
 parent: competitive-analysis
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Feature/Pricing Matrix - Competitive Offer Analysis
 

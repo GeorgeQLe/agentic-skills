@@ -2,7 +2,7 @@
 name: burn-rate
 description: Estimate monthly burn rate from infrastructure signals and calculate payback period against revenue projections
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[optional: focus area e.g. \"infrastructure only\", \"team costs\", \"runway\"]"
 interview_depth: light
 visual_tier: visual
@@ -173,12 +173,12 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 - If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 Conditional items:
-- IF no `research/monetization.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` inside Claude Code, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/monetization` — Build pricing strategy informed by actual infrastructure costs
-- IF `research/monetization.md` exists but unit economics differ: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` inside Claude Code, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/monetization` — Update unit economics with infrastructure-grounded costs
-- IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` inside Claude Code, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/gtm` — Build go-to-market plan with cost-aware pricing
-- IF no `research/metrics.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` inside Claude Code, or `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/metrics` — Define metrics to track burn rate health (cost per customer, infrastructure efficiency)
+- IF no `research/monetization.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/monetization` — Build pricing strategy informed by actual infrastructure costs
+- IF `research/monetization.md` exists but unit economics differ: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/monetization` — Update unit economics with infrastructure-grounded costs
+- IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/gtm` — Build go-to-market plan with cost-aware pricing
+- IF no `research/metrics.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `npx skillpacks install business-growth` from the project shell, first; if `business-growth` is enabled, recommend `/metrics` — Define metrics to track burn rate health (cost per customer, infrastructure efficiency)
 - IF no `research/scale-audit.md` and infrastructure is complex: `/scale-audit` — Evaluate infrastructure readiness before scaling costs
-- IF codebase exists and optimization opportunities found: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` inside Claude Code, or `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `/brainstorm` — Explore cost optimization as a feature priority
+- IF codebase exists and optimization opportunities found: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell, first; if `product-design` is enabled, recommend `/brainstorm` — Explore cost optimization as a feature priority
 
 ### 8. Write Output
 

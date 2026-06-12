@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.2
+version: v0.3
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 interview_depth: full
 visual_tier: prototype
@@ -10,7 +10,7 @@ visual_tier: prototype
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` inside Codex, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # User Flow Map
 
@@ -45,7 +45,7 @@ Read available evidence before asking deep questions:
 - Existing `specs/`, including `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ui-*.md`, and `specs/ux-variations-*.md`.
 - Existing route files, component files, app shells, navigation config, screenshots, wireframes, mockups, and design artifacts when present.
 
-If `research/positioning.md` is missing for a business-product flow, recommend `$positioning` first. If `product-design` is not enabled, recommend `$pack install product-design` inside Codex, or `npx skillpacks install product-design` from the project shell.
+If `research/positioning.md` is missing for a business-product flow, recommend `$positioning` first. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell.
 
 ### 2. Flow Assumptions Checkpoint
 

@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.7
+version: v0.8
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -68,8 +68,8 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 When a name passed to `install` or `remove` does not match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
 
-- `$pack install design-system` inside Codex, or `npx skillpacks install design-system` from the project shell, installs only the `design-system` skill from `product-design`, not the whole pack.
-- `$pack install code-review customer-discovery` inside Codex, or `npx skillpacks install code-review customer-discovery` from the project shell, installs the `code-review` pack plus the individual `customer-discovery` skill.
+- `npx skillpacks install design-system` from the project shell installs only the `design-system` skill from `product-design`, not the whole pack.
+- `npx skillpacks install code-review customer-discovery` from the project shell installs the `code-review` pack plus the individual `customer-discovery` skill.
 - `$pack remove customer-discovery` removes only the `customer-discovery` skill root and its `enabled_skills` entry.
 - `$pack which design-system` shows the source pack and whether the skill is installed.
 
@@ -156,7 +156,7 @@ Reply with a number or an exact pack list to install.
 When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
-2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `$pack install <skill>` for just that skill, `$pack install <pack>` for the full pack, or `npx skillpacks install <pack-or-skill>` from the project shell, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
+2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
 3. If found in an installed pack: the skill should already be available, so suggest the same reload path to pick up the local skill roots.
 4. If not found in any pack: suggest `$skills` to browse available skills or `$skills search <keyword>` to search.
 

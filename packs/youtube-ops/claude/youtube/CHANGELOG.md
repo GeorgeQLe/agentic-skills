@@ -1,5 +1,9 @@
 # youtube Changelog
 
+## v0.2 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.1 - 2026-06-09
 
 - Added routing for the new `/youtube-video-prelaunch-audit` skill.

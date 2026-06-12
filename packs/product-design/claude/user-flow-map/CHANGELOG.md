@@ -1,5 +1,9 @@
 # user-flow-map changelog (claude)
 
+## v0.3 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.2 - 2026-06-11
 
 - Added npm-aware install-route wording for product-design pack availability while preserving Claude `/pack install ...` routes.

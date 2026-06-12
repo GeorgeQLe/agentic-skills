@@ -2,14 +2,14 @@
 name: creator-metrics-review
 description: Review creator-media performance over time using raw YouTube evidence, portfolio metrics, programming goals, and explicit follow-up decisions
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[channel slug] [--period monthly|quarterly]"
 interview_depth: none
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Creator Metrics Review
 

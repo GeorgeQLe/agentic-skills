@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.2 - 2026-06-11
 
 - Added an `npx skillpacks install devtool` alternative to the graduation route while preserving Claude `/pack install` guidance.

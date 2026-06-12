@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.3 - 2026-06-07
 
 - Routed post-bootstrap fresh-start guidance from retired `$icp` to `$customer-discovery`.

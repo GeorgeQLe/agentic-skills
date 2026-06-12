@@ -2,14 +2,14 @@
 name: experiment
 description: Design lean validation experiments — hypothesis, method, success criteria, sample size, timeline, and decision rules
 type: planning
-version: v0.5
+version: v0.6
 argument-hint: <hypothesis or assumption to test>
 interview_depth: light
 ---
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Experiment — Lean Validation Design
 

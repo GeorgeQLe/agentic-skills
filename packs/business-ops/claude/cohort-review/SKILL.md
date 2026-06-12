@@ -2,7 +2,7 @@
 name: cohort-review
 description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from /metrics
 type: analysis
-version: v0.3
+version: v0.4
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 interview_depth: none
 visual_tier: visual
@@ -10,7 +10,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+When recommending a skill from another pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Cohort Review — Post-Launch Metrics & Funnel Analysis
 

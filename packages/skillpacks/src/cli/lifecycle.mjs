@@ -31,6 +31,8 @@ const HIBERNATED_ARCHIVE_RELATIVE_PATH = 'archive/hibernated-packs/2026-06-poket
 const HIBERNATED_REACTIVATION_TEXT =
   'Reactivation requires a stable service/API, a known auth contract, and updated smoke tests.';
 const TOOLS = ['claude', 'codex'];
+const AGENT_DOCS = ['AGENTS.md', 'CLAUDE.md'];
+const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7']);
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
 const checkoutRoot = resolve(packageRoot, '..', '..');
@@ -401,7 +403,9 @@ function linkSkill(projectRoot, tool, skillName, sourceDir, config) {
     } else {
       console.log(`Installed .${tool}/skills/${skillName}`);
     }
+    return true;
   }
+  return false;
 }
 
 function enabledPacks(config) {
@@ -633,6 +637,9 @@ function skillInstallStatus(target) {
   const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
     const source = readlinkSync(target);
+    if (!sourceOwnedBySkillpacks(source)) {
+      return { status: 'not-managed', recordedVersion: '', currentVersion: '' };
+    }
     const version = skillSourceVersion(source);
     return { status: 'pinned', recordedVersion: version, currentVersion: version };
   }
@@ -775,6 +782,10 @@ function expectedSkillNames(manifest, config) {
     expected.add(skillName);
   }
 
+  for (const skillName of Object.keys(pinnedVersions(config))) {
+    expected.add(skillName);
+  }
+
   return expected;
 }
 
@@ -809,7 +820,303 @@ export async function installResolved({ manifest, projectRoot = process.cwd(), p
   });
 }
 
-export function doctorProject({ projectRoot = process.cwd() } = {}) {
+function syncExpectedSkillRoots(projectRoot, manifest) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    return 0;
+  }
+
+  let changed = 0;
+
+  if (baseSkillsEnabled(config)) {
+    for (const tool of TOOLS) {
+      for (const skill of baseSkillEntries(manifest, tool)) {
+        if (linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config)) {
+          changed += 1;
+        }
+      }
+    }
+  }
+
+  for (const pack of enabledPacks(config)) {
+    for (const tool of TOOLS) {
+      for (const skill of packSkillEntries(manifest, pack, tool)) {
+        if (linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config)) {
+          changed += 1;
+        }
+      }
+    }
+  }
+
+  for (const [skillName, pack] of enabledSkillEntries(config)) {
+    for (const tool of TOOLS) {
+      const skill = findSkillEntry(manifest, pack, tool, skillName);
+      if (skill && linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config)) {
+        changed += 1;
+      }
+    }
+  }
+
+  return changed;
+}
+
+function pruneOrphanedSkillRoots({ manifest, projectRoot, dryRun = false }) {
+  const expected = expectedSkillNames(manifest, readProjectConfig(projectRoot));
+  let removed = 0;
+
+  for (const target of installedSkillTargets(projectRoot)) {
+    const status = skillInstallStatus(target);
+    if (status.status === 'not-managed') {
+      continue;
+    }
+
+    let reason = '';
+    if (status.status === 'missing-source') {
+      reason = 'source no longer exists';
+    } else if (!expected.has(basename(target))) {
+      reason = 'pack not enabled';
+    }
+
+    if (!reason) {
+      continue;
+    }
+
+    const rel = relativeProjectPath(projectRoot, target);
+    if (dryRun) {
+      console.log(`would remove  ${rel} (${reason})`);
+    } else if (removeRepoSkillInstall(target)) {
+      console.log(`removed  ${rel} (${reason})`);
+    } else if (lstatSync(target).isSymbolicLink()) {
+      unlinkSync(target);
+      console.log(`removed  ${rel} (${reason})`);
+    } else if (lstatSync(target).isDirectory()) {
+      rmSync(target, { recursive: true, force: true });
+      console.log(`removed  ${rel} (${reason})`);
+    } else {
+      console.error(`FAILED   ${rel} (${reason})`);
+    }
+
+    removed += 1;
+  }
+
+  return removed;
+}
+
+function provisionerSkillText() {
+  const sourcePath = resolvePackagedPath('global/codex/provision-agentic-config/SKILL.md');
+  if (!existsSync(sourcePath)) {
+    throw new Error(`Cannot find canonical provision-agentic-config skill at ${sourcePath}`);
+  }
+  return readFileSync(sourcePath, 'utf8');
+}
+
+function extractCanonicalProvisionBlock(fileName) {
+  const heading = fileName === 'CLAUDE.md' ? '## Required Claude Block' : '## Required AGENTS Block';
+  const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pattern = new RegExp(`${escapedHeading}\\r?\\n\\r?\\n\`\`\`\`(?:md|markdown)\\r?\\n([\\s\\S]*?)\\r?\\n\`\`\`\``);
+  const match = provisionerSkillText().match(pattern);
+  if (!match) {
+    throw new Error(`Cannot extract canonical ${fileName} provision block from provision-agentic-config`);
+  }
+  return match[1].replace(/\r\n/g, '\n').trimEnd();
+}
+
+function provisionNote(fileName) {
+  return `Provisioned artifact: ./${fileName}. Source: workflow.md. Verification: block appears exactly once.`;
+}
+
+function parseProvisionedAgentDoc(projectRoot, fileName) {
+  const filePath = join(projectRoot, fileName);
+  if (!existsSync(filePath)) {
+    throw new Error(`${fileName}: file not found`);
+  }
+
+  const original = readFileSync(filePath, 'utf8');
+  const markerPattern = /<!-- provision-agentic-config (v\d+\.\d+) -->/g;
+  const markers = [...original.matchAll(markerPattern)];
+  if (markers.length === 0) {
+    throw new Error(`${fileName}: missing provision-agentic-config marker`);
+  }
+  if (markers.length > 1) {
+    throw new Error(`${fileName}: duplicate provision-agentic-config markers`);
+  }
+
+  const marker = markers[0];
+  const version = marker[1];
+  if (!KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS.has(version)) {
+    throw new Error(`${fileName}: unknown provision-agentic-config version ${version}`);
+  }
+
+  const afterMarker = original.slice(marker.index);
+  const note = provisionNote(fileName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const noteMatch = afterMarker.match(new RegExp(`^${note}$`, 'm'));
+  if (!noteMatch || noteMatch.index === undefined) {
+    throw new Error(`${fileName}: malformed provision block boundary`);
+  }
+  if (!afterMarker.slice(0, noteMatch.index).includes('## Workflow Orchestration')) {
+    throw new Error(`${fileName}: malformed provision block boundary`);
+  }
+
+  let end = marker.index + noteMatch.index + noteMatch[0].length;
+  while (original[end] === '\r' || original[end] === '\n') {
+    end += 1;
+  }
+
+  return {
+    fileName,
+    filePath,
+    original,
+    start: marker.index,
+    end,
+    prefix: original.slice(0, marker.index),
+    suffix: original.slice(end)
+  };
+}
+
+function replacementProvisionBlock(fileName, hasSuffix) {
+  const block = extractCanonicalProvisionBlock(fileName);
+  const note = provisionNote(fileName);
+  return hasSuffix ? `${block}\n\n${note}\n\n` : `${block}\n\n${note}\n`;
+}
+
+function unifiedDiff(fileName, before, after) {
+  const beforeLines = before.endsWith('\n') ? before.slice(0, -1).split('\n') : before.split('\n');
+  const afterLines = after.endsWith('\n') ? after.slice(0, -1).split('\n') : after.split('\n');
+  const output = [
+    `--- ${fileName}`,
+    `+++ ${fileName}`,
+    `@@ -1,${beforeLines.length} +1,${afterLines.length} @@`
+  ];
+  output.push(...beforeLines.map((line) => `-${line}`));
+  output.push(...afterLines.map((line) => `+${line}`));
+  return `${output.join('\n')}\n`;
+}
+
+function timestampForBackup() {
+  return new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+}
+
+function migrateAgentDocs({ projectRoot = process.cwd(), dryRun = false } = {}) {
+  const planned = [];
+  const errors = [];
+
+  for (const fileName of AGENT_DOCS) {
+    try {
+      const parsed = parseProvisionedAgentDoc(projectRoot, fileName);
+      const next =
+        parsed.prefix + replacementProvisionBlock(fileName, parsed.suffix.length > 0) + parsed.suffix;
+      planned.push({ ...parsed, next });
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Refusing agent-doc migration:\n${errors.map((error) => `  - ${error}`).join('\n')}`);
+  }
+
+  const changed = planned.filter((entry) => entry.original !== entry.next);
+  if (changed.length === 0) {
+    console.log('Agent docs already match the canonical provision blocks.');
+    return 0;
+  }
+
+  for (const entry of changed) {
+    console.log(unifiedDiff(entry.fileName, entry.original, entry.next));
+  }
+
+  if (dryRun) {
+    console.log('Dry run: no files written.');
+    return changed.length;
+  }
+
+  const backupDir = join(projectRoot, '.agents', 'backups');
+  mkdirSync(backupDir, { recursive: true });
+  const timestamp = timestampForBackup();
+  const reports = [];
+
+  for (const entry of changed) {
+    const backupPath = join(backupDir, `${entry.fileName}.${timestamp}.bak`);
+    writeFileSync(backupPath, entry.original);
+    writeFileSync(entry.filePath, entry.next);
+    reports.push({
+      fileName: entry.fileName,
+      backupPath: relativeProjectPath(projectRoot, backupPath)
+    });
+  }
+
+  console.log('Agent docs changed:');
+  for (const report of reports) {
+    console.log(`  ${report.fileName} (backup: ${report.backupPath})`);
+  }
+
+  return changed.length;
+}
+
+function parseDoctorArgs(args) {
+  const options = {
+    fix: false,
+    agentDocs: false,
+    dryRun: false
+  };
+
+  for (const arg of args) {
+    if (arg === '--fix') {
+      options.fix = true;
+      continue;
+    }
+    if (arg === '--agent-docs') {
+      options.agentDocs = true;
+      continue;
+    }
+    if (arg === '--dry-run') {
+      options.dryRun = true;
+      continue;
+    }
+    throw new Error(`doctor: unknown option '${arg}'`);
+  }
+
+  if (options.agentDocs && !options.fix) {
+    throw new Error('doctor --agent-docs requires --fix');
+  }
+  if (options.dryRun && !options.agentDocs) {
+    throw new Error('doctor --dry-run is only supported with --fix --agent-docs');
+  }
+
+  return options;
+}
+
+export async function doctorProject({ manifest, projectRoot = process.cwd(), args = [] } = {}) {
+  const options = parseDoctorArgs(args);
+
+  if (options.fix) {
+    if (options.dryRun) {
+      migrateAgentDocs({ projectRoot, dryRun: true });
+      return 0;
+    }
+
+    return withProjectLock(projectRoot, 'doctor --fix', async () => {
+      console.log('Doctor fix: generated skill-root cleanup');
+      const synced = syncExpectedSkillRoots(projectRoot, manifest);
+      const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
+      if (synced === 0 && removed === 0) {
+        console.log('No generated skill-root changes needed.');
+      } else {
+        console.log(`Generated skill-root cleanup changed ${synced + removed} item(s).`);
+      }
+
+      if (options.agentDocs) {
+        migrateAgentDocs({ projectRoot, dryRun: false });
+      }
+
+      if (synced > 0 || removed > 0) {
+        printSessionReloadNotice();
+      }
+
+      return 0;
+    });
+  }
+
   const mode = projectSkillUpdatesMode(projectRoot) || 'warn (default)';
   console.log(`Project skill update mode: ${mode}`);
   console.log('Skill install drift (.claude/skills, .codex/skills):');
@@ -916,43 +1223,7 @@ export async function pruneProject({
   }
 
   return withProjectLock(projectRoot, 'prune', async () => {
-    const expected = expectedSkillNames(manifest, readProjectConfig(projectRoot));
-    let removed = 0;
-
-    for (const target of installedSkillTargets(projectRoot)) {
-      const status = skillInstallStatus(target);
-      if (status.status === 'not-managed') {
-        continue;
-      }
-
-      let reason = '';
-      if (status.status === 'missing-source') {
-        reason = 'source no longer exists';
-      } else if (!expected.has(basename(target))) {
-        reason = 'pack not enabled';
-      }
-
-      if (!reason) {
-        continue;
-      }
-
-      const rel = relativeProjectPath(projectRoot, target);
-      if (dryRun) {
-        console.log(`would remove  ${rel} (${reason})`);
-      } else if (removeRepoSkillInstall(target)) {
-        console.log(`removed  ${rel} (${reason})`);
-      } else if (lstatSync(target).isSymbolicLink()) {
-        unlinkSync(target);
-        console.log(`removed  ${rel} (${reason})`);
-      } else if (lstatSync(target).isDirectory()) {
-        rmSync(target, { recursive: true, force: true });
-        console.log(`removed  ${rel} (${reason})`);
-      } else {
-        console.error(`FAILED   ${rel} (${reason})`);
-      }
-
-      removed += 1;
-    }
+    const removed = pruneOrphanedSkillRoots({ manifest, projectRoot, dryRun });
 
     if (removed === 0) {
       console.log('Nothing to prune.');

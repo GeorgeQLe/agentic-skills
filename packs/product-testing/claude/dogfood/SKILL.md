@@ -2,14 +2,14 @@
 name: dogfood
 description: Derive owner/operator dogfood scenarios from product evidence and active-use cadence, then produce adoption instructions and manual evaluation checks
 type: analysis
-version: v0.3
+version: v0.4
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
 interview_depth: none
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Dogfood
 
@@ -145,8 +145,8 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
 - Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
 - Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/customer-discovery`, `/journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/customer-discovery`, `/journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `npx skillpacks install <pack>` before the skill.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Alignment Page
 

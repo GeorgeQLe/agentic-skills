@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.8
+version: v0.9
 argument-hint: "[optional: target industry or market segment]"
 interview_depth: full
 visual_tier: visual
@@ -12,7 +12,7 @@ visual_tier: visual
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` inside Claude Code, or `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. After install, tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 ## Report-First Approval Gate
 
@@ -178,10 +178,10 @@ Continue until the user confirms the findings are complete and accurate. Only th
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` inside Claude Code, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF no enterprise feature specs in `specs/`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` inside Claude Code, or `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF `research/journey-map.md` exists but doesn't cover enterprise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` inside Claude Code, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `/journey-map enterprise` — Map enterprise stakeholder journeys
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` inside Claude Code, or `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map user and customer journeys first
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF no enterprise feature specs in `specs/`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF `research/journey-map.md` exists but doesn't cover enterprise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `/journey-map enterprise` — Map enterprise stakeholder journeys
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map user and customer journeys first
 - IF `research/icp.md` exists but no `research/competitive-analysis.md`: `/competitive-analysis` — Research how competitors serve enterprise
 
 ### 5. Write Output

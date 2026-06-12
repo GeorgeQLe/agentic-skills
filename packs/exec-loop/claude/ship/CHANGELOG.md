@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-12
+
+- Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
+
 ## v0.6 - 2026-06-11
 
 - Added npm CLI install alternatives to cross-pack next-step routing fallback wording while preserving Claude `/pack install` recommendations.

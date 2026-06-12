@@ -2,7 +2,7 @@
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: <type> <name> (e.g. "package utils" or "app admin-dashboard")
 ---
 
@@ -76,7 +76,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
 ## Next-Step Routing
 
 - If the scaffold was created as part of an active roadmap/phase, recommend `/exec` to continue the current implementation step.
-- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `/customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `/pack install business-discovery` inside Claude Code, or `npx skillpacks install business-discovery` from the project shell.
+- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `/customer-discovery` when the concept is ready and business-discovery is enabled, otherwise `npx skillpacks install business-discovery` from the project shell.
 - If the scaffold is for a non-product package with no pending roadmap item, recommend `/roadmap` or `/plan-phase` only when implementation sequencing is missing.
 
 ## Constraints

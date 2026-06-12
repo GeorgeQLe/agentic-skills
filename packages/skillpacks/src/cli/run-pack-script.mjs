@@ -186,6 +186,9 @@ Commands:
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
+  doctor --fix                 Clean generated skill-root drift
+  doctor --fix --agent-docs [--dry-run]
+                               Also migrate generated AGENTS.md/CLAUDE.md blocks
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
   pin <skill> <version>        Pin a skill to an archived version
@@ -310,7 +313,9 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'doctor') {
     return doctorProject({
-      projectRoot: process.cwd()
+      manifest: readManifest(),
+      projectRoot: process.cwd(),
+      args: rest
     });
   }
 

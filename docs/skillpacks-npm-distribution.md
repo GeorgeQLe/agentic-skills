@@ -52,7 +52,7 @@ npx skillpacks init-global
 
 Both global init forms invoke the packaged `init.sh` and keep the global surface limited to core skills. Domain packs remain project-local only.
 
-Existing users keep using:
+Source-checkout users can keep using:
 
 ```bash
 ./init.sh
@@ -60,7 +60,7 @@ scripts/pack.sh install business-discovery
 scripts/pack.sh refresh
 ```
 
-The npm path is additive until it proves stable.
+The npm path is now the standard agent-facing install route. The source-checkout commands remain supported for local repository development and compatibility.
 
 ## Design Principles
 
@@ -181,6 +181,8 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
 | `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates enabled base skills, packs, and individual skill roots from `.agents/project.json`. |
 | `doctor` | Node-owned | Managed marker drift reader | No | No | Read-only drift report; exits non-zero for stale installs. |
+| `doctor --fix` | Node-owned | Manifest plus lifecycle helpers | No | No | Cleans generated skill roots only: removes orphaned managed installs, converts unpinned legacy symlinks to managed package copies, preserves pinned symlinks, and preserves unmanaged local directories. |
+| `doctor --fix --agent-docs [--dry-run]` | Node-owned | Marker-bounded agent-doc migrator | No | No | Replaces only recognized generated blocks in `AGENTS.md` and `CLAUDE.md`; dry-run prints a diff without writing, and non-dry-run writes timestamped backups under `.agents/backups/`. |
 | `prune [--dry-run]` | Node-owned | Manifest plus lifecycle helpers | No | No | Removes only orphaned managed installs; keeps unmanaged directories. |
 | `pin <skill> <version>` | Node-owned | Manifest plus lifecycle helpers | No | No | Validates archive versions, updates `pinned_versions`, and relinks installs. |
 | `unpin <skill>` | Node-owned | Manifest plus lifecycle helpers | No | No | Clears the pin and relinks to latest packaged source. |
