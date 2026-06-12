@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-12 - Generated skill-root hygiene unblock
+
+- Removed the only tracked generated local skill install files from the Git index while keeping the local files in place: `.codex/skills/skill-interview/SKILL.md` and `.claude/skills/skill-interview/SKILL.md`.
+- Narrowed `.gitignore` from broad `.codex` to root and recursive generated skill-root patterns so skill installs stay ignored without hiding future project config under `.codex`.
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260612-160019-generated-root-shipping-blocker.md`.
+- This resolves the generated-root blocker from the prior `$ship-end` attempt; the broader dirty validation-remediation tree remains a separate shipping boundary.
+- Manifest: `tasks/ship-manifest-2026-06-12-generated-skill-root-hygiene.md`.
+
 ## 2026-06-12 — Skillpacks `init --global` alias
 
 - Added the npm CLI compatibility alias `skillpacks init --global`, routing it through the same packaged `init.sh` global-core path as the existing `init-global` command while preserving project-local `skillpacks init` behavior.

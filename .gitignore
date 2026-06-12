@@ -3,8 +3,10 @@ node_modules/
 packs/poketowork-kanban/claude/poketo-kanban/scripts/node_modules/
 *.db-wal
 *.db-shm
-.codex
+.codex/skills/
 .claude/skills/
+**/.codex/skills/
+**/.claude/skills/
 .agents/approved-plan.json
 .agents/backups/
 tests/runs/

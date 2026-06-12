@@ -1,3 +1,27 @@
+## Current Hygiene - Generated Skill Root Shipping Blocker
+
+### Goal
+
+Unblock `$ship-end` by treating generated local skill install roots as local artifacts instead of tracked source.
+
+### Current Checklist
+
+- [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+- [x] Confirm only two generated-root files are tracked under `.codex/skills` and `.claude/skills`.
+- [x] Remove `.codex/skills/skill-interview/SKILL.md` and `.claude/skills/skill-interview/SKILL.md` from the Git index while keeping local files on disk.
+- [x] Narrow `.gitignore` from broad `.codex` to generated-root `.codex/skills/` patterns while preserving `.claude/skills/` generated-root patterns.
+- [x] Record the hygiene boundary in task docs and a ship manifest.
+- [x] Commit and push the hygiene-only boundary, then rerun `$ship-end` for the broader dirty tree.
+
+### Review Notes
+
+- Boundary: this hygiene fix includes only `.gitignore`, index deletions for the two tracked generated install files, prompt capture, task/history docs, and its ship manifest. The broad pre-existing dirty tree remains outside scope.
+- Local generated skill files remain present under both `.codex/skills` and `.claude/skills`; only Git tracking changes.
+- This resolves the generated-root blocker named by the prior `$ship-end` attempt. The broader interleaved dirty tree still needs a separate `$ship-end` pass to prove and ship its own boundary.
+- Manual task status: 1/5 complete; 4 deferred production setup tasks remain unchecked in `tasks/manual-todo.md`.
+- Advisory task status: no `tasks/record-todo.md`; 2 unchecked recurring advisory tasks remain in `tasks/recurring-todo.md`.
+- Manifest: `tasks/ship-manifest-2026-06-12-generated-skill-root-hygiene.md`.
+
 ## Current Implementation - Optional Alignment Pages For Operational Skills
 
 ### Goal

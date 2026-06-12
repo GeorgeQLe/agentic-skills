@@ -1,3 +1,31 @@
+## Current Hygiene - Generated Skill Root Shipping Blocker
+
+### Goal
+
+Restore `.codex/skills/**` and `.claude/skills/**` to generated local artifact status so `$ship-end` can proceed without tracked install-root mutations blocking the shipping contract.
+
+### Scope
+
+- `.gitignore` generated-root ignore rules.
+- Git index tracking for `.codex/skills/skill-interview/SKILL.md` and `.claude/skills/skill-interview/SKILL.md`.
+- Prompt capture and task/history/manifest bookkeeping for this narrow hygiene boundary.
+- No source skill, generated alignment bundle, app, test, or broad validation-remediation changes.
+
+### Plan
+
+1. Confirm the only tracked generated-root files are the two `skill-interview/SKILL.md` install copies.
+2. Remove those two files from Git tracking while preserving the local generated files.
+3. Replace the broad `.codex` ignore rule with generated-root `.codex/skills/` patterns and keep `.claude/skills/` generated-root patterns.
+4. Verify tracked-file removal, local-file presence, ignore behavior, and whitespace.
+5. Commit and push the hygiene-only boundary, then rerun `$ship-end` for the broader dirty tree.
+
+### Acceptance Criteria
+
+- `git ls-files .codex/skills .claude/skills` returns no tracked generated-root files.
+- `find .codex/skills .claude/skills -maxdepth 2 -name SKILL.md -print` still shows generated local install files.
+- `git check-ignore -v` proves local generated skill roots are ignored.
+- `git diff --check` passes for the hygiene boundary.
+
 ## Current Implementation - Optional Alignment Pages For Operational Skills
 
 ### Goal
