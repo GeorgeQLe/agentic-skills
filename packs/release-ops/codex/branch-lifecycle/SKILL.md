@@ -2,7 +2,7 @@
 name: branch-lifecycle
 description: "Evaluate feature branches and decide whether to merge, salvage, keep open, or delete based on branch health, PR status, and stale-branch heuristics"
 type: ops
-version: v0.1
+version: v0.2
 argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]"
 ---
 
@@ -153,7 +153,7 @@ This is an exception workflow. The default repository policy is direct-to-primar
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/branch-lifecycle-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/branch-lifecycle-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

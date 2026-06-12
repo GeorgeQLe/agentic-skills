@@ -14,14 +14,14 @@ function readBundle(skillMdPath: string) {
 }
 
 const explicitReportFirstSkills = [
-  "packs/business-discovery/claude/customer-discovery/SKILL.md",
-  "packs/business-discovery/codex/customer-discovery/SKILL.md",
-  "packs/business-discovery/claude/competitive-analysis/SKILL.md",
-  "packs/business-discovery/codex/competitive-analysis/SKILL.md",
+  "packs/business-research/claude/customer-discovery/SKILL.md",
+  "packs/business-research/codex/customer-discovery/SKILL.md",
+  "packs/business-research/claude/competitive-analysis/SKILL.md",
+  "packs/business-research/codex/competitive-analysis/SKILL.md",
   "packs/customer-lifecycle/claude/journey-map/SKILL.md",
   "packs/customer-lifecycle/codex/journey-map/SKILL.md",
-  "packs/business-discovery/claude/positioning/SKILL.md",
-  "packs/business-discovery/codex/positioning/SKILL.md",
+  "packs/business-research/claude/positioning/SKILL.md",
+  "packs/business-research/codex/positioning/SKILL.md",
 ];
 
 // Converted from bespoke alignment sections to the generated stub + bundled
@@ -37,8 +37,6 @@ const localPlanningPreviewSkills: Array<[path: string, specificGates: string]> =
   ["packs/product-testing/codex/uat/SKILL.md", "**UAT-specific gates.**"],
   ["packs/product-design/claude/consolidate-variations/SKILL.md", "**Consolidation-specific gates.**"],
   ["packs/product-design/codex/consolidate-variations/SKILL.md", "**Consolidation-specific gates.**"],
-  ["packs/research-admin/claude/research-roadmap/SKILL.md", "**Research-roadmap translation.**"],
-  ["packs/research-admin/codex/research-roadmap/SKILL.md", "**Research-roadmap translation.**"],
   ["packs/product-design/claude/spec-interview/SKILL.md", "**Spec-specific gates.**"],
   ["packs/product-design/codex/spec-interview/SKILL.md", "**Spec-specific gates.**"],
 ];
@@ -51,6 +49,15 @@ const prototypeSkills = [
 const roadmapSkills = [
   "packs/agent-work-admin/claude/roadmap/SKILL.md",
   "packs/agent-work-admin/codex/roadmap/SKILL.md",
+];
+
+const optionalPlanningSkills = [
+  "packs/agent-work-admin/claude/roadmap/SKILL.md",
+  "packs/agent-work-admin/codex/roadmap/SKILL.md",
+  "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+  "packs/agent-work-admin/codex/plan-phase/SKILL.md",
+  "packs/research-admin/claude/research-roadmap/SKILL.md",
+  "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
 describe("AFPS alignment preview gates", () => {
@@ -80,7 +87,7 @@ describe("AFPS alignment preview gates", () => {
       expect(bundle, `${path} assumptions`).toContain("assumptions/confidence");
       expect(bundle, `${path} proposed changes`).toContain("proposed file changes");
       expect(bundle, `${path} approval gates`).toContain("approval gates");
-      expect(bundle, `${path} yaml`).toContain("**Gate YAML contract.**");
+      expect(bundle, `${path} yaml`).toContain("**Response YAML contract.**");
       expect(bundle, `${path} downstream stop`).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language");
       expect(bundle, `${path} approval stop`).toContain("the next action is review of the HTML alignment page");
     }
@@ -98,19 +105,39 @@ describe("AFPS alignment preview gates", () => {
 
       const bundle = readBundle(path);
       expect(bundle, `${path} bundled skill-specific gates`).toContain("**Prototype-specific gates.**");
-      expect(bundle, `${path} yaml`).toContain("**Gate YAML contract.**");
+      expect(bundle, `${path} yaml`).toContain("**Response YAML contract.**");
       expect(bundle, `${path} routing suppressed`).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language");
     }
   });
 
-  it("treats roadmap as a durable planning-output skill with a preview gate", () => {
+  it("makes roadmap optional instead of blocking task writes on an automatic preview gate", () => {
     for (const path of roadmapSkills) {
       const content = read(path);
       expect(content, `${path} alignment heading`).toMatch(/^## Alignment Page$/m);
       expect(content, `${path} output`).toContain("alignment/roadmap-{topic}.html");
-      expect(content, `${path} before roadmap writes`).toContain("before writing or replacing `tasks/roadmap.md`, `tasks/todo.md`");
-      expect(content, `${path} yaml`).toContain("**Gate YAML contract.**");
-      expect(content, `${path} routing suppressed`).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language");
+      expect(content, `${path} inline default`).toContain("By default, this skill reports results inline");
+      expect(content, `${path} no automatic page`).toContain("Do not build an alignment page automatically");
+      expect(content, `${path} conditional page`).toContain("only when the user explicitly requests an alignment page");
+      expect(content, `${path} review need`).toContain("concrete clarification/review need");
+      expect(content, `${path} no before roadmap writes`).not.toContain(
+        "before writing or replacing `tasks/roadmap.md`, `tasks/todo.md`",
+      );
+    }
+  });
+
+  it("keeps optional planning pages fully gated when the page is explicitly created", () => {
+    for (const path of optionalPlanningSkills) {
+      const content = read(path);
+      expect(content, `${path} generated stub`).toContain("Do not build an alignment page automatically");
+
+      const bundle = readBundle(path);
+      expect(bundle, `${path} optional intro`).toContain("Alignment pages are optional for this operational skill");
+      expect(bundle, `${path} default inline artifacts`).toContain("By default, report the outcome inline");
+      expect(bundle, `${path} conditional creation`).toContain("only when the user explicitly requests an alignment page");
+      expect(bundle, `${path} clarification need`).toContain("concrete clarification/review need");
+      expect(bundle, `${path} bundled alignment gates`).toContain("**Alignment gates.**");
+      expect(bundle, `${path} yaml`).toContain("**Response YAML contract.**");
+      expect(bundle, `${path} approval stop when created`).toContain("the next action is review of the HTML alignment page");
     }
   });
 });

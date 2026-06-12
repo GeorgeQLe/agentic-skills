@@ -1,3 +1,39 @@
+## Current Implementation - Optional Alignment Pages For Operational Skills
+
+### Goal
+
+Make alignment pages optional for the selected operational/planning/status skills while preserving automatic alignment pages for approval-gated research, product, and spec skills.
+
+### Current Checklist
+
+- [x] Read the repo-managed skill update instructions and relevant lessons.
+- [x] Capture the visible prompt under `prompts/create-agentic-skill/`.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect generator, skip list, target skill sources, and focused tests.
+- [x] Patch generator optional-alignment policy and skip-list semantics.
+- [x] Archive, version-bump, and changelog changed active `SKILL.md` files.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Update and run focused layer1 tests.
+- [x] Run broader validation if targeted tests pass.
+- [x] Review diff scope, commit, and push intended changes.
+
+### Review Notes
+
+- Added `OPTIONAL_ALIGNMENT_SKILLS` to `scripts/upgrade-alignment-page.mjs` and generated optional `SKILL.md` stubs plus conditional `ALIGNMENT-PAGE.md` bundle intros for the first-batch operational skills.
+- Removed `roadmap`, `plan-phase`, and `provision-agentic-config` from the no-contract alignment skip-list semantics; `roadmap` no longer carries the old automatic "build before writing `tasks/roadmap.md`" blocker.
+- Archived, bumped, and changelogged 44 active optional-batch `SKILL.md` files across Claude/Codex mirrors, then regenerated the affected alignment bundles.
+- Refreshed Skills Showcase generated data after the skill metadata/behavior changes.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/afps-alignment-preview-gates.test.ts layer1/codex-interview-cadence.test.ts` (48 tests passed)
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/upgrade-alignment-page-bespoke.test.ts` (17 tests passed)
+  - `pnpm --dir tests bench:coverage`
+  - `git diff --cached --check`
+- Requested root `npm test -- tests/layer1/alignment-gates.test.ts tests/layer1/afps-alignment-preview-gates.test.ts tests/layer1/codex-interview-cadence.test.ts` could not run because the root package has no `test` script; the equivalent layer1 Vitest command passed.
+- Broader `pnpm --dir tests exec vitest run --project layer1` was attempted after the focused suite passed and failed with 31 failures across 18 files from stale/unrelated layer1 expectations, including old `business-discovery` pack references, stale provision-config version expectations, showcase fixture drift, unrelated routing/manifest tests, and the now-stale `skill-inventory` v0.0 expectation after this required optional-policy bump.
+
+---
+
 ## Current Implementation - Repo-Wide Packet Dump Remediation
 
 ### Goal

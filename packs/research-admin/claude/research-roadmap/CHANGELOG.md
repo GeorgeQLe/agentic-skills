@@ -1,5 +1,9 @@
 # research-roadmap changelog (claude)
 
+## v0.18 - 2026-06-12
+
+- Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.
+
 ## v0.17 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

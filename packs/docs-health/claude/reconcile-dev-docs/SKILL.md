@@ -2,7 +2,7 @@
 name: reconcile-dev-docs
 description: Reconcile development docs by auditing roadmap, todo, history, phase archives, specs, git history, and code reality
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[audit|fix] [tasks|specs|all]"
 ---
 
@@ -142,7 +142,7 @@ Report the same sections plus:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/reconcile-dev-docs-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/reconcile-dev-docs-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

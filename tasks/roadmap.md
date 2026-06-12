@@ -1,3 +1,61 @@
+## Current Implementation - Optional Alignment Pages For Operational Skills
+
+### Goal
+
+Change the selected operational, planning, reporting, and status skills so alignment pages are optional rather than automatic. Their default output should be inline conversation summary plus normal durable artifacts such as `tasks/*.md`, reports, queues, status docs, or benchmark notes. They should create `alignment/*.html` only when the user requests it or when the agent names a concrete clarification/review need.
+
+### Scope
+
+- `scripts/upgrade-alignment-page.mjs`
+- `scripts/alignment-skip-list.txt`
+- First-batch optional skills and their Claude/Codex mirrors where present:
+  - `roadmap`, `research-roadmap`, `plan-phase`
+  - `brainstorm`, `devtool-workflow`, `game-workflow`, `game-roadmap`, `experiment`, `mono-plan`, `vertical-slice-splitter`
+  - `reconcile-dev-docs`, `analyze-sessions`, `prompt-history-backfill`, `benchmark-test-skill`, `benchmark-agent-review`
+  - `afps-status`, `handoff`, `branch-lifecycle`, `release`, `product-line`, `skill-inventory`, `provision-agentic-config`
+- Generated `ALIGNMENT-PAGE.md` bundles for affected skills
+- Focused layer1 tests:
+  - `tests/layer1/alignment-gates.test.ts`
+  - `tests/layer1/afps-alignment-preview-gates.test.ts`
+  - `tests/layer1/codex-interview-cadence.test.ts`
+- Prompt capture under `prompts/create-agentic-skill/`
+
+### Plan
+
+1. Capture the prompt and protect the existing dirty worktree.
+   - Read the repo-managed skill update instructions and relevant lessons.
+   - Record this plan in `tasks/roadmap.md` and `tasks/todo.md`.
+   - Inventory target skills and current generated alignment policy.
+2. Patch the generator.
+   - Add an `OPTIONAL_ALIGNMENT_SKILLS` first-batch set.
+   - Generate optional `SKILL.md` alignment stubs for those skills: inline/task artifacts by default; alignment pages only on request or explicit clarification/review need.
+   - Generate optional `ALIGNMENT-PAGE.md` introductions while keeping the existing page/YAML/gate contract for cases where a page is created.
+   - Keep approval-gated research, product, and spec skills automatic.
+3. Patch skill sources through archive-first versioning.
+   - Run `scripts/skill-archive.sh <skill-dir>` before each changed active `SKILL.md`.
+   - Bump each changed skill version by one decimal.
+   - Add `CHANGELOG.md` entries dated `2026-06-12`.
+   - Convert `roadmap` and `plan-phase` to optional policy; remove `roadmap` from no-contract skip semantics.
+4. Update skip-list semantics and tests.
+   - Clarify that `scripts/alignment-skip-list.txt` is for skills excluded from generated alignment policy entirely.
+   - Update tests that currently require automatic roadmap/research-roadmap gates.
+   - Assert optional skills contain inline/task-artifact defaults, conditional page creation, and no automatic `tasks/roadmap.md` blocker language.
+5. Regenerate and verify.
+   - Run `node scripts/upgrade-alignment-page.mjs`.
+   - Run `node scripts/upgrade-alignment-page.mjs --check`.
+   - Run the requested focused tests, then broader layer1 coverage if targeted tests pass.
+   - Review diff scope, stage only intended changes, commit, and push to `master`.
+
+### Acceptance Criteria
+
+- First-batch operational skills no longer require automatic alignment pages.
+- Optional alignment pages still use the standard generated page/YAML/gate contract when created.
+- `roadmap` is no longer treated as a no-contract skip-list exception.
+- Approval-gated research/spec/product skills continue to require automatic alignment review pages.
+- Focused tests prove both optional and automatic paths.
+
+---
+
 ## Current Implementation - Repo-Wide Packet Dump Remediation
 
 ### Goal

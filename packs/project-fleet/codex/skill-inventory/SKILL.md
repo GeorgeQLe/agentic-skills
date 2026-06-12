@@ -2,7 +2,7 @@
 name: skill-inventory
 description: Inventory downstream repository Claude and Codex skill installs from a control-repo manifest, classify managed local skill-copy drift against canonical agentic-skills sources, and produce report-only Markdown or JSON guidance without refreshing, deleting, or mutating downstream repos.
 type: ops
-version: v0.0
+version: v0.1
 argument-hint: "[--manifest <path>] [--repo <path>] [--format markdown|json]"
 ---
 
@@ -78,7 +78,7 @@ If no local paths are found, the scanner must fail non-destructively and print a
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/skill-inventory-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/skill-inventory-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

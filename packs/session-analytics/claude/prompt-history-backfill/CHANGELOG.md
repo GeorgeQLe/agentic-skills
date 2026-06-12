@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-12
+
+- Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.
+
 ## v0.1 - 2026-06-04
 
 - Add legacy skill routing: hardcoded map of renamed/removed/never-existed skill slugs (`run`, `review`, `skill-creator`, `verify`, `simplify`, `schedule`).

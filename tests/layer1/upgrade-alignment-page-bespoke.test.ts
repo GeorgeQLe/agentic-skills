@@ -12,6 +12,7 @@ const SCRIPT = repoPath("scripts/upgrade-alignment-page.mjs");
 
 const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md";
 const STUB_PREFIX = "When this skill produces durable deliverables";
+const OPTIONAL_STUB_PREFIX = "By default, this skill reports results inline";
 
 function parseListFile(path: string): Set<string> {
   const names = new Set<string>();
@@ -56,7 +57,7 @@ function isOwnable(body: string | null): boolean {
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .some((p) => p.startsWith(POINTER_PREFIX) || p.startsWith(STUB_PREFIX));
+    .some((p) => p.startsWith(POINTER_PREFIX) || p.startsWith(STUB_PREFIX) || p.startsWith(OPTIONAL_STUB_PREFIX));
 }
 
 // Re-derive the bespoke classification straight from active SKILL.md files,

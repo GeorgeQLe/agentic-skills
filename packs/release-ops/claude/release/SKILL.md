@@ -2,7 +2,7 @@
 name: release
 description: Version bump, generate changelog, tag, and prepare a release
 type: shipping
-version: v0.1
+version: v0.2
 argument-hint: "[patch|minor|major] or [specific version like 1.2.3]"
 ---
 
@@ -88,7 +88,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/release-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/release-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

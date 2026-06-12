@@ -69,6 +69,46 @@ if (!markerMatch) {
 }
 const conventionTemplate = markerMatch[1];
 
+const OPTIONAL_ALIGNMENT_SKILLS = new Set([
+  "roadmap",
+  "research-roadmap",
+  "plan-phase",
+  "brainstorm",
+  "devtool-workflow",
+  "game-workflow",
+  "game-roadmap",
+  "experiment",
+  "mono-plan",
+  "vertical-slice-splitter",
+  "reconcile-dev-docs",
+  "analyze-sessions",
+  "prompt-history-backfill",
+  "benchmark-test-skill",
+  "benchmark-agent-review",
+  "afps-status",
+  "handoff",
+  "branch-lifecycle",
+  "release",
+  "product-line",
+  "skill-inventory",
+  "provision-agentic-config",
+]);
+
+function isOptionalAlignmentSkill(skillName) {
+  return OPTIONAL_ALIGNMENT_SKILLS.has(skillName);
+}
+
+function optionalConventionTemplate(skillName) {
+  const automaticIntro =
+    "When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.";
+  const optionalIntro =
+    "Alignment pages are optional for this operational skill. By default, report the outcome inline and write only the skill's normal durable artifacts (`tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Build `alignment/{skill-name}-{topic}.html` only when the user explicitly requests an alignment page or when the agent explicitly identifies a concrete clarification/review need that cannot be resolved cleanly in conversation or the normal artifacts. When an alignment page is created, use the full contract below and a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.";
+  if (!conventionTemplate.startsWith(automaticIntro)) {
+    throw new Error(`Unexpected alignment convention intro while rendering optional policy for ${skillName}`);
+  }
+  return conventionTemplate.replace(automaticIntro, optionalIntro);
+}
+
 // Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
 function bundledContentFor(skillName, skillPath) {
   const specific = skillSpecificGates(skillName);
@@ -77,7 +117,8 @@ function bundledContentFor(skillName, skillPath) {
   const skillType = skillPath ? readSkillType(skillPath) : null;
   const glossaryApplies = skillType === 'research' || skillType === 'analysis';
   const glossaryText = glossaryApplies ? glossaryGateText(skillName) : '';
-  const body = conventionTemplate
+  const template = isOptionalAlignmentSkill(skillName) ? optionalConventionTemplate(skillName) : conventionTemplate;
+  const body = template
     .replaceAll("{skill-name}", skillName)
     .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")
     .replace(/\n*\{\{SKILL_VISUAL_TIER\}\}\n*/, tierText ? `\n\n${tierText}\n\n` : "\n\n")
@@ -91,13 +132,17 @@ function bundledContentFor(skillName, skillPath) {
 // pointer paragraph in place, leaving any surrounding bespoke prose untouched.
 const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md";
 const STUB_PREFIX = "When this skill produces durable deliverables";
+const OPTIONAL_STUB_PREFIX = "By default, this skill reports results inline";
 
 function stubParagraph(skillName) {
+  if (isOptionalAlignmentSkill(skillName)) {
+    return `By default, this skill reports results inline and writes only its normal durable artifacts (for example \`tasks/*.md\`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create \`alignment/${skillName}-{topic}.html\` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow \`ALIGNMENT-PAGE.md\` in this skill's directory.`;
+  }
   return `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
 }
 
 function isPointerOrStub(paragraph) {
-  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX);
+  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(OPTIONAL_STUB_PREFIX);
 }
 
 // --- Visual Tier ---
@@ -218,7 +263,7 @@ function skillSpecificGates(skillName) {
   return "";
 }
 
-function replaceOrInsert(content, skillName) {
+function replaceOrInsert(content, skillName, { replaceSection = false } = {}) {
   const headingMatch = content.match(/^(#{2,3}) Alignment Page$/m);
   const stub = stubParagraph(skillName);
 
@@ -230,6 +275,12 @@ function replaceOrInsert(content, skillName) {
     nextHeading.lastIndex = afterHeading;
     const boundary = nextHeading.exec(content);
     const end = boundary ? boundary.index : content.length;
+
+    if (replaceSection) {
+      const head = `${content.slice(0, afterHeading)}\n\n${stub}`;
+      const tail = content.slice(end).replace(/^\n+/, "");
+      return tail ? `${head}\n\n${tail}` : `${head}\n`;
+    }
 
     // Swap only the pointer/stub paragraph for the stub; keep bespoke prose.
     const paragraphs = content.slice(afterHeading, end).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
@@ -330,16 +381,24 @@ for (const file of files) {
   const body = alignmentSectionBody(before);
   // Skills without an alignment section are out of scope.
   if (body === null) {
-    outOfScope += 1;
-    continue;
+    if (!isOptionalAlignmentSkill(skillName)) {
+      outOfScope += 1;
+      continue;
+    }
+    recordClassification(skillName, file, "ownableFiles");
+  } else if (!isOwnable(body)) {
+    // Preserve hand-authored / hybrid alignment sections verbatim unless the
+    // skill is in the optional batch. Optional skills must not retain older
+    // automatic page blockers such as "build before writing tasks/roadmap.md".
+    if (!isOptionalAlignmentSkill(skillName)) {
+      bespoke += 1;
+      recordClassification(skillName, file, "bespokeFiles");
+      continue;
+    }
+    recordClassification(skillName, file, "ownableFiles");
+  } else {
+    recordClassification(skillName, file, "ownableFiles");
   }
-  // Preserve hand-authored / hybrid alignment sections verbatim.
-  if (!isOwnable(body)) {
-    bespoke += 1;
-    recordClassification(skillName, file, "bespokeFiles");
-    continue;
-  }
-  recordClassification(skillName, file, "ownableFiles");
 
   // 1. Bundled, load-on-demand convention file beside the skill.
   const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
@@ -348,7 +407,7 @@ for (const file of files) {
   const bundleChanged = bundleBefore !== bundleContent;
 
   // 2. Short stub inside SKILL.md pointing at the bundled file.
-  const after = replaceOrInsert(before, skillName);
+  const after = replaceOrInsert(before, skillName, { replaceSection: body !== null && !isOwnable(body) && isOptionalAlignmentSkill(skillName) });
   const skillChanged = before !== after;
 
   if (!bundleChanged && !skillChanged) continue;

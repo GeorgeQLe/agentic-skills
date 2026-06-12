@@ -18,10 +18,53 @@ const coreSkills = [
   "packs/product-design/codex/prototype/SKILL.md",
   "packs/product-testing/claude/uat/SKILL.md",
   "packs/product-testing/codex/uat/SKILL.md",
+];
+
+const optionalAlignmentSkills = [
+  "global/claude/afps-status/SKILL.md",
+  "global/claude/provision-agentic-config/SKILL.md",
+  "global/codex/afps-status/SKILL.md",
+  "global/codex/provision-agentic-config/SKILL.md",
+  "packs/agent-work-admin/claude/plan-phase/SKILL.md",
   "packs/agent-work-admin/claude/roadmap/SKILL.md",
+  "packs/agent-work-admin/codex/plan-phase/SKILL.md",
   "packs/agent-work-admin/codex/roadmap/SKILL.md",
+  "packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md",
+  "packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md",
+  "packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md",
+  "packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md",
+  "packs/alignment-loop/claude/vertical-slice-splitter/SKILL.md",
+  "packs/alignment-loop/codex/vertical-slice-splitter/SKILL.md",
+  "packs/business-growth/claude/experiment/SKILL.md",
+  "packs/business-growth/codex/experiment/SKILL.md",
+  "packs/business-ops/claude/product-line/SKILL.md",
+  "packs/business-ops/codex/product-line/SKILL.md",
+  "packs/context-transfer/claude/handoff/SKILL.md",
+  "packs/context-transfer/codex/handoff/SKILL.md",
+  "packs/devtool/claude/devtool-workflow/SKILL.md",
+  "packs/devtool/codex/devtool-workflow/SKILL.md",
+  "packs/docs-health/claude/reconcile-dev-docs/SKILL.md",
+  "packs/docs-health/codex/reconcile-dev-docs/SKILL.md",
+  "packs/game/claude/game-roadmap/SKILL.md",
+  "packs/game/claude/game-workflow/SKILL.md",
+  "packs/game/codex/game-roadmap/SKILL.md",
+  "packs/game/codex/game-workflow/SKILL.md",
+  "packs/monorepo/claude/mono-plan/SKILL.md",
+  "packs/monorepo/codex/mono-plan/SKILL.md",
+  "packs/product-design/claude/brainstorm/SKILL.md",
+  "packs/product-design/codex/brainstorm/SKILL.md",
+  "packs/project-fleet/claude/skill-inventory/SKILL.md",
+  "packs/project-fleet/codex/skill-inventory/SKILL.md",
+  "packs/release-ops/claude/branch-lifecycle/SKILL.md",
+  "packs/release-ops/claude/release/SKILL.md",
+  "packs/release-ops/codex/branch-lifecycle/SKILL.md",
+  "packs/release-ops/codex/release/SKILL.md",
   "packs/research-admin/claude/research-roadmap/SKILL.md",
   "packs/research-admin/codex/research-roadmap/SKILL.md",
+  "packs/session-analytics/claude/analyze-sessions/SKILL.md",
+  "packs/session-analytics/claude/prompt-history-backfill/SKILL.md",
+  "packs/session-analytics/codex/analyze-sessions/SKILL.md",
+  "packs/session-analytics/codex/prompt-history-backfill/SKILL.md",
 ];
 
 const skippedSkills = [
@@ -33,8 +76,6 @@ const skippedSkills = [
   "packs/exec-loop/codex/ship-end/SKILL.md",
   "packs/gitops/claude/sync/SKILL.md",
   "packs/gitops/codex/sync/SKILL.md",
-  "packs/agent-work-admin/claude/plan-phase/SKILL.md",
-  "packs/agent-work-admin/codex/plan-phase/SKILL.md",
 ];
 
 const researchQualitySkills = [
@@ -60,8 +101,8 @@ function hasBundle(skillMdPath: string) {
 }
 
 // Where the convention text lives for a skill: the bundled file when the
-// generator owns it, otherwise the inline SKILL.md section (bespoke,
-// skip-listed skills such as `roadmap` keep their convention inline).
+// generator owns it, otherwise the inline SKILL.md section (bespoke sections
+// keep their convention inline).
 function conventionText(skillMdPath: string) {
   return hasBundle(skillMdPath) ? bundled(skillMdPath) : read(skillMdPath);
 }
@@ -107,9 +148,54 @@ describe("alignment page gate contract", () => {
         // Generator-owned skills point their stub at the bundled file.
         expect(content, `${path} references bundled file`).toContain("ALIGNMENT-PAGE.md");
       } else {
-        // Bespoke skip-listed skills (e.g. roadmap) keep the gates inline.
+        // Bespoke sections keep the gates inline.
         expect(content, `${path} inline gates`).toContain("**Alignment gates.**");
       }
+    }
+  });
+
+  it("makes operational alignment pages optional while preserving the page contract when created", () => {
+    for (const path of optionalAlignmentSkills) {
+      const content = read(path);
+      expect(content, `${path} alignment heading`).toMatch(/^#{2,3} Alignment Page$/m);
+      expect(hasBundle(path), `${path} has generated bundle`).toBe(true);
+      expect(content, `${path} inline default`).toContain("By default, this skill reports results inline");
+      expect(content, `${path} durable artifacts default`).toContain("writes only its normal durable artifacts");
+      expect(content, `${path} no automatic page`).toContain("Do not build an alignment page automatically");
+      expect(content, `${path} conditional request`).toContain("only when the user explicitly requests an alignment page");
+      expect(content, `${path} conditional clarification`).toContain("concrete clarification/review need");
+      expect(content, `${path} references bundle`).toContain("ALIGNMENT-PAGE.md");
+      expect(content, `${path} no automatic durable-output stub`).not.toContain(
+        "When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following",
+      );
+
+      const bundle = bundled(path);
+      expect(bundle, `${path} optional intro`).toContain("Alignment pages are optional for this operational skill");
+      expect(bundle, `${path} inline default bundle`).toContain("By default, report the outcome inline");
+      expect(bundle, `${path} conditional bundle`).toContain("only when the user explicitly requests an alignment page");
+      expect(bundle, `${path} review need bundle`).toContain("concrete clarification/review need");
+      expect(bundle, `${path} keeps gate contract`).toContain("**Alignment gates.**");
+      expect(bundle, `${path} keeps yaml contract`).toMatch(/\*\*(Gate|Response) YAML contract\.\*\*/);
+      expect(bundle, `${path} no automatic intro`).not.toContain(
+        "When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at",
+      );
+    }
+  });
+
+  it("does not leave roadmap with the old automatic pre-write alignment blocker", () => {
+    for (const path of [
+      "packs/agent-work-admin/claude/roadmap/SKILL.md",
+      "packs/agent-work-admin/codex/roadmap/SKILL.md",
+      "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+      "packs/agent-work-admin/codex/plan-phase/SKILL.md",
+    ]) {
+      const content = read(path);
+      expect(content, `${path} no tasks/roadmap blocker`).not.toContain(
+        "before writing or replacing `tasks/roadmap.md`",
+      );
+      expect(content, `${path} no automatic roadmap gate`).not.toContain(
+        "Build and attempt to open `alignment/roadmap-{topic}.html`",
+      );
     }
   });
 
@@ -567,7 +653,7 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("leaves skip-list skills excluded from alignment requirements", () => {
+  it("leaves no-contract skip-list skills excluded from alignment requirements", () => {
     for (const path of skippedSkills) {
       const content = read(path);
       expect(content, `${path} skipped`).not.toContain("**Alignment gates.**");

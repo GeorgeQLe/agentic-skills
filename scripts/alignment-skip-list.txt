@@ -1,6 +1,8 @@
-# Skills that should NOT have alignment pages.
-# These are execution, infrastructure, or utility skills that don't produce
-# durable deliverables requiring interactive user review.
+# Skills excluded from the generated alignment-page policy entirely.
+# These are execution, infrastructure, or utility skills that should not carry
+# even the optional alignment-page contract. Operational skills that may create
+# an alignment page on explicit request or concrete clarification need belong
+# in OPTIONAL_ALIGNMENT_SKILLS in scripts/upgrade-alignment-page.mjs, not here.
 #
 # One skill name per line. Lines starting with # are comments.
 # Skill names match the directory basename (e.g. "provision-agentic-config").
@@ -17,7 +19,6 @@ bootstrap-repo
 env-setup
 
 # Infrastructure / config utilities
-provision-agentic-config
 init-agentic-skills
 pack
 skills
@@ -27,10 +28,6 @@ patch-exec-profile
 create-agentic-skill
 create-local-skill
 update-packages
-
-# Planning tools (output goes to tasks/ files, reviewed directly)
-roadmap
-plan-phase
 
 # Interactive / meta skills
 quiz-me

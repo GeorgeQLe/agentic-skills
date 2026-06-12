@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.7
+version: v0.8
 ---
 
 # Install Workflow Orchestration
@@ -27,12 +27,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.7 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.8 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.7 -->
+<!-- provision-agentic-config v0.8 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -150,7 +150,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.7 -->
+<!-- provision-agentic-config v0.8 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -298,6 +298,9 @@ After updating the files, report:
 - The source/verification note status for each target file when a note was written or updated
 - Never present benchmark harness temp paths such as `/tmp`, `/private/var`, or `/var/folders` as the user-facing artifact location; convert them to repo-relative target paths.
 
+## Alignment Page
+
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/provision-agentic-config-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

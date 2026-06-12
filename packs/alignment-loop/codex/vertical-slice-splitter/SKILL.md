@@ -2,7 +2,7 @@
 name: vertical-slice-splitter
 description: Decompose a destination doc or spec into vertical-slice issue cards with a dependency DAG
 type: planning
-version: v0.1
+version: v0.2
 ---
 
 # Vertical Slice Splitter
@@ -52,7 +52,7 @@ Decompose a destination doc or spec into independently grabbable vertical-slice 
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/vertical-slice-splitter-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/vertical-slice-splitter-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

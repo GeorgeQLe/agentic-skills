@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-12
+
+- Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.
+
 ## v0.2 - 2026-06-11
 
 - Added npm-aware devtool pack install wording while preserving the source-checkout `scripts/pack.sh install devtool` route.

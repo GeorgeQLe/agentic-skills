@@ -2,7 +2,7 @@
 name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
 type: shipping
-version: v0.1
+version: v0.2
 argument-hint: "[focus area] [--target=codex]"
 ---
 
@@ -106,7 +106,7 @@ After writing the handoff, report:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/handoff-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/handoff-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

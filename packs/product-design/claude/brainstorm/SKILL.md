@@ -2,7 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /feature-interview
 type: planning
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area]"
 interview_depth: light
 visual_tier: prototype
@@ -91,7 +91,7 @@ Present suggestions grouped by effort level, with each suggestion framed as a to
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/brainstorm-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/brainstorm-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

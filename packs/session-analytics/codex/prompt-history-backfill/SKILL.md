@@ -2,7 +2,7 @@
 name: prompt-history-backfill
 description: Scan Claude and Codex conversation history for skill invocation prompts missing from repo prompt history and report or backfill them safely
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[--repo <path>] [--skill <slug>] [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--apply] [history/export paths...]"
 ---
 
@@ -103,7 +103,7 @@ The report should include:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/prompt-history-backfill-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/prompt-history-backfill-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

@@ -2,7 +2,7 @@
 name: game-workflow
 description: Use only for video game projects; route research, validation, roadmap, metrics, and launch work through the game pack
 type: planning
-version: v0.2
+version: v0.3
 invocation: orchestrator
 interview_depth: none
 ---
@@ -27,7 +27,7 @@ Recommend the next single game-pack skill to run and explain the missing artifac
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/game-workflow-{topic}.html`.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/game-workflow-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 
