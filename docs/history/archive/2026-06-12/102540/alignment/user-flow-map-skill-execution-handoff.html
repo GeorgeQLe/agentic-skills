@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>User Flow Map - Skill Execution Handoff - Confirmed</title>
+<title>User Flow Map - Skill Execution Handoff</title>
 <style>
 :root{
   --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;
@@ -29,7 +29,7 @@ pre code{background:none;border:none;padding:0}
 .status .k{color:var(--text-muted);display:inline-block;min-width:190px}
 .muted{color:var(--text-muted)}
 .badge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:700}
-.badge.review{background:#241d10;color:var(--orange);border:1px solid var(--orange)}.badge.confirmed{background:#12261a;color:var(--green);border:1px solid var(--green)}.decision-record{background:#0f1520;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin:12px 0}.decision-answer{color:#fff}.updated{background:#102034;color:var(--accent);border:1px solid var(--accent)}
+.badge.review{background:#241d10;color:var(--orange);border:1px solid var(--orange)}
 .badge.proto{background:#231a35;color:var(--purple);border:1px solid var(--purple)}
 .badge.blocked{background:#2a1314;color:var(--red);border:1px solid var(--red)}
 .toc ol{margin:8px 0 0;padding-left:24px}
@@ -78,19 +78,16 @@ label.active-needs-clarification{border-color:var(--orange);color:var(--orange)}
 <main>
 <header>
   <h1>User Flow Map - Skill Execution Handoff</h1>
-  <p class="muted">Confirmed alignment page for <code>$user-flow-map skills-showcase skill-execution-handoff</code>. The approved user-flow spec and interview log have been written to canonical markdown files, and this page preserves the approval record.</p>
+  <p class="muted">Review page for <code>$user-flow-map skills-showcase skill-execution-handoff</code>. This page renders the full proposed user-flow spec and interview log inline. It does not write the canonical markdown files until final compiled YAML approval.</p>
   <div class="status">
-    <div class="row"><span class="k">alignment_status:</span> <span class="badge confirmed">confirmed</span> <span class="badge proto">prototype tier</span></div>
-    <div class="row"><span class="k">generated:</span> 2026-06-12 (review)</div>
-    <div class="row"><span class="k">confirmed:</span> 2026-06-12</div>
+    <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
+    <div class="row"><span class="k">generated:</span> 2026-06-12</div>
     <div class="row"><span class="k">skill:</span> user-flow-map v0.2</div>
     <div class="row"><span class="k">product path:</span> <code>skills-showcase</code> from <code>research/.progress.yaml</code></div>
-    <div class="row"><span class="k">alignment artifact:</span> <code>alignment/user-flow-map-skill-execution-handoff.html</code></div>
-    <div class="row"><span class="k">confirmed artifacts:</span> <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> · <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></div>
-    <div class="row"><span class="k">approval source:</span> final compiled YAML, 7/7 gates answered, <code>section_feedback: []</code>, no needs-clarification, no requested edits (verbatim record in Approval Record)</div>
-    <div class="row"><span class="k">prior review page:</span> archived at <code>docs/history/archive/2026-06-12/102540/alignment/user-flow-map-skill-execution-handoff.html</code></div>
-    <div class="row"><span class="k">downstream:</span> <code>$ui-interview --requirements-only skill-execution-handoff</code></div>
-    <div class="row muted">This page is finished and current for the completed alignment cycle. It remains amendable: later research may change or extend these conclusions only by archiving this confirmed page first and highlighting the amendment against the preserved approval record.</div>
+    <div class="row"><span class="k">review artifact:</span> <code>alignment/user-flow-map-skill-execution-handoff.html</code></div>
+    <div class="row"><span class="k">proposed canonical:</span> <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> and <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></div>
+    <div class="row"><span class="k">blocked until approval:</span> <span class="badge blocked">canonical spec writes</span> <span class="badge blocked">confirmed conversion</span></div>
+    <div class="row muted">Next action while this page is in review: inspect this HTML page and provide either section-feedback YAML or bottom compiled response YAML. Canonical files remain unwritten unless the compiled YAML has <code>approval_status: ready-for-agent-review</code> with no unresolved negative feedback.</div>
   </div>
 </header>
 
@@ -99,14 +96,22 @@ label.active-needs-clarification{border-color:var(--orange);color:var(--orange)}
   <ol>
     <li><a href="#summary">Review Summary</a></li>
     <li><a href="#evidence">Evidence Context</a></li>
-    <li><a href="#proposed-spec">Confirmed Spec - <code>user-flow-skill-execution-handoff.md</code></a></li>
-    <li><a href="#interview-log">Confirmed Interview Log - <code>user-flow-skill-execution-handoff-interview.md</code></a></li>
-    <li><a href="#approval-record">Approval Record</a></li>
+    <li><a href="#proposed-spec">Proposed Spec - <code>user-flow-skill-execution-handoff.md</code></a></li>
+    <li><a href="#interview-log">Proposed Interview Log - <code>user-flow-skill-execution-handoff-interview.md</code></a></li>
+    <li><a href="#gates">Review Gates</a></li>
+    <li><a href="#compile">Compile Responses</a></li>
   </ol>
 </nav>
 
 <section id="summary">
   <div class="sec-head"><h2>1. Review Summary</h2></div>
+  <div class="section-feedback" data-section="Review Summary" id="fb-summary">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-summary" value="emphasize" data-feedback-section="Review Summary"> Emphasize</label>
+    <label><input type="radio" name="fb-summary" value="down" data-feedback-section="Review Summary"> Flag concern</label>
+    <label><input type="radio" name="fb-summary" value="needs-clarification" data-feedback-section="Review Summary"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-summary" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('summary')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('summary')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-summary"></textarea></div>
+  </div>
   <p>The proposed flow starts after a user has selected a deck or workflow and needs to leave the site with an actionable local execution artifact. It connects the existing deck-builder output model to the operating-mode model in <code>docs/operating-modes.md</code>: direct terminal execution, hybrid <code>/delegate</code>, async <code>/handoff --target=codex</code>, and Codex execution of an approved packet through <code>$exec --execute-approved</code>.</p>
   <div class="callout">
     <strong>Corrected persona wording carried into the proposed spec:</strong>
@@ -133,6 +138,13 @@ label.active-needs-clarification{border-color:var(--orange);color:var(--orange)}
 
 <section id="evidence">
   <div class="sec-head"><h2>2. Evidence Context</h2></div>
+  <div class="section-feedback" data-section="Evidence Context" id="fb-evidence">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-evidence" value="emphasize" data-feedback-section="Evidence Context"> Emphasize</label>
+    <label><input type="radio" name="fb-evidence" value="down" data-feedback-section="Evidence Context"> Flag concern</label>
+    <label><input type="radio" name="fb-evidence" value="needs-clarification" data-feedback-section="Evidence Context"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-evidence" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('evidence')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('evidence')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-evidence"></textarea></div>
+  </div>
   <div class="table-wrap" data-tts-narrative="Evidence matrix for the skill execution handoff flow, covering the active product path, idea brief, upstream deck-creation flow, deck output model, operating modes, workflow lab route, and corrected conversation checkpoints.">
     <table>
       <tr><th>Evidence</th><th>Observed fact</th><th>Decision impact</th><th>Confidence</th></tr>
@@ -151,15 +163,22 @@ label.active-needs-clarification{border-color:var(--orange);color:var(--orange)}
 </section>
 
 <section id="proposed-spec">
-  <div class="sec-head"><h2>3. Confirmed Spec - <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code></h2></div>
+  <div class="sec-head"><h2>3. Proposed Spec - <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code></h2></div>
+  <div class="section-feedback" data-section="Proposed Spec" id="fb-proposed-spec">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-proposed-spec" value="emphasize" data-feedback-section="Proposed Spec"> Emphasize</label>
+    <label><input type="radio" name="fb-proposed-spec" value="down" data-feedback-section="Proposed Spec"> Flag concern</label>
+    <label><input type="radio" name="fb-proposed-spec" value="needs-clarification" data-feedback-section="Proposed Spec"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-proposed-spec" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('proposed-spec')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('proposed-spec')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-proposed-spec"></textarea></div>
+  </div>
 
   <h3>3.1 Status, Scope, And Source Evidence</h3>
   <ul>
-    <li><strong>Status:</strong> confirmed; approved 2026-06-12 via final compiled YAML.</li>
+    <li><strong>Status:</strong> proposed, awaiting review-page final compiled YAML approval.</li>
     <li><strong>Skill:</strong> <code>$user-flow-map</code> v0.2.</li>
     <li><strong>Product path:</strong> <code>skills-showcase</code>.</li>
-    <li><strong>Alignment page:</strong> <code>alignment/user-flow-map-skill-execution-handoff.html</code> confirmed.</li>
-    <li><strong>Interview log:</strong> <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code>.</li>
+    <li><strong>Alignment page:</strong> <code>alignment/user-flow-map-skill-execution-handoff.html</code> in review state.</li>
+    <li><strong>Proposed interview log:</strong> <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code>.</li>
     <li><strong>Scope:</strong> flow structure only. Screens, routes, actions, decisions, branches, states, failure paths, handoffs, and wireframe-level notes for the step where a user leaves the showcase with a local execution artifact.</li>
     <li><strong>Explicit non-goals:</strong> no implementation code, CLI behavior changes, GitHub Actions, production architecture, account system, visual styling, layout polish, or backend execution from the browser.</li>
   </ul>
@@ -391,11 +410,18 @@ Local execution happens in your terminal
   </ul>
 
   <h3>3.16 Downstream Handoff After Approval Only</h3>
-  <p>Approved post-approval route: <code>$ui-interview --requirements-only skill-execution-handoff</code>. The canonical flow spec and interview log have been written, and this page preserves the approval record that authorized those writes.</p>
+  <p>After final compiled YAML approval, the agent should write the canonical spec and interview log, convert this page to <code>confirmed</code>, and then route the approved flow into requirements-only UI work: <code>$ui-interview --requirements-only skill-execution-handoff</code>. This route is proposed here for approval; it is not active while the page remains in review.</p>
 </section>
 
 <section id="interview-log">
-  <div class="sec-head"><h2>4. Confirmed Interview Log - <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></h2></div>
+  <div class="sec-head"><h2>4. Proposed Interview Log - <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></h2></div>
+  <div class="section-feedback" data-section="Proposed Interview Log" id="fb-interview-log">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-interview-log" value="emphasize" data-feedback-section="Proposed Interview Log"> Emphasize</label>
+    <label><input type="radio" name="fb-interview-log" value="down" data-feedback-section="Proposed Interview Log"> Flag concern</label>
+    <label><input type="radio" name="fb-interview-log" value="needs-clarification" data-feedback-section="Proposed Interview Log"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-interview-log" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('interview-log')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('interview-log')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-interview-log"></textarea></div>
+  </div>
   <h3>4.1 Evidence Consulted</h3>
   <ul>
     <li><code>research/.progress.yaml</code> - active product path <code>skills-showcase</code>.</li>
@@ -434,63 +460,93 @@ Local execution happens in your terminal
   </ul>
 </section>
 
-<section id="approval-record" class="compile-section">
-  <h2>5. Approval Record <span class="badge updated">Confirmed 2026-06-12</span></h2>
-  <p>Final compiled YAML received 2026-06-12: all 7 gates answered, <code>section_feedback: []</code>, no <code>needs-clarification</code>, and no requested edits. The compile controls that produced it were removed when this page converted from <code>review</code> to <code>confirmed</code>.</p>
-  <div class="decision-record"><p class="decision-answer"><strong>Evidence Context:</strong> Evidence coverage is sufficient for review approval.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Flow Assumptions Checkpoint:</strong> Assumptions are accurate; carry into canonical files.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Proposed Spec:</strong> Approve the proposed flow map.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Branch/State/Handoff Coverage:</strong> Coverage is complete for v1.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Artifact Destination:</strong> Approve <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> and the interview log companion.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Proposed File Changes:</strong> Approve canonical spec/interview writes, page confirmation, and index update after final approval.</p></div>
-  <div class="decision-record"><p class="decision-answer"><strong>Downstream Route:</strong> Approve post-approval route to <code>$ui-interview --requirements-only skill-execution-handoff</code>.</p></div>
-  <pre data-tts-narrative="Read-only approval record: the user's final compiled YAML approved all seven gates with no section feedback on 2026-06-12."><code>alignment_page: "alignment/user-flow-map-skill-execution-handoff.html"
-response_status: complete
-approval_status: ready-for-agent-review
-required_gate_status: complete
-unanswered_required_questions:
-  []
-gate_answers:
-  - section: "Evidence Context"
-    gate_type: "evidence coverage"
-    status: "answered"
-    answer: "Evidence coverage is sufficient for review approval"
-  - section: "Flow Assumptions Checkpoint"
-    gate_type: "assumptions/confidence"
-    status: "answered"
-    answer: "Assumptions are accurate; carry into canonical files"
-  - section: "Proposed Spec"
-    gate_type: "flow map"
-    status: "answered"
-    answer: "Approve the proposed flow map"
-  - section: "Branch/State/Handoff Coverage"
-    gate_type: "coverage checkpoint"
-    status: "answered"
-    answer: "Coverage is complete for v1"
-  - section: "Artifact Destination"
-    gate_type: "artifact destination"
-    status: "answered"
-    answer: "Approve proposed canonical destinations"
-    target_path: "specs/skills-showcase/user-flow-skill-execution-handoff.md"
-  - section: "Proposed File Changes"
-    gate_type: "proposed file changes"
-    status: "answered"
-    answer: "Approve canonical spec/interview writes, page confirmation, and index update after final approval"
-  - section: "Downstream Route"
-    gate_type: "post-approval route"
-    status: "answered"
-    answer: "Approve post-approval route to $ui-interview --requirements-only skill-execution-handoff"
-section_feedback:
-  []</code></pre>
-  <h3>What changed during confirmation</h3>
-  <ul>
-    <li>Canonical spec written to <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code>.</li>
-    <li>Interview log written to <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code>.</li>
-    <li>The prior <code>review</code> page was archived to <code>docs/history/archive/2026-06-12/102540/alignment/user-flow-map-skill-execution-handoff.html</code>, then this page converted to <code>confirmed</code>: gate radio/textarea controls, section feedback controls, and compile controls were removed. No approved flow content changed.</li>
-  </ul>
+<section id="gates">
+  <div class="sec-head"><h2>5. Review Gates</h2></div>
+  <div class="section-feedback" data-section="Review Gates" id="fb-gates">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-gates" value="emphasize" data-feedback-section="Review Gates"> Emphasize</label>
+    <label><input type="radio" name="fb-gates" value="down" data-feedback-section="Review Gates"> Flag concern</label>
+    <label><input type="radio" name="fb-gates" value="needs-clarification" data-feedback-section="Review Gates"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-gates" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('gates')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('gates')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-gates"></textarea></div>
+  </div>
+
+  <div class="question" id="qwrap-evidence">
+    <p><strong>Q1 - Evidence coverage:</strong> Is the evidence base sufficient for this proposed flow map?</p>
+    <label><input type="radio" name="evidence" value="approve" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Evidence coverage is sufficient for review approval"> Evidence coverage is sufficient for review approval</label>
+    <label><input type="radio" name="evidence" value="needs-more" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Needs more evidence before canonical writes"> Needs more evidence before canonical writes</label>
+    <label><input type="radio" name="evidence" value="other" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="evidence" value="needs-clarification" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="evidence" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-assumptions">
+    <p><strong>Q2 - Assumptions:</strong> Are the assumptions, especially the corrected persona wording, accurate?</p>
+    <label><input type="radio" name="assumptions" value="approve" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Assumptions are accurate; carry into canonical files"> Assumptions are accurate; carry into canonical files</label>
+    <label><input type="radio" name="assumptions" value="revise" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Revise assumptions before approval"> Revise assumptions before approval</label>
+    <label><input type="radio" name="assumptions" value="other" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="assumptions" value="needs-clarification" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="assumptions" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-flow-map">
+    <p><strong>Q3 - Flow map:</strong> Does the proposed flow map cover the right sequence from deck/workflow source to local execution artifact?</p>
+    <label><input type="radio" name="flow-map" value="approve" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Approve the proposed flow map"> Approve the proposed flow map</label>
+    <label><input type="radio" name="flow-map" value="revise" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Revise the flow map before canonical writes"> Revise the flow map before canonical writes</label>
+    <label><input type="radio" name="flow-map" value="other" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="flow-map" value="needs-clarification" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="flow-map" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-coverage">
+    <p><strong>Q4 - Branch, state, and handoff coverage:</strong> Are execution modes, approval-packet states, stale behavior, prerequisites, and recovery paths complete enough for v1?</p>
+    <label><input type="radio" name="coverage" value="approve" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Coverage is complete for v1"> Coverage is complete for v1</label>
+    <label><input type="radio" name="coverage" value="add-branches" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Add branches/states/handoffs named in notes"> Add branches/states/handoffs named in notes</label>
+    <label><input type="radio" name="coverage" value="other" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="coverage" value="needs-clarification" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="coverage" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-artifact-destination">
+    <p><strong>Q5 - Artifact destination:</strong> Approve the proposed canonical file destinations after final approval?</p>
+    <label><input type="radio" name="artifact-destination" value="approve" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Approve proposed canonical destinations" data-target-path="specs/skills-showcase/user-flow-skill-execution-handoff.md"> Approve <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> and interview log companion</label>
+    <label><input type="radio" name="artifact-destination" value="change" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Change destination paths before canonical writes"> Change destination paths before canonical writes</label>
+    <label><input type="radio" name="artifact-destination" value="other" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="artifact-destination" value="needs-clarification" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="artifact-destination" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-file-changes">
+    <p><strong>Q6 - Proposed file changes:</strong> Approve the mutation scope after approval?</p>
+    <label><input type="radio" name="file-changes" value="approve" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Approve canonical spec/interview writes, page confirmation, and index update after final approval"> Approve only: canonical spec/interview writes, page confirmation, and index update after final approval</label>
+    <label><input type="radio" name="file-changes" value="restrict" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Restrict mutation scope as named in notes"> Restrict mutation scope as named in notes</label>
+    <label><input type="radio" name="file-changes" value="other" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="file-changes" value="needs-clarification" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="file-changes" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-downstream-route">
+    <p><strong>Q7 - Downstream route:</strong> After canonical writes and confirmed conversion, should this route to requirements-only UI work?</p>
+    <label><input type="radio" name="downstream-route" value="approve" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Approve post-approval route to $ui-interview --requirements-only skill-execution-handoff"> Approve post-approval route to <code>$ui-interview --requirements-only skill-execution-handoff</code></label>
+    <label><input type="radio" name="downstream-route" value="different" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Use a different downstream route named in notes"> Use a different downstream route named in notes</label>
+    <label><input type="radio" name="downstream-route" value="other" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="downstream-route" value="needs-clarification" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="downstream-route" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+</section>
+
+<section class="compile-section" id="compile">
+  <h2>6. Compile Responses</h2>
+  <p>Use section feedback for revision requests before answering every gate. Use bottom compiled response YAML for partial gate answers or final approval. Final canonical writes require <code>approval_status: ready-for-agent-review</code>, all required gates answered, and no unresolved negative feedback.</p>
+  <p id="remaining" class="muted"></p>
+  <div>
+    <button type="button" onclick="compileResponses()">Compile Responses</button>
+    <button type="button" class="secondary" onclick="copyCompiled()">Copy YAML</button>
+  </div>
+  <textarea readonly class="yaml-output" id="compiled-yaml" aria-label="Compiled YAML output"></textarea>
 </section>
 
 <script>
+const alignmentPage = 'alignment/user-flow-map-skill-execution-handoff.html';
 const previewText = {
   direct: 'Direct path: copy the generated command, then run it in the local terminal. The site does not claim local success.',
   config: 'Config path: download or copy project.json, place it in the target repo, then use the local skillpacks workflow.',
@@ -498,6 +554,135 @@ const previewText = {
   handoff: 'Async path: use /handoff --target=codex locally, then resume in Codex with $exec --execute-approved.',
   reset: 'Default path: choose a deck or workflow, review the generated command/config, then copy or download an artifact for local execution.'
 };
+function escYaml(s){return JSON.stringify(String(s == null ? '' : s));}
+function requiredGroups(){
+  return Array.from(new Set(Array.from(document.querySelectorAll('input[data-required="true"]')).map(i => i.name)))
+    .map(name => ({name, checked: document.querySelector('input[name="' + CSS.escape(name) + '"]:checked')}));
+}
+function noteFor(name){
+  const el = document.querySelector('textarea[data-notes-for="' + CSS.escape(name) + '"]');
+  return el ? el.value.trim() : '';
+}
+function answerObject(group){
+  const i = group.checked;
+  let status = 'answered';
+  if (i.value === 'other') status = 'other';
+  if (i.value === 'needs-clarification') status = 'needs-clarification';
+  return {section:i.dataset.section, gate_type:i.dataset.gateType, status, answer:i.dataset.answer || i.value, notes:noteFor(group.name), target_path:i.dataset.targetPath || ''};
+}
+function actionFor(v){
+  return v === 'emphasize' ? 'add-weight-to-section' : (v === 'down' ? 'investigate-and-revise' : 'clarify-before-approval');
+}
+function sectionFeedbackObjects(sectionId){
+  const selected = [];
+  document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+    if (!r.checked) return;
+    const wrapper = r.closest('.section-feedback');
+    if (sectionId !== 'all' && wrapper && wrapper.id !== 'fb-' + sectionId) return;
+    const notes = wrapper ? (wrapper.querySelector('.feedback-notes')?.value.trim() || '') : '';
+    selected.push({section:r.dataset.feedbackSection, feedback:r.value, notes, requested_agent_action:actionFor(r.value)});
+  });
+  return selected;
+}
+function unansweredNames(groups){
+  return groups.filter(g => !g.checked).map(g => g.name);
+}
+function hasNegative(groups, fb){
+  const answered = groups.filter(g => g.checked).map(answerObject);
+  return answered.some(a => a.status === 'needs-clarification' || a.status === 'other' || /revise|needs|change|restrict|different|add/i.test(a.answer))
+    || fb.length > 0;
+}
+function feedbackYaml(items){
+  const missing = unansweredNames(requiredGroups());
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n';
+  if (!missing.length) y += '  []\n'; else missing.forEach(m => { y += '  - ' + escYaml(m) + '\n'; });
+  y += 'section_feedback:\n';
+  if (!items.length) y += '  []\n';
+  items.forEach(item => {
+    y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n';
+    if (item.feedback === 'emphasize') y += '    intent: "revision request: add more weight, prominence, evidence, detail, or recommendation emphasis to this section or to the point named in notes; not approval as-is"\n';
+    else y += '    intent: "revision request: evaluate feedback, investigate when needed, and amend the page before asking again for final approval"\n';
+  });
+  return y;
+}
+function compileFeedback(sectionId){
+  const yaml = feedbackYaml(sectionFeedbackObjects(sectionId));
+  if (sectionId === 'all') document.getElementById('compiled-yaml').value = yaml;
+  else {
+    const out = document.getElementById('fb-yaml-' + sectionId);
+    if (out) out.value = yaml;
+  }
+  tryCopy(yaml);
+}
+function compileResponses(){
+  const groups = requiredGroups();
+  const missing = unansweredNames(groups);
+  const fb = sectionFeedbackObjects('all');
+  const complete = missing.length === 0;
+  const negative = hasNegative(groups, fb);
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\n';
+  y += 'response_status: ' + (complete ? 'complete' : 'partial') + '\n';
+  y += 'approval_status: ' + (complete && !negative ? 'ready-for-agent-review' : 'not-approved') + '\n';
+  y += 'required_gate_status: ' + (complete ? 'complete' : 'incomplete') + '\n';
+  y += 'unanswered_required_questions:\n';
+  if (!missing.length) y += '  []\n'; else missing.forEach(m => { y += '  - ' + escYaml(m) + '\n'; });
+  const answered = groups.filter(g => g.checked).map(answerObject);
+  y += 'gate_answers:\n';
+  if (!answered.length) y += '  []\n';
+  answered.forEach(a => {
+    y += '  - section: ' + escYaml(a.section) + '\n    gate_type: ' + escYaml(a.gate_type) + '\n    status: ' + escYaml(a.status) + '\n    answer: ' + escYaml(a.answer) + '\n';
+    if (a.notes) y += '    notes: ' + escYaml(a.notes) + '\n';
+    if (a.target_path) y += '    target_path: ' + escYaml(a.target_path) + '\n';
+  });
+  y += 'section_feedback:\n';
+  if (!fb.length) y += '  []\n';
+  fb.forEach(item => {
+    y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n';
+  });
+  document.getElementById('compiled-yaml').value = y;
+  tryCopy(y);
+  updateRemaining();
+}
+function tryCopy(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => {});
+}
+function copyCompiled(){
+  const el = document.getElementById('compiled-yaml');
+  tryCopy(el.value);
+  el.focus();
+  el.select();
+}
+function copyLocalFeedback(sectionId){
+  const el = document.getElementById('fb-yaml-' + sectionId);
+  if (el) { tryCopy(el.value); el.focus(); el.select(); }
+}
+function updateRemaining(){
+  const n = unansweredNames(requiredGroups()).length;
+  document.getElementById('remaining').textContent = n ? (n + ' required gate questions unanswered') : 'All required gate questions answered';
+}
+document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+  r.addEventListener('click', function(){
+    const wrapper = this.closest('.section-feedback');
+    if (this.dataset.wasChecked === 'true') {
+      this.checked = false;
+      this.dataset.wasChecked = 'false';
+      wrapper.querySelector('.fb-body').hidden = true;
+      wrapper.dataset.feedback = '';
+    } else {
+      wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => { o.dataset.wasChecked = 'false'; });
+      this.dataset.wasChecked = 'true';
+      wrapper.querySelector('.fb-body').hidden = false;
+      wrapper.dataset.feedback = this.value;
+      wrapper.classList.add('has-feedback');
+    }
+    wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => {
+      const lbl = o.closest('label');
+      lbl.classList.remove('active-emphasize','active-down','active-needs-clarification');
+      if (o.checked) lbl.classList.add('active-' + o.value);
+    });
+    if (!wrapper.querySelector('input[data-feedback-section]:checked')) wrapper.classList.remove('has-feedback');
+  });
+});
 document.querySelectorAll('[data-preview]').forEach(btn => {
   btn.addEventListener('click', () => {
     const key = btn.dataset.preview;
@@ -507,6 +692,8 @@ document.querySelectorAll('[data-preview]').forEach(btn => {
     });
   });
 });
+document.addEventListener('change', updateRemaining);
+updateRemaining();
 </script>
 </main>
 <script src="../scripts/alignment-tts-kokoro.js"></script>

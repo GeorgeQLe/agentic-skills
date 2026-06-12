@@ -125,6 +125,54 @@ Build only the review-state alignment page for `$user-flow-map skills-showcase s
 
 ---
 
+## Current Planning - Skills Showcase Skill Execution Handoff UI Requirements
+
+### Goal
+
+Consume the approved user-flow-map response and use the confirmed flow as source evidence for `$ui-interview --requirements-only skill-execution-handoff`.
+
+### Current Checklist
+
+- [x] Capture visible handoff prompt history for `ui-interview`.
+- [x] Read active `ui-interview` skill instructions and alignment-page contract.
+- [x] Resolve active product path: `skills-showcase`.
+- [x] Record scoped roadmap/todo plan.
+- [x] Confirm final compiled user-flow YAML is complete and clean.
+- [x] Write approved canonical user-flow spec and interview log.
+- [x] Convert `alignment/user-flow-map-skill-execution-handoff.html` from `review` to `confirmed` and update the alignment index if needed.
+- [x] Gather UI requirements evidence from the confirmed flow, idea brief, deck-creation spec, operating-mode docs, and relevant app files.
+- [x] Write only the UI working packet at `research/skills-showcase/_working/preliminary-ui-interview-research.md`.
+- [x] Build `alignment/ui-interview-skill-execution-handoff.html` in `review` state.
+- [x] Attempt browser open for the UI review page.
+- [x] Run `node scripts/audit-alignment-pages.mjs`.
+- [x] Run `git diff --check`.
+- [x] Verify `specs/skills-showcase/ui-requirements-skill-execution-handoff*.md` do not exist before final UI approval.
+- [x] Review diff scope.
+- [ ] Commit and push intended tracked changes.
+
+### Review Notes
+
+- The provided compiled user-flow YAML is complete, has `approval_status: ready-for-agent-review`, and includes no section feedback.
+- `product-design` is available through `.agents/project.json` `enabled_skills.ui-interview`.
+- UI requirements canonical files remain gated behind a future final compiled YAML response from `alignment/ui-interview-skill-execution-handoff.html`.
+- Canonical upstream flow files written:
+  - `specs/skills-showcase/user-flow-skill-execution-handoff.md`
+  - `specs/skills-showcase/user-flow-skill-execution-handoff-interview.md`
+- Prior user-flow review page archived to `docs/history/archive/2026-06-12/102540/alignment/user-flow-map-skill-execution-handoff.html`; active page converted to `confirmed`.
+- UI requirements review artifacts written:
+  - `research/skills-showcase/_working/preliminary-ui-interview-research.md`
+  - `alignment/ui-interview-skill-execution-handoff.html`
+- `alignment/index.html` now lists 50 active pages and includes the UI review page under Product Design & Spec.
+- Browser open: `node scripts/open-html-page.mjs alignment/ui-interview-skill-execution-handoff.html --browser auto` opened the page via macOS.
+- Verification passed:
+  - `node scripts/audit-alignment-pages.mjs` -> 50 active pages, TTS exact, metadata exact, viewport exact, embed prohibition exact, index integrity exact.
+  - `git diff --check`
+  - inline-script syntax check for `alignment/ui-interview-skill-execution-handoff.html`
+  - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff.md`
+  - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff-interview.md`
+
+---
+
 ## Current Implementation - Skillpacks Init Global Alias
 
 ### Goal
