@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-06-12 — Skillpacks 0.1.1 publish-readiness pass
+
+- Implemented the inherited readiness plan for `skillpacks@0.1.1` without running a real publish.
+- Confirmed source package metadata is `0.1.1` and refreshed the stale staged package artifact; `packages/skillpacks/build/package.json` now reports `0.1.1` instead of the prior stale `0.1.0`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json`; the tracked diff records the current `idea-scope-brief` v0.16 metadata, v0.15 archive entry, content hash, and source fingerprint.
+- Public registry check passed: `npm view skillpacks versions --json --cache /tmp/skillpacks-npm-cache` returned only `0.1.0`, so `0.1.1` is not already published.
+- Validation passed: `npm --workspace skillpacks run test:node` (50 passed), `npm --workspace skillpacks run build`, `npm --workspace skillpacks run build:check`, `npm --workspace skillpacks run verify:package`, staged-build `npm publish --dry-run --json`, and `git diff --check`.
+- Publish dry-run ran from `packages/skillpacks/build` and reported `skillpacks@0.1.1`, `skillpacks-0.1.1.tgz`, shasum `8123ff40415d62831844b00a3a13f9d6b3cdbaa0`, and 2,569 entries.
+- Real `npm publish` was not run. No tag, dist-tag, package access, or external release mutation was attempted.
+- Final publish readiness remains externally blocked because `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` returned `E401 Unauthorized`.
+- Manifest: `tasks/ship-manifest-2026-06-12-skillpacks-0.1.1-readiness.md`.
+
 ## 2026-06-11 — Deck-builder animation approval and routing spike
 
 - Captured the visible `/exec` handoff and final animation-plan approval YAML in `prompts/exec/skill-prompt-20260611-142531-deck-builder-implementation.md` and `prompts/animation-design-planner/skill-prompt-20260611-142531-deck-builder-approval.md`.

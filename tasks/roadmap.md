@@ -1,3 +1,54 @@
+## Current Implementation - Skillpacks 0.1.1 Publish Readiness
+
+### Goal
+
+Prepare the repository and staged npm package artifacts for a later explicit `skillpacks@0.1.1` publish, without running a real publish in this pass.
+
+### Scope
+
+- Re-run the `skillpacks` package validation and build gates.
+- Refresh stale generated package artifacts, especially `packages/skillpacks/build/` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+- Confirm the staged package reports `skillpacks@0.1.1`.
+- Run npm registry/readiness checks using `/tmp/skillpacks-npm-cache`.
+- Record readiness notes in task history and ship manifest artifacts.
+- Out of scope: real `npm publish`, package access changes, npm dist-tag changes, GitHub Actions, or unrelated package behavior changes.
+
+### Plan
+
+1. Capture current state.
+   - [x] Check git status and package metadata.
+   - [x] Confirm the public registry does not already contain `skillpacks@0.1.1`.
+2. Validate and regenerate package artifacts.
+   - [x] Run `npm --workspace skillpacks run test:node`.
+   - [x] Run `npm --workspace skillpacks run build`.
+   - [x] Run `npm --workspace skillpacks run build:check`.
+   - [x] Run `npm --workspace skillpacks run verify:package`.
+   - [x] Confirm `packages/skillpacks/build/package.json` is `0.1.1`.
+3. Exercise publish packaging without publishing.
+   - [x] Run `npm publish --dry-run --json` from `packages/skillpacks/build`.
+   - [x] Confirm the dry-run reports `skillpacks@0.1.1`.
+   - [x] Run `git diff --check`.
+   - [x] Run `npm whoami` against the npm registry and record whether auth is ready.
+4. Ship readiness artifacts.
+   - [x] Record review notes in `tasks/todo.md`.
+   - [x] Add a dated history entry and ship manifest.
+   - [x] Commit and push intended readiness artifacts on the primary branch if validation allows.
+
+### Acceptance Criteria
+
+- `packages/skillpacks/package.json` and `packages/skillpacks/build/package.json` both report `0.1.1`.
+- Generated package checks pass with no stale generated files.
+- The dry-run tarball reports `skillpacks@0.1.1`.
+- The npm registry does not already contain `0.1.1`.
+- The worktree is clean after committing readiness artifacts.
+- Full external publish readiness is blocked if npm auth still fails.
+
+### Review Notes
+
+Local package readiness passed for `skillpacks@0.1.1`; the only remaining publish-readiness blocker is npm authentication. `npm whoami` reached `registry.npmjs.org` and returned `E401 Unauthorized`, so a real publish remains out of scope until the intended publisher account is logged in and the publish is explicitly requested.
+
+---
+
 ## Current Implementation - Deck-Builder Animation Approval And Routing Spike
 
 ### Goal

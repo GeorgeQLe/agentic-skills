@@ -1,3 +1,58 @@
+## Current Implementation - Skillpacks 0.1.1 Publish Readiness
+
+### Goal
+
+Prepare `skillpacks@0.1.1` source and staged npm artifacts for a later explicit publish, without running a real publish.
+
+### Execution Profile
+
+- Parallel mode: status and read-only metadata checks.
+- Serial mode: package validation, build regeneration, npm dry-run, task notes, commit, and push.
+- Rationale: npm release readiness has external side effects if commands are run from the wrong directory or without dry-run flags, so publish-adjacent commands stay explicit and staged-package scoped.
+
+### Steps
+
+- [x] Check git status and current source/staged package versions.
+- [x] Confirm the npm registry only has the already-published `0.1.0` version.
+- [x] Run `npm --workspace skillpacks run test:node`.
+- [x] Run `npm --workspace skillpacks run build`.
+- [x] Run `npm --workspace skillpacks run build:check`.
+- [x] Run `npm --workspace skillpacks run verify:package`.
+- [x] Run `npm publish --dry-run --json` from `packages/skillpacks/build`.
+- [x] Confirm the dry-run reports `skillpacks@0.1.1`.
+- [x] Run `git diff --check`.
+- [x] Run `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache`.
+- [x] Record review notes, history, and ship manifest.
+- [x] Commit and push intended readiness artifacts on `master` if local verification gates pass.
+
+### Acceptance Criteria
+
+- `packages/skillpacks/package.json` and `packages/skillpacks/build/package.json` both say `0.1.1`.
+- Manifest/build checks pass after regeneration.
+- Dry-run publish output reports `skillpacks@0.1.1`.
+- `skillpacks@0.1.1` is not present on the public npm registry.
+- No real publish, tag, or package access mutation is run in this pass.
+- Publish readiness remains externally blocked if `npm whoami` cannot authenticate.
+
+### Review Notes
+
+- Starting state confirmed the inherited issue: `packages/skillpacks/package.json` was already `0.1.1`, while `packages/skillpacks/build/package.json` was stale at `0.1.0`.
+- Public registry check passed: `npm view skillpacks versions --json --cache /tmp/skillpacks-npm-cache` returned only `["0.1.0"]`, so `0.1.1` is not published.
+- Regenerated package artifacts with `npm --workspace skillpacks run build`; the staged package now reports `0.1.1`.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`; the diff records the current `idea-scope-brief` v0.16 metadata, v0.15 archive entry, content hash, and source fingerprint.
+- Package verification passed:
+  - `npm --workspace skillpacks run test:node` (50 tests passed)
+  - `npm --workspace skillpacks run build`
+  - `npm --workspace skillpacks run build:check`
+  - `npm --workspace skillpacks run verify:package`
+  - `git diff --check`
+- Staged-package publish dry-run passed from `packages/skillpacks/build`: `npm_config_cache=/tmp/skillpacks-npm-cache npm publish --dry-run --json`. It reported `skillpacks@0.1.1`, `skillpacks-0.1.1.tgz`, shasum `8123ff40415d62831844b00a3a13f9d6b3cdbaa0`, integrity `sha512-S7wzFIy3do9OF5Y4A3u1C75KxinAkTPOxlId+IGNDeCEEFaqDOkMqI7gQVaOo+Cgw9b6XJFubjHvF78S8VMw3A==`, and 2,569 entries.
+- Real `npm publish` was not run. No tag, package access, dist-tag, or external release mutation was attempted.
+- Final external auth gate remains blocked: `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` reached npm and returned `E401 Unauthorized`.
+- Local release readiness is green for `0.1.1`; full publish readiness requires npm auth for the intended publisher account before an explicit publish command is run from `packages/skillpacks/build`.
+
+---
+
 ## Current Implementation - Deck-Builder Animation Approval And Routing Spike
 
 ### Goal

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "0d09ecd13a0789336df3e55f3a604fb9b5df3f5d31bd0f614cb3b60279d990ec",
+  "source_fingerprint": "dd587329bf0379b6e83974b4e5c7978b27462b4db857cde98d0b3bc62c82853b",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1048,9 +1048,9 @@
       "scope": "global",
       "pack": null,
       "platform": "codex",
-      "version": "v0.15",
+      "version": "v0.16",
       "path": "global/codex/idea-scope-brief/SKILL.md",
-      "content_sha256": "f288ed530afc32b680183155eabffd5e7023182f4b09f584cb2c7643cc2e8daa",
+      "content_sha256": "e797108ce6b14cae021f62dfafef54678ec7e3badc6a150a8e30eed3bef774bb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1059,6 +1059,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
