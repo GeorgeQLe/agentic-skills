@@ -47,6 +47,8 @@ Prepare the repository and staged npm package artifacts for a later explicit `sk
 
 Local package readiness passed for `skillpacks@0.1.1`; the only remaining publish-readiness blocker is npm authentication. `npm whoami` reached `registry.npmjs.org` and returned `E401 Unauthorized`, so a real publish remains out of scope until the intended publisher account is logged in and the publish is explicitly requested.
 
+Ship-end addendum: real publish attempts now run `packages/skillpacks/scripts/prepublish-auth-check.mjs` through `prepublishOnly` before npm upload. The guard skips dry-runs, verifies the expected publisher and maintainer state, and fails early if `skillpacks@0.1.1` already exists. Package staging includes the guard, and package validation passes with 55 Node tests plus `verify:package`.
+
 ---
 
 ## Current Implementation - Deck-Builder Animation Approval And Routing Spike

@@ -20,6 +20,7 @@ const checkMode = process.argv.includes("--check");
 const packageOwnedEntries = [
   { fromRoot: packageRoot, from: "bin", to: "bin" },
   { fromRoot: packageRoot, from: "src", to: "src" },
+  { fromRoot: packageRoot, from: "scripts/prepublish-auth-check.mjs", to: "scripts/prepublish-auth-check.mjs" },
   { fromRoot: packageRoot, from: "dist/skillpacks-manifest.json", to: "dist/skillpacks-manifest.json" }
 ];
 
@@ -42,6 +43,7 @@ const requiredBuildFiles = [
   "bin/skillpacks.mjs",
   "dist/skillpacks-manifest.json",
   "src/cli/run-pack-script.mjs",
+  "scripts/prepublish-auth-check.mjs",
   "scripts/pack.sh",
   "scripts/skill-links.sh",
   "init.sh",
@@ -117,11 +119,19 @@ function stagedPackageJson() {
     "license",
     "engines"
   ];
-  return Object.fromEntries(
+  const staged = Object.fromEntries(
     allowedKeys
       .filter((key) => Object.prototype.hasOwnProperty.call(packageJson, key))
       .map((key) => [key, packageJson[key]])
   );
+
+  if (packageJson.scripts?.prepublishOnly) {
+    staged.scripts = {
+      prepublishOnly: packageJson.scripts.prepublishOnly
+    };
+  }
+
+  return staged;
 }
 
 function assertBuildBoundary() {

@@ -34,6 +34,15 @@ Prepare `skillpacks@0.1.1` source and staged npm artifacts for a later explicit 
 - No real publish, tag, or package access mutation is run in this pass.
 - Publish readiness remains externally blocked if `npm whoami` cannot authenticate.
 
+### Ship-End Addendum - Prepublish Auth Guard
+
+- [x] Add `packages/skillpacks/scripts/prepublish-auth-check.mjs` to fail real publishes before npm's misleading publish failure path when the active account is unauthenticated, wrong, not a maintainer, or the version already exists.
+- [x] Wire the guard into `packages/skillpacks/package.json` as `prepublishOnly` and `publish:preflight`.
+- [x] Include the guard in `packages/skillpacks/scripts/build-package.mjs` and package `files` so staged npm artifacts carry the publish protection.
+- [x] Add mocked npm unit coverage for dry-run skip, valid maintainer, unauthenticated login guidance, wrong user, and already-published version.
+- [x] Regenerate package staging/manifest artifacts and run package validation.
+- [x] Capture this `$ship-end` invocation under `prompts/ship-end/`.
+
 ### Review Notes
 
 - Starting state confirmed the inherited issue: `packages/skillpacks/package.json` was already `0.1.1`, while `packages/skillpacks/build/package.json` was stale at `0.1.0`.
@@ -50,6 +59,18 @@ Prepare `skillpacks@0.1.1` source and staged npm artifacts for a later explicit 
 - Real `npm publish` was not run. No tag, package access, dist-tag, or external release mutation was attempted.
 - Final external auth gate remains blocked: `npm whoami --registry https://registry.npmjs.org/ --cache /tmp/skillpacks-npm-cache` reached npm and returned `E401 Unauthorized`.
 - Local release readiness is green for `0.1.1`; full publish readiness requires npm auth for the intended publisher account before an explicit publish command is run from `packages/skillpacks/build`.
+- Added a `prepublishOnly` auth preflight for real publish attempts. It skips dry-runs, checks `npm whoami`, requires the expected publisher `glexcorp` unless `SKILLPACKS_NPM_PUBLISHER` is set, verifies maintainer membership when the package exists, and fails early if `skillpacks@0.1.1` is already published.
+- Added `publish:preflight` for explicit local verification and included `scripts/prepublish-auth-check.mjs` in both the package allowlist and staged package build boundary.
+- Added mocked npm coverage for dry-run skip, successful maintainer preflight, unauthenticated login guidance, wrong account failure, and already-published version failure.
+- Validation passed for the ship-end addendum:
+  - `npm --workspace skillpacks run test:node` (55 tests passed)
+  - `npm --workspace skillpacks run build:check`
+  - `node --check packages/skillpacks/scripts/prepublish-auth-check.mjs`
+  - `node --check packages/skillpacks/test/prepublish-auth-check.test.mjs`
+  - `git diff --check`
+  - `npm --workspace skillpacks run build`
+  - `npm --workspace skillpacks run verify:package` (dry-run tarball `skillpacks@0.1.1`, 2,570 entries, includes `scripts/prepublish-auth-check.mjs`)
+- Ship manifest: `tasks/ship-manifest-2026-06-11-skillpacks-prepublish-auth-guard.md`.
 
 ---
 

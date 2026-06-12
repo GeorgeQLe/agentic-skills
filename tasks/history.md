@@ -14185,6 +14185,16 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-210336-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-global.md`.
 
+## 2026-06-11 — Skillpacks prepublish auth guard
+
+- Added `packages/skillpacks/scripts/prepublish-auth-check.mjs` to protect real `skillpacks` publishes from unauthenticated, wrong-account, non-maintainer, and already-published-version failures before npm upload.
+- Wired the guard into `packages/skillpacks/package.json` as `prepublishOnly` and `publish:preflight`, added it to the package `files` allowlist, and updated `packages/skillpacks/scripts/build-package.mjs` so staged package builds include it.
+- Added mocked npm unit tests for dry-run skip, successful maintainer preflight, unauthenticated login guidance, wrong account failure, and already-published version failure.
+- Refreshed package staging and manifest fingerprint for the changed package boundary.
+- Validation passed: `npm --workspace skillpacks run test:node` (55 passed), `npm --workspace skillpacks run build:check`, `node --check packages/skillpacks/scripts/prepublish-auth-check.mjs`, `node --check packages/skillpacks/test/prepublish-auth-check.test.mjs`, `git diff --check`, `npm --workspace skillpacks run build`, and `npm --workspace skillpacks run verify:package`.
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260611-232053-wrap-up-session.md`.
+- Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-prepublish-auth-guard.md`.
+
 ## 2026-06-11 — Skillpacks CLI routing P2 agent-work-admin remediation
 
 - Updated the first P2 bucket from `research/skillpack-cli-routing-audit.md`: mirrored `plan-phase`, `roadmap`, and `spec-drift` under `packs/agent-work-admin` now include `npx skillpacks install <pack-or-skill>` alternatives while preserving Claude `/pack install` and Codex `$pack install` routes.
