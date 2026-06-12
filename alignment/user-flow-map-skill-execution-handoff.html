@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="prototype">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User Flow Map - Skill Execution Handoff</title>
+<style>
+:root{
+  --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;
+  --accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff;
+  --chart-1:#58a6ff;--chart-2:#3fb950;--chart-3:#d29922;--chart-4:#bc8cff;
+  --chart-5:#f85149;--chart-6:#79c0ff;--chart-7:#f0883e;--chart-8:#a5d6ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.6}
+main{width:min(1120px,calc(100vw - 40px));margin:0 auto;padding:32px 0 64px;max-width:100%;overflow-wrap:break-word}
+h1{color:#fff;font-size:1.9rem;line-height:1.2;margin:0 0 10px;letter-spacing:0}
+h2{color:var(--accent);font-size:1.35rem;margin:42px 0 12px;letter-spacing:0}
+h3{color:#fff;font-size:1.1rem;margin:28px 0 10px;letter-spacing:0}
+h4{color:var(--purple);font-size:1rem;margin:20px 0 8px;letter-spacing:0}
+a{color:var(--accent)}
+p{margin:10px 0}
+code{background:#1c2128;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.92em}
+pre{background:#10151c;border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;font-size:.84rem;line-height:1.45;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+pre code{background:none;border:none;padding:0}
+.status,.toc,.section-feedback,.question,.compile-section,.callout,.preview,.review-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0}
+.status strong{color:var(--purple)}
+.status .row{margin:4px 0}
+.status .k{color:var(--text-muted);display:inline-block;min-width:190px}
+.muted{color:var(--text-muted)}
+.badge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.badge.review{background:#241d10;color:var(--orange);border:1px solid var(--orange)}
+.badge.proto{background:#231a35;color:var(--purple);border:1px solid var(--purple)}
+.badge.blocked{background:#2a1314;color:var(--red);border:1px solid var(--red)}
+.toc ol{margin:8px 0 0;padding-left:24px}
+.toc li{margin:4px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th{background:var(--surface);color:#fff;text-align:left}
+th,td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+ul,ol{padding-left:24px}
+li{margin:5px 0}
+.callout{border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+.callout.warn{border-left-color:var(--orange)}
+.callout.block{border-left-color:var(--red)}
+.question{background:#1c2333;border-color:var(--purple)}
+.question p:first-child{margin-top:0;color:#fff}
+label{display:block;min-height:44px;padding:10px 16px;margin:7px 0;border:1px solid var(--border);border-radius:6px;background:#0f1520}
+input[type="radio"]{margin-right:8px}
+textarea{box-sizing:border-box;width:100%;min-height:92px;margin-top:8px;background:#0f1520;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font:inherit}
+button{font:inherit;min-height:44px;padding:10px 16px;margin:8px 8px 8px 0;background:#1f6feb;color:#fff;border:1px solid #388bfd;border-radius:6px;cursor:pointer}
+button.secondary{background:#21262d;border-color:var(--border)}
+button:hover{border-color:var(--accent)}
+.section-feedback{border-color:#26384f}
+.section-feedback > span{display:block;color:var(--text-muted);margin-bottom:6px}
+.section-feedback label{display:inline-block;margin-right:6px}
+.section-feedback .fb-body{margin-top:8px}
+label.active-emphasize{border-color:var(--green);color:var(--green)}
+label.active-down{border-color:var(--red);color:var(--red)}
+label.active-needs-clarification{border-color:var(--orange);color:var(--orange)}
+.yaml-output{min-height:150px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.preview{background:#101722}
+.preview-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.preview-stage{display:grid;grid-template-columns:repeat(4,minmax(min(210px,100%),1fr));gap:10px;margin-top:12px}
+.preview-step{background:#0f1520;border:1px solid var(--border);border-radius:8px;padding:12px;min-height:120px}
+.preview-step strong{display:block;color:#fff;margin-bottom:6px}
+.preview-step.active{border-color:var(--green);box-shadow:0 0 0 1px rgba(63,185,80,.45)}
+.preview-readout{background:#0f1520;border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(min(300px,100%),1fr));gap:14px}
+.review-card{background:#0f1520}
+.route-label{color:var(--accent);font-weight:700}
+@media (max-width:860px){main{width:calc(100vw - 28px)}h1{font-size:1.55rem}.preview-stage{grid-template-columns:repeat(2,minmax(min(210px,100%),1fr))}.status .k{min-width:150px}}
+@media (max-width:560px){main{width:calc(100vw - 22px);padding-top:22px}h1{font-size:1.32rem}.preview-stage,.two-col{grid-template-columns:1fr}th,td{padding:8px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>User Flow Map - Skill Execution Handoff</h1>
+  <p class="muted">Review page for <code>$user-flow-map skills-showcase skill-execution-handoff</code>. This page renders the full proposed user-flow spec and interview log inline. It does not write the canonical markdown files until final compiled YAML approval.</p>
+  <div class="status">
+    <div class="row"><span class="k">alignment_status:</span> <span class="badge review">review</span> <span class="badge proto">prototype tier</span></div>
+    <div class="row"><span class="k">generated:</span> 2026-06-12</div>
+    <div class="row"><span class="k">skill:</span> user-flow-map v0.2</div>
+    <div class="row"><span class="k">product path:</span> <code>skills-showcase</code> from <code>research/.progress.yaml</code></div>
+    <div class="row"><span class="k">review artifact:</span> <code>alignment/user-flow-map-skill-execution-handoff.html</code></div>
+    <div class="row"><span class="k">proposed canonical:</span> <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> and <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></div>
+    <div class="row"><span class="k">blocked until approval:</span> <span class="badge blocked">canonical spec writes</span> <span class="badge blocked">confirmed conversion</span></div>
+    <div class="row muted">Next action while this page is in review: inspect this HTML page and provide either section-feedback YAML or bottom compiled response YAML. Canonical files remain unwritten unless the compiled YAML has <code>approval_status: ready-for-agent-review</code> with no unresolved negative feedback.</div>
+  </div>
+</header>
+
+<nav class="toc" id="toc">
+  <strong>Table of Contents</strong>
+  <ol>
+    <li><a href="#summary">Review Summary</a></li>
+    <li><a href="#evidence">Evidence Context</a></li>
+    <li><a href="#proposed-spec">Proposed Spec - <code>user-flow-skill-execution-handoff.md</code></a></li>
+    <li><a href="#interview-log">Proposed Interview Log - <code>user-flow-skill-execution-handoff-interview.md</code></a></li>
+    <li><a href="#gates">Review Gates</a></li>
+    <li><a href="#compile">Compile Responses</a></li>
+  </ol>
+</nav>
+
+<section id="summary">
+  <div class="sec-head"><h2>1. Review Summary</h2></div>
+  <div class="section-feedback" data-section="Review Summary" id="fb-summary">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-summary" value="emphasize" data-feedback-section="Review Summary"> Emphasize</label>
+    <label><input type="radio" name="fb-summary" value="down" data-feedback-section="Review Summary"> Flag concern</label>
+    <label><input type="radio" name="fb-summary" value="needs-clarification" data-feedback-section="Review Summary"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-summary" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('summary')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('summary')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-summary"></textarea></div>
+  </div>
+  <p>The proposed flow starts after a user has selected a deck or workflow and needs to leave the site with an actionable local execution artifact. It connects the existing deck-builder output model to the operating-mode model in <code>docs/operating-modes.md</code>: direct terminal execution, hybrid <code>/delegate</code>, async <code>/handoff --target=codex</code>, and Codex execution of an approved packet through <code>$exec --execute-approved</code>.</p>
+  <div class="callout">
+    <strong>Corrected persona wording carried into the proposed spec:</strong>
+    <p>Personas covered: a new evaluator choosing a GSkillPacks deck for adoption, and an existing user configuring another repo. Their shared goal is to leave the site with a clear command or config they can run locally.</p>
+  </div>
+  <div class="preview" data-tts-narrative="Interactive preview of the execution handoff flow. The user starts from a completed deck or workflow selection, reviews the output, chooses direct command, config download, hybrid delegate, or async handoff, then resolves any prerequisite or approval-packet state before running locally.">
+    <div class="preview-controls">
+      <strong>Prototype preview: execution handoff branch</strong>
+      <button type="button" data-preview="direct">Direct</button>
+      <button type="button" data-preview="config">Config</button>
+      <button type="button" data-preview="delegate">Delegate</button>
+      <button type="button" data-preview="handoff">Handoff</button>
+      <button type="button" class="secondary" data-preview="reset">Reset</button>
+    </div>
+    <div class="preview-stage" aria-live="polite">
+      <div class="preview-step active" data-step="1"><strong>1. Source</strong><span>Completed deck output or <code>/workflows</code> Production step.</span></div>
+      <div class="preview-step" data-step="2"><strong>2. Review</strong><span>Command/config plus prerequisites and mode context.</span></div>
+      <div class="preview-step" data-step="3"><strong>3. Choose path</strong><span>Direct, config, hybrid delegate, or async handoff.</span></div>
+      <div class="preview-step" data-step="4"><strong>4. Local run</strong><span>User runs command or resumes approved execution locally.</span></div>
+    </div>
+    <div class="preview-readout" id="preview-readout">Default path: choose a deck or workflow, review the generated command/config, then copy or download an artifact for local execution.</div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="sec-head"><h2>2. Evidence Context</h2></div>
+  <div class="section-feedback" data-section="Evidence Context" id="fb-evidence">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-evidence" value="emphasize" data-feedback-section="Evidence Context"> Emphasize</label>
+    <label><input type="radio" name="fb-evidence" value="down" data-feedback-section="Evidence Context"> Flag concern</label>
+    <label><input type="radio" name="fb-evidence" value="needs-clarification" data-feedback-section="Evidence Context"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-evidence" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('evidence')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('evidence')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-evidence"></textarea></div>
+  </div>
+  <div class="table-wrap" data-tts-narrative="Evidence matrix for the skill execution handoff flow, covering the active product path, idea brief, upstream deck-creation flow, deck output model, operating modes, workflow lab route, and corrected conversation checkpoints.">
+    <table>
+      <tr><th>Evidence</th><th>Observed fact</th><th>Decision impact</th><th>Confidence</th></tr>
+      <tr><td><code>research/.progress.yaml</code></td><td>Exactly one active product path: <code>skills-showcase</code>.</td><td>Write proposed canonical specs under <code>specs/skills-showcase/</code> after approval.</td><td>High</td></tr>
+      <tr><td><code>research/skills-showcase/idea-brief.md</code></td><td>The showcase should produce actionable output: copyable CLI command and downloadable <code>project.json</code>.</td><td>The handoff flow must end in a local command/config artifact, not a web-only success state.</td><td>High</td></tr>
+      <tr><td><code>specs/skills-showcase/user-flow-deck-creation.md</code></td><td>Deck completion unlocks CLI, project.json download, share, and keep-editing paths.</td><td>Skill execution handoff starts from the completed deck/output state and extends the artifact handoff.</td><td>High</td></tr>
+      <tr><td><code>specs/skills-showcase/user-flow-deck-creation-interview.md</code></td><td>Deck flow approval recorded artifact destination, file changes, and post-approval route gates.</td><td>Reuse the same alignment-gated review model and do not overwrite deck-creation files.</td><td>High</td></tr>
+      <tr><td><code>apps/skills-showcase/docs/deck-builder-ux.md</code></td><td>Locked choices: deck-first entry, canvas plus real URLs, tap-to-add, phase-labeled slots, localStorage progress, no accounts.</td><td>Do not introduce account-backed install state or server-side execution.</td><td>High</td></tr>
+      <tr><td><code>docs/decks.md</code></td><td>Npm deck installs use <code>npx skillpacks install-deck &lt;slug&gt;</code>; current release requires <code>bash</code> and <code>jq</code> for deck materialization, while direct npm pack installs do not require <code>jq</code>.</td><td>Prerequisite states must distinguish deck install from direct pack install/config download.</td><td>High</td></tr>
+      <tr><td><code>docs/operating-modes.md</code></td><td>Modes are <code>claude-only</code>, <code>codex-only</code>, and <code>hybrid</code>. Hybrid uses <code>/delegate</code>; async handoff uses <code>/handoff --target=codex</code>; Codex consumes with <code>$exec --execute-approved</code>.</td><td>The flow must branch by user execution mode and packet lifecycle without inventing new local automation.</td><td>High</td></tr>
+      <tr><td><code>docs/operating-modes.md</code> and <code>scripts/approved-plan.sh</code></td><td>Approval packet writes require <code>jq</code>; only lifecycle <code>approved</code> is executable; freshness checks can mark a packet <code>stale</code>.</td><td>Handoff branch needs prerequisite and stale-packet recovery states.</td><td>High</td></tr>
+      <tr><td><code>apps/skills-showcase/app/workflows/page.tsx</code> and <code>workflow-data.ts</code></td><td><code>/workflows</code> presents the AFPS phase walkthroughs; the Production workflow includes roadmap, plan phase, run, ship, and close steps.</td><td>Current app surface can enter handoff from workflow selection as well as from completed deck output.</td><td>High</td></tr>
+      <tr><td>Conversation checkpoints</td><td>Assumptions confirmed as-is, coverage reviewed, persona wording corrected.</td><td>Carry the corrected persona wording and show approval gates instead of re-asking terminal interview questions.</td><td>High (user-stated via handoff plan)</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="proposed-spec">
+  <div class="sec-head"><h2>3. Proposed Spec - <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code></h2></div>
+  <div class="section-feedback" data-section="Proposed Spec" id="fb-proposed-spec">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-proposed-spec" value="emphasize" data-feedback-section="Proposed Spec"> Emphasize</label>
+    <label><input type="radio" name="fb-proposed-spec" value="down" data-feedback-section="Proposed Spec"> Flag concern</label>
+    <label><input type="radio" name="fb-proposed-spec" value="needs-clarification" data-feedback-section="Proposed Spec"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-proposed-spec" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('proposed-spec')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('proposed-spec')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-proposed-spec"></textarea></div>
+  </div>
+
+  <h3>3.1 Status, Scope, And Source Evidence</h3>
+  <ul>
+    <li><strong>Status:</strong> proposed, awaiting review-page final compiled YAML approval.</li>
+    <li><strong>Skill:</strong> <code>$user-flow-map</code> v0.2.</li>
+    <li><strong>Product path:</strong> <code>skills-showcase</code>.</li>
+    <li><strong>Alignment page:</strong> <code>alignment/user-flow-map-skill-execution-handoff.html</code> in review state.</li>
+    <li><strong>Proposed interview log:</strong> <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code>.</li>
+    <li><strong>Scope:</strong> flow structure only. Screens, routes, actions, decisions, branches, states, failure paths, handoffs, and wireframe-level notes for the step where a user leaves the showcase with a local execution artifact.</li>
+    <li><strong>Explicit non-goals:</strong> no implementation code, CLI behavior changes, GitHub Actions, production architecture, account system, visual styling, layout polish, or backend execution from the browser.</li>
+  </ul>
+
+  <h3>3.2 Flow Assumptions Checkpoint</h3>
+  <p>Checkpoint status from prior conversation context: assumptions confirmed as-is. Persona wording corrected as follows and treated as authoritative for this proposed spec.</p>
+  <blockquote class="callout">Personas covered: a new evaluator choosing a GSkillPacks deck for adoption, and an existing user configuring another repo. Their shared goal is to leave the site with a clear command or config they can run locally.</blockquote>
+  <div class="table-wrap" data-tts-narrative="Flow assumptions checkpoint with source tags for persona, entry points, success condition, mode branches, screens, states, failure paths, handoffs, and non-goals.">
+    <table>
+      <tr><th>#</th><th>Assumption</th><th>Source</th></tr>
+      <tr><td>1</td><td>The primary persona is a new evaluator choosing a GSkillPacks deck for adoption.</td><td>[from corrected conversation checkpoint]</td></tr>
+      <tr><td>2</td><td>The secondary persona is an existing user configuring another repo.</td><td>[from corrected conversation checkpoint]</td></tr>
+      <tr><td>3</td><td>Both personas share one success condition: leave the site with a clear command or config they can run locally.</td><td>[from corrected conversation checkpoint]</td></tr>
+      <tr><td>4</td><td>Entry can come from a completed deck output panel, the <code>/workflows</code> Production walkthrough, a shared deck URL, or docs/npm links that land on a deck/workflow surface.</td><td>[from spec + codebase]</td></tr>
+      <tr><td>5</td><td>Direct web-to-terminal execution is a copy path, not browser-side execution.</td><td>[from docs/decks.md + inferred boundary]</td></tr>
+      <tr><td>6</td><td>Web-to-repo execution is a download/copy path for <code>project.json</code> or command text; the user places or runs it locally.</td><td>[from idea brief + deck-creation spec]</td></tr>
+      <tr><td>7</td><td>Hybrid and async handoff paths explain existing commands: <code>/delegate</code>, <code>/handoff --target=codex</code>, and <code>$exec --execute-approved</code>. The showcase does not create hidden approval packets for the user.</td><td>[from operating-modes.md]</td></tr>
+      <tr><td>8</td><td>Approval packet lifecycle and freshness matter enough to be visible in the flow: draft, approved, consumed, stale, superseded, uncertain; only approved is executable.</td><td>[from operating-modes.md]</td></tr>
+      <tr><td>9</td><td><code>jq</code> prerequisite messaging is required for packet write paths and npm deck materialization prerequisites.</td><td>[from docs/decks.md + scripts/approved-plan.sh]</td></tr>
+      <tr><td>10</td><td>States to represent: empty/no selection, loading data, generated output ready, copied/downloaded success, clipboard denied, missing prerequisite, stale packet, mode mismatch, invalid deck/workflow, offline after first load, and review/edit before handoff.</td><td>[inferred from evidence]</td></tr>
+      <tr><td>11</td><td>Handoffs include web to terminal, web to repo config, web to Claude orchestration, Claude to Codex through approval packet, and person-to-person sharing.</td><td>[from spec + operating-modes.md]</td></tr>
+      <tr><td>12</td><td>Layout and styling remain wireframe-level; UI details move to <code>$ui-interview --requirements-only skill-execution-handoff</code> after approval.</td><td>[from skill contract]</td></tr>
+    </table>
+  </div>
+
+  <h3>3.3 Persona, Goal, And Success Condition</h3>
+  <div class="table-wrap" data-tts-narrative="Two personas and their success condition. A new evaluator wants adoption confidence and an existing user wants a fast repo setup, but both need a local command or config.">
+    <table>
+      <tr><th>Persona</th><th>Goal</th><th>Success condition</th><th>Tempo</th></tr>
+      <tr><td>New evaluator choosing a GSkillPacks deck for adoption</td><td>Understand enough about the deck/workflow to trust running it in a project.</td><td>Leaves with a clear local command, config download, or agent handoff route.</td><td>Exploratory: may inspect deck contents, prerequisites, and execution mode before copying.</td></tr>
+      <tr><td>Existing user configuring another repo</td><td>Move quickly from known deck/workflow to runnable setup.</td><td>Copies a command or downloads <code>project.json</code> with minimal friction.</td><td>Direct: wants fast copy/download plus recovery if local state is stale.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.4 Entry Points And Preconditions</h3>
+  <div class="table-wrap" data-tts-narrative="Entry point inventory for deck output, workflow lab production step, shared deck URL, docs links, and returning user state.">
+    <table>
+      <tr><th>ID</th><th>Entry</th><th>Trigger</th><th>Precondition</th><th>Lands on</th></tr>
+      <tr><td>E1</td><td>Completed deck output panel</td><td>User fills deck core slots or selects a completed preset.</td><td>Deck output command/config can be generated.</td><td>S1 Handoff source.</td></tr>
+      <tr><td>E2</td><td><code>/workflows</code> Production workflow</td><td>User explores the AFPS Production workflow in the current TUI surface.</td><td>Workflow data loads and the Production workflow is selectable.</td><td>S1 Handoff source with workflow-derived command path.</td></tr>
+      <tr><td>E3</td><td>Direct deck URL such as <code>/deck/[slug]</code></td><td>Shared or bookmarked deck.</td><td>Slug is known; otherwise recover through invalid-deck state.</td><td>S1 or S2, depending on completion state.</td></tr>
+      <tr><td>E4</td><td>Downloaded or copied <code>project.json</code> from a prior session</td><td>Returning user wants to reuse config in another repo.</td><td>File still matches current deck/package model.</td><td>S3 Config review or F7 stale-config recovery.</td></tr>
+      <tr><td>E5</td><td>Docs/npm README link to showcase</td><td>User arrives from package documentation.</td><td>Skills data and workflow data load.</td><td>S1 with source context from link target when available.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.5 Happy Path</h3>
+  <div class="table-wrap" data-tts-narrative="Happy path from source surface through output review, mode choice, prerequisite check, copy or download, local run, and optional return to the site after successful execution.">
+    <table>
+      <tr><th>#</th><th>Step</th><th>Screen</th></tr>
+      <tr><td>1</td><td>User reaches a completed deck output or the <code>/workflows</code> Production workflow.</td><td>S1 Handoff source</td></tr>
+      <tr><td>2</td><td>The site shows the generated command/config plus what it will change locally: enabled packs, deck slug or explicit pack list, and any prerequisites.</td><td>S2 Output review</td></tr>
+      <tr><td>3</td><td>User chooses a handoff path: direct terminal command, config download, hybrid delegate guidance, or async Codex handoff guidance.</td><td>S3 Mode choice</td></tr>
+      <tr><td>4</td><td>System validates in-page prerequisites it can know: deck/config available, command not empty, browser can copy/download, and selected branch has required explanation.</td><td>S3/S4</td></tr>
+      <tr><td>5</td><td>User copies command or downloads config/packet guidance.</td><td>S4 Artifact actions</td></tr>
+      <tr><td>6</td><td>User runs the command locally, places config in repo, or uses Claude/Codex commands to produce/consume an approval packet.</td><td>External local terminal/repo</td></tr>
+      <tr><td>7</td><td>If local execution reports stale packet, missing <code>jq</code>, mode mismatch, or dirty-tree blocker, the user returns to S5 recovery guidance instead of guessing.</td><td>S5 Recovery</td></tr>
+      <tr><td>8</td><td>After local success, the site offers keep-browsing/share paths but does not claim the local run succeeded unless the user did it.</td><td>S6 Post-handoff state</td></tr>
+    </table>
+  </div>
+
+  <h3>3.6 Alternate Paths And Branches</h3>
+  <div class="table-wrap" data-tts-narrative="Alternate paths for direct execution, config download, hybrid delegate, async handoff, Codex-only execution, keep editing, no data, clipboard fallback, and stale packet recovery.">
+    <table>
+      <tr><th>ID</th><th>Branch</th><th>Diverges at</th><th>Behavior</th><th>Rejoins</th></tr>
+      <tr><td>B1</td><td>Direct terminal command</td><td>S3</td><td>User copies <code>npx skillpacks install-deck &lt;slug&gt;</code> for canonical decks or explicit install commands for modified/custom decks.</td><td>S4 copy/download success, then local terminal.</td></tr>
+      <tr><td>B2</td><td>Config download</td><td>S3</td><td>User downloads <code>project.json</code> or copies its JSON preview for placement in another repo.</td><td>S4 download success, then local repo.</td></tr>
+      <tr><td>B3</td><td>Hybrid delegate guidance</td><td>S3</td><td>User in Claude/hybrid mode follows guidance that <code>/delegate</code> creates an approval packet and invokes Codex execution inside Claude after approval.</td><td>S4 guidance copied, then Claude local session.</td></tr>
+      <tr><td>B4</td><td>Async handoff to Codex</td><td>S3</td><td>User follows guidance that <code>/handoff --target=codex</code> produces the approval packet plus <code>tasks/handoff.md</code>; Codex resumes with <code>$exec --execute-approved</code>.</td><td>S4 guidance copied, then local Claude/Codex sessions.</td></tr>
+      <tr><td>B5</td><td>Codex-only execution</td><td>S3</td><td>User skips Claude packet language and uses Codex-side execution routes when Codex is the planner/executor.</td><td>S4 copied command/guidance.</td></tr>
+      <tr><td>B6</td><td>Review/edit before handoff</td><td>S2/S3</td><td>User returns to deck/workflow selection to adjust packs, overlays, or workflow step before copying.</td><td>S1 source surface.</td></tr>
+      <tr><td>B7</td><td>Prerequisite warning</td><td>S3/S4</td><td>Missing <code>jq</code>, missing <code>bash</code> for deck materialization, or unsupported browser clipboard/download surfaces inline recovery.</td><td>S5 recovery, then S4 retry.</td></tr>
+      <tr><td>B8</td><td>Stale approval packet</td><td>External run returns stale</td><td>Freshness check failed: lifecycle, HEAD, todo hash, dirty path, manual blocker, or TTL. User is told to re-draft/re-approve rather than force execution.</td><td>S5 recovery; may return to S3 for async/hybrid path.</td></tr>
+      <tr><td>B9</td><td>Share handoff choice</td><td>S4</td><td>User copies a share URL plus command/config summary for a teammate, without implying the teammate's local packet is approved.</td><td>Recipient starts at E3/E5.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.7 Decision-Point Table</h3>
+  <div class="table-wrap" data-tts-narrative="Decision point table distinguishing user decisions, system decisions, permission decisions, and external manual decisions.">
+    <table>
+      <tr><th>ID</th><th>Type</th><th>Where</th><th>Decision</th><th>Branch rule</th></tr>
+      <tr><td>D1</td><td>User</td><td>S1/S2</td><td>Proceed with current deck/workflow or edit first?</td><td>Edit returns to deck/workflow; proceed opens S3.</td></tr>
+      <tr><td>D2</td><td>User</td><td>S3</td><td>Direct command, config download, hybrid delegate, async handoff, or Codex-only guidance?</td><td>Routes to B1-B5.</td></tr>
+      <tr><td>D3</td><td>System</td><td>S2</td><td>Canonical deck intact?</td><td>Yes: one-line <code>install-deck</code>. No: explicit pack list/config.</td></tr>
+      <tr><td>D4</td><td>System</td><td>S3/S4</td><td>Prerequisites known and explainable?</td><td>Missing prerequisite opens warning/recovery; output stays copyable if safe with caveat.</td></tr>
+      <tr><td>D5</td><td>Permission</td><td>S4</td><td>Clipboard/download permission granted?</td><td>Success confirmation or manual select/save fallback.</td></tr>
+      <tr><td>D6</td><td>External/manual</td><td>Local terminal</td><td>Approval packet freshness passes?</td><td>Pass executes; fail becomes stale and requires re-approval.</td></tr>
+      <tr><td>D7</td><td>External/manual</td><td>Local terminal</td><td>Mode compatible with selected command?</td><td>Compatible proceeds; mode mismatch requires choosing the correct local route.</td></tr>
+      <tr><td>D8</td><td>User</td><td>S5</td><td>Resolve issue, change path, or abandon handoff?</td><td>Retry S4, change S3, or return S1.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.8 Screen/Route Inventory</h3>
+  <div class="table-wrap" data-tts-narrative="Screen and route inventory for source, output review, mode choice, artifact actions, recovery, and post-handoff status.">
+    <table>
+      <tr><th>ID</th><th>Screen</th><th>Route / surface</th><th>Purpose</th><th>Inputs</th><th>Outputs</th></tr>
+      <tr><td>S1</td><td>Handoff source</td><td>Completed deck panel, <code>/deck/[slug]</code>, <code>/workflows</code></td><td>Orient the user around the selected deck/workflow and show that local execution is possible.</td><td>Deck slug/config, workflow key/step, local progress.</td><td>S2 output review or return to deck/workflow edit.</td></tr>
+      <tr><td>S2</td><td>Output review</td><td>Panel within deck/workflow surface</td><td>Preview command/config, prerequisites, and what will be handed off.</td><td>Deck/workflow output model and operating-mode evidence copy.</td><td>S3 mode choice, S1 edit.</td></tr>
+      <tr><td>S3</td><td>Mode choice</td><td>Panel/drawer/modal within the same route</td><td>Select direct, config, hybrid delegate, async handoff, or Codex-only path.</td><td>User selection and generated output availability.</td><td>S4 action panel or S5 prerequisite recovery.</td></tr>
+      <tr><td>S4</td><td>Artifact actions</td><td>Panel in flow</td><td>Copy command, copy guidance, download config, copy share URL.</td><td>Selected branch, command text, config JSON.</td><td>External local terminal/repo, S6 success, or S5 recovery.</td></tr>
+      <tr><td>S5</td><td>Recovery guidance</td><td>Inline warning/error state</td><td>Explain missing prerequisites, stale packet, mode mismatch, clipboard failure, invalid selection, or stale config.</td><td>Error/recovery reason.</td><td>Retry S4, switch branch S3, or edit S1.</td></tr>
+      <tr><td>S6</td><td>Post-handoff state</td><td>Same flow surface</td><td>Confirm browser-side copy/download only and offer share/keep-browsing.</td><td>Completed browser action.</td><td>Share URL, return to deck/workflows, no false local-exec claim.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.9 Per-Screen Action/State Matrix</h3>
+  <div class="table-wrap" data-tts-narrative="Action and state matrix for the six handoff screens, covering actions, navigation, disabled rules, validation, and required states.">
+    <table>
+      <tr><th>Screen</th><th>Actions</th><th>Navigation</th><th>Disabled / blocked rules</th><th>Validation</th><th>States</th></tr>
+      <tr><td>S1 Handoff source</td><td>Open output review; edit deck/workflow; inspect deck/workflow evidence.</td><td>S2 or upstream deck/workflow route.</td><td>Open review disabled if no deck/workflow output exists.</td><td>Known deck slug or workflow key required.</td><td>empty, loading, ready, invalid source, restored.</td></tr>
+      <tr><td>S2 Output review</td><td>Inspect command/config preview; view prerequisites; keep editing.</td><td>S3 or S1.</td><td>Mode choice blocked if generated output is empty or inconsistent.</td><td>Canonical vs explicit pack list; config JSON parseable.</td><td>ready, needs edit, stale config warning.</td></tr>
+      <tr><td>S3 Mode choice</td><td>Select direct/config/delegate/handoff/Codex-only; compare consequences.</td><td>S4, S5, or S2.</td><td>Hybrid/async choices marked guidance-only; browser cannot create local packet.</td><td>Selected mode has required explanation and target command text.</td><td>selected, unselected, warning, clarification.</td></tr>
+      <tr><td>S4 Artifact actions</td><td>Copy command; copy guidance; download <code>project.json</code>; copy share URL.</td><td>External local tool, S5, S6.</td><td>Copy button disabled only when text is absent; fallback available when clipboard denied.</td><td>Command/config shown exactly as copied/downloaded.</td><td>copy-ready, copied, download-ready, downloaded, copy-failed.</td></tr>
+      <tr><td>S5 Recovery guidance</td><td>Read issue, copy fix command/guidance, switch branch, retry.</td><td>S3/S4/S1.</td><td>Execution claim never shown from browser recovery alone.</td><td>Error reason maps to one recovery path.</td><td>missing jq, missing bash, stale packet, mode mismatch, dirty tree, invalid deck, offline, clipboard denied.</td></tr>
+      <tr><td>S6 Post-handoff state</td><td>Share, keep browsing, start another deck/workflow.</td><td>S1, share URL.</td><td>No "successfully ran" wording unless local proof exists outside browser scope.</td><td>Browser action succeeded.</td><td>copied, downloaded, shared, done-with-caveat.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.10 Required State Coverage</h3>
+  <div class="table-wrap" data-tts-narrative="State coverage table for empty, loading, error, partial, success, permission denied, offline, validation, stale packet, mode mismatch, and reduced motion.">
+    <table>
+      <tr><th>State class</th><th>Where it appears</th><th>Handling</th></tr>
+      <tr><td>Empty</td><td>S1 no selected deck/workflow; S4 no command/config.</td><td>Ask user to choose a deck/workflow first.</td></tr>
+      <tr><td>Loading</td><td>S1/S2 data load for deck/workflow output.</td><td>Show non-interactive skeleton; do not render copy actions from partial data.</td></tr>
+      <tr><td>Error</td><td>Invalid slug/workflow, data load failure, corrupt config.</td><td>Route to S5 with specific recovery.</td></tr>
+      <tr><td>Partial</td><td>Deck incomplete or workflow step not selected.</td><td>Show locked/needs-selection message; allow edit path.</td></tr>
+      <tr><td>Success</td><td>Copy/download/share completed in browser.</td><td>Confirm browser action only; local execution remains outside site.</td></tr>
+      <tr><td>Permission denied</td><td>Clipboard/download blocked by browser.</td><td>Manual select/save fallback with visible command/config.</td></tr>
+      <tr><td>Offline</td><td>After initial app load or when assets are already cached.</td><td>Copy/download existing rendered output; initial load offline remains browser-level failure.</td></tr>
+      <tr><td>Validation</td><td>Config JSON, command text, branch selection.</td><td>Do not allow empty or mismatched artifact output.</td></tr>
+      <tr><td>Stale packet</td><td>External <code>$exec --execute-approved</code> check fails.</td><td>Explain that consumer marks packet stale and re-prompts with diff; re-draft/re-approve required.</td></tr>
+      <tr><td>Mode mismatch</td><td>Wrong local command for <code>claude-only</code>, <code>codex-only</code>, or <code>hybrid</code>.</td><td>Return to mode choice and show compatible route.</td></tr>
+      <tr><td>Reduced motion</td><td>Any interactive preview or drawer/sheet.</td><td>All states reachable without animation.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.11 Failure And Recovery Paths</h3>
+  <div class="table-wrap" data-tts-narrative="Failure and recovery paths for no output, data failure, clipboard denied, missing jq, missing bash, stale packet, mode mismatch, dirty tree, invalid config, and contradictory choices.">
+    <table>
+      <tr><th>ID</th><th>Failure</th><th>Recovery</th></tr>
+      <tr><td>F1</td><td>No deck/workflow output exists.</td><td>Return to deck/workflow selection; explain that handoff needs a generated artifact.</td></tr>
+      <tr><td>F2</td><td>Skills/workflow data fails to load.</td><td>Retry; no copy/download action renders from partial data.</td></tr>
+      <tr><td>F3</td><td>Clipboard API denied/unavailable.</td><td>Auto-select command/guidance text and show keyboard copy hint.</td></tr>
+      <tr><td>F4</td><td><code>jq</code> missing for approval packet writes or current npm deck materialization path.</td><td>Show prerequisite explanation and install hints; direct pack install/config branch remains available when applicable.</td></tr>
+      <tr><td>F5</td><td><code>bash</code> unavailable for current npm deck materialization backend.</td><td>Warn before copy; offer config download or explicit direct pack-install path when possible.</td></tr>
+      <tr><td>F6</td><td>Approval packet stale.</td><td>Do not retry blindly. Re-draft/re-approve after inspecting diff from moved HEAD, changed todo hash, dirty tree, manual blockers, or expired TTL.</td></tr>
+      <tr><td>F7</td><td>Mode mismatch.</td><td>Show compatible path: Claude-only inline, Codex-only <code>$exec</code>, hybrid <code>/delegate</code>, async <code>/handoff --target=codex</code> then <code>$exec --execute-approved</code>.</td></tr>
+      <tr><td>F8</td><td>Dirty tree blocks approved packet freshness.</td><td>Commit/stash/re-approve locally, or use allowed-dirty path only through proper packet creation.</td></tr>
+      <tr><td>F9</td><td>Downloaded config is stale relative to current deck/package model.</td><td>Regenerate from current deck output; never silently use old config.</td></tr>
+      <tr><td>F10</td><td>User chooses hybrid/async but expects the website to execute locally.</td><td>Clarify browser boundary and local command requirement.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.12 Handoffs And External Dependencies</h3>
+  <div class="table-wrap" data-tts-narrative="Handoff inventory for web to terminal, web to repo, web to Claude, Claude to Codex, person to person, and browser to local boundary.">
+    <table>
+      <tr><th>ID</th><th>Handoff</th><th>Mechanism</th><th>Failure surface</th></tr>
+      <tr><td>H1</td><td>Web to terminal</td><td>Copy <code>npx skillpacks install-deck &lt;slug&gt;</code>, explicit install commands, or workflow command guidance.</td><td>Clipboard failure; missing local prerequisites; CLI-side errors out of browser scope.</td></tr>
+      <tr><td>H2</td><td>Web to repo</td><td>Download or copy <code>project.json</code> matching the deck/config output.</td><td>Browser download blocked; stale config.</td></tr>
+      <tr><td>H3</td><td>Web to Claude orchestration</td><td>Copy guidance for <code>/delegate</code> or <code>/handoff --target=codex</code> as local session actions.</td><td>Mode mismatch, missing <code>jq</code>, user has only Codex available.</td></tr>
+      <tr><td>H4</td><td>Claude to Codex</td><td>Approval packet <code>.agents/approved-plan.json</code> plus mirror <code>tasks/approved-plan.md</code>; consumed by <code>$exec --execute-approved</code>.</td><td>Stale, superseded, consumed, uncertain, or missing packet.</td></tr>
+      <tr><td>H5</td><td>Person to person</td><td>Share URL plus command/config summary.</td><td>Recipient local environment may differ; packet approval is not transferable unless intentionally recreated.</td></tr>
+      <tr><td>H6</td><td>Browser to local filesystem</td><td>Download only; no direct write into repo from website.</td><td>User must place files correctly; site can explain destination but cannot verify placement.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.13 Low-Fidelity Wireframe Notes</h3>
+  <div class="two-col">
+    <div class="review-card"><h4>S1/S2: Source And Output Review</h4><pre><code>[Deck or Workflow]
+title, slug/key, purpose
+enabled packs / workflow steps
+
+[Output Preview]
+command line or project.json summary
+prerequisite badges
+[choose handoff path]</code></pre></div>
+    <div class="review-card"><h4>S3/S4: Mode Choice And Artifact Actions</h4><pre><code>[Direct] [Config] [Hybrid delegate] [Async handoff] [Codex-only]
+
+Selected path detail
+exact copied text preview
+[copy] [download] [share] [back]</code></pre></div>
+    <div class="review-card"><h4>S5: Recovery</h4><pre><code>Problem: stale approved packet
+Reason: todo hash changed
+Impact: local execution blocked
+Next local action: re-draft/re-approve
+[copy guidance] [choose another path]</code></pre></div>
+    <div class="review-card"><h4>S6: Post-Handoff</h4><pre><code>Copied / downloaded
+Browser action complete
+Local execution happens in your terminal
+[share] [keep browsing] [start another deck]</code></pre></div>
+  </div>
+  <p class="muted">Mobile branch notes: mode-choice cards stack vertically; command/config preview wraps with copy controls adjacent; recovery guidance appears above copy/download actions; all actions remain tap-first with no drag-only controls.</p>
+
+  <h3>3.14 Flow Coverage Checkpoint</h3>
+  <div class="table-wrap" data-tts-narrative="Coverage checkpoint showing persona, entry points, happy path, branches, route inventory, actions, states, failures, handoffs, wireframe notes, and non-goals covered.">
+    <table>
+      <tr><th>Coverage item</th><th>Status</th></tr>
+      <tr><td>Persona and goal</td><td>Covered with corrected wording.</td></tr>
+      <tr><td>Entry points</td><td>Covered: completed deck, workflow lab, direct deck URL, prior config, docs/npm link.</td></tr>
+      <tr><td>Happy path</td><td>Covered: source to output review to mode choice to local run.</td></tr>
+      <tr><td>Branches and decision points</td><td>Covered: direct, config, hybrid, async, Codex-only, edit, prerequisite, stale packet, share.</td></tr>
+      <tr><td>Screen/route inventory</td><td>Covered: six screens/surfaces.</td></tr>
+      <tr><td>Actions per screen</td><td>Covered in action/state matrix.</td></tr>
+      <tr><td>Required states</td><td>Covered including stale packet and mode mismatch.</td></tr>
+      <tr><td>Failure/recovery paths</td><td>Covered: ten named failures.</td></tr>
+      <tr><td>Handoffs</td><td>Covered: web-to-terminal, web-to-repo, web-to-Claude, Claude-to-Codex, person-to-person, browser-to-local boundary.</td></tr>
+      <tr><td>Wireframe-level notes</td><td>Covered without locking visual design.</td></tr>
+      <tr><td>Layout/styling non-goals</td><td>Preserved.</td></tr>
+    </table>
+  </div>
+
+  <h3>3.15 Open Questions, Risks, And Explicit Non-Goals</h3>
+  <div class="table-wrap" data-tts-narrative="Open questions and risks around whether handoff actions live in deck output only or also workflow lab, how much config diff detail is needed, local prerequisite detection limits, stale packet education, and keeping browser copy honest.">
+    <table>
+      <tr><th>Item</th><th>Detail</th><th>Where it resolves</th></tr>
+      <tr><td>Surface placement</td><td>Does the full handoff panel appear in both deck output and workflow lab, or is workflow lab a route into the deck/output handoff?</td><td><code>$ui-interview --requirements-only skill-execution-handoff</code></td></tr>
+      <tr><td>Config detail depth</td><td>How much of <code>project.json</code> should be previewed before download?</td><td>UI requirements.</td></tr>
+      <tr><td>Prerequisite detection</td><td>Website cannot inspect local <code>jq</code>, <code>bash</code>, git state, or agent mode directly.</td><td>UI copy/state design; local commands remain source of truth.</td></tr>
+      <tr><td>Packet education</td><td>Approval packet lifecycle is important but could overwhelm new evaluators.</td><td>UI requirements and copy hierarchy.</td></tr>
+      <tr><td>False success risk</td><td>Browser copy/download success is not local execution success.</td><td>Spec must keep language precise.</td></tr>
+    </table>
+  </div>
+  <ul>
+    <li>No CLI behavior changes.</li>
+    <li>No GitHub Actions.</li>
+    <li>No account, cloud execution, or browser write access to the user's repo.</li>
+    <li>No visual design or component detail beyond wireframe notes.</li>
+    <li>No changes to existing deck-creation canonical files.</li>
+  </ul>
+
+  <h3>3.16 Downstream Handoff After Approval Only</h3>
+  <p>After final compiled YAML approval, the agent should write the canonical spec and interview log, convert this page to <code>confirmed</code>, and then route the approved flow into requirements-only UI work: <code>$ui-interview --requirements-only skill-execution-handoff</code>. This route is proposed here for approval; it is not active while the page remains in review.</p>
+</section>
+
+<section id="interview-log">
+  <div class="sec-head"><h2>4. Proposed Interview Log - <code>specs/skills-showcase/user-flow-skill-execution-handoff-interview.md</code></h2></div>
+  <div class="section-feedback" data-section="Proposed Interview Log" id="fb-interview-log">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-interview-log" value="emphasize" data-feedback-section="Proposed Interview Log"> Emphasize</label>
+    <label><input type="radio" name="fb-interview-log" value="down" data-feedback-section="Proposed Interview Log"> Flag concern</label>
+    <label><input type="radio" name="fb-interview-log" value="needs-clarification" data-feedback-section="Proposed Interview Log"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-interview-log" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('interview-log')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('interview-log')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-interview-log"></textarea></div>
+  </div>
+  <h3>4.1 Evidence Consulted</h3>
+  <ul>
+    <li><code>research/.progress.yaml</code> - active product path <code>skills-showcase</code>.</li>
+    <li><code>research/skills-showcase/idea-brief.md</code> - actionable output contract: CLI command and <code>project.json</code>.</li>
+    <li><code>specs/skills-showcase/user-flow-deck-creation.md</code> - upstream deck completion flow and output panel.</li>
+    <li><code>specs/skills-showcase/user-flow-deck-creation-interview.md</code> - upstream checkpoint/approval model and known gaps.</li>
+    <li><code>apps/skills-showcase/docs/deck-builder-ux.md</code> - locked deck-builder UX decisions and persistence boundaries.</li>
+    <li><code>docs/decks.md</code> - deck install commands, deck model, npm prerequisites.</li>
+    <li><code>docs/operating-modes.md</code> - operating modes, <code>/delegate</code>, <code>/handoff --target=codex</code>, approval packet lifecycle, stale behavior, and <code>jq</code> dependency.</li>
+    <li><code>specs/approved-plan.schema.json</code> and <code>scripts/approved-plan.sh</code> - packet fields and freshness checks.</li>
+    <li><code>apps/skills-showcase/app/workflows/page.tsx</code> and <code>apps/skills-showcase/src/showcase/tui/workflow-data.ts</code> - current workflow lab route and Production workflow.</li>
+  </ul>
+  <h3>4.2 Questions, Options, And User Responses</h3>
+  <div class="table-wrap" data-tts-narrative="Interview log table listing the assumptions checkpoint, coverage checkpoint, persona wording correction, and alignment-first delivery plan.">
+    <table>
+      <tr><th>Prompt / checkpoint</th><th>Options or recommendation</th><th>User response / decision</th><th>Carried into proposed spec</th></tr>
+      <tr><td>Flow Assumptions Checkpoint</td><td>Confirm assumptions as-is or correct them.</td><td>Confirmed as-is in the prior conversation context.</td><td>Yes: assumptions table in section 3.2.</td></tr>
+      <tr><td>Persona wording</td><td>Clarify who the flow covers and their shared goal.</td><td>Corrected wording: "Personas covered: a new evaluator choosing a GSkillPacks deck for adoption, and an existing user configuring another repo. Their shared goal is to leave the site with a clear command or config they can run locally."</td><td>Yes: status summary, persona table, assumptions.</td></tr>
+      <tr><td>Coverage checkpoint</td><td>Review branch/state/handoff coverage before durable writes.</td><td>Coverage reviewed in the prior conversation context.</td><td>Yes: flow coverage checkpoint in section 3.14 and branch/state/handoff gate.</td></tr>
+      <tr><td>Approval workflow correction</td><td>Build review page first; defer canonical markdown writes until compiled YAML approval.</td><td>User-provided handoff plan requires alignment-first review.</td><td>Yes: this page is review-only; canonical files are proposed destinations only.</td></tr>
+    </table>
+  </div>
+  <h3>4.3 Notable Changes From Initial Draft Context</h3>
+  <ul>
+    <li>Changed from direct spec/interview writes after coverage approval to review-page-first with canonical files blocked until final compiled YAML.</li>
+    <li>Changed persona language from generic evaluator/returner wording to the corrected two-persona wording supplied by the user.</li>
+    <li>Added operating-mode handoff details: <code>claude-only</code>, <code>codex-only</code>, <code>hybrid</code>, <code>/delegate</code>, <code>/handoff --target=codex</code>, <code>$exec --execute-approved</code>, and stale packet recovery.</li>
+    <li>Kept existing deck-creation files as upstream evidence only.</li>
+  </ul>
+  <h3>4.4 Remaining Gaps For UI Requirements</h3>
+  <ul>
+    <li>Where exactly the handoff panel sits in the deck output and workflow lab surfaces.</li>
+    <li>Which config preview fields are primary versus expandable.</li>
+    <li>How much approval-packet lifecycle detail belongs in the default view versus progressive disclosure.</li>
+    <li>Precise labels, copy hierarchy, controls, and responsive behavior for the mode-choice surface.</li>
+  </ul>
+</section>
+
+<section id="gates">
+  <div class="sec-head"><h2>5. Review Gates</h2></div>
+  <div class="section-feedback" data-section="Review Gates" id="fb-gates">
+    <span>Section feedback</span>
+    <label><input type="radio" name="fb-gates" value="emphasize" data-feedback-section="Review Gates"> Emphasize</label>
+    <label><input type="radio" name="fb-gates" value="down" data-feedback-section="Review Gates"> Flag concern</label>
+    <label><input type="radio" name="fb-gates" value="needs-clarification" data-feedback-section="Review Gates"> Clarification needed</label>
+    <div class="fb-body" hidden><textarea class="feedback-notes" id="fb-notes-gates" placeholder="Optional section feedback"></textarea><div><button type="button" onclick="compileFeedback('gates')">Compile Feedback YAML</button><button type="button" class="secondary" onclick="copyLocalFeedback('gates')">Copy YAML</button></div><textarea readonly class="yaml-output" id="fb-yaml-gates"></textarea></div>
+  </div>
+
+  <div class="question" id="qwrap-evidence">
+    <p><strong>Q1 - Evidence coverage:</strong> Is the evidence base sufficient for this proposed flow map?</p>
+    <label><input type="radio" name="evidence" value="approve" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Evidence coverage is sufficient for review approval"> Evidence coverage is sufficient for review approval</label>
+    <label><input type="radio" name="evidence" value="needs-more" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Needs more evidence before canonical writes"> Needs more evidence before canonical writes</label>
+    <label><input type="radio" name="evidence" value="other" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="evidence" value="needs-clarification" data-required="true" data-section="Evidence Context" data-gate-type="evidence coverage" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="evidence" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-assumptions">
+    <p><strong>Q2 - Assumptions:</strong> Are the assumptions, especially the corrected persona wording, accurate?</p>
+    <label><input type="radio" name="assumptions" value="approve" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Assumptions are accurate; carry into canonical files"> Assumptions are accurate; carry into canonical files</label>
+    <label><input type="radio" name="assumptions" value="revise" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Revise assumptions before approval"> Revise assumptions before approval</label>
+    <label><input type="radio" name="assumptions" value="other" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="assumptions" value="needs-clarification" data-required="true" data-section="Flow Assumptions Checkpoint" data-gate-type="assumptions/confidence" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="assumptions" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-flow-map">
+    <p><strong>Q3 - Flow map:</strong> Does the proposed flow map cover the right sequence from deck/workflow source to local execution artifact?</p>
+    <label><input type="radio" name="flow-map" value="approve" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Approve the proposed flow map"> Approve the proposed flow map</label>
+    <label><input type="radio" name="flow-map" value="revise" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Revise the flow map before canonical writes"> Revise the flow map before canonical writes</label>
+    <label><input type="radio" name="flow-map" value="other" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="flow-map" value="needs-clarification" data-required="true" data-section="Proposed Spec" data-gate-type="flow map" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="flow-map" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-coverage">
+    <p><strong>Q4 - Branch, state, and handoff coverage:</strong> Are execution modes, approval-packet states, stale behavior, prerequisites, and recovery paths complete enough for v1?</p>
+    <label><input type="radio" name="coverage" value="approve" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Coverage is complete for v1"> Coverage is complete for v1</label>
+    <label><input type="radio" name="coverage" value="add-branches" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Add branches/states/handoffs named in notes"> Add branches/states/handoffs named in notes</label>
+    <label><input type="radio" name="coverage" value="other" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="coverage" value="needs-clarification" data-required="true" data-section="Branch/State/Handoff Coverage" data-gate-type="coverage checkpoint" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="coverage" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-artifact-destination">
+    <p><strong>Q5 - Artifact destination:</strong> Approve the proposed canonical file destinations after final approval?</p>
+    <label><input type="radio" name="artifact-destination" value="approve" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Approve proposed canonical destinations" data-target-path="specs/skills-showcase/user-flow-skill-execution-handoff.md"> Approve <code>specs/skills-showcase/user-flow-skill-execution-handoff.md</code> and interview log companion</label>
+    <label><input type="radio" name="artifact-destination" value="change" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Change destination paths before canonical writes"> Change destination paths before canonical writes</label>
+    <label><input type="radio" name="artifact-destination" value="other" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="artifact-destination" value="needs-clarification" data-required="true" data-section="Artifact Destination" data-gate-type="artifact destination" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="artifact-destination" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-file-changes">
+    <p><strong>Q6 - Proposed file changes:</strong> Approve the mutation scope after approval?</p>
+    <label><input type="radio" name="file-changes" value="approve" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Approve canonical spec/interview writes, page confirmation, and index update after final approval"> Approve only: canonical spec/interview writes, page confirmation, and index update after final approval</label>
+    <label><input type="radio" name="file-changes" value="restrict" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Restrict mutation scope as named in notes"> Restrict mutation scope as named in notes</label>
+    <label><input type="radio" name="file-changes" value="other" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="file-changes" value="needs-clarification" data-required="true" data-section="Proposed File Changes" data-gate-type="proposed file changes" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="file-changes" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+
+  <div class="question" id="qwrap-downstream-route">
+    <p><strong>Q7 - Downstream route:</strong> After canonical writes and confirmed conversion, should this route to requirements-only UI work?</p>
+    <label><input type="radio" name="downstream-route" value="approve" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Approve post-approval route to $ui-interview --requirements-only skill-execution-handoff"> Approve post-approval route to <code>$ui-interview --requirements-only skill-execution-handoff</code></label>
+    <label><input type="radio" name="downstream-route" value="different" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Use a different downstream route named in notes"> Use a different downstream route named in notes</label>
+    <label><input type="radio" name="downstream-route" value="other" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="downstream-route" value="needs-clarification" data-required="true" data-section="Downstream Route" data-gate-type="post-approval route" data-answer="Need clarification"> Need clarification</label>
+    <textarea class="answer-notes" data-notes-for="downstream-route" placeholder="Optional notes, edits, or clarification request"></textarea>
+  </div>
+</section>
+
+<section class="compile-section" id="compile">
+  <h2>6. Compile Responses</h2>
+  <p>Use section feedback for revision requests before answering every gate. Use bottom compiled response YAML for partial gate answers or final approval. Final canonical writes require <code>approval_status: ready-for-agent-review</code>, all required gates answered, and no unresolved negative feedback.</p>
+  <p id="remaining" class="muted"></p>
+  <div>
+    <button type="button" onclick="compileResponses()">Compile Responses</button>
+    <button type="button" class="secondary" onclick="copyCompiled()">Copy YAML</button>
+  </div>
+  <textarea readonly class="yaml-output" id="compiled-yaml" aria-label="Compiled YAML output"></textarea>
+</section>
+
+<script>
+const alignmentPage = 'alignment/user-flow-map-skill-execution-handoff.html';
+const previewText = {
+  direct: 'Direct path: copy the generated command, then run it in the local terminal. The site does not claim local success.',
+  config: 'Config path: download or copy project.json, place it in the target repo, then use the local skillpacks workflow.',
+  delegate: 'Hybrid path: use Claude /delegate locally. It creates an approval packet, prompts for approval, and invokes Codex execution.',
+  handoff: 'Async path: use /handoff --target=codex locally, then resume in Codex with $exec --execute-approved.',
+  reset: 'Default path: choose a deck or workflow, review the generated command/config, then copy or download an artifact for local execution.'
+};
+function escYaml(s){return JSON.stringify(String(s == null ? '' : s));}
+function requiredGroups(){
+  return Array.from(new Set(Array.from(document.querySelectorAll('input[data-required="true"]')).map(i => i.name)))
+    .map(name => ({name, checked: document.querySelector('input[name="' + CSS.escape(name) + '"]:checked')}));
+}
+function noteFor(name){
+  const el = document.querySelector('textarea[data-notes-for="' + CSS.escape(name) + '"]');
+  return el ? el.value.trim() : '';
+}
+function answerObject(group){
+  const i = group.checked;
+  let status = 'answered';
+  if (i.value === 'other') status = 'other';
+  if (i.value === 'needs-clarification') status = 'needs-clarification';
+  return {section:i.dataset.section, gate_type:i.dataset.gateType, status, answer:i.dataset.answer || i.value, notes:noteFor(group.name), target_path:i.dataset.targetPath || ''};
+}
+function actionFor(v){
+  return v === 'emphasize' ? 'add-weight-to-section' : (v === 'down' ? 'investigate-and-revise' : 'clarify-before-approval');
+}
+function sectionFeedbackObjects(sectionId){
+  const selected = [];
+  document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+    if (!r.checked) return;
+    const wrapper = r.closest('.section-feedback');
+    if (sectionId !== 'all' && wrapper && wrapper.id !== 'fb-' + sectionId) return;
+    const notes = wrapper ? (wrapper.querySelector('.feedback-notes')?.value.trim() || '') : '';
+    selected.push({section:r.dataset.feedbackSection, feedback:r.value, notes, requested_agent_action:actionFor(r.value)});
+  });
+  return selected;
+}
+function unansweredNames(groups){
+  return groups.filter(g => !g.checked).map(g => g.name);
+}
+function hasNegative(groups, fb){
+  const answered = groups.filter(g => g.checked).map(answerObject);
+  return answered.some(a => a.status === 'needs-clarification' || a.status === 'other' || /revise|needs|change|restrict|different|add/i.test(a.answer))
+    || fb.length > 0;
+}
+function feedbackYaml(items){
+  const missing = unansweredNames(requiredGroups());
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n';
+  if (!missing.length) y += '  []\n'; else missing.forEach(m => { y += '  - ' + escYaml(m) + '\n'; });
+  y += 'section_feedback:\n';
+  if (!items.length) y += '  []\n';
+  items.forEach(item => {
+    y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n';
+    if (item.feedback === 'emphasize') y += '    intent: "revision request: add more weight, prominence, evidence, detail, or recommendation emphasis to this section or to the point named in notes; not approval as-is"\n';
+    else y += '    intent: "revision request: evaluate feedback, investigate when needed, and amend the page before asking again for final approval"\n';
+  });
+  return y;
+}
+function compileFeedback(sectionId){
+  const yaml = feedbackYaml(sectionFeedbackObjects(sectionId));
+  if (sectionId === 'all') document.getElementById('compiled-yaml').value = yaml;
+  else {
+    const out = document.getElementById('fb-yaml-' + sectionId);
+    if (out) out.value = yaml;
+  }
+  tryCopy(yaml);
+}
+function compileResponses(){
+  const groups = requiredGroups();
+  const missing = unansweredNames(groups);
+  const fb = sectionFeedbackObjects('all');
+  const complete = missing.length === 0;
+  const negative = hasNegative(groups, fb);
+  let y = 'alignment_page: ' + escYaml(alignmentPage) + '\n';
+  y += 'response_status: ' + (complete ? 'complete' : 'partial') + '\n';
+  y += 'approval_status: ' + (complete && !negative ? 'ready-for-agent-review' : 'not-approved') + '\n';
+  y += 'required_gate_status: ' + (complete ? 'complete' : 'incomplete') + '\n';
+  y += 'unanswered_required_questions:\n';
+  if (!missing.length) y += '  []\n'; else missing.forEach(m => { y += '  - ' + escYaml(m) + '\n'; });
+  const answered = groups.filter(g => g.checked).map(answerObject);
+  y += 'gate_answers:\n';
+  if (!answered.length) y += '  []\n';
+  answered.forEach(a => {
+    y += '  - section: ' + escYaml(a.section) + '\n    gate_type: ' + escYaml(a.gate_type) + '\n    status: ' + escYaml(a.status) + '\n    answer: ' + escYaml(a.answer) + '\n';
+    if (a.notes) y += '    notes: ' + escYaml(a.notes) + '\n';
+    if (a.target_path) y += '    target_path: ' + escYaml(a.target_path) + '\n';
+  });
+  y += 'section_feedback:\n';
+  if (!fb.length) y += '  []\n';
+  fb.forEach(item => {
+    y += '  - section: ' + escYaml(item.section) + '\n    feedback: ' + escYaml(item.feedback) + '\n    notes: ' + escYaml(item.notes) + '\n    requested_agent_action: ' + escYaml(item.requested_agent_action) + '\n';
+  });
+  document.getElementById('compiled-yaml').value = y;
+  tryCopy(y);
+  updateRemaining();
+}
+function tryCopy(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => {});
+}
+function copyCompiled(){
+  const el = document.getElementById('compiled-yaml');
+  tryCopy(el.value);
+  el.focus();
+  el.select();
+}
+function copyLocalFeedback(sectionId){
+  const el = document.getElementById('fb-yaml-' + sectionId);
+  if (el) { tryCopy(el.value); el.focus(); el.select(); }
+}
+function updateRemaining(){
+  const n = unansweredNames(requiredGroups()).length;
+  document.getElementById('remaining').textContent = n ? (n + ' required gate questions unanswered') : 'All required gate questions answered';
+}
+document.querySelectorAll('input[data-feedback-section]').forEach(r => {
+  r.addEventListener('click', function(){
+    const wrapper = this.closest('.section-feedback');
+    if (this.dataset.wasChecked === 'true') {
+      this.checked = false;
+      this.dataset.wasChecked = 'false';
+      wrapper.querySelector('.fb-body').hidden = true;
+      wrapper.dataset.feedback = '';
+    } else {
+      wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => { o.dataset.wasChecked = 'false'; });
+      this.dataset.wasChecked = 'true';
+      wrapper.querySelector('.fb-body').hidden = false;
+      wrapper.dataset.feedback = this.value;
+      wrapper.classList.add('has-feedback');
+    }
+    wrapper.querySelectorAll('input[data-feedback-section]').forEach(o => {
+      const lbl = o.closest('label');
+      lbl.classList.remove('active-emphasize','active-down','active-needs-clarification');
+      if (o.checked) lbl.classList.add('active-' + o.value);
+    });
+    if (!wrapper.querySelector('input[data-feedback-section]:checked')) wrapper.classList.remove('has-feedback');
+  });
+});
+document.querySelectorAll('[data-preview]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.preview;
+    document.getElementById('preview-readout').textContent = previewText[key] || previewText.reset;
+    document.querySelectorAll('.preview-step').forEach((step, index) => {
+      step.classList.toggle('active', key === 'reset' ? index === 0 : index <= 3);
+    });
+  });
+});
+document.addEventListener('change', updateRemaining);
+updateRemaining();
+</script>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
