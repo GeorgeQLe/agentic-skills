@@ -324,7 +324,13 @@ describe("alignment page gate contract", () => {
         "Stage 2 starts only after final compiled response YAML approves the research scope",
       );
       expect(content, `${path} stage 2 research`).toContain("Perform the synthesized research");
-      expect(content, `${path} full preliminary packet`).toContain("renders the full preliminary packet");
+      expect(content, `${path} structured packet rendering`).toContain(
+        "renders the complete working-packet substance as structured HTML review UI",
+      );
+      expect(content, `${path} no primary packet dump`).toContain(
+        "Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI",
+      );
+      expect(content, `${path} old packet wording removed`).not.toContain("renders the full preliminary packet");
       expect(content, `${path} feedback remains stage 2`).toContain(
         "Partial compiled responses revise the working packet and review page, then remain in Stage 2",
       );

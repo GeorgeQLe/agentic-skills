@@ -113,8 +113,9 @@ const STAGED_MARKERS = [
   },
   {
     id: "artifact-review-page",
-    label: "artifact approval page renders the full preliminary packet",
-    test: (text) => text.includes("Update the `review` HTML alignment page with the full preliminary packet"),
+    label: "artifact approval page renders structured working-packet substance",
+    test: (text) =>
+      text.includes("Update the `review` HTML alignment page so it renders the complete working-packet substance"),
   },
   {
     id: "feedback-loop",

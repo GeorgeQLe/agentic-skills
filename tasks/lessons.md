@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — No-context-loss means rendered review UI, not packet mirroring
+
+- Repo-wide staged research guidance used "full preliminary/working packet" language, which made agents preserve content by dumping dense Markdown packets into alignment pages instead of translating the same content into readable review UI.
+- Future alignment pages must preserve every section, finding, caveat, source, assumption, and decision detail by rendering them as purposeful HTML sections, tables, matrices, cards, gates, and review modules.
+- Working packet Markdown remains a non-canonical staging artifact. Raw Markdown may appear only as a supplemental source view after the rendered HTML review UI, never as the primary review surface.
+
 ## 2026-06-12 — UI interview review pages need stage clarity and rendered packets
 
 - A `ui-interview --requirements-only` alignment page preserved the full working packet only as a raw Markdown `<pre><code>` preview, making tables hard to parse and leaving the reviewer unclear whether the page represented a live agent/user interview or a requirements review artifact.

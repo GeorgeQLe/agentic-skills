@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18 - 2026-06-12
+
+- Replaced the remaining packet-dump wording with the shared structured HTML review UI contract for complete working-packet substance.
+
 ## v0.17 - 2026-06-12
 
 - Required pre-approval alignment pages to state the current interview stage in plain language and to distinguish requirements-only review from a live page-by-page interview.

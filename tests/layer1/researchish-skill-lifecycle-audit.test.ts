@@ -56,14 +56,14 @@ describe("research-ish skill lifecycle audit", () => {
   const audit = runAudit();
 
   it("emits stable counts and finding categories", () => {
-    expect(audit.totals.activeSkills).toBe(383);
-    expect(audit.totals.inScopeSkills).toBe(315);
+    expect(audit.totals.activeSkills).toBe(386);
+    expect(audit.totals.inScopeSkills).toBe(317);
     expect(audit.totals.typeResearchSkills).toBe(142);
     expect(audit.totals.nonResearchResearchPathSkills).toBe(107);
     expect(audit.totals.byCategory).toEqual({
       "staged-research": 142,
       "alignment-document": 127,
-      "direct-utility": 46,
+      "direct-utility": 48,
       misclassified: 0,
     });
 

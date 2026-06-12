@@ -1,5 +1,9 @@
 # positioning changelog (codex)
 
+## v0.16 - 2026-06-12
+
+- Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.
+
 ## v0.15 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

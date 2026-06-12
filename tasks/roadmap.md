@@ -1,3 +1,145 @@
+## Current Implementation - Repo-Wide Packet Dump Remediation
+
+### Goal
+
+Fix packet-dump wording as a repo-wide contract bug. Alignment review pages must preserve complete packet content by rendering it as readable HTML review UI, not by making "Full Preliminary Packet" or "Full Working Packet" raw Markdown dumps the primary review surface.
+
+### User Claims Validated
+
+- Confirmed: active pack `SKILL.md` files contain the risky packet-rendering wording in 144 files.
+- Confirmed: active generated `ALIGNMENT-PAGE.md` bundles repeat the generated risky wording in 281 files.
+- Confirmed: root cause spans the shared generated alignment convention and copied Stage 2 lifecycle prose. `docs/alignment-page-convention.md` contains "renders the full preliminary packet"; active Stage 2 skill prose contains "Update the `review` HTML alignment page with the full preliminary packet".
+- Confirmed: `scripts/researchish-skill-lifecycle-audit.mjs` and `tests/layer1/alignment-gates.test.ts` currently enforce the old phrasing.
+- Confirmed: `.codex` / `.claude` local install roots did not show active hits in the initial search, but they still need refresh after source updates so runtime copies cannot lag.
+
+### Root Cause Notes
+
+The risky contract entered the canonical alignment convention in commit `664de0b23` on 2026-06-11 as part of the staged research workflow. The intent was no context loss, but the wording says to render the "full preliminary packet" without explicitly requiring translation into purposeful HTML modules. Copied Stage 2 prose in research-ish skills is stronger and says to update the review HTML page "with the full preliminary packet", which encourages agents to paste dense Markdown packets into the page instead of rendering the same content as navigable review UI.
+
+### Scope
+
+- `docs/alignment-page-convention.md`
+- `scripts/researchish-skill-lifecycle-audit.mjs`
+- Focused layer tests that assert old packet wording
+- 144 active non-archive pack `SKILL.md` files across 72 logical mirrored skills
+- Generated active `ALIGNMENT-PAGE.md` bundles after convention regeneration
+- `tasks/roadmap.md`, `tasks/todo.md`, `tasks/lessons.md`, and prompt capture
+- Local ignored `.codex/skills` and `.claude/skills` refresh if available
+
+### Affected Active SKILL.md Inventory
+
+Counts by pack:
+
+- `business-research`: 44 files, 22 mirrored skills
+- `youtube-ops`: 26 files, 13 mirrored skills
+- `creator-foundation`: 14 files, 7 mirrored skills
+- `business-growth`: 12 files, 6 mirrored skills
+- `customer-lifecycle`: 12 files, 6 mirrored skills
+- `game`: 12 files, 6 mirrored skills
+- `business-ops`: 8 files, 4 mirrored skills
+- `devtool`: 8 files, 4 mirrored skills
+- `ord`: 2 files, 1 mirrored skill
+- `product-design`: 2 files, 1 mirrored skill
+- `remotion`: 2 files, 1 mirrored skill
+- `vard`: 2 files, 1 mirrored skill
+
+Logical mirrored skill inventory:
+
+- `business-research`: `customer-feedback`, `lean-canvas`, `enterprise-icp`, `competitive-analysis`, `competitive-analysis/frameworks/feature-pricing-matrix`, `competitive-analysis/frameworks/porter-five-forces`, `competitive-analysis/frameworks/strategic-group-map`, `competitive-analysis/frameworks/swot`, `positioning`, `positioning/frameworks/category-design`, `positioning/frameworks/jtbd-positioning`, `positioning/frameworks/moore-positioning`, `positioning/frameworks/obviously-awesome`, `positioning/frameworks/strategic-canvas`, `customer-discovery`, `customer-discovery/frameworks/five-rings`, `customer-discovery/frameworks/four-forces`, `customer-discovery/frameworks/jtbd-needs`, `customer-discovery/frameworks/pmf-engine`, `customer-discovery/frameworks/seven-dimensions`, `customer-discovery/frameworks/w3-hypothesis`, `value-prop-canvas`
+- `devtool`: `devtool-adoption`, `devtool-monetization`, `devtool-positioning`, `devtool-user-map`
+- `business-growth`: `growth-model`, `gtm`, `hook-model`, `landing-copy`, `monetization`, `pmf-assessment`
+- `business-ops`: `mvp-gap`, `platform-strategy`, `reconcile-research`, `repo-glossary`
+- `creator-foundation`: `content-programming`, `creator-evidence-schema`, `creator-metrics-review`, `creator-platform-capability-matrix`, `creator-positioning`, `creator-presence-dossier`, `product-led-media-map`
+- `customer-lifecycle`: `journey-map`, `journey-map/frameworks/customer-journey-canvas`, `journey-map/frameworks/experience-map`, `journey-map/frameworks/jtbd-timeline`, `journey-map/frameworks/service-blueprint`, `journey-map/frameworks/user-story-map`
+- `game`: `game-audience`, `game-comparables`, `game-fantasy`, `game-genre-map`, `game-launch`, `game-store-page-test`
+- `youtube-ops`: `youtube-audit`, `youtube-cadence-diagnosis`, `youtube-channel-audit`, `youtube-competitive-research`, `youtube-concept-research`, `youtube-description-optimizer`, `youtube-peer-benchmark`, `youtube-portfolio`, `youtube-search-positioning`, `youtube-title-thumbnail-audit`, `youtube-vid-research`, `youtube-video-audit`, `youtube-video-prelaunch-audit`
+- `ord`: `ord-scan`
+- `vard`: `vard-scan`
+- `remotion`: `youtube-format-research`
+- `product-design`: `ui-interview`
+
+Generated `ALIGNMENT-PAGE.md` hit counts by pack:
+
+- `agent-bridge`: 1
+- `agentic-skills-bench`: 4
+- `alignment-loop`: 2
+- `business-growth`: 16
+- `business-ops`: 26
+- `business-research`: 44
+- `code-maintenance`: 2
+- `code-quality`: 4
+- `code-review`: 8
+- `context-transfer`: 2
+- `creator-foundation`: 18
+- `customer-lifecycle`: 24
+- `devtool`: 16
+- `docs-health`: 2
+- `game`: 22
+- `guided-walkthrough`: 2
+- `monorepo`: 2
+- `ord`: 2
+- `product-design`: 18
+- `product-testing`: 4
+- `project-fleet`: 6
+- `release-ops`: 4
+- `remotion`: 6
+- `report-gen`: 2
+- `research-admin`: 2
+- `session-analytics`: 4
+- `skill-dev`: 4
+- `teardown`: 4
+- `vard`: 2
+- `website-polish`: 2
+- `youtube-ops`: 26
+
+### Plan
+
+1. Record and validate the bug.
+   - Capture the `$investigate` invocation under `prompts/investigate/`.
+   - Produce the active non-archive inventory and classify hits as generated convention, shared Stage 2 prose, skill-specific wording, tests/audits, or local install state.
+   - Check recent git history for where the risky generated wording entered.
+2. Patch shared convention and gates.
+   - Update `docs/alignment-page-convention.md` so no-context-loss requires clean rendered HTML sections, tables, matrices, gates, cards, and review modules.
+   - Explicitly forbid primary "Full Working Packet" / "Full Preliminary Packet" Markdown dumps.
+   - Allow raw Markdown only as a supplemental source view after the rendered review UI.
+   - Update lifecycle audit and focused tests to assert structured rendering language instead of "full preliminary packet".
+3. Patch active skill contracts.
+   - Process packs in requested order: `business-research`, `devtool`, `business-growth`, `business-ops`, `creator-foundation`, `customer-lifecycle`, `game`, `youtube-ops`, then `ord`, `vard`, `remotion`, `product-design`.
+   - For each logical skill, archive both active mirrors with `scripts/skill-archive.sh <skill-dir>`, bump decimal versions, replace Stage 2 wording with structured HTML rendering language, preserve skill-specific additions, and update `CHANGELOG.md`.
+4. Regenerate and refresh.
+   - Run `node scripts/upgrade-alignment-page.mjs`.
+   - Refresh ignored local `.codex/skills` and `.claude/skills` installs from pack source where project tooling supports it.
+5. Verify and ship.
+   - Run the requested checks and regression searches.
+   - Review diff scope for unrelated changes.
+   - Add the correction lesson.
+   - Commit and push intended tracked changes to `master`.
+
+### Verification Gates
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/researchish-skill-lifecycle-audit.mjs`
+- `npx vitest run tests/layer1/alignment-gates.test.ts`
+- `npx vitest run tests/layer1/researchish-skill-lifecycle-audit.test.ts`
+- `npx vitest run tests/layer1/upgrade-alignment-page-bespoke.test.ts`
+- Regression search over active non-archive sources must show no primary-rendering instructions containing:
+  - `full preliminary packet`
+  - `full working packet`
+  - `Full Preliminary Packet`
+  - `Full Working Packet`
+  - `Update the review HTML alignment page with the full preliminary packet`
+- Remaining hits, if any, must be archive history, storage-path references, or explicit "do not use as primary rendering" guardrails.
+
+### Acceptance Criteria
+
+- Every active affected skill keeps the staged working-packet lifecycle but instructs agents to render packet substance as structured HTML review UI.
+- Generated alignment bundles carry the new no-packet-dump convention.
+- Tests and audits enforce the new wording.
+- `tasks/lessons.md` records the correction pattern.
+- Intended tracked changes are committed and pushed.
+
+---
+
 ## Current Implementation - UI Interview Alignment Review Clarity
 
 ### Goal

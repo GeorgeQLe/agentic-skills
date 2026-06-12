@@ -1,3 +1,149 @@
+## Current Implementation - Repo-Wide Packet Dump Remediation
+
+### Goal
+
+Remove packet-dump wording from active contracts so no-context-loss means complete rendered HTML review UI, not primary raw Markdown packet mirroring.
+
+### Current Checklist
+
+- [x] Read the active `investigate` skill instructions.
+- [x] Capture the visible user invocation under `prompts/investigate/`.
+- [x] Confirm active hit counts: 144 `SKILL.md` files and 281 generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Classify shared root causes: canonical convention, copied Stage 2 lifecycle prose, lifecycle audit, and focused tests.
+- [x] Record the remediation roadmap and inventory.
+- [x] Update canonical alignment convention wording.
+- [x] Update lifecycle audit wording.
+- [x] Update focused layer tests.
+- [x] Archive, bump, patch, and changelog affected active `SKILL.md` files.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Refresh ignored local `.codex/skills` and `.claude/skills` installs where supported.
+- [x] Add packet-rendering correction to `tasks/lessons.md`.
+- [x] Run verification gates and regression search.
+- [x] Review intended diff scope.
+- [x] Commit and push intended tracked changes to `master`.
+
+### Per-Skill Queue
+
+#### business-research
+
+- [x] `customer-feedback` (`codex`, `claude`)
+- [x] `lean-canvas` (`codex`, `claude`)
+- [x] `enterprise-icp` (`codex`, `claude`)
+- [x] `competitive-analysis` (`codex`, `claude`)
+- [x] `competitive-analysis/frameworks/feature-pricing-matrix` (`codex`, `claude`)
+- [x] `competitive-analysis/frameworks/porter-five-forces` (`codex`, `claude`)
+- [x] `competitive-analysis/frameworks/strategic-group-map` (`codex`, `claude`)
+- [x] `competitive-analysis/frameworks/swot` (`codex`, `claude`)
+- [x] `positioning` (`codex`, `claude`)
+- [x] `positioning/frameworks/category-design` (`codex`, `claude`)
+- [x] `positioning/frameworks/jtbd-positioning` (`codex`, `claude`)
+- [x] `positioning/frameworks/moore-positioning` (`codex`, `claude`)
+- [x] `positioning/frameworks/obviously-awesome` (`codex`, `claude`)
+- [x] `positioning/frameworks/strategic-canvas` (`codex`, `claude`)
+- [x] `customer-discovery` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/five-rings` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/four-forces` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/jtbd-needs` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/pmf-engine` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/seven-dimensions` (`codex`, `claude`)
+- [x] `customer-discovery/frameworks/w3-hypothesis` (`codex`, `claude`)
+- [x] `value-prop-canvas` (`codex`, `claude`)
+
+#### devtool
+
+- [x] `devtool-adoption` (`codex`, `claude`)
+- [x] `devtool-monetization` (`codex`, `claude`)
+- [x] `devtool-positioning` (`codex`, `claude`)
+- [x] `devtool-user-map` (`codex`, `claude`)
+
+#### business-growth
+
+- [x] `growth-model` (`codex`, `claude`)
+- [x] `gtm` (`codex`, `claude`)
+- [x] `hook-model` (`codex`, `claude`)
+- [x] `landing-copy` (`codex`, `claude`)
+- [x] `monetization` (`codex`, `claude`)
+- [x] `pmf-assessment` (`codex`, `claude`)
+
+#### business-ops
+
+- [x] `mvp-gap` (`codex`, `claude`)
+- [x] `platform-strategy` (`codex`, `claude`)
+- [x] `reconcile-research` (`codex`, `claude`)
+- [x] `repo-glossary` (`codex`, `claude`)
+
+#### creator-foundation
+
+- [x] `content-programming` (`codex`, `claude`)
+- [x] `creator-evidence-schema` (`codex`, `claude`)
+- [x] `creator-metrics-review` (`codex`, `claude`)
+- [x] `creator-platform-capability-matrix` (`codex`, `claude`)
+- [x] `creator-positioning` (`codex`, `claude`)
+- [x] `creator-presence-dossier` (`codex`, `claude`)
+- [x] `product-led-media-map` (`codex`, `claude`)
+
+#### customer-lifecycle
+
+- [x] `journey-map` (`codex`, `claude`)
+- [x] `journey-map/frameworks/customer-journey-canvas` (`codex`, `claude`)
+- [x] `journey-map/frameworks/experience-map` (`codex`, `claude`)
+- [x] `journey-map/frameworks/jtbd-timeline` (`codex`, `claude`)
+- [x] `journey-map/frameworks/service-blueprint` (`codex`, `claude`)
+- [x] `journey-map/frameworks/user-story-map` (`codex`, `claude`)
+
+#### game
+
+- [x] `game-audience` (`codex`, `claude`)
+- [x] `game-comparables` (`codex`, `claude`)
+- [x] `game-fantasy` (`codex`, `claude`)
+- [x] `game-genre-map` (`codex`, `claude`)
+- [x] `game-launch` (`codex`, `claude`)
+- [x] `game-store-page-test` (`codex`, `claude`)
+
+#### youtube-ops
+
+- [x] `youtube-audit` (`codex`, `claude`)
+- [x] `youtube-cadence-diagnosis` (`codex`, `claude`)
+- [x] `youtube-channel-audit` (`codex`, `claude`)
+- [x] `youtube-competitive-research` (`codex`, `claude`)
+- [x] `youtube-concept-research` (`codex`, `claude`)
+- [x] `youtube-description-optimizer` (`codex`, `claude`)
+- [x] `youtube-peer-benchmark` (`codex`, `claude`)
+- [x] `youtube-portfolio` (`codex`, `claude`)
+- [x] `youtube-search-positioning` (`codex`, `claude`)
+- [x] `youtube-title-thumbnail-audit` (`codex`, `claude`)
+- [x] `youtube-vid-research` (`codex`, `claude`)
+- [x] `youtube-video-audit` (`codex`, `claude`)
+- [x] `youtube-video-prelaunch-audit` (`codex`, `claude`)
+
+#### smaller packs
+
+- [x] `ord/ord-scan` (`codex`, `claude`)
+- [x] `vard/vard-scan` (`codex`, `claude`)
+- [x] `remotion/youtube-format-research` (`codex`, `claude`)
+- [x] `product-design/ui-interview` (`codex`, `claude`)
+
+### Review Notes
+
+- Initial regression evidence:
+  - `rg -l -i 'full (preliminary|working) packet|Update the review HTML alignment page with the full preliminary packet|Full Preliminary Packet|Full Working Packet' packs -g '**/SKILL.md' -g '!**/archive/**' | wc -l` -> 144
+  - `rg -l -i 'full (preliminary|working) packet|Update the review HTML alignment page with the full preliminary packet|Full Preliminary Packet|Full Working Packet' packs -g '**/ALIGNMENT-PAGE.md' -g '!**/archive/**' | wc -l` -> 281
+  - `.codex` and `.claude` active local install roots had no initial hits for the searched packet phrases.
+- `git blame` points the generated convention wording at `664de0b23` from 2026-06-11.
+- Updated `docs/alignment-page-convention.md` so Stage 2 review pages must render complete working-packet substance as structured HTML review UI, with raw Markdown permitted only as a supplemental source view after the rendered UI.
+- Archived, bumped, and changelogged 144 affected active `SKILL.md` files across Claude and Codex mirrors, preserving skill-specific additions such as `ui-interview`, `ord-scan`, and `vard-scan`.
+- Regenerated 288 ownable `ALIGNMENT-PAGE.md` bundles and refreshed ignored `.claude/skills` / `.codex/skills` local installs; final `scripts/pack.sh doctor` reported all installs `ok`.
+- Regression search for old positive primary-rendering wording returns only the negative test assertion. Broader active packet-term classification found 628 matches and 0 unexpected primary-looking matches, meaning remaining active hits are guardrails.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/researchish-skill-lifecycle-audit.mjs`
+  - `npx vitest run --project layer1 layer1/alignment-gates.test.ts layer1/researchish-skill-lifecycle-audit.test.ts layer1/upgrade-alignment-page-bespoke.test.ts` from `tests/` (47 tests passed)
+  - `git diff --check`
+  - `scripts/pack.sh doctor`
+- Note: the exact root-level `npx vitest run tests/layer1/...` form from the initial plan failed because root `npx` could not find `vitest`; rerunning the equivalent command from `tests/` passed.
+
+---
+
 ## Current Implementation - UI Interview Alignment Review Clarity
 
 ### Goal

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-12
+
+- Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.
+
 ## v0.4 - 2026-06-10
 
 - Changed report-first research flow to require alignment-page research-scope approval before synthesized findings, candidate rankings, recommendations, working packets, or canonical research writes.
