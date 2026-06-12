@@ -222,7 +222,7 @@ Consume the approved `alignment/user-flow-map-skill-execution-handoff.html` resp
    - [x] Run `git diff --check`.
    - [x] Verify UI canonical files remain unwritten before final UI approval.
    - [x] Review the diff for unrelated changes and intended scope.
-   - [ ] Commit and push intended tracked changes if validation passes.
+   - [x] Commit and push intended tracked changes if validation passes.
 
 ### Acceptance Criteria
 
@@ -250,6 +250,7 @@ Consume the approved `alignment/user-flow-map-skill-execution-handoff.html` resp
   - `node -e` inline-script syntax check for `alignment/ui-interview-skill-execution-handoff.html`
   - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff.md`
   - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff-interview.md`
+- Shipped to `origin/master` in commit `5139bcbc` (`Add skill execution handoff UI requirements review`).
 
 ---
 

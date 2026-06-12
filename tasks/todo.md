@@ -148,7 +148,7 @@ Consume the approved user-flow-map response and use the confirmed flow as source
 - [x] Run `git diff --check`.
 - [x] Verify `specs/skills-showcase/ui-requirements-skill-execution-handoff*.md` do not exist before final UI approval.
 - [x] Review diff scope.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review Notes
 
@@ -170,6 +170,7 @@ Consume the approved user-flow-map response and use the confirmed flow as source
   - inline-script syntax check for `alignment/ui-interview-skill-execution-handoff.html`
   - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff.md`
   - `test ! -e specs/skills-showcase/ui-requirements-skill-execution-handoff-interview.md`
+- Shipped to `origin/master` in commit `5139bcbc` (`Add skill execution handoff UI requirements review`).
 
 ---
 
