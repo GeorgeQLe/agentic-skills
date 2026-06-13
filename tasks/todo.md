@@ -10,7 +10,7 @@
 - [x] Run required pre-commit verification.
 - [x] Commit and push the verified changes.
 - [x] Regenerate the package manifest after the final install-routing skill update and rerun package verification.
-- [ ] Rerun `./publish.sh --dry-run patch` from a clean tree.
+- [x] Rerun `./publish.sh --dry-run patch` from a clean tree.
 
 ### Review Notes
 
@@ -28,6 +28,8 @@
   - `pnpm --dir apps/skills-showcase validate:data`
   - `git diff --check`
 - Follow-up verification found the manifest needed regeneration after the later `init-agentic-skills` routing update from `v0.8` to `v0.9`. Regenerated `packages/skillpacks/dist/skillpacks-manifest.json`; `npm --workspace packages/skillpacks run verify:package` now passes against the current source.
+- Hardened `publish.sh` for local npm behavior where `npm --workspace packages/skillpacks version patch --no-git-tag-version --ignore-scripts --no-commit-hooks` can either hang or exit nonzero after writing the new version. The script now continues only after observing the version change and then regenerates/verifies the manifest.
+- `./publish.sh --dry-run patch` passed with npm cache/log access. It bumped the staged version to `0.1.2`, ran the 74 package tests, attempted `npm run skillpacks:verify`, used the direct built-package fallback after npm's local lifecycle pack failure, patched both staged package manifests, skipped auth preflight for dry-run, and ran `npm publish --dry-run` for both `skillpacks@0.1.2` and `@glexcorp/gskp@0.1.2`.
 
 ## Current Implementation - Alignment YAML Routing Remediation
 
