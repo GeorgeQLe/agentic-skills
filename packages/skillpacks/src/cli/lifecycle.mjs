@@ -1202,6 +1202,10 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
   console.log(`Project skill update mode: ${mode}`);
   console.log('Skill install drift (.claude/skills, .codex/skills):');
 
+  const refreshCmd = existsSync(join(checkoutRoot, '.git'))
+    ? `${checkoutRoot}/scripts/pack.sh refresh`
+    : 'npx skillpacks refresh';
+
   let found = false;
   let anyStale = false;
   for (const target of installedSkillTargets(projectRoot)) {
@@ -1220,7 +1224,7 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
         console.log(`  pinned   ${rel} (frozen ${status.recordedVersion || '?'})`);
         break;
       case 'unknown':
-        console.log(`  unknown  ${rel} — run refresh to enable drift tracking`);
+        console.log(`  unknown  ${rel} — run \`${refreshCmd}\` to enable drift tracking`);
         break;
       case 'missing-source':
         console.log(`  missing  ${rel} — canonical source no longer exists`);
@@ -1242,7 +1246,7 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
 
   if (anyStale) {
     console.log('');
-    console.log('Fix: npx skillpacks refresh (or scripts/pack.sh refresh from a source checkout)');
+    console.log(`Fix: ${refreshCmd}`);
     return 1;
   }
 

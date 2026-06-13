@@ -901,6 +901,12 @@ doctor() {
 
   local found=false any_stale=false
   local target line status rec cur rel
+  local refresh_cmd
+  if [[ -d "$REPO_ROOT/.git" ]]; then
+    refresh_cmd="$REPO_ROOT/scripts/pack.sh refresh"   # absolute → works from any cwd
+  else
+    refresh_cmd="npx skillpacks refresh"               # npx-bundle case (no checkout)
+  fi
   while IFS= read -r target; do
     [[ -n "$target" ]] || continue
     line="$(skill_install_status "$target")"
@@ -911,7 +917,7 @@ doctor() {
     case "$status" in
       ok)             printf '  ok       %s\n' "$rel" ;;
       pinned)         printf '  pinned   %s (frozen %s)\n' "$rel" "${rec:-?}" ;;
-      unknown)        printf '  unknown  %s — run `npx skillpacks refresh` (or scripts/pack.sh refresh) to enable drift tracking\n' "$rel" ;;
+      unknown)        printf '  unknown  %s — run `%s` to enable drift tracking\n' "$rel" "$refresh_cmd" ;;
       missing-source) printf '  missing  %s — canonical source no longer exists\n' "$rel" ;;
       stale)          printf '  STALE    %s (%s -> %s)\n' "$rel" "${rec:-?}" "${cur:-?}"; any_stale=true ;;
     esac
@@ -923,7 +929,7 @@ doctor() {
 
   if [[ "$any_stale" == true ]]; then
     echo ""
-    echo "Fix: npx skillpacks refresh (or scripts/pack.sh refresh from a source checkout)"
+    echo "Fix: $refresh_cmd"
     return 1
   fi
   return 0
