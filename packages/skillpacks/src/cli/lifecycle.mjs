@@ -17,7 +17,8 @@ import { fileURLToPath } from 'node:url';
 import {
   canonicalHibernatedPack,
   hibernatedPacksForSkill,
-  hibernatedSkillNamesForPack
+  hibernatedSkillNamesForPack,
+  normalizePack
 } from './pack-normalization.mjs';
 import {
   inferProjectType,
@@ -609,6 +610,85 @@ function enabledSkillEntries(config) {
   return Object.entries(config.enabled_skills);
 }
 
+function staleProjectPackError(pack, location, reason = '') {
+  const detail = reason ? ` ${reason}` : '';
+  return new Error(
+    `Stale pack entry '${pack}' in .agents/project.json ${location}.${detail} ` +
+      `Run 'npx skillpacks remove ${pack}' or edit .agents/project.json to remove or rename it.`
+  );
+}
+
+function reconcileStoredPack(manifest, pack, location) {
+  const hibernatedPack = canonicalHibernatedPack(pack);
+  if (hibernatedPack) {
+    throw hibernatedPackError(pack, hibernatedPack);
+  }
+
+  if (activePackExists(manifest, pack)) {
+    return pack;
+  }
+
+  const activeMatches = normalizePack(pack).filter((candidate) => activePackExists(manifest, candidate));
+  if (activeMatches.length === 1) {
+    return activeMatches[0];
+  }
+  if (activeMatches.length > 1) {
+    throw staleProjectPackError(
+      pack,
+      location,
+      `It resolves to multiple active packs: ${activeMatches.join(', ')}.`
+    );
+  }
+
+  throw staleProjectPackError(pack, location);
+}
+
+function reconcileProjectConfig(projectRoot, manifest) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    return null;
+  }
+
+  const next = { ...config };
+  let changed = false;
+
+  if (Array.isArray(config.enabled_packs)) {
+    const packs = [];
+    for (const pack of config.enabled_packs) {
+      const canonical = reconcileStoredPack(manifest, pack, 'enabled_packs');
+      if (canonical !== pack) {
+        changed = true;
+      }
+      if (!packs.includes(canonical)) {
+        packs.push(canonical);
+      } else {
+        changed = true;
+      }
+    }
+    next.enabled_packs = packs;
+  }
+
+  if (config.enabled_skills && typeof config.enabled_skills === 'object') {
+    const enabledSkills = {};
+    for (const [skillName, pack] of Object.entries(config.enabled_skills)) {
+      const canonical = findPackForSkill(manifest, skillName);
+      enabledSkills[skillName] = canonical || pack;
+      if (canonical && canonical !== pack) {
+        changed = true;
+      }
+    }
+    next.enabled_skills = enabledSkills;
+  }
+
+  if (changed) {
+    writeProjectConfig(projectRoot, next);
+    console.log('Reconciled .agents/project.json pack names');
+    return next;
+  }
+
+  return config;
+}
+
 function installedSkillTargets(projectRoot) {
   const roots = TOOLS.map((tool) => targetRoot(projectRoot, tool));
   const paths = [];
@@ -1097,6 +1177,7 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
 
     return withProjectLock(projectRoot, 'doctor --fix', async () => {
       console.log('Doctor fix: generated skill-root cleanup');
+      reconcileProjectConfig(projectRoot, manifest);
       const synced = syncExpectedSkillRoots(projectRoot, manifest);
       const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
       if (synced === 0 && removed === 0) {
@@ -1253,7 +1334,7 @@ export async function removeResolved({ manifest, projectRoot = process.cwd(), pa
 
 export async function refreshProject({ manifest, projectRoot = process.cwd() }) {
   return withProjectLock(projectRoot, 'refresh', async () => {
-    const config = readProjectConfig(projectRoot);
+    const config = reconcileProjectConfig(projectRoot, manifest);
     const packs = enabledPacks(config);
     const skills = enabledSkillEntries(config).map(([skill]) => skill);
     const base = baseSkillsEnabled(config);

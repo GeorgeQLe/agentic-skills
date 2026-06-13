@@ -404,6 +404,75 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'devtool-adoption': 'devtool' });
   });
 
+  it('refresh reconciles a renamed enabled pack alias before installing', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'business-app',
+      enabled_packs: ['business-discovery'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Reconciled \.agents\/project\.json pack names/);
+    assert.match(stdout, /Installed \.claude\/skills\/customer-discovery/);
+    assert.match(stdout, /Installed \.codex\/skills\/customer-discovery/);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, ['business-research']);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'customer-discovery')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'customer-discovery')), true);
+  });
+
+  it('refresh de-duplicates renamed pack aliases while preserving order', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'business-app',
+      enabled_packs: ['business-discovery', 'business-research'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Reconciled \.agents\/project\.json pack names/);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, ['business-research']);
+  });
+
+  it('refresh reconciles stale enabled-skill pack values when the skill still exists', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'customer-discovery': 'business-discovery'
+      }
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Reconciled \.agents\/project\.json pack names/);
+    assert.match(stdout, /Installed \.claude\/skills\/customer-discovery/);
+    assert.match(stdout, /Updated \.agents\/project\.json \(skill: customer-discovery from pack: business-research\)/);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'customer-discovery': 'business-research' });
+    assert.equal(existsSync(skillPath(dir, 'codex', 'customer-discovery')), true);
+  });
+
+  it('doctor --fix reconciles renamed enabled pack aliases before cleanup', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'business-app',
+      enabled_packs: ['business-discovery'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['doctor', '--fix']);
+
+    assert.match(stdout, /Doctor fix: generated skill-root cleanup/);
+    assert.match(stdout, /Reconciled \.agents\/project\.json pack names/);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, ['business-research']);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'customer-discovery')), true);
+  });
+
   it('refreshes enabled base skills from the current package snapshot', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {
@@ -467,6 +536,21 @@ describe('Node lifecycle commands', () => {
     assert.match(error.message, /Archive: archive\/hibernated-packs\/2026-06-poketowork-rebuild\/devtool-kanban/);
     assert.match(error.message, /Reactivation requires a stable service\/API/);
     assert.match(error.message, /scripts\/pack\.sh remove devtool-kanban/);
+  });
+
+  it('rejects unknown stale enabled pack refresh with cleanup guidance', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['not-a-real-pack'],
+      skill_pack_version: 1
+    });
+
+    const error = await runSkillpacksExpectError(dir, ['refresh']);
+
+    assert.match(error.message, /Stale pack entry 'not-a-real-pack' in \.agents\/project\.json enabled_packs/);
+    assert.match(error.message, /npx skillpacks remove not-a-real-pack/);
+    assert.match(error.message, /edit \.agents\/project\.json/);
   });
 
   it('records lock command labels and releases locks after errors', async () => {

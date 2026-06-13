@@ -1,3 +1,36 @@
+## Current Implementation - skillpacks refresh rename reconciliation
+
+### Goal
+
+Make `npx skillpacks refresh` and `npx skillpacks doctor --fix` tolerate stale project config entries left behind by pack or skill renames, while preserving explicit hibernated-pack and unknown-pack failures.
+
+### Scope
+
+- `packages/skillpacks/src/cli/lifecycle.mjs`
+- `packages/skillpacks/test/lifecycle.test.mjs`
+- Required prompt/task artifacts for the invoked `$investigate` workflow
+- No new CLI command and no changes to install/remove argument semantics
+
+### Plan
+
+1. Re-read lifecycle, pack-normalization, project-config, and lifecycle test coverage to confirm current behavior.
+2. Add stored-config reconciliation before refresh and doctor fix operations:
+   - Rewrite single-target active pack aliases such as `business-discovery` to their canonical active pack.
+   - De-duplicate canonical `enabled_packs` values while preserving first-seen order.
+   - Rewrite `enabled_skills` pack values to the active pack that currently provides the skill.
+   - Keep hibernated pack diagnostics unchanged.
+   - Fail unknown stale pack entries with cleanup-oriented guidance.
+3. Add regression tests for pack alias migration, duplicate alias de-duplication, enabled-skill pack migration, hibernated stale packs, and unknown stale packs.
+4. Run the requested targeted tests and live CLI checks against this checkout.
+5. Review the diff for minimality, then commit and push the intended tracked changes.
+
+### Verification
+
+- `node --test packages/skillpacks/test/pack-normalization.test.mjs packages/skillpacks/test/lifecycle.test.mjs`
+- `npx skillpacks doctor`
+- `npx skillpacks refresh`
+- Repo-local fallback for this checkout if the npx binary is unavailable: `node packages/skillpacks/bin/skillpacks.mjs doctor` and `node packages/skillpacks/bin/skillpacks.mjs refresh`
+
 ## Current Hygiene - Generated Skill Root Shipping Blocker
 
 ### Goal

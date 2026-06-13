@@ -1,3 +1,29 @@
+## Current Implementation - skillpacks refresh rename reconciliation
+
+### Current Checklist
+
+- [x] Re-read the investigate skill and relevant skillpacks lifecycle code.
+- [x] Capture the visible investigate prompt under `prompts/investigate/`.
+- [x] Write the implementation roadmap and current checklist.
+- [x] Implement stored project config reconciliation for refresh and doctor fix.
+- [x] Add lifecycle regression tests.
+- [x] Run targeted Node tests.
+- [x] Attempt live `npx skillpacks doctor`.
+- [x] Run repo-local live `skillpacks refresh` and `skillpacks doctor` checks.
+- [ ] Review diff, commit, and push.
+
+### Review Notes
+
+- Added lifecycle reconciliation for stored `.agents/project.json` pack values before `refresh` and `doctor --fix`.
+- Single-target aliases such as `business-discovery` now rewrite to active canonical packs such as `business-research`; duplicate canonical pack entries are collapsed in first-seen order.
+- Individually enabled skills now rewrite their stored pack value to the current active pack when the skill still exists.
+- Hibernated pack config still raises the existing PoketoWork safety diagnostic.
+- Unknown stale pack config now fails with cleanup-oriented guidance.
+- `node --test packages/skillpacks/test/pack-normalization.test.mjs packages/skillpacks/test/lifecycle.test.mjs` passed: 49 tests.
+- `npx skillpacks doctor` failed in this checkout because no `skillpacks` npx binary was available; the equivalent repo-local CLI command initially reported stale managed skill roots.
+- `node packages/skillpacks/bin/skillpacks.mjs refresh` passed and reinstalled current managed skill roots.
+- `node packages/skillpacks/bin/skillpacks.mjs doctor` passed after refresh with all managed roots `ok`.
+
 ## Current Hygiene - Generated Skill Root Shipping Blocker
 
 ### Goal
