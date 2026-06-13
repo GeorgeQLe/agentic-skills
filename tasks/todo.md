@@ -10,7 +10,7 @@
 - [x] Refresh Skills Showcase generated assets after active skill metadata changes.
 - [x] Update focused layer1 expectations for the new approved-artifact routing convention and current generated benchmark-data model.
 - [x] Run the requested validation suite.
-- [ ] Commit and push the verified boundary to `origin/master`.
+- [x] Commit and push the verified boundary to `origin/master`.
 
 ### Review Notes
 
