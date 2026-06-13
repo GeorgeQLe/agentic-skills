@@ -1,3 +1,32 @@
+## Current Investigation - AFPS Prototype Product Design Workflow
+
+### Goal
+
+Evaluate whether the shipped product-design route `user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation]` is the best default workflow for the AFPS prototype phase.
+
+### Scope
+
+- Active product-design skill contracts for `user-flow-map`, `ux-variations`, and `ui-interview`
+- Recent shipped commit for the product-design flow tree routing update
+- Existing AFPS workflow evidence in repo docs, task notes, progress manifests, and pack metadata
+- Verification limited to read-only or non-mutating checks unless the investigation discovers a concrete source defect
+
+### Plan
+
+1. Capture the visible investigation prompt.
+2. Inspect the shipped commit, active product-design contracts, and relevant prior route wording.
+3. Inspect AFPS workflow context and prototype-phase assumptions from existing artifacts.
+4. Evaluate the new route against prototype-phase goals: speed to visual alignment, branch exploration quality, evidence traceability, decision gates, and handoff readiness.
+5. Run focused verification for stale route references and audit health.
+6. Record findings and, if no source edits are needed, keep the outcome as an evaluation rather than implementation.
+
+### Acceptance Criteria
+
+- Confirm whether the shipped workflow matches the claimed route.
+- Identify whether the route is better than the old requirements/layout-first default for AFPS prototypes.
+- Name any conditions where the workflow should branch or be amended.
+- Provide a concrete recommended default route for the AFPS prototype phase.
+
 ## Current Implementation - Product Design Flow Tree Routing
 
 ### Goal

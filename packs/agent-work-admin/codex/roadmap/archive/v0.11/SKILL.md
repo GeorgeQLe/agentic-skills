@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.12
+version: v0.11
 argument-hint: "[--existing] [path-to-spec]"
 ---
 
@@ -48,7 +48,7 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/lessons.md` — accumulated lessons
 - `specs/` or `spec.md` — specifications
 - `specs/user-flow-*.md` — screen-flow maps for user-facing work
-- `specs/ui-requirements-*.md` — optional requirements-only UI content contracts for explicit layout-mode work
+- `specs/ui-requirements-*.md` — requirements-only UI content contracts for user-facing work
 - `specs/ux-variations-*.md` — UX variation plans for user-facing work
 - `specs/ui-*.md` — implementation-ready UI specifications for user-facing work
 - `research/journey-map.md` — user/customer journey context for user-facing work
@@ -66,8 +66,8 @@ Route behavior based on the current pipeline state:
 |-------|-----------|----------|
 | A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `$journey-map`. Done (skip to step 7). |
 | A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `$feature-interview` when an idea/research gap exists and the planning destination is not confirmed; queue `$spec-interview` only when the user already selected full-spec creation. Done (skip to step 7). |
-| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/user-flow-*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
-| B — Specs, no roadmap | Specs exist and required journey/flow/UX-variation/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
+| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
+| B — Specs, no roadmap | Specs exist and required journey/flow/UI requirements/UX planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `$plan-phase N`. Do not queue `$roadmap`. |
 | D — All complete, documentation scan needed | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has no current `## Priority Documentation Todo` section from a previous `$research-roadmap` run | Queue `$research-roadmap` for documentation scan. Done (skip to step 7). |
@@ -168,16 +168,16 @@ User-facing specs exist, but one or more required design-planning artifacts are 
 
 - `research/journey-map.md` — run `$journey-map` first to define discovery, onboarding, aha, conversion, retention, and advocacy.
 - `specs/user-flow-*.md` — run `$user-flow-map` after positioning/journey context to define screen flow, branches, decisions, states, failure paths, and handoffs.
-- `specs/ux-variations-*.md` — run `$ux-variations [specific-user-flow]` after user-flow mapping to explore alternate progression branches for a selected flow.
-- `specs/ui-*.md` — run `$ui-interview [specific-ux-variation]` after UX variation planning to render an HTML visual mockup and record approve/reject/retry for a specific branch.
-- `specs/ui-requirements-*.md` — run `$ui-interview --requirements-only` only when the user explicitly needs a fixed content/data/action contract before `$ux-variations --layout-mode`.
+- `specs/ui-requirements-*.md` — run `$ui-interview --requirements-only` after user-flow mapping to lock the content and behavior contract before layout alternatives.
+- `specs/ux-variations-*.md` — run `$ux-variations --layout-mode` after user-flow and UI requirements to compare layout approaches.
+- `specs/ui-*.md` — run `$ui-interview` only when a full UI specification is still needed after layout selection.
 
 For `$journey-map` (customer-lifecycle pack), `$user-flow-map`, `$ui-interview`, and `$ux-variations`, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `npx skillpacks install <pack>` from the project shell, before the skill.
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
 #### 12. Missing Roadmap (internal consistency fallback)
-Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `$roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `$plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`$spec-interview`, `$journey-map`, `$user-flow-map`, `$ux-variations [specific-user-flow]`, `$ui-interview [specific-ux-variation]`, or explicit `$ui-interview --requirements-only` / `$ux-variations --layout-mode` detours) with evidence.
+Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `$roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `$plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`$spec-interview`, `$journey-map`, `$user-flow-map`, `$ui-interview --requirements-only`, `$ux-variations --layout-mode`, or `$ui-interview`) with evidence.
 
 #### 13. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
@@ -226,7 +226,7 @@ Rules:
 8. Use checked boxes only when an issue is already resolved.
 9. Never write `$roadmap` into `## Priority Task Queue`. If an issue appears to require `$roadmap`, resolve the underlying state in this run:
    - specs missing: queue `$feature-interview` for idea triage, `$spec-interview` when full spec creation is already confirmed, or the relevant upstream planning command
-   - user-facing design gate missing: queue `$journey-map`, `$user-flow-map`, `$ux-variations [specific-user-flow]`, `$ui-interview [specific-ux-variation]`, or explicit requirements/layout detours when needed
+   - user-facing design gate missing: queue `$journey-map`, `$user-flow-map`, `$ui-interview --requirements-only`, `$ux-variations --layout-mode`, or `$ui-interview`
    - specs exist but roadmap missing: build `tasks/roadmap.md` through State B and seed `$plan-phase 1`
    - existing queue already contains `$roadmap`: replace it with `$reconcile-dev-docs fix tasks` because the queue is stale/self-referential
 
@@ -271,7 +271,7 @@ For missing journey/flow/UI/UX planning:
 ```md
 - [ ] `$journey-map` - create `research/journey-map.md` before roadmap because user-facing specs need lifecycle context.
 - [ ] `$user-flow-map` - create `specs/user-flow-[topic].md` before roadmap because user-facing specs need screen-flow structure.
-- [ ] `$ux-variations [specific-user-flow]` - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need progression-branch alternatives before branch UI approval.
+- [ ] `$ui-interview --requirements-only` - create `specs/ui-requirements-[topic].md` before roadmap because user-facing specs need content and behavior requirements before layout alternatives.
 - [ ] `$ux-variations --layout-mode` - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need layout alternatives.
 - [ ] `$ui-interview` - create `specs/ui-[topic].md` before roadmap only if the selected experience still needs implementation-ready interface detail.
 ```

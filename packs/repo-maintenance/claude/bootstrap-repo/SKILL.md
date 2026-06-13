@@ -2,7 +2,7 @@
 name: bootstrap-repo
 description: Initialize or reset a repository README and agent workflow docs from a short project brief
 type: execution
-version: v0.4
+version: v0.5
 argument-hint: "<project brief>"
 ---
 
@@ -57,13 +57,14 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
 7. **Route research-first after product bootstrap:**
    - If this is a product, app, SaaS, dashboard, internal tool, marketplace, website, or other user-facing restart, rebuild market and lifecycle alignment from the high-level concept before UI requirements or prototypes.
    - Check `.agents/project.json.enabled_packs` when present. If `business-research` is not enabled, recommend `npx skillpacks install business-research` from the project shell, before `/customer-discovery`. If `customer-lifecycle` is not enabled, include `npx skillpacks install customer-lifecycle` before `/journey-map`.
-   - When required packs are available, recommend `/customer-discovery <concept>` as the next command. After `/customer-discovery`, the intended sequence is `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> prototype work.
+   - When required packs are available, recommend `/customer-discovery <concept>` as the next command. After `/customer-discovery`, the intended sequence is `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]` -> prototype work.
    - If current, accepted `research/icp.md`, `research/competitive-analysis.md`, and `research/journey-map.md` already exist from the fresh reset but positioning is missing, then recommend `/positioning <topic>`.
    - If positioning exists but a flow map is missing, recommend `/user-flow-map <topic>`.
-   - If a flow map exists but UI requirements are missing, recommend `/ui-interview --requirements-only <topic>`.
-   - If UI requirements exist but layout variations are missing, recommend `/ux-variations --layout-mode <topic>`.
+   - If a flow map exists but UX variation branches are missing, recommend `/ux-variations [specific-user-flow]`.
+   - If UX variation branches exist but no branch has an approved UI direction, recommend `/ui-interview [specific-ux-variation]`.
+   - Recommend `/ui-interview --requirements-only <topic>` only when the user explicitly needs a fixed content/data/action contract before `/ux-variations --layout-mode <topic>`.
    - Only route directly to `/roadmap` or `/exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
-   - The intended product sequence after reset is: `/customer-discovery` -> `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
+   - The intended product sequence after reset is: `/customer-discovery` -> `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
 
 ## Output
 
@@ -76,7 +77,7 @@ Bootstrapped repository
 - AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
 - Verification: [commands/checks run]
-- Recommended next command: [npx skillpacks install business-research | npx skillpacks install customer-lifecycle | npx skillpacks install product-design | /customer-discovery <concept> | /positioning <topic> | /user-flow-map <topic> | /ui-interview --requirements-only <topic> | /ux-variations --layout-mode <topic> | /roadmap | /exec]
+- Recommended next command: [npx skillpacks install business-research | npx skillpacks install customer-lifecycle | npx skillpacks install product-design | /customer-discovery <concept> | /positioning <topic> | /user-flow-map <topic> | /ux-variations [specific-user-flow] | /ui-interview [specific-ux-variation] | /roadmap | /exec]
 ```
 
 ## Constraints

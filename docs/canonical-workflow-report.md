@@ -178,7 +178,7 @@ The current `roadmap` contract distinguishes unresolved ideas from confirmed ful
 | No specs and missing journey for user-facing work | Queue `journey-map` first. |
 | No specs, unresolved idea, unclear destination | Queue `feature-interview`. |
 | No specs, user already selected full production spec creation | Queue `spec-interview`. |
-| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ui-interview --requirements-only`, `ux-variations --layout-mode`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. |
+| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ux-variations [specific-user-flow]`, `ui-interview [specific-ux-variation]`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only when a fixed content contract and layout-only alternatives are explicitly needed. |
 | Production spec exists, roadmap missing | Build or update `tasks/roadmap.md`, then seed `plan-phase`. |
 | All roadmap phases complete | Queue `research-roadmap`, then route to `brainstorm` unless a concrete idea is selected. |
 

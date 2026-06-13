@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-12
+
+- Updated user-facing design-gate routing to treat `/ux-variations [specific-user-flow]` before `/ui-interview [specific-ux-variation]` as the default AFPS prototype path, with requirements-only/layout-mode as explicit detours.
+
 ## v0.11 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

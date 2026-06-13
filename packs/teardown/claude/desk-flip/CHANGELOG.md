@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-12
+
+- Updated fresh-start product routing to use the AFPS prototype flow tree: `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]`, with requirements-only/layout-mode as explicit bounded detours.
+
 ## v0.4 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

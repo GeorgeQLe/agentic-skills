@@ -1,3 +1,27 @@
+## Current Investigation - AFPS Prototype Product Design Workflow
+
+### Current Checklist
+
+- [x] Read the active `investigate` and `afps-status` skill instructions.
+- [x] Capture the visible investigation prompt under `prompts/investigate/`.
+- [x] Inspect the shipped product-design route and active skill contracts.
+- [x] Inspect AFPS workflow/prototype context from existing artifacts.
+- [x] Patch stale AFPS route surfaces outside the product-design skill files.
+- [x] Evaluate whether the route is the best default for AFPS prototypes.
+- [x] Run focused verification checks.
+- [x] Record review notes and ship any required artifacts.
+
+### Review Notes
+
+- Initial framing: the shipped route claims to replace the old requirements/layout-first default with a flow-tree model: `user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation]`.
+- Evaluation lens: AFPS prototype work should minimize chat-driven drift, produce a visual artifact early enough for alignment, preserve research/spec traceability, and keep branch decisions explicit before implementation.
+- Finding: the active product-design contracts matched the claimed route, but active docs and route owners still exposed the old requirements/layout-mode default.
+- Action taken: updated `docs/skill-next-step-contracts.md`, `docs/pack-workflow-matrix.md`, `docs/canonical-workflow-report.md`, `docs/skill-routing-map.html`, mirrored `bootstrap-repo`, mirrored `roadmap`, and mirrored `desk-flip`.
+- Evaluation: the new route is the better AFPS prototype default. It preserves the flow map as the structural root, explores meaningful progression alternatives before UI detail hardens, requires HTML mockup feedback before branch approval, and keeps requirements-only/layout-mode available for cases that genuinely need a fixed content contract.
+- Caveat: the route should not become a five-variation tax for tiny or already-obvious changes. For narrow fixes or explicit bypasses, `user-flow-map` may route directly to `ui-interview`; for fixed-content layout comparisons, the requirements-only/layout-mode detour remains valid.
+- Verification passed: skill archive, version, next-step routing, mirror parity, generated Skills Showcase data freshness, app build, and whitespace checks.
+- Shipping boundary note: this commit includes the route synchronization, required version archive/changelog entries, workflow docs, prompt captures, task/history notes, manifest, and regenerated Skills Showcase data.
+
 ## Current Implementation - Product Design Flow Tree Routing
 
 ### Current Checklist

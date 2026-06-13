@@ -297,7 +297,7 @@ const PACKS = {
 // AFPS chain nodes (order matters — laid out left to right)
 const AFPS_CHAIN = [
   'idea-scope-brief', 'icp', 'competitive-analysis', 'journey-map',
-  'positioning', 'user-flow-map', 'ui-interview', 'ux-variations', 'prototype',
+  'positioning', 'user-flow-map', 'ux-variations', 'ui-interview', 'prototype',
   'uat', 'consolidate-variations', 'research-roadmap', 'spec-interview',
   'roadmap', 'plan-phase', 'run', 'ship', 'ship-end'
 ];
@@ -354,9 +354,9 @@ const EDGES = [
   { from: 'competitive-analysis', to: 'journey-map',          type: 'default',     condition: 'Competitive analysis complete' },
   { from: 'journey-map',         to: 'positioning',           type: 'default',     condition: 'Journey map complete' },
   { from: 'positioning',         to: 'user-flow-map',         type: 'default',     condition: 'Positioning complete' },
-  { from: 'user-flow-map',       to: 'ui-interview',          type: 'default',     condition: 'Flow map approved' },
-  { from: 'ui-interview',        to: 'ux-variations',         type: 'default',     condition: 'Requirements-only UI contract complete' },
-  { from: 'ux-variations',       to: 'prototype',             type: 'default',     condition: 'Layout-mode variations specced' },
+  { from: 'user-flow-map',       to: 'ux-variations',         type: 'default',     condition: 'Flow map approved; select a specific user flow' },
+  { from: 'ux-variations',       to: 'ui-interview',          type: 'default',     condition: 'Specific UX variation branch ready for visual mockup' },
+  { from: 'ui-interview',        to: 'prototype',             type: 'default',     condition: 'Branch mockup approved' },
   { from: 'prototype',           to: 'uat',                   type: 'default',     condition: 'Prototype built' },
   { from: 'uat',                 to: 'consolidate-variations', type: 'default',    condition: 'UAT evaluation evidence exists' },
   { from: 'consolidate-variations', to: 'research-roadmap',   type: 'default',     condition: 'Variants consolidated' },

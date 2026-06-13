@@ -44,7 +44,9 @@ Business app:
 business-research -> customer-lifecycle -> business-growth -> business-ops
 ```
 
-Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
+Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
+
+Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only as explicit bounded detours when a fixed content/data/action contract and layout-only alternatives are needed.
 
 Optional research/framework detours sit after the evidence that exposes their trigger and before the downstream choice they would change. After `journey-map`, use `hook-model` only when repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; if `business-growth` is not enabled, route to `npx skillpacks install business-growth` first. For enterprise, infrastructure, transactional, or naturally infrequent products, skip `hook-model` and prefer lifecycle or success measurement (`lifecycle-metrics` or `metrics`). `value-prop-canvas`, `lean-canvas`, lifecycle stage maps, `monetization`, and `gtm` remain optional trigger-driven detours, not required chain links.
 
