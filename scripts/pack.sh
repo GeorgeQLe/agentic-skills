@@ -911,7 +911,7 @@ doctor() {
     case "$status" in
       ok)             printf '  ok       %s\n' "$rel" ;;
       pinned)         printf '  pinned   %s (frozen %s)\n' "$rel" "${rec:-?}" ;;
-      unknown)        printf '  unknown  %s — run refresh to enable drift tracking\n' "$rel" ;;
+      unknown)        printf '  unknown  %s — run `npx skillpacks refresh` (or scripts/pack.sh refresh) to enable drift tracking\n' "$rel" ;;
       missing-source) printf '  missing  %s — canonical source no longer exists\n' "$rel" ;;
       stale)          printf '  STALE    %s (%s -> %s)\n' "$rel" "${rec:-?}" "${cur:-?}"; any_stale=true ;;
     esac
@@ -923,7 +923,7 @@ doctor() {
 
   if [[ "$any_stale" == true ]]; then
     echo ""
-    echo "Fix: scripts/pack.sh refresh"
+    echo "Fix: npx skillpacks refresh (or scripts/pack.sh refresh from a source checkout)"
     return 1
   fi
   return 0

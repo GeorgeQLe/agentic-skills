@@ -1,5 +1,11 @@
 # sync Changelog
 
+## v0.5
+
+- Fix skill-install drift fix routing: surface the doctor-reported context-aware refresh command instead of a bare `scripts/pack.sh refresh`, which fails to resolve from a non-checkout project directory
+- Prefer `npx skillpacks refresh` for installs managed by the published npx `skillpacks` package; use `scripts/pack.sh refresh` only from a resolved source checkout
+- Apply the same routing to `unknown`-install hints and the Report status drift line
+
 ## v0.4
 
 - Add warn-only skill-install drift check: run `scripts/pack.sh doctor` against the resolved `agentic-skills` checkout and report `stale`/`unknown` project skill installs with the `scripts/pack.sh refresh` fix

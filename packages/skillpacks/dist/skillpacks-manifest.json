@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "4dfcfe8e8bb44be8a787c17b6654bb71b609c5e02323443a86b8fc98c92dbf22",
+  "source_fingerprint": "be61d8d031bc5bf01828344631f52c5fdaecf62ea512482e41f7c632cfbdb89e",
   "packs": [
     {
       "name": "agent-bridge",
@@ -5792,14 +5792,15 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "path": "packs/gitops/claude/sync/SKILL.md",
-      "content_sha256": "e3897174183f9929dc89c2449bbdb572cfbb9f8795bd4ac1ff96a0da4480839a",
+      "content_sha256": "1ffe41c282bb97ae5c0cc0372582016a15b2c10ce711d1bb74738cdcb473c6d7",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/sync",
       "deck_memberships": []
@@ -5825,14 +5826,15 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "path": "packs/gitops/codex/sync/SKILL.md",
-      "content_sha256": "1788035e2e4a24841a9365dbef2e68e4778de74b3842dfd33627f18c72017cbb",
+      "content_sha256": "c955845d4f2760ea29167c0a0ad48627dbeffb27b23b740de28565cf89256a49",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$sync",
       "deck_memberships": []
