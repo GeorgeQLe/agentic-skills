@@ -68,14 +68,14 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "41 packs · 179 unique pack skills · 11 unique global skills · 373 platform entries",
-      "rawText": "41 packs · 179 unique pack skills · 11 unique global skills · 373 platform entries",
+      "text": "41 packs · 179 unique pack skills · 11 unique base skills · 373 platform entries",
+      "rawText": "41 packs · 179 unique pack skills · 11 unique base skills · 373 platform entries",
       "fontSize": 14,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "41 packs · 179 unique pack skills · 11 unique global skills · 373 platform entries",
+      "originalText": "41 packs · 179 unique pack skills · 11 unique base skills · 373 platform entries",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -718,7 +718,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "pack-body-business-discovery",
+      "id": "pack-body-business-research",
       "type": "rectangle",
       "x": 40,
       "y": 324,
@@ -733,16 +733,16 @@
       "roughness": 1,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": {
         "type": 3
       },
-      "seed": 1426946618,
+      "seed": 1824975919,
       "version": 1,
-      "versionNonce": 1285672316,
+      "versionNonce": 739678523,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -750,7 +750,7 @@
       "locked": false
     },
     {
-      "id": "pack-header-business-discovery",
+      "id": "pack-header-business-research",
       "type": "rectangle",
       "x": 40,
       "y": 324,
@@ -765,16 +765,16 @@
       "roughness": 1,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": {
         "type": 3
       },
-      "seed": 529905775,
+      "seed": 1438270724,
       "version": 1,
-      "versionNonce": 752790041,
+      "versionNonce": 1636719366,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -782,7 +782,7 @@
       "locked": false
     },
     {
-      "id": "pack-title-business-discovery",
+      "id": "pack-title-business-research",
       "type": "text",
       "x": 50,
       "y": 332,
@@ -797,32 +797,32 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1576699220,
+      "seed": 1541815583,
       "version": 1,
-      "versionNonce": 1633035446,
+      "versionNonce": 551642935,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "business-discovery",
-      "rawText": "business-discovery",
+      "text": "business-research",
+      "rawText": "business-research",
       "fontSize": 16,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "business-discovery",
+      "originalText": "business-research",
       "autoResize": true,
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-competitive-analysis",
+      "id": "skill-business-research-competitive-analysis",
       "type": "text",
       "x": 50,
       "y": 368,
@@ -837,14 +837,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 221437064,
+      "seed": 93317381,
       "version": 1,
-      "versionNonce": 1725385490,
+      "versionNonce": 1402128603,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -862,7 +862,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-customer-discovery",
+      "id": "skill-business-research-customer-discovery",
       "type": "text",
       "x": 50,
       "y": 390,
@@ -877,14 +877,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 352822831,
+      "seed": 1926831774,
       "version": 1,
-      "versionNonce": 1947394009,
+      "versionNonce": 397757268,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -902,7 +902,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-customer-feedback",
+      "id": "skill-business-research-customer-feedback",
       "type": "text",
       "x": 50,
       "y": 412,
@@ -917,14 +917,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 176210138,
+      "seed": 2050862701,
       "version": 1,
-      "versionNonce": 1167546864,
+      "versionNonce": 847765827,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -942,7 +942,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-enterprise-icp",
+      "id": "skill-business-research-enterprise-icp",
       "type": "text",
       "x": 50,
       "y": 434,
@@ -957,14 +957,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1647716568,
+      "seed": 356452981,
       "version": 1,
-      "versionNonce": 460393826,
+      "versionNonce": 1834859595,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -982,7 +982,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-lean-canvas",
+      "id": "skill-business-research-lean-canvas",
       "type": "text",
       "x": 50,
       "y": 456,
@@ -997,14 +997,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 678662735,
+      "seed": 764078626,
       "version": 1,
-      "versionNonce": 436291813,
+      "versionNonce": 2083366488,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -1022,7 +1022,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-positioning",
+      "id": "skill-business-research-positioning",
       "type": "text",
       "x": 50,
       "y": 478,
@@ -1037,14 +1037,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 767283669,
+      "seed": 852699560,
       "version": 1,
-      "versionNonce": 1984010155,
+      "versionNonce": 663882466,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -1062,7 +1062,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-business-discovery-value-prop-canvas",
+      "id": "skill-business-research-value-prop-canvas",
       "type": "text",
       "x": 50,
       "y": 500,
@@ -1077,14 +1077,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-business-discovery"
+        "group-business-research"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1704685768,
+      "seed": 715628965,
       "version": 1,
-      "versionNonce": 1305651138,
+      "versionNonce": 709661553,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11460,14 +11460,14 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-poketowork-kanban-poketo-kanban",
+      "id": "skill-poketowork-kanban-empty",
       "type": "text",
       "x": 1250,
       "y": 2266,
       "width": 260,
       "height": 17,
       "angle": 0,
-      "strokeColor": "#495057",
+      "strokeColor": "#868e96",
       "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 1,
@@ -11480,22 +11480,22 @@
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 2034259034,
+      "seed": 656480349,
       "version": 1,
-      "versionNonce": 1362479504,
+      "versionNonce": 1123945779,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "poketo-kanban",
-      "rawText": "poketo-kanban",
+      "text": "(no skills yet)",
+      "rawText": "(no skills yet)",
       "fontSize": 13,
       "fontFamily": 3,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "poketo-kanban",
+      "originalText": "(no skills yet)",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -11688,7 +11688,7 @@
       "type": "text",
       "x": 40,
       "y": 2370,
-      "width": 156,
+      "width": 132,
       "height": 24,
       "angle": 0,
       "strokeColor": "#495057",
@@ -11710,19 +11710,19 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "Global Skills",
-      "rawText": "Global Skills",
+      "text": "Base Skills",
+      "rawText": "Base Skills",
       "fontSize": 20,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Global Skills",
+      "originalText": "Base Skills",
       "autoResize": true,
       "lineHeight": 1.25
     },
     {
-      "id": "pack-body-global",
+      "id": "pack-body-base",
       "type": "rectangle",
       "x": 40,
       "y": 2410,
@@ -11737,16 +11737,16 @@
       "roughness": 1,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": {
         "type": 3
       },
-      "seed": 296128634,
+      "seed": 1631134360,
       "version": 1,
-      "versionNonce": 590053180,
+      "versionNonce": 974442510,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11754,7 +11754,7 @@
       "locked": false
     },
     {
-      "id": "pack-header-global",
+      "id": "pack-header-base",
       "type": "rectangle",
       "x": 40,
       "y": 2410,
@@ -11769,16 +11769,16 @@
       "roughness": 1,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": {
         "type": 3
       },
-      "seed": 1751468497,
+      "seed": 1669524573,
       "version": 1,
-      "versionNonce": 1539051559,
+      "versionNonce": 215654329,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11786,7 +11786,7 @@
       "locked": false
     },
     {
-      "id": "pack-title-global",
+      "id": "pack-title-base",
       "type": "text",
       "x": 50,
       "y": 2418,
@@ -11801,32 +11801,32 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1579799572,
+      "seed": 413838682,
       "version": 1,
-      "versionNonce": 1729146358,
+      "versionNonce": 55902628,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "global/claude",
-      "rawText": "global/claude",
+      "text": "base/claude",
+      "rawText": "base/claude",
       "fontSize": 16,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "global/claude",
+      "originalText": "base/claude",
       "autoResize": true,
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-afps-status",
+      "id": "skill-base-afps-status",
       "type": "text",
       "x": 50,
       "y": 2454,
@@ -11841,14 +11841,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 730500535,
+      "seed": 1115369335,
       "version": 1,
-      "versionNonce": 1170679987,
+      "versionNonce": 216711135,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11866,7 +11866,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-animation-design-planner",
+      "id": "skill-base-animation-design-planner",
       "type": "text",
       "x": 50,
       "y": 2476,
@@ -11881,14 +11881,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 550884762,
+      "seed": 1230671060,
       "version": 1,
-      "versionNonce": 102441444,
+      "versionNonce": 503902922,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11906,7 +11906,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-autoresearch",
+      "id": "skill-base-autoresearch",
       "type": "text",
       "x": 50,
       "y": 2498,
@@ -11921,14 +11921,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 222824632,
+      "seed": 1610215754,
       "version": 1,
-      "versionNonce": 1682370882,
+      "versionNonce": 1622919060,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11946,7 +11946,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-autoresearch-prep",
+      "id": "skill-base-autoresearch-prep",
       "type": "text",
       "x": 50,
       "y": 2520,
@@ -11961,14 +11961,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 483955166,
+      "seed": 1955205328,
       "version": 1,
-      "versionNonce": 2117708140,
+      "versionNonce": 481823142,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -11986,7 +11986,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-codebase-status",
+      "id": "skill-base-codebase-status",
       "type": "text",
       "x": 50,
       "y": 2542,
@@ -12001,14 +12001,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 377496781,
+      "seed": 921129313,
       "version": 1,
-      "versionNonce": 1182501795,
+      "versionNonce": 1509762251,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12026,7 +12026,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-fork-idea-branch",
+      "id": "skill-base-fork-idea-branch",
       "type": "text",
       "x": 50,
       "y": 2564,
@@ -12041,14 +12041,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 544049691,
+      "seed": 2146752941,
       "version": 1,
-      "versionNonce": 314328645,
+      "versionNonce": 2124831849,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12066,7 +12066,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-idea-scope-brief",
+      "id": "skill-base-idea-scope-brief",
       "type": "text",
       "x": 50,
       "y": 2586,
@@ -12081,14 +12081,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 334095193,
+      "seed": 1936798443,
       "version": 1,
-      "versionNonce": 1767016509,
+      "versionNonce": 88790293,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12106,7 +12106,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-init-agentic-skills",
+      "id": "skill-base-init-agentic-skills",
       "type": "text",
       "x": 50,
       "y": 2608,
@@ -12121,14 +12121,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1236638433,
+      "seed": 2039419981,
       "version": 1,
-      "versionNonce": 318914359,
+      "versionNonce": 1202489911,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12146,7 +12146,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-pack",
+      "id": "skill-base-pack",
       "type": "text",
       "x": 50,
       "y": 2630,
@@ -12161,14 +12161,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1835808903,
+      "seed": 709939993,
       "version": 1,
-      "versionNonce": 1075501263,
+      "versionNonce": 533303421,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12186,7 +12186,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-provision-agentic-config",
+      "id": "skill-base-provision-agentic-config",
       "type": "text",
       "x": 50,
       "y": 2652,
@@ -12201,14 +12201,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 1322526038,
+      "seed": 459029784,
       "version": 1,
-      "versionNonce": 1951365664,
+      "versionNonce": 1345021298,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12226,7 +12226,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-global-skills",
+      "id": "skill-base-skills",
       "type": "text",
       "x": 50,
       "y": 2674,
@@ -12241,14 +12241,14 @@
       "roughness": 0,
       "opacity": 100,
       "groupIds": [
-        "group-global"
+        "group-base"
       ],
       "frameId": null,
       "index": "a0",
       "roundness": null,
-      "seed": 923897040,
+      "seed": 552160958,
       "version": 1,
-      "versionNonce": 1423962950,
+      "versionNonce": 62879604,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12266,7 +12266,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "arrow-vard-business-discovery-26",
+      "id": "arrow-vard-business-research-26",
       "type": "arrow",
       "x": 180,
       "y": 259,
@@ -12286,9 +12286,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 1356468482,
+      "seed": 1240692203,
       "version": 1,
-      "versionNonce": 899149900,
+      "versionNonce": 193247489,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
@@ -12434,7 +12434,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "arrow-business-discovery-customer-lifecycle-30",
+      "id": "arrow-business-research-customer-lifecycle-30",
       "type": "arrow",
       "x": 180,
       "y": 535,
@@ -12454,9 +12454,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 189257737,
+      "seed": 1607391334,
       "version": 1,
-      "versionNonce": 1572022669,
+      "versionNonce": 1710476080,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1,
