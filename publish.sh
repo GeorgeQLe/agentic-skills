@@ -84,7 +84,15 @@ run_version_bump() {
     fi
   done
 
-  wait "$pid"
+  if ! wait "$pid"; then
+    local bumped_version
+    bumped_version=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
+    if [[ "$bumped_version" != "$ORIGINAL_VERSION" ]]; then
+      printf 'npm version exited non-zero after writing %s; continuing with verified manifest bump.\n' "$bumped_version" >&2
+      return 0
+    fi
+    return 1
+  fi
 }
 
 verify_skillpacks_package() {
