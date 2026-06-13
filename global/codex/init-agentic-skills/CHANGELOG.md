@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-13
+
+- Switched the default project-shell pack install recommendation from `npx gskp install <pack-or-skill>` to `npx skillpacks install <pack-or-skill>`, matching the canonical install-routing contract and the Claude mirror.
+
 ## v0.8 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx gskp install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

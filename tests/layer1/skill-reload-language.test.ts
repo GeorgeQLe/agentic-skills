@@ -47,10 +47,10 @@ describe("skill availability reload language", () => {
       const content = read(surface.path);
 
       expect(content, `${surface.path} provision version`).toContain(
-        "<!-- provision-agentic-config v0.9 -->",
+        "<!-- provision-agentic-config v0.11 -->",
       );
       expect(content, `${surface.path} should route skill or pack installs`).toContain(
-        "npx gskp install <pack-or-skill>",
+        "npx skillpacks install <pack-or-skill>",
       );
       expect(content, `${surface.path} should suggest skills browse`).toContain(surface.skills);
       for (const expected of reloadExpectations) {
@@ -62,7 +62,7 @@ describe("skill availability reload language", () => {
       "global/claude/provision-agentic-config/SKILL.md",
       "global/codex/provision-agentic-config/SKILL.md",
     ]) {
-      expect(read(path), `${path} skill version`).toContain("version: v0.9");
+      expect(read(path), `${path} skill version`).toContain("version: v0.11");
     }
   });
 
