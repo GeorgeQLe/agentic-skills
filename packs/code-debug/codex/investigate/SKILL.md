@@ -2,7 +2,7 @@
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
 type: debugging
-version: v0.1
+version: v0.2
 ---
 
 # Investigate

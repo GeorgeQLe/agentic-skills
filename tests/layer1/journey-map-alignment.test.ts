@@ -21,7 +21,7 @@ describe("journey-map alignment preview contract", () => {
     for (const check of checks) {
       const content = readFileSync(check.path, "utf8");
 
-      expect(content, `${check.command} version`).toMatch(/^version: v0\.16$/m);
+      expect(content, `${check.command} version`).toMatch(/^version: v0\.17$/m);
       expect(content, `${check.command} report-first gate`).toContain("## Report-First Approval Gate");
       expect(content, `${check.command} scope-first approval`).toContain("Default to scope-first approval");
       expect(content, `${check.command} blocks synthesis before scope approval`).toContain(

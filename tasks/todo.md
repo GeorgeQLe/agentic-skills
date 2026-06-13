@@ -1,3 +1,37 @@
+## Current Implementation - Alignment YAML Routing Remediation
+
+### Current Checklist
+
+- [x] Create a clean detached worktree from `origin/master` for this boundary.
+- [x] Add `docs/alignment-yaml-routing-contract.md` as the canonical review/YAML routing contract.
+- [x] Add `scripts/skill-alignment-routing-audit.mjs` with layer1 fixture coverage.
+- [x] Archive, version-bump, changelog, and patch active non-exec skills with direct `$exec`/`/exec` handoffs.
+- [x] Add the pre-approval section-feedback/final compiled YAML stop contract to the remaining active game artifact skills named by the remediation plan.
+- [x] Refresh Skills Showcase generated assets after active skill metadata changes.
+- [x] Update focused layer1 expectations for the new approved-artifact routing convention and current generated benchmark-data model.
+- [x] Run the requested validation suite.
+- [ ] Commit and push the verified boundary to `origin/master`.
+
+### Review Notes
+
+- Implemented an active-skill audit that excludes archives and generated local install roots, allows execution-loop skills, fails non-exec direct `$exec`/`/exec` handoffs, and checks staged/game alignment-producing skills for the review-state YAML stop contract.
+- Direct exec handoffs were removed from active non-exec routing surfaces in global status/planning helpers, alignment-page admin, business research orchestrators, code-debug routes, journey-map, game-roadmap, and youtube play routing.
+- Game `game-core-loop`, `game-prototype-test`, `game-playtest-metrics`, and `game-roadmap` now explicitly state that while an alignment page is in `review`, section-feedback YAML or final compiled YAML is the only next action; downstream routing is emitted only after approved artifacts are written.
+- Skills Showcase generated data now reflects the version bumps. The generator is reproducible in this checkout with 0 graded and 0 incomplete persisted benchmark rows because historical raw benchmark reports are not tracked.
+- Validation passed:
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1` (60 files / 2235 tests)
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (fresh final pass)
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase test` (13 files / 136 tests)
+  - `git diff --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-deps.sh --broken`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+- Validation notes: initial generated-data validation failed as expected after metadata changes, then passed after assets were refreshed. Layer1 `bench-coverage` creates ignored `tests/benchmarks/runs/exec-codex-*` artifacts; those were removed before the final generated-data validation to keep committed assets deterministic.
+
 ## Current Implementation - Short npm CLI Rename
 
 ### Current Checklist

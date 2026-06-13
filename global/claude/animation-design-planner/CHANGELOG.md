@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+
+
 ## v0.0 - 2026-06-05 (subskill expansion)
 
 - Expanded CSS transitions subskill: sequencing/orchestration, will-change lifecycle, forced reflow triggers, exit animation patterns

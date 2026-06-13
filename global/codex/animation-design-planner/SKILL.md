@@ -2,7 +2,7 @@
 name: animation-design-planner
 description: Plan interactive UI animations before implementation with visible motion contracts, lifecycle ownership, accessibility/performance guardrails, and proof gates
 type: planning
-version: v0.0
+version: v0.1
 invocation: orchestrator
 argument-hint: "[component, interaction, animation bug, or motion brief]"
 visual_tier: prototype
@@ -75,7 +75,7 @@ For generated video, Remotion timelines, or non-interactive animation, produce o
 
 7. **Hand off implementation only after the plan**
    - If the user asked only for planning, stop with the plan and proof gate.
-   - If the user asked for implementation too, make the implementation step conditional on the plan and proof gate. Then route to `$exec` or the appropriate implementation skill with the plan as the contract.
+   - If the user asked for implementation too, make the implementation step conditional on the plan and proof gate. Then write the implementation plan and proof gate as the routing contract, or name the appropriate implementation skill when one owns the work.
    - For bug-fix requests, route to `$investigate --ui` only after this skill has named the visible motion contract and likely lifecycle owner, unless the bug is a crash or data issue.
 
 ## Output
@@ -87,7 +87,7 @@ Produce a structured animation plan with these sections:
 - **Lifecycle Ownership Map:** single sequence owner, state phases, component mount/unmount responsibilities, stable key rules, identity persistence, callback handoffs, focus/scroll responsibilities, and interruption handling.
 - **Implementation Guardrails:** framework-specific guardrails (from the routed subskill), reduced-motion behavior, transform/opacity-first performance constraints, layout/paint risks, layering, and pointer/focus rules.
 - **Proof Gate:** slow-motion/manual review steps, Playwright screenshot or video capture plan where feasible, reduced-motion verification, regression checks, and acceptance checklist tied to the visible motion contract.
-- **Implementation Handoff:** whether implementation is ready, blocked, or should route to `$exec`, `$investigate --ui`, or another skill.
+- **Implementation Handoff:** whether implementation is ready, blocked, or should be represented by an approved task artifact, `$investigate --ui`, or another owner skill.
 
 End with:
 

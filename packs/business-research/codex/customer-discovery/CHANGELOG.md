@@ -1,3 +1,10 @@
+# Changelog
+
+## v1.5 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+
+
 # customer-discovery changelog (codex)
 
 ## v1.4 - 2026-06-12

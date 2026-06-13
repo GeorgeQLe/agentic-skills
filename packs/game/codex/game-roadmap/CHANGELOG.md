@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+- Added the alignment-page review-state rule: section-feedback YAML or final compiled YAML is the only pre-approval next action.
+
+
 ## v0.3 - 2026-06-12
 
 - Added explicit next-step routing from roadmap updates to phase planning, execution, missing game validation, or no-follow-up completion.

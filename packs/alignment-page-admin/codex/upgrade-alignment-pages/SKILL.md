@@ -2,7 +2,7 @@
 name: upgrade-alignment-pages
 description: Audit and explicitly upgrade generated alignment/*.html review pages to the current local alignment-page standard while preserving page-specific context
 type: ops
-version: v0.2
+version: v0.3
 argument-hint: "[--repo <path>] [--apply] [alignment/*.html...]"
 ---
 
@@ -58,7 +58,7 @@ Use this skill when a repository already has generated `alignment/*.html` review
        - Acceptance criteria matching the audit findings
      - If `tasks/todo.md` already has unchecked items, append the phase at the bottom with a separator (`---`) and warn the user about pre-existing items.
      - Output the full audit report.
-     - Report: "Generated exec-loop task plan with N steps. Recommended next command: $exec"
+     - Report: "Generated exec-loop task plan with N steps. Recommended next route: approved task artifact"
      - Stop. Do not modify any HTML files.
    - If count <= 2: proceed to step 5 (inline apply).
 
@@ -86,7 +86,7 @@ Include:
 - In apply mode, archive paths and changed page paths.
 - Verification performed.
 - Next action: usually `$compile-central-alignment` after successful apply, or no mutation needed when all pages are current.
-- In batch mode: the generated `tasks/todo.md` phase with exec-loop steps and the recommended `$exec` command.
+- In batch mode: the generated `tasks/todo.md` phase with execution steps and the approved-artifact route.
 
 ## Constraints
 
@@ -102,5 +102,5 @@ Include:
 
 - **Audit mode:** no file mutations; no commit or push.
 - **Apply mode (inline, ≤2 pages):** modified generated alignment pages and archive copies are normal repo artifacts. Follow the target repository's shipping rules after verification.
-- **Apply mode (batch, >2 pages):** generates `tasks/todo.md` phase only; does not modify any HTML files. Commit the task plan, then hand off to `$exec`.
-- **Default next-step routing:** after successful inline apply, `Recommended next command: $compile-central-alignment`; after batch-mode handoff, `Recommended next command: $exec`; otherwise report the audit result and recommend no follow-up skill when no upgrades are needed.
+- **Apply mode (batch, >2 pages):** generates `tasks/todo.md` phase only; does not modify any HTML files. Commit the task plan, then stop; the approved task artifact records the next executable step.
+- **Default next-step routing:** after successful inline apply, `Recommended next command: $compile-central-alignment`; after batch-mode handoff, `Recommended next route: approved task artifact`; otherwise report the audit result and recommend no follow-up skill when no upgrades are needed.

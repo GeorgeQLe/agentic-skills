@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+- Added the alignment-page review-state rule: section-feedback YAML or final compiled YAML is the only pre-approval next action.
+
+
 ## v0.0
 
 - Archived previous skill contract.

@@ -2,7 +2,7 @@
 name: youtube
 description: Intent-based router and play composer for youtube-ops skills — classifies what the user needs and recommends a single skill or queues a multi-step play for /exec
 type: router
-version: v0.2
+version: v0.3
 argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status"
 ---
 
@@ -97,7 +97,7 @@ Before writing a play to `tasks/todo.md`:
 2. **Present the play.** Show the numbered steps with skill names and arguments. Note any optional steps and their prerequisites (e.g., remotion pack).
 3. **Write on approval.** Write the play to `tasks/todo.md` as a checklist. Include a header line identifying the play type and timestamp. Each step is a `- [ ]` item with the full skill invocation command.
 
-After writing the play, recommend `/exec` to begin execution.
+After writing the play, recommend the approved task artifact route to begin execution.
 
 ## Play Format for `tasks/todo.md`
 
@@ -135,7 +135,7 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 
 When Mode A recommends skills without writing files, the recommended next step is the selected youtube-ops skill or pack installation command shown in the routing response.
 
-After Mode B-E writes an approved play to `tasks/todo.md`, recommend `Recommended next command: /exec` to begin execution. If play writing is blocked by existing unfinished tasks, the next step is the user's append, replace, or abort decision.
+After Mode B-E writes an approved play to `tasks/todo.md`, recommend `Recommended next route: approved task artifact` to begin execution. If play writing is blocked by existing unfinished tasks, the next step is the user's append, replace, or abort decision.
 
 ## Default Shipping Contract
 

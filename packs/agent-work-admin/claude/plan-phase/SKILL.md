@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.4
+version: v0.5
 argument-hint: "[phase-number] [--no-tdd]"
 invocation: sub-skill
 parent: exec
@@ -348,8 +348,8 @@ Rules:
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `npx skillpacks install agent-bridge` from the project shell, first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
-  - Claude-only or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `npx skillpacks install exec-loop` from the project shell, first; if `exec-loop` is enabled, recommend `/exec`.
-  - Codex-only execution → recommend `$exec`.
+  - Claude-only or orchestration-heavy work → check `.agents/project.json.enabled_packs` for `exec-loop` — if `exec-loop` is not enabled, recommend `npx skillpacks install exec-loop` from the project shell, first; if `exec-loop` is enabled, recommend the approved task artifact route.
+  - Codex-only execution → recommend the approved task artifact route.
   - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `npx skillpacks install guided-walkthrough` from the project shell, first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `npx skillpacks install docs-health` from the project shell, first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.

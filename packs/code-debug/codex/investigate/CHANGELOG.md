@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2 - 2026-06-13
+
+- Kept the Codex mirror aligned with the alignment-YAML routing remediation and approved-artifact execution boundary.
+
+
 ## v0.0
 
 - Archived previous skill contract.

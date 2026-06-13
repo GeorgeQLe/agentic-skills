@@ -90,8 +90,8 @@ describe("codebase-status routing", () => {
     for (const mirror of mirrors) {
       const content = readFileSync(mirror.path, "utf8");
 
-      expect(content, `${mirror.path} should route actionable task work to exec`).toContain(
-        `actionable implementation work, recommend \`${mirror.exec}\``,
+      expect(content, `${mirror.path} should route actionable task work through the approved artifact`).toContain(
+        "actionable implementation work, recommend the approved task artifact route",
       );
       expect(content, `${mirror.path} should route finished unshipped work to ship`).toContain(
         `recommend \`${mirror.ship}\``,

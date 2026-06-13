@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.4
+version: v1.5
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -187,7 +187,7 @@ After user approval, write selected frameworks as sequential steps in `tasks/tod
 
 Only include frameworks the user selected. Always append the synthesis step last.
 
-Stop after writing `tasks/todo.md`. The user runs `$exec` to execute each framework sequentially.
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
 ### 6. Mode B — Synthesis (`$customer-discovery --synthesize`)
 

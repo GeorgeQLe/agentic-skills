@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5 - 2026-06-13
+
+- Kept the Codex mirror aligned with the alignment-YAML routing remediation and approved-artifact execution boundary.
+
+
 ## v0.4 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

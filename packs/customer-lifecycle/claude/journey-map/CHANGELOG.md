@@ -1,3 +1,10 @@
+# Changelog
+
+## v0.17 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+
+
 # journey-map changelog (claude)
 
 ## v0.16 - 2026-06-12

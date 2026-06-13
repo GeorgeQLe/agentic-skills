@@ -1,3 +1,10 @@
+# Changelog
+
+## v0.3 - 2026-06-13
+
+- Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.
+
+
 # youtube Changelog
 
 ## v0.2 - 2026-06-12

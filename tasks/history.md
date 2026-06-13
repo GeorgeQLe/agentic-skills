@@ -14258,6 +14258,16 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260610-210336-exec.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p1-global.md`.
 
+## 2026-06-13 — Alignment YAML routing remediation
+
+- Added `docs/alignment-yaml-routing-contract.md` and `scripts/skill-alignment-routing-audit.mjs` so active non-exec skills route through review alignment pages and approved YAML/task artifacts instead of direct `$exec`/`/exec` handoffs.
+- Added layer1 fixtures and active-scan coverage for non-exec direct exec handoffs, allowed exec-loop routing, and pre-approval alignment YAML stop language.
+- Archived, version-bumped, changelogged, and patched affected active skills across global status/planning surfaces, alignment-page admin, business research orchestrators, code-debug routes, journey-map, game-roadmap/game artifact skills, and youtube play routing.
+- Refreshed Skills Showcase generated data/proof assets after active skill metadata changes and updated layer1 expectations for approved-artifact routing plus the current generated benchmark-data model.
+- Validation passed: alignment routing audit, alignment bundle check, full layer1, Skills Showcase data validation/typecheck/test, whitespace, archive strictness, skill versions, skill deps, and next-step routing.
+- Captured the visible `$exec` remediation invocation in `prompts/exec/skill-prompt-20260613-221200-alignment-yaml-routing.md`.
+- Manifest: `tasks/ship-manifest-2026-06-13-alignment-yaml-routing.md`.
+
 ## 2026-06-11 — Skillpacks prepublish auth guard
 
 - Added `packages/skillpacks/scripts/prepublish-auth-check.mjs` to protect real `skillpacks` publishes from unauthenticated, wrong-account, non-maintainer, and already-published-version failures before npm upload.

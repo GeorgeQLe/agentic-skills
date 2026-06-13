@@ -2,7 +2,7 @@
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
 type: debugging
-version: v0.1
+version: v0.2
 argument-hint: <error, bug description, user observations, or issue URL> [--ui] [--data] [--plan]
 ---
 
@@ -138,7 +138,7 @@ _(Shown in inline mode)_
 _(Shown in plan mode — replaces "Fix Applied")_
 - Written to `tasks/todo.md` under `## Investigation Fix: [title]`
 - Number of steps and summary
-- Run `/exec` to execute the fix steps sequentially
+- Consume the approved fix-step artifact with the project executor to apply the steps sequentially
 
 ### Prevention
 - What test or check would have caught this earlier

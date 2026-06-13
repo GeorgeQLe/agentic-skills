@@ -2,12 +2,16 @@
 name: game-prototype-test
 description: Use only for video game projects; design playable prototype tests and success criteria for fun, clarity, and replay
 type: planning
-version: v0.1
+version: v0.2
 context_intake: scoped
 visual_tier: prototype
 ---
 
 # Game Prototype Test
+
+## Alignment-YAML Routing
+
+While an alignment page is in `review`, the only next action is section-feedback YAML or final compiled YAML from the bottom compile controls. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Invoke as `$game-prototype-test`.
 

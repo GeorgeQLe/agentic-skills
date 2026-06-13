@@ -56,7 +56,7 @@ describe("research-ish skill lifecycle audit", () => {
   const audit = runAudit();
 
   it("emits stable counts and finding categories", () => {
-    expect(audit.totals.activeSkills).toBe(386);
+    expect(audit.totals.activeSkills).toBe(383);
     expect(audit.totals.inScopeSkills).toBe(319);
     expect(audit.totals.typeResearchSkills).toBe(142);
     expect(audit.totals.nonResearchResearchPathSkills).toBe(107);

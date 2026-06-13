@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.4
+version: v1.5
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -222,7 +222,7 @@ Write selected frameworks as sequential steps in `tasks/todo.md`:
 
 Only include frameworks the user selected. Always append the synthesis step last.
 
-Stop after writing `tasks/todo.md`. The user runs `/exec` to execute each framework sequentially.
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
 ### 6. Mode B — Synthesis (`/customer-discovery --synthesize`)
 
@@ -295,7 +295,7 @@ After user approval via final compiled YAML, write this execution plan to `tasks
 - [ ] Synthesize: `/customer-discovery --synthesize` — Write research/icp.md
 ```
 
-Stop — user runs `/exec`.
+Stop; the approved task artifact is the routing contract.
 
 ### 8. Mode D — Validation Shortcut (`/customer-discovery validate`)
 
@@ -316,7 +316,7 @@ After user approval via final compiled YAML, write this execution plan to `tasks
 - [ ] Synthesize: `/customer-discovery --synthesize` — Write research/icp.md
 ```
 
-Stop — user runs `/exec`.
+Stop; the approved task artifact is the routing contract.
 
 ### 9. Next Steps (after synthesis only)
 
@@ -570,7 +570,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Parent does not execute frameworks.** It bootstraps candidates, selects frameworks, and synthesizes. `/exec` handles framework execution.
+- **Parent does not execute frameworks.** It bootstraps candidates, selects frameworks, and synthesizes. the approved task artifact records framework execution.
 - **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
 - **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/spec-interview`'s job.

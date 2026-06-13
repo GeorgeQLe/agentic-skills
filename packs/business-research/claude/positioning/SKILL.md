@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.16
+version: v0.17
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -151,7 +151,7 @@ Write selected frameworks as sequential steps in `tasks/todo.md`:
 
 Only include frameworks the user selected. Always append the synthesis step last.
 
-Stop after writing `tasks/todo.md`. The user runs `/exec` to execute each framework sequentially.
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
 ### 4. Mode B — Synthesis (`/positioning --synthesize`)
 
@@ -209,7 +209,7 @@ After user approval via final compiled YAML, write this execution plan to `tasks
 - [ ] Synthesize: `/positioning --synthesize` — Write research/positioning.md
 ```
 
-Stop — user runs `/exec`.
+Stop; the approved task artifact is the routing contract.
 
 ### 6. Next Steps (after synthesis only)
 

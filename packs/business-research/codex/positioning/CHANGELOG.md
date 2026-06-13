@@ -1,3 +1,10 @@
+# Changelog
+
+## v0.17 - 2026-06-13
+
+- Kept the Codex mirror aligned with the alignment-YAML routing remediation and approved-artifact execution boundary.
+
+
 # positioning changelog (codex)
 
 ## v0.16 - 2026-06-12

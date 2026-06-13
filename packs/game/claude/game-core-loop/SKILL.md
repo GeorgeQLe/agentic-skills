@@ -2,12 +2,16 @@
 name: game-core-loop
 description: Use only for video game projects; analyze moment-to-moment, session, progression, and retention loops
 type: analysis
-version: v0.1
+version: v0.2
 context_intake: artifact_only
 visual_tier: visual
 ---
 
 # Game Core Loop
+
+## Alignment-YAML Routing
+
+While an alignment page is in `review`, the only next action is section-feedback YAML or final compiled YAML from the bottom compile controls. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Break the game into repeatable loops.
 
