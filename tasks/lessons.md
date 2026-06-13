@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — Verify exact npm package names before running `npx`
+
+- I ran `npx skillpack install exec-loop` with the singular package name, which invoked an unrelated public npm package at `skillpack@0.1.3` instead of this repo's `skillpacks` CLI.
+- Before running or recommending an `npx` command, verify the exact package name from the repo docs or local package metadata when a similarly named package could exist.
+- For this repo, the package manager CLI is `skillpacks` plural. Treat `skillpack` singular output, `skillpack.yaml`, or `skillpack init` guidance as evidence that the wrong package is running.
+
 ## 2026-06-12 — Product design routing is a wireframe tree, not a linear UI-requirements funnel
 
 - The product-design route was still encoded as `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode`, but the intended model is a branching wireframe tree.
