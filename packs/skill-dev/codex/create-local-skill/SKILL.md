@@ -2,7 +2,7 @@
 name: create-local-skill
 description: Scaffold a new user-local skill in ~/.codex/skills (and optionally ~/.claude/skills), then offer to promote it to a personal fork of agentic-skills
 type: execution
-version: v0.1
+version: v0.2
 ---
 
 # Create Local Skill
@@ -11,7 +11,7 @@ Invoke as `$create-local-skill`.
 
 Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and optionally `~/.claude/skills/<name>/`) as a real directory. The upstream agentic-skills repo is not touched. At the end, offer to **promote** the skill by copying it into the user's personal fork.
 
-`init.sh --uninstall` only removes repo-managed skill installs whose source is inside the agentic-skills repo, so user-authored real directories are safe from upstream sync.
+`npx skillpacks uninstall-global` only removes skillpacks-owned skill installs whose source is inside the agentic-skills repo, so user-authored real directories are safe from upstream sync.
 
 ## Process
 

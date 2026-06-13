@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -7,45 +7,39 @@ const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repoPath = (path: string) => resolve(TESTS_ROOT, "..", path);
 const read = (path: string) => readFileSync(repoPath(path), "utf8");
 
-describe("init-agentic-skills freshness contract", () => {
+describe("init-agentic-skills project-local contract", () => {
   const contracts = [
     {
       skillPath: "base/codex/init-agentic-skills/SKILL.md",
-      scriptPath: "base/codex/init-agentic-skills/scripts/init-agentic-skills.sh",
       packCommand: "$pack",
-      version: "v0.10",
+      version: "v0.11",
     },
     {
       skillPath: "base/claude/init-agentic-skills/SKILL.md",
-      scriptPath: "base/claude/init-agentic-skills/scripts/init-agentic-skills.sh",
       packCommand: "/pack",
-      version: "v0.9",
+      version: "v0.10",
     },
   ];
 
-  it("defines status and explicit fast-forward-only update modes", () => {
+  it("drives base installation through project-local npx skillpacks", () => {
     for (const contract of contracts) {
       const content = read(contract.skillPath);
 
       expect(content, `${contract.skillPath} should be bumped`).toContain(`version: ${contract.version}`);
+      expect(content, `${contract.skillPath} should install via npx skillpacks init`).toContain(
+        "npx skillpacks init",
+      );
+      expect(content, `${contract.skillPath} should describe project-local installs`).toContain(
+        "project-local",
+      );
+      expect(content, `${contract.skillPath} should report status`).toContain("npx skillpacks status");
+      expect(content, `${contract.skillPath} should report drift`).toContain("npx skillpacks doctor");
       expect(content, `${contract.skillPath} should describe managed provenance`).toContain(
         ".agentic-skills-managed",
       );
-      expect(content, `${contract.skillPath} should accept update`).toContain("`update` or `latest`");
-      expect(content, `${contract.skillPath} should report checkout commit`).toContain(
-        "local checkout commit",
+      expect(content, `${contract.skillPath} should offer legacy global cleanup`).toContain(
+        "npx skillpacks uninstall-global",
       );
-      expect(content, `${contract.skillPath} should report remote URL`).toContain("remote URL");
-      expect(content, `${contract.skillPath} should report preference state`).toContain(
-        "~/.agentic-skills/preferences.json",
-      );
-      expect(content, `${contract.skillPath} should require confirmation`).toContain(
-        "Confirm before running commands that fetch, pull, or reinstall",
-      );
-      expect(content, `${contract.skillPath} should require ff-only update`).toContain(
-        "fast-forward-only",
-      );
-      expect(content, `${contract.skillPath} should rerun init after update`).toContain("rerun `init.sh`");
       expect(content, `${contract.skillPath} should recommend Claude reload-skills`).toContain(
         "/reload-skills",
       );
@@ -65,42 +59,28 @@ describe("init-agentic-skills freshness contract", () => {
     }
   });
 
-  it("launcher implements status and update/latest branches", () => {
+  it("retires the user-home launcher and init.sh references", () => {
     for (const contract of contracts) {
-      const script = read(contract.scriptPath);
+      const content = read(contract.skillPath);
 
-      expect(script, `${contract.scriptPath} should read local preference`).toContain(
-        'PREFERENCES_FILE="$HOME/.agentic-skills/preferences.json"',
+      expect(content, `${contract.skillPath} should not reference init.sh`).not.toContain("init.sh");
+      expect(content, `${contract.skillPath} should not reference --global`).not.toContain("--global");
+      expect(content, `${contract.skillPath} should not delegate to a launcher script`).not.toContain(
+        "scripts/init-agentic-skills.sh",
       );
-      expect(script, `${contract.scriptPath} should resolve from BASH_SOURCE`).toContain(
-        '${BASH_SOURCE[0]}',
-      );
-      expect(script, `${contract.scriptPath} should read managed provenance`).toContain(
-        ".agentic-skills-managed",
-      );
-      expect(script, `${contract.scriptPath} should report local commit`).toContain("local commit:");
-      expect(script, `${contract.scriptPath} should report remote URL`).toContain("remote URL:");
-      expect(script, `${contract.scriptPath} should require update confirmation`).toContain(
-        "confirm_update",
-      );
-      expect(script, `${contract.scriptPath} should fetch explicitly`).toContain("fetch origin");
-      expect(script, `${contract.scriptPath} should merge ff-only`).toContain("merge --ff-only origin/HEAD");
-      expect(script, `${contract.scriptPath} should rerun init`).toContain(
-        'bash "$REPO_ROOT/$DELEGATE_SCRIPT"',
-      );
-      expect(script, `${contract.scriptPath} should recommend Claude reload-skills`).toContain(
-        "/reload-skills first",
-      );
-      expect(script, `${contract.scriptPath} should mention clear-context reload`).toContain(
-        "/clear starts a new empty-context conversation",
-      );
-      expect(script, `${contract.scriptPath} should mention missing top-level skills dir`).toContain(
-        "top-level .claude/skills directory did not exist at session start",
-      );
-      expect(script, `${contract.scriptPath} should recommend Codex fresh CLI session`).toContain(
-        "fresh Codex CLI session",
-      );
-      expect(script, `${contract.scriptPath} should branch on latest`).toContain("update|latest");
     }
+
+    expect(
+      existsSync(repoPath("base/claude/init-agentic-skills/scripts/init-agentic-skills.sh")),
+      "claude launcher should be removed",
+    ).toBe(false);
+    expect(
+      existsSync(repoPath("base/codex/init-agentic-skills/scripts/init-agentic-skills.sh")),
+      "codex launcher should be removed",
+    ).toBe(false);
+    expect(existsSync(repoPath("init.sh")), "root init.sh should be removed").toBe(false);
+    expect(existsSync(repoPath("scripts/init-agentic-skills.sh")), "dispatcher should be removed").toBe(
+      false,
+    );
   });
 });

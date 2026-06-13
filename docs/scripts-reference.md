@@ -6,9 +6,9 @@ Compact command index for all scripts in this repository.
 
 | Command | Description |
 | --- | --- |
-| `./init.sh` | Install managed base skill directories to `~/.claude/skills/` and `~/.codex/skills/` |
-| `./init.sh --uninstall` | Remove repo-managed base skill installs that point back to this checkout |
-| `./init.sh --pin ship=v0.0` | Pin a base skill to an archived version during initialization |
+| `npx skillpacks init` | Install managed base skill directories into the current project's local `.claude/skills/` and `.codex/skills/` roots and record `base_skills: true` in `.agents/project.json` |
+| `npx skillpacks uninstall-global` | Remove legacy skillpacks-owned base installs under `~/.claude/skills` and `~/.codex/skills` (leaves unmanaged dirs untouched) |
+| `npx skillpacks pin ship v0.0` | Pin a project-local base skill to an archived version |
 
 ## Project Packs
 
@@ -52,11 +52,11 @@ Compact command index for all scripts in this repository.
 
 | Command | Description |
 | --- | --- |
-| `scripts/init-agentic-skills.sh doctor` | Check base skill drift |
-| `scripts/init-agentic-skills.sh hook enable` | Enable session-start drift-check hook |
-| `scripts/init-agentic-skills.sh hook disable` | Disable session-start drift-check hook |
-| `scripts/init-agentic-skills.sh set-pref <key> <value>` | Set a preference in `~/.agentic-skills/preferences.json` |
-| `scripts/init-agentic-skills.sh show-prefs` | Show current preferences |
+| `npx skillpacks init` | Install managed base skills into the current project's local `.claude/skills/` and `.codex/skills/` roots |
+| `npx skillpacks doctor` | Check project-local base skill drift |
+| `npx skillpacks refresh` | Re-copy project-local managed base skills, clearing drift |
+| `npx skillpacks pin <skill> <version>` | Pin a project-local base skill to an archived version |
+| `npx skillpacks uninstall-global` | Remove legacy skillpacks-owned base installs under `~/.claude/skills` and `~/.codex/skills` |
 
 ## Testing & Benchmarks
 

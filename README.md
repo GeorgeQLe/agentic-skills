@@ -12,7 +12,7 @@ This keeps game research out of B2B SaaS sessions, and keeps business-product as
 ## Prerequisites
 
 - **Node.js 18+** for the `gskp` npm CLI and package build.
-- **bash** shell (macOS, Linux, or WSL on Windows) for `./init.sh`, `scripts/pack.sh`, and the remaining shell-backed `gskp` commands.
+- **bash** shell (macOS, Linux, or WSL on Windows) for `scripts/pack.sh` and the remaining shell-backed `gskp` commands.
 - **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp` project commands do not require `jq`.
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
@@ -27,11 +27,11 @@ The source-checkout path is available today and remains supported:
 
 ```bash
 git clone <this-repo-url> ~/agentic-skills
-cd ~/agentic-skills
-./init.sh
+cd ~/my-project
+npx skillpacks init
 ```
 
-Project-local packs are installed from the checkout:
+Base skills install **project-local** into the current repository (`.claude/skills/`, `.codex/skills/`). Project-local packs are installed from the checkout:
 
 ```bash
 cd ~/my-project
@@ -61,22 +61,21 @@ The same release is also published as the scoped alias package `@glexcorp/gskp`,
 ## Initialization
 
 ```bash
-./init.sh
+cd ~/my-project
+npx skillpacks init
 ```
 
-`init.sh` initializes only user-home base skills:
+`npx skillpacks init` initializes base skills **project-local** for the current repository:
 
-- `base/claude/*` -> `~/.claude/skills/*`
-- `base/codex/*` -> `~/.codex/skills/*`
+- `base/claude/*` -> `<project>/.claude/skills/*`
+- `base/codex/*` -> `<project>/.codex/skills/*`
 
-It does **not** install `packs/*`.
+It records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. It does **not** install `packs/*` — domain packs are never installed as base skills.
 
-For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when you explicitly want user-home base installs from the package snapshot. Domain packs are never installed as base skills.
-
-To remove repo-managed base skill installs:
+There is no user-home (global) base install. To clean up legacy repo-managed base installs left in `~/.claude/skills` and `~/.codex/skills` by the retired init path:
 
 ```bash
-./init.sh --uninstall
+npx skillpacks uninstall-global
 ```
 
 ## Project Packs
@@ -210,7 +209,6 @@ agentic-skills/
 │   └── skills-showcase/
 ├── packages/
 │   └── skillpacks/
-├── init.sh
 └── docs/
 ```
 
@@ -218,7 +216,7 @@ The repository root is private workspace metadata. The publishable `skillpacks` 
 
 ## Base Core
 
-The base surface is intentionally small and domain-neutral. `./init.sh` installs 11 skills under `base/claude/`, 8 of which are mirrored under `base/codex/`:
+The base surface is intentionally small and domain-neutral. `npx skillpacks init` installs 11 skills under `base/claude/`, 8 of which are mirrored under `base/codex/`:
 
 ```text
 afps-status, animation-design-planner, autoresearch, autoresearch-prep,
@@ -422,8 +420,8 @@ bash scripts/skill-archive.sh base/claude/codebase-status
 scripts/pack.sh pin devtool-adoption v0.0
 scripts/pack.sh unpin devtool-adoption
 
-# Pin a base skill during initialization
-./init.sh --pin ship=v0.0
+# Pin a base skill to an archived version
+npx skillpacks pin ship v0.0
 
 # Audit archive integrity
 bash scripts/skill-archive-audit.sh

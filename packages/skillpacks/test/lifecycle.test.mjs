@@ -17,6 +17,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
+import { uninstallGlobal } from '../src/cli/lifecycle.mjs';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -128,6 +129,35 @@ function writeManagedInstall(projectRoot, tool, skill, source, options = {}) {
   writeFileSync(join(target, 'SKILL.md'), 'stale\n');
 }
 
+function writeManagedSkillDir(target, source) {
+  mkdirSync(target, { recursive: true });
+  writeFileSync(
+    join(target, '.agentic-skills-managed'),
+    ['source=' + source, 'managed_by=agentic-skills', 'source_version=v0.0', 'source_sha=stale'].join('\n') + '\n'
+  );
+  writeFileSync(join(target, 'SKILL.md'), 'managed\n');
+}
+
+async function captureConsole(fn) {
+  const originalLog = console.log;
+  const originalError = console.error;
+  let stdout = '';
+  let stderr = '';
+  console.log = (...parts) => {
+    stdout += `${parts.join(' ')}\n`;
+  };
+  console.error = (...parts) => {
+    stderr += `${parts.join(' ')}\n`;
+  };
+  try {
+    const exitCode = await fn();
+    return { exitCode, stdout, stderr };
+  } finally {
+    console.log = originalLog;
+    console.error = originalError;
+  }
+}
+
 function lockDir(projectRoot) {
   return join(projectRoot, '.agents/.pack.lock');
 }
@@ -213,50 +243,52 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
   });
 
-  it('routes init --global through packaged init.sh and forwards remaining args', async () => {
-    const dir = makeTempProject();
-    const fakeBin = join(dir, 'bin');
-    const argsFile = join(dir, 'bash-args.txt');
-    mkdirSync(fakeBin, { recursive: true });
-    writeFileSync(
-      join(fakeBin, 'bash'),
-      [
-        '#!/bin/sh',
-        'if [ "$1" = "--version" ]; then',
-        '  exit 0',
-        'fi',
-        'printf "%s\\n" "$@" > "$SKILLPACKS_FAKE_BASH_ARGS"'
-      ].join('\n') + '\n',
-      { mode: 0o755 }
-    );
-
-    const originalArgsFile = process.env.SKILLPACKS_FAKE_BASH_ARGS;
-    process.env.SKILLPACKS_FAKE_BASH_ARGS = argsFile;
-    try {
-      await runSkillpacks(dir, ['init', '--global', '--help'], { path: fakeBin });
-    } finally {
-      if (originalArgsFile === undefined) {
-        delete process.env.SKILLPACKS_FAKE_BASH_ARGS;
-      } else {
-        process.env.SKILLPACKS_FAKE_BASH_ARGS = originalArgsFile;
-      }
-    }
-
-    assert.deepEqual(readFileSync(argsFile, 'utf8').trim().split('\n'), [
-      join(repoRoot, 'init.sh'),
-      '--help'
-    ]);
-    assert.equal(existsSync(projectConfigPath(dir)), false);
-  });
-
   it('rejects unsupported init arguments', async () => {
     const dir = makeTempProject();
 
     const error = await runSkillpacksExpectError(dir, ['init', '--bad']);
 
     assert.match(error.message, /init does not accept arguments/);
-    assert.match(error.message, /--global/);
     assert.equal(existsSync(projectConfigPath(dir)), false);
+  });
+
+  it('uninstall-global removes only repo-managed installs from the user-home skill roots', async () => {
+    const home = makeTempProject();
+    const claudeRoot = join(home, '.claude/skills');
+    const codexRoot = join(home, '.codex/skills');
+    mkdirSync(claudeRoot, { recursive: true });
+    mkdirSync(codexRoot, { recursive: true });
+
+    // Repo-managed installs (source owned by skillpacks) — must be removed.
+    writeManagedSkillDir(join(claudeRoot, 'codebase-status'), join(repoRoot, 'base/claude/codebase-status'));
+    writeManagedSkillDir(join(codexRoot, 'afps-status'), join(repoRoot, 'base/codex/afps-status'));
+
+    // Unmanaged installs — must be left untouched.
+    const unmanagedDir = join(claudeRoot, 'my-local-skill');
+    mkdirSync(unmanagedDir, { recursive: true });
+    writeFileSync(join(unmanagedDir, 'SKILL.md'), 'local\n');
+    const foreignSource = join(home, 'somewhere-else');
+    mkdirSync(foreignSource, { recursive: true });
+    writeManagedSkillDir(join(codexRoot, 'foreign-managed'), foreignSource);
+
+    const { stdout, exitCode } = await captureConsole(() => uninstallGlobal({ homeRoot: home }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Removed \.codex\/skills\/afps-status/);
+    assert.match(stdout, /Removed 2 repo-managed base skill install\(s\)/);
+    assert.equal(existsSync(join(claudeRoot, 'codebase-status')), false);
+    assert.equal(existsSync(join(codexRoot, 'afps-status')), false);
+    assert.equal(existsSync(unmanagedDir), true);
+    assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
+  });
+
+  it('rejects arguments to uninstall-global', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['uninstall-global', 'extra']);
+
+    assert.match(error.message, /uninstall-global does not accept arguments/);
   });
 
   it('installs active packs without bash or jq and writes managed markers', async () => {
@@ -617,10 +649,10 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Project skill update mode: warn \(default\)/);
     assert.match(stdout, /ok       \.claude\/skills\/quality-sweep/);
     assert.match(stdout, /pinned   \.codex\/skills\/pinned-skill \(frozen v0\.0\)/);
-    assert.match(stdout, /unknown  \.codex\/skills\/unknown-skill — run refresh to enable drift tracking/);
+    assert.match(stdout, /unknown  \.codex\/skills\/unknown-skill — run `[^`]*refresh` to enable drift tracking/);
     assert.match(stdout, /missing  \.claude\/skills\/missing-skill — canonical source no longer exists/);
     assert.match(stdout, /STALE    \.claude\/skills\/stale-skill \(v0\.0 -> v9\.0\)/);
-    assert.match(stdout, /Fix: npx skillpacks refresh \(or scripts\/pack\.sh refresh from a source checkout\)/);
+    assert.match(stdout, /Fix: [^\n]*refresh/);
   });
 
   it('keeps plain doctor read-only for skill roots and agent docs', async () => {

@@ -47,10 +47,9 @@ if [[ -f "$proj_dir/.agents/project.json" ]] && command -v jq >/dev/null 2>&1; t
 fi
 
 stale_project=()
-global_stale=0
 
 scan_root() {
-  local root="$1" scope="$2"
+  local root="$1"
   [[ -d "$root" ]] || return 0
   local target line status
   while IFS= read -r target; do
@@ -58,28 +57,19 @@ scan_root() {
     line="$(skill_install_status "$target")"
     status="${line%%$'\t'*}"
     [[ "$status" == "stale" ]] || continue
-    if [[ "$scope" == "project" ]]; then
-      stale_project+=("${target#"$proj_dir"/}")
-    else
-      global_stale=$((global_stale + 1))
-    fi
+    stale_project+=("${target#"$proj_dir"/}")
   done < <(find "$root" -mindepth 1 -maxdepth 1 \( -type l -o -type d \) -print 2>/dev/null | sort)
 }
 
-scan_root "$proj_dir/.claude/skills" project
-scan_root "$proj_dir/.codex/skills" project
-scan_root "$HOME/.claude/skills" global
-scan_root "$HOME/.codex/skills" global
+scan_root "$proj_dir/.claude/skills"
+scan_root "$proj_dir/.codex/skills"
 
-total_stale=$(( ${#stale_project[@]} + global_stale ))
+total_stale=${#stale_project[@]}
 [[ "$total_stale" -eq 0 ]] && exit 0
 
 if [[ "$auto_global" == "true" || "$project_auto" == "true" ]]; then
   if [[ ${#stale_project[@]} -gt 0 && -f "$proj_dir/.agents/project.json" ]]; then
     ( cd "$proj_dir" && bash "$REPO_ROOT/scripts/pack.sh" refresh ) >/dev/null 2>&1 || true
-  fi
-  if [[ "$global_stale" -gt 0 ]]; then
-    bash "$REPO_ROOT/init.sh" >/dev/null 2>&1 || true
   fi
   echo "agentic-skills: auto-refreshed $total_stale stale skill install(s) to canonical latest."
   exit 0
@@ -88,5 +78,4 @@ fi
 # Warn-only (default).
 echo "agentic-skills: $total_stale skill install(s) behind canonical (track-latest)."
 [[ ${#stale_project[@]} -gt 0 ]] && echo "  project: ${stale_project[*]}  (fix: scripts/pack.sh refresh)"
-[[ "$global_stale" -gt 0 ]] && echo "  global: $global_stale stale  (fix: /init-agentic-skills update)"
 exit 0

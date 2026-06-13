@@ -42,8 +42,7 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
   { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" },
   { fromRoot: repoRoot, from: "AGENTS.md", to: "AGENTS.md" },
-  { fromRoot: repoRoot, from: "CLAUDE.md", to: "CLAUDE.md" },
-  { fromRoot: repoRoot, from: "init.sh", to: "init.sh" }
+  { fromRoot: repoRoot, from: "CLAUDE.md", to: "CLAUDE.md" }
 ];
 
 const requiredBuildFiles = [
@@ -62,7 +61,6 @@ const requiredBuildFiles = [
   "scripts/alignment-skip-list.txt",
   "scripts/alignment-bespoke-list.txt",
   "docs/alignment-page-convention.md",
-  "init.sh",
   "LICENSE",
   "base/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"
@@ -182,8 +180,7 @@ function buildPackage() {
     ...activeSkillPaths(files),
     ...packManifestPaths(files),
     "scripts/pack.sh",
-    "scripts/skill-links.sh",
-    "init.sh"
+    "scripts/skill-links.sh"
   ]);
 
   rmSync(buildRoot, { recursive: true, force: true });

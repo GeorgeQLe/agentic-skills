@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-13
+
+- Repo-verification check no longer looks for the removed `init.sh`; it now checks for `base/claude/`, `base/codex/`, and `packages/skillpacks/`.
+
 ## v0.2 - 2026-06-13
 
 - Renamed authoring paths from `global/{claude,codex}` to `base/{claude,codex}` following the global→base directory migration.

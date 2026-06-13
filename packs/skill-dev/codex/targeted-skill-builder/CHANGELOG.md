@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-13
+
+- Validation and reload steps use `npx skillpacks refresh` instead of the removed `./init.sh`.
+
 ## v0.3 - 2026-06-09
 
 - Updated Skills Showcase refresh commands to use app-owned generator and validator paths after the workspace split.

@@ -40,21 +40,24 @@ function resultOf(parsed: unknown): SessionAnalysisResult {
   return result as SessionAnalysisResult;
 }
 
+function installBaseSkills(workDir: string): void {
+  // Base skills install project-local via the skillpacks CLI; headless agents
+  // discover them under the scenario repo's .claude/skills and .codex/skills.
+  execFileSync("node", [join(REPO_ROOT, "packages/skillpacks/bin/skillpacks.mjs"), "init"], {
+    cwd: workDir,
+    stdio: "pipe",
+  });
+}
+
 function makeScenarioRepo(name: string): string {
   const workDir = makeLiveTestRepo(name);
   writeFixtureFiles(workDir);
+  installBaseSkills(workDir);
   workDirs.push(workDir);
   return workDir;
 }
 
 liveDescribe("live session-analysis skill behavior", () => {
-  beforeAll(() => {
-    execFileSync("bash", [join(REPO_ROOT, "init.sh")], {
-      cwd: REPO_ROOT,
-      stdio: "pipe",
-    });
-  });
-
   afterEach(() => {
     for (const dir of workDirs) removeLiveTestRepo(dir);
     workDirs = [];

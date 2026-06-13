@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-13
+
+- Upstream-safety note references `npx skillpacks uninstall-global` instead of the removed `init.sh --uninstall`.
+
 ## v0.1 - 2026-05-30
 
 - Tightened post-creation skill visibility guidance to distinguish Claude Code `/reload-skills`, `/clear`, and restart fallback behavior from Codex fresh CLI session fallback.

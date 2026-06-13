@@ -5,7 +5,7 @@ Get from clone to a working skill in under 5 minutes.
 ## Prerequisites
 
 - **Node.js 18+** for the `gskp` npm CLI and package build
-- **bash** shell (macOS, Linux, or WSL on Windows) for clone-based `./init.sh`, `scripts/pack.sh`, and remaining shell-backed `gskp` commands
+- **bash** shell (macOS, Linux, or WSL on Windows) for `scripts/pack.sh` and remaining shell-backed `gskp` commands
 - **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
@@ -14,15 +14,15 @@ Get from clone to a working skill in under 5 minutes.
 
 ### Source checkout
 
-Use the source checkout when you are developing this repository or want base skills installed directly from a local clone:
+Use the source checkout when you are developing this repository or installing base skills from a local clone:
 
 ```bash
 git clone <this-repo-url> ~/agentic-skills
-cd ~/agentic-skills
-./init.sh
+cd ~/my-project
+npx skillpacks init
 ```
 
-`init.sh` installs repo-managed base skill directories into `~/.claude/skills/` and `~/.codex/skills/`. Track-latest installs are managed copies with drift metadata; pinned archived skills are the symlink case. Domain packs are not installed as base skills — that is intentional context hygiene.
+`npx skillpacks init` installs repo-managed base skill directories **project-local** into the current repository's `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Track-latest installs are managed copies with drift metadata; pinned archived skills are the symlink case. Domain packs are not installed as base skills — that is intentional context hygiene.
 
 ### npm CLI
 
@@ -35,7 +35,7 @@ npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI does not install user-home base skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home base skills from npm, run `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`). Domain packs are never installed as base skills.
+The npm CLI installs base skills **project-local only** — there is no user-home (global) install path. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. To clean up legacy user-home base installs from the retired init path, run `npx skillpacks uninstall-global`. Domain packs are never installed as base skills.
 
 The scoped alias package is published from the same release artifact and version. Users who prefer that package identity can run `npx @glexcorp/gskp init`, `npx @glexcorp/gskp install devtool`, and the same subcommands.
 

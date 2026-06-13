@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "be61d8d031bc5bf01828344631f52c5fdaecf62ea512482e41f7c632cfbdb89e",
+  "source_fingerprint": "995a7e665a8304f7eccd5d3247f953c7583d51fc26c05218197f4ec0618b790d",
   "packs": [
     {
       "name": "agent-bridge",
@@ -924,9 +924,9 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v0.10",
       "path": "base/claude/init-agentic-skills/SKILL.md",
-      "content_sha256": "ba7f4efa699d08fbfd79573c10dc63208b046cc21cc3dfe35343cd3f9bb2bead",
+      "content_sha256": "108aa44e29dcb92ae0709fd94caf260dc8211c02993a687651c763a3d71b8fce",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -936,7 +936,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/init-agentic-skills",
       "deck_memberships": []
@@ -947,9 +948,9 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v0.10",
       "path": "base/claude/pack/SKILL.md",
-      "content_sha256": "18db05f2c0d9887198458ebb0b37b6217c89ae9ed57fe712a88d5364ce8712b6",
+      "content_sha256": "6a8f41f5b6cea2d4d1d29e3d2132db328217fada5828a1ac4eaf56f83f753c8d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -959,7 +960,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/pack",
       "deck_memberships": []
@@ -1105,12 +1107,13 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "path": "base/codex/init-agentic-skills/SKILL.md",
-      "content_sha256": "4baded995f7a03819d62a60726dd44aba5ff7a8d9c1f94404b3a9ed7fde1fdb2",
+      "content_sha256": "d3b40a7f2be6216026b8bebfc3c88188d503d85886e7db58b3b8897ebdddc4c3",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1129,9 +1132,9 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v0.10",
       "path": "base/codex/pack/SKILL.md",
-      "content_sha256": "44dfc594f902583da02d9ae46d2a795327b1f453a947ead7269f00fcf29c756b",
+      "content_sha256": "7992e2a940381da1c44a13b42ebf98ba4fd20ba044f28e8e25ff81b695cba2ff",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1141,7 +1144,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$pack",
       "deck_memberships": []
@@ -5792,15 +5796,16 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
       "path": "packs/gitops/claude/sync/SKILL.md",
-      "content_sha256": "1ffe41c282bb97ae5c0cc0372582016a15b2c10ce711d1bb74738cdcb473c6d7",
+      "content_sha256": "87a316fc94cf50ec8a8de4fe4e77e016afd43ea82d7bbce3ecf71a22f32b82e2",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/sync",
       "deck_memberships": []
@@ -5826,15 +5831,16 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "codex",
-      "version": "v0.5",
+      "version": "v0.6",
       "path": "packs/gitops/codex/sync/SKILL.md",
-      "content_sha256": "c955845d4f2760ea29167c0a0ad48627dbeffb27b23b740de28565cf89256a49",
+      "content_sha256": "3cab76515d481c14a04d7bd07db796cd8dfc9e237c6081b6e35d776e5d11ac13",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$sync",
       "deck_memberships": []
@@ -7329,12 +7335,13 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "path": "packs/skill-dev/claude/create-agentic-skill/SKILL.md",
-      "content_sha256": "7d2209239db9da208eb5b47bb18808157d771638c68eb5250d1c4407e3047210",
+      "content_sha256": "3111b66695c8be8e2e8c597ffdf26a3e154b19029a6bbf796f68e9457baafe21",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/create-agentic-skill",
       "deck_memberships": []
@@ -7345,11 +7352,12 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/skill-dev/claude/create-local-skill/SKILL.md",
-      "content_sha256": "89a2f1cd8e8fc4d2ea9afd3bf07cb4e325d91efdaacca2c2084fbf6eea06ca8a",
+      "content_sha256": "8d16db97d12db596683033cec39f69f540f28e4e8c25d32f4a72f817daeebfb0",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/create-local-skill",
       "deck_memberships": []
@@ -7376,13 +7384,14 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "path": "packs/skill-dev/claude/targeted-skill-builder/SKILL.md",
-      "content_sha256": "627389cedc16c070e3782ea0e75ad8c437f8923273839481a89e1bef33b37e53",
+      "content_sha256": "c9ea5f1678b83eeee16e69f29e79687a4367b2423a95be5cdb5496da1e096b71",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/targeted-skill-builder",
       "deck_memberships": []
@@ -7393,12 +7402,13 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "path": "packs/skill-dev/codex/create-agentic-skill/SKILL.md",
-      "content_sha256": "857ea2b3b40ea7aa641f6fa44b5467d6e8e47dc81d90e6031fc0adc6951816a8",
+      "content_sha256": "043d64abb734c7663405921d58ce4e10a39fb8becda234b152f9a406dcc229e4",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$create-agentic-skill",
       "deck_memberships": []
@@ -7409,11 +7419,12 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/skill-dev/codex/create-local-skill/SKILL.md",
-      "content_sha256": "f1befa6173bf612918d85490513df0e606c0c7d0a5437abdf07216e9ce04dd29",
+      "content_sha256": "c90acc39721483ae320b8553c842b631186839925e33d478d75558763109268e",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$create-local-skill",
       "deck_memberships": []
@@ -7440,13 +7451,14 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "path": "packs/skill-dev/codex/targeted-skill-builder/SKILL.md",
-      "content_sha256": "ae00bf91808a78b77793ba58d314da6ff4f0f5d1051be8546bd5ef2a7e8c3fd2",
+      "content_sha256": "2dde33f197d9e545691f72bc40ba02d5d68a640e57222fb215a3e55ddf3cea02",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$targeted-skill-builder",
       "deck_memberships": []

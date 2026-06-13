@@ -1,5 +1,9 @@
 # sync Changelog
 
+## v0.6
+
+- Provisioner lookup prefers project-local `.claude/skills` / `.codex/skills` (base skills now install project-local). Stale-checkout guidance points to an explicit checkout/package update followed by `npx skillpacks refresh` instead of the removed `/init-agentic-skills update` flow.
+
 ## v0.5
 
 - Fix skill-install drift fix routing: surface the doctor-reported context-aware refresh command instead of a bare `scripts/pack.sh refresh`, which fails to resolve from a non-checkout project directory

@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: v0.5
+version: v0.6
 argument-hint:
 ---
 
@@ -31,9 +31,9 @@ Pull the latest changes from the remote repository and report status.
 
 4. **Check provisioned agent config:**
    - If `CLAUDE.md` or `AGENTS.md` contains `<!-- provision-agentic-config vX.Y -->`, extract the version.
-   - Read the canonical `provision-agentic-config` skill from the first existing path in this order:
-     1. `~/.claude/skills/provision-agentic-config/SKILL.md`
-     2. `~/.codex/skills/provision-agentic-config/SKILL.md`
+   - Read the canonical `provision-agentic-config` skill from the first existing path in this order (base skills install project-local, so the project roots come first):
+     1. `.claude/skills/provision-agentic-config/SKILL.md`
+     2. `.codex/skills/provision-agentic-config/SKILL.md`
      3. `base/claude/provision-agentic-config/SKILL.md` in the current repo, when present
      4. `base/codex/provision-agentic-config/SKILL.md` in the current repo, when present
    - Extract the `version:` field from the canonical skill's YAML frontmatter.
@@ -80,7 +80,7 @@ Pull the latest changes from the remote repository and report status.
    - Compare the local `agentic-skills` checkout against `origin/HEAD` using non-mutating commands such as `git remote get-url origin`, `git rev-parse HEAD`, `git rev-parse origin/HEAD`, and, when remote freshness is explicitly enabled, `git fetch --dry-run` or an equivalent non-mutating freshness probe.
    - Report the local checkout commit, remote URL, local `origin/HEAD` commit if available, and whether the local checkout appears behind the remote.
    - Do not pull, fast-forward, rebase, install, or mutate the checkout from plain `/sync`.
-   - If a GitHub check shows the local checkout is stale, recommend `/init-agentic-skills update` for an explicit update.
+   - If a GitHub check shows the local checkout is stale, recommend an explicit update — update the `agentic-skills` checkout (e.g. `git pull --ff-only`) or bump the `skillpacks` package, then run `npx skillpacks refresh` — without performing it from plain `/sync`.
 
 8. **Report status:**
    - Branch name
@@ -167,7 +167,7 @@ Files and patterns to check for changes after a pull. Alert the user if any were
 - If any post-sync command fails, report the error and continue with remaining actions (do not abort).
 - Never auto-create `sync.md` without explicit user approval.
 - Do not execute commands from `sync.md` sections that are commented out with HTML comments (`<!-- ... -->`).
-- Plain `/sync` must not update the `agentic-skills` checkout, pull from GitHub for the local canonical source, or reinstall skills. Only `/init-agentic-skills update` / `/init-agentic-skills latest` may perform that explicit update flow after confirmation.
+- Plain `/sync` must not update the `agentic-skills` checkout, pull from GitHub for the local canonical source, or reinstall skills. The explicit update flow is the user's own checkout/package update (e.g. `git pull --ff-only`) followed by `npx skillpacks refresh`, run only after confirmation.
 
 
 ## Default Shipping Contract

@@ -12,6 +12,7 @@ import {
   unlinkSync,
   writeFileSync
 } from 'node:fs';
+import { homedir } from 'node:os';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -885,6 +886,29 @@ export async function initProject({ manifest, projectRoot = process.cwd() }) {
     printSessionReloadNotice();
     return 0;
   });
+}
+
+export async function uninstallGlobal({ homeRoot = homedir() } = {}) {
+  let removed = 0;
+
+  for (const tool of TOOLS) {
+    const root = join(homeRoot, `.${tool}`, 'skills');
+    if (!existsSync(root)) {
+      continue;
+    }
+
+    for (const entry of readdirSync(root).sort((a, b) => a.localeCompare(b))) {
+      const target = join(root, entry);
+      if (removeRepoSkillInstall(target)) {
+        console.log(`Removed ${relative(homeRoot, target)}`);
+        removed += 1;
+      }
+    }
+  }
+
+  console.log(`Done. Removed ${removed} repo-managed base skill install(s) from ${homeRoot}.`);
+  console.log('Base skills now install project-local via `npx skillpacks init`.');
+  return 0;
 }
 
 export async function installResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {

@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills as base skills
 type: ops
-version: v0.9
+version: v0.10
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -46,7 +46,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 ## Pack Model
 
-- Base skills are domain-neutral and initialized by `init.sh`.
+- Base skills are domain-neutral and installed project-local by `npx skillpacks init`.
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
 - `.agents/project.json` is the committed project designation. `.claude/skills/**` and `.codex/skills/**` are generated local skill roots and must not be staged or committed; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.

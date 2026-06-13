@@ -17,6 +17,7 @@ import {
   pruneProject,
   refreshProject,
   removeResolved,
+  uninstallGlobal,
   unpinSkill
 } from './lifecycle.mjs';
 
@@ -25,7 +26,6 @@ const packageRoot = resolve(moduleDir, '..', '..');
 const checkoutRoot = resolve(packageRoot, '..', '..');
 const packageJsonPath = join(packageRoot, 'package.json');
 const packScriptPath = resolvePackagedPath('scripts/pack.sh');
-const initScriptPath = resolvePackagedPath('init.sh');
 const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
@@ -114,11 +114,6 @@ function runCommand(command, args, options = {}) {
       resolve(code ?? 1);
     });
   });
-}
-
-function runGlobalInit(args) {
-  requireCommand('bash', 'Install bash before running gskp.');
-  return runCommand('bash', [initScriptPath, ...args]);
 }
 
 function assertNoArgs(command, args) {
@@ -364,7 +359,7 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  init --global [args...]      Install user-home base skills with packaged init.sh
+  uninstall-global             Remove legacy repo-managed base skills from ~/.claude and ~/.codex
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
@@ -383,7 +378,6 @@ Commands:
   unpin <skill>                Revert a pinned skill to latest
   set-mode <mode>              Set project agent mode
   which <skill>                Show which pack provides a skill
-  init-global [args...]        Alias for init --global
 
 Project-local commands write to the current working directory.`);
 }
@@ -433,8 +427,9 @@ export async function runSkillpacksCli(args) {
     return setUpdateMode(rest[0]);
   }
 
-  if (command === 'init-global') {
-    return runGlobalInit(rest);
+  if (command === 'uninstall-global') {
+    assertNoArgs('uninstall-global', rest);
+    return uninstallGlobal();
   }
 
   if (command === 'install-deck') {
@@ -452,13 +447,8 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'init') {
-    if (rest[0] === '--global') {
-      return runGlobalInit(rest.slice(1));
-    }
     if (rest.length > 0) {
-      throw new Error(
-        "init does not accept arguments except '--global'. Use 'gskp init --global' for user-home base skills."
-      );
+      throw new Error('init does not accept arguments');
     }
     return initProject({
       manifest: readManifest(),

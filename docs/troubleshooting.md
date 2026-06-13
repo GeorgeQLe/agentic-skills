@@ -15,7 +15,7 @@ Symptom-led recovery for common issues.
 | Broken skill references | A skill references another that was moved or deleted | `./scripts/skill-deps.sh --broken` | Lists broken refs; fix or remove |
 | Missing version metadata | Skill lacks required version field | `./scripts/skill-versions.sh --missing` | Lists skills needing version bump |
 | Pinned skill archive missing | Archived version was deleted | `bash scripts/skill-archive-audit.sh --strict` | Lists integrity issues; restore archive or unpin |
-| Base skills stale | Base install older than repo | `scripts/init-agentic-skills.sh doctor` then `./init.sh` | Re-copies managed base skills |
+| Base skills stale | Base install older than repo | `npx skillpacks doctor` then `npx skillpacks refresh` | Re-copies managed base skills |
 
 ## Detailed Recovery Procedures
 
@@ -67,10 +67,10 @@ Pack commands use `.agents/.pack.lock` to prevent concurrent writes. If a previo
 
 ### Base Skill Drift
 
-Base skills (installed by `./init.sh`) can also drift after the repo is updated.
+Base skills (installed project-local via `npx skillpacks init`) can also drift after the repo is updated.
 
-1. Run `scripts/init-agentic-skills.sh doctor` to check base drift.
-2. Run `./init.sh` to re-copy managed base skills.
+1. Run `npx skillpacks doctor` to check project-local base drift.
+2. Run `npx skillpacks refresh` to re-copy managed base skills.
 3. Restart your CLI session.
 
 ### Windows/WSL Issues

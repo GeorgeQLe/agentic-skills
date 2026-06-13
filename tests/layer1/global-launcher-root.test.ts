@@ -11,8 +11,8 @@ type Agent = "claude" | "codex";
 function copyManagedLauncher(
   fakeHome: string,
   agent: Agent,
-  skill: "pack" | "init-agentic-skills",
-  scriptName: "pack.sh" | "init-agentic-skills.sh",
+  skill: "pack",
+  scriptName: "pack.sh",
 ): string {
   const sourceSkill = join(REPO_ROOT, "base", agent, skill);
   const agentDir = agent === "claude" ? ".claude" : ".codex";
@@ -50,26 +50,6 @@ describe("base copied managed launchers", () => {
 
         expect(output).toContain("Project designation:");
         expect(output).toContain("Installed local pack skills:");
-      } finally {
-        rmSync(fakeHome, { recursive: true, force: true });
-      }
-    }
-  });
-
-  it("resolves copied init launchers through managed provenance", () => {
-    for (const agent of ["claude", "codex"] as const) {
-      const fakeHome = mkdtempSync(join(tmpdir(), `agentic-skills-${agent}-init-`));
-      try {
-        const script = copyManagedLauncher(
-          fakeHome,
-          agent,
-          "init-agentic-skills",
-          "init-agentic-skills.sh",
-        );
-        const output = runCopiedLauncher(fakeHome, script, ["status"]);
-
-        expect(output).toContain(`agentic-skills checkout: ${REPO_ROOT}`);
-        expect(output).not.toContain(`agentic-skills checkout: ${fakeHome}`);
       } finally {
         rmSync(fakeHome, { recursive: true, force: true });
       }

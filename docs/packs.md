@@ -259,16 +259,16 @@ scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers 
 
 **Update mode.** `.agents/project.json` may carry `skill_updates.mode` — `warn` (default) or `auto`. Set it with `scripts/pack.sh set-update-mode <warn|auto|unset>`. A trigger (the session-start hook, or sync-with-approval) that sees `mode == auto`, or machine-wide `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`, runs `refresh` automatically; otherwise it only warns. `doctor` itself never mutates — it renders the effective policy.
 
-**Session-start hook (opt-in, off by default).** `/init-agentic-skills` offers to enable a `SessionStart` hook (`scripts/skill-drift-hook.sh`) that warns about stale installs at session start, or auto-refreshes when `skills.auto_refresh` / `skill_updates.mode == auto` is set. Register or remove the hook directly with `scripts/init-agentic-skills.sh hook enable|disable`, which writes (or clears) the `~/.claude/settings.json` `SessionStart` entry and sets the `session_start_hook` preference. Preferences live in `~/.agentic-skills/preferences.json` under `skills` (`session_start_hook`, `auto_refresh`); set them with `scripts/init-agentic-skills.sh set-pref <key> <value>` and inspect them with `scripts/init-agentic-skills.sh show-prefs`. Disable by declining the prompt, running `scripts/init-agentic-skills.sh set-pref session_start_hook false`, or `scripts/init-agentic-skills.sh hook disable`.
+**Session-start hook (opt-in, off by default).** An optional `SessionStart` hook (`scripts/skill-drift-hook.sh`) warns about stale project skill installs at session start, or auto-refreshes when `skill_updates.mode == auto` (or machine-wide `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`) is set. Enable it by registering a `SessionStart` entry in `~/.claude/settings.json` that runs `bash <checkout>/scripts/skill-drift-hook.sh` (Claude Code's `/update-config` can write this for you) and setting `skills.session_start_hook: true` in `~/.agentic-skills/preferences.json`. The hook is gated on that preference, so an unset or `false` value makes it a silent no-op. Remove the `SessionStart` entry (or set the preference to `false`) to disable it.
 
-Base skill installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports base drift against `base/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the base "refresh").
+Base skill installs follow the same model: `npx skillpacks doctor` reports project base drift against `base/<tool>/<skill>`, and `npx skillpacks refresh` recreates them from the package snapshot (the base "refresh").
 
 ## Team Setup Checklist
 
 For teams adopting agentic-skills across multiple developers:
 
 1. **Choose a checkout path.** Each developer clones this repo locally. The path does not need to match across developers, but `scripts/pack.sh refresh` may need to re-run if the checkout moves.
-2. **Run `./init.sh` once per developer.** This installs base skills to each developer's `~/.claude/skills/` and `~/.codex/skills/`.
+2. **Run `npx skillpacks init` once per project.** This installs base skills **project-local** into the project's `.claude/skills/` and `.codex/skills/` and records `base_skills: true` in `.agents/project.json`.
 3. **Commit `.agents/project.json`.** This file records the project's pack designation and should be checked into the target project repository.
 4. **Never commit generated skill roots.** `.claude/skills/` and `.codex/skills/` in consumer projects are generated from `.agents/project.json`. Add them to `.gitignore`.
 5. **Run `scripts/pack.sh refresh` after pulling pack changes.** When `.agents/project.json` changes upstream (e.g. a new pack is added), each developer runs refresh to recreate their local skill roots.

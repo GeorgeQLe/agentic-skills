@@ -2,7 +2,7 @@
 name: create-agentic-skill
 description: Create or update a repo-managed skill inside this agentic-skills checkout under base/codex and optionally base/claude, then validate, commit, and push it
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: "<skill-name> [description] [--codex-only|--claude-only|--mirror]"
 ---
 
@@ -15,7 +15,7 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 ## Process
 
 1. **Confirm repository context.**
-   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `base/codex/`, and `base/claude/`.
+   - Verify the current repo is `agentic-skills` by checking for `base/codex/`, `base/claude/`, and `packages/skillpacks/`.
    - If the current repo is not `agentic-skills`, stop and ask for the checkout path.
    - Inspect `git status --short` and identify unrelated dirty files before editing.
 

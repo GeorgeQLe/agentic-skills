@@ -97,19 +97,16 @@ Pin state is stored in `.agents/project.json` under `pinned_versions`:
 
 When a skill is pinned, `pack.sh install/refresh` points the installed skill root at `archive/<version>/` instead of the active skill root.
 
-### Base skills (`init.sh`)
+### Base skills (`npx skillpacks`)
 
 ```bash
-./init.sh --pin ship=v0.0
+npx skillpacks pin ship v0.0
+npx skillpacks unpin ship
 ```
 
-Pin state is stored in `~/.claude/skill-pins.json`:
+Pin state is stored alongside the project-local install in `.agents/project.json` under `pinned_versions`.
 
-```json
-{ "ship": "v0.0" }
-```
-
-When a base skill is pinned, `init.sh` points the installed skill root at the `archive/<version>/` subdirectory.
+When a project-local base skill is pinned, `npx skillpacks init/refresh` points the installed skill root at the `archive/<version>/` subdirectory instead of the active skill root.
 
 ## Auditing
 

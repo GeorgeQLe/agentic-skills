@@ -15,7 +15,7 @@ const expectedMatrix = new Map([
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
-  ['init --global [args...]', { owner: 'External script-backed', bash: 'Yes', jq: 'Optional' }],
+  ['uninstall-global', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -32,8 +32,7 @@ const expectedMatrix = new Map([
   ['list', { owner: 'Shell-backed', bash: 'Yes', jq: 'No' }],
   ['recommend', { owner: 'Shell-backed', bash: 'Yes', jq: 'No' }],
   ['which <skill>', { owner: 'Shell-backed', bash: 'Yes', jq: 'Optional' }],
-  ['install-deck <deck> [--full]', { owner: 'Hybrid shell materialization', bash: 'Yes', jq: 'Yes' }],
-  ['init-global [args...]', { owner: 'External script-backed', bash: 'Yes', jq: 'Optional' }]
+  ['install-deck <deck> [--full]', { owner: 'Hybrid shell materialization', bash: 'Yes', jq: 'Yes' }]
 ]);
 
 function readCompatibilityMatrix() {
@@ -109,13 +108,13 @@ describe('skillpacks compatibility matrix', () => {
     );
     assert.match(
       cliSource,
-      /if \(command === 'init-global'\) \{[\s\S]*return runGlobalInit\(rest\)/,
-      'init-global should remain explicitly documented as external script-backed'
+      /if \(command === 'uninstall-global'\) \{[\s\S]*return uninstallGlobal\(\)/,
+      'uninstall-global should be a Node-owned command that cleans legacy user-home installs'
     );
-    assert.match(
+    assert.doesNotMatch(
       cliSource,
-      /if \(command === 'init'\) \{[\s\S]*if \(rest\[0\] === '--global'\) \{[\s\S]*return runGlobalInit\(rest\.slice\(1\)\)/,
-      'init --global should route to the same external script-backed global init path'
+      /init --global|init-global|runGlobalInit/,
+      'the retired user-home global init path should be fully removed from the CLI'
     );
   });
 });

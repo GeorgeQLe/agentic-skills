@@ -40,8 +40,7 @@
     "README.md",
     "LICENSE",
     "AGENTS.md",
-    "CLAUDE.md",
-    "init.sh"
+    "CLAUDE.md"
   ],
   "scripts": {
     "build": "npm run build:manifest && node scripts/build-package.mjs",

@@ -5,7 +5,7 @@ Skills are split into base skills and project-local packs.
 ## Base Install
 
 ```bash
-./init.sh
+npx skillpacks init
 ```
 
 Installs only:
@@ -15,7 +15,7 @@ Installs only:
 
 It does not install domain packs as base skills.
 
-For npm consumers, `npx skillpacks init` installs these same base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when user-home base installs are explicitly desired.
+`npx skillpacks init` installs these base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Base skills are project-local only — there is no user-home (global) base install. To clean up legacy user-home base installs left by the retired global path, run `npx skillpacks uninstall-global`.
 
 ## Project Pack Commands
 
@@ -78,7 +78,7 @@ If a skill only has generic smoke coverage and needs domain-quality assertions, 
 
 ## Base Skills
 
-Base skills are domain-neutral and installed by `./init.sh` for every project. The base surface is intentionally small — 11 skills under `base/claude/`, 8 of them mirrored under `base/codex/`:
+Base skills are domain-neutral and installed project-local via `npx skillpacks init` for every project. The base surface is intentionally small — 11 skills under `base/claude/`, 8 of them mirrored under `base/codex/`:
 
 | Skill | Purpose |
 | --- | --- |

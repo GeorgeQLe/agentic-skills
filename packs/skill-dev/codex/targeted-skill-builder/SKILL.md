@@ -2,7 +2,7 @@
 name: targeted-skill-builder
 description: Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation
 type: execution
-version: v0.3
+version: v0.4
 argument-hint: "[workflow gap, correction, skill name, or capability request]"
 ---
 
@@ -61,7 +61,7 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - Store it only when the user asks for a file or the current repo has an obvious prompt/template location.
    - Otherwise output the reusable prompt directly.
 10. Run validation after repository skill changes:
-    - `./init.sh`
+    - `npx skillpacks refresh` (recreate project-local base/pack skill installs from the changed sources)
     - `./scripts/skill-deps.sh --broken`
     - `./scripts/skill-versions.sh --missing`
     - `./scripts/skill-next-step-routing.sh --missing`
@@ -86,7 +86,7 @@ Produce a concise report with:
 - Existing-skill overlap findings.
 - Files created or changed, if any, including generated showcase assets when skill metadata or behavior changed.
 - Validation results.
-- Reload note: after `./init.sh`, tell the user the runner-specific reload path. Claude Code should run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible. Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+- Reload note: after `npx skillpacks refresh`, tell the user the runner-specific reload path. Claude Code should run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible. Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
 
 When an external project session needs an existing shared skill amended, output a prompt like:
 

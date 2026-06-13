@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-06-13
+
+- Base-skill install reference updated from the retired `init.sh` to project-local `npx skillpacks init`.
+
 ## v0.9 - 2026-06-13
 
 - Renamed the domain-neutral core skill set from "global" to "base" in the description and notes (these are the `init.sh`-initialized base skills).

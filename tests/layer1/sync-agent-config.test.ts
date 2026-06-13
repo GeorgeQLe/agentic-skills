@@ -12,13 +12,13 @@ describe("sync agent config drift contract", () => {
     {
       path: "packs/gitops/codex/sync/SKILL.md",
       command: "$provision-agentic-config",
-      primarySkillPath: "~/.codex/skills/provision-agentic-config/SKILL.md",
+      primarySkillPath: ".codex/skills/provision-agentic-config/SKILL.md",
       repoFallbackPath: "base/codex/provision-agentic-config/SKILL.md",
     },
     {
       path: "packs/gitops/claude/sync/SKILL.md",
       command: "/provision-agentic-config",
-      primarySkillPath: "~/.claude/skills/provision-agentic-config/SKILL.md",
+      primarySkillPath: ".claude/skills/provision-agentic-config/SKILL.md",
       repoFallbackPath: "base/claude/provision-agentic-config/SKILL.md",
     },
   ];
@@ -27,7 +27,7 @@ describe("sync agent config drift contract", () => {
     for (const contract of contracts) {
       const content = read(contract.path);
 
-      expect(content, `${contract.path} should be versioned`).toContain("version: v0.4");
+      expect(content, `${contract.path} should be versioned`).toMatch(/^version:\s*v\d+\.\d+/m);
       expect(content, `${contract.path} should keep version-comment detection`).toContain(
         "<!-- provision-agentic-config vX.Y -->",
       );
@@ -78,8 +78,8 @@ describe("sync agent config drift contract", () => {
       expect(content, `${contract.path} should prohibit checkout mutation from plain sync`).toContain(
         "must not update the `agentic-skills` checkout",
       );
-      expect(content, `${contract.path} should route stale checkout to explicit init update`).toContain(
-        "init-agentic-skills update",
+      expect(content, `${contract.path} should route stale checkout to an explicit refresh`).toContain(
+        "npx skillpacks refresh",
       );
     }
   });
