@@ -11,8 +11,8 @@ describe("prompt history convention", () => {
   const surfaces = [
     { path: "CLAUDE.md", minOccurrences: 1 },
     { path: "AGENTS.md", minOccurrences: 1 },
-    { path: "global/claude/provision-agentic-config/SKILL.md", minOccurrences: 2 },
-    { path: "global/codex/provision-agentic-config/SKILL.md", minOccurrences: 2 },
+    { path: "base/claude/provision-agentic-config/SKILL.md", minOccurrences: 2 },
+    { path: "base/codex/provision-agentic-config/SKILL.md", minOccurrences: 2 },
   ];
 
   it("requires visible skill invocation prompts to be persisted before skill work", () => {
@@ -59,8 +59,8 @@ describe("prompt history convention", () => {
     for (const path of [
       "CLAUDE.md",
       "AGENTS.md",
-      "global/claude/provision-agentic-config/SKILL.md",
-      "global/codex/provision-agentic-config/SKILL.md",
+      "base/claude/provision-agentic-config/SKILL.md",
+      "base/codex/provision-agentic-config/SKILL.md",
     ]) {
       const content = read(path);
 
@@ -70,8 +70,8 @@ describe("prompt history convention", () => {
     }
 
     for (const path of [
-      "global/claude/provision-agentic-config/SKILL.md",
-      "global/codex/provision-agentic-config/SKILL.md",
+      "base/claude/provision-agentic-config/SKILL.md",
+      "base/codex/provision-agentic-config/SKILL.md",
     ]) {
       expect(read(path), `${path} skill version`).toContain("version: v0.9");
     }

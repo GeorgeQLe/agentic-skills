@@ -39,8 +39,8 @@ describe("skill availability reload language", () => {
     const surfaces = [
       { path: "CLAUDE.md", command: "/pack", skills: "/skills" },
       { path: "AGENTS.md", command: "$pack", skills: "$skills" },
-      { path: "global/claude/provision-agentic-config/SKILL.md", command: "/pack", skills: "/skills" },
-      { path: "global/codex/provision-agentic-config/SKILL.md", command: "$pack", skills: "$skills" },
+      { path: "base/claude/provision-agentic-config/SKILL.md", command: "/pack", skills: "/skills" },
+      { path: "base/codex/provision-agentic-config/SKILL.md", command: "$pack", skills: "$skills" },
     ];
 
     for (const surface of surfaces) {
@@ -59,8 +59,8 @@ describe("skill availability reload language", () => {
     }
 
     for (const path of [
-      "global/claude/provision-agentic-config/SKILL.md",
-      "global/codex/provision-agentic-config/SKILL.md",
+      "base/claude/provision-agentic-config/SKILL.md",
+      "base/codex/provision-agentic-config/SKILL.md",
     ]) {
       expect(read(path), `${path} skill version`).toContain("version: v0.11");
     }
@@ -74,7 +74,7 @@ describe("skill availability reload language", () => {
       /new session is needed/,
       /Codex desktop sessions may list newly created skills only after the active skill registry refreshes/,
     ];
-    const roots = ["global", "packs", "scripts", "README.md", "CLAUDE.md", "AGENTS.md"];
+    const roots = ["base", "packs", "scripts", "README.md", "CLAUDE.md", "AGENTS.md"];
     const files: string[] = [];
 
     const collect = (absolutePath: string) => {

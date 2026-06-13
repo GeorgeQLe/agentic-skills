@@ -226,7 +226,7 @@ describe("benchmark setup registry", () => {
     });
   });
 
-  it("exposes quality evaluators for design-system and high-signal global setups", () => {
+  it("exposes quality evaluators for design-system and high-signal base setups", () => {
     expect(resolveBenchSetup("design-system")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
       expect.arrayContaining([
         "design-token-facts",
@@ -246,7 +246,7 @@ describe("benchmark setup registry", () => {
       ]),
     );
 
-    const globalSkills = [
+    const baseSkills = [
       "affected",
       "brainstorm",
       "debug",
@@ -258,7 +258,7 @@ describe("benchmark setup registry", () => {
       "ui-interview",
     ];
 
-    for (const skill of globalSkills) {
+    for (const skill of baseSkills) {
       expect(resolveBenchSetup(skill)?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
         expect.arrayContaining([
           "workflow-fixture-facts",
@@ -2479,7 +2479,7 @@ describe("benchmark setup registry", () => {
     });
   });
 
-  it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {
+  it("uses custom setup for deterministic Tier 2 and Tier 3 base workflows", () => {
     const setup = resolveBenchSetup("affected");
     const target = resolveBenchTarget("affected");
 
@@ -2488,7 +2488,7 @@ describe("benchmark setup registry", () => {
     expect(target).toMatchObject({
       skill: "affected",
       coverageStatus: "custom",
-      setupPath: "tests/layer4/setups/tier23-global-workflows.setup.ts",
+      setupPath: "tests/layer4/setups/tier23-base-workflows.setup.ts",
     });
   });
 
@@ -3038,7 +3038,7 @@ describe("benchmark setup registry", () => {
 
     expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
     expect(output).toContain("exec\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
-    expect(output).toContain("affected\tcoverage=custom setup=tests/layer4/setups/tier23-global-workflows.setup.ts");
+    expect(output).toContain("affected\tcoverage=custom setup=tests/layer4/setups/tier23-base-workflows.setup.ts");
     expect(output).toContain("assumption-tracker\tcoverage=custom setup=tests/layer4/setups/packs/pack-workflows.setup.ts");
     expect(output).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
   });
@@ -3093,7 +3093,7 @@ describe("benchmark coverage matrix", () => {
     }
   });
 
-  it("records custom or blocked coverage for remaining global Tier 2 and Tier 3 skills", () => {
+  it("records custom or blocked coverage for remaining base Tier 2 and Tier 3 skills", () => {
     const matrix = benchmarkCoverageMatrix();
     const expectedCustomSkills = [
       "affected",
@@ -3143,7 +3143,7 @@ describe("benchmark coverage matrix", () => {
     for (const skill of expectedCustomSkills) {
       expect(matrix.find((row) => row.skill === skill)).toMatchObject({
         coverage_status: "custom",
-        setup_path: "tests/layer4/setups/tier23-global-workflows.setup.ts",
+        setup_path: "tests/layer4/setups/tier23-base-workflows.setup.ts",
         agent_scope: "codex",
       });
       expect(resolveBenchSetup(skill)).toBe(CUSTOM_BENCH_SETUPS[skill]);
@@ -3180,7 +3180,7 @@ describe("benchmark coverage matrix", () => {
 
   it("covers quiz-me, uat-guide, and taste-calibration with executable Codex setups", () => {
     const expectations = [
-      ["quiz-me", "tests/layer4/setups/tier23-global-workflows.setup.ts"],
+      ["quiz-me", "tests/layer4/setups/tier23-base-workflows.setup.ts"],
       ["uat-guide", "tests/layer4/setups/packs/pack-workflows.setup.ts"],
       ["taste-calibration", "tests/layer4/setups/packs/pack-workflows.setup.ts"],
     ] as const;
@@ -3639,7 +3639,7 @@ describe("Tier 1 workflow benchmark setups", () => {
   });
 });
 
-describe("Tier 2 and Tier 3 global workflow benchmark setups", () => {
+describe("Tier 2 and Tier 3 base workflow benchmark setups", () => {
   it("sets up and validates the affected workflow artifact", () => {
     const setup = CUSTOM_BENCH_SETUPS.affected;
     const workDir = mkdtempSync(resolve(tmpdir(), "tier23-affected-"));

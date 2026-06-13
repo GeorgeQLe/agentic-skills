@@ -20,7 +20,7 @@ describe("skill install routing audit", () => {
     expect(output).not.toContain("Allowlist failures:");
   });
 
-  it("keeps the P1 global routing inventory in the active scan", () => {
+  it("keeps the P1 base routing inventory in the active scan", () => {
     const output = runAudit(["--report"]);
 
     expect(output).toContain("P1 required coverage files: 14/14");

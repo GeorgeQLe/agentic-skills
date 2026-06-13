@@ -11,8 +11,8 @@ const posixRel = (path: string) => relative(REPO_ROOT, path).split("\\").join("/
 
 const pairs = {
   concept: [
-    "global/codex/idea-scope-brief/SKILL.md",
-    "global/claude/idea-scope-brief/SKILL.md",
+    "base/codex/idea-scope-brief/SKILL.md",
+    "base/claude/idea-scope-brief/SKILL.md",
   ],
   customerDiscovery: [
     "packs/business-research/codex/customer-discovery/SKILL.md",
@@ -47,8 +47,8 @@ const pairs = {
 const changedContracts = Object.values(pairs).flat();
 
 const researchPathRoots = [
-  "global/codex/idea-scope-brief",
-  "global/claude/idea-scope-brief",
+  "base/codex/idea-scope-brief",
+  "base/claude/idea-scope-brief",
   "packs/business-research",
   "packs/customer-lifecycle",
   "packs/business-growth",

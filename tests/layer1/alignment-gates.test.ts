@@ -21,10 +21,10 @@ const coreSkills = [
 ];
 
 const optionalAlignmentSkills = [
-  "global/claude/afps-status/SKILL.md",
-  "global/claude/provision-agentic-config/SKILL.md",
-  "global/codex/afps-status/SKILL.md",
-  "global/codex/provision-agentic-config/SKILL.md",
+  "base/claude/afps-status/SKILL.md",
+  "base/claude/provision-agentic-config/SKILL.md",
+  "base/codex/afps-status/SKILL.md",
+  "base/codex/provision-agentic-config/SKILL.md",
   "packs/agent-work-admin/claude/plan-phase/SKILL.md",
   "packs/agent-work-admin/claude/roadmap/SKILL.md",
   "packs/agent-work-admin/codex/plan-phase/SKILL.md",
@@ -124,7 +124,7 @@ function activeSkillFiles(dir: string, out: string[] = []) {
 
 // Alignment skills now carry the convention in a sibling ALIGNMENT-PAGE.md;
 // the SKILL.md only holds a short stub heading that points at it.
-const activeAlignmentSkillFiles = [...activeSkillFiles("global"), ...activeSkillFiles("packs")]
+const activeAlignmentSkillFiles = [...activeSkillFiles("base"), ...activeSkillFiles("packs")]
   .filter((path) => {
     const content = read(path);
     if (!/^#{2,3} Alignment Page$/m.test(content)) return false;
@@ -685,7 +685,7 @@ describe("alignment page gate contract", () => {
     expect(conventionText("packs/product-design/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
     expect(conventionText("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
     expect(conventionText("packs/research-admin/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");
-    expect(conventionText("global/codex/idea-scope-brief/SKILL.md")).toContain(
+    expect(conventionText("base/codex/idea-scope-brief/SKILL.md")).toContain(
       "Apply the shared artifact-destination/proposed-file-changes de-duplication rule",
     );
     expect(conventionText("packs/product-design/codex/feature-interview/SKILL.md")).toContain(
@@ -880,8 +880,8 @@ describe("alignment page gate contract", () => {
     // (the afps-tracker incident). They must now ship a sibling
     // ALIGNMENT-PAGE.md with the full convention and their skill-specific gates.
     const pointerSkills = [
-      "global/claude/idea-scope-brief/SKILL.md",
-      "global/codex/idea-scope-brief/SKILL.md",
+      "base/claude/idea-scope-brief/SKILL.md",
+      "base/codex/idea-scope-brief/SKILL.md",
       "packs/customer-lifecycle/claude/journey-map/SKILL.md",
       "packs/customer-lifecycle/codex/journey-map/SKILL.md",
     ];
@@ -896,7 +896,7 @@ describe("alignment page gate contract", () => {
       expect(page, `${path} bundle has response contract`).toContain("**Response YAML contract.**");
       expect(page, `${path} bundle has required questions`).toContain("**Required inline questions.**");
     }
-    expect(bundled("global/claude/idea-scope-brief/SKILL.md"), "idea-scope-brief gates").toContain(
+    expect(bundled("base/claude/idea-scope-brief/SKILL.md"), "idea-scope-brief gates").toContain(
       "**Idea-specific gates.**",
     );
     expect(bundled("packs/customer-lifecycle/codex/journey-map/SKILL.md"), "journey-map gates").toContain(

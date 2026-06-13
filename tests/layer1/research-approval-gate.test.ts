@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 const ROOT_DIR = resolve(import.meta.dirname, "../..");
 
 const skillFiles = [
-  ...globSync("global/{claude,codex}/*/SKILL.md", { cwd: ROOT_DIR }),
+  ...globSync("base/{claude,codex}/*/SKILL.md", { cwd: ROOT_DIR }),
   ...globSync("packs/*/{claude,codex}/**/SKILL.md", {
     cwd: ROOT_DIR,
     ignore: ["**/archive/**"],

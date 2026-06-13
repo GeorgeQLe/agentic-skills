@@ -5,8 +5,8 @@ import { resolve } from "node:path";
 const ROOT = resolve(import.meta.dirname, "../..");
 
 const skillPaths = [
-  "global/claude/idea-scope-brief/SKILL.md",
-  "global/codex/idea-scope-brief/SKILL.md",
+  "base/claude/idea-scope-brief/SKILL.md",
+  "base/codex/idea-scope-brief/SKILL.md",
 ];
 
 function read(path: string) {

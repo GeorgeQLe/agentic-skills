@@ -29,20 +29,20 @@ const packDirs = globSync("*/", { cwd: PACKS_DIR }).map((d) =>
   resolve(PACKS_DIR, d),
 );
 
-const globalPackSkills = globSync("**/SKILL.md", { cwd: PACKS_DIR });
+const allPackSkills = globSync("**/SKILL.md", { cwd: PACKS_DIR });
 const allPackSkillNames = new Set(
-  globalPackSkills.map((s) => {
+  allPackSkills.map((s) => {
     const parts = s.split("/");
     return parts[parts.length - 2];
   }),
 );
 
-// Also check user-local skills (these are global skills installed
+// Also check user-local skills (these are base skills installed
 // outside of packs, referenced via slash commands)
-const GLOBAL_DIR = resolve(PACKS_DIR, "../global");
-const globalCoreSkills = globSync("**/SKILL.md", { cwd: GLOBAL_DIR });
-const globalCoreNames = new Set(
-  globalCoreSkills.map((s) => {
+const BASE_DIR = resolve(PACKS_DIR, "../base");
+const baseCoreSkills = globSync("**/SKILL.md", { cwd: BASE_DIR });
+const baseCoreNames = new Set(
+  baseCoreSkills.map((s) => {
     const parts = s.split("/");
     return parts[parts.length - 2];
   }),
@@ -82,15 +82,15 @@ describe("Next-Skill routing references", () => {
       if (refs.length === 0) continue;
 
       for (const ref of refs) {
-        it(`${rel} references /${ref} which should exist in pack or globally`, () => {
+        it(`${rel} references /${ref} which should exist in a pack or base`, () => {
           const existsInPack = skillNames.has(ref);
-          const existsGlobally = allPackSkillNames.has(ref);
-          const existsInCore = globalCoreNames.has(ref);
+          const existsInAnyPack = allPackSkillNames.has(ref);
+          const existsInCore = baseCoreNames.has(ref);
           const isKnownExternal = knownExternalSkills.has(ref);
 
           expect(
-            existsInPack || existsGlobally || existsInCore || isKnownExternal,
-            `/${ref} referenced in ${rel} not found in pack "${packName}", globally, or known externals`,
+            existsInPack || existsInAnyPack || existsInCore || isKnownExternal,
+            `/${ref} referenced in ${rel} not found in pack "${packName}", another pack, base, or known externals`,
           ).toBe(true);
         });
       }

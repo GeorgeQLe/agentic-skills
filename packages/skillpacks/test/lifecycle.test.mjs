@@ -195,7 +195,7 @@ afterEach(() => {
 });
 
 describe('Node lifecycle commands', () => {
-  it('initializes project-local base skills without installing user-home globals', async () => {
+  it('initializes project-local base skills without installing user-home skills', async () => {
     const dir = makeTempProject();
 
     const { stdout } = await runSkillpacks(dir, ['init']);
@@ -208,7 +208,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
     assert.equal(existsSync(skillPath(dir, 'claude', 'afps-status')), true);
-    assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*global\/claude\/codebase-status/);
+    assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*base\/claude\/codebase-status/);
     assert.equal(readProjectConfig(dir).base_skills, true);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
   });
@@ -485,7 +485,7 @@ describe('Node lifecycle commands', () => {
       dir,
       'claude',
       'codebase-status',
-      join(repoRoot, 'global/claude/codebase-status')
+      join(repoRoot, 'base/claude/codebase-status')
     );
 
     const { stdout } = await runSkillpacks(dir, ['refresh']);

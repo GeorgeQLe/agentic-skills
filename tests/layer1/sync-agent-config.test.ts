@@ -13,13 +13,13 @@ describe("sync agent config drift contract", () => {
       path: "packs/gitops/codex/sync/SKILL.md",
       command: "$provision-agentic-config",
       primarySkillPath: "~/.codex/skills/provision-agentic-config/SKILL.md",
-      repoFallbackPath: "global/codex/provision-agentic-config/SKILL.md",
+      repoFallbackPath: "base/codex/provision-agentic-config/SKILL.md",
     },
     {
       path: "packs/gitops/claude/sync/SKILL.md",
       command: "/provision-agentic-config",
       primarySkillPath: "~/.claude/skills/provision-agentic-config/SKILL.md",
-      repoFallbackPath: "global/claude/provision-agentic-config/SKILL.md",
+      repoFallbackPath: "base/claude/provision-agentic-config/SKILL.md",
     },
   ];
 

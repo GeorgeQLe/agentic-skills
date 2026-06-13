@@ -14,7 +14,7 @@ function copyManagedLauncher(
   skill: "pack" | "init-agentic-skills",
   scriptName: "pack.sh" | "init-agentic-skills.sh",
 ): string {
-  const sourceSkill = join(REPO_ROOT, "global", agent, skill);
+  const sourceSkill = join(REPO_ROOT, "base", agent, skill);
   const agentDir = agent === "claude" ? ".claude" : ".codex";
   const copiedSkill = join(fakeHome, agentDir, "skills", skill);
   const copiedScripts = join(copiedSkill, "scripts");
@@ -40,7 +40,7 @@ function runCopiedLauncher(fakeHome: string, script: string, args: string[]): st
   });
 }
 
-describe("global copied managed launchers", () => {
+describe("base copied managed launchers", () => {
   it("resolves copied pack launchers through managed provenance", () => {
     for (const agent of ["claude", "codex"] as const) {
       const fakeHome = mkdtempSync(join(tmpdir(), `agentic-skills-${agent}-pack-`));

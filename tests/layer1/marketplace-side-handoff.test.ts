@@ -6,11 +6,11 @@ const ROOT = resolve(import.meta.dirname, "../..");
 
 const ideaMirrors = [
   {
-    path: "global/claude/idea-scope-brief/SKILL.md",
+    path: "base/claude/idea-scope-brief/SKILL.md",
     command: "/customer-discovery",
   },
   {
-    path: "global/codex/idea-scope-brief/SKILL.md",
+    path: "base/codex/idea-scope-brief/SKILL.md",
     command: "$customer-discovery",
   },
 ] as const;
@@ -74,8 +74,8 @@ describe("marketplace side handoff contracts", () => {
 
   it("keeps the handoff section mirrored and the preflight contract in both mirrors", () => {
     // The idea-scope-brief mirrors stay byte-identical for this section.
-    const claudeIdea = extractSection(read("global/claude/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
-    const codexIdea = extractSection(read("global/codex/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
+    const claudeIdea = extractSection(read("base/claude/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
+    const codexIdea = extractSection(read("base/codex/idea-scope-brief/SKILL.md"), "### Market Structure Handoff");
     expect(claudeIdea).toEqual(codexIdea);
 
     // The customer-discovery Codex mirror is a deliberately condensed orchestrator

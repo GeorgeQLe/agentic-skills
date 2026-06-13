@@ -9,8 +9,8 @@ const read = (path: string) => readFileSync(repoPath(path), "utf8");
 
 describe("pack skill reload guidance", () => {
   const skillPaths = [
-    "global/claude/pack/SKILL.md",
-    "global/codex/pack/SKILL.md",
+    "base/claude/pack/SKILL.md",
+    "base/codex/pack/SKILL.md",
   ];
 
   it("documents Claude Code reload-skills, clear-context, restart, and Codex fresh-session paths", () => {

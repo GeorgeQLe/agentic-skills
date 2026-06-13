@@ -6,14 +6,14 @@ import { resolve } from "node:path";
 const ROOT_DIR = resolve(import.meta.dirname, "../..");
 
 const codexSkillFiles = [
-  ...globSync("global/codex/*/SKILL.md", { cwd: ROOT_DIR }),
+  ...globSync("base/codex/*/SKILL.md", { cwd: ROOT_DIR }),
   ...globSync("packs/*/codex/*/SKILL.md", { cwd: ROOT_DIR }),
 ].map((rel) => resolve(ROOT_DIR, rel));
 
 const oneQuestionCodexSkills = [
   "packs/product-design/codex/spec-interview/SKILL.md",
   "packs/product-design/codex/feature-interview/SKILL.md",
-  "global/codex/idea-scope-brief/SKILL.md",
+  "base/codex/idea-scope-brief/SKILL.md",
   "packs/product-design/codex/ui-interview/SKILL.md",
   "packs/product-design/codex/ux-variations/SKILL.md",
   "packs/product-design/codex/consolidate-variations/SKILL.md",

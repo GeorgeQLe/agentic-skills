@@ -10,14 +10,16 @@ const read = (path: string) => readFileSync(repoPath(path), "utf8");
 describe("init-agentic-skills freshness contract", () => {
   const contracts = [
     {
-      skillPath: "global/codex/init-agentic-skills/SKILL.md",
-      scriptPath: "global/codex/init-agentic-skills/scripts/init-agentic-skills.sh",
+      skillPath: "base/codex/init-agentic-skills/SKILL.md",
+      scriptPath: "base/codex/init-agentic-skills/scripts/init-agentic-skills.sh",
       packCommand: "$pack",
+      version: "v0.10",
     },
     {
-      skillPath: "global/claude/init-agentic-skills/SKILL.md",
-      scriptPath: "global/claude/init-agentic-skills/scripts/init-agentic-skills.sh",
+      skillPath: "base/claude/init-agentic-skills/SKILL.md",
+      scriptPath: "base/claude/init-agentic-skills/scripts/init-agentic-skills.sh",
       packCommand: "/pack",
+      version: "v0.9",
     },
   ];
 
@@ -25,7 +27,7 @@ describe("init-agentic-skills freshness contract", () => {
     for (const contract of contracts) {
       const content = read(contract.skillPath);
 
-      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.8");
+      expect(content, `${contract.skillPath} should be bumped`).toContain(`version: ${contract.version}`);
       expect(content, `${contract.skillPath} should describe managed provenance`).toContain(
         ".agentic-skills-managed",
       );
@@ -57,7 +59,7 @@ describe("init-agentic-skills freshness contract", () => {
         "fresh Codex CLI session",
       );
       expect(content, `${contract.skillPath} should keep packs local`).toContain(
-        "Do not install `packs/*` globally",
+        "Do not install `packs/*` as base skills",
       );
       expect(content, `${contract.skillPath} should route pack setup`).toContain(contract.packCommand);
     }

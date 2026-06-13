@@ -12,7 +12,7 @@ const skillFiles = globSync("**/SKILL.md", {
 }).map((rel) => resolve(PACKS_DIR, rel));
 
 const activeSkillFiles = [
-  ...globSync("global/{claude,codex}/*/SKILL.md", {
+  ...globSync("base/{claude,codex}/*/SKILL.md", {
     cwd: ROOT_DIR,
     ignore: ["**/archive/**"],
   }),
