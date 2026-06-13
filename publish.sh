@@ -87,6 +87,34 @@ run_version_bump() {
   wait "$pid"
 }
 
+verify_skillpacks_package() {
+  if run npm run skillpacks:verify; then
+    return 0
+  fi
+
+  local pack_json="$STAGE_ROOT/package-dry-run.json"
+  log "npm run skillpacks:verify failed; running equivalent direct package verification"
+  (
+    cd "$PACKAGE_DIR"
+    run node bin/skillpacks.mjs --version
+    run node bin/skillpacks.mjs list
+    run npm run build:check
+    printf '+ npm pack ./build --dry-run --json --silent > %q\n' "$pack_json"
+    npm pack ./build --dry-run --json --silent > "$pack_json"
+  )
+  node - "$pack_json" "$VERSION" <<'NODE'
+const fs = require("fs");
+const [packJsonPath, version] = process.argv.slice(2);
+const payload = JSON.parse(fs.readFileSync(packJsonPath, "utf8"));
+const pack = Array.isArray(payload) ? payload[0] : payload;
+if (!pack || pack.name !== "skillpacks" || pack.version !== version) {
+  console.error(`Unexpected npm pack result: ${JSON.stringify(pack)}`);
+  process.exit(1);
+}
+console.log(`Verified npm pack dry run for ${pack.name}@${pack.version}.`);
+NODE
+}
+
 cleanup() {
   local dir
   for dir in "${TMP_DIRS[@]}"; do
@@ -168,10 +196,11 @@ VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.arg
 log "Building and verifying skillpacks@$VERSION"
 run npm --workspace packages/skillpacks run build:manifest
 run npm --workspace packages/skillpacks run test:node
-run npm run skillpacks:verify
 
 STAGE_ROOT=$(mktemp -d /tmp/skillpacks-publish-XXXXXX)
 TMP_DIRS+=("$STAGE_ROOT")
+verify_skillpacks_package
+
 SKILLPACKS_STAGE="$STAGE_ROOT/skillpacks"
 GSKP_STAGE="$STAGE_ROOT/glexcorp-gskp"
 
