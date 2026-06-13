@@ -1,5 +1,9 @@
 # journey-map changelog (codex)
 
+## v0.16 - 2026-06-12
+
+- Updated cross-pack routing guards from the removed `business-discovery` pack name to the canonical `business-research` pack.
+
 ## v0.15 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

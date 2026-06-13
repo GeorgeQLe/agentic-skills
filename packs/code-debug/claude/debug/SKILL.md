@@ -2,7 +2,7 @@
 name: debug
 description: Investigate a problem, log it to the debug changelog, cross-check past issues, and suggest a non-duplicate fix
 type: debugging
-version: v0.1
+version: v0.2
 argument-hint: <error message, bug description, or symptom>
 ---
 
@@ -92,6 +92,15 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 ### Changelog Updated
 - Entry added to `docs/debug-changelog.md`
 - Related entries: [any cross-references]
+
+## Next-Step Routing
+
+After reporting the debug outcome:
+
+- If the root cause remains unresolved or verification still fails, use **Recommended next command:** `/debug <specific failing symptom>` with the failing command and evidence, or `/investigate <claim>` when the remaining work is broader repo validation.
+- If the fix created or modified tracked files, check `.agents/project.json` for `exec-loop`; recommend `/ship` when enabled, or `npx skillpacks install exec-loop` from the project shell when it is not enabled.
+- If a systemic follow-up was added to `tasks/todo.md`, check `.agents/project.json` for `exec-loop`; recommend `/exec` when enabled, or `npx skillpacks install exec-loop` from the project shell when it is not enabled.
+- If verification passed, no tracked files are dirty, and no systemic follow-up remains, state that no follow-up command is recommended.
 
 ### Prevention
 - What test, lint rule, or check would have caught this earlier

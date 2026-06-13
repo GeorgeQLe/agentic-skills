@@ -3,7 +3,7 @@ name: vard-scan
 description: Scan for viral app opportunities from trends, gaps, and user pain points
 type: research
 version: v0.2
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # VARD Scan

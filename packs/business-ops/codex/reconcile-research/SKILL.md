@@ -4,7 +4,7 @@ description: Cross-document consistency audit across research outputs — find c
 type: research
 version: v0.10
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # Reconcile Research — Cross-Document Consistency Audit

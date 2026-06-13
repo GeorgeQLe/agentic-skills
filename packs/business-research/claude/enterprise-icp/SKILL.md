@@ -4,7 +4,7 @@ description: Enterprise multi-stakeholder discovery — map personas, deal-kille
 type: research
 version: v0.10
 argument-hint: "[optional: target industry or market segment]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

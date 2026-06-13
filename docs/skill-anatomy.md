@@ -42,7 +42,9 @@ Every active `SKILL.md` must include YAML frontmatter with:
 
 Allowed optional fields include:
 
-- `type`: broad workflow category used by repo tooling.
+- `type`: broad workflow category used by repo tooling. Preserve it for workflow semantics: `planning`, `research`, `analysis`, `execution`, `review`, `shipping`, `ops`, or `router`.
+- `context_intake`: how much user/project context the skill gathers before producing output. Values: `deep`, `scoped`, or `artifact_only`. See `docs/interview-convention.md`.
+- `visual_tier`: alignment-page rendering tier. Values: `document`, `visual`, or `prototype`.
 - `argument-hint`: a short invocation hint for commands that usually take an argument.
 - `invocation`: one of `primary`, `chained`, `sub-skill`, or `orchestrator`. See [Invocation Types](#invocation-types) below. Defaults to `primary` when absent — only add explicitly for non-primary skills.
 - `parent`: names the parent skill for sub-skills (e.g., `parent: positioning`). Used by the `/skills` browser to show sub-skills indented under their parent. Only valid when `invocation: sub-skill`.
@@ -121,6 +123,9 @@ Primary (implicit — no extra fields needed):
 name: idea-scope-brief
 description: Shape a rough project idea into a scoped brief before ICP and market research
 version: v0.0
+type: planning
+context_intake: deep
+visual_tier: document
 ```
 
 Sub-skill with parent:

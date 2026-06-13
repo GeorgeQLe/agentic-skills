@@ -4,7 +4,7 @@ type: research
 version: v0.9
 description: Nir Eyal engagement loop design — trigger, action, variable reward, investment
 argument-hint: "[optional: specific engagement loop or user behavior to focus on]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

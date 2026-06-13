@@ -4,7 +4,7 @@ description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, a
 type: planning
 version: v0.3
 invocation: orchestrator
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

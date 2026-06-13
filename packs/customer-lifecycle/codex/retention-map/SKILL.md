@@ -4,7 +4,7 @@ description: Plan repeat-use loops, lifecycle triggers, churn risks, recovery pa
 type: analysis
 version: v0.5
 argument-hint: "[optional: app, persona, or retention stage]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

@@ -3,7 +3,7 @@ name: vard-ship
 description: Deploy the app, create landing page, set up analytics, and log the shipment
 type: ops
 version: v0.0
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # VARD Ship

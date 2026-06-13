@@ -3,7 +3,7 @@ name: game-audience
 description: Use only for video game projects; identify player segments by taste, behavior, platform, genre affinity, and motivation
 type: research
 version: v0.5
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

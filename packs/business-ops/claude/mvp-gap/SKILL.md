@@ -4,7 +4,7 @@ description: Evaluate codebase against ICP to identify gaps blocking first sales
 type: research
 version: v0.10
 argument-hint: "[optional: path-to-icp-spec]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

@@ -4,7 +4,7 @@ type: research
 version: v0.10
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

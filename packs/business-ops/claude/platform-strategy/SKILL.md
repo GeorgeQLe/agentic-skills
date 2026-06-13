@@ -4,7 +4,7 @@ description: Expand from a single product into a multi-product platform — map 
 type: research
 version: v0.11
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

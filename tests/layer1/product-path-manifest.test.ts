@@ -15,12 +15,12 @@ const pairs = {
     "global/claude/idea-scope-brief/SKILL.md",
   ],
   customerDiscovery: [
-    "packs/business-discovery/codex/customer-discovery/SKILL.md",
-    "packs/business-discovery/claude/customer-discovery/SKILL.md",
+    "packs/business-research/codex/customer-discovery/SKILL.md",
+    "packs/business-research/claude/customer-discovery/SKILL.md",
   ],
   competitive: [
-    "packs/business-discovery/codex/competitive-analysis/SKILL.md",
-    "packs/business-discovery/claude/competitive-analysis/SKILL.md",
+    "packs/business-research/codex/competitive-analysis/SKILL.md",
+    "packs/business-research/claude/competitive-analysis/SKILL.md",
   ],
   platform: [
     "packs/business-ops/codex/platform-strategy/SKILL.md",
@@ -49,7 +49,7 @@ const changedContracts = Object.values(pairs).flat();
 const researchPathRoots = [
   "global/codex/idea-scope-brief",
   "global/claude/idea-scope-brief",
-  "packs/business-discovery",
+  "packs/business-research",
   "packs/customer-lifecycle",
   "packs/business-growth",
   "packs/business-ops",

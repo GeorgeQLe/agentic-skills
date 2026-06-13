@@ -84,11 +84,11 @@ describe("pack skill mirror parity", () => {
     expect(quizMe).toContain("Codex-compatible user-input handling");
     expect(quizMe).not.toContain("AskUserQuestion");
 
-    for (const command of ["$uat-guide", "$uat", "$debug", "$guide", "$ux-variations", "$pack install"]) {
+    for (const command of ["$uat-guide", "$uat", "$debug", "$guide", "$ux-variations", "npx skillpacks install"]) {
       expect(uatGuide).toContain(command);
     }
     expect(uatGuide).not.toMatch(
-      /(?:^|[\s`"'])\/(?:uat-guide|uat|debug|guide|ux-variations|pack install)\b/,
+      /(?:^|[\s`"'])\/(?:uat-guide|uat|debug|guide|ux-variations)\b|\/pack install/,
     );
 
     expect(tasteCalibration).toContain("permitted non-mutating exploration tools");

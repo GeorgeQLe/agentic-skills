@@ -4,7 +4,7 @@ description: Design lean validation experiments — hypothesis, method, success 
 type: planning
 version: v0.7
 argument-hint: <hypothesis or assumption to test>
-interview_depth: light
+context_intake: scoped
 ---
 
 ## Pack Availability Guard

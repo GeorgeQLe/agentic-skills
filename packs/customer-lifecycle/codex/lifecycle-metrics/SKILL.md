@@ -4,7 +4,7 @@ description: Define stage metrics, instrumentation needs, and evidence gaps acro
 type: analysis
 version: v0.5
 argument-hint: "[optional: app or lifecycle stage]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

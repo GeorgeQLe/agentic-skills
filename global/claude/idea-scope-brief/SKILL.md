@@ -4,7 +4,7 @@ description: Shape a rough product or project idea into a scoped brief before cu
 type: planning
 version: v0.16
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
-interview_depth: full
+context_intake: deep
 ---
 
 # Idea Scope Brief

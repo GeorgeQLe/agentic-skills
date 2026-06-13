@@ -4,7 +4,7 @@ description: Research one or more external YouTube videos for context, claims, s
 type: research
 version: v0.6
 argument-hint: "<video URL or ID...> [--focus context|claims|summary|references] [--compare-channel <slug>]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

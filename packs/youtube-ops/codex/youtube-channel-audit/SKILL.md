@@ -4,7 +4,7 @@ description: Run an evidence-first YouTube channel audit that captures raw metad
 type: research
 version: v0.6
 argument-hint: "<channel URL or handle> [--count N]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

@@ -1,5 +1,10 @@
 # user-flow-map changelog (codex)
 
+## v0.4 - 2026-06-12
+
+- Replaced the single downstream command recommendation with an explicit stop/clear-context versus continue-now handoff choice for `$ui-interview --requirements-only`.
+- Clarified that continuing immediately still requires `ui-interview` to run its own UI Assumptions Manifest and Content Requirements Manifest gates.
+
 ## v0.3 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

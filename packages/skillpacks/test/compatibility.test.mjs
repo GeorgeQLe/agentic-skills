@@ -22,6 +22,10 @@ const expectedMatrix = new Map([
   ['doctor', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['doctor --fix', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['doctor --fix --agent-docs [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['alignment bundles [--dry-run] [--check]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
+  ['alignment pages audit', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
+  ['alignment pages inject-tts [--force] [alignment/<page>.html]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
+  ['alignment verify', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['prune [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['pin <skill> <version>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['unpin <skill>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -135,6 +139,8 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
     assert.match(decks, /npx skillpacks install-deck vard/, 'decks doc should document npm deck installs');
     assert.match(decks, /npx skillpacks install-deck business-afps/, 'decks doc should use install-deck for canonical decks');
     assert.doesNotMatch(decks, /npx skillpacks install <deck>/, 'decks doc must not model decks as generic pack installs');
+    assert.match(readme, /npx skillpacks alignment bundles --check/, 'README should document npm alignment bundle checks');
+    assert.match(quickstart, /npx skillpacks alignment pages audit/, 'quickstart should document npm alignment page audits');
   });
 
   it('documents migration and package-semver vs skill-version pinning', () => {

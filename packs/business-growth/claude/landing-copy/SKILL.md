@@ -4,7 +4,7 @@ description: Generate or audit landing page copy grounded in upstream research â
 type: research
 version: v0.9
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
-interview_depth: full
+context_intake: deep
 visual_tier: prototype
 ---
 

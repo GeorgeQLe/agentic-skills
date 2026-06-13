@@ -4,7 +4,7 @@ description: Map creator platforms to free/manual evidence sources, available fi
 type: research
 version: v0.7
 argument-hint: "[creator or project slug]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

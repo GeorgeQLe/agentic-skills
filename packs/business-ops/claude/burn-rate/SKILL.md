@@ -4,7 +4,7 @@ description: Estimate monthly burn rate from infrastructure signals and calculat
 type: analysis
 version: v0.5
 argument-hint: "[optional: focus area e.g. \"infrastructure only\", \"team costs\", \"runway\"]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

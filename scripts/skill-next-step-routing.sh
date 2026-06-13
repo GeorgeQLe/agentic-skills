@@ -9,7 +9,8 @@ MODE="${1:---missing}"
 
 mapfile -t SKILL_FILES < <(
   find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
-    -mindepth 2 -maxdepth 5 -type f -name SKILL.md 2>/dev/null \
+    -mindepth 2 -maxdepth 5 -type f -name SKILL.md \
+    ! -path '*/archive/*' 2>/dev/null \
     | sort
 )
 
@@ -17,15 +18,15 @@ is_mutation_capable() {
   local file="$1"
 
   grep -Eq \
-    'Default Shipping Contract|If this skill creates or modifies tracked repository files|Write or update `|write or update `|Only after confirmation, write|Only after the user validates, write|Apply the fix|Apply fixes|create/update|create or update|mutations?:|mutation or broad refactor|Behavior-preserving refactor|finish by committing and pushing|moves? .*card|create .*card|update .*card|archive .*card' \
+    'If this skill creates or modifies tracked repository files|Write or update `|write or update `|Only after confirmation, write|Only after the user validates, write|Apply the fix|Apply fixes|create/update|create or update|mutations?:|mutation or broad refactor|Behavior-preserving refactor|moves? .*card|create .*card|update .*card|archive .*card' \
     "$file"
 }
 
 has_next_step_routing() {
   local file="$1"
 
-  grep -Eq \
-    'Recommended next skill:|Recommended next command:|Recommended next step|\*\*Recommended next command:\*\*|\*\*Next work:\*\*|## Next Steps|## Next-Step Routing|## Next-Skill Routing' \
+  grep -Eqi \
+    'Recommended next skill:|Recommended next command:|Recommended next step|recommended next command|exact next command|\*\*Recommended next command:\*\*|\*\*Next work:\*\*|#{2,3} ([0-9]+\. )?(Populate )?Next Steps|## Next-Step Routing|## Next-Skill Routing|## Intent-Aware Routing|Next step:' \
     "$file"
 }
 

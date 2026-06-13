@@ -4,7 +4,7 @@ description: Analyze why an external YouTube video performed well and extract ev
 type: research
 version: v0.6
 argument-hint: "<video URL or ID...> [--primary-channel <slug>] [--comments N] [--angle packaging|topic|retention|positioning]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

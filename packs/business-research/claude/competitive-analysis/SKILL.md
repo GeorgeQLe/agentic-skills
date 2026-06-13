@@ -5,7 +5,7 @@ type: research
 version: v0.19
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

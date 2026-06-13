@@ -34,7 +34,7 @@ describe("positioning alignment contracts", () => {
   it("bundles sibling alignment-page conventions for positioning framework subskills", () => {
     for (const agent of agents) {
       for (const framework of frameworkNames) {
-        const skillPath = `packs/business-discovery/${agent}/positioning/frameworks/${framework}/SKILL.md`;
+        const skillPath = `packs/business-research/${agent}/positioning/frameworks/${framework}/SKILL.md`;
         const bundlePath = resolve(dirname(repoPath(skillPath)), "ALIGNMENT-PAGE.md");
         const skill = read(skillPath);
         const bundle = readFileSync(bundlePath, "utf8");
@@ -46,7 +46,7 @@ describe("positioning alignment contracts", () => {
         expect(skill, `${skillPath} no parent-relative alignment pointer`).not.toContain(
           "../ALIGNMENT-PAGE.md",
         );
-        expect(bundle, `${skillPath} bundled gate contract`).toContain("**Gate YAML contract.**");
+        expect(bundle, `${skillPath} bundled YAML contract`).toMatch(/\*\*(Gate|Response) YAML contract\.\*\*/);
         expect(bundle, `${skillPath} bundled research quality`).toContain(
           "**Research quality contract.**",
         );
@@ -59,8 +59,8 @@ describe("positioning alignment contracts", () => {
 
   it("approval-gates the product-positioning shortcut before writing tasks/todo.md", () => {
     const contracts = [
-      "packs/business-discovery/claude/positioning/SKILL.md",
-      "packs/business-discovery/codex/positioning/SKILL.md",
+      "packs/business-research/claude/positioning/SKILL.md",
+      "packs/business-research/codex/positioning/SKILL.md",
     ];
 
     for (const path of contracts) {
@@ -84,7 +84,7 @@ describe("positioning alignment contracts", () => {
 
   it("preserves parent positioning-specific alignment gates in generated bundles", () => {
     for (const agent of agents) {
-      const bundle = read(`packs/business-discovery/${agent}/positioning/ALIGNMENT-PAGE.md`);
+      const bundle = read(`packs/business-research/${agent}/positioning/ALIGNMENT-PAGE.md`);
 
       expect(bundle, `${agent} parent multi-select gate`).toContain(
         "**Multi-select framework convention.**",

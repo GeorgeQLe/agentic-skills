@@ -15,7 +15,7 @@ Restore `.codex/skills/**` and `.claude/skills/**` to generated local artifact s
 
 1. Confirm the only tracked generated-root files are the two `skill-interview/SKILL.md` install copies.
 2. Remove those two files from Git tracking while preserving the local generated files.
-3. Replace the broad `.codex` ignore rule with generated-root `.codex/skills/` patterns and keep `.claude/skills/` generated-root patterns.
+3. Replace the broad `.codex` ignore rule with `.codex/skills/` and keep `.claude/skills/`.
 4. Verify tracked-file removal, local-file presence, ignore behavior, and whitespace.
 5. Commit and push the hygiene-only boundary, then rerun `$ship-end` for the broader dirty tree.
 
@@ -23,8 +23,207 @@ Restore `.codex/skills/**` and `.claude/skills/**` to generated local artifact s
 
 - `git ls-files .codex/skills .claude/skills` returns no tracked generated-root files.
 - `find .codex/skills .claude/skills -maxdepth 2 -name SKILL.md -print` still shows generated local install files.
-- `git check-ignore -v` proves local generated skill roots are ignored.
+- `git check-ignore -v` proves both local generated skill roots are ignored.
 - `git diff --check` passes for the hygiene boundary.
+
+## Current Ship-End - Validation Remediation And Shipping
+
+### Goal
+
+Wrap the current dirty working tree: complete validation, document the ship boundary, and commit/push now that the generated-root blocker is resolved.
+
+### Scope
+
+- Ship-end validation failures across layer1 tests, Skills Showcase generated data, skill audits, archive/version/dependency checks, routing checks, and mirror parity.
+- Task/history/manifest documentation for the wrap-up.
+- No deploy unless a successful commit/push creates a shipped boundary.
+- No staging of generated local skill roots under `.codex/skills/**` or `.claude/skills/**`.
+
+### Plan
+
+1. Inspect the dirty tree, generated-root state, manual tasks, advisory task files, and existing unpushed commits.
+2. Remediate validation failures that are necessary to make the current repo state provably green.
+3. Prefer audit/parser fixes for false positives; archive/version/changelog any real active `SKILL.md` behavior changes.
+4. Refresh generated Skills Showcase assets after active skill or validation metadata changes.
+5. Run the full executable and documentation validation gate.
+6. Update `tasks/todo.md`, `tasks/history.md`, and a ship manifest with results, skipped deploy rationale, residual risks, and next command.
+7. Commit/push the ship boundary after confirming generated local roots are excluded.
+
+### Acceptance Criteria
+
+- Full layer1 and Skills Showcase checks pass.
+- Active alignment pages and generated alignment bundles are exact.
+- Skill archive/version/dependency/routing/mirror audits pass.
+- The ship manifest states whether the commit boundary is safe.
+- Final handoff names any deploy/manual follow-up and next command.
+
+### Current Status
+
+- Validation is green across the full ship-end gate after the generated-root hygiene commit.
+- `git ls-files .codex/skills .claude/skills` returns no tracked generated local skill roots.
+- The broad validation-remediation boundary is ready to commit and push.
+
+## Current Implementation - Stage 2 Alignment Page Template
+
+### Goal
+
+Enhance the canonical alignment-page convention so Stage 1 scope-review pages preview the expected Stage 2 research/artifact-review shape before heavy research begins.
+
+### Scope
+
+- `docs/alignment-page-convention.md` inside the generated `alignment-convention` block.
+- Generated `ALIGNMENT-PAGE.md` bundles refreshed only through `scripts/upgrade-alignment-page.mjs`.
+- Focused layer1 coverage in `tests/layer1/alignment-gates.test.ts` and, if needed, `tests/layer1/research-approval-gate.test.ts`.
+- Task tracking and review notes in `tasks/roadmap.md` and `tasks/todo.md`.
+
+### Plan
+
+1. Preserve the existing dirty worktree and inspect current convention/test wording before editing.
+2. Add a Stage 2 review-page template section after the staged research workflow language, including required status, findings, evidence, packet-review, alternatives, source gaps, assumptions, file-change, format-preference, and final-artifact approval sections.
+3. Require Stage 1 scope-review pages to include a Stage 2 preview / expected review format section before research starts.
+4. Keep raw Markdown packet text supplemental only, with structured HTML as the primary review surface.
+5. Regenerate generated alignment bundles via `node scripts/upgrade-alignment-page.mjs`.
+6. Add focused tests for the Stage 2 template and Stage 1 preview expectation.
+7. Run the requested generator, Vitest, and scoped whitespace verification, then record results and ship only if the dirty worktree can be safely isolated.
+
+### Acceptance Criteria
+
+- Canonical convention defines the Stage 2 review-page template and Stage 1 preview expectation.
+- Generated bundles contain the new Stage 2 guidance after regeneration.
+- Focused layer1 tests fail without the new text and pass with it.
+- Verification results are documented before final handoff.
+- No generated `ALIGNMENT-PAGE.md` files are hand-edited.
+
+## Current Implementation - Framework-Specific Alignment Guidance
+
+### Goal
+
+Populate generated `ALIGNMENT-PAGE.md` guidance for delegated framework skills with framework-specific review instructions covering research focus, documentation/review format, and concrete user feedback prompts.
+
+### Scope
+
+- `scripts/upgrade-alignment-page.mjs`
+- Generated bundled `ALIGNMENT-PAGE.md` files under active `global/**` and `packs/**` skill mirrors
+- Focused layer1 alignment generator tests
+- Targeted framework bundles:
+  - Competitive frameworks: `porter-five-forces`, `swot`, `strategic-group-map`, `feature-pricing-matrix`
+  - Customer discovery frameworks: `w3-hypothesis`, `five-rings`, `four-forces`, `jtbd-needs`, `pmf-engine`, `seven-dimensions`
+  - Positioning frameworks: `category-design`, `jtbd-positioning`, `moore-positioning`, `obviously-awesome`, `strategic-canvas`
+  - Generated customer-lifecycle journey-map frameworks if they receive generated alignment bundles
+
+### Plan
+
+1. Protect existing dirty worktree state and inspect current generator/test behavior before editing.
+2. Extend framework-specific translation in `scripts/upgrade-alignment-page.mjs` so known delegated frameworks no longer fall through to generic research guidance.
+3. Keep broad fallback guidance for unknown `invocation: sub-skill` frameworks.
+4. Regenerate bundled `ALIGNMENT-PAGE.md` files via `node scripts/upgrade-alignment-page.mjs`.
+5. Add or update focused layer1 tests to require framework-specific research focus, review/documentation format, and suggested user feedback language.
+6. Verify generator drift, targeted bundle content, focused tests, package/build checks if needed, and `git diff --check`.
+7. Record review notes, history, ship manifest, and commit/push only the intended boundary if it can be isolated from unrelated dirty work.
+
+### Acceptance Criteria
+
+- Known delegated framework bundles contain framework-specific guidance for research focus, documentation format, and user feedback.
+- Unknown sub-skill framework fallback remains broad but useful.
+- Generated bundles are exact after regeneration.
+- Focused layer1 tests and targeted `rg` checks pass.
+- No hand edits are made to generated `ALIGNMENT-PAGE.md` files.
+
+### Current Status
+
+- Implemented and verified. Known delegated framework bundles now receive exact framework-specific guidance through `scripts/upgrade-alignment-page.mjs`, and unknown framework subskills retain fallback guidance.
+- Verification passed: generator syntax check, generator regeneration/check, targeted framework `rg` scan, focused layer1 Vitest suite, and scoped `git diff --check` over this task's intended boundary.
+- Full-tree `git diff --check` is currently red on unrelated archive `SKILL.md` blank-line-at-EOF diagnostics from the pre-existing dirty tree.
+- Shipping is blocked until the pre-existing dirty worktree is separated; shared generator, test, and generated bundle files contain unrelated user-owned changes that cannot be safely committed as this task's boundary.
+
+---
+
+## Current Implementation - Context Intake Metadata And Glossary Bootstrap
+
+### Goal
+
+Make `context_intake` the canonical skill frontmatter field for user/context intake, replacing `interview_depth`, and synchronize the docs, generator, catalog, showcase data, parity audit, tests, and glossary starter artifacts.
+
+### Scope
+
+- Active non-archived `SKILL.md` frontmatter under `global/`, `packs/`, and project-local `.codex/skills/`
+- `docs/interview-convention.md`, `docs/skill-anatomy.md`, and narrow orchestrator wording if needed
+- `scripts/upgrade-alignment-page.mjs`, `scripts/catalog/index.mjs`, and `scripts/skill-mirror-parity-audit.sh`
+- Skills Showcase generated data and related catalog types
+- `research/_working/preliminary-repo-glossary-research.md`, glossary review alignment page, and `research/glossary.md` if this handoff is treated as final approval
+- Focused layer1 metadata/generator/catalog/parity verification
+
+### Plan
+
+1. Audit the existing dirty worktree and current metadata references without reverting unrelated work.
+2. Convert active `interview_depth` declarations to `context_intake` values:
+   - `full` -> `deep`
+   - `light` -> `scoped`
+   - `none` -> `artifact_only`
+3. Update documentation and public wording to use "Deep interview", "Scoped intake", and "Artifact-driven" while preserving `type` as the broad workflow category.
+4. Patch tooling and tests so `context_intake` and `visual_tier` are parsed, generated, mirrored, and exposed in catalog/showcase data.
+5. Refresh glossary working/review artifacts with the new metadata terms and write the canonical starter glossary only if approval status is defensible from the handoff.
+6. Regenerate derived bundles/data, run focused verification, record review notes, then stage/commit/push intended changes if they can be isolated from unrelated dirty work.
+
+### Acceptance Criteria
+
+- No active non-archived `SKILL.md` files use `interview_depth`.
+- Active docs/scripts/apps/tests use `context_intake` except explicit historical migration notes if intentionally retained.
+- Catalog output exposes `contextIntake`; Skills Showcase data carries it.
+- Mirror parity includes `context_intake` and `visual_tier`.
+- Glossary starter terms cover Frontmatter, Skill metadata, `type`, `context_intake`, `visual_tier`, Artifact-driven, Scoped intake, and Deep interview with sources.
+- Focused checks and `git diff --check` pass or any pre-existing failures are clearly proven.
+
+### Current Status
+
+- Implemented through verification. Active skill metadata is migrated to `context_intake`, generated alignment guidance reads `context_intake` and `visual_tier`, catalog/showcase surfaces expose `contextIntake` and `visualTier`, and frontmatter tests guard the retired key.
+- The glossary bootstrap is in review state: `research/_working/preliminary-repo-glossary-research.md` and `alignment/repo-glossary-skill-conventions.html` contain the starter terms and approval gates. `research/glossary.md` is intentionally not written until final compiled YAML approves the canonical glossary.
+- Verification passed for static migration checks, alignment-page audit, generator drift, focused layer1 tests, Skills Showcase typecheck and catalog/smoke tests, and archive-excluded whitespace checks.
+- Known blocked checks are due to pre-existing repo state: full-tree `git diff --check` fails only on unrelated archived snapshots, `skill-mirror-parity-audit.sh` still has 56 existing mirror drifts outside the new metadata keys, and showcase `validate:data` cannot pass until generated assets are committed.
+- Shipping is blocked until the pre-existing dirty worktree is separated. A direct commit from this state would include unrelated staged and unstaged user-owned changes.
+
+---
+
+## Current Investigation - Delegated Skill Alignment Page Depth
+
+### Goal
+
+Investigate the claim that delegated/framework skills such as `w3-hypothesis` produce weaker, less informative alignment pages than non-delegated skills such as `idea-scope-brief` or `competitive-analysis`, then apply the smallest durable contract/test fix.
+
+### Scope
+
+- Delegated/framework skill contracts, starting with `w3-hypothesis` and adjacent customer-discovery frameworks.
+- Non-delegated comparison contracts: `idea-scope-brief`, `competitive-analysis`, and the competitive-analysis framework route if relevant.
+- Shared alignment-page convention and generation scripts only if they are the root cause.
+- Focused tests or audits that can prevent thin delegated alignment-page instructions from returning.
+- Prompt capture under `prompts/investigate/`.
+
+### Plan
+
+1. Validate the user claims against source and history.
+   - Compare delegated and non-delegated `SKILL.md` / `ALIGNMENT-PAGE.md` contracts.
+   - Check whether delegated skills explicitly instruct agents to render framework-specific findings, evidence, confidence, tradeoffs, and decision impact.
+   - Inspect recent git history for when the delegated wording diverged or failed to inherit stronger guidance.
+2. Trace the root cause.
+   - Determine whether the issue is a framework-skill template gap, a shared alignment convention gap, or specific `w3-hypothesis` wording.
+   - Identify the minimal set of active mirrors affected.
+3. Patch the contract and coverage.
+   - Prefer source skill/template wording over hand-editing generated pages.
+   - Archive and version-bump any changed active `SKILL.md` files.
+   - Add or update focused tests/audits so delegated framework skills require useful rendered review sections.
+4. Verify and ship safely.
+   - Run focused generation/check tests.
+   - Record results in `tasks/todo.md`.
+   - Stage only intended files, then commit/push if the existing dirty worktree can be cleanly isolated.
+
+### Acceptance Criteria
+
+- The claim is classified as confirmed, partially correct, or unsupported with file/history evidence.
+- Delegated framework skills have explicit alignment-page substance requirements matching the quality bar of non-delegated skills.
+- Verification proves the new guardrail is present.
+- Existing unrelated dirty work is not reverted or accidentally absorbed.
+
+---
 
 ## Current Implementation - Optional Alignment Pages For Operational Skills
 
@@ -81,6 +280,92 @@ Change the selected operational, planning, reporting, and status skills so align
 - `roadmap` is no longer treated as a no-contract skip-list exception.
 - Approval-gated research/spec/product skills continue to require automatic alignment review pages.
 - Focused tests prove both optional and automatic paths.
+
+---
+
+## Current Investigation - Interview Skill Type Convention
+
+### Goal
+
+Determine whether interview-style skills should get a dedicated skill type/convention, and whether the convention should preserve the longstanding relentless interview behavior under a better name.
+
+### Scope
+
+- Active skill frontmatter and type taxonomy across repo-managed skills.
+- Interview-related skill contracts, especially `ui-interview`, `skill-interview`, and local/product interview variants.
+- Recent history around `ui-interview` behavior regressions and evidence-synthesis/requirements-only changes.
+- Pack metadata, generated showcase/index code, and tests that may consume `type`.
+- Recommendation only unless a follow-up implementation is requested.
+
+### Plan
+
+1. Capture and classify the user claims.
+   - Confirm whether interview-style skills currently have an explicit type or are hidden under broader categories.
+   - Confirm whether recent changes weakened live interview/interrogation behavior.
+2. Audit current conventions.
+   - Inventory active non-archive `type:` values.
+   - Read interview-related active `SKILL.md` files and pack metadata.
+   - Check scripts/tests that group or display skills by type.
+3. Inspect recent history.
+   - Use `git log`, `git diff`, and `git blame` around `ui-interview` and related interview skill changes.
+   - Identify whether the regression is a taxonomy issue, a contract wording issue, or both.
+4. Produce the report.
+   - Recommend a convention name and type value.
+   - Spell out migration scope, guardrails, tests, and what not to rename.
+
+### Acceptance Criteria
+
+- Report distinguishes confirmed evidence from inference.
+- Recommendation names the convention/type and explains why.
+- Report includes likely impacted files/tests and a migration plan without making broad source changes in this audit.
+
+---
+
+## Current Implementation - UI Interview Skipping And Context Routing
+
+### Goal
+
+Prevent `ui-interview --requirements-only` from treating upstream `user-flow-map` approval as its own interview, and make downstream research/planning handoffs offer an explicit context boundary instead of implying automatic execution.
+
+### Scope
+
+- `packs/product-design/{codex,claude}/ui-interview/SKILL.md`
+- `packs/product-design/{codex,claude}/user-flow-map/SKILL.md`
+- `packs/product-design/{codex,claude}/ui-interview/CHANGELOG.md`
+- `scripts/upgrade-alignment-page.mjs`
+- Generated `ALIGNMENT-PAGE.md` bundles from the canonical alignment convention
+- Focused layer1 tests and targeted regression searches
+- Prompt capture under `prompts/targeted-skill-builder/` and `prompts/ui-interview/`
+
+### Plan
+
+1. Confirm current source state and protect existing dirty work.
+   - Read active skill instructions, current pack mirrors, generator text, task docs, lessons, and relevant tests.
+   - Treat the existing uncommitted `ui-interview` `v0.18` packet-rendering change as an in-progress release and extend that release rather than creating a conflicting `v0.19`.
+2. Patch `ui-interview` requirements-only behavior.
+   - State that upstream `user-flow-map` approval authorizes route selection only; it never counts as `ui-interview` interview completion.
+   - Require the UI Assumptions Manifest and Content Requirements Manifest to be shown and confirmed inside `ui-interview --requirements-only` before any review page is built.
+   - Add an explicit evidence-synthesis exception only when the current invocation asks to skip live questions or synthesize from evidence.
+3. Patch downstream handoff routing.
+   - Make `user-flow-map` present two choices after approval: stop so the user can clear context and run the next skill, or continue immediately in the same session.
+   - State that continuing immediately still requires the next skill to run its own interaction gates.
+   - Avoid auto-run or auto-invoke wording for downstream skills.
+4. Patch generated alignment guidance and tests.
+   - Add `Interview provenance` requirements to the `ui-interview` gate text.
+   - Regenerate bundled `ALIGNMENT-PAGE.md` files.
+   - Add focused tests for provenance, evidence-synthesis labeling, and handoff routing language.
+5. Verify and ship.
+   - Run the requested generator, layer1, diff, and targeted `rg` checks.
+   - Record review notes in `tasks/todo.md`.
+   - Commit and push intended changes where the existing dirty worktree allows clean staging.
+
+### Acceptance Criteria
+
+- `ui-interview --requirements-only` cannot skip its own UI/content confirmation gates based on upstream approval alone.
+- Evidence-only output is explicitly labeled `evidence-synthesis review` and routes unresolved decisions back to a resumed `ui-interview`.
+- Product-design handoffs present clear stop/clear-context and continue-now choices.
+- Generated alignment guidance requires `Interview provenance` values: `live-ui-interview`, `evidence-synthesis-with-explicit-skip`, or `invalid-missing-ui-interview`.
+- Focused tests and searches prove the new contract is present.
 
 ---
 
@@ -2061,3 +2346,12 @@ icp -> competitive-analysis -> journey-map -> positioning
 3. Define the active research-skill set from repo metadata and non-archive skill roots.
 4. Audit each research skill for generated `ALIGNMENT-PAGE.md` presence, `SKILL.md` alignment-page handoff, staged research workflow language where applicable, category/tier/index/feedback/confirmation/TTS requirements, and drift from the canonical convention.
 5. Run the available convention validation scripts/tests and report confirmed compliance, violations, and prevention checks.
+
+## Current Plan — skillpacks alignment commands
+
+1. Inspect the package-owned CLI dispatcher, package staging boundary, alignment scripts, and existing package tests before changing behavior.
+2. Add an explicit `skillpacks alignment` command namespace for generated per-skill bundles, active rendered-page audits, TTS injection, and focused verification.
+3. Package the alignment scripts, support assets, and canonical convention doc needed for npm consumers while preserving denied package paths such as `alignment/`, `tasks/`, and `prompts/`.
+4. Make `scripts/inject-tts.mjs` accept `--root <path>` and keep the CLI from injecting a TTS tag without the packaged TTS asset available in the target repo.
+5. Update source-checkout and npm-path docs for the new alignment commands.
+6. Add focused CLI/package tests, run the planned Vitest alignment set plus `npm --workspace skillpacks run verify:package`, then ship only this task's intended files.

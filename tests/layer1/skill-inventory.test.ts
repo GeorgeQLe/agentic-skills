@@ -206,7 +206,7 @@ describe("skill-inventory skill contracts", () => {
   for (const relativePath of skillPaths) {
     it(`${relativePath} declares report-only inventory behavior`, () => {
       const content = readFileSync(resolve(REPO_ROOT, relativePath), "utf8");
-      expect(content).toMatch(/^version: v0\.0$/m);
+      expect(content).toMatch(/^version: v0\.1$/m);
       expect(content).toContain("report-only");
       expect(content).toContain("Do not run `scripts/pack.sh refresh`");
       expect(content).toContain("Do not run delete, cleanup, remove, prune, or reinstall commands.");

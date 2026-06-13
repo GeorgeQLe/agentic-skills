@@ -4,7 +4,7 @@ description: Break down a YouTube video's format, visual system, pacing, editing
 type: research
 version: v0.6
 argument-hint: "<video URL or ID> [--target remotion|script|style-guide] [--compare <video URL or ID...>]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

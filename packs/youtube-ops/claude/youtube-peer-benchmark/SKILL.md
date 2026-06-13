@@ -4,7 +4,7 @@ description: Benchmark a YouTube channel against peers — discover comparable c
 type: research
 version: v0.6
 argument-hint: "<channel URL or handle> [--niche 'keyword phrase'] [--peers @handle1,@handle2] [--count N]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

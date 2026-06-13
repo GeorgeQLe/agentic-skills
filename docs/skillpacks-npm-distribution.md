@@ -183,6 +183,10 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `doctor` | Node-owned | Managed marker drift reader | No | No | Read-only drift report; exits non-zero for stale installs. |
 | `doctor --fix` | Node-owned | Manifest plus lifecycle helpers | No | No | Cleans generated skill roots only: removes orphaned managed installs, converts unpinned legacy symlinks to managed package copies, preserves pinned symlinks, and preserves unmanaged local directories. |
 | `doctor --fix --agent-docs [--dry-run]` | Node-owned | Marker-bounded agent-doc migrator | No | No | Replaces only recognized generated blocks in `AGENTS.md` and `CLAUDE.md`; dry-run prints a diff without writing, and non-dry-run writes timestamped backups under `.agents/backups/`. |
+| `alignment bundles [--dry-run] [--check]` | Node-owned wrapper | Packaged `scripts/upgrade-alignment-page.mjs` | No | No | Runs generated per-skill `ALIGNMENT-PAGE.md` bundle generation/checking with `--root <cwd>`. |
+| `alignment pages audit` | Node-owned wrapper | Packaged `scripts/audit-alignment-pages.mjs` | No | No | Audits active rendered `alignment/*.html` pages with `--root <cwd>`. |
+| `alignment pages inject-tts [--force] [alignment/<page>.html]` | Node-owned wrapper | Packaged `scripts/inject-tts.mjs` plus TTS asset | No | No | Ensures `scripts/alignment-tts-kokoro.js` exists in the target repo before injecting the TTS include. |
+| `alignment verify` | Node-owned wrapper | Target repo Vitest suite | No | No | Runs this repo's focused alignment Vitest set when the target repo contains those tests; exits clearly when unavailable. |
 | `prune [--dry-run]` | Node-owned | Manifest plus lifecycle helpers | No | No | Removes only orphaned managed installs; keeps unmanaged directories. |
 | `pin <skill> <version>` | Node-owned | Manifest plus lifecycle helpers | No | No | Validates archive versions, updates `pinned_versions`, and relinks installs. |
 | `unpin <skill>` | Node-owned | Manifest plus lifecycle helpers | No | No | Clears the pin and relinks to latest packaged source. |
@@ -387,6 +391,27 @@ npx skillpacks unpin quality-sweep
 If a pin fails because an archive version is unavailable, the installed npm package does not contain that archived skill snapshot. Upgrade to a package version that includes the archive, or use a source checkout at a commit that contains it.
 
 Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. In the current `skillpacks@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
+
+### Alignment Convention Commands
+
+Source-checkout users can keep using the direct script paths:
+
+```bash
+node scripts/upgrade-alignment-page.mjs --check
+node scripts/audit-alignment-pages.mjs
+node scripts/inject-tts.mjs --force alignment/example.html
+```
+
+npm users can run the equivalent wrapped commands from the target repository:
+
+```bash
+npx skillpacks alignment bundles --check
+npx skillpacks alignment pages audit
+npx skillpacks alignment pages inject-tts --force alignment/example.html
+npx skillpacks alignment verify
+```
+
+The namespace keeps the two alignment workflows separate. `alignment bundles` generates or checks the bundled per-skill convention files (`ALIGNMENT-PAGE.md`) from `docs/alignment-page-convention.md`; `alignment pages audit` checks already-rendered active `alignment/*.html` pages. `alignment pages inject-tts` copies the packaged `scripts/alignment-tts-kokoro.js` asset into the target repo when needed before adding the script tag. `alignment verify` is mainly for this source checkout and exits with a clear message when a consumer repo does not include the focused alignment Vitest files.
 
 ## Implementation Roadmap
 

@@ -391,6 +391,9 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} review page before synthesis`).toContain(
         "Build the `review` alignment page before synthesized research",
       );
+      expect(content, `${path} stage 1 previews stage 2`).toContain(
+        "`Stage 2 Preview / Expected Review Format` section that shows the future Stage 2 review shape before research starts",
+      );
       expect(content, `${path} scope yaml approval`).toContain(
         "Stop for final compiled response YAML approval of the research scope",
       );
@@ -431,6 +434,45 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("defines the Stage 2 research review template and Stage 1 preview gate", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} stage 2 template section`).toContain("**Stage 2 review-page template.**");
+      expect(content, `${path} stage 1 format preview`).toContain(
+        "Stage 1 scope-review pages must include a `Stage 2 Preview / Expected Review Format` section",
+      );
+      expect(content, `${path} preview format knobs`).toContain(
+        "preferred content formats, grouping, labels, visuals, and evidence density",
+      );
+      expect(content, `${path} approved scope status`).toContain("`Research Scope Approved` status block");
+      expect(content, `${path} executive findings confidence`).toContain(
+        "`Executive Findings` or a skill-specific top-findings section with confidence labels",
+      );
+      expect(content, `${path} evidence matrix shape`).toContain(
+        "`Evidence Matrix` mapping claim, evidence/source/path, inference, confidence, assumptions, and decision impact",
+      );
+      expect(content, `${path} working packet review shape`).toContain(
+        "`Working Packet Review` with the complete working-packet substance rendered as purpose-built HTML sections",
+      );
+      expect(content, `${path} alternatives section`).toContain(
+        "`Alternatives / Rejected or Lower-Confidence Findings`",
+      );
+      expect(content, `${path} source gaps section`).toContain("`Source Coverage & Gaps`");
+      expect(content, `${path} confidence register section`).toContain("`Assumptions / Confidence Register`");
+      expect(content, `${path} canonical artifacts section`).toContain(
+        "`Proposed Canonical Artifacts & File Changes`",
+      );
+      expect(content, `${path} format preferences gate`).toContain("required `User Format Preferences` gate");
+      expect(content, `${path} final artifact gate`).toContain(
+        "required `Final Artifact Approval` gate for Stage 3 readiness",
+      );
+      expect(content, `${path} raw markdown supplemental`).toContain(
+        "Raw Markdown packet text, search logs, or source notes may appear only as supplemental source views",
+      );
+    }
+  });
+
   it("requires research output pages to preserve evidence, uncertainty, and decision context", () => {
     for (const path of researchQualitySkills) {
       const content = conventionText(path);
@@ -463,11 +505,183 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("requires delegated framework subskills to render framework-specific alignment pages", () => {
+    const agents = ["claude", "codex"] as const;
+    const frameworkChecks = [
+      {
+        root: "packs/business-research",
+        family: "competitive-analysis/frameworks",
+        name: "feature-pricing-matrix",
+        title: "Feature-pricing matrix",
+        snippets: ["competitor-by-feature matrix", "tier equivalence"],
+      },
+      {
+        root: "packs/business-research",
+        family: "competitive-analysis/frameworks",
+        name: "porter-five-forces",
+        title: "Porter five forces",
+        snippets: ["five-force pressure map", "market boundary"],
+      },
+      {
+        root: "packs/business-research",
+        family: "competitive-analysis/frameworks",
+        name: "strategic-group-map",
+        title: "Strategic group map",
+        snippets: ["two-axis strategic map", "axis choices"],
+      },
+      {
+        root: "packs/business-research",
+        family: "competitive-analysis/frameworks",
+        name: "swot",
+        title: "SWOT",
+        snippets: ["four SWOT quadrants", "quadrant placement"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "five-rings",
+        title: "Five Rings",
+        snippets: ["ICP-candidate-by-ring matrix", "buying-committee sources"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "four-forces",
+        title: "Four Forces",
+        snippets: ["force map per ICP candidate", "trigger event"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "jtbd-needs",
+        title: "JTBD needs",
+        snippets: ["outcome scorecards", "underserved needs"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "pmf-engine",
+        title: "PMF Engine",
+        snippets: ["PMF signal table", "HXC realism"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "seven-dimensions",
+        title: "Seven dimensions",
+        snippets: ["seven-dimension candidate scorecard", "dimension scores"],
+      },
+      {
+        root: "packs/business-research",
+        family: "customer-discovery/frameworks",
+        name: "w3-hypothesis",
+        title: "W3 hypothesis",
+        snippets: ["WHO/WHAT/WHY triptych", "parent `customer-discovery` synthesis"],
+      },
+      {
+        root: "packs/business-research",
+        family: "positioning/frameworks",
+        name: "category-design",
+        title: "Category design",
+        snippets: ["category POV canvas", "category boundary"],
+      },
+      {
+        root: "packs/business-research",
+        family: "positioning/frameworks",
+        name: "jtbd-positioning",
+        title: "JTBD positioning",
+        snippets: ["job story map", "job wording"],
+      },
+      {
+        root: "packs/business-research",
+        family: "positioning/frameworks",
+        name: "moore-positioning",
+        title: "Moore positioning",
+        snippets: ["Geoffrey Moore positioning templates", "category label"],
+      },
+      {
+        root: "packs/business-research",
+        family: "positioning/frameworks",
+        name: "obviously-awesome",
+        title: "Obviously Awesome",
+        snippets: ["Obviously Awesome component matrix", "category choice"],
+      },
+      {
+        root: "packs/business-research",
+        family: "positioning/frameworks",
+        name: "strategic-canvas",
+        title: "Strategic canvas",
+        snippets: ["value curve or strategic canvas", "ERRC moves"],
+      },
+      {
+        root: "packs/customer-lifecycle",
+        family: "journey-map/frameworks",
+        name: "customer-journey-canvas",
+        title: "Customer journey canvas",
+        snippets: ["stage-by-touchpoint canvas", "journey stages"],
+      },
+      {
+        root: "packs/customer-lifecycle",
+        family: "journey-map/frameworks",
+        name: "experience-map",
+        title: "Experience map",
+        snippets: ["emotional arc", "channel transitions"],
+      },
+      {
+        root: "packs/customer-lifecycle",
+        family: "journey-map/frameworks",
+        name: "jtbd-timeline",
+        title: "JTBD timeline",
+        snippets: ["switching timeline", "force strengths"],
+      },
+      {
+        root: "packs/customer-lifecycle",
+        family: "journey-map/frameworks",
+        name: "service-blueprint",
+        title: "Service blueprint",
+        snippets: ["front-stage/backstage/support/evidence swimlanes", "backstage dependencies"],
+      },
+      {
+        root: "packs/customer-lifecycle",
+        family: "journey-map/frameworks",
+        name: "user-story-map",
+        title: "User story map",
+        snippets: ["activity-task-story backbone", "walking skeleton"],
+      },
+    ];
+
+    for (const check of frameworkChecks) {
+      for (const agent of agents) {
+        const path = `${check.root}/${agent}/${check.family}/${check.name}/SKILL.md`;
+        const content = bundled(path);
+        expect(content, `${path} specific translation`).toContain(`**${check.title} translation.**`);
+        expect(content, `${path} research focus`).toContain("Research focus:");
+        expect(content, `${path} review/documentation format`).toContain("Review/documentation format:");
+        expect(content, `${path} suggested feedback`).toContain("Suggested user feedback:");
+        for (const snippet of check.snippets) {
+          expect(content, `${path} ${snippet}`).toContain(snippet);
+        }
+        expect(content, `${path} no generic fallback`).not.toContain("fallback translation");
+        expect(content, `${path} visual tier`).toContain("**Visual tier rendering.**");
+      }
+    }
+  });
+
   it("preserves skill-specific gate language", () => {
     const uiInterviewConvention = conventionText("packs/product-design/codex/ui-interview/SKILL.md");
     expect(uiInterviewConvention).toContain("Render surfaced assumptions, the UI or content requirements manifest");
     expect(uiInterviewConvention).toContain("plain-language Interview Stage section");
+    expect(uiInterviewConvention).toContain("Interview provenance");
+    expect(uiInterviewConvention).toContain("`live-ui-interview`");
+    expect(uiInterviewConvention).toContain("`evidence-synthesis-with-explicit-skip`");
+    expect(uiInterviewConvention).toContain("`invalid-missing-ui-interview`");
+    expect(uiInterviewConvention).toContain("upstream approval alone is not interview completion");
+    expect(uiInterviewConvention).toContain("`evidence-synthesis review`");
     expect(uiInterviewConvention).toContain("do not use a single raw Markdown `<pre><code>` block as the primary review surface");
+    const userFlowConvention = conventionText("packs/product-design/codex/user-flow-map/SKILL.md");
+    expect(userFlowConvention).toContain("downstream handoff choices to UI requirements");
+    expect(userFlowConvention).toContain("stop/clear-context and continue-now options");
+    expect(userFlowConvention).toContain("continuing immediately still requires the next skill's own interaction gates");
     expect(conventionText("packs/product-design/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
     expect(conventionText("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
     expect(conventionText("packs/research-admin/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");

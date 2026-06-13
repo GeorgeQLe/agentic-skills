@@ -4,7 +4,7 @@ description: Plan evaluation, trial, pricing decision, objections, buyer roles, 
 type: analysis
 version: v0.5
 argument-hint: "[optional: app, segment, or conversion motion]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

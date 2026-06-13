@@ -8,7 +8,7 @@ const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const mirrors = [
   {
     path: resolve(TESTS_ROOT, "../packs/customer-lifecycle/codex/journey-map/SKILL.md"),
-    packInstall: "$pack install business-growth",
+    packInstall: "npx skillpacks install business-growth",
     hook: "$hook-model",
     positioning: "$positioning",
     userFlow: "$user-flow-map",
@@ -30,7 +30,7 @@ const mirrors = [
   },
   {
     path: resolve(TESTS_ROOT, "../packs/customer-lifecycle/claude/journey-map/SKILL.md"),
-    packInstall: "/pack install business-growth",
+    packInstall: "npx skillpacks install business-growth",
     hook: "/hook-model",
     positioning: "/positioning",
     userFlow: "/user-flow-map",

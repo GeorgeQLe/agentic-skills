@@ -4,7 +4,7 @@ description: Audit unlisted or pre-release YouTube videos before public launch f
 type: research
 version: v0.3
 argument-hint: "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

@@ -4,7 +4,7 @@ description: Audit one YouTube video in depth using public metadata, transcript/
 type: research
 version: v0.6
 argument-hint: "<video URL or ID> [--owner-analytics <path>] [--comments N] [--compare-channel <slug>]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

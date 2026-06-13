@@ -32,7 +32,8 @@ const root = process.argv[2];
 const verbose = process.argv[3] === "true";
 const packsRoot = path.join(root, "packs");
 
-const frontmatterKeys = ["name", "type", "version", "argument-hint"];
+const frontmatterKeys = ["name", "type", "context_intake", "visual_tier", "version", "argument-hint"];
+const optionalFrontmatterKeys = new Set(["context_intake", "visual_tier", "argument-hint"]);
 const sharedSections = [
   "Pack Availability Guard",
   "Report-First Approval Gate",
@@ -64,6 +65,7 @@ const approvedFrontmatterDrift = new Map([
   ["code-review/slim-audit::argument-hint", "Pre-existing platform argument-hint drift."],
   ["context-transfer/handoff::argument-hint", "Pre-existing platform argument-hint drift."],
   ["exec-loop/exec::argument-hint", "Codex supports --execute-approved approval packets."],
+  ["exec-loop/exec::version", "Pre-existing platform version drift outside this remediation."],
   ["guided-walkthrough/guide::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/affected::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/mono-plan::argument-hint", "Pre-existing platform argument-hint drift."],
@@ -71,8 +73,11 @@ const approvedFrontmatterDrift = new Map([
   ["poketowork-kanban/poketo-kanban::argument-hint", "Pre-existing platform argument-hint drift."],
   ["product-design/brainstorm::argument-hint", "Pre-existing platform argument-hint drift."],
   ["product-design/spec-interview::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["product-design/design-system::version", "Pre-existing platform version drift outside this remediation."],
   ["release-ops/deploy::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/release::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["session-analytics/analyze-sessions::version", "Pre-existing platform version drift outside this remediation."],
+  ["session-analytics/session-triage::version", "Pre-existing platform version drift outside this remediation."],
   ["skill-dev/create-agentic-skill::argument-hint", "Pre-existing platform argument-hint drift."],
   ["skill-dev/create-local-skill::argument-hint", "Pre-existing platform argument-hint drift."],
   ["teardown/decommission::argument-hint", "Pre-existing platform argument-hint drift."],
@@ -95,12 +100,18 @@ const approvedHeadingDrift = new Map([
   ["business-growth/landing-copy", "Pre-existing heading shape drift outside this remediation."],
   ["business-growth/monetization", "Pre-existing heading shape drift outside this remediation."],
   ["business-growth/pmf-assessment", "Pre-existing heading shape drift outside this remediation."],
+  ["business-growth/experiment", "Pre-existing heading shape drift outside this remediation."],
+  ["business-growth/metrics", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/burn-rate", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/mvp-gap", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/platform-strategy", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/product-line", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/reconcile-research", "Pre-existing heading shape drift outside this remediation."],
   ["business-ops/scale-audit", "Pre-existing heading shape drift outside this remediation."],
+  ["business-ops/retro", "Pre-existing heading shape drift outside this remediation."],
+  ["business-ops/risk-register", "Pre-existing heading shape drift outside this remediation."],
+  ["business-ops/runway-model", "Pre-existing heading shape drift outside this remediation."],
+  ["business-research/customer-discovery", "Pre-existing heading shape drift outside this remediation."],
   ["code-debug/debug", "Pre-existing heading shape drift outside this remediation."],
   ["code-debug/investigate", "Pre-existing heading shape drift outside this remediation."],
   ["code-debug/trace", "Pre-existing heading shape drift outside this remediation."],
@@ -110,7 +121,21 @@ const approvedHeadingDrift = new Map([
   ["code-review/regression-check", "Pre-existing heading shape drift outside this remediation."],
   ["code-review/slim-audit", "Pre-existing heading shape drift outside this remediation."],
   ["context-transfer/handoff", "Pre-existing heading shape drift outside this remediation."],
+  ["creator-foundation/content-programming", "Pre-existing heading shape drift outside this remediation."],
+  ["creator-foundation/creator-positioning", "Pre-existing heading shape drift outside this remediation."],
+  ["creator-foundation/product-led-media-map", "Pre-existing heading shape drift outside this remediation."],
   ["creator-foundation/research-directory-conventions", "Pre-existing heading shape drift outside this remediation."],
+  ["creator-foundation/series-spec", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/conversion-map", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/expansion-map", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/lifecycle-metrics", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/onboarding-map", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/retention-map", "Pre-existing heading shape drift outside this remediation."],
+  ["customer-lifecycle/transaction-map", "Pre-existing heading shape drift outside this remediation."],
+  ["devtool/devtool-adoption", "Pre-existing heading shape drift outside this remediation."],
+  ["devtool/devtool-monetization", "Pre-existing heading shape drift outside this remediation."],
+  ["devtool/devtool-positioning", "Pre-existing heading shape drift outside this remediation."],
+  ["devtool/devtool-user-map", "Pre-existing heading shape drift outside this remediation."],
   ["docs-health/hygiene", "Pre-existing heading shape drift outside this remediation."],
   ["exec-loop/exec", "Pre-existing heading shape drift outside this remediation."],
   ["exec-loop/ship", "Pre-existing heading shape drift outside this remediation."],
@@ -118,6 +143,13 @@ const approvedHeadingDrift = new Map([
   ["gitops/commit-and-push-by-feature", "Pre-existing heading shape drift outside this remediation."],
   ["guided-walkthrough/guide", "Pre-existing heading shape drift outside this remediation."],
   ["guided-walkthrough/uat-guide", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-audience", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-comparables", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-fantasy", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-genre-map", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-launch", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-prototype-test", "Pre-existing heading shape drift outside this remediation."],
+  ["game/game-store-page-test", "Pre-existing heading shape drift outside this remediation."],
   ["monorepo/affected", "Pre-existing heading shape drift outside this remediation."],
   ["monorepo/mono-plan", "Pre-existing heading shape drift outside this remediation."],
   ["monorepo/scaffold", "Pre-existing heading shape drift outside this remediation."],
@@ -132,6 +164,7 @@ const approvedHeadingDrift = new Map([
   ["research-admin/research-roadmap", "Pre-existing heading shape drift outside this remediation."],
   ["teardown/decommission", "Pre-existing heading shape drift outside this remediation."],
   ["youtube-ops/youtube-audit", "Pre-existing heading shape drift outside this remediation."],
+  ["youtube-ops/youtube-concept-research", "Pre-existing heading shape drift outside this remediation."],
   ["youtube-ops/youtube-peer-benchmark", "Pre-existing heading shape drift outside this remediation."],
 ]);
 
@@ -201,6 +234,8 @@ function extractSharedSection(text, heading) {
 function normalizePlatformSyntax(text) {
   return text
     .replace(/\r\n/g, "\n")
+    .replace(/After install, tell Claude users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
+    .replace(/After install, tell Codex users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
     .replace(/\$pack install/g, "/pack install")
     .replace(/\$([a-z][a-z0-9-]+)/g, "/$1")
     .replace(/\bCodex\b/g, "Agent")
@@ -256,7 +291,7 @@ for (const pack of packs) {
       const claudeValue = claudeFrontmatter.get(key) || "";
       const codexValue = codexFrontmatter.get(key) || "";
       if (claudeValue === codexValue) {
-        if (key === "argument-hint" || claudeValue !== "") continue;
+        if (optionalFrontmatterKeys.has(key) || claudeValue !== "") continue;
       }
 
       const approvedKey = `${pair}::${key}`;

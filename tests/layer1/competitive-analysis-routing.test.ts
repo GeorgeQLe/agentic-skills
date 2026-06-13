@@ -9,11 +9,11 @@ describe("competitive-analysis routing", () => {
   it("declares competitive-analysis as a framework orchestrator with route-free framework subskills", () => {
     const parentChecks = [
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/codex/competitive-analysis/SKILL.md"),
         commandPrefix: "$",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/claude/competitive-analysis/SKILL.md"),
         commandPrefix: "/",
       },
     ];
@@ -46,7 +46,7 @@ describe("competitive-analysis routing", () => {
       for (const slug of frameworkSlugs) {
         const path = resolve(
           TESTS_ROOT,
-          `../packs/business-discovery/${runner}/competitive-analysis/frameworks/${slug}/SKILL.md`,
+          `../packs/business-research/${runner}/competitive-analysis/frameworks/${slug}/SKILL.md`,
         );
         const content = readFileSync(path, "utf8");
 
@@ -66,13 +66,13 @@ describe("competitive-analysis routing", () => {
   it("routes missing journey-map through customer-lifecycle pack install when unavailable", () => {
     const checks = [
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
-        install: "$pack install customer-lifecycle",
+        path: resolve(TESTS_ROOT, "../packs/business-research/codex/competitive-analysis/SKILL.md"),
+        install: "npx skillpacks install customer-lifecycle",
         journey: "recommend `$journey-map`",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
-        install: "/pack install customer-lifecycle",
+        path: resolve(TESTS_ROOT, "../packs/business-research/claude/competitive-analysis/SKILL.md"),
+        install: "npx skillpacks install customer-lifecycle",
         journey: "recommend `/journey-map`",
       },
     ];
@@ -97,12 +97,12 @@ describe("competitive-analysis routing", () => {
   it("keeps standard routing journey-first before value-prop-canvas", () => {
     const checks = [
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/codex/competitive-analysis/SKILL.md"),
         first: "$journey-map",
         second: "$value-prop-canvas",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/claude/competitive-analysis/SKILL.md"),
         first: "/journey-map",
         second: "/value-prop-canvas",
       },
@@ -112,7 +112,7 @@ describe("competitive-analysis routing", () => {
         second: "value-prop-canvas",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/PACK.md"),
         first: "journey-map",
         second: "value-prop-canvas",
       },
@@ -131,13 +131,13 @@ describe("competitive-analysis routing", () => {
   it("keeps AFPS route order journey-map before positioning before user-flow-map", () => {
     const checks = [
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/codex/competitive-analysis/SKILL.md"),
         first: "$journey-map",
         second: "$positioning",
         third: "$user-flow-map",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/claude/competitive-analysis/SKILL.md"),
         first: "/journey-map",
         second: "/positioning",
         third: "/user-flow-map",
@@ -149,7 +149,7 @@ describe("competitive-analysis routing", () => {
         third: "user-flow-map",
       },
       {
-        path: resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
+        path: resolve(TESTS_ROOT, "../packs/business-research/PACK.md"),
         first: "journey-map",
         second: "positioning",
         third: "user-flow-map",
@@ -178,12 +178,12 @@ describe("competitive-analysis routing", () => {
 
   it("keeps value-prop-canvas and lean-canvas optional detours instead of default route blockers", () => {
     const checks = [
-      resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
+      resolve(TESTS_ROOT, "../packs/business-research/PACK.md"),
       resolve(TESTS_ROOT, "../docs/skill-next-step-contracts.md"),
-      resolve(TESTS_ROOT, "../packs/business-discovery/codex/value-prop-canvas/SKILL.md"),
-      resolve(TESTS_ROOT, "../packs/business-discovery/codex/lean-canvas/SKILL.md"),
-      resolve(TESTS_ROOT, "../packs/business-discovery/claude/value-prop-canvas/SKILL.md"),
-      resolve(TESTS_ROOT, "../packs/business-discovery/claude/lean-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-research/codex/value-prop-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-research/codex/lean-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-research/claude/value-prop-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-research/claude/lean-canvas/SKILL.md"),
     ];
 
     for (const path of checks) {

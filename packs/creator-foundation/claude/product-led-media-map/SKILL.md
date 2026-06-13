@@ -4,7 +4,7 @@ description: Map a product or company into founder-led YouTube media themes, pro
 type: research
 version: v0.5
 argument-hint: "[product or channel slug]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

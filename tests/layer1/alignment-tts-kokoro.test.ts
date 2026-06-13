@@ -23,7 +23,8 @@ describe("alignment-tts-kokoro script", () => {
 
   it("pipelines synthesis with a short first chunk and small follow-up chunks", () => {
     expect(source).toContain("FIRST_CHUNK_LEN");
-    expect(source).toContain("chunkText(text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN)");
+    expect(source).toContain("function chunkTextWithOffsets(text, maxLen, firstLen)");
+    expect(source).toContain("chunkTextWithOffsets(sec.text, MAX_CHUNK_LEN, FIRST_CHUNK_LEN)");
     expect(source).toContain("PREFETCH_AHEAD");
     expect(source).toContain("startGen(");
   });

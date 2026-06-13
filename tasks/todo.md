@@ -9,7 +9,7 @@ Unblock `$ship-end` by treating generated local skill install roots as local art
 - [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
 - [x] Confirm only two generated-root files are tracked under `.codex/skills` and `.claude/skills`.
 - [x] Remove `.codex/skills/skill-interview/SKILL.md` and `.claude/skills/skill-interview/SKILL.md` from the Git index while keeping local files on disk.
-- [x] Narrow `.gitignore` from broad `.codex` to generated-root `.codex/skills/` patterns while preserving `.claude/skills/` generated-root patterns.
+- [x] Narrow `.gitignore` from broad `.codex` to `.codex/skills/` while preserving `.claude/skills/`.
 - [x] Record the hygiene boundary in task docs and a ship manifest.
 - [x] Commit and push the hygiene-only boundary, then rerun `$ship-end` for the broader dirty tree.
 
@@ -21,6 +21,202 @@ Unblock `$ship-end` by treating generated local skill install roots as local art
 - Manual task status: 1/5 complete; 4 deferred production setup tasks remain unchecked in `tasks/manual-todo.md`.
 - Advisory task status: no `tasks/record-todo.md`; 2 unchecked recurring advisory tasks remain in `tasks/recurring-todo.md`.
 - Manifest: `tasks/ship-manifest-2026-06-12-generated-skill-root-hygiene.md`.
+
+## Current Ship-End - Validation Remediation And Shipping
+
+### Current Checklist
+
+- [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+- [x] Capture the follow-up visible `$ship-end` invocation under `prompts/ship-end/skill-prompt-20260612-140848-ship-end.md`.
+- [x] Inspect the dirty worktree, generated-root boundary, manual tasks, and advisory task files.
+- [x] Fix stale layer1 failures surfaced during ship-end validation.
+- [x] Fix the next-step routing audit so it recognizes existing numbered/routing idioms without hiding real missing contracts.
+- [x] Archive, version-bump, changelog, and patch the remaining explicit next-step routing gaps in `debug` and `game-roadmap`.
+- [x] Refresh Skills Showcase generated data/proof assets.
+- [x] Run the full ship-end validation gate.
+- [x] Record review notes, history, and a blocked ship manifest.
+- [x] Resolve the tracked generated-root blocker through the hygiene commit.
+- [x] Rerun the full ship-end validation gate after the hygiene commit.
+- [x] Commit and push the validated broad shipping boundary.
+
+### Review Notes
+
+- Validation remediation completed during ship-end:
+  - Updated stale `business-discovery` references to `business-research` in layer1 tests/docs/showcase catalog surfaces touched by validation.
+  - Updated stale version/count/generated-data expectations in layer1 coverage.
+  - Fixed Bash 3.2 portability in the mirrored `skill-inventory` scripts.
+  - Tightened `scripts/skill-mirror-parity-audit.sh` approved drift handling for current active mirror differences.
+  - Tightened `scripts/skill-next-step-routing.sh` to ignore archives, avoid generic shipping-contract false positives, and recognize numbered `Next Steps`, `Intent-Aware Routing`, `Next step:`, and exact-next-command idioms.
+  - Added explicit next-step routing to mirrored `debug` and `game-roadmap` skills with archive/version/changelog updates.
+- Full validation passed:
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (second pass fresh)
+  - `pnpm --dir tests exec vitest run --project layer1` (58 files / 2229 tests)
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/audit-alignment-pages.mjs`
+  - `node --check scripts/upgrade-alignment-page.mjs`
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase test` (13 files / 136 tests)
+  - `git diff --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-deps.sh --broken`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+- Manual task status: 1/5 complete; 4 deferred production setup tasks remain unchecked in `tasks/manual-todo.md`.
+- Advisory task status: no `tasks/record-todo.md`; 2 unchecked recurring advisory tasks remain in `tasks/recurring-todo.md`.
+- Generated-root blocker update: the repository hygiene task above removes the two tracked generated install files from the Git index and narrows the ignore rule, so `.codex/skills/**` and `.claude/skills/**` can return to local generated-artifact status.
+- Follow-up `$ship-end` validation after the hygiene commit passed:
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (first pass regenerated assets; final standalone rerun fresh)
+  - `pnpm --dir tests exec vitest run --project layer1` (58 files / 2229 tests)
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/audit-alignment-pages.mjs`
+  - `node --check scripts/upgrade-alignment-page.mjs`
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase test` (13 files / 136 tests)
+  - `pnpm --dir apps/skills-showcase build`
+  - `git diff --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-deps.sh --broken`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+- Commit boundary is now safe: generated local skill roots are untracked/ignored, and `git ls-files .codex/skills .claude/skills` returns no tracked files.
+
+## Current Implementation - Stage 2 Alignment Page Template
+
+### Current Checklist
+
+- [x] Inspect existing dirty worktree and relevant convention/tests.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Patch the canonical alignment-page convention with Stage 2 template and Stage 1 preview guidance.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles through `scripts/upgrade-alignment-page.mjs`.
+- [x] Update focused layer1 tests.
+- [x] Run requested verification commands.
+- [ ] Record review notes and commit/push only if the intended boundary can be isolated from unrelated dirty work.
+
+### Review Notes
+
+- Worktree note: this session starts from a large dirty tree with pre-existing edits across generated bundles, generator code, tests, docs, task files, and prompt history. Treat them as user-owned and avoid reverting or staging unrelated changes.
+- Scope note: generated `ALIGNMENT-PAGE.md` files must be updated only by `node scripts/upgrade-alignment-page.mjs`.
+- Implementation note: `docs/alignment-page-convention.md` now requires Stage 1 scope-review pages to include `Stage 2 Preview / Expected Review Format` before heavy research, and defines the required Stage 2 review-page template: approved-scope status, executive/top findings with confidence, evidence matrix, structured working-packet review, alternatives, source gaps, assumptions/confidence, proposed canonical artifacts/file changes, user format preferences, and final artifact approval.
+- Regeneration note: ran `node scripts/upgrade-alignment-page.mjs`; it wrote 294 generated bundles and reported `Generated bundles: 294 ownable, exact`.
+- Test update: `tests/layer1/alignment-gates.test.ts` now asserts generated bundles contain the Stage 1 preview expectation and Stage 2 template sections/gates.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/research-approval-gate.test.ts` (2 files / 315 tests)
+  - `git diff --check -- docs/alignment-page-convention.md scripts/upgrade-alignment-page.mjs tests/layer1/alignment-gates.test.ts tests/layer1/research-approval-gate.test.ts`
+- Shipping note: commit/push is blocked in this checkout because this task's intended changes are interleaved with pre-existing user-owned edits in the same canonical/test/task files and generated `ALIGNMENT-PAGE.md` files. A normal file-level commit would absorb unrelated work.
+
+## Current Implementation - Framework-Specific Alignment Guidance
+
+### Goal
+
+Populate delegated framework skill alignment-page instructions with framework-specific review guidance through the generator and regenerate bundled pages.
+
+### Current Checklist
+
+- [x] Read the active `exec` skill instructions and relevant project lessons.
+- [x] Capture the visible user invocation under `prompts/exec/`.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect current generator/test state and existing delegated-framework guidance.
+- [x] Patch `scripts/upgrade-alignment-page.mjs` with per-framework guidance and fallback behavior.
+- [x] Update focused layer1 tests for framework-specific guidance.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Run generator drift check, targeted `rg` checks, focused tests, and package/build verification if needed.
+- [x] Record review notes, history, and ship manifest.
+- [ ] Commit/push intended changes only after the pre-existing dirty worktree is separated enough to prove a clean boundary.
+
+### Review Notes
+
+- Worktree note: this session starts from a large dirty tree with prior task-doc, generator, test, generated bundle, skill metadata, archive, and prompt-history changes. Treat all pre-existing changes as user-owned and avoid reverting or staging unrelated work.
+- Scope note: source changes should go through `scripts/upgrade-alignment-page.mjs`; generated `ALIGNMENT-PAGE.md` files must only be refreshed by the generator.
+- Implementation note: added exact delegated-framework translations for competitive-analysis, customer-discovery, positioning, and customer-lifecycle journey-map framework subskills. Each known framework now receives explicit `Research focus:`, `Review/documentation format:`, and `Suggested user feedback:` guidance; parent-category fallback translations remain for unknown framework subskills.
+- Regeneration note: ran `node scripts/upgrade-alignment-page.mjs`; generated bundles remained exact afterward with `Generated bundles: 294 ownable, exact`.
+- Validation passed:
+  - `node --check scripts/upgrade-alignment-page.mjs`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - targeted `rg` scan across framework bundle directories for required guidance and absence of fallback text on known frameworks
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/upgrade-alignment-page-bespoke.test.ts layer1/positioning-alignment-contract.test.ts` (49 tests passed)
+  - scoped `git diff --check -- scripts/upgrade-alignment-page.mjs tests/layer1/alignment-gates.test.ts tests/layer1/positioning-alignment-contract.test.ts tasks/roadmap.md tasks/todo.md tasks/history.md tasks/ship-manifest-2026-06-12-framework-specific-alignment-guidance.md prompts/exec/skill-prompt-20260612-130708-framework-specific-alignment-guidance.md packs/business-research packs/customer-lifecycle`
+- Full-tree whitespace note: `git diff --check` currently fails on unrelated archive `SKILL.md` files with blank-line-at-EOF diagnostics outside this framework-guidance boundary. Those files are part of the pre-existing dirty tree and were left untouched.
+- Package/build note: skipped `npm run skillpacks:build` and package verification because package output is not the intended shipping boundary here, and the checkout already contains broad unrelated skill metadata, generated data, and archive changes. Running package build from this state would risk baking unrelated work into package artifacts.
+- Shipping note: commit/push remains blocked. The worktree has large pre-existing unrelated changes, including interleaved edits in `scripts/upgrade-alignment-page.mjs`, generated alignment bundles, and layer1 tests. A direct commit from this checkout would absorb unrelated user-owned work.
+
+---
+
+## Current Implementation - Context Intake Metadata And Glossary Bootstrap
+
+### Goal
+
+Replace active `interview_depth` metadata with `context_intake`, update all consumers, and bootstrap glossary terminology for the new convention.
+
+### Current Checklist
+
+- [x] Read the `repo-glossary` skill instructions and relevant lessons.
+- [x] Capture the visible user invocation under `prompts/repo-glossary/`.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Convert active frontmatter from `interview_depth` to `context_intake`.
+- [x] Update docs, generator, catalog parser, mirror parity audit, and focused tests.
+- [x] Regenerate generated alignment/showcase artifacts.
+- [x] Refresh glossary working packet, review page, and canonical glossary decision state.
+- [x] Run focused verification and record results.
+- [ ] Stage, commit, and push intended changes only after the dirty worktree can be safely isolated.
+
+### Review Notes
+
+- Worktree note: this session starts from a large dirty tree containing prior optional-alignment, UI-interview, delegated-alignment, generated-data, and task-doc edits. These are treated as pre-existing work and must not be reverted.
+- Metadata migration: active non-archived skill frontmatter now uses `context_intake` with `deep`, `scoped`, and `artifact_only`; no active `SKILL.md` files retain `interview_depth`.
+- Docs/tooling updates: refreshed `docs/interview-convention.md`, `docs/skill-anatomy.md`, `docs/alignment-page-convention.md`, generator context-intake guidance, catalog parsing, showcase types/chips/search, and mirror parity keys. Fixed the parity audit so optional `context_intake`/`visual_tier` keys do not fail when both mirrors omit them.
+- Glossary state: refreshed `research/_working/preliminary-repo-glossary-research.md` and `alignment/repo-glossary-skill-conventions.html` with starter terms for Frontmatter, Skill metadata, `type`, `context_intake`, `visual_tier`, Artifact-driven, Scoped intake, and Deep interview. `research/glossary.md` remains unwritten because the repo-glossary contract requires final compiled YAML before canonical confirmed glossary rows.
+- Generated artifacts: regenerated alignment bundles and Skills Showcase data; `contextIntake` and `visualTier` are present in both generated Skills Showcase data copies.
+- Validation passed:
+  - `rg -n "interview_depth" docs scripts apps tests global packs .codex/skills --glob '!**/archive/**'` returns only the intentional migration note and regression test.
+  - `rg -n "interrogation" docs scripts apps global packs .codex/skills --glob '!**/archive/**'` returns no active public contract hits.
+  - `rg -n "^interview_depth:" global packs .codex/skills --glob '!**/archive/**' --glob 'SKILL.md'` returns no hits.
+  - `node scripts/audit-alignment-pages.mjs` (50 active pages exact).
+  - `node scripts/upgrade-alignment-page.mjs --check` (294 ownable bundles exact).
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/frontmatter.test.ts layer1/audit-alignment-pages.test.ts` (1079 tests passed).
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/afps-alignment-preview-gates.test.ts layer1/codex-interview-cadence.test.ts layer1/upgrade-alignment-page-bespoke.test.ts` (65 tests passed).
+  - `pnpm --dir apps/skills-showcase typecheck`.
+  - `pnpm --dir apps/skills-showcase test src/showcase/catalog.test.tsx src/showcase/smoke.test.tsx` (30 tests passed).
+  - `git diff --check -- . ':(exclude)**/archive/**'`.
+- Validation caveats:
+  - Full-tree `git diff --check` fails on pre-existing archived `SKILL.md` blank-line-at-EOF diagnostics outside this task boundary.
+  - `bash scripts/skill-mirror-parity-audit.sh` no longer reports `context_intake` or `visual_tier` false positives, but still fails on 56 pre-existing heading/shared-section/version drifts.
+  - `pnpm --dir apps/skills-showcase validate:data` regenerates expected assets, then fails because those generated files are dirty relative to `HEAD`; it is commit-state sensitive and cannot pass in this dirty checkout before a safe commit boundary exists.
+- Shipping note: commit/push remains blocked. The worktree already contains broad pre-existing staged and unstaged changes, including interleaved generator, generated bundle, generated data, task-doc, archive, and prompt-history work. A direct commit would absorb unrelated user-owned changes.
+
+---
+
+## Current Investigation - Delegated Skill Alignment Page Depth
+
+### Goal
+
+Fix delegated/framework skill alignment-page guidance if the investigation confirms it is thinner than non-delegated skill guidance.
+
+### Current Checklist
+
+- [x] Read the active `investigate` skill instructions.
+- [x] Capture the visible user invocation under `prompts/investigate/`.
+- [x] Record the scoped investigation plan.
+- [x] Compare delegated/framework contracts against non-delegated examples.
+- [x] Inspect git history for the divergence/root cause.
+- [x] Patch the smallest owner contract and tests.
+- [x] Run focused verification.
+- [x] Record review notes and ship isolated intended changes if possible.
+
+### Review Notes
+
+- Claim validation: confirmed. `w3-hypothesis` and adjacent delegated framework skills had only generic generated research-page guidance, while stronger non-delegated examples such as `competitive-analysis` and `idea-scope-brief` had skill-specific alignment-page translation requirements.
+- Root cause: `scripts/upgrade-alignment-page.mjs` keyed skill-specific alignment guidance mostly by top-level skill name. Framework subskills with `invocation: sub-skill` fell through to generic research translation; `w3-hypothesis` also lacked visual-tier treatment.
+- Fix applied: added parent-aware framework subskill translation in the generator, added a dedicated W3 review contract, treated core framework subskills as visual-tier pages, regenerated affected bundled `ALIGNMENT-PAGE.md` files, and added regression coverage in `tests/layer1/alignment-gates.test.ts`.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` (29 tests passed)
+  - `git diff --cached --check`
+- Shipping note: commit/push is intentionally blocked for now because the worktree already contains a large unrelated dirty set, including prior optional-alignment and UI-interview changes in the same generator/test files. A broad commit would absorb unrelated work.
+
+---
 
 ## Current Implementation - Optional Alignment Pages For Operational Skills
 
@@ -52,9 +248,72 @@ Make alignment pages optional for the selected operational/planning/status skill
   - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/afps-alignment-preview-gates.test.ts layer1/codex-interview-cadence.test.ts` (48 tests passed)
   - `pnpm --dir tests exec vitest run --project layer1 layer1/upgrade-alignment-page-bespoke.test.ts` (17 tests passed)
   - `pnpm --dir tests bench:coverage`
-  - `git diff --cached --check`
+  - `git diff --check`
 - Requested root `npm test -- tests/layer1/alignment-gates.test.ts tests/layer1/afps-alignment-preview-gates.test.ts tests/layer1/codex-interview-cadence.test.ts` could not run because the root package has no `test` script; the equivalent layer1 Vitest command passed.
 - Broader `pnpm --dir tests exec vitest run --project layer1` was attempted after the focused suite passed and failed with 31 failures across 18 files from stale/unrelated layer1 expectations, including old `business-discovery` pack references, stale provision-config version expectations, showcase fixture drift, unrelated routing/manifest tests, and the now-stale `skill-inventory` v0.0 expectation after this required optional-policy bump.
+
+---
+
+## Current Investigation - Interview Skill Type Convention
+
+### Goal
+
+Audit whether interview/interrogation skills need a dedicated `type` convention and recommend the naming/behavior contract.
+
+### Current Checklist
+
+- [x] Read the active `investigate` skill instructions.
+- [x] Capture the visible user invocation under `prompts/investigate/`.
+- [x] Record the scoped investigation plan.
+- [x] Inventory active skill `type:` values and interview-related skills.
+- [x] Inspect recent `ui-interview`/interview history for regression evidence.
+- [x] Check metadata/tests/scripts that depend on `type`.
+- [x] Produce recommendation report with migration plan and verification notes.
+
+### Review Notes
+
+- Recommendation: do not create `type: interview` or rename the convention to `interrogation`. Keep `type` as the broad activity/output category and promote `interview_depth: full | light | none` as the first-class interaction convention.
+- Evidence: active non-archive skills use 11 existing `type:` values, while `interview_depth` already spans 83 `none`, 77 `light`, and 41 `full` declarations. Full-interview skills cross `planning`, `research`, and `analysis`, so an interview `type` would erase useful category information.
+- Regression shape: confirmed as a `ui-interview --requirements-only`/handoff contract issue, not primarily a missing taxonomy. Current in-progress edits already add provenance guards and explicit `user-flow-map` handoff choices.
+- Follow-up fix should update `docs/interview-convention.md`, `docs/skill-anatomy.md`, `scripts/upgrade-alignment-page.mjs`, `scripts/catalog/index.mjs`, and focused tests so `interview_depth` is parsed, displayed, validated, and protected from drift.
+
+---
+
+## Current Implementation - UI Interview Skipping And Context Routing
+
+### Goal
+
+Fix the `ui-interview --requirements-only` skip path and downstream handoff wording so upstream approval cannot masquerade as a completed UI interview.
+
+### Current Checklist
+
+- [x] Capture visible invocation prompt history for `targeted-skill-builder` and `ui-interview`.
+- [x] Read selected skill instructions and relevant lessons.
+- [x] Inspect current dirty worktree, pack mirrors, generator text, and focused tests.
+- [x] Record scoped roadmap/todo plan.
+- [x] Patch `ui-interview` requirements-only provenance and evidence-synthesis rules.
+- [x] Patch `user-flow-map` handoff choices.
+- [x] Update generator `ui-interview` gate text.
+- [x] Update focused layer1 tests.
+- [x] Regenerate generated alignment bundles.
+- [x] Run verification and targeted regression searches.
+- [x] Record review notes.
+- [ ] Commit and push intended changes if staging can isolate this task from existing unrelated dirty work.
+
+### Review Notes
+
+- Extended the in-progress `ui-interview` `v0.18` release with a strict requirements-only handoff guard: upstream `$user-flow-map` / `/user-flow-map` approval can authorize the route and provide evidence, but does not count as `ui-interview` interview completion.
+- Required `ui-interview --requirements-only` to confirm its own UI Assumptions Manifest and Content Requirements Manifest before building a review page, except when the current invocation explicitly asks for evidence-only synthesis.
+- Added the evidence-only label and provenance contract: `evidence-synthesis review`, `live-ui-interview`, `evidence-synthesis-with-explicit-skip`, and `invalid-missing-ui-interview`.
+- Bumped `user-flow-map` mirrors to `v0.4`, archived `v0.3`, and replaced the single next-command recommendation with stop/clear-context versus continue-now handoff choices.
+- Updated generated alignment gate text for `ui-interview` provenance and `user-flow-map` downstream handoff choices.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs`
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/codex-interview-cadence.test.ts` (40 tests passed)
+  - `git diff --check`
+  - targeted `rg` checks for upstream approval not counting as interview completion, stop/clear-context and continue-now routing language, `Interview provenance`, and `evidence-synthesis`
+- Commit/push left pending because the worktree already contains a large pre-existing packet-rendering remediation touching hundreds of unrelated files, including generated alignment bundles. A broad commit from this state would absorb unrelated work; a partial commit needs that pre-existing remediation separated first.
 
 ---
 
@@ -4131,6 +4390,15 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Audit active research skills for convention compliance and generated-file drift.
 - [x] Run available alignment-page validation scripts/tests.
 - [x] Record review notes and findings.
+
+## Active — skillpacks alignment commands
+
+- [x] Inspect the package CLI, package staging boundary, alignment scripts, and package tests.
+- [x] Add the `skillpacks alignment` command namespace and root-aware TTS injection.
+- [x] Package alignment scripts/assets/convention docs and document npm usage.
+- [x] Add focused CLI and package-boundary tests.
+- [ ] Run focused alignment Vitest tests and package verification.
+- [ ] Record review notes and ship intended changes.
 
 ### Review Notes — Research Skills Alignment Convention Audit
 

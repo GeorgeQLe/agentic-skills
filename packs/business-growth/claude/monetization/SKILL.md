@@ -4,7 +4,7 @@ description: Research-driven monetization strategy — revenue models, pricing a
 type: research
 version: v0.12
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

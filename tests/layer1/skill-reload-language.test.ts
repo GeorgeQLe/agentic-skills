@@ -47,13 +47,10 @@ describe("skill availability reload language", () => {
       const content = read(surface.path);
 
       expect(content, `${surface.path} provision version`).toContain(
-        "<!-- provision-agentic-config v0.5 -->",
+        "<!-- provision-agentic-config v0.8 -->",
       );
-      expect(content, `${surface.path} should route exact skill installs`).toContain(
-        `${surface.command} install <skill>`,
-      );
-      expect(content, `${surface.path} should route full pack installs`).toContain(
-        `${surface.command} install <pack>`,
+      expect(content, `${surface.path} should route skill or pack installs`).toContain(
+        "npx skillpacks install <pack-or-skill>",
       );
       expect(content, `${surface.path} should suggest skills browse`).toContain(surface.skills);
       for (const expected of reloadExpectations) {
@@ -65,7 +62,7 @@ describe("skill availability reload language", () => {
       "global/claude/provision-agentic-config/SKILL.md",
       "global/codex/provision-agentic-config/SKILL.md",
     ]) {
-      expect(read(path), `${path} skill version`).toContain("version: v0.5");
+      expect(read(path), `${path} skill version`).toContain("version: v0.8");
     }
   });
 
@@ -82,7 +79,8 @@ describe("skill availability reload language", () => {
 
     const collect = (absolutePath: string) => {
       const relativePath = absolutePath.slice(REPO_ROOT.length + 1);
-      if (relativePath.split("/").includes("archive")) return;
+      const pathSegments = relativePath.split("/");
+      if (pathSegments.includes("archive") || pathSegments.includes("node_modules")) return;
 
       const stats = statSync(absolutePath);
       if (stats.isDirectory()) {

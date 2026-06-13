@@ -3,6 +3,8 @@
 ## v0.18 - 2026-06-12
 
 - Replaced the remaining packet-dump wording with the shared structured HTML review UI contract for complete working-packet substance.
+- Required requirements-only runs to complete their own UI Assumptions Manifest and Content Requirements Manifest confirmations, with an explicit `evidence-synthesis review` exception only when the current user invocation asks to skip live questions.
+- Added Interview provenance values for review pages: `live-ui-interview`, `evidence-synthesis-with-explicit-skip`, and `invalid-missing-ui-interview`.
 
 ## v0.17 - 2026-06-12
 

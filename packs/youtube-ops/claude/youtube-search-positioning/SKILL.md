@@ -4,7 +4,7 @@ description: Find YouTube search opportunities by comparing channel topics again
 type: research
 version: v0.6
 argument-hint: "<channel slug or handle> [--keywords <kw1,kw2,...>] [--count N]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

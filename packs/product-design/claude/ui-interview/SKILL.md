@@ -4,7 +4,7 @@ description: Interview page by page to define a complete UI specification, inclu
 type: planning
 version: v0.18
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
-interview_depth: full
+context_intake: deep
 visual_tier: prototype
 ---
 
@@ -18,7 +18,9 @@ Use `/user-flow-map` before this skill when the product or feature has no credib
 
 Use `/ux-variations` after this skill when the user wants multiple experience concepts or interface variants to compare before locking the final direction.
 
-When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode feeds directly into `/ux-variations --layout-mode` to explore multiple concrete visual approaches for the same content contract.
+When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode produces the content contract a later `/ux-variations --layout-mode` run can use to explore multiple concrete visual approaches.
+
+Requirements-only handoff guard: upstream `/user-flow-map` approval may authorize running this skill next and may provide source evidence, but it does not count as `ui-interview` interview completion. `ui-interview --requirements-only` must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest, before building the alignment page.
 
 ## Process
 
@@ -67,6 +69,8 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 4b. **Requirements gate (requirements-only mode)**
    - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
+   - Requirements-only mode has two required confirmation gates before any alignment page build: the UI Assumptions Manifest from step 3, then the Content Requirements Manifest in this step. Upstream approval, including approved `/user-flow-map` YAML or an approved flow alignment page, may populate assumptions and source evidence but cannot replace either confirmation.
+   - Evidence-synthesis exception: only skip live confirmation questions when the current visible user invocation explicitly asks to skip live interview questions, synthesize from existing evidence only, or avoid asking the user. In that case, label the output as an `evidence-synthesis review`, set Interview provenance to `evidence-synthesis-with-explicit-skip`, do not call it a completed interview, and route unresolved decisions to a resumed `/ui-interview` instead of implying interview completion.
    - For each page, confirm:
      - Data fields and entities (with cardinality: one, many, nested, polymorphic)
      - User actions (create, edit, delete, filter, sort, export, navigate, bulk-select, reorder)
@@ -109,6 +113,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 7. **Build pre-approval alignment page**
    - Before writing any canonical `specs/ui-[topic].md`, `specs/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
    - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the complete working-packet substance as structured HTML review UI: the manifest, page-by-page decisions, coverage checkpoint, proposed canonical file destinations, and approval gates.
+   - Include **Interview provenance** in the page and working packet with exactly one of these values: `live-ui-interview` when this run completed the required manifest confirmations with the user; `evidence-synthesis-with-explicit-skip` when the current invocation explicitly asked to skip live questions or synthesize from evidence; `invalid-missing-ui-interview` when neither condition is true. `invalid-missing-ui-interview` pages must route unresolved decisions to a resumed `/ui-interview` and must not imply interview completion or readiness for canonical writes.
    - At the top of the page, include a plain-language **Interview stage** explainer naming the invocation, whether the run is requirements-only or full UI mode, what user/agent interview work has already happened or was inferred from approved upstream evidence, and what the reviewer should do next. If requirements were synthesized primarily from approved specs or code evidence rather than live Q&A, say so directly and route missing answers through section feedback or a resumed interview instead of implying the interview is complete.
    - Render the working packet as structured HTML, not as a raw Markdown preview: headings become sections, lists stay readable lists, and every Markdown table becomes an HTML `<table>` inside a `.table-wrap` container with a concise `data-tts-narrative`. A raw Markdown `<pre><code>` dump may appear only as a supplemental source view after the rendered packet, never as the primary review surface.
    - Attempt to open the page in the browser and point the user at the repo-relative path.

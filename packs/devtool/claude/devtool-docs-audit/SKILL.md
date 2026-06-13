@@ -3,7 +3,7 @@ name: devtool-docs-audit
 description: Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths
 type: review
 version: v0.1
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # Devtool Docs Audit

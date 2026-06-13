@@ -4,7 +4,7 @@ description: Plan account expansion, upgrades, seat growth, referrals, advocacy,
 type: analysis
 version: v0.5
 argument-hint: "[optional: app, segment, or expansion motion]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

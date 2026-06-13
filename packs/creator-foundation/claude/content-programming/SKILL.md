@@ -4,7 +4,7 @@ description: Design an evidence-backed channel programming plan across pillars, 
 type: research
 version: v0.5
 argument-hint: "[channel slug or positioning path]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

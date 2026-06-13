@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-12
+
+- Added explicit next-step routing from roadmap updates to phase planning, execution, missing game validation, or no-follow-up completion.
+
 ## v0.2 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

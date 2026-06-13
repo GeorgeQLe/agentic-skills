@@ -2,9 +2,9 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.3
+version: v0.4
 argument-hint: "[optional: product, flow, feature, route, or goal]"
-interview_depth: full
+context_intake: deep
 visual_tier: prototype
 ---
 
@@ -122,7 +122,7 @@ The user-flow spec must include:
 - Handoffs and external/manual dependencies.
 - Low-fidelity wireframe notes per screen.
 - Open questions, risks, and explicit non-goals.
-- Downstream handoff to `$ui-interview --requirements-only [topic]`.
+- Downstream handoff choices for `$ui-interview --requirements-only [topic]`.
 
 The interview log must include:
 
@@ -131,9 +131,12 @@ The interview log must include:
 - Questions asked, options presented, recommendations, and user responses.
 - Flow Coverage Checkpoint and remaining gaps.
 
-After approved files are written, recommend:
+After approved files are written, present this handoff choice instead of auto-running or auto-invoking the next skill:
 
-> Recommended next command: `$ui-interview --requirements-only [topic]`
+1. Stop here so the user can clear context and run `$ui-interview --requirements-only [topic]` in a fresh session.
+2. Continue immediately in this session with `$ui-interview --requirements-only [topic]`.
+
+If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the route and provides source evidence; it does not count as `ui-interview` interview completion or replace the UI Assumptions Manifest and Content Requirements Manifest confirmations.
 
 ## Alignment Page
 
@@ -153,6 +156,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not produce high-fidelity mockups, component styling, color palettes, design systems, production architecture, database schemas, or implementation plans.
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
 - Do not route directly to `$ux-variations` from an approved flow map; route to `$ui-interview --requirements-only` first.
+- Do not auto-run or auto-invoke downstream skills after approval. Present the stop/clear-context versus continue-now choice, and preserve the next skill's required gates either way.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 
 ## Default Shipping Contract

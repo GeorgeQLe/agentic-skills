@@ -4,7 +4,7 @@ description: Interview the user to define the characteristics of a skill they wa
 type: planning
 version: v0.2
 argument-hint: "[skill-name-or-topic]"
-interview_depth: full
+context_intake: deep
 ---
 
 # Skill Interview

@@ -57,14 +57,14 @@ describe("skills showcase pack coverage", () => {
       expect(generatedSkillPaths).toContain(skillPath);
     });
 
-    const businessDiscovery = data.packs.find((pack) => pack.name === "business-discovery");
+    const businessDiscovery = data.packs.find((pack) => pack.name === "business-research");
     const businessDiscoverySkillCount = activePackSkillPaths.filter((skillPath) =>
-      skillPath.startsWith("packs/business-discovery/"),
+      skillPath.startsWith("packs/business-research/"),
     ).length;
 
     expect(businessDiscovery?.skillCount).toBe(businessDiscoverySkillCount);
     expect(generatedSkillPaths).toContain(
-      "packs/business-discovery/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
+      "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
     );
   });
 });

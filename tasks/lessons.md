@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — Delegated framework alignment pages need framework-specific review surfaces
+
+- Delegated/framework skills such as `w3-hypothesis` can satisfy generic research alignment-page rules while still producing thin, low-signal pages compared with richer parent or non-delegated skills.
+- Future framework subskills must render the actual framework lens as the review surface: per-candidate or per-competitor matrices, scores/verdicts, disconfirming evidence, confidence by dimension, source gaps, and explicit implications for parent synthesis.
+- Generator-level fallbacks should inspect `invocation: sub-skill` and `parent:` metadata so new delegated skills do not silently fall through to generic evidence-summary guidance.
+
 ## 2026-06-12 — No-context-loss means rendered review UI, not packet mirroring
 
 - Repo-wide staged research guidance used "full preliminary/working packet" language, which made agents preserve content by dumping dense Markdown packets into alignment pages instead of translating the same content into readable review UI.

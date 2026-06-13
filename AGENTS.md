@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.7 -->
+<!-- provision-agentic-config v0.8 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default

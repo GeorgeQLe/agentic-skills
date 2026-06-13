@@ -4,7 +4,7 @@ type: research
 version: v0.9
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

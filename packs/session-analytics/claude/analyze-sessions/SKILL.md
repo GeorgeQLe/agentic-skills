@@ -4,7 +4,7 @@ description: Analyze Claude Code and Codex session history for cross-session tre
 type: analysis
 version: v0.4
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

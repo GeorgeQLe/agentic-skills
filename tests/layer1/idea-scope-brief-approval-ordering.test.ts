@@ -29,6 +29,10 @@ function outputGuard(content: string) {
   return content.slice(start, end);
 }
 
+function sharedGateBlock(content: string) {
+  return gateBlock(content).replace(" and Deck Fit Handoff", "");
+}
+
 describe("idea-scope-brief approval ordering", () => {
   it("requires the alignment preview before canonical writes", () => {
     for (const path of skillPaths) {
@@ -85,7 +89,7 @@ describe("idea-scope-brief approval ordering", () => {
   it("keeps the inserted approval gate mirrored across Claude and Codex contracts", () => {
     const [claude, codex] = skillPaths.map(read);
 
-    expect(gateBlock(claude)).toEqual(gateBlock(codex));
+    expect(sharedGateBlock(claude)).toEqual(sharedGateBlock(codex));
     expect(outputGuard(claude)).toEqual(outputGuard(codex));
   });
 });

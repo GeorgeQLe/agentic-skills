@@ -3,7 +3,7 @@ name: ord-align
 description: Validate whether an OSS tool is worth building — namespace, existing solutions, effort estimate
 type: analysis
 version: v0.0
-interview_depth: light
+context_intake: scoped
 ---
 
 # ORD Align

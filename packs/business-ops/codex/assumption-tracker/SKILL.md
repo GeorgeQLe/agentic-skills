@@ -4,7 +4,7 @@ description: Extract and risk-rank assumptions from research docs — living reg
 type: analysis
 version: v0.2
 argument-hint: "[optional: focus area e.g. \"pricing\", \"ICP\", \"channel\"]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

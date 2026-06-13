@@ -4,7 +4,7 @@ description: Interview a feature idea with evidence-backed alignment, then decid
 type: planning
 version: v0.7
 argument-hint: "[feature idea or tasks/ideas.md entry]"
-interview_depth: full
+context_intake: deep
 ---
 
 ## Pack Availability Guard
@@ -15,7 +15,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill. This skill is also the primary entry point for post-ship feature work, where scope determines the re-entry depth into the pipeline.
 
-This is narrower than `/spec-interview`: it performs the same assumption surfacing and user interrogation needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `/investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
+This is narrower than `/spec-interview`: it performs the same assumption surfacing and deep interview needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `/investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
 
 Use `/feature-interview` especially after a production spec already exists and the user wants to add, adjust, or triage a smaller feature. In post-spec use, treat existing specs as the baseline contract: prefer a scoped add-on spec or a tightly bounded update to an existing spec over re-running `/spec-interview` for the whole product. Only route to `/spec-interview` when the existing spec is absent, obsolete, or too incomplete to support the new feature decision.
 

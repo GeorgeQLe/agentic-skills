@@ -8,7 +8,7 @@ const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const mirrors = [
   {
     path: resolve(TESTS_ROOT, "../global/codex/codebase-status/SKILL.md"),
-    install: "$pack install customer-lifecycle",
+    install: "npx skillpacks install customer-lifecycle",
     journey: "$journey-map",
     exec: "$exec",
     ship: "$ship",
@@ -16,7 +16,7 @@ const mirrors = [
   },
   {
     path: resolve(TESTS_ROOT, "../global/claude/codebase-status/SKILL.md"),
-    install: "/pack install customer-lifecycle",
+    install: "npx skillpacks install customer-lifecycle",
     journey: "/journey-map",
     exec: "/exec",
     ship: "/ship",

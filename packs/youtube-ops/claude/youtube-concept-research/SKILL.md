@@ -4,7 +4,7 @@ description: Research a proposed YouTube video concept against successful direct
 type: research
 version: v0.6
 argument-hint: "\"<video concept>\" [--channel <slug>] [--comparables N] [--angle search|browse|packaging|retention|format|all]"
-interview_depth: light
+context_intake: scoped
 ---
 
 ## Pack Availability Guard

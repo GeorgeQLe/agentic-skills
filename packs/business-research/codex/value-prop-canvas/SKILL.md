@@ -4,7 +4,7 @@ description: Strategyzer-style jobs/pains/gains to features/relievers/creators f
 type: research
 version: v0.11
 argument-hint: "[optional: specific job or segment to focus on]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

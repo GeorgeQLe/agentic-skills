@@ -3,7 +3,7 @@ name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
 version: v0.5
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

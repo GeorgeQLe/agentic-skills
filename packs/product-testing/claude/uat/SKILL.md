@@ -4,7 +4,7 @@ description: Create user acceptance test journeys from a target user's perspecti
 type: analysis
 version: v0.11
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

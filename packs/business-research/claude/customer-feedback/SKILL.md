@@ -4,7 +4,7 @@ description: Ingest and synthesize customer feedback — categorize findings aga
 type: research
 version: v0.9
 argument-hint: "[file path, pasted text, or empty to be prompted]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

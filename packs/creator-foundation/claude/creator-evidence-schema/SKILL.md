@@ -4,7 +4,7 @@ description: Define normalized creator evidence records, raw evidence paths, con
 type: research
 version: v0.7
 argument-hint: "[creator or project slug]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 ## Pack Availability Guard

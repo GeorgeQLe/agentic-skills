@@ -16,8 +16,8 @@ const ideaMirrors = [
 ] as const;
 
 const discoveryMirrors = [
-  "packs/business-discovery/claude/customer-discovery/SKILL.md",
-  "packs/business-discovery/codex/customer-discovery/SKILL.md",
+  "packs/business-research/claude/customer-discovery/SKILL.md",
+  "packs/business-research/codex/customer-discovery/SKILL.md",
 ] as const;
 
 function read(path: string) {

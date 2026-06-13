@@ -250,23 +250,35 @@ TEMPLATE
 
 declare -a REPO_PATHS=()
 declare -a REPO_LABELS=()
-declare -A SEEN_REPOS=()
+declare -a SEEN_REPOS=()
+
+repo_seen() {
+  local candidate="$1"
+  local existing
+  [[ ${#SEEN_REPOS[@]} -gt 0 ]] || return 1
+  for existing in "${SEEN_REPOS[@]}"; do
+    [[ "$existing" == "$candidate" ]] && return 0
+  done
+  return 1
+}
 
 add_repo_path() {
   local raw="$1"
   local base="$2"
   local resolved
   resolved="$(canonical_dir_or_path "$(resolve_path_from_base "$raw" "$base")")"
-  if [[ -z "${SEEN_REPOS[$resolved]:-}" ]]; then
-    SEEN_REPOS["$resolved"]=1
+  if ! repo_seen "$resolved"; then
+    SEEN_REPOS+=("$resolved")
     REPO_PATHS+=("$resolved")
     REPO_LABELS+=("$(basename "$resolved")")
   fi
 }
 
-for repo in "${repo_args[@]}"; do
-  add_repo_path "$repo" "$PWD"
-done
+if [[ ${#repo_args[@]} -gt 0 ]]; then
+  for repo in "${repo_args[@]}"; do
+    add_repo_path "$repo" "$PWD"
+  done
+fi
 
 if [[ -n "$manifest_path" ]]; then
   manifest_base="$(dirname "$manifest_path")"
@@ -286,13 +298,38 @@ manifest_display="${manifest_label:-explicit --repo only}"
 
 declare -a INSTALL_ROWS=()
 declare -a REPO_ROWS=()
-declare -A STATUS_TOTALS=()
-for status in "${STATUS_ORDER[@]}"; do
-  STATUS_TOTALS["$status"]=0
-done
+STATUS_TOTAL_OK=0
+STATUS_TOTAL_STALE=0
+STATUS_TOTAL_UNKNOWN=0
+STATUS_TOTAL_MISSING_SOURCE=0
+STATUS_TOTAL_PINNED=0
+STATUS_TOTAL_NOT_MANAGED=0
 TOTAL_REPOS=0
 TOTAL_INSTALLS=0
 TOTAL_AGENT_ROOTS=0
+
+status_total() {
+  case "$1" in
+    ok) printf '%s\n' "$STATUS_TOTAL_OK" ;;
+    stale) printf '%s\n' "$STATUS_TOTAL_STALE" ;;
+    unknown) printf '%s\n' "$STATUS_TOTAL_UNKNOWN" ;;
+    missing-source) printf '%s\n' "$STATUS_TOTAL_MISSING_SOURCE" ;;
+    pinned) printf '%s\n' "$STATUS_TOTAL_PINNED" ;;
+    not-managed) printf '%s\n' "$STATUS_TOTAL_NOT_MANAGED" ;;
+    *) printf '0\n' ;;
+  esac
+}
+
+increment_status_total() {
+  case "$1" in
+    ok) STATUS_TOTAL_OK=$((STATUS_TOTAL_OK + 1)) ;;
+    stale) STATUS_TOTAL_STALE=$((STATUS_TOTAL_STALE + 1)) ;;
+    unknown) STATUS_TOTAL_UNKNOWN=$((STATUS_TOTAL_UNKNOWN + 1)) ;;
+    missing-source) STATUS_TOTAL_MISSING_SOURCE=$((STATUS_TOTAL_MISSING_SOURCE + 1)) ;;
+    pinned) STATUS_TOTAL_PINNED=$((STATUS_TOTAL_PINNED + 1)) ;;
+    not-managed) STATUS_TOTAL_NOT_MANAGED=$((STATUS_TOTAL_NOT_MANAGED + 1)) ;;
+  esac
+}
 
 status_hint() {
   case "$1" in
@@ -321,11 +358,13 @@ scan_repo() {
   local exists="yes"
   local claude_count=0
   local codex_count=0
-  local -A repo_status=()
+  local repo_ok=0
+  local repo_stale=0
+  local repo_unknown=0
+  local repo_missing_source=0
+  local repo_pinned=0
+  local repo_not_managed=0
   local status
-  for status in "${STATUS_ORDER[@]}"; do
-    repo_status["$status"]=0
-  done
 
   TOTAL_REPOS=$((TOTAL_REPOS + 1))
 
@@ -350,8 +389,15 @@ scan_repo() {
         INSTALL_ROWS+=("${label}"$'\t'"${repo_path}"$'\t'"${agent}"$'\t'"${skill}"$'\t'"${status}"$'\t'"${recorded}"$'\t'"${current}"$'\t'"${source}"$'\t'"${hint}")
         count=$((count + 1))
         TOTAL_INSTALLS=$((TOTAL_INSTALLS + 1))
-        repo_status["$status"]=$((repo_status["$status"] + 1))
-        STATUS_TOTALS["$status"]=$((STATUS_TOTALS["$status"] + 1))
+        case "$status" in
+          ok) repo_ok=$((repo_ok + 1)) ;;
+          stale) repo_stale=$((repo_stale + 1)) ;;
+          unknown) repo_unknown=$((repo_unknown + 1)) ;;
+          missing-source) repo_missing_source=$((repo_missing_source + 1)) ;;
+          pinned) repo_pinned=$((repo_pinned + 1)) ;;
+          not-managed) repo_not_managed=$((repo_not_managed + 1)) ;;
+        esac
+        increment_status_total "$status"
       done < <(find "$root" -mindepth 1 -maxdepth 1 \( -type d -o -type l \) -print | LC_ALL=C sort)
     fi
     if [[ "$agent" == "claude" ]]; then
@@ -361,7 +407,7 @@ scan_repo() {
     fi
   done
 
-  REPO_ROWS+=("${label}"$'\t'"${repo_path}"$'\t'"${exists}"$'\t'"${claude_count}"$'\t'"${codex_count}"$'\t'"${repo_status[ok]}"$'\t'"${repo_status[stale]}"$'\t'"${repo_status[unknown]}"$'\t'"${repo_status[missing-source]}"$'\t'"${repo_status[pinned]}"$'\t'"${repo_status[not-managed]}")
+  REPO_ROWS+=("${label}"$'\t'"${repo_path}"$'\t'"${exists}"$'\t'"${claude_count}"$'\t'"${codex_count}"$'\t'"${repo_ok}"$'\t'"${repo_stale}"$'\t'"${repo_unknown}"$'\t'"${repo_missing_source}"$'\t'"${repo_pinned}"$'\t'"${repo_not_managed}")
 }
 
 for i in "${!REPO_PATHS[@]}"; do
@@ -404,12 +450,12 @@ Report-only notice: this scan did not run refresh, delete, cleanup, install, or 
 | Repositories scanned | ${TOTAL_REPOS} |
 | Agent skill roots found | ${TOTAL_AGENT_ROOTS} |
 | Skill installs inspected | ${TOTAL_INSTALLS} |
-| ok | ${STATUS_TOTALS[ok]} |
-| stale | ${STATUS_TOTALS[stale]} |
-| unknown | ${STATUS_TOTALS[unknown]} |
-| missing-source | ${STATUS_TOTALS[missing-source]} |
-| pinned | ${STATUS_TOTALS[pinned]} |
-| not-managed | ${STATUS_TOTALS[not-managed]} |
+| ok | $(status_total ok) |
+| stale | $(status_total stale) |
+| unknown | $(status_total unknown) |
+| missing-source | $(status_total missing-source) |
+| pinned | $(status_total pinned) |
+| not-managed | $(status_total not-managed) |
 
 ## Repositories
 
@@ -475,7 +521,7 @@ render_json() {
     idx=$((idx + 1))
     comma=","
     [[ $idx -eq ${#STATUS_ORDER[@]} ]] && comma=""
-    printf '    "%s": %s%s\n' "$status" "${STATUS_TOTALS[$status]}" "$comma"
+    printf '    "%s": %s%s\n' "$status" "$(status_total "$status")" "$comma"
   done
   printf '  },\n'
   printf '  "repositories": [\n'

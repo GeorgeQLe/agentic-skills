@@ -4,7 +4,7 @@ description: Generate structured monthly stakeholder update from current researc
 type: analysis
 version: v0.4
 argument-hint: "[optional: month e.g. \"March 2026\"]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

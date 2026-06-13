@@ -4,7 +4,7 @@ description: Compare a channel against peer channels using evidence-backed portf
 type: research
 version: v0.6
 argument-hint: "<primary channel> <peer channel...> [--count N]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

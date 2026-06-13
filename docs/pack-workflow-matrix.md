@@ -16,17 +16,17 @@ compatibility alias = old broad name kept for existing commands
 
 | Workflow | Start with | Then add | Leads into | Command |
 | --- | --- | --- | --- | --- |
-| Business/product discovery | `business-discovery` | `customer-lifecycle` after ICP and competitive analysis so journey evidence can precede positioning | `business-growth`, then `business-ops` | `npx skillpacks install business-discovery` |
-| Customer lifecycle planning | `customer-lifecycle` | `business-discovery` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `npx skillpacks install customer-lifecycle` |
-| Business GTM/growth | `business-growth` | `business-discovery` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `npx skillpacks install business-growth` |
-| Business operations | `business-ops` | `business-discovery` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `npx skillpacks install business-ops` |
+| Business/product discovery | `business-research` | `customer-lifecycle` after ICP and competitive analysis so journey evidence can precede positioning | `business-growth`, then `business-ops` | `npx skillpacks install business-research` |
+| Customer lifecycle planning | `customer-lifecycle` | `business-research` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `npx skillpacks install customer-lifecycle` |
+| Business GTM/growth | `business-growth` | `business-research` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `npx skillpacks install business-growth` |
+| Business operations | `business-ops` | `business-research` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `npx skillpacks install business-ops` |
 | Full business app compatibility | `business-app` | expands to all business packs | discovery -> lifecycle -> growth -> ops | `npx skillpacks install business-app` |
 | Creator strategy | `creator-foundation` | `youtube-ops` for YouTube-specific channel/video work | `remotion` for production planning and build handoff | `npx skillpacks install creator-foundation` |
 | YouTube operations | `youtube-ops` | `creator-foundation` if positioning, programming, series, or cross-platform evidence is missing | `remotion` when work becomes scripting or production planning | `npx skillpacks install youtube-ops` |
 | Remotion production | `remotion` | `creator-foundation` for strategy; `youtube-ops` for YouTube evidence/reference analysis | script -> build spec/scaffold | `npx skillpacks install remotion` |
 | Full creator-to-video path | `creator-foundation` | `youtube-ops`, `remotion` | research -> YouTube ops -> Remotion production | `npx skillpacks install creator-foundation youtube-ops remotion` |
 | Creator media compatibility | `creator-media` | expands to `creator-foundation` + `youtube-ops` | add `remotion` separately for production work | `npx skillpacks install creator-media` |
-| Viral app rapid distribution | `vard` | none — self-contained rapid pipeline | graduates to `business-discovery` on traction | `npx skillpacks install vard` |
+| Viral app rapid distribution | `vard` | none — self-contained rapid pipeline | graduates to `business-research` on traction | `npx skillpacks install vard` |
 | OSS rapid distribution | `ord` | none — self-contained rapid pipeline | graduates to `devtool` on traction | `npx skillpacks install ord` |
 | Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | global spec/roadmap/exec/ship flow | `npx skillpacks install devtool` |
 | Game AFPS product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> genre -> comparables -> loop -> prototype -> playtest -> store page -> launch -> roadmap | `npx skillpacks install game` |
@@ -41,7 +41,7 @@ compatibility alias = old broad name kept for existing commands
 Business app:
 
 ```text
-business-discovery -> customer-lifecycle -> business-growth -> business-ops
+business-research -> customer-lifecycle -> business-growth -> business-ops
 ```
 
 Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.

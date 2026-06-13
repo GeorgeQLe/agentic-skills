@@ -4,7 +4,7 @@ description: Evaluate the codebase and suggest ideas to explore with /feature-in
 type: planning
 version: v0.3
 argument-hint: "[optional: focus area]"
-interview_depth: light
+context_intake: scoped
 visual_tier: prototype
 ---
 

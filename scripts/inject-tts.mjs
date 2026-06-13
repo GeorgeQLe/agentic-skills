@@ -3,7 +3,7 @@
  * Injects the alignment TTS module tag into existing alignment HTML pages.
  * Idempotent — skips pages that already have the Kokoro TTS module.
  *
- * Usage: node scripts/inject-tts.mjs [--dry-run] [--force] [alignment/specific-page.html]
+ * Usage: node scripts/inject-tts.mjs [--root <path>] [--dry-run] [--force] [alignment/specific-page.html]
  *        Default: processes all alignment/*.html except index.html
  *
  * --force: replaces any existing TTS code (old inline IIFE or prior module tag)
@@ -13,12 +13,27 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+const argv = process.argv.slice(2);
+let rootOverride = null;
+const passthroughArgs = [];
+for (let i = 0; i < argv.length; i += 1) {
+  if (argv[i] === '--root') {
+    rootOverride = argv[i + 1];
+    i += 1;
+    if (!rootOverride) {
+      console.error('--root requires a path argument');
+      process.exit(1);
+    }
+    continue;
+  }
+  passthroughArgs.push(argv[i]);
+}
+const ROOT = rootOverride ? path.resolve(rootOverride) : path.resolve(__dirname, '..');
 const ALIGNMENT_DIR = path.join(ROOT, 'alignment');
 
-const dryRun = process.argv.includes('--dry-run');
-const force = process.argv.includes('--force');
-const specificFile = process.argv.find(a => a.endsWith('.html'));
+const dryRun = passthroughArgs.includes('--dry-run');
+const force = passthroughArgs.includes('--force');
+const specificFile = passthroughArgs.find(a => a.endsWith('.html'));
 
 const KOKORO_TAG = '<script src="../scripts/alignment-tts-kokoro.js"></script>';
 const scriptBlock = `\n${KOKORO_TAG}`;
@@ -78,7 +93,7 @@ function inject(filePath) {
 
 let files;
 if (specificFile) {
-  const full = path.resolve(specificFile);
+  const full = path.resolve(ROOT, specificFile);
   files = [full];
 } else {
   files = readdirSync(ALIGNMENT_DIR)

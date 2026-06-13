@@ -4,7 +4,7 @@ description: Define a creator or founder-media channel's audience promise, categ
 type: research
 version: v0.7
 argument-hint: "[channel slug or audit path]"
-interview_depth: light
+context_intake: scoped
 ---
 
 ## Pack Availability Guard

@@ -4,7 +4,7 @@ description: Orchestrator — detect market vs product mode, recommend positioni
 type: research
 version: v0.16
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 invocation: orchestrator
 ---

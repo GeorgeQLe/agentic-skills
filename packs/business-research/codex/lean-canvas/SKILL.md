@@ -4,7 +4,7 @@ description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
 version: v0.11
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

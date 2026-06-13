@@ -4,7 +4,7 @@ description: Manage the portfolio of product paths — review, activate, archive
 type: ops
 version: v0.6
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

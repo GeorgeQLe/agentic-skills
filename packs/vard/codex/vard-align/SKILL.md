@@ -3,7 +3,7 @@ name: vard-align
 description: Quick feasibility and novelty check — go/no-go decision for this week's build
 type: analysis
 version: v0.0
-interview_depth: light
+context_intake: scoped
 ---
 
 # VARD Align

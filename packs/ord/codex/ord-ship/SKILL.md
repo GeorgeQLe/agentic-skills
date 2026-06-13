@@ -3,7 +3,7 @@ name: ord-ship
 description: Publish to npm, create README, set up repo, and log the shipment
 type: ops
 version: v0.3
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # ORD Ship

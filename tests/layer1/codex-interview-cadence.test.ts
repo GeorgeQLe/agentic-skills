@@ -19,7 +19,7 @@ const oneQuestionCodexSkills = [
   "packs/product-design/codex/consolidate-variations/SKILL.md",
   "packs/agent-work-admin/codex/roadmap/SKILL.md",
   "packs/product-design/codex/design-system/SKILL.md",
-  "packs/business-discovery/codex/enterprise-icp/SKILL.md",
+  "packs/business-research/codex/enterprise-icp/SKILL.md",
   "packs/business-growth/codex/gtm/SKILL.md",
   "packs/business-growth/codex/metrics/SKILL.md",
 ];
@@ -34,6 +34,21 @@ const groupedQuestionPhrases = [
   /1-3 questions per turn/i,
   /1–3 questions per turn/i,
   /request_user_input` for 1-3 focused questions/i,
+];
+
+const productDesignMirrors = [
+  {
+    agent: "codex",
+    uiInterview: "packs/product-design/codex/ui-interview/SKILL.md",
+    userFlowMap: "packs/product-design/codex/user-flow-map/SKILL.md",
+    uiCommand: "$ui-interview",
+  },
+  {
+    agent: "claude",
+    uiInterview: "packs/product-design/claude/ui-interview/SKILL.md",
+    userFlowMap: "packs/product-design/claude/user-flow-map/SKILL.md",
+    uiCommand: "/ui-interview",
+  },
 ];
 
 describe("Codex interview cadence", () => {
@@ -58,4 +73,41 @@ describe("Codex interview cadence", () => {
       }
     });
   }
+
+  it("requires ui-interview requirements-only runs to prove interview provenance", () => {
+    for (const mirror of productDesignMirrors) {
+      const raw = readFileSync(resolve(ROOT_DIR, mirror.uiInterview), "utf8");
+
+      expect(raw, `${mirror.agent} upstream approval`).toContain(
+        "does not count as `ui-interview` interview completion",
+      );
+      expect(raw, `${mirror.agent} manifest gates`).toContain(
+        "must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest",
+      );
+      expect(raw, `${mirror.agent} evidence exception`).toContain("Evidence-synthesis exception");
+      expect(raw, `${mirror.agent} evidence label`).toContain("`evidence-synthesis review`");
+      expect(raw, `${mirror.agent} live provenance`).toContain("`live-ui-interview`");
+      expect(raw, `${mirror.agent} evidence provenance`).toContain("`evidence-synthesis-with-explicit-skip`");
+      expect(raw, `${mirror.agent} invalid provenance`).toContain("`invalid-missing-ui-interview`");
+      expect(raw, `${mirror.agent} resume route`).toContain(`resumed \`${mirror.uiCommand}\``);
+    }
+  });
+
+  it("requires user-flow-map to present explicit handoff choices before ui-interview", () => {
+    for (const mirror of productDesignMirrors) {
+      const raw = readFileSync(resolve(ROOT_DIR, mirror.userFlowMap), "utf8");
+
+      expect(raw, `${mirror.agent} no auto handoff`).toContain(
+        "instead of auto-running or auto-invoking the next skill",
+      );
+      expect(raw, `${mirror.agent} stop option`).toContain("Stop here so the user can clear context");
+      expect(raw, `${mirror.agent} continue option`).toContain("Continue immediately in this session");
+      expect(raw, `${mirror.agent} next gates`).toContain(
+        "the next skill must still execute its own required interaction gates",
+      );
+      expect(raw, `${mirror.agent} no borrowed interview`).toContain(
+        "does not count as `ui-interview` interview completion",
+      );
+    }
+  });
 });

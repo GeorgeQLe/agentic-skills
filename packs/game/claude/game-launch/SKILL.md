@@ -3,7 +3,7 @@ name: game-launch
 description: Use only for video game projects; plan Steam launch, festivals, creator outreach, demo timing, community, and wishlist targets
 type: research
 version: v0.5
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

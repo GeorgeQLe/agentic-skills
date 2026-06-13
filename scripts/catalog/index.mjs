@@ -128,6 +128,8 @@ export function parseSkill(repoRoot, relativePath) {
     title: titleize(name),
     description: fields.description || null,
     type: fields.type || null,
+    contextIntake: fields.context_intake || null,
+    visualTier: fields.visual_tier || null,
     version: fields.version || null,
     argumentHint: fields["argument-hint"] || null,
     platform,

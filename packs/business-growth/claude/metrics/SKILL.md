@@ -4,7 +4,7 @@ description: Define success metrics framework — activation, engagement, retent
 type: analysis
 version: v0.5
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

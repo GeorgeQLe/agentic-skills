@@ -4,7 +4,7 @@ description: Financial runway & unit economics tracker — burn rate, revenue tr
 type: analysis
 version: v0.4
 argument-hint: "[file path to financials, pasted data, or empty to be prompted]"
-interview_depth: light
+context_intake: scoped
 visual_tier: visual
 ---
 

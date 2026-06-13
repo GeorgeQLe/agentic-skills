@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-12 - Ship-end validation remediation shipped
+
+- Reran `$ship-end` after the generated skill-root hygiene commit and confirmed `.codex/skills/**` and `.claude/skills/**` have no tracked files.
+- Revalidated the broad ship-end remediation boundary: generated Skills Showcase data freshness, full layer1 Vitest, alignment bundle check, active alignment-page audit, generator syntax check, Skills Showcase typecheck/tests/build, full `git diff --check`, archive strict audit, skill version audit, skill dependency audit, next-step routing audit, and mirror parity audit all passed.
+- Updated the ship manifest from blocked to ready-to-ship with the final validation evidence, generated-root proof, and deploy follow-up.
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260612-161257-ship-end.md`.
+- Manifest: `tasks/ship-manifest-2026-06-12-ship-end-validation-remediation.md`.
+
 ## 2026-06-12 - Generated skill-root hygiene unblock
 
 - Removed the only tracked generated local skill install files from the Git index while keeping the local files in place: `.codex/skills/skill-interview/SKILL.md` and `.claude/skills/skill-interview/SKILL.md`.
@@ -7,6 +15,29 @@
 - Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260612-160019-generated-root-shipping-blocker.md`.
 - This resolves the generated-root blocker from the prior `$ship-end` attempt; the broader dirty validation-remediation tree remains a separate shipping boundary.
 - Manifest: `tasks/ship-manifest-2026-06-12-generated-skill-root-hygiene.md`.
+
+## 2026-06-12 - Ship-end validation remediation and blocked shipping
+
+- Ran `$ship-end` wrap-up and completed validation remediation needed to turn the current dirty repo state green.
+- Follow-up `$ship-end` attempt captured `prompts/ship-end/skill-prompt-20260612-140848-ship-end.md` and reconfirmed the same no-ship blocker remains active.
+- Fixed stale validation fallout around the `business-discovery` to `business-research` rename, generated-data expectations, skill inventory Bash portability, mirror parity allowlists, and next-step routing audit semantics.
+- Added explicit next-step routing to mirrored `debug` and `game-roadmap` skill contracts; archived prior versions, bumped active versions, and updated changelogs.
+- Refreshed Skills Showcase generated data/proof assets after active skill and validation metadata changes.
+- Validation passed: Skills Showcase generated-data freshness, full layer1 Vitest (58 files / 2229 tests), alignment bundle check, active alignment-page audit, generator syntax check, Skills Showcase typecheck/tests (13 files / 136 tests), full `git diff --check`, archive strict audit, skill version audit, skill dependency audit, next-step routing audit, and mirror parity audit.
+- Commit/push was blocked by the ship-end generated-root rule: `.codex/skills/skill-interview/SKILL.md` is a tracked modified generated-root file, and the broader worktree still contains hundreds of interleaved pre-existing edits. No commit, push, or deploy was performed.
+- Manifest: `tasks/ship-manifest-2026-06-12-ship-end-validation-remediation.md`.
+
+## 2026-06-12 - Framework-specific alignment guidance
+
+- Implemented the inherited framework-alignment plan through `scripts/upgrade-alignment-page.mjs`, adding exact delegated-framework review-page translations for competitive-analysis, customer-discovery, positioning, and customer-lifecycle journey-map framework subskills.
+- Generated framework bundles now include explicit research focus, review/documentation format, and suggested user feedback guidance, while unknown framework subskills keep parent-category fallback guidance.
+- Added regression coverage requiring all 20 targeted framework subskills to receive specific translation text, framework-specific snippets, no generic fallback wording, and visual-tier guidance.
+- Updated stale positioning alignment contract test paths from `business-discovery` to `business-research` and allowed the current generated YAML-contract heading shape.
+- Validation passed: generator syntax check, generator regeneration/check with `Generated bundles: 294 ownable, exact`, targeted framework `rg` scan, focused layer1 Vitest suite (49 tests), and scoped `git diff --check` over the intended framework-guidance boundary.
+- Full-tree `git diff --check` is currently blocked by unrelated archive `SKILL.md` blank-line-at-EOF diagnostics in the pre-existing dirty tree.
+- Package build and package verification were skipped because package output is not part of the intended source-only boundary and the checkout already contains broad unrelated dirty generated/metadata/archive work.
+- Commit/push was blocked because the pre-existing dirty worktree interleaves unrelated changes in shared generator, test, and generated bundle files.
+- Manifest: `tasks/ship-manifest-2026-06-12-framework-specific-alignment-guidance.md`.
 
 ## 2026-06-12 — Skillpacks `init --global` alias
 

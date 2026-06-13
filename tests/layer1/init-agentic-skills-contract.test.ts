@@ -25,7 +25,7 @@ describe("init-agentic-skills freshness contract", () => {
     for (const contract of contracts) {
       const content = read(contract.skillPath);
 
-      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.6");
+      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.8");
       expect(content, `${contract.skillPath} should describe managed provenance`).toContain(
         ".agentic-skills-managed",
       );

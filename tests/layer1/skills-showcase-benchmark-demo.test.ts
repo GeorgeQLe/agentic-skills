@@ -76,12 +76,12 @@ describe("skills showcase benchmark demos", () => {
 
   it("publishes benchmark-backed prompt and output excerpts when raw run artifacts contain them", () => {
     const data = loadShowcaseData();
-    const skillsSkill = data.skills.find((skill) => skill.name === "skills" && skill.platform === "codex");
+    const packSkill = data.skills.find((skill) => skill.name === "pack" && skill.platform === "codex");
 
-    expect(skillsSkill?.benchmarkEvidence?.demo?.prompt).toContain("You have the skills skill installed");
-    expect(skillsSkill?.benchmarkEvidence?.demo?.output).toContain("skills-index.md");
-    expect(skillsSkill?.benchmarkEvidence?.demo?.runPath).toMatch(
-      /^tests\/benchmarks\/runs\/skills-codex-.+\/run-\d{3}\.json$/,
+    expect(packSkill?.benchmarkEvidence?.demo?.prompt).toContain("You have the pack skill installed");
+    expect(packSkill?.benchmarkEvidence?.demo?.output).toContain("pack-plan.md");
+    expect(packSkill?.benchmarkEvidence?.demo?.runPath).toMatch(
+      /^tests\/benchmarks\/runs\/pack-codex-.+\/run-\d{3}\.json$/,
     );
   });
 });

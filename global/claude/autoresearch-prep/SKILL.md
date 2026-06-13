@@ -5,7 +5,7 @@ type: planning
 version: v0.0
 invocation: chained
 argument-hint: "[output-path]"
-interview_depth: light
+context_intake: scoped
 ---
 
 # Autoresearch Prep

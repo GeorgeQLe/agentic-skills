@@ -4,7 +4,7 @@ description: Go-to-market planning — channel strategy, messaging, pricing, lau
 type: research
 version: v0.12
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

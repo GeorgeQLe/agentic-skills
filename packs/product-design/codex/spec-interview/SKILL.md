@@ -4,7 +4,7 @@ description: Post-prototype production deep dive — walks through consolidated 
 type: planning
 version: v0.13
 argument-hint: "[--ideas]"
-interview_depth: full
+context_intake: deep
 ---
 
 ## Pack Availability Guard

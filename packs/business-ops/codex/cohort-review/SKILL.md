@@ -4,7 +4,7 @@ description: Post-launch metrics & funnel analysis — cohort retention, channel
 type: analysis
 version: v0.4
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
-interview_depth: none
+context_intake: artifact_only
 visual_tier: visual
 ---
 

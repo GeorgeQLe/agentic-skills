@@ -5,7 +5,7 @@ type: research
 version: v1.4
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
-interview_depth: full
+context_intake: deep
 visual_tier: visual
 ---
 

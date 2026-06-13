@@ -4,7 +4,7 @@ description: Analyze a YouTube channel with evidence-first metadata, transcripts
 type: research
 version: v0.6
 argument-hint: "<channel URL or handle> [--count N]"
-interview_depth: none
+context_intake: artifact_only
 ---
 
 # YouTube Audit — Evidence-First Channel Analysis

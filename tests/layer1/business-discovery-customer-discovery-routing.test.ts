@@ -5,39 +5,39 @@ import { describe, expect, it } from "vitest";
 const ROOT = resolve(import.meta.dirname, "../..");
 
 const routeBearingSkillPaths = [
-  ["packs/business-discovery/codex/competitive-analysis/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/competitive-analysis/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/customer-feedback/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/customer-feedback/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/lean-canvas/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/lean-canvas/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/value-prop-canvas/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/value-prop-canvas/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/frameworks/category-design/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/frameworks/category-design/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/frameworks/jtbd-positioning/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/frameworks/jtbd-positioning/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/frameworks/moore-positioning/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/frameworks/moore-positioning/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/frameworks/obviously-awesome/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/frameworks/obviously-awesome/SKILL.md", "/customer-discovery"],
-  ["packs/business-discovery/codex/positioning/frameworks/strategic-canvas/SKILL.md", "$customer-discovery"],
-  ["packs/business-discovery/claude/positioning/frameworks/strategic-canvas/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/competitive-analysis/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/competitive-analysis/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/customer-feedback/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/customer-feedback/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/lean-canvas/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/lean-canvas/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/value-prop-canvas/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/value-prop-canvas/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/frameworks/category-design/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/frameworks/category-design/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/frameworks/jtbd-positioning/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/frameworks/jtbd-positioning/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/frameworks/moore-positioning/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/frameworks/moore-positioning/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/frameworks/obviously-awesome/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/frameworks/obviously-awesome/SKILL.md", "/customer-discovery"],
+  ["packs/business-research/codex/positioning/frameworks/strategic-canvas/SKILL.md", "$customer-discovery"],
+  ["packs/business-research/claude/positioning/frameworks/strategic-canvas/SKILL.md", "/customer-discovery"],
 ] as const;
 
 const inspectedSkillPaths = [
   ...routeBearingSkillPaths.map(([path]) => path),
-  "packs/business-discovery/codex/enterprise-icp/SKILL.md",
-  "packs/business-discovery/claude/enterprise-icp/SKILL.md",
+  "packs/business-research/codex/enterprise-icp/SKILL.md",
+  "packs/business-research/claude/enterprise-icp/SKILL.md",
 ];
 
 function read(path: string) {
   return readFileSync(resolve(ROOT, path), "utf8");
 }
 
-describe("business-discovery customer-discovery routing", () => {
+describe("business-research customer-discovery routing", () => {
   it("routes active pack contracts to customer-discovery instead of the retired icp command", () => {
     for (const [path, command] of routeBearingSkillPaths) {
       expect(read(path), `${path} should route to ${command}`).toContain(command);

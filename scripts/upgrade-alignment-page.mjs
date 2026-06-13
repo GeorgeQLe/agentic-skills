@@ -111,9 +111,11 @@ function optionalConventionTemplate(skillName) {
 
 // Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
 function bundledContentFor(skillName, skillPath) {
-  const specific = skillSpecificGates(skillName);
-  const tier = skillVisualTier(skillName);
+  const specific = skillSpecificGates(skillName, skillPath);
+  const tier = skillVisualTier(skillName, skillPath);
   const tierText = visualTierGuidance(tier);
+  const contextIntake = skillPath ? skillContextIntake(skillPath) : null;
+  const contextText = contextIntake ? contextIntakeGuidance(contextIntake) : "";
   const skillType = skillPath ? readSkillType(skillPath) : null;
   const glossaryApplies = skillType === 'research' || skillType === 'analysis';
   const glossaryText = glossaryApplies ? glossaryGateText(skillName) : '';
@@ -121,6 +123,7 @@ function bundledContentFor(skillName, skillPath) {
   const body = template
     .replaceAll("{skill-name}", skillName)
     .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")
+    .replace(/\n*\{\{SKILL_CONTEXT_INTAKE\}\}\n*/, contextText ? `\n\n${contextText}\n\n` : "\n\n")
     .replace(/\n*\{\{SKILL_VISUAL_TIER\}\}\n*/, tierText ? `\n\n${tierText}\n\n` : "\n\n")
     .replace(/\n*\{\{SKILL_GLOSSARY_GATE\}\}\n*/, glossaryText ? `\n\n${glossaryText}\n\n` : "\n\n")
     .replace(/\n{3,}/g, "\n\n")
@@ -157,6 +160,10 @@ const VISUAL_TIER_SKILLS = new Set([
   'gtm', 'customer-feedback', 'investor-update', 'product-line', 'scale-audit', 'mvp-gap',
   'devtool-adoption', 'devtool-integration-map', 'devtool-workflow', 'game-comparables',
   'game-genre-map', 'game-launch', 'game-roadmap', 'customer-discovery',
+  'five-rings', 'four-forces', 'jtbd-needs', 'pmf-engine', 'seven-dimensions', 'w3-hypothesis',
+  'feature-pricing-matrix', 'porter-five-forces', 'strategic-group-map', 'swot',
+  'category-design', 'jtbd-positioning', 'moore-positioning', 'obviously-awesome', 'strategic-canvas',
+  'customer-journey-canvas', 'experience-map', 'jtbd-timeline', 'service-blueprint', 'user-story-map',
 ]);
 
 const PROTOTYPE_TIER_SKILLS = new Set([
@@ -165,7 +172,9 @@ const PROTOTYPE_TIER_SKILLS = new Set([
   'landing-copy', 'uat-guide', 'animation-design-planner',
 ]);
 
-function skillVisualTier(skillName) {
+function skillVisualTier(skillName, skillPath) {
+  const declared = skillPath ? readSkillFrontmatterField(skillPath, 'visual_tier') : null;
+  if (declared === 'document' || declared === 'visual' || declared === 'prototype') return declared;
   if (PROTOTYPE_TIER_SKILLS.has(skillName)) return 'prototype';
   if (VISUAL_TIER_SKILLS.has(skillName)) return 'visual';
   return 'document';
@@ -181,54 +190,199 @@ function visualTierGuidance(tier) {
   return '';
 }
 
-// --- Interview Depth ---
-const FULL_INTERVIEW_SKILLS = new Set([
-  'enterprise-icp', 'gtm', 'landing-copy', 'metrics', 'monetization', 'conversion-map',
-  'expansion-map', 'lifecycle-metrics', 'onboarding-map', 'retention-map', 'transaction-map',
-  'feature-interview', 'ui-interview', 'spec-interview', 'skill-interview', 'idea-scope-brief',
-  'customer-discovery', 'user-flow-map',
-]);
+// --- Context Intake ---
+function skillContextIntake(skillPath) {
+  const declared = readSkillFrontmatterField(skillPath, 'context_intake');
+  if (declared === 'deep' || declared === 'scoped' || declared === 'artifact_only') return declared;
+  return null;
+}
 
-const LIGHT_INTERVIEW_SKILLS = new Set([
-  'competitive-analysis', 'customer-feedback', 'lean-canvas', 'positioning', 'value-prop-canvas',
-  'experiment', 'growth-model', 'hook-model', 'pmf-assessment', 'burn-rate', 'platform-strategy',
-  'risk-register', 'runway-model', 'retro', 'devtool-adoption', 'devtool-monetization',
-  'devtool-positioning', 'devtool-user-map', 'game-audience', 'game-comparables', 'game-fantasy',
-  'game-genre-map', 'game-launch', 'game-prototype-test', 'game-store-page-test',
-  'youtube-concept-research', 'content-programming', 'creator-positioning',
-  'product-led-media-map', 'series-spec', 'brainstorm',
-]);
-
-function skillInterviewDepth(skillName) {
-  if (FULL_INTERVIEW_SKILLS.has(skillName)) return 'full';
-  if (LIGHT_INTERVIEW_SKILLS.has(skillName)) return 'light';
-  return 'none';
+function contextIntakeGuidance(contextIntake) {
+  if (contextIntake === 'deep') {
+    return `**Context intake.** This skill declares \`context_intake: deep\` (Deep interview). Gather repo/project context before asking, present an assumptions manifest when the contract requires it, ask focused questions, and confirm coverage before building review artifacts.`;
+  }
+  if (contextIntake === 'scoped') {
+    return `**Context intake.** This skill declares \`context_intake: scoped\` (Scoped intake). Ask only the focused questions needed to scope the research or analysis, then validate critical findings before building review artifacts.`;
+  }
+  if (contextIntake === 'artifact_only') {
+    return `**Context intake.** This skill declares \`context_intake: artifact_only\` (Artifact-driven). Work from concrete artifacts, data, logs, or existing instructions by default; ask concise clarification questions only when the available artifacts are missing, contradictory, or unsafe to interpret.`;
+  }
+  return '';
 }
 
 // --- Glossary Gate ---
 // Read the skill type from SKILL.md frontmatter to determine if glossary gate applies.
-function readSkillType(skillPath) {
+function readSkillFrontmatterField(skillPath, field) {
   try {
     const content = readFileSync(`${repoRoot}/${skillPath}`, 'utf8');
     const fm = content.match(/^---\n([\s\S]*?)\n---/);
     if (!fm) return null;
-    const typeMatch = fm[1].match(/^type:\s*(.+)$/m);
-    return typeMatch ? typeMatch[1].trim() : null;
+    const fieldMatch = fm[1].match(new RegExp(`^${field}:\\s*(.+)$`, "m"));
+    return fieldMatch ? fieldMatch[1].trim() : null;
   } catch { return null; }
+}
+
+function readSkillType(skillPath) {
+  return readSkillFrontmatterField(skillPath, 'type');
 }
 
 function glossaryGateText(skillName) {
   return `**Glossary Additions gate.** When this research introduces domain-specific terms, acronyms, or concept definitions that a reader outside the project would not know, include a \`## Glossary Additions\` section in the alignment page. Render a table of proposed terms with columns: Term, Definition, Source (\`${skillName}\`), Category (business/tooling/workflow/technical/domain), and per-term Approve/Edit/Reject/Flag radio controls. Only user-approved terms are appended to the target glossary (\`research/glossary.md\` or \`research/{slug}/glossary.md\` for scoped paths) during the confirmed-page write step. When the skill operates in a product-path scope, ask whether each term belongs in the parent or scoped glossary; default to the scoped glossary.`;
 }
 
-function skillSpecificGates(skillName) {
+const FRAMEWORK_SUBSKILL_TRANSLATIONS = {
+  "feature-pricing-matrix": {
+    title: "Feature-pricing matrix",
+    focus: "Compare competitors, tiers, packaging gates, usage limits, add-ons, buyer segments, and published pricing evidence. Separate observed pricing/feature facts from inferred value fences, assumptions about hidden enterprise terms, and decision impact for parent competitive synthesis.",
+    format: "Render a competitor-by-feature matrix, a tier/price comparison table, source and recency badges per cell, confidence markers for estimated values, and a summary of pricing-packaging implications.",
+    feedback: "Ask reviewers to confirm the competitor set, feature taxonomy, tier equivalence, estimated prices, confidence ratings, missing sources, and which packaging gaps should influence the parent recommendation.",
+  },
+  "porter-five-forces": {
+    title: "Porter five forces",
+    focus: "Gather evidence for rivalry, substitutes, new entrants, buyer power, and supplier power within a clearly bounded market. Separate market-structure claims from source evidence, pressure inferences, assumptions about boundaries, and decision impact for strategy.",
+    format: "Render a five-force pressure map or scorecard, force-by-force evidence tables, confidence by force, contradictions, source gaps, and a concise industry-attractiveness verdict.",
+    feedback: "Ask reviewers to confirm the market boundary, pressure ratings, force weighting, substitute and entrant definitions, buyer/supplier assumptions, missing evidence, and strategic implications.",
+  },
+  "strategic-group-map": {
+    title: "Strategic group map",
+    focus: "Gather evidence for competitor positioning, axis selection, strategic dimensions, and cluster membership. Separate factual competitor attributes from inferred placements, axis assumptions, confidence, and decision impact.",
+    format: "Render a two-axis strategic map or scatter plot with cluster labels, axis definitions, competitor placement rationale, confidence by placement, and a table of alternatives considered for axes.",
+    feedback: "Ask reviewers to confirm axis choices, competitor set, cluster names, placement confidence, outliers, missing competitors, and which whitespace or crowding patterns should matter to parent synthesis.",
+  },
+  swot: {
+    title: "SWOT",
+    focus: "Classify strengths, weaknesses, opportunities, and threats with evidence for each item. Separate internal facts from external market signals, inference from assumption, confidence level, and decision impact.",
+    format: "Render four SWOT quadrants plus a prioritized evidence table that maps each item to source, confidence, owner scope, time horizon, and recommended action or watch item.",
+    feedback: "Ask reviewers to confirm quadrant placement, priority, evidence sufficiency, stale or missing sources, overclaimed strengths, understated threats, and implications for the parent competitive recommendation.",
+  },
+  "five-rings": {
+    title: "Five Rings",
+    focus: "Gather candidate-specific evidence for Priority Initiatives, Success Factors, Perceived Barriers, Decision Criteria, and Buyer's Journey. Separate observed buyer language from inference, assumptions, confidence, and decision impact.",
+    format: "Render an ICP-candidate-by-ring matrix, buyer-journey timeline, confidence by ring, source coverage gaps, contradictions, and parent-synthesis implications for candidate priority.",
+    feedback: "Ask reviewers to confirm candidate definitions, ring labels, buyer-language evidence, confidence ratings, missing buying-committee sources, and which ring should most affect ICP selection.",
+  },
+  "four-forces": {
+    title: "Four Forces",
+    focus: "Gather switching-story evidence for push of the current situation, pull of the new solution, anxieties of change, and habits of the present. Separate user quotes/events from inferred force strength, assumptions, and decision impact.",
+    format: "Render a force map per ICP candidate, a switching timeline, force-strength scorecards, evidence for and against each force, confidence, and source gaps.",
+    feedback: "Ask reviewers to confirm the trigger event, force strengths, anxiety and habit barriers, candidate comparison, confidence ratings, missing switch-story evidence, and adoption implications.",
+  },
+  "jtbd-needs": {
+    title: "JTBD needs",
+    focus: "Gather job, circumstance, desired-outcome, current-alternative, pain, and gain evidence for each candidate. Separate observed job language from inferred outcome statements, assumptions, confidence, and decision impact.",
+    format: "Render job statements and outcome scorecards, candidate-by-need matrices, importance/satisfaction or opportunity ratings when evidence supports them, evidence tables, and source gaps.",
+    feedback: "Ask reviewers to confirm job framing, outcome wording, candidate fit, importance and satisfaction scoring, missing evidence, and which underserved needs should drive parent synthesis.",
+  },
+  "pmf-engine": {
+    title: "PMF Engine",
+    focus: "Gather real user evidence for Sean Ellis PMF signal, very-disappointed segmentation, retention/usage behavior, alternatives, and High-Expectation Customer synthesis. Separate observed user data from inference, sample assumptions, confidence, and decision impact.",
+    format: "Render a data-readiness scorecard, PMF signal table, very-disappointed segment analysis, HXC profile, retention/behavior evidence matrix, confidence register, and minimum-evidence gaps.",
+    feedback: "Ask reviewers to confirm evidence completeness, segment cuts, sample-size and bias risks, HXC realism, product-focus implications, missing data, and whether PMF claims are sufficiently supported.",
+  },
+  "seven-dimensions": {
+    title: "Seven dimensions",
+    focus: "Gather per-candidate evidence for Readiness, Willingness, Ability, Success Potential, Acquisition Efficiency, Ascension Potential, and Advocacy Potential. Separate scored claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render a seven-dimension candidate scorecard, weighted composite table, confidence by dimension, evidence-strength badges, weakest-dimension callouts, and sensitivity notes.",
+    feedback: "Ask reviewers to confirm dimension scores, weighting, candidate definitions, weak-dimension interpretation, evidence strength, missing sources, and how the composite should influence ICP selection.",
+  },
+  "w3-hypothesis": {
+    title: "W3 hypothesis",
+    focus: "Gather evidence for WHO, WHAT, and WHY for each ICP candidate, including disproval hypotheses and evidence against each W. Separate candidate claims from source evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render each ICP candidate as a WHO/WHAT/WHY triptych or equivalent side-by-side module with weakest-W confidence, cross-candidate comparison, research-log coverage by W dimension, and source gaps that could reverse the hypothesis.",
+    feedback: "Ask reviewers to confirm candidate definitions, WHO/WHAT/WHY wording, disproval evidence, weakest-W confidence, missing sources, and explicit implications for the parent `customer-discovery` synthesis.",
+  },
+  "category-design": {
+    title: "Category design",
+    focus: "Gather evidence for category problem, old-game alternatives, new-category POV, ecosystem actors, language patterns, and category-name viability. Separate category claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render a category POV canvas, old-game/new-game comparison, ecosystem map, naming scorecard, evidence matrix, and confidence/source-gap register.",
+    feedback: "Ask reviewers to confirm the category boundary, enemy/problem framing, name candidates, ecosystem assumptions, confidence ratings, missing sources, and implications for positioning synthesis.",
+  },
+  "jtbd-positioning": {
+    title: "JTBD positioning",
+    focus: "Gather evidence for target job, hiring circumstance, desired progress, current alternatives, anxieties, and value criteria. Separate job claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render a job story map, progress forces summary, alternatives table, outcome/value-criteria matrix, confidence register, and positioning implications.",
+    feedback: "Ask reviewers to confirm job wording, circumstance boundaries, alternatives, value criteria, confidence ratings, missing customer language, and which job should anchor positioning.",
+  },
+  "moore-positioning": {
+    title: "Moore positioning",
+    focus: "Gather evidence for target customer, need, product category, key benefit, primary alternative, and differentiation. Separate template claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render Geoffrey Moore positioning templates, claim-by-claim evidence matrix, alternative/differentiator comparison, confidence register, and rejected template variants.",
+    feedback: "Ask reviewers to confirm target segment, category label, benefit statement, alternative frame, differentiator, confidence, missing proof, and final template implications.",
+  },
+  "obviously-awesome": {
+    title: "Obviously Awesome",
+    focus: "Gather evidence for competitive alternatives, unique attributes, value themes, best-fit customers, and market category. Separate positioning claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render an Obviously Awesome component matrix, alternatives-to-attributes-to-value chain, best-fit customer scorecard, market-category options, and confidence/source gaps.",
+    feedback: "Ask reviewers to confirm competitive alternatives, unique attributes, value themes, best-fit customer definition, category choice, confidence ratings, and synthesis implications.",
+  },
+  "strategic-canvas": {
+    title: "Strategic canvas",
+    focus: "Gather evidence for competing factors, buyer value criteria, competitor factor ratings, and raise/reduce/eliminate/create moves. Separate value-curve claims from evidence, inference, assumptions, confidence, and decision impact.",
+    format: "Render a value curve or strategic canvas, factor-definition table, competitor scoring evidence, ERRC grid, confidence markers, and factor/source gaps.",
+    feedback: "Ask reviewers to confirm factors, competitor ratings, value-curve shape, ERRC moves, confidence, missing sources, and which moves should influence positioning synthesis.",
+  },
+  "customer-journey-canvas": {
+    title: "Customer journey canvas",
+    focus: "Gather stage, touchpoint, action, emotion, backstage, pain, and opportunity evidence across the journey. Separate observed customer behavior from inferred stages, assumptions, confidence, and decision impact.",
+    format: "Render a stage-by-touchpoint canvas with actions, emotions, backstage dependencies, pains, opportunities, source coverage, confidence, and stage-level gaps.",
+    feedback: "Ask reviewers to confirm journey stages, touchpoints, emotional readings, backstage assumptions, opportunity priority, missing evidence, and implications for the parent journey map.",
+  },
+  "experience-map": {
+    title: "Experience map",
+    focus: "Gather evidence for doing, thinking, feeling, pain, delight, and channel transitions across the end-to-end experience. Separate observed evidence from inferred emotional arc, assumptions, confidence, and decision impact.",
+    format: "Render an experience map with phase lanes, emotional arc, channel-transition markers, pain/delight moments, confidence by phase, and source gaps.",
+    feedback: "Ask reviewers to confirm phases, emotional highs/lows, channel transitions, pain/delight priority, confidence ratings, missing evidence, and journey synthesis implications.",
+  },
+  "jtbd-timeline": {
+    title: "JTBD timeline",
+    focus: "Gather switching evidence for first thought, passive looking, active looking, deciding, consuming, and satisfaction, plus push, pull, anxiety, and habit forces. Separate observed switch events from inference, assumptions, confidence, and decision impact.",
+    format: "Render a switching timeline with force overlays, stage evidence cards, trigger and decision criteria tables, anxiety/habit blockers, confidence, and source gaps.",
+    feedback: "Ask reviewers to confirm timeline stages, trigger events, force strengths, decision criteria, anxieties/habits, confidence ratings, and implications for the parent journey map.",
+  },
+  "service-blueprint": {
+    title: "Service blueprint",
+    focus: "Gather evidence for customer actions, front-stage interactions, backstage work, support processes, physical/digital evidence, failure points, and operational dependencies. Separate observed service facts from inferred dependencies, assumptions, confidence, and decision impact.",
+    format: "Render a service blueprint with front-stage/backstage/support/evidence swimlanes, line-of-interaction markers, failure/opportunity callouts, confidence, and source gaps.",
+    feedback: "Ask reviewers to confirm swimlane assignments, backstage dependencies, support-process gaps, evidence artifacts, operational risks, confidence ratings, and journey synthesis implications.",
+  },
+  "user-story-map": {
+    title: "User story map",
+    focus: "Gather evidence for activities, tasks, stories, release slices, walking skeleton, persona/job fit, and dependency order. Separate user-behavior evidence from inferred story hierarchy, assumptions, confidence, and decision impact.",
+    format: "Render an activity-task-story backbone, release-slice bands, walking-skeleton marker, dependency and confidence notes, evidence links, and source gaps.",
+    feedback: "Ask reviewers to confirm activity backbone, task/story granularity, slice priority, walking skeleton, missing stories, confidence ratings, and implications for the parent journey map.",
+  },
+};
+
+function frameworkGuidance(entry, outputGateDedup) {
+  return `**${entry.title} translation.** Research focus: ${entry.focus} Review/documentation format: ${entry.format} Suggested user feedback: ${entry.feedback} ${outputGateDedup}`;
+}
+
+function frameworkSubskillTranslation(skillName, parent, outputGateDedup) {
+  const specific = FRAMEWORK_SUBSKILL_TRANSLATIONS[skillName];
+  if (specific) return frameworkGuidance(specific, outputGateDedup);
+  if (parent === "customer-discovery") {
+    return `**Customer-discovery framework fallback translation.** Research focus: render inherited ICP candidates and parent scope, framework dimensions, scores or verdicts, evidence for and against each candidate, confidence, assumptions, and decision impact for parent \`customer-discovery\` synthesis. Review/documentation format: use per-candidate matrices, scorecards, tables, or diagrams appropriate to \`${skillName}\`, with source gaps and lower-confidence findings visible. Suggested user feedback: ask reviewers to confirm candidate definitions, scoring, confidence ratings, missing evidence, assumptions, and parent-synthesis implications. ${outputGateDedup}`;
+  }
+  if (parent === "competitive-analysis") {
+    return `**Competitive-analysis framework fallback translation.** Research focus: render inherited competitive scope, competitors or categories covered, tested dimensions, source evidence, inference, assumptions, confidence, and decision impact for parent \`competitive-analysis\` synthesis. Review/documentation format: use comparison tables, matrices, maps, force diagrams, or visual layouts appropriate to \`${skillName}\`, with lower-confidence comparisons and source gaps visible. Suggested user feedback: ask reviewers to confirm the competitor set, category boundaries, scores or verdicts, confidence ratings, missing sources, and synthesis implications. ${outputGateDedup}`;
+  }
+  if (parent === "positioning") {
+    return `**Positioning framework fallback translation.** Research focus: render inherited positioning context, the framework method, positioning claims, evidence, inference, assumptions, confidence, alternatives, and decision impact for parent \`positioning\` synthesis. Review/documentation format: use templates, canvases, value curves, maps, scorecards, or comparison tables appropriate to \`${skillName}\`, with rejected alternatives and source gaps visible. Suggested user feedback: ask reviewers to confirm the target segment, category/market frame, value claim, alternatives, confidence ratings, missing proof, and synthesis implications. ${outputGateDedup}`;
+  }
+  if (parent === "journey-map") {
+    return `**Journey-map framework fallback translation.** Research focus: render inherited ICP and journey scope, framework stages or lanes, observed evidence, inference, assumptions, confidence, source gaps, and decision impact for parent \`journey-map\` synthesis. Review/documentation format: use journey canvases, timelines, swimlanes, story maps, or experience maps appropriate to \`${skillName}\`, with stage confidence and evidence gaps visible. Suggested user feedback: ask reviewers to confirm stages, touchpoints, actions, emotions, dependencies, scoring or priority, missing evidence, and parent journey implications. ${outputGateDedup}`;
+  }
+  return `**Framework subskill fallback translation.** Research focus: render inherited parent context, framework method, intermediate outputs, claims, evidence, inference, assumptions, confidence, and decision impact for the parent skill. Review/documentation format: use structured tables, matrices, scorecards, canvases, maps, or diagrams appropriate to \`${skillName}\`, with source gaps and handoff implications visible. Suggested user feedback: ask reviewers to confirm the framework definitions, scoring or verdicts, assumptions, confidence ratings, missing evidence, and exact parent synthesis questions this subskill should answer. ${outputGateDedup}`;
+}
+
+function skillSpecificGates(skillName, skillPath) {
   const outputGateDedup =
     "Apply the shared artifact-destination/proposed-file-changes de-duplication rule: combine them into one visual gate when they ask only the same path-destination question, and render separate gates when destination approval differs from downstream mutation scope, timing, or allowed files.";
   const rules = {
     "idea-scope-brief": `**Idea-specific gates.** Render the Idea Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The idea identity, slug, scope/non-goals, ICP readiness, and output-location/change-scope decisions must each be reviewable gates. ${outputGateDedup}`,
     "feature-interview": `**Feature-specific gates.** Render the evidence brief, claim verdicts, assumptions, planning destination, prototype-first decision, priority hypothesis, and output-location/change-scope decisions as gates before writing or updating durable planning artifacts. ${outputGateDedup}`,
-    "user-flow-map": `**User-flow-map gates.** Render surfaced flow assumptions, the proposed flow map, branch and decision coverage, state coverage, failure/recovery and handoff coverage, low-fidelity wireframe notes, output-location/change-scope decisions, and the downstream route to UI requirements as gates before writing final flow deliverables. ${outputGateDedup}`,
-    "ui-interview": `**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, output-location/change-scope decisions, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals. Every \`ui-interview\` review page must include a plain-language Interview Stage section that names the invocation, distinguishes requirements-only review from a live page-by-page interview, states what user/agent interview work has already happened or was inferred from approved upstream evidence, and tells the reviewer whether the next action is section feedback, compiled approval YAML, or resuming the interview. Render the working packet as structured HTML sections, lists, and real HTML tables; do not use a single raw Markdown \`<pre><code>\` block as the primary review surface. Raw Markdown may appear only as a supplemental source view after the rendered packet. ${outputGateDedup}`,
+    "user-flow-map": `**User-flow-map gates.** Render surfaced flow assumptions, the proposed flow map, branch and decision coverage, state coverage, failure/recovery and handoff coverage, low-fidelity wireframe notes, output-location/change-scope decisions, and the downstream handoff choices to UI requirements as gates before writing final flow deliverables. The handoff gate must offer stop/clear-context and continue-now options, and must state that continuing immediately still requires the next skill's own interaction gates. ${outputGateDedup}`,
+    "ui-interview": `**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, output-location/change-scope decisions, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals. Every \`ui-interview\` review page must include a plain-language Interview Stage section that names the invocation, distinguishes requirements-only review from a live page-by-page interview, states what user/agent interview work has already happened or was inferred from approved upstream evidence, and tells the reviewer whether the next action is section feedback, compiled approval YAML, or resuming the interview. Every page must include Interview provenance with exactly one of \`live-ui-interview\`, \`evidence-synthesis-with-explicit-skip\`, or \`invalid-missing-ui-interview\`; upstream approval alone is not interview completion. Evidence-only pages must be labeled \`evidence-synthesis review\` and route unresolved decisions to a resumed \`ui-interview\`. Render the working packet as structured HTML sections, lists, and real HTML tables; do not use a single raw Markdown \`<pre><code>\` block as the primary review surface. Raw Markdown may appear only as a supplemental source view after the rendered packet. ${outputGateDedup}`,
     "ux-variations": `**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, output-location/change-scope decisions, and coverage checkpoint as gates before writing final variation plans. ${outputGateDedup}`,
     "spec-interview": `**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, output-location/change-scope decisions, and post-approval route as gates before writing or replacing specs. ${outputGateDedup}`,
     "consolidate-variations": `**Consolidation-specific gates.** Render UAT evidence coverage, variation verdicts, selected concept, rejected alternatives, unresolved assumptions, output-location/change-scope decisions, and coverage checkpoint as gates. ${outputGateDedup}`,
@@ -248,6 +402,10 @@ function skillSpecificGates(skillName) {
     "research-roadmap": "**Research-roadmap translation.** Render repository/documentation evidence by file path, observed documentation facts, inferred research gaps, priority rationale, rejected lower-priority items, source coverage gaps, and downstream implications for the next skill route.",
   };
   if (rules[skillName]) return rules[skillName];
+  const invocation = skillPath ? readSkillFrontmatterField(skillPath, "invocation") : null;
+  if (invocation === "sub-skill") {
+    return frameworkSubskillTranslation(skillName, readSkillFrontmatterField(skillPath, "parent"), outputGateDedup);
+  }
   if (skillName === "repo-glossary") {
     return `**Glossary audit gates.** Render the seven term categories (existing, missing, conflicting, stale, shadowed, cross-path divergences, and inheritance gaps) as separate gate sections. Each category must include per-term inline radio questions for the user to approve, edit, reject, or flag terms. Include an evidence matrix mapping proposed changes to source documents. The glossary approval gate must show term, proposed definition, source, category, origin (parent or scoped), and per-term action controls. For shadowed terms, show parent and scoped definitions side by side. For cross-path divergences, show each sibling definition with its slug. ${outputGateDedup}`;
   }

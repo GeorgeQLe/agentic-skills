@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -27,6 +27,10 @@ const packageJsonPath = join(packageRoot, 'package.json');
 const packScriptPath = resolvePackagedPath('scripts/pack.sh');
 const initScriptPath = resolvePackagedPath('init.sh');
 const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
+const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
+const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
+const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
+const alignmentTtsAssetPath = resolvePackagedPath('scripts/alignment-tts-kokoro.js');
 
 function resolvePackagedPath(relativePath) {
   const packagedPath = join(packageRoot, relativePath);
@@ -117,6 +121,184 @@ function runGlobalInit(args) {
   return runCommand('bash', [initScriptPath, ...args]);
 }
 
+function assertNoArgs(command, args) {
+  if (args.length > 0) {
+    throw new Error(`${command} does not accept arguments`);
+  }
+}
+
+function ensureAlignmentTtsAsset(projectRoot) {
+  if (!existsSync(alignmentTtsAssetPath)) {
+    throw new Error(
+      `alignment TTS asset not found at ${alignmentTtsAssetPath}. Reinstall skillpacks or use a source checkout that includes scripts/alignment-tts-kokoro.js.`
+    );
+  }
+
+  const target = join(projectRoot, 'scripts/alignment-tts-kokoro.js');
+  if (existsSync(target)) {
+    return;
+  }
+
+  mkdirSync(dirname(target), { recursive: true });
+  copyFileSync(alignmentTtsAssetPath, target);
+  console.log('Installed scripts/alignment-tts-kokoro.js for alignment page TTS.');
+}
+
+function alignmentHelp() {
+  console.log(`skillpacks alignment
+
+Usage:
+  skillpacks alignment bundles [--dry-run] [--check]
+  skillpacks alignment pages audit
+  skillpacks alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
+  skillpacks alignment verify
+
+Commands:
+  bundles                    Generate per-skill ALIGNMENT-PAGE.md bundles
+  bundles --dry-run          Preview generated bundle changes
+  bundles --check            Fail on generated-bundle drift without writing
+  pages audit                Audit active rendered alignment/*.html pages
+  pages inject-tts           Add the packaged Brief Me TTS script tag to pages
+  verify                     Run the focused alignment verification set when present`);
+}
+
+function validateArgs(command, args, options) {
+  const { allowedFlags = new Set(), maxPositionals = 0, positionalPattern = null } = options;
+  let positionals = 0;
+
+  for (const arg of args) {
+    if (arg.startsWith('-')) {
+      if (!allowedFlags.has(arg)) {
+        throw new Error(`${command}: unsupported flag '${arg}'`);
+      }
+      continue;
+    }
+
+    positionals += 1;
+    if (positionals > maxPositionals) {
+      throw new Error(`${command}: unexpected argument '${arg}'`);
+    }
+    if (positionalPattern && !positionalPattern.test(arg)) {
+      throw new Error(`${command}: expected an alignment HTML page path, got '${arg}'`);
+    }
+  }
+}
+
+export function resolveAlignmentCommand(args, options = {}) {
+  const projectRoot = resolve(options.projectRoot || process.cwd());
+  const [scope, ...rest] = args;
+
+  if (!scope || scope === 'help' || scope === '--help' || scope === '-h') {
+    return { kind: 'help' };
+  }
+
+  if (scope === 'bundles') {
+    validateArgs('alignment bundles', rest, {
+      allowedFlags: new Set(['--dry-run', '--check'])
+    });
+    if (rest.includes('--dry-run') && rest.includes('--check')) {
+      throw new Error('alignment bundles accepts either --dry-run or --check, not both');
+    }
+    return {
+      kind: 'run',
+      command: process.execPath,
+      args: [alignmentUpgradeScriptPath, '--root', projectRoot, ...rest]
+    };
+  }
+
+  if (scope === 'pages') {
+    const [pagesCommand, ...pagesRest] = rest;
+    if (!pagesCommand || pagesCommand === 'help' || pagesCommand === '--help' || pagesCommand === '-h') {
+      return { kind: 'help' };
+    }
+
+    if (pagesCommand === 'audit') {
+      assertNoArgs('alignment pages audit', pagesRest);
+      return {
+        kind: 'run',
+        command: process.execPath,
+        args: [alignmentAuditScriptPath, '--root', projectRoot]
+      };
+    }
+
+    if (pagesCommand === 'inject-tts') {
+      validateArgs('alignment pages inject-tts', pagesRest, {
+        allowedFlags: new Set(['--force', '--dry-run']),
+        maxPositionals: 1,
+        positionalPattern: /^alignment\/[^/].*\.html$/
+      });
+      return {
+        kind: 'run',
+        command: process.execPath,
+        args: [alignmentInjectTtsScriptPath, '--root', projectRoot, ...pagesRest],
+        ensureTtsAsset: !pagesRest.includes('--dry-run')
+      };
+    }
+
+    throw new Error(`alignment pages: unknown command '${pagesCommand}'`);
+  }
+
+  if (scope === 'verify') {
+    assertNoArgs('alignment verify', rest);
+    return {
+      kind: 'verify',
+      projectRoot,
+      command: 'pnpm',
+      args: [
+        '--dir',
+        'tests',
+        'exec',
+        'vitest',
+        'run',
+        '--project',
+        'layer1',
+        'layer1/upgrade-alignment-page-bespoke.test.ts',
+        'layer1/audit-alignment-pages.test.ts',
+        'layer1/alignment-gates.test.ts',
+        'layer1/alignment-tts-kokoro.test.ts'
+      ]
+    };
+  }
+
+  throw new Error(`alignment: unknown command '${scope}'`);
+}
+
+function targetHasAlignmentVerifyTests(projectRoot) {
+  const required = [
+    'tests/package.json',
+    'tests/layer1/upgrade-alignment-page-bespoke.test.ts',
+    'tests/layer1/audit-alignment-pages.test.ts',
+    'tests/layer1/alignment-gates.test.ts',
+    'tests/layer1/alignment-tts-kokoro.test.ts'
+  ];
+  return required.every((relativePath) => existsSync(join(projectRoot, relativePath)));
+}
+
+function runAlignment(args) {
+  const resolved = resolveAlignmentCommand(args, { projectRoot: process.cwd() });
+  if (resolved.kind === 'help') {
+    alignmentHelp();
+    return 0;
+  }
+
+  if (resolved.kind === 'verify') {
+    if (!targetHasAlignmentVerifyTests(resolved.projectRoot)) {
+      console.error(
+        'alignment verify requires this repository\'s focused alignment Vitest files under tests/layer1. This target repo does not include them.'
+      );
+      return 1;
+    }
+    requireCommand('pnpm', 'Install pnpm or run the source-checkout Vitest command directly.');
+    return runCommand(resolved.command, resolved.args);
+  }
+
+  requireCommand('node', 'Install Node.js before running skillpacks alignment commands.');
+  if (resolved.ensureTtsAsset) {
+    ensureAlignmentTtsAsset(process.cwd());
+  }
+  return runCommand(resolved.command, resolved.args);
+}
+
 function printManifestJson(args) {
   if (args.length !== 1 || args[0] !== '--json') {
     throw new Error('list --json does not accept additional arguments');
@@ -189,6 +371,12 @@ Commands:
   doctor --fix                 Clean generated skill-root drift
   doctor --fix --agent-docs [--dry-run]
                                Also migrate generated AGENTS.md/CLAUDE.md blocks
+  alignment bundles [--dry-run] [--check]
+                               Generate/check per-skill ALIGNMENT-PAGE.md bundles
+  alignment pages audit        Audit active rendered alignment/*.html pages
+  alignment pages inject-tts [--force] [alignment/<page>.html]
+                               Add the packaged Brief Me TTS script include
+  alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
   pin <skill> <version>        Pin a skill to an archived version
@@ -257,6 +445,10 @@ export async function runSkillpacksCli(args) {
       'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
     );
     return runCommand('bash', [packScriptPath, 'install', ...deckInstall.packs]);
+  }
+
+  if (command === 'alignment') {
+    return runAlignment(rest);
   }
 
   if (command === 'init') {
