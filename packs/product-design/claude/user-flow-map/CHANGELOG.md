@@ -1,5 +1,11 @@
 # user-flow-map changelog (claude)
 
+## v0.6 - 2026-06-13
+
+- Moved pre-prototype flow-map deliverables from `specs/` to `design/` and added scoped `design/**/flow-tree-*.yaml` initialization.
+- Added the `design/flow-tree.schema.json` manifest contract for user-flow, UX-variation, UI review, and branch-decision state.
+- Clarified that `research/.progress.yaml` remains product-path/product-line tracking, not UX branch state.
+
 ## v0.5 - 2026-06-12
 
 - Reframed `user-flow-map` as the root of a wireframe tree whose named user flows fan out into `/ux-variations [specific-user-flow]`.

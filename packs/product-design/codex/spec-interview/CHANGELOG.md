@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.14 - 2026-06-13
+
+- Updated post-prototype spec interviews to consume `design/user-flow-*`, `design/ux-variations-*`, `design/ui-*`, and scoped flow-tree manifests as upstream design evidence.
+- Clarified that `spec-interview` keeps finalized production implementation specs in `specs/` and does not write pre-prototype design artifacts.
+
 ## v0.13 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

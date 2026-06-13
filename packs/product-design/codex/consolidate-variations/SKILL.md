@@ -1,8 +1,8 @@
 ---
 name: consolidate-variations
-description: Compare multiple built UI variations after UAT evidence, interview the user on what works and what does not, resolve conflicts, and produce a final implementation-ready UI specification
+description: Compare multiple built UI variations after UAT evidence, interview the user on what works and what does not, resolve conflicts, and produce a final consolidated prototype
 type: planning
-version: v0.12
+version: v0.13
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
 ---
@@ -11,7 +11,7 @@ visual_tier: prototype
 
 Invoke as `$consolidate-variations`.
 
-Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `$ux-variations --layout-mode`, built via `$exec`, and evaluated via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the variations, interviews the user on what works and what does not in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated implementation-ready UI specification.
+Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `$ux-variations --layout-mode`, built via `$prototype`, and evaluated via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the variations, interviews the user on what works and what does not in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated prototype for post-prototype production specification.
 
 Users with manually built variations can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
@@ -29,13 +29,14 @@ Resolve research scope by product path before using code or app structure as a h
 6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
+When product path `{slug}` is active, read research under `research/{slug}/`, read pre-prototype design artifacts under `design/{slug}/`, write prototype output under `prototypes/{topic}/`, and treat top-level `research/*.md` and `design/*.md` files as flat-mode documents or cross-path summaries.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, and design artifacts when present.
-   - Locate the variation spec: `specs/ui-layout-variations-[topic].md` or `specs/ux-variations-[topic].md`.
-   - Locate the content requirements: `specs/ui-requirements-[topic].md` or equivalent content contract.
+   - Locate the variation plan: `design/ui-layout-variations-[topic].md` or `design/ux-variations-[topic].md`.
+   - Locate the content requirements: `design/ui-requirements-[topic].md` or equivalent content contract.
+   - Locate the flow-tree manifest: `design/flow-tree-[topic].yaml` or `design/{slug}/flow-tree-{topic}.yaml` when present.
    - Locate variant evaluation evidence: `research/uat-variant-evaluation-[topic].md`, `research/uat-plan.md` result logs, screenshots, notes, recordings, or explicit user-provided review notes.
    - Locate built implementations: scan route files, component directories, and any variation-specific directories or branches.
    - If the variation spec or implementations cannot be found, ask the user to point to them.
@@ -90,7 +91,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Ask the user to confirm the consolidated design before building the prototype.
 
 7. **Coverage checkpoint**
-   - Verify every content requirement from `specs/ui-requirements-[topic].md` has a UI home in the consolidated spec.
+   - Verify every content requirement from `design/ui-requirements-[topic].md` has a UI home in the consolidated prototype.
    - Verify every user action has a placement: button, menu item, keyboard shortcut, or gesture.
    - Verify all states are accounted for: empty, loading, error, partial, full, offline, permission-denied.
    - Flag any gaps and resolve them before writing.
@@ -98,7 +99,8 @@ When product path `{slug}` is active, read and write research under `research/{s
 ## Deliverables
 
 - Write the consolidated prototype to `prototypes/{topic}/consolidated/`.
-- Write the consolidation interview log to `consolidate-variations-[topic]-interview.md`.
+- Write the consolidation interview log to `design/consolidate-variations-[topic]-interview.md` in flat mode or `design/{slug}/consolidate-variations-[topic]-interview.md` in product-path mode.
+- Update the scoped flow-tree manifest to mark consolidated branches as `consolidated` or `promoted-to-prototype` when applicable.
 
 ### Alignment Page
 
@@ -109,13 +111,13 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not proceed without evaluation evidence unless the user explicitly says they have reviewed the variants and is ready to converge.
 - Do not pick winners without user input. Present the matrix and let the user decide.
 - Do not ignore conflicts. If two preferred choices are spatially or functionally incompatible, surface the tension and resolve it explicitly.
-- The consolidated spec must be at least as detailed as a `$ui-interview` output — implementation-ready, not a summary.
+- The consolidated prototype must preserve the approved UI branch detail from `$ui-interview` and be concrete enough for `$spec-interview` to extract production implementation requirements.
 - Do not lose content requirements. Every data field, action, and state from the requirements spec must appear in the final design.
 - Do not bias toward the first or last variation reviewed. Present them neutrally and let the user's feedback and evaluation evidence drive the outcome.
 
 ## Archive-First Replacement Policy
 
-- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Before replacing or substantively rewriting an existing canonical research/design/spec document (`research/**/*.md`, `design/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.

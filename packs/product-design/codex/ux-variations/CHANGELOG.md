@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.19 - 2026-06-13
+
+- Moved pre-prototype UX variation plans and interview logs from `specs/` to `design/`.
+- Updated default and layout-mode inputs to read `design/user-flow-*`, `design/ui-requirements-*`, and scoped flow-tree manifests.
+- Required ordinary UX branch status to live in the design flow-tree manifest, with `research/.progress.yaml` reserved for materially different product paths.
+
 ## v0.18 - 2026-06-12
 
 - Reframed default `ux-variations` work as expanding one selected user flow into alternate progression branches before UI proposal work.

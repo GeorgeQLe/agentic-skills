@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.14
+version: v0.13
 argument-hint: "[--ideas]"
 context_intake: deep
 ---
@@ -50,7 +50,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - `devtool` → use devtool artifacts such as `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-integration-map.md`.
    - If project type is missing or mismatched, recommend `$pack recommend`, `npx skillpacks install <pack>` from the project shell before doing domain-specific planning.
    - For business-app projects, check if `research/idea-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `$journey-map`. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
-   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
+   - Read `specs/user-flow-*.md` when present as upstream evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, and low-fidelity wireframe intent.
 
 2. **Surface a prototype-grounded assumptions checkpoint before probing:**
    - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
@@ -100,7 +100,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 ## Deliverables
 
 - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if needed), where `topic` is a short kebab-case summary
-- Keep `specs/` as the canonical output directory for finalized post-prototype implementation specifications. Do not write pre-prototype flow maps, UX variation plans, UI branch packets, or flow-tree manifests from this skill; those remain design-phase artifacts under `design/`.
 - The spec must use these canonical section headings (unnumbered):
   - `## Overview`
   - `## Goals`

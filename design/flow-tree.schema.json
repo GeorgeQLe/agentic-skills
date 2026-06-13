@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-skills.local/design/flow-tree.schema.json",
+  "title": "Product Design Flow Tree Manifest",
+  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "topic",
+    "mode",
+    "route",
+    "source_artifacts",
+    "branches"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "v0.1"
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_path": {
+      "type": "string",
+      "pattern": "^research/[^/]+/$"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["flat", "product-path"]
+    },
+    "route": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "user-flow-map",
+          "ux-variations",
+          "ui-interview",
+          "prototype",
+          "consolidate-variations",
+          "spec-interview"
+        ]
+      },
+      "prefixItems": [
+        { "const": "user-flow-map" },
+        { "const": "ux-variations" },
+        { "const": "ui-interview" },
+        { "const": "prototype" },
+        { "const": "consolidate-variations" },
+        { "const": "spec-interview" }
+      ],
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/user_flow_branch"
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision"
+      },
+      "default": []
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "artifact_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "ready-for-ui",
+        "approved",
+        "rejected",
+        "retry-needed",
+        "promoted-to-prototype",
+        "consolidated"
+      ]
+    },
+    "user_flow_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status", "artifacts", "ux_variations"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "ux_variations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ux_variation_branch"
+          }
+        }
+      }
+    },
+    "ux_variation_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status", "artifacts", "ui_reviews"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "ui_reviews": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ui_review"
+          }
+        }
+      }
+    },
+    "ui_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "artifacts"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "decision_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "branch_ref", "decision", "rationale", "recorded_at"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "branch_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["approve", "reject", "retry"]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

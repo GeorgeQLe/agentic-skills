@@ -1,3 +1,33 @@
+## Current Implementation - Product Design Flow Tree Artifact Boundaries
+
+### Current Checklist
+
+- [x] Inspect current product-design contracts, route docs, and layer1 coverage.
+- [x] Record the implementation plan in task docs.
+- [x] Archive active mirrored product-design contracts before version bumps.
+- [x] Add the flow-tree schema contract under `design/`.
+- [x] Update mirrored product-design skills to use `design/` pre-prototype outputs and manifest state.
+- [x] Add focused layer1 regression tests.
+- [x] Run required verification commands.
+- [ ] Commit and push the verified changes.
+
+### Review Notes
+
+- Initial finding: the route wording is already mostly aligned with `user-flow-map -> ux-variations -> ui-interview`, but active deliverables still write `specs/user-flow-*`, `specs/ux-variations-*`, and `specs/ui-*` for pre-prototype design work.
+- Boundary decision: `research/` stays evidence/product-path state, `design/` becomes the pre-prototype design decision layer, `prototypes/` remains disposable/consolidated prototype output, and `specs/` remains finalized post-prototype implementation specifications.
+- Implementation note: `user-flow-map`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-variations`, and `spec-interview` were updated across Claude/Codex mirrors so the design tree remains executable through prototype consolidation before `spec-interview` writes finalized `specs/[topic].md`.
+- Focused validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` (1 file / 5 tests).
+- Full validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1` (59 files / 2234 tests)
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `git diff --check`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (rerun fresh after generated asset refresh)
+- Generated data note: Skills Showcase generated assets and `docs/benchmark-results-matrix.md` were refreshed after active skill version/content changes.
+- Worktree note: untracked `prompts/ship-end/skill-prompt-20260612-213808-ship-end.md` appeared during this session but is unrelated to the product-design flow-tree boundary and is intentionally not part of this commit.
+
 ## Current Investigation - Repository Boundary And Deploy Gating
 
 ### Current Checklist
@@ -22,7 +52,6 @@
 - Added `scripts/test-vercel-ignore-build.sh` covering skill-only, task/prompt-only, alignment-only, archive-only, package-only, app runtime, generated docs mirror, benchmark matrix, root manifest, workspace manifest, mixed skill/showcase, and deploy-gate changes.
 - Verification passed: `scripts/test-vercel-ignore-build.sh`, `bash -n scripts/vercel-ignore-build.sh scripts/test-vercel-ignore-build.sh`, and `git diff --check`.
 - Showcase build/data validation skipped because this boundary does not modify showcase runtime code or generated showcase assets.
-
 
 ## Current Investigation - AFPS Prototype Product Design Workflow
 

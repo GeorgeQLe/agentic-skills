@@ -1,3 +1,40 @@
+## Current Implementation - Product Design Flow Tree Artifact Boundaries
+
+### Goal
+
+Move pre-prototype product-design artifacts from `specs/` into a dedicated `design/` phase and add a machine-readable flow-tree manifest contract that tracks user-flow branches, UX variation branches, and UI branch decisions.
+
+### Scope
+
+- `packs/product-design/{codex,claude}/user-flow-map/SKILL.md`
+- `packs/product-design/{codex,claude}/ux-variations/SKILL.md`
+- `packs/product-design/{codex,claude}/ui-interview/SKILL.md`
+- Product-design changelogs and archives for versioned behavior changes
+- New `design/flow-tree.schema.json`
+- Focused layer1 tests for artifact boundaries, route parity, and manifest-state ownership
+- Task review notes and verification results
+
+### Plan
+
+1. Inspect current product-design contracts, route docs, and layer1 coverage.
+2. Record this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+3. Archive current mirrored product-design skill contracts before version bumps.
+4. Add `design/flow-tree.schema.json` defining scoped flow-tree manifests.
+5. Update `user-flow-map` to write `design/user-flow-*`, initialize `design/flow-tree-*`, and avoid pre-prototype `specs/` output.
+6. Update `ux-variations` to read/write `design/ux-variations-*`, expand the flow-tree manifest, and avoid `research/.progress.yaml` for UX branch state.
+7. Update `ui-interview` to read/write `design/ui-*`, record approve/reject/retry branch decisions in the design manifest, and preserve `specs/` only for requirements-only or finalized post-prototype specs where appropriate.
+8. Keep `spec-interview` output in `specs/` and update upstream read guidance so it can consume `design/` evidence without becoming a design-phase writer.
+9. Add layer1 tests for design/spec/research artifact boundaries and mirrored route parity.
+10. Run required verification, fix any regressions, then commit and push the verified mutation set.
+
+### Acceptance Criteria
+
+- Pre-prototype `user-flow-map`, `ux-variations`, and default `ui-interview` deliverables write to `design/`, not `specs/`.
+- `design/flow-tree.schema.json` defines product-path and flat manifest locations and branch decision state.
+- `research/.progress.yaml` remains product-path/product-line tracking only, not UX branch state.
+- `spec-interview` still writes finalized production implementation specs to `specs/`.
+- Claude and Codex product-design mirrors preserve `user-flow-map -> ux-variations -> ui-interview -> prototype -> consolidate-variations -> spec-interview`.
+
 ## Current Investigation - Repository Boundary And Deploy Gating
 
 ### Goal
@@ -31,7 +68,6 @@ Keep this repository as one repo for now, but make its ownership zones and Verce
 - The ignored-build helper allows showcase runtime/assets, root dependency manifests, deploy config, and showcase generation script changes.
 - Focused tests exercise representative skip/deploy cases.
 - No GitHub Actions workflows are created or modified.
-
 
 ## Current Investigation - AFPS Prototype Product Design Workflow
 

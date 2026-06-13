@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.13
+version: v0.14
 argument-hint: "[optional-topic-override] [--ideas]"
 context_intake: deep
 ---
@@ -51,7 +51,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
-   - Read `specs/user-flow-*.md` when present as upstream evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, and low-fidelity wireframe intent.
+   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
 
 2. **Surface a prototype-grounded assumptions checkpoint before probing:**
    - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
@@ -95,6 +95,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 6. **Write outputs:**
    - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if it doesn't exist) where `topic` is a short kebab-case summary.
+   - Keep `specs/` as the canonical output directory for finalized post-prototype implementation specifications. Do not write pre-prototype flow maps, UX variation plans, UI branch packets, or flow-tree manifests from this skill; those remain design-phase artifacts under `design/`.
    - The spec must use these canonical section headings (unnumbered):
      - `## Overview`
      - `## Goals`

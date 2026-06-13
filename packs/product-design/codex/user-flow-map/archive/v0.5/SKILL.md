@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.6
+version: v0.5
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 context_intake: deep
 visual_tier: prototype
@@ -14,9 +14,9 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # User Flow Map
 
-Invoke as `/user-flow-map`.
+Invoke as `$user-flow-map`.
 
-Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. Treat the output as the root of a wireframe tree: each mapped user flow can fan out into `/ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `/ui-interview`.
+Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. Treat the output as the root of a wireframe tree: each mapped user flow can fan out into `$ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `$ui-interview`.
 
 This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action." Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
 
@@ -34,17 +34,7 @@ Resolve research scope by product path before using code or app structure as a h
 6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`, pre-prototype design artifacts under `design/{slug}/`, finalized post-prototype implementation specs under `specs/{slug}/`, and treat top-level `research/*.md` and `design/*.md` files as flat-mode documents or cross-path summaries.
-
-### 0b. Design Flow Tree Manifest
-
-Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-prototype product-design tree.
-
-- Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
-- Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
-- Initialize the manifest when writing the flow map. Set `schema_version: v0.1`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-variations, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
-- Track user-flow, UX-variation, UI review, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
-- Reference all pre-prototype design artifacts from the manifest using repo-relative paths.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Resolve Context
 
@@ -52,15 +42,14 @@ Read available evidence before asking deep questions:
 
 - `.agents/project.json`, `AGENTS.md`, `CLAUDE.md`, `README.md`, and relevant task docs.
 - `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, `research/positioning.md`, and product-path-scoped equivalents.
-- Existing `design/`, including `design/user-flow-*.md`, `design/ui-requirements-*.md`, `design/ui-*.md`, `design/ux-variations-*.md`, product-path-scoped equivalents, and `design/**/flow-tree-*.yaml`.
-- Existing `specs/` only as finalized post-prototype implementation context.
+- Existing `specs/`, including `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ui-*.md`, and `specs/ux-variations-*.md`.
 - Existing route files, component files, app shells, navigation config, screenshots, wireframes, mockups, and design artifacts when present.
 
-If `research/positioning.md` is missing for a business-product flow, recommend `/positioning` first. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell.
+If `research/positioning.md` is missing for a business-product flow, recommend `$positioning` first. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell.
 
 ### 2. Flow Assumptions Checkpoint
 
-Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool call — then ask the user to confirm, correct, or flag it in the next turn. AskUserQuestion option previews may mirror the checkpoint as a supplement but are never the sole channel. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
+Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call — then ask the user to confirm, correct, or flag it in the next turn. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
 
 Cover:
 
@@ -96,7 +85,7 @@ Build the flow map at workflow level, not visual-design level:
 
 ### 4. Coverage Checkpoint
 
-Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool call):
+Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool or command call):
 
 - Persona and goal covered.
 - Entry points covered.
@@ -116,9 +105,8 @@ In the next turn, ask whether any flow branch, state, or handoff is missing befo
 
 Write:
 
-- `design/user-flow-[topic].md` in flat mode or `design/{slug}/user-flow-[topic].md` in product-path mode.
-- `design/user-flow-[topic]-interview.md` in flat mode or `design/{slug}/user-flow-[topic]-interview.md` in product-path mode.
-- `design/flow-tree-[topic].yaml` in flat mode or `design/{slug}/flow-tree-[topic].yaml` in product-path mode.
+- `specs/user-flow-[topic].md`
+- `user-flow-[topic]-interview.md`
 
 The user-flow spec must include:
 
@@ -134,8 +122,7 @@ The user-flow spec must include:
 - Handoffs and external/manual dependencies.
 - Low-fidelity wireframe notes per screen.
 - Open questions, risks, and explicit non-goals.
-- Downstream handoff choices for `/ux-variations [specific-user-flow]`.
-- Flow-tree manifest branch IDs and artifact references.
+- Downstream handoff choices for `$ux-variations [specific-user-flow]`.
 
 The interview log must include:
 
@@ -146,10 +133,10 @@ The interview log must include:
 
 After approved files are written, present this handoff choice instead of auto-running or auto-invoking the next skill:
 
-1. Stop here so the user can clear context and run `/ux-variations [specific-user-flow]` in a fresh session.
-2. Continue immediately in this session with `/ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
+1. Stop here so the user can clear context and run `$ux-variations [specific-user-flow]` in a fresh session.
+2. Continue immediately in this session with `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
 
-If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path, and it does not count as `ui-interview` interview completion.
+If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path.
 
 ## Alignment Page
 
@@ -157,7 +144,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Archive-First Replacement Policy
 
-- Before replacing or substantively rewriting an existing canonical research/design/spec document (`research/**/*.md`, `design/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.
@@ -168,8 +155,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Keep this skill before UX variation, UI layout, and prototype work in the AFPS route.
 - Do not produce high-fidelity mockups, component styling, color palettes, design systems, production architecture, database schemas, or implementation plans.
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
-- Do not route directly to `/ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]`.
-- Do not write pre-prototype flow maps to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
+- Do not route directly to `$ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `$user-flow-map` -> `$ux-variations [specific-user-flow]` -> `$ui-interview [specific-ux-variation]`.
 - Do not auto-run or auto-invoke downstream skills after approval. Present the stop/clear-context versus continue-now choice, and preserve the next skill's required gates either way.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 

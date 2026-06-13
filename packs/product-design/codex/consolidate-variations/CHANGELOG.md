@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.13 - 2026-06-13
+
+- Updated consolidation to consume `design/` variation plans, UI requirements, and flow-tree manifests instead of pre-prototype `specs/` files.
+- Clarified that consolidation outputs a consolidated prototype under `prototypes/{topic}/consolidated/` and records consolidation state in the design flow-tree manifest.
+
 ## v0.12 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.20
+version: v0.19
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 context_intake: deep
 visual_tier: prototype
@@ -14,13 +14,13 @@ Invoke as `$ui-interview`.
 
 Use this skill when the user needs to turn a UX variation branch, rough product idea, feature, page, wireframe, screenshot, or existing app surface into a detailed implementation-ready UI specification. In the default product-design tree, this skill evaluates one proposed `$ux-variations` branch for one specific user flow, designs a proposed UI, renders an HTML visual mockup for alignment, and then records whether that branch is approved, rejected, or needs another mockup iteration before routing to the next UX variation or user flow.
 
-Use `$user-flow-map` before this skill when the product or feature has no credible screen/route inventory, task sequence, branch coverage, or state map. Prefer `design/user-flow-*.md` and the scoped flow-tree manifest as source material when they exist; they are the upstream wireframe-tree contract. Use `$ux-variations [specific-user-flow]` before this skill when a flow exists but no UX variation branch has been proposed yet.
+Use `$user-flow-map` before this skill when the product or feature has no credible screen/route inventory, task sequence, branch coverage, or state map. Prefer `specs/user-flow-*.md` as source material when it exists; it is the upstream wireframe-tree contract. Use `$ux-variations [specific-user-flow]` before this skill when a flow exists but no UX variation branch has been proposed yet.
 
 Use `$ux-variations` after this skill only when the current UI mockup exposes a missing or rejected variation axis that needs branch exploration before another UI proposal.
 
 When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This is an explicit bounded mode, not the default route from `$user-flow-map`; use it when the user asks for a content contract or when a layout-mode variation run genuinely requires fixed page requirements.
 
-Default branch-review handoff guard: upstream `$user-flow-map` approval and `$ux-variations` output may provide source evidence, but they do not count as `ui-interview` approval. Upstream approval does not count as `ui-interview` interview completion. Requirements-only runs must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest. `ui-interview` must still investigate cross-flow and cross-variation coordination, design a proposed UI, render the visual mockup in HTML, ask the user for alignment or feedback, and record an explicit approve/reject/retry branch decision.
+Default branch-review handoff guard: upstream `$user-flow-map` approval and `$ux-variations` output may provide source evidence, but they do not count as `ui-interview` approval. `ui-interview` must still investigate cross-flow and cross-variation coordination, design a proposed UI, render the visual mockup in HTML, ask the user for alignment or feedback, and record an explicit approve/reject/retry branch decision.
 
 ## Process
 
@@ -36,22 +36,13 @@ Resolve research scope by product path before using code or app structure as a h
 6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`, pre-prototype design artifacts under `design/{slug}/`, finalized post-prototype implementation specs under `specs/{slug}/`, and treat top-level `research/*.md` and `design/*.md` files as flat-mode documents or cross-path summaries.
-
-### 0b. Design Flow Tree Manifest
-
-Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-prototype product-design tree.
-
-- Product-path mode reads and updates `design/{slug}/flow-tree-{topic}.yaml`.
-- Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
-- Add one `ui_reviews[]` entry under the selected UX variation branch for each proposed UI review. Each entry must include `id`, `status`, artifact references, and `decision_id` when a decision is recorded.
-- Record approve/reject/retry decisions in the manifest `decisions[]` list. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, screenshots, and design artifacts when present.
-   - Prefer `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` for screen sequence, route inventory, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
-   - Prefer `design/ux-variations-*.md` (or product-path-scoped equivalents) for the selected UX variation branch, sibling variations, unresolved branch decisions, proposed progression paths, and branch-routing expectations.
+   - Prefer `specs/user-flow-*.md` (or product-path-scoped equivalents) for screen sequence, route inventory, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
+   - Prefer `specs/ux-variations-*.md` (or product-path-scoped equivalents) for the selected UX variation branch, sibling variations, unresolved branch decisions, proposed progression paths, and branch-routing expectations.
    - If the request is for an existing UI, inspect the current implementation before interviewing.
    - If multiple apps or surfaces are plausible, ask the user which app, flow, or page to cover first.
    - If the interface has no credible screen/flow structure from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
@@ -111,7 +102,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 5b. **Requirements gate (requirements-only mode)**
    - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
-   - Requirements-only mode has two required confirmation gates before any alignment page build: the UI Assumptions Manifest from step 3, then the Content Requirements Manifest in this step. Upstream approval, including approved `$user-flow-map` YAML or an approved flow alignment page, may populate assumptions and source evidence but cannot replace either confirmation; `ui-interview` must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest.
+   - Requirements-only mode has two required confirmation gates before any alignment page build: the UI Assumptions Manifest from step 3, then the Content Requirements Manifest in this step. Upstream approval, including approved `$user-flow-map` YAML or an approved flow alignment page, may populate assumptions and source evidence but cannot replace either confirmation.
    - Evidence-synthesis exception: only skip live confirmation questions when the current visible user invocation explicitly asks to skip live interview questions, synthesize from existing evidence only, or avoid asking the user. In that case, label the output as an `evidence-synthesis review`, set Interview provenance to `evidence-synthesis-with-explicit-skip`, do not call it a completed interview, and route unresolved decisions to a resumed `$ui-interview` instead of implying interview completion.
    - For each page, confirm:
      - Data fields and entities with cardinality: one, many, nested, or polymorphic
@@ -122,7 +113,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
      - Relationships between data elements: parent-child, peer, reference, aggregate
    - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm. Deliver the manifest per the inline visibility rule in step 3 (turn-final message text of its own turn; confirmation question in the next turn), never as mid-turn text only.
    - This manifest confirmation is non-final: it only confirms the requirements draft is ready for the pre-approval lifecycle in step 9. Route all writes through that lifecycle — working packet at `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active), then a `review`-state `alignment/ui-interview-{topic}.html` page rendering the Content Requirements Manifest as the candidate/verdict gate, then final compiled YAML approval.
-   - Only after final compiled YAML approval, write `design/ui-requirements-[topic].md` and `design/ui-requirements-[topic]-interview.md` in flat mode or product-path-scoped equivalents, update the scoped flow-tree manifest, archive the working packet, and convert the page to `confirmed` per step 9.
+   - Only after final compiled YAML approval, write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`, archive the working packet, and convert the page to `confirmed` per step 9.
    - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
    - Stop. Do not continue to step 6 or beyond; the pre-approval lifecycle in step 9 and the requirements deliverables above are the only remaining work in this mode.
@@ -153,7 +144,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - This confirmation is non-final: it only establishes that the draft is ready for the pre-approval lifecycle in step 9. It does not authorize canonical spec writes.
 
 9. **Build pre-approval alignment page**
-   - Before writing any canonical `design/ui-[topic].md`, `design/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
+   - Before writing any canonical `specs/ui-[topic].md`, `specs/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
    - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the complete working-packet substance as structured HTML review UI: the manifest, branch investigation, HTML visual mockup, page-by-page decisions, coverage checkpoint, proposed canonical file destinations, and approval/rejection gates.
    - Include **Interview provenance** in the page and working packet with exactly one of these values: `live-ui-interview` when this run completed the required manifest confirmations with the user; `evidence-synthesis-with-explicit-skip` when the current invocation explicitly asked to skip live questions or synthesize from evidence; `invalid-missing-ui-interview` when neither condition is true. `invalid-missing-ui-interview` pages must route unresolved decisions to a resumed `$ui-interview` and must not imply interview completion or readiness for canonical writes.
    - At the top of the page, include a plain-language **Interview stage** explainer naming the invocation, whether the run is requirements-only, full UI mode, or branch-review mode, what user/agent interview work has already happened or was inferred from approved upstream evidence, and what the reviewer should do next. If requirements were synthesized primarily from approved specs or code evidence rather than live Q&A, say so directly and route missing answers through section feedback or a resumed interview instead of implying the interview is complete.
@@ -167,9 +158,8 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 Before writing anything in this section, verify the alignment page has final compiled YAML approval. Do not write canonical UI specs or interview logs until `alignment/ui-interview-{topic}.html` has been reviewed and the user has provided final compiled YAML approval; checkpoint confirmations are not final approval and do not authorize these writes.
 
-- Write the completed UI branch packet to `design/ui-[topic].md` in flat mode or `design/{slug}/ui-[topic].md` in product-path mode.
-- Write the interview log to `design/ui-[topic]-interview.md` in flat mode or `design/{slug}/ui-[topic]-interview.md` in product-path mode.
-- Update the scoped flow-tree manifest with the UI review status, artifact references, and approve/reject/retry decision record.
+- Write the completed UI specification to `specs/ui-[topic].md`.
+- Write the interview log to `ui-[topic]-interview.md`.
 
 After the canonical files are written, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, and convert the alignment page from `review` to `confirmed`.
 
@@ -180,7 +170,6 @@ The UI specification must include:
 - Parent user flow, selected UX variation branch, touched sibling flows, and coordination dependencies
 - HTML visual mockup path or embedded review section for the proposed UI
 - Branch decision record: approved, rejected, or retry needed, with next branch/user-flow route
-- Flow-tree manifest branch IDs, UI review ID, and decision ID.
 - Page inventory and route map
 - Global shell and navigation rules
 - Detailed page-by-page anatomy
@@ -220,12 +209,11 @@ The page is built pre-approval in `review` state per step 9, before any canonica
 - Do not treat visual polish as separate from implementation. Size, spacing, hierarchy, and responsive behavior must be specified well enough for a developer to build.
 - Do not treat upstream `ux-variations` output as UI approval. The branch still needs an HTML visual mockup and explicit approve/reject/retry decision.
 - Do not route to broad implementation planning while unresolved UX variation branches or touched user flows still need review.
-- Do not write pre-prototype UI branch packets to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Archive-First Replacement Policy
 
-- Before replacing or substantively rewriting an existing canonical research/design/spec document (`research/**/*.md`, `design/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.

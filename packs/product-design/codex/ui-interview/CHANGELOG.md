@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.20 - 2026-06-13
+
+- Moved confirmed pre-prototype UI branch packets, requirements-only packets, and interview logs from `specs/` to `design/`.
+- Added flow-tree manifest updates for UI review status, artifact references, and approve/reject/retry branch decisions.
+- Updated upstream reads to prefer `design/user-flow-*`, `design/ux-variations-*`, and scoped flow-tree manifests.
+
 ## v0.19 - 2026-06-12
 
 - Reframed default `ui-interview` work around a specific UX variation branch rather than the old requirements-only handoff from `user-flow-map`.

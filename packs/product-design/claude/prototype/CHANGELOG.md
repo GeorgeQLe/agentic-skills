@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.14 - 2026-06-13
+
+- Moved prototype gates and source reads from pre-prototype `specs/` files to `design/` flow maps, UX variation plans, UI branch packets, and flow-tree manifests.
+- Clarified that prototype output remains under `prototypes/` and consumes design-phase branch approval state before post-prototype specification work.
+
 ## v0.13 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
