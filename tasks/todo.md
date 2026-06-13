@@ -4397,8 +4397,17 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Add the `skillpacks alignment` command namespace and root-aware TTS injection.
 - [x] Package alignment scripts/assets/convention docs and document npm usage.
 - [x] Add focused CLI and package-boundary tests.
-- [ ] Run focused alignment Vitest tests and package verification.
-- [ ] Record review notes and ship intended changes.
+- [x] Run focused alignment Vitest tests and package verification.
+- [x] Record review notes and ship intended changes.
+
+### Review Notes — skillpacks alignment commands
+
+- Implemented and shipped in `f92dfbcb`: `skillpacks alignment bundles`, `skillpacks alignment pages audit`, `skillpacks alignment pages inject-tts`, and `skillpacks alignment verify`.
+- `alignment bundles` wraps the packaged bundle generator with `--root <cwd>`; `alignment pages audit` wraps the active-page audit with `--root <cwd>`; `alignment pages inject-tts` wraps root-aware TTS injection and installs `scripts/alignment-tts-kokoro.js` into the target repo before real injection runs.
+- Package staging now includes the alignment generator/audit/inject scripts, TTS asset, chart snippets, skip/bespoke lists, and `docs/alignment-page-convention.md` while preserving denied paths such as `alignment/`, `tasks/`, and `prompts/`.
+- Docs now show source-checkout `node scripts/...` commands as the direct path and `npx skillpacks alignment ...` as the npm path.
+- Validation passed: `npm --workspace skillpacks run test:node` (69/69); focused alignment Vitest via direct command (4 files / 69 tests); `node packages/skillpacks/bin/skillpacks.mjs alignment verify` (4 files / 69 tests); `node packages/skillpacks/scripts/build-package.mjs --check`; `npm pack ./packages/skillpacks/build --dry-run --json --silent`; temp-repo TTS injection smoke; scoped `git diff --check`.
+- `npm --workspace skillpacks run verify:package` initially stopped at `build:manifest:check` because the generated package manifest was stale relative to the broader validation-remediation boundary. The implementation commit includes the refreshed manifest; after that, the package staging and pack dry-run checks passed.
 
 ### Review Notes — Research Skills Alignment Convention Audit
 
