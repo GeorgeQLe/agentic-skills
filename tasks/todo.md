@@ -10,7 +10,7 @@
 - [x] Run targeted Node tests.
 - [x] Attempt live `npx skillpacks doctor`.
 - [x] Run repo-local live `skillpacks refresh` and `skillpacks doctor` checks.
-- [ ] Review diff, commit, and push.
+- [x] Review diff, commit, and push.
 
 ### Review Notes
 
@@ -23,6 +23,7 @@
 - `npx skillpacks doctor` failed in this checkout because no `skillpacks` npx binary was available; the equivalent repo-local CLI command initially reported stale managed skill roots.
 - `node packages/skillpacks/bin/skillpacks.mjs refresh` passed and reinstalled current managed skill roots.
 - `node packages/skillpacks/bin/skillpacks.mjs doctor` passed after refresh with all managed roots `ok`.
+- Shipped on `master` in commit `01e7bbe3` and pushed to `origin/master`.
 
 ## Current Hygiene - Generated Skill Root Shipping Blocker
 
