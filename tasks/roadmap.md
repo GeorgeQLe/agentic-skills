@@ -1,3 +1,34 @@
+## Current Implementation - npm Age-Gate Warning Cleanup
+
+### Goal
+
+Stop `update-packages` guidance and benchmark fixtures from recommending package-manager age-gate keys that npm 11 reports as unknown project config, while preserving the 8-day dependency safety policy.
+
+### Scope
+
+- `packs/code-maintenance/{codex,claude}/update-packages/SKILL.md`
+- update-packages archives and changelogs
+- focused layer1/layer4 benchmark setup expectations for age-gate wording
+- task review notes and verification results
+
+### Plan
+
+1. Confirm the warning is not emitted by this repository's current npm project config.
+2. Archive the active mirrored `update-packages` contracts before changing behavior.
+3. Bump the mirrored skills from `v0.0` to `v0.1`.
+4. Replace `.npmrc` age-gate instructions with npm-safe guidance: manual age verification for npm-only projects and persisted pnpm enforcement through project pnpm config such as `minimumReleaseAge: 11520`.
+5. Update benchmark prompts, assertions, and retained examples so they no longer require `min-release-age=8` or `minimum-release-age=11520` in `.npmrc`.
+6. Run focused layer1 coverage and repository hygiene checks.
+7. Commit and push the verified cleanup.
+
+### Acceptance Criteria
+
+- `npm config list` from the repository root emits no unknown project config warning.
+- Active `update-packages` skills do not tell agents to write `min-release-age` or `minimum-release-age` into `.npmrc`.
+- The benchmark still requires an 8-day update policy and persisted pnpm age-gate coverage where supported.
+- Reversed ownership assertions still fail.
+- Skill archive/version hygiene passes.
+
 ## Current Implementation - Short npm CLI Rename
 
 ### Goal

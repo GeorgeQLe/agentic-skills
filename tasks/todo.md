@@ -32,6 +32,36 @@
   - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
 - Validation notes: initial generated-data validation failed as expected after metadata changes, then passed after assets were refreshed. Layer1 `bench-coverage` creates ignored `tests/benchmarks/runs/exec-codex-*` artifacts; those were removed before the final generated-data validation to keep committed assets deterministic.
 
+## Current Implementation - npm Age-Gate Warning Cleanup
+
+### Current Checklist
+
+- [x] Confirm local npm project config does not currently emit the pasted warning.
+- [x] Archive and bump mirrored `update-packages` skill contracts.
+- [x] Patch active `update-packages` guidance to avoid npm-unknown `.npmrc` keys.
+- [x] Patch benchmark prompts/assertions/examples for npm-safe age-gate wording.
+- [x] Run focused verification.
+- [x] Commit and push the verified cleanup.
+
+### Review Notes
+
+- `npm config list` from `/Users/georgele/projects/tools/agentic-skills` showed only builtin config and did not emit the warning.
+- No `.npmrc` exists inside this checkout, so the pasted warning is likely from a fixture/generated project or another directory.
+- Root cause in this repo: the active `update-packages` skill contracts and tests recommend `.npmrc` entries `min-release-age=8` and `minimum-release-age=11520`, which npm 11 reports as unknown project config when read from project `.npmrc`.
+- Updated mirrored `update-packages` contracts from `v0.0` to `v0.1`, archived `v0.0`, and added changelogs.
+- New contract: npm-only projects retain publish-time proof for selected versions; pnpm projects persist `minimumReleaseAge: 11520` in supported pnpm project config. The active contract now explicitly forbids unsupported npm-read `.npmrc` age-gate keys.
+- Updated layer1/layer4 benchmark expectations to require `publish-time proof` and `minimumReleaseAge` instead of `.npmrc`/`min-release-age`.
+- Elegance check: keeping npm as retained proof and pnpm as persisted config is narrower than inventing compatibility shims, because npm has no supported project age-gate key in this environment and `.npmrc` is exactly what triggers the warning.
+- Verification passed:
+  - `npm config list`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` (79 tests)
+  - `git diff --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+
 ## Current Implementation - Short npm CLI Rename
 
 ### Current Checklist

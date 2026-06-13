@@ -295,8 +295,7 @@ describe("benchmark setup registry", () => {
       "The source project has package-lock.json and no pnpm-lock.yaml according to package-lock-note.md.",
       "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
       "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
-      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0 because they are inside the 8-day safety window.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -331,8 +330,8 @@ describe("benchmark setup registry", () => {
       { agent: "claude" },
     );
 
-    expect(codexAssertions.find((assertion) => assertion.description === "Output includes .npmrc")).toMatchObject({ pass: true });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output includes min-release-age")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes publish-time proof")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes minimumReleaseAge")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes verification command evidence")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes major-upgrade compatibility risk handling")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest")).toMatchObject({ pass: true });
@@ -379,8 +378,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
         "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
@@ -409,8 +407,7 @@ describe("benchmark setup registry", () => {
       "# Package Update Plan",
       "This package-update-plan.md records the update plan.",
       "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -488,8 +485,7 @@ describe("benchmark setup registry", () => {
       "npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
       "That is older than 8 days, so it is age-eligible.",
       "Skip pnpm@10.22.0 because 2026-05-16 is inside the age gate.",
-      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -530,8 +526,7 @@ describe("benchmark setup registry", () => {
       "Today: 2026-05-18. Age gate: only versions older than 8 days are eligible.",
       "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
       "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
-      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -557,7 +552,7 @@ describe("benchmark setup registry", () => {
       "Plan dependency updates using only versions published older than 8 days.",
       "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
       "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -579,7 +574,7 @@ describe("benchmark setup registry", () => {
       "This package-update-plan.md records the update plan.",
       "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
       "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -599,7 +594,7 @@ describe("benchmark setup registry", () => {
       "This package-update-plan.md records the update plan.",
       "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
       "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -627,7 +622,7 @@ describe("benchmark setup registry", () => {
         "# Dependency Update Notes",
         "Use pnpm and only versions older than 8 days.",
         "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
-        "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+        "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Recommended next command: $exec",
@@ -653,8 +648,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
         "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -693,8 +687,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
         "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -727,7 +720,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
         "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+        "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -753,7 +746,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
         "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+        "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -783,8 +776,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
         "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -833,7 +825,7 @@ describe("benchmark setup registry", () => {
     const passing = evaluatePlan([
       ...basePlan.slice(0, 2),
       "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -847,7 +839,7 @@ describe("benchmark setup registry", () => {
       "Chosen pnpm version: 10.11.0 (published 2026-05-01, 16 days old - age-eligible).",
       "Retained publish-time evidence (from `npm view pnpm@10.11.0 time.version`): `2026-05-01T12:00:00.000Z`.",
       "Migration steps: add `\"packageManager\": \"pnpm@10.11.0\"` to `package.json`.",
-      "Ownership: `min-release-age=8` - npm's relative age gate (days). `minimum-release-age=11520` (`.npmrc`) and `minimumReleaseAge: 11520` (`package.json#pnpm`) - pnpm coverage where supported.",
+      "Ownership: npm uses retained publish-time proof during the run. `minimumReleaseAge: 11520` (`pnpm-workspace.yaml`) is pnpm persisted coverage where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -860,8 +852,8 @@ describe("benchmark setup registry", () => {
       ...basePlan.slice(0, 2),
       "Recommended `packageManager`: `pnpm@10.11.0`.",
       "Retained publish-time evidence from `npm-view-times.json`: `pnpm@10.11.0` published `2026-05-01T12:00:00.000Z`, which is older than 8 days for this fixture.",
-      "Create or update project-root `.npmrc` with:\n\n```ini\nmin-release-age=8\nminimum-release-age=11520\n```",
-      "Ownership:\n\n- `min-release-age=8` is npm's relative age gate.\n- `minimum-release-age=11520` is pnpm coverage in `.npmrc` where supported.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported, for example in `pnpm-workspace.yaml`.",
+      "Keep npm publish-time proof in package-update-plan.md and update `pnpm-workspace.yaml` with:\n\n```yaml\nminimumReleaseAge: 11520\n```",
+      "Ownership:\n\n- npm coverage is retained registry publish-time proof during the run.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported, for example in `pnpm-workspace.yaml`.",
       ...basePlan.slice(2),
     ]);
 
@@ -874,8 +866,8 @@ describe("benchmark setup registry", () => {
       ...basePlan.slice(0, 2),
       "Recommended `packageManager`: `pnpm@10.11.0`.",
       "Publish-time proof retained in `npm-view-times.json`:\n\n- `pnpm@10.11.0`: 2026-05-01T12:00:00.000Z, eligible because it is older than 8 days.\n- `pnpm@10.22.0`: 2026-05-16T12:00:00.000Z, skipped because it is not older than 8 days.",
-      "Create or update project-root `.npmrc` with:\n\n```ini\nmin-release-age=8\nminimum-release-age=11520\n```",
-      "Ownership:\n\n- `min-release-age=8` is npm's relative age gate.\n- `minimum-release-age=11520` is pnpm coverage in `.npmrc` where supported.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported.",
+      "Keep npm publish-time proof in package-update-plan.md and update `pnpm-workspace.yaml` with:\n\n```yaml\nminimumReleaseAge: 11520\n```",
+      "Ownership:\n\n- npm coverage is retained registry publish-time proof during the run.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -886,8 +878,8 @@ describe("benchmark setup registry", () => {
       ...basePlan.slice(0, 2),
       "Recommended migration:\n1. Add `packageManager: \"pnpm@10.11.0\"` to `package.json`.",
       "pnpm version selection proof:\n- Do not use unqualified `pnpm@latest`.\n- `pnpm@10.11.0` is selected because `npm-view-times.json` records `\"10.11.0\": \"2026-05-01T12:00:00.000Z\"`, which is older than 8 days.\n- `pnpm@10.22.0` is skipped because `npm-view-times.json` records `\"10.22.0\": \"2026-05-16T12:00:00.000Z\"`, which is not older than 8 days.",
-      "Create or update project-root `.npmrc` with:\n\n```ini\nmin-release-age=8\nminimum-release-age=11520\n```",
-      "Ownership:\n\n- `min-release-age=8` is npm's relative age gate.\n- `minimum-release-age=11520` is pnpm coverage in `.npmrc` where supported.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported.",
+      "Keep npm publish-time proof in package-update-plan.md and update `pnpm-workspace.yaml` with:\n\n```yaml\nminimumReleaseAge: 11520\n```",
+      "Ownership:\n\n- npm coverage is retained registry publish-time proof during the run.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -897,7 +889,7 @@ describe("benchmark setup registry", () => {
     const missingProof = evaluatePlan([
       ...basePlan.slice(0, 2),
       "Package-manager migration strategy: set packageManager to pnpm@10.22.0 from the existing local toolchain. Before real mutation, verify its publish timestamp with npm view pnpm@10.22.0 time.version.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -909,7 +901,7 @@ describe("benchmark setup registry", () => {
       ...basePlan.slice(0, 2),
       "Recommended migration: add `packageManager: \"pnpm@10.22.0\"` to `package.json`.",
       "pnpm version selection proof: `pnpm@10.22.0` is selected because `npm-view-times.json` records `\"10.11.0\": \"2026-05-01T12:00:00.000Z\"`, which is older than 8 days.",
-      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Age-gate config: npm coverage uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
       ...basePlan.slice(2),
     ]);
 
@@ -919,7 +911,7 @@ describe("benchmark setup registry", () => {
     const reversedSemantics = evaluatePlan([
       ...basePlan.slice(0, 2),
       "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
-      "Age-gate config: npm reads `minimum-release-age=11520`; pnpm reads `min-release-age=8`; write both values.",
+      "Age-gate config: npm reads `minimumReleaseAge: 11520`; pnpm only uses npm publish-time proof; write both values.",
       ...basePlan.slice(2),
     ]);
 
@@ -940,8 +932,7 @@ describe("benchmark setup registry", () => {
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
         "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
-        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
-        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Recommended next command: $exec",
@@ -972,7 +963,7 @@ describe("benchmark setup registry", () => {
         "# Package Update Plan",
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
-        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+        "Age-gate config: npm uses retained publish-time proof; pnpm project config uses `minimumReleaseAge: 11520` where supported.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Verification commands: pnpm install, pnpm test, pnpm build.",
