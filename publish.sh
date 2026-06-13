@@ -98,7 +98,7 @@ verify_skillpacks_package() {
     run node bin/skillpacks.mjs --version
     run node bin/skillpacks.mjs list
     run npm run build:check
-    run npm pack ./build --dry-run --json --silent
+    run npm pack ./build --dry-run --silent
   )
 }
 
