@@ -14,6 +14,12 @@ Investigate whether the shipped product-design flow-tree route is the best defau
 - `docs/skill-routing-map.html`
 - `docs/skills-showcase/assets/github-proof-data.js`
 - `docs/skills-showcase/assets/skills-data.js`
+- `global/claude/codebase-status/CHANGELOG.md`
+- `global/claude/codebase-status/SKILL.md`
+- `global/claude/codebase-status/archive/v0.8/SKILL.md`
+- `global/codex/codebase-status/CHANGELOG.md`
+- `global/codex/codebase-status/SKILL.md`
+- `global/codex/codebase-status/archive/v0.8/SKILL.md`
 - `packs/agent-work-admin/claude/roadmap/CHANGELOG.md`
 - `packs/agent-work-admin/claude/roadmap/SKILL.md`
 - `packs/agent-work-admin/claude/roadmap/archive/v0.11/SKILL.md`
@@ -42,7 +48,7 @@ Investigate whether the shipped product-design flow-tree route is the best defau
 ## Per-file purpose
 
 - Workflow docs and routing map: replace the old default AFPS prototype sequence with `user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation]`.
-- `roadmap`, `bootstrap-repo`, and `desk-flip` mirrored skill contracts: align active routing owners with the flow-tree default and preserve requirements-only/layout-mode as explicit bounded detours.
+- `roadmap`, `bootstrap-repo`, `desk-flip`, and `codebase-status` mirrored skill contracts: align active routing owners with the flow-tree default and preserve requirements-only/layout-mode as explicit bounded detours.
 - Archive and changelog files: preserve prior active contracts and record version bumps for substantive routing behavior changes.
 - Generated Skills Showcase assets: refresh public metadata for changed active skill versions and history.
 - Prompt/task/history/manifest files: preserve the visible investigation prompt, visible ship-end prompt capture, plan, review notes, verification, and shipping boundary.
@@ -53,7 +59,7 @@ The evaluation confirmed the new route is the better AFPS prototype default beca
 
 ## Tests run
 
-- Stale default-route scans for the old active chain - passed; remaining hits are intentional detour wording, history, or changelog entries.
+- Stale default-route scans for the old active chain - initially found one remaining active `codebase-status` route owner, which was fixed; final scan passed with remaining hits limited to history/task/changelog mentions.
 - `git diff --check` - passed.
 - `bash scripts/skill-archive-audit.sh --strict` - passed, 383 skills checked, 0 violations.
 - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing` - passed, all 462 skills have a version field.
@@ -72,7 +78,7 @@ The evaluation confirmed the new route is the better AFPS prototype default beca
 - The new route is better for AFPS prototypes when the goal is learning through visible branch evidence, not producing a premature implementation spec.
 - The old requirements/layout-first route over-optimized for content contract stability before the user had seen plausible progression branches; that delayed visual alignment and made one path feel canonical too early.
 - The flow-tree route has a real risk of extra ceremony for tiny or already-obvious work. The active contracts mitigate that by allowing explicit bypass to `ui-interview` for a named flow and preserving requirements-only/layout-mode as bounded modes.
-- Updated route owners were limited to active docs and active skills that can misdirect future work; historical specs, changelogs, and benchmark examples were not rewritten as current truth.
+- Updated route owners were limited to active docs and active skills that can misdirect future work; historical specs, changelogs, benchmark examples, and task records were not rewritten as current truth.
 
 ## Residual risk
 

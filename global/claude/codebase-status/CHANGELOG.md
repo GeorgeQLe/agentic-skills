@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-12
+
+- Updated canonical AFPS status routing to use the flow-tree prototype default: `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]`, with requirements-only/layout-mode as explicit bounded detours.
+
 ## v0.8 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

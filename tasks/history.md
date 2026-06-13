@@ -6,8 +6,9 @@
 - Confirmed the active product-design contracts implement `user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation]`.
 - Found stale active route surfaces still pointing at `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode`.
 - Updated active workflow docs and route-owner skills so AFPS prototype work defaults to flow mapping, progression-branch variation, branch-specific UI mockup approval, prototype, UAT, consolidation, post-prototype research refresh, spec, and roadmap.
+- Patched the follow-up `codebase-status` route-owner finding after the final stale-route scan surfaced one remaining active old-route recommendation.
 - Preserved `ui-interview --requirements-only` and `ux-variations --layout-mode` as explicit bounded detours when a fixed content/data/action contract and layout-only alternatives are needed.
-- Archived and bumped mirrored `bootstrap-repo`, `roadmap`, and `desk-flip` contracts for the routing behavior change, with changelog entries.
+- Archived and bumped mirrored `bootstrap-repo`, `roadmap`, `desk-flip`, and `codebase-status` contracts for the routing behavior change, with changelog entries.
 - Refreshed Skills Showcase generated data/proof assets for changed active skill versions and task history.
 - Evaluation result: the flow-tree route is the right default for AFPS prototype work because it produces concrete visual branch evidence earlier than the old requirements/layout-first path while preserving explicit branch decisions before implementation.
 - Manifest: `tasks/ship-manifest-2026-06-12-afps-prototype-investigation-intake.md`.

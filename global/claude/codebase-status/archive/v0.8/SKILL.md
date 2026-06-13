@@ -2,7 +2,7 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.9
+version: v0.8
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
@@ -62,7 +62,7 @@ This is read-only status synthesis. It does not replace `/roadmap`: `roadmap` ma
    - Use phase-aware routing before naming a command:
      - If `tasks/todo.md` or active phase docs contain actionable implementation work, recommend `/exec`. Do not route back to research merely because advisory gaps exist.
      - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `/ship`.
-     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`. Use `/ui-interview --requirements-only` and `/ux-variations --layout-mode` only when the user explicitly needs a fixed content/data/action contract and layout-only alternatives.
+     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
      - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `/journey-map`; if enabled, recommend `/journey-map`.
      - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Before recommending either, check `business-research` availability; if it is not enabled, recommend `npx skillpacks install business-research` from the project shell, before `/value-prop-canvas` or `/lean-canvas`. Recommend `/value-prop-canvas` only for contested solution-fit evidence, and `/lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, `user-flow-map`, or layout-mode UX variations.
      - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `/brainstorm` to discover new AFPS work.
