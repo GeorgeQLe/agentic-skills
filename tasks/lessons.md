@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — Prefer `$pack install` when the project-local skillpacks CLI is unavailable
+
+- I recommended `npx skillpacks install guided-walkthrough` after shipping, but the user’s shell returned `sh: skillpacks: command not found`.
+- Before recommending an npm-distributed pack install as the next command, check whether the CLI is available in the user’s project shell or whether the repo-local `$pack` workflow is the safer path.
+- For this repository, when the goal is to enable a pack-provided skill from an active Codex session, prefer `$pack install <skill-or-pack>` or `scripts/pack.sh install <skill-or-pack>`; use `npx skillpacks ...` only when the npm CLI is known to be installed or intentionally being tested.
+
 ## 2026-06-12 — Verify exact npm package names before running `npx`
 
 - I ran `npx skillpack install exec-loop` with the singular package name, which invoked an unrelated public npm package at `skillpack@0.1.3` instead of this repo's `skillpacks` CLI.

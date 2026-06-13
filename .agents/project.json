@@ -22,6 +22,7 @@
     "repo-glossary": "business-ops",
     "brainstorm": "product-design",
     "user-flow-map": "product-design",
-    "ui-interview": "product-design"
+    "ui-interview": "product-design",
+    "guide": "guided-walkthrough"
   }
 }
