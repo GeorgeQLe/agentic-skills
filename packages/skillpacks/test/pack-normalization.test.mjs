@@ -209,7 +209,7 @@ describe('fuzzy skill resolution', () => {
   it('throws unknown error with help text for no-match tokens', () => {
     assert.throws(
       () => resolvePackCommandArgs('install', ['zzz-nonexistent'], { manifest }),
-      /Run 'npx skillpacks list' to see all available skills\./
+      /Run 'npx gskp list' to see all available skills\./
     );
   });
 

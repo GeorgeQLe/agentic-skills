@@ -117,7 +117,7 @@ function runCommand(command, args, options = {}) {
 }
 
 function runGlobalInit(args) {
-  requireCommand('bash', 'Install bash before running skillpacks.');
+  requireCommand('bash', 'Install bash before running gskp.');
   return runCommand('bash', [initScriptPath, ...args]);
 }
 
@@ -145,13 +145,13 @@ function ensureAlignmentTtsAsset(projectRoot) {
 }
 
 function alignmentHelp() {
-  console.log(`skillpacks alignment
+  console.log(`gskp alignment
 
 Usage:
-  skillpacks alignment bundles [--dry-run] [--check]
-  skillpacks alignment pages audit
-  skillpacks alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
-  skillpacks alignment verify
+  gskp alignment bundles [--dry-run] [--check]
+  gskp alignment pages audit
+  gskp alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
+  gskp alignment verify
 
 Commands:
   bundles                    Generate per-skill ALIGNMENT-PAGE.md bundles
@@ -292,7 +292,7 @@ function runAlignment(args) {
     return runCommand(resolved.command, resolved.args);
   }
 
-  requireCommand('node', 'Install Node.js before running skillpacks alignment commands.');
+  requireCommand('node', 'Install Node.js before running gskp alignment commands.');
   if (resolved.ensureTtsAsset) {
     ensureAlignmentTtsAsset(process.cwd());
   }
@@ -350,10 +350,10 @@ function resolveDeckInstall(args) {
 }
 
 function usage() {
-  console.log(`skillpacks ${packageVersion()}
+  console.log(`gskp ${packageVersion()}
 
 Usage:
-  skillpacks <command> [args...]
+  gskp <command> [args...]
 
 Commands:
   list                         List available packs
@@ -439,7 +439,7 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'install-deck') {
     const deckInstall = resolveDeckInstall(rest);
-    requireCommand('bash', 'Install bash before running skillpacks.');
+    requireCommand('bash', 'Install bash before running gskp.');
     requireCommand(
       'jq',
       'Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).'
@@ -457,7 +457,7 @@ export async function runSkillpacksCli(args) {
     }
     if (rest.length > 0) {
       throw new Error(
-        "init does not accept arguments except '--global'. Use 'skillpacks init --global' for user-home global core skills."
+        "init does not accept arguments except '--global'. Use 'gskp init --global' for user-home global core skills."
       );
     }
     return initProject({
@@ -536,7 +536,7 @@ export async function runSkillpacksCli(args) {
     });
   }
 
-  requireCommand('bash', 'Install bash before running skillpacks.');
+  requireCommand('bash', 'Install bash before running gskp.');
 
   return runCommand('bash', [packScriptPath, command, ...rest]);
 }

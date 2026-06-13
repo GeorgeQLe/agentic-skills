@@ -42,7 +42,7 @@ describe('skillpacks alignment command parsing', () => {
     const { exitCode, stdout } = await captureCli(['alignment', '--help']);
 
     assert.equal(exitCode, 0);
-    assert.match(stdout, /skillpacks alignment/);
+    assert.match(stdout, /gskp alignment/);
     assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\]/);
     assert.match(stdout, /alignment pages audit/);
     assert.match(stdout, /alignment pages inject-tts \[--force\]/);

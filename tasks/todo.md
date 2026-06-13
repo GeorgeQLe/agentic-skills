@@ -1,3 +1,33 @@
+## Current Implementation - Short npm CLI Rename
+
+### Current Checklist
+
+- [x] Verify short-name availability candidates.
+- [x] Update package metadata and CLI aliases.
+- [x] Update high-visibility install docs and package tests.
+- [x] Run focused package verification.
+- [x] Commit and push the verified rename boundary.
+
+### Review Notes
+
+- `gsp` is already taken on npm at `0.5.4`.
+- `gsk` is already taken on npm at `0.0.2`.
+- `skp` is already taken on npm at `1.0.0`.
+- `gskp` returned npm E404 and is the shortest available brand-aligned candidate checked.
+- Decision: use `gskp` as the package and primary command; preserve `skillpacks` as a compatibility binary.
+- Updated `packages/skillpacks/package.json` to publish as `gskp` with both `gskp` and `skillpacks` bins pointing at `bin/skillpacks.mjs`.
+- Updated high-visibility docs and generated provision blocks to prefer `npx gskp ...`, and documented `skillpack` singular as an unrelated npm package.
+- Mirrored `provision-agentic-config` Claude/Codex skills were archived and bumped from `v0.8` to `v0.9` because their generated missing-skill fallback blocks changed.
+- Verification passed:
+  - `npm --workspace packages/skillpacks run build`
+  - `node --test packages/skillpacks/test/*.test.mjs` (74 tests)
+  - `npm --workspace packages/skillpacks run build:check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm pack ./packages/skillpacks/build --dry-run --json --silent` produced `gskp@0.1.1` / `gskp-0.1.1.tgz`.
+- Note: an earlier parallel validation attempt raced two package-build commands against `packages/skillpacks/build`; rerunning those checks sequentially passed.
+
 ## Current Implementation - Product Design Flow Tree Artifact Boundaries
 
 ### Current Checklist

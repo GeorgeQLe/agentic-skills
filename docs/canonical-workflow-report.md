@@ -94,12 +94,12 @@ Claude route:
 ```bash
 /idea-scope-brief
 /pack
-npx skillpacks install business-discovery        # when the discovery lane is missing
+npx gskp install business-discovery        # when the discovery lane is missing
 /customer-discovery
 /competitive-analysis
-npx skillpacks install customer-lifecycle        # when lifecycle mapping is missing
+npx gskp install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
-npx skillpacks install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
+npx gskp install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
 /hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
 /positioning                            # orchestrator: market mode (framework selection → /exec → synthesis) during default AFPS; product mode triggered post-launch via research-roadmap staleness detection or explicit `/positioning product`
 /value-prop-canvas                      # optional: contested solution-fit evidence
@@ -128,12 +128,12 @@ Codex route:
 ```bash
 $idea-scope-brief
 $pack
-npx skillpacks install business-discovery
+npx gskp install business-discovery
 $customer-discovery
 $competitive-analysis
-npx skillpacks install customer-lifecycle
+npx gskp install customer-lifecycle
 $journey-map
-npx skillpacks install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
+npx gskp install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
 $hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
 $positioning                            # orchestrator: market mode (framework selection → $exec → synthesis) during default AFPS; product mode triggered post-launch
 $value-prop-canvas                      # optional: contested solution-fit evidence

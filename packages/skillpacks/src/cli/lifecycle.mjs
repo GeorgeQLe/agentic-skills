@@ -33,7 +33,7 @@ const HIBERNATED_REACTIVATION_TEXT =
   'Reactivation requires a stable service/API, a known auth contract, and updated smoke tests.';
 const TOOLS = ['claude', 'codex'];
 const AGENT_DOCS = ['AGENTS.md', 'CLAUDE.md'];
-const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7']);
+const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7', 'v0.8', 'v0.9']);
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
 const checkoutRoot = resolve(packageRoot, '..', '..');
@@ -614,7 +614,7 @@ function staleProjectPackError(pack, location, reason = '') {
   const detail = reason ? ` ${reason}` : '';
   return new Error(
     `Stale pack entry '${pack}' in .agents/project.json ${location}.${detail} ` +
-      `Run 'npx skillpacks remove ${pack}' or edit .agents/project.json to remove or rename it.`
+      `Run 'npx gskp remove ${pack}' or edit .agents/project.json to remove or rename it.`
   );
 }
 
@@ -1242,7 +1242,7 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
 
   if (anyStale) {
     console.log('');
-    console.log('Fix: npx skillpacks refresh (or scripts/pack.sh refresh from a source checkout)');
+    console.log('Fix: npx gskp refresh (or scripts/pack.sh refresh from a source checkout)');
     return 1;
   }
 

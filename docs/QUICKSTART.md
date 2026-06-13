@@ -4,9 +4,9 @@ Get from clone to a working skill in under 5 minutes.
 
 ## Prerequisites
 
-- **Node.js 18+** for the `skillpacks` npm CLI and package build
-- **bash** shell (macOS, Linux, or WSL on Windows) for clone-based `./init.sh`, `scripts/pack.sh`, and remaining shell-backed `skillpacks` commands
-- **jq** for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `skillpacks install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
+- **Node.js 18+** for the `gskp` npm CLI and package build
+- **bash** shell (macOS, Linux, or WSL on Windows) for clone-based `./init.sh`, `scripts/pack.sh`, and remaining shell-backed `gskp` commands
+- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 
@@ -26,16 +26,16 @@ cd ~/agentic-skills
 
 ### npm CLI
 
-With the published npm package, use `npx skillpacks` from the project that should receive local skills:
+With the published npm package, use `npx gskp` from the project that should receive local skills:
 
 ```bash
 cd ~/my-project
-npx skillpacks --version
-npx skillpacks init
-npx skillpacks list
+npx gskp --version
+npx gskp init
+npx gskp list
 ```
 
-The npm CLI does not install user-home global skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`). Domain packs are never installed globally.
+The npm CLI does not install user-home global skills by default. `npx gskp init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx gskp refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx gskp init --global` (or the backward-compatible `npx gskp init-global`). Domain packs are never installed globally.
 
 ## 2. Install a Pack in Your Project
 
@@ -43,10 +43,10 @@ Navigate to any project repository and install the pack that matches your domain
 
 ```bash
 cd ~/my-project
-npx skillpacks init
-npx skillpacks install devtool    # for developer tools
-npx skillpacks install game        # for games
-npx skillpacks install business-discovery  # for SaaS/business apps
+npx gskp init
+npx gskp install devtool    # for developer tools
+npx gskp install game        # for games
+npx gskp install business-discovery  # for SaaS/business apps
 ```
 
 From a source checkout, the equivalent compatibility route is:
@@ -60,9 +60,9 @@ This creates `.agents/project.json` and project-local skill roots in `.claude/sk
 The npm CLI can also install a canonical deck from manifest metadata:
 
 ```bash
-npx skillpacks install-deck business-afps
-npx skillpacks install-deck devtool-afps
-npx skillpacks install-deck game-afps
+npx gskp install-deck business-afps
+npx gskp install-deck devtool-afps
+npx gskp install-deck game-afps
 ```
 
 ## 3. Reload Skills in Your CLI
@@ -83,7 +83,7 @@ Source checkout:
 npm:
 
 ```bash
-npx skillpacks status
+npx gskp status
 ```
 
 Or from within Claude Code: run `/pack` with no arguments. From Codex: run `$pack`.
@@ -121,9 +121,9 @@ After running a skill, look for these artifacts:
 Alignment maintenance from npm is available through:
 
 ```bash
-npx skillpacks alignment bundles --check
-npx skillpacks alignment pages audit
-npx skillpacks alignment pages inject-tts --force alignment/example.html
+npx gskp alignment bundles --check
+npx gskp alignment pages audit
+npx gskp alignment pages inject-tts --force alignment/example.html
 ```
 
 From a source checkout, the direct script paths remain canonical: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs`.
@@ -133,11 +133,11 @@ From a source checkout, the direct script paths remain canonical: `node scripts/
 Moving from a source checkout to npm does not change the project-local files. From the target project directory, run the npm command that matches your existing pack designation:
 
 ```bash
-npx skillpacks refresh
-npx skillpacks doctor
+npx gskp refresh
+npx gskp doctor
 ```
 
-`skillpacks@<semver>` selects the package snapshot. Skill pins remain skill-level pins, for example `npx skillpacks pin quality-sweep v0.0`. If a pinned archive version is not present in the installed npm package, upgrade the npm package or use a source checkout that contains that archive.
+`gskp@<semver>` selects the package snapshot. Skill pins remain skill-level pins, for example `npx gskp pin quality-sweep v0.0`. If a pinned archive version is not present in the installed npm package, upgrade the npm package or use a source checkout that contains that archive.
 
 ## What's Next
 

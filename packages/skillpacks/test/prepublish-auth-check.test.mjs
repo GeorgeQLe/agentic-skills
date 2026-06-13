@@ -25,12 +25,12 @@ if [[ "$1" == "whoami" ]]; then
   exit 0
 fi
 
-if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == "maintainers" ]]; then
+if [[ "$1" == "view" && "$2" == "gskp" && "$3" == "maintainers" ]]; then
   printf '%s\\n' "\${NPM_MOCK_MAINTAINERS:-[\\"glexcorp <george@leexperimental.com>\\"]}"
   exit "\${NPM_MOCK_MAINTAINERS_RC:-0}"
 fi
 
-if [[ "$1" == "view" && "$2" == "skillpacks@0.1.1" && "$3" == "version" ]]; then
+if [[ "$1" == "view" && "$2" == "gskp@0.1.1" && "$3" == "version" ]]; then
   if [[ "\${NPM_MOCK_VERSION_EXISTS:-0}" == "1" ]]; then
     printf '"0.1.1"\\n'
     exit 0
@@ -71,7 +71,7 @@ test("passes for the expected npm maintainer when the version is unpublished", (
   const result = runPreflight();
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /preflight passed for skillpacks@0\.1\.1 as glexcorp/);
+  assert.match(result.stderr, /preflight passed for gskp@0\.1\.1 as glexcorp/);
 });
 
 test("fails with login guidance when npm whoami is not authenticated", () => {
@@ -93,5 +93,5 @@ test("fails before publish if the package version already exists", () => {
   const result = runPreflight({ NPM_MOCK_VERSION_EXISTS: "1" });
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /skillpacks@0\.1\.1 is already published/);
+  assert.match(result.stderr, /gskp@0\.1\.1 is already published/);
 });

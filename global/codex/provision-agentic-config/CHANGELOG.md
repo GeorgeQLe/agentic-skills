@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.9 - 2026-06-12
+
+- Updated generated missing-skill fallback blocks to recommend `npx gskp install <pack-or-skill>` as the primary npm route while preserving source-checkout lookup behavior.
+
 ## v0.8 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

@@ -15,7 +15,7 @@ try {
   process.exitCode = exitCode;
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
-  console.error(`skillpacks: ${message}`);
+  console.error(`gskp: ${message}`);
   process.exitCode = 1;
 } finally {
   await printUpdateNotice(checkPromise, pkg.version);

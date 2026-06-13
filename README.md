@@ -11,9 +11,9 @@ This keeps game research out of B2B SaaS sessions, and keeps business-product as
 
 ## Prerequisites
 
-- **Node.js 18+** for the `skillpacks` npm CLI and package build.
-- **bash** shell (macOS, Linux, or WSL on Windows) for `./init.sh`, `scripts/pack.sh`, and the remaining shell-backed `skillpacks` commands.
-- **jq** for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `skillpacks` project commands do not require `jq`.
+- **Node.js 18+** for the `gskp` npm CLI and package build.
+- **bash** shell (macOS, Linux, or WSL on Windows) for `./init.sh`, `scripts/pack.sh`, and the remaining shell-backed `gskp` commands.
+- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp` project commands do not require `jq`.
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 
@@ -46,15 +46,17 @@ With the published npm package, users can install from the current project direc
 
 ```bash
 cd ~/my-project
-npx skillpacks init
-npx skillpacks install devtool
-npx skillpacks install code-quality
-npx skillpacks install-deck game-afps
-npx skillpacks refresh
-npx skillpacks status
+npx gskp init
+npx gskp install devtool
+npx gskp install code-quality
+npx gskp install-deck game-afps
+npx gskp refresh
+npx gskp status
 ```
 
-`npx skillpacks init` installs the base skills for the current repository as project-local roots. `npx skillpacks install <pack-or-skill>` adds domain packs or individual pack skills. Both write project-local files: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. Package semver such as `skillpacks@0.1.0` selects the bundled skill snapshot; `npx skillpacks refresh` recreates enabled base skills and packs from that snapshot. Individual skill pins still use each skill's `version:` value through `skillpacks pin <skill> <version>`.
+`npx gskp init` installs the base skills for the current repository as project-local roots. `npx gskp install <pack-or-skill>` adds domain packs or individual pack skills. Both write project-local files: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. Package semver such as `gskp@0.1.0` selects the bundled skill snapshot; `npx gskp refresh` recreates enabled base skills and packs from that snapshot. Individual skill pins still use each skill's `version:` value through `gskp pin <skill> <version>`.
+
+The older `npx skillpacks ...` command remains a compatibility alias when installed from this package. Do not use `npx skillpack ...` singular; that is an unrelated npm package with a different project format.
 
 ## Initialization
 
@@ -69,7 +71,7 @@ npx skillpacks status
 
 It does **not** install `packs/*` globally.
 
-For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when you explicitly want user-home global core installs from the package snapshot. Domain packs are never installed globally.
+For npm consumers, prefer `npx gskp init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx gskp refresh` updates them from the package version being run. Use `npx gskp init --global` (or the backward-compatible `npx gskp init-global`) only when you explicitly want user-home global core installs from the package snapshot. Domain packs are never installed globally.
 
 To remove repo-managed global skill installs:
 
@@ -82,48 +84,48 @@ To remove repo-managed global skill installs:
 Project packs are enabled per repository.
 
 ```bash
-npx skillpacks list
-npx skillpacks recommend
-npx skillpacks install business-discovery
-npx skillpacks install business-growth
-npx skillpacks install business-ops
-npx skillpacks install game
-npx skillpacks install devtool
-npx skillpacks install creator-foundation
-npx skillpacks install youtube-ops
-npx skillpacks install code-quality
-npx skillpacks install agentic-skills-bench
-npx skillpacks install monorepo
-npx skillpacks install remotion
-npx skillpacks install project-fleet
-npx skillpacks install alignment-loop
-npx skillpacks install design-system
-npx skillpacks which design-system
-npx skillpacks status
-npx skillpacks remove game
-npx skillpacks remove design-system
+npx gskp list
+npx gskp recommend
+npx gskp install business-discovery
+npx gskp install business-growth
+npx gskp install business-ops
+npx gskp install game
+npx gskp install devtool
+npx gskp install creator-foundation
+npx gskp install youtube-ops
+npx gskp install code-quality
+npx gskp install agentic-skills-bench
+npx gskp install monorepo
+npx gskp install remotion
+npx gskp install project-fleet
+npx gskp install alignment-loop
+npx gskp install design-system
+npx gskp which design-system
+npx gskp status
+npx gskp remove game
+npx gskp remove design-system
 ```
 
-`npx skillpacks install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
+`npx gskp install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
-For source-checkout development, `scripts/pack.sh install <pack-or-skill>` remains supported from a local clone. The npm CLI also supports `npx skillpacks refresh`, `npx skillpacks doctor`, `npx skillpacks doctor --fix`, `npx skillpacks doctor --fix --agent-docs --dry-run`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
+For source-checkout development, `scripts/pack.sh install <pack-or-skill>` remains supported from a local clone. The npm CLI also supports `npx gskp refresh`, `npx gskp doctor`, `npx gskp doctor --fix`, `npx gskp doctor --fix --agent-docs --dry-run`, and deck installation from manifest metadata including `npx gskp install-deck vard`, `npx gskp install-deck ord`, `npx gskp install-deck business-afps`, `npx gskp install-deck devtool-afps`, and `npx gskp install-deck game-afps`.
 
 Alignment convention maintenance also has npm wrappers:
 
 ```bash
-npx skillpacks alignment bundles --check
-npx skillpacks alignment pages audit
-npx skillpacks alignment pages inject-tts --force alignment/example.html
-npx skillpacks alignment verify
+npx gskp alignment bundles --check
+npx gskp alignment pages audit
+npx gskp alignment pages inject-tts --force alignment/example.html
+npx gskp alignment verify
 ```
 
-Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx skillpacks alignment ...` from npm-installed target repos.
+Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx gskp alignment ...` from npm-installed target repos.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
-`npx skillpacks which <skill>` shows which pack provides a skill and whether it is installed. `npx skillpacks refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
+`npx gskp which <skill>` shows which pack provides a skill and whether it is installed. `npx gskp refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
 
 Pack installation creates local repo-managed skill roots in the current project. Active installs expose the canonical `SKILL.md` and exclude `archive/`:
 
@@ -168,7 +170,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
 }
 ```
 
-Git-checkout `scripts/pack.sh` commands preserve existing `project_scopes` and `notes` fields when `jq` is available. The npm `skillpacks` Node-owned commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`.
+Git-checkout `scripts/pack.sh` commands preserve existing `project_scopes` and `notes` fields when `jq` is available. The npm `gskp` Node-owned commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`.
 
 Pack commands also write `.agents/.pack.lock` owner metadata and automatically remove stale locks whose recorded process is no longer running.
 
@@ -212,7 +214,7 @@ agentic-skills/
 └── docs/
 ```
 
-The repository root is private workspace metadata. The publishable `skillpacks` package lives in `packages/skillpacks/`, while the public Skills Showcase app and its data generators live in `apps/skills-showcase/`.
+The repository root is private workspace metadata. The publishable `gskp` package source lives in `packages/skillpacks/`, while the public Skills Showcase app and its data generators live in `apps/skills-showcase/`.
 
 ## Global Core
 
@@ -235,7 +237,7 @@ afps-status
 
 ### `delegate` moved to the `agent-bridge` pack
 
-`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `npx skillpacks install agent-bridge`. It remains **Claude-only** with no Codex mirror.
+`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `npx gskp install agent-bridge`. It remains **Claude-only** with no Codex mirror.
 
 `/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `packs/agent-bridge/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
 
@@ -262,7 +264,7 @@ burn-rate, runway-model, investor-update, reconcile-research,
 mvp-gap, scale-audit, platform-strategy
 ```
 
-`npx skillpacks install business-app` remains a compatibility alias that installs all four, but narrow installs are preferred for context size.
+`npx gskp install business-app` remains a compatibility alias that installs all four, but narrow installs are preferred for context size.
 
 
 ### Game
@@ -306,7 +308,7 @@ youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis
 ```
 
-`npx skillpacks install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
+`npx gskp install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
 
 LinkedIn-first evidence work uses the `creator-foundation` matrix/schema/dossier path:
 
@@ -363,7 +365,7 @@ extract-shared-types, quality-sweep
 For pnpm workspace monorepos that may use Turborepo and need package-aware execution, guardrails, and shipping.
 
 ```bash
-npx skillpacks install monorepo
+npx gskp install monorepo
 ```
 
 ```text
@@ -399,10 +401,10 @@ PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Their
 Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 ```bash
-npx skillpacks install business-discovery
-npx skillpacks install customer-lifecycle
-npx skillpacks install business-growth
-npx skillpacks install business-ops
+npx gskp install business-discovery
+npx gskp install customer-lifecycle
+npx gskp install business-growth
+npx gskp install business-ops
 ```
 
 Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.

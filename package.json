@@ -7,10 +7,10 @@
     "packages/skillpacks"
   ],
   "scripts": {
-    "skillpacks:build": "npm --workspace skillpacks run build",
-    "skillpacks:list": "npm --workspace skillpacks run skillpacks:list",
-    "skillpacks:verify": "npm --workspace skillpacks run verify:package",
-    "skillpacks:verify-published": "npm --workspace skillpacks run verify:published",
+    "skillpacks:build": "npm --workspace packages/skillpacks run build",
+    "skillpacks:list": "npm --workspace packages/skillpacks run skillpacks:list",
+    "skillpacks:verify": "npm --workspace packages/skillpacks run verify:package",
+    "skillpacks:verify-published": "npm --workspace packages/skillpacks run verify:published",
     "skills-showcase:build": "pnpm --dir apps/skills-showcase build",
     "skills-showcase:test": "pnpm --dir apps/skills-showcase test",
     "skills-showcase:validate-data": "pnpm --dir apps/skills-showcase validate:data"

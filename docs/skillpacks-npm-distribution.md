@@ -2,52 +2,54 @@
 
 ## Approval Summary
 
-Source alignment page: `alignment/idea-scope-brief-npm-distribution.html` (historical strategy context). Current package usage reference: `alignment/skillpacks-npm-package-walkthrough.html`.
+Source alignment page: `alignment/idea-scope-brief-npm-distribution.html` (historical strategy context). Current package usage reference: `alignment/gskp-npm-package-walkthrough.html`.
 
 Approved decisions:
 
 - Primary path: hybrid, starting with COA A and evolving toward COA B/C only when demand justifies it.
-- Public npm/CLI name: `skillpacks`.
+- Public npm/CLI name: `gskp`.
 - Version granularity: skill-level versioning remains authoritative for user pinning.
 - Deck installation: COA B/C-shaped metadata first. Decks should be represented as curated package lists and registry tags; the initial COA A monolith may materialize those selections locally, but deck behavior should not be hard-coded as monolith-only presets.
 - Artifact route: write the detailed design doc in `docs/` first, then use it as the implementation roadmap.
 
-Current npm check on 2026-06-08:
+Current npm check on 2026-06-12:
 
-- `npm view skillpacks --json` returned `E404`, so the unscoped package name appears unclaimed or inaccessible to this machine.
-- `npm view @skillpacks/cli --json` and `npm view @skillpacks/core --json` returned `E404`; that does not prove npm organization availability, but no packages under those names are visible.
+- `npm view gsp --json` returned an existing external package at version `0.5.4`, so `gsp` should not be used.
+- `npm view gsk --json` returned an existing external package at version `0.0.2`, so `gsk` should not be used.
+- `npm view skp --json` returned an existing external package at version `1.0.0`, so `skp` should not be used.
+- `npm view gskp --json` returned `E404`, so the unscoped package name appears unclaimed or inaccessible to this machine.
 - `npm view agentic-skills --json` returned an existing external package at version `2.5.1`, so `agentic-skills` should not be used as this repo's public npm package name.
+- `npm view skillpack --json` returned an existing unrelated package at version `0.1.3`, so the old `skillpacks` spelling is too typo-adjacent for the primary route.
 
-Publication status on 2026-06-10:
+Publication status before the `gskp` rename:
 
-- `skillpacks@0.1.0` is published publicly on npm with `latest` pointing to `0.1.0`.
-- Package metadata uses `license: MIT`, repository `git+https://github.com/GeorgeQLe/agentic-skills.git`, `repository.directory: packages/skillpacks`, bugs URL `https://github.com/GeorgeQLe/agentic-skills/issues`, and homepage `https://github.com/GeorgeQLe/agentic-skills#readme`.
-- Registry tarball evidence: `skillpacks-0.1.0.tgz`, 2,349 files, 31,323,992 bytes unpacked, shasum `9ab8925b5f8d3dc39f1caa9c50609fb8df6df1f2`, integrity `sha512-TyZFnm9HjaV8E0yTN1EPRuh1BZDWt/Hcn316omlXvAVhLFpWkP191BaKzw/wmCjRkEm14RF2WkWJ6XSlusDKHg==`.
-- Published-package verification passed with `npx skillpacks@latest list`, temp-project `install code-quality`, temp-project `install quality-sweep`, temp-project `install-deck game-afps`, and the git-checkout `scripts/pack.sh list` path.
+- `skillpacks@0.1.0` and `skillpacks@0.1.1` were published publicly on npm before the short-name change.
+- The package now publishes as `gskp`, while retaining `skillpacks` as a compatibility binary in the package.
+- The next public verification target is `npx gskp@latest list`, temp-project `install code-quality`, temp-project `install quality-sweep`, temp-project `install-deck game-afps`, and the git-checkout `scripts/pack.sh list` path.
 
 ## Product Shape
 
-`skillpacks` becomes the public installer and CLI for this repository's markdown skill library. The first npm release should not restructure the repository into many packages. It should package the current repository content needed to install skills and expose a Node entry point that can drive the existing install model.
+`gskp` becomes the public installer and CLI for this repository's markdown skill library. The first npm release should not restructure the repository into many packages. It should package the current repository content needed to install skills and expose a Node entry point that can drive the existing install model.
 
 The initial user experience should be:
 
 ```bash
-npx skillpacks init
-npx skillpacks install business-discovery
-npx skillpacks install-deck vard
-npx skillpacks status
-npx skillpacks doctor
-npx skillpacks refresh
+npx gskp init
+npx gskp install business-discovery
+npx gskp install-deck vard
+npx gskp status
+npx gskp doctor
+npx gskp refresh
 ```
 
-`npx skillpacks init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx skillpacks refresh` update base skills from the current package snapshot instead of depending on user-home global installs.
+`npx gskp init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx gskp refresh` update base skills from the current package snapshot instead of depending on user-home global installs.
 
 When a user explicitly wants user-home global core skills from the npm package snapshot, the compatibility path is:
 
 ```bash
-npx skillpacks init --global
+npx gskp init --global
 # Backward-compatible spelling:
-npx skillpacks init-global
+npx gskp init-global
 ```
 
 Both global init forms invoke the packaged `init.sh` and keep the global surface limited to core skills. Domain packs remain project-local only.
@@ -77,17 +79,18 @@ The npm path is now the standard agent-facing install route. The source-checkout
 
 ### Package
 
-The publishable npm package is named `skillpacks` and lives under `packages/skillpacks/`. The repository root stays private workspace metadata for the monorepo.
+The publishable npm package is named `gskp` and lives under `packages/skillpacks/`. The repository root stays private workspace metadata for the monorepo.
 
 Current package `package.json` shape:
 
 ```json
 {
-  "name": "skillpacks",
+  "name": "gskp",
   "version": "0.1.0",
   "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {
+    "gskp": "bin/skillpacks.mjs",
     "skillpacks": "bin/skillpacks.mjs"
   },
   "repository": {
@@ -125,6 +128,8 @@ Current package `package.json` shape:
 ```
 
 The root `package.json` is private and declares workspaces for `apps/skills-showcase` and `packages/skillpacks`. The public package uses the repository root MIT license and npm metadata links back to `https://github.com/GeorgeQLe/agentic-skills`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
+
+The `skillpacks` binary is retained as an in-package compatibility alias. It should no longer be the primary docs route because `skillpack` singular is an unrelated npm package that can catch common typos.
 
 ### CLI Entry Point
 
@@ -166,7 +171,7 @@ Skill-level archives inside `global/**/archive/` and `packs/**/archive/` must re
 
 Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-checkout compatibility wrapper and as the packaged shell fallback for commands that are not yet worth porting. Do not turn `pack.sh` into a thin wrapper over the Node CLI in this phase; that would make the old checkout path depend on the npm package internals before all discovery and init surfaces are ported. Revisit the decision only after `recommend`, `which`, `install-deck`, and global init behavior are either Node-owned or intentionally documented as permanent shell surfaces.
 
-<!-- skillpacks-compatibility-matrix:start -->
+<!-- gskp-compatibility-matrix:start -->
 | Command | Owner | Backend | Requires bash | Requires jq | Notes |
 | --- | --- | --- | --- | --- | --- |
 | `help / --help / --version` | Node-owned | `packages/skillpacks/src/cli/run-pack-script.mjs` | No | No | CLI help and version output from package metadata. |
@@ -195,7 +200,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `which <skill>` | Shell-backed | Packaged `scripts/pack.sh which` | Yes | Optional | `jq` improves individually enabled skill status; pack-level status has a grep/sed fallback. |
 | `install-deck <deck> [--full]` | Hybrid shell materialization | Node manifest resolver, then packaged `scripts/pack.sh install` | Yes | Yes | Deck metadata is Node-resolved, but installation still uses the compatibility install path. |
 | `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Backward-compatible alias for `init --global`; `jq` preserves an existing global pin file when `--pin` updates it. |
-<!-- skillpacks-compatibility-matrix:end -->
+<!-- gskp-compatibility-matrix:end -->
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.
 
@@ -203,18 +208,18 @@ The CLI should print the same reload notice as `pack.sh` after install, remove, 
 
 The approved deck answer points to COA B and COA C. That means decks should be modeled as installable package-list and registry-tag metadata, not as an implementation detail of the first monolith package.
 
-Phase 1 can still run from the monolith package. The distinction is that `skillpacks install-deck <deck>` reads deck metadata from the manifest and then materializes that selection using the currently available backend. In the first release, that backend is the local monolith plus `scripts/pack.sh install`. Later, the same deck metadata can drive scoped package installs or registry tag resolution.
+Phase 1 can still run from the monolith package. The distinction is that `gskp install-deck <deck>` reads deck metadata from the manifest and then materializes that selection using the currently available backend. In the first release, that backend is the local monolith plus `scripts/pack.sh install`. Later, the same deck metadata can drive scoped package installs or registry tag resolution.
 
 Supported deck metadata:
 
 | Deck | CLI command | Package-list meaning | Registry tags |
 | --- | --- | --- | --- |
-| VARD | `skillpacks install-deck vard` | `vard` | `deck:vard` |
-| ORD | `skillpacks install-deck ord` | `ord` | `deck:ord` |
-| Business AFPS | `skillpacks install-deck business-afps` | `business-discovery` by default | `deck:business-afps`, `stage:discovery` |
-| Business AFPS full | `skillpacks install-deck business-afps --full` | `business-discovery`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
-| Devtool AFPS | `skillpacks install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
-| Game AFPS | `skillpacks install-deck game-afps` | `game` | `deck:game-afps` |
+| VARD | `gskp install-deck vard` | `vard` | `deck:vard` |
+| ORD | `gskp install-deck ord` | `ord` | `deck:ord` |
+| Business AFPS | `gskp install-deck business-afps` | `business-discovery` by default | `deck:business-afps`, `stage:discovery` |
+| Business AFPS full | `gskp install-deck business-afps --full` | `business-discovery`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
+| Devtool AFPS | `gskp install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
+| Game AFPS | `gskp install-deck game-afps` | `game` | `deck:game-afps` |
 
 Business AFPS defaults to the first deliberate pack because current docs recommend progressive installation. The `--full` flag can exist for users who intentionally want the whole deliberate lane.
 
@@ -224,10 +229,10 @@ Implementation rule:
 - Generate deck metadata into `packages/skillpacks/dist/skillpacks-manifest.json`.
 - Make `install-deck` a resolver over that manifest.
 - In COA A, the resolver forwards selected packs to `scripts/pack.sh install`.
-- In COA B, the resolver can install or recommend scoped package lists such as `@skillpacks/vard`.
+- In COA B, the resolver can install or recommend scoped package lists such as `@gskp/vard`.
 - In COA C, the resolver can query skills by registry tags such as `deck:vard`.
 
-The CLI command stays `skillpacks install-deck <deck>` so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
+The CLI command stays `gskp install-deck <deck>` so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
 
 ## Manifest Design
 
@@ -246,7 +251,7 @@ Proposed shape:
   "schema_version": 1,
   "generated_at": "2026-06-08T00:00:00Z",
   "package": {
-    "name": "skillpacks",
+    "name": "gskp",
     "version": "0.1.0"
   },
   "packs": [
@@ -295,17 +300,17 @@ The manifest should be generated from repository files, not hand-maintained. Sta
 
 Manifest consumers:
 
-- `skillpacks list --json`
-- `skillpacks search <query>` in a later phase
+- `gskp list --json`
+- `gskp search <query>` in a later phase
 - package tarball validation
-- migration to `@skillpacks/*` package metadata
+- migration to `@gskp/*` package metadata
 - possible hosted registry later
 
 ## Versioning And Pinning
 
 There are two version layers:
 
-1. npm package semver, such as `skillpacks@0.1.0`.
+1. npm package semver, such as `gskp@0.1.0`.
 2. skill frontmatter versions, such as `version: v0.4`.
 
 The approved granularity is skill-level, so skill frontmatter remains the user-facing pinning level. npm package semver is the transport snapshot.
@@ -313,14 +318,14 @@ The approved granularity is skill-level, so skill frontmatter remains the user-f
 User examples:
 
 ```bash
-npx skillpacks@0.1.0 install business-discovery
-npx skillpacks pin devtool-adoption v0.0
-npx skillpacks doctor
+npx gskp@0.1.0 install business-discovery
+npx gskp pin devtool-adoption v0.0
+npx gskp doctor
 ```
 
 Important consequences:
 
-- `skillpacks@0.1.0` determines which skill archive snapshots are available locally.
+- `gskp@0.1.0` determines which skill archive snapshots are available locally.
 - `pinned_versions` in `.agents/project.json` continues to select `archive/<version>/SKILL.md` inside the installed package.
 - A user who needs a skill archive not present in their installed npm package must upgrade the npm package or use the git checkout model.
 - Package releases should be cut after one or more skill changes are complete and verified; they should not require every edited skill to share a new npm version internally.
@@ -339,7 +344,7 @@ After the Phase 3 port, `scripts/pack.sh` remains a supported compatibility wrap
 
 ## Phase 4 Release-Readiness Notes
 
-Phase 4 prepares the package for a dry-run release only. It does not publish `skillpacks`, create npm tags, change package access, or replace the source-checkout setup path.
+Phase 4 prepares the package for a dry-run release only. It does not publish `gskp`, create npm tags, change package access, or replace the source-checkout setup path.
 
 ### User Setup Paths
 
@@ -356,10 +361,10 @@ With the published npm package, npm users can install from the target project di
 
 ```bash
 cd ~/my-project
-npx skillpacks install devtool
-npx skillpacks install code-quality
-npx skillpacks install-deck game-afps
-npx skillpacks status
+npx gskp install devtool
+npx gskp install code-quality
+npx gskp install-deck game-afps
+npx gskp status
 ```
 
 Both paths write the same project-local contract: `.agents/project.json`, `.claude/skills/*`, and `.codex/skills/*`. The CLI session reload requirements are unchanged: Claude Code needs `/reload-skills`, `/clear`, or a restart depending on when the local roots appeared; Codex needs a fresh session if the `$` skill list remains stale.
@@ -369,8 +374,8 @@ Both paths write the same project-local contract: `.agents/project.json`, `.clau
 An existing project can move from a local checkout workflow to the npm package by keeping `.agents/project.json` committed and running:
 
 ```bash
-npx skillpacks refresh
-npx skillpacks doctor
+npx gskp refresh
+npx gskp doctor
 ```
 
 `refresh` recreates generated local skill roots from the package snapshot and the existing project designation. `doctor` then reports whether managed installs are current, stale, missing, unknown, or pinned.
@@ -379,18 +384,18 @@ Do not commit generated `.claude/skills/*` or `.codex/skills/*` roots during mig
 
 ### Version And Pinning Troubleshooting
 
-`skillpacks@<semver>` is the transport snapshot. It determines which active skill files and `archive/<version>/SKILL.md` snapshots are present in the installed package.
+`gskp@<semver>` is the transport snapshot. It determines which active skill files and `archive/<version>/SKILL.md` snapshots are present in the installed package.
 
 Skill pins still use skill frontmatter versions:
 
 ```bash
-npx skillpacks pin quality-sweep v0.0
-npx skillpacks unpin quality-sweep
+npx gskp pin quality-sweep v0.0
+npx gskp unpin quality-sweep
 ```
 
 If a pin fails because an archive version is unavailable, the installed npm package does not contain that archived skill snapshot. Upgrade to a package version that includes the archive, or use a source checkout at a commit that contains it.
 
-Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. In the current `skillpacks@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
+Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode`) do not require `jq`. In the current `gskp@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
 
 ### Alignment Convention Commands
 
@@ -405,10 +410,10 @@ node scripts/inject-tts.mjs --force alignment/example.html
 npm users can run the equivalent wrapped commands from the target repository:
 
 ```bash
-npx skillpacks alignment bundles --check
-npx skillpacks alignment pages audit
-npx skillpacks alignment pages inject-tts --force alignment/example.html
-npx skillpacks alignment verify
+npx gskp alignment bundles --check
+npx gskp alignment pages audit
+npx gskp alignment pages inject-tts --force alignment/example.html
+npx gskp alignment verify
 ```
 
 The namespace keeps the two alignment workflows separate. `alignment bundles` generates or checks the bundled per-skill convention files (`ALIGNMENT-PAGE.md`) from `docs/alignment-page-convention.md`; `alignment pages audit` checks already-rendered active `alignment/*.html` pages. `alignment pages inject-tts` copies the packaged `scripts/alignment-tts-kokoro.js` asset into the target repo when needed before adding the script tag. `alignment verify` is mainly for this source checkout and exits with a clear message when a consumer repo does not include the focused alignment Vitest files.
@@ -421,8 +426,8 @@ Goal: prove the public name and package boundary before code changes.
 
 Tasks:
 
-- Confirm npm account access for publishing `skillpacks`.
-- Reserve or create the `@skillpacks` npm organization if future scoped packages are desired.
+- Confirm npm account access for publishing `gskp`.
+- Reserve or create the `@gskp` npm organization if future scoped packages are desired.
 - Decide whether the first release should be private dry-run only or public `0.1.0`.
 - Confirm MIT license metadata and npm repository/bugs/homepage links.
 - Confirm `jq` remains a documented dependency for write commands in phase 1.
@@ -430,7 +435,7 @@ Tasks:
 
 Exit criteria:
 
-- `skillpacks` publish rights are confirmed.
+- `gskp` publish rights are confirmed.
 - Package name collision risk is closed.
 - Tarball content policy is documented and testable.
 
@@ -440,7 +445,7 @@ Goal: publishable monolith package that delegates to current scripts.
 
 Tasks:
 
-- Add `packages/skillpacks/package.json` for `skillpacks`.
+- Add `packages/skillpacks/package.json` for `gskp`.
 - Add `packages/skillpacks/bin/skillpacks.mjs`.
 - Add `packages/skillpacks/src/cli/run-pack-script.mjs` or equivalent script dispatcher.
 - Implement command forwarding for existing `pack.sh` commands.
@@ -466,9 +471,9 @@ Tasks:
 - Add `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` or extend package build to emit the manifest.
 - Add deck metadata for `vard`, `ord`, `business-afps`, `devtool-afps`, and `game-afps`.
 - Include package-list fields for COA B and registry-tag fields for COA C.
-- Implement `skillpacks install-deck <deck>` as a manifest resolver.
-- Implement `skillpacks install-deck business-afps --full` from manifest metadata.
-- Add `skillpacks list --json` using the manifest.
+- Implement `gskp install-deck <deck>` as a manifest resolver.
+- Implement `gskp install-deck business-afps --full` from manifest metadata.
+- Add `gskp list --json` using the manifest.
 - Add validation that every deck references existing packs.
 - Add validation that deck package-list and registry-tag fields are present.
 - Add validation that every manifest skill path exists and has `version:`.
@@ -508,7 +513,7 @@ Goal: prepare users for npm install without changing the old setup path.
 
 Tasks:
 
-- Update `README.md` with `npx skillpacks` usage.
+- Update `README.md` with `npx gskp` usage.
 - Update `docs/QUICKSTART.md`, `docs/packs.md`, and `docs/decks.md`.
 - Add a migration note for users moving from git checkout to npm.
 - Add troubleshooting for npm package version vs skill-level pinning.
@@ -530,13 +535,13 @@ Tasks:
 - Verify working tree is clean except intended release changes.
 - Run package tests, tarball validation, and package metadata checks.
 - Run `npm publish --access public`.
-- Verify `npx skillpacks@latest list` against the published package.
+- Verify `npx gskp@latest list` against the published package.
 - Install into a fresh temp repo and verify one pack, one individual skill, and one deck.
 - Commit and push release docs and any package version changes.
 
 Exit criteria:
 
-- `skillpacks` is installable from npm.
+- `gskp` is installable from npm.
 - A fresh project can install packs without cloning this repository.
 - Current git-checkout install path remains functional.
 
@@ -548,10 +553,10 @@ Tasks:
 
 - Track install usage and maintenance pain from the monolith package.
 - Identify "hot packs" that deserve scoped packages.
-- Use manifest data to generate `@skillpacks/<pack>` package metadata experimentally.
+- Use manifest data to generate `@gskp/<pack>` package metadata experimentally.
 - Use deck package-list metadata to generate scoped package recommendations.
 - Use registry-style deck tags to support per-skill and category resolution.
-- Consider `@skillpacks/sdk` only after the manifest is stable and used by the CLI.
+- Consider `@gskp/sdk` only after the manifest is stable and used by the CLI.
 
 Exit criteria:
 
@@ -593,28 +598,28 @@ node /path/to/agentic-skills/packages/skillpacks/bin/skillpacks.mjs pin quality-
 Published-package checks:
 
 ```bash
-npx skillpacks@latest list
-npx skillpacks@latest install-deck ord
-npx skillpacks@latest doctor
+npx gskp@latest list
+npx gskp@latest install-deck ord
+npx gskp@latest doctor
 ```
 
 ## Risks And Mitigations
 
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
-| `skillpacks` package or scope cannot be claimed | Blocks approved public name | Resolve in phase 0 before implementation. |
+| `gskp` package or scope cannot be claimed | Blocks approved public name | Resolve in phase 0 before implementation. |
 | npm package accidentally includes task/history/prompt artifacts | Bloated or sensitive package | Use `files` whitelist plus `npm pack --dry-run` validation. |
 | `pack.sh` assumes a git checkout | npm install breaks | Run it from the packaged script path and add temp-repo tests. |
-| `jq` is missing | Shell-backed write paths fail | Node-owned `skillpacks` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and `skillpacks install-deck` materialization. |
+| `jq` is missing | Shell-backed write paths fail | Node-owned `gskp` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization. |
 | Skill-level pinning needs archives omitted from tarball | Pins break | Include skill-local `archive/**` while excluding global docs history. |
 | Existing git-checkout users regress | Adoption risk | Keep `init.sh` and `pack.sh` unchanged until Node parity is proven. |
-| CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `skillpacks` as the only npm package and bin name. |
+| CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `gskp` as the only npm package and bin name. |
 
 ## Open Questions
 
 These should be answered before first publish, not before starting phase 1:
 
-- Is `skillpacks` the final npm package owner identity, or should the public package be `@skillpacks/cli` after an organization is created?
+- Is `gskp` the final npm package owner identity, or should the public package be `@gskp/cli` after an organization is created?
 - Should `install-deck` remain a hybrid shell materialization path for the first public package, or should deck installation move fully to Node before publish?
 - Should `init-global` install only global core skills, or should it also offer an optional deck picker?
 - Should hibernated packs be excluded from the npm tarball entirely or included only to preserve explicit error messages?
@@ -624,7 +629,7 @@ These should be answered before first publish, not before starting phase 1:
 
 Start with Phase 0 and Phase 1 in one implementation pass:
 
-1. Confirm publish rights for `skillpacks`.
+1. Confirm publish rights for `gskp`.
 2. Add workspace package metadata and a thin CLI wrapper under `packages/skillpacks`.
 3. Prove one temp-repo install from the wrapper.
 4. Add deck metadata and the manifest resolver only after the wrapper is stable.

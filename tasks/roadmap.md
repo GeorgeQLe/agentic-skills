@@ -1,3 +1,35 @@
+## Current Implementation - Short npm CLI Rename
+
+### Goal
+
+Make `gskp` the short primary npm package and CLI command for G Skillpacks, while preserving `skillpacks` as a compatibility command/alias so existing users and docs do not break immediately.
+
+### Scope
+
+- `packages/skillpacks/package.json` package/bin metadata
+- root npm workspace scripts that target the package by name
+- package CLI help/error wording where user-facing command names appear
+- package tests that assert public npm command examples and metadata
+- high-visibility install docs: `README.md`, `docs/skillpacks-npm-distribution.md`, `docs/skills-reference.md`, and routing contract docs
+- task review notes and verification results
+
+### Plan
+
+1. Verify the shortest viable npm name. `gsp`, `gsk`, and `skp` are taken; `gskp` returns npm E404 and is the shortest available brand-aligned candidate checked.
+2. Rename the public package metadata to `gskp` and expose both `gskp` and `skillpacks` binaries from the same entry point.
+3. Keep source directory names, manifest filenames, and compatibility documentation stable unless changing them is required by verification.
+4. Update high-visibility docs and tests so `npx gskp ...` is the primary route and `npx skillpacks ...` is documented as compatibility.
+5. Run focused package metadata/build/test verification.
+6. Commit and push only the intended rename boundary.
+
+### Acceptance Criteria
+
+- `packages/skillpacks/package.json` publishes as `gskp`.
+- The package exposes a primary `gskp` binary and a compatibility `skillpacks` binary.
+- User-facing quickstart/install examples prefer `npx gskp`.
+- Docs explicitly warn that `skillpack` singular is unrelated.
+- Package build/check and focused package tests pass.
+
 ## Current Implementation - Product Design Flow Tree Artifact Boundaries
 
 ### Goal

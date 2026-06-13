@@ -56,28 +56,28 @@ In this model, `project_type` is the default designation for uncategorized work,
 npm CLI commands:
 
 ```bash
-npx skillpacks list
-npx skillpacks recommend
-npx skillpacks install game
-npx skillpacks install business-discovery
-npx skillpacks install business-growth
-npx skillpacks install business-ops
-npx skillpacks install devtool
-npx skillpacks install creator-foundation
-npx skillpacks install youtube-ops
-npx skillpacks install code-quality
-npx skillpacks install agentic-skills-bench
-npx skillpacks install monorepo
-npx skillpacks install remotion
-npx skillpacks install project-fleet
-npx skillpacks install alignment-loop
-npx skillpacks remove game
-npx skillpacks refresh
-npx skillpacks status
-npx skillpacks doctor
-npx skillpacks doctor --fix
-npx skillpacks doctor --fix --agent-docs --dry-run
-npx skillpacks set-update-mode <mode>
+npx gskp list
+npx gskp recommend
+npx gskp install game
+npx gskp install business-discovery
+npx gskp install business-growth
+npx gskp install business-ops
+npx gskp install devtool
+npx gskp install creator-foundation
+npx gskp install youtube-ops
+npx gskp install code-quality
+npx gskp install agentic-skills-bench
+npx gskp install monorepo
+npx gskp install remotion
+npx gskp install project-fleet
+npx gskp install alignment-loop
+npx gskp remove game
+npx gskp refresh
+npx gskp status
+npx gskp doctor
+npx gskp doctor --fix
+npx gskp doctor --fix --agent-docs --dry-run
+npx gskp set-update-mode <mode>
 ```
 
 Source-checkout equivalents remain available from a local clone:
@@ -89,11 +89,11 @@ scripts/pack.sh refresh
 scripts/pack.sh status
 ```
 
-`npx skillpacks install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
+`npx gskp install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
 
 `doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below.
 
-The npm CLI can install canonical decks from manifest metadata: `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase, so it requires `bash` and `jq`.
+The npm CLI can install canonical decks from manifest metadata: `npx gskp install-deck vard`, `npx gskp install-deck ord`, `npx gskp install-deck business-afps`, `npx gskp install-deck devtool-afps`, and `npx gskp install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase, so it requires `bash` and `jq`.
 
 Assistant-native usage also supports guided setup:
 
@@ -143,7 +143,7 @@ For the full workflow/dependency matrix, see [`docs/pack-workflow-matrix.md`](pa
 The `monorepo` pack is an execution overlay for pnpm workspace repositories. It targets repositories with `pnpm-workspace.yaml` and optionally `turbo.json`.
 
 ```bash
-npx skillpacks install monorepo
+npx gskp install monorepo
 ```
 
 Skills:
@@ -186,7 +186,7 @@ Use `scope: package-scoped` when work is contained to declared package paths, `s
 The `remotion` pack contains the production path that turns reference-video research and creator-media strategy into Remotion-ready artifacts.
 
 ```bash
-npx skillpacks install remotion
+npx gskp install remotion
 ```
 
 Skills:
@@ -204,7 +204,7 @@ youtube-format-research -> video-script -> video-build
 Install it alongside `creator-foundation` and, when YouTube evidence is needed, `youtube-ops` for the full path from channel evidence, positioning, programming, or product-led media strategy into production:
 
 ```bash
-npx skillpacks install creator-foundation youtube-ops remotion
+npx gskp install creator-foundation youtube-ops remotion
 ```
 
 ## Alignment Loop Pack
@@ -212,7 +212,7 @@ npx skillpacks install creator-foundation youtube-ops remotion
 The `alignment-loop` pack is a lightweight planning on-ramp for projects that need shared taste and intent before a full specification cycle.
 
 ```bash
-npx skillpacks install alignment-loop
+npx gskp install alignment-loop
 ```
 
 Skills:
@@ -233,11 +233,11 @@ If a tool does not discover project-local `.claude/skills` or `.codex/skills`, u
 
 Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
 
-Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `npx skillpacks refresh` or, from a source checkout, `scripts/pack.sh refresh`.
+Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `npx gskp refresh` or, from a source checkout, `scripts/pack.sh refresh`.
 
-`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available. The npm `skillpacks` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
+`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available. The npm `gskp` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
 
-To migrate an existing project from a local checkout workflow to npm after publication, keep `.agents/project.json` committed and run `npx skillpacks refresh` from that project. The generated `.claude/skills` and `.codex/skills` roots will be recreated from the package snapshot. If the project pins a skill version, the installed package must include that skill's `archive/<version>/SKILL.md`.
+To migrate an existing project from a local checkout workflow to npm after publication, keep `.agents/project.json` committed and run `npx gskp refresh` from that project. The generated `.claude/skills` and `.codex/skills` roots will be recreated from the package snapshot. If the project pins a skill version, the installed package must include that skill's `archive/<version>/SKILL.md`.
 
 Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`). If a previous pack command exits without releasing the lock and its recorded process is no longer running, the next pack command removes the stale lock automatically. If a live process still owns the lock, timeout errors include the owner metadata.
 
@@ -280,10 +280,10 @@ For teams adopting agentic-skills across multiple developers:
 Business/product workflows that used to be globally installed now live in narrow business packs. Prefer the current lane:
 
 ```bash
-npx skillpacks install business-discovery
-npx skillpacks install customer-lifecycle
-npx skillpacks install business-growth
-npx skillpacks install business-ops
+npx gskp install business-discovery
+npx gskp install customer-lifecycle
+npx gskp install business-growth
+npx gskp install business-ops
 ```
 
 `business-app` remains a compatibility alias that installs all four. Creator-media and YouTube work is split between `creator-foundation`, `youtube-ops`, and `remotion`; fleet/portfolio work lives in `project-fleet`.

@@ -1,9 +1,10 @@
 {
-  "name": "skillpacks",
+  "name": "gskp",
   "version": "0.1.1",
   "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {
+    "gskp": "bin/skillpacks.mjs",
     "skillpacks": "bin/skillpacks.mjs"
   },
   "repository": {
