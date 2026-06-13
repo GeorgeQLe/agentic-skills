@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-12 - Product design flow-tree artifact boundary
+
+- Moved the pre-prototype product-design artifact contract from `specs/` to `design/` across mirrored `user-flow-map`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-variations`, and `spec-interview` skills.
+- Added `design/flow-tree.schema.json` as the machine-readable manifest for user-flow branches, UX variation branches, UI review entries, approve/reject/retry decisions, and the route through prototype consolidation to post-prototype specs.
+- Preserved `research/.progress.yaml` as product-path/product-line state rather than ordinary UX branch state, and kept `spec-interview` as the writer of finalized post-prototype implementation specs under `specs/`.
+- Archived prior active product-design skill contracts, bumped versions, and updated changelogs for all changed mirrored skills.
+- Added layer1 coverage in `tests/layer1/product-design-flow-tree.test.ts` for design/spec/research boundaries, manifest schema shape, downstream prototype/consolidation reads, and route parity.
+- Refreshed Skills Showcase generated assets after active skill version/content changes.
+- Validation passed: full layer1 Vitest (59 files / 2234 tests), focused product-design flow-tree test (5 tests), Skills Showcase data freshness after regeneration, Skills Showcase app tests/build, archive/version/dependency/routing/mirror audits, and `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-12-product-design-flow-tree-artifact-boundary.md`.
+
 ## 2026-06-12 - AFPS prototype workflow route evaluation and sync
 
 - Captured the visible investigation request asking whether the shipped product-design flow-tree route is the best default for the AFPS prototype phase.
