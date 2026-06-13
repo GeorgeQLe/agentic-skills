@@ -99,7 +99,26 @@ verify_skillpacks_package() {
     run node bin/skillpacks.mjs list
     run npm run build:check
   )
-  run npm pack "$BUILD_DIR" --dry-run --silent
+  node - "$BUILD_DIR" "$VERSION" <<'NODE'
+const fs = require("fs");
+const path = require("path");
+const [buildDir, version] = process.argv.slice(2);
+const pkg = JSON.parse(fs.readFileSync(path.join(buildDir, "package.json"), "utf8"));
+const manifest = JSON.parse(fs.readFileSync(path.join(buildDir, "dist", "skillpacks-manifest.json"), "utf8"));
+const failures = [];
+if (pkg.name !== "skillpacks") failures.push(`package name ${pkg.name} !== skillpacks`);
+if (pkg.version !== version) failures.push(`package version ${pkg.version} !== ${version}`);
+if (pkg.bin?.gskp !== "bin/skillpacks.mjs") failures.push("missing gskp bin");
+if (pkg.bin?.skillpacks !== "bin/skillpacks.mjs") failures.push("missing skillpacks bin");
+if (!fs.existsSync(path.join(buildDir, "bin", "skillpacks.mjs"))) failures.push("missing bin/skillpacks.mjs");
+if (manifest.package?.name !== "skillpacks") failures.push(`manifest package name ${manifest.package?.name} !== skillpacks`);
+if (manifest.package?.version !== version) failures.push(`manifest package version ${manifest.package?.version} !== ${version}`);
+if (failures.length) {
+  console.error(failures.join("\n"));
+  process.exit(1);
+}
+console.log(`Verified built package metadata for skillpacks@${version}.`);
+NODE
 }
 
 cleanup() {
