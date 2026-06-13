@@ -56,6 +56,13 @@ describe("prompt history convention", () => {
   });
 
   it("keeps provisioned config versions in sync with bumped provisioner skills", () => {
+    // Derive the expected version from the source of truth (the provisioner skill
+    // frontmatter) so this assertion self-heals on the next version bump.
+    const skillSource = read("base/claude/provision-agentic-config/SKILL.md");
+    const versionMatch = skillSource.match(/^version:\s*(v\d+\.\d+)/m);
+    expect(versionMatch, "provision-agentic-config SKILL.md version frontmatter").not.toBeNull();
+    const version = versionMatch![1];
+
     for (const path of [
       "CLAUDE.md",
       "AGENTS.md",
@@ -65,7 +72,7 @@ describe("prompt history convention", () => {
       const content = read(path);
 
       expect(content, `${path} provisioned block version`).toContain(
-        "<!-- provision-agentic-config v0.9 -->",
+        `<!-- provision-agentic-config ${version} -->`,
       );
     }
 
@@ -73,7 +80,7 @@ describe("prompt history convention", () => {
       "base/claude/provision-agentic-config/SKILL.md",
       "base/codex/provision-agentic-config/SKILL.md",
     ]) {
-      expect(read(path), `${path} skill version`).toContain("version: v0.9");
+      expect(read(path), `${path} skill version`).toContain(`version: ${version}`);
     }
   });
 });
