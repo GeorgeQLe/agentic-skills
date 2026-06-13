@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.11
+version: v0.10
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.11 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.10 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.11 -->
+   <!-- provision-agentic-config v0.10 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -74,7 +74,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
 
    ### Missing Skill Fallback
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-   - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+   - If found in an uninstalled pack, recommend `npx @glexcorp/gskp install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
    - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
 
@@ -145,7 +145,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.11 -->
+   <!-- provision-agentic-config v0.10 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -188,7 +188,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
 
    ### Missing Skill Fallback
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-   - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+   - If found in an uninstalled pack, recommend `npx @glexcorp/gskp install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
    - If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 

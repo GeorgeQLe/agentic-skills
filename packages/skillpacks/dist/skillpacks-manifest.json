@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "package": {
-    "name": "@glexcorp/gskp",
+    "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "bb8d02daa0ffba69fc133e716c1d042e938677130f61b39472662c0c302d4180",
+  "source_fingerprint": "bcc8c4705a54501e711c7796d71e767289309cc1245a5057da36fc37ae1cc819",
   "packs": [
     {
       "name": "agent-bridge",
@@ -968,12 +968,13 @@
       "scope": "global",
       "pack": null,
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "path": "global/claude/provision-agentic-config/SKILL.md",
-      "content_sha256": "3f6b9d70c2f4114931b3a3b6e2432d286a1f08c23726b33738ae3688c0f704b7",
+      "content_sha256": "3c37daa4f9bc1aef5bd52940d91a0f0f4b14774a9b0b663b1a0ad8c5921b6439",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1145,12 +1146,13 @@
       "scope": "global",
       "pack": null,
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "path": "global/codex/provision-agentic-config/SKILL.md",
-      "content_sha256": "9e559f9cba2002503aa831db8894e8d66827dfdfb0c41cab526f39a7fd04dd8c",
+      "content_sha256": "fe08536bd5f011877d0a795ffe131d5edc212a42a987bb0d7dbb84713c2f2409",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",

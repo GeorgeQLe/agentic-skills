@@ -1,3 +1,31 @@
+## Current Implementation - Dual npm Publish Automation
+
+### Current Checklist
+
+- [x] Record the implementation plan in task docs.
+- [x] Inspect existing package build, auth, publish verification, and install docs.
+- [x] Restore source package metadata to `skillpacks` while preserving both binaries.
+- [x] Add root `publish.sh` dual publish automation with dry-run support.
+- [x] Update tests and docs for primary `npx skillpacks` guidance plus scoped alias.
+- [x] Run required pre-commit verification.
+- [ ] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting point: the working tree was clean on `master`.
+- Added root `publish.sh` with clean-tree enforcement, workspace version bumping, package tests/verification, `/tmp` dual staging, staged package/manifest name patching, staged prepublish auth checks, real `npm publish` commands, and published-package verification for both `skillpacks` and `@glexcorp/gskp`.
+- Restored `packages/skillpacks/package.json` source metadata to `skillpacks`; the scoped `@glexcorp/gskp` package is now generated only as a publish-stage variant. Both packages keep `gskp` and `skillpacks` binaries.
+- Updated public docs and runtime guidance back to `npx skillpacks ...` as the primary route, with `npx @glexcorp/gskp ...` documented as a same-version scoped alias.
+- Updated `provision-agentic-config` generated blocks from `v0.10` to `v0.11`, archived `v0.10`, and refreshed generated Skills Showcase data after the active skill version change.
+- Pre-commit verification passed:
+  - `npm --workspace packages/skillpacks run build`
+  - `npm --workspace packages/skillpacks run test:node` (74 tests)
+  - `npm run skillpacks:verify`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `pnpm --dir apps/skills-showcase validate:data`
+  - `git diff --check`
+
 ## Current Implementation - Alignment YAML Routing Remediation
 
 ### Current Checklist

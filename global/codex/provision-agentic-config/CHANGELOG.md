@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.11 - 2026-06-13
+
+- Updated generated missing-skill fallback blocks to recommend the primary `npx skillpacks install <pack-or-skill>` route while `@glexcorp/gskp` remains a same-version package alias.
+
 ## v0.10 - 2026-06-13
 
 - Updated generated missing-skill fallback blocks to recommend the scoped npm route `npx @glexcorp/gskp install <pack-or-skill>`.

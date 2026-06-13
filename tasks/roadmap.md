@@ -1,3 +1,35 @@
+## Current Implementation - Dual npm Publish Automation
+
+### Goal
+
+Publish the established `skillpacks` package and the scoped alias `@glexcorp/gskp` from the same source build at the same version, with both packages exposing `skillpacks` and `gskp` binaries.
+
+### Scope
+
+- Root `publish.sh` release automation.
+- `packages/skillpacks/package.json` source package metadata.
+- Release/package verification tests.
+- Public npm install and publish docs: `README.md`, `docs/QUICKSTART.md`, `docs/skillpacks-npm-distribution.md`, `docs/skillpacks-install-routing-contract.md`, and high-visibility reference docs where package identity is asserted.
+- Task review notes and verification results.
+
+### Plan
+
+1. Record this execution plan in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Inspect existing package build, auth, publish verification, and install docs.
+3. Restore source package metadata to the established `skillpacks` package while keeping both binaries.
+4. Add root `publish.sh` that bumps the workspace version, builds/verifies once, stages two `/tmp` publish directories from `packages/skillpacks/build`, patches staged package names, auth-checks, publishes both packages, and verifies both published specs. Support `--dry-run`.
+5. Update tests and docs for primary `npx skillpacks ...` guidance with `npx @glexcorp/gskp ...` as the same-version scoped alias.
+6. Run package tests, package verification, root publish dry run, and diff hygiene.
+7. Commit and push the verified changes on the primary branch.
+
+### Acceptance Criteria
+
+- `./publish.sh patch`, `./publish.sh minor`, `./publish.sh 0.1.2`, and `./publish.sh --dry-run patch` have clear supported behavior.
+- Source package metadata is `skillpacks`; staged publish metadata can produce both `skillpacks` and `@glexcorp/gskp`.
+- Both staged packages keep `gskp` and `skillpacks` bins pointed at `bin/skillpacks.mjs`.
+- Public docs prefer `npx skillpacks ...` and mention `npx @glexcorp/gskp ...` as an equivalent scoped alias.
+- Verification passes before commit/push.
+
 ## Current Implementation - npm Age-Gate Warning Cleanup
 
 ### Goal

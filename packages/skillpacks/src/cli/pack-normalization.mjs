@@ -440,7 +440,7 @@ function allPacksExist(packs, activePacks) {
 }
 
 function unknownNameError(token, manifest) {
-  return new Error(`Unknown pack or skill '${token}'. Available packs: ${availablePacksInline(manifest)}\nRun 'npx @glexcorp/gskp list' to see all available skills.`);
+  return new Error(`Unknown pack or skill '${token}'. Available packs: ${availablePacksInline(manifest)}\nRun 'npx skillpacks list' to see all available skills.`);
 }
 
 function hibernatedPackError(requested, pack) {

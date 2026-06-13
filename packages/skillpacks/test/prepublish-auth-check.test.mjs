@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { chmodSync, mkdtempSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -11,6 +11,9 @@ const preflightScript = path.join(packageRoot, "scripts", "prepublish-auth-check
 function makeMockNpm() {
   const tempDir = mkdtempSync(path.join(tmpdir(), "skillpacks-npm-mock-"));
   const npmPath = path.join(tempDir, "npm");
+  const packageVersion = JSON.parse(
+    readFileSync(path.join(packageRoot, "package.json"), "utf8")
+  ).version;
   writeFileSync(
     npmPath,
     `#!/usr/bin/env bash
@@ -25,14 +28,14 @@ if [[ "$1" == "whoami" ]]; then
   exit 0
 fi
 
-if [[ "$1" == "view" && "$2" == "@glexcorp/gskp" && "$3" == "maintainers" ]]; then
+if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == "maintainers" ]]; then
   printf '%s\\n' "\${NPM_MOCK_MAINTAINERS:-[\\"glexcorp <george@leexperimental.com>\\"]}"
   exit "\${NPM_MOCK_MAINTAINERS_RC:-0}"
 fi
 
-if [[ "$1" == "view" && "$2" == "@glexcorp/gskp@0.1.1" && "$3" == "version" ]]; then
+if [[ "$1" == "view" && "$2" == "skillpacks@${packageVersion}" && "$3" == "version" ]]; then
   if [[ "\${NPM_MOCK_VERSION_EXISTS:-0}" == "1" ]]; then
-    printf '"0.1.1"\\n'
+    printf '"${packageVersion}"\\n'
     exit 0
   fi
   printf 'npm error code E404\\n' >&2
@@ -69,9 +72,12 @@ test("skips npm auth checks for publish dry-runs", () => {
 
 test("passes for the expected npm maintainer when the version is unpublished", () => {
   const result = runPreflight();
+  const packageVersion = JSON.parse(
+    readFileSync(path.join(packageRoot, "package.json"), "utf8")
+  ).version;
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /preflight passed for @glexcorp\/gskp@0\.1\.1 as glexcorp/);
+  assert.match(result.stderr, new RegExp(`preflight passed for skillpacks@${packageVersion.replaceAll(".", "\\.")} as glexcorp`));
 });
 
 test("fails with login guidance when npm whoami is not authenticated", () => {
@@ -91,7 +97,10 @@ test("fails when authenticated as the wrong npm user", () => {
 
 test("fails before publish if the package version already exists", () => {
   const result = runPreflight({ NPM_MOCK_VERSION_EXISTS: "1" });
+  const packageVersion = JSON.parse(
+    readFileSync(path.join(packageRoot, "package.json"), "utf8")
+  ).version;
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /@glexcorp\/gskp@0\.1\.1 is already published/);
+  assert.match(result.stderr, new RegExp(`skillpacks@${packageVersion.replaceAll(".", "\\.")} is already published`));
 });
