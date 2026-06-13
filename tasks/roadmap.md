@@ -65,7 +65,7 @@ Stop `update-packages` guidance and benchmark fixtures from recommending package
 
 ### Goal
 
-Make `gskp` the short primary npm package and CLI command for G Skillpacks, while preserving `skillpacks` as a compatibility command/alias so existing users and docs do not break immediately.
+Make `gskp` the short primary npm package and CLI command for gSkillPacks, while preserving `skillpacks` as a compatibility command/alias so existing users and docs do not break immediately.
 
 ### Scope
 

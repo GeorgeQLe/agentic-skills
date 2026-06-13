@@ -1,6 +1,6 @@
 ---
 version: "1.0"
-name: "G Skillpacks Design System"
+name: "gSkillPacks Design System"
 colors:
   ink: "#111827"
   muted: "#5B6472"
@@ -133,11 +133,11 @@ components:
 
 ## Overview
 
-The G Skillpacks visual system blends Swiss grid discipline with playful blueprint energy: neutral paper foundations, teal blueprint construction lines, progressive corner rounding, coral warmth accents, bounce-in micro-interactions, and compact technical density. The site should feel like a lab notebook crossed with a productized command center, not a generic SaaS landing page.
+The gSkillPacks visual system blends Swiss grid discipline with playful blueprint energy: neutral paper foundations, teal blueprint construction lines, progressive corner rounding, coral warmth accents, bounce-in micro-interactions, and compact technical density. The site should feel like a lab notebook crossed with a productized command center, not a generic SaaS landing page.
 
 Public naming must keep the brand and product layout aligned:
 
-- Use **G Skillpacks** as the visible brand in the header, metadata, footer, hero, and docs.
+- Use **gSkillPacks** as the visible brand in the header, metadata, footer, hero, and docs.
 - Use `gskillpacks.com` as the production domain reference.
 - Use "skill packs" language for information architecture: packs, routes, coordinates, workflow nodes, pack maps, catalog entries, and proof surfaces.
 - Use `agentic-skills` only for the underlying open-source repository/library, not as the public site brand.

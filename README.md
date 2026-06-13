@@ -1,4 +1,4 @@
-# Agentic Skills
+# gSkillPacks
 
 A shared skill library for Claude Code and OpenAI Codex.
 
