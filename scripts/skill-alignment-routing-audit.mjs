@@ -62,7 +62,7 @@ function lineNumber(text, index) {
 
 function isExecAllowed(relPath, fm) {
   return relPath.startsWith("packs/exec-loop/")
-    || /^global\/(?:claude|codex)\/exec\//.test(relPath)
+    || /^base\/(?:claude|codex)\/exec\//.test(relPath)
     || fm.type === "execution";
 }
 
@@ -140,7 +140,7 @@ function scanSkill(file, root = repoRoot) {
 
 function collectActive() {
   return [
-    ...walk(path.join(repoRoot, "global")),
+    ...walk(path.join(repoRoot, "base")),
     ...walk(path.join(repoRoot, "packs")),
   ].sort();
 }

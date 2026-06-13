@@ -192,7 +192,7 @@ function normalizeRel(file) {
 
 function collectActiveSkillFiles() {
   return [
-    ...walk(resolve(repoRoot, "global"), (file) => file.endsWith("/SKILL.md")),
+    ...walk(resolve(repoRoot, "base"), (file) => file.endsWith("/SKILL.md")),
     ...walk(resolve(repoRoot, "packs"), (file) => file.endsWith("/SKILL.md")),
   ].map(normalizeRel).sort();
 }
@@ -594,7 +594,7 @@ function renderMarkdown(audit) {
   const lines = [];
   lines.push("# Research-ish Skill Lifecycle Audit");
   lines.push("");
-  lines.push("Generated from active `global/**/SKILL.md` and `packs/**/SKILL.md` files, excluding `archive/**`.");
+  lines.push("Generated from active `base/**/SKILL.md` and `packs/**/SKILL.md` files, excluding `archive/**`.");
   lines.push("Command: `node scripts/researchish-skill-lifecycle-audit.mjs`.");
   lines.push("");
   lines.push("## Summary");

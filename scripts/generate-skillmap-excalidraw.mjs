@@ -4,7 +4,7 @@ import { join, resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const PACKS_DIR = join(ROOT, 'packs');
-const GLOBAL_DIR = join(ROOT, 'global', 'claude');
+const BASE_DIR = join(ROOT, 'base', 'claude');
 const OUT = join(ROOT, 'docs', 'skillmap.excalidraw');
 const OUT_HTML = join(ROOT, 'alignment', 'skillmap.html');
 const SHOWCASE_DATA_JS = join(ROOT, 'apps', 'skills-showcase', 'public', 'assets', 'skills-data.js');
@@ -29,8 +29,8 @@ function getAllPacks() {
   return packs;
 }
 
-function getGlobalSkills() {
-  return getSkills(GLOBAL_DIR);
+function getBaseSkills() {
+  return getSkills(BASE_DIR);
 }
 
 function getShowcaseCounts() {
@@ -41,9 +41,9 @@ function getShowcaseCounts() {
     skillBearingPacks: 0,
     uniqueMirroredSkills: 0,
     uniquePackSkills: 0,
-    uniqueGlobalSkills: 0,
+    uniqueBaseSkills: 0,
     packPlatformEntries: 0,
-    globalPlatformEntries: 0,
+    basePlatformEntries: 0,
   };
 
   if (!existsSync(SHOWCASE_DATA_JS)) return fallback;
@@ -56,17 +56,17 @@ function getShowcaseCounts() {
   const skills = Array.isArray(data.skills) ? data.skills : [];
   const uniqueMirroredSkills = new Set();
   const uniquePackSkills = new Set();
-  const uniqueGlobalSkills = new Set();
+  const uniqueBaseSkills = new Set();
   const skillBearingPacks = new Set();
   let packPlatformEntries = 0;
-  let globalPlatformEntries = 0;
+  let basePlatformEntries = 0;
 
   for (const skill of skills) {
     const key = skill.mirrorKey || skill.name;
     if (key) uniqueMirroredSkills.add(key);
-    if (skill.scope === 'global') {
-      globalPlatformEntries += 1;
-      if (key) uniqueGlobalSkills.add(key);
+    if (skill.scope === 'base') {
+      basePlatformEntries += 1;
+      if (key) uniqueBaseSkills.add(key);
     } else {
       packPlatformEntries += 1;
       if (key) uniquePackSkills.add(key);
@@ -81,9 +81,9 @@ function getShowcaseCounts() {
     skillBearingPacks: skillBearingPacks.size,
     uniqueMirroredSkills: uniqueMirroredSkills.size,
     uniquePackSkills: uniquePackSkills.size,
-    uniqueGlobalSkills: uniqueGlobalSkills.size,
+    uniqueBaseSkills: uniqueBaseSkills.size,
     packPlatformEntries,
-    globalPlatformEntries,
+    basePlatformEntries,
   };
 }
 
@@ -342,19 +342,19 @@ function layoutRow(packDataMap, domainKeys, startX, startY, rowLabel) {
 // --- Main ---
 
 const allPacks = getAllPacks();
-const globalSkills = getGlobalSkills();
+const baseSkills = getBaseSkills();
 const showcaseCounts = getShowcaseCounts();
 
 const mappedPacks = Object.keys(allPacks).length;
 const claudePackRoots = Object.values(allPacks).reduce((sum, s) => sum + s.length, 0);
 const activePacks = showcaseCounts.activePacks || mappedPacks;
 const uniquePackSkills = showcaseCounts.uniquePackSkills || claudePackRoots;
-const uniqueGlobalSkills = showcaseCounts.uniqueGlobalSkills || globalSkills.length;
-const platformEntries = showcaseCounts.platformEntries || claudePackRoots + globalSkills.length;
-const uniqueMirroredSkills = showcaseCounts.uniqueMirroredSkills || uniquePackSkills + uniqueGlobalSkills;
+const uniqueBaseSkills = showcaseCounts.uniqueBaseSkills || baseSkills.length;
+const platformEntries = showcaseCounts.platformEntries || claudePackRoots + baseSkills.length;
+const uniqueMirroredSkills = showcaseCounts.uniqueMirroredSkills || uniquePackSkills + uniqueBaseSkills;
 const skillBearingPacks = showcaseCounts.skillBearingPacks || mappedPacks;
 const packPlatformEntries = showcaseCounts.packPlatformEntries || claudePackRoots;
-const globalPlatformEntries = showcaseCounts.globalPlatformEntries || globalSkills.length;
+const basePlatformEntries = showcaseCounts.basePlatformEntries || baseSkills.length;
 
 const allElements = [];
 let curY = 40;
@@ -369,7 +369,7 @@ allElements.push(makeText(nextId('title'), startX, curY, 'agentic-skills — Ski
   width: 500,
 }));
 curY += 36;
-allElements.push(makeText(nextId('subtitle'), startX, curY, `${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueGlobalSkills} unique global skills · ${platformEntries} platform entries`, {
+allElements.push(makeText(nextId('subtitle'), startX, curY, `${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueBaseSkills} unique base skills · ${platformEntries} platform entries`, {
   fontSize: 14,
   fontFamily: 2,
   strokeColor: '#868e96',
@@ -430,41 +430,41 @@ allElements.push(...row5b.elements);
 Object.assign(allPackPositions, row5b.packPositions);
 curY = row5b.nextY;
 
-// Row 6: Global Skills
-const globalGroupId = 'group-global';
-const globalH = HEADER_H + PACK_PAD + globalSkills.length * SKILL_LINE_H + PACK_PAD;
-const globalW = 340;
+// Row 6: Base Skills
+const baseGroupId = 'group-base';
+const baseH = HEADER_H + PACK_PAD + baseSkills.length * SKILL_LINE_H + PACK_PAD;
+const baseW = 340;
 
-allElements.push(makeText(nextId('row-label'), startX, curY - 30, 'Global Skills', {
+allElements.push(makeText(nextId('row-label'), startX, curY - 30, 'Base Skills', {
   fontSize: 20,
   fontFamily: 2,
   strokeColor: '#495057',
 }));
 
-allElements.push(makeRect('pack-body-global', startX, curY + 10, globalW, globalH, {
+allElements.push(makeRect('pack-body-base', startX, curY + 10, baseW, baseH, {
   strokeColor: '#1971c2',
   backgroundColor: '#ffffff',
-  groupIds: [globalGroupId],
+  groupIds: [baseGroupId],
 }));
-allElements.push(makeRect('pack-header-global', startX, curY + 10, globalW, HEADER_H, {
+allElements.push(makeRect('pack-header-base', startX, curY + 10, baseW, HEADER_H, {
   strokeColor: '#1971c2',
   backgroundColor: '#f8f9fa',
-  groupIds: [globalGroupId],
+  groupIds: [baseGroupId],
 }));
-allElements.push(makeText('pack-title-global', startX + 10, curY + 18, 'global/claude', {
+allElements.push(makeText('pack-title-base', startX + 10, curY + 18, 'base/claude', {
   fontSize: 16,
   fontFamily: 2,
   strokeColor: '#1971c2',
-  groupIds: [globalGroupId],
-  width: globalW - 20,
+  groupIds: [baseGroupId],
+  width: baseW - 20,
 }));
-globalSkills.forEach((skill, i) => {
-  allElements.push(makeText(`skill-global-${skill}`, startX + 10, curY + 10 + HEADER_H + PACK_PAD + i * SKILL_LINE_H, skill, {
+baseSkills.forEach((skill, i) => {
+  allElements.push(makeText(`skill-base-${skill}`, startX + 10, curY + 10 + HEADER_H + PACK_PAD + i * SKILL_LINE_H, skill, {
     fontSize: 13,
     fontFamily: 3,
     strokeColor: '#495057',
-    groupIds: [globalGroupId],
-    width: globalW - 20,
+    groupIds: [baseGroupId],
+    width: baseW - 20,
   }));
 });
 
@@ -609,7 +609,7 @@ function generateAlignmentHTML() {
 
   svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="24" font-weight="700" fill="#ffffff">agentic-skills — Skill Map</text>`;
   y += 24;
-  svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" fill="#8b949e">${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueGlobalSkills} unique global skills · ${platformEntries} platform entries</text>`;
+  svgContent += `<text x="${sx}" y="${y}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" fill="#8b949e">${activePacks} packs · ${uniquePackSkills} unique pack skills · ${uniqueBaseSkills} unique base skills · ${platformEntries} platform entries</text>`;
   y += 44;
 
   const rows = [
@@ -637,15 +637,15 @@ function generateAlignmentHTML() {
   const ir2 = svgLayoutRow(allPacks, ['_ir2'], sx, y, '');
   svgContent += ir2.svg; Object.assign(positions, ir2.positions); y = ir2.nextY;
 
-  // Global skills box
-  const gH = HEADER_H + PACK_PAD + globalSkills.length * SKILL_LINE_H + PACK_PAD;
+  // Base skills box
+  const gH = HEADER_H + PACK_PAD + baseSkills.length * SKILL_LINE_H + PACK_PAD;
   const gW = 340;
-  svgContent += svgRowLabel(sx, y - 12, 'Global Skills');
+  svgContent += svgRowLabel(sx, y - 12, 'Base Skills');
   svgContent += `<rect x="${sx}" y="${y + 14}" width="${gW}" height="${gH}" rx="6" fill="#161b22" stroke="#1971c2" stroke-width="1.5"/>`;
   svgContent += `<rect x="${sx}" y="${y + 14}" width="${gW}" height="${HEADER_H}" rx="6" fill="#1c2333" stroke="#1971c2" stroke-width="1.5"/>`;
   svgContent += `<rect x="${sx}" y="${y + 14 + HEADER_H - 6}" width="${gW}" height="6" fill="#1c2333"/>`;
-  svgContent += `<text x="${sx + 10}" y="${y + 37}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#58a6ff">global/claude</text>`;
-  globalSkills.forEach((skill, i) => {
+  svgContent += `<text x="${sx + 10}" y="${y + 37}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#58a6ff">base/claude</text>`;
+  baseSkills.forEach((skill, i) => {
     svgContent += `<text x="${sx + 10}" y="${y + 14 + HEADER_H + PACK_PAD + 13 + i * SKILL_LINE_H}" font-family="ui-monospace,SFMono-Regular,monospace" font-size="12" fill="#c9d1d9">${esc(skill)}</text>`;
   });
   y += 14 + gH + 40;
@@ -685,7 +685,7 @@ function generateAlignmentHTML() {
     { label: 'Session & Knowledge', fill: '#c5f6fa', border: '#15aabf' },
     { label: 'Skill Dev', fill: '#e9fac8', border: '#82c91e' },
     { label: 'Infrastructure', fill: '#e9ecef', border: '#868e96' },
-    { label: 'Global', fill: '#1c2333', border: '#1971c2' },
+    { label: 'Base', fill: '#1c2333', border: '#1971c2' },
   ];
 
   // Pack stats table rows sorted by domain
@@ -757,7 +757,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <main>
 <header>
   <h1>Skill Map</h1>
-  <p class="lead">Visual overview of the current generated Skills Showcase inventory: ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, and ${activePacks} active packs &mdash; organized by deck and domain.</p>
+  <p class="lead">Visual overview of the current generated Skills Showcase inventory: ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueBaseSkills} unique base skills, and ${activePacks} active packs &mdash; organized by deck and domain.</p>
   <div class="status"><strong>alignment_status:</strong>&nbsp; review &nbsp; <strong>generated:</strong>&nbsp; ${today} &nbsp; <strong>artifact:</strong>&nbsp; ${alignmentPage}</div>
 </header>
 
@@ -781,15 +781,15 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<div class="stat-grid" data-tts-narrative="The generated inventory contains ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, ${activePacks} active packs, and ${skillBearingPacks} skill-bearing packs. The visual map below lists ${claudePackRoots} repo-managed Claude pack roots and ${globalSkills.length} global Claude roots.">
+<div class="stat-grid" data-tts-narrative="The generated inventory contains ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills, ${uniquePackSkills} unique pack skills, ${uniqueBaseSkills} unique base skills, ${activePacks} active packs, and ${skillBearingPacks} skill-bearing packs. The visual map below lists ${claudePackRoots} repo-managed Claude pack roots and ${baseSkills.length} base Claude roots.">
   <div><strong>${platformEntries}</strong><span>Platform entries</span></div>
   <div><strong>${uniqueMirroredSkills}</strong><span>Unique mirrored skills</span></div>
   <div><strong>${uniquePackSkills}</strong><span>Unique pack skills</span></div>
-  <div><strong>${uniqueGlobalSkills}</strong><span>Unique global skills</span></div>
+  <div><strong>${uniqueBaseSkills}</strong><span>Unique base skills</span></div>
   <div><strong>${activePacks}</strong><span>Active packs</span></div>
   <div><strong>${skillBearingPacks}</strong><span>Skill-bearing packs</span></div>
 </div>
-<p>The counts above come from <code>apps/skills-showcase/public/assets/skills-data.js</code>. The SVG and pack index are a structural Claude-root map for the editable Excalidraw view; they list ${claudePackRoots} repo-managed Claude pack roots and ${globalSkills.length} global Claude roots rather than platform entries.</p>
+<p>The counts above come from <code>apps/skills-showcase/public/assets/skills-data.js</code>. The SVG and pack index are a structural Claude-root map for the editable Excalidraw view; they list ${claudePackRoots} repo-managed Claude pack roots and ${baseSkills.length} base Claude roots rather than platform entries.</p>
 <h3>Domain Legend</h3>
 <div class="legend">
 ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" style="background:${d.fill};border:1.5px solid ${d.border}"></div>${esc(d.label)}</div>`).join('\n')}
@@ -807,8 +807,8 @@ ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" 
       <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
       <textarea class="local-yaml" readonly></textarea>
     </div>
-<p>All packs grouped by deck row (Rapid &rarr; Business AFPS &rarr; Devtool AFPS &rarr; Game AFPS &rarr; Support &rarr; Infrastructure &rarr; Global). Dashed arrows show graduation paths; solid arrows show canonical flow.</p>
-<div class="map-wrap" data-tts-narrative="The skill map shows ${activePacks} active packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business and creator packs, Devtool AFPS, Game AFPS, support and cross-cutting packs, infrastructure packs, and global skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
+<p>All packs grouped by deck row (Rapid &rarr; Business AFPS &rarr; Devtool AFPS &rarr; Game AFPS &rarr; Support &rarr; Infrastructure &rarr; Base). Dashed arrows show graduation paths; solid arrows show canonical flow.</p>
+<div class="map-wrap" data-tts-narrative="The skill map shows ${activePacks} active packs organized in deck rows: Rapid decks with VARD and ORD, Business AFPS with business and creator packs, Devtool AFPS, Game AFPS, support and cross-cutting packs, infrastructure packs, and base skills. Dashed arrows connect rapid decks to their graduation targets, and solid arrows show the canonical business flow from discovery through operations.">
 ${fullSvg}
 </div>
 <p style="color:var(--text-muted);font-size:0.85rem">Scroll horizontally to see all packs. Also available as <code>docs/skillmap.excalidraw</code> for editing in Excalidraw.</p>
@@ -1035,6 +1035,6 @@ const htmlSize = generateAlignmentHTML();
 console.log(`Generated ${OUT}`);
 console.log(`Generated ${OUT_HTML} (${(htmlSize / 1024).toFixed(1)} KB)`);
 console.log(`  ${platformEntries} platform entries, ${uniqueMirroredSkills} unique mirrored skills`);
-console.log(`  ${uniquePackSkills} unique pack skills, ${uniqueGlobalSkills} unique global skills, ${activePacks} active packs`);
-console.log(`  map scope: ${mappedPacks} repo-managed packs, ${claudePackRoots} Claude pack roots, ${globalSkills.length} global Claude roots`);
+console.log(`  ${uniquePackSkills} unique pack skills, ${uniqueBaseSkills} unique base skills, ${activePacks} active packs`);
+console.log(`  map scope: ${mappedPacks} repo-managed packs, ${claudePackRoots} Claude pack roots, ${baseSkills.length} base Claude roots`);
 console.log(`  ${allElements.length} Excalidraw elements`);

@@ -25,7 +25,7 @@ Use `/analyze-sessions` instead when the user wants broad cross-session trends, 
 1. Define the investigation scope:
    - Treat the current conversation and current working directory as the default scope.
    - Prefer user-provided session IDs, files, repo paths, skill names, exact correction phrases, errors, logs, and test failures over broad history searches.
-   - Resolve named skills from `global/codex`, `global/claude`, `packs`, project-local `.agents`, `.codex`, `.claude`, and installed `~/.codex/skills` or `~/.claude/skills` as read-only fallback evidence.
+   - Resolve named skills from `base/codex`, `base/claude`, `packs`, project-local `.agents`, `.codex`, `.claude`, and installed `~/.codex/skills` or `~/.claude/skills` as read-only fallback evidence.
    - Do not create an `/analyze-session` alias or route; use this distinct command name to avoid singular/plural confusion.
 
 2. Gather narrow evidence first:

@@ -20,7 +20,7 @@
     "bin/",
     "src/",
     "dist/",
-    "global/",
+    "base/",
     "packs/",
     "scripts/pack.sh",
     "scripts/skill-links.sh",

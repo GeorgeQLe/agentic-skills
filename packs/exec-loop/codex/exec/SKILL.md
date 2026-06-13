@@ -137,7 +137,7 @@ Rules:
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - If a post-roadmap `$research-roadmap` scan reports documentation current with no missing or stale work, do not stop at documentation completeness; recommend `$brainstorm` as the next route for candidate phase discovery.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
-- Normalize copied task routes to Codex syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Claude slash commands for global skills (for example `/exec`, `/ship`, `/roadmap`, `/guide`, `/reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Codex `$...` command unless the next action is explicitly a Claude-only handoff, `/delegate`, or a human-guided Claude workflow.
+- Normalize copied task routes to Codex syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Claude slash commands for base skills (for example `/exec`, `/ship`, `/roadmap`, `/guide`, `/reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Codex `$...` command unless the next action is explicitly a Claude-only handoff, `/delegate`, or a human-guided Claude workflow.
 - Inference defaults:
   - Codex skill invocation (`$exec`, `$ship`, `$ship-end`, or `$exec --execute-approved`) → recommend the matching `$...` command.
   - Claude slash invocation (`/exec`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
@@ -148,10 +148,10 @@ Rules:
 
 ### Pack-Aware Command Text
 
-PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Do not substitute `$exec-kanban`, `$ship-kanban`, or `$ship-end-kanban` for global-default recommendations. If `.agents/project.json` still lists a hibernated kanban pack, keep recommending the global default command and mention `scripts/pack.sh remove <kanban-pack>` only when cleanup of stale pack designation is directly relevant.
+PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Do not substitute `$exec-kanban`, `$ship-kanban`, or `$ship-end-kanban` for base-default recommendations. If `.agents/project.json` still lists a hibernated kanban pack, keep recommending the base default command and mention `scripts/pack.sh remove <kanban-pack>` only when cleanup of stale pack designation is directly relevant.
 
-- **No-match / no-pack:** emit the global-default recommendation exactly as today.
-- **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) -> silent fallback to the global-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.
+- **No-match / no-pack:** emit the base-default recommendation exactly as today.
+- **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) -> silent fallback to the base-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.
 - **Scope:** recommendation-text routing only. `$exec --execute-approved` still consumes `.agents/approved-plan.json` verbatim regardless of pack routing — the approval-packet contract is unchanged.
 
 ## Constraints

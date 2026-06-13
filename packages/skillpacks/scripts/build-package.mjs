@@ -64,7 +64,7 @@ const requiredBuildFiles = [
   "docs/alignment-page-convention.md",
   "init.sh",
   "LICENSE",
-  "global/codex/pack/SKILL.md",
+  "base/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"
 ];
 
@@ -192,7 +192,7 @@ function buildPackage() {
   for (const entry of packageOwnedEntries) {
     copyEntry(entry);
   }
-  copyTrackedPrefixes(files, ["global", "packs"]);
+  copyTrackedPrefixes(files, ["base", "packs"]);
   for (const entry of repoOwnedEntries) {
     copyEntry(entry);
   }

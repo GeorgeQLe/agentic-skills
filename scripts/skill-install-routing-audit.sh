@@ -17,20 +17,20 @@ const root = process.argv[2];
 const args = process.argv.slice(3);
 
 const P1_REQUIRED_FILES = [
-  "global/claude/afps-status/SKILL.md",
-  "global/claude/codebase-status/SKILL.md",
-  "global/claude/idea-scope-brief/SKILL.md",
-  "global/claude/init-agentic-skills/SKILL.md",
-  "global/claude/pack/SKILL.md",
-  "global/claude/provision-agentic-config/SKILL.md",
-  "global/claude/skills/SKILL.md",
-  "global/codex/afps-status/SKILL.md",
-  "global/codex/codebase-status/SKILL.md",
-  "global/codex/idea-scope-brief/SKILL.md",
-  "global/codex/init-agentic-skills/SKILL.md",
-  "global/codex/pack/SKILL.md",
-  "global/codex/provision-agentic-config/SKILL.md",
-  "global/codex/skills/SKILL.md",
+  "base/claude/afps-status/SKILL.md",
+  "base/claude/codebase-status/SKILL.md",
+  "base/claude/idea-scope-brief/SKILL.md",
+  "base/claude/init-agentic-skills/SKILL.md",
+  "base/claude/pack/SKILL.md",
+  "base/claude/provision-agentic-config/SKILL.md",
+  "base/claude/skills/SKILL.md",
+  "base/codex/afps-status/SKILL.md",
+  "base/codex/codebase-status/SKILL.md",
+  "base/codex/idea-scope-brief/SKILL.md",
+  "base/codex/init-agentic-skills/SKILL.md",
+  "base/codex/pack/SKILL.md",
+  "base/codex/provision-agentic-config/SKILL.md",
+  "base/codex/skills/SKILL.md",
 ];
 
 const VALID_ALLOWLIST_SCOPES = new Set([
@@ -73,7 +73,7 @@ function normalizeRel(fileRoot, file) {
 
 function collectActiveSkillFiles(repoRoot) {
   return [
-    ...walk(path.join(repoRoot, "global"), (file) => file.endsWith("/SKILL.md")),
+    ...walk(path.join(repoRoot, "base"), (file) => file.endsWith("/SKILL.md")),
     ...walk(path.join(repoRoot, "packs"), (file) => file.endsWith("/SKILL.md")),
   ].sort();
 }

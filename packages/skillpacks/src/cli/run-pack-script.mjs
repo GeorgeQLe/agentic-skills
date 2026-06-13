@@ -364,7 +364,7 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  init --global [args...]      Install user-home global core skills with packaged init.sh
+  init --global [args...]      Install user-home base skills with packaged init.sh
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   doctor                       Report skill-install drift
@@ -457,7 +457,7 @@ export async function runSkillpacksCli(args) {
     }
     if (rest.length > 0) {
       throw new Error(
-        "init does not accept arguments except '--global'. Use 'gskp init --global' for user-home global core skills."
+        "init does not accept arguments except '--global'. Use 'gskp init --global' for user-home base skills."
       );
     }
     return initProject({

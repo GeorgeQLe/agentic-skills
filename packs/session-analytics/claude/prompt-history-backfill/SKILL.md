@@ -31,7 +31,7 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
    - In report-only mode, prompt backfill candidates are reviewed but no files under `prompts/<skill-slug>/` are created.
 
 2. Resolve known skills in the target repo:
-   - Read active non-archive `SKILL.md` files under `global/`, `packs/`, `.claude/skills/`, and `.codex/skills/` when present.
+   - Read active non-archive `SKILL.md` files under `base/`, `packs/`, `.claude/skills/`, and `.codex/skills/` when present.
    - Include existing `prompts/<skill-slug>/` directories as known prompt-history targets.
    - Maintain a hardcoded legacy skill map for slugs that no longer exist as active skills:
      - `run` — renamed → `exec`

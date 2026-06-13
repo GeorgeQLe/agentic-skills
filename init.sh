@@ -9,8 +9,8 @@ source "$SCRIPT_DIR/scripts/skill-links.sh"
 usage() {
   echo "Usage: $0 [--uninstall] [--pin skill=version]"
   echo ""
-  echo "Init:       Installs global core skills into assistant global skill directories."
-  echo "Uninstall:  Removes repo-managed global skill installs pointing back to this repo."
+  echo "Init:       Installs base skills into assistant user-home skill directories."
+  echo "Uninstall:  Removes repo-managed base skill installs pointing back to this repo."
   echo ""
   echo "Project-local packs and individual pack skills are managed with: scripts/pack.sh install <pack-or-skill>"
   exit 0
@@ -78,7 +78,7 @@ remove_stale_repo_links() {
     if [[ -L "$link" ]]; then
       target="$(readlink "$link")"
       case "$target" in
-        "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
+        "$SCRIPT_DIR/base/claude/"*|"$SCRIPT_DIR/base/codex/"*)
           if [[ ! -e "$target" ]]; then
             rm "$link"
             echo "Removed stale $(basename "$link")"
@@ -188,20 +188,20 @@ for pin_entry in "${PINS[@]+"${PINS[@]}"}"; do
     pin_skill="${BASH_REMATCH[1]}"
     pin_version="${BASH_REMATCH[2]}"
     write_skill_pin "$pin_skill" "$pin_version"
-    echo "Pinned global skill $pin_skill to $pin_version"
+    echo "Pinned base skill $pin_skill to $pin_version"
   else
     echo "WARNING: invalid --pin format '$pin_entry', expected skill=version" >&2
   fi
 done
 
-install_tree "$SCRIPT_DIR/global/claude" "$CLAUDE_SKILLS_DIR" "Claude core" count_claude_core skipped_claude_core
-install_tree "$SCRIPT_DIR/global/codex" "$CODEX_SKILLS_DIR" "Codex core" count_codex_core skipped_codex_core
+install_tree "$SCRIPT_DIR/base/claude" "$CLAUDE_SKILLS_DIR" "Claude core" count_claude_core skipped_claude_core
+install_tree "$SCRIPT_DIR/base/codex" "$CODEX_SKILLS_DIR" "Codex core" count_codex_core skipped_codex_core
 
 skipped=$((skipped_claude_core + skipped_codex_core))
 
 echo ""
 echo "Installed $count_claude_core Claude core skills -> $CLAUDE_SKILLS_DIR"
 echo "Installed $count_codex_core Codex core skills -> $CODEX_SKILLS_DIR"
-echo "Domain packs were not installed globally. Use scripts/pack.sh install <pack-or-skill> from a project."
+echo "Domain packs were not installed. Use scripts/pack.sh install <pack-or-skill> from a project."
 if [[ "$skipped" -gt 0 ]]; then echo "Skipped $skipped (see warnings above)"; fi
 echo "Done."

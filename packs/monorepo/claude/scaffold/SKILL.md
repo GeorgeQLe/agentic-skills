@@ -81,7 +81,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
 
 ## Constraints
 - Always use an existing package/app as the reference template — do not invent conventions.
-- Do not install domain packs globally; use project-local pack skill roots.
+- Do not install domain packs as base skills; use project-local pack skill roots.
 - Always enter plan mode before creating files.
 - Do not call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
 - Do not add unnecessary boilerplate — keep the scaffold minimal and consistent with existing packages.

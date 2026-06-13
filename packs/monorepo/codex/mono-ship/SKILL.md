@@ -21,7 +21,7 @@ Use this skill to ship completed work in a pnpm workspace monorepo only after pa
 2. **Ship:** delegate to the standard `$ship` contract after validation passes.
 3. **Post-ship:** update `tasks/lane-specs.md` with shipping status, lifecycle notes, and the next routed command.
 
-The global `$ship` skill remains the source of truth for final validation policy, task docs, history updates, commit/push, deploy handling, and next-step routing.
+The base `$ship` skill remains the source of truth for final validation policy, task docs, history updates, commit/push, deploy handling, and next-step routing.
 
 ## Inputs
 

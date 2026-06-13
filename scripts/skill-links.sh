@@ -5,10 +5,10 @@ SKILL_LINK_MARKER=".agentic-skills-managed"
 skill_source_owned_by_repo() {
   local source="$1"
   local repo_root="${REPO_ROOT:-${SCRIPT_DIR:-}}"
-  local global_root="${SCRIPT_DIR:-$repo_root}"
+  local base_root="${SCRIPT_DIR:-$repo_root}"
   [[ -n "$repo_root" ]] || return 1
   case "$source" in
-    "$global_root/global/claude/"*|"$global_root/global/codex/"*|"$repo_root/packs/"*)
+    "$base_root/base/claude/"*|"$base_root/base/codex/"*|"$repo_root/packs/"*)
       return 0
       ;;
     *)

@@ -14,11 +14,11 @@ Invoke as `$mono-detect`.
 
 Use this skill to detect a pnpm workspace monorepo and generate the `.agents/monorepo.json` artifact consumed by the monorepo pack.
 
-`mono-detect` is the foundation skill for `mono-exec`, `mono-ship`, and `mono-guard`. Those skills use its output to inject monorepo-aware pre/post steps into the standard `$exec` and `$ship` contracts without duplicating the global workflow.
+`mono-detect` is the foundation skill for `mono-exec`, `mono-ship`, and `mono-guard`. Those skills use its output to inject monorepo-aware pre/post steps into the standard `$exec` and `$ship` contracts without duplicating the base workflow.
 
 ## Augmentation Injection Pattern
 
-`mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `$exec`, `$ship`, or global monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-exec`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
+`mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `$exec`, `$ship`, or base monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-exec`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
 
 ## Process
 
@@ -64,7 +64,7 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 - Do not run package manager install/add commands.
 - Do not infer non-pnpm workspace managers in V1.
 - Do not modify `.agents/monorepo.json` manually; use `mono-detect.sh`.
-- Treat `mono-detect` as an augmentation foundation for `mono-exec`, `mono-ship`, and `mono-guard`, not as a replacement for `$exec`, `$ship`, or global monorepo planning skills.
+- Treat `mono-detect` as an augmentation foundation for `mono-exec`, `mono-ship`, and `mono-guard`, not as a replacement for `$exec`, `$ship`, or base monorepo planning skills.
 
 ## Default Shipping Contract
 

@@ -33,7 +33,7 @@ This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/
    - If examples are needed, ask for them or run a tightly scoped history query limited by path, skill name, date range, or exact phrase.
    - Do not scan all session history unless explicitly requested.
 5. Search existing skills for overlap before creating anything:
-   - Search `global/claude`, `global/codex`, `packs`, and project-local `.claude/skills` or `.codex/skills` when present.
+   - Search `base/claude`, `base/codex`, `packs`, and project-local `.claude/skills` or `.codex/skills` when present.
    - Compare name, description, workflow, and next-step routing behavior.
    - If an existing skill substantially covers the job, recommend updating that skill instead of adding a duplicate.
 6. Decide the smallest durable fix:
@@ -42,7 +42,7 @@ This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/
    - Reusable prompt/template: choose this when the behavior is too situational or not stable enough for a skill.
    - No repository change: choose this when the request is already covered and only needs a usage note.
 7. Resolve the destination:
-   - Default new shared Claude/Codex skills to this repository: `/Users/georgele/projects/tools/agentic-skills/global/claude/<name>/SKILL.md` and `/Users/georgele/projects/tools/agentic-skills/global/codex/<name>/SKILL.md`.
+   - Default new shared Claude/Codex skills to this repository: `/Users/georgele/projects/tools/agentic-skills/base/claude/<name>/SKILL.md` and `/Users/georgele/projects/tools/agentic-skills/base/codex/<name>/SKILL.md`.
    - If the current session is not in the agentic-skills repository and the user wants to audit or amend an existing shared skill, do not edit a local copy. Provide a concise prompt for the user to run from `/Users/georgele/projects/tools/agentic-skills` with the target skill path and requested adjustment.
    - Use user-local `~/.claude/skills` or `~/.codex/skills` only when the user explicitly asks for a personal/local skill.
 8. If creating or updating a repository skill:

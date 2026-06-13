@@ -19,7 +19,7 @@ Use this skill to execute planned work in a pnpm workspace monorepo with package
 2. **Dispatch:** run cross-cutting steps serially first in the main agent, then dispatch package-scoped worktree waves on separate GitHub branches only after lane specs are approved and guard validation passes.
 3. **Post-dispatch:** perform consolidation/PR review, run `mono-guard --post-integration`, update lane-spec lifecycle, then continue to `mono-ship` when shipping is requested.
 
-The global `/exec` skill remains the source of truth for task selection, task docs, validation, history updates, commit/push, deploy handling, and next-step routing.
+The base `/exec` skill remains the source of truth for task selection, task docs, validation, history updates, commit/push, deploy handling, and next-step routing.
 
 ## Flags
 

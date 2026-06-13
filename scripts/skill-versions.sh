@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Skill version audit — lists versions from global skills and pack skills.
+# Skill version audit — lists versions from base skills and pack skills.
 # Usage: skill-versions.sh [--json|--missing]
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -14,7 +14,7 @@ MISSING=0
 MISSING_NAMES=()
 
 mapfile -t SKILL_FILES < <(
-  find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
+  find "$REPO_ROOT/base" "$REPO_ROOT/packs" \
     -mindepth 2 -maxdepth 5 -type f -name SKILL.md 2>/dev/null \
     | sort
 )

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Regenerates the data sections of alignment/skills-inventory.html from the
-// repo's SKILL.md files (global/claude/* and packs/*/claude/*). Page chrome
+// repo's SKILL.md files (base/claude/* and packs/*/claude/*). Page chrome
 // (CSS, JS behavior, layout) is preserved; only the subtitle date, stats bar,
 // TOC, list-view pack sections, and packCategoryMap are rewritten.
 //
@@ -67,7 +67,7 @@ function readSkillDirs(parent) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const globalSkills = readSkillDirs(join(repoRoot, 'global', 'claude'));
+const baseSkills = readSkillDirs(join(repoRoot, 'base', 'claude'));
 const packs = readdirSync(join(repoRoot, 'packs'), { withFileTypes: true })
   .filter((e) => e.isDirectory())
   .map((e) => ({ name: e.name, skills: readSkillDirs(join(repoRoot, 'packs', e.name, 'claude')) }))
@@ -80,7 +80,7 @@ if (unmapped.length) {
   process.exit(1);
 }
 
-const sections = [{ name: 'global', category: 'global', skills: globalSkills }]
+const sections = [{ name: 'base', category: 'base', skills: baseSkills }]
   .concat(packs.map((p) => ({ name: p.name, category: PACK_CATEGORY[p.name], skills: p.skills })));
 
 const uniqueSkills = new Set(sections.flatMap((s) => s.skills.map((k) => k.name))).size;
@@ -91,7 +91,7 @@ const renderSection = (s) => {
   const rows = s.skills.map((k) => `    <div class="skill-row" data-skill="${k.name}" data-desc="${esc(k.desc)}">
       <span class="skill-name">${k.name}</span><span class="skill-version">${k.version}</span><span class="skill-desc">${esc(k.desc)}</span>
     </div>`).join('\n');
-  return `<div class="pack-section${s.name === 'global' ? ' open' : ''}" data-pack="${s.name}" data-category="${s.category}" id="${s.name}">
+  return `<div class="pack-section${s.name === 'base' ? ' open' : ''}" data-pack="${s.name}" data-category="${s.category}" id="${s.name}">
   <div class="pack-header" onclick="togglePack(this)">
     <div><span class="pack-name">${s.name}</span> <span class="pack-badge">${s.skills.length} skill${s.skills.length === 1 ? '' : 's'}</span></div>
     <span class="pack-chevron">&#9654;</span>
@@ -105,7 +105,7 @@ ${rows}
 const statsBar = `<div class="stats-bar">
   <div class="stat"><div class="stat-value">${uniqueSkills}</div><div class="stat-label">Unique Skills</div></div>
   <div class="stat"><div class="stat-value">${packs.length}</div><div class="stat-label">Packs</div></div>
-  <div class="stat"><div class="stat-value">${globalSkills.length}</div><div class="stat-label">Global Skills</div></div>
+  <div class="stat"><div class="stat-value">${baseSkills.length}</div><div class="stat-label">Base Skills</div></div>
   <div class="stat"><div class="stat-value">${categories}</div><div class="stat-label">Categories</div></div>
 </div>`;
 
@@ -140,4 +140,4 @@ splice('list view', /<div class="list-view" id="listView">[\s\S]*?<\/div><!-- en
 splice('packCategoryMap', /const packCategoryMap = \{[\s\S]*?\};/, categoryMap);
 
 writeFileSync(pagePath, html);
-console.log(`Updated ${pagePath}: ${uniqueSkills} unique skills, ${packs.length} packs, ${globalSkills.length} global skills, ${categories} categories (${today})`);
+console.log(`Updated ${pagePath}: ${uniqueSkills} unique skills, ${packs.length} packs, ${baseSkills.length} base skills, ${categories} categories (${today})`);

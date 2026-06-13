@@ -32,8 +32,8 @@ Pull the latest changes from the remote repository and report status.
    - Read the canonical `provision-agentic-config` skill from the first existing path in this order:
      1. `~/.codex/skills/provision-agentic-config/SKILL.md`
      2. `~/.claude/skills/provision-agentic-config/SKILL.md`
-     3. `global/codex/provision-agentic-config/SKILL.md` in the current repo, when present
-     4. `global/claude/provision-agentic-config/SKILL.md` in the current repo, when present
+     3. `base/codex/provision-agentic-config/SKILL.md` in the current repo, when present
+     4. `base/claude/provision-agentic-config/SKILL.md` in the current repo, when present
    - Extract the `version:` field from the canonical skill's YAML frontmatter.
    - Extract the canonical provisioned blocks from the same skill:
      - `CLAUDE.md`: the fenced block under `Required Claude Block` or the section that says "The Claude block to insert into `./CLAUDE.md`".
@@ -47,7 +47,7 @@ Pull the latest changes from the remote repository and report status.
    - Always report the local canonical source path used and its `version:` field when this check runs.
 5. Check skill-install drift (track-latest):
    - Project-local pack/skill installs under `.claude/skills` and `.codex/skills` are managed copies stamped with `.agentic-skills-managed`, which now records `source_version` and `source_sha`. When canonical sources in the `agentic-skills` checkout move ahead, the installed copies fall behind.
-   - Resolve the `agentic-skills` checkout from any install marker's `source=` path (the parent above `.../packs/..` or `.../global/..` is the repo root). If no managed install exists or the checkout cannot be resolved, skip this check silently.
+   - Resolve the `agentic-skills` checkout from any install marker's `source=` path (the parent above `.../packs/..` or `.../base/..` is the repo root). If no managed install exists or the checkout cannot be resolved, skip this check silently.
    - Run `scripts/pack.sh doctor` from the project root using that checkout (read-only; it never mutates installs).
    - Fold any `stale` skills into the Report status block with the fix command `scripts/pack.sh refresh`. Report `unknown` skills as "run `scripts/pack.sh refresh` to enable drift tracking" and leave `pinned` skills noted as frozen.
    - Must not mutate. Plain `$sync` only warns; it never runs `refresh`, re-copies, or otherwise changes installs. Direct the user to `scripts/pack.sh refresh` (or enable auto-refresh) for the actual update.

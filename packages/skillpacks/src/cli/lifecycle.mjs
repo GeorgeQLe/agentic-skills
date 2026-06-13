@@ -126,7 +126,7 @@ function packSkillEntries(manifest, packName, tool) {
 
 function baseSkillEntries(manifest, tool) {
   return manifestSkills(manifest).filter((skill) => {
-    return skill.scope === 'global' && skill.platform === tool && skill.path;
+    return skill.scope === 'base' && skill.platform === tool && skill.path;
   });
 }
 
@@ -144,7 +144,7 @@ function uniqueBaseSkillNames(manifest) {
   return [
     ...new Set(
       manifestSkills(manifest)
-        .filter((skill) => skill.scope === 'global' && skill.name)
+        .filter((skill) => skill.scope === 'base' && skill.name)
         .map((skill) => skill.name)
     )
   ].sort((a, b) => a.localeCompare(b));
@@ -269,11 +269,11 @@ function managedMarkerField(target, field) {
 
 function sourceOwnedBySkillpacks(source) {
   const ownedPrefixes = [
-    join(packageRoot, 'global', 'claude'),
-    join(packageRoot, 'global', 'codex'),
+    join(packageRoot, 'base', 'claude'),
+    join(packageRoot, 'base', 'codex'),
     join(packageRoot, 'packs'),
-    join(checkoutRoot, 'global', 'claude'),
-    join(checkoutRoot, 'global', 'codex'),
+    join(checkoutRoot, 'base', 'claude'),
+    join(checkoutRoot, 'base', 'codex'),
     join(checkoutRoot, 'packs')
   ];
 
@@ -983,7 +983,7 @@ function pruneOrphanedSkillRoots({ manifest, projectRoot, dryRun = false }) {
 }
 
 function provisionerSkillText() {
-  const sourcePath = resolvePackagedPath('global/codex/provision-agentic-config/SKILL.md');
+  const sourcePath = resolvePackagedPath('base/codex/provision-agentic-config/SKILL.md');
   if (!existsSync(sourcePath)) {
     throw new Error(`Cannot find canonical provision-agentic-config skill at ${sourcePath}`);
   }

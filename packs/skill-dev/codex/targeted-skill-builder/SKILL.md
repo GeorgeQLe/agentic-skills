@@ -35,7 +35,7 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - If examples are needed, ask for them or run a tightly scoped history query limited by path, skill name, date range, or exact phrase.
    - Do not scan all session history unless explicitly requested.
 5. Search existing skills for overlap before creating anything:
-   - Search `global/claude`, `global/codex`, `packs`, and project-local `.claude/skills` or `.codex/skills` when present.
+   - Search `base/claude`, `base/codex`, `packs`, and project-local `.claude/skills` or `.codex/skills` when present.
    - Compare name, description, workflow, and next-step routing behavior.
    - If an existing skill substantially covers the job, recommend updating that skill instead of adding a duplicate.
 6. Decide the smallest durable fix:
@@ -44,14 +44,14 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - Reusable prompt/template: choose this when the behavior is too situational or not stable enough for a skill.
    - No repository change: choose this when the request is already covered and only needs a usage note.
 7. Resolve the destination:
-   - Default new shared Claude/Codex skills to this repository: `/Users/georgele/projects/tools/agentic-skills/global/claude/<name>/SKILL.md` and `/Users/georgele/projects/tools/agentic-skills/global/codex/<name>/SKILL.md`.
+   - Default new shared Claude/Codex skills to this repository: `/Users/georgele/projects/tools/agentic-skills/base/claude/<name>/SKILL.md` and `/Users/georgele/projects/tools/agentic-skills/base/codex/<name>/SKILL.md`.
    - If the current session is not in the agentic-skills repository and the user wants to audit or amend an existing shared skill, do not edit a local copy. Provide a concise prompt for the user to run from `/Users/georgele/projects/tools/agentic-skills` with the target skill path and requested adjustment.
    - Use user-local `~/.claude/skills` or `~/.codex/skills` only when the user explicitly asks for a personal/local skill.
 8. If creating or updating a repository skill:
    - Follow existing frontmatter conventions: `name`, specific `description`, `type`, `version`, and `argument-hint` when useful.
    - Keep `SKILL.md` concise and operational.
    - Include clear trigger conditions, workflow steps, outputs, constraints, and next-step routing for mutation-capable skills.
-   - For Codex global skills, add `agents/openai.yaml` with display name, short description, default prompt, and implicit-invocation policy.
+   - For Codex base skills, add `agents/openai.yaml` with display name, short description, default prompt, and implicit-invocation policy.
    - Update `tests/harness/bench-coverage.ts` for every new repository skill or material skill behavior update.
    - Add/register a deterministic custom setup under `tests/layer4/setups/` when practical, or record an explicit blocked row with `blocked_reason` and `next_command` when coverage depends on unsafe or external conditions.
    - For custom setup work, include a deterministic output-quality rubric when practical. Prefer fixture fact coverage, concrete file/command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over broad prose judgments.

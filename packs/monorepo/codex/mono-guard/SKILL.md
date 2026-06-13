@@ -12,7 +12,7 @@ Invoke as `$mono-guard`.
 
 Use this skill to validate monorepo pack lane artifacts before parallel dispatch and to audit integrated lane changes after dispatch.
 
-This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/monorepo.json`. It preserves behavioral compatibility with the global `$mono-guard` contract while using the monorepo pack's JSON artifacts and scripts as the project-local enforcement surface.
+This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/monorepo.json`. It preserves behavioral compatibility with the base `$mono-guard` contract while using the monorepo pack's JSON artifacts and scripts as the project-local enforcement surface.
 
 ## Augmentation Injection Pattern
 
@@ -118,7 +118,7 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
 - Do not run package manager install/add commands.
 - Do not modify `.agents/lane-specs.json` or `.agents/monorepo.json` except by invoking the designated generation/detection skills when appropriate.
 - Do not revert or repair post-integration changes; report violations only.
-- Keep behavior compatible with the global `$mono-guard` safety contract.
+- Keep behavior compatible with the base `$mono-guard` safety contract.
 
 ## Next-Step Routing
 

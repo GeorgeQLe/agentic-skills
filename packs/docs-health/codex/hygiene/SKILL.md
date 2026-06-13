@@ -23,7 +23,7 @@ Read `CLAUDE.md` for project conventions. Read `docs/skills-reference.md` for th
 
 ### 2. Audit Skills (`skills` scope)
 
-For each skill directory in `global/claude/*/SKILL.md`, `global/codex/*/SKILL.md`, `packs/*/claude/*/SKILL.md`, and `packs/*/codex/*/SKILL.md`:
+For each skill directory in `base/claude/*/SKILL.md`, `base/codex/*/SKILL.md`, `packs/*/claude/*/SKILL.md`, and `packs/*/codex/*/SKILL.md`:
 
 **Frontmatter check:**
 - Has `name` field — matches directory name
@@ -72,9 +72,9 @@ Check expected project files exist based on project phase:
 ### 4. Audit Docs (`docs` scope)
 
 **Skills reference sync:**
-- Every global core directory has a corresponding entry in `docs/skills-reference.md`
+- Every base core directory has a corresponding entry in `docs/skills-reference.md`
 - Every pack directory is listed under its pack in `docs/skills-reference.md`
-- The global core table and pack skill lists are complete (no missing, no extras)
+- The base core table and pack skill lists are complete (no missing, no extras)
 
 **Required docs:**
 - `CLAUDE.md` exists at project root
@@ -125,7 +125,7 @@ Check expected project files exist based on project phase:
 
 Compare Claude and Codex directories within each root:
 
-- Every skill in `global/claude/` should have a corresponding `global/codex/<name>/SKILL.md`
+- Every skill in `base/claude/` should have a corresponding `base/codex/<name>/SKILL.md`
 - Every skill in `packs/<pack>/claude/` should have a corresponding `packs/<pack>/codex/<name>/SKILL.md`
 - Flag skills that exist in one but not the other
 - For skills that exist in both, check that the codex version has:
@@ -158,7 +158,7 @@ Only fix mechanical, unambiguous issues:
 - Add missing `argument-hint:` field (empty) to frontmatter
 - Fix `name` field to match directory name
 - Create missing Codex mirror in the matching root from the Claude version (copy frontmatter + intro, add TODO for Codex-specific content)
-- Add missing skill entries to the appropriate global core table or pack list in `docs/skills-reference.md`
+- Add missing skill entries to the appropriate base core table or pack list in `docs/skills-reference.md`
 - Add missing empty metadata scaffold only when the target generated-doc template explicitly requires metadata and the values can be left blank
 - Normalize duplicate blank lines around headings in generated docs when it is purely mechanical
 
@@ -179,16 +179,16 @@ Display directly to the user (no files written in audit mode):
 ## Hygiene Report — [scope]
 
 ### Errors (X)
-- **global/claude/foo/SKILL.md** — missing `version` field in frontmatter
+- **base/claude/foo/SKILL.md** — missing `version` field in frontmatter
 - **packs/business-discovery/claude/bar/SKILL.md** — directory name `bar` doesn't match frontmatter name `baz`
 
 ### Warnings (X)
 - **packs/example-pack/codex/example-skill/** — missing Codex mirror (exists in Claude only)
-- **docs/skills-reference.md** — `$hygiene` not listed in the global core table
+- **docs/skills-reference.md** — `$hygiene` not listed in the base core table
 - **research/icp.md** — missing `## Next Steps` section required by the research doc template
 
 ### Info (X)
-- **global/claude/ship/SKILL.md** — no `## Constraints` section (consider adding)
+- **base/claude/ship/SKILL.md** — no `## Constraints` section (consider adding)
 - **docs/architecture.md** — unknown hand-written doc; skipped strict generated-doc template checks
 
 ### Summary
@@ -202,8 +202,8 @@ In `fix` mode, prepend each fixed item with a checkmark:
 
 ```
 ### Fixed
-- [x] Added missing `argument-hint:` to global/claude/foo/SKILL.md
-- [x] Created mirror global/codex/hygiene/SKILL.md
+- [x] Added missing `argument-hint:` to base/claude/foo/SKILL.md
+- [x] Created mirror base/codex/hygiene/SKILL.md
 
 ### Remaining Errors (X)
 ...

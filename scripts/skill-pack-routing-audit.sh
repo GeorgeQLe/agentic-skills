@@ -26,7 +26,7 @@ function walk(dir, predicate, out = []) {
 }
 
 const packSkillFiles = walk(path.join(root, "packs"), (file) => file.endsWith("/SKILL.md"));
-const globalSkillFiles = walk(path.join(root, "global"), (file) => file.endsWith("/SKILL.md"));
+const baseSkillFiles = walk(path.join(root, "base"), (file) => file.endsWith("/SKILL.md"));
 
 const skillPacks = new Map();
 for (const file of packSkillFiles) {
@@ -37,10 +37,10 @@ for (const file of packSkillFiles) {
   skillPacks.get(skill).add(pack);
 }
 
-const globalSkills = new Set();
-for (const file of globalSkillFiles) {
+const baseSkills = new Set();
+for (const file of baseSkillFiles) {
   const rel = path.relative(root, file).split(path.sep);
-  globalSkills.add(rel[2]);
+  baseSkills.add(rel[2]);
 }
 
 const refRe = /(?:^|[\s`"'(|>:,])([/$])([a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:\-*]|\])/g;
@@ -78,7 +78,7 @@ function addFailure(relPath, lineNumber, skill, targetPacks) {
   failures.push(`${relPath}:${lineNumber}: ${skill} requires pack ${packList}`);
 }
 
-for (const file of [...globalSkillFiles, ...packSkillFiles]) {
+for (const file of [...baseSkillFiles, ...packSkillFiles]) {
   const relPath = path.relative(root, file);
   const text = fs.readFileSync(file, "utf8");
   const hasWholeFileGuard = guardRe.test(text);
@@ -92,7 +92,7 @@ for (const file of [...globalSkillFiles, ...packSkillFiles]) {
 
     for (const match of line.matchAll(refRe)) {
       const skill = match[2];
-      if (globalSkills.has(skill) || !skillPacks.has(skill)) continue;
+      if (baseSkills.has(skill) || !skillPacks.has(skill)) continue;
       const targetPacks = skillPacks.get(skill);
       if (sourcePack && targetPacks.has(sourcePack)) continue;
       if (hasWholeFileGuard) continue;

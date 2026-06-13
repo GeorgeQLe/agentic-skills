@@ -39,7 +39,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 ## Constraints
 
 - Always use an existing package as the reference template.
-- Do not install domain packs globally; use project-local pack skill roots.
+- Do not install domain packs as base skills; use project-local pack skill roots.
 - Present the plan and get approval before creating files. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Keep the scaffold minimal — no unnecessary boilerplate.
 - Do not treat scaffolding as product validation. It creates structure only; ICP, market, journey, UX, UI, and prototype decisions belong to their upstream skills.

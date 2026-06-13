@@ -88,7 +88,7 @@ export function compactText(value, maxLength = 700) {
 export function activeSkillPaths(files) {
   return files.filter((file) => {
     return (
-      /^global\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
+      /^base\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
       (
         /^packs\/[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
         !file.split("/").includes("archive")
@@ -116,9 +116,9 @@ export function parseSkill(repoRoot, relativePath) {
   const text = readText(repoRoot, relativePath);
   const fields = parseFrontmatter(text);
   const segments = relativePath.split("/");
-  const scope = segments[0] === "global" ? "global" : "pack";
-  const platform = scope === "global" ? segments[1] : segments[2];
-  const pack = scope === "global" ? null : segments[1];
+  const scope = segments[0] === "base" ? "base" : "pack";
+  const platform = scope === "base" ? segments[1] : segments[2];
+  const pack = scope === "base" ? null : segments[1];
   const fallbackName = segments[segments.length - 2];
   const name = fields.name || fallbackName;
 

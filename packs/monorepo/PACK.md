@@ -34,14 +34,14 @@ scripts/pack.sh refresh
 
 ## Augmentation Injection Pattern
 
-This pack does not duplicate the global execution and shipping skills. It injects monorepo-aware pre/post steps around the existing contracts:
+This pack does not duplicate the base execution and shipping skills. It injects monorepo-aware pre/post steps around the existing contracts:
 
 - Pre-execution: run `mono-detect`, read the phase execution profile, generate lane specs when appropriate, and run `mono-guard` pre-flight.
 - Execution: keep root-only and cross-cutting steps serial in the main agent; dispatch only approved package-scoped lanes with disjoint `owns` paths and separate non-primary GitHub branches.
 - Post-integration: run consolidation/PR review, then `mono-guard` against the actual diff before package-scoped shipping.
 - Pre-ship: use `.agents/monorepo.json` and lane specs to run package and transitive-dependent validation before delegating to `/ship` or `$ship`.
 
-This differs from `*-kanban` packs, which intentionally provide workflow variants. The monorepo pack is an overlay that makes the normal skill pipeline workspace-aware while preserving the global skill contracts as the source of truth.
+This differs from `*-kanban` packs, which intentionally provide workflow variants. The monorepo pack is an overlay that makes the normal skill pipeline workspace-aware while preserving the base skill contracts as the source of truth.
 
 ## Package-Scope Tags
 

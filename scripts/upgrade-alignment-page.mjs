@@ -477,7 +477,7 @@ function walk(dir, out = []) {
   return out;
 }
 
-const files = [...walk(`${repoRoot}/global`), ...walk(`${repoRoot}/packs`)]
+const files = [...walk(`${repoRoot}/base`), ...walk(`${repoRoot}/packs`)]
   .filter((file) => /(^|\/)(codex|claude)\//.test(file))
   .sort();
 

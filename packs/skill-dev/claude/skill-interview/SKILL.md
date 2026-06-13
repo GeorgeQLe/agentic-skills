@@ -20,7 +20,7 @@ Use this skill when the user wants to create or substantially redesign a skill b
    - If the user wants an experimental personal skill under `~/.claude/skills`, plan for `/create-local-skill`; otherwise default to repo-managed `/create-agentic-skill`.
 
 2. **Gather local evidence before probing.**
-   - Search for overlapping skills in the active skill list and repository paths such as `global/codex/`, `global/claude/`, and `packs/*/{codex,claude}/`.
+   - Search for overlapping skills in the active skill list and repository paths such as `base/codex/`, `base/claude/`, and `packs/*/{codex,claude}/`.
    - Read the closest existing skill contracts and any relevant `tasks/lessons.md` entries before asking detailed questions.
    - If an existing skill already covers the request, explain the overlap and ask whether the user wants an update, alias, narrower variant, or new skill.
 
@@ -89,10 +89,10 @@ Use this skill when the user wants to create or substantially redesign a skill b
 
 After writing the brief and interview log, recommend exactly one next command:
 
-- `/create-agentic-skill <skill-name>` for repo-managed global skills.
+- `/create-agentic-skill <skill-name>` for repo-managed base skills.
 - `/create-local-skill <skill-name>` for personal local-only skills.
 - `/targeted-skill-builder <existing-skill> <gap>` when the interview found that an existing skill should be updated instead of creating a new skill.
-- `/pack` or a pack-local creation route when the skill belongs inside a project-local pack rather than global skills.
+- `/pack` or a pack-local creation route when the skill belongs inside a project-local pack rather than base skills.
 
 Output exactly two lines beyond the normal report:
 

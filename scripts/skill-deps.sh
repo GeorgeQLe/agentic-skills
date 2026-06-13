@@ -8,10 +8,10 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 MODE="${1:-default}"
 
-# 1. Discover valid skill names from global skills and pack skills.
+# 1. Discover valid skill names from base skills and pack skills.
 declare -A VALID_SKILLS
 mapfile -t SKILL_DIRS < <(
-  find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
+  find "$REPO_ROOT/base" "$REPO_ROOT/packs" \
     -mindepth 2 -type f -name SKILL.md 2>/dev/null \
     -not -path '*/archive/*' \
     | sed 's#/SKILL.md$##' \

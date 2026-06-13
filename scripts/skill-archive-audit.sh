@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       echo "Usage: skill-archive-audit.sh [--json] [--strict]"
       echo ""
-      echo "Audits skill archive integrity across global/ and packs/."
+      echo "Audits skill archive integrity across base/ and packs/."
       echo ""
       echo "Checks:"
       echo "  1. Every archive/<version>/SKILL.md has a version: matching its directory"
@@ -119,7 +119,7 @@ check_skill() {
 
 while IFS= read -r skill_dir; do
   check_skill "$skill_dir"
-done < <(find "$REPO_ROOT/global" "$REPO_ROOT/packs" -name SKILL.md -not -path '*/archive/*' -exec dirname {} \; 2>/dev/null | sort -u)
+done < <(find "$REPO_ROOT/base" "$REPO_ROOT/packs" -name SKILL.md -not -path '*/archive/*' -exec dirname {} \; 2>/dev/null | sort -u)
 
 if [[ "$MODE" == "json" ]]; then
   echo "{"

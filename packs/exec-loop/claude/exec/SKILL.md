@@ -127,7 +127,7 @@ Rules:
 
 - Make the next work item primary. Derive it from `tasks/todo.md`, validation results, manual blockers, deploy/smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
-- Normalize copied task routes to Claude syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Codex dollar commands for global skills (for example `$exec`, `$ship`, `$roadmap`, `$guide`, `$reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Claude `/...` route unless the next action is explicitly a Codex handoff such as `/delegate $ship`.
+- Normalize copied task routes to Claude syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Codex dollar commands for base skills (for example `$exec`, `$ship`, `$roadmap`, `$guide`, `$reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Claude `/...` route unless the next action is explicitly a Codex handoff such as `/delegate $ship`.
 - Inference defaults:
   - Hybrid execution handoff after Claude `/exec` → recommend `/delegate` (agent-bridge pack) `$ship`.
   - Claude-only or manual/orchestration-heavy work → recommend `/ship` or `/guide` (guided-walkthrough pack).

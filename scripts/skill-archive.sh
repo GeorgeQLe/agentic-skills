@@ -7,7 +7,7 @@ usage() {
   echo "Archives the current SKILL.md into archive/<version>/SKILL.md"
   echo "before a version bump."
   echo ""
-  echo "Example: bash scripts/skill-archive.sh global/claude/ship"
+  echo "Example: bash scripts/skill-archive.sh base/claude/codebase-status"
   exit 0
 }
 

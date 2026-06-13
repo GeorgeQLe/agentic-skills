@@ -23,7 +23,7 @@ Write **real directories**, not managed roots back to the shared repo. `init.sh 
 2. **Validate the target path:**
    - Target is `$HOME/.claude/skills/<name>`.
    - If the path already exists:
-     - If it is a **symlink** pointing into an agentic-skills repo (`readlink` contains `agentic-skills/global/` or `agentic-skills/packs/`), refuse — this would shadow a repo-managed skill. Tell the user to choose a different name.
+     - If it is a **symlink** pointing into an agentic-skills repo (`readlink` contains `agentic-skills/base/` or `agentic-skills/packs/`), refuse — this would shadow a repo-managed skill. Tell the user to choose a different name.
      - If it is a **real directory or a user-owned symlink**, ask before overwriting.
 
 3. **Write the Claude SKILL.md** at `~/.claude/skills/<name>/SKILL.md`:
@@ -70,9 +70,9 @@ Write **real directories**, not managed roots back to the shared repo. `init.sh 
      - Clone this repo and `git remote set-url origin <their-repo-url>` to repoint pushes.
    - Verify the path exists and is a git repo (`git -C <path> rev-parse --show-toplevel`).
    - Copy the scaffolded skill into:
-     - `<fork>/global/claude/<name>/` (and `<fork>/global/codex/<name>/` if a Codex version was created), **or**
+     - `<fork>/base/claude/<name>/` (and `<fork>/base/codex/<name>/` if a Codex version was created), **or**
      - `<fork>/personal/claude/<name>/` if the user wants to keep personal skills segregated from upstream-syncable dirs. Ask which.
-   - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - If the skill is promoted into a fork's `base/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
    - For promoted custom setups, include a deterministic quality rubric when practical, or record why quality scoring is blocked/deferred instead of adding a subjective rubric.
    - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Show the `git status` in the fork and suggest a commit message like `feat(skill): add <name>`. Do **not** commit or push automatically — leave that to the user.
@@ -81,7 +81,7 @@ Write **real directories**, not managed roots back to the shared repo. `init.sh 
 
 ## Notes
 
-- Never write into this repo's `global/` or `packs/` directories from this skill. Target paths are always under `$HOME/.claude/skills`, `$HOME/.codex/skills`, or an explicitly-supplied personal fork path.
+- Never write into this repo's `base/` or `packs/` directories from this skill. Target paths are always under `$HOME/.claude/skills`, `$HOME/.codex/skills`, or an explicitly-supplied personal fork path.
 - Do not create documentation files beyond `SKILL.md` unless the user asks.
 - If the user wants version control for their personal skills without a full fork, suggest `git init` inside a sibling directory and symlinking from `~/.claude/skills/<name>` — but default to the simpler "real directory in `~/.claude/skills`" flow.
 

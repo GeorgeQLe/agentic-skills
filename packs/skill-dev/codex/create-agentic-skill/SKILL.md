@@ -1,8 +1,8 @@
 ---
 name: create-agentic-skill
-description: Create or update a repo-managed skill inside this agentic-skills checkout under global/codex and optionally global/claude, then validate, commit, and push it
+description: Create or update a repo-managed skill inside this agentic-skills checkout under base/codex and optionally base/claude, then validate, commit, and push it
 type: execution
-version: v0.1
+version: v0.2
 argument-hint: "<skill-name> [description] [--codex-only|--claude-only|--mirror]"
 ---
 
@@ -15,14 +15,14 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 ## Process
 
 1. **Confirm repository context.**
-   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `global/codex/`, and `global/claude/`.
+   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `base/codex/`, and `base/claude/`.
    - If the current repo is not `agentic-skills`, stop and ask for the checkout path.
    - Inspect `git status --short` and identify unrelated dirty files before editing.
 
 2. **Resolve skill identity.**
    - Parse `<skill-name>` as kebab-case.
    - Parse the description when provided; otherwise ask for a one-line description.
-   - Default to creating both `global/codex/<skill-name>/SKILL.md` and `global/claude/<skill-name>/SKILL.md` when the skill should exist for both agents.
+   - Default to creating both `base/codex/<skill-name>/SKILL.md` and `base/claude/<skill-name>/SKILL.md` when the skill should exist for both agents.
    - Honor `--codex-only`, `--claude-only`, or `--mirror`.
    - If a local-only workflow is requested, route to `$create-local-skill` instead.
 

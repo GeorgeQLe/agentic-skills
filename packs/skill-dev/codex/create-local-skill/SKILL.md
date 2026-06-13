@@ -22,7 +22,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    - Whether to also create a Claude version in `~/.claude/skills/<name>/`
 
 2. Validate `$HOME/.codex/skills/<name>`:
-   - If it is a symlink into `agentic-skills/global/` or `agentic-skills/packs/`, refuse — it would shadow a repo-managed skill.
+   - If it is a symlink into `agentic-skills/base/` or `agentic-skills/packs/`, refuse — it would shadow a repo-managed skill.
    - If it is a real dir or user-owned symlink, confirm before overwriting.
 
 3. Write `~/.codex/skills/<name>/SKILL.md`:
@@ -61,8 +61,8 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    If yes:
    - Ask for the path to their fork. If they don't have one, explain: fork on GitHub and clone, or `git remote set-url origin <their-repo>` to repoint an existing clone.
    - Verify with `git -C <path> rev-parse --show-toplevel`.
-   - Copy the skill into `<fork>/global/codex/<name>/` (and `<fork>/global/claude/<name>/` if applicable), or into a `<fork>/personal/...` subtree if the user prefers to segregate personal skills.
-   - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - Copy the skill into `<fork>/base/codex/<name>/` (and `<fork>/base/claude/<name>/` if applicable), or into a `<fork>/personal/...` subtree if the user prefers to segregate personal skills.
+   - If the skill is promoted into a fork's `base/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
    - For promoted custom setups, include a deterministic quality rubric when practical, or record why quality scoring is blocked/deferred instead of adding a subjective rubric.
    - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Run `git status` in the fork and suggest a commit message. Do not commit or push — leave that to the user.
@@ -71,7 +71,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
 
 ## Notes
 
-- Never write into this repo's `global/` or `packs/` directories. Target paths are always under `$HOME/.codex/skills`, `$HOME/.claude/skills`, or an explicitly-supplied personal fork path.
+- Never write into this repo's `base/` or `packs/` directories. Target paths are always under `$HOME/.codex/skills`, `$HOME/.claude/skills`, or an explicitly-supplied personal fork path.
 - Do not create extra docs beyond `SKILL.md` unless asked.
 
 ## Default Shipping Contract

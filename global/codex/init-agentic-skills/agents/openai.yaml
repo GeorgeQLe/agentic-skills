@@ -1,7 +1,0 @@
-interface:
-  display_name: "Init Agentic Skills"
-  short_description: "Initialize global Claude and Codex skills from this checkout"
-  default_prompt: "Use $init-agentic-skills to run the agentic-skills initializer, refresh global managed skill installs, and explain how to enable project-local packs."
-
-policy:
-  allow_implicit_invocation: true
