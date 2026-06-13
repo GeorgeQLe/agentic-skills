@@ -62,7 +62,7 @@ export async function printUpdateNotice(checkPromise, currentVersion) {
     if (compareVersions(currentVersion, latest) >= 0) return;
 
     const msg = `  Update available: ${currentVersion} → ${latest}`;
-    const run = '  Run: npx gskp@latest';
+    const run = '  Run: npx @glexcorp/gskp@latest';
     const width = Math.max(msg.length, run.length) + 2;
     const pad = (s) => s + ' '.repeat(width - s.length);
     const border = '─'.repeat(width);

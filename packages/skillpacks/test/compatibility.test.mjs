@@ -133,14 +133,14 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
       ['docs/packs.md', packs]
     ]) {
       assert.match(doc, /scripts\/pack\.sh install/, `${label} should keep the checkout install path`);
-      assert.match(doc, /npx gskp install/, `${label} should document npm install usage`);
+      assert.match(doc, /npx @glexcorp\/gskp install/, `${label} should document npm install usage`);
     }
 
-    assert.match(decks, /npx gskp install-deck vard/, 'decks doc should document npm deck installs');
-    assert.match(decks, /npx gskp install-deck business-afps/, 'decks doc should use install-deck for canonical decks');
-    assert.doesNotMatch(decks, /npx gskp install <deck>/, 'decks doc must not model decks as generic pack installs');
-    assert.match(readme, /npx gskp alignment bundles --check/, 'README should document npm alignment bundle checks');
-    assert.match(quickstart, /npx gskp alignment pages audit/, 'quickstart should document npm alignment page audits');
+    assert.match(decks, /npx @glexcorp\/gskp install-deck vard/, 'decks doc should document npm deck installs');
+    assert.match(decks, /npx @glexcorp\/gskp install-deck business-afps/, 'decks doc should use install-deck for canonical decks');
+    assert.doesNotMatch(decks, /npx @glexcorp\/gskp install <deck>/, 'decks doc must not model decks as generic pack installs');
+    assert.match(readme, /npx @glexcorp\/gskp alignment bundles --check/, 'README should document npm alignment bundle checks');
+    assert.match(quickstart, /npx @glexcorp\/gskp alignment pages audit/, 'quickstart should document npm alignment page audits');
   });
 
   it('documents migration and package-semver vs skill-version pinning', () => {
@@ -151,8 +151,8 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
       readFileSync(join(repoRoot, 'docs/skillpacks-npm-distribution.md'), 'utf8')
     ].join('\n');
 
-    assert.match(docs, /npx gskp refresh/, 'migration should tell users how to refresh from npm');
-    assert.match(docs, /gskp@<semver>|gskp@0\.1\.0/, 'docs should explain npm package semver');
+    assert.match(docs, /npx @glexcorp\/gskp refresh/, 'migration should tell users how to refresh from npm');
+    assert.match(docs, /@glexcorp\/gskp@<semver>|@glexcorp\/gskp@0\.1\.0/, 'docs should explain npm package semver');
     assert.match(docs, /skill(?:'s)? `version:`|skill frontmatter versions/, 'docs should explain skill-level versions');
     assert.match(docs, /archive\/<version>\/SKILL\.md/, 'docs should explain archive availability for pins');
     assert.match(docs, /Phase 4 prepares the package for a dry-run release only/, 'release prep should not imply publish');
@@ -165,7 +165,7 @@ describe('skillpacks npm package metadata', () => {
       readFileSync(join(packageRoot, 'package.json'), 'utf8')
     );
 
-    assert.equal(packageJson.name, 'gskp');
+    assert.equal(packageJson.name, '@glexcorp/gskp');
     assert.equal(packageJson.bin.gskp, 'bin/skillpacks.mjs');
     assert.equal(packageJson.bin.skillpacks, 'bin/skillpacks.mjs');
     assert.equal(packageJson.license, 'MIT');

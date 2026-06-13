@@ -18,15 +18,15 @@ Rapid decks are for weekly experiments. Deliberate decks are for products that j
 Install decks through the npm CLI:
 
 ```bash
-npx gskp install-deck vard
-npx gskp install-deck ord
-npx gskp install-deck business-afps
-npx gskp install-deck business-afps --full
-npx gskp install-deck devtool-afps
-npx gskp install-deck game-afps
+npx @glexcorp/gskp install-deck vard
+npx @glexcorp/gskp install-deck ord
+npx @glexcorp/gskp install-deck business-afps
+npx @glexcorp/gskp install-deck business-afps --full
+npx @glexcorp/gskp install-deck devtool-afps
+npx @glexcorp/gskp install-deck game-afps
 ```
 
-In the current `gskp@0.1.0` release, npm deck materialization still uses the packaged shell backend, so `install-deck` requires `bash` and `jq`. Direct npm pack installs such as `npx gskp install devtool` are Node-owned and do not require `jq`.
+In the current `@glexcorp/gskp@0.1.0` release, npm deck materialization still uses the packaged shell backend, so `install-deck` requires `bash` and `jq`. Direct npm pack installs such as `npx @glexcorp/gskp install devtool` are Node-owned and do not require `jq`.
 
 ---
 
@@ -38,7 +38,7 @@ In the current `gskp@0.1.0` release, npm deck materialization still uses the pac
 **Install:**
 
 ```bash
-npx gskp install-deck vard
+npx @glexcorp/gskp install-deck vard
 ```
 
 **Canonical chain:**
@@ -55,7 +55,7 @@ vard-scan -> vard-align -> vard-ship
 **Graduation:** When an experiment shows traction, graduate to Business AFPS:
 
 ```bash
-npx gskp install business-discovery
+npx @glexcorp/gskp install business-discovery
 ```
 
 Then start the deliberate pipeline with `/idea-scope-brief` or `/customer-discovery`.
@@ -70,7 +70,7 @@ Then start the deliberate pipeline with `/idea-scope-brief` or `/customer-discov
 **Install:**
 
 ```bash
-npx gskp install-deck ord
+npx @glexcorp/gskp install-deck ord
 ```
 
 **Canonical chain:**
@@ -87,7 +87,7 @@ ord-scan -> ord-align -> ord-ship
 **Graduation:** When a package gains traction (stars, downloads, issues), graduate to Devtool AFPS:
 
 ```bash
-npx gskp install devtool
+npx @glexcorp/gskp install devtool
 ```
 
 Then start the deliberate pipeline with `/devtool-adoption` or `/devtool-positioning`.
@@ -102,15 +102,15 @@ Then start the deliberate pipeline with `/devtool-adoption` or `/devtool-positio
 **Install:**
 
 ```bash
-npx gskp install-deck business-afps
+npx @glexcorp/gskp install-deck business-afps
 ```
 
 Add packs progressively as the product matures:
 
 ```bash
-npx gskp install customer-lifecycle   # after ICP + competitive analysis
-npx gskp install business-growth      # after lifecycle evidence
-npx gskp install business-ops         # for ongoing operations
+npx @glexcorp/gskp install customer-lifecycle   # after ICP + competitive analysis
+npx @glexcorp/gskp install business-growth      # after lifecycle evidence
+npx @glexcorp/gskp install business-ops         # for ongoing operations
 ```
 
 **Canonical chain:**
@@ -131,7 +131,7 @@ See `docs/pack-workflow-matrix.md` for the full default route with optional deto
 **Install:**
 
 ```bash
-npx gskp install-deck devtool-afps
+npx @glexcorp/gskp install-deck devtool-afps
 ```
 
 **Canonical chain:**
@@ -152,7 +152,7 @@ devtool-positioning -> devtool-adoption -> devtool-dx-journey -> devtool-docs-au
 **Install:**
 
 ```bash
-npx gskp install-deck game-afps
+npx @glexcorp/gskp install-deck game-afps
 ```
 
 **Canonical chain:**

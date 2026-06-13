@@ -16,24 +16,24 @@ compatibility alias = old broad name kept for existing commands
 
 | Workflow | Start with | Then add | Leads into | Command |
 | --- | --- | --- | --- | --- |
-| Business/product discovery | `business-research` | `customer-lifecycle` after ICP and competitive analysis so journey evidence can precede positioning | `business-growth`, then `business-ops` | `npx gskp install business-research` |
-| Customer lifecycle planning | `customer-lifecycle` | `business-research` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `npx gskp install customer-lifecycle` |
-| Business GTM/growth | `business-growth` | `business-research` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `npx gskp install business-growth` |
-| Business operations | `business-ops` | `business-research` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `npx gskp install business-ops` |
-| Full business app compatibility | `business-app` | expands to all business packs | discovery -> lifecycle -> growth -> ops | `npx gskp install business-app` |
-| Creator strategy | `creator-foundation` | `youtube-ops` for YouTube-specific channel/video work | `remotion` for production planning and build handoff | `npx gskp install creator-foundation` |
-| YouTube operations | `youtube-ops` | `creator-foundation` if positioning, programming, series, or cross-platform evidence is missing | `remotion` when work becomes scripting or production planning | `npx gskp install youtube-ops` |
-| Remotion production | `remotion` | `creator-foundation` for strategy; `youtube-ops` for YouTube evidence/reference analysis | script -> build spec/scaffold | `npx gskp install remotion` |
-| Full creator-to-video path | `creator-foundation` | `youtube-ops`, `remotion` | research -> YouTube ops -> Remotion production | `npx gskp install creator-foundation youtube-ops remotion` |
-| Creator media compatibility | `creator-media` | expands to `creator-foundation` + `youtube-ops` | add `remotion` separately for production work | `npx gskp install creator-media` |
-| Viral app rapid distribution | `vard` | none — self-contained rapid pipeline | graduates to `business-research` on traction | `npx gskp install vard` |
-| OSS rapid distribution | `ord` | none — self-contained rapid pipeline | graduates to `devtool` on traction | `npx gskp install ord` |
-| Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | global spec/roadmap/exec/ship flow | `npx gskp install devtool` |
-| Game AFPS product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> genre -> comparables -> loop -> prototype -> playtest -> store page -> launch -> roadmap | `npx gskp install game` |
-| Monorepo execution overlay | `monorepo` | any domain pack that describes the product work | wraps `run` and `ship` with detection, branch-backed lane specs, guards, PR review, and scoped validation | `npx gskp install monorepo` |
-| Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `npx gskp install code-quality` |
-| Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spin-off | `npx gskp install project-fleet` |
-| Alignment-first planning | `alignment-loop` | a domain pack once the project type is clear | grill -> destination doc -> vertical slice -> implementation | `npx gskp install alignment-loop` |
+| Business/product discovery | `business-research` | `customer-lifecycle` after ICP and competitive analysis so journey evidence can precede positioning | `business-growth`, then `business-ops` | `npx @glexcorp/gskp install business-research` |
+| Customer lifecycle planning | `customer-lifecycle` | `business-research` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `npx @glexcorp/gskp install customer-lifecycle` |
+| Business GTM/growth | `business-growth` | `business-research` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `npx @glexcorp/gskp install business-growth` |
+| Business operations | `business-ops` | `business-research` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `npx @glexcorp/gskp install business-ops` |
+| Full business app compatibility | `business-app` | expands to all business packs | discovery -> lifecycle -> growth -> ops | `npx @glexcorp/gskp install business-app` |
+| Creator strategy | `creator-foundation` | `youtube-ops` for YouTube-specific channel/video work | `remotion` for production planning and build handoff | `npx @glexcorp/gskp install creator-foundation` |
+| YouTube operations | `youtube-ops` | `creator-foundation` if positioning, programming, series, or cross-platform evidence is missing | `remotion` when work becomes scripting or production planning | `npx @glexcorp/gskp install youtube-ops` |
+| Remotion production | `remotion` | `creator-foundation` for strategy; `youtube-ops` for YouTube evidence/reference analysis | script -> build spec/scaffold | `npx @glexcorp/gskp install remotion` |
+| Full creator-to-video path | `creator-foundation` | `youtube-ops`, `remotion` | research -> YouTube ops -> Remotion production | `npx @glexcorp/gskp install creator-foundation youtube-ops remotion` |
+| Creator media compatibility | `creator-media` | expands to `creator-foundation` + `youtube-ops` | add `remotion` separately for production work | `npx @glexcorp/gskp install creator-media` |
+| Viral app rapid distribution | `vard` | none — self-contained rapid pipeline | graduates to `business-research` on traction | `npx @glexcorp/gskp install vard` |
+| OSS rapid distribution | `ord` | none — self-contained rapid pipeline | graduates to `devtool` on traction | `npx @glexcorp/gskp install ord` |
+| Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | global spec/roadmap/exec/ship flow | `npx @glexcorp/gskp install devtool` |
+| Game AFPS product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> genre -> comparables -> loop -> prototype -> playtest -> store page -> launch -> roadmap | `npx @glexcorp/gskp install game` |
+| Monorepo execution overlay | `monorepo` | any domain pack that describes the product work | wraps `run` and `ship` with detection, branch-backed lane specs, guards, PR review, and scoped validation | `npx @glexcorp/gskp install monorepo` |
+| Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `npx @glexcorp/gskp install code-quality` |
+| Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spin-off | `npx @glexcorp/gskp install project-fleet` |
+| Alignment-first planning | `alignment-loop` | a domain pack once the project type is clear | grill -> destination doc -> vertical slice -> implementation | `npx @glexcorp/gskp install alignment-loop` |
 | PoketoWork kanban flows | hibernated | wait for Poketo.work rebuild | archived board-aware workflows | not installable |
 
 ## Canonical Chains
@@ -48,7 +48,7 @@ Default business-product route: `customer-discovery -> competitive-analysis -> j
 
 Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only as explicit bounded detours when a fixed content/data/action contract and layout-only alternatives are needed.
 
-Optional research/framework detours sit after the evidence that exposes their trigger and before the downstream choice they would change. After `journey-map`, use `hook-model` only when repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; if `business-growth` is not enabled, route to `npx gskp install business-growth` first. For enterprise, infrastructure, transactional, or naturally infrequent products, skip `hook-model` and prefer lifecycle or success measurement (`lifecycle-metrics` or `metrics`). `value-prop-canvas`, `lean-canvas`, lifecycle stage maps, `monetization`, and `gtm` remain optional trigger-driven detours, not required chain links.
+Optional research/framework detours sit after the evidence that exposes their trigger and before the downstream choice they would change. After `journey-map`, use `hook-model` only when repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; if `business-growth` is not enabled, route to `npx @glexcorp/gskp install business-growth` first. For enterprise, infrastructure, transactional, or naturally infrequent products, skip `hook-model` and prefer lifecycle or success measurement (`lifecycle-metrics` or `metrics`). `value-prop-canvas`, `lean-canvas`, lifecycle stage maps, `monetization`, and `gtm` remain optional trigger-driven detours, not required chain links.
 
 Creator/media:
 

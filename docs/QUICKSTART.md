@@ -26,16 +26,16 @@ cd ~/agentic-skills
 
 ### npm CLI
 
-With the published npm package, use `npx gskp` from the project that should receive local skills:
+With the published npm package, use `npx @glexcorp/gskp` from the project that should receive local skills:
 
 ```bash
 cd ~/my-project
-npx gskp --version
-npx gskp init
-npx gskp list
+npx @glexcorp/gskp --version
+npx @glexcorp/gskp init
+npx @glexcorp/gskp list
 ```
 
-The npm CLI does not install user-home global skills by default. `npx gskp init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx gskp refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx gskp init --global` (or the backward-compatible `npx gskp init-global`). Domain packs are never installed globally.
+The npm CLI does not install user-home global skills by default. `npx @glexcorp/gskp init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx @glexcorp/gskp refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx @glexcorp/gskp init --global` (or the backward-compatible `npx @glexcorp/gskp init-global`). Domain packs are never installed globally.
 
 ## 2. Install a Pack in Your Project
 
@@ -43,10 +43,10 @@ Navigate to any project repository and install the pack that matches your domain
 
 ```bash
 cd ~/my-project
-npx gskp init
-npx gskp install devtool    # for developer tools
-npx gskp install game        # for games
-npx gskp install business-discovery  # for SaaS/business apps
+npx @glexcorp/gskp init
+npx @glexcorp/gskp install devtool    # for developer tools
+npx @glexcorp/gskp install game        # for games
+npx @glexcorp/gskp install business-discovery  # for SaaS/business apps
 ```
 
 From a source checkout, the equivalent compatibility route is:
@@ -60,9 +60,9 @@ This creates `.agents/project.json` and project-local skill roots in `.claude/sk
 The npm CLI can also install a canonical deck from manifest metadata:
 
 ```bash
-npx gskp install-deck business-afps
-npx gskp install-deck devtool-afps
-npx gskp install-deck game-afps
+npx @glexcorp/gskp install-deck business-afps
+npx @glexcorp/gskp install-deck devtool-afps
+npx @glexcorp/gskp install-deck game-afps
 ```
 
 ## 3. Reload Skills in Your CLI
@@ -83,7 +83,7 @@ Source checkout:
 npm:
 
 ```bash
-npx gskp status
+npx @glexcorp/gskp status
 ```
 
 Or from within Claude Code: run `/pack` with no arguments. From Codex: run `$pack`.
@@ -121,9 +121,9 @@ After running a skill, look for these artifacts:
 Alignment maintenance from npm is available through:
 
 ```bash
-npx gskp alignment bundles --check
-npx gskp alignment pages audit
-npx gskp alignment pages inject-tts --force alignment/example.html
+npx @glexcorp/gskp alignment bundles --check
+npx @glexcorp/gskp alignment pages audit
+npx @glexcorp/gskp alignment pages inject-tts --force alignment/example.html
 ```
 
 From a source checkout, the direct script paths remain canonical: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs`.
@@ -133,11 +133,11 @@ From a source checkout, the direct script paths remain canonical: `node scripts/
 Moving from a source checkout to npm does not change the project-local files. From the target project directory, run the npm command that matches your existing pack designation:
 
 ```bash
-npx gskp refresh
-npx gskp doctor
+npx @glexcorp/gskp refresh
+npx @glexcorp/gskp doctor
 ```
 
-`gskp@<semver>` selects the package snapshot. Skill pins remain skill-level pins, for example `npx gskp pin quality-sweep v0.0`. If a pinned archive version is not present in the installed npm package, upgrade the npm package or use a source checkout that contains that archive.
+`@glexcorp/gskp@<semver>` selects the package snapshot. Skill pins remain skill-level pins, for example `npx @glexcorp/gskp pin quality-sweep v0.0`. If a pinned archive version is not present in the installed npm package, upgrade the npm package or use a source checkout that contains that archive.
 
 ## What's Next
 

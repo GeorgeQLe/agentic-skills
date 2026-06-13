@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.9 -->
+<!-- provision-agentic-config v0.10 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -41,7 +41,7 @@
 
 ### Missing Skill Fallback
 - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-- If found in an uninstalled pack, recommend `npx gskp install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+- If found in an uninstalled pack, recommend `npx @glexcorp/gskp install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
 - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
 - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
 
@@ -163,4 +163,4 @@ Research-producing skills maintain a shared project glossary at `research/glossa
 
 ### Cross-Pack Routing
 
-When a skill recommends another skill from a different pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx gskp install <pack-name>` as the prerequisite in the recommendation.
+When a skill recommends another skill from a different pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx @glexcorp/gskp install <pack-name>` as the prerequisite in the recommendation.

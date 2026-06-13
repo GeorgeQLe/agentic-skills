@@ -15,25 +15,25 @@ Installs only:
 
 It does not install domain packs globally.
 
-For npm consumers, `npx gskp init` installs these same global-scope base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx gskp refresh`. Use `npx gskp init --global` (or the backward-compatible `npx gskp init-global`) only when user-home global core installs are explicitly desired.
+For npm consumers, `npx @glexcorp/gskp init` installs these same global-scope base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx @glexcorp/gskp refresh`. Use `npx @glexcorp/gskp init --global` (or the backward-compatible `npx @glexcorp/gskp init-global`) only when user-home global core installs are explicitly desired.
 
 ## Project Pack Commands
 
 ```bash
-npx gskp list
-npx gskp recommend
-npx gskp install <pack-or-skill>
-npx gskp remove <pack-or-skill>
-npx gskp which <skill>
-npx gskp refresh
-npx gskp status
+npx @glexcorp/gskp list
+npx @glexcorp/gskp recommend
+npx @glexcorp/gskp install <pack-or-skill>
+npx @glexcorp/gskp remove <pack-or-skill>
+npx @glexcorp/gskp which <skill>
+npx @glexcorp/gskp refresh
+npx @glexcorp/gskp status
 ```
 
 Project designation is stored in `.agents/project.json`.
 
 `install <name>` accepts either a pack name or a skill name from any pack. Pack names install all skills in that pack; skill names install only that one local skill and store `{skill: pack}` provenance under `.agents/project.json` `enabled_skills`.
 
-`npx gskp list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+`npx @glexcorp/gskp list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
 `refresh` recreates project-local skill roots from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
@@ -93,7 +93,7 @@ All other formerly-global skills now live in domain packs — see [Moved Skills]
 
 ### `delegate` (moved to the `agent-bridge` pack)
 
-`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `npx gskp install agent-bridge` (or `npx gskp install delegate`).
+`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `npx @glexcorp/gskp install agent-bridge` (or `npx @glexcorp/gskp install delegate`).
 
 `/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `packs/agent-bridge/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
 
@@ -102,10 +102,10 @@ All other formerly-global skills now live in domain packs — see [Moved Skills]
 Install the narrow business lane needed for the current phase:
 
 ```bash
-npx gskp install business-discovery
-npx gskp install customer-lifecycle
-npx gskp install business-growth
-npx gskp install business-ops
+npx @glexcorp/gskp install business-discovery
+npx @glexcorp/gskp install customer-lifecycle
+npx @glexcorp/gskp install business-growth
+npx @glexcorp/gskp install business-ops
 ```
 
 `business-app` remains a compatibility alias that installs all four.
@@ -146,13 +146,13 @@ scale-audit, platform-strategy, product-line
 Install in video game and playable entertainment projects:
 
 ```bash
-npx gskp install game
+npx @glexcorp/gskp install game
 ```
 
 With the npm CLI, install the deck as:
 
 ```bash
-npx gskp install-deck game-afps
+npx @glexcorp/gskp install-deck game-afps
 ```
 
 Skills:
@@ -176,7 +176,7 @@ game-audience -> game-fantasy -> game-genre-map -> game-comparables
 Install in developer-facing tools, SDKs, CLIs, APIs, libraries, and infrastructure products:
 
 ```bash
-npx gskp install devtool
+npx @glexcorp/gskp install devtool
 ```
 
 Skills:
@@ -200,7 +200,7 @@ devtool-user-map -> devtool-integration-map -> devtool-dx-journey
 Install alongside a domain pack when a project needs behavior-preserving code health refactors:
 
 ```bash
-npx gskp install code-quality
+npx @glexcorp/gskp install code-quality
 ```
 
 Skills:
@@ -220,7 +220,7 @@ quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-ch
 Install when working in this repository and measuring one skill with the local verify and benchmark harness:
 
 ```bash
-npx gskp install agentic-skills-bench
+npx @glexcorp/gskp install agentic-skills-bench
 ```
 
 Skills:
@@ -240,7 +240,7 @@ benchmark-test-skill <skill> -> benchmark-agent-review <skill> when subjective a
 Install in pnpm workspace monorepos that may use Turborepo and need package-aware planning, guarded execution, and scoped shipping:
 
 ```bash
-npx gskp install monorepo
+npx @glexcorp/gskp install monorepo
 ```
 
 Skills:
@@ -277,8 +277,8 @@ Use `scope: package-scoped` for work contained to declared packages, `scope: cro
 Install the narrow creator-media lane needed for the current phase:
 
 ```bash
-npx gskp install creator-foundation
-npx gskp install youtube-ops
+npx @glexcorp/gskp install creator-foundation
+npx @glexcorp/gskp install youtube-ops
 ```
 
 `creator-media` remains a compatibility alias that installs both.
@@ -317,7 +317,7 @@ Use `remotion` for format analysis, video scripting, and Remotion build planning
 Install in control repositories that manage downstream repo portfolios or spin-offs:
 
 ```bash
-npx gskp install project-fleet
+npx @glexcorp/gskp install project-fleet
 ```
 
 Skills:
@@ -337,7 +337,7 @@ clone-spec-store -> project-fleet -> spin-off
 Install when a project needs lightweight operator-agent calibration before the full spec-interview pipeline:
 
 ```bash
-npx gskp install alignment-loop
+npx @glexcorp/gskp install alignment-loop
 ```
 
 Skills:
@@ -357,7 +357,7 @@ taste-calibration -> destination-doc -> vertical-slice-splitter -> implementatio
 Install in projects that need Remotion-oriented video production:
 
 ```bash
-npx gskp install remotion
+npx @glexcorp/gskp install remotion
 ```
 
 Skills:
@@ -389,15 +389,15 @@ Hibernated skill surfaces include `brainstorm-kanban`, `spec-interview-kanban`, 
 The pack reorg moved the engineering, git, release, and plan-tracking skills out of global core into narrow packs. Each `Skills:` list is the authoritative on-disk skill set for that pack.
 
 ```bash
-npx gskp install code-debug        # debug, investigate, trace
-npx gskp install code-review        # dead-code, expert-review, regression-check, slim-audit
-npx gskp install exec-loop          # exec, ship, ship-end
-npx gskp install gitops             # commit-and-push-by-feature, sync
-npx gskp install release-ops        # branch-lifecycle, deploy, release
-npx gskp install agent-work-admin   # plan-phase, roadmap, spec-drift
-npx gskp install code-maintenance   # migrate, update-packages
-npx gskp install docs-health        # hygiene, reconcile-dev-docs
-npx gskp install repo-maintenance   # bootstrap-repo, env-setup
+npx @glexcorp/gskp install code-debug        # debug, investigate, trace
+npx @glexcorp/gskp install code-review        # dead-code, expert-review, regression-check, slim-audit
+npx @glexcorp/gskp install exec-loop          # exec, ship, ship-end
+npx @glexcorp/gskp install gitops             # commit-and-push-by-feature, sync
+npx @glexcorp/gskp install release-ops        # branch-lifecycle, deploy, release
+npx @glexcorp/gskp install agent-work-admin   # plan-phase, roadmap, spec-drift
+npx @glexcorp/gskp install code-maintenance   # migrate, update-packages
+npx @glexcorp/gskp install docs-health        # hygiene, reconcile-dev-docs
+npx @glexcorp/gskp install repo-maintenance   # bootstrap-repo, env-setup
 ```
 
 Two engineering packs are **Claude-only** (no Codex mirror):
@@ -408,26 +408,26 @@ Two engineering packs are **Claude-only** (no Codex mirror):
 ## Product, Design & Walkthrough Packs
 
 ```bash
-npx gskp install product-design       # brainstorm, consolidate-variations, design-system,
+npx @glexcorp/gskp install product-design       # brainstorm, consolidate-variations, design-system,
                                               #   feature-interview, prototype, spec-interview,
                                               #   ui-interview, user-flow-map, ux-variations
-npx gskp install product-testing      # dogfood, uat
-npx gskp install guided-walkthrough   # guide, uat-guide
-npx gskp install website-polish       # icon-handler
-npx gskp install knowledge-check      # quiz-me
+npx @glexcorp/gskp install product-testing      # dogfood, uat
+npx @glexcorp/gskp install guided-walkthrough   # guide, uat-guide
+npx @glexcorp/gskp install website-polish       # icon-handler
+npx @glexcorp/gskp install knowledge-check      # quiz-me
 ```
 
 ## Research, Sessions, Context & Skill-Dev Packs
 
 ```bash
-npx gskp install research-admin        # research-roadmap
-npx gskp install session-analytics     # analyze-sessions, session-triage
-npx gskp install skill-dev             # create-agentic-skill, create-local-skill,
+npx @glexcorp/gskp install research-admin        # research-roadmap
+npx @glexcorp/gskp install session-analytics     # analyze-sessions, session-triage
+npx @glexcorp/gskp install skill-dev             # create-agentic-skill, create-local-skill,
                                               #   skill-interview, targeted-skill-builder
-npx gskp install context-transfer      # handoff
-npx gskp install teardown              # decommission, desk-flip
-npx gskp install report-gen            # report-website
-npx gskp install alignment-page-admin  # compile-central-alignment
+npx @glexcorp/gskp install context-transfer      # handoff
+npx @glexcorp/gskp install teardown              # decommission, desk-flip
+npx @glexcorp/gskp install report-gen            # report-website
+npx @glexcorp/gskp install alignment-page-admin  # compile-central-alignment
 ```
 
 ## Moved Skills
@@ -437,10 +437,10 @@ Former global business/product skills now live in narrower project packs. `busin
 Prefer one of:
 
 ```bash
-npx gskp install business-discovery
-npx gskp install customer-lifecycle
-npx gskp install business-growth
-npx gskp install business-ops
+npx @glexcorp/gskp install business-discovery
+npx @glexcorp/gskp install customer-lifecycle
+npx @glexcorp/gskp install business-growth
+npx @glexcorp/gskp install business-ops
 ```
 
 The 53-skill global catalog was split into 22 narrower packs in the pack reorg. The engineering and workflow skills that used to be global now live in the packs above — `code-debug`, `code-review`, `exec-loop`, `gitops`, `release-ops`, `agent-bridge`, `agent-work-admin`, `code-maintenance`, `docs-health`, and `repo-maintenance` — and `affected`/`scaffold` moved into `monorepo`. Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.

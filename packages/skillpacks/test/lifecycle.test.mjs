@@ -203,7 +203,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Installed \.claude\/skills\/codebase-status/);
     assert.match(stdout, /Installed \.codex\/skills\/afps-status/);
     assert.match(stdout, /Updated \.agents\/project\.json \(base skills enabled\)/);
-    assert.match(stdout, /Initialized project base skills to gskp@/);
+    assert.match(stdout, /Initialized project base skills to @glexcorp\/gskp@/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
@@ -390,7 +390,7 @@ describe('Node lifecycle commands', () => {
     const { stdout } = await runSkillpacks(dir, ['refresh']);
 
     const packageVersion = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).version;
-    assert.equal(stdout.includes(`Refreshed project skills to gskp@${packageVersion}.`), true);
+    assert.equal(stdout.includes(`Refreshed project skills to @glexcorp/gskp@${packageVersion}.`), true);
     assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
     assert.match(stdout, /Installed \.codex\/skills\/devtool-adoption/);
     assert.doesNotMatch(stdout, / -> /);
@@ -492,7 +492,7 @@ describe('Node lifecycle commands', () => {
 
     assert.match(stdout, /Installed \.claude\/skills\/codebase-status/);
     assert.match(stdout, /Installed \.codex\/skills\/pack/);
-    assert.match(stdout, /Refreshed project skills to gskp@/);
+    assert.match(stdout, /Refreshed project skills to @glexcorp\/gskp@/);
     assert.notEqual(
       readFileSync(join(skillPath(dir, 'claude', 'codebase-status'), 'SKILL.md'), 'utf8'),
       'stale\n'
@@ -549,7 +549,7 @@ describe('Node lifecycle commands', () => {
     const error = await runSkillpacksExpectError(dir, ['refresh']);
 
     assert.match(error.message, /Stale pack entry 'not-a-real-pack' in \.agents\/project\.json enabled_packs/);
-    assert.match(error.message, /npx gskp remove not-a-real-pack/);
+    assert.match(error.message, /npx @glexcorp\/gskp remove not-a-real-pack/);
     assert.match(error.message, /edit \.agents\/project\.json/);
   });
 
@@ -620,7 +620,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /unknown  \.codex\/skills\/unknown-skill — run refresh to enable drift tracking/);
     assert.match(stdout, /missing  \.claude\/skills\/missing-skill — canonical source no longer exists/);
     assert.match(stdout, /STALE    \.claude\/skills\/stale-skill \(v0\.0 -> v9\.0\)/);
-    assert.match(stdout, /Fix: npx gskp refresh \(or scripts\/pack\.sh refresh from a source checkout\)/);
+    assert.match(stdout, /Fix: npx @glexcorp\/gskp refresh \(or scripts\/pack\.sh refresh from a source checkout\)/);
   });
 
   it('keeps plain doctor read-only for skill roots and agent docs', async () => {
@@ -734,8 +734,8 @@ describe('Node lifecycle commands', () => {
     assert.equal(claude.endsWith('claude suffix byte-for-byte'), true);
     assert.doesNotMatch(agents, /legacy generated line/);
     assert.doesNotMatch(claude, /legacy generated line/);
-    assert.match(agents, /npx gskp install <pack-or-skill>/);
-    assert.match(claude, /npx gskp install <pack-or-skill>/);
+    assert.match(agents, /npx @glexcorp\/gskp install <pack-or-skill>/);
+    assert.match(claude, /npx @glexcorp\/gskp install <pack-or-skill>/);
     assert.deepEqual(
       backupFiles(dir).map((file) => file.replace(/\.\d{8}T\d{6}Z\.bak$/, '.TIMESTAMP.bak')),
       ['AGENTS.md.TIMESTAMP.bak', 'CLAUDE.md.TIMESTAMP.bak']

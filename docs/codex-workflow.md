@@ -59,12 +59,12 @@ Do not rely on chat history as the source of truth when these files can carry th
 Codex global skills are intentionally domain-neutral. Business-app, game, and devtool workflows are enabled per project with:
 
 ```bash
-npx gskp install <pack-or-skill>
+npx @glexcorp/gskp install <pack-or-skill>
 ```
 
 The pack installer writes `.agents/project.json` and local `.codex/skills/*` managed skill roots. A pack name enables every skill in that pack; a skill name installs only that single skill and records it under `enabled_skills`. If local skill discovery is unavailable in a Codex session, use `$pack` or `$research-roadmap` as the launcher and read the enabled pack files from `packs/<pack>/codex`. Pack `refresh` recreates managed skill roots; it does not reload the active Codex process, so start a fresh CLI session after pack changes if the changed skills are not visible.
 
-Running `$pack` with no arguments remains the Codex bootstrap path. If `.agents/project.json` exists, it refreshes local skill roots from that committed project designation. If the file is missing, Codex inspects the codebase, recommends a pack, and presents a text-based Pack Decision Checkpoint. The checkpoint is the Codex stand-in for Claude's AskUserQuestion flow: Codex shows numbered choices and waits for an explicit reply before installing the selected pack; use `npx gskp install <pack...>` for explicit shell installs.
+Running `$pack` with no arguments remains the Codex bootstrap path. If `.agents/project.json` exists, it refreshes local skill roots from that committed project designation. If the file is missing, Codex inspects the codebase, recommends a pack, and presents a text-based Pack Decision Checkpoint. The checkpoint is the Codex stand-in for Claude's AskUserQuestion flow: Codex shows numbered choices and waits for an explicit reply before installing the selected pack; use `npx @glexcorp/gskp install <pack...>` for explicit shell installs.
 
 ## Default Codex Cycle
 
@@ -281,7 +281,7 @@ After execution, leave behind clean repo state:
 If you are used to this Claude Code rhythm:
 
 1. `$idea-scope-brief`
-2. `npx gskp install business-discovery` for business/product concepts
+2. `npx @glexcorp/gskp install business-discovery` for business/product concepts
 3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`
@@ -302,12 +302,12 @@ If you are used to this Claude Code rhythm:
 20. `$ship-end` when wrapping an off-script or partial session
 21. `$pmf-assessment` (post-launch)
 
-Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; lifecycle stage maps when onboarding, conversion, transaction, retention, expansion, or stage metrics would change UX/prototype choices. Use `$hook-model` after `$journey-map` only when consumer/PLG-style repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; route to `npx gskp install business-growth` first if needed. For B2B, enterprise, infrastructure, transactional, or naturally infrequent products, skip `$hook-model` and prefer `$lifecycle-metrics` or `$metrics`. Pricing/GTM detours such as `$monetization` and `$gtm` are also trigger-driven, not mandatory post-spec work.
+Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; lifecycle stage maps when onboarding, conversion, transaction, retention, expansion, or stage metrics would change UX/prototype choices. Use `$hook-model` after `$journey-map` only when consumer/PLG-style repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; route to `npx @glexcorp/gskp install business-growth` first if needed. For B2B, enterprise, infrastructure, transactional, or naturally infrequent products, skip `$hook-model` and prefer `$lifecycle-metrics` or `$metrics`. Pricing/GTM detours such as `$monetization` and `$gtm` are also trigger-driven, not mandatory post-spec work.
 
 The closest Codex translation is:
 
 1. `$idea-scope-brief`
-2. `npx gskp install business-discovery` for business/product concepts
+2. `npx @glexcorp/gskp install business-discovery` for business/product concepts
 3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`
