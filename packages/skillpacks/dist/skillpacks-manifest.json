@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.1"
   },
-  "source_fingerprint": "bcc8c4705a54501e711c7796d71e767289309cc1245a5057da36fc37ae1cc819",
+  "source_fingerprint": "822f7be34a4d49dad38262f90cd4cbe027969c023fa7615139f776ad6309de47",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1102,9 +1102,9 @@
       "scope": "global",
       "pack": null,
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "path": "global/codex/init-agentic-skills/SKILL.md",
-      "content_sha256": "30a9682ad08ddd2acd64a8608d718eabef56fa4230d64084783a48b1e8e36076",
+      "content_sha256": "a380ebaacee9916ba5a19cc7e2a0a9b4424b785e92648ab718fdf699b8bd9897",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1113,7 +1113,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$init-agentic-skills",
       "deck_memberships": []

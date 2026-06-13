@@ -8,7 +8,9 @@
 - [x] Add root `publish.sh` dual publish automation with dry-run support.
 - [x] Update tests and docs for primary `npx skillpacks` guidance plus scoped alias.
 - [x] Run required pre-commit verification.
-- [ ] Commit and push the verified changes.
+- [x] Commit and push the verified changes.
+- [x] Regenerate the package manifest after the final install-routing skill update and rerun package verification.
+- [ ] Rerun `./publish.sh --dry-run patch` from a clean tree.
 
 ### Review Notes
 
@@ -25,6 +27,7 @@
   - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
   - `pnpm --dir apps/skills-showcase validate:data`
   - `git diff --check`
+- Follow-up verification found the manifest needed regeneration after the later `init-agentic-skills` routing update from `v0.8` to `v0.9`. Regenerated `packages/skillpacks/dist/skillpacks-manifest.json`; `npm --workspace packages/skillpacks run verify:package` now passes against the current source.
 
 ## Current Implementation - Alignment YAML Routing Remediation
 
