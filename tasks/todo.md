@@ -9,7 +9,7 @@
 - [x] Update mirrored product-design skills to use `design/` pre-prototype outputs and manifest state.
 - [x] Add focused layer1 regression tests.
 - [x] Run required verification commands.
-- [ ] Commit and push the verified changes.
+- [x] Commit and push the verified changes.
 
 ### Review Notes
 
@@ -26,7 +26,8 @@
   - `git diff --check`
   - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (rerun fresh after generated asset refresh)
 - Generated data note: Skills Showcase generated assets and `docs/benchmark-results-matrix.md` were refreshed after active skill version/content changes.
-- Worktree note: untracked `prompts/ship-end/skill-prompt-20260612-213808-ship-end.md` appeared during this session but is unrelated to the product-design flow-tree boundary and is intentionally not part of this commit.
+- Regression note: full layer1 initially failed on missing exact `ui-interview` provenance wording after the design-path rewrite. Patched mirrored `ui-interview` contracts to preserve the requirements-only manifest gate text, then reran the failing tests and full layer1 successfully.
+- Prompt note: captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260612-213808-ship-end.md` and included it in the ship boundary.
 
 ## Current Investigation - Repository Boundary And Deploy Gating
 

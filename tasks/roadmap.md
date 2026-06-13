@@ -9,6 +9,9 @@ Move pre-prototype product-design artifacts from `specs/` into a dedicated `desi
 - `packs/product-design/{codex,claude}/user-flow-map/SKILL.md`
 - `packs/product-design/{codex,claude}/ux-variations/SKILL.md`
 - `packs/product-design/{codex,claude}/ui-interview/SKILL.md`
+- `packs/product-design/{codex,claude}/prototype/SKILL.md`
+- `packs/product-design/{codex,claude}/consolidate-variations/SKILL.md`
+- `packs/product-design/{codex,claude}/spec-interview/SKILL.md`
 - Product-design changelogs and archives for versioned behavior changes
 - New `design/flow-tree.schema.json`
 - Focused layer1 tests for artifact boundaries, route parity, and manifest-state ownership
