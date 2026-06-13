@@ -114,7 +114,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
 fi
 
 log "Bumping packages/skillpacks to $TARGET"
-run npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version
+run npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks
 
 VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 log "Building and verifying skillpacks@$VERSION"
