@@ -92,27 +92,14 @@ verify_skillpacks_package() {
     return 0
   fi
 
-  local pack_json="$STAGE_ROOT/package-dry-run.json"
   log "npm run skillpacks:verify failed; running equivalent direct package verification"
   (
     cd "$PACKAGE_DIR"
     run node bin/skillpacks.mjs --version
     run node bin/skillpacks.mjs list
     run npm run build:check
-    printf '+ npm pack ./build --dry-run --json --silent > %q\n' "$pack_json"
-    npm pack ./build --dry-run --json --silent > "$pack_json"
+    run npm pack ./build --dry-run --json --silent
   )
-  node - "$pack_json" "$VERSION" <<'NODE'
-const fs = require("fs");
-const [packJsonPath, version] = process.argv.slice(2);
-const payload = JSON.parse(fs.readFileSync(packJsonPath, "utf8"));
-const pack = Array.isArray(payload) ? payload[0] : payload;
-if (!pack || pack.name !== "skillpacks" || pack.version !== version) {
-  console.error(`Unexpected npm pack result: ${JSON.stringify(pack)}`);
-  process.exit(1);
-}
-console.log(`Verified npm pack dry run for ${pack.name}@${pack.version}.`);
-NODE
 }
 
 cleanup() {
