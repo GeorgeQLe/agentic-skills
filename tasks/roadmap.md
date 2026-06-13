@@ -1,3 +1,38 @@
+## Current Investigation - Repository Boundary And Deploy Gating
+
+### Goal
+
+Keep this repository as one repo for now, but make its ownership zones and Vercel deploy boundary explicit enough that skill-source, package, prompt, task, alignment, and archive work do not accidentally imply a Skills Showcase deploy.
+
+### Scope
+
+- Repository boundary audit covering tracked path zones, recent churn, and deploy relevance.
+- Skills Showcase deploy contract in `tasks/deploy.md`.
+- Vercel ignored-build helper script and focused classifier tests.
+- Prompt/task evidence for this `investigate` run.
+- No repository split, no history rewrite, and no GitHub Actions changes.
+
+### Plan
+
+1. Capture the visible `investigate` prompt and record this execution plan.
+2. Audit tracked files, recent Git churn, Vercel config, and showcase generation/deploy surfaces.
+3. Document confirmed and unsupported claims in `tasks/repo-boundary-audit.md`.
+4. Update `tasks/deploy.md` with the path-based deploy policy and Vercel ignored-build setup.
+5. Add `scripts/vercel-ignore-build.sh` with a testable path classifier.
+6. Add focused shell tests for skip/deploy cases.
+7. Run classifier tests, whitespace checks, and any showcase checks made relevant by touched files.
+8. Record review notes, commit, and push the intended boundary if verification passes.
+
+### Acceptance Criteria
+
+- `tasks/repo-boundary-audit.md` classifies repository zones and validates the user claims with Git/code evidence.
+- `tasks/deploy.md` distinguishes source shipping, generated showcase refreshes, workflow evidence, and actual showcase deploys.
+- The ignored-build helper skips skill-only, task-only, prompt-only, alignment-only, archive-only, and non-showcase package-only changes.
+- The ignored-build helper allows showcase runtime/assets, root dependency manifests, deploy config, and showcase generation script changes.
+- Focused tests exercise representative skip/deploy cases.
+- No GitHub Actions workflows are created or modified.
+
+
 ## Current Investigation - AFPS Prototype Product Design Workflow
 
 ### Goal

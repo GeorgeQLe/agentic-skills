@@ -1,3 +1,29 @@
+## Current Investigation - Repository Boundary And Deploy Gating
+
+### Current Checklist
+
+- [x] Read the active `investigate` skill instructions and relevant lessons.
+- [x] Capture the visible `investigate` prompt under `prompts/investigate/`.
+- [x] Record the execution plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Audit tracked zones, recent churn, Vercel config, and showcase generation/deploy surfaces.
+- [x] Write `tasks/repo-boundary-audit.md`.
+- [x] Update `tasks/deploy.md` with path-based deploy gating and operating model guidance.
+- [x] Add `scripts/vercel-ignore-build.sh`.
+- [x] Add focused ignored-build classifier tests.
+- [x] Run verification and record review notes.
+- [x] Commit and push the verified boundary.
+
+### Review Notes
+
+- Strategy: General `investigate`; this is a repository/process boundary issue rather than UI or data runtime behavior.
+- Worktree note: the checkout starts with unrelated untracked product-design archive directories. They are outside this boundary and must not be staged.
+- User claims validated in `tasks/repo-boundary-audit.md`: workspace roots, churn concentration, absent repo-level `vercel.json`, and `apps/skills-showcase/` Vercel root are confirmed; repo split as the required fix is not supported yet.
+- Implemented `scripts/vercel-ignore-build.sh` with Vercel ignored-build exit semantics: skip on exit `0`, deploy on exit `1`.
+- Added `scripts/test-vercel-ignore-build.sh` covering skill-only, task/prompt-only, alignment-only, archive-only, package-only, app runtime, generated docs mirror, benchmark matrix, root manifest, workspace manifest, mixed skill/showcase, and deploy-gate changes.
+- Verification passed: `scripts/test-vercel-ignore-build.sh`, `bash -n scripts/vercel-ignore-build.sh scripts/test-vercel-ignore-build.sh`, and `git diff --check`.
+- Showcase build/data validation skipped because this boundary does not modify showcase runtime code or generated showcase assets.
+
+
 ## Current Investigation - AFPS Prototype Product Design Workflow
 
 ### Current Checklist

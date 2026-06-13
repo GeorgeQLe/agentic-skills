@@ -6,6 +6,8 @@ This contract covers deployment for the Skills Showcase. The primary surface is 
 
 Current status: the Skills Showcase is live and hosted via Vercel as of 2026-05-15. Remaining manual launch checks should focus on environment variables, `/follow`, `/admin/newsletter`, and route/UI verification rather than initial Vercel project setup.
 
+This deploy contract documents the production surface. It does not mean every repository commit should deploy. Most skill source, package, prompt-history, task-doc, alignment, research, spec, and archive commits do not change the Skills Showcase runtime or generated public data.
+
 ## Next.js App (Primary)
 
 ### Hosting Target
@@ -19,6 +21,47 @@ Current status: the Skills Showcase is live and hosted via Vercel as of 2026-05-
 - Runtime: server-side (Node.js).
 - Database: Neon PostgreSQL.
 - GitHub Actions: not used.
+
+### Path-Based Deploy Policy
+
+Configure Vercel's Ignored Build Step to run:
+
+```sh
+scripts/vercel-ignore-build.sh
+```
+
+The helper follows Vercel ignored-build semantics:
+
+- Exit `0`: skip the build.
+- Exit `1`: continue with the build.
+
+Deploy when at least one changed path affects the Skills Showcase deploy surface:
+
+- `apps/skills-showcase/**`
+- `docs/skills-showcase/**`
+- `docs/benchmark-results-matrix.md`
+- `package.json`
+- root lockfiles such as `pnpm-lock.yaml`, `package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, or `bun.lockb`
+- `pnpm-workspace.yaml`
+- `vercel.json` or `apps/skills-showcase/vercel.json`
+- `scripts/vercel-ignore-build.sh` or its test harness
+
+Skip deploys when the commit only touches non-showcase surfaces:
+
+- Skill source under `packs/**` or `global/**`
+- Skillpack package/CLI internals under `packages/skillpacks/**`
+- Workflow evidence under `tasks/**`, `prompts/**`, `alignment/**`, `research/**`, or `specs/**`
+- Archive or historical snapshots under `archive/**` or nested `**/archive/**`
+- Generated local install roots such as `.codex/skills/**` and `.claude/skills/**`
+
+Mixed commits deploy if any deploy-relevant path changed. For example, a skill-source commit plus regenerated `apps/skills-showcase/public/assets/skills-data.js` should deploy; a skill-source commit plus task notes only should not.
+
+### Operating Model
+
+- Ship source changes: commit and push the intended source/evidence boundary after local verification. This action does not automatically imply a production deploy.
+- Refresh generated showcase data: run the showcase data generators when public catalog, benchmark, proof, or validation metadata changed, then commit the generated app/public and docs mirror assets with the source change.
+- Deploy the showcase: let Vercel build only when path gating says the app runtime, generated public assets, dependency manifests, or deploy config changed.
+- Record workflow evidence: keep required task, prompt, alignment, research, and spec artifacts tracked, but classify them as non-deploying evidence.
 
 ### Environment Variables
 
