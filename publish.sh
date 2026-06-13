@@ -41,6 +41,19 @@ run() {
   "$@"
 }
 
+kill_process_tree() {
+  local signal=$1
+  local pid=$2
+  local child
+
+  while read -r child; do
+    [[ -n "$child" ]] || continue
+    kill_process_tree "$signal" "$child"
+  done < <(pgrep -P "$pid" 2>/dev/null || true)
+
+  kill "-$signal" "$pid" 2>/dev/null || true
+}
+
 run_version_bump() {
   local timeout_seconds=${SKILLPACKS_PUBLISH_VERSION_TIMEOUT_SECONDS:-20}
   printf '+ npm --workspace packages/skillpacks version %q --no-git-tag-version --ignore-scripts --no-commit-hooks\n' "$TARGET"
@@ -59,13 +72,13 @@ run_version_bump() {
       bumped_version=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
       if [[ "$bumped_version" != "$ORIGINAL_VERSION" ]]; then
         printf 'npm version did not exit within %ss after writing %s; continuing with verified manifest bump.\n' "$timeout_seconds" "$bumped_version" >&2
-        kill "$pid" 2>/dev/null || true
+        kill_process_tree TERM "$pid"
         sleep 1
-        kill -9 "$pid" 2>/dev/null || true
+        kill_process_tree KILL "$pid"
         wait "$pid" 2>/dev/null || true
         return 0
       fi
-      kill "$pid" 2>/dev/null || true
+      kill_process_tree TERM "$pid"
       wait "$pid" 2>/dev/null || true
       fail "npm version timed out before updating $PACKAGE_JSON."
     fi
