@@ -2,13 +2,13 @@
 
 Compact command index for all scripts in this repository.
 
-## Install & Global
+## Install & Base
 
 | Command | Description |
 | --- | --- |
-| `./init.sh` | Install managed global core skill directories to `~/.claude/skills/` and `~/.codex/skills/` |
-| `./init.sh --uninstall` | Remove repo-managed global skill installs that point back to this checkout |
-| `./init.sh --pin ship=v0.0` | Pin a global skill to an archived version during initialization |
+| `./init.sh` | Install managed base skill directories to `~/.claude/skills/` and `~/.codex/skills/` |
+| `./init.sh --uninstall` | Remove repo-managed base skill installs that point back to this checkout |
+| `./init.sh --pin ship=v0.0` | Pin a base skill to an archived version during initialization |
 
 ## Project Packs
 
@@ -48,11 +48,11 @@ Compact command index for all scripts in this repository.
 | `bash scripts/skill-archive-audit.sh` | Audit archive integrity |
 | `bash scripts/skill-archive-audit.sh --strict` | Strict archive integrity (non-zero exit on any issue) |
 
-## Global Skill Management
+## Base Skill Management
 
 | Command | Description |
 | --- | --- |
-| `scripts/init-agentic-skills.sh doctor` | Check global skill drift |
+| `scripts/init-agentic-skills.sh doctor` | Check base skill drift |
 | `scripts/init-agentic-skills.sh hook enable` | Enable session-start drift-check hook |
 | `scripts/init-agentic-skills.sh hook disable` | Disable session-start drift-check hook |
 | `scripts/init-agentic-skills.sh set-pref <key> <value>` | Set a preference in `~/.agentic-skills/preferences.json` |

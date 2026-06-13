@@ -1,7 +1,7 @@
 # Skill Invocation Types
 
 > Audit date: 2026-06-01
-> Scope: all active `SKILL.md` files under `global/` and `packs/` (excluding `archive/` and codex mirrors)
+> Scope: all active `SKILL.md` files under `base/` and `packs/` (excluding `archive/` and codex mirrors)
 > Purpose: classify every skill by invocation type so tools, browsers, and conventions can distinguish user entry points from agent-delegated sub-steps.
 
 ## Taxonomy
@@ -15,7 +15,7 @@
 
 ## Classification by Location
 
-### Global Skills (`global/claude/`)
+### Base Skills (`base/claude/`)
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|

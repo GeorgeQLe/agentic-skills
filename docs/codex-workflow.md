@@ -56,7 +56,7 @@ Do not rely on chat history as the source of truth when these files can carry th
 
 ## Project Packs
 
-Codex global skills are intentionally domain-neutral. Business-app, game, and devtool workflows are enabled per project with:
+Codex base skills are intentionally domain-neutral. Business-app, game, and devtool workflows are enabled per project with:
 
 ```bash
 npx skillpacks install <pack-or-skill>
@@ -211,7 +211,7 @@ This skill ports well because it already depends on repo state more than tool st
 
 ### PoketoWork Kanban Commands
 
-PoketoWork kanban commands such as `$exec-kanban`, `$ship-kanban`, and `$ship-end-kanban` are hibernated while Poketo.work is being rebuilt. Use the global `$exec`, `$ship`, and `$ship-end` routes unless the kanban packs are later reactivated with stable service/API behavior, a known auth contract, and updated smoke tests.
+PoketoWork kanban commands such as `$exec-kanban`, `$ship-kanban`, and `$ship-end-kanban` are hibernated while Poketo.work is being rebuilt. Use the base `$exec`, `$ship`, and `$ship-end` routes unless the kanban packs are later reactivated with stable service/API behavior, a known auth contract, and updated smoke tests.
 
 ## Manual Gaps Summary
 

@@ -1,10 +1,10 @@
 # Project-Local Skill Packs
 
-Project-local packs keep domain-specific workflows out of global assistant context.
+Project-local packs keep domain-specific workflows out of base assistant context.
 
 ## Design
 
-- Global skills live in `global/{claude,codex}`.
+- Base skills live in `base/{claude,codex}`.
 - Domain packs live in `packs/<pack>/{claude,codex}`.
 - Project designation lives in `.agents/project.json`.
 - Mixed monorepos can declare scoped domain routing in `.agents/project.json.project_scopes`.
@@ -152,14 +152,14 @@ Skills:
 mono-detect, mono-exec, mono-guard, mono-ship
 ```
 
-The pack uses an augmentation injection pattern. Its skills add pre/post behavior around the global `exec` and `ship` contracts instead of replacing them:
+The pack uses an augmentation injection pattern. Its skills add pre/post behavior around the base `exec` and `ship` contracts instead of replacing them:
 
 - `mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, package scripts, dependency graph, and Turborepo awareness.
 - `mono-exec` injects monorepo detection, lane-spec generation, guard pre-flight checks, serial cross-cutting work, and package-scoped dispatch around standard `run`.
 - `mono-guard` validates lane specs before dispatch and checks integrated diffs against declared ownership after dispatch.
 - `mono-ship` injects package-scoped test/lint/build and transitive-dependent validation before delegating to standard `ship`.
 
-This differs from the former `*-kanban` duplication pattern. The hibernated kanban packs provided alternate command variants such as `exec-kanban`, `ship-kanban`, and `ship-end-kanban`; the active monorepo pack keeps the global lifecycle skills authoritative and makes them workspace-aware through pre/post steps.
+This differs from the former `*-kanban` duplication pattern. The hibernated kanban packs provided alternate command variants such as `exec-kanban`, `ship-kanban`, and `ship-end-kanban`; the active monorepo pack keeps the base lifecycle skills authoritative and makes them workspace-aware through pre/post steps.
 
 Lane dispatch uses two artifacts:
 
@@ -229,9 +229,9 @@ taste-calibration -> destination-doc -> vertical-slice-splitter -> implementatio
 
 ## Compatibility
 
-If a tool does not discover project-local `.claude/skills` or `.codex/skills`, use the global `pack` and `research-roadmap` skills as launchers. They should read `.agents/project.json` and the local pack files directly.
+If a tool does not discover project-local `.claude/skills` or `.codex/skills`, use the base `pack` and `research-roadmap` skills as launchers. They should read `.agents/project.json` and the local pack files directly.
 
-Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
+Do not install `packs/*` as base skills as a fallback; that recreates the context pollution this design avoids.
 
 Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `npx skillpacks refresh` or, from a source checkout, `scripts/pack.sh refresh`.
 
@@ -257,27 +257,27 @@ scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers 
 
 `doctor` statuses: `ok` (matches canonical), `stale (vOld → vNew)` (canonical moved), `unknown` (a pre-upgrade marker has no `source_sha` — run `refresh` once to enable tracking, never a false `stale`), `pinned vX (frozen)`, and `missing-source` (canonical path gone). `doctor` only detects *canonical moved*; it does not detect local edits to an installed copy.
 
-**Update mode.** `.agents/project.json` may carry `skill_updates.mode` — `warn` (default) or `auto`. Set it with `scripts/pack.sh set-update-mode <warn|auto|unset>`. A trigger (the session-start hook, or sync-with-approval) that sees `mode == auto`, or global `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`, runs `refresh` automatically; otherwise it only warns. `doctor` itself never mutates — it renders the effective policy.
+**Update mode.** `.agents/project.json` may carry `skill_updates.mode` — `warn` (default) or `auto`. Set it with `scripts/pack.sh set-update-mode <warn|auto|unset>`. A trigger (the session-start hook, or sync-with-approval) that sees `mode == auto`, or machine-wide `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`, runs `refresh` automatically; otherwise it only warns. `doctor` itself never mutates — it renders the effective policy.
 
 **Session-start hook (opt-in, off by default).** `/init-agentic-skills` offers to enable a `SessionStart` hook (`scripts/skill-drift-hook.sh`) that warns about stale installs at session start, or auto-refreshes when `skills.auto_refresh` / `skill_updates.mode == auto` is set. Register or remove the hook directly with `scripts/init-agentic-skills.sh hook enable|disable`, which writes (or clears) the `~/.claude/settings.json` `SessionStart` entry and sets the `session_start_hook` preference. Preferences live in `~/.agentic-skills/preferences.json` under `skills` (`session_start_hook`, `auto_refresh`); set them with `scripts/init-agentic-skills.sh set-pref <key> <value>` and inspect them with `scripts/init-agentic-skills.sh show-prefs`. Disable by declining the prompt, running `scripts/init-agentic-skills.sh set-pref session_start_hook false`, or `scripts/init-agentic-skills.sh hook disable`.
 
-Global installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports global drift against `global/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the global "refresh").
+Base skill installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports base drift against `base/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the base "refresh").
 
 ## Team Setup Checklist
 
 For teams adopting agentic-skills across multiple developers:
 
 1. **Choose a checkout path.** Each developer clones this repo locally. The path does not need to match across developers, but `scripts/pack.sh refresh` may need to re-run if the checkout moves.
-2. **Run `./init.sh` once per developer.** This installs global core skills to each developer's `~/.claude/skills/` and `~/.codex/skills/`.
+2. **Run `./init.sh` once per developer.** This installs base skills to each developer's `~/.claude/skills/` and `~/.codex/skills/`.
 3. **Commit `.agents/project.json`.** This file records the project's pack designation and should be checked into the target project repository.
 4. **Never commit generated skill roots.** `.claude/skills/` and `.codex/skills/` in consumer projects are generated from `.agents/project.json`. Add them to `.gitignore`.
 5. **Run `scripts/pack.sh refresh` after pulling pack changes.** When `.agents/project.json` changes upstream (e.g. a new pack is added), each developer runs refresh to recreate their local skill roots.
 6. **Restart CLI after install/remove/refresh.** Skills are not hot-reloaded. Claude Code: `/reload-skills` then `/clear` or restart. Codex: fresh session.
 7. **Agree on shipping workflow.** The default is direct-to-primary (commit and push to main/master). If your team uses feature branches, note this in `.agents/project.json` `notes` or your project's CLAUDE.md.
 
-## Former Global Domain Skills
+## Former Base Domain Skills
 
-Business/product workflows that used to be globally installed now live in narrow business packs. Prefer the current lane:
+Business/product workflows that used to be base skills now live in narrow business packs. Prefer the current lane:
 
 ```bash
 npx skillpacks install business-discovery

@@ -14,7 +14,7 @@ Get from clone to a working skill in under 5 minutes.
 
 ### Source checkout
 
-Use the source checkout when you are developing this repository or want global core skills installed directly from a local clone:
+Use the source checkout when you are developing this repository or want base skills installed directly from a local clone:
 
 ```bash
 git clone <this-repo-url> ~/agentic-skills
@@ -22,7 +22,7 @@ cd ~/agentic-skills
 ./init.sh
 ```
 
-`init.sh` installs repo-managed global core skill directories into `~/.claude/skills/` and `~/.codex/skills/`. Track-latest installs are managed copies with drift metadata; pinned archived skills are the symlink case. Domain packs are not installed globally — that is intentional context hygiene.
+`init.sh` installs repo-managed base skill directories into `~/.claude/skills/` and `~/.codex/skills/`. Track-latest installs are managed copies with drift metadata; pinned archived skills are the symlink case. Domain packs are not installed as base skills — that is intentional context hygiene.
 
 ### npm CLI
 
@@ -35,7 +35,7 @@ npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI does not install user-home global skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home global core skills from npm, run `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`). Domain packs are never installed globally.
+The npm CLI does not install user-home base skills by default. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. If you explicitly want user-home base skills from npm, run `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`). Domain packs are never installed as base skills.
 
 The scoped alias package is published from the same release artifact and version. Users who prefer that package identity can run `npx @glexcorp/gskp init`, `npx @glexcorp/gskp install devtool`, and the same subcommands.
 

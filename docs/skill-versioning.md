@@ -29,7 +29,7 @@ When bumping a version, archive the current `SKILL.md` before overwriting it:
 Use the convenience script to automate the archive step:
 
 ```bash
-bash scripts/skill-archive.sh global/claude/ship
+bash scripts/skill-archive.sh base/claude/ship
 ```
 
 This reads the current version, creates `archive/<version>/SKILL.md`, and prints confirmation. Then bump the version and update the changelog manually.
@@ -39,7 +39,7 @@ This reads the current version, creates `archive/<version>/SKILL.md`, and prints
 Each skill directory can contain an `archive/` subdirectory with snapshots of prior versions:
 
 ```text
-global/claude/ship/
+base/claude/ship/
   SKILL.md              # current version (e.g., v0.1)
   CHANGELOG.md          # reverse-chronological changes
   archive/
@@ -97,7 +97,7 @@ Pin state is stored in `.agents/project.json` under `pinned_versions`:
 
 When a skill is pinned, `pack.sh install/refresh` points the installed skill root at `archive/<version>/` instead of the active skill root.
 
-### Global skills (`init.sh`)
+### Base skills (`init.sh`)
 
 ```bash
 ./init.sh --pin ship=v0.0
@@ -109,7 +109,7 @@ Pin state is stored in `~/.claude/skill-pins.json`:
 { "ship": "v0.0" }
 ```
 
-When a global skill is pinned, `init.sh` points the installed skill root at the `archive/<version>/` subdirectory.
+When a base skill is pinned, `init.sh` points the installed skill root at the `archive/<version>/` subdirectory.
 
 ## Auditing
 

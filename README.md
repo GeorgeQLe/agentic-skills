@@ -4,7 +4,7 @@ A shared skill library for Claude Code and OpenAI Codex.
 
 The library now uses a two-layer model:
 
-- **Global core skills** are domain-neutral and safe to expose in every project.
+- **Base skills** are domain-neutral and safe to expose in every project.
 - **Project-local packs** hold domain-specific workflows such as business apps, video games, and developer tools.
 
 This keeps game research out of B2B SaaS sessions, and keeps business-product assumptions out of game and devtool projects.
@@ -64,16 +64,16 @@ The same release is also published as the scoped alias package `@glexcorp/gskp`,
 ./init.sh
 ```
 
-`init.sh` initializes only user-home global core skills:
+`init.sh` initializes only user-home base skills:
 
-- `global/claude/*` -> `~/.claude/skills/*`
-- `global/codex/*` -> `~/.codex/skills/*`
+- `base/claude/*` -> `~/.claude/skills/*`
+- `base/codex/*` -> `~/.codex/skills/*`
 
-It does **not** install `packs/*` globally.
+It does **not** install `packs/*`.
 
-For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when you explicitly want user-home global core installs from the package snapshot. Domain packs are never installed globally.
+For npm consumers, prefer `npx skillpacks init` in each target repository. That installs the same base skill sources project-locally and records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when you explicitly want user-home base installs from the package snapshot. Domain packs are never installed as base skills.
 
-To remove repo-managed global skill installs:
+To remove repo-managed base skill installs:
 
 ```bash
 ./init.sh --uninstall
@@ -121,7 +121,7 @@ npx skillpacks alignment verify
 
 Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx skillpacks alignment ...` from npm-installed target repos.
 
-`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
@@ -176,7 +176,7 @@ Pack commands also write `.agents/.pack.lock` owner metadata and automatically r
 
 `.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
 
-If an assistant does not discover project-local skills, use the global `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
+If an assistant does not discover project-local skills, use the base `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
 
 For workflow ordering, lead-in recommendations, and overlay dependencies, see [`docs/pack-workflow-matrix.md`](docs/pack-workflow-matrix.md).
 
@@ -184,7 +184,7 @@ For workflow ordering, lead-in recommendations, and overlay dependencies, see [`
 
 ```text
 agentic-skills/
-├── global/
+├── base/
 │   ├── claude/<name>/SKILL.md
 │   └── codex/<name>/SKILL.md
 ├── packs/
@@ -216,28 +216,29 @@ agentic-skills/
 
 The repository root is private workspace metadata. The publishable `skillpacks` package source lives in `packages/skillpacks/`; `@glexcorp/gskp` is generated as a staged package variant during release. The public Skills Showcase app and its data generators live in `apps/skills-showcase/`.
 
-## Global Core
+## Base Core
 
-The global surface is intentionally small and domain-neutral. `./init.sh` installs six skills under `global/claude/` (mirrored under `global/codex/`):
+The base surface is intentionally small and domain-neutral. `./init.sh` installs 11 skills under `base/claude/`, 8 of which are mirrored under `base/codex/`:
 
 ```text
-codebase-status, idea-scope-brief, init-agentic-skills, pack,
-provision-agentic-config, skills
+afps-status, animation-design-planner, autoresearch, autoresearch-prep,
+codebase-status, fork-idea-branch, idea-scope-brief, init-agentic-skills,
+pack, provision-agentic-config, skills
 ```
 
-### Codex-only global skill
+### Claude-only base skills
 
-One global skill ships only under `global/codex/` (no `global/claude/` mirror):
+Three base skills ship only under `base/claude/` (no `base/codex/` mirror):
 
 ```text
-afps-status
+autoresearch, autoresearch-prep, fork-idea-branch
 ```
 
 `$afps-status` summarizes AFPS product-workflow progress from existing artifacts and recommends the next concrete skill command. It is read-mostly reconciliation, not a competing workflow state system.
 
 ### `delegate` moved to the `agent-bridge` pack
 
-`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `npx skillpacks install agent-bridge`. It remains **Claude-only** with no Codex mirror.
+`delegate` is **no longer a base skill** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `npx skillpacks install agent-bridge`. It remains **Claude-only** with no Codex mirror.
 
 `/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `packs/agent-bridge/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
 
@@ -398,7 +399,7 @@ PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Their
 
 ## Moved Skills
 
-Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
+Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 ```bash
 npx skillpacks install business-discovery
@@ -407,7 +408,7 @@ npx skillpacks install business-growth
 npx skillpacks install business-ops
 ```
 
-Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
+Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from base core into `project-fleet`.
 
 ## Version Pinning
 
@@ -415,13 +416,13 @@ Skills can be pinned to an archived version. When a skill's version is bumped, t
 
 ```bash
 # Archive current version before bumping
-bash scripts/skill-archive.sh global/claude/ship
+bash scripts/skill-archive.sh base/claude/codebase-status
 
 # Pin a pack skill to an archived version
 scripts/pack.sh pin devtool-adoption v0.0
 scripts/pack.sh unpin devtool-adoption
 
-# Pin a global skill during initialization
+# Pin a base skill during initialization
 ./init.sh --pin ship=v0.0
 
 # Audit archive integrity
@@ -442,7 +443,7 @@ See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioni
 pnpm --dir tests test
 ```
 
-`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`; `skill-mirror-parity-audit.sh` checks mirrored pack skill pairs under `packs/`.
+`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `base/` and `packs/`; `skill-mirror-parity-audit.sh` checks mirrored pack skill pairs under `packs/`.
 
 Live agent behavior tests are opt-in because they invoke authenticated CLIs and may spend model budget:
 

@@ -2,7 +2,7 @@
 
 This repository uses a versioned skillpack layout:
 
-- Global skills live under `global/{claude,codex}/<skill>/SKILL.md`.
+- Base skills live under `base/{claude,codex}/<skill>/SKILL.md`.
 - Pack skills live under `packs/<pack>/{claude,codex}/<skill>/SKILL.md`.
 - Archived versions live under `archive/<version>/SKILL.md` inside the owning skill directory.
 

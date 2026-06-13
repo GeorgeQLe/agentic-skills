@@ -179,7 +179,7 @@ Same as Pattern A: `invocation: orchestrator`. The parent skill uses `type: plan
 Same as Pattern A — the parent owns a `frameworks/` directory with child subskills.
 
 ```
-global/claude/<orchestrator>/
+base/claude/<orchestrator>/
   SKILL.md                          # orchestrator — domain workflow + framework detection
   CHANGELOG.md
   ALIGNMENT-PAGE.md
@@ -215,7 +215,7 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 
 ### Reference Implementation
 
-- `global/claude/animation-design-planner/` — 7-step animation planning workflow, detects motion framework via codebase grep, injects framework-specific guardrails from one of 5 subskills (`motion-framer`, `css-transitions`, `gsap`, `web-animations-api`, `threejs`), produces structured plan with motion contract + storyboard + guardrails + proof gate
+- `base/claude/animation-design-planner/` — 7-step animation planning workflow, detects motion framework via codebase grep, injects framework-specific guardrails from one of 5 subskills (`motion-framer`, `css-transitions`, `gsap`, `web-animations-api`, `threejs`), produces structured plan with motion contract + storyboard + guardrails + proof gate
 
 ---
 
@@ -230,4 +230,4 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 | `youtube` | youtube-ops | B | 13-intent classification, 4 named plays, status mode |
 | `devtool-workflow` | devtool | B (thin) | Project-type guard, implicit skill ordering |
 | `game-workflow` | game | B (thin) | Project-type guard, explicit three-phase ordering |
-| `animation-design-planner` | global | C | 5 framework subskills, codebase grep detection, inline guardrail injection |
+| `animation-design-planner` | base | C | 5 framework subskills, codebase grep detection, inline guardrail injection |

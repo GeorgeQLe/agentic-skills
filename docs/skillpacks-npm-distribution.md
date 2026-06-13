@@ -45,9 +45,9 @@ npx skillpacks doctor
 npx skillpacks refresh
 ```
 
-`npx skillpacks init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx skillpacks refresh` update base skills from the current package snapshot instead of depending on user-home global installs.
+`npx skillpacks init` installs the base skill surface into the current repository as local skill roots and records `base_skills: true` in `.agents/project.json`. This makes `npx skillpacks refresh` update base skills from the current package snapshot instead of depending on user-home installs.
 
-When a user explicitly wants user-home global core skills from the npm package snapshot, the compatibility path is:
+When a user explicitly wants user-home base skills from the npm package snapshot, the compatibility path is:
 
 ```bash
 npx skillpacks init --global
@@ -55,7 +55,7 @@ npx skillpacks init --global
 npx skillpacks init-global
 ```
 
-Both global init forms invoke the packaged `init.sh` and keep the global surface limited to core skills. Domain packs remain project-local only.
+Both `--global` init forms invoke the packaged `init.sh` and keep the user-home surface limited to base skills. Domain packs remain project-local only.
 
 Source-checkout users can keep using:
 
@@ -77,7 +77,7 @@ npx @glexcorp/gskp install business-discovery
 ## Design Principles
 
 1. Preserve `SKILL.md` as the source format.
-2. Preserve `global/{claude,codex}` and `packs/<pack>/{claude,codex}` as the authoring layout.
+2. Preserve `base/{claude,codex}` and `packs/<pack>/{claude,codex}` as the authoring layout.
 3. Preserve `.agents/project.json` as the project designation file.
 4. Preserve `scripts/pack.sh` while the npm CLI reaches parity.
 5. Keep the first npm release as one package.
@@ -116,7 +116,7 @@ Current package `package.json` shape:
     "bin/",
     "src/",
     "dist/",
-    "global/",
+    "base/",
     "packs/",
     "scripts/pack.sh",
     "scripts/skill-links.sh",
@@ -167,7 +167,7 @@ The wrapper must run `scripts/pack.sh` with the user's current working directory
 
 The npm tarball must include:
 
-- `global/**` active core skills and their local archives.
+- `base/**` active core skills and their local archives.
 - `packs/**` active pack skills and their local archives.
 - `scripts/pack.sh` and script helpers it sources, especially `scripts/skill-links.sh`.
 - `init.sh` or an equivalent `init-global` implementation.
@@ -186,11 +186,11 @@ The tarball should exclude:
 - generated local roots under `.claude/skills` and `.codex/skills`
 - unrelated benchmark output and session artifacts
 
-Skill-level archives inside `global/**/archive/` and `packs/**/archive/` must remain included because pinning depends on them.
+Skill-level archives inside `base/**/archive/` and `packs/**/archive/` must remain included because pinning depends on them.
 
 ## CLI Surface
 
-Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-checkout compatibility wrapper and as the packaged shell fallback for commands that are not yet worth porting. Do not turn `pack.sh` into a thin wrapper over the Node CLI in this phase; that would make the old checkout path depend on the npm package internals before all discovery and init surfaces are ported. Revisit the decision only after `recommend`, `which`, `install-deck`, and global init behavior are either Node-owned or intentionally documented as permanent shell surfaces.
+Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-checkout compatibility wrapper and as the packaged shell fallback for commands that are not yet worth porting. Do not turn `pack.sh` into a thin wrapper over the Node CLI in this phase; that would make the old checkout path depend on the npm package internals before all discovery and init surfaces are ported. Revisit the decision only after `recommend`, `which`, `install-deck`, and `--global` init behavior is either Node-owned or intentionally documented as permanent shell surfaces.
 
 <!-- gskp-compatibility-matrix:start -->
 | Command | Owner | Backend | Requires bash | Requires jq | Notes |
@@ -201,8 +201,8 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `status` | Node-owned | Project config/status reader | No | No | Reports project designation and local roots. |
 | `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |
 | `set-update-mode <mode>` | Node-owned | Project config writer | No | No | Preserves sibling `skill_updates` fields. |
-| `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs global-scope manifest entries as project-local base skills and records `base_skills: true`. |
-| `init --global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs user-home global core skills from the package snapshot; strips `--global` and forwards remaining args to `init.sh`. |
+| `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs base-scope manifest entries as project-local base skills and records `base_skills: true`. |
+| `init --global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Installs user-home base skills from the package snapshot; strips `--global` and forwards remaining args to `init.sh`. |
 | `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
 | `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
 | `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates enabled base skills, packs, and individual skill roots from `.agents/project.json`. |
@@ -220,7 +220,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `recommend` | Shell-backed | Packaged `scripts/pack.sh recommend` | Yes | No | Uses existing repository-signal heuristics. |
 | `which <skill>` | Shell-backed | Packaged `scripts/pack.sh which` | Yes | Optional | `jq` improves individually enabled skill status; pack-level status has a grep/sed fallback. |
 | `install-deck <deck> [--full]` | Hybrid shell materialization | Node manifest resolver, then packaged `scripts/pack.sh install` | Yes | Yes | Deck metadata is Node-resolved, but installation still uses the compatibility install path. |
-| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Backward-compatible alias for `init --global`; `jq` preserves an existing global pin file when `--pin` updates it. |
+| `init-global [args...]` | External script-backed | Packaged `init.sh` | Yes | Optional | Backward-compatible alias for `init --global`; `jq` preserves an existing base pin file when `--pin` updates it. |
 <!-- gskp-compatibility-matrix:end -->
 
 The CLI should print the same reload notice as `pack.sh` after install, remove, refresh, pin, and unpin.
@@ -665,7 +665,7 @@ npx skillpacks@latest doctor
 | npm package accidentally includes task/history/prompt artifacts | Bloated or sensitive package | Use `files` whitelist plus `npm pack --dry-run` validation. |
 | `pack.sh` assumes a git checkout | npm install breaks | Run it from the packaged script path and add temp-repo tests. |
 | `jq` is missing | Shell-backed write paths fail | Node-owned `gskp` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization. |
-| Skill-level pinning needs archives omitted from tarball | Pins break | Include skill-local `archive/**` while excluding global docs history. |
+| Skill-level pinning needs archives omitted from tarball | Pins break | Include skill-local `archive/**` while excluding repo-wide docs history. |
 | Existing git-checkout users regress | Adoption risk | Keep `init.sh` and `pack.sh` unchanged until Node parity is proven. |
 | CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `gskp` as the only npm package and bin name. |
 
@@ -675,7 +675,7 @@ These should be answered before first publish, not before starting phase 1:
 
 - Is `gskp` the final npm package owner identity, or should the public package be `@gskp/cli` after an organization is created?
 - Should `install-deck` remain a hybrid shell materialization path for the first public package, or should deck installation move fully to Node before publish?
-- Should `init-global` install only global core skills, or should it also offer an optional deck picker?
+- Should `init-global` install only base skills, or should it also offer an optional deck picker?
 - Should hibernated packs be excluded from the npm tarball entirely or included only to preserve explicit error messages?
 - Should package releases use `0.x` until several real consumer installs pass?
 

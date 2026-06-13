@@ -36,4 +36,4 @@ Run:
 node scripts/skill-alignment-routing-audit.mjs
 ```
 
-The audit scans active `global/**/SKILL.md` and `packs/**/SKILL.md`, excluding archives and generated local install roots. It fails when active non-exec skills recommend direct `$exec`/`/exec` handoffs, and it checks the game artifact skills plus staged approval-gated skills for the pre-approval YAML stop contract.
+The audit scans active `base/**/SKILL.md` and `packs/**/SKILL.md`, excluding archives and generated local install roots. It fails when active non-exec skills recommend direct `$exec`/`/exec` handoffs, and it checks the game artifact skills plus staged approval-gated skills for the pre-approval YAML stop contract.

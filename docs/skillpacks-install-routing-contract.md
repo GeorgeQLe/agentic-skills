@@ -57,7 +57,7 @@ Use `<skill>` instead of `<pack>` when the intended install unit is one individu
 
 ## Validation Targets
 
-The follow-up validation rule should scan active `SKILL.md` files under `global/` and `packs/`, excluding `archive/**`, and report install-route wording that omits the relevant npm CLI route.
+The follow-up validation rule should scan active `SKILL.md` files under `base/` and `packs/`, excluding `archive/**`, and report install-route wording that omits the relevant npm CLI route.
 
 Candidate trigger text:
 

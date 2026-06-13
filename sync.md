@@ -10,6 +10,6 @@ bash init.sh
 
 ## Notifications
 
-- `global/` — new or changed global skills may need initialized skill roots updated
+- `base/` — new or changed base skills may need initialized skill roots updated
 - `packs/` — project-local packs may need `scripts/pack.sh refresh` inside affected projects
 - `init.sh` — initializer script was modified

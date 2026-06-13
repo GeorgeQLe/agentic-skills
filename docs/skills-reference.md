@@ -1,8 +1,8 @@
 # Skills Reference
 
-Skills are split into global core skills and project-local packs.
+Skills are split into base skills and project-local packs.
 
-## Global Install
+## Base Install
 
 ```bash
 ./init.sh
@@ -10,12 +10,12 @@ Skills are split into global core skills and project-local packs.
 
 Installs only:
 
-- `global/claude/*`
-- `global/codex/*`
+- `base/claude/*`
+- `base/codex/*`
 
-It does not install domain packs globally.
+It does not install domain packs as base skills.
 
-For npm consumers, `npx skillpacks init` installs these same global-scope base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when user-home global core installs are explicitly desired.
+For npm consumers, `npx skillpacks init` installs these same base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Use `npx skillpacks init --global` (or the backward-compatible `npx skillpacks init-global`) only when user-home base installs are explicitly desired.
 
 ## Project Pack Commands
 
@@ -35,7 +35,7 @@ Project designation is stored in `.agents/project.json`.
 
 The scoped alias package `@glexcorp/gskp` is published from the same release artifact and version. `npx @glexcorp/gskp install <pack-or-skill>` is equivalent to `npx skillpacks install <pack-or-skill>`.
 
-`npx skillpacks list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+`npx skillpacks list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
 `refresh` recreates project-local skill roots from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
@@ -60,7 +60,7 @@ The validator fingerprints all four generated JS assets plus `docs/benchmark-res
 
 ## Benchmark Coverage Freshness
 
-Every repository skill under `global/` or `packs/` must be represented in `tests/harness/bench-coverage.ts`. When a shared skill is created or materially updated, the same shipping boundary must add or update its benchmark coverage row:
+Every repository skill under `base/` or `packs/` must be represented in `tests/harness/bench-coverage.ts`. When a shared skill is created or materially updated, the same shipping boundary must add or update its benchmark coverage row:
 
 - Use `coverage_status: "custom"` with a registered deterministic setup under `tests/layer4/setups/` when local fixtures can exercise the workflow safely.
 - For custom setups, add a deterministic output-quality rubric when practical. Prefer local fixture facts, concrete file or command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over subjective prose scoring.
@@ -76,26 +76,31 @@ pnpm --dir tests bench:coverage
 
 If a skill only has generic smoke coverage and needs domain-quality assertions, route to `targeted-skill-builder <skill> benchmark coverage`.
 
-## Global Core Skills
+## Base Skills
 
-Global skills are domain-neutral and installed by `./init.sh` for every project. The global surface is intentionally small — six skills under `global/claude/` (mirrored under `global/codex/`), plus one Codex-only skill:
+Base skills are domain-neutral and installed by `./init.sh` for every project. The base surface is intentionally small — 11 skills under `base/claude/`, 8 of them mirrored under `base/codex/`:
 
 | Skill | Purpose |
 | --- | --- |
+| `afps-status` | Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command |
+| `animation-design-planner` | Plan interactive UI animations before implementation with motion contracts, guardrails, and proof gates |
+| `autoresearch` | Autonomous experiment loop — iteratively mutate code, measure a metric, keep only improvements |
+| `autoresearch-prep` | Scaffold a `program.md` for `/autoresearch` from codebase signals and a short interview |
 | `codebase-status` | Report repo state, related conversation history, and outstanding work |
+| `fork-idea-branch` | Split an active research path into parallel product paths |
 | `idea-scope-brief` | Shape a rough idea into a concept brief before ICP and market research |
-| `init-agentic-skills` | Initialize global Claude and Codex managed skill installs from this checkout and route pack setup to the pack workflow |
+| `init-agentic-skills` | Initialize base Claude and Codex managed skill installs from this checkout and route pack setup to the pack workflow |
 | `pack` | Manage project-local packs and `.agents/project.json` |
 | `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
-| `skills` | Browse global and enabled project-local skills |
+| `skills` | Browse base and enabled project-local skills |
 
-> `afps-status` ships **Codex-only** under `global/codex/` (no `global/claude/` mirror). Invoke it as `$afps-status` to summarize AFPS product-workflow progress and recommend the next concrete skill command.
+> Three base skills are **Claude-only** (no `base/codex/` mirror): `autoresearch`, `autoresearch-prep`, and `fork-idea-branch`.
 
-All other formerly-global skills now live in domain packs — see [Moved Skills](#moved-skills) and the per-pack sections below.
+All other formerly-base skills now live in domain packs — see [Moved Skills](#moved-skills) and the per-pack sections below.
 
 ### `delegate` (moved to the `agent-bridge` pack)
 
-`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `npx skillpacks install agent-bridge` (or `npx skillpacks install delegate`).
+`delegate` is **no longer a base skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `npx skillpacks install agent-bridge` (or `npx skillpacks install delegate`).
 
 `/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `packs/agent-bridge/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
 
@@ -259,7 +264,7 @@ mono-detect -> mono-exec -> mono-guard -> mono-ship
 
 `mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-exec` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, package-scoped dispatch on separate GitHub branches, and consolidation/PR review before integration. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries and PR-review evidence. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
 
-The pack uses an augmentation injection pattern rather than a duplication pattern. The global `exec` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. The former `*-kanban` workflow-variant packs are hibernated while Poketo.work is being rebuilt.
+The pack uses an augmentation injection pattern rather than a duplication pattern. The base `exec` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. The former `*-kanban` workflow-variant packs are hibernated while Poketo.work is being rebuilt.
 
 Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, `mode`, and `branch`. For `agent-team` work, each write lane must push its non-primary GitHub branch and provide commit SHA, validation evidence, and PR URL before the consolidation/PR review gate approves integration.
 
@@ -388,7 +393,7 @@ Hibernated skill surfaces include `brainstorm-kanban`, `spec-interview-kanban`, 
 
 ## Engineering & Workflow Packs
 
-The pack reorg moved the engineering, git, release, and plan-tracking skills out of global core into narrow packs. Each `Skills:` list is the authoritative on-disk skill set for that pack.
+The pack reorg moved the engineering, git, release, and plan-tracking skills out of base core into narrow packs. Each `Skills:` list is the authoritative on-disk skill set for that pack.
 
 ```bash
 npx skillpacks install code-debug        # debug, investigate, trace
@@ -434,7 +439,7 @@ npx skillpacks install alignment-page-admin  # compile-central-alignment
 
 ## Moved Skills
 
-Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
+Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 Prefer one of:
 
@@ -445,4 +450,4 @@ npx skillpacks install business-growth
 npx skillpacks install business-ops
 ```
 
-The 53-skill global catalog was split into 22 narrower packs in the pack reorg. The engineering and workflow skills that used to be global now live in the packs above — `code-debug`, `code-review`, `exec-loop`, `gitops`, `release-ops`, `agent-bridge`, `agent-work-admin`, `code-maintenance`, `docs-health`, and `repo-maintenance` — and `affected`/`scaffold` moved into `monorepo`. Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
+The 53-skill base catalog was split into 22 narrower packs in the pack reorg. The engineering and workflow skills that used to be base skills now live in the packs above — `code-debug`, `code-review`, `exec-loop`, `gitops`, `release-ops`, `agent-bridge`, `agent-work-admin`, `code-maintenance`, `docs-health`, and `repo-maintenance` — and `affected`/`scaffold` moved into `monorepo`. Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from base core into `project-fleet`.

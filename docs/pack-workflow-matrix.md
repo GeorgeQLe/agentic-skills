@@ -1,6 +1,6 @@
 # Pack Workflow Matrix
 
-Project-local packs reduce global context by separating **domain workflows** from **execution overlays** and **compatibility aliases**.
+Project-local packs reduce base context by separating **domain workflows** from **execution overlays** and **compatibility aliases**.
 
 Use the narrowest pack that matches the current phase. Add overlays only when the repository needs that execution behavior.
 
@@ -28,7 +28,7 @@ compatibility alias = old broad name kept for existing commands
 | Creator media compatibility | `creator-media` | expands to `creator-foundation` + `youtube-ops` | add `remotion` separately for production work | `npx skillpacks install creator-media` |
 | Viral app rapid distribution | `vard` | none — self-contained rapid pipeline | graduates to `business-research` on traction | `npx skillpacks install vard` |
 | OSS rapid distribution | `ord` | none — self-contained rapid pipeline | graduates to `devtool` on traction | `npx skillpacks install ord` |
-| Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | global spec/roadmap/exec/ship flow | `npx skillpacks install devtool` |
+| Developer tool strategy | `devtool` | `code-quality` for implementation cleanup; `monorepo` for workspace-aware execution | base spec/roadmap/exec/ship flow | `npx skillpacks install devtool` |
 | Game AFPS product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> genre -> comparables -> loop -> prototype -> playtest -> store page -> launch -> roadmap | `npx skillpacks install game` |
 | Monorepo execution overlay | `monorepo` | any domain pack that describes the product work | wraps `run` and `ship` with detection, branch-backed lane specs, guards, PR review, and scoped validation | `npx skillpacks install monorepo` |
 | Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `npx skillpacks install code-quality` |
