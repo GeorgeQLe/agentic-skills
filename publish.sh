@@ -153,6 +153,7 @@ run_version_bump
 
 VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 log "Building and verifying skillpacks@$VERSION"
+run npm --workspace packages/skillpacks run build:manifest
 run npm --workspace packages/skillpacks run test:node
 run npm run skillpacks:verify
 
