@@ -41,6 +41,39 @@ run() {
   "$@"
 }
 
+run_version_bump() {
+  local timeout_seconds=${SKILLPACKS_PUBLISH_VERSION_TIMEOUT_SECONDS:-20}
+  printf '+ npm --workspace packages/skillpacks version %q --no-git-tag-version --ignore-scripts --no-commit-hooks\n' "$TARGET"
+
+  npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks &
+  local pid=$!
+  local start
+  start=$(date +%s)
+
+  while kill -0 "$pid" 2>/dev/null; do
+    sleep 1
+    local now
+    now=$(date +%s)
+    if (( now - start >= timeout_seconds )); then
+      local bumped_version
+      bumped_version=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
+      if [[ "$bumped_version" != "$ORIGINAL_VERSION" ]]; then
+        printf 'npm version did not exit within %ss after writing %s; continuing with verified manifest bump.\n' "$timeout_seconds" "$bumped_version" >&2
+        kill "$pid" 2>/dev/null || true
+        sleep 1
+        kill -9 "$pid" 2>/dev/null || true
+        wait "$pid" 2>/dev/null || true
+        return 0
+      fi
+      kill "$pid" 2>/dev/null || true
+      wait "$pid" 2>/dev/null || true
+      fail "npm version timed out before updating $PACKAGE_JSON."
+    fi
+  done
+
+  wait "$pid"
+}
+
 cleanup() {
   local dir
   for dir in "${TMP_DIRS[@]}"; do
@@ -113,8 +146,10 @@ if [[ "$DRY_RUN" == "1" ]]; then
   fi
 fi
 
+ORIGINAL_VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
+
 log "Bumping packages/skillpacks to $TARGET"
-run npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks
+run_version_bump
 
 VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 log "Building and verifying skillpacks@$VERSION"
