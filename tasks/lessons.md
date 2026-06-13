@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-12 — Product design routing is a wireframe tree, not a linear UI-requirements funnel
+
+- The product-design route was still encoded as `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode`, but the intended model is a branching wireframe tree.
+- Future product-design skills should preserve this default route: `user-flow-map` creates named user-flow roots, `ux-variations` expands one selected user flow into alternate progression branches, and `ui-interview` investigates/proposes/approves or rejects one UX-variation branch with an HTML visual mockup.
+- Keep `ui-interview --requirements-only` and `ux-variations --layout-mode` as explicit bounded modes, not the default product-design path, unless the user asks for a fixed content/layout contract.
+
 ## 2026-06-12 — Delegated framework alignment pages need framework-specific review surfaces
 
 - Delegated/framework skills such as `w3-hypothesis` can satisfy generic research alignment-page rules while still producing thin, low-signal pages compared with richer parent or non-delegated skills.

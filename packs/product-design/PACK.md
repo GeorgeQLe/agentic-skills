@@ -20,10 +20,10 @@ scripts/pack.sh refresh
 
 - `brainstorm`: Generate and explore ideas for a product or feature direction.
 - `feature-interview`: Conduct a structured interview to define feature requirements and constraints.
-- `user-flow-map`: Map positioned product goals into screen flow, branches, decisions, states, handoffs, and low-fidelity wireframe notes before UI requirements.
-- `ui-interview`: Conduct a structured interview focused on UI layout, interaction, and visual design decisions.
+- `user-flow-map`: Map positioned product goals into the root of a wireframe tree with user-flow branches, decisions, states, handoffs, and low-fidelity wireframe notes.
+- `ui-interview`: Investigate a specific UX variation branch, propose an HTML visual mockup, interview for alignment, and approve/reject/retry the branch before routing onward.
 - `spec-interview`: Conduct a structured interview to produce a detailed product specification.
-- `ux-variations`: Generate multiple UX variation candidates for a given flow or interaction.
+- `ux-variations`: Expand a selected user flow into alternate progression branches users can compare before one branch moves into UI proposal work.
 - `consolidate-variations`: Evaluate and consolidate UX variations into a final recommended direction.
 - `prototype`: Build a working prototype from a specification or design direction.
 - `design-system`: Define or extend a design system with tokens, components, and usage guidelines.

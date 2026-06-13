@@ -1,5 +1,10 @@
 # user-flow-map changelog (codex)
 
+## v0.5 - 2026-06-12
+
+- Reframed `user-flow-map` as the root of a wireframe tree whose named user flows fan out into `$ux-variations [specific-user-flow]`.
+- Replaced the default requirements-only UI handoff with a UX-variation handoff and clarified that flow-map approval does not approve UX branches, UI mockups, or implementation paths.
+
 ## v0.4 - 2026-06-12
 
 - Replaced the single downstream command recommendation with an explicit stop/clear-context versus continue-now handoff choice for `$ui-interview --requirements-only`.

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.18 - 2026-06-12
+
+- Reframed default `ux-variations` work as expanding one selected user flow into alternate progression branches before UI proposal work.
+- Preserved `--layout-mode` as an explicit bounded mode for fixed flow/content contracts, while routing default progression branches to `$ui-interview [specific-ux-variation]`.
+- Added branch-routing deliverable guidance covering parent flow, sibling flow/variation dependencies, and next UI-interview branch.
+
 ## v0.17 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

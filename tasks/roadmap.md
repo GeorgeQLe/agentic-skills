@@ -1,3 +1,37 @@
+## Current Implementation - Product Design Flow Tree Routing
+
+### Goal
+
+Rework the product-design skill sequence so `$user-flow-map` starts a wireframe tree, `$ux-variations` expands a specific user flow into alternative progression paths, and `$ui-interview` investigates and approves or rejects a specific UX-variation branch through an HTML visual mockup loop.
+
+### Scope
+
+- `packs/product-design/codex/user-flow-map/SKILL.md` and Claude mirror
+- `packs/product-design/codex/ux-variations/SKILL.md` and Claude mirror
+- `packs/product-design/codex/ui-interview/SKILL.md` and Claude mirror
+- Matching archives and changelog entries for substantive skill behavior changes
+- Prompt history and task docs for the invoked skills
+- Focused validation only; no generated local `.codex/skills/**` or `.claude/skills/**` source edits
+
+### Plan
+
+1. Capture visible prompt history for the invoked `user-flow-map`, `ux-variations`, and `ui-interview` skills.
+2. Archive current active skill contracts before version bumps.
+3. Update `user-flow-map` to describe the initial wireframe-tree root and route approved flows to UX variation exploration, not requirements-only UI interview.
+4. Update `ux-variations` to expand one selected user flow into alternate progression branches and UI-experiment candidates, while preserving layout-mode only as a bounded mode when explicitly requested.
+5. Update `ui-interview` to follow the four-step branch review loop: investigate cross-flow coordination, design/propose HTML visual mockup, interview for alignment/retry, then approve or reject the branch and route to the next variation or user flow.
+6. Mirror Codex/Claude wording, bump versions, update changelogs, and verify archive/version/routing checks.
+7. Commit and push the intended tracked changes after verification.
+
+### Acceptance Criteria
+
+- Product-design active skill contracts no longer define the default route as `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode`.
+- `user-flow-map` explicitly positions itself as the root of the wireframe tree and routes to `ux-variations` per user flow.
+- `ux-variations` explicitly explores alternate ways to progress through a chosen user flow.
+- `ui-interview` explicitly implements the four-step UX-variation branch approval loop and HTML mockup feedback retry behavior.
+- Version archives and changelog entries exist for every changed active `SKILL.md`.
+- Focused validation passes or any pre-existing unrelated failure is clearly isolated.
+
 ## Current Implementation - skillpacks refresh rename reconciliation
 
 ### Goal

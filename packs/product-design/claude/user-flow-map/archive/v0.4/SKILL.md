@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.5
+version: v0.4
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 context_intake: deep
 visual_tier: prototype
@@ -14,11 +14,11 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # User Flow Map
 
-Invoke as `$user-flow-map`.
+Invoke as `/user-flow-map`.
 
-Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. Treat the output as the root of a wireframe tree: each mapped user flow can fan out into `$ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `$ui-interview`.
+Use this skill after positioning and before UI/layout/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. This skill defines what screens and transitions exist before `/ui-interview --requirements-only` defines per-screen content requirements and before `/ux-variations --layout-mode` explores visual/layout alternatives.
 
-This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action." Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
+This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action."
 
 ## Process
 
@@ -45,11 +45,11 @@ Read available evidence before asking deep questions:
 - Existing `specs/`, including `specs/user-flow-*.md`, `specs/ui-requirements-*.md`, `specs/ui-*.md`, and `specs/ux-variations-*.md`.
 - Existing route files, component files, app shells, navigation config, screenshots, wireframes, mockups, and design artifacts when present.
 
-If `research/positioning.md` is missing for a business-product flow, recommend `$positioning` first. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell.
+If `research/positioning.md` is missing for a business-product flow, recommend `/positioning` first. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell.
 
 ### 2. Flow Assumptions Checkpoint
 
-Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call — then ask the user to confirm, correct, or flag it in the next turn. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
+Before deep probing, present a concise **Flow Assumptions Checkpoint** inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool call — then ask the user to confirm, correct, or flag it in the next turn. AskUserQuestion option previews may mirror the checkpoint as a supplement but are never the sole channel. Tag each assumption with `[from idea]`, `[from research]`, `[from positioning]`, `[from journey]`, `[from spec]`, `[from codebase]`, `[from artifact]`, or `[inferred]`.
 
 Cover:
 
@@ -85,7 +85,7 @@ Build the flow map at workflow level, not visual-design level:
 
 ### 4. Coverage Checkpoint
 
-Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool or command call):
+Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool call):
 
 - Persona and goal covered.
 - Entry points covered.
@@ -122,7 +122,7 @@ The user-flow spec must include:
 - Handoffs and external/manual dependencies.
 - Low-fidelity wireframe notes per screen.
 - Open questions, risks, and explicit non-goals.
-- Downstream handoff choices for `$ux-variations [specific-user-flow]`.
+- Downstream handoff choices for `/ui-interview --requirements-only [topic]`.
 
 The interview log must include:
 
@@ -133,10 +133,10 @@ The interview log must include:
 
 After approved files are written, present this handoff choice instead of auto-running or auto-invoking the next skill:
 
-1. Stop here so the user can clear context and run `$ux-variations [specific-user-flow]` in a fresh session.
-2. Continue immediately in this session with `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
+1. Stop here so the user can clear context and run `/ui-interview --requirements-only [topic]` in a fresh session.
+2. Continue immediately in this session with `/ui-interview --requirements-only [topic]`.
 
-If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path.
+If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the route and provides source evidence; it does not count as `ui-interview` interview completion or replace the UI Assumptions Manifest and Content Requirements Manifest confirmations.
 
 ## Alignment Page
 
@@ -152,10 +152,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Constraints
 
-- Keep this skill before UX variation, UI layout, and prototype work in the AFPS route.
+- Keep this skill before UI layout and prototype work in the AFPS route.
 - Do not produce high-fidelity mockups, component styling, color palettes, design systems, production architecture, database schemas, or implementation plans.
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
-- Do not route directly to `$ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `$user-flow-map` -> `$ux-variations [specific-user-flow]` -> `$ui-interview [specific-ux-variation]`.
+- Do not route directly to `/ux-variations` from an approved flow map; route to `/ui-interview --requirements-only` first.
 - Do not auto-run or auto-invoke downstream skills after approval. Present the stop/clear-context versus continue-now choice, and preserve the next skill's required gates either way.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.19 - 2026-06-12
+
+- Reframed default `ui-interview` work around a specific UX variation branch rather than the old requirements-only handoff from `user-flow-map`.
+- Added the four-step branch review loop: investigate touched flows and sibling variation/UI proposal coordination, design and render an HTML visual mockup, interview for alignment or retry, and record approve/reject/retry routing.
+- Added deliverable requirements for branch investigation notes, visual mockup feedback, branch decision records, and next variation/user-flow routing.
+
 ## v0.18 - 2026-06-12
 
 - Replaced the remaining packet-dump wording with the shared structured HTML review UI contract for complete working-packet substance.

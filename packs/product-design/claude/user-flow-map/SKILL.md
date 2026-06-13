@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.4
+version: v0.5
 argument-hint: "[optional: product, flow, feature, route, or goal]"
 context_intake: deep
 visual_tier: prototype
@@ -16,9 +16,9 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/user-flow-map`.
 
-Use this skill after positioning and before UI/layout/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. This skill defines what screens and transitions exist before `/ui-interview --requirements-only` defines per-screen content requirements and before `/ux-variations --layout-mode` explores visual/layout alternatives.
+Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. Treat the output as the root of a wireframe tree: each mapped user flow can fan out into `/ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `/ui-interview`.
 
-This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action."
+This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action." Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
 
 ## Process
 
@@ -122,7 +122,7 @@ The user-flow spec must include:
 - Handoffs and external/manual dependencies.
 - Low-fidelity wireframe notes per screen.
 - Open questions, risks, and explicit non-goals.
-- Downstream handoff choices for `/ui-interview --requirements-only [topic]`.
+- Downstream handoff choices for `/ux-variations [specific-user-flow]`.
 
 The interview log must include:
 
@@ -133,10 +133,10 @@ The interview log must include:
 
 After approved files are written, present this handoff choice instead of auto-running or auto-invoking the next skill:
 
-1. Stop here so the user can clear context and run `/ui-interview --requirements-only [topic]` in a fresh session.
-2. Continue immediately in this session with `/ui-interview --requirements-only [topic]`.
+1. Stop here so the user can clear context and run `/ux-variations [specific-user-flow]` in a fresh session.
+2. Continue immediately in this session with `/ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
 
-If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the route and provides source evidence; it does not count as `ui-interview` interview completion or replace the UI Assumptions Manifest and Content Requirements Manifest confirmations.
+If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path.
 
 ## Alignment Page
 
@@ -152,10 +152,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Constraints
 
-- Keep this skill before UI layout and prototype work in the AFPS route.
+- Keep this skill before UX variation, UI layout, and prototype work in the AFPS route.
 - Do not produce high-fidelity mockups, component styling, color palettes, design systems, production architecture, database schemas, or implementation plans.
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
-- Do not route directly to `/ux-variations` from an approved flow map; route to `/ui-interview --requirements-only` first.
+- Do not route directly to `/ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]`.
 - Do not auto-run or auto-invoke downstream skills after approval. Present the stop/clear-context versus continue-now choice, and preserve the next skill's required gates either way.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 

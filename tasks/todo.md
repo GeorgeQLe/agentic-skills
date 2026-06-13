@@ -1,3 +1,31 @@
+## Current Implementation - Product Design Flow Tree Routing
+
+### Current Checklist
+
+- [x] Read the active `user-flow-map`, `ux-variations`, and `ui-interview` skill contracts.
+- [x] Capture visible prompt history for the invoked product-design skills.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Archive current skill contracts before version bumps.
+- [x] Update default routing and branch semantics across product-design skill sources.
+- [x] Update changelogs and mirror wording across Codex/Claude variants.
+- [x] Run focused archive/version/routing/whitespace validation.
+- [x] Commit and push the verified source update.
+
+### Review Notes
+
+- Initial finding: current contracts route normal AFPS product work as `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode`, which conflicts with the requested wireframe-tree model.
+- Source boundary: edit active `packs/product-design/**/SKILL.md` contracts and supporting changelogs/archives. Generated local installs under `.codex/skills/**` and `.claude/skills/**` remain local artifacts.
+- Implemented route: `user-flow-map` now starts the wireframe tree, `ux-variations` expands a selected user flow into progression branches, and `ui-interview` investigates a selected UX variation branch, renders an HTML visual mockup, interviews for alignment, and records approve/reject/retry routing.
+- Validation passed:
+  - `git diff --check -- <intended product-design/task/prompt boundary>`
+  - active stale-route scan for the old default `user-flow-map -> ui-interview --requirements-only -> ux-variations --layout-mode` contract returned no hits.
+  - active step-number stale scan for `ui-interview` returned no hits.
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+- Bash note: `bash scripts/skill-versions.sh --missing` fails under macOS Bash 3.2 because the script uses associative arrays; rerun with Homebrew Bash passed.
+- Shipped on `master` in commit `3a41e6c9` and pushed to `origin/master`.
+
 ## Current Implementation - skillpacks refresh rename reconciliation
 
 ### Current Checklist
