@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.12
+version: v0.11
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.12 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.11 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.12 -->
+   <!-- provision-agentic-config v0.11 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -106,8 +106,6 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    5. **Document Results**: Add review section to `tasks/todo.md`
    6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
 
-   **Research vs implementation loops.** The `tasks/roadmap.md` + `tasks/todo.md` task tracking above is for implementation work. Pattern A research orchestrators (e.g. `customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`) instead use the **Research Session Loop**: each invocation runs one heavy phase (interview, one framework, or synthesis) and stops, re-invoking itself to continue, with state in a run manifest plus the research artifacts. See `docs/research-session-loop-convention.md`.
-
    ## Core Principles
    - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
@@ -147,7 +145,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.12 -->
+   <!-- provision-agentic-config v0.11 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -228,8 +226,6 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    4. **Explain Changes**: High-level summary at each step
    5. **Document Results**: Add review section to `tasks/todo.md`
    6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
-
-   **Research vs implementation loops.** The `tasks/roadmap.md` + `tasks/todo.md` task tracking above is for implementation work. Pattern A research orchestrators (e.g. `customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`) instead use the **Research Session Loop**: each invocation runs one heavy phase (interview, one framework, or synthesis) and stops, re-invoking itself to continue, with state in a run manifest plus the research artifacts. See `docs/research-session-loop-convention.md`.
 
    ## Core Principles
    - **Simplicity First**: Make every change as simple as possible. Impact minimal code.

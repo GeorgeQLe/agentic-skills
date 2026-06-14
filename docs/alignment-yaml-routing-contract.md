@@ -22,6 +22,8 @@ After final compiled YAML approval:
 - Convert the alignment page to `confirmed` with the approval record preserved.
 - Only then emit downstream routing based on the approved artifact state.
 
+A skill's own re-invocation is a valid downstream route. Self-advancing Pattern A research orchestrators (`docs/research-session-loop-convention.md`) continue their loop by naming their own command as the next action once a gate's artifact is written (e.g. `Next: clear context, then run /customer-discovery`).
+
 ## Non-Exec Skills
 
 Non-exec skills may write YAML, task, roadmap, or play artifacts that describe executable work. They must not recommend `$exec` or `/exec` directly as the next action. The approved artifact is the routing boundary; the user or active executor consumes that artifact later.

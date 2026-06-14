@@ -30,6 +30,8 @@ For skills where the user is the primary source and input is ambiguous. The skil
 
 **Phase 4 - Coverage checkpoint.** Present a summary checklist of everything covered. Ask the user to confirm completeness or flag gaps. Only after explicit confirmation does the skill proceed to build the alignment page. Deliver the checklist per the Manifest Visibility Rule above.
 
+**Self-advancing research orchestrators (Research Session Loop).** Pattern A research orchestrators that use the Research Session Loop (`docs/research-session-loop-convention.md`) run the deep interview as the first session's heavy phase, and that session ends by writing a **preliminary interview handoff** (`research/_working/preliminary-{orchestrator}-interview.md`, or the product-path equivalent) and stopping — it does not flow into the alignment page in the same session. The handoff is a complete context transfer (detected mode, context summary, recommended framework subset with rationale, shaping answers); the next fresh session reads only that file to build the framework multi-select alignment page. All other deep-interview phases above are unchanged.
+
 **Deep-interview examples:** `enterprise-icp`, `gtm`, `landing-copy`, `metrics`, `monetization`, `conversion-map`, `expansion-map`, `lifecycle-metrics`, `onboarding-map`, `retention-map`, `transaction-map`, `feature-interview`, `ui-interview`, `spec-interview`, `skill-interview`, `idea-scope-brief`, `customer-discovery`, `user-flow-map`.
 
 ### Scoped intake (`context_intake: scoped`)

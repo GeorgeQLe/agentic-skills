@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.11 -->
+<!-- provision-agentic-config v0.12 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -76,6 +76,8 @@
 4. **Explain Changes**: High-level summary at each step
 5. **Document Results**: Add review section to `tasks/todo.md`
 6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+
+**Research vs implementation loops.** The `tasks/roadmap.md` + `tasks/todo.md` task tracking above is for implementation work. Pattern A research orchestrators (e.g. `customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`) instead use the **Research Session Loop**: each invocation runs one heavy phase (interview, one framework, or synthesis) and stops, re-invoking itself to continue, with state in a run manifest plus the research artifacts. See `docs/research-session-loop-convention.md`.
 
 ## Core Principles
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.

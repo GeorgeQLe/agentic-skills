@@ -14,7 +14,8 @@ Three orchestrator patterns exist. Each differs in how it selects targets, what 
 | **Subskill ownership** | Parent owns `frameworks/` dir | No ownership — routes to independent skills | Parent owns `frameworks/` dir |
 | **Synthesis** | Yes — `--synthesize` reads all intermediates | No — each routed skill produces independent output | No separate synthesis — parent skill produces unified output inline |
 | **Artifacts** | Framework intermediates + synthesized canonical | Routed skills own their own artifacts | Parent produces structured plan document |
-| **`tasks/todo.md` usage** | Writes framework steps + synthesis step | Writes multi-step plays (Modes B–E) | Does not use `tasks/todo.md` |
+| **Execution driver** | Self-advancing — Research Session Loop (re-invokes itself) | Queued play, driven downstream | Single inline session |
+| **`tasks/todo.md` usage** | **None** — uses the Research Session Loop | Writes multi-step plays (Modes B–E) | Does not use `tasks/todo.md` |
 | **Frontmatter** | `invocation: orchestrator` | `type: router` | `invocation: orchestrator` |
 | **Reference implementations** | customer-discovery, competitive-analysis, positioning, journey-map | youtube | animation-design-planner |
 
@@ -30,6 +31,8 @@ Three orchestrator patterns exist. Each differs in how it selects targets, what 
 ---
 
 ## Pattern A — Framework Decomposition + Synthesis
+
+> **Execution model:** Pattern A research orchestrators advance through their frameworks using the **Research Session Loop** — each invocation runs one heavy phase and stops, and the orchestrator re-invokes itself to continue. State lives in a run manifest plus the research artifacts themselves, so there is no separate task queue. The full ladder, state-detection precedence, run-manifest contract, and naming/archive rules are defined in `docs/research-session-loop-convention.md`. This section summarizes the responsibilities and modes; that document is authoritative for the loop.
 
 ### Frontmatter Contract
 
@@ -55,9 +58,9 @@ packs/<pack>/claude/<orchestrator>/
 
 1. **Mode detection** — inspect project state (codebase, research artifacts, customer feedback, arguments) to determine which mode applies (e.g. pre-product vs product-exists).
 2. **Framework recommendation** — present available frameworks as a multi-select alignment page with mode-appropriate defaults pre-checked and optional frameworks available.
-3. **Task queueing** — write selected frameworks as sequential steps in `tasks/todo.md`. The orchestrator stops after writing the task list; `/exec` drives sequential framework execution.
-4. **Synthesis** — when invoked with `--synthesize`, read all framework intermediate outputs and synthesize into the canonical deliverable. Present via alignment page before writing.
-5. **Next-step routing** — emit routing only after synthesis is approved and written.
+3. **Self-advancing execution** — record the approved framework selection in a run manifest, then advance one phase per invocation: each re-invocation runs the next pending framework's subskill inline (following its staged research workflow) and stops. State is the run manifest plus canonical-intermediate file existence — no separate task queue. Progress is derived from which intermediates exist. See `docs/research-session-loop-convention.md`.
+4. **Synthesis** — once every selected framework intermediate exists (auto-detected; an explicit `--synthesize` may also be accepted), read all intermediates and synthesize into the canonical deliverable. Present via alignment page before writing, then archive the run manifest.
+5. **Next-step routing** — emit cross-skill routing only after synthesis is approved and written. To continue the loop before then, route to the orchestrator's **own** re-invocation.
 
 ### Subskill Responsibilities
 
@@ -76,37 +79,37 @@ packs/<pack>/claude/<orchestrator>/
 | Product-path intermediate | `research/{slug}/{orchestrator}-{framework-slug}.md` |
 | Product-path canonical | `research/{slug}/{orchestrator}.md` |
 
-### Execution Model
+### Execution Model — the Research Session Loop
+
+Each invocation runs **one heavy phase** and stops; the orchestrator re-invokes itself to continue, so every phase gets a fresh context window. Each session is `(consume any pasted gate YAML) → (one heavy phase) → (emit next gate) → stop`.
 
 ```
-User invokes /orchestrator
-  → Orchestrator detects mode, builds multi-select alignment page
-  → User approves framework selection
-  → Orchestrator writes tasks/todo.md with framework steps + synthesis step
-  → Orchestrator stops
-
-User runs /exec (repeats for each framework)
-  → /exec invokes next framework subskill
-  → Subskill writes intermediate research artifact
-  → /exec marks step complete, moves to next
-
-User runs /exec on synthesis step
-  → /exec invokes /orchestrator --synthesize
-  → Orchestrator reads all intermediates, synthesizes, presents alignment page
-  → User approves → canonical deliverable written
+Session 1   /orchestrator               → deep interview → write preliminary handoff → stop
+Session 2   /orchestrator               → read handoff → build framework multi-select page → stop
+Session 3   /orchestrator (+ YAML)      → record selection (light) → run framework 1 inline → page → stop
+Session 4…N /orchestrator (+ YAML)      → write prior intermediate (light) → run next pending framework → stop
+Session N+1 /orchestrator (+ YAML)      → all intermediates exist → synthesize → page → write canonical → stop
 ```
+
+State is resolved on each invocation from pasted-YAML + filesystem (the run manifest plus which canonical intermediates exist), not from flags. The full ladder and precedence are in `docs/research-session-loop-convention.md`.
 
 ### Shortcut Modes
 
-Orchestrators may define shortcut invocations (e.g. `/journey-map product`) that skip the multi-select alignment page and queue a fixed set of frameworks. Shortcuts still write to `tasks/todo.md` and require `/exec` for execution.
+Orchestrators may define shortcut invocations (e.g. `/journey-map product`) that skip the interview and multi-select and record a fixed framework set directly into the run manifest. Shortcuts then enter the same self-advancing loop — each subsequent re-invocation runs the next pending framework, driven by the run manifest.
 
 ### Operational Modes Summary
 
-| Mode | Trigger | Behavior |
-|------|---------|----------|
-| A (default) | No special flags | Mode detection → multi-select → write `tasks/todo.md` → stop |
-| B (synthesize) | `--synthesize` | Read intermediates → synthesize → alignment page → write canonical |
-| C (shortcut) | Per-orchestrator keyword | Skip multi-select → queue fixed set + synthesis → stop |
+Mode is auto-detected from pasted-YAML + filesystem state on each invocation (the Research Session Loop ladder):
+
+| State | Detected from | Behavior |
+|-------|---------------|----------|
+| Interview | no prior artifacts | deep interview → preliminary handoff → stop |
+| Select | handoff exists, no selection recorded | build multi-select alignment page → stop |
+| Advance | selection recorded, ≥1 framework pending | run next pending framework inline → page → stop |
+| Synthesize | all selected intermediates exist, no canonical | synthesize → alignment page → write canonical |
+| Shortcut | per-orchestrator keyword | record fixed framework set → enter Advance |
+
+A pasted compiled YAML is consumed first: `ready-for-agent-review` applies the gate then falls through to the next state; `not-approved` amends the named page (a refinement session).
 
 ---
 
@@ -227,6 +230,8 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 | `competitive-analysis` | business-discovery | A | 4 frameworks, market-structure/comparison modes, synthesis |
 | `positioning` | business-discovery | A | 5 frameworks, market/product modes, synthesis |
 | `journey-map` | customer-lifecycle | A | 5 frameworks, pre-product/product-exists modes, synthesis |
+
+> **Migration status.** The Research Session Loop is normative for Pattern A. The four Pattern A orchestrators above are migrating from the legacy `tasks/todo.md` + `/exec` execution model to the loop; until each skill's `SKILL.md` is updated it still implements the legacy model. The per-orchestrator rollout checklist is in `docs/research-session-loop-convention.md` § Migration status. Patterns B and C are unaffected.
 | `youtube` | youtube-ops | B | 13-intent classification, 4 named plays, status mode |
 | `devtool-workflow` | devtool | B (thin) | Project-type guard, implicit skill ordering |
 | `game-workflow` | game | B (thin) | Project-type guard, explicit three-phase ordering |

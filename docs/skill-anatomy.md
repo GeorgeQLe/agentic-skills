@@ -168,6 +168,8 @@ packs/<pack>/claude/<parent>/frameworks/
 
 **Exemplar:** `positioning` routes to `category-design`, `jtbd-positioning`, `moore-positioning`, `obviously-awesome`, and `strategic-canvas`, then synthesizes their outputs into unified positioning.
 
+**Advancing through the children.** Pattern A research orchestrators advance through their sub-skills with the **Research Session Loop** — each invocation runs one heavy phase (interview, one framework, or synthesis) and stops, and the parent re-invokes itself to continue, giving every phase a fresh context window. They keep state in a run manifest plus the research artifacts rather than a task queue. See `docs/research-session-loop-convention.md` and `docs/orchestrator-convention.md` § Pattern A.
+
 ### Pattern 2: Auto-invocation (exec/plan-phase model)
 
 A parent skill detects a missing prerequisite and transparently invokes a sub-skill to fill it. The user does not need to know about the sub-skill invocation.

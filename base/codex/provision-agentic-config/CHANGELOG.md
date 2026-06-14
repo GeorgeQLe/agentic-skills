@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.12 - 2026-06-14
+
+- Added a "Research vs implementation loops" note to the provisioned Workflow Orchestration blocks (Claude + AGENTS): clarifies that `tasks/roadmap.md`/`tasks/todo.md` task tracking is for implementation work, while Pattern A research orchestrators use the self-advancing Research Session Loop (`docs/research-session-loop-convention.md`). Bumped block comment to v0.12.
+
 ## v0.11 - 2026-06-13
 
 - Updated generated missing-skill fallback blocks to recommend the primary `npx skillpacks install <pack-or-skill>` route while `@glexcorp/gskp` remains a same-version package alias.
