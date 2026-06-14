@@ -164,6 +164,10 @@ If a run is small enough that a phase is trivially cheap (e.g. a 2-framework run
 - **Refinement sessions** are not a separate concept — they are step 0 with `approval_status: not-approved`: amend the named page (`amended` lifecycle state), highlight the diff, stop, ask again. The framework's canonical intermediate is not written until approval, so file-existence inference correctly treats an under-revision framework as still pending.
 - **Synthesis** (step B) reads all canonical intermediates, builds a `review` page, and on approval writes the canonical `research/{orchestrator}.md`, archives the run manifest, updates `.progress.yaml` `pipeline_stage`, and emits the downstream next-skill route (the one place cross-orchestrator routing is allowed, per the YAML routing contract).
 
+## Revision hygiene
+
+When user feedback asks to remove, replace, or reduce emphasis on research content, revise the active working packet, alignment page, intermediate, or synthesis toward the requested final state. Keep corrected or rejected claims out of canonical findings, recommendations, framework outputs, synthesis narratives, and future-session instructions. If provenance matters, preserve it in a concise revision note or archive record rather than reintroducing it into the forward-facing research story.
+
 ## Relationship to the other conventions
 
 - **`docs/orchestrator-convention.md`** — Pattern A's Execution Model and Operational Modes are defined by *this* document for research orchestrators. Pattern B (intent-router plays) and Pattern C (detect-and-route, single session) are unchanged and may still use `tasks/todo.md` + `/exec`.

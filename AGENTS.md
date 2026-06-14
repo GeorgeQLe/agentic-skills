@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.12 -->
+<!-- provision-agentic-config v0.13 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -20,6 +20,11 @@
 - Write rules for yourself that prevent the same mistake
 - Ruthlessly iterate on these lessons until mistake rate drops
 - Review lessons at session start for relevant project
+
+### Revision Hygiene
+- When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
+- For remove, replace, or reweight requests, update the artifact toward the requested final state.
+- Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
 
 ### 4. Verification Before Done
 - Never mark a task complete without proving it works

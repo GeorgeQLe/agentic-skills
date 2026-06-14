@@ -6,6 +6,7 @@
 - Treat this as overcorrection/negative instruction anchoring: the rejected concept becomes more salient because it is repeated in the durable artifact.
 - When revising skills, research docs, alignment pages, or task docs, first classify the user request as add, remove, replace, reweight, or verify. For remove/replace/reweight requests, make the target text match the desired final state and do not add a new cautionary paragraph about the thing being removed unless the user explicitly asks for a warning.
 - In research artifacts, keep rejected or corrected claims out of the canonical narrative. If provenance is needed, put it in a concise revision note or archive record, not in the forward-facing findings, recommendations, or future-agent instructions.
+- Durable prevention belongs in shared revision hygiene rules and research/alignment conventions first; add skill-local copies only when the shared convention cannot reliably reach the workflow.
 
 ## 2026-06-13 — Research/prototype routing must not jump to roadmap
 

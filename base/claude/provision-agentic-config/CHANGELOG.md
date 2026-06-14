@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.13 - 2026-06-14
+
+- Added `Revision Hygiene` to the provisioned Workflow Orchestration blocks so feedback-driven edits converge on the requested final artifact instead of repeating rejected framing. Bumped block comment to v0.13.
+
 ## v0.12 - 2026-06-14
 
 - Added a "Research vs implementation loops" note to the provisioned Workflow Orchestration blocks (Claude + AGENTS): clarifies that `tasks/roadmap.md`/`tasks/todo.md` task tracking is for implementation work, while Pattern A research orchestrators use the self-advancing Research Session Loop (`docs/research-session-loop-convention.md`). Bumped block comment to v0.12.

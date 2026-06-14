@@ -1,3 +1,36 @@
+## Current Implementation - Revision Hygiene Rule
+
+### Current Checklist
+
+- [x] Capture the visible request prompt and record the implementation plan.
+- [x] Archive current mirrored `provision-agentic-config` contracts.
+- [x] Patch root workflow blocks and provisioning source contracts.
+- [x] Patch research/alignment conventions.
+- [x] Regenerate derived surfaces if required.
+- [x] Run focused verification and repository hygiene checks.
+- [ ] Commit and push the verified change.
+
+### Review Notes
+
+- Starting point: working tree was clean.
+- Skill context: `provision-agentic-config`, because this changes the provisioned root `AGENTS.md`/`CLAUDE.md` workflow block.
+- Added `Revision Hygiene` to root `AGENTS.md` and `CLAUDE.md`, and to mirrored `provision-agentic-config` source contracts. Archived `v0.12`, bumped the active contracts to `v0.13`, and added changelog entries.
+- Added a research/alignment-specific revision hygiene rule to `docs/alignment-page-convention.md` and `docs/research-session-loop-convention.md`.
+- Regenerated 294 bundled `ALIGNMENT-PAGE.md` files from the canonical alignment convention.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, Skills Showcase generated data, and GitHub proof data after the skill version and generated convention changes.
+- Updated `tasks/lessons.md` with the durable-placement detail for this correction without duplicating the existing negative-instruction-anchoring lesson.
+- Verification passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-deps.sh --broken`
+  - `git diff --check`
+
 ## Current Implementation - Documentation Drift Remediation
 
 ### Current Checklist

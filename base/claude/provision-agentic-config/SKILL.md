@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.12
+version: v0.13
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.12 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.13 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.12 -->
+   <!-- provision-agentic-config v0.13 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -53,6 +53,11 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Write rules for yourself that prevent the same mistake
    - Ruthlessly iterate on these lessons until mistake rate drops
    - Review lessons at session start for relevant project
+
+   ### Revision Hygiene
+   - When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
+   - For remove, replace, or reweight requests, update the artifact toward the requested final state.
+   - Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
 
    ### 4. Verification Before Done
    - Never mark a task complete without proving it works
@@ -147,7 +152,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.12 -->
+   <!-- provision-agentic-config v0.13 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -169,6 +174,11 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Write rules for yourself that prevent the same mistake
    - Ruthlessly iterate on these lessons until mistake rate drops
    - Review lessons at session start for relevant project
+
+   ### Revision Hygiene
+   - When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
+   - For remove, replace, or reweight requests, update the artifact toward the requested final state.
+   - Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
 
    ### 4. Verification Before Done
    - Never mark a task complete without proving it works

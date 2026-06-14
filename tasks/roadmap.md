@@ -1,3 +1,35 @@
+## Current Implementation - Revision Hygiene Rule
+
+### Goal
+
+Add a durable revision hygiene rule that makes feedback-driven edits converge on the desired final artifact instead of preserving rejected framing as warnings or negative reinforcement.
+
+### Scope
+
+- Root agent instruction files: `AGENTS.md` and `CLAUDE.md`
+- Provisioning source skill: `base/{codex,claude}/provision-agentic-config/SKILL.md`, archives, and changelogs
+- Alignment and research conventions: `docs/alignment-page-convention.md` and `docs/research-session-loop-convention.md`
+- Generated alignment bundles and package/manifest surfaces if required by repo generators
+- Prompt history, task review notes, lessons, verification, commit, and push
+
+### Plan
+
+1. Capture the visible request prompt for the `provision-agentic-config` skill context and record this implementation plan.
+2. Archive and bump the mirrored `provision-agentic-config` source skills.
+3. Add the revision hygiene rule to provisioned root workflow blocks and current root artifacts.
+4. Add the research/alignment-specific rule to canonical conventions.
+5. Regenerate derived alignment/skillpack surfaces as required.
+6. Run focused hygiene, archive/version, generated-bundle, and package verification.
+7. Document results, update lessons only where needed, commit, and push.
+
+### Acceptance Criteria
+
+- Root `AGENTS.md` and `CLAUDE.md` contain a `Revision Hygiene` section inside the provisioned workflow block.
+- Future `provision-agentic-config` runs preserve the same rule in both Claude and AGENTS variants.
+- Alignment/research conventions instruct agents to keep corrected or rejected claims out of canonical findings unless provenance is explicitly needed.
+- Generated alignment bundles are in sync with the canonical convention.
+- Verification output is recorded in `tasks/todo.md`.
+
 ## Current Implementation - Documentation Drift Remediation
 
 ### Goal
