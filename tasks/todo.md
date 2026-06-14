@@ -1,3 +1,28 @@
+## Current Implementation - Documentation Drift Inventory
+
+### Current Checklist
+
+- [x] Capture the visible prompt history for the docs audit.
+- [x] Record the documentation drift inventory plan in task docs.
+- [x] Inventory documentation files and classify major surfaces.
+- [x] Compare high-risk documentation contracts for drift.
+- [x] Write the audit report and alignment page.
+- [x] Update the alignment index and run verification.
+- [ ] Commit and push the intended audit artifacts.
+
+### Review Notes
+
+- Starting point: working tree was clean before this audit.
+- Skill selected: `devtool-docs-audit`, because the request is a documentation drift audit for a developer-facing repository.
+- Inventory found 4,779 repo-owned documentation-like files after excluding dependency docs, `.next`, and package build output.
+- Major drift findings: missing `devtool-docs-audit` next-skill routing section, `business-discovery` alias vs `business-research` canonical pack naming, Pattern A positioning still routed through `/exec` in next-step docs, stale pre-prototype `specs/` paths in the canonical workflow report, and stale `gskp`-primary wording in the npm distribution doc.
+- Wrote `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-docs-drift-inventory.html`, and updated `alignment/index.html`.
+- Verification passed:
+  - `node scripts/audit-alignment-pages.mjs` (51 active pages, exact TTS include, metadata, viewport, embed prohibition, and index integrity)
+  - `git diff --check`
+  - artifact presence checks for the report, alignment page, and prompt log
+- Browser-open status: helper reported `blocked`, then WSL PowerShell fallback opened the page.
+
 ## Current Implementation - Prototype Session Loop Convention Refactor
 
 ### Current Checklist

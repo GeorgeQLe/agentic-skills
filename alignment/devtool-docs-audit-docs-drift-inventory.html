@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentation Drift Inventory - Devtool Docs Audit</title>
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text-muted:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.55;letter-spacing:0}main{width:min(1120px,calc(100vw - 40px));max-width:100%;overflow-wrap:break-word;margin:0 auto;padding:34px 0 64px}header{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:24px}.status{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--purple);color:#fff;background:#1c2333;border-radius:8px;padding:6px 10px;font-size:.9rem}h1{margin:14px 0 8px;color:#fff;font-size:2rem;line-height:1.15}h2{margin:34px 0 12px;color:var(--accent);font-size:1.35rem}h3{margin:22px 0 10px;color:#fff;font-size:1.05rem}p{margin:0 0 12px}.muted{color:var(--text-muted)}a{color:var(--accent)}code{background:#0b1018;border:1px solid var(--border);border-radius:6px;padding:1px 5px}.toc,.panel,.question{border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:16px;margin:14px 0}.toc ul{margin:8px 0 0;padding-left:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:12px}.stat{border:1px solid var(--border);border-radius:8px;background:#0b1018;padding:12px}.stat strong{display:block;color:#fff;font-size:1.3rem}.table-wrap{overflow-x:auto;margin:12px 0;border:1px solid var(--border);border-radius:8px}table{border-collapse:collapse;width:100%;min-width:720px}th,td{border-bottom:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}th{background:var(--surface);color:#fff}tr:last-child td{border-bottom:0}.finding{border-left:3px solid var(--orange);padding-left:14px}.p1{border-left-color:var(--red)}.p2{border-left-color:var(--orange)}.p3{border-left-color:var(--accent)}.feedback{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}.feedback button,.question label,button{min-height:44px;padding:10px 16px;border:1px solid var(--border);border-radius:8px;background:#0b1018;color:var(--text);font:inherit}.question{background:#1c2333;border-color:#303b58}.question label{display:block;margin:8px 0}.question textarea,#compiled{width:100%;min-height:90px;margin-top:8px;background:#0b1018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font:inherit}.compile{border-color:var(--purple)}@media(max-width:860px){main{width:min(100vw - 28px,1120px)}}@media(max-width:560px){h1{font-size:1.6rem}.feedback{display:block}.feedback button{width:100%;margin-bottom:8px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <span class="status">alignment_status: review</span>
+  <h1>Documentation Drift Inventory</h1>
+  <p class="muted">Devtool docs audit review page. Date: 2026-06-14. Canonical markdown artifact: <code>research/devtool-docs-audit.md</code>.</p>
+  <p>This page renders the full decision-relevant audit content for reviewing documentation drift across root docs, <code>docs/</code>, active skill contracts, pack metadata, package docs, tasks, prompts, research, specs, and alignment pages.</p>
+</header>
+
+<section id="toc" class="toc">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#verdict">Executive Verdict</a></li>
+    <li><a href="#inventory">Inventory</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#matrix">Evidence Matrix</a></li>
+    <li><a href="#surface-matrix">Surface Matrix</a></li>
+    <li><a href="#gaps">Source Coverage Gaps</a></li>
+    <li><a href="#verification">Verification</a></li>
+    <li><a href="#review-gates">Review Gates</a></li>
+    <li><a href="#compile">Compile Responses</a></li>
+  </ul>
+</section>
+
+<section id="verdict">
+  <h2>Executive Verdict</h2>
+  <div class="feedback" data-section="Executive Verdict"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <div class="panel">
+    <p><strong>P0:</strong> none found. The main <code>skillpacks</code> package metadata, primary install-route contract, and generated active pack manifest do not appear structurally broken.</p>
+    <p><strong>P1:</strong> active <code>devtool-docs-audit</code> references a missing <code>## Next-Skill Routing</code> section.</p>
+    <p><strong>P1:</strong> current business-pack docs mix canonical <code>business-research</code> with compatibility alias <code>business-discovery</code>, and some compatibility descriptions omit <code>customer-lifecycle</code>.</p>
+    <p><strong>P1:</strong> <code>docs/skill-next-step-contracts.md</code> still routes Pattern A <code>positioning</code> framework work through <code>tasks/todo.md</code> and <code>/exec</code>, conflicting with the Research Session Loop.</p>
+    <p><strong>P2:</strong> the Canonical Agentic Workflow Report still uses pre-prototype <code>specs/</code> paths where current product-design contracts use <code>design/</code>.</p>
+    <p><strong>P2:</strong> <code>docs/skillpacks-npm-distribution.md</code> is internally inconsistent about whether <code>skillpacks</code> or <code>gskp</code> is the primary npm package.</p>
+    <p><strong>P3:</strong> archive/task/benchmark/prompt drift is expected historical drift unless current docs present those artifacts as live guidance.</p>
+  </div>
+</section>
+
+<section id="inventory">
+  <h2>Inventory</h2>
+  <div class="feedback" data-section="Inventory"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <p>The repository has 4,779 repo-owned Markdown/HTML/RST/ADOC files after excluding dependency docs, app build output, and package build output.</p>
+  <div class="grid">
+    <div class="stat"><strong>1,019</strong>Active pack docs and active pack skill/pack surfaces</div>
+    <div class="stat"><strong>1,771</strong>Archived pack docs</div>
+    <div class="stat"><strong>227</strong>Installed Codex skill docs</div>
+    <div class="stat"><strong>80</strong>Docs under <code>docs/</code></div>
+    <div class="stat"><strong>121</strong>Task docs</div>
+    <div class="stat"><strong>170</strong>Benchmark reports</div>
+    <div class="stat"><strong>32</strong>Specs</div>
+    <div class="stat"><strong>16</strong>Research docs</div>
+    <div class="stat"><strong>51</strong>Alignment pages</div>
+    <div class="stat"><strong>394</strong>Prompt logs</div>
+  </div>
+  <div class="table-wrap" data-tts-narrative="The inventory table classifies repository documentation by path family. Active pack docs and archives dominate the repository-owned documentation footprint.">
+    <table>
+      <thead><tr><th>Documentation class</th><th>Count</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Active pack docs and active pack <code>SKILL.md</code>/<code>PACK.md</code> surfaces</td><td>1,019</td><td>Active skill contracts, alignment bundles, and pack metadata under <code>packs/</code> excluding archives.</td></tr>
+        <tr><td>Archived pack skill/docs surfaces</td><td>1,771</td><td>Versioned historical snapshots under <code>packs/**/archive/**</code>.</td></tr>
+        <tr><td>Installed Codex skill copies</td><td>227</td><td>Current local install surface under <code>.codex/skills</code>.</td></tr>
+        <tr><td>Public/reference docs under <code>docs/</code></td><td>80</td><td>Canonical conventions, quickstarts, package docs, generated showcase assets, historical docs.</td></tr>
+        <tr><td>Task docs under <code>tasks/</code></td><td>121</td><td>Current plans plus historical ship manifests and review notes.</td></tr>
+        <tr><td>Benchmark reports under <code>benchmark/</code></td><td>170</td><td>Historical test and triage outputs.</td></tr>
+        <tr><td>Specs under <code>specs/</code></td><td>32</td><td>Product/spec artifacts, some historical design-phase documents.</td></tr>
+        <tr><td>Research docs under <code>research/</code></td><td>16</td><td>Active research outputs and working packets.</td></tr>
+        <tr><td>Alignment pages under <code>alignment/</code></td><td>51</td><td>Current and historical review/approval pages, plus index.</td></tr>
+        <tr><td>Prompt logs under <code>prompts/</code></td><td>394</td><td>Invocation history, intentionally historical.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="findings">
+  <h2>Findings</h2>
+  <div class="feedback" data-section="Findings"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+
+  <article class="finding p1">
+    <h3>P1 - <code>devtool-docs-audit</code> References Missing Next-Skill Routing Rules</h3>
+    <p>Active Codex, Claude, and installed copies reference a local <code>## Next-Skill Routing</code> section that is absent. Evidence: <code>packs/devtool/codex/devtool-docs-audit/SKILL.md:17</code> points to the section, while lines 19-25 contain only alignment-page and shipping-contract sections.</p>
+    <p>Recommended cleanup: add the routing section to both mirrors, or remove the local-section reference and use the shared shipping contract.</p>
+  </article>
+
+  <article class="finding p1">
+    <h3>P1 - Business Pack Naming Drift</h3>
+    <p>Active pack directories and generated manifest use <code>business-research</code>; docs and pack metadata still often present <code>business-discovery</code> as the active name. The CLI intentionally accepts <code>business-discovery</code> as an alias, so this is terminology drift rather than a hard install break.</p>
+    <p>Evidence includes <code>packages/skillpacks/src/cli/pack-normalization.mjs:13-14</code>, <code>README.md:90</code>, <code>docs/packs.md:120</code>, and <code>docs/packs.md:137</code>. The last also omits <code>customer-lifecycle</code> from the <code>business-app</code> compatibility expansion.</p>
+    <p>Recommended cleanup: use <code>business-research</code> as primary wording and mention <code>business-discovery</code> only as a compatibility alias.</p>
+  </article>
+
+  <article class="finding p1">
+    <h3>P1 - Pattern A Positioning Still Routes Through <code>/exec</code></h3>
+    <p><code>docs/research-session-loop-convention.md</code> says Pattern A research orchestrators use self re-invocation and run manifests rather than <code>tasks/todo.md</code> plus <code>/exec</code>. <code>docs/skill-next-step-contracts.md:84</code> and line 86 still tell <code>positioning</code> framework selection to write work to <code>tasks/todo.md</code>.</p>
+    <p>Recommended cleanup: update those rows to the Research Session Loop contract and add a focused scan preventing this regression.</p>
+  </article>
+
+  <article class="finding p2">
+    <h3>P2 - Canonical Workflow Report Uses Old <code>specs/</code> Paths</h3>
+    <p><code>docs/canonical-workflow-report.md:16-18</code> says pre-prototype UX/UI artifacts live in <code>specs/</code>, while <code>docs/prototype-session-loop-convention.md:86-90</code> says pre-prototype design artifacts live in <code>design/</code> and <code>specs/</code> is for finalized post-prototype implementation specs.</p>
+    <p>Recommended cleanup: update the report or mark it as a historical snapshot.</p>
+  </article>
+
+  <article class="finding p2">
+    <h3>P2 - npm Distribution Doc Has Old <code>gskp</code>-Primary Text</h3>
+    <p>The top of <code>docs/skillpacks-npm-distribution.md</code> says <code>skillpacks</code> is primary and <code>@glexcorp/gskp</code> is scoped alias. Later sections still say <code>gskp</code> is the only npm package and bin name and ask maintainers to confirm <code>gskp</code> publish rights.</p>
+    <p>Recommended cleanup: split current decisions from historical planning notes and update old manifest snippets to use <code>business-research</code>.</p>
+  </article>
+
+  <article class="finding p3">
+    <h3>P3 - Historical Surfaces Need Currentness Labels</h3>
+    <p>Most drift in archives, prompt logs, task history, and benchmark reports is expected. The risk is discoverability: current indexes or root docs can make old pages look like live guidance.</p>
+    <p>Recommended cleanup: add <code>Status: active contract</code>, <code>Status: historical snapshot</code>, <code>Status: generated</code>, or <code>Status: task history</code> to high-visibility docs.</p>
+  </article>
+</section>
+
+<section id="matrix">
+  <h2>Evidence Matrix</h2>
+  <div class="feedback" data-section="Evidence Matrix"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <div class="table-wrap" data-tts-narrative="The evidence matrix maps each major drift claim to observed repo evidence, inference, confidence, and decision impact.">
+    <table>
+      <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr></thead>
+      <tbody>
+        <tr><td>Missing devtool-docs-audit routing section</td><td>Active skill references <code>## Next-Skill Routing</code>; file has no such section</td><td>Active contract points to absent rules</td><td>High</td><td>Patch skill mirrors or remove reference</td></tr>
+        <tr><td>Business pack naming inconsistent</td><td>Manifest and dirs use <code>business-research</code>; docs use <code>business-discovery</code>; alias exists</td><td>Commands may work, but docs mix canonical and alias identities</td><td>High</td><td>Standardize docs on canonical name</td></tr>
+        <tr><td>Business app alias docs omit lifecycle lane</td><td>CLI expands to four packs; <code>docs/packs.md</code> lists three</td><td>Workflow docs can under-install AFPS lanes</td><td>High</td><td>Fix compatibility alias docs</td></tr>
+        <tr><td>Pattern A route conflict</td><td>Research loop forbids <code>/exec</code>; next-step table routes positioning to <code>/exec</code></td><td>Docs disagree on execution driver</td><td>High</td><td>Update next-step contracts</td></tr>
+        <tr><td>Pre-prototype artifact path drift</td><td>Canonical report says <code>specs/</code>; prototype convention says <code>design/</code></td><td>Current-looking report is stale</td><td>High</td><td>Update or label historical</td></tr>
+        <tr><td>npm package identity drift</td><td>Top says <code>skillpacks</code>; later says <code>gskp</code> only package/bin</td><td>Obsolete implementation plan remains in current doc</td><td>High</td><td>Split current vs historical sections</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="surface-matrix">
+  <h2>Current / Needs Update / Historical Matrix</h2>
+  <div class="feedback" data-section="Surface Matrix"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <div class="table-wrap" data-tts-narrative="The surface matrix lists each high visibility document or skill surface and the recommended action.">
+    <table>
+      <thead><tr><th>Surface</th><th>Classification</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><code>README.md</code></td><td>Mostly current</td><td>Replace primary <code>business-discovery</code> examples with <code>business-research</code>.</td></tr>
+        <tr><td><code>docs/QUICKSTART.md</code></td><td>Needs update</td><td>Replace <code>business-discovery</code> primary install guidance.</td></tr>
+        <tr><td><code>docs/packs.md</code></td><td>Needs update</td><td>Rename canonical business lane and fix <code>business-app</code> expansion.</td></tr>
+        <tr><td><code>docs/skill-next-step-contracts.md</code></td><td>Needs update</td><td>Replace Pattern A <code>/exec</code> routing with Research Session Loop routing.</td></tr>
+        <tr><td><code>docs/canonical-workflow-report.md</code></td><td>Historical or needs update</td><td>Update pre-prototype paths to <code>design/</code> or label historical.</td></tr>
+        <tr><td><code>docs/skillpacks-npm-distribution.md</code></td><td>Needs update</td><td>Separate current decisions from old <code>gskp</code>-only planning text.</td></tr>
+        <tr><td><code>packs/devtool/{codex,claude}/devtool-docs-audit/SKILL.md</code></td><td>Needs update</td><td>Add or remove missing <code>Next-Skill Routing</code> reference.</td></tr>
+        <tr><td><code>packs/**/archive/**</code></td><td>Historical</td><td>Do not rewrite for drift.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gaps">
+  <h2>Source Coverage Gaps</h2>
+  <div class="feedback" data-section="Source Coverage Gaps"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <ul>
+    <li>No web research was performed; this is a repo-internal documentation alignment audit.</li>
+    <li>I did not read all 4,779 files line by line. The scan focused on install commands, pack names, routing, artifact paths, package identity, alignment lifecycle, and skill local references.</li>
+    <li>The audit reports inconsistencies and recommended cleanup; it does not mutate the underlying drifted docs beyond this report and review page.</li>
+  </ul>
+</section>
+
+<section id="verification">
+  <h2>Verification</h2>
+  <div class="feedback" data-section="Verification"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <div class="table-wrap" data-tts-narrative="Verification covered path inventory, skill inventory, targeted ripgrep scans, and exact line evidence for the major findings.">
+    <table>
+      <thead><tr><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>Repo-owned docs inventory excluding dependencies/build output</td><td>4,779 files classified by path class.</td></tr>
+        <tr><td>Active/archived/installed skill inventory</td><td>354 active pack skills, 2,172 archived skill snapshots, 53 installed Codex skills.</td></tr>
+        <tr><td>Targeted <code>rg</code> scans</td><td>Found drift across pack naming, Pattern A routing, pre-prototype artifact paths, and npm package identity.</td></tr>
+        <tr><td>Exact line evidence checks</td><td>Captured with <code>nl -ba</code> for major findings.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="review-gates">
+  <h2>Review Gates</h2>
+  <div class="feedback" data-section="Review Gates"><button type="button">emphasize</button><button type="button">thumbs down</button><button type="button">clarification needed</button></div>
+  <div class="question" data-gate="evidence coverage">
+    <h3>Evidence Coverage</h3>
+    <p>Is the evidence sufficient to prioritize documentation cleanup from this audit?</p>
+    <label><input type="radio" name="evidence" value="Evidence is sufficient for cleanup planning"> Evidence is sufficient for cleanup planning</label>
+    <label><input type="radio" name="evidence" value="Need more source coverage before cleanup"> Need more source coverage before cleanup</label>
+    <label><input type="radio" name="evidence" value="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="evidence" value="Need clarification"> Need clarification</label>
+    <textarea name="evidence_notes" placeholder="Optional notes"></textarea>
+  </div>
+  <div class="question" data-gate="proposed file changes">
+    <h3>Proposed File Changes</h3>
+    <p>Which cleanup path should follow this audit?</p>
+    <label><input type="radio" name="changes" value="Patch P1 docs and skill-contract drift first"> Patch P1 docs and skill-contract drift first</label>
+    <label><input type="radio" name="changes" value="Patch all P1 and P2 drift in one remediation pass"> Patch all P1 and P2 drift in one remediation pass</label>
+    <label><input type="radio" name="changes" value="Other / None of the above"> Other / None of the above</label>
+    <label><input type="radio" name="changes" value="Need clarification"> Need clarification</label>
+    <textarea name="changes_notes" placeholder="Optional notes"></textarea>
+  </div>
+</section>
+
+<section id="compile" class="panel compile">
+  <h2>Compile Responses</h2>
+  <p>Answer one or both review gates, then compile YAML for a follow-up remediation pass.</p>
+  <button type="button" id="compileBtn">Compile Responses</button>
+  <textarea id="compiled" readonly placeholder="Compiled YAML appears here"></textarea>
+</section>
+</main>
+<script>
+document.getElementById('compileBtn').addEventListener('click', function () {
+  const gates = [];
+  [['evidence','Evidence Coverage','evidence coverage'],['changes','Proposed File Changes','proposed file changes']].forEach(([name, section, gateType]) => {
+    const checked = document.querySelector('input[name="'+name+'"]:checked');
+    if (checked) {
+      const notes = document.querySelector('textarea[name="'+name+'_notes"]').value.trim();
+      gates.push({section, gate_type: gateType, status: checked.value === 'Need clarification' ? 'needs-clarification' : checked.value === 'Other / None of the above' ? 'other' : 'answered', answer: checked.value, notes});
+    }
+  });
+  const required = ['evidence','changes'].filter((name) => !document.querySelector('input[name="'+name+'"]:checked'));
+  const yaml = [
+    'alignment_page: alignment/devtool-docs-audit-docs-drift-inventory.html',
+    'response_status: ' + (required.length ? 'partial' : 'complete'),
+    'approval_status: ' + (required.length || gates.some((g) => g.status !== 'answered') ? 'not-approved' : 'ready-for-agent-review'),
+    'required_gate_status: ' + (required.length ? 'incomplete' : 'complete'),
+    'unanswered_required_questions:',
+    ...required.map((name) => '  - ' + name),
+    'gate_answers:',
+    ...gates.flatMap((g) => ['  - section: ' + g.section, '    gate_type: ' + g.gate_type, '    status: ' + g.status, '    answer: "' + g.answer.replace(/"/g,'\\"') + '"', '    notes: "' + g.notes.replace(/"/g,'\\"') + '"'])
+  ].join('\n');
+  const out = document.getElementById('compiled');
+  out.value = yaml;
+  if (navigator.clipboard) navigator.clipboard.writeText(yaml).catch(function(){});
+});
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

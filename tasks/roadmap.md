@@ -1,3 +1,34 @@
+## Current Implementation - Documentation Drift Inventory
+
+### Goal
+
+Inventory the repository's documentation surfaces and identify drift between canonical docs, generated/package docs, active skill contracts, pack metadata, task history, and alignment/research artifacts.
+
+### Scope
+
+- Root docs such as `README.md`, `AGENTS.md`, and `CLAUDE.md`
+- Public docs under `docs/`
+- Pack metadata and active skill contracts under `packs/**`
+- Generated/package documentation surfaces where they represent user-facing docs
+- Research/alignment/task artifacts that document current process or historical decisions
+- Prompt history, task tracking, audit report, and alignment page required by the invoked docs-audit workflow
+
+### Plan
+
+1. Capture the visible invocation prompt and record this plan in task tracking.
+2. Inventory documentation files and classify them as canonical, active contract, generated, archived, task/history, or research/alignment.
+3. Compare high-risk documentation contracts for drift: install commands/package identity, workflow orchestration, alignment lifecycle, skill routing, artifact paths, versioning/archive rules, and prompt/task conventions.
+4. Write `research/devtool-docs-audit.md` with findings-first results and create `alignment/devtool-docs-audit-docs-drift-inventory.html`.
+5. Update `alignment/index.html`, run focused verification, and commit/push the intended audit artifacts if the repository is clean aside from this work.
+
+### Acceptance Criteria
+
+- The audit includes an inventory with counts and representative paths for each documentation class.
+- Drift findings distinguish confirmed contradictions from lower-confidence or historical/archive-only drift.
+- Each major finding cites concrete file/path evidence.
+- The alignment page renders the complete audit content directly and includes required review controls.
+- Verification includes at least markdown/HTML hygiene checks and repository diff review.
+
 ## Current Implementation - Prototype Session Loop Convention Refactor
 
 ### Goal
