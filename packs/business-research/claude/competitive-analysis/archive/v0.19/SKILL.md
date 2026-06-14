@@ -1,8 +1,8 @@
 ---
 name: competitive-analysis
-description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
+description: Orchestrator — select competitive-analysis frameworks, queue framework research, and synthesize market landscape findings
 type: research
-version: v0.20
+version: v0.19
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 context_intake: scoped
@@ -17,7 +17,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/competitive-analysis`.
 
-This is a **Pattern A framework-decomposition orchestrator** that runs as a self-advancing **Research Session Loop** (see `docs/research-session-loop-convention.md` and the Execution Model below). It resolves product/research scope, recommends competitive-analysis frameworks, runs each selected framework inline one per session, and synthesizes the approved framework outputs into the canonical competitive landscape report. Individual frameworks live as child skills under `frameworks/`.
+This is a **Pattern A framework-decomposition orchestrator**. It resolves product/research scope, recommends competitive-analysis frameworks, writes framework execution steps to `tasks/todo.md`, and later synthesizes approved framework outputs into the canonical competitive landscape report. Individual frameworks live as child skills under `frameworks/`.
 
 Available frameworks:
 
@@ -67,45 +67,19 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 **Provisional product-path evidence.** When a referenced product path is not present in `research/.progress.yaml` (either absent entirely or not in `active_paths` or `product_paths[]`), do not treat it as a canonical active path. Before using it as source context, require an explicit provisional-path evidence reference: a `review-only-approved` alignment page (e.g., `alignment/idea-scope-brief-{topic}.html` with `approval_status: review-only-approved`) that fully renders the proposed path's concept, brief, and manifest entry. If no such evidence exists, ask the user whether to proceed with the path as unverified context or to run `/idea-scope-brief` first.
 
-## Execution Model — Research Session Loop
+## Operational Modes
 
-This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/competitive-analysis`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+### Mode A: Framework Selection (default)
 
-State lives in two places only:
+Activated by `/competitive-analysis`, `/competitive-analysis [concept/category]`, or `/competitive-analysis core`.
 
-- **Run manifest** — `research/_working/competitive-analysis-run.yaml` (flat) or `research/{slug}/_working/competitive-analysis-run.yaml` (product-path). Records the selected framework set and each framework's intermediate path. Written when the multi-select YAML is approved. Shape:
+Resolve scope, load context, choose mode, recommend frameworks, build an alignment page with selected defaults, and after approval write framework steps plus a synthesis step to `tasks/todo.md`. Stop after queueing the work; `/exec` drives each framework and the final synthesis step.
 
-  ```yaml
-  orchestrator: competitive-analysis
-  slug: skills-showcase            # omit in flat mode
-  selected_frameworks:
-    - slug: porter-five-forces
-      intermediate: research/skills-showcase/competitive-analysis-porter-five-forces.md
-    - slug: swot
-      intermediate: research/skills-showcase/competitive-analysis-swot.md
-  ```
+### Mode B: Synthesis
 
-- **Canonical-intermediate existence** — a selected framework is *done* when `research/competitive-analysis-{framework}.md` (or `research/{slug}/competitive-analysis-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status.
+Activated by `/competitive-analysis --synthesize`.
 
-`research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
-
-### State resolution (resolve the first match; YAML first, then most-progressed A→E)
-
-On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
-
-| State | Detected when | Heavy phase this session | Emits / stops with |
-|---|---|---|---|
-| **0 — pasted YAML** | a compiled alignment YAML is pasted | branch on `approval_status`: `ready-for-agent-review` → apply the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then fall through to the next pending state below; `not-approved` → amend the named page (refinement session) and stop | amended page, or proceeds ↓ |
-| **A — done** | canonical `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) exists | — | done; emit next-skill route (synthesis step) |
-| **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `competitive-analysis.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
-| **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3) | that framework's findings `review` page |
-| **E — build selection** | no run manifest and no canonical (cold start) | establish context → mode detect → recommend frameworks → build multi-select page (steps 1–2) | multi-select `review` page |
-
-**Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk) resolves directly to **state E**; the 1–3 light scope questions in Context Gathering fold into the head of the E session rather than getting their own round-trip.
-
-**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
-
-**Shortcuts.** `/competitive-analysis --synthesize` forces state B. `/competitive-analysis core` presets the state-E multi-select defaults to `porter-five-forces`, `swot`, and `feature-pricing-matrix` (the user may still add `strategic-group-map`); it does not skip the selection gate.
+Read approved framework intermediates, synthesize the canonical competitive analysis and search log, present the report-first alignment page, then write canonical artifacts only after final approval YAML.
 
 ---
 
@@ -137,11 +111,11 @@ When product path `{slug}` is active, read and write research under `research/{s
 **Concept-validation mode:**
 - Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites to establish the problem space
 - Summarise what the concept proposes (problem it addresses, intended audience, hypothesised approach)
-- Confirm this understanding with the user before building the multi-select page
+- Confirm this understanding with the user before queueing frameworks
 
 Write the context summary, resolved mode, candidate competitor categories, known competitors from arguments, and source gaps to `research/_working/preliminary-competitive-analysis-research.md` (or `research/{slug}/_working/preliminary-competitive-analysis-research.md`) so framework subskills inherit the same scope.
 
-### 2. State E — Recommend Frameworks & Build Multi-Select Page
+### 2. Mode A — Recommend Frameworks
 
 Recommend framework defaults based on context:
 
@@ -150,42 +124,36 @@ Recommend framework defaults based on context:
 - **Concept-validation mode**: keep `porter-five-forces` and `swot` defaulted; use `feature-pricing-matrix` only when named competitors or visible pricing alternatives exist; use `strategic-group-map` when the concept competes across multiple categories.
 - **`core` shortcut**: default only `porter-five-forces`, `swot`, and `feature-pricing-matrix`; still allow the user to add `strategic-group-map`.
 
-Build the framework multi-select `review` alignment page that includes: mode, product-path scope, context summary, selected/default frameworks, optional frameworks, which canonical sections each framework feeds, output paths, source coverage gaps, a loop explanation (the selected set is the scope-and-candidate approval gate; each selected framework is then run inline — one findings page per framework — and the run advances by re-invoking `/competitive-analysis`), and the approval gate.
+Build an alignment page that includes: mode, product-path scope, context summary, selected/default frameworks, optional frameworks, execution plan, output paths, source coverage gaps, and approval gates.
 
-This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
+After approval, overwrite or update the current execution section of `tasks/todo.md` with the selected framework steps and synthesis step:
 
-### 3. State C — Run Next Pending Framework (inline)
+```markdown
+## Competitive Analysis Framework Execution
 
-This session consumes the approved multi-select YAML (state 0→C) or advances after a prior framework's approval. At the **head** of the session, do the light bookkeeping first:
+- [ ] Run `/competitive-analysis/frameworks/porter-five-forces` - Porter's Five Forces industry structure
+- [ ] Run `/competitive-analysis/frameworks/swot` - SWOT from competitive evidence
+- [ ] Run `/competitive-analysis/frameworks/strategic-group-map` - Strategic group mapping
+- [ ] Run `/competitive-analysis/frameworks/feature-pricing-matrix` - Feature and pricing comparison
+- [ ] Synthesize: `/competitive-analysis --synthesize` - Combine framework outputs into research/competitive-analysis.md
+```
 
-1. **Write the run manifest** if it does not yet exist: `research/_working/competitive-analysis-run.yaml` (flat) or `research/{slug}/_working/competitive-analysis-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
-2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/competitive-analysis-{fw}.md` (or `research/{slug}/competitive-analysis-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
+Only include frameworks the user selected. Always append synthesis last. Do not emit downstream next-step routing in Mode A.
 
-Then run the **one heavy phase** for this session:
+### 3. Framework Execution
 
-3. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
-4. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
-
-Framework intermediate paths (`research/{slug}/` in product-path mode):
+Framework subskills read the orchestrator working packet and any existing relevant research, then produce approved intermediate artifacts:
 
 - `research/competitive-analysis-porter-five-forces.md`
 - `research/competitive-analysis-swot.md`
 - `research/competitive-analysis-strategic-group-map.md`
 - `research/competitive-analysis-feature-pricing-matrix.md`
 
-**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `/competitive-analysis` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
+In product-path mode, write under `research/{slug}/`. Subskills follow the staged research workflow, present before writing, and do not emit next-step routing.
 
-```
-✔ Framework 1 (Porter's Five Forces) findings ready for review.
-Next: review the page and compile YAML, then clear context and run  /competitive-analysis
-(the next run writes this framework's intermediate and picks up the next pending framework automatically.)
-```
+### 4. Mode B — Synthesis (`/competitive-analysis --synthesize`)
 
-Do not emit cross-skill routing here — that happens only after synthesis (step 4).
-
-### 4. State B — Synthesis (auto-detected; also `/competitive-analysis --synthesize`)
-
-Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/competitive-analysis.md` yet exists. An explicit `/competitive-analysis --synthesize` also forces this state. Read all existing `research/competitive-analysis-*.md` framework outputs for the active scope. At least one approved framework output must exist; if none exist, stop and ask the user to run `/competitive-analysis` to select and run frameworks first.
+Read all existing `research/competitive-analysis-*.md` framework outputs for the active scope. At least one approved framework output must exist; if none exist, stop and ask the user to run `/competitive-analysis` to queue framework research.
 
 Synthesize across framework outputs into the canonical deliverables below:
 
@@ -197,7 +165,7 @@ Synthesize across framework outputs into the canonical deliverables below:
 - concept-validation `## Gap Assessment` when the orchestrator context selected concept-validation mode
 - `## Next Steps` using the unchanged routing contract below
 
-Build the report-first alignment page before writing. Only after final compiled YAML approval, write canonical artifacts, then on this canonical write **archive the run manifest** (`competitive-analysis-run.yaml`) and the synthesis working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, update `research/.progress.yaml` `pipeline_stage` to `competitive-analysis` (and any deferred-path evidence that changed), and emit the downstream next-step routing. This is the one place cross-orchestrator routing is allowed.
+Build the report-first alignment page before writing. Only after final compiled YAML approval, write canonical artifacts, archive the working packet, update `research/.progress.yaml` only when active-path evidence changed, and emit downstream next-step routing.
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2-4 alternatives). Choose the recommended item by the first matching condition:
 
@@ -328,10 +296,10 @@ Positioning recommendations ("where we fit", "recommended positioning") belong i
 
 ## Next Steps
 
-**Recommended:** [first matching item from the step 4 synthesis routing list]
+**Recommended:** [first matching item from step 6]
 
 **Other options:**
-- [remaining conditional items from the step 4 synthesis routing list — only include items whose conditions are met]
+- [remaining conditional items from step 6 — only include items whose conditions are met]
 
 ## Signals for Downstream Research
 
@@ -388,14 +356,14 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.
 - **Search breadth over depth initially.** Cast a wide net to find all competitors before going deep on each one. It's better to identify 15 competitors and research 8 deeply than to miss half the landscape.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
-- **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It records the selected framework set in the run manifest, runs each selected framework inline, and synthesizes; progress is the existence of canonical intermediates. The loop advances by re-invoking `/competitive-analysis` (clear context between sessions). Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
+- **Queue before research in Mode A.** Default invocation queues framework work only; it must not emit downstream next-step routing.
 - **Keep framework subskills route-free.** Framework subskills must not emit `Recommended next skill` or `Recommended next command`; routing belongs to synthesis after canonical artifacts are approved.
 
 ## Context Gathering
 
-**Step 1 — Scope questions.** Before building the multi-select page, ask the user 1–3 questions via `AskUserQuestion` only if the product/service, target audience, or decision goal is unclear from the repository and arguments. These light questions fold into the head of the state-E session.
+**Step 1 — Scope questions.** Before queueing frameworks, ask the user 1–3 questions via `AskUserQuestion` only if the product/service, target audience, or decision goal is unclear from the repository and arguments.
 
-**Step 2 — Framework selection.** Use the answers plus repo context to choose defaults and present the framework multi-select `review` alignment page (state E). The run manifest is written at the head of the first state-C session on approval, not in state E.
+**Step 2 — Framework selection.** Use the answers plus repo context to choose defaults, present the framework-selection alignment page, and write framework steps to `tasks/todo.md` after approval.
 
 **Step 3 — Synthesis validation.** In `/competitive-analysis --synthesize`, present the 3–5 most important cross-framework findings before building the final approval alignment page.
 

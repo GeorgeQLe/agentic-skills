@@ -1,5 +1,13 @@
 # competitive-analysis changelog (claude)
 
+## v0.20 - 2026-06-14
+
+- Migrated the orchestrator to the Research Session Loop (`docs/research-session-loop-convention.md`): replaced the Mode A/B framing and the `tasks/todo.md` + `/exec` framework-queueing with a self-advancing session ladder (states 0/A/B/C/E, YAML-first resolution).
+- Added the selected-set run manifest `research/_working/competitive-analysis-run.yaml` as chunk state; framework progress is now derived from canonical-intermediate file existence.
+- One approval gate per framework: the multi-select approval (state E) satisfies each framework's Stage-1 scope gate, so the loop runs frameworks inline entering at their research stage (Stage 2).
+- Synthesis (state B) is auto-detected when all intermediates exist; on canonical write it archives the run manifest + working packet and updates `.progress.yaml`.
+- Routing between frameworks is self-re-invocation of `/competitive-analysis`; cross-skill routing only after synthesis. Scoped intake means no deep-interview state F — a cold start resolves directly to state E.
+
 ## v0.19 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.
