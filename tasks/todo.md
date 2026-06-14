@@ -1,3 +1,37 @@
+## Current Implementation - Documentation Drift Remediation
+
+### Current Checklist
+
+- [x] Capture the visible approval prompt and record the remediation plan.
+- [x] Patch missing `devtool-docs-audit` routing guidance.
+- [x] Standardize business pack naming and compatibility docs.
+- [x] Replace Pattern A positioning `/exec` routing with Research Session Loop routing.
+- [x] Update P2 workflow path and npm package identity docs.
+- [x] Run focused verification and repository hygiene checks.
+- [ ] Commit and push the verified remediation.
+
+### Review Notes
+
+- Starting point: working tree was clean after the prior documentation drift inventory commit.
+- Approval input: evidence is sufficient for cleanup planning; patch all P1 and P2 drift in one remediation pass.
+- Skill context: `devtool-docs-audit`, because the approved work remediates findings from its docs drift audit.
+- Patched current business pack docs to use canonical `business-research`; `business-discovery` remains documented only as a compatibility alias.
+- Restored the missing `## Next-Skill Routing` section in mirrored `devtool-docs-audit` contracts, archived `v0.1`, bumped to `v0.2`, and refreshed package/installed surfaces.
+- Updated `docs/skill-next-step-contracts.md` and the mirrored active `positioning` contracts so Pattern A framework work uses the Research Session Loop/run manifest instead of `tasks/todo.md` plus `/exec`; archived `positioning` `v0.17` and bumped to `v0.18`.
+- Updated P2 docs: current workflow report now uses `design/` for pre-prototype artifacts, and npm distribution docs consistently present `skillpacks` as primary with `@glexcorp/gskp` as scoped alias.
+- Skills Showcase generated data and package manifest were refreshed after active skill version changes.
+- Verification passed:
+  - Focused drift scans for business pack naming, missing `Next-Skill Routing`, old Pattern A `/exec` wording, stale `gskp`-primary wording, and stale pre-prototype `specs/` paths.
+  - `npm run skillpacks:build`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:verify`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-deps.sh --broken`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `git diff --check`
+
 ## Current Implementation - Documentation Drift Inventory
 
 ### Current Checklist

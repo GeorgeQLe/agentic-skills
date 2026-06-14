@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-14
+
+- Restored the missing local `## Next-Skill Routing` section referenced by the output contract.
+
 ## v0.0
 
 - Archived previous skill contract.

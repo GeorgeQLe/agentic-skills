@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.18
+version: v0.17
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -56,16 +56,7 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
   - `research/customer-feedback.md` — real customer language about what makes the product different
   - `research/monetization.md` — pricing context for value perception
 
-## Execution Model — Research Session Loop
-
-This is a self-advancing Pattern A research orchestrator. Use `docs/research-session-loop-convention.md`: each invocation resolves state from pasted YAML plus filesystem, runs one heavy phase, emits the next review gate, and stops. Do not route framework selection through `tasks/todo.md` or `/exec`.
-
-State lives in:
-
-- `research/_working/positioning-run.yaml` or `research/{slug}/_working/positioning-run.yaml`, written after approved framework selection and containing selected framework slugs plus canonical intermediate paths.
-- Canonical intermediate existence: a framework is complete when `research/positioning-{framework}.md` or `research/{slug}/positioning-{framework}.md` exists.
-
-### Operational Modes
+## Operational Modes
 
 ### Mode A: Framework Selection (default first invocation)
 
@@ -142,25 +133,25 @@ Build an alignment page with:
    - Pre-checked defaults based on available evidence:
      - Market mode defaults: `jtbd-positioning` + `strategic-canvas` + `moore-positioning` pre-checked; `category-design` unchecked (recommended only when strategic canvas shows no existing category fits)
      - Product mode defaults: `obviously-awesome` pre-checked; `strategic-canvas` unchecked (optional refresh)
-4. **Loop plan explanation**: selected frameworks will be recorded in the run manifest; each fresh `/positioning` invocation runs the next pending framework inline and stops for that framework's findings review
+4. **Execution plan explanation**: selected frameworks will be written to `tasks/todo.md` for sequential `/exec` execution
 5. **Approval gate**: framework selection confirmation
 
 After user approval via compiled YAML (which includes `selected_frameworks` list):
 
-Write selected frameworks to the run manifest:
+Write selected frameworks as sequential steps in `tasks/todo.md`:
 
-```yaml
-orchestrator: positioning
-selected_frameworks:
-  - slug: jtbd-positioning
-    intermediate: research/positioning-jtbd-positioning.md
-  - slug: strategic-canvas
-    intermediate: research/positioning-strategic-canvas.md
-  - slug: moore-positioning
-    intermediate: research/positioning-moore-positioning.md
+```markdown
+## Positioning Framework Execution
+
+- [ ] Run `/positioning/frameworks/jtbd-positioning` — JTBD analysis
+- [ ] Run `/positioning/frameworks/strategic-canvas` — Blue Ocean gap analysis
+- [ ] Run `/positioning/frameworks/moore-positioning` — Positioning hypothesis
+- [ ] Synthesize: `/positioning --synthesize` — Combine framework outputs into research/positioning.md
 ```
 
-Only include selected frameworks. Then run the first pending framework inline at its research stage and stop with that framework's findings review page. On each later invocation, consume approved YAML for the previous framework, write its canonical intermediate, run the next pending framework, and stop. When all selected framework intermediates exist, synthesize.
+Only include frameworks the user selected. Always append the synthesis step last.
+
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
 ### 4. Mode B — Synthesis (`/positioning --synthesize`)
 
@@ -204,21 +195,21 @@ Skip multi-select. Build an alignment page for the shortcut execution plan with:
 
 1. **Shortcut explanation**: product-positioning shortcut selected and why `obviously-awesome` is the only queued framework
 2. **Evidence readiness**: customer-feedback requirement and any missing evidence caveats
-3. **Proposed loop plan**: the single `obviously-awesome` framework that will be recorded in the run manifest
-4. **Approval gate**: require final compiled YAML approval before writing the run manifest
+3. **Proposed execution plan**: the exact `tasks/todo.md` framework queue shown below
+4. **Approval gate**: require final compiled YAML approval before writing `tasks/todo.md`
 
-Do not write the run manifest before alignment approval. The next action is review of the HTML alignment page.
+Do not write `tasks/todo.md` before alignment approval. The next action is review of the HTML alignment page.
 
-After user approval via final compiled YAML, write this selected set to the run manifest and enter the next pending framework session:
+After user approval via final compiled YAML, write this execution plan to `tasks/todo.md`:
 
-```yaml
-orchestrator: positioning
-selected_frameworks:
-  - slug: obviously-awesome
-    intermediate: research/positioning-obviously-awesome.md
+```markdown
+## Positioning Framework Execution
+
+- [ ] Run `/positioning/frameworks/obviously-awesome` — April Dunford positioning
+- [ ] Synthesize: `/positioning --synthesize` — Write research/positioning.md
 ```
 
-Run `obviously-awesome` inline at its research stage and stop with the framework findings review page.
+Stop; the approved task artifact is the routing contract.
 
 ### 6. Next Steps (after synthesis only)
 
@@ -252,9 +243,9 @@ These detours are conditional framework owners, not required AFPS chain links. A
 
 ## Output
 
-### Mode A output: run manifest update plus next pending framework review page
+### Mode A output: `tasks/todo.md` update
 
-Selected framework state in `research/_working/positioning-run.yaml` or `research/{slug}/_working/positioning-run.yaml`, plus the next pending framework's findings review page.
+Framework execution steps (see section 3 above).
 
 ### Mode B output: `research/positioning.md` (or `research/{slug}/positioning.md`)
 
@@ -345,7 +336,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Requires ICP + competitive analysis.** Positioning without knowing the customer and the competition is guesswork.
 - **Customer-grounded.** Every positioning decision must connect to real customer behavior or research evidence.
 - **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
-- **Parent owns the research loop.** It records selected frameworks in the run manifest and runs one pending framework inline per invocation. Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
+- **Parent does not execute frameworks.** It selects and queues them. `/exec` handles execution.
 - **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Do not overwrite existing `research/positioning.md`** without asking the user first.
 

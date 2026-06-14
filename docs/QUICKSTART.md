@@ -48,7 +48,7 @@ cd ~/my-project
 npx skillpacks init
 npx skillpacks install devtool    # for developer tools
 npx skillpacks install game        # for games
-npx skillpacks install business-discovery  # for SaaS/business apps
+npx skillpacks install business-research   # for SaaS/business apps
 ```
 
 From a source checkout, the equivalent compatibility route is:

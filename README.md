@@ -87,7 +87,7 @@ Project packs are enabled per repository.
 ```bash
 npx skillpacks list
 npx skillpacks recommend
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install business-growth
 npx skillpacks install business-ops
 npx skillpacks install game
@@ -152,7 +152,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
+  "enabled_packs": ["devtool", "business-research", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -164,7 +164,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-discovery", "business-growth"],
+      "packs": ["business-research", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     }
   ]
@@ -251,7 +251,7 @@ For SaaS, marketplaces, productivity tools, business applications, and enterpris
 Install only the current lane:
 
 ```text
-business-discovery: customer-discovery, enterprise-icp, competitive-analysis, customer-feedback,
+business-research: customer-discovery, enterprise-icp, competitive-analysis, customer-feedback,
 value-prop-canvas, lean-canvas, positioning
 
 customer-lifecycle: journey-map, onboarding-map, conversion-map,
@@ -399,10 +399,10 @@ PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Their
 
 ## Moved Skills
 
-Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
+Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs. `business-discovery` is accepted as a compatibility alias for `business-research`.
 
 ```bash
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install customer-lifecycle
 npx skillpacks install business-growth
 npx skillpacks install business-ops

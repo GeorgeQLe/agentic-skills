@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18 - 2026-06-14
+
+- Replaced framework-selection `tasks/todo.md` + `$exec` routing with the Research Session Loop run-manifest model.
+
 ## v0.17 - 2026-06-13
 
 - Kept the Codex mirror aligned with the alignment-YAML routing remediation and approved-artifact execution boundary.

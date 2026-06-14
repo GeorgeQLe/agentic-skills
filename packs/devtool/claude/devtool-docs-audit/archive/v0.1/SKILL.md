@@ -2,7 +2,7 @@
 name: devtool-docs-audit
 description: Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths
 type: review
-version: v0.2
+version: v0.1
 context_intake: artifact_only
 ---
 
@@ -22,12 +22,3 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 Follow the shared shipping contract convention in CLAUDE.md.
 
-## Next-Skill Routing
-
-After writing or updating approved artifacts, recommend the next contextual action:
-
-1. If the alignment page is still in review or the user has not provided final compiled YAML, stop and ask for review of the HTML alignment page. Do not include downstream routing until approval YAML has been provided.
-2. If the audit identifies immediately actionable documentation or skill-contract cleanup and the user approves remediation, recommend the implementation route for the approved cleanup plan.
-3. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
-4. Otherwise, recommend `/research-roadmap` to confirm the devtool documentation queue is complete and identify any non-devtool follow-up.
-5. If `/research-roadmap` reports no queue, recommend `/roadmap` only when implementation planning is missing or stale.

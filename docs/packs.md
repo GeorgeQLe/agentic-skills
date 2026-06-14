@@ -24,7 +24,7 @@ Mixed monorepo example:
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
+  "enabled_packs": ["devtool", "business-research", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -36,13 +36,13 @@ Mixed monorepo example:
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-discovery", "business-growth"],
+      "packs": ["business-research", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     },
     {
       "path": "packages/calcllm-sync",
       "project_type": "business-app",
-      "packs": ["business-discovery", "business-growth"],
+      "packs": ["business-research", "business-growth"],
       "purpose": "Connected-edition sync and SaaS integration work."
     }
   ]
@@ -59,7 +59,7 @@ npm CLI commands:
 npx skillpacks list
 npx skillpacks recommend
 npx skillpacks install game
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install business-growth
 npx skillpacks install business-ops
 npx skillpacks install devtool
@@ -117,7 +117,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 
 ## Pack Selection
 
-- Use `business-discovery` for ICP, market/customer discovery, value proposition, positioning, lean canvas, and journeys.
+- Use `business-research` for ICP, market/customer discovery, value proposition, positioning, lean canvas, and journeys.
 - Use `business-growth` for GTM, growth, metrics, monetization, landing copy, experiments, and PMF.
 - Use `business-ops` for assumptions, feedback/cohorts/retros, risks, runway, stakeholder updates, platform strategy, and research reconciliation.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
@@ -134,7 +134,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 
 The hibernated packs are preserved under `archive/hibernated-packs/2026-06-poketowork-rebuild/` and are not available for active install or recommendation.
 
-`business-app` is a compatibility alias that expands to `business-discovery`, `business-growth`, and `business-ops`. `creator-media` is a compatibility alias that expands to `creator-foundation` and `youtube-ops`.
+`business-app` is a compatibility alias that expands to `business-research`, `customer-lifecycle`, `business-growth`, and `business-ops`. `business-discovery` is accepted as a compatibility alias for `business-research`. `creator-media` is a compatibility alias that expands to `creator-foundation` and `youtube-ops`.
 
 For the full workflow/dependency matrix, see [`docs/pack-workflow-matrix.md`](pack-workflow-matrix.md).
 
@@ -280,7 +280,7 @@ For teams adopting agentic-skills across multiple developers:
 Business/product workflows that used to be base skills now live in narrow business packs. Prefer the current lane:
 
 ```bash
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install customer-lifecycle
 npx skillpacks install business-growth
 npx skillpacks install business-ops

@@ -14,8 +14,8 @@ The report previously described the workflow as implemented through a completed 
 The durable source of truth remains the repository task and planning surface:
 
 - `research/*.md` captures concept, market, customer, lifecycle, and operating evidence.
-- `specs/ux-variations-*.md` captures UX alternatives before implementation is locked.
-- `specs/ui-*.md` and `specs/ui-requirements-*.md` capture screen and content requirements for prototypes.
+- `design/ux-variations-*.md` captures UX alternatives before implementation is locked.
+- `design/ui-*.md`, `design/ui-requirements-*.md`, and `design/flow-tree*.yaml` capture screen, content, and branch-state requirements for prototypes.
 - `prototypes/{topic}/variation-N/` captures cheap built variants.
 - `research/uat-variant-evaluation-*.md` captures comparable hands-on variant evidence.
 - `prototypes/{topic}/consolidated/` captures the chosen prototype direction after consolidation.
@@ -60,7 +60,7 @@ The current business routing model is lane-based:
 
 | Lane | Pack | Primary purpose |
 | --- | --- | --- |
-| Discovery | `business-discovery` | ICP, competitive analysis, customer feedback, positioning, optional value proposition and lean canvas detours |
+| Discovery | `business-research` | ICP, competitive analysis, customer feedback, positioning, optional value proposition and lean canvas detours |
 | Customer lifecycle | `customer-lifecycle` | Journey, onboarding, conversion, transaction, retention, expansion, lifecycle metrics |
 | Growth | `business-growth` | Hook model, growth model, metrics, GTM, monetization, landing copy, experiments, PMF |
 | Operations | `business-ops` | Assumptions, risk, runway, cohorts, retros, investor updates, platform strategy, research reconciliation |
@@ -94,7 +94,7 @@ Claude route:
 ```bash
 /idea-scope-brief
 /pack
-npx skillpacks install business-discovery        # when the discovery lane is missing
+npx skillpacks install business-research         # when the research lane is missing
 /customer-discovery
 /competitive-analysis
 npx skillpacks install customer-lifecycle        # when lifecycle mapping is missing
@@ -128,7 +128,7 @@ Codex route:
 ```bash
 $idea-scope-brief
 $pack
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 $customer-discovery
 $competitive-analysis
 npx skillpacks install customer-lifecycle
@@ -164,7 +164,7 @@ This is an ordered default, not a mandate to run every optional business skill. 
 Use `pack` first to designate the project. Then run the lightest evidence-producing path that fits the codebase:
 
 - If the product concept is unclear, use `idea-scope-brief`.
-- If there is product direction but no market evidence, use `business-discovery` and start with `customer-discovery`.
+- If there is product direction but no market evidence, use `business-research` and start with `customer-discovery`.
 - If there is market evidence but no user/customer path, install or enable `customer-lifecycle` and run `journey-map`.
 - If the implementation already exists but specs are stale, use `spec-drift` or `reconcile-dev-docs` before mutating plans.
 - If a stale project should restart, use `desk-flip` and `bootstrap-repo --reset-existing` so old docs and code are archived before fresh alignment begins.
@@ -271,7 +271,7 @@ The prior report dated 2026-04-19 and refreshed 2026-04-22 described Phase 11 as
 
 ### Finding 2: Business-Pack Language Drifted Toward The Compatibility Alias
 
-The old report described `business-app` as a normal project-local opt-in. Current docs and pack contracts split business work into `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops`; `business-app` remains a compatibility alias.
+The old report described `business-app` as a normal project-local opt-in. Current docs and pack contracts split business work into `business-research`, `customer-lifecycle`, `business-growth`, and `business-ops`; `business-app` remains a compatibility alias, and `business-discovery` is accepted only as a compatibility alias for `business-research`.
 
 **Resolution in this report:** the pack model now centers the narrow lanes and labels `business-app` as compatibility-only.
 
@@ -321,9 +321,9 @@ The current `consolidate-variations` contract says the skill produces a consolid
 ```text
 idea-scope-brief
   -> pack recommend/install
-  -> business-discovery: customer-discovery -> competitive-analysis
+  -> business-research: customer-discovery -> competitive-analysis
   -> customer-lifecycle: journey-map
-  -> optional business-discovery/growth/ops evidence lanes
+  -> optional business-research/growth/ops evidence lanes
   -> user-flow-map
   -> ui-interview --requirements-only
   -> ux-variations --layout-mode

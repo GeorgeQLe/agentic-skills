@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "78873a648b675642ce0dcb1d287cac45a3518826af3f96b391f4c89ee1e46546",
+  "source_fingerprint": "8e74287087d98d0cd245d7a901a2a61f91f1a1f094a5c609696b79664d7a7fa7",
   "packs": [
     {
       "name": "agent-bridge",
@@ -972,13 +972,14 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "path": "base/claude/provision-agentic-config/SKILL.md",
-      "content_sha256": "3c37daa4f9bc1aef5bd52940d91a0f0f4b14774a9b0b663b1a0ad8c5921b6439",
+      "content_sha256": "94b8ed5d72d96195c2108259dd8e9346c784ead7b491c5d6d3fbff57558a6aab",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1156,13 +1157,14 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "path": "base/codex/provision-agentic-config/SKILL.md",
-      "content_sha256": "fe08536bd5f011877d0a795ffe131d5edc212a42a987bb0d7dbb84713c2f2409",
+      "content_sha256": "ce95e0f3b6666a98b1a8b9175589d86e6d4e3c6cbd6810d7306d6ad3a6a8825c",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -2988,9 +2990,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.17",
+      "version": "v0.18",
       "path": "packs/business-research/claude/positioning/SKILL.md",
-      "content_sha256": "5dfa65a42ca7593fea7931ef7c5df6940323f797fd07a8bff4d5b92c117cdb00",
+      "content_sha256": "b28d759d97bb2e9abfb51bec705a358e0c0bf5e35901af71152a46626ad29a91",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3001,6 +3003,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3514,9 +3517,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.17",
+      "version": "v0.18",
       "path": "packs/business-research/codex/positioning/SKILL.md",
-      "content_sha256": "8a76edeeb0dbeff5686fbcfd75aeb5a5541a97f183479b2ad3b95cb9a10f481c",
+      "content_sha256": "a484e3cba13878c6a55849c89abc8a7043569dcaca1052c8f97ce5de5e6c47ce",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3527,6 +3530,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4838,11 +4842,12 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/devtool/claude/devtool-docs-audit/SKILL.md",
-      "content_sha256": "2ed45d52dd340d468780dc4276af6f8640743d0b1ede022ead4085c6fa7af1f2",
+      "content_sha256": "02c4f0f62614e7ff49dd8d06690b1fe959554426f426c93c4d6f3ecadd90133f",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/devtool-docs-audit",
       "deck_memberships": [
@@ -5010,11 +5015,12 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/devtool/codex/devtool-docs-audit/SKILL.md",
-      "content_sha256": "9e0f996048d17486c16d6e1bde816fe8d28d23b00ce8c5626a19e4bfcdac80b9",
+      "content_sha256": "174d0fd3711b89b6e8f3e2a04d4b18b0cd02975c9c33cd10211f03db4ec81f13",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$devtool-docs-audit",
       "deck_memberships": [

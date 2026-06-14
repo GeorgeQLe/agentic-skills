@@ -1,3 +1,37 @@
+## Current Implementation - Documentation Drift Remediation
+
+### Goal
+
+Patch all P1 and P2 drift identified by `alignment/devtool-docs-audit-docs-drift-inventory.html` after approval gates selected a single remediation pass.
+
+### Scope
+
+- `packs/devtool/{codex,claude}/devtool-docs-audit/SKILL.md` and installed Codex copy where present
+- High-visibility business pack naming docs: `README.md`, `docs/QUICKSTART.md`, and `docs/packs.md`
+- Pattern A routing contract in `docs/skill-next-step-contracts.md`
+- Pre-prototype artifact path wording in `docs/canonical-workflow-report.md`
+- npm package identity wording in `docs/skillpacks-npm-distribution.md`
+- Task docs, prompt history, verification notes, and any generated package/installed skill surfaces needed for parity
+
+### Plan
+
+1. Capture the visible approval prompt and record this remediation plan in task tracking.
+2. Patch the missing `devtool-docs-audit` next-skill routing reference across source mirrors and active installed copies.
+3. Standardize current business pack docs on canonical `business-research`, retaining `business-discovery` only as a compatibility alias, and include `customer-lifecycle` in business-app compatibility expansion.
+4. Update Pattern A positioning route docs to use the Research Session Loop rather than `tasks/todo.md` plus `/exec`.
+5. Update P2 docs for current `design/` pre-prototype artifacts and current npm package identity, keeping historical planning text clearly labeled where retained.
+6. Run focused scans plus repository hygiene/version/mirror verification.
+7. Commit and push the verified remediation.
+
+### Acceptance Criteria
+
+- No active current docs present `business-discovery` as the canonical business pack name.
+- The `devtool-docs-audit` skill no longer references a missing local section.
+- Pattern A positioning framework rows route through the Research Session Loop.
+- Current workflow docs distinguish `design/` pre-prototype artifacts from finalized `specs/` implementation specs.
+- The npm distribution doc consistently presents `skillpacks` as primary and `@glexcorp/gskp` as the scoped alias.
+- Verification output is recorded in `tasks/todo.md`.
+
 ## Current Implementation - Documentation Drift Inventory
 
 ### Goal

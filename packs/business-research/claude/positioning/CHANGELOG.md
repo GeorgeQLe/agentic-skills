@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18 - 2026-06-14
+
+- Replaced framework-selection `tasks/todo.md` + `/exec` routing with the Research Session Loop run-manifest model.
+
 ## v0.17 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

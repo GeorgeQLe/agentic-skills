@@ -38,7 +38,7 @@ The initial user experience should be:
 
 ```bash
 npx skillpacks init
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install-deck vard
 npx skillpacks status
 npx skillpacks doctor
@@ -59,7 +59,7 @@ Source-checkout users install base skills project-local the same way and keep us
 
 ```bash
 npx skillpacks init
-scripts/pack.sh install business-discovery
+scripts/pack.sh install business-research
 scripts/pack.sh refresh
 ```
 
@@ -69,7 +69,7 @@ Scoped alias examples are equivalent at the same package version:
 
 ```bash
 npx @glexcorp/gskp init
-npx @glexcorp/gskp install business-discovery
+npx @glexcorp/gskp install business-research
 ```
 
 ## Design Principles
@@ -230,12 +230,12 @@ Supported deck metadata:
 
 | Deck | CLI command | Package-list meaning | Registry tags |
 | --- | --- | --- | --- |
-| VARD | `gskp install-deck vard` | `vard` | `deck:vard` |
-| ORD | `gskp install-deck ord` | `ord` | `deck:ord` |
-| Business AFPS | `gskp install-deck business-afps` | `business-discovery` by default | `deck:business-afps`, `stage:discovery` |
-| Business AFPS full | `gskp install-deck business-afps --full` | `business-discovery`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
-| Devtool AFPS | `gskp install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
-| Game AFPS | `gskp install-deck game-afps` | `game` | `deck:game-afps` |
+| VARD | `skillpacks install-deck vard` | `vard` | `deck:vard` |
+| ORD | `skillpacks install-deck ord` | `ord` | `deck:ord` |
+| Business AFPS | `skillpacks install-deck business-afps` | `business-research` by default | `deck:business-afps`, `stage:discovery` |
+| Business AFPS full | `skillpacks install-deck business-afps --full` | `business-research`, `customer-lifecycle`, `business-growth`, `business-ops` | `deck:business-afps`, `lane:full` |
+| Devtool AFPS | `skillpacks install-deck devtool-afps` | `devtool` | `deck:devtool-afps` |
+| Game AFPS | `skillpacks install-deck game-afps` | `game` | `deck:game-afps` |
 
 Business AFPS defaults to the first deliberate pack because current docs recommend progressive installation. The `--full` flag can exist for users who intentionally want the whole deliberate lane.
 
@@ -248,7 +248,7 @@ Implementation rule:
 - In COA B, the resolver can install or recommend scoped package lists such as `@gskp/vard`.
 - In COA C, the resolver can query skills by registry tags such as `deck:vard`.
 
-The CLI command stays `gskp install-deck <deck>` so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
+The deck command stays `install-deck <deck>` in both published binaries (`skillpacks` and `gskp`) so users do not need to know whether a deck is backed by a monolith, scoped package list, or registry query.
 
 ## Manifest Design
 
@@ -272,8 +272,8 @@ Proposed shape:
   },
   "packs": [
     {
-      "name": "business-discovery",
-      "path": "packs/business-discovery",
+      "name": "business-research",
+      "path": "packs/business-research",
       "status": "active",
       "tools": ["claude", "codex"],
       "skills": ["customer-discovery", "competitive-analysis"]
@@ -282,10 +282,10 @@ Proposed shape:
   "skills": [
     {
       "name": "customer-discovery",
-      "pack": "business-discovery",
+      "pack": "business-research",
       "tool": "codex",
       "version": "v1.0",
-      "path": "packs/business-discovery/codex/customer-discovery/SKILL.md",
+      "path": "packs/business-research/codex/customer-discovery/SKILL.md",
       "content_sha": "<sha256>",
       "archive_versions": ["v0.11"],
       "decks": ["business-afps"]
@@ -297,8 +297,8 @@ Proposed shape:
       "label": "Business AFPS",
       "tempo": "deliberate",
       "domain": "business",
-      "default_packs": ["business-discovery"],
-      "full_packs": ["business-discovery", "customer-lifecycle", "business-growth", "business-ops"]
+      "default_packs": ["business-research"],
+      "full_packs": ["business-research", "customer-lifecycle", "business-growth", "business-ops"]
     },
     {
       "name": "game-afps",
@@ -334,7 +334,7 @@ The approved granularity is skill-level, so skill frontmatter remains the user-f
 User examples:
 
 ```bash
-npx skillpacks@0.1.0 install business-discovery
+npx skillpacks@0.1.0 install business-research
 npx skillpacks pin devtool-adoption v0.0
 npx skillpacks doctor
 ```
@@ -530,7 +530,7 @@ Tasks:
 Exit criteria:
 
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck vard` installs the `vard` pack in a temp repo.
-- `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps` installs only `business-discovery`.
+- `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps` installs only `business-research`.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck business-afps --full` installs the full deliberate lane.
 - `node packages/skillpacks/bin/skillpacks.mjs install-deck game-afps` installs the `game` pack.
 - `packages/skillpacks/dist/skillpacks-manifest.json` exposes deck package-list and registry-tag metadata.
@@ -656,28 +656,28 @@ npx skillpacks@latest doctor
 
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
-| `gskp` package or scope cannot be claimed | Blocks approved public name | Resolve in phase 0 before implementation. |
+| `@glexcorp/gskp` scoped alias cannot be claimed | Blocks the approved scoped alias | Keep `skillpacks` as the primary package and resolve scoped alias access before dual publish. |
 | npm package accidentally includes task/history/prompt artifacts | Bloated or sensitive package | Use `files` whitelist plus `npm pack --dry-run` validation. |
 | `pack.sh` assumes a git checkout | npm install breaks | Run it from the packaged script path and add temp-repo tests. |
-| `jq` is missing | Shell-backed write paths fail | Node-owned `gskp` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization. |
+| `jq` is missing | Shell-backed write paths fail | Node-owned `skillpacks` project commands no longer require `jq`; keep `jq` documented for git-checkout `scripts/pack.sh` write commands and shell-backed deck materialization. |
 | Skill-level pinning needs archives omitted from tarball | Pins break | Include skill-local `archive/**` while excluding repo-wide docs history. |
 | Existing git-checkout users regress | Adoption risk | Keep `pack.sh` unchanged until Node parity is proven; base init is Node-owned and project-local via `npx skillpacks init`. |
-| CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `gskp` as the only npm package and bin name. |
+| CLI name conflicts with installed external `agentic-skills` package | User confusion | Use `skillpacks` as the primary npm package and keep `@glexcorp/gskp` as a scoped alias with the same binaries. |
 
 ## Open Questions
 
-These should be answered before first publish, not before starting phase 1:
+Historical planning questions from before the first publish:
 
-- Is `gskp` the final npm package owner identity, or should the public package be `@gskp/cli` after an organization is created?
+- The current decision is `skillpacks` as the primary package with `@glexcorp/gskp` as a scoped alias.
 - Should `install-deck` remain a hybrid shell materialization path for the first public package, or should deck installation move fully to Node before publish?
 - Should hibernated packs be excluded from the npm tarball entirely or included only to preserve explicit error messages?
 - Should package releases use `0.x` until several real consumer installs pass?
 
 ## Recommended Next Step
 
-Start with Phase 0 and Phase 1 in one implementation pass:
+Historical phase-start recommendation from before the first publish:
 
-1. Confirm publish rights for `gskp`.
+1. Confirm publish rights for `skillpacks` and `@glexcorp/gskp`.
 2. Add workspace package metadata and a thin CLI wrapper under `packages/skillpacks`.
 3. Prove one temp-repo install from the wrapper.
 4. Add deck metadata and the manifest resolver only after the wrapper is stable.
