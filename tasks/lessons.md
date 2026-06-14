@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-13 — Research/prototype routing must not jump to roadmap
+
+- A product-design route fix added the prototype build-plan synthesis step but left `ui-interview` able to recommend `agent-work-admin`/`roadmap` after approved UI branch work.
+- During AFPS research and prototyping, completed UI branch decisions should route to `user-flow-map --prototype-build-plan [topic]`, then `prototype`, UAT/evaluation, consolidation, and post-prototype spec work before roadmap sequencing.
+- When adding an intermediate artifact to a skill route, update the producer skill's final handoff and add a regression assertion for the exact next command, not just broad route-contract docs.
+
 ## 2026-06-12 — Prefer `$pack install` when the project-local skillpacks CLI is unavailable
 
 - I recommended `npx skillpacks install guided-walkthrough` after shipping, but the user’s shell returned `sh: skillpacks: command not found`.

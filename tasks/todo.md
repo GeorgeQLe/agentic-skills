@@ -1,3 +1,30 @@
+## Current Implementation - Product Design Prototype Routing Cleanup
+
+### Current Checklist
+
+- [x] Record the remediation plan in task docs.
+- [x] Archive and bump mirrored `ui-interview` skill contracts.
+- [x] Patch `ui-interview` to route completed branch sets to `user-flow-map --prototype-build-plan [topic]`.
+- [x] Refresh active `.codex/skills/` copies for affected skills.
+- [x] Add focused regression assertions for the post-`ui-interview` handoff.
+- [x] Run validation and hygiene checks.
+- [x] Commit and push the verified fix.
+
+### Review Notes
+
+- User correction: roadmap routing is wrong in the research/prototyping segment; prototype work should go through the build-plan synthesis step instead.
+- Updated source and refreshed managed local skill roots so `.codex/skills/user-flow-map` includes `--prototype-build-plan` and `.codex/skills/ui-interview` points completed branch sets to it.
+- Focused validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+- Route/reference and generated-data validation passed:
+  - `bash scripts/skill-deps.sh --broken`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir apps/skills-showcase validate:data` after generated data refresh
+  - `git diff --check`
+
 ## Current Implementation - Dual npm Publish Automation
 
 ### Current Checklist

@@ -1,3 +1,34 @@
+## Current Implementation - Product Design Prototype Routing Cleanup
+
+### Goal
+
+Remove premature roadmap/agent-work-admin routing from the research/prototyping portion of the product-design route, and make the post-`ui-interview` handoff explicitly synthesize the prototype build plan before `$prototype`.
+
+### Scope
+
+- `packs/product-design/{codex,claude}/ui-interview/SKILL.md`
+- Active Codex installed copies under `.codex/skills/` for affected product-design skills
+- Product-design changelogs and archives for versioned behavior changes
+- Focused layer1 route coverage
+- `tasks/lessons.md`, `tasks/todo.md`, and task review notes
+
+### Plan
+
+1. Record this remediation plan in task docs.
+2. Archive current mirrored `ui-interview` contracts before bumping behavior.
+3. Update mirrored `ui-interview` routing so branch completion never routes to `agent-work-admin` or `roadmap` during research/prototype work.
+4. Route completed UI branch sets to `user-flow-map --prototype-build-plan [topic]`; continue to `ui-interview` or `ux-variations` only when unresolved branches remain.
+5. Refresh active `.codex/skills/` copies so the current Codex session can see `user-flow-map --prototype-build-plan`.
+6. Add regression coverage that fails if `ui-interview` keeps the old roadmap handoff.
+7. Run focused validation, hygiene checks, then commit and push.
+
+### Acceptance Criteria
+
+- `ui-interview` routes approved design-tree completion to `user-flow-map --prototype-build-plan [topic]`, not `roadmap`.
+- `ui-interview` does not recommend installing `agent-work-admin` during the product-design research/prototype handoff.
+- Active `.codex/skills/user-flow-map` includes `--prototype-build-plan`.
+- Layer1 coverage checks the exact post-`ui-interview` synthesis route.
+
 ## Current Implementation - Dual npm Publish Automation
 
 ### Goal

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.21 - 2026-06-13
+
+- Removed premature `agent-work-admin`/`roadmap` handoff guidance from the research/prototype phase.
+- Routed completed UI branch sets to `$user-flow-map --prototype-build-plan [topic]` so prototype work uses the explicit build-plan synthesis ledger before `$prototype`.
+
 ## v0.20 - 2026-06-13
 
 - Moved confirmed pre-prototype UI branch packets, requirements-only packets, and interview logs from `specs/` to `design/`.

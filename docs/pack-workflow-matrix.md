@@ -44,7 +44,7 @@ Business app:
 business-research -> customer-lifecycle -> business-growth -> business-ops
 ```
 
-Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
+Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`.
 
 Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only as explicit bounded detours when a fixed content/data/action contract and layout-only alternatives are needed.
 

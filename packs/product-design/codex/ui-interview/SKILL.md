@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.20
+version: v0.21
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 context_intake: deep
 visual_tier: prototype
@@ -99,7 +99,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
      2. Design a proposed UI for that branch and display a visual mockup in HTML. The mockup may be static or lightly interactive, but it must be concrete enough for the user to judge layout, hierarchy, controls, copy, state treatment, and branch viability.
      3. Interview the user for alignment over the UI for this UX variation experiment. If the visual mockup is off-base, collect focused feedback, revise the proposal/mockup, and ask again instead of treating the first mockup as final.
      4. Record whether this branch of the user flow is approved, rejected, or needs another iteration, then route to the next unresolved UX variation or user flow as needed.
-   - The branch decision is separate from implementation approval. Approval means the UI direction is a valid branch of the wireframe tree; implementation work still follows the project roadmap/shipping contract.
+   - The branch decision is separate from implementation approval. Approval means the UI direction is a valid branch of the wireframe tree; implementation sequencing remains blocked until prototype build-plan synthesis, prototype evaluation, consolidation, and post-prototype specification work are complete.
 
 5. **Interview page by page**
    - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same page or interface decision, not to batch unrelated questions.
@@ -123,7 +123,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm. Deliver the manifest per the inline visibility rule in step 3 (turn-final message text of its own turn; confirmation question in the next turn), never as mid-turn text only.
    - This manifest confirmation is non-final: it only confirms the requirements draft is ready for the pre-approval lifecycle in step 9. Route all writes through that lifecycle — working packet at `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active), then a `review`-state `alignment/ui-interview-{topic}.html` page rendering the Content Requirements Manifest as the candidate/verdict gate, then final compiled YAML approval.
    - Only after final compiled YAML approval, write `design/ui-requirements-[topic].md` and `design/ui-requirements-[topic]-interview.md` in flat mode or product-path-scoped equivalents, update the scoped flow-tree manifest, archive the working packet, and convert the page to `confirmed` per step 9.
-   - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
+   - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ui-interview` without the flag to evaluate a concrete UX variation branch, `$ux-variations --layout-mode` only when this requirements-only detour intentionally needs layout alternatives, or `$user-flow-map --prototype-build-plan [topic]` only when all target UI branch decisions already exist. Do not route requirements-only work to `$roadmap` or `agent-work-admin`.
    - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
    - Stop. Do not continue to step 6 or beyond; the pre-approval lifecycle in step 9 and the requirements deliverables above are the only remaining work in this mode.
 
@@ -204,7 +204,7 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the approved branch is ready to sequence into implementation work.
+Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
 
 ### Alignment Page
 

@@ -129,8 +129,10 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(userFlow).toContain(`${sigil}user-flow-map`);
       expect(userFlow).toContain(`${sigil}ux-variations [specific-user-flow]`);
       expect(uxVariations).toContain(`${sigil}ui-interview [specific-ux-variation]`);
+      expect(uiInterview).toContain(`${sigil}user-flow-map --prototype-build-plan [topic]`);
       expect(uiInterview).toContain("route based on the branch decision");
-      expect(uiInterview).toContain("approved branch is ready to sequence into implementation work");
+      expect(uiInterview).toContain("prototype build ledger");
+      expect(uiInterview).not.toContain(`recommend ${sigil}roadmap`);
     }
   });
 });
