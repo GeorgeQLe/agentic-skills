@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.6
+version: v1.5
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -50,8 +50,6 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-**How this maps onto the Research Session Loop.** This orchestrator runs as a self-advancing loop (see Execution Model below and `docs/research-session-loop-convention.md`): each approval stop above is a **session boundary** — the agent stops, the user reviews and compiles YAML, then starts a fresh Codex session and re-invokes `$customer-discovery` to continue. The multi-select framework page is the single scope-and-candidate approval gate (Stage 1) for the whole selected set; synthesis has its own `review` page. When the loop runs a framework subskill inline (state C), that multi-select approval already satisfies the framework's Stage-1 scope gate, so the framework **enters at its research stage (Stage 2)** and produces exactly one findings `review` page — one approval gate per framework. Standalone (non-loop) invocation of a framework subskill still runs its full two-stage workflow.
-
 ## Evidence And Feedback Handling
 
 Treat user feedback as input to evaluate, not as automatic ground truth.
@@ -69,46 +67,23 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
   - Specs, README/CLAUDE, and relevant source files for product context
   - `research/customer-feedback.md` — real customer evidence (triggers product-exists mode)
 
-## Execution Model — Research Session Loop
+## Operational Modes
 
-This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by starting a fresh Codex session and re-invoking `$customer-discovery`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+### Mode A: Candidate Bootstrap + Framework Selection (default first invocation)
 
-State lives in two places only:
+Activated by: `$customer-discovery` or `$customer-discovery [concept/idea]` (no special flags).
 
-- **Run manifest** — `research/_working/customer-discovery-run.yaml` (flat) or `research/{slug}/_working/customer-discovery-run.yaml` (product-path). Records the selected framework set and each framework's intermediate path. Written when the multi-select YAML is approved. Shape:
+### Mode B: Synthesis
 
-  ```yaml
-  orchestrator: customer-discovery
-  slug: skills-showcase            # omit in flat mode
-  selected_frameworks:
-    - slug: w3-hypothesis
-      intermediate: research/skills-showcase/customer-discovery-w3-hypothesis.md
-    - slug: jtbd-needs
-      intermediate: research/skills-showcase/customer-discovery-jtbd-needs.md
-  ```
+Activated by: `$customer-discovery --synthesize`
 
-- **Canonical-intermediate existence** — a selected framework is *done* when `research/customer-discovery-{framework}.md` (or `research/{slug}/customer-discovery-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status.
+### Mode C: Discovery Shortcut
 
-`research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
+Activated by: `$customer-discovery discovery`
 
-### State resolution (resolve the first match; YAML first, then most-progressed A→F)
+### Mode D: Validation Shortcut
 
-On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
-
-| State | Detected when | Heavy phase this session | Emits / stops with |
-|---|---|---|---|
-| **0 — pasted YAML** | a compiled alignment YAML is pasted | branch on `approval_status`: `ready-for-agent-review` → apply the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then fall through to the next pending state below; `not-approved` → amend the named page (refinement session) and stop | amended page, or proceeds ↓ |
-| **A — done** | canonical `research/icp.md` (or `research/{slug}/icp.md`) exists | — | done; emit next-skill route (step 9) |
-| **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `icp.md` (also forced by `--synthesize`) | **synthesis** (step 6) | synthesis `review` page |
-| **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 5b) | that framework's findings `review` page |
-| **E — build selection** | preliminary interview handoff exists, no run manifest, no multi-select page | mode detect → candidate bootstrap → build multi-select page (steps 1–5a) | multi-select `review` page |
-| **F — interview** | nothing yet (no handoff, no manifest) | deep interview (`context_intake: deep`) | preliminary interview handoff, stop |
-
-**State F handoff.** When the deep interview completes, write the preliminary interview handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) and **stop** — do not bootstrap candidates or build the multi-select page in the interview session. The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with evidence), context summary, recommended framework subset with rationale, and all user answers that shape candidate generation and framework selection.
-
-**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session and do not get their own round-trip. The heavy phase (interview, one framework's research, synthesis) is the only thing isolated per session.
-
-**Shortcuts.** `$customer-discovery discovery` and `$customer-discovery validate` short-circuit states E→C: they write a fixed framework set straight into the run manifest after the user approves the shortcut plan, then enter state C (steps 7–8).
+Activated by: `$customer-discovery validate`
 
 ---
 
@@ -132,7 +107,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### 1. Mode Detection
 
-Runs in **state E** (the build-selection session, after reading the interview handoff). Detect **pre-product mode** (default) or **product-exists mode**:
+Detect **pre-product mode** (default) or **product-exists mode**:
 
 **Pre-product mode** activates when:
 - No production codebase with live users detected, AND
@@ -183,7 +158,7 @@ Before identifying ICP candidates, resolve market-structure side coverage:
 
 ### 4. Candidate Bootstrapping
 
-This step runs in **state E** only (skipped when `research/icp.md` already exists and user chooses to refine).
+This step runs in Mode A only (skipped when `research/icp.md` already exists and user chooses to refine).
 
 **Broad market research** using web search with **8–12 diverse query strategies** (direct persona, pain point, market segment, trend, competitor user, forum/community, job posting, industry report, switching trigger, adjacent market, geographic/regulatory, business model, WTP signal, named account searches).
 
@@ -195,27 +170,28 @@ Write candidates to `research/_working/preliminary-customer-discovery-research.m
 
 **Checkpoint — Present candidates to the user.** Show ICP candidates with evidence. Ask for corrections and missing segments. Incorporate feedback before framework selection.
 
-### 5a. State E — Build Framework Multi-Select Page
+### 5. Mode A — Framework Selection
 
-Build the framework multi-select `review` alignment page with mode explanation, ICP candidates summary, available evidence, multi-select framework section (with mode-appropriate defaults pre-checked), a loop explanation (the selected set is the scope-and-candidate approval gate; each selected framework is then run inline, one findings page per framework, and the run advances by re-invoking `$customer-discovery`), and the approval gate.
+Build an alignment page with mode explanation, ICP candidates summary, available evidence, multi-select framework section (with mode-appropriate defaults pre-checked), execution plan explanation, and approval gate.
 
-This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
+After user approval, write selected frameworks as sequential steps in `tasks/todo.md`:
 
-### 5b. State C — Run Next Pending Framework (inline)
+```markdown
+## Customer Discovery Framework Execution
 
-This session consumes the approved multi-select YAML (state 0→C) or advances after a prior framework's approval. At the **head** of the session, do the light bookkeeping first:
+- [ ] Run `$customer-discovery/frameworks/w3-hypothesis` — Schwartzfarb W3 hypothesis
+- [ ] Run `$customer-discovery/frameworks/jtbd-needs` — JTBD needs analysis
+- [ ] Run `$customer-discovery/frameworks/four-forces` — Moesta four forces
+- [ ] Synthesize: `$customer-discovery --synthesize` — Combine framework outputs into research/icp.md
+```
 
-1. **Write/append the run manifest** if it does not yet exist: `research/_working/customer-discovery-run.yaml` (flat) or `research/{slug}/_working/customer-discovery-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
-2. **Archive the preliminary interview handoff** at this selection-commit point (move it under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`). A rejected multi-select page must still rebuild from the handoff, so do not archive it earlier.
-3. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/customer-discovery-{fw}.md` (or `research/{slug}/customer-discovery-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
+Only include frameworks the user selected. Always append the synthesis step last.
 
-Then run the **one heavy phase**: determine the next pending framework (first selected framework whose canonical intermediate does not yet exist), then **load and follow that framework subskill's `SKILL.md` inline, entering at its research stage (Stage 2)** — the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the research, write its working packet, and build a single findings `review` page. Stop for that framework's compiled YAML.
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
-**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `$customer-discovery` and tell the user to start a fresh Codex session and re-invoke, reporting progress as "k of N frameworks complete". Do not emit cross-skill routing here — that happens only after synthesis (step 9).
+### 6. Mode B — Synthesis (`$customer-discovery --synthesize`)
 
-### 6. State B — Synthesis (auto-detected; also `$customer-discovery --synthesize`)
-
-Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/icp.md` yet exists. An explicit `$customer-discovery --synthesize` also forces this state. Read all intermediate framework outputs (`research/customer-discovery-{slug}.md`). At least one must exist.
+Read all intermediate framework outputs (`research/customer-discovery-{slug}.md`). At least one must exist.
 
 **Synthesis mapping** — how framework outputs merge into the canonical 9+1 section format:
 
@@ -234,15 +210,36 @@ Enter synthesis when the run manifest exists, **all** selected framework interme
 
 **Cross-ICP handling**: Merge per-candidate evidence across frameworks, select primary ICP using seven-dimensions scoring (or value × accessibility matrix), populate Additional ICPs and Cross-ICP Analysis sections.
 
-Build alignment page for synthesis approval. After approval: write `research/icp.md` and `research/icp-search-log.md`, then on this canonical write **archive the run manifest** (`customer-discovery-run.yaml`) and synthesis working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, **update `research/.progress.yaml`** `pipeline_stage` to `customer-discovery`, and emit the downstream next-step routing (step 9).
+Build alignment page for synthesis approval. After approval: write `research/icp.md` and `research/icp-search-log.md`, then emit next-step routing.
 
-### 7. State C via Discovery Shortcut (`$customer-discovery discovery`)
+### 7. Mode C — Discovery Shortcut (`$customer-discovery discovery`)
 
-Pre-product shortcut — short-circuits states E→C with a fixed framework set (`w3-hypothesis`, `jtbd-needs`, `four-forces`). Build a `review` alignment page for the shortcut plan and require final compiled YAML approval. After approval, write the fixed framework set straight into the run manifest (`research/_working/customer-discovery-run.yaml` or the product-path equivalent), then enter **state C** and run framework 1 inline per step 5b. The loop advances by re-invoking `$customer-discovery`.
+Pre-product shortcut. Build alignment page, then after approval write to `tasks/todo.md`:
 
-### 8. State C via Validation Shortcut (`$customer-discovery validate`)
+```markdown
+## Customer Discovery Framework Execution
 
-Product-exists shortcut — short-circuits states E→C with a fixed framework set (`pmf-engine`, `seven-dimensions`). Build a `review` alignment page for the shortcut plan and require final compiled YAML approval. After approval, write the fixed framework set straight into the run manifest, then enter **state C** and run framework 1 inline per step 5b. The loop advances by re-invoking `$customer-discovery`.
+- [ ] Run `$customer-discovery/frameworks/w3-hypothesis` — Schwartzfarb W3 hypothesis
+- [ ] Run `$customer-discovery/frameworks/jtbd-needs` — JTBD needs analysis
+- [ ] Run `$customer-discovery/frameworks/four-forces` — Moesta four forces
+- [ ] Synthesize: `$customer-discovery --synthesize` — Write research/icp.md
+```
+
+Stop — user runs `$exec`.
+
+### 8. Mode D — Validation Shortcut (`$customer-discovery validate`)
+
+Product-exists shortcut. Build alignment page, then after approval write to `tasks/todo.md`:
+
+```markdown
+## Customer Discovery Framework Execution
+
+- [ ] Run `$customer-discovery/frameworks/pmf-engine` — Vohra PMF Engine + HXC
+- [ ] Run `$customer-discovery/frameworks/seven-dimensions` — Lincoln Murphy scoring
+- [ ] Synthesize: `$customer-discovery --synthesize` — Write research/icp.md
+```
+
+Stop — user runs `$exec`.
 
 ### 9. Next Steps (after synthesis only)
 
@@ -260,13 +257,9 @@ After writing, check existing downstream documents for conflicts. Classify as No
 
 ## Output
 
-### State E output: framework multi-select `review` page + working packet
+### Mode A output: `tasks/todo.md` update + working packet
 
-The run manifest `research/_working/customer-discovery-run.yaml` is written at the head of the first state-C session (on multi-select approval), not in state E.
-
-### State C output: per-framework findings `review` page + `research/customer-discovery-{framework}.md`
-
-### State B output (synthesis): `research/icp.md` (or `research/{slug}/icp.md`)
+### Mode B output: `research/icp.md` (or `research/{slug}/icp.md`)
 
 Canonical 9+1 section format preserved for downstream compatibility. See claude mirror for full template.
 
@@ -287,7 +280,7 @@ Product-path manifest updated when secondary ICPs create parked or promotable pa
 
 ## Constraints
 
-- **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It bootstraps candidates, builds the multi-select selection, runs each selected framework inline, and synthesizes. The run manifest records the selected framework set; progress is the existence of canonical intermediates. The loop advances by re-invoking `$customer-discovery` (fresh Codex session between sessions).
+- **Parent does not execute frameworks.** It bootstraps candidates, selects frameworks, and synthesizes. `$exec` handles framework execution.
 - **Synthesis requires at least one framework output.**
 - **Mode detection is evidence-based.**
 - **Stay in problem space.** No features, architecture, UI, or technical solutions.

@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.6 - 2026-06-14
+
+- Migrated the orchestrator to the Research Session Loop (`docs/research-session-loop-convention.md`): replaced the Mode A/B/C/D framing and the `tasks/todo.md` + `/exec` framework-queueing with a self-advancing session ladder (states F/E/C/B/A, YAML-first resolution).
+- Added the selected-set run manifest `research/_working/customer-discovery-run.yaml` as chunk state; framework progress is now derived from canonical-intermediate file existence.
+- State F (deep interview) now writes a preliminary interview handoff and stops; state E reads the handoff to detect mode, bootstrap candidates, and build the multi-select page.
+- One approval gate per framework: the multi-select approval satisfies each framework's Stage-1 scope gate, so the loop runs frameworks inline entering at their research stage (Stage 2).
+- Synthesis (state B) is auto-detected when all intermediates exist; on canonical write it archives the run manifest + working packet and updates `.progress.yaml`.
+- Routing between frameworks is self-re-invocation of `/customer-discovery`; cross-skill routing only after synthesis.
+
 ## v1.5 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

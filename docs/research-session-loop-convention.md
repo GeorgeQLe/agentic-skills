@@ -52,12 +52,16 @@ Because every session starts cold, mode detection must resolve purely from **pas
 | 0 | **Pasted compiled YAML present** | Branch on `approval_status`: `ready-for-agent-review` → apply approval for the gate it answers, then fall through to the next pending phase below. `not-approved` → **amend the named page** (this is a *refinement session*). | amended page, or proceeds ↓ |
 | A | Canonical `research/{orchestrator}.md` exists | — | done; emit next-skill route |
 | B | All selected framework intermediates exist, no canonical | **synthesize** | canonical-approval (`review`) page |
-| C | Selection recorded, ≥1 framework pending | **run next pending framework** (its full subskill staged flow, inline) | that framework's `review` page |
+| C | Selection recorded, ≥1 framework pending | **run next pending framework** — load its subskill inline and enter at its research stage (the multi-select approval already satisfied its scope gate) | that framework's `review` page |
 | D | Multi-select page in `review`, selection not yet recorded | — (waiting) | points user to the page |
 | E | Preliminary interview handoff exists, no multi-select page | build framework multi-select `review` page | multi-select page |
 | F | Nothing yet | run the deep interview | preliminary interview handoff |
 
 Resolution order is **YAML first, then most-progressed state backward** (A→F). "Pending framework" = a selected framework whose canonical intermediate file does not yet exist.
+
+### Framework approval granularity
+
+When the loop runs a framework inline (state C), the multi-select approval — recorded in the run manifest — **is** that framework's Stage-1 scope approval. The framework therefore enters at its **research stage** (Stage 2 of the staged research workflow): it performs the research and builds a single findings/artifact `review` page, instead of re-running its own scope gate first. The result is **one approval gate per framework** inside the loop — the multi-select page approves scope for the whole selected set, and each framework then produces exactly one findings page. Standalone (non-loop) invocation of a framework subskill is unchanged: invoked on its own, the subskill runs its full two-stage workflow, including its own scope gate.
 
 ### Worked example: `/customer-discovery`
 
