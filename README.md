@@ -40,6 +40,8 @@ cd ~/my-project
 ~/agentic-skills/scripts/pack.sh status
 ```
 
+**Maintainer dev-setup note.** To run the local `npx skillpacks` / `npx gskp` CLI from *inside* this monorepo checkout, run `pnpm install` once at the repo root first (this is a pnpm workspace — do **not** use `npm install`, which fails on the pnpm-managed `apps/skills-showcase`). The root `package.json` declares `skillpacks` as a `workspace:*` devDependency, so `pnpm install` links both the `skillpacks` and `gskp` bins into `node_modules/.bin`, pointing at the local `packages/skillpacks/bin/skillpacks.mjs`. Without it, the root `node_modules/.bin/` has no shims and `npx skillpacks` reports `gskp: not found`. The pure-bash `scripts/pack.sh <cmd>` route bypasses Node/pnpm entirely and needs no install — use it as the no-install fallback. (End users never hit any of this; they run `npx skillpacks` from their own project against the published package.)
+
 ### npm CLI
 
 With the published npm package, users can install from the current project directory without cloning this repository:

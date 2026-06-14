@@ -6,6 +6,9 @@
     "apps/skills-showcase",
     "packages/skillpacks"
   ],
+  "devDependencies": {
+    "skillpacks": "workspace:*"
+  },
   "scripts": {
     "skillpacks:build": "npm --workspace packages/skillpacks run build",
     "skillpacks:list": "npm --workspace packages/skillpacks run skillpacks:list",
