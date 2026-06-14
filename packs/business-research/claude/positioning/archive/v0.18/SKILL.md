@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.19
+version: v0.18
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -58,43 +58,26 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 ## Execution Model — Research Session Loop
 
-This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/positioning`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+This is a self-advancing Pattern A research orchestrator. Use `docs/research-session-loop-convention.md`: each invocation resolves state from pasted YAML plus filesystem, runs one heavy phase, emits the next review gate, and stops. Do not route framework selection through `tasks/todo.md` or `/exec`.
 
-State lives in two places only:
+State lives in:
 
-- **Run manifest** — `research/_working/positioning-run.yaml` (flat) or `research/{slug}/_working/positioning-run.yaml` (product-path). Records the selected framework set and each framework's intermediate path. Written when the multi-select YAML is approved. Shape:
+- `research/_working/positioning-run.yaml` or `research/{slug}/_working/positioning-run.yaml`, written after approved framework selection and containing selected framework slugs plus canonical intermediate paths.
+- Canonical intermediate existence: a framework is complete when `research/positioning-{framework}.md` or `research/{slug}/positioning-{framework}.md` exists.
 
-  ```yaml
-  orchestrator: positioning
-  slug: skills-showcase            # omit in flat mode
-  selected_frameworks:
-    - slug: jtbd-positioning
-      intermediate: research/skills-showcase/positioning-jtbd-positioning.md
-    - slug: strategic-canvas
-      intermediate: research/skills-showcase/positioning-strategic-canvas.md
-  ```
+### Operational Modes
 
-- **Canonical-intermediate existence** — a selected framework is *done* when `research/positioning-{framework}.md` (or `research/{slug}/positioning-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status.
+### Mode A: Framework Selection (default first invocation)
 
-`research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
+Activated by: `/positioning` or `/positioning [focus area]` (no special flags).
 
-### State resolution (resolve the first match; YAML first, then most-progressed A→E)
+### Mode B: Synthesis
 
-On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
+Activated by: `/positioning --synthesize`
 
-| State | Detected when | Heavy phase this session | Emits / stops with |
-|---|---|---|---|
-| **0 — pasted YAML** | a compiled alignment YAML is pasted | branch on `approval_status`: `ready-for-agent-review` → apply the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then fall through to the next pending state below; `not-approved` → amend the named page (refinement session) and stop | amended page, or proceeds ↓ |
-| **A — done** | canonical `research/positioning.md` (or `research/{slug}/positioning.md`) exists | — | done; emit next-skill route (step 6) |
-| **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `positioning.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
-| **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3b) | that framework's findings `review` page |
-| **E — build selection** | no run manifest and no canonical (cold start) | mode detect → load context → recommend frameworks → build multi-select page (steps 1–3a) | multi-select `review` page |
+### Mode C: Product-Positioning Shortcut
 
-**Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk, after the hard `research/icp.md` + `research/competitive-analysis.md` prerequisites are satisfied) resolves directly to **state E**; the 1–3 light scope questions in Context Gathering fold into the head of the E session. The `product`/`post-launch`/`obviously-awesome` shortcut short-circuits E→C with a fixed framework set (step 5).
-
-**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
-
-**Shortcuts.** `/positioning --synthesize` forces state B. `/positioning product` (also `post-launch`, `obviously-awesome`) is the product-positioning shortcut (step 5): after the user approves the shortcut plan, it writes a fixed single-framework set (`obviously-awesome`) into the run manifest and enters state C. Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
+Activated by: `/positioning product` or `/positioning post-launch` or `/positioning obviously-awesome`
 
 ---
 
@@ -147,9 +130,9 @@ Available frameworks in product mode:
 - Read CLAUDE.md, README for product context
 - Read any existing `research/positioning-*.md` intermediate artifacts (from prior runs)
 
-### 3a. State E — Framework Selection & Build Multi-Select Page
+### 3. Mode A — Framework Selection
 
-Build the framework multi-select `review` alignment page with:
+Build an alignment page with:
 
 1. **Mode explanation**: which mode was detected and why (evidence for detection)
 2. **Available evidence summary**: what research exists and what's missing
@@ -159,43 +142,32 @@ Build the framework multi-select `review` alignment page with:
    - Pre-checked defaults based on available evidence:
      - Market mode defaults: `jtbd-positioning` + `strategic-canvas` + `moore-positioning` pre-checked; `category-design` unchecked (recommended only when strategic canvas shows no existing category fits)
      - Product mode defaults: `obviously-awesome` pre-checked; `strategic-canvas` unchecked (optional refresh)
-4. **Loop plan explanation**: the selected set is the scope-and-candidate approval gate; each selected framework will then be run inline (one findings page per framework) and the run advances by re-invoking `/positioning`
+4. **Loop plan explanation**: selected frameworks will be recorded in the run manifest; each fresh `/positioning` invocation runs the next pending framework inline and stops for that framework's findings review
 5. **Approval gate**: framework selection confirmation
 
-This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
+After user approval via compiled YAML (which includes `selected_frameworks` list):
 
-### 3b. State C — Run Next Pending Framework (inline)
+Write selected frameworks to the run manifest:
 
-This session consumes the approved multi-select YAML (state 0→C) or advances after a prior framework's approval. At the **head** of the session, do the light bookkeeping first:
+```yaml
+orchestrator: positioning
+selected_frameworks:
+  - slug: jtbd-positioning
+    intermediate: research/positioning-jtbd-positioning.md
+  - slug: strategic-canvas
+    intermediate: research/positioning-strategic-canvas.md
+  - slug: moore-positioning
+    intermediate: research/positioning-moore-positioning.md
+```
 
-1. **Write the run manifest** if it does not yet exist: `research/_working/positioning-run.yaml` (flat) or `research/{slug}/_working/positioning-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected. Example (market mode):
+Only include selected frameworks. Then run the first pending framework inline at its research stage and stop with that framework's findings review page. On each later invocation, consume approved YAML for the previous framework, write its canonical intermediate, run the next pending framework, and stop. When all selected framework intermediates exist, synthesize.
 
-   ```yaml
-   orchestrator: positioning
-   selected_frameworks:
-     - slug: jtbd-positioning
-       intermediate: research/positioning-jtbd-positioning.md
-     - slug: strategic-canvas
-       intermediate: research/positioning-strategic-canvas.md
-     - slug: moore-positioning
-       intermediate: research/positioning-moore-positioning.md
-   ```
+### 4. Mode B — Synthesis (`/positioning --synthesize`)
 
-2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/positioning-{fw}.md` (or `research/{slug}/positioning-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
-
-Then run the **one heavy phase** for this session:
-
-3. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
-4. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
-
-**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `/positioning` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete". Do not emit cross-skill routing here — that happens only after synthesis (step 6).
-
-### 4. State B — Synthesis (auto-detected; also `/positioning --synthesize`)
-
-Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/positioning.md` yet exists. An explicit `/positioning --synthesize` also forces this state. Read all selected intermediate framework outputs (the `intermediate` paths recorded in the run manifest), e.g.:
-- `research/positioning-jtbd-positioning.md`
+Read all intermediate framework outputs:
+- `research/positioning-jtbd.md`
 - `research/positioning-strategic-canvas.md`
-- `research/positioning-moore-positioning.md`
+- `research/positioning-moore.md`
 - `research/positioning-category-design.md`
 - `research/positioning-obviously-awesome.md`
 
@@ -224,9 +196,9 @@ Build alignment page for synthesis approval with:
 - Proposed file changes gate
 - Approval gate
 
-After approval: write `research/positioning.md`, then on this canonical write **archive the run manifest** (`positioning-run.yaml`) and the synthesis working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, update `research/.progress.yaml` `pipeline_stage` to `positioning`, and emit the downstream next-step routing (step 6). This is the one place cross-orchestrator routing is allowed.
+After approval: write `research/positioning.md`, then emit next-step routing.
 
-### 5. State C via Product-Positioning Shortcut (`/positioning product`)
+### 5. Mode C — Product-Positioning Shortcut
 
 Skip multi-select. Build an alignment page for the shortcut execution plan with:
 
@@ -246,7 +218,7 @@ selected_frameworks:
     intermediate: research/positioning-obviously-awesome.md
 ```
 
-Then enter **state C** and run `obviously-awesome` inline per step 3b. The loop advances by re-invoking `/positioning`.
+Run `obviously-awesome` inline at its research stage and stop with the framework findings review page.
 
 ### 6. Next Steps (after synthesis only)
 
@@ -280,11 +252,11 @@ These detours are conditional framework owners, not required AFPS chain links. A
 
 ## Output
 
-### State E / State C output: run manifest plus per-framework findings review page
+### Mode A output: run manifest update plus next pending framework review page
 
-The state-E multi-select page; then, per state-C session, the run manifest `research/_working/positioning-run.yaml` (or `research/{slug}/_working/positioning-run.yaml`, written at the head of the first state-C session) plus the next pending framework's findings review page. One findings page per selected framework; the canonical intermediate `research/positioning-{framework}.md` is written on that framework's approval.
+Selected framework state in `research/_working/positioning-run.yaml` or `research/{slug}/_working/positioning-run.yaml`, plus the next pending framework's findings review page.
 
-### State B output (synthesis): `research/positioning.md` (or `research/{slug}/positioning.md`)
+### Mode B output: `research/positioning.md` (or `research/{slug}/positioning.md`)
 
 ```markdown
 # Positioning

@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.19 - 2026-06-14
+
+- Completed the Research Session Loop migration: replaced the `### Operational Modes` (Mode A/B/C) framing with the formal 0/A/B/C/E state-resolution table, matching the other research orchestrators.
+- Split framework selection into an explicit state-E build-multi-select-page-and-stop step and a state-C inline-run step, making the session boundary explicit (the manifest is written at the head of the first state-C session, not in state E).
+- Added state-0 pasted-YAML resolution and `not-approved` refinement-session handling.
+- Synthesis (state B) now archives the run manifest + working packet and updates `.progress.yaml` `pipeline_stage` on canonical write (previously only emitted routing).
+- Fixed the synthesis intermediate read-list to use the full framework-slug filenames (`positioning-jtbd-positioning.md`, `positioning-moore-positioning.md`) so they match the run-manifest `intermediate` paths and file-existence state detection.
+- Made the scoped cold entry explicit (no deep-interview state F — a cold start resolves directly to state E).
+
 ## v0.18 - 2026-06-14
 
 - Replaced framework-selection `tasks/todo.md` + `/exec` routing with the Research Session Loop run-manifest model.
