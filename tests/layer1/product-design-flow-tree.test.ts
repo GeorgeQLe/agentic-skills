@@ -25,6 +25,14 @@ describe("product-design flow tree artifact boundaries", () => {
     ]);
     expect(schema.properties.mode.enum).toEqual(["flat", "product-path"]);
     expect(schema.$defs.decision.properties.decision.enum).toEqual(["approve", "reject", "retry"]);
+    expect(schema.properties.prototype_build_plan.$ref).toBe("#/$defs/prototype_build_plan");
+    expect(schema.$defs.prototype_build_status.enum).toEqual([
+      "pending",
+      "built",
+      "needs-revision",
+      "deferred",
+      "dropped",
+    ]);
   });
 
   it("routes pre-prototype flow maps, UX variations, and UI branch packets through design artifacts", () => {
@@ -40,8 +48,10 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(userFlow).toContain("design/flow-tree-[topic].yaml");
       expect(userFlow).toContain("design/{slug}/flow-tree-[topic].yaml");
       expect(userFlow).toContain("design/user-flow-[topic].md");
+      expect(userFlow).toContain("design/prototype-build-plan-[topic].md");
       expect(userFlow).toContain(`${sigil}user-flow-map`);
       expect(userFlow).toContain(`${sigil}ux-variations [specific-user-flow]`);
+      expect(userFlow).toContain(`${sigil}user-flow-map --prototype-build-plan [topic]`);
       expect(userFlow).not.toContain("`specs/user-flow-[topic].md`");
 
       expect(uxVariations).toContain("design/flow-tree.schema.json");
@@ -62,7 +72,12 @@ describe("product-design flow tree artifact boundaries", () => {
 
       expect(prototype).toContain("design/ux-variations-[topic].md");
       expect(prototype).toContain("design/ui-[topic].md");
+      expect(prototype).toContain("design/prototype-build-plan-[topic].md");
       expect(prototype).toContain("design/**/flow-tree-*.yaml");
+      expect(prototype).toContain("pending");
+      expect(prototype).toContain("needs-revision");
+      expect(prototype).toContain("deferred");
+      expect(prototype).toContain("dropped");
       expect(prototype).toContain("prototypes/{topic}/variation-{N}/");
       expect(prototype).not.toContain("`specs/ux-variations-[topic].md`");
       expect(prototype).not.toContain("`specs/user-flow-[topic].md`");
@@ -101,7 +116,7 @@ describe("product-design flow tree artifact boundaries", () => {
 
   it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {
     const expectedRoute =
-      "user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
+      "user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
 
     expect(read("docs/skill-next-step-contracts.md")).toContain(expectedRoute);
 

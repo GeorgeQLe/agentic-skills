@@ -133,6 +133,40 @@ Move pre-prototype product-design artifacts from `specs/` into a dedicated `desi
 - `spec-interview` still writes finalized production implementation specs to `specs/`.
 - Claude and Codex product-design mirrors preserve `user-flow-map -> ux-variations -> ui-interview -> prototype -> consolidate-variations -> spec-interview`.
 
+## Current Implementation - Prototype Build Plan Ledger
+
+### Goal
+
+Add a pre-prototype synthesis artifact that turns approved user-flow, UX-variation, and UI-branch decisions into one build ledger for `$prototype`, so variation work can be tracked as pending, built, needs revision, deferred, or dropped.
+
+### Scope
+
+- `packs/product-design/{codex,claude}/user-flow-map/SKILL.md`
+- `packs/product-design/{codex,claude}/prototype/SKILL.md`
+- Product-design changelogs and archives for versioned behavior changes
+- `design/flow-tree.schema.json`
+- Focused layer1 product-design flow-tree tests
+- Prompt history and task review notes
+
+### Plan
+
+1. Capture visible prompt history for the invoked `user-flow-map` and `prototype` skills.
+2. Record this implementation plan in task docs.
+3. Archive active mirrored `user-flow-map` and `prototype` contracts before version bumps.
+4. Extend the flow-tree schema with prototype build-plan references and build-item statuses.
+5. Add a `user-flow-map` prototype-build synthesis mode that writes `design/prototype-build-plan-[topic].md` after branch decisions exist.
+6. Update `prototype` to require/read the build plan, build only planned items unless `--variant N` narrows the run, and update plan/manifest status after each item.
+7. Add focused regression coverage for the new build-plan contract.
+8. Run focused validation, hygiene checks, then commit and push the verified mutation set.
+
+### Acceptance Criteria
+
+- `user-flow-map` can synthesize a single prototype build-plan artifact from approved flow-tree branch state.
+- `prototype` consumes the build plan as its todo ledger and tracks statuses: pending, built, needs-revision, deferred, and dropped.
+- Dropped/deferred build items are not silently built.
+- The flow-tree manifest schema can reference prototype build-plan artifacts and per-item status.
+- Claude and Codex product-design mirrors stay route-equivalent.
+
 ## Current Investigation - Repository Boundary And Deploy Gating
 
 ### Goal

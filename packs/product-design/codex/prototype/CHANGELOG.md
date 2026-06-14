@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.15 - 2026-06-13
+
+- Added `design/prototype-build-plan-[topic].md` as the required prototype todo ledger produced by `$user-flow-map --prototype-build-plan`.
+- Updated prototype build behavior to build only pending/needs-revision items, skip deferred/dropped items, and update build-plan plus flow-tree status after each build.
+
 ## v0.14 - 2026-06-13
 
 - Moved prototype gates and source reads from pre-prototype `specs/` files to `design/` flow maps, UX variation plans, UI branch packets, and flow-tree manifests.

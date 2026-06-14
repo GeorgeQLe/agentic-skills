@@ -1,5 +1,10 @@
 # user-flow-map changelog (claude)
 
+## v0.7 - 2026-06-13
+
+- Added prototype-build-plan synthesis mode that reads approved flow-tree branch decisions and writes `design/prototype-build-plan-[topic].md` as the todo ledger for `/prototype`.
+- Extended flow-tree manifest guidance with `prototype_build_plan` item tracking for pending, built, needs-revision, deferred, and dropped prototype branches.
+
 ## v0.6 - 2026-06-13
 
 - Moved pre-prototype flow-map deliverables from `specs/` to `design/` and added scoped `design/**/flow-tree-*.yaml` initialization.

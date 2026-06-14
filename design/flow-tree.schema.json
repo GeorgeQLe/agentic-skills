@@ -74,6 +74,9 @@
       },
       "default": []
     },
+    "prototype_build_plan": {
+      "$ref": "#/$defs/prototype_build_plan"
+    },
     "last_updated": {
       "type": "string",
       "format": "date-time"
@@ -95,6 +98,78 @@
         "promoted-to-prototype",
         "consolidated"
       ]
+    },
+    "prototype_build_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "built",
+        "needs-revision",
+        "deferred",
+        "dropped"
+      ]
+    },
+    "prototype_build_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifacts", "items"],
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/prototype_build_item"
+          }
+        }
+      }
+    },
+    "prototype_build_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status", "user_flow_branch_id", "ux_variation_id", "ui_review_id", "artifacts"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/prototype_build_status"
+        },
+        "user_flow_branch_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "ux_variation_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "ui_review_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "prototype_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
     },
     "user_flow_branch": {
       "type": "object",

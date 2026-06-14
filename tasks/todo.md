@@ -156,6 +156,35 @@
 - Regression note: full layer1 initially failed on missing exact `ui-interview` provenance wording after the design-path rewrite. Patched mirrored `ui-interview` contracts to preserve the requirements-only manifest gate text, then reran the failing tests and full layer1 successfully.
 - Prompt note: captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260612-213808-ship-end.md` and included it in the ship boundary.
 
+## Current Implementation - Prototype Build Plan Ledger
+
+### Current Checklist
+
+- [x] Inspect current product-design contracts, route docs, schema, and layer1 coverage.
+- [x] Capture visible prompt history for the invoked skills.
+- [x] Record the implementation plan in task docs.
+- [x] Archive active mirrored skill contracts before version bumps.
+- [x] Add flow-tree schema support for prototype build-plan status.
+- [x] Update mirrored `user-flow-map` contracts with a prototype-build synthesis mode.
+- [x] Update mirrored `prototype` contracts to consume/update the build-plan ledger.
+- [x] Add focused layer1 regression coverage.
+- [x] Run verification, record review notes, commit, and push.
+
+### Review Notes
+
+- Initial finding: `prototype` currently treats `design/ux-variations-*` plus `design/ui-*` as an implicit todo list. It can build all variations or one `--variant N`, but it lacks a canonical artifact for pending/built/revision/deferred/dropped state.
+- Design decision: keep the ledger in `design/` as pre-prototype planning state and reference it from `design/**/flow-tree-*.yaml`; keep runnable output in `prototypes/`.
+- Implementation note: added `design/prototype-build-plan-[topic].md` as the explicit todo ledger synthesized by `user-flow-map --prototype-build-plan`, with flow-tree `prototype_build_plan.items[]` statuses `pending`, `built`, `needs-revision`, `deferred`, and `dropped`.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts`
+  - `git diff --check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir apps/skills-showcase validate:data`
+- Validation note: the first `validate:data` run failed in the sandbox with `spawnSync git EPERM`; rerunning with approved escalation refreshed generated showcase data. A follow-up run initially reported the generated files as stale while the working tree settled, and the final repeat `validate:data` passed as fresh.
+
 ## Current Investigation - Repository Boundary And Deploy Gating
 
 ### Current Checklist
