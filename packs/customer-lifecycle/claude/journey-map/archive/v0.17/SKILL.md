@@ -2,11 +2,9 @@
 name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: research
-version: v0.18
+version: v0.17
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator
-context_intake: scoped
-visual_tier: visual
 ---
 
 ## Pack Availability Guard
@@ -15,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Journey Map — Orchestrator
 
-This is an **orchestrator skill** using the parent router delegation pattern, running as a self-advancing **Research Session Loop** (see `docs/research-session-loop-convention.md` and the Execution Model below). It detects context, recommends applicable journey-mapping frameworks, runs each selected framework inline one per session, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
+This is an **orchestrator skill** using the parent router delegation pattern. It detects context, recommends applicable journey-mapping frameworks, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
 
 ## Report-First Approval Gate
 
@@ -45,45 +43,19 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
   - `research/customer-feedback.md` — real customer language
   - Specs, README/CLAUDE, and relevant source files for product context
 
-## Execution Model — Research Session Loop
+## Operational Modes
 
-This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/journey-map`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+### Mode A: Framework Selection (default first invocation)
 
-State lives in two places only:
+Activated by: `/journey-map` or `/journey-map [focus area]` (no special flags).
 
-- **Run manifest** — `research/_working/journey-map-run.yaml` (flat) or `research/{slug}/_working/journey-map-run.yaml` (product-path). Records the selected framework set and each framework's intermediate path. Written when the multi-select YAML is approved. Shape:
+### Mode B: Synthesis
 
-  ```yaml
-  orchestrator: journey-map
-  slug: skills-showcase            # omit in flat mode
-  selected_frameworks:
-    - slug: jtbd-timeline
-      intermediate: research/skills-showcase/journey-map-jtbd-timeline.md
-    - slug: experience-map
-      intermediate: research/skills-showcase/journey-map-experience-map.md
-  ```
+Activated by: `/journey-map --synthesize`
 
-- **Canonical-intermediate existence** — a selected framework is *done* when `research/journey-map-{framework}.md` (or `research/{slug}/journey-map-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status.
+### Mode C: Product-Exists Shortcut
 
-`research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
-
-### State resolution (resolve the first match; YAML first, then most-progressed A→E)
-
-On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
-
-| State | Detected when | Heavy phase this session | Emits / stops with |
-|---|---|---|---|
-| **0 — pasted YAML** | a compiled alignment YAML is pasted | branch on `approval_status`: `ready-for-agent-review` → apply the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then fall through to the next pending state below; `not-approved` → amend the named page (refinement session) and stop | amended page, or proceeds ↓ |
-| **A — done** | canonical `research/journey-map.md` (or `research/{slug}/journey-map.md`) exists | — | done; emit next-skill route (step 6) |
-| **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `journey-map.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
-| **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3b) | that framework's findings `review` page |
-| **E — build selection** | no run manifest and no canonical (cold start) | mode detect → load context → recommend frameworks → build multi-select page (steps 1–3a) | multi-select `review` page |
-
-**Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk, after the hard `research/icp.md` prerequisite is satisfied) resolves directly to **state E**; the `product` shortcut short-circuits E→C with a fixed framework set (step 5).
-
-**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
-
-**Shortcuts.** `/journey-map --synthesize` forces state B. `/journey-map product` is the product-exists shortcut (step 5): after the user approves the shortcut plan, it writes a fixed framework set (`service-blueprint`, `user-story-map`) into the run manifest and enters state C.
+Activated by: `/journey-map product`
 
 ---
 
@@ -141,9 +113,9 @@ Available frameworks in product-exists mode:
 - Read CLAUDE.md, README for product context
 - Read any existing `research/journey-map-*.md` intermediate artifacts (from prior runs)
 
-### 3a. State E — Framework Selection & Build Multi-Select Page
+### 3. Mode A — Framework Selection
 
-Build the framework multi-select `review` alignment page with:
+Build an alignment page with:
 
 1. **Mode explanation**: which mode was detected and why (evidence for detection)
 2. **Available evidence summary**: what research exists and what's missing
@@ -151,36 +123,26 @@ Build the framework multi-select `review` alignment page with:
    - Framework name and one-line description
    - Why it's recommended or optional for this context
    - Pre-checked defaults based on detected mode (see mode detection above)
-4. **Loop explanation**: the selected set is the scope-and-candidate approval gate; each selected framework will then be run inline (one findings page per framework) and the run advances by re-invoking `/journey-map`
+4. **Execution plan explanation**: selected frameworks will be written to `tasks/todo.md` for sequential `/exec` execution
 5. **Approval gate**: framework selection confirmation
 
-This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
+After user approval via compiled YAML (which includes `selected_frameworks` list):
 
-### 3b. State C — Run Next Pending Framework (inline)
+Write selected frameworks as sequential steps in `tasks/todo.md`:
 
-This session consumes the approved multi-select YAML (state 0→C) or advances after a prior framework's approval. At the **head** of the session, do the light bookkeeping first:
+```markdown
+## Journey Map Framework Execution
 
-1. **Write the run manifest** if it does not yet exist: `research/_working/journey-map-run.yaml` (flat) or `research/{slug}/_working/journey-map-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
-2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/journey-map-{fw}.md` (or `research/{slug}/journey-map-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
-
-Then run the **one heavy phase** for this session:
-
-3. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
-4. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
-
-**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `/journey-map` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
-
-```
-✔ Framework 1 (JTBD Timeline) findings ready for review.
-Next: review the page and compile YAML, then clear context and run  /journey-map
-(the next run writes this framework's intermediate and picks up the next pending framework automatically.)
+- [ ] Run `/journey-map/frameworks/jtbd-timeline` — JTBD switching timeline
+- [ ] Run `/journey-map/frameworks/experience-map` — Adaptive Path experience map
+- [ ] Synthesize: `/journey-map --synthesize` — Combine framework outputs into research/journey-map.md
 ```
 
-Do not emit cross-skill routing here — that happens only after synthesis (step 6).
+Only include frameworks the user selected. Always append the synthesis step last.
 
-### 4. State B — Synthesis (auto-detected; also `/journey-map --synthesize`)
+Stop after writing `tasks/todo.md`. The approved task artifact records the ordered framework execution and synthesis steps.
 
-Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/journey-map.md` yet exists. An explicit `/journey-map --synthesize` also forces this state.
+### 4. Mode B — Synthesis (`/journey-map --synthesize`)
 
 Read all intermediate framework outputs:
 - `research/journey-map-jtbd-timeline.md`
@@ -211,31 +173,30 @@ Build alignment page for synthesis approval with:
 - Proposed file changes gate
 - Approval gate
 
-After approval: write `research/journey-map.md`, then on this canonical write **archive the run manifest** (`journey-map-run.yaml`) and the synthesis working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, update `research/.progress.yaml` `pipeline_stage` to `journey-map`, and emit the downstream next-step routing (step 6). This is the one place cross-orchestrator routing is allowed.
+After approval: write `research/journey-map.md`, then emit next-step routing.
 
-### 5. State C via Product-Exists Shortcut (`/journey-map product`)
+### 5. Mode C — Product-Exists Shortcut
 
-Skip multi-select. Build a `review` alignment page for the shortcut plan with:
+Skip multi-select. Build an alignment page for the shortcut execution plan with:
 
-1. **Shortcut explanation**: product-exists shortcut selected and why `service-blueprint` + `user-story-map` are the fixed defaults
+1. **Shortcut explanation**: product-exists shortcut selected and why `service-blueprint` + `user-story-map` are the queued defaults
 2. **Evidence readiness**: available product/customer evidence and any caveats
-3. **Proposed framework set**: the fixed set that will be recorded in the run manifest
-4. **Approval gate**: require final compiled YAML approval before writing the run manifest
+3. **Proposed execution plan**: the exact `tasks/todo.md` framework queue shown below
+4. **Approval gate**: require final compiled YAML approval before writing `tasks/todo.md`
 
-Do not write the run manifest before alignment approval. The next action is review of the HTML alignment page.
+Do not write `tasks/todo.md` before alignment approval. The next action is review of the HTML alignment page.
 
-After user approval via final compiled YAML, write this fixed framework set straight into the run manifest (`research/_working/journey-map-run.yaml` or the product-path equivalent):
+After user approval via final compiled YAML, write this execution plan to `tasks/todo.md`:
 
-```yaml
-orchestrator: journey-map
-selected_frameworks:
-  - slug: service-blueprint
-    intermediate: research/journey-map-service-blueprint.md
-  - slug: user-story-map
-    intermediate: research/journey-map-user-story-map.md
+```markdown
+## Journey Map Framework Execution
+
+- [ ] Run `/journey-map/frameworks/service-blueprint` — Shostack service blueprint
+- [ ] Run `/journey-map/frameworks/user-story-map` — Jeff Patton user story map
+- [ ] Synthesize: `/journey-map --synthesize` — Write research/journey-map.md
 ```
 
-Then enter **state C** and run framework 1 inline per step 3b. The loop advances by re-invoking `/journey-map`.
+Stop; the approved task artifact is the routing contract.
 
 ### 6. Next Steps (after synthesis only)
 
@@ -268,15 +229,11 @@ These detours are conditional framework owners, not required AFPS chain links. U
 
 ## Output
 
-### State E output: framework multi-select `review` page + working packet
+### Mode A output: `tasks/todo.md` update
 
-The multi-select page (see step 3a). The run manifest `research/_working/journey-map-run.yaml` is written at the head of the first state-C session on approval, not in state E.
+Framework execution steps (see section 3 above).
 
-### State C output: per-framework findings `review` page + `research/journey-map-{framework}.md`
-
-One findings page per selected framework; the canonical intermediate is written on that framework's approval (see step 3b).
-
-### State B output (synthesis): `research/journey-map.md` (or `research/{slug}/journey-map.md`)
+### Mode B output: `research/journey-map.md` (or `research/{slug}/journey-map.md`)
 
 ```markdown
 # Journey Map
@@ -317,7 +274,7 @@ Before approval, the next action is review of `alignment/journey-map-{topic}.htm
 
 ## Constraints
 
-- **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It records the selected framework set in the run manifest, runs each selected framework inline, and synthesizes; progress is the existence of canonical intermediates. The loop advances by re-invoking `/journey-map` (clear context between sessions). Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
+- **Parent does not execute frameworks.** It selects and queues them. `/exec` handles execution.
 - **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
 - Ground every important step in ICP, research, specs, feedback, or codebase evidence.
