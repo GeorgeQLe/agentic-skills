@@ -1,3 +1,25 @@
+## Current Implementation - Root Agent Instruction Audit
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt and record the audit plan.
+- [x] Read `CLAUDE.md` and `AGENTS.md` with line numbers and identify generated sections.
+- [x] Compare Claude/Codex-specific content for necessity and redundancy.
+- [x] Write findings-first audit recommendations.
+- [x] Run verification and record review notes.
+
+### Review Notes
+
+- Starting point: working tree had no reported changes before this audit.
+- Skill context: `provision-agentic-config`, because the audit targets the generated root instruction blocks in `CLAUDE.md` and `AGENTS.md`.
+- Scope guard: this pass is an audit only. Root instruction policy changes should wait for a concrete user-approved reduction plan.
+- Audit report written to `tasks/root-agent-instruction-audit.md`.
+- Key findings: root files do not exactly reflect current `base/claude/provision-agentic-config` source wording; the provisioned block mixes universal workflow, repo-specific skill authoring, and environment troubleshooting; Windows/WSL detail is the clearest removal candidate from the root block.
+- Verification passed:
+  - `git diff --check`
+  - `rg -n "provision-agentic-config v0.13" CLAUDE.md AGENTS.md`
+  - artifact presence checks for `tasks/root-agent-instruction-audit.md` and the prompt-history log
+
 ## Current Implementation - Revision Hygiene Rule
 
 ### Current Checklist

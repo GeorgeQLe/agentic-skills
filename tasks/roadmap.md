@@ -1,3 +1,31 @@
+## Current Implementation - Root Agent Instruction Audit
+
+### Goal
+
+Audit every provisioned section of `CLAUDE.md` and `AGENTS.md` from `provision-agentic-config`, deciding what is necessary, redundant, agent-specific, contradictory, or removable before making any policy changes.
+
+### Scope
+
+- Root `CLAUDE.md` and `AGENTS.md`
+- Mirrored `provision-agentic-config` source contracts if the audit recommends future provisioning changes
+- Prompt history, task tracking, audit notes, verification, and shipping if tracked files are changed
+
+### Plan
+
+1. Capture the visible invocation prompt and record this audit plan.
+2. Read `CLAUDE.md` and `AGENTS.md` with line numbers and identify the generated/provisioned blocks.
+3. Compare Claude-specific and Codex-specific sections for duplication, agent mismatch, and current necessity.
+4. Produce a findings-first audit with keep/remove/merge/reword recommendations for each section.
+5. Verify prompt/task/audit artifacts and decide whether any policy edits should be made in a follow-up implementation pass.
+
+### Acceptance Criteria
+
+- Each generated section is evaluated with exact file/line references.
+- Recommendations distinguish immediate removals from items that should remain because they enforce workflow, safety, or repo-specific conventions.
+- Claude-only and Codex-only differences are called out explicitly.
+- No root instruction policy is edited during the audit unless the user approves a concrete reduction plan.
+- Verification and review notes are recorded in `tasks/todo.md`.
+
 ## Current Implementation - Revision Hygiene Rule
 
 ### Goal
