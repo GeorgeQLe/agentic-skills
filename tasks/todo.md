@@ -8,7 +8,7 @@
 - [x] Compare high-risk documentation contracts for drift.
 - [x] Write the audit report and alignment page.
 - [x] Update the alignment index and run verification.
-- [ ] Commit and push the intended audit artifacts.
+- [x] Commit and push the intended audit artifacts.
 
 ### Review Notes
 
@@ -22,6 +22,7 @@
   - `git diff --check`
   - artifact presence checks for the report, alignment page, and prompt log
 - Browser-open status: helper reported `blocked`, then WSL PowerShell fallback opened the page.
+- Shipped in commit `461ab271` and pushed to `origin/master`.
 
 ## Current Implementation - Prototype Session Loop Convention Refactor
 
