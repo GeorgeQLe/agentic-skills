@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5 - 2026-06-14
+
+- Made reporting and routing Research-Session-Loop-aware: when reconciling a research stage, read the selected-set run manifest (`research/{slug}/_working/{orchestrator}-run.yaml`), compare against existing canonical intermediates, and report "k of N frameworks complete" instead of reading `tasks/todo.md` checkboxes for research progress.
+- Added a mid-run routing rule: when a research loop has pending frameworks (or all intermediates exist but no synthesized canonical), route to re-invoking that same orchestrator (fresh Codex session), taking precedence over starting a new orchestrator. Kept `research/.progress.yaml` `pipeline_stage` as a pointer.
+
 ## v0.4 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

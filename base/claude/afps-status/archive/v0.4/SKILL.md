@@ -2,13 +2,13 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.5
+version: v0.4
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
 # AFPS Status
 
-Invoke as `$afps-status`.
+Invoke as `/afps-status`.
 
 Use this skill when the user asks where a product project is in the AFPS workflow, what research/planning/implementation artifact is missing next, whether task docs match product evidence, or which AFPS command should run next.
 
@@ -28,20 +28,23 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Use `scripts/pack.sh list-packs` when available to determine enabled packs; do not grep `.agents/project.json` directly when choosing installed-pack routes.
 3. Inspect AFPS evidence from existing artifacts:
    - Product-path state: `research/.progress.yaml`, including legacy `active_path` normalized mentally to `active_paths`.
-   - Research-loop state: selected-set run manifests `research/_working/{orchestrator}-run.yaml` (or `research/{slug}/_working/{orchestrator}-run.yaml`) for the self-advancing research orchestrators (`customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`). When a manifest exists, read its `selected_frameworks` and compare against existing canonical intermediates `research/{orchestrator}-{framework}.md` (or `research/{slug}/{orchestrator}-{framework}.md`) to derive how many frameworks are complete. A manifest with frameworks still pending — or all intermediates present but no synthesized canonical (`research/{orchestrator}.md`) yet — means that loop is **mid-run**.
    - Concept artifacts: `research/idea-brief*.md`, app-scoped `research/*/idea-brief*.md`, and concept/interview notes.
    - Discovery artifacts: customer-discovery docs such as `research/icp.md`, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
    - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, and alignment pages under `alignment/`.
    - Execution artifacts: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases/`, and recent validation notes.
+   - Rapid pipeline artifacts: `research/vard-ship-log.md` (VARD experiments), `research/ord-ship-log.md` (ORD packages), and `alignment/vard-*.md` or `alignment/ord-*.md` alignment docs.
    - Git evidence: `git status --short`, current branch/upstream, last relevant commits, unpushed commits, and changed files.
 4. Reconcile evidence instead of trusting one file:
    - Distinguish missing artifacts, stale artifacts, contradictory artifacts, completed work, active implementation tasks, manual blockers, unvalidated implementation, and unshipped local changes.
-   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts. Its `pipeline_stage` is a pointer to which orchestrator stage last ran, not per-framework status.
-   - For a self-advancing research orchestrator, derive framework progress from the run manifest + canonical-intermediate existence and report it as "k of N frameworks complete," not from `tasks/todo.md` checkboxes (the migrated orchestrators no longer queue framework work there).
+   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts.
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
-5. Classify AFPS stage:
+5. Detect rapid pipeline activity:
+   - If `research/vard-ship-log.md` exists, report VARD pipeline status: number of experiments shipped, most recent entry, and whether any show traction signals warranting graduation to Business AFPS.
+   - If `research/ord-ship-log.md` exists, report ORD pipeline status: number of packages published, most recent entry, and whether any show traction signals warranting graduation to Devtool AFPS.
+   - If `vard` or `ord` packs are enabled, note the active rapid pipeline alongside deliberate pipeline status.
+6. Classify AFPS stage:
    - `unscoped`: no concept brief or the concept is too unclear for customer discovery.
    - `concept-ready`: concept exists but discovery pack/skills are not enabled.
    - `discovery-needed`: concept exists and discovery skills are enabled, but customer discovery is absent or not specific enough.
@@ -53,16 +56,15 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - `ship-needed`: implementation changes are present, completed, or unpushed but validation, task review, commit, push, or deploy packaging is pending.
    - `reconcile-needed`: artifacts conflict enough that the next step should be reconciliation before new research or implementation.
 6. Choose the next route with these rules:
-   - No concept brief or unclear concept: `$idea-scope-brief`
+   - No concept brief or unclear concept: `/idea-scope-brief`
    - Concept exists but business discovery is missing: `npx skillpacks install business-discovery` from the project shell.
-   - Concept exists and discovery is enabled, but no customer-discovery evidence: `$customer-discovery`
-   - A self-advancing research loop is mid-run (a run manifest exists with frameworks still pending, or all intermediates exist but no synthesized canonical yet): re-invoke that same orchestrator to advance one phase — `$customer-discovery`, `$competitive-analysis`, `$positioning`, or `$journey-map` — and tell the user to start a fresh Codex session and re-run it. This continuation takes precedence over starting a new orchestrator; do not imply a single pass and do not route framework work to `$exec`.
-   - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `$competitive-analysis`, `$value-prop-canvas`, or `$positioning`
+   - Concept exists and discovery is enabled, but no customer-discovery evidence: `/customer-discovery`
+   - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `/competitive-analysis`, `/value-prop-canvas`, or `/positioning`
    - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or install the required pack first, such as `npx skillpacks install customer-lifecycle` from the project shell, or `npx skillpacks install business-growth` from the project shell.
-   - Research/specs exist but task queue is stale or absent: `$roadmap`
-   - Clear executable task exists: `$exec`
-   - Implementation is done but unvalidated, dirty, uncommitted, unpushed, or otherwise unshipped: `$ship`
-   - Contradictory research/spec/task evidence: `$reconcile-research` when business-ops is enabled, `$spec-drift` when agent-work-admin is enabled, otherwise `$codebase-status` with a focused prompt naming the contradiction.
+   - Research/specs exist but task queue is stale or absent: `/roadmap`
+   - Clear executable task exists: `/exec`
+   - Implementation is done but unvalidated, dirty, uncommitted, unpushed, or otherwise unshipped: `/ship`
+   - Contradictory research/spec/task evidence: `/reconcile-research` when business-ops is enabled, `/spec-drift` when agent-work-admin is enabled, otherwise `/codebase-status` with a focused prompt naming the contradiction.
 7. Validate command availability before recommending pack-local routes:
    - Use `scripts/pack.sh list-packs` when present to detect enabled packs.
    - If the best command lives in an uninstalled pack, recommend the package install command instead of the unavailable command: `npx skillpacks install <pack>` from the project shell.
@@ -72,8 +74,9 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 
 Produce a concise structured report with:
 
-- **Overview:** repo path, product/app focus, git status, enabled packs, and whether AFPS evidence is single-path or multi-path.
-- **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status. For a research stage whose run manifest exists, report loop progress as "k of N frameworks complete" and whether it is mid-run.
+- **Overview:** repo path, product/app focus, git status, enabled packs, active rapid pipelines (VARD/ORD), and whether AFPS evidence is single-path or multi-path.
+- **Rapid Pipeline Status** (if applicable): VARD and/or ORD experiment counts, latest shipment, traction signals, and graduation readiness.
+- **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status.
 - **AFPS Stage:** one stage label from the workflow above, with confidence and evidence.
 - **Contradictions And Gaps:** conflicting artifacts, missing product-path manifest updates, stale task queues, manual blockers, validation/shipping gaps, and uncertainty.
 - **Recommended Route:** the next concrete work item and why it is the narrowest route.
@@ -92,7 +95,7 @@ End with exactly:
 - Propose missing `research/.progress.yaml` updates in the report instead of writing them by default.
 - Do not run expensive tests, installs, web research, deploys, or external-account actions during status synthesis.
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues unless an item has clearly been promoted into `tasks/todo.md`.
-- Do not route agent-executable repo work to `$guide`; reserve guided/manual routes for human-only blockers.
+- Do not route agent-executable repo work to `/guide`; reserve guided/manual routes for human-only blockers.
 - Do not create or modify GitHub Actions workflows.
 
 ## Alignment Page

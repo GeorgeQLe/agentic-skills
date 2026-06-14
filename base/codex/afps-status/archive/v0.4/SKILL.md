@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.5
+version: v0.4
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
@@ -28,7 +28,6 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Use `scripts/pack.sh list-packs` when available to determine enabled packs; do not grep `.agents/project.json` directly when choosing installed-pack routes.
 3. Inspect AFPS evidence from existing artifacts:
    - Product-path state: `research/.progress.yaml`, including legacy `active_path` normalized mentally to `active_paths`.
-   - Research-loop state: selected-set run manifests `research/_working/{orchestrator}-run.yaml` (or `research/{slug}/_working/{orchestrator}-run.yaml`) for the self-advancing research orchestrators (`customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`). When a manifest exists, read its `selected_frameworks` and compare against existing canonical intermediates `research/{orchestrator}-{framework}.md` (or `research/{slug}/{orchestrator}-{framework}.md`) to derive how many frameworks are complete. A manifest with frameworks still pending — or all intermediates present but no synthesized canonical (`research/{orchestrator}.md`) yet — means that loop is **mid-run**.
    - Concept artifacts: `research/idea-brief*.md`, app-scoped `research/*/idea-brief*.md`, and concept/interview notes.
    - Discovery artifacts: customer-discovery docs such as `research/icp.md`, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
@@ -37,8 +36,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Git evidence: `git status --short`, current branch/upstream, last relevant commits, unpushed commits, and changed files.
 4. Reconcile evidence instead of trusting one file:
    - Distinguish missing artifacts, stale artifacts, contradictory artifacts, completed work, active implementation tasks, manual blockers, unvalidated implementation, and unshipped local changes.
-   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts. Its `pipeline_stage` is a pointer to which orchestrator stage last ran, not per-framework status.
-   - For a self-advancing research orchestrator, derive framework progress from the run manifest + canonical-intermediate existence and report it as "k of N frameworks complete," not from `tasks/todo.md` checkboxes (the migrated orchestrators no longer queue framework work there).
+   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts.
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
 5. Classify AFPS stage:
@@ -56,7 +54,6 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - No concept brief or unclear concept: `$idea-scope-brief`
    - Concept exists but business discovery is missing: `npx skillpacks install business-discovery` from the project shell.
    - Concept exists and discovery is enabled, but no customer-discovery evidence: `$customer-discovery`
-   - A self-advancing research loop is mid-run (a run manifest exists with frameworks still pending, or all intermediates exist but no synthesized canonical yet): re-invoke that same orchestrator to advance one phase — `$customer-discovery`, `$competitive-analysis`, `$positioning`, or `$journey-map` — and tell the user to start a fresh Codex session and re-run it. This continuation takes precedence over starting a new orchestrator; do not imply a single pass and do not route framework work to `$exec`.
    - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `$competitive-analysis`, `$value-prop-canvas`, or `$positioning`
    - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or install the required pack first, such as `npx skillpacks install customer-lifecycle` from the project shell, or `npx skillpacks install business-growth` from the project shell.
    - Research/specs exist but task queue is stale or absent: `$roadmap`
@@ -73,7 +70,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 Produce a concise structured report with:
 
 - **Overview:** repo path, product/app focus, git status, enabled packs, and whether AFPS evidence is single-path or multi-path.
-- **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status. For a research stage whose run manifest exists, report loop progress as "k of N frameworks complete" and whether it is mid-run.
+- **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status.
 - **AFPS Stage:** one stage label from the workflow above, with confidence and evidence.
 - **Contradictions And Gaps:** conflicting artifacts, missing product-path manifest updates, stale task queues, manual blockers, validation/shipping gaps, and uncertainty.
 - **Recommended Route:** the next concrete work item and why it is the narrowest route.
