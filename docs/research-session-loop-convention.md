@@ -177,11 +177,20 @@ When user feedback asks to remove, replace, or reduce emphasis on research conte
 
 ## Migration status
 
-This convention is **normative for new and migrating Pattern A research orchestrators**. The reference orchestrators are migrating from the legacy `tasks/todo.md` + `/exec` execution model to this loop. Until a skill's `SKILL.md` is updated, it implements the legacy model described historically in `docs/orchestrator-convention.md`.
+This convention is **normative for all Pattern A research orchestrators**. The rollout is **complete**: all four reference orchestrators implement the session ladder (states 0–F), keep their state in the run manifest plus canonical-intermediate existence, and advance by self-re-invocation. New Pattern A research orchestrators follow this convention from creation.
 
-### Rollout checklist (per orchestrator)
+| Orchestrator | Version | Cold entry | Run manifest |
+|---|---|---|---|
+| `customer-discovery` | v1.6 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
+| `competitive-analysis` | v0.20 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
+| `positioning` | v0.19 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
+| `journey-map` | v0.18 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
 
-For each of `customer-discovery`, `competitive-analysis`, `positioning`, `journey-map`:
+`customer-discovery` is the deep-intake reference (state F → E → C… → B → A); the three scoped-intake orchestrators have no deep-interview phase and resolve a cold start directly to state E. The adjacent `afps-status` reader (base, v0.5) is loop-aware: it reports "k of N frameworks complete" from the run manifest and routes a mid-run loop back to its orchestrator.
+
+### Rollout checklist (the steps each migration followed)
+
+Each of `customer-discovery`, `competitive-analysis`, `positioning`, `journey-map` was migrated by:
 
 1. Replace the "write framework steps to `tasks/todo.md`; `/exec` drives" execution model with the session ladder (states 0–F).
 2. Replace the "Parent does not execute frameworks" constraint with "Parent self-advances one phase per invocation and follows the next pending framework subskill inline." The migrated `SKILL.md` should describe self-re-invocation positively (name the orchestrator's own command); it does not need to enumerate what *not* to route to.
@@ -193,5 +202,5 @@ For each of `customer-discovery`, `competitive-analysis`, `positioning`, `journe
 
 ### Adjacent updates
 
-- **`afps-status`** — when reconciling a research stage in progress, read the selected-set run manifest (`research/{slug}/_working/{orchestrator}-run.yaml`) and compare against existing canonical intermediates to report "k of N frameworks complete," instead of reading `tasks/todo.md` checkboxes for research progress. Keep `.progress.yaml` as a pointer.
+- **`afps-status`** (done, v0.5) — when reconciling a research stage in progress, it reads the selected-set run manifest (`research/{slug}/_working/{orchestrator}-run.yaml`), compares against existing canonical intermediates to report "k of N frameworks complete," and routes a mid-run loop back to its orchestrator. `.progress.yaml` stays a pointer.
 - **Audit** — `scripts/skill-alignment-routing-audit.mjs` recognizes self-re-invocation routing as valid for these skills.
