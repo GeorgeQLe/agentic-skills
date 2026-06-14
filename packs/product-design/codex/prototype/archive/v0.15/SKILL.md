@@ -2,20 +2,18 @@
 name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.16
+version: v0.15
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
 
 # Prototype
 
-Invoke as `/prototype`.
+Invoke as `$prototype`.
 
 Build tangible, runnable prototypes before production spec work begins. Create the first concrete artifact users can interact with, grounded in research and UX variation planning. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
-
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
 
 ## Gate
 
@@ -23,16 +21,16 @@ Before proceeding, verify the following files exist:
 
 - At least one `design/ux-variations-*.md` file or product-path-scoped equivalent.
 - At least one `design/ui-*.md` file or product-path-scoped equivalent (e.g., `design/ui-[topic].md`, `design/ui-layout-variations-[topic].md`, or `design/ui-requirements-[topic].md`).
-- One `design/prototype-build-plan-*.md` file or product-path-scoped equivalent produced by `/user-flow-map --prototype-build-plan`.
+- One `design/prototype-build-plan-*.md` file or product-path-scoped equivalent produced by `$user-flow-map --prototype-build-plan`.
 
 Also read `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` as upstream screen-ordering, task-sequencing, branch-state, build-item status, and approval-state signals.
 
 If either is missing, halt with a clear message:
 
 > Prototyping requires UX variation planning and UI specification. Missing prerequisites:
-> - `design/ux-variations-*.md` — run `/ux-variations` to create variation concepts.
-> - `design/ui-*.md` — run `/ui-interview` to define the interface specification.
-> - `design/prototype-build-plan-*.md` — run `/user-flow-map --prototype-build-plan [topic]` to create the prototype todo ledger.
+> - `design/ux-variations-*.md` — run `$ux-variations` to create variation concepts.
+> - `design/ui-*.md` — run `$ui-interview` to define the interface specification.
+> - `design/prototype-build-plan-*.md` — run `$user-flow-map --prototype-build-plan [topic]` to create the prototype todo ledger.
 
 Do not proceed past this gate until both prerequisites exist.
 
@@ -141,7 +139,6 @@ For each build item in `design/prototype-build-plan-[topic].md` with status `pen
 6. If a build item cannot be completed because the design is unclear, mark it `needs-revision` with a short note instead of inventing missing design decisions.
 7. Do not build items marked `deferred` or `dropped` unless the current user instruction explicitly reactivates them; if reactivated, update the build plan status first.
 8. Ensure the prototype is immediately usable: open the HTML file, run the script, curl the endpoint, or read the config.
-9. Do not write build progress to `tasks/todo.md`; the build plan and flow-tree manifest are the authoritative prototype status stores.
 
 ### 6. Build the hub page
 
@@ -192,7 +189,7 @@ design/flow-tree-{topic}.yaml
 
 After prototypes are built, recommend:
 
-> Recommended next command: `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
+> Recommended next command: `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 
@@ -206,7 +203,6 @@ The user should interact with each prototype variation hands-on before consolida
 - Do not use `design/ux-variations-*.md` as the build todo list when a prototype build plan exists; it is source evidence, not the ledger.
 - Do not choose a winning variation or recommend consolidation. That is the user's decision after UAT evaluation.
 - Do not modify specs, research documents, or task files. Only create files in the `prototypes/` directory and update the prototype build-plan/flow-tree status ledger.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Alignment Page
 

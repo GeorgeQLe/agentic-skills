@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.20 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Clarified that UX progression/layout branch state stays in the flow-tree manifest and human variant review stays out of `tasks/todo.md`.
+
 ## v0.19 - 2026-06-13
 
 - Moved pre-prototype UX variation plans and interview logs from `specs/` to `design/`.

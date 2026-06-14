@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.20
+version: v0.19
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 visual_tier: prototype
 ---
@@ -14,8 +14,6 @@ Invoke as `$ux-variations`.
 Use this skill when the user wants to explore multiple UX/UI directions before committing to a final experience. In the default product-design tree, this skill expands one specific user flow from `$user-flow-map` into alternate progression branches: different ways users can enter, advance, recover, hand off, complete, or abandon the flow. It then creates variation plans for flow progression, layout implications, navigation models, interaction patterns, component choices, content density, visual tone, and behavior so the user can compare, test, and decide which branch should move into `$ui-interview`.
 
 In the normal AFPS product route, use `$user-flow-map` first to establish the wireframe-tree root and name the user-flow branches. Then run `$ux-variations [specific-user-flow]` to explore alternate ways users can progress through that selected flow. After a variation branch is ready for UI treatment, route that branch to `$ui-interview [specific-ux-variation]` for visual mockup, alignment, approval/rejection, and next-branch routing.
-
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. UX progression and layout branch state belongs in `design/**/flow-tree-*.yaml`, not Pattern A selected-framework manifests, `research/.progress.yaml`, or `tasks/todo.md`.
 
 Use `$user-flow-map` first when the interface has no credible flow structure. Use this skill directly only when a user-flow map, current implementation, screenshot, prototype, explicit user prompt, or clear feature scope already identifies the flow being varied. Do not require a finalized UI requirements spec before default UX variation work; the point is to compare alternative progression paths before a single branch becomes a UI proposal.
 
@@ -45,7 +43,6 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
 - Add one `ux_variations[]` entry under the selected parent user-flow branch for each proposed progression branch. Each entry must include `id`, `label`, `status`, and artifact references.
 - Keep UX variation branch state in the design manifest. Do not write ordinary UX branch state to `research/.progress.yaml`; use that file only when a variant or route experiment creates a materially different product path or product line.
-- Do not mirror UX progression, layout-variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -268,7 +265,6 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not skip `$ui-interview` for a UX variation branch that needs a proposed UI, HTML visual mockup, or approval/rejection decision.
 - Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack is shared unless the user explicitly locks a shared constraint.
 - Do not write pre-prototype UX variation plans to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
-- Do not use `tasks/todo.md` for UX/design branch progress or human variant review. Human prototype/UAT evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 
 ## Archive-First Replacement Policy
 

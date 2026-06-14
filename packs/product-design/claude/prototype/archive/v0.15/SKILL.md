@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.16
+version: v0.15
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -14,8 +14,6 @@ Invoke as `/prototype`.
 Build tangible, runnable prototypes before production spec work begins. Create the first concrete artifact users can interact with, grounded in research and UX variation planning. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
-
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
 
 ## Gate
 
@@ -141,7 +139,6 @@ For each build item in `design/prototype-build-plan-[topic].md` with status `pen
 6. If a build item cannot be completed because the design is unclear, mark it `needs-revision` with a short note instead of inventing missing design decisions.
 7. Do not build items marked `deferred` or `dropped` unless the current user instruction explicitly reactivates them; if reactivated, update the build plan status first.
 8. Ensure the prototype is immediately usable: open the HTML file, run the script, curl the endpoint, or read the config.
-9. Do not write build progress to `tasks/todo.md`; the build plan and flow-tree manifest are the authoritative prototype status stores.
 
 ### 6. Build the hub page
 

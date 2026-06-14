@@ -1,25 +1,23 @@
 ---
 name: ux-variations
-description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
+description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.20
+version: v0.19
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 visual_tier: prototype
 ---
 
 # UX Variations
 
-Invoke as `$ux-variations`.
+Invoke as `/ux-variations`.
 
-Use this skill when the user wants to explore multiple UX/UI directions before committing to a final experience. In the default product-design tree, this skill expands one specific user flow from `$user-flow-map` into alternate progression branches: different ways users can enter, advance, recover, hand off, complete, or abandon the flow. It then creates variation plans for flow progression, layout implications, navigation models, interaction patterns, component choices, content density, visual tone, and behavior so the user can compare, test, and decide which branch should move into `$ui-interview`.
+Use this skill when the user wants to explore multiple UX/UI directions before committing to a final experience. In the default product-design tree, this skill expands one specific user flow from `/user-flow-map` into alternate progression branches: different ways users can enter, advance, recover, hand off, complete, or abandon the flow. It then creates variation plans for flow progression, layout implications, navigation models, interaction patterns, component choices, content density, visual tone, and behavior so the user can compare, test, and decide which branch should move into `/ui-interview`.
 
-In the normal AFPS product route, use `$user-flow-map` first to establish the wireframe-tree root and name the user-flow branches. Then run `$ux-variations [specific-user-flow]` to explore alternate ways users can progress through that selected flow. After a variation branch is ready for UI treatment, route that branch to `$ui-interview [specific-ux-variation]` for visual mockup, alignment, approval/rejection, and next-branch routing.
+In the normal AFPS product route, use `/user-flow-map` first to establish the wireframe-tree root and name the user-flow branches. Then run `/ux-variations [specific-user-flow]` to explore alternate ways users can progress through that selected flow. After a variation branch is ready for UI treatment, route that branch to `/ui-interview [specific-ux-variation]` for visual mockup, alignment, approval/rejection, and next-branch routing.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. UX progression and layout branch state belongs in `design/**/flow-tree-*.yaml`, not Pattern A selected-framework manifests, `research/.progress.yaml`, or `tasks/todo.md`.
+Use `/user-flow-map` first when the interface has no credible flow structure. Use this skill directly only when a user-flow map, current implementation, screenshot, prototype, explicit user prompt, or clear feature scope already identifies the flow being varied. Do not require a finalized UI requirements spec before default UX variation work; the point is to compare alternative progression paths before a single branch becomes a UI proposal.
 
-Use `$user-flow-map` first when the interface has no credible flow structure. Use this skill directly only when a user-flow map, current implementation, screenshot, prototype, explicit user prompt, or clear feature scope already identifies the flow being varied. Do not require a finalized UI requirements spec before default UX variation work; the point is to compare alternative progression paths before a single branch becomes a UI proposal.
-
-When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode is an explicit bounded mode for cases where both the flow and content contract are already fixed; otherwise default to progression-path UX variations. Layout-mode takes a fixed flow contract from `design/user-flow-[topic].md` plus a fixed content contract from `design/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches. Each variation must be specified well enough to build as a lightweight implementation, then evaluated through `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `$consolidate-variations`.
+When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode is an explicit bounded mode for cases where both the flow and content contract are already fixed; otherwise default to progression-path UX variations. Layout-mode takes a fixed flow contract from `design/user-flow-[topic].md` plus a fixed content contract from `design/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `/consolidate-variations`.
 
 ## Process
 
@@ -45,7 +43,6 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
 - Add one `ux_variations[]` entry under the selected parent user-flow branch for each proposed progression branch. Each entry must include `id`, `label`, `status`, and artifact references.
 - Keep UX variation branch state in the design manifest. Do not write ordinary UX branch state to `research/.progress.yaml`; use that file only when a variant or route experiment creates a materially different product path or product line.
-- Do not mirror UX progression, layout-variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -53,30 +50,13 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Use `active_paths` as the product/app focuses and treat deferred `product_paths[]` as parked product directions, not required UX variants.
    - Prefer existing `design/user-flow-*.md`, product-path-scoped equivalents, and `design/**/flow-tree-*.yaml` as the normal AFPS input; select one named user-flow branch as the variation surface.
    - Also read `design/ui-*.md`, product specs, journey maps, ICP research, positioning research, finalized implementation specs, and user feedback as source evidence.
-   - If no credible flow structure exists, run or recommend `$user-flow-map` before developing variants.
-   - If the user explicitly requests layout-mode and no credible content/data/action contract exists, run or recommend `$ui-interview --requirements-only` before developing layout-mode variants.
+   - If no credible flow structure exists, run or recommend `/user-flow-map` before developing variants.
+   - If the user explicitly requests layout-mode and no credible content/data/action contract exists, run or recommend `/ui-interview --requirements-only` before developing layout-mode variants.
 
 2. **Define the decision surface**
    - Identify what the user is deciding: the selected user flow, onboarding, activation, typical workflow, sharing flow, collaboration model, purchase flow, editor, dashboard, settings, mobile experience, page layout, or another bounded surface.
    - Identify the parent user-flow branch, the upstream `user-flow-map` source, and any sibling user flows or prior UX/UI proposals that this variation must coordinate with.
-   - Identify which dimensions are allowed to vary:
-     - First-run onboarding and activation
-     - Core workflow sequencing
-     - Sharing, invitations, permissions, and collaboration
-     - Return-use loops and re-entry points
-     - Notifications, reminders, and status surfaces
-     - Handoffs between users, roles, devices, or channels
-     - Recovery from errors, empty states, and stalled progress
-     - Information architecture
-     - Navigation
-     - Page layout
-     - Task flow order
-     - Component model
-     - Data density
-     - Visual hierarchy
-     - Motion and transition behavior
-     - Copy tone
-     - Mobile behavior
+   - Identify which dimensions may vary: first-run onboarding, activation, core workflow sequencing, sharing, invitations, permissions, collaboration, return-use loops, notifications, reminders, status surfaces, user or device handoffs, failure recovery, information architecture, navigation, page layout, task flow order, component model, data density, visual hierarchy, motion, copy tone, and mobile behavior.
    - Identify fixed constraints: brand, stack, design system, must-keep components, accessibility, launch scope, performance, and business requirements.
    - **Default progression-mode addition**: For each selected user flow, identify which parts may vary: entry route, sequencing, step granularity, user choice points, system automation, handoff points, review/edit loops, save-for-later behavior, cancellation, recovery, permissions, notifications, and completion criteria. Preserve the parent flow boundary while allowing progression branches to differ meaningfully.
    - **Layout-mode addition**: In layout-mode, read `design/user-flow-[topic].md` as the fixed screen-flow contract and `design/ui-requirements-[topic].md` as the fixed content contract. The WHAT and flow order are locked; only the HOW varies. Layout dimensions that can vary:
@@ -90,45 +70,16 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 3. **Surface assumptions before probing**
    - Present a UX Variation Assumptions Manifest before deep questioning.
    - Tag assumptions with `[from spec]`, `[from codebase]`, `[from research]`, `[from artifact]`, or `[inferred]`.
-   - Cover:
-     - Target users and usage context
-     - Parent user flow and selected branch scope
-     - Primary job or workflow
-     - First-run moment, activation event, and "aha" threshold
-     - Typical repeat-use workflow
-     - Sharing, collaboration, and permission assumptions
-     - Return triggers, notifications, and re-engagement assumptions
-     - Cross-device, cross-role, or external handoff assumptions
-     - Existing pain points or uncertainty
-     - Decisions that are locked versus open, including which parts of the parent flow may vary
-     - Evaluation criteria
-     - Required variants and desired breadth
-     - Prototype fidelity and implementation budget
-     - Success metrics and selection method
-   - Ask the user to confirm, correct, or flag assumptions before proceeding.
-   - Deliver every manifest/checklist/checkpoint the user must confirm inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
+   - Cover target users, usage context, parent user flow, selected branch scope, first-run moment, activation event, "aha" threshold, typical repeat-use workflow, sharing and collaboration assumptions, permissions, return triggers, notifications, re-engagement assumptions, handoffs, pain points, locked versus open decisions including which parent-flow moments may vary, evaluation criteria, required variant breadth, prototype fidelity, implementation budget, success metrics, and selection method.
+   - Use AskUserQuestion to ask the user to confirm, correct, or flag assumptions before proceeding.
+   - Deliver every manifest/checklist/checkpoint the user must confirm inline as the final message text of its own turn; ask the confirmation question in the next turn. AskUserQuestion option previews may mirror the content as a supplement but are never the sole channel. Never emit it only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 4. **Interview for variation goals**
-   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same variation decision, not to batch unrelated questions.
+   - Ask 1 to 3 focused questions per turn using AskUserQuestion.
    - Default to maximally contrasting archetypes. Do not ask how different variants should be — assume dramatic contrast unless the user explicitly requests graduated steps.
-   - Default evaluation method is: build each variation, then run `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) so the user has task-based evidence before consolidation.
+   - Default evaluation method is: build each variation, then run `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) so the user has task-based evidence before consolidation. Do not ask who will judge — assume solo evaluator building and gut-checking unless the user states otherwise.
    - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
-   - Establish:
-     - Assume solo evaluator building and gut-checking unless the user states otherwise
-     - Which user flow from the wireframe tree is being expanded
-     - What they must be able to accomplish
-     - Which progression moments can vary: entry, sequencing, decision points, handoffs, recovery, completion, and re-entry
-     - How a new user arrives, signs up, understands the product, and reaches first value
-     - What the normal repeat workflow looks like after onboarding
-     - What users create, save, share, export, invite others into, or hand off
-     - What roles or permission levels exist, and how collaboration should feel
-     - What notifications, reminders, status updates, or activity feeds users expect
-     - How users resume work after hours, days, or weeks away
-     - What happens when a workflow is abandoned, blocked, invalid, offline, or partially complete
-     - Which current interface parts are working
-     - Which current interface parts feel wrong, uncertain, slow, confusing, too dense, too sparse, or too generic
-     - What would make a variant unacceptable
-     - What evidence will decide the winner
+   - Establish which user flow from the wireframe tree is being expanded, what the variants must accomplish, which progression moments can vary (entry, sequencing, decision points, handoffs, recovery, completion, and re-entry), how a new user arrives and reaches first value, what the normal repeat workflow looks like, what users create/save/share/export/invite others into, what roles or permission levels exist, what notifications or status updates users expect, how users resume work after time away, what happens when a workflow is abandoned or blocked, which current interface parts work, which parts feel wrong or uncertain, what would make a variant unacceptable, and what evidence will decide the winner.
    - When the user is unsure, recommend a practical default and explain why.
    - **Layout-mode interview additions**: When in layout-mode, also ask:
      - What is the primary user task on this page? (scan, search, create, compare, monitor, triage)
@@ -142,20 +93,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - Produce 5 variations by default. Present the concepts for adjustment — do not ask the user to choose a count first.
    - Each variation must be meaningfully different, not just a color or spacing change.
    - At this stage, keep each concept lightweight: name, thesis, archetype, best-fit user/context, core workflow difference, major tradeoff, and rough complexity. Do not fully specify screens, controls, or implementation details yet.
-   - Useful archetypes include:
-     - Task-first workflow
-     - Data-dense operator console
-     - Guided step-by-step flow
-     - Onboarding-first activation path
-     - Collaboration-first workspace
-     - Sharing-first artifact flow
-     - Notification/status-driven workflow
-     - Role-based handoff workflow
-     - Visual canvas or board
-     - Command/search-first interface
-     - Mobile-first progressive disclosure
-     - Familiar SaaS dashboard
-     - Editorial or showcase layout
+   - Useful archetypes include task-first workflow, data-dense operator console, guided step-by-step flow, onboarding-first activation path, collaboration-first workspace, sharing-first artifact flow, notification/status-driven workflow, role-based handoff workflow, visual canvas or board, command/search-first interface, mobile-first progressive disclosure, familiar SaaS dashboard, and editorial or showcase layout.
    - Only choose archetypes that fit the product and user context.
    - **Layout-mode archetypes** (use these instead of the UX-flow archetypes above when in layout-mode):
      - Card grid: visual items in a responsive grid, good for browsing and scanning
@@ -182,76 +120,43 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - Revise the concept set based on the answer before moving on.
 
 7. **Specify each approved variation enough to build**
-   - For each variation, define:
-     - Name and design thesis
-     - Target user fit
-     - Parent user flow and branch relationship
-     - Page and flow changes
-     - Progression model: how the user advances through the flow and how this differs from sibling variations
-     - Onboarding and activation model
-     - Typical workflow sequence
-     - Sharing, collaboration, and permissions model
-     - Return-use and notification model
-     - Failure recovery and abandoned-workflow behavior
-     - Navigation model
-     - Screen-by-screen layout
-     - Key components and controls
-     - Button and link behavior
-     - Spatial density, sizing, and hierarchy
-     - Responsive behavior
-     - Visual tone
-     - Strengths, risks, and failure modes
-     - Implementation complexity
-     - What to prototype first
-     - What user signal would make this branch ready for `$ui-interview`
+   - For each variation, define name and thesis, parent user flow and branch relationship, target user fit, onboarding and activation model, typical workflow sequence, progression model (how the user advances through the flow and how this differs from sibling variations), sharing and collaboration model, permissions model, return-use and notification model, failure recovery behavior, page and flow changes, navigation model, screen-by-screen layout, key components and controls, button and link behavior, spatial density, sizing, hierarchy, responsive behavior, visual tone, strengths, risks, failure modes, implementation complexity, prototype scope, and the user signal that would make this branch ready for `/ui-interview`.
    - **Layout-mode variation spec additions**: In layout-mode, each variation spec must also include:
      - Content-to-component mapping: which content requirement maps to which UI component
      - Page regions with approximate proportions (e.g., sidebar 280px, content fluid, detail panel 400px)
-     - Primary content component
-     - Detail view pattern
-     - Action placement
+     - Primary content component (the main way items are displayed)
+     - Detail view pattern (how a single item's full details are accessed)
+     - Action placement (where create, edit, delete, and bulk actions live)
      - Navigation pattern and placement
-     - Responsive behavior at 3 breakpoints (mobile <=640px, tablet <=1024px, desktop >1024px)
-     - Density approach
-     - States rendering
-     - Implementation file list
-     - Estimated build time
+     - Responsive behavior at 3 breakpoints (mobile ≤640px, tablet ≤1024px, desktop >1024px)
+     - Density approach (line-height, padding, font sizes, information per viewport)
+     - States rendering (how empty, loading, error, and partial states appear in this layout)
+     - Implementation file list (components, routes, layouts to create or modify)
+     - Estimated build time (hours)
      - Variant evaluation task: the user task to perform in this variation before consolidation
      - Evidence to capture: screenshots, notes, time-to-complete, friction points, and acceptance/rejection signals
 
 8. **Plan experimentation**
-   - Recommend serial full buildout of all approved variants when the user is using layout-mode or explicitly wants to compare built interfaces. Do not recommend building a subset first unless the user asks for a smaller experiment.
+   - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
 - If route experiments imply materially different products, apps, ICPs, or product lines, update `research/.progress.yaml` with experiment product-path entries instead of making every divergent path a required UX variation. Include `id`, `label`, `source_skill: ux-variations`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage: ux-variations`, and `last_touched`.
    - Product paths are not git branches; keep route-experiment product-path tracking in `research/.progress.yaml` distinct from git workflow branch terminology.
-   - After progression variants are specified, route the next selected branch to `$ui-interview [specific-ux-variation]` for visual mockup and approval/rejection. If variants are built before UI interview, recommend `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `$consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
-   - Define the cheapest useful validation method:
-     - Static mockups for visual direction
-     - Clickable prototype for navigation and flow
-     - Feature-flagged implementation for real usage
-     - A/B test only when traffic and metrics are credible
-     - Human UAT when target-user acceptance is the question
+   - After progression variants are specified, route the next selected branch to `/ui-interview [specific-ux-variation]` for visual mockup and approval/rejection. If variants are built before UI interview, recommend `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `/consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
-   - Include a UAT handoff checklist:
-     - Target task for each variant
-     - Success criteria and non-acceptance signals
-     - Side-by-side comparison questions
-     - Evidence to capture
-     - Tradeoffs to notice
-     - Readiness criteria for `$consolidate-variations`
+   - Include a UAT handoff checklist: target task for each variant, success criteria, side-by-side comparison questions, evidence to capture, tradeoffs to notice, and readiness criteria for `/consolidate-variations`.
 
 9. **Coverage checkpoint**
-   - Before concluding, summarize the variants, the decision criteria, and the proposed experiment plan inline as the final message text of its own turn.
-   - In the next turn, ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
+   - Before concluding, summarize the variants, decision criteria, and experiment plan inline as the final message text of its own turn.
+   - In the next turn, use AskUserQuestion to ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
 
 ## Deliverables
 
 - Write the variation plan to `design/ux-variations-[topic].md` in flat mode or `design/{slug}/ux-variations-[topic].md` in product-path mode.
 - Write the interview log to `design/ux-variations-[topic]-interview.md` in flat mode or `design/{slug}/ux-variations-[topic]-interview.md` in product-path mode.
-- Update the scoped flow-tree manifest with UX variation branch IDs, statuses, artifact references, and the recommended next `$ui-interview [specific-ux-variation]` branch.
+- Update the scoped flow-tree manifest with UX variation branch IDs, statuses, artifact references, and the recommended next `/ui-interview [specific-ux-variation]` branch.
 - Update `research/.progress.yaml` only when variant or route experiments create materially different product paths; downstream research remains active-path-only until a path is activated. Do not use `research/.progress.yaml` for ordinary UX branch approve/reject/retry state.
-- Include a branch-routing section that names the parent user flow, each UX variation branch, sibling flow/variation dependencies, and the recommended next `$ui-interview [specific-ux-variation]` branch.
+- Include a branch-routing section that names the parent user flow, each UX variation branch, sibling flow/variation dependencies, and the recommended next `/ui-interview [specific-ux-variation]` branch.
 
 ### Alignment Page
 
@@ -264,11 +169,11 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not choose a winner for the user unless the evidence clearly supports it and the user asked for a recommendation.
 - Do not defer all decisions to testing. State a recommended variant or experiment when evidence is sufficient.
 - Do not ignore implementation cost. A compelling variation still needs a prototype path and selection criteria.
-- Do not route directly from built UI variants to `$consolidate-variations`; insert `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) unless the user explicitly confirms they have already evaluated the variants.
-- Do not skip `$ui-interview` for a UX variation branch that needs a proposed UI, HTML visual mockup, or approval/rejection decision.
-- Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack is shared unless the user explicitly locks a shared constraint.
+- Do not route directly from built UI variants to `/consolidate-variations`; insert `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) unless the user explicitly confirms they have already evaluated the variants.
+- Do not skip `/ui-interview` for a UX variation branch that needs a proposed UI, HTML visual mockup, or approval/rejection decision.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
+- Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack (framework, renderer, design system tokens) is shared unless the user explicitly locks a shared constraint.
 - Do not write pre-prototype UX variation plans to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
-- Do not use `tasks/todo.md` for UX/design branch progress or human variant review. Human prototype/UAT evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 
 ## Archive-First Replacement Policy
 

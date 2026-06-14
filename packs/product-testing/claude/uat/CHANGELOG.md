@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Updated variant-evaluation mode to prefer `design/` UX/UI artifacts and prototype build plans, using legacy `specs/` files only as fallback evidence.
+
 ## v0.11 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

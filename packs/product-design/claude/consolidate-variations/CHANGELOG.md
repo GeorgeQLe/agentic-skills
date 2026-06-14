@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.14 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Made UAT evidence and explicit consolidation decisions prerequisites for writing `prototypes/{topic}/consolidated/`.
+
 ## v0.13 - 2026-06-13
 
 - Updated consolidation to consume `design/` variation plans, UI requirements, and flow-tree manifests instead of pre-prototype `specs/` files.

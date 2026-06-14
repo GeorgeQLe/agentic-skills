@@ -1,5 +1,10 @@
 # user-flow-map changelog (codex)
 
+## v0.8 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Clarified that flow-tree branch state and prototype build-plan synthesis are not tracked through `tasks/todo.md`.
+
 ## v0.7 - 2026-06-13
 
 - Added prototype-build-plan synthesis mode that reads approved flow-tree branch decisions and writes `design/prototype-build-plan-[topic].md` as the todo ledger for `$prototype`.

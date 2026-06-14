@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.22 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Clarified that UI review decisions enter the flow-tree only after the skill's approval lifecycle allows canonical writes, and that checkpoint confirmations are not final approval.
+
 ## v0.21 - 2026-06-13
 
 - Removed premature `agent-work-admin`/`roadmap` handoff guidance from the research/prototype phase.

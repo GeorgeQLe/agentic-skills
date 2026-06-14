@@ -33,6 +33,7 @@
     "scripts/alignment-bespoke-list.txt",
     "scripts/prepublish-auth-check.mjs",
     "docs/alignment-page-convention.md",
+    "docs/prototype-session-loop-convention.md",
     "docs/decks.md",
     "docs/packs.md",
     "docs/QUICKSTART.md",

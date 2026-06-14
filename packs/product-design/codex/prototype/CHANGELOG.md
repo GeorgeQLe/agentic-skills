@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.16 - 2026-06-14
+
+- Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.
+- Clarified that prototype build status is stored in the build-plan ledger and flow-tree manifest, not `tasks/todo.md`.
+
 ## v0.15 - 2026-06-13
 
 - Added `design/prototype-build-plan-[topic].md` as the required prototype todo ledger produced by `$user-flow-map --prototype-build-plan`.

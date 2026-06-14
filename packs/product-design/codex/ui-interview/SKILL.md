@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.21
+version: v0.22
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 context_intake: deep
 visual_tier: prototype
@@ -21,6 +21,8 @@ Use `$ux-variations` after this skill only when the current UI mockup exposes a 
 When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This is an explicit bounded mode, not the default route from `$user-flow-map`; use it when the user asks for a content contract or when a layout-mode variation run genuinely requires fixed page requirements.
 
 Default branch-review handoff guard: upstream `$user-flow-map` approval and `$ux-variations` output may provide source evidence, but they do not count as `ui-interview` approval. Upstream approval does not count as `ui-interview` interview completion. Requirements-only runs must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest. `ui-interview` must still investigate cross-flow and cross-variation coordination, design a proposed UI, render the visual mockup in HTML, ask the user for alignment or feedback, and record an explicit approve/reject/retry branch decision.
+
+Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill records UI review decisions in the flow-tree manifest only after its own approval lifecycle permits canonical writes; checkpoint confirmations are not final approval.
 
 ## Process
 
@@ -46,6 +48,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
 - Add one `ui_reviews[]` entry under the selected UX variation branch for each proposed UI review. Each entry must include `id`, `status`, artifact references, and `decision_id` when a decision is recorded.
 - Record approve/reject/retry decisions in the manifest `decisions[]` list. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
+- Do not mirror UI review, approve/reject/retry, prototype build, or branch progress into `tasks/todo.md`.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -159,7 +162,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - At the top of the page, include a plain-language **Interview stage** explainer naming the invocation, whether the run is requirements-only, full UI mode, or branch-review mode, what user/agent interview work has already happened or was inferred from approved upstream evidence, and what the reviewer should do next. If requirements were synthesized primarily from approved specs or code evidence rather than live Q&A, say so directly and route missing answers through section feedback or a resumed interview instead of implying the interview is complete.
    - Render the working packet as structured HTML, not as a raw Markdown preview: headings become sections, lists stay readable lists, and every Markdown table becomes an HTML `<table>` inside a `.table-wrap` container with a concise `data-tts-narrative`. A raw Markdown `<pre><code>` dump may appear only as a supplemental source view after the rendered packet, never as the primary review surface.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
-   - Treat every checkpoint confirmation in steps 3–8 as non-final; each only confirms the draft is ready for review. Only final compiled YAML from the alignment page authorizes canonical writes.
+- Treat every checkpoint confirmation in steps 3–8 as non-final; each only confirms the draft is ready for review. Only final compiled YAML from the alignment page authorizes canonical writes.
    - When feedback-only YAML is provided, revise the working packet and the alignment page, then ask again; the work stays pre-approval.
    - Before final compiled YAML approval, the next action is review or revision of the HTML alignment page. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML approval has been provided and the approved canonical files have been written.
 
@@ -221,6 +224,7 @@ The page is built pre-approval in `review` state per step 9, before any canonica
 - Do not treat upstream `ux-variations` output as UI approval. The branch still needs an HTML visual mockup and explicit approve/reject/retry decision.
 - Do not route to broad implementation planning while unresolved UX variation branches or touched user flows still need review.
 - Do not write pre-prototype UI branch packets to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
+- Do not use `tasks/todo.md` for UI/design branch progress. Human prototype/UAT evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Archive-First Replacement Policy

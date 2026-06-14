@@ -2,7 +2,7 @@
 name: consolidate-variations
 description: Compare multiple built UI variations, interview the user on what works and what doesn't, cherry-pick best elements, resolve conflicts, and produce a final consolidated prototype
 type: planning
-version: v0.13
+version: v0.14
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
 ---
@@ -14,6 +14,8 @@ Invoke as `/consolidate-variations`.
 Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `/ux-variations --layout-mode`, built via `/prototype`, and evaluated via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the variations, interviews the user on what works and what doesn't in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated prototype for post-prototype production specification.
 
 Users with manually built variations (not from the `/ux-variations` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
+
+Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
 
 ## Process
 
@@ -37,7 +39,7 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
    - Locate the variation plan: `design/ui-layout-variations-[topic].md` or `design/ux-variations-[topic].md`.
    - Locate the content requirements: `design/ui-requirements-[topic].md` or equivalent content contract.
    - Locate the flow-tree manifest: `design/flow-tree-[topic].yaml` or `design/{slug}/flow-tree-{topic}.yaml` when present.
-   - Locate variant evaluation evidence: `research/uat-variant-evaluation-[topic].md`, `research/uat-plan.md` result logs, screenshots, notes, recordings, or explicit user-provided review notes.
+   - Locate variant evaluation evidence: `research/uat-variant-evaluation-[topic].md`, product-path-scoped equivalents, `research/uat-plan.md` result logs, screenshots, notes, recordings, or explicit user-provided review notes.
    - Locate built implementations: scan route files, component directories, and any variation-specific directories or branches.
    - If the variation spec or implementations cannot be found, ask the user to point to them.
 
@@ -83,6 +85,7 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 6. **Build consolidated prototype**
    - Merge the best elements from variation prototypes into a single runnable artifact at `prototypes/{topic}/consolidated/`.
+   - Build only after UAT evidence and user consolidation decisions identify which elements to keep, reject, or resolve.
    - The consolidated prototype must reflect:
      - Layout skeleton (regions, proportions, scroll behavior)
      - Primary content pattern (how items are displayed)
@@ -117,12 +120,13 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not ignore conflicts. If two preferred choices are spatially or functionally incompatible, surface the tension and resolve it explicitly.
 - The consolidated prototype must preserve the approved UI branch detail from `/ui-interview` and be concrete enough for `/spec-interview` to extract production implementation requirements.
 - Do not lose content requirements. Every data field, action, and state from the requirements spec must appear in the final design.
-- Do not bias toward the first or last variation reviewed. Present them neutrally and let the user's feedback drive the outcome.
+- Do not bias toward the first or last variation reviewed. Present them neutrally and let the user's feedback and evaluation evidence drive the outcome.
+- Do not use `tasks/todo.md` for consolidation branch progress or human review. Human evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Archive-First Replacement Policy
 
-- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Before replacing or substantively rewriting an existing canonical research/design/spec document (`research/**/*.md`, `design/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.

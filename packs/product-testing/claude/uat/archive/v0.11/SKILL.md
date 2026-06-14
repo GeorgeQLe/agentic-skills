@@ -2,7 +2,7 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.12
+version: v0.11
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
 ---
@@ -23,8 +23,6 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
 
 When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `/consolidate-variations` (product-design pack). This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
-
 ## Process
 
 ### 0. Product-Path Scope Resolution
@@ -39,7 +37,7 @@ Resolve research scope by product path before using code or app structure as a h
 6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`, read pre-prototype design artifacts under `design/{slug}/`, read finalized implementation specs under `specs/{slug}/`, and treat top-level `research/*.md` and `design/*.md` files as flat-mode documents or cross-path summaries.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 1. **Resolve project context**
    - Read `.agents/project.json` if it exists.
@@ -59,9 +57,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - In product-path workspaces with `research/{slug}/` or `specs/{slug}/`, produce product-path-scoped UAT journeys for the requested app. If no app is specified and multiple apps are plausible, ask the user to choose.
 
 2b. **Variant evaluation mode**
-   - Trigger this branch when invoked with `--variant-evaluation`, when `design/ui-layout-variations-*.md`, `design/ux-variations-*.md`, or product-path-scoped equivalents exist for the requested topic, or when the user asks how to test/review built variants. Legacy `specs/ui-layout-variations-*.md` may also trigger this branch during migration.
-   - Read `design/ui-layout-variations-[topic].md`, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/**/flow-tree-*.yaml`, `design/prototype-build-plan-[topic].md`, product-path-scoped equivalents, built prototype directories under `prototypes/{topic}/`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
-   - Treat legacy `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, and `specs/ui-requirements-[topic].md` as fallback evidence only when the corresponding `design/` artifact is missing.
+   - Trigger this branch when invoked with `--variant-evaluation`, when `specs/ui-layout-variations-*.md` exists for the requested topic, or when the user asks how to test/review built variants.
+   - Read `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, `specs/ui-requirements-[topic].md`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
    - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
    - Include a side-by-side comparison matrix and a "Ready for `/consolidate-variations` (product-design pack)?" checklist.

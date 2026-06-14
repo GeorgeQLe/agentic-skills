@@ -1,3 +1,31 @@
+## Current Implementation - Prototype Session Loop Convention Refactor
+
+### Current Checklist
+
+- [x] Record the implementation plan in task docs.
+- [x] Archive and bump mirrored source skill contracts.
+- [x] Add `docs/prototype-session-loop-convention.md`.
+- [x] Patch mirrored product-design/product-testing skills to cite and follow the convention.
+- [x] Regenerate/sync derived package and installed skill surfaces.
+- [x] Run verification and fix focused regressions.
+- [x] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting state: active source skills already use the `design/` flow-tree and prototype build-plan artifacts from prior work; this pass names the shared prototype-session-loop contract and tightens UAT/consolidation/task routing around it.
+- Working tree had pre-existing changes in `docs/alignment-yaml-routing-contract.md`, `docs/orchestrator-convention.md`, and untracked `docs/research-session-loop-convention.md`; those are treated as unrelated user/pre-existing work unless verification requires otherwise.
+- Additional unrelated unstaged changes appeared in `base/claude/provision-agentic-config/SKILL.md`, `base/*/provision-agentic-config/archive/v0.11/`, `docs/interview-convention.md`, and `docs/skill-anatomy.md`; they remain outside this commit.
+- Added the prototype-session-loop convention doc, archived/bumped the six targeted skills across Claude and Codex mirrors, refreshed package metadata/build surfaces, and refreshed installed local skill copies where this repo currently had them.
+- Verification passed:
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - Targeted `rg` audits for prototype convention references and legacy `specs/` fallback usage
+  - `git diff --check`
+
 ## Current Implementation - Product Design Prototype Routing Cleanup
 
 ### Current Checklist

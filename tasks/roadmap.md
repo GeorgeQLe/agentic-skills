@@ -1,3 +1,41 @@
+## Current Implementation - Prototype Session Loop Convention Refactor
+
+### Goal
+
+Create `docs/prototype-session-loop-convention.md` as the named contract for prototype-phase product-design/product-testing work, then refactor the mirrored skills so branch progress, build ledgers, alignment gates, UAT evidence, and human-evaluation tasks use consistent artifact stores.
+
+### Scope
+
+- New `docs/prototype-session-loop-convention.md`
+- `packs/product-design/{codex,claude}/user-flow-map/SKILL.md`
+- `packs/product-design/{codex,claude}/ux-variations/SKILL.md`
+- `packs/product-design/{codex,claude}/ui-interview/SKILL.md`
+- `packs/product-design/{codex,claude}/prototype/SKILL.md`
+- `packs/product-design/{codex,claude}/consolidate-variations/SKILL.md`
+- `packs/product-testing/{codex,claude}/uat/SKILL.md`
+- Matching changelogs, archives, generated package output, and installed local skill copies where present
+- Task review notes and verification results
+
+### Plan
+
+1. Record this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Archive current mirrored source skill contracts before version bumps.
+3. Add the prototype session loop convention doc as a companion to the research session loop convention, without importing Pattern A selected-framework manifests.
+4. Bump and patch mirrored product-design/product-testing skills to cite the convention and consistently use `design/**/flow-tree-*.yaml`, `design/prototype-build-plan-*.md`, alignment-page approvals, `research/uat-variant-evaluation-*.md`, `prototypes/{topic}/consolidated/`, and `tasks/manual-todo.md`.
+5. Fix UAT variant-evaluation inputs to prefer `design/` artifacts while allowing legacy `specs/` files only as fallback evidence.
+6. Regenerate/sync derived package and installed local skill surfaces.
+7. Run archive/version, mirror/build, routing/content, and diff hygiene verification.
+8. Commit and push the verified mutation set.
+
+### Acceptance Criteria
+
+- All six affected skills in both Codex and Claude mirrors cite `docs/prototype-session-loop-convention.md`.
+- Branch state remains in `design/**/flow-tree-*.yaml`; prototype build status remains in `design/prototype-build-plan-*.md` plus the flow-tree manifest.
+- Alignment checkpoints are described as non-final; final compiled YAML controls canonical writes for skills already using that lifecycle.
+- Human prototype/UAT evaluation is routed to `tasks/manual-todo.md`; `tasks/todo.md` is reserved for implementation fixes only after human evidence exists.
+- UAT variant-evaluation reads `design/ux-variations-*`, `design/ui-requirements-*`, and `design/ui-layout-variations-*` first, with `specs/` only as legacy fallback evidence.
+- Generated package output and installed local copies are refreshed from source, not hand-edited.
+
 ## Current Implementation - Product Design Prototype Routing Cleanup
 
 ### Goal
