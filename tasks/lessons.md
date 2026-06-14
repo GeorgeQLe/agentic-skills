@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-06-14 — Revision feedback should not preserve the rejected framing
+
+- The user identified a recurring pattern where agents respond to feedback by adding warnings or negative emphasis around the undesired behavior instead of simply applying the requested edit.
+- Treat this as overcorrection/negative instruction anchoring: the rejected concept becomes more salient because it is repeated in the durable artifact.
+- When revising skills, research docs, alignment pages, or task docs, first classify the user request as add, remove, replace, reweight, or verify. For remove/replace/reweight requests, make the target text match the desired final state and do not add a new cautionary paragraph about the thing being removed unless the user explicitly asks for a warning.
+- In research artifacts, keep rejected or corrected claims out of the canonical narrative. If provenance is needed, put it in a concise revision note or archive record, not in the forward-facing findings, recommendations, or future-agent instructions.
+
 ## 2026-06-13 — Research/prototype routing must not jump to roadmap
 
 - A product-design route fix added the prototype build-plan synthesis step but left `ui-interview` able to recommend `agent-work-admin`/`roadmap` after approved UI branch work.
