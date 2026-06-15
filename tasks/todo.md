@@ -8,7 +8,7 @@
 - [x] Update docs/convention and regenerate bundles.
 - [x] Add focused tests.
 - [x] Run required verification and reconcile results.
-- [ ] Commit and push the verified changes.
+- [x] Commit and push the verified changes.
 
 ### Review Notes
 
@@ -23,6 +23,7 @@
   - `node scripts/upgrade-alignment-page.mjs --check`
   - `git diff --check`
   - Runtime smoke: `node packages/skillpacks/bin/skillpacks.mjs alignment pages serve --port 8917` served the repo root and `curl -sS -I http://localhost:8917/alignment/` returned `HTTP/1.1 200 OK`.
+- Shipped in commit `1bb065f2` on `master`.
 
 ## Current Implementation - Alignment Portability
 
