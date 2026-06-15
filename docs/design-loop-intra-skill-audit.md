@@ -49,6 +49,84 @@ Two genuinely new ideas remain, and this audit evaluates each:
 
 ---
 
+## Reframed goal (user directive): minimize per-session context via substep chunking + a shared context brief
+
+> **This section supersedes the cost/benefit weighting in the first draft of Part A.** The user's
+> stated objective is to **minimize the context window each agent session consumes** before clearing
+> context and starting the next step, by **chunking steps into substeps** that each run in a fresh
+> session, with **a shared document each agent reads to gain just enough context to do its current
+> substep.** Context minimization is the goal, not a benefit to be weighed against complexity — so the
+> verdicts below shift from "is it worth it?" to "what is the cleanest mechanism, and where does it
+> give the most relief?"
+
+The shared document is the missing piece, and it is exactly what neutralizes the two objections that
+made the first-draft verdicts lukewarm. It is the design-loop analog of the research loop's
+**"complete context transfer" handoff** — the preliminary interview handoff that "must carry … detected
+mode, context summary, recommended subset with rationale, and any user answers"
+(`research-session-loop-convention.md:116`) so the *next cold session builds the next thing reading
+only that file.*
+
+### Three-tier state model
+
+To run one substep per cold session without re-reading everything, a session bootstraps from three
+bounded inputs instead of the full conversation + all prior artifacts:
+
+| Tier | Artifact | Role | Lifecycle |
+|---|---|---|---|
+| **Machine cursor** | flow-tree manifest (`design/**/flow-tree-*.yaml`) | Names *which committed branch state* exists; the post-approval source of truth (unchanged from today) | Permanent |
+| **Shared context brief** *(new)* | `design/{slug}/_working/{skill}-{topic}-brief.md` | Compact prose: the distilled output of the expensive setup phase + a short running decision log + the substep checklist/cursor. **This is the "enough context to do the current substep" doc.** | `_working/`, throwaway, archived at canonical write |
+| **Per-substep intermediates** *(new)* | `design/{slug}/{skill}-{topic}/{unit-id}.md` | The actual work product of each substep, accumulating one file per unit; assembled into the single canonical doc at the end | `_working`-band until the final gate, then assembled into canonical |
+
+### The per-session shape (research loop's unifying rule, applied intra-skill)
+
+```
+(read brief + manifest cursor)              ← light, BOUNDED context bootstrap
+   → (do exactly ONE substep)               ← the only heavy work; writes one intermediate
+      → (update the brief: mark substep done, append any new shared facts)   ← light tail
+         → STOP, naming the same skill for re-invocation
+```
+
+**Why a brief and not "just read the prior intermediates."** Reading all prior substep outputs grows
+context *linearly with progress* — the opposite of the goal. The brief is **bounded**: it carries
+forward only the distilled shared context and a short decision log, never the full body of every prior
+substep. Session cost stays roughly constant (small brief + one unit) instead of climbing as the run
+proceeds. That bounded-cost property is the whole point.
+
+### How the brief resolves the two first-draft objections
+
+1. **"Schema change needed for the cursor" (first-draft shared finding 3) — resolved, no schema
+   change.** Put the **substep cursor in the working brief**, not the manifest. The brief is
+   pre-approval `_working/` state — the exact analog of the research loop's run manifest + working
+   packets, which also live under `_working/` and are archived on commit
+   (`research-session-loop-convention.md:84-104,119-124`). The flow-tree manifest keeps recording only
+   **committed, post-approval** branch state (its existing `status` enum is sufficient), so
+   `flow-tree.schema.json` does **not** need a new enum value or sub-node for chunking. This drops the
+   effort and risk of the Part-A items materially versus the first draft.
+
+2. **"One approval gate per unit multiplies friction" (first-draft shared finding 4) — resolved by
+   one-final-gate.** The substep sessions are **pre-approval drafting** into `_working/`; there is
+   still exactly **one** binding alignment-page `review → confirmed` gate at the end, after the
+   intermediates are assembled. This respects "checkpoint confirmations are not final approval"
+   (`prototype-session-loop-convention.md:70`) and preserves the whole-set comparison UX
+   (`ux-variations/SKILL.md:113-123`): the user reviews the assembled set once, not five times.
+
+### Scope decision: per-skill-run brief (recommended) vs. one pipeline-wide brief
+
+A genuine fork for the follow-up plan:
+
+- **Recommended — per-skill-run brief.** One brief per skill invocation
+  (`{skill}-{topic}-brief.md`), scoped to that skill's substeps. Cross-skill context continues to flow
+  through the canonical artifacts + flow-tree manifest exactly as today (those already serve the
+  cross-skill loop well). Smallest change; each brief stays small and focused.
+- **Alternative — one pipeline-wide brief.** A single `design/{slug}/{topic}-context.md` shared across
+  `user-flow-map` → `ux-variations` → `ui-interview`. Richer cross-skill continuity, but the brief
+  grows across the whole pipeline (working against the bounded-cost property) and overlaps the
+  manifest's job. Recommend only if cross-skill context loss proves to be a real problem.
+
+Default to the per-skill-run brief; revisit the pipeline-wide variant if needed.
+
+---
+
 ## Evidence base (what was read)
 
 | Source | What it established |
@@ -58,7 +136,7 @@ Two genuinely new ideas remain, and this audit evaluates each:
 | `ux-variations/SKILL.md` | Heavy per-unit phase = step 7 "Specify each approved variation enough to build" (lines 125-140), N≈5 (line 96). All units land in **one** doc `design/ux-variations-[topic].md` (line 158). Flow-tree cursor = `branches[].ux_variations[]` entries with `id/label/status` (lines 46, 160). |
 | `ui-interview/SKILL.md` | Heavy phase = the per-branch "Branch review loop" steps 4-6 (lines 76-119); already one branch per run. One alignment-page approval gate per run (step 9, lines 135-144). Deprioritizes inspiration (line 127). |
 | `user-flow-map/SKILL.md` | Owns the wireframe-tree root + build-plan synthesis (line 23). Its N-unit fan-out **is** downstream `/ux-variations` calls (line 19). Already emits a fresh-context stop/continue handoff (lines 191-198). |
-| `design/flow-tree.schema.json` | `additionalProperties: false` throughout. `ux_variation_branch` requires `id/label/status/artifacts/ui_reviews` (lines 204-232). `status` enum has no "spec-drafted-not-approved" intermediate value (lines 90-101). Any per-sub-unit cursor field is a **schema change**. |
+| `design/flow-tree.schema.json` | `additionalProperties: false` throughout. `ux_variation_branch` requires `id/label/status/artifacts/ui_reviews` (lines 204-232). `status` enum has no "spec-drafted-not-approved" intermediate value (lines 90-101). A per-sub-unit cursor *in the manifest* would be a schema change — **but the reframe puts the substep cursor in the `_working/` brief instead, so no schema change is required** (see § Reframed goal). |
 | `docs/orchestrator-convention.md` | Pattern A vs B vs C. Pattern A = framework decomposition + synthesis, self-advancing via the Research Session Loop (lines 33-113). |
 | `docs/skill-versioning.md` | Decimal bump for behavioral change; archive prior `SKILL.md` to `archive/<old>/`; `CHANGELOG.md` entry; mirror parity across `{claude,codex}` (lines 14-35, 136-142). |
 | `grep` web-harness scan | `WebSearch`/`WebFetch` appear in `customer-discovery` (lines 184, 560, 599), `enterprise-icp:70`, `growth-model:86`, and ~10 other business skills — **never** in the three design skills. `deep-research` is a built-in harness skill, not a repo file. |
@@ -68,9 +146,10 @@ Two genuinely new ideas remain, and this audit evaluates each:
 
 ## Part A — Intra-skill self-re-invocation audit (per skill)
 
-The question for each skill: is a **second** chunking level — one unit per cold session, the skill
-re-invoking *itself* between units — worth adding *on top of* the cross-skill chaining the prototype
-loop already provides?
+Given the reframed goal, the question per skill is **not** "is a second chunking level worth it?" but
+"how much per-session context relief does brief-driven substep chunking buy here, and what's the
+cleanest unit?" — a second chunking level on top of the cross-skill chaining the prototype loop
+already provides, advanced by the skill re-invoking *itself* between substeps.
 
 ### Shared findings that frame every verdict
 
@@ -82,19 +161,22 @@ loop already provides?
    loop's "file existence = done" cursor; it must either invent per-unit intermediate files or key
    off a manifest status field.
 
-2. **The cursor must be the flow-tree manifest — not a new `*-run.yaml`.** The prototype convention
-   is explicit: prototype-phase skills "do not use Pattern A selected-framework run manifests"
-   (`prototype-session-loop-convention.md:31`; restated `ux-variations/SKILL.md:18`). So any unit
-   cursor must live as a `status` on existing manifest nodes (`branches[].ux_variations[].status`,
-   `…ui_reviews[].status`), **not** a `ux-variations-run.yaml`.
+2. **No `*-run.yaml` is allowed.** The prototype convention is explicit: prototype-phase skills "do
+   not use Pattern A selected-framework run manifests" (`prototype-session-loop-convention.md:31`;
+   restated `ux-variations/SKILL.md:18`). So the substep cursor cannot be a `ux-variations-run.yaml`.
+   The two remaining homes are (a) a `status` on existing manifest nodes
+   (`branches[].ux_variations[].status`, `…ui_reviews[].status`) or (b) the `_working/` brief. The
+   reframe chooses (b) — see finding 3.
 
-3. **The schema constrains the cursor.** `flow-tree.schema.json` is `additionalProperties: false`
-   (line 7 and every `$def`), and the `status` enum (`proposed`, `ready-for-ui`, `approved`,
-   `rejected`, `retry-needed`, `promoted-to-prototype`, `consolidated` — lines 90-101) has **no
-   "spec-drafted, not yet approved" value.** An intra-skill loop needs to distinguish "this unit's
-   heavy spec work is done" from "this unit is approved." That requires **either** a new enum value
-   (e.g. `specified`) **or** a new per-unit field — both are schema edits, which ripple to every
-   skill that reads the schema.
+3. **Putting the *drafting* cursor in the manifest would force a schema change; putting it in the
+   brief does not.** `flow-tree.schema.json` is `additionalProperties: false` (line 7 and every
+   `$def`), and the `status` enum (`proposed`, `ready-for-ui`, `approved`, `rejected`, `retry-needed`,
+   `promoted-to-prototype`, `consolidated` — lines 90-101) has **no "spec-drafted, not yet approved"
+   value.** Tracking per-substep drafting progress in the manifest would therefore need a new enum
+   value (e.g. `specified`) or sub-node — a schema edit rippling to every reader. **The reframe
+   sidesteps this:** drafting is pre-approval `_working/` state, so the substep cursor lives in the
+   brief's checklist, and the manifest keeps recording only committed, post-approval branch state with
+   its existing enum. No schema change.
 
 4. **Approval-gate multiplication is the real cost.** Today each skill emits **one** binding
    alignment-page `review → confirmed` gate per run (`ui-interview/SKILL.md:135-144`;
@@ -105,11 +187,15 @@ loop already provides?
    (`ux-variations/SKILL.md:96,113-123` — "Present the concepts for adjustment"; "Do not ask the
    user to remove or merge concepts before they have been built").
 
-These four findings mean an intra-skill loop is **not free** the way it looked by analogy to the
-research loop. It is justified only where per-unit context cost is genuinely large *and* the
-per-unit work can stand alone behind its own gate without harming the compare-the-set UX.
+**Reframe note:** findings 1-2 still hold and define the mechanism (a brief + per-unit intermediates,
+cursor off `_working/` not a `*-run.yaml`). Findings 3-4 are the two objections that made the
+first-draft verdicts lukewarm — and **the shared context brief resolves both**: the substep cursor
+lives in the `_working/` brief (no schema change), and one final assemble-then-approve gate avoids
+gate multiplication (see § Reframed goal). With both objections neutralized and context minimization
+as the stated goal, the verdicts below shift toward **adopt**, differing only in how much relief each
+skill gets.
 
-### A.1 `ux-variations` — **adopt, optional and threshold-gated (not mandatory)**
+### A.1 `ux-variations` — **adopt (primary target)**
 
 **Heavy per-unit phase.** Step 7, "Specify each approved variation enough to build"
 (`SKILL.md:125-140`). In layout-mode this expands to content-to-component mapping, region
@@ -118,48 +204,43 @@ and build-time estimates *per variation* (lines 127-140). With the default N=5 (
 the single heaviest accumulation point in the whole design pack: five full build-grade specs
 authored in one context.
 
-**Natural unit.** One variation = one `branches[].ux_variations[]` entry — the cursor home already
-exists in the schema (`flow-tree.schema.json:204-232`).
+**Natural unit.** One variation = one `branches[].ux_variations[]` entry. Its committed status lives in
+the manifest as today; its *drafting* cursor lives in the brief.
 
-**Why it's the strongest candidate.** Clean countable units, the heaviest per-unit work, and a cursor
-node that already exists. If any design skill benefits from per-unit fresh contexts, it's this one.
+**Why it's the primary target.** Clean countable units, the heaviest per-unit work, and the largest
+single-session context accumulation in the whole design pack. This is where substep chunking buys the
+most relief: instead of one session holding five full build-grade specs at once, each session holds
+the brief + one spec.
 
-**Why *not* mandatory.** Two real frictions pull against it:
+**Mechanism (concrete).**
 
-- **It collides with the "compare the whole set" UX.** Steps 5-6 deliberately generate all 5 concepts
-  *lightweight* first and ask the user to adjust the **set** before any deep spec (`SKILL.md:95-123`).
-  The concept-selection checkpoint and "do not ask the user to remove or merge concepts before they
-  have been built" (line 120) assume the user holds all concepts in view at once. A per-variation
-  loop that approves variation 1 fully before variation 2 is even specified weakens that
-  whole-set comparison.
-- **Gate multiplication.** Five binding alignment pages instead of one (see shared finding 4).
+- **Setup session (one cold session):** run the existing light phases together — interview →
+  assumptions manifest → 5 lightweight concepts → concept-set checkpoint (`SKILL.md:73-123`). These
+  are cheap and benefit from being co-located. Its durable output is the **shared brief**
+  `design/{slug}/_working/ux-variations-{topic}-brief.md` containing: the decision surface, the
+  confirmed assumptions, the locked shared constraints (stack/design-system), the 5 concept theses,
+  the evaluation criteria, and a substep checklist (`v1 … v5: pending`). Initialize the flow-tree
+  `branches[].ux_variations[]` entries at their existing `proposed` status. Stop.
+- **Spec sessions (one per variation):** read the brief + checklist → pick the next `pending`
+  variation → write its full build spec (step 7, `SKILL.md:125-140`) to
+  `design/{slug}/ux-variations-{topic}/{variation-id}.md` → mark it done in the brief's checklist and
+  append any cross-variation facts worth carrying (e.g. "v2 shares the nav model decided for v1") →
+  stop with a clear-context / re-invoke handoff (mirroring `user-flow-map/SKILL.md:191-194`). Context
+  per session ≈ brief + one spec — bounded.
+- **Assemble + approve session:** when the checklist is all-done, assemble the per-variation files into
+  the single canonical `design/{slug}/ux-variations-{topic}.md`, build **one** `review` alignment page
+  over the whole set, and on approval write canonical + flip manifest statuses + archive the brief and
+  intermediates. One binding gate, whole-set comparison preserved.
+- **No schema change** (cursor is in the brief). **Small runs fold:** if a run has few variations, the
+  loop's own "do not spend a round-trip on a near-empty session" rule
+  (`research-session-loop-convention.md:44,160`) collapses it back toward one session — so a threshold
+  (auto-chunk at N ≥ ~4, or `--chunked`) keeps tiny runs cheap.
 
-**Mechanism sketch (if adopted).** Keep the existing flow: interview → 5 lightweight concepts →
-concept-set checkpoint (all in **one** session, because these phases are light). Then split **only
-step 7**, the heavy spec phase:
+**Verdict: adopt — primary target.** Split step 7 into per-variation spec sessions driven by the
+shared brief, with one final assemble-then-approve gate. Largest context relief, no schema change,
+whole-set UX intact.
 
-- Add a per-variation intermediate `design/{slug}/ux-variations-{topic}/{variation-id}.md` (a new
-  per-unit file, the design analog of the research loop's framework intermediate). The single
-  canonical `design/{slug}/ux-variations-{topic}.md` is **assembled** from the per-variation files at
-  the end (or links to them).
-- Cursor: a per-variation `status` on `branches[].ux_variations[]`. This needs a new enum value
-  (e.g. `specified`) to mean "spec drafted, awaiting the run's approval" distinct from `proposed`
-  and `approved` — a `flow-tree.schema.json` change.
-- Each re-invocation specs the next variation whose status is still `proposed`, writes its
-  intermediate, sets it `specified`, and stops with a continue/clear-context handoff (mirroring
-  `user-flow-map/SKILL.md:191-194`). When all are `specified`, one **final** approval page covers the
-  assembled set — preserving the single whole-set gate and sidestepping gate multiplication.
-- Gate it behind a **threshold** (e.g. `--chunked`, or auto only when N ≥ a threshold like 5–6 *and*
-  layout-mode's heavy per-variation spec is in play). Small runs fold into one session per the loop's
-  own "do not spend a round-trip on a near-empty session" rule
-  (`research-session-loop-convention.md:44,160`).
-
-**Verdict: adopt intra-skill loop — optional/threshold-gated, splitting only step 7, with one final
-set-level approval gate (not one gate per variation).** This is the only place the bloat relief is
-real, and the "intermediate per unit, assemble at end" shape keeps the whole-set comparison and the
-single binding gate intact.
-
-### A.2 `ui-interview` — **conditional; recommend an optional threshold-gated per-page split, not mandatory**
+### A.2 `ui-interview` — **adopt for large branches (brief carries the page cursor)**
 
 **Heavy phase.** The per-branch "Branch review loop" (steps 4-6, `SKILL.md:76-119`): investigate the
 branch, design a proposed UI, render an HTML visual mockup, interview for alignment, and in full mode
@@ -172,23 +253,30 @@ already (`SKILL.md:15,76-82`), and routes to the next branch via its own `/ui-in
 one-branch-per-cold-session granularity. The intra-skill question is only about going *finer*: one
 **page/section** per session within a single branch.
 
-**Natural sub-unit.** One page in the page inventory (step 5, lines 84-90). But the cursor problem is
-worse here: the schema's `ui_reviews[]` node (`flow-tree.schema.json:234-256`) has **no per-page
-sub-structure** — there is no `pages[]` array to hold per-page status. A per-page loop would need a
-**new nested schema node**, not just a new enum value.
+**Natural sub-unit.** One page in the page inventory (step 5, lines 84-90). In the first draft this
+ranked low because the schema's `ui_reviews[]` node (`flow-tree.schema.json:234-256`) has no
+`pages[]` sub-structure, implying a nested schema change. **The reframe removes that blocker:** the
+per-page cursor lives in the shared brief's page checklist (pre-approval `_working/` state), so the
+manifest still records only the one committed `ui_reviews[]` decision per branch — **no schema
+change.**
 
-**Cost.** Per-page chunking only pays off for a genuinely large branch (many pages). For the common
-case — a branch of a handful of pages — it adds round-trips and a much bigger schema change for
-little context relief, and it fragments the single HTML visual mockup (step 4b, line 80) that the
-user judges the branch by.
+**Mechanism.** Setup session: assumptions manifest + branch investigation + the HTML visual-mockup
+direction (steps 3-4, `SKILL.md:69-82`) → write `design/{slug}/_working/ui-interview-{topic}-brief.md`
+with the page inventory as the checklist + the global-shell decisions every page shares. Spec sessions:
+one page's full spec (step 6, `SKILL.md:110-120`) per cold session, reading the brief. Assemble +
+approve: one alignment page over the whole branch spec, one binding gate.
 
-**Verdict: keep cross-skill phase only by default; recommend an *optional, threshold-gated* per-page
-split.** Adopt a per-page intra-skill loop **only** when a branch exceeds a page-count threshold
-(e.g. 6+ pages). Below that, the existing one-branch-per-run cross-skill chunking is sufficient. If
-implemented, it requires a `pages[]` sub-node in `ui_reviews[]` (larger schema change than
-`ux-variations`) — which is part of why this ranks below `ux-variations`.
+**Where it pays off.** Per-page chunking earns its round-trips on **large branches** (many pages); a
+small branch folds back to one session via the near-empty-session rule. The one real caution is the
+**HTML visual mockup** (step 4b, line 80): it is judged as a whole, so produce it in the setup session
+(or a dedicated mockup session) and keep the page-spec sessions text-only, rather than fragmenting the
+mockup across pages.
 
-### A.3 `user-flow-map` — **not worth it; no change**
+**Verdict: adopt for large branches.** Same brief-driven mechanism as `ux-variations`, gated by page
+count; keep the visual mockup whole in the setup session. No schema change. Ranks just below
+`ux-variations` only because branch sizes are often small enough to fold.
+
+### A.3 `user-flow-map` — **applicable but lowest relief; chunk only large flows**
 
 **Heavy phase.** Mapping one flow (steps 3-4, `SKILL.md:88-119`) or build-plan synthesis (step 5,
 lines 121-143).
@@ -201,19 +289,31 @@ one `user-flow-map` session the way step-7 specs are trapped in `ux-variations`.
 
 **It already emits a fresh-context handoff.** Steps after approval present an explicit "stop here so
 the user can clear context and run `/ux-variations` in a fresh session" vs "continue immediately"
-choice (`SKILL.md:191-198`). The fresh-context relief an intra-skill loop would provide is **already
-present** via this handoff plus the downstream chaining.
+choice (`SKILL.md:191-198`) — so its *primary* fan-out relief already exists via downstream chaining.
 
-**Verdict: not worth it — recommend no change.** Adding an intra-skill loop here would duplicate the
-cross-skill fan-out it already produces and add machinery with no bloat relief to show for it.
+**Where intra-skill chunking could still help.** A single large flow's step-3 mapping has ten
+sub-steps (`SKILL.md:88-101`) producing one cohesive map. For a big flow this can be chunked: setup
+session writes the brief (persona, goal, happy path, entry points); spec sessions fill the
+screen/route inventory, then per-screen action/state matrices, then failure/recovery, then handoffs —
+each reading the brief. The relief is smaller than `ux-variations` because the flow map is more
+holistic (later sections reference earlier ones, so the brief must carry more), and small flows fold
+to one session.
 
-### Part A summary
+**Verdict: applicable but lowest priority.** The same brief-driven mechanism works, but the
+cross-skill fan-out already covers the common case and the per-screen units are more interdependent.
+Adopt only after `ux-variations`/`ui-interview`, and only for large flows. No schema change.
 
-| Skill | Verdict | Heavy unit | Cursor home | Schema change needed | Gate impact |
+### Part A summary (reweighted for context minimization)
+
+| Skill | Verdict | Heavy unit chunked | Drafting cursor | Schema change | Final gate |
 |---|---|---|---|---|---|
-| `ux-variations` | **Adopt — optional/threshold, split step 7 only, one final set gate** | per-variation build spec (N≈5) | `branches[].ux_variations[].status` (exists) | new enum value `specified` + per-variation intermediate file path convention | none if assembled-then-one-gate |
-| `ui-interview` | **Conditional — optional/threshold per-page split** | per-page spec within a branch | none today | **new `pages[]` sub-node** in `ui_reviews[]` | risk of fragmenting the single mockup gate |
-| `user-flow-map` | **Not worth it — no change** | per-flow map | n/a | none | n/a |
+| `ux-variations` | **Adopt — primary target** | step-7 per-variation build spec (N≈5) | brief checklist (`_working/`) | **none** | one assemble-then-approve |
+| `ui-interview` | **Adopt — large branches** | step-6 per-page spec | brief checklist (`_working/`) | **none** | one per branch; keep mockup whole in setup |
+| `user-flow-map` | **Applicable, lowest priority** | step-3 per-section map (large flows only) | brief checklist (`_working/`) | **none** | one per flow |
+
+All three use the **same** shared-brief mechanism; they differ only in how much relief chunking buys
+(highest for `ux-variations`, lowest for `user-flow-map`). The reframe means **no `flow-tree.schema.json`
+change is required for any of them** — the substep cursor lives in the `_working/` brief.
 
 ---
 
@@ -321,38 +421,40 @@ three skills.
 
 ## Part C — Recommended course of action
 
-Synthesis of Parts A + B into a phased plan. Each item is independently shippable; the user can pick
-any subset for a follow-up implementation plan. "Version bump" follows `docs/skill-versioning.md`
-(decimal bump for behavioral change, archive prior `SKILL.md`, `CHANGELOG.md` entry, **claude + codex
-in lockstep**).
+Synthesis of Parts A + B, **reweighted around the stated goal** (minimize per-session context via
+substep chunking + a shared brief). The foundational item is now the **shared-context-brief
+mechanism** itself; the per-skill adoptions build on it; the `design-inspirations` skill is an
+independent track. Each item is independently shippable. "Version bump" follows
+`docs/skill-versioning.md` (decimal bump for behavioral change, archive prior `SKILL.md`,
+`CHANGELOG.md` entry, **claude + codex in lockstep**).
 
 | # | Item | Effort | Risk | Version / artifact impact | Conventions / audits touched |
 |---|---|---|---|---|---|
-| 1 | **Add `design-inspirations` skill** (Part B) | **Medium** | **Low** | New skill at v0.0, two mirrors; new `design/design-inspirations-{topic}.md` artifact; `PACK.md` entry; `ALIGNMENT-PAGE.md` + `CHANGELOG.md` per skill scaffolding | `prototype-session-loop-convention.md` (new "inspiration feeder" subsection); glossary write-forward (type: research); mirror parity audit; alignment-page audit |
-| 2 | **Add optional/threshold intra-skill loop to `ux-variations`** (Part A.1) — split step 7 only, per-variation intermediates, assemble-then-one-gate | **Medium-High** | **Medium** | `ux-variations` decimal bump (v0.20 → v0.21), both mirrors, archive prior; **`flow-tree.schema.json` change** (new `status` enum value `specified`) | `prototype-session-loop-convention.md` (intra-skill chunking subsection); `flow-tree.schema.json`; mirror parity audit; any skill reading the schema |
-| 3 | **Optional threshold-gated per-page split for `ui-interview`** (Part A.2) | **High** | **Medium-High** | `ui-interview` decimal bump (v0.22 → v0.23), both mirrors, archive prior; **larger schema change** (`pages[]` sub-node in `ui_reviews[]`) | `flow-tree.schema.json`; `prototype-session-loop-convention.md`; mirror parity audit. Defer unless large-branch pain is demonstrated. |
-| 4 | **Update `docs/prototype-session-loop-convention.md`** to describe (a) intra-skill chunking as a second level on top of cross-skill chaining and (b) the inspiration-feeder artifact | **Low-Medium** | **Low** | Convention doc only (non-skill); no version bump | This is the umbrella doc edit that items 1-3 reference |
-| 5 | **Leave `user-flow-map` as-is** (Part A.3) | **None** | **None** | No change | — |
+| 1 | **Define the shared-context-brief mechanism** in `docs/prototype-session-loop-convention.md` — three-tier state (manifest cursor + `_working/` brief + per-substep intermediates), the per-session shape, the brief naming convention `design/{slug}/_working/{skill}-{topic}-brief.md`, archive-at-canonical-write timing, and the one-final-gate rule | **Low-Medium** | **Low** | Convention doc only (non-skill); no version bump. **No schema change.** | `prototype-session-loop-convention.md` (new "Intra-skill substep chunking + shared brief" section); references `research-session-loop-convention.md` handoff pattern |
+| 2 | **Adopt the brief loop in `ux-variations`** (Part A.1, primary target) — split step 7 into per-variation spec sessions, brief-driven cursor, assemble-then-one-gate; threshold/`--chunked` so small runs fold | **Medium** | **Low-Medium** | `ux-variations` decimal bump (v0.20 → v0.21), both mirrors, archive prior; new `design/{slug}/ux-variations-{topic}/{variation-id}.md` intermediates + `_working/` brief. **No schema change.** | item 1 convention; mirror parity audit; alignment-page audit |
+| 3 | **Adopt the brief loop in `ui-interview`** (Part A.2) — per-page spec sessions for large branches, brief carries the page checklist, mockup kept whole in setup, one gate per branch | **Medium** | **Low-Medium** | `ui-interview` decimal bump (v0.22 → v0.23), both mirrors, archive prior; new per-page intermediates + `_working/` brief. **No schema change.** | item 1 convention; mirror parity audit; alignment-page audit |
+| 4 | **Add `design-inspirations` skill** (Part B) — independent track; single-pass web research feeder, soft read-if-exists input to `ux-variations`/`ui-interview` | **Medium** | **Low** | New skill at v0.0, two mirrors; new `design/design-inspirations-{topic}.md` artifact; `PACK.md` entry; `ALIGNMENT-PAGE.md` + `CHANGELOG.md` scaffolding; referenced from manifest `source_artifacts[]` (no schema change) | `prototype-session-loop-convention.md` ("inspiration feeder" subsection); glossary write-forward (type: research); mirror parity + alignment-page audits |
+| 5 | **Adopt the brief loop in `user-flow-map`** (Part A.3) — large-flow per-section chunking only | **Medium** | **Low** | `user-flow-map` decimal bump (v0.8 → v0.9), both mirrors, archive prior. **No schema change.** | item 1 convention; mirror parity audit |
 
 ### Recommended sequencing & scope
 
-1. **Do item 1 first (`design-inspirations`).** It is the highest value-to-risk: it directly answers
-   the user's Q2, resolves the "web search for inspiration" premise cleanly, requires **no schema
-   change**, and needs no change to the other three skills (they gain a soft read-if-exists input
-   only when item 4's convention text lands). Low risk, self-contained.
-2. **Then item 4 (convention update)** so items 1-3 have a documented home, and the soft read-if-exists
-   integration for `ux-variations`/`ui-interview` is specified.
-3. **Then item 2 (`ux-variations` intra-skill loop)** if the user wants the deeper bloat relief —
-   gated behind the schema enum addition and the assemble-then-one-gate design that preserves the
-   whole-set comparison UX. This is the only Part-A item with clearly positive return.
-4. **Treat item 3 (`ui-interview` per-page) as deferred/optional** — adopt only if real large-branch
-   context bloat is observed; it carries the biggest schema change for the narrowest benefit.
-5. **Item 5 — no work.**
+1. **Item 1 first — define the mechanism.** Everything else depends on it, and it is the cheapest,
+   lowest-risk piece: a convention section, no skill or schema change. It pins down the brief naming,
+   the three-tier state, the per-session shape, and the one-final-gate rule so the per-skill adoptions
+   are mechanical.
+2. **Item 2 — `ux-variations`.** The primary target: largest single-session context accumulation, so
+   the most relief per unit of effort. No schema change now that the cursor lives in the brief.
+3. **Item 3 — `ui-interview`.** Same mechanism; adopt for large branches. Keep the HTML mockup whole.
+4. **Item 4 — `design-inspirations`.** Independent of the loop work; can proceed in parallel. Resolves
+   the "web search for inspiration" premise and feeds items 2-3 as a soft input.
+5. **Item 5 — `user-flow-map`.** Lowest relief; do last or skip until a large-flow pain case appears.
 
-**Smallest sensible scope:** items 1 + 4 (add the inspirations skill + document its integration).
-This delivers the user's main ask with the least risk and no schema churn.
-**Fuller scope:** items 1 + 4 + 2 (add inspirations feeder *and* the `ux-variations` step-7 loop).
-Items 3 stays deferred.
+**Smallest sensible scope:** items 1 + 2 (mechanism + `ux-variations`) — directly delivers the
+context-minimization goal where it matters most, no schema churn.
+**Fuller scope:** items 1 + 2 + 3 (+ 4 in parallel) — the brief loop across both per-unit-heavy skills,
+plus the inspiration feeder.
+**One open decision for the follow-up plan:** per-skill-run brief (recommended) vs. one pipeline-wide
+brief (see § Reframed goal → Scope decision).
 
 ---
 
@@ -361,16 +463,20 @@ Items 3 stays deferred.
 - **Both questions answered with cited evidence.** Part A gives a per-skill verdict against the
   prototype-loop model with `SKILL.md`/schema/convention line citations; Part B answers
   feasibility + shape + integration + placement with web-harness citations.
-- **Concrete enough to seed a follow-up plan.** Named paths
-  (`design/{slug}/ux-variations-{topic}/{variation-id}.md`,
-  `design/{slug}/design-inspirations-{topic}.md`), the manifest cursor
-  (`branches[].ux_variations[].status` + new `specified` enum value), route placement (feeder via
-  `source_artifacts[]`, not a 7th `route` stage), and version-bump implications are all specified.
+- **Concrete enough to seed a follow-up plan.** Named paths (the `_working/` brief
+  `design/{slug}/_working/{skill}-{topic}-brief.md`, per-substep intermediates
+  `design/{slug}/ux-variations-{topic}/{variation-id}.md`, `design/{slug}/design-inspirations-{topic}.md`),
+  the cursor location (substep checklist in the `_working/` brief — **no schema change**), route
+  placement (feeder via `source_artifacts[]`, not a 7th `route` stage), the one-final-gate rule, and
+  version-bump implications are all specified.
 - **No normative artifact modified.** This audit edits no `SKILL.md`, convention, manifest, schema,
   or build mirror — only this new doc under `docs/`.
 
 ## Out of scope (deferred to a follow-up plan the user approves)
 
-Actual edits to any `SKILL.md`; creation of the `design-inspirations` skill; `flow-tree.schema.json`
-changes; convention updates; version bumps, archives, and `CHANGELOG.md` entries; `PACK.md` edits;
-and shipping. Those happen only after the user reviews this recommendation and picks scope.
+Actual edits to any `SKILL.md`; creation of the `design-inspirations` skill; convention updates (the
+shared-brief mechanism and the inspiration-feeder subsection); version bumps, archives, and
+`CHANGELOG.md` entries; `PACK.md` edits; and shipping. The reframe means **no `flow-tree.schema.json`
+change is anticipated** (the substep cursor lives in the `_working/` brief); if the follow-up plan
+finds a case that needs one, that is also deferred to it. All of the above happen only after the user
+reviews this recommendation and picks scope.
