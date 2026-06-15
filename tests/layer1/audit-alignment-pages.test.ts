@@ -217,6 +217,7 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("TTS include drift:");
     expect(result.stderr).toContain("Missing TTS include in alignment/page-a.html");
+    expect(result.stderr).toContain("npx skillpacks alignment pages inject-tts alignment/page-a.html");
     expect(result.stderr).toContain("node scripts/inject-tts.mjs");
     expect(result.stdout).toContain("TTS include: 1 pages, DRIFT");
   });
@@ -233,7 +234,8 @@ describe("audit-alignment-pages fixture trees", () => {
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Module TTS tag in alignment/page-a.html");
-    expect(result.stderr).toContain("inject-tts.mjs --force");
+    expect(result.stderr).toContain("npx skillpacks alignment pages inject-tts --force alignment/page-a.html");
+    expect(result.stderr).toContain("node scripts/inject-tts.mjs --force");
   });
 
   it("fails on an old inline TTS block instead of the src tag", () => {
@@ -248,7 +250,8 @@ describe("audit-alignment-pages fixture trees", () => {
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Inline TTS in alignment/page-a.html");
-    expect(result.stderr).toContain("inject-tts.mjs --force");
+    expect(result.stderr).toContain("npx skillpacks alignment pages inject-tts --force alignment/page-a.html");
+    expect(result.stderr).toContain("node scripts/inject-tts.mjs --force");
   });
 
   it("fails on missing and invalid data attributes on <html>", () => {

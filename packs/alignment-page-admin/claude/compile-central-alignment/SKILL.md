@@ -2,7 +2,7 @@
 name: compile-central-alignment
 description: Generate a central alignment/index.html table of contents for all alignment pages in the current repo
 type: ops
-version: v0.2
+version: v0.3
 ---
 
 # Compile Central Alignment
@@ -57,7 +57,8 @@ Generate a browsable `alignment/index.html` that links to every alignment page i
 
 5. **Open or focus the central index:**
    - Verify `alignment/index.html` was written and still works as a direct `file://` page.
-   - Run `node scripts/open-html-page.mjs alignment/index.html --browser auto`.
+   - Run `npx skillpacks alignment pages open alignment/index.html --browser auto`.
+   - In this source checkout only, if the packaged CLI is unavailable, fall back to `node scripts/open-html-page.mjs alignment/index.html --browser auto`.
    - Report the opener script status exactly as one of `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
    - If the status is `blocked`, report the blocked open attempt; it does not fail this skill when `alignment/index.html` was generated and verified.
 

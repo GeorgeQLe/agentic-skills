@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "1adfb3c127afa891a4384bb210266ad57d6857bb4ca694e9fcc2a9c2a563e09d",
+  "source_fingerprint": "1ab28aad65121274dcce8a6df3508fdd5e1c2adf577efcb77597de7bd5c013d9",
   "packs": [
     {
       "name": "agent-bridge",
@@ -883,6 +883,19 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-create-alignment-page",
+      "name": "create-alignment-page",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "path": "base/claude/create-alignment-page/SKILL.md",
+      "content_sha256": "56bdbd25accff71569992b3de4ae09fe681c599350daf422b2f02792592e5479",
+      "archive_versions": [],
+      "command": "/create-alignment-page",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
@@ -1080,6 +1093,19 @@
         "v0.9"
       ],
       "command": "$codebase-status",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-create-alignment-page",
+      "name": "create-alignment-page",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "path": "base/codex/create-alignment-page/SKILL.md",
+      "content_sha256": "4ddc848fdd7b7efeb0b45f38f247011235543ddea8a08cd7c56d035df6a47aa3",
+      "archive_versions": [],
+      "command": "$create-alignment-page",
       "deck_memberships": []
     },
     {
@@ -1504,12 +1530,13 @@
       "scope": "pack",
       "pack": "alignment-page-admin",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "path": "packs/alignment-page-admin/claude/compile-central-alignment/SKILL.md",
-      "content_sha256": "c77a9045b6c0c9c2fd1c9eb52cdda2d2b73713947292f4b7265f9c57a16832ba",
+      "content_sha256": "97974f87725f8e98dacf462d69ecb0f182038b7d15890aa186b4f85c037fde5d",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/compile-central-alignment",
       "deck_memberships": []
@@ -1537,12 +1564,13 @@
       "scope": "pack",
       "pack": "alignment-page-admin",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "path": "packs/alignment-page-admin/codex/compile-central-alignment/SKILL.md",
-      "content_sha256": "ca7288f358f31c3f43880da998c100669a7cdc038aa597f69eea896ab0c78ae1",
+      "content_sha256": "13287fb6b60380b42db5943a7b6c5fdea04b559d0bf24585b151a5092b6264c0",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$compile-central-alignment",
       "deck_memberships": []

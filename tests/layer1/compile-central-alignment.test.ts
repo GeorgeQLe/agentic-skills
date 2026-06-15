@@ -19,10 +19,10 @@ describe("compile-central-alignment skill contract", () => {
       const skillPath = `${skillDir}/SKILL.md`;
       const content = read(skillPath);
 
-      expect(content, `${skillPath} opener script`).toContain("scripts/open-html-page.mjs");
-      expect(content, `${skillPath} exact index open command`).toContain(
-        "node scripts/open-html-page.mjs alignment/index.html --browser auto",
+      expect(content, `${skillPath} portable opener command`).toContain(
+        "npx skillpacks alignment pages open alignment/index.html --browser auto",
       );
+      expect(content, `${skillPath} source fallback`).toContain("node scripts/open-html-page.mjs alignment/index.html --browser auto");
       expect(content, `${skillPath} only opens central index`).toContain(
         "opens or focuses only the central index",
       );
@@ -81,6 +81,10 @@ describe("compile-central-alignment skill contract", () => {
       expect(read(archivePath), `${archivePath} archived version`).toMatch(/^version: v0\.0$/m);
 
       const changelog = read(changelogPath);
+      expect(changelog, `${changelogPath} v0.3`).toContain("## v0.3 - 2026-06-15");
+      expect(changelog, `${changelogPath} portable opener behavior`).toContain(
+        "npx skillpacks alignment pages open alignment/index.html --browser auto",
+      );
       expect(changelog, `${changelogPath} v0.1`).toContain("## v0.1 - 2026-06-05");
       expect(changelog, `${changelogPath} opener behavior`).toContain(
         "node scripts/open-html-page.mjs alignment/index.html --browser auto",

@@ -45,6 +45,7 @@ describe('skillpacks alignment command parsing', () => {
     assert.match(stdout, /gskp alignment/);
     assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\]/);
     assert.match(stdout, /alignment pages audit/);
+    assert.match(stdout, /alignment pages open <alignment\/page.html>/);
     assert.match(stdout, /alignment pages inject-tts \[--force\]/);
     assert.match(stdout, /alignment verify/);
   });
@@ -68,6 +69,37 @@ describe('skillpacks alignment command parsing', () => {
     assert.equal(command.kind, 'run');
     assert.deepEqual(command.args.slice(1), ['--root', projectRoot]);
     assert.equal(command.args[0].endsWith('scripts/audit-alignment-pages.mjs'), true);
+  });
+
+  it('wraps page opening through the packaged opener script', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveAlignmentCommand(
+      ['pages', 'open', 'alignment/example.html', '--browser', 'brave'],
+      { projectRoot }
+    );
+
+    assert.equal(command.kind, 'run');
+    assert.equal(command.command, process.execPath);
+    assert.deepEqual(command.args.slice(1), ['alignment/example.html', '--browser', 'brave']);
+    assert.equal(command.args[0].endsWith('scripts/open-html-page.mjs'), true);
+  });
+
+  it('passes opener dry-run and json flags through unchanged', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveAlignmentCommand(
+      ['pages', 'open', '--dry-run', '--json', '--browser=chrome', 'alignment/example.html'],
+      { projectRoot }
+    );
+
+    assert.equal(command.kind, 'run');
+    assert.deepEqual(command.args.slice(1), [
+      '--dry-run',
+      '--json',
+      '--browser=chrome',
+      'alignment/example.html'
+    ]);
   });
 
   it('wraps TTS injection and marks real runs for asset installation', () => {
@@ -109,6 +141,18 @@ describe('skillpacks alignment command parsing', () => {
       () => resolveAlignmentCommand(['pages', 'inject-tts', '../alignment/example.html']),
       /expected an alignment HTML page path/
     );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'open', 'alignment/../example.html']),
+      /expected an alignment HTML page path/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'open', 'docs/example.html']),
+      /expected an alignment HTML page path/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'open', 'alignment/example.html', '--browser', 'firefox']),
+      /unsupported browser 'firefox'/
+    );
   });
 });
 
@@ -125,6 +169,7 @@ describe('skillpacks package staging boundary for alignment commands', () => {
     for (const relativePath of [
       'scripts/upgrade-alignment-page.mjs',
       'scripts/audit-alignment-pages.mjs',
+      'scripts/open-html-page.mjs',
       'scripts/inject-tts.mjs',
       'scripts/alignment-tts-kokoro.js',
       'scripts/alignment-chart-snippets.js',

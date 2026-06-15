@@ -3,7 +3,7 @@
 // edits made without invoking a skill can be checked against
 // docs/alignment-page-convention.md. Archived pages under
 // docs/history/archive/ are out of scope. No write/fix mode: diagnostics
-// point at scripts/inject-tts.mjs or manual fixes.
+// point at npx skillpacks alignment pages inject-tts, the local script fallback, or manual fixes.
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -108,20 +108,20 @@ for (const file of pages) {
   if (!kokoroTag) {
     if (INLINE_TTS_RE.test(html)) {
       ttsDiagnostics.push(
-        `Inline TTS in ${rel} — the Brief Me script must be the src tag, never inlined. Run node scripts/inject-tts.mjs --force ${rel} to replace it.`,
+        `Inline TTS in ${rel} — the Brief Me script must be the src tag, never inlined. Run npx skillpacks alignment pages inject-tts --force ${rel} to replace it (or node scripts/inject-tts.mjs --force ${rel} in this source checkout).`,
       );
     } else {
       ttsDiagnostics.push(
-        `Missing TTS include in ${rel} — every alignment page needs <script src="../scripts/alignment-tts-kokoro.js"></script> before </body>. Run node scripts/inject-tts.mjs ${rel} to add it.`,
+        `Missing TTS include in ${rel} — every alignment page needs <script src="../scripts/alignment-tts-kokoro.js"></script> before </body>. Run npx skillpacks alignment pages inject-tts ${rel} to add it (or node scripts/inject-tts.mjs ${rel} in this source checkout).`,
       );
     }
   } else if (/\btype="module"/.test(kokoroTag[0])) {
     ttsDiagnostics.push(
-      `Module TTS tag in ${rel} — type="module" scripts are blocked by CORS on file:// URLs. Run node scripts/inject-tts.mjs --force ${rel} to replace it.`,
+      `Module TTS tag in ${rel} — type="module" scripts are blocked by CORS on file:// URLs. Run npx skillpacks alignment pages inject-tts --force ${rel} to replace it (or node scripts/inject-tts.mjs --force ${rel} in this source checkout).`,
     );
   } else if (INLINE_TTS_RE.test(html)) {
     ttsDiagnostics.push(
-      `Leftover inline TTS in ${rel} beside the src tag. Run node scripts/inject-tts.mjs --force ${rel} to clean it up.`,
+      `Leftover inline TTS in ${rel} beside the src tag. Run npx skillpacks alignment pages inject-tts --force ${rel} to clean it up (or node scripts/inject-tts.mjs --force ${rel} in this source checkout).`,
     );
   }
 

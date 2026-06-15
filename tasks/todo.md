@@ -1,3 +1,40 @@
+## Current Implementation - Alignment Portability
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt and record the implementation plan.
+- [x] Package `scripts/open-html-page.mjs` and expose `alignment pages open`.
+- [x] Update portable alignment convention and generated bundles.
+- [x] Create mirrored `$create-alignment-page` contracts.
+- [x] Add/update focused regression tests.
+- [x] Run required validation and reconcile results.
+- [x] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting point: working tree was clean.
+- Skill context: `create-agentic-skill`, because the requested plan creates a repo-managed `create-alignment-page` skill while also updating supporting package/convention infrastructure.
+- Implementation target: portable npm CLI commands should be primary in generated instructions; source-checkout `node scripts/...` commands remain fallbacks.
+- Added `alignment pages open` to the `skillpacks` CLI, package staging boundary, package `files`, npm docs, compatibility matrix, and node tests. The command validates safe direct-child `alignment/*.html` paths and passes `--browser`, `--dry-run`, and `--json` through to the packaged opener.
+- Updated the canonical alignment convention and regenerated 300 bundled `ALIGNMENT-PAGE.md` files so browser open, audit, and TTS injection prefer `npx skillpacks alignment pages ...` with source-checkout fallbacks.
+- Added mirrored base `create-alignment-page` skill contracts with generated alignment bundles, changelogs, benchmark coverage registration, and a deterministic tier-2 fixture.
+- Bumped `compile-central-alignment` to `v0.3` in both mirrors, archived `v0.2`, and switched its index open command to `npx skillpacks alignment pages open alignment/index.html --browser auto` with source-checkout fallback.
+- Refreshed project-local installed skill roots with `scripts/pack.sh refresh`, package manifest/build output, and Skills Showcase generated assets.
+- Validation passed:
+  - `npm --workspace packages/skillpacks run test:node` (77 tests)
+  - `npm --workspace packages/skillpacks run build:check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts layer1/compile-central-alignment.test.ts` (53 tests)
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests bench:coverage`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:verify`
+  - `node scripts/audit-alignment-pages.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `git diff --check`
+- Note: the first showcase validation run was started in parallel with other generation/verification work and reported stale generated assets; rerunning the same validation sequentially passed after fingerprints stabilized.
+
 ## Current Implementation - Competitive Analysis Re-Entry Routing Guard
 
 ### Current Checklist

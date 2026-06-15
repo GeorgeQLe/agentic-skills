@@ -30,7 +30,9 @@ const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
 const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
+const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
 const alignmentTtsAssetPath = resolvePackagedPath('scripts/alignment-tts-kokoro.js');
+const ALIGNMENT_PAGE_BROWSERS = new Set(['auto', 'brave', 'chrome', 'safari', 'edge', 'default']);
 
 function resolvePackagedPath(relativePath) {
   const packagedPath = join(packageRoot, relativePath);
@@ -145,6 +147,7 @@ function alignmentHelp() {
 Usage:
   gskp alignment bundles [--dry-run] [--check]
   gskp alignment pages audit
+  gskp alignment pages open <alignment/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
   gskp alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
   gskp alignment verify
 
@@ -153,6 +156,7 @@ Commands:
   bundles --dry-run          Preview generated bundle changes
   bundles --check            Fail on generated-bundle drift without writing
   pages audit                Audit active rendered alignment/*.html pages
+  pages open                 Open or focus an alignment HTML page
   pages inject-tts           Add the packaged Brief Me TTS script tag to pages
   verify                     Run the focused alignment verification set when present`);
 }
@@ -177,6 +181,77 @@ function validateArgs(command, args, options) {
       throw new Error(`${command}: expected an alignment HTML page path, got '${arg}'`);
     }
   }
+}
+
+function assertSafeAlignmentPagePath(command, pagePath) {
+  if (typeof pagePath !== 'string' || pagePath.length === 0) {
+    throw new Error(`${command}: expected an alignment HTML page path`);
+  }
+  if (pagePath.startsWith('/') || /^[A-Za-z]:[\\/]/.test(pagePath) || pagePath.includes('\\')) {
+    throw new Error(`${command}: expected a repo-relative alignment HTML page path, got '${pagePath}'`);
+  }
+
+  const parts = pagePath.split('/');
+  if (
+    parts.length !== 2 ||
+    parts[0] !== 'alignment' ||
+    !parts[1] ||
+    parts[1] === '.' ||
+    parts[1] === '..' ||
+    parts[1].includes('..') ||
+    !parts[1].endsWith('.html')
+  ) {
+    throw new Error(`${command}: expected an alignment HTML page path, got '${pagePath}'`);
+  }
+}
+
+function validateOpenAlignmentPageArgs(args) {
+  const passthrough = [];
+  let pagePath = null;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === '--dry-run' || arg === '--json') {
+      passthrough.push(arg);
+      continue;
+    }
+
+    if (arg === '--browser') {
+      const value = args[index + 1];
+      if (!value || value.startsWith('-')) {
+        throw new Error('alignment pages open: --browser requires a value');
+      }
+      if (!ALIGNMENT_PAGE_BROWSERS.has(value)) {
+        throw new Error(`alignment pages open: unsupported browser '${value}'`);
+      }
+      passthrough.push(arg, value);
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--browser=')) {
+      const value = arg.slice('--browser='.length);
+      if (!ALIGNMENT_PAGE_BROWSERS.has(value)) {
+        throw new Error(`alignment pages open: unsupported browser '${value}'`);
+      }
+      passthrough.push(arg);
+      continue;
+    }
+
+    if (arg.startsWith('-')) {
+      throw new Error(`alignment pages open: unsupported flag '${arg}'`);
+    }
+
+    if (pagePath) {
+      throw new Error(`alignment pages open: unexpected argument '${arg}'`);
+    }
+    pagePath = arg;
+    passthrough.push(arg);
+  }
+
+  assertSafeAlignmentPagePath('alignment pages open', pagePath);
+  return passthrough;
 }
 
 export function resolveAlignmentCommand(args, options = {}) {
@@ -216,12 +291,24 @@ export function resolveAlignmentCommand(args, options = {}) {
       };
     }
 
+    if (pagesCommand === 'open') {
+      const openArgs = validateOpenAlignmentPageArgs(pagesRest);
+      return {
+        kind: 'run',
+        command: process.execPath,
+        args: [alignmentOpenScriptPath, ...openArgs]
+      };
+    }
+
     if (pagesCommand === 'inject-tts') {
       validateArgs('alignment pages inject-tts', pagesRest, {
         allowedFlags: new Set(['--force', '--dry-run']),
         maxPositionals: 1,
-        positionalPattern: /^alignment\/[^/].*\.html$/
       });
+      const pagePath = pagesRest.find((arg) => !arg.startsWith('-'));
+      if (pagePath) {
+        assertSafeAlignmentPagePath('alignment pages inject-tts', pagePath);
+      }
       return {
         kind: 'run',
         command: process.execPath,
@@ -369,6 +456,8 @@ Commands:
   alignment bundles [--dry-run] [--check]
                                Generate/check per-skill ALIGNMENT-PAGE.md bundles
   alignment pages audit        Audit active rendered alignment/*.html pages
+  alignment pages open <alignment/page.html> [--browser <browser>]
+                               Open or focus an alignment HTML page
   alignment pages inject-tts [--force] [alignment/<page>.html]
                                Add the packaged Brief Me TTS script include
   alignment verify             Run focused alignment tests when present

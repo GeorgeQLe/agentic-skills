@@ -1,3 +1,36 @@
+## Current Implementation - Alignment Portability
+
+### Goal
+
+Make alignment-page creation, audit, TTS injection, and browser opening portable for repositories that install skills through the `skillpacks` npm package rather than this source checkout.
+
+### Scope
+
+- `packages/skillpacks` CLI routing, package build staging, and node tests
+- Packaged alignment helper scripts under `scripts/`
+- Canonical `docs/alignment-page-convention.md` and generated `ALIGNMENT-PAGE.md` bundles
+- New repo-managed `$create-alignment-page` skill contract
+- Benchmark/showcase/package generated surfaces required by the new skill
+- Task tracking, prompt history, verification notes, commit, and push
+
+### Plan
+
+1. Capture the visible invocation prompt and record this implementation plan.
+2. Package `scripts/open-html-page.mjs` and expose it through `npx skillpacks alignment pages open`.
+3. Validate safe `alignment/*.html` page paths and pass supported opener flags through to the packaged script.
+4. Update the alignment-page convention so portable `npx skillpacks alignment pages ...` commands are primary, with source-checkout `node scripts/...` fallbacks.
+5. Create mirrored `$create-alignment-page` contracts around bundled convention discovery and the portable CLI commands.
+6. Add focused package/CLI/layer1 regression coverage.
+7. Run required validation, review the diff, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- `npm --workspace packages/skillpacks run build:check` stages `scripts/open-html-page.mjs` and still excludes denied source-repo directories.
+- `npx skillpacks alignment pages open alignment/foo.html --browser auto` resolves to the packaged opener and rejects traversal or non-alignment paths.
+- Generated alignment bundles present portable `npx skillpacks alignment pages open|audit|inject-tts` commands as the primary workflow.
+- `$create-alignment-page` exists for Codex and Claude and instructs agents to use bundled per-skill conventions first, then packaged convention guidance, with audit/open handled through `npx skillpacks alignment ...`.
+- Verification output is recorded in `tasks/todo.md`.
+
 ## Current Implementation - Alignment Gate Reactivity Contract
 
 ### Goal

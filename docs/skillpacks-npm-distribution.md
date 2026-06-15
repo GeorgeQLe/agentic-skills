@@ -207,6 +207,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `doctor --fix --agent-docs [--dry-run]` | Node-owned | Marker-bounded agent-doc migrator | No | No | Replaces only recognized generated blocks in `AGENTS.md` and `CLAUDE.md`; dry-run prints a diff without writing, and non-dry-run writes timestamped backups under `.agents/backups/`. |
 | `alignment bundles [--dry-run] [--check]` | Node-owned wrapper | Packaged `scripts/upgrade-alignment-page.mjs` | No | No | Runs generated per-skill `ALIGNMENT-PAGE.md` bundle generation/checking with `--root <cwd>`. |
 | `alignment pages audit` | Node-owned wrapper | Packaged `scripts/audit-alignment-pages.mjs` | No | No | Audits active rendered `alignment/*.html` pages with `--root <cwd>`. |
+| `alignment pages open <alignment/page.html> [--browser <browser>]` | Node-owned wrapper | Packaged `scripts/open-html-page.mjs` | No | No | Opens or focuses an active rendered alignment page with best-effort platform handling. Browser values: `auto`, `brave`, `chrome`, `safari`, `edge`, or `default`. |
 | `alignment pages inject-tts [--force] [alignment/<page>.html]` | Node-owned wrapper | Packaged `scripts/inject-tts.mjs` plus TTS asset | No | No | Ensures `scripts/alignment-tts-kokoro.js` exists in the target repo before injecting the TTS include. |
 | `alignment verify` | Node-owned wrapper | Target repo Vitest suite | No | No | Runs this repo's focused alignment Vitest set when the target repo contains those tests; exits clearly when unavailable. |
 | `prune [--dry-run]` | Node-owned | Manifest plus lifecycle helpers | No | No | Removes only orphaned managed installs; keeps unmanaged directories. |
@@ -420,6 +421,7 @@ Source-checkout users can keep using the direct script paths:
 ```bash
 node scripts/upgrade-alignment-page.mjs --check
 node scripts/audit-alignment-pages.mjs
+node scripts/open-html-page.mjs alignment/example.html --browser auto
 node scripts/inject-tts.mjs --force alignment/example.html
 ```
 
@@ -428,11 +430,12 @@ npm users can run the equivalent wrapped commands from the target repository:
 ```bash
 npx skillpacks alignment bundles --check
 npx skillpacks alignment pages audit
+npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 npx skillpacks alignment verify
 ```
 
-The namespace keeps the two alignment workflows separate. `alignment bundles` generates or checks the bundled per-skill convention files (`ALIGNMENT-PAGE.md`) from `docs/alignment-page-convention.md`; `alignment pages audit` checks already-rendered active `alignment/*.html` pages. `alignment pages inject-tts` copies the packaged `scripts/alignment-tts-kokoro.js` asset into the target repo when needed before adding the script tag. `alignment verify` is mainly for this source checkout and exits with a clear message when a consumer repo does not include the focused alignment Vitest files.
+The namespace keeps the two alignment workflows separate. `alignment bundles` generates or checks the bundled per-skill convention files (`ALIGNMENT-PAGE.md`) from `docs/alignment-page-convention.md`; `alignment pages audit` checks already-rendered active `alignment/*.html` pages. `alignment pages open` opens or focuses one active alignment page and reports `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`. `alignment pages inject-tts` copies the packaged `scripts/alignment-tts-kokoro.js` asset into the target repo when needed before adding the script tag. `alignment verify` is mainly for this source checkout and exits with a clear message when a consumer repo does not include the focused alignment Vitest files.
 
 ## Publishing
 

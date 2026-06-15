@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-15
+
+- Prefer portable `npx skillpacks alignment pages open alignment/index.html --browser auto` for opening the central index, with the source-checkout opener script as fallback.
+
 ## v0.2 - 2026-06-06
 
 - Group index entries by category (research, product-design, utility, qa-meta, ops-analysis) instead of a flat date-sorted list.

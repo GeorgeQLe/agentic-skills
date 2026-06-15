@@ -125,10 +125,11 @@ Alignment maintenance from npm is available through:
 ```bash
 npx skillpacks alignment bundles --check
 npx skillpacks alignment pages audit
+npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 ```
 
-From a source checkout, the direct script paths remain canonical: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs`.
+From a source checkout, the direct script paths remain available fallbacks: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs`.
 
 ## Migration Notes
 
