@@ -2,13 +2,13 @@
 name: create-alignment-page
 description: Create or amend a portable HTML alignment review page in a target repo using bundled conventions and skillpacks alignment commands
 type: ops
-version: v0.1
+version: v0.0
 argument-hint: "<skill-or-topic> [target artifact or repo path]"
 ---
 
 # Create Alignment Page
 
-Invoke as `$create-alignment-page`.
+Invoke as `/create-alignment-page`.
 
 Use this skill when the user asks to create, refresh, or amend an `alignment/*.html` review page for an existing skill output, research artifact, spec, plan, report, prototype, or other durable deliverable. This skill is for target repositories that may only have skills installed through the `skillpacks` npm package, so it must not assume this source checkout's `docs/` or `scripts/` directories are present.
 
@@ -21,10 +21,10 @@ Use this skill when the user asks to create, refresh, or amend an `alignment/*.h
    - If amending an existing page, read the whole current page and archive it before replacing it.
 
 2. Load the best available convention:
-   - First read the producing skill's bundled sibling `ALIGNMENT-PAGE.md` from the installed skill directory, such as `.codex/skills/<skill>/ALIGNMENT-PAGE.md` or `.claude/skills/<skill>/ALIGNMENT-PAGE.md`.
-   - In this source checkout or a package-shaped checkout with `docs/`, `base/`, and `packs/`, source paths such as `base/<agent>/<skill>/ALIGNMENT-PAGE.md`, `packs/<pack>/<agent>/<skill>/ALIGNMENT-PAGE.md`, `docs/alignment-page-convention.md`, and `node scripts/upgrade-alignment-page.mjs --check` are acceptable maintenance fallbacks.
-   - `npx skillpacks alignment bundles --check` is a source/package maintenance check for repositories that contain the packaged convention inputs (`docs/`, `base/`, and `packs/`). Do not use it as a bare target-repo fallback.
-   - If no installed sibling `ALIGNMENT-PAGE.md` or valid source/package-shaped convention source exists, stop and report which skill convention is missing. Do not invent a simplified template.
+   - First read the producing skill's bundled `ALIGNMENT-PAGE.md` when it exists under `.codex/skills/<skill>/`, `.claude/skills/<skill>/`, `base/`, or `packs/`.
+   - If the bundled convention is unavailable, use the packaged convention path by running or recommending `npx skillpacks alignment bundles --check` to confirm bundled conventions are installable in the target repo.
+   - In this source checkout only, `docs/alignment-page-convention.md` and `node scripts/upgrade-alignment-page.mjs --check` are acceptable fallbacks.
+   - Do not invent a simplified template when a bundled or packaged convention is available.
 
 3. Build or amend the page:
    - Render the full source artifact content directly in HTML. Do not replace the deliverable with an iframe, object embed, or link-only preview.

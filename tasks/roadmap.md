@@ -1,3 +1,38 @@
+## Current Implementation - Alignment Fallback And npx Caveat Docs
+
+### Goal
+
+Correct the create-alignment-page fallback contract and public docs so target repositories use installed sibling `ALIGNMENT-PAGE.md` bundles plus consumer-safe `alignment pages ...` commands, while `alignment bundles` remains a source/package-maintenance command.
+
+### Scope
+
+- `base/codex/create-alignment-page/SKILL.md`
+- `base/claude/create-alignment-page/SKILL.md`
+- create-alignment-page archives and changelogs
+- Public npm/package docs that mention alignment commands, especially `README.md` and `docs/skillpacks-npm-distribution.md`
+- Prompt history and task review notes
+- Focused static/version checks and package node tests
+
+### Plan
+
+1. Capture the visible invocation prompt and record this implementation plan.
+2. Archive the mirrored `create-alignment-page` `v0.0` skill contracts.
+3. Bump active mirrored contracts to `v0.1` and replace the invalid `alignment bundles --check` consumer fallback with a missing-bundled-convention stop condition.
+4. Add `v0.1` changelog entries for both mirrors.
+5. Update public docs to distinguish consumer-safe `alignment pages ...` commands from source/package-maintenance `alignment bundles` and `alignment verify` commands.
+6. Add concise repeat/offline npx guidance for reliable target-repo use.
+7. Run static text checks, version/archive checks, focused metadata/routing verification, package node tests, and diff hygiene.
+8. Record review notes, commit, and push the verified doc-only change on the primary branch.
+
+### Acceptance Criteria
+
+- No active `create-alignment-page` skill recommends `npx skillpacks alignment bundles --check` as a target-repo fallback.
+- Both mirrored active skills are archived from `v0.0`, bumped to `v0.1`, and have `v0.1` changelog entries.
+- Public docs separate consumer-safe page commands from source/package-maintenance alignment commands.
+- Public docs include the narrowed repeat/offline expectation for `npx skillpacks ...`.
+- CLI behavior, command names, package files, and `scripts/upgrade-alignment-page.mjs` remain unchanged.
+- Verification results are recorded in `tasks/todo.md`.
+
 ## Current Implementation - Framework Handoff Routing Alias Parity
 
 ### Goal

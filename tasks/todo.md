@@ -1,3 +1,39 @@
+## Current Implementation - Alignment Fallback And npx Caveat Docs
+
+### Current Checklist
+
+- [x] Record the implementation plan in task tracking.
+- [x] Capture the visible invocation prompt.
+- [x] Archive mirrored `create-alignment-page` `v0.0` contracts.
+- [x] Update mirrored active skill contracts, versions, and changelogs.
+- [x] Update public docs for consumer-safe vs source-maintenance alignment commands and npx repeat/offline guidance.
+- [x] Run static, versioning, metadata/routing, package, and diff verification.
+- [x] Review final diff, commit, and push.
+
+### Review Notes
+
+- Starting point: working tree was clean.
+- Skill context: `create-agentic-skill`, because this updates repo-managed mirrored skill contracts under `base/codex` and `base/claude`.
+- Planned scope is doc/skill-text only. CLI behavior, command names, package files, and `scripts/upgrade-alignment-page.mjs` are intentionally out of scope.
+- Archived `v0.0` for both mirrored `create-alignment-page` skill dirs with `scripts/skill-archive.sh`.
+- Bumped active mirrored contracts to `v0.1` and added `v0.1` changelog entries.
+- Replaced the target-repo fallback with an installed sibling `ALIGNMENT-PAGE.md` requirement and a missing-convention stop condition.
+- Updated README, Quickstart, and npm distribution docs to classify `alignment pages ...` as consumer-safe target-repo commands and `alignment bundles` / `alignment verify` as source/package maintenance commands.
+- Added repeat/offline guidance to add `skillpacks` as a target-repo devDependency or use a pinned `npx skillpacks@<version> ...` command.
+- Verification passed:
+  - static active-skill scan found no old packaged-convention fallback wording in the mirrored active `create-alignment-page` contracts
+  - static docs/version scan confirmed active `version: v0.1`, `v0.1` changelogs, source/package-maintenance wording, consumer-safe page wording, and repeat/offline npx guidance
+  - archive existence check for both `archive/v0.0/SKILL.md` files
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm --workspace packages/skillpacks run test:node` (80 tests)
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/routing-graph.test.ts layer1/compile-central-alignment.test.ts` (372 tests)
+  - `git diff --check`
+  - bare-target sanity: `node packages/skillpacks/bin/skillpacks.mjs alignment bundles --check` failed by design on missing `docs/alignment-page-convention.md`; `alignment pages audit` passed with 0 active pages
+- Focused `layer1/skill-alignment-routing-audit.test.ts` still fails, but the same `node scripts/skill-alignment-routing-audit.mjs --report` failure reproduces on an unmodified `HEAD` export with 44 existing business-research/customer-lifecycle findings. It is unrelated to this doc-only fallback change.
+- Optional bare-target `alignment pages serve --port 8999` was not used as evidence because the sandbox blocked localhost listen with `EPERM`.
+
 ## Current Implementation - Framework Handoff Routing Alias Parity
 
 ### Current Checklist

@@ -120,17 +120,18 @@ After running a skill, look for these artifacts:
 - A git commit with the skill's output
 - An alignment page in `alignment/` (for research skills)
 
-Alignment maintenance from npm is available through:
+Alignment page maintenance from npm is available through consumer-safe commands:
 
 ```bash
-npx skillpacks alignment bundles --check
 npx skillpacks alignment pages audit
 npx skillpacks alignment pages serve --port 8907
 npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 ```
 
-From a source checkout, the direct script paths remain available fallbacks: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs`.
+Source/package maintenance commands such as `npx skillpacks alignment bundles --check` and `npx skillpacks alignment verify` require a checkout with this repository's `docs/`, `base/`, `packs/`, and focused test files. From a source checkout, the direct script paths remain available fallbacks: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs`.
+
+One-off `npx skillpacks ...` works when the network is available or the npm cache is warm. For repeat or offline alignment workflows, add `skillpacks` as a devDependency in the target repo or use a pinned npm spec such as `npx skillpacks@<version> alignment pages audit`.
 
 ## Migration Notes
 
