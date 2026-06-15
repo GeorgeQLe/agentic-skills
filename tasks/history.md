@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-15 - Track 2: design-loop brief adoption + design-inspirations feeder
+
+- Adopted the Intra-Skill Substep Chunking + Shared Context Brief mechanism (`docs/prototype-session-loop-convention.md`) in two more design skills, completing the audit's remaining Part C items.
+- `ui-interview` v0.22 → v0.23 (both mirrors): per-page chunking on large branches (full UI mode, N ≥ 4 pages, no `--no-chunk`) — setup session writes a pure-context brief and keeps the HTML mockup whole, one spec session per page, one assemble+approve gate per branch. Also wired `design/**/design-inspirations-{topic}.md` as a soft read-if-exists input (step 1 + step-7 inspiration line).
+- `user-flow-map` v0.8 → v0.9 (both mirrors): per-section chunking for large flows only (screen/route inventory ≥ ~6) — setup session + `screen-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs` spec sessions → one assemble+approve gate. Build-plan synthesis mode never chunks.
+- New `design-inspirations` skill v0.0 (both mirrors, `type: research`, `context_intake: scoped`, `visual_tier: document`): single-pass web-research feeder modeled on `ord-scan` + `customer-discovery` (numbered strategy menu, 6-query floor, search log), with an honest "named patterns/links, not pixels" scope limit. PACK.md entry, generator `rules{}` entry + generated `ALIGNMENT-PAGE.md` bundles (auto glossary gate). Referenced from flow-tree `source_artifacts[]` — no schema change.
+- Cursor for all chunking is intermediate-file existence; no `design/flow-tree.schema.json` change; no `tasks/todo.md` use; one final alignment gate each. `ux-variations` intentionally not re-bumped.
+- Verification: `skill-mirror-parity-audit.sh` 0 failures (156 pairs); generator `--check` clean except the pre-existing unrelated `journey-map` drift; archives byte-identical to prior committed versions; no schema change. Regenerated Skills Showcase data (new skill + version bumps), validator fresh, app build passing.
+- Shipped as four commits: ui-interview adoption, user-flow-map adoption, design-inspirations skill, and the regenerated showcase data.
+
 ## 2026-06-12 - Product design flow-tree artifact boundary
 
 - Moved the pre-prototype product-design artifact contract from `specs/` to `design/` across mirrored `user-flow-map`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-variations`, and `spec-interview` skills.
