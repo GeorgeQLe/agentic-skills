@@ -1,5 +1,11 @@
 # user-flow-map changelog (claude)
 
+## v0.9 - 2026-06-14
+
+- Added intra-skill substep chunking for large flows: when the flow is large (screen/route inventory ≥ ~6 screens, and `--no-chunk` is not passed), `user-flow-map` splits into a setup session (steps 1–2 + step-3 sub-steps 1–5, writes a pure-context shared brief and stops), one spec session per step-3 heavy section (in order: `screen-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs`, each authoring a single `{section-id}.md` intermediate), and a final assemble+approve session (step 4 + deliverables + the one alignment page).
+- Cursor is intermediate-file existence (the brief carries no step list) — no `design/flow-tree.schema.json` change and no `tasks/todo.md` use; the brief and per-section intermediates are archived at canonical write. Exactly one alignment gate for the whole flow. The per-flow stop/continue handoff and prototype-build-plan synthesis mode are unchanged; synthesis mode never chunks. For small flows or `--no-chunk`, behavior is unchanged from v0.8.
+- Added `--no-chunk` to `argument-hint`. Follows the Intra-Skill Substep Chunking + Shared Context Brief section in `docs/prototype-session-loop-convention.md`.
+
 ## v0.8 - 2026-06-14
 
 - Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.

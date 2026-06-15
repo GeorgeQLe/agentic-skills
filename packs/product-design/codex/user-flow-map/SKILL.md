@@ -2,8 +2,8 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.8
-argument-hint: "[optional: product, flow, feature, route, or goal]"
+version: v0.9
+argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
 visual_tier: prototype
 ---
@@ -52,6 +52,10 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Reference all pre-prototype design artifacts from the manifest using repo-relative paths.
 - Do not mirror user-flow, UX variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
 
+### 0c. Session model — chunked per-section spec sessions vs. one continuous session
+
+For a **large** flow, the step-3 mapping fans out into several heavy per-section work products, and holding them all in one context is the dominant per-session cost. Estimate flow size from the Flow Assumptions Checkpoint's likely screen/route count (step 2): if the flow is large — **screen/route inventory ≥ ~6 screens** — and `--no-chunk` was not passed, enter **chunked mode**; otherwise run one continuous session exactly as a single pass through steps 1–4 (the common case). Chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `docs/prototype-session-loop-convention.md`: a setup session (steps 1–2 + step-3 sub-steps 1–5) writes a pure-context brief and stops; one spec session per step-3 heavy section (in order: `screen-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs`) authors a single section's intermediate; and a final assemble+approve session (step 4 + deliverables + the one alignment page) assembles the canonical flow map. The units here are more interdependent than `ux-variations` — later sections reference earlier ones — so the brief carries more shared context: persona, goal, happy path, entry points, and decision/branch rules. The progress cursor is intermediate-file existence — the brief carries no step list, and there is no schema change and no `tasks/todo.md` use. Chunking applies to default flow-mapping only; prototype-build-plan synthesis mode (step 5) never chunks. For small flows or when `--no-chunk` is passed, write no brief and no intermediates and behave exactly as v0.8 did.
+
 ### 1. Resolve Context
 
 Read available evidence before asking deep questions:
@@ -89,6 +93,8 @@ Do not proceed until the user has reviewed the checkpoint. If the user confirms 
 
 Build the flow map at workflow level, not visual-design level:
 
+**Chunked-mode sessions (step 0c).** When chunked mode is active (large flow, no `--no-chunk`): the setup session runs sub-steps 1–5 below (persona/goal/success, entry points, happy path, alternate paths, decision points), then writes the shared context brief to `design/{slug}/_working/user-flow-map-{topic}-brief.md` (flat mode: `design/_working/user-flow-map-{topic}-brief.md`) containing **pure context only** — persona/role/goal, success condition, entry points, happy path, alternate paths, and decision/branch rules — with **no step list and no status field**, and STOPs. Each spec session then reads the brief and scans which `{section-id}.md` files exist under `design/{slug}/user-flow-map-{topic}/`, fills the first missing section in order — `screen-inventory` (sub-step 6, with its per-screen low-fidelity wireframe notes from sub-step 10), `action-state-matrices` (sub-step 7), `failure-recovery` (sub-step 8), then `handoffs` (sub-step 9) — to its intermediate path, appends any cross-section facts to the brief, and STOPs / re-invokes. In non-chunked mode, run all sub-steps below in one continuous session as before.
+
 1. Define the primary persona, goal, success condition, and triggering context.
 2. List every entry point and precondition.
 3. Write the happy path as ordered steps with the screen/route used by each step.
@@ -101,6 +107,8 @@ Build the flow map at workflow level, not visual-design level:
 10. Add low-fidelity wireframe notes for each screen: rough regions, primary/secondary content, key controls, data groupings, progressive disclosure, and fixed/sticky elements only when structurally necessary.
 
 ### 4. Coverage Checkpoint
+
+**Chunked-mode assemble+approve session (step 0c).** When chunked mode is active, begin this session only once every section's `{section-id}.md` intermediate exists under `design/{slug}/user-flow-map-{topic}/`. Assemble those per-section intermediates plus the brief into the canonical flow map (the deliverables below), run this coverage checkpoint over the whole assembled flow, and build the **one** alignment page. On approval, update the scoped flow-tree manifest branch state and archive the brief and per-section intermediates per the convention's archive-at-canonical-write timing. There is exactly one alignment gate for the whole flow, not one per section.
 
 Before writing deliverables, present a **Flow Coverage Checkpoint** inline as the final message text of its own turn (never only as mid-turn text before a tool or command call):
 
