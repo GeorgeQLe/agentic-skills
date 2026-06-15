@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.21 - 2026-06-14
+
+- Added intra-skill substep chunking: when the approved concept count is N ≥ 4 (and `--no-chunk` is not passed), `ux-variations` splits into a setup session (steps 0–6, writes a pure-context shared brief and stops), one spec session per variation (step 7, authors a single `{variation-id}.md` intermediate), and a final assemble+approve session (steps 8–9 + deliverables + the one alignment page).
+- Cursor is intermediate-file existence (the brief carries no step list) — no `design/flow-tree.schema.json` change and no `tasks/todo.md` use; the brief and per-variation intermediates are archived at canonical write.
+- Exactly one binding alignment-page gate at the end (whole-set comparison preserved); brief = pure context. For N < 4 or `--no-chunk`, behavior is unchanged from v0.20.
+- Added `--no-chunk` to `argument-hint`. Follows the new Intra-Skill Substep Chunking + Shared Context Brief section in `docs/prototype-session-loop-convention.md`.
+
 ## v0.20 - 2026-06-14
 
 - Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.

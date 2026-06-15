@@ -56,6 +56,52 @@ Prototype work usually advances through these phases:
 
 Each phase may run in a fresh context when the branch is heavy. Small adjacent work may continue in the same session when the next skill still runs its own gates and the user explicitly chooses to continue.
 
+## Intra-Skill Substep Chunking + Shared Context Brief
+
+The phase chunking above is *cross-skill*: each prototype-phase skill runs in its own fresh session. This section adds a **second, optional chunking level** *inside* a single skill, for the case where one skill's heavy phase itself produces **N countable per-unit work products** and holding all N in one context is the dominant per-session cost (e.g. `ux-variations` authoring five full build-grade variation specs in one session). When that is the bottleneck, split the heavy phase into a setup session, one spec session per unit, and a final assemble+approve session — each carrying only a small shared brief plus the one unit it works on.
+
+**When it applies.** Use intra-skill chunking only when a skill's heavy phase fans out into N independent, fully-specified per-unit artifacts and N is large enough that one-context authoring degrades quality. For small N, **fold** — run the heavy phase straight through in one session as before. Do not spend a fresh-context round-trip on a near-empty session (same near-empty-session judgment as `docs/research-session-loop-convention.md:44`). A skill that adopts this mechanism states its own fold threshold (e.g. auto-chunk at N ≥ 4 with a `--no-chunk` override).
+
+### Three-tier state
+
+Like the research loop's State store, the machine path deliberately stays minimal and HTML stays out of it. Intra-skill chunking adds two `_working`-band tiers *below* the committed manifest:
+
+| Tier | Store | Content | Role |
+|---|---|---|---|
+| Machine cursor | Flow-tree manifest (`design/**/flow-tree-*.yaml`) | Committed, **post-approval** branch state only — unchanged by this mechanism | Authoritative branch/decision state |
+| Shared context brief *(new)* | `design/{slug}/_working/{skill}-{topic}-brief.md` | **Pure context, no step list**: confirmed assumptions, locked shared constraints, the N per-unit theses, evaluation criteria, carried decisions | Lets each fresh spec session reconstruct the whole decision surface from one small file |
+| Per-substep intermediates *(new)* | `design/{slug}/{skill}-{topic}/{unit-id}.md` | One full per-unit spec each | **Their existence IS the cursor** — the next substep is the first unit whose intermediate file does not yet exist |
+
+Progress is read from the filesystem exactly as the research loop reads canonical-intermediate existence (`docs/research-session-loop-convention.md:100`): `pending = planned-units − existing-intermediates`. The brief carries **no step list and no status field** — it is pure context, never a rival ledger.
+
+### Per-session shape
+
+```
+setup session       run the light phases together → write the brief (pure context)
+                    → init the manifest entries at their pre-approval status → STOP
+   → spec sessions  read brief + scan which {unit-id}.md intermediates exist
+   (one per unit)   → author the one missing unit's full spec to its intermediate path
+                    → append any cross-unit facts to the brief → STOP / re-invoke
+      → assemble+approve session   when all intermediates exist: assemble the canonical
+                                   artifact → ONE alignment-page review → confirmed gate
+                                   → on approval flip manifest statuses + archive brief
+                                     and intermediates
+```
+
+The setup session runs the cheap upfront phases (scope, assumptions, interview, concept set) together and stops the moment it has written the brief — those phases are individually light, so they fold into one head session rather than each taking a round-trip. Each spec session resolves its work purely from filesystem state (brief present + which intermediates exist), authors exactly one unit, and stops. The assemble+approve session is the only session that touches the alignment-page lifecycle.
+
+### Approval: exactly one final gate
+
+There is **exactly one** binding alignment-page gate, in the assemble+approve session. The per-substep spec sessions are pre-approval `_working/`-band drafting — they write intermediates, not canonical artifacts, so no checkpoint inside them authorizes a canonical write (consistent with Approval Rules above: "checkpoint confirmations are not final approval"). The single end-of-loop `review → confirmed` gate approves the whole assembled set at once, preserving whole-set comparison UX. Adopting this mechanism therefore adds **no new alignment gate** and requires **no `ALIGNMENT-PAGE.md` or generator change** — the existing single page is unchanged.
+
+### No schema change, no `tasks/todo.md`
+
+The cursor is filesystem existence, so this mechanism needs **no `design/flow-tree.schema.json` change** and the manifest entries keep their existing status enum (initialized at their normal pre-approval status in the setup session, flipped on final approval). Reaffirming Routing Rule below: prototype-phase branch progress never routes through `/exec`, `$exec`, `tasks/roadmap.md`, or `tasks/todo.md`. The shared context brief is the **sanctioned substitute** for a per-substep working store — it is pure context, not a step ledger, and it lives in `_working/`, never in the task surfaces.
+
+### Archive timing
+
+The brief and the per-substep intermediates are `_working/`-band sources. Archive them at **canonical write** — when the assembled canonical artifact is committed on final approval — mirroring the research loop's archive-at-synthesis rule (`docs/research-session-loop-convention.md:122`). A rejected final page must still be able to rebuild from the brief + intermediates, so they survive until the canonical artifact exists.
+
 ## Routing Rules
 
 - Route downstream only after the upstream skill has written approved or canonical artifacts.

@@ -2,8 +2,8 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.20
-argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
+version: v0.21
+argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 visual_tier: prototype
 ---
 
@@ -46,6 +46,18 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Add one `ux_variations[]` entry under the selected parent user-flow branch for each proposed progression branch. Each entry must include `id`, `label`, `status`, and artifact references.
 - Keep UX variation branch state in the design manifest. Do not write ordinary UX branch state to `research/.progress.yaml`; use that file only when a variant or route experiment creates a materially different product path or product line.
 - Do not mirror UX progression, layout-variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
+
+### 0c. Session model — chunked spec sessions vs. one continuous session
+
+This skill authors up to five full build-grade variation specs (step 7); holding all of them in one context is the dominant per-session cost. After the concept-set checkpoint (step 6), decide the session model:
+
+- **Trigger**: if the approved concept count is **N ≥ 4** and `--no-chunk` was not passed, enter **chunked mode**; otherwise run straight through in one continuous session, exactly as a single pass through steps 0–9.
+- **Mechanism**: chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `docs/prototype-session-loop-convention.md`:
+  - Setup session = steps 0–6 → write a pure-context brief → STOP.
+  - Spec sessions = step 7, one variation each → author a single variation's intermediate → STOP / re-invoke.
+  - Assemble+approve session = steps 8–9 + deliverables + the one alignment page → assemble the canonical plan behind the single existing alignment gate.
+- **Cursor**: progress is intermediate-file existence; the brief carries no step list. No `design/flow-tree.schema.json` change and no `tasks/todo.md` use.
+- **Fold (small runs)**: for N < 4 or `--no-chunk`, write no brief and no intermediates and behave exactly as v0.20 did, so small runs stay cheap.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -180,8 +192,19 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
    - Ask the user to name the affected concept and briefly describe the change when they choose anything other than keeping all concepts.
    - Recommend a practical default when evidence supports it; do not imply that variants have already been built or committed.
    - Revise the concept set based on the answer before moving on.
+   - **Chunked-mode setup handoff**: When chunked mode is active (step 0c — N ≥ 4 approved concepts and no `--no-chunk`), this checkpoint ends the setup session:
+     - Write the shared context brief to `design/{slug}/_working/ux-variations-{topic}-brief.md` (flat mode: `design/_working/ux-variations-{topic}-brief.md`).
+     - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
+     - Initialize the scoped flow-tree `ux_variations[]` entries at `proposed` (existing status enum, §0b — no schema change).
+     - STOP and hand off with a clear-context / re-invoke instruction so each variation gets its own cold spec session (step 7).
+     - In non-chunked mode, continue directly to step 7 in this same session.
 
 7. **Specify each approved variation enough to build**
+   - **Chunked-mode spec session (one variation per session)**: When chunked mode is active, each spec session:
+     - Reads the brief at `design/{slug}/_working/ux-variations-{topic}-brief.md` and scans which `{variation-id}.md` files already exist under `design/{slug}/ux-variations-{topic}/`.
+     - Picks the first variation whose intermediate file does **not** yet exist and writes its full build spec (the attribute list below, plus the layout-mode additions when applicable) to `design/{slug}/ux-variations-{topic}/{variation-id}.md`.
+     - Appends any cross-variation facts to the brief, then STOPs and re-invokes for the next variation. Context per session is the brief plus one spec.
+     - In non-chunked mode, specify all approved variations in this same session as before. The spec content below is identical in both modes — chunking changes only how many variations one session writes.
    - For each variation, define:
      - Name and design thesis
      - Target user fit
@@ -220,6 +243,11 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
      - Evidence to capture: screenshots, notes, time-to-complete, friction points, and acceptance/rejection signals
 
 8. **Plan experimentation**
+   - **Chunked-mode assemble+approve session**: When chunked mode is active, begin this session only once every approved variation's `{variation-id}.md` intermediate exists under `design/{slug}/ux-variations-{topic}/`:
+     - Assemble those per-variation intermediates into the single canonical `design/{slug}/ux-variations-[topic].md` (the deliverable below).
+     - Run this experimentation step and the coverage checkpoint (step 9) over the whole assembled set, then build the **one** alignment page.
+     - On approval, flip the scoped flow-tree `ux_variations[].status` values and archive the brief plus the per-variation intermediates per the convention's archive-at-canonical-write timing.
+     - There is exactly one alignment gate for the whole set, not one per variation, so whole-set comparison is preserved.
    - Recommend serial full buildout of all approved variants when the user is using layout-mode or explicitly wants to compare built interfaces. Do not recommend building a subset first unless the user asks for a smaller experiment.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
 - If route experiments imply materially different products, apps, ICPs, or product lines, update `research/.progress.yaml` with experiment product-path entries instead of making every divergent path a required UX variation. Include `id`, `label`, `source_skill: ux-variations`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage: ux-variations`, and `last_touched`.
