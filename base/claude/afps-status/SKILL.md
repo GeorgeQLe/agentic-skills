@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.6
+version: v0.7
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
@@ -43,10 +43,11 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
 5. Detect rapid pipeline activity:
-   - If `research/vard-ship-log.md` exists, report VARD pipeline status: number of experiments shipped, most recent entry, and whether any show traction signals warranting graduation to Business AFPS.
-   - If `research/ord-ship-log.md` exists, report ORD pipeline status: number of packages published, most recent entry, and whether any show traction signals warranting graduation to Devtool AFPS.
+   - If `research/vard-ship-log.md` exists, report VARD pipeline status: number of experiments shipped and the most recent entry. Under each concept, read the **latest traction entry's** persisted `Status:` (`iterating` | `graduating` | `archived`) and `Recommendation:` line, and report that status and recommendation rather than re-deriving graduation readiness from raw signals. A `graduating` status is the graduation-ready signal; keep raw traction signals as supporting evidence only.
+   - If `research/ord-ship-log.md` exists, report ORD pipeline status: number of packages published and the most recent entry. Under each package, read the **latest traction entry's** persisted `Status:` (`iterating` | `graduating` | `archived`) and `Recommendation:` line, and report that status and recommendation rather than re-deriving readiness from raw signals. A `graduating` status is the graduation-ready signal.
    - If `vard` or `ord` packs are enabled, note the active rapid pipeline alongside deliberate pipeline status.
 6. Classify AFPS stage:
+   - `graduation-ready`: a rapid pipeline's latest ship-log traction entry shows `Status: graduating` — the experiment/package is ready to enter the full AFPS pipeline.
    - `unscoped`: no concept brief or the concept is too unclear for customer discovery.
    - `concept-ready`: concept exists but discovery pack/skills are not enabled.
    - `discovery-needed`: concept exists and discovery skills are enabled, but customer discovery is absent or not specific enough.
@@ -57,7 +58,9 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - `execution-ready`: a clear unchecked implementation task exists with no blocking manual task.
    - `ship-needed`: implementation changes are present, completed, or unpushed but validation, task review, commit, push, or deploy packaging is pending.
    - `reconcile-needed`: artifacts conflict enough that the next step should be reconciliation before new research or implementation.
-6. Choose the next route with these rules:
+7. Choose the next route with these rules:
+   - VARD latest traction `Status: graduating`: `/idea-scope-brief` to enter the full Business AFPS pipeline, linking the vard-scan/align/ship-log entries as evidence. `idea-scope-brief` lives in the base pack — no install hint needed.
+   - ORD latest traction `Status: graduating`: `/devtool-user-map` to enter Devtool AFPS (prefix `npx skillpacks install devtool` from the project shell if the `devtool` pack is not enabled, per the step-8 availability gate), or `/idea-scope-brief` for the rare cross-domain Business case.
    - No concept brief or unclear concept: `/idea-scope-brief`
    - Concept exists but business discovery is missing: `npx skillpacks install business-research` from the project shell.
    - Concept exists and discovery is enabled, but no customer-discovery evidence: `/customer-discovery`
@@ -68,7 +71,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Clear executable task exists: `/exec`
    - Implementation is done but unvalidated, dirty, uncommitted, unpushed, or otherwise unshipped: `/ship`
    - Contradictory research/spec/task evidence: `/reconcile-research` when business-ops is enabled, `/spec-drift` when agent-work-admin is enabled, otherwise `/codebase-status` with a focused prompt naming the contradiction.
-7. Validate command availability before recommending pack-local routes:
+8. Validate command availability before recommending pack-local routes:
    - Use `scripts/pack.sh list-packs` when present to detect enabled packs.
    - If the best command lives in an uninstalled pack, recommend the package install command instead of the unavailable command: `npx skillpacks install <pack>` from the project shell.
    - If `scripts/pack.sh` is missing or pack lookup fails, silently fall back to the global/default route and mention the degraded lookup only if it changes confidence.
@@ -78,7 +81,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 Produce a concise structured report with:
 
 - **Overview:** repo path, product/app focus, git status, enabled packs, active rapid pipelines (VARD/ORD), and whether AFPS evidence is single-path or multi-path.
-- **Rapid Pipeline Status** (if applicable): VARD and/or ORD experiment counts, latest shipment, traction signals, and graduation readiness.
+- **Rapid Pipeline Status** (if applicable): VARD and/or ORD experiment counts, latest shipment, and the latest persisted traction `Status:` and `Recommendation:` per concept/package (`graduating` = graduation-ready), with raw traction signals as supporting evidence.
 - **Artifact Map:** concept, customer discovery/research, lifecycle/growth, specs/prototypes/UAT, tasks, alignment pages, and shipping evidence with present/missing/stale status. For a research stage whose run manifest exists, report loop progress as "k of N frameworks complete" and whether it is mid-run.
 - **AFPS Stage:** one stage label from the workflow above, with confidence and evidence.
 - **Contradictions And Gaps:** conflicting artifacts, missing product-path manifest updates, stale task queues, manual blockers, validation/shipping gaps, and uncertainty.

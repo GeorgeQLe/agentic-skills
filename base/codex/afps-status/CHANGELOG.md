@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7 - 2026-06-15
+
+- Brought the Codex side to parity with Claude on rapid-pipeline awareness: added the "Rapid pipeline artifacts" inspection bullet, a new "Detect rapid pipeline activity" step (step 5, renumbering classify/route/validate to 6/7/8), and the "active rapid pipelines (VARD/ORD)" Overview + "Rapid Pipeline Status" output additions.
+- Surfaced VARD/ORD graduation as a concrete next command: the detect step reads the **latest** ship-log traction entry's persisted `Status:` (`iterating` | `graduating` | `archived`) and `Recommendation:` line deterministically, and the next-route ladder gained high-priority graduation rules — VARD `Status: graduating` → `$idea-scope-brief` (base pack), ORD `Status: graduating` → `$devtool-user-map` (install `devtool` if needed) or `$idea-scope-brief` for the rare cross-domain case — so the `Recommended next command:` footer now emits the graduation command. Added a `graduation-ready` AFPS stage label.
+
 ## v0.6 - 2026-06-15
 
 - Updated business discovery fallback routing to use canonical `business-research` install guidance and explicit pack-availability wording for cross-pack discovery routes.
