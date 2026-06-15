@@ -19,15 +19,16 @@ scripts/pack.sh refresh
 ## Default Flow
 
 ```text
-vard-scan -> vard-align -> vard-ship
+vard-scan -> vard-align -> vard-ship -> vard-traction
 ```
 
 ## Graduation
 
-When a VARD experiment shows traction, graduate to the full Business AFPS pipeline: `scripts/pack.sh install business-discovery`.
+After 1-2 weeks live, run `vard-traction` to compare the shipped app's signals against the VARD graduation thresholds. It recommends iterate, graduate, or archive — you confirm. When it recommends graduating, enter the full Business AFPS pipeline at `/idea-scope-brief` (`scripts/pack.sh install business-discovery`) with the VARD scan, align, and ship-log entries linked as evidence.
 
 ## Skills
 
 - `vard-scan`: Scan for viral app opportunities from trends, gaps, and user pain points.
 - `vard-align`: Quick feasibility and novelty check — go/no-go decision for this week's build.
 - `vard-ship`: Deploy the app, create landing page, set up analytics, and log the shipment.
+- `vard-traction`: Check post-launch traction and recommend iterate, graduate to Business AFPS, or archive (semi-automatic graduation gate).

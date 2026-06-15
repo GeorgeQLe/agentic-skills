@@ -68,9 +68,10 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 
 <!-- Section 1: Header + Status -->
 <h1>Five-Deck Workflow Model</h1>
-<div class="status">alignment_status: amended &nbsp; generated: 2026-06-08 &nbsp; amended: 2026-06-10</div>
+<div class="status">alignment_status: reviewed &nbsp; generated: 2026-06-08 &nbsp; amended: 2026-06-15</div>
 <p class="lead">Formalizing five workflow decks &mdash; VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS &mdash; to support the "Apps as Distribution" thesis while giving game work its own deliberate AFPS track. This page preserves the original VARD/ORD/devtool decisions and supersedes the old matrix with the Game AFPS deck-model update.</p>
 <div class="callout callout-green"><strong>Amendment note:</strong> Superseded by the 2026-06-10 Game AFPS deck-model update. The active model is now five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.</div>
+<div class="callout callout-green"><strong>Gate 5 resolution (2026-06-15, agent review):</strong> All six gates answered (five decks; COA B; 3-step core; devtool front-half on demand; semi-auto graduation; <code>packs/vard/</code> + <code>packs/ord/</code>). Agent review found that semi-auto graduation depends on the traction skills COA B deferred to Phase 3, so it could not function. Resolution: <strong>pull <code>vard-traction</code> and <code>ord-traction</code> into Phase 1</strong>, making the rapid pipelines effectively 4-step and the semi-auto graduation gate functional now. Both traction skills are built (claude + codex, v0.0) and registered in their PACK.md flows. The <code>afps-status</code> graduation-surfacing wiring remains a later (Phase 3) enhancement; the recommend-and-confirm loop lives inside the traction skills.</div>
 
 <!-- Section 2: TOC -->
 <nav class="toc">
@@ -328,7 +329,7 @@ POST-RESEARCH:
                      Output: Deployed app + landing page + social announcement.</pre>
 
   <div class="callout">
-    <strong>Optional 4th step:</strong> <code>vard-traction</code> &mdash; check back after 1&ndash;2 weeks. Users, shares, engagement, revenue signals. Decide: iterate, graduate to Business AFPS, or archive.
+    <strong>4th step (built — Gate 5 resolution):</strong> <code>vard-traction</code> &mdash; check back after 1&ndash;2 weeks. Users, shares, engagement, revenue signals. Recommends: iterate, graduate to Business AFPS, or archive (user confirms).
   </div>
 
   <h4>How VARD differs from ORD</h4>
@@ -370,7 +371,7 @@ POST-RESEARCH:
                      Output: npm package + GitHub repo + README + optional tweet.</pre>
 
   <div class="callout">
-    <strong>Optional 4th step:</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Decide: iterate, graduate to Devtool AFPS, or archive.
+    <strong>4th step (built — Gate 5 resolution):</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Recommends: iterate, graduate to Devtool AFPS (or cross-domain Business AFPS), or archive (user confirms).
   </div>
 </section>
 
