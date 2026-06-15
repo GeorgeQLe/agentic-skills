@@ -1,31 +1,33 @@
-## Current Implementation - Framework Handoff Routing
+## Current Implementation - Framework Handoff Routing Alias Parity
 
 ### Goal
 
-Prevent framework-loop orchestrators from handing users path-shaped child framework commands such as `parent/frameworks/child`, and make the only framework-continuation route a fresh invocation of the parent orchestrator with the relevant research path argument.
+Close the remaining framework handoff routing gap by making active top-level installed framework aliases participate in the same parent-routed contract as nested framework copies, and by making regression coverage discover those aliases through frontmatter instead of path shape alone.
 
 ### Scope
 
-- Framework-loop parent skills for `competitive-analysis`, `customer-discovery`, `positioning`, and `journey-map`
-- Active framework subskills under those parents across source pack mirrors and refreshed installed/generated copies
-- Layer1 routing tests covering active non-archive `*/frameworks/*/SKILL.md` files
+- Active installed top-level aliases in `.codex/skills` and `.claude/skills` whose frontmatter declares `invocation: sub-skill` and a framework-loop parent: `competitive-analysis`, `customer-discovery`, `positioning`, or `journey-map`
+- Nested active framework copies across source packs, installed roots, and package build mirrors
+- `tests/layer1/framework-handoff-routing.test.ts`
+- Generated package/showcase surfaces only if verification proves them stale
 - Task review notes, verification, commit, and push
 
 ### Plan
 
-1. Inspect active parent and framework subskill routing language and existing layer1 routing tests.
-2. Archive and bump changed source skill contracts per skill versioning rules.
-3. Add a shared parent-loop routing contract to the four framework-loop orchestrator families.
-4. Harden framework subskills so they explicitly route through the parent orchestrator, avoid path-shaped child commands, and suppress downstream routing labels.
-5. Add generic framework-subskill routing tests plus parent self-reinvocation checks.
-6. Refresh installed/generated mirrors, run focused and package verification, review diffs, then commit and push.
+1. Confirm stale top-level installed alias versions and routing wording against nested/source framework copies.
+2. Refresh or patch the installed alias files so their active routing contracts match their nested source equivalents.
+3. Broaden the framework handoff regression inventory to include active top-level installed aliases based on `parent:` frontmatter, while still excluding archives.
+4. Add a generic placeholder-leak assertion for `parent/frameworks/...` wording in active framework subskills.
+5. Run focused routing tests, direct active-route scans, package verification, and hygiene checks.
+6. Record review notes, inspect the final diff, commit, and push the verified changes on `master`.
 
 ### Acceptance Criteria
 
-- Active framework subskills do not contain `$parent/frameworks/child`, `/parent/frameworks/child`, or bare `parent/frameworks/child` handoffs.
+- Active framework subskills and installed top-level aliases do not contain `$parent/frameworks/child`, `/parent/frameworks/child`, bare `parent/frameworks/child`, or generic `parent/frameworks/...` handoffs.
 - Framework subskills do not emit `Recommended next skill:` or `Recommended next command:` labels.
 - Parent orchestrators document that pending frameworks continue by re-invoking the parent, preserving product-path arguments such as `research/afps-tracker`.
-- Focused layer1 routing tests and package/skill verification pass.
+- Focused layer1 routing tests cover both nested framework paths and top-level installed aliases with relevant `parent:` frontmatter.
+- Package/skill verification passes, with generated surfaces refreshed only when needed.
 
 ## Current Implementation - Alignment Portability
 

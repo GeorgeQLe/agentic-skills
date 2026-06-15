@@ -17,6 +17,12 @@ const searchRoots = [
   "packages/skillpacks/build/packs",
 ].map((path) => resolve(ROOT, path));
 
+type FrameworkSkill = {
+  child: string;
+  file: string;
+  parent: string;
+};
+
 function walk(dir: string): string[] {
   if (!existsSync(dir)) return [];
 
@@ -36,16 +42,38 @@ function walk(dir: string): string[] {
   return files;
 }
 
-function activeFrameworkSkillPaths() {
+function frameworkSkillFromNestedPath(file: string): FrameworkSkill | null {
+  const parts = relative(ROOT, file).split(sep);
+  const frameworksIndex = parts.indexOf("frameworks");
+  if (frameworksIndex < 1) return null;
+
+  const parent = parts[frameworksIndex - 1];
+  const child = parts[frameworksIndex + 1];
+  if (!FRAMEWORK_PARENTS.has(parent) || !child) return null;
+
+  return { child, file, parent };
+}
+
+function frameworkSkillFromInstalledAlias(file: string): FrameworkSkill | null {
+  const parts = relative(ROOT, file).split(sep);
+  if (parts.length !== 4 || parts[1] !== "skills" || parts[3] !== "SKILL.md") return null;
+  if (parts[0] !== ".codex" && parts[0] !== ".claude") return null;
+
+  const content = readFileSync(file, "utf8");
+  if (!content.includes("invocation: sub-skill")) return null;
+
+  const parent = content.match(/^parent: (.+)$/m)?.[1];
+  if (!parent || !FRAMEWORK_PARENTS.has(parent)) return null;
+
+  return { child: parts[2], file, parent };
+}
+
+function activeFrameworkSkills() {
   return searchRoots
     .flatMap(walk)
-    .filter((file) => {
-      const parts = relative(ROOT, file).split(sep);
-      const frameworksIndex = parts.indexOf("frameworks");
-      if (frameworksIndex < 1) return false;
-      return FRAMEWORK_PARENTS.has(parts[frameworksIndex - 1]);
-    })
-    .sort();
+    .map((file) => frameworkSkillFromNestedPath(file) ?? frameworkSkillFromInstalledAlias(file))
+    .filter((skill): skill is FrameworkSkill => skill !== null)
+    .sort((a, b) => relative(ROOT, a.file).localeCompare(relative(ROOT, b.file)));
 }
 
 function activeParentSkillPaths() {
@@ -87,20 +115,19 @@ function escapeRegExp(value: string) {
 
 describe("framework handoff routing", () => {
   it("keeps framework subskills parent-routed and free of path-shaped child handoffs", () => {
-    const paths = activeFrameworkSkillPaths();
-    expect(paths.length, "framework subskill inventory should be non-empty").toBeGreaterThan(0);
+    const skills = activeFrameworkSkills();
+    expect(skills.length, "framework subskill inventory should be non-empty").toBeGreaterThan(0);
 
-    for (const file of paths) {
+    for (const { child, file, parent } of skills) {
       const relPath = relative(ROOT, file);
-      const parts = relPath.split(sep);
-      const frameworksIndex = parts.indexOf("frameworks");
-      const parent = parts[frameworksIndex - 1];
-      const child = parts[frameworksIndex + 1];
       const prefix = routePrefix(file);
       const command = `${prefix}${parent}`;
       const content = readFileSync(file, "utf8");
       const directChildRoute = new RegExp(
         `(?:[$/])?${escapeRegExp(parent)}/frameworks/${escapeRegExp(child)}(?:\\s+research/[^\\s)]+)?`,
+      );
+      const placeholderChildRoute = new RegExp(
+        `(?:[$/])?${escapeRegExp(parent)}/frameworks/(?:\\.\\.\\.|<[^>\\s]+>|\\[[^\\]\\s]+\\])`,
       );
 
       expect(content, `${relPath} should declare subskill invocation`).toContain("invocation: sub-skill");
@@ -113,6 +140,9 @@ describe("framework handoff routing", () => {
       );
       expect(content, `${relPath} should not expose path-shaped child framework commands`).not.toMatch(
         directChildRoute,
+      );
+      expect(content, `${relPath} should not expose placeholder child framework commands`).not.toMatch(
+        placeholderChildRoute,
       );
       expect(content, `${relPath} should not emit next-routing labels`).not.toMatch(
         /Recommended next (skill|command):/i,

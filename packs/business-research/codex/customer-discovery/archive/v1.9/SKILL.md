@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.10
+version: v1.9
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -38,7 +38,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `$customer-discovery`, never an execution-loop command or a path-shaped child framework invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
+Do not include downstream or cross-skill command recommendations while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `$customer-discovery`, never an execution-loop command or a direct `customer-discovery/frameworks/...` invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
 
 ## Staged Research Workflow
 

@@ -1,31 +1,37 @@
-## Current Implementation - Framework Handoff Routing
+## Current Implementation - Framework Handoff Routing Alias Parity
 
 ### Current Checklist
 
 - [x] Record the implementation plan in task tracking.
-- [x] Inspect active parent/framework routing surfaces and existing tests.
-- [x] Archive and bump changed source skill contracts.
-- [x] Patch parent-loop and framework-subskill routing language.
-- [x] Add focused layer1 routing tests.
-- [x] Refresh generated/installed mirrors and run verification.
-- [x] Review final diff, commit, and push.
+- [x] Inspect active installed alias and nested framework routing surfaces.
+- [x] Refresh active installed aliases or patch parity gaps.
+- [x] Expand layer1 routing coverage to include top-level installed aliases.
+- [x] Run focused routing tests and direct active-route scans.
+- [x] Run package/skill verification and diff hygiene checks.
+- [ ] Review final diff, commit, and push.
 
 ### Review Notes
 
 - Starting point: working tree was clean.
-- Scope: routing contract hardening for self-advancing framework loops; no research workflow redesign or new framework behavior is intended.
-- Archived and bumped the four parent orchestrator families and their active framework subskills across Codex/Claude source pack mirrors.
-- Added parent-only continuation wording that preserves the product/research path argument, e.g. `$competitive-analysis research/afps-tracker`, while explicitly prohibiting path-shaped child framework commands.
-- Removed standalone invocation cues from framework subskills and replaced downstream routing-label wording with parent-synthesis ownership.
-- Refreshed `.codex`/`.claude` installed mirrors, rebuilt the skillpacks package manifest/build staging, and regenerated Skills Showcase assets.
+- Scope: follow-up to the framework handoff routing work; no source skill behavior change is expected unless installed alias parity requires it.
+- Inspection confirmed the blind spot: the existing regression test inventories nested `*/frameworks/*/SKILL.md` paths but misses active top-level installed aliases whose frontmatter declares framework-loop parents.
+- Stale installed alias examples include `.codex/skills/porter-five-forces/SKILL.md` at `v0.5` while `.codex/skills/competitive-analysis/frameworks/porter-five-forces/SKILL.md` is `v0.6`, and customer-discovery aliases still include concrete `customer-discovery/frameworks/...` placeholder wording.
+- Synced 30 active top-level installed aliases from their nested active installed framework copies: 15 Codex aliases and 15 Claude aliases.
+- Expanded `tests/layer1/framework-handoff-routing.test.ts` so active framework inventory includes direct `.codex/skills/<child>/SKILL.md` and `.claude/skills/<child>/SKILL.md` aliases when frontmatter declares a framework-loop `parent:`.
+- The installed skill roots are ignored by git, so the alias sync repairs the current workspace install while the tracked regression test prevents this blind spot during local verification when those roots exist.
+- Direct active-route scan found one remaining source/package parent placeholder in `customer-discovery`; archived `v1.9`, bumped mirrored active contracts to `v1.10`, and replaced the concrete `customer-discovery/frameworks/...` wording with generic path-shaped child framework wording.
+- `npm test -- tests/layer1/framework-handoff-routing.test.ts` is not available in the root package (`Missing script: "test"`), so verification used the repo's established `pnpm --dir tests exec vitest run --project layer1 ...` command.
 - Verification passed:
-  - `pnpm --dir tests exec vitest run --project layer1 layer1/framework-handoff-routing.test.ts layer1/competitive-analysis-routing.test.ts layer1/positioning-alignment-contract.test.ts layer1/journey-map-routing.test.ts layer1/business-discovery-customer-discovery-routing.test.ts layer1/customer-lifecycle-customer-discovery-routing.test.ts` (20 tests)
-  - direct-route scan across active source, installed, and package-build framework subskills found no matches
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/framework-handoff-routing.test.ts`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/framework-handoff-routing.test.ts layer1/positioning-alignment-contract.test.ts`
+  - direct active-route scan across `packs`, `.codex/skills`, `.claude/skills`, and `packages/skillpacks/build/packs` found no non-archive `parent/frameworks/...` leaks
+  - direct installed alias parity scan checked 30 aliases with 0 mismatches
   - `bash scripts/skill-archive-audit.sh --strict`
   - `bash scripts/skill-versions.sh --missing`
   - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:build`
   - `npm run skillpacks:verify`
-  - `./scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-next-step-routing.sh --missing`
   - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed after the expected regeneration pass
   - `git diff --check`
 

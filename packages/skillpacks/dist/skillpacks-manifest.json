@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "c153d9b816f66c6e29b7530ef72e9e77c85f76f192d856e513491e44d6e20073",
+  "source_fingerprint": "e6204d02987abcfabce288f1233329e8de12bd73ace85b20f6662b5496f88023",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2822,9 +2822,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v1.9",
+      "version": "v1.10",
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
-      "content_sha256": "8dbec49b96978c9eceb1b5eeb5700a1c117bb9c89ee9eb1f895f011f46818c62",
+      "content_sha256": "aa3b265e77096644813f8c27f1243942b99b1d8d452a158de4aa3b33a61b951d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2845,7 +2845,8 @@
         "v1.4",
         "v1.5",
         "v1.7",
-        "v1.8"
+        "v1.8",
+        "v1.9"
       ],
       "command": "/customer-discovery",
       "deck_memberships": [
@@ -3382,9 +3383,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v1.9",
+      "version": "v1.10",
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
-      "content_sha256": "d506ce16802e64b71004e0dcf99096a6d92e7db4aa2c123217c2c5477afdd446",
+      "content_sha256": "87d6e07c366e5cd1f45c4b0d22b3668df2f572d217f325c15662c6fd4b682bf6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3405,7 +3406,8 @@
         "v1.4",
         "v1.5",
         "v1.7",
-        "v1.8"
+        "v1.8",
+        "v1.9"
       ],
       "command": "$customer-discovery",
       "deck_memberships": [

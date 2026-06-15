@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10 - 2026-06-15
+
+- Replaced the remaining concrete `customer-discovery/frameworks/...` placeholder in parent-loop routing guidance with generic path-shaped child framework wording.
+
 ## v1.9 - 2026-06-15
 
 - Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
