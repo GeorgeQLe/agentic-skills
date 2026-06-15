@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.23 - 2026-06-14
+
+- Added intra-skill substep chunking for large branches: in full UI mode, when the page count is N ≥ 4 (and `--no-chunk` is not passed), `ui-interview` splits into a setup session (steps 1–5, writes a pure-context shared brief and stops, keeping the HTML visual mockup whole), one spec session per page (step 6, authors a single `{page-id}.md` intermediate), and a final assemble+approve session (steps 7–9 + deliverables + the one alignment page).
+- Cursor is intermediate-file existence (the brief carries no step list) — no `design/flow-tree.schema.json` change and no `tasks/todo.md` use; the brief and per-page intermediates are archived at canonical write. Exactly one binding alignment-page gate per branch (unchanged). Requirements-only mode never chunks; for N < 4 or `--no-chunk`, behavior is unchanged from v0.22.
+- Added `--no-chunk` to `argument-hint`. Follows the Intra-Skill Substep Chunking + Shared Context Brief section in `docs/prototype-session-loop-convention.md`.
+- Added a soft read-if-exists `design/**/design-inspirations-{topic}.md` input (from `$design-inspirations`): step 1 reads it as the pre-gathered "apps you admire" / reference-pattern input, and the step-7 inspiration line notes it supplies that input when present, without reversing the local-evidence stance. Absent → behavior unchanged.
+
 ## v0.22 - 2026-06-14
 
 - Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.

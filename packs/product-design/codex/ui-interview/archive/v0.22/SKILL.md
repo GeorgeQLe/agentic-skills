@@ -2,8 +2,8 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.23
-argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
+version: v0.22
+argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 context_intake: deep
 visual_tier: prototype
 ---
@@ -50,16 +50,11 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Record approve/reject/retry decisions in the manifest `decisions[]` list. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Do not mirror UI review, approve/reject/retry, prototype build, or branch progress into `tasks/todo.md`.
 
-### 0c. Session model — chunked per-page spec sessions vs. one continuous session
-
-This skill already runs **one UX-variation branch per session**; this subsection adds an optional **finer** chunking *within a single large branch*. In full UI mode the heavy phase is the page-by-page specification (step 6), and holding the full spec for every page in one context is the dominant per-session cost on large branches. After the page inventory is known (step 5), decide the session model from the page count: if **N ≥ 4** pages and `--no-chunk` was not passed, enter **chunked mode**; otherwise run straight through in one continuous session exactly as a single pass through steps 0–9. Chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `docs/prototype-session-loop-convention.md`: a setup session (steps 1–5) writes a pure-context brief and stops; one spec session per page (step 6) authors a single page's intermediate; and a final assemble+approve session (steps 7–9 + deliverables + the one alignment page) assembles the canonical UI branch packet behind the single existing alignment gate. The progress cursor is intermediate-file existence — the brief carries no step list, and there is no schema change and no `tasks/todo.md` use. Keep the **HTML visual mockup whole** in the setup session — it is judged as a whole and is never fragmented across pages. Chunking applies to full UI mode only; requirements-only mode (step 5b) stops before the page-spec fan-out and never chunks. For N < 4, when `--no-chunk` is passed, or in requirements-only mode, write no brief and no intermediates and behave exactly as v0.22 did, so small branches stay cheap.
-
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, screenshots, and design artifacts when present.
    - Prefer `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` for screen sequence, route inventory, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
    - Prefer `design/ux-variations-*.md` (or product-path-scoped equivalents) for the selected UX variation branch, sibling variations, unresolved branch decisions, proposed progression paths, and branch-routing expectations.
-   - Read `design/**/design-inspirations-{topic}.md` if present and treat it as the pre-gathered "apps you admire" / reference-pattern input for mockup and spec work — named UI/UX patterns, conventions, component-library references, and annotated links. When absent, behavior is unchanged.
    - If the request is for an existing UI, inspect the current implementation before interviewing.
    - If multiple apps or surfaces are plausible, ask the user which app, flow, or page to cover first.
    - If the interface has no credible screen/flow structure from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
@@ -116,7 +111,6 @@ This skill already runs **one UX-variation branch per session**; this subsection
      - Page inventory: every route, modal, drawer, overlay, and important empty state
      - Page purpose: user goal, task priority, and success condition
      - Prototype calibration: first clickable journey, route-based experiment set, fixture/fake data boundaries, infrastructure-only states to mock rather than implement, and taste/feel questions the prototype must answer before database, auth, payment, analytics, deployment, admin, or multi-tenant work is planned.
-   - **Chunked-mode setup handoff**: When chunked mode is active (step 0c — full UI mode, N ≥ 4 pages, no `--no-chunk`), the page inventory established here is the end of the setup session. Keep the HTML visual mockup whole in this session (step 4). Write the shared context brief to `design/{slug}/_working/ui-interview-{topic}-brief.md` (flat mode: `design/_working/ui-interview-{topic}-brief.md`) containing **pure context only** — the confirmed UI Assumptions Manifest, scope boundaries, the page inventory as context, the global-shell/navigation decisions every page shares, the HTML visual mockup reference, the evaluation criteria, and any carried branch decisions — with **no step list and no status field**. Then STOP and hand off with a clear-context / re-invoke instruction so each page gets its own cold spec session (step 6). In non-chunked mode, continue directly to step 6 in this same session.
 
 5b. **Requirements gate (requirements-only mode)**
    - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
@@ -138,7 +132,6 @@ This skill already runs **one UX-variation branch per session**; this subsection
 
 6. **Full UI specification** (no `--content-only` flag):
 
-   - **Chunked-mode spec session (one page per session)**: When chunked mode is active, each spec session reads the brief at `design/{slug}/_working/ui-interview-{topic}-brief.md` and scans which `{page-id}.md` files already exist under `design/{slug}/ui-interview-{topic}/`. Pick the first page whose intermediate file does **not** yet exist, write its full spec (the attribute list below — layout anatomy, component inventory, control inventory, copy, states, spatial details, responsive behavior, accessibility) to `design/{slug}/ui-interview-{topic}/{page-id}.md`, append any cross-page facts worth carrying to the brief, then STOP and re-invoke for the next page. Context per session is the brief plus one page. In non-chunked mode, specify all pages in this same session as before. The per-page spec content below is identical in both modes — chunking changes only how many pages one session writes.
      - Layout anatomy: top-to-bottom and left-to-right regions, alignment, density, scroll behavior
      - Component inventory: tables, lists, cards, forms, charts, media, editors, maps, canvases
      - Controls: every button, icon button, segmented control, checkbox, radio, toggle, input, menu, tab, link, and destructive action
@@ -154,7 +147,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - For material decisions, present options, a recommendation, rationale, tradeoffs, and mitigation.
    - Recommend familiar controls over novel patterns unless the product has a strong reason to deviate.
    - For frontend work, respect the existing design system, component library, and implementation patterns.
-   - Reference and inspiration questions are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input. When a `design/**/design-inspirations-{topic}.md` artifact exists (from `$design-inspirations`), it supplies that pre-gathered inspiration input, so you need not ask the reference question; still favor local project evidence and established conventions over external references.
+   - Reference and inspiration questions are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input.
 
 8. **Coverage checkpoint**
    - Before concluding, present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.
@@ -163,7 +156,6 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - This confirmation is non-final: it only establishes that the draft is ready for the pre-approval lifecycle in step 9. It does not authorize canonical spec writes.
 
 9. **Build pre-approval alignment page**
-   - **Chunked-mode assemble+approve session**: When chunked mode is active, begin this session only once every page's `{page-id}.md` intermediate exists under `design/{slug}/ui-interview-{topic}/`. Assemble those per-page intermediates plus the brief into the single working packet below, then run step 7 (research/recommend) and step 8 (coverage checkpoint) over the whole assembled branch spec and build the **one** alignment page. On final compiled YAML approval, write the canonical UI branch packet, flip the scoped flow-tree `ui_reviews[]` decision, and archive the brief and the per-page intermediates per the convention's archive-at-canonical-write timing. There is exactly one alignment gate for the whole branch, not one per page (the existing one-gate-per-branch behavior is unchanged).
    - Before writing any canonical `design/ui-[topic].md`, `design/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
    - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the complete working-packet substance as structured HTML review UI: the manifest, branch investigation, HTML visual mockup, page-by-page decisions, coverage checkpoint, proposed canonical file destinations, and approval/rejection gates.
    - Include **Interview provenance** in the page and working packet with exactly one of these values: `live-ui-interview` when this run completed the required manifest confirmations with the user; `evidence-synthesis-with-explicit-skip` when the current invocation explicitly asked to skip live questions or synthesize from evidence; `invalid-missing-ui-interview` when neither condition is true. `invalid-missing-ui-interview` pages must route unresolved decisions to a resumed `$ui-interview` and must not imply interview completion or readiness for canonical writes.
