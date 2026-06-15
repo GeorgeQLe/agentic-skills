@@ -1,8 +1,8 @@
 ---
-name: swot
-description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
+name: feature-pricing-matrix
+description: Feature and pricing matrix competitive analysis - compare capabilities, packages, proof points, and pricing models
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -11,11 +11,11 @@ parent: competitive-analysis
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# SWOT - Competitive Evidence Analysis
+# Feature/Pricing Matrix - Competitive Offer Analysis
 
-Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
+Invoke from the parent queue as `/competitive-analysis/frameworks/feature-pricing-matrix`.
 
-This is a framework subskill for `/competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
+This is a framework subskill for `/competitive-analysis`. It compares competitor packaging, capabilities, pricing, proof points, and visible GTM constraints for parent synthesis. It must not emit downstream next-step routing.
 
 ## Report-First Approval Gate
 
@@ -40,7 +40,7 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 ## Prerequisites
 
 - **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `/competitive-analysis` first and stop.
-- **Soft**: Existing competitive framework outputs, `research/customer-feedback.md`, `research/journey-map.md`, specs, and source files that reveal product capability.
+- **Soft**: Existing competitive framework outputs, landing pages, pricing pages, review sites, product docs, customer feedback, and source files.
 
 ## Product-Path Scope Resolution
 
@@ -48,36 +48,35 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 
 ## Process
 
-1. Load product/customer context and seeded competitors.
-2. Use web search and repo evidence to identify competitor strengths, weaknesses, unmet opportunities, and threats.
-3. Separate internal-ish product evidence from external market evidence:
-   - strengths and weaknesses must be grounded in actual product/repo/research capability, not aspiration
-   - opportunities and threats must be grounded in competitor, market, customer, or trend evidence
-4. Score each SWOT item by evidence strength and strategic relevance.
-5. Identify contradictions or uncertain assumptions for parent synthesis.
+1. Load seeded competitors and use web search to find direct, indirect, incumbent, emerging, and DIY alternatives.
+2. Collect visible pricing, packaging, feature, integration, platform, target segment, and proof-point evidence.
+3. Build a comparison matrix that separates observed facts from inferred gaps.
+4. Identify pricing gaps, packaging trade-offs, missing capabilities, over-served features, and proof-point patterns.
+5. Flag unavailable pricing or gated sales pages as evidence gaps rather than guessing.
 6. Present findings before writing and incorporate factual corrections.
 
 ## Output
 
-### `research/competitive-analysis-swot.md` (or `research/{slug}/competitive-analysis-swot.md`)
+### `research/competitive-analysis-feature-pricing-matrix.md` (or `research/{slug}/competitive-analysis-feature-pricing-matrix.md`)
 
 ```markdown
-# SWOT Competitive Analysis
+# Feature And Pricing Matrix
 
 > Based on: [parent context, sources]
 > Date: [current date]
-> Methodology: SWOT
+> Methodology: Feature/Pricing Matrix
 
-## SWOT Matrix
-| Quadrant | Item | Evidence | Confidence | Synthesis Implication |
-|----------|------|----------|------------|-----------------------|
-| Strength | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Weakness | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Opportunity | [item] | [source] | High/Medium/Low | [implication] |
-| Threat | [item] | [source] | High/Medium/Low | [implication] |
+## Competitor Matrix
+| Competitor | Segment | Core Features | Integrations | Pricing Model | Public Price | Proof Points | Evidence |
+|------------|---------|---------------|--------------|---------------|--------------|--------------|----------|
 
-## Strategic Tensions
-[Where strengths meet threats, weaknesses block opportunities, or evidence conflicts]
+## Gaps And Patterns
+| Pattern | Evidence | Opportunity/Risk | Confidence |
+|---------|----------|------------------|------------|
+
+## Source Gaps
+| Competitor | Missing Evidence | Why It Matters | Follow-up Query |
+|------------|------------------|----------------|-----------------|
 
 ## Evidence Matrix
 | Claim | Source | Evidence Type | Confidence |
@@ -86,13 +85,13 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 
 ## Constraints
 
-- Do not invent strengths from product aspirations; cite repo/research evidence.
-- Do not turn SWOT into positioning or feature recommendations.
+- Never invent pricing. Use `not public`, `sales-gated`, or `not found` when needed.
+- Keep GTM observations factual; strategy belongs to `/gtm`.
 - This is a sub-skill; do not emit `Recommended next skill` or `Recommended next command`.
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/swot-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/feature-pricing-matrix-{topic}.html`.
 
 ## Default Shipping Contract
 

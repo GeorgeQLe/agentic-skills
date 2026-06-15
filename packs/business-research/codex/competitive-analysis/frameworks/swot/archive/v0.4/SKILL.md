@@ -2,7 +2,7 @@
 name: swot
 description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -13,9 +13,9 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # SWOT - Competitive Evidence Analysis
 
-Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
+Invoke from the parent queue as `$competitive-analysis/frameworks/swot`.
 
-This is a framework subskill for `/competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
+This is a framework subskill for `$competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
 
 ## Report-First Approval Gate
 
@@ -39,7 +39,7 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 ## Prerequisites
 
-- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `/competitive-analysis` first and stop.
+- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `$competitive-analysis` first and stop.
 - **Soft**: Existing competitive framework outputs, `research/customer-feedback.md`, `research/journey-map.md`, specs, and source files that reveal product capability.
 
 ## Product-Path Scope Resolution

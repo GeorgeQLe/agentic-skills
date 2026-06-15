@@ -1,8 +1,8 @@
 ---
-name: swot
-description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
+name: strategic-group-map
+description: Strategic group map competitive analysis - cluster competitors by market axes and identify segment whitespace
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -11,11 +11,11 @@ parent: competitive-analysis
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# SWOT - Competitive Evidence Analysis
+# Strategic Group Map - Competitive Cluster Analysis
 
-Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
+Invoke from the parent queue as `$competitive-analysis/frameworks/strategic-group-map`.
 
-This is a framework subskill for `/competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
+This is a framework subskill for `$competitive-analysis`. It maps competitors into strategic groups using evidence-backed axes so the parent synthesis can reason about clusters, crowded zones, and whitespace. It must not emit downstream next-step routing.
 
 ## Report-First Approval Gate
 
@@ -39,8 +39,8 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 ## Prerequisites
 
-- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `/competitive-analysis` first and stop.
-- **Soft**: Existing competitive framework outputs, `research/customer-feedback.md`, `research/journey-map.md`, specs, and source files that reveal product capability.
+- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `$competitive-analysis` first and stop.
+- **Soft**: Existing competitive framework outputs, positioning research, journey research, customer feedback, and specs.
 
 ## Product-Path Scope Resolution
 
@@ -48,36 +48,42 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 
 ## Process
 
-1. Load product/customer context and seeded competitors.
-2. Use web search and repo evidence to identify competitor strengths, weaknesses, unmet opportunities, and threats.
-3. Separate internal-ish product evidence from external market evidence:
-   - strengths and weaknesses must be grounded in actual product/repo/research capability, not aspiration
-   - opportunities and threats must be grounded in competitor, market, customer, or trend evidence
-4. Score each SWOT item by evidence strength and strategic relevance.
-5. Identify contradictions or uncertain assumptions for parent synthesis.
+1. Load seeded competitors and use web search to broaden the competitor list enough for meaningful clustering.
+2. Select 2-3 evidence-backed axes, such as:
+   - enterprise vs SMB
+   - high-service vs self-serve
+   - broad platform vs focused workflow
+   - premium vs low-cost
+   - incumbent suite vs specialist tool
+3. Place competitors on the map only when evidence supports their position.
+4. Identify clusters, crowded zones, underserved segments, and competitors that blur categories.
+5. Record axis uncertainty and alternative maps when the market does not fit one clean 2x2.
 6. Present findings before writing and incorporate factual corrections.
 
 ## Output
 
-### `research/competitive-analysis-swot.md` (or `research/{slug}/competitive-analysis-swot.md`)
+### `research/competitive-analysis-strategic-group-map.md` (or `research/{slug}/competitive-analysis-strategic-group-map.md`)
 
 ```markdown
-# SWOT Competitive Analysis
+# Strategic Group Map
 
 > Based on: [parent context, sources]
 > Date: [current date]
-> Methodology: SWOT
+> Methodology: Strategic Group Mapping
 
-## SWOT Matrix
-| Quadrant | Item | Evidence | Confidence | Synthesis Implication |
-|----------|------|----------|------------|-----------------------|
-| Strength | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Weakness | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Opportunity | [item] | [source] | High/Medium/Low | [implication] |
-| Threat | [item] | [source] | High/Medium/Low | [implication] |
+## Axis Selection
+| Axis | Why It Matters | Evidence | Confidence |
+|------|----------------|----------|------------|
 
-## Strategic Tensions
-[Where strengths meet threats, weaknesses block opportunities, or evidence conflicts]
+## Competitor Placement
+| Competitor | Axis 1 Position | Axis 2 Position | Group | Evidence | Confidence |
+|------------|-----------------|-----------------|-------|----------|------------|
+
+## Strategic Groups
+[Named clusters, shared traits, and how they compete]
+
+## Whitespace And Crowded Zones
+[Underserved spaces and over-served clusters]
 
 ## Evidence Matrix
 | Claim | Source | Evidence Type | Confidence |
@@ -86,13 +92,13 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 
 ## Constraints
 
-- Do not invent strengths from product aspirations; cite repo/research evidence.
-- Do not turn SWOT into positioning or feature recommendations.
+- Do not force a 2x2 when the market needs a table or multiple maps; explain the limitation.
+- Competitor placement must cite evidence.
 - This is a sub-skill; do not emit `Recommended next skill` or `Recommended next command`.
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/swot-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/strategic-group-map-{topic}.html`.
 
 ## Default Shipping Contract
 

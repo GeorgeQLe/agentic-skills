@@ -2881,3 +2881,12 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Make `scripts/inject-tts.mjs` accept `--root <path>` and keep the CLI from injecting a TTS tag without the packaged TTS asset available in the target repo.
 5. Update source-checkout and npm-path docs for the new alignment commands.
 6. Add focused CLI/package tests, run the planned Vitest alignment set plus `npm --workspace skillpacks run verify:package`, then ship only this task's intended files.
+
+## Current Investigation — Competitive Analysis Framework Routing
+
+1. Capture the `$investigate` invocation and record this plan in task tracking.
+2. Validate the reported `$competitive-analysis/frameworks/porter-five-forces` route against active installed skills, source mirrors, tests, and recent git history.
+3. Archive and bump competitive-analysis framework subskills when their routing contract changes.
+4. Replace path-like direct framework invocations with parent-orchestrator-only instructions for both Codex and Claude mirrors, plus the active installed Codex copies.
+5. Add focused regression coverage that rejects `$competitive-analysis/frameworks/*` and `/competitive-analysis/frameworks/*` command strings.
+6. Run archive/version, routing, build, and diff hygiene verification, then ship the intended changes without touching unrelated in-flight work.

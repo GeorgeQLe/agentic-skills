@@ -2,7 +2,7 @@
 name: swot
 description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -13,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # SWOT - Competitive Evidence Analysis
 
-Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
+Invoke from the parent queue as `/competitive-analysis/frameworks/swot`.
 
 This is a framework subskill for `/competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
 

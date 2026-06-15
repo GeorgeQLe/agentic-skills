@@ -2,7 +2,7 @@
 name: porter-five-forces
 description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
-version: v0.4
+version: v0.5
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -13,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Porter's Five Forces - Competitive Structure Analysis
 
-Invoke from the parent queue as `/competitive-analysis/frameworks/porter-five-forces`.
+Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
 
 This is a framework subskill for `/competitive-analysis`. It analyzes industry structure and competitive pressure. It produces an intermediate artifact for parent synthesis and must not emit downstream next-step routing.
 

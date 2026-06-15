@@ -4912,3 +4912,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Installed Codex-copy audit found 42 `.codex/skills` `type: research` skills; all 42 matched the same core checks.
 - Ambiguity noted: 20 `type: analysis` source skills lack alignment sections/bundles, but they are operational or diagnostic analysis skills rather than metadata-classified `type: research` skills. Treating every `analysis` skill as a research skill would expand the convention scope and needs a separate taxonomy decision.
 - Validation passed: `node scripts/upgrade-alignment-page.mjs --check`; `node scripts/audit-alignment-pages.mjs`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/research-approval-gate.test.ts layer1/audit-alignment-pages.test.ts` (3 files / 325 tests).
+
+## Active — Competitive Analysis Framework Routing
+
+- [x] Capture `$investigate` invocation prompt history.
+- [x] Validate the reported malformed framework route in installed and source skill files.
+- [x] Archive and bump competitive-analysis framework subskills.
+- [x] Replace direct framework invocation text with parent-orchestrator-only routing.
+- [x] Add focused regression coverage for path-like framework commands.
+- [x] Run focused verification and record review notes.
+- [ ] Commit and push the verified routing fix.
+
+### Review Notes — Competitive Analysis Framework Routing
+
+- User claim validated: active installed `.codex/skills/competitive-analysis/frameworks/*/SKILL.md` files and mirrored source framework skills advertised path-like commands such as `$competitive-analysis/frameworks/porter-five-forces`.
+- Root cause: framework subskill headers preserved old parent-queue wording after `competitive-analysis` moved to the Research Session Loop, where the parent follows framework SKILL files inline and the user only re-invokes `$competitive-analysis` or `/competitive-analysis`.
+- Fix: archived `v0.4`, bumped the eight mirrored framework contracts to `v0.5`, changed their invocation text to parent-orchestrator-only routing, updated the installed Codex copies, and added layer1 assertions rejecting `competitive-analysis/frameworks/*` command strings.
+- Verification passed: focused `competitive-analysis-routing` Vitest (6/6), direct-route `rg` scan clean for active contracts, `skill-archive-audit.sh --strict`, `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`, `skill-mirror-parity-audit.sh`, `npm run skillpacks:build`, `npm run skillpacks:verify`, Skills Showcase generated-data validation, and `git diff --check`.
+- Existing unrelated customer-discovery changes and mixed generated data were left unstaged.

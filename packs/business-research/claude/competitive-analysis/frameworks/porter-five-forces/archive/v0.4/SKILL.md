@@ -1,8 +1,8 @@
 ---
-name: swot
-description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
+name: porter-five-forces
+description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -11,11 +11,11 @@ parent: competitive-analysis
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# SWOT - Competitive Evidence Analysis
+# Porter's Five Forces - Competitive Structure Analysis
 
-Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
+Invoke from the parent queue as `/competitive-analysis/frameworks/porter-five-forces`.
 
-This is a framework subskill for `/competitive-analysis`. It translates product, customer, and competitor evidence into a SWOT matrix for parent synthesis. It must not emit downstream next-step routing.
+This is a framework subskill for `/competitive-analysis`. It analyzes industry structure and competitive pressure. It produces an intermediate artifact for parent synthesis and must not emit downstream next-step routing.
 
 ## Report-First Approval Gate
 
@@ -39,45 +39,55 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 ## Prerequisites
 
-- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or product-path equivalent. If absent, read `research/icp.md` or product-path equivalent plus repo context; if neither exists, tell the user to run `/competitive-analysis` first and stop.
-- **Soft**: Existing competitive framework outputs, `research/customer-feedback.md`, `research/journey-map.md`, specs, and source files that reveal product capability.
+- **Hard**: Parent context from `research/_working/preliminary-competitive-analysis-research.md` or `research/{slug}/_working/preliminary-competitive-analysis-research.md`. If absent, read `research/icp.md` or `research/{slug}/icp.md` plus repo context; if neither exists, tell the user to run `/competitive-analysis` first and stop.
+- **Soft**: Existing `research/competitive-analysis-*.md`, `research/customer-feedback.md`, `research/journey-map.md`, specs, and codebase context.
 
 ## Product-Path Scope Resolution
 
-Use the parent `competitive-analysis` product-path scope when present. Otherwise resolve scope from `research/.progress.yaml` and active non-archived paths before writing under `research/{slug}/`.
+Use the parent `competitive-analysis` product-path scope when present. Otherwise resolve scope by reading `research/.progress.yaml`, selecting active non-archived product paths, and writing under `research/{slug}/` only when that path is active or explicitly named.
 
 ## Process
 
-1. Load product/customer context and seeded competitors.
-2. Use web search and repo evidence to identify competitor strengths, weaknesses, unmet opportunities, and threats.
-3. Separate internal-ish product evidence from external market evidence:
-   - strengths and weaknesses must be grounded in actual product/repo/research capability, not aspiration
-   - opportunities and threats must be grounded in competitor, market, customer, or trend evidence
-4. Score each SWOT item by evidence strength and strategic relevance.
-5. Identify contradictions or uncertain assumptions for parent synthesis.
+1. Load parent context and identify the relevant category, buyer/customer frame, seeded competitors, and source gaps.
+2. Use web search to validate the market boundary and identify evidence for each force.
+3. Assess:
+   - competitive rivalry
+   - threat of new entrants
+   - threat of substitutes and DIY alternatives
+   - buyer/customer power
+   - supplier/platform/channel power
+4. Score each force as low, moderate, or high pressure with evidence and confidence.
+5. Identify the structural constraints, exploitable gaps, and risks that the parent synthesis should carry forward.
 6. Present findings before writing and incorporate factual corrections.
 
 ## Output
 
-### `research/competitive-analysis-swot.md` (or `research/{slug}/competitive-analysis-swot.md`)
+### `research/competitive-analysis-porter-five-forces.md` (or `research/{slug}/competitive-analysis-porter-five-forces.md`)
 
 ```markdown
-# SWOT Competitive Analysis
+# Porter's Five Forces Analysis
 
 > Based on: [parent context, sources]
 > Date: [current date]
-> Methodology: SWOT
+> Methodology: Porter's Five Forces
 
-## SWOT Matrix
-| Quadrant | Item | Evidence | Confidence | Synthesis Implication |
-|----------|------|----------|------------|-----------------------|
-| Strength | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Weakness | [item] | [source/repo evidence] | High/Medium/Low | [implication] |
-| Opportunity | [item] | [source] | High/Medium/Low | [implication] |
-| Threat | [item] | [source] | High/Medium/Low | [implication] |
+## Market Boundary
+[Category, buyer frame, and competitors included/excluded]
 
-## Strategic Tensions
-[Where strengths meet threats, weaknesses block opportunities, or evidence conflicts]
+## Force Assessment
+| Force | Pressure | Evidence | Confidence | Implication |
+|-------|----------|----------|------------|-------------|
+| Rivalry | Low/Moderate/High | [sources] | High/Medium/Low | [what synthesis should consider] |
+| New Entrants | Low/Moderate/High | [sources] | High/Medium/Low | [implication] |
+| Substitutes | Low/Moderate/High | [sources] | High/Medium/Low | [implication] |
+| Buyer Power | Low/Moderate/High | [sources] | High/Medium/Low | [implication] |
+| Supplier Power | Low/Moderate/High | [sources] | High/Medium/Low | [implication] |
+
+## Structural Opportunities
+[White-space openings created by force dynamics]
+
+## Structural Risks
+[Forces that could undermine the product or category thesis]
 
 ## Evidence Matrix
 | Claim | Source | Evidence Type | Confidence |
@@ -86,13 +96,14 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 
 ## Constraints
 
-- Do not invent strengths from product aspirations; cite repo/research evidence.
-- Do not turn SWOT into positioning or feature recommendations.
+- Every competitor or market fact must be source-backed.
+- Prefer recent sources from the last 12 months and flag older evidence.
+- Do not recommend product features, positioning, architecture, or downstream skills.
 - This is a sub-skill; do not emit `Recommended next skill` or `Recommended next command`.
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/swot-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/porter-five-forces-{topic}.html`.
 
 ## Default Shipping Contract
 

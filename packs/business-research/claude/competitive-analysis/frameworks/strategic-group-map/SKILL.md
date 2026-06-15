@@ -2,7 +2,7 @@
 name: strategic-group-map
 description: Strategic group map competitive analysis - cluster competitors by market axes and identify segment whitespace
 type: research
-version: v0.4
+version: v0.5
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -13,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Strategic Group Map - Competitive Cluster Analysis
 
-Invoke from the parent queue as `/competitive-analysis/frameworks/strategic-group-map`.
+Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
 
 This is a framework subskill for `/competitive-analysis`. It maps competitors into strategic groups using evidence-backed axes so the parent synthesis can reason about clusters, crowded zones, and whitespace. It must not emit downstream next-step routing.
 

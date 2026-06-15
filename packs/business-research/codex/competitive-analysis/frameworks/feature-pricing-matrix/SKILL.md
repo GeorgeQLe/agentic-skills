@@ -2,7 +2,7 @@
 name: feature-pricing-matrix
 description: Feature and pricing matrix competitive analysis - compare capabilities, packages, proof points, and pricing models
 type: research
-version: v0.4
+version: v0.5
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -13,7 +13,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Feature/Pricing Matrix - Competitive Offer Analysis
 
-Invoke from the parent queue as `$competitive-analysis/frameworks/feature-pricing-matrix`.
+Run only through the parent orchestrator `$competitive-analysis`; do not ask the user to invoke this framework directly.
 
 This is a framework subskill for `$competitive-analysis`. It compares competitor packaging, capabilities, pricing, proof points, and visible GTM constraints for parent synthesis. It must not emit downstream next-step routing.
 

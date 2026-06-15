@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-15 — Framework file paths are not skill invocation commands
+
+- The user reported `$competitive-analysis/frameworks/porter-five-forces`, which was a path-shaped route leaked from framework subskill docs rather than a valid skill invocation.
+- Pattern A framework subskills are implementation units followed inline by the parent orchestrator. Their `SKILL.md` files may live under `frameworks/`, but user-facing continuation must name only the parent orchestrator command.
+- When changing orchestrator loops, add regression coverage that rejects slash-path skill commands such as `$parent/frameworks/child` or `/parent/frameworks/child` in active skill contracts.
+
 ## 2026-06-14 — Revision feedback should not preserve the rejected framing
 
 - The user identified a recurring pattern where agents respond to feedback by adding warnings or negative emphasis around the undesired behavior instead of simply applying the requested edit.

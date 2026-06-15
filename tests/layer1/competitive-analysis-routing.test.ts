@@ -36,10 +36,15 @@ describe("competitive-analysis routing", () => {
         "research/competitive-analysis.md",
       );
 
-      for (const slug of frameworkSlugs) {
-        const command = `${check.commandPrefix}competitive-analysis/frameworks/${slug}`;
-        expect(content, `${check.path} should queue ${command}`).toContain(command);
-      }
+      expect(content, `${check.path} should route framework work through self-reinvocation`).toMatch(
+        new RegExp(`re-invoking \`?\\${check.commandPrefix}competitive-analysis\`?`),
+      );
+      expect(content, `${check.path} should prevent direct framework invocation`).toContain(
+        "The user never invokes a framework subskill directly",
+      );
+      expect(content, `${check.path} should not document path-like framework commands`).not.toMatch(
+        /[$/]competitive-analysis\/frameworks\//,
+      );
     }
 
     for (const runner of ["codex", "claude"]) {
@@ -49,9 +54,16 @@ describe("competitive-analysis routing", () => {
           `../packs/business-research/${runner}/competitive-analysis/frameworks/${slug}/SKILL.md`,
         );
         const content = readFileSync(path, "utf8");
+        const commandPrefix = runner === "codex" ? "$" : "/";
 
         expect(content, `${path} should be a subskill`).toContain("invocation: sub-skill");
         expect(content, `${path} should declare competitive-analysis parent`).toContain("parent: competitive-analysis");
+        expect(content, `${path} should route only through the parent orchestrator`).toMatch(
+          new RegExp(`Run only through the parent orchestrator \`?\\${commandPrefix}competitive-analysis\`?`),
+        );
+        expect(content, `${path} should not expose a path-like direct invocation`).not.toMatch(
+          /[$/]competitive-analysis\/frameworks\//,
+        );
         expect(content, `${path} should write an intermediate artifact`).toContain(
           `research/competitive-analysis-${slug}.md`,
         );
