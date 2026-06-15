@@ -40,6 +40,7 @@ const ttsDiagnostics = [];
 const metadataDiagnostics = [];
 const viewportDiagnostics = [];
 const embedDiagnostics = [];
+const alignmentStatusDiagnostics = [];
 const indexDiagnostics = [];
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
@@ -53,6 +54,32 @@ function checkAttribute(htmlTag, rel, attribute, allowed) {
       `Invalid ${attribute} "${match[1]}" in ${rel} — must be one of: ${[...allowed].join(", ")}.`,
     );
   }
+}
+
+function isConfirmedPage(html) {
+  return /\bdata-alignment-status=["']confirmed["']/i.test(html) || /\balignment_status:\s*confirmed\b/i.test(html);
+}
+
+function confirmedPageControlFindings(html) {
+  const findings = [];
+  const checks = [
+    [/class=["'][^"']*\bquestion-block\b/i, ".question-block gate controls"],
+    [/<(?:input|textarea)\b[^>]*(?:\brequired\b|data-question-id=|data-gate|data-gate-type=)/i, "required gate inputs/textareas"],
+    [/class=["'][^"']*\bsection-feedback\b/i, ".section-feedback controls"],
+    [/class=["'][^"']*\b(?:local-yaml|compile-local|copy-local|yaml-output|compile-local-feedback|copy-local-feedback)\b/i, "local YAML/compile controls"],
+    [/\bCompile Responses\b/i, "Compile Responses control"],
+    [/\bCompile Feedback YAML\b/i, "Compile Feedback YAML control"],
+    [/\brequiredGateNames\b/, "requiredGateNames registry"],
+    [/\bgateRegistry\b/i, "gate registry data"],
+    [/\b(?:response|answer|approval)[-_ ]?counter(?:s)?\b/i, "response counters"],
+    [/\b(?:blocks finalization|approval[- ]blocking|approval is blocked|required questions remain|cannot approve|approval_status:\s*not-approved)\b/i, "approval-blocking wording"],
+    [/\bretained controls\b/i, "retained controls wording"],
+  ];
+
+  for (const [pattern, label] of checks) {
+    if (pattern.test(html)) findings.push(label);
+  }
+  return findings;
 }
 
 for (const file of pages) {
@@ -104,6 +131,15 @@ for (const file of pages) {
   } else {
     checkAttribute(htmlTag[0], rel, "data-alignment-category", CATEGORIES);
     checkAttribute(htmlTag[0], rel, "data-visual-tier", TIERS);
+  }
+
+  if (isConfirmedPage(html)) {
+    const findings = confirmedPageControlFindings(html);
+    if (findings.length) {
+      alignmentStatusDiagnostics.push(
+        `Confirmed page controls in ${rel} — remove active review UI and keep decisions only as read-only approval records. Found: ${findings.join(", ")}.`,
+      );
+    }
   }
 }
 
@@ -177,6 +213,7 @@ console.log(`TTS include: ${activePages.length} pages, ${ttsDiagnostics.length ?
 console.log(`Page metadata: ${activePages.length} pages, ${metadataDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Alignment status controls: ${activePages.length} pages, ${alignmentStatusDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length ? "DRIFT" : "exact"}`);
 
 const groups = [
@@ -184,6 +221,7 @@ const groups = [
   ["Page metadata drift:", metadataDiagnostics],
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],
+  ["Alignment status controls drift:", alignmentStatusDiagnostics],
   ["Index integrity drift:", indexDiagnostics],
 ];
 let failed = false;

@@ -1,3 +1,32 @@
+## Current Implementation - Alignment Gate Reactivity Contract
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt and record the implementation plan.
+- [x] Patch the canonical alignment-page convention.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files.
+- [x] Extend active-page audit coverage for confirmed-page controls.
+- [x] Add focused layer1 regression tests.
+- [x] Run required validation and reconcile results.
+- [x] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting point: working tree reported clean before this implementation.
+- Skill context: `targeted-skill-builder`, because the requested durable fix updates a shared workflow contract rather than creating a new skill.
+- Decision: update the existing shared alignment-page convention and audit script; do not create a new skill.
+- Added the canonical `Gate reactivity after revisions` rule, requiring revised review pages to regenerate affected gates, blocking state, unanswered required questions, and gate registries from the revised artifact.
+- Strengthened the confirmed-page contract so decisions remain only as read-only approval records, with no active gate, section feedback, compile, registry, counter, blocking, or retained-control UI.
+- Regenerated 298 generated `ALIGNMENT-PAGE.md` bundles from `docs/alignment-page-convention.md`.
+- Extended `scripts/audit-alignment-pages.mjs` with an `Alignment status controls` diagnostic for pages marked confirmed by `data-alignment-status="confirmed"` or visible `alignment_status: confirmed`.
+- Added layer1 fixture coverage for read-only confirmed pages, confirmed pages with retained controls, and review pages with active controls.
+- No tracked `SKILL.md` or `PACK.md` behavior/metadata changed, so targeted-skill-builder showcase refresh validation was not applicable.
+- Validation passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `pnpm --dir tests exec vitest run layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts` (48 tests)
+  - `node scripts/audit-alignment-pages.mjs`
+  - `git diff --check`
+
 ## Current Implementation - Alignment Gate Reactivity Session Analysis
 
 ### Current Checklist

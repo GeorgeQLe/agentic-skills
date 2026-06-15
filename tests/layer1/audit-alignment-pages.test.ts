@@ -27,15 +27,17 @@ const TTS_TAG = '<script src="../scripts/alignment-tts-kokoro.js"></script>';
 function pageHtml(overrides: {
   category?: string | null;
   tier?: string | null;
+  status?: string | null;
   viewport?: boolean;
   tts?: string | null;
   body?: string;
 } = {}): string {
-  const { category = "research", tier = "document", viewport = true, tts = TTS_TAG, body = "" } = overrides;
+  const { category = "research", tier = "document", status = null, viewport = true, tts = TTS_TAG, body = "" } = overrides;
   const attrs = [
     'lang="en"',
     category === null ? "" : `data-alignment-category="${category}"`,
     tier === null ? "" : `data-visual-tier="${tier}"`,
+    status === null ? "" : `data-alignment-status="${status}"`,
   ].filter(Boolean).join(" ");
   return [
     "<!doctype html>",
@@ -116,7 +118,86 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stdout).toContain("Page metadata: 2 pages, exact");
     expect(result.stdout).toContain("Viewport meta: 3 pages, exact");
     expect(result.stdout).toContain("Embed prohibition: 3 pages, exact");
+    expect(result.stdout).toContain("Alignment status controls: 2 pages, exact");
     expect(result.stdout).toContain("Index integrity: 2 entries, exact");
+  });
+
+  it("passes on a confirmed page with read-only approval records", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      status: "confirmed",
+      body: [
+        '<section class="status"><p>alignment_status: confirmed</p></section>',
+        '<section class="approval-record">',
+        "<h2>Approval Record</h2>",
+        "<p><strong>Evidence coverage:</strong> Approved as sufficient.</p>",
+        "<p><strong>Artifact destination:</strong> research/example.md.</p>",
+        "</section>",
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Alignment status controls: 1 pages, exact");
+  });
+
+  it("fails on confirmed pages with retained active gate, compile, registry, or retained-controls text", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      status: "confirmed",
+      body: '<div class="question-block"><input required name="gate"></div>',
+    }));
+    writePage(root, "page-b.html", pageHtml({
+      body: '<p>alignment_status: confirmed</p><button>Compile Responses</button>',
+    }));
+    writePage(root, "page-c.html", pageHtml({
+      status: "confirmed",
+      body: "<script>const requiredGateNames = ['evidence'];</script>",
+    }));
+    writePage(root, "page-d.html", pageHtml({
+      status: "confirmed",
+      body: "<p>Retained controls from review remain here.</p>",
+    }));
+    writeIndex(root, [
+      { href: "page-a.html" },
+      { href: "page-b.html" },
+      { href: "page-c.html" },
+      { href: "page-d.html" },
+    ]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("Alignment status controls: 4 pages, DRIFT");
+    expect(result.stderr).toContain("Alignment status controls drift:");
+    expect(result.stderr).toContain("Confirmed page controls in alignment/page-a.html");
+    expect(result.stderr).toContain(".question-block gate controls");
+    expect(result.stderr).toContain("required gate inputs/textareas");
+    expect(result.stderr).toContain("Confirmed page controls in alignment/page-b.html");
+    expect(result.stderr).toContain("Compile Responses control");
+    expect(result.stderr).toContain("Confirmed page controls in alignment/page-c.html");
+    expect(result.stderr).toContain("requiredGateNames registry");
+    expect(result.stderr).toContain("Confirmed page controls in alignment/page-d.html");
+    expect(result.stderr).toContain("retained controls wording");
+  });
+
+  it("allows review pages to keep active controls", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      body: [
+        '<div class="question-block"><input required name="gate"></div>',
+        '<div class="section-feedback"><textarea></textarea></div>',
+        "<button>Compile Responses</button>",
+        "<script>const requiredGateNames = ['evidence'];</script>",
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Alignment status controls: 1 pages, exact");
   });
 
   it("passes on an empty alignment directory with no index", () => {

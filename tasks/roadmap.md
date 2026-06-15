@@ -1,3 +1,35 @@
+## Current Implementation - Alignment Gate Reactivity Contract
+
+### Goal
+
+Update the shared alignment-page convention and active-page audit so feedback-driven revised review pages regenerate stale gates, and confirmed pages cannot retain active gate, feedback, or compile controls.
+
+### Scope
+
+- `docs/alignment-page-convention.md` inside the canonical `alignment-convention` block
+- Generated bundled `ALIGNMENT-PAGE.md` files
+- `scripts/audit-alignment-pages.mjs`
+- Focused layer1 tests for alignment gate convention drift and active-page audit fixtures
+- Prompt history, task tracking, verification notes, commit, and push
+
+### Plan
+
+1. Capture the visible targeted-skill-builder invocation prompt and record this implementation plan.
+2. Patch the canonical alignment-page convention with gate-reactivity and confirmed-page control prohibitions.
+3. Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+4. Extend the active-page audit with an `Alignment status controls` diagnostic for confirmed pages.
+5. Add focused layer1 regression coverage for the generated bundle language and confirmed-page controls audit.
+6. Run required validation: bundle check, focused tests, active-page audit, and diff hygiene.
+7. Record review notes, then commit and push the verified changes on the primary branch.
+
+### Acceptance Criteria
+
+- Revised review pages are contractually required to regenerate affected gates, blocking state, unanswered required questions, and gate registries from revised artifact content.
+- Superseded gates must be removed or rewritten, and changed gates must be visibly marked in the revised review page.
+- Confirmed pages may preserve decisions only as read-only records, not active inputs, compile buttons, stale registries, counters, blocking language, or retained controls.
+- Active confirmed pages containing retained controls fail the audit with the new diagnostic group.
+- Review pages with active controls continue to pass the audit.
+
 ## Current Implementation - Alignment Gate Reactivity Session Analysis
 
 ### Goal

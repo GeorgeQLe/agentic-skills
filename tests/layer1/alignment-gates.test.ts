@@ -336,6 +336,10 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} remove gate ui`).toContain(
         'Remove required gate-question controls, section feedback input controls, local compile/copy controls, local read-only YAML outputs, the final "Compile Responses" button, response counters',
       );
+      expect(content, `${path} no stale gate registry`).toContain("stale `requiredGateNames` or gate registry data");
+      expect(content, `${path} read-only only`).toContain("Preserve decisions only as read-only approval records");
+      expect(content, `${path} no compile feedback controls`).toContain("`Compile Feedback YAML` controls");
+      expect(content, `${path} no retained controls`).toContain("retained controls remain");
       expect(content, `${path} preserve approval record`).toContain("Preserve the full research and approval record");
       expect(content, `${path} preserve evidence`).toContain(
         "answered decisions, user requests, evidence matrix, assumptions/confidence register, source gaps, proposed file changes",
@@ -344,6 +348,32 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} research caveats`).toContain("Keep research caveats visible");
       expect(content, `${path} not immutable`).toContain(
         "`confirmed` means approved/current, not immutable or permanently true",
+      );
+    }
+  });
+
+  it("requires revised review pages to regenerate affected gates after feedback changes the premise", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} gate reactivity section`).toContain("**Gate reactivity after revisions.**");
+      expect(content, `${path} revision triggers`).toContain(
+        "feedback, partial compiled response YAML, `other` answers, `needs-clarification`, or approval-with-edits changes the artifact premise",
+      );
+      expect(content, `${path} regenerate gates`).toContain(
+        "regenerate the affected gate set from the revised artifact",
+      );
+      expect(content, `${path} recompute blockers`).toContain(
+        "Recompute gate questions, options, defaults, blocking state, `unanswered_required_questions`, and any `requiredGateNames` or gate registry",
+      );
+      expect(content, `${path} remove superseded gates`).toContain(
+        "Remove or rewrite superseded gates",
+      );
+      expect(content, `${path} visible gate changes`).toContain(
+        "Visibly mark changed gates in the revised review page",
+      );
+      expect(content, `${path} partial yaml reactivity`).toContain(
+        "regenerate affected gates under the Gate reactivity after revisions rule",
       );
     }
   });
