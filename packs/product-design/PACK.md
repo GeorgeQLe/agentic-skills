@@ -20,6 +20,7 @@ scripts/pack.sh refresh
 
 - `brainstorm`: Generate and explore ideas for a product or feature direction.
 - `feature-interview`: Conduct a structured interview to define feature requirements and constraints.
+- `design-inspirations`: Gather UI/UX inspiration once via web research — named patterns, conventions, component-library references, and annotated links — into a durable cited brief that feeds `ui-interview` and `ux-variations`.
 - `user-flow-map`: Map positioned product goals into the root of a wireframe tree with user-flow branches, decisions, states, handoffs, and low-fidelity wireframe notes.
 - `ui-interview`: Investigate a specific UX variation branch, propose an HTML visual mockup, interview for alignment, and approve/reject/retry the branch before routing onward.
 - `spec-interview`: Conduct a structured interview to produce a detailed product specification.
