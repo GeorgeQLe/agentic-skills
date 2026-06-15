@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-15
+
+- Updated business discovery fallback routing to use canonical `business-research` install guidance and explicit pack-availability wording for cross-pack discovery routes.
+
 ## v0.5 - 2026-06-14
 
 - Made reporting and routing Research-Session-Loop-aware: when reconciling a research stage, read the selected-set run manifest (`research/{slug}/_working/{orchestrator}-run.yaml`), compare against existing canonical intermediates, and report "k of N frameworks complete" instead of reading `tasks/todo.md` checkboxes for research progress.

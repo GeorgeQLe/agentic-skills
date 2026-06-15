@@ -311,7 +311,7 @@ YouTube ops:
 
 ```text
 youtube-audit, youtube-channel-audit, youtube-video-audit, youtube-video-prelaunch-audit,
-youtube-vid-research, youtube-competitive-research,
+youtube-vid-research, youtube-competitive-research, youtube-derivative-cuts,
 youtube-title-thumbnail-audit, youtube-description-optimizer,
 youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis

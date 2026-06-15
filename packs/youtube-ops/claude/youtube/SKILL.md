@@ -16,7 +16,7 @@ Invoke as `/youtube`.
 
 Entry point for the `youtube-ops` pack. Classifies the user's intent and either recommends a single skill or composes a multi-step "play" written to `tasks/todo.md` for `/exec` to drive.
 
-This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 13 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
+This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 14 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
 
 ## Modes
 
@@ -32,6 +32,7 @@ When invoked with natural language and no flags, classify the user's intent agai
 | Video understanding | "watch this", "summarize", external URL | `/youtube-vid-research` |
 | Concept validation | "should I make", "video idea" | `/youtube-concept-research` or suggest `--concept` play |
 | Competitive analysis | "why did their video", "competitor" | `/youtube-competitive-research` |
+| Derivative slate planning | "clips", "Shorts from this video", "derivative cuts", "repurpose long video", "publish sequence" | `/youtube-derivative-cuts` |
 | Packaging | "title", "thumbnail", "CTR" | `/youtube-title-thumbnail-audit` |
 | Description/SEO | "description", "tags", "metadata" | `/youtube-description-optimizer` |
 | Search opportunity | "search", "keywords", "ranking" | `/youtube-search-positioning` |

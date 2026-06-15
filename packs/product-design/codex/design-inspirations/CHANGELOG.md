@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1 - 2026-06-15
+
+- Added explicit `business-research` availability wording around the `customer-discovery` reference so cross-pack routing remains guarded.
+
 ## v0.0 - 2026-06-14
 
 - Initial version. Single-pass web-research feeder for prototype-phase design work: gathers named UI/UX patterns, layout/interaction conventions, component-library references, competitor/comparable UX notes, and annotated reference links into a durable cited brief (`design/design-inspirations-{topic}.md`) plus a search log, behind the staged scope → working packet → `review` alignment page → approved canonical write lifecycle.

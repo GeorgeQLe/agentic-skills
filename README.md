@@ -303,7 +303,8 @@ creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review
 
 youtube-ops: youtube-audit, youtube-channel-audit, youtube-video-audit,
-youtube-vid-research, youtube-competitive-research,
+youtube-video-prelaunch-audit, youtube-vid-research, youtube-competitive-research,
+youtube-derivative-cuts,
 youtube-title-thumbnail-audit, youtube-description-optimizer,
 youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis

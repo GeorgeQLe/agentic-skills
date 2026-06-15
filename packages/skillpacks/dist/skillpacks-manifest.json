@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "d1856c044ac73653cef7ef859a8367c3f3740114a50676b8ea5702f6fe8d3d1c",
+  "source_fingerprint": "b86125e2b3ab25d13b2b907dbbd7043aa24ec06709ce891891da1f43de1fd3c3",
   "packs": [
     {
       "name": "agent-bridge",
@@ -542,6 +542,7 @@
       "skills": [
         "brainstorm",
         "consolidate-variations",
+        "design-inspirations",
         "design-system",
         "feature-interview",
         "prototype",
@@ -550,7 +551,7 @@
         "user-flow-map",
         "ux-variations"
       ],
-      "skill_count": 9
+      "skill_count": 10
     },
     {
       "name": "product-testing",
@@ -779,6 +780,7 @@
         "youtube-channel-audit",
         "youtube-competitive-research",
         "youtube-concept-research",
+        "youtube-derivative-cuts",
         "youtube-description-optimizer",
         "youtube-peer-benchmark",
         "youtube-portfolio",
@@ -788,7 +790,7 @@
         "youtube-video-audit",
         "youtube-video-prelaunch-audit"
       ],
-      "skill_count": 14
+      "skill_count": 15
     }
   ],
   "skills": [
@@ -798,14 +800,16 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.6",
       "path": "base/claude/afps-status/SKILL.md",
-      "content_sha256": "1df2737523b4290a8a57c716ce2b8b6fff5e2540f4823689449dcad591cd009c",
+      "content_sha256": "d275390437fe44058fe03582c54baa126fa6eea20be59b70976b947c8cb31129",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4",
+        "v0.5"
       ],
       "command": "/afps-status",
       "deck_memberships": []
@@ -1021,14 +1025,16 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.6",
       "path": "base/codex/afps-status/SKILL.md",
-      "content_sha256": "5c77e370c02caf46511c3bc4b0c2bab715e7d797c4f5099cd2994e9068f96341",
+      "content_sha256": "8f38886867dd979d8d9528ed82293fc3a29329b9357496d0fc5fa9438869c7c8",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4",
+        "v0.5"
       ],
       "command": "$afps-status",
       "deck_memberships": []
@@ -2606,9 +2612,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.19",
+      "version": "v0.20",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
-      "content_sha256": "4da51fba6cd02623e56699d6aeeea39d04ae8c524f8847a3d187bb22b0999000",
+      "content_sha256": "299e2dcc66432b2f0f4daf95bae679cd552b0cb45f222f10a488360be1532d99",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2621,6 +2627,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -2993,9 +3000,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.18",
+      "version": "v0.19",
       "path": "packs/business-research/claude/positioning/SKILL.md",
-      "content_sha256": "b28d759d97bb2e9abfb51bec705a358e0c0bf5e35901af71152a46626ad29a91",
+      "content_sha256": "d63dc448e7fa739e2eb852eebfdd7038fa32fa3cf4090f69f2d19ca455c81ca6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3007,6 +3014,7 @@
         "v0.15",
         "v0.16",
         "v0.17",
+        "v0.18",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3134,9 +3142,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.19",
+      "version": "v0.20",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
-      "content_sha256": "928553673275ad0589b7b08ecf106d2f6b5ae0ce9e2e3fd9b20c46d70fd08eb1",
+      "content_sha256": "190f812dccce943e08fedf4ef5370937f6745e7a11badb8f300b429ae406692b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3149,6 +3157,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3521,9 +3530,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.18",
+      "version": "v0.19",
       "path": "packs/business-research/codex/positioning/SKILL.md",
-      "content_sha256": "a484e3cba13878c6a55849c89abc8a7043569dcaca1052c8f97ce5de5e6c47ce",
+      "content_sha256": "bf84be5ab68ad6687faa6da609770c2f563718e39acdc54885f0efa6b2d1e753",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3535,6 +3544,7 @@
         "v0.15",
         "v0.16",
         "v0.17",
+        "v0.18",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4441,9 +4451,9 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.17",
+      "version": "v0.18",
       "path": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
-      "content_sha256": "973af9f932fdc5c6e090088e1332e2cda9c7d72fc0e72b82148a56b3c3d17845",
+      "content_sha256": "e99f9c6fac83f2083c5704a39eae13a89193f554dcb8c42e84bae992248a7950",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4454,6 +4464,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4705,9 +4716,9 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.17",
+      "version": "v0.18",
       "path": "packs/customer-lifecycle/codex/journey-map/SKILL.md",
-      "content_sha256": "2df247d6d75a95c9100e572f8eba69ec932b6a4d18c6ba48aa96af1f46c7dcc5",
+      "content_sha256": "ef9e6b738d1d5af28097402ec2716a2014d2f49d3435c3de2675f266e0f87841",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4718,6 +4729,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6311,6 +6323,21 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-claude-design-inspirations",
+      "name": "design-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "claude",
+      "version": "v0.1",
+      "path": "packs/product-design/claude/design-inspirations/SKILL.md",
+      "content_sha256": "db80a75e8f5d4c2f02763175c66a2475ac9d33a327afaa406955ea990dd01748",
+      "archive_versions": [
+        "v0.0"
+      ],
+      "command": "/design-inspirations",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-claude-design-system",
       "name": "design-system",
       "scope": "pack",
@@ -6412,9 +6439,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.22",
+      "version": "v0.23",
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
-      "content_sha256": "148f57030ce6d7582ee92f63c42d7e903fd4a28963b70624f38f9ce69f972655",
+      "content_sha256": "23db19d82ddef6841d2ebca32b42419a5fc57cf236d7538eccf0ff9df613d051",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6431,6 +6458,7 @@
         "v0.2",
         "v0.20",
         "v0.21",
+        "v0.22",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -6448,9 +6476,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
-      "content_sha256": "282b39cbd0b0fa07cb1dd543c71a8aef9c973a5057f1dff56755a06b50e0fd4f",
+      "content_sha256": "c6648f6ad5c5c0578be69a25e25ea3c22c40a1ee388264fff1b5e26c81c3671c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6459,7 +6487,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -6470,9 +6499,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
-      "content_sha256": "4d774b1e57e42d7c58bf7aa99d6e685b6308d49e6b3d3737c7447167ef9765b2",
+      "content_sha256": "63395cd06a0a83e186be6e85b941d53c2905c86120e0cc1678c0723ed7f0b8c3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6487,6 +6516,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -6541,6 +6571,21 @@
         "v0.9"
       ],
       "command": "$consolidate-variations",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-product-design-codex-design-inspirations",
+      "name": "design-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "codex",
+      "version": "v0.1",
+      "path": "packs/product-design/codex/design-inspirations/SKILL.md",
+      "content_sha256": "a3df6d5c86ce2aa909e80d1784a473761ff97c815128d189c7f52954d879840f",
+      "archive_versions": [
+        "v0.0"
+      ],
+      "command": "$design-inspirations",
       "deck_memberships": []
     },
     {
@@ -6643,9 +6688,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.22",
+      "version": "v0.23",
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
-      "content_sha256": "1a7a7914298d20d350ae48500847f983c8d112d636277185da845b8e1f7376cf",
+      "content_sha256": "15036f049774b0d7173beaa12a93f195b1acd48eaa1ac1dc6382af41d27338a7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6662,6 +6707,7 @@
         "v0.2",
         "v0.20",
         "v0.21",
+        "v0.22",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -6679,9 +6725,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
-      "content_sha256": "bd59c9c06c06b790e27bd5c839da18930dbb6b7c6da135ac651eecb7f5b858e4",
+      "content_sha256": "4f93a168ad3736e65f2f0dd33d168d4e46ffc1b5907b1faff23e6bccd65ab10f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6690,7 +6736,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []
@@ -6701,9 +6748,9 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
-      "content_sha256": "44b283d6e66fee1574c2e786b8c1b7b947e0a8ba1b265b1173e173cb43081f38",
+      "content_sha256": "02c26550526f3ffaa07b4b842677ba91ec8fb956d8ed9bb8febc42cb9bdfa8dd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6718,6 +6765,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -7786,6 +7834,19 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-youtube-ops-claude-youtube-derivative-cuts",
+      "name": "youtube-derivative-cuts",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "claude",
+      "version": "v0.0",
+      "path": "packs/youtube-ops/claude/youtube-derivative-cuts/SKILL.md",
+      "content_sha256": "f469d72010a62c56483d16ae3bb31351e0a1de59032226a886e99a7882ee508e",
+      "archive_versions": [],
+      "command": "/youtube-derivative-cuts",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-youtube-ops-claude-youtube-description-optimizer",
       "name": "youtube-description-optimizer",
       "scope": "pack",
@@ -7950,7 +8011,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
-      "content_sha256": "3b8bcfa80513fbbc1f90b0248441a07e0db92bcf3e6ec6f05d14ff867cf60adb",
+      "content_sha256": "89c357c3bd1163725ec22ec35efacd9e18e774708a43cc01bf9a1262b4f60712",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8057,6 +8118,19 @@
         "v0.5"
       ],
       "command": "$youtube-concept-research",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-youtube-ops-codex-youtube-derivative-cuts",
+      "name": "youtube-derivative-cuts",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "codex",
+      "version": "v0.0",
+      "path": "packs/youtube-ops/codex/youtube-derivative-cuts/SKILL.md",
+      "content_sha256": "17e4457f94864aa1b1f842d41f915903b4637de631f48a1bca361dd55a010bbb",
+      "archive_versions": [],
+      "command": "$youtube-derivative-cuts",
       "deck_memberships": []
     },
     {
@@ -8224,7 +8298,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
-      "content_sha256": "78aeafd0db90486b3e257e53cb6010b01693cc3f773952af3f119c40af5f3383",
+      "content_sha256": "a6fcb5067b85e916175adf6aeac7531340e3382db8cb907f0c8ba1cd2064ccae",
       "archive_versions": [
         "v0.0",
         "v0.1",

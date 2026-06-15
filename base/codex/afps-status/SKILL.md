@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.5
+version: v0.6
 argument-hint: "[optional project path, product path, or focus]"
 ---
 
@@ -54,10 +54,10 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - `reconcile-needed`: artifacts conflict enough that the next step should be reconciliation before new research or implementation.
 6. Choose the next route with these rules:
    - No concept brief or unclear concept: `$idea-scope-brief`
-   - Concept exists but business discovery is missing: `npx skillpacks install business-discovery` from the project shell.
+   - Concept exists but business discovery is missing: `npx skillpacks install business-research` from the project shell.
    - Concept exists and discovery is enabled, but no customer-discovery evidence: `$customer-discovery`
-   - A self-advancing research loop is mid-run (a run manifest exists with frameworks still pending, or all intermediates exist but no synthesized canonical yet): re-invoke that same orchestrator to advance one phase — `$customer-discovery`, `$competitive-analysis`, `$positioning`, or `$journey-map` — and tell the user to start a fresh Codex session and re-run it. This continuation takes precedence over starting a new orchestrator; do not imply a single pass and do not route framework work to `$exec`.
-   - Customer discovery exists but market/value evidence is missing: the most specific discovery command, usually `$competitive-analysis`, `$value-prop-canvas`, or `$positioning`
+   - A self-advancing research loop is mid-run (a run manifest exists with frameworks still pending, or all intermediates exist but no synthesized canonical yet): re-invoke that same orchestrator to advance one phase — `$customer-discovery`, `$competitive-analysis`, or `$positioning` when `business-research` is installed, or `$journey-map` when `customer-lifecycle` is installed — and tell the user to start a fresh Codex session and re-run it. This continuation takes precedence over starting a new orchestrator; do not imply a single pass and do not route framework work to `$exec`.
+   - Customer discovery exists but market/value evidence is missing: the most specific installed discovery command, usually `$competitive-analysis`, `$value-prop-canvas`, or `$positioning`; if `business-research` is not installed, recommend `npx skillpacks install business-research` first.
    - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or install the required pack first, such as `npx skillpacks install customer-lifecycle` from the project shell, or `npx skillpacks install business-growth` from the project shell.
    - Research/specs exist but task queue is stale or absent: `$roadmap`
    - Clear executable task exists: `$exec`

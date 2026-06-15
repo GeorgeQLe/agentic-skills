@@ -2,7 +2,7 @@
 name: design-inspirations
 description: Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: surface, product class, or reference products]"
 context_intake: scoped
 visual_tier: document
@@ -10,11 +10,11 @@ visual_tier: document
 
 # Design Inspirations
 
-Invoke as `$design-inspirations`.
+Invoke as `/design-inspirations`.
 
-Single-pass web-research feeder for prototype-phase design work. This is the **one home for web-driven inspiration** in the product-design pack: it gathers named UI/UX patterns, interaction and layout conventions, component-library references, competitor/comparable-product UX writeups, and annotated reference links for a chosen surface or product class, then writes one durable cited brief that `$ui-interview` and `$ux-variations` read as a soft, read-if-exists input. The other design skills stay deliberately local-evidence-driven; this skill keeps web search in exactly one place.
+Single-pass web-research feeder for prototype-phase design work. This is the **one home for web-driven inspiration** in the product-design pack: it gathers named UI/UX patterns, interaction and layout conventions, component-library references, competitor/comparable-product UX writeups, and annotated reference links for a chosen surface or product class, then writes one durable cited brief that `/ui-interview` and `/ux-variations` read as a soft, read-if-exists input. The other design skills stay deliberately local-evidence-driven; this skill keeps web search in exactly one place.
 
-It runs as a single pass (gather → working packet → `review` alignment page → approved canonical write), **not** a multi-session loop — the gathering is one heavy phase with no per-framework decomposition to chunk. Model the staged workflow and search-log artifact on `$customer-discovery`'s WebSearch pattern when `business-research` is installed; if it is not installed, use the staged workflow described below without recommending `$customer-discovery`.
+It runs as a single pass (gather → working packet → `review` alignment page → approved canonical write), **not** a multi-session loop — the gathering is one heavy phase with no per-framework decomposition to chunk. Model the staged workflow and search-log artifact on `/customer-discovery`'s WebSearch pattern.
 
 Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. The inspiration brief is referenced from the scoped flow-tree manifest `source_artifacts[]` (a free-form artifact path — no schema change); it is a gather-once feeder, not a mandatory branch stage in the `route`.
 
@@ -76,7 +76,7 @@ Stage 3 output is the approved canonical inspiration brief at `design/design-ins
 ```md
 **Inspiration scope:** <surface / product class>
 **Next work:** feed this brief into UI/UX design for the surface
-**Recommended next command:** $ui-interview [specific-ux-variation]
+**Recommended next command:** /ui-interview [specific-ux-variation]
 ```
 
 ## Constraints
@@ -86,7 +86,7 @@ Stage 3 output is the approved canonical inspiration brief at `design/design-ins
 - Separate observed source evidence from inference; do not present a pattern as validated for this product without a fit rationale.
 - Do not run paid API calls or external account actions.
 - Do not write canonical inspiration briefs, design files, tasks, or next-command routing before final artifact approval.
-- This is a soft feeder: do not require it before `$user-flow-map`, `$ux-variations`, or `$ui-interview`; those skills read the brief only if it exists.
+- This is a soft feeder: do not require it before `/user-flow-map`, `/ux-variations`, or `/ui-interview`; those skills read the brief only if it exists.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Alignment Page

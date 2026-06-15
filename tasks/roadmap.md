@@ -1,3 +1,36 @@
+## Current Implementation - YouTube Derivative Cuts Skill
+
+### Goal
+
+Add a mirrored `youtube-ops` research skill that plans a prioritized derivative clip slate from one long YouTube source video, using existing source/video evidence and producing approved research artifacts without editing, upload, thumbnail design, or full metadata optimization.
+
+### Scope
+
+- `packs/youtube-ops/{codex,claude}/youtube-derivative-cuts/`
+- `packs/youtube-ops/{codex,claude}/youtube/SKILL.md`
+- `packs/youtube-ops/PACK.md`, `README.md`, and `docs/skills-reference.md`
+- Benchmark coverage in `tests/harness/bench-coverage.ts` and `tests/layer4/setups/packs/pack-workflows.setup.ts`
+- Generated Skills Showcase data
+- Prompt history and task review notes
+
+### Plan
+
+1. Capture the visible invocation prompt and record this implementation plan.
+2. Draft mirrored Codex/Claude skill contracts, changelogs, and bundled alignment-page files for `youtube-derivative-cuts`.
+3. Update YouTube router signals and public pack/docs listings.
+4. Add benchmark coverage with deterministic assertions for timestamped candidates, companion-vs-Shorts separation, publish sequence, and measurement beyond views.
+5. Refresh Skills Showcase data.
+6. Run focused readback, routing, mirror, benchmark, generated-data, and diff verification.
+7. Commit and push the verified mutation set on the primary branch.
+
+### Acceptance Criteria
+
+- Both active `SKILL.md` files are mirrored aside from agent invocation syntax and include `version: v0.0`, `type: research`, and `context_intake: artifact_only`.
+- The skill requires candidate timestamps, companion clip vs Shorts separation, packaging notes, default publish sequence, checkpoint review, measurement plan, and handoffs.
+- YouTube router and docs list the new skill.
+- Benchmark coverage registers `youtube-derivative-cuts` and checks the new workflow expectations.
+- Generated showcase assets are refreshed and validated.
+
 ## Current Implementation - Root Agent Instruction Audit
 
 ### Goal

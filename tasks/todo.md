@@ -1,3 +1,37 @@
+## Current Implementation - YouTube Derivative Cuts Skill
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt and record the implementation plan.
+- [x] Draft mirrored skill contracts and supporting skill files.
+- [x] Update YouTube router and listing docs.
+- [x] Add benchmark coverage and fixture expectations.
+- [x] Refresh generated Skills Showcase data.
+- [x] Run focused verification.
+- [x] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting point: working tree had no reported changes before this implementation.
+- Skill context: `create-agentic-skill` applies because this creates a repo-managed pack skill; prompt history is also captured under `youtube-derivative-cuts` per the requested plan.
+- Scope addition: adding `CHANGELOG.md` and bundled `ALIGNMENT-PAGE.md` for the new skill keeps it consistent with active YouTube research skills and repo skill-versioning/alignment conventions.
+- Verification surfaced two pre-existing guard gaps: `design-inspirations` was missing benchmark coverage and `afps-status` / `design-inspirations` had cross-pack routing references that needed explicit `business-research` availability wording. Added an explicit blocked benchmark row for `design-inspirations`, archived/bumped `afps-status` to `v0.6`, and archived/bumped `design-inspirations` to `v0.1`.
+- Verification passed:
+  - Readback checks for mirrored `youtube-derivative-cuts` `version: v0.0`, `context_intake: artifact_only`, Codex `$youtube-derivative-cuts`, Claude `/youtube-derivative-cuts`, and `research/youtube/derivative-cuts-<video-id>-YYYY-MM-DD.md`.
+  - `rg -n 'youtube-derivative-cuts' packs README.md docs tests apps/skills-showcase/public/assets docs/skills-showcase/assets`
+  - `pnpm --dir tests bench:coverage`
+  - `./scripts/skill-mirror-parity-audit.sh`
+  - `./scripts/skill-pack-routing-audit.sh`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+- Unrelated dirty files appeared in `alignment/`, `research/skills-showcase/`, `docs/history/archive/2026-06-15/`, `prompts/customer-discovery/`, and `specs/skills-showcase/` while this task was running. They are treated as outside this commit boundary and are not staged.
+
 ## Current Implementation - Root Agent Instruction Audit
 
 ### Current Checklist
