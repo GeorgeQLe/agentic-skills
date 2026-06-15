@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.8 - 2026-06-15
+
+- Stage 3 now names a concrete confirmed-page validation: reconcile each displayed gate decision against the final compiled YAML and the written canonical artifact, render any `other`/freeform choice as the read-only decision and drop superseded options, and run the alignment-page post-confirmation self-check before handoff. Closes a verified incident where a `confirmed` page retained an active, stale gate question that contradicted the final compiled YAML.
+
+## v1.7 - 2026-06-15
+
+- Clarified that framework completion returns to the parent Research Session Loop rather than downstream routing. Parent-loop continuation now names the parent `customer-discovery` command and disallows execution-loop or direct framework handoffs before synthesized `icp.md` finalization.
+
 ## v1.6 - 2026-06-14
 
 - Migrated the orchestrator to the Research Session Loop (`docs/research-session-loop-convention.md`): replaced the Mode A/B/C/D framing and the `tasks/todo.md` + `/exec` framework-queueing with a self-advancing session ladder (states F/E/C/B/A, YAML-first resolution).
