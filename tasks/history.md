@@ -14292,6 +14292,15 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ## 2026-06-11 — Skillpacks prepublish auth guard
 
 - Added `packages/skillpacks/scripts/prepublish-auth-check.mjs` to protect real `skillpacks` publishes from unauthenticated, wrong-account, non-maintainer, and already-published-version failures before npm upload.
+## 2026-06-15 — Alignment gate reactivity session analysis
+
+- Investigated recurring cases where alignment-page gate questions and blockers were not updated after user feedback or prior answers.
+- Scanned local Claude/Codex history and wrote `tasks/alignment-gate-reactivity-analysis.md` with corpus counts, confirmed examples, repository-surface diagnosis, and recommended owner updates.
+- Key recommendation: update the shared alignment-page convention, audit checks, and layer1 tests so revised pages regenerate or retire stale gates, recompute blocking state, and render confirmed gate answers as read-only records.
+- Validation passed for report readback, the same-session alignment-page audit, and diff hygiene.
+- Captured visible `$analyze-sessions` and `$ship-end` invocations in prompt history.
+- Manifest: `tasks/ship-manifest-2026-06-15-alignment-gate-reactivity-analysis.md`.
+
 - Wired the guard into `packages/skillpacks/package.json` as `prepublishOnly` and `publish:preflight`, added it to the package `files` allowlist, and updated `packages/skillpacks/scripts/build-package.mjs` so staged package builds include it.
 - Added mocked npm unit tests for dry-run skip, successful maintainer preflight, unauthenticated login guidance, wrong account failure, and already-published version failure.
 - Refreshed package staging and manifest fingerprint for the changed package boundary.

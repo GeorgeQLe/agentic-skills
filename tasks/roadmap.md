@@ -1,3 +1,32 @@
+## Current Implementation - Alignment Gate Reactivity Session Analysis
+
+### Goal
+
+Investigate recurring cases where alignment-page gate questions were not reactive to prior user answers or feedback, then report likely owner surfaces and concrete updates.
+
+### Scope
+
+- Local Claude/Codex prompt and rich session history relevant to alignment pages, gate questions, compiled YAML, feedback, and approval flows
+- Repository alignment-page convention and generator/audit scripts
+- Active alignment-producing skill contracts where gate behavior is specified
+- Prompt history and task review notes for this analysis
+
+### Plan
+
+1. Capture the visible `$analyze-sessions` invocation and record this analysis plan.
+2. Script-scan full available Claude/Codex history for alignment-page gate reactivity, feedback, compiled YAML, and user correction patterns.
+3. Inspect canonical alignment-page convention, bundled alignment instructions, and audit/generator scripts for static-gate assumptions.
+4. Compare session evidence against current repository contracts to identify concrete update surfaces.
+5. Report findings, confidence, recommended owner surface, and validation expectations.
+
+### Acceptance Criteria
+
+- Findings cite real history examples and distinguish explicit evidence from inference.
+- Counts are exact for the scanned corpus and scope.
+- Recommendations name the likely contract or generator surface to update.
+- Cost is reported as unavailable unless explicit logged cost fields or verified current pricing are used.
+- No alignment page is created unless the investigation finds a clarification need that cannot be handled inline.
+
 ## Current Implementation - YouTube Derivative Cuts Skill
 
 ### Goal
