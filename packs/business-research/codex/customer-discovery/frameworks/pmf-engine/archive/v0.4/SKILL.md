@@ -2,7 +2,7 @@
 name: pmf-engine
 description: Vohra/Supan PMF Engine - evaluate existing user data with Sean Ellis PMF signal, very-disappointed segmentation, retention/usage evidence, and High-Expectation Customer synthesis
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: customer-discovery
 ---
@@ -21,7 +21,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while scope or artifact approval is pending. The approval request itself is the next action. Parent-loop continuation is allowed only after the approved artifact has been written or updated: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 ## Staged Research Workflow
 
@@ -241,7 +241,7 @@ Present PMF signal, very-disappointed segment analysis, HXC synthesis, and targe
 - Do not prescribe UI or architecture - describe PMF, segment focus, and customer evidence implications.
 - Present findings before writing.
 - Do not overwrite existing output without asking the user first.
-- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or direct `customer-discovery/frameworks/...` invocations. After approved artifact finalization, hand control back to parent-loop continuation: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+- This is a sub-skill - do not emit next-step routing.
 
 ## Alignment Page
 

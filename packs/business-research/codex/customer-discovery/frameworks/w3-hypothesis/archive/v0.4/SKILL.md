@@ -1,8 +1,8 @@
 ---
-name: jtbd-needs
-description: Ulwick/Christensen JTBD — identify jobs, map desired outcomes, score importance vs satisfaction, and segment ICP candidates by unmet needs
+name: w3-hypothesis
+description: Schwartzfarb W3 — define WHO/WHAT/WHY for each ICP candidate, generate disproval hypotheses, and validate via targeted research
 type: research
-version: v0.5
+version: v0.4
 invocation: sub-skill
 parent: customer-discovery
 ---
@@ -11,7 +11,7 @@ parent: customer-discovery
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# JTBD Needs — Ulwick/Christensen Outcome-Driven Innovation
+# W3 Hypothesis — Schwartzfarb WHO/WHAT/WHY Analysis
 
 ## Report-First Approval Gate
 
@@ -21,7 +21,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while scope or artifact approval is pending. The approval request itself is the next action. Parent-loop continuation is allowed only after the approved artifact has been written or updated: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 ## Staged Research Workflow
 
@@ -71,143 +71,104 @@ When product path `{slug}` is active, read and write research under `research/{s
 - Read CLAUDE.md, README for product context
 - Scan codebase and existing research for additional signal
 
-### 2. Identify Jobs-to-be-Done
+### 2. Define W3 for Each ICP Candidate
 
-For each ICP candidate, identify the full job landscape:
+For each ICP candidate, construct the three-variable hypothesis:
 
-**Functional jobs** — tasks and outcomes they need accomplished:
-- Core tasks they hire a solution to perform
-- Desired outcomes for each task (measurable results)
-- Related tasks that precede, follow, or co-occur with the core job
-- Frequency and context of job execution
+**WHO** — narrowly defined buyer/customer:
+- Demographics: age, location, education, income level
+- Firmographics: company size, stage, industry, revenue, funding status
+- Psychographics: values, motivations, risk tolerance, decision-making style
+- Role/title, budget authority, buying power
+- Behavioral patterns: where they spend time, what they read, who they trust
 
-**Social jobs** — how they want to be perceived:
-- Professional reputation goals
-- Peer perception and status signals
-- Team/org perception of their decisions
-- Industry credibility and thought leadership
+**WHAT** — what they're actually buying (the outcome, not the product):
+- The specific problem being solved
+- The outcome or transformation they expect
+- What success looks like in their words
+- The difference between what they say they want and what they actually need
+- How they measure whether they got what they paid for
 
-**Emotional jobs** — how they want to feel:
-- Confidence and control over outcomes
-- Reduced anxiety about risks or unknowns
-- Satisfaction and sense of progress
-- Freedom from tedious or frustrating work
+**WHY** — the business driver and measurable impact:
+- Primary business driver: revenue growth, cost reduction, compliance, competitive pressure, efficiency
+- Measurable impact: quantifiable benefit they expect
+- Urgency level: why now, not later
+- Macro trends or market forces creating the window
+- What happens if they do nothing (cost of inaction)
 
-**Related jobs** — adjacent jobs that create context:
-- Jobs performed immediately before and after
-- Jobs that share the same workflow or trigger
-- Jobs delegated to other roles that affect this one
-- Jobs that compete for the same time/attention
+### 3. Generate Disproval Hypotheses
 
-**Consumption chain jobs** — jobs around acquiring, using, maintaining the solution:
-- Evaluate and select solutions
-- Onboard and learn the solution
-- Integrate with existing workflow
-- Maintain, update, and extend over time
-- Migrate away when the job changes
+For each W in each candidate's W3, generate 2-3 hypotheses that would **disprove** the assumption. The goal is falsification, not confirmation.
 
-### 3. Map Desired Outcomes
+- **WHO disproval**: "If our WHO is wrong, we'd expect to see [specific evidence]. For example: the actual buyer is a different role, the company size doesn't match, the budget holder is someone else."
+- **WHAT disproval**: "If our WHAT is wrong, we'd expect to see [specific evidence]. For example: customers describe the problem differently, they measure success by different metrics, the outcome they want is adjacent but distinct."
+- **WHY disproval**: "If our WHY is wrong, we'd expect to see [specific evidence]. For example: the urgency driver is different, the business case doesn't hold at their scale, the macro trend is weaker than assumed."
 
-For each job, write Ulwick outcome statements following the canonical format:
+### 4. Targeted Research
 
-`[Direction of improvement] + [performance metric] + [object of control] + [contextual clarifier]`
+Run WebSearch queries designed to test each disproval hypothesis:
+- Search for evidence that contradicts each W assumption
+- Search for evidence that supports each W assumption
+- Log every query and its key findings
+- Look for competitor positioning that implies a different WHO/WHAT/WHY
+- Look for community discussions, job postings, industry reports that reveal actual buyer behavior
+- Prioritize disconfirming evidence — confirmation bias is the enemy
 
-Direction of improvement: Minimize, Maximize, Increase, Reduce, Eliminate, Optimize
+### 5. Score Hypothesis Confidence
 
-Examples:
-- "Minimize the time it takes to identify qualified leads in a new market segment"
-- "Reduce the likelihood of misallocating budget to underperforming channels"
-- "Maximize the percentage of outreach messages that receive a response"
-- "Minimize the number of tools required to complete end-to-end campaign analysis"
+For each ICP candidate, score each W dimension:
 
-Write 8-15 outcome statements per core functional job, 3-5 per social/emotional job.
+- **Strong**: multiple independent sources support the assumption; disproval hypotheses tested and no significant contradicting evidence found
+- **Moderate**: some supporting evidence; one or more disproval hypotheses partially supported; key uncertainties remain
+- **Weak**: limited evidence; disproval hypotheses found supporting evidence; significant risk the assumption is wrong
 
-### 4. Score Importance & Satisfaction
-
-For each outcome statement, score based on available evidence (research, feedback, competitive analysis, codebase signals):
-
-- **Importance** (1-10): How important is achieving this outcome to the ICP candidate?
-- **Current Satisfaction** (1-10): How well do existing solutions satisfy this outcome?
-
-Calculate **Opportunity Score**: `Importance + max(Importance - Satisfaction, 0)`
-
-Classify each outcome:
-- **Underserved** (opportunity score ≥ 12): high importance, low satisfaction — prime innovation targets
-- **Appropriately served** (opportunity score 8-11): adequate current solutions exist
-- **Overserved** (opportunity score < 8): low importance or high satisfaction — potential to simplify/reduce
-
-### 5. Segment by Unmet Needs
-
-Cluster ICP candidates by shared patterns of underserved outcomes:
-
-- Identify candidates with similar underserved outcome clusters
-- Define natural segments based on shared unmet needs (not demographics)
-- Map cross-segment patterns: outcomes underserved across all candidates
-- Identify segment-specific opportunity areas unique to each cluster
-- Rank segments by total addressable opportunity (sum of opportunity scores for underserved outcomes)
-- Note which segments align with or diverge from demographic/firmographic ICP boundaries
+Calculate an overall candidate confidence based on the weakest dimension — a candidate is only as strong as its weakest W.
 
 ### 6. Validate with User
 
-Present jobs, outcomes, opportunity scores, and segment recommendations. Ask for corrections on:
-- Job completeness: missing jobs or mischaracterized job importance
-- Outcome accuracy: whether statements reflect real user language and priorities
-- Scoring calibration: whether importance/satisfaction estimates match known reality
-- Segment validity: whether proposed clusters reflect real behavioral differences
+Present W3 definitions, disproval evidence, and confidence scores. Ask for corrections, missing context, and whether any candidates should be eliminated or refined.
 
 ## Output
 
-### `research/customer-discovery-jtbd-needs.md` (or `research/{slug}/customer-discovery-jtbd-needs.md`)
+### `research/customer-discovery-w3-hypothesis.md` (or `research/{slug}/customer-discovery-w3-hypothesis.md`)
 
 ```markdown
-# JTBD Needs Analysis
+# W3 Hypothesis Analysis
 
 > Based on: [sources]
 > Date: [current date]
-> Methodology: Ulwick/Christensen Outcome-Driven Innovation
+> Methodology: Schwartzfarb W3 (WHO/WHAT/WHY)
 
 ## ICP Candidate: [Name]
 
-### Functional Jobs
-| Job | Context | Frequency |
-|-----|---------|-----------|
-| [core task] | [when/where this job arises] | [how often] |
+### WHO
+[Narrow buyer definition — demographics, firmographics, psychographics, role, budget authority]
 
-### Social & Emotional Jobs
-| Type | Job | Evidence |
-|------|-----|----------|
-| Social | [how they want to be perceived] | [source] |
-| Emotional | [how they want to feel] | [source] |
+### WHAT
+[What they're actually buying — the outcome, not the product]
 
-### Desired Outcomes & Opportunity Scores
-| Outcome Statement | Job | Importance | Satisfaction | Opportunity Score | Classification |
-|-------------------|-----|------------|--------------|-------------------|----------------|
-| [direction] + [metric] + [object] + [context] | [parent job] | 1-10 | 1-10 | calculated | Underserved/Served/Overserved |
+### WHY
+[Business driver and measurable impact, urgency, macro trends]
 
-### Top Underserved Outcomes
-1. [outcome] — Opportunity Score: [score]
-2. [outcome] — Opportunity Score: [score]
-3. [outcome] — Opportunity Score: [score]
+### Disproval Evidence
+| Hypothesis | Evidence For | Evidence Against | Confidence |
+|------------|-------------|-----------------|------------|
+| WHO: [specific disproval hypothesis] | [supporting evidence] | [contradicting evidence] | Strong/Moderate/Weak |
+| WHAT: [specific disproval hypothesis] | [supporting evidence] | [contradicting evidence] | Strong/Moderate/Weak |
+| WHY: [specific disproval hypothesis] | [supporting evidence] | [contradicting evidence] | Strong/Moderate/Weak |
 
 ## ICP Candidate: [Name 2]
 ...
 
-## Opportunity Landscape
-| Outcome | Candidate(s) | Importance | Satisfaction | Opportunity Score |
-|---------|-------------|------------|--------------|-------------------|
-| [outcome] | [who shares it] | [avg] | [avg] | [score] |
-
-## Needs-Based Segments
-### Segment: [Name]
-- **Shared underserved outcomes**: [list]
-- **ICP candidates in segment**: [list]
-- **Total addressable opportunity**: [sum of opportunity scores]
-- **Distinguishing characteristic**: [what unites them beyond demographics]
-
 ## Cross-Candidate Comparison
-| Candidate | Top Underserved Outcome | Segment | Total Opportunity |
-|-----------|------------------------|---------|-------------------|
-| [name] | [highest-scoring outcome] | [segment] | [sum] |
+| Candidate | WHO Confidence | WHAT Confidence | WHY Confidence | Overall |
+|-----------|---------------|-----------------|----------------|---------|
+| [name] | Strong/Moderate/Weak | Strong/Moderate/Weak | Strong/Moderate/Weak | Strong/Moderate/Weak |
+
+## Research Log
+| Query | Key Findings | Disproval Target |
+|-------|-------------|-----------------|
+| [search query] | [what was found] | [which W hypothesis this tested] |
 
 ## Evidence Matrix
 | Claim | Evidence Source | Evidence Type | Confidence |
@@ -217,17 +178,16 @@ Present jobs, outcomes, opportunity scores, and segment recommendations. Ask for
 
 ## Constraints
 
-- Ground every job, outcome, and score in evidence from ICP candidates, research, specs, feedback, or codebase.
-- Use Ulwick's canonical outcome statement format — do not shortcut to vague needs language.
-- Prioritize underserved outcomes as innovation targets; do not optimize for overserved outcomes.
-- Do not prescribe UI or architecture — describe the customer need, not the solution.
+- Ground every W3 definition and confidence score in evidence from ICP candidates, research, specs, feedback, or codebase.
+- Prioritize disconfirming evidence — the framework demands falsification, not confirmation.
+- Do not prescribe UI or architecture — describe the customer hypothesis, not the solution.
 - Present findings before writing.
 - Do not overwrite existing output without asking the user first.
-- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or direct `customer-discovery/frameworks/...` invocations. After approved artifact finalization, hand control back to parent-loop continuation: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+- This is a sub-skill — do not emit next-step routing.
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/jtbd-needs-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/w3-hypothesis-{topic}.html`.
 
 ## Default Shipping Contract
 

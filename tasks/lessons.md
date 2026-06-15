@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-15 — Verify ownership before deleting untracked files
+
+- A cleanup plan treated all untracked files as disposable refresh fallout, but some untracked files can be prior or concurrent work that has not been committed yet.
+- Before deleting an untracked path, verify whether it is named by the current cleanup request, tied to the current task's generated outputs, or clearly disposable build/cache output.
+- If an untracked path belongs to another active task or prior work, leave it alone and narrow cleanup commands to the exact accidental paths named by the user.
+
 ## 2026-06-15 — Framework file paths are not skill invocation commands
 
 - The user reported `$competitive-analysis/frameworks/porter-five-forces`, which was a path-shaped route leaked from framework subskill docs rather than a valid skill invocation.

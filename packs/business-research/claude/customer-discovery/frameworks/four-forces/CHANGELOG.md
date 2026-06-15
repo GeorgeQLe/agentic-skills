@@ -1,5 +1,9 @@
 # four-forces changelog (claude)
 
+## v0.5 - 2026-06-15
+
+- Clarified framework handoff behavior: after approved artifact finalization, return to the parent `customer-discovery` Research Session Loop using the agent-specific parent command, without cross-skill, execution-loop, or direct framework-route recommendations.
+
 ## v0.4 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

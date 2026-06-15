@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-15 - Customer discovery routing cleanup
+
+- Preserved the intended customer-discovery framework handoff update: all six mirrored framework skills remain at `v0.5`, keep their `v0.4` archives, and hand control back to `$customer-discovery` or `/customer-discovery` after approved framework finalization.
+- Removed only the accidental untracked parent `customer-discovery/archive/v1.6/` directories from the Claude and Codex business-research pack sources.
+- Restored `packages/skillpacks/package.json` to the committed `0.1.2` package version and rebuilt `packages/skillpacks/dist/skillpacks-manifest.json` from current sources.
+- Refreshed Skills Showcase generated assets so generated site data stays consistent with current source skills, including existing VARD/ORD traction entries.
+- Updated `tasks/lessons.md` with the cleanup correction: verify ownership before deleting untracked paths.
+- Verification passed: VARD/ORD boundary checks, active handoff scans, `scripts/skill-mirror-parity-audit.sh --verbose`, `scripts/pack.sh doctor`, strict archive audit, missing-version audit, Skills Showcase data validation, and `git diff --check`.
+- Left unrelated analyze-sessions artifacts and pre-existing task-doc changes out of the cleanup boundary.
+- Manifest: `tasks/ship-manifest-2026-06-15-customer-discovery-routing-cleanup.md`.
+
 ## 2026-06-15 - Track 2: design-loop brief adoption + design-inspirations feeder
 
 - Adopted the Intra-Skill Substep Chunking + Shared Context Brief mechanism (`docs/prototype-session-loop-convention.md`) in two more design skills, completing the audit's remaining Part C items.
