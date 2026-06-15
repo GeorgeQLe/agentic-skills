@@ -116,11 +116,12 @@ Alignment convention maintenance also has npm wrappers:
 ```bash
 npx skillpacks alignment bundles --check
 npx skillpacks alignment pages audit
+npx skillpacks alignment pages serve --port 8907
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 npx skillpacks alignment verify
 ```
 
-Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx skillpacks alignment ...` from npm-installed target repos.
+Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx skillpacks alignment ...` from npm-installed target repos.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 

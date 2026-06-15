@@ -27,6 +27,7 @@
     "scripts/upgrade-alignment-page.mjs",
     "scripts/audit-alignment-pages.mjs",
     "scripts/open-html-page.mjs",
+    "scripts/serve-alignment.mjs",
     "scripts/inject-tts.mjs",
     "scripts/alignment-tts-kokoro.js",
     "scripts/alignment-chart-snippets.js",

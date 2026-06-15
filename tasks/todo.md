@@ -1,3 +1,29 @@
+## Current Implementation - Portable Alignment Server
+
+### Current Checklist
+
+- [x] Record the implementation plan in task tracking.
+- [x] Inspect current CLI, package staging, docs, and tests.
+- [x] Implement packaged `alignment pages serve`.
+- [x] Update docs/convention and regenerate bundles.
+- [x] Add focused tests.
+- [x] Run required verification and reconcile results.
+- [ ] Commit and push the verified changes.
+
+### Review Notes
+
+- Starting point: working tree was clean.
+- Scope: make the existing alignment page server portable through the `skillpacks` npm CLI without adding browser auto-open or background process management.
+- Added `alignment pages serve [--port <port>]` to the Node-owned CLI wrapper, resolving the packaged `scripts/serve-alignment.mjs` and serving the current target repo root.
+- Updated package staging, npm docs, quickstart, README, canonical alignment convention, and regenerated 300 generated alignment bundles.
+- Verification passed:
+  - `npm --workspace packages/skillpacks run test:node` (80 tests)
+  - `npm --workspace packages/skillpacks run build:check`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts layer1/compile-central-alignment.test.ts` (54 tests)
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `git diff --check`
+  - Runtime smoke: `node packages/skillpacks/bin/skillpacks.mjs alignment pages serve --port 8917` served the repo root and `curl -sS -I http://localhost:8917/alignment/` returned `HTTP/1.1 200 OK`.
+
 ## Current Implementation - Alignment Portability
 
 ### Current Checklist

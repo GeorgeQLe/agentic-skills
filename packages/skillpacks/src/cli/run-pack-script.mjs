@@ -31,6 +31,7 @@ const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignmen
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
 const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
 const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
+const alignmentServeScriptPath = resolvePackagedPath('scripts/serve-alignment.mjs');
 const alignmentTtsAssetPath = resolvePackagedPath('scripts/alignment-tts-kokoro.js');
 const ALIGNMENT_PAGE_BROWSERS = new Set(['auto', 'brave', 'chrome', 'safari', 'edge', 'default']);
 
@@ -148,6 +149,7 @@ Usage:
   gskp alignment bundles [--dry-run] [--check]
   gskp alignment pages audit
   gskp alignment pages open <alignment/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
+  gskp alignment pages serve [--port <port>]
   gskp alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
   gskp alignment verify
 
@@ -157,6 +159,7 @@ Commands:
   bundles --check            Fail on generated-bundle drift without writing
   pages audit                Audit active rendered alignment/*.html pages
   pages open                 Open or focus an alignment HTML page
+  pages serve                Serve alignment pages from the current repo over localhost
   pages inject-tts           Add the packaged Brief Me TTS script tag to pages
   verify                     Run the focused alignment verification set when present`);
 }
@@ -254,6 +257,56 @@ function validateOpenAlignmentPageArgs(args) {
   return passthrough;
 }
 
+function validateServeAlignmentPageArgs(args) {
+  let port = null;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === '--port') {
+      const value = args[index + 1];
+      if (!value || value.startsWith('-')) {
+        throw new Error('alignment pages serve: --port requires an integer value');
+      }
+      if (port !== null) {
+        throw new Error('alignment pages serve: --port can only be provided once');
+      }
+      port = validatePort(value);
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--port=')) {
+      if (port !== null) {
+        throw new Error('alignment pages serve: --port can only be provided once');
+      }
+      port = validatePort(arg.slice('--port='.length));
+      continue;
+    }
+
+    if (arg.startsWith('-')) {
+      throw new Error(`alignment pages serve: unsupported flag '${arg}'`);
+    }
+
+    throw new Error(`alignment pages serve: unexpected argument '${arg}'`);
+  }
+
+  return port;
+}
+
+function validatePort(value) {
+  if (!/^[0-9]+$/.test(value)) {
+    throw new Error(`alignment pages serve: invalid port '${value}'`);
+  }
+
+  const port = Number(value);
+  if (!Number.isSafeInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`alignment pages serve: invalid port '${value}'`);
+  }
+
+  return String(port);
+}
+
 export function resolveAlignmentCommand(args, options = {}) {
   const projectRoot = resolve(options.projectRoot || process.cwd());
   const [scope, ...rest] = args;
@@ -297,6 +350,16 @@ export function resolveAlignmentCommand(args, options = {}) {
         kind: 'run',
         command: process.execPath,
         args: [alignmentOpenScriptPath, ...openArgs]
+      };
+    }
+
+    if (pagesCommand === 'serve') {
+      const port = validateServeAlignmentPageArgs(pagesRest);
+      return {
+        kind: 'run',
+        command: process.execPath,
+        args: [alignmentServeScriptPath, projectRoot],
+        env: { ...process.env, PORT: port || '8907' }
       };
     }
 
@@ -378,7 +441,7 @@ function runAlignment(args) {
   if (resolved.ensureTtsAsset) {
     ensureAlignmentTtsAsset(process.cwd());
   }
-  return runCommand(resolved.command, resolved.args);
+  return runCommand(resolved.command, resolved.args, { env: resolved.env || process.env });
 }
 
 function printManifestJson(args) {
@@ -458,6 +521,8 @@ Commands:
   alignment pages audit        Audit active rendered alignment/*.html pages
   alignment pages open <alignment/page.html> [--browser <browser>]
                                Open or focus an alignment HTML page
+  alignment pages serve [--port <port>]
+                               Serve alignment pages from the current repo over localhost
   alignment pages inject-tts [--force] [alignment/<page>.html]
                                Add the packaged Brief Me TTS script include
   alignment verify             Run focused alignment tests when present

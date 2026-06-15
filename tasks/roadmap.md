@@ -2976,6 +2976,16 @@ icp -> competitive-analysis -> journey-map -> positioning
 5. Update source-checkout and npm-path docs for the new alignment commands.
 6. Add focused CLI/package tests, run the planned Vitest alignment set plus `npm --workspace skillpacks run verify:package`, then ship only this task's intended files.
 
+## Current Plan — Portable Alignment Server
+
+1. Inspect the existing `skillpacks` CLI alignment namespace, package staging boundary, server script, docs, and focused package tests.
+2. Add `alignment pages serve [--port <port>]` to resolve the packaged `scripts/serve-alignment.mjs`, validate arguments strictly, and run the server against the current project root.
+3. Include `scripts/serve-alignment.mjs` in npm package files, build staging entries, and required build files.
+4. Update the canonical alignment-page convention and npm/quickstart docs so the portable `npx skillpacks alignment pages serve --port 8907` command is primary and the source-checkout node command is fallback.
+5. Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+6. Add focused tests for help output, command resolution, port handling, invalid arguments, and package staging.
+7. Run the required package, layer1, generation-check, and diff-hygiene verification, then commit and push the intended changes.
+
 ## Current Investigation — Competitive Analysis Framework Routing
 
 1. Capture the `$investigate` invocation and record this plan in task tracking.

@@ -774,6 +774,20 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("recommends the portable localhost alignment server for Brief Me caching", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} portable serve command`).toContain(
+        "npx skillpacks alignment pages serve --port 8907",
+      );
+      expect(content, `${path} source server fallback`).toContain("node scripts/serve-alignment.mjs");
+      expect(content, `${path} localhost alignment URL`).toContain(
+        "http://localhost:8907/alignment/<page>.html",
+      );
+    }
+  });
+
   it("allows partial compiled responses before final gate answers are complete", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {

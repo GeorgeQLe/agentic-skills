@@ -46,6 +46,7 @@ describe('skillpacks alignment command parsing', () => {
     assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\]/);
     assert.match(stdout, /alignment pages audit/);
     assert.match(stdout, /alignment pages open <alignment\/page.html>/);
+    assert.match(stdout, /alignment pages serve \[--port <port>\]/);
     assert.match(stdout, /alignment pages inject-tts \[--force\]/);
     assert.match(stdout, /alignment verify/);
   });
@@ -102,6 +103,30 @@ describe('skillpacks alignment command parsing', () => {
     ]);
   });
 
+  it('wraps alignment serving through the packaged server script with the project root', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveAlignmentCommand(['pages', 'serve'], { projectRoot });
+
+    assert.equal(command.kind, 'run');
+    assert.equal(command.command, process.execPath);
+    assert.deepEqual(command.args.slice(1), [projectRoot]);
+    assert.equal(command.args[0].endsWith('scripts/serve-alignment.mjs'), true);
+    assert.equal(command.env.PORT, '8907');
+  });
+
+  it('sets PORT for alignment serving with either --port spelling', () => {
+    const projectRoot = makeTempProject();
+
+    const splitFlag = resolveAlignmentCommand(['pages', 'serve', '--port', '9000'], { projectRoot });
+    const equalsFlag = resolveAlignmentCommand(['pages', 'serve', '--port=9001'], { projectRoot });
+
+    assert.equal(splitFlag.env.PORT, '9000');
+    assert.equal(equalsFlag.env.PORT, '9001');
+    assert.deepEqual(splitFlag.args.slice(1), [projectRoot]);
+    assert.deepEqual(equalsFlag.args.slice(1), [projectRoot]);
+  });
+
   it('wraps TTS injection and marks real runs for asset installation', () => {
     const projectRoot = makeTempProject();
 
@@ -154,6 +179,32 @@ describe('skillpacks alignment command parsing', () => {
       /unsupported browser 'firefox'/
     );
   });
+
+  it('rejects invalid alignment server arguments', () => {
+    for (const args of [
+      ['pages', 'serve', '--port'],
+      ['pages', 'serve', '--port='],
+      ['pages', 'serve', '--port', '0'],
+      ['pages', 'serve', '--port', '65536'],
+      ['pages', 'serve', '--port', '90.5'],
+      ['pages', 'serve', '--port', 'abc']
+    ]) {
+      assert.throws(() => resolveAlignmentCommand(args), /alignment pages serve: .*port/);
+    }
+
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'serve', '--host', '127.0.0.1']),
+      /unsupported flag '--host'/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'serve', 'alignment/example.html']),
+      /unexpected argument 'alignment\/example.html'/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'serve', '--port', '9000', '--port=9001']),
+      /--port can only be provided once/
+    );
+  });
 });
 
 describe('skillpacks package staging boundary for alignment commands', () => {
@@ -170,6 +221,7 @@ describe('skillpacks package staging boundary for alignment commands', () => {
       'scripts/upgrade-alignment-page.mjs',
       'scripts/audit-alignment-pages.mjs',
       'scripts/open-html-page.mjs',
+      'scripts/serve-alignment.mjs',
       'scripts/inject-tts.mjs',
       'scripts/alignment-tts-kokoro.js',
       'scripts/alignment-chart-snippets.js',

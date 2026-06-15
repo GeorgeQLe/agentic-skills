@@ -25,6 +25,7 @@ const expectedMatrix = new Map([
   ['alignment bundles [--dry-run] [--check]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment pages audit', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment pages open <alignment/page.html> [--browser <browser>]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
+  ['alignment pages serve [--port <port>]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment pages inject-tts [--force] [alignment/<page>.html]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment verify', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['prune [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
