@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
 type: research
-version: v0.21
+version: v0.20
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 context_intake: scoped
@@ -100,15 +100,6 @@ On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 | **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `competitive-analysis.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
 | **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3) | that framework's findings `review` page |
 | **E — build selection** | no run manifest and no canonical (cold start) | establish context → mode detect → recommend frameworks → build multi-select page (steps 1–2) | multi-select `review` page |
-
-### Re-entry Routing Guard
-
-When a user re-invokes `/competitive-analysis`, treat existing progress as routing evidence before doing any status, audit, cleanup, or cold-start selection work:
-
-- If a run manifest exists and at least one selected framework intermediate is missing, resolve directly to **State C** and run the first pending framework inline through this parent orchestrator.
-- If no run manifest exists but legacy `tasks/todo.md` contains an approved `## Competitive Analysis Framework Execution` queue with child framework rows, treat that queue as compatibility evidence only: identify the first unchecked framework row, reconstruct the selected framework order from the queue, and run that first pending framework inline through this parent orchestrator.
-- Do not rerun State E, perform a status audit, do bookkeeping-only cleanup, route to `/exec`, or tell the user to invoke path-shaped framework commands.
-- Exception: if the user explicitly asks for status, re-scoping, queue cleanup, or synthesis, honor that explicit request instead of forcing State C.
 
 **Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk) resolves directly to **state E**; the 1–3 light scope questions in Context Gathering fold into the head of the E session rather than getting their own round-trip.
 

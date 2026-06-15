@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-06-15 - Competitive analysis re-entry routing guard
+
+- Updated the existing `competitive-analysis` orchestrator in both Codex and Claude business-research pack sources from `v0.20` to `v0.21`.
+- Added a Re-entry Routing Guard so repeated parent invocations with a pending selected framework resolve directly to State C and run the first pending framework inline through the parent orchestrator.
+- Added compatibility handling for legacy approved `tasks/todo.md` `## Competitive Analysis Framework Execution` queues so the first unchecked framework row routes into parent-owned inline execution rather than status audit, cleanup, `exec`, or direct framework commands.
+- Archived both prior `v0.20` skill contracts and updated both changelogs.
+- Refreshed local skill mirrors with `scripts/pack.sh refresh` after `npx skillpacks refresh` hit the documented missing workspace shim issue (`sh: gskp: command not found`).
+- Reworked the deterministic `competitive-analysis` pack workflow fixture to model Porter complete + SWOT pending re-entry state, with hard forbidden-output checks for bad handoffs.
+- Added missing `ord-traction` and `vard-traction` benchmark coverage rows and fixtures after validation surfaced pre-existing coverage matrix gaps.
+- Refreshed Skills Showcase generated assets and rebuilt the skillpacks package manifest.
+- Validation passed: skill dependency/version/next-step audits, mirror parity, strict archive audit, benchmark coverage, focused layer1 routing/setup tests, Skills Showcase freshness validation, `npm run skillpacks:build`, `npm run skillpacks:verify`, and `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-15-competitive-analysis-reentry.md`.
+
 ## 2026-06-15 - Customer discovery routing cleanup
 
 - Preserved the intended customer-discovery framework handoff update: all six mirrored framework skills remain at `v0.5`, keep their `v0.4` archives, and hand control back to `$customer-discovery` or `/customer-discovery` after approved framework finalization.

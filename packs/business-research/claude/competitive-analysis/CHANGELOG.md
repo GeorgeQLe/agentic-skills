@@ -1,5 +1,10 @@
 # competitive-analysis changelog (claude)
 
+## v0.21 - 2026-06-15
+
+- Added a Re-entry Routing Guard so repeat `/competitive-analysis` invocations with pending selected frameworks resolve directly to State C and run the first pending framework inline.
+- Added compatibility handling for legacy approved `tasks/todo.md` Competitive Analysis Framework Execution queues, treating them as evidence for parent-owned inline framework execution instead of routing to `/exec` or status/audit cleanup.
+
 ## v0.20 - 2026-06-14
 
 - Migrated the orchestrator to the Research Session Loop (`docs/research-session-loop-convention.md`): replaced the Mode A/B framing and the `tasks/todo.md` + `/exec` framework-queueing with a self-advancing session ladder (states 0/A/B/C/E, YAML-first resolution).

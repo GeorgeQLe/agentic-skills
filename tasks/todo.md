@@ -1,3 +1,43 @@
+## Current Implementation - Competitive Analysis Re-Entry Routing Guard
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt and record the implementation plan.
+- [x] Archive and bump mirrored `competitive-analysis` skill contracts.
+- [x] Add the re-entry routing guard to Codex and Claude skill contracts.
+- [x] Refresh installed skill mirrors and generated showcase data.
+- [x] Add deterministic benchmark coverage for re-entry routing.
+- [x] Run required validation and reconcile results.
+- [x] Review and report the final diff.
+
+### Review Notes
+
+- Starting point: the prior plan targets the existing `competitive-analysis` orchestrator, not a new skill.
+- Skill context: `competitive-analysis` plus `exec` were provided by the user; this implementation is a targeted skill contract change.
+- Coverage inspection confirmed `competitive-analysis` is already listed in `tests/harness/bench-coverage.ts` custom coverage, so coverage metadata should remain unchanged.
+- Archived `v0.20` into both competitive-analysis skill archive directories, bumped active contracts to `v0.21`, and added `v0.21 - 2026-06-15` changelog entries.
+- Added the Re-entry Routing Guard under state resolution for run-manifest pending work and legacy approved framework queues.
+- `npx skillpacks refresh` failed locally with `sh: gskp: command not found`, matching the README's workspace-shim caveat; used the documented no-install fallback `scripts/pack.sh refresh`, which updated `.codex/skills/competitive-analysis/SKILL.md` and `.claude/skills/competitive-analysis/SKILL.md`.
+- Replaced the generic `competitive-analysis` pack workflow fixture with a re-entry state fixture: Porter complete, SWOT pending, run manifest present, and legacy approved `## Competitive Analysis Framework Execution` queue present.
+- Added deterministic forbidden-output assertions for pack workflow fixtures and added `ord-traction` / `vard-traction` coverage rows after validation surfaced those pre-existing missing matrix entries.
+- Refreshed Skills Showcase data/proof assets and rebuilt the skillpacks package manifest after active `SKILL.md` behavior changes.
+- Validation passed:
+  - `rg -n "version: v0.21|Re-entry Routing Guard|first pending|Framework Execution|status audit|\\$exec|/exec" ...`
+  - `scripts/pack.sh refresh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests exec vitest run layer1/competitive-analysis-routing.test.ts layer1/bench-setups.test.ts`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `git diff --check`
+
 ## Current Implementation - Alignment Gate Reactivity Contract
 
 ### Current Checklist

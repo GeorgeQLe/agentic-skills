@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "dc3daa974fdeb54b6c6b1ab58f47089bcd65532a809c63f0565a38e217f9b9a1",
+  "source_fingerprint": "1adfb3c127afa891a4384bb210266ad57d6857bb4ca694e9fcc2a9c2a563e09d",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2620,9 +2620,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
-      "content_sha256": "299e2dcc66432b2f0f4daf95bae679cd552b0cb45f222f10a488360be1532d99",
+      "content_sha256": "05ec9de0f813fa1c2b477b581df3bf4a698ccda75e4330cb2564c00323c2dbe7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2637,6 +2637,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -3161,9 +3162,9 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
-      "content_sha256": "190f812dccce943e08fedf4ef5370937f6745e7a11badb8f300b429ae406692b",
+      "content_sha256": "4fbc036fc325411233110f6e4e0f788f39cddeff4a144c0f6fa83046b944e4ee",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3178,6 +3179,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
