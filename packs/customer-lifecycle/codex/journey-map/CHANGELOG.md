@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.19 - 2026-06-15
+
+- Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
+
 ## v0.18 - 2026-06-14
 
 - Migrated the orchestrator to the Research Session Loop (`docs/research-session-loop-convention.md`): replaced the Mode A/B/C framing and the `tasks/todo.md` + `$exec` framework-queueing with a self-advancing session ladder (states 0/A/B/C/E, YAML-first resolution).

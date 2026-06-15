@@ -1,5 +1,9 @@
 # experience-map changelog (codex)
 
+## v0.6 - 2026-06-15
+
+- Hardened framework-loop routing so this subskill runs only through the parent orchestrator, prohibits path-shaped child framework handoffs, and suppresses downstream routing labels.
+
 ## v0.5 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

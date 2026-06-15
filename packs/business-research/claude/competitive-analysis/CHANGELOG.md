@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.22 - 2026-06-15
+
+- Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
+
 ## v0.21 - 2026-06-15
 
 - Added a Re-entry Routing Guard so repeat `/competitive-analysis` invocations with pending selected frameworks resolve directly to State C and run the first pending framework inline.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-15
+
+- Hardened framework-loop routing so this subskill runs only through the parent orchestrator, prohibits path-shaped child framework handoffs, and suppresses downstream routing labels.
+
 ## v0.5 - 2026-06-15
 
 - Replaced the invalid direct framework invocation with parent-orchestrator-only routing through `$competitive-analysis`.

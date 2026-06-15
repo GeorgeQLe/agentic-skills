@@ -1,5 +1,9 @@
 # four-forces changelog (codex)
 
+## v0.6 - 2026-06-15
+
+- Hardened framework-loop routing so this subskill runs only through the parent orchestrator, prohibits path-shaped child framework handoffs, and suppresses downstream routing labels.
+
 ## v0.5 - 2026-06-15
 
 - Clarified framework handoff behavior: after approved artifact finalization, return to the parent `customer-discovery` Research Session Loop using the agent-specific parent command, without cross-skill, execution-loop, or direct framework-route recommendations.

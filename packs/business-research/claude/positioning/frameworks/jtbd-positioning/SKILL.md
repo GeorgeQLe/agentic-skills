@@ -2,7 +2,7 @@
 name: jtbd-positioning
 description: Jobs-to-be-Done positioning analysis — identify primary job, map functional/social/emotional dimensions, position around job outcome
 type: research
-version: v0.8
+version: v0.9
 invocation: sub-skill
 parent: positioning
 ---
@@ -13,6 +13,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # JTBD Positioning — Jobs-to-be-Done Analysis
 
+## Parent Orchestrator Routing
+
+Run only through the parent orchestrator `/positioning` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to clear context and re-invoke `/positioning` with the same product/research path argument when present, for example `/positioning research/afps-tracker`.
+
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
+
 ## Report-First Approval Gate
 
 Default to scope-first approval: before synthesized research, inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions in a `review` alignment page plus a concise conversation summary.
@@ -21,7 +27,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+Do not include downstream routing language. The approval request itself is the next action. Parent synthesis owns downstream routing after approved artifacts are written or updated.
 
 ## Staged Research Workflow
 

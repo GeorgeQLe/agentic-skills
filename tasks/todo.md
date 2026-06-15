@@ -1,3 +1,34 @@
+## Current Implementation - Framework Handoff Routing
+
+### Current Checklist
+
+- [x] Record the implementation plan in task tracking.
+- [x] Inspect active parent/framework routing surfaces and existing tests.
+- [x] Archive and bump changed source skill contracts.
+- [x] Patch parent-loop and framework-subskill routing language.
+- [x] Add focused layer1 routing tests.
+- [x] Refresh generated/installed mirrors and run verification.
+- [x] Review final diff, commit, and push.
+
+### Review Notes
+
+- Starting point: working tree was clean.
+- Scope: routing contract hardening for self-advancing framework loops; no research workflow redesign or new framework behavior is intended.
+- Archived and bumped the four parent orchestrator families and their active framework subskills across Codex/Claude source pack mirrors.
+- Added parent-only continuation wording that preserves the product/research path argument, e.g. `$competitive-analysis research/afps-tracker`, while explicitly prohibiting path-shaped child framework commands.
+- Removed standalone invocation cues from framework subskills and replaced downstream routing-label wording with parent-synthesis ownership.
+- Refreshed `.codex`/`.claude` installed mirrors, rebuilt the skillpacks package manifest/build staging, and regenerated Skills Showcase assets.
+- Verification passed:
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/framework-handoff-routing.test.ts layer1/competitive-analysis-routing.test.ts layer1/positioning-alignment-contract.test.ts layer1/journey-map-routing.test.ts layer1/business-discovery-customer-discovery-routing.test.ts layer1/customer-lifecycle-customer-discovery-routing.test.ts` (20 tests)
+  - direct-route scan across active source, installed, and package-build framework subskills found no matches
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:verify`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed after the expected regeneration pass
+  - `git diff --check`
+
 ## Current Implementation - Portable Alignment Server
 
 ### Current Checklist

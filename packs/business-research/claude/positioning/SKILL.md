@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.19
+version: v0.20
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -59,6 +59,9 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 ## Execution Model — Research Session Loop
 
 This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/positioning`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+
+When a framework is pending, the only user-facing continuation route is re-invoking `/positioning` with the same product/research path argument when present, for example `/positioning research/afps-tracker`. Never tell the user to run a path-shaped child framework command; the parent resolves the pending framework from the run manifest and filesystem.
+
 
 State lives in two places only:
 

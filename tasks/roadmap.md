@@ -1,3 +1,32 @@
+## Current Implementation - Framework Handoff Routing
+
+### Goal
+
+Prevent framework-loop orchestrators from handing users path-shaped child framework commands such as `parent/frameworks/child`, and make the only framework-continuation route a fresh invocation of the parent orchestrator with the relevant research path argument.
+
+### Scope
+
+- Framework-loop parent skills for `competitive-analysis`, `customer-discovery`, `positioning`, and `journey-map`
+- Active framework subskills under those parents across source pack mirrors and refreshed installed/generated copies
+- Layer1 routing tests covering active non-archive `*/frameworks/*/SKILL.md` files
+- Task review notes, verification, commit, and push
+
+### Plan
+
+1. Inspect active parent and framework subskill routing language and existing layer1 routing tests.
+2. Archive and bump changed source skill contracts per skill versioning rules.
+3. Add a shared parent-loop routing contract to the four framework-loop orchestrator families.
+4. Harden framework subskills so they explicitly route through the parent orchestrator, avoid path-shaped child commands, and suppress downstream routing labels.
+5. Add generic framework-subskill routing tests plus parent self-reinvocation checks.
+6. Refresh installed/generated mirrors, run focused and package verification, review diffs, then commit and push.
+
+### Acceptance Criteria
+
+- Active framework subskills do not contain `$parent/frameworks/child`, `/parent/frameworks/child`, or bare `parent/frameworks/child` handoffs.
+- Framework subskills do not emit `Recommended next skill:` or `Recommended next command:` labels.
+- Parent orchestrators document that pending frameworks continue by re-invoking the parent, preserving product-path arguments such as `research/afps-tracker`.
+- Focused layer1 routing tests and package/skill verification pass.
+
 ## Current Implementation - Alignment Portability
 
 ### Goal

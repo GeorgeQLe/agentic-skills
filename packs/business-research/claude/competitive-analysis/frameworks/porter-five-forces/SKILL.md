@@ -2,7 +2,7 @@
 name: porter-five-forces
 description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
-version: v0.5
+version: v0.6
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -12,6 +12,12 @@ parent: competitive-analysis
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Porter's Five Forces - Competitive Structure Analysis
+
+## Parent Orchestrator Routing
+
+Run only through the parent orchestrator `/competitive-analysis` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to clear context and re-invoke `/competitive-analysis` with the same product/research path argument when present, for example `/competitive-analysis research/afps-tracker`.
+
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
 
 Run only through the parent orchestrator `/competitive-analysis`; do not ask the user to invoke this framework directly.
 
@@ -25,7 +31,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+Do not include downstream routing language. The approval request itself is the next action. Parent synthesis owns downstream routing after approved artifacts are written or updated.
 
 ## Staged Research Workflow
 
@@ -99,7 +105,7 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 - Every competitor or market fact must be source-backed.
 - Prefer recent sources from the last 12 months and flag older evidence.
 - Do not recommend product features, positioning, architecture, or downstream skills.
-- This is a sub-skill; do not emit `Recommended next skill` or `Recommended next command`.
+- This is a sub-skill; do not emit downstream routing labels or command recommendations.
 
 ## Alignment Page
 

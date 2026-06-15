@@ -2,7 +2,7 @@
 name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: research
-version: v0.18
+version: v0.19
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator
 context_intake: scoped
@@ -48,6 +48,9 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 ## Execution Model — Research Session Loop
 
 This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by starting a fresh Codex session and re-invoking `$journey-map`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+
+When a framework is pending, the only user-facing continuation route is re-invoking `$journey-map` with the same product/research path argument when present, for example `$journey-map research/afps-tracker`. Never tell the user to run a path-shaped child framework command; the parent resolves the pending framework from the run manifest and filesystem.
+
 
 State lives in two places only:
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.20 - 2026-06-15
+
+- Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
+
 ## v0.19 - 2026-06-14
 
 - Completed the Research Session Loop migration: replaced the `### Operational Modes` (Mode A/B/C) framing with the formal 0/A/B/C/E state-resolution table, matching the other research orchestrators.

@@ -2,7 +2,7 @@
 name: seven-dimensions
 description: Lincoln Murphy 7 Dimensions of ICP — score ICP candidates on Readiness, Willingness, Ability, Success Potential, Acquisition Efficiency, Ascension Potential, and Advocacy Potential for composite fitness scoring
 type: research
-version: v0.5
+version: v0.6
 invocation: sub-skill
 parent: customer-discovery
 ---
@@ -12,6 +12,12 @@ parent: customer-discovery
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell, instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # 7 Dimensions of ICP — Lincoln Murphy Ideal Customer Profile Scoring
+
+## Parent Orchestrator Routing
+
+Run only through the parent orchestrator `$customer-discovery` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to start a fresh Codex session and re-invoke `$customer-discovery` with the same product/research path argument when present, for example `$customer-discovery research/afps-tracker`.
+
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
 
 ## Report-First Approval Gate
 
@@ -374,7 +380,7 @@ Present dimension analyses, composite fitness scoring, and cross-candidate compa
 - Do not prescribe UI or architecture — describe ICP fitness characteristics, not the solution.
 - Present findings before writing.
 - Do not overwrite existing output without asking the user first.
-- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or direct `customer-discovery/frameworks/...` invocations. After approved artifact finalization, hand control back to parent-loop continuation: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or path-shaped child framework invocations. After approved artifact finalization, hand control back to parent-loop continuation through `$customer-discovery`.
 
 ## Alignment Page
 

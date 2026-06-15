@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.8
+version: v1.9
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -70,6 +70,9 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 ## Execution Model — Research Session Loop
 
 This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/customer-discovery`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+
+When a framework is pending, the only user-facing continuation route is re-invoking `/customer-discovery` with the same product/research path argument when present, for example `/customer-discovery research/afps-tracker`. Never tell the user to run a path-shaped child framework command; the parent resolves the pending framework from the run manifest and filesystem.
+
 
 State lives in two places only:
 

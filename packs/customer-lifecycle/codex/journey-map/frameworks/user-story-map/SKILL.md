@@ -2,7 +2,7 @@
 name: user-story-map
 description: Jeff Patton user story map — activity→task→story hierarchy with release slicing and walking skeleton identification
 type: research
-version: v0.5
+version: v0.6
 invocation: sub-skill
 parent: journey-map
 ---
@@ -13,6 +13,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # User Story Map — Jeff Patton Analysis
 
+## Parent Orchestrator Routing
+
+Run only through the parent orchestrator `$journey-map` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to start a fresh Codex session and re-invoke `$journey-map` with the same product/research path argument when present, for example `$journey-map research/afps-tracker`.
+
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
+
 ## Report-First Approval Gate
 
 Default to scope-first approval: before synthesized research, inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions in a `review` alignment page plus a concise conversation summary.
@@ -21,7 +27,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+Do not include downstream routing language. The approval request itself is the next action. Parent synthesis owns downstream routing after approved artifacts are written or updated.
 
 ## Staged Research Workflow
 
@@ -184,7 +190,7 @@ Present the story map hierarchy and release slicing. Ask for corrections, missin
 - Do not prescribe implementation architecture — describe user behavior, not system design.
 - Present findings before writing.
 - Do not overwrite existing output without asking the user first.
-- This is a sub-skill — do not emit next-step routing.
+- This is a sub-skill; do not emit downstream routing labels or command recommendations.
 
 ## Alignment Page
 

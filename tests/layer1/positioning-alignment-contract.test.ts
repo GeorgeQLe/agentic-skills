@@ -22,11 +22,11 @@ function read(path: string) {
   return readFileSync(repoPath(path), "utf8");
 }
 
-function modeCSection(content: string) {
-  const start = content.indexOf("### 5. Mode C");
+function shortcutSection(content: string) {
+  const start = content.indexOf("### 5. State C via");
   const end = content.indexOf("### 6. Next Steps", start);
-  expect(start, "Mode C section exists").toBeGreaterThanOrEqual(0);
-  expect(end, "Mode C section boundary exists").toBeGreaterThan(start);
+  expect(start, "shortcut section exists").toBeGreaterThanOrEqual(0);
+  expect(end, "shortcut section boundary exists").toBeGreaterThan(start);
   return content.slice(start, end);
 }
 
@@ -57,28 +57,26 @@ describe("positioning alignment contracts", () => {
     }
   });
 
-  it("approval-gates the product-positioning shortcut before writing tasks/todo.md", () => {
+  it("approval-gates the product-positioning shortcut before writing the run manifest", () => {
     const contracts = [
       "packs/business-research/claude/positioning/SKILL.md",
       "packs/business-research/codex/positioning/SKILL.md",
     ];
 
     for (const path of contracts) {
-      const section = modeCSection(read(path));
+      const section = shortcutSection(read(path));
       const buildIndex = section.indexOf("Build an alignment page for the shortcut execution plan");
-      const doNotWriteIndex = section.indexOf("Do not write `tasks/todo.md` before alignment approval");
+      const doNotWriteIndex = section.indexOf("Do not write the run manifest before alignment approval");
       const approvalIndex = section.indexOf("After user approval via final compiled YAML");
-      const writeIndex = section.indexOf("write this execution plan to `tasks/todo.md`");
-      const planIndex = section.indexOf("## Positioning Framework Execution");
+      const writeIndex = section.indexOf("write this selected set to the run manifest");
+      const manifestIndex = section.indexOf("orchestrator: positioning");
 
       expect(buildIndex, `${path} builds alignment page`).toBeGreaterThanOrEqual(0);
-      expect(doNotWriteIndex, `${path} forbids pre-approval todo write`).toBeGreaterThan(buildIndex);
+      expect(doNotWriteIndex, `${path} forbids pre-approval manifest write`).toBeGreaterThan(buildIndex);
       expect(approvalIndex, `${path} waits for final compiled YAML`).toBeGreaterThan(doNotWriteIndex);
-      expect(writeIndex, `${path} writes only after approval phrase`).toBeGreaterThan(approvalIndex);
-      expect(planIndex, `${path} plan appears after approval gate`).toBeGreaterThan(approvalIndex);
-      expect(section, `${path} old direct-write shortcut removed`).not.toMatch(
-        /Skip multi-select\. Write(?: directly)? to `tasks\/todo\.md`/,
-      );
+      expect(writeIndex, `${path} writes manifest only after approval phrase`).toBeGreaterThan(approvalIndex);
+      expect(manifestIndex, `${path} manifest example appears after approval gate`).toBeGreaterThan(approvalIndex);
+      expect(section, `${path} old task-queue shortcut removed`).not.toMatch(/tasks\/todo\.md|Framework Execution/);
     }
   });
 

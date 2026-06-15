@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9 - 2026-06-15
+
+- Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
+
 ## v1.8 - 2026-06-15
 
 - Stage 3 now names a concrete confirmed-page validation: reconcile each displayed gate decision against the final compiled YAML and the written canonical artifact, render any `other`/freeform choice as the read-only decision and drop superseded options, and run the alignment-page post-confirmation self-check before handoff. Closes a verified incident where a `confirmed` page retained an active, stale gate question that contradicted the final compiled YAML.
