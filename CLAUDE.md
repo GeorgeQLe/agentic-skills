@@ -91,6 +91,7 @@
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
+- **Concurrent-Session Working Tree**: Another Claude/Codex session may be working this repo in parallel on a shared working tree. After running a repo-wide operation (e.g. `scripts/pack.sh refresh`), do NOT `git restore`/delete unexpected `git status` entries you did not create — they may be a concurrent session's uncommitted work, and cleaning them up silently reverts and deletes that work. Scope any post-op cleanup to your own task paths only, and commit your own new files promptly rather than relying on the working tree surviving.
 
 ## Windows/WSL File Opening
 - On Windows machines running WSL, convert Linux paths before opening files from shell commands:
