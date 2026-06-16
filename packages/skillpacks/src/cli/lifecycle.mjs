@@ -155,9 +155,21 @@ function findPackForSkill(manifest, skillName) {
   return manifestSkills(manifest).find((skill) => skill.name === skillName && skill.pack)?.pack || null;
 }
 
+function hasBaseSkill(manifest, skillName) {
+  return manifestSkills(manifest).some((skill) => {
+    return skill.scope === 'base' && skill.name === skillName && skill.path;
+  });
+}
+
 function findSkillEntry(manifest, packName, tool, skillName) {
   return manifestSkills(manifest).find((skill) => {
     return skill.pack === packName && skill.platform === tool && skill.name === skillName && skill.path;
+  });
+}
+
+function findBaseSkillEntry(manifest, tool, skillName) {
+  return manifestSkills(manifest).find((skill) => {
+    return skill.scope === 'base' && skill.platform === tool && skill.name === skillName && skill.path;
   });
 }
 
@@ -577,7 +589,8 @@ function ensureProjectConfigForSkill(projectRoot) {
 
 function installSingleSkill(projectRoot, manifest, skillName) {
   const pack = findPackForSkill(manifest, skillName);
-  if (!pack) {
+  const baseSkill = !pack && hasBaseSkill(manifest, skillName);
+  if (!pack && !baseSkill) {
     const hibernatedPacks = hibernatedPacksForSkill(skillName);
     if (hibernatedPacks.length > 0) {
       throw new Error(`ERROR: PoketoWork kanban skill '${skillName}' is archived in hibernated pack(s): ${hibernatedPacks.join(', ')}`);
@@ -587,7 +600,9 @@ function installSingleSkill(projectRoot, manifest, skillName) {
 
   const config = readProjectConfig(projectRoot);
   for (const tool of TOOLS) {
-    const skill = findSkillEntry(manifest, pack, tool, skillName);
+    const skill = pack
+      ? findSkillEntry(manifest, pack, tool, skillName)
+      : findBaseSkillEntry(manifest, tool, skillName);
     if (skill) {
       linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config);
     }
@@ -597,10 +612,10 @@ function installSingleSkill(projectRoot, manifest, skillName) {
   const enabledSkills = next.enabled_skills && typeof next.enabled_skills === 'object'
     ? { ...next.enabled_skills }
     : {};
-  enabledSkills[skillName] = pack;
+  enabledSkills[skillName] = pack || 'base';
   next.enabled_skills = enabledSkills;
   writeProjectConfig(projectRoot, next);
-  console.log(`Updated .agents/project.json (skill: ${skillName} from pack: ${pack})`);
+  console.log(`Updated .agents/project.json (skill: ${skillName} from ${pack ? `pack: ${pack}` : 'base'})`);
 }
 
 function removeEnabledSkill(projectRoot, skillName) {
@@ -626,9 +641,10 @@ function removeSingleSkill(projectRoot, manifest, skillName) {
   const config = readProjectConfig(projectRoot);
   const enabledSkillPack = config?.enabled_skills?.[skillName];
   const activePack = findPackForSkill(manifest, skillName);
+  const activeBaseSkill = hasBaseSkill(manifest, skillName);
   const hibernatedPacks = hibernatedPacksForSkill(skillName);
 
-  if (!enabledSkillPack && !activePack && hibernatedPacks.length === 0) {
+  if (!enabledSkillPack && !activePack && !activeBaseSkill && hibernatedPacks.length === 0) {
     throw new Error(`Skill '${skillName}' not found in any pack`);
   }
 
@@ -737,8 +753,10 @@ function reconcileProjectConfig(projectRoot, manifest) {
     const enabledSkills = {};
     for (const [skillName, pack] of Object.entries(config.enabled_skills)) {
       const canonical = findPackForSkill(manifest, skillName);
-      enabledSkills[skillName] = canonical || pack;
-      if (canonical && canonical !== pack) {
+      const baseSkill = !canonical && hasBaseSkill(manifest, skillName);
+      const nextPack = canonical || (baseSkill ? 'base' : pack);
+      enabledSkills[skillName] = nextPack;
+      if (nextPack !== pack) {
         changed = true;
       }
     }
@@ -1018,7 +1036,9 @@ function syncExpectedSkillRoots(projectRoot, manifest) {
 
   for (const [skillName, pack] of enabledSkillEntries(config)) {
     for (const tool of TOOLS) {
-      const skill = findSkillEntry(manifest, pack, tool, skillName);
+      const skill = pack === 'base'
+        ? findBaseSkillEntry(manifest, tool, skillName)
+        : findSkillEntry(manifest, pack, tool, skillName);
       if (skill && linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config)) {
         changed += 1;
       }

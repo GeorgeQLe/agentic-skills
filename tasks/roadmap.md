@@ -1,3 +1,32 @@
+## Current Implementation - Single Base Skill Install Support
+
+### Goal
+
+Allow `npx skillpacks install idea-scope-brief` to install a retired global/base skill into the current project without requiring all base skills via `npx skillpacks init`.
+
+### Scope
+
+- `packages/skillpacks/src/cli/pack-normalization.mjs`
+- `packages/skillpacks/src/cli/lifecycle.mjs`
+- Focused Node CLI tests for exact base-skill install, refresh, and lookup behavior
+- Task review notes and verification
+
+### Plan
+
+1. Inspect current install resolution and lifecycle behavior for base skills versus pack skills.
+2. Add exact base-skill resolution to `install <name>`.
+3. Teach lifecycle single-skill install/refresh to link `scope: base` skills and record them in `.agents/project.json`.
+4. Add focused regression tests for `idea-scope-brief`.
+5. Run targeted tests and package verification.
+6. Review diff and report whether the installer can now handle the sunset skill.
+
+### Acceptance Criteria
+
+- `resolvePackCommandArgs('install', ['idea-scope-brief'])` resolves as a single skill, not an unknown name.
+- `npx skillpacks install idea-scope-brief` installs `.claude/skills/idea-scope-brief` and `.codex/skills/idea-scope-brief`.
+- The project records the install without enabling all base skills.
+- `refresh` preserves the individual base skill install.
+
 ## Current Investigation - Codex Skill Startup Context
 
 ### Goal

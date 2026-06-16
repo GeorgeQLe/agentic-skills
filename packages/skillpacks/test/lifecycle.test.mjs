@@ -359,6 +359,44 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { exec: 'exec-loop' });
   });
 
+  it('installs an exact base skill without enabling all base skills', async () => {
+    const dir = makeTempProject();
+
+    const { stdout } = await runSkillpacks(dir, ['install', 'idea-scope-brief']);
+
+    assert.match(stdout, /Installed \.claude\/skills\/idea-scope-brief/);
+    assert.match(stdout, /Installed \.codex\/skills\/idea-scope-brief/);
+    assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'idea-scope-brief')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), false);
+    assert.match(marker(dir, 'claude', 'idea-scope-brief'), /source=.*base\/claude\/idea-scope-brief/);
+    assert.match(marker(dir, 'codex', 'idea-scope-brief'), /source=.*base\/codex\/idea-scope-brief/);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
+    assert.equal(Object.hasOwn(readProjectConfig(dir), 'base_skills'), false);
+  });
+
+  it('refreshes individually enabled base skills', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'idea-scope-brief': 'base'
+      }
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Installed \.claude\/skills\/idea-scope-brief/);
+    assert.match(stdout, /Installed \.codex\/skills\/idea-scope-brief/);
+    assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
+  });
+
   it('installs individual pinned skills as archive symlinks and tracks enabled skills', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {

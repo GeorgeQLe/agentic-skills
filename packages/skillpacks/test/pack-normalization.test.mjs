@@ -125,6 +125,10 @@ describe('pack command argument resolution', () => {
     const exactSkill = resolvePackCommandArgs('install', ['enterprise-icp'], { manifest });
     assert.deepEqual(exactSkill.packs, []);
     assert.deepEqual(exactSkill.skills, ['enterprise-icp']);
+
+    const baseSkill = resolvePackCommandArgs('install', ['idea-scope-brief'], { manifest });
+    assert.deepEqual(baseSkill.packs, []);
+    assert.deepEqual(baseSkill.skills, ['idea-scope-brief']);
   });
 
   it('resolves exact active pack names without alias expansion', () => {

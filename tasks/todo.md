@@ -1,3 +1,27 @@
+## Current Implementation - Single Base Skill Install Support
+
+### Current Checklist
+
+- [x] Inspect current install resolution and lifecycle behavior for base skills versus pack skills.
+- [x] Add exact base-skill resolution to `install <name>`.
+- [x] Teach lifecycle single-skill install/refresh to link `scope: base` skills and record them in `.agents/project.json`.
+- [x] Add focused regression tests for `idea-scope-brief`.
+- [x] Run targeted tests and package verification.
+- [x] Review diff and report whether the installer can now handle the sunset skill.
+
+### Review Notes
+
+- Starting point: `git status --short` showed unrelated modified files under `apps/skills-showcase/**`; they are outside this task and will be left untouched.
+- Initial finding: `idea-scope-brief` is still packaged under `base/codex` and `base/claude`, but `install <skill>` only considered manifest entries with a `pack`, so exact base skill names were rejected or not installable individually.
+- Fix applied: exact base skill names now resolve through install normalization, `installSingleSkill` links base skill sources for both Claude and Codex, and `.agents/project.json.enabled_skills` records individually installed base skills with the source label `base`.
+- Direct smoke passed in `/private/tmp/skillpacks-idea-install-check`: `node /Users/georgele/projects/tools/agentic-skills/packages/skillpacks/bin/skillpacks.mjs install idea-scope-brief` installed `.claude/skills/idea-scope-brief` and `.codex/skills/idea-scope-brief` while leaving `enabled_packs: []` and writing `enabled_skills.idea-scope-brief: "base"`.
+- Verification passed:
+  - `node --test packages/skillpacks/test/pack-normalization.test.mjs`
+  - `node --test packages/skillpacks/test/lifecycle.test.mjs`
+  - `npm --workspace packages/skillpacks run test:node`
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+
 ## Current Investigation - Codex Skill Startup Context
 
 ### Current Checklist

@@ -384,17 +384,21 @@ function availablePacksInline(manifest) {
   }, '');
 }
 
-function skillPackMap(manifest) {
+function skillInstallSourceMap(manifest) {
   const map = new Map();
   const skills = [...(manifest.skills || [])].sort((a, b) => {
     return String(a.path || '').localeCompare(String(b.path || ''));
   });
 
   for (const skill of skills) {
-    if (!skill.name || !skill.pack || map.has(skill.name)) {
+    if (!skill.name || map.has(skill.name)) {
       continue;
     }
-    map.set(skill.name, skill.pack);
+    if (skill.pack) {
+      map.set(skill.name, skill.pack);
+    } else if (skill.scope === 'base') {
+      map.set(skill.name, 'base');
+    }
   }
 
   return map;
@@ -551,7 +555,7 @@ export function resolvePackCommandArgs(command, args, options) {
     manifest: options.manifest,
     activePacks: new Set(activePackNames(options.manifest)),
     activePackTitles: activePackTitleMap(options.manifest),
-    skillPacks: skillPackMap(options.manifest),
+    skillPacks: skillInstallSourceMap(options.manifest),
     enabledSkillPacks: command === 'remove'
       ? enabledSkillPackMap(options.projectRoot || process.cwd())
       : new Map(),
