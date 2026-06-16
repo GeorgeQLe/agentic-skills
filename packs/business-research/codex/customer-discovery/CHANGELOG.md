@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.11 - 2026-06-15
+
+- Narrowed approval-boundary routing language so pending review pages may name `Recommended next command after compiling YAML: $customer-discovery` for same-orchestrator loop continuation, while downstream and cross-skill routing remain blocked until approved synthesis artifacts are written.
+
 ## v1.10 - 2026-06-15
 
 - Replaced the remaining concrete `customer-discovery/frameworks/...` placeholder in parent-loop routing guidance with generic path-shaped child framework wording.

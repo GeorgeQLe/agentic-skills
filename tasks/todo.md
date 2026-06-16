@@ -1,3 +1,44 @@
+## Current Implementation - Narrow Research Loop Routing Guardrails
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Inspect the Research Session Loop convention and affected orchestrator contracts.
+- [x] Archive the four affected source skill contracts.
+- [x] Update convention, skill contracts, versions, and changelogs.
+- [x] Run targeted verification and record results.
+- [x] Review final diff, commit, and push.
+
+### Review Notes
+
+- Starting point: `git status --short` showed only unrelated untracked `prompts/expert-review/`, which is intentionally left untouched.
+- Skill context: `investigate`, because the user supplied an implementation plan as the source of intent and a visible `$investigate` skill context.
+- `journey-map` is not installed under `.codex/skills`; `scripts/pack.sh which journey-map` reports it is provided by the uninstalled `customer-lifecycle` pack, so the tracked source file under `packs/customer-lifecycle/codex/journey-map/` is in scope.
+- The installed `.codex/skills/{competitive-analysis,customer-discovery,positioning}` files match the tracked source copies, but only the tracked source pack files are commit targets.
+- Archives created before edits:
+  - `packs/business-research/codex/competitive-analysis/archive/v0.22/SKILL.md`
+  - `packs/business-research/codex/customer-discovery/archive/v1.10/SKILL.md`
+  - `packs/business-research/codex/positioning/archive/v0.20/SKILL.md`
+  - `packs/customer-lifecycle/codex/journey-map/archive/v0.19/SKILL.md`
+- Mirror parity required the same behavior update in the Claude source mirrors, so those were also archived before editing:
+  - `packs/business-research/claude/competitive-analysis/archive/v0.22/SKILL.md`
+  - `packs/business-research/claude/customer-discovery/archive/v1.10/SKILL.md`
+  - `packs/business-research/claude/positioning/archive/v0.20/SKILL.md`
+  - `packs/customer-lifecycle/claude/journey-map/archive/v0.19/SKILL.md`
+- Verification passed:
+  - targeted `rg` confirmed the broad `Recommended next command` ban is gone from active parent orchestrators.
+  - targeted `rg` confirmed each affected parent explicitly names its same-orchestrator continuation command for pending YAML review and confirmed loop continuation.
+  - targeted `rg` confirmed active framework subskills under the affected framework directories remain route-free.
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:build`
+  - `scripts/pack.sh refresh`
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+- `node scripts/skill-alignment-routing-audit.mjs` still reports the existing `ord-align` alignment stop-contract findings. The same two findings reproduce from an unmodified `HEAD` archive in `/tmp`, so they are pre-existing and unrelated to this routing-guardrail change.
+
 ## Current Implementation - ord-align Staged Review Contract
 
 ### Current Checklist

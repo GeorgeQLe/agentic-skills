@@ -2,7 +2,7 @@
 name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: research
-version: v0.20
+version: v0.19
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator
 context_intake: scoped
@@ -25,7 +25,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action, and the only command label allowed before approval is `Recommended next command after compiling YAML:` with this same parent orchestrator, such as `/journey-map` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing. Only emit downstream next-skill routing after the synthesized `journey-map.md` artifact has been approved and written.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 ## Staged Research Workflow
 
@@ -39,7 +39,7 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `/customer-discovery` first.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist — run `$customer-discovery` first.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape
   - `research/customer-feedback.md` — real customer language
@@ -47,9 +47,9 @@ Canonical output paths remain unchanged. Search logs and other supporting eviden
 
 ## Execution Model — Research Session Loop
 
-This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by clearing context and re-invoking `/journey-map`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
+This is a **self-advancing Pattern A research orchestrator** (see `docs/research-session-loop-convention.md`). Each invocation starts cold, resolves its state from **pasted YAML + filesystem**, runs **exactly one heavy phase**, emits the next gate, and stops. The user advances the loop by starting a fresh Codex session and re-invoking `$journey-map`. The user never invokes a framework subskill directly — the orchestrator follows each selected framework's subskill inline.
 
-When a framework is pending, the only user-facing continuation route is re-invoking `/journey-map` with the same product/research path argument when present, for example `/journey-map research/afps-tracker`. Never tell the user to run a path-shaped child framework command; the parent resolves the pending framework from the run manifest and filesystem.
+When a framework is pending, the only user-facing continuation route is re-invoking `$journey-map` with the same product/research path argument when present, for example `$journey-map research/afps-tracker`. Never tell the user to run a path-shaped child framework command; the parent resolves the pending framework from the run manifest and filesystem.
 
 
 State lives in two places only:
@@ -86,7 +86,7 @@ On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 
 **Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
 
-**Shortcuts.** `/journey-map --synthesize` forces state B. `/journey-map product` is the product-exists shortcut (step 5): after the user approves the shortcut plan, it writes a fixed framework set (`service-blueprint`, `user-story-map`) into the run manifest and enters state C.
+**Shortcuts.** `$journey-map --synthesize` forces state B. `$journey-map product` is the product-exists shortcut (step 5): after the user approves the shortcut plan, it writes a fixed framework set (`service-blueprint`, `user-story-map`) into the run manifest and enters state C.
 
 ---
 
@@ -106,7 +106,7 @@ Resolve research scope by product path before using code or app structure as a h
 
 When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
-0b. **Product-path manifest**: Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the journey map to the active product path by default. When journey mapping reveals lifecycle stages or user flows that only apply to a deferred product path, add a `## Product Path Implications` section noting the finding and recommending `/product-line fork` if it implies a new product surface.
+0b. **Product-path manifest**: Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the journey map to the active product path by default. When journey mapping reveals lifecycle stages or user flows that only apply to a deferred product path, add a `## Product Path Implications` section noting the finding and recommending `$product-line fork` if it implies a new product surface.
 
 ### 1. Mode Detection
 
@@ -154,7 +154,7 @@ Build the framework multi-select `review` alignment page with:
    - Framework name and one-line description
    - Why it's recommended or optional for this context
    - Pre-checked defaults based on detected mode (see mode detection above)
-4. **Loop explanation**: the selected set is the scope-and-candidate approval gate; each selected framework will then be run inline (one findings page per framework) and the run advances by re-invoking `/journey-map`
+4. **Loop explanation**: the selected set is the scope-and-candidate approval gate; each selected framework will then be run inline (one findings page per framework) and the run advances by re-invoking `$journey-map`
 5. **Approval gate**: framework selection confirmation
 
 This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
@@ -166,24 +166,13 @@ This session consumes the approved multi-select YAML (state 0→C) or advances a
 1. **Write the run manifest** if it does not yet exist: `research/_working/journey-map-run.yaml` (flat) or `research/{slug}/_working/journey-map-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
 2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/journey-map-{fw}.md` (or `research/{slug}/journey-map-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
 
-Then run the **one heavy phase** for this session:
+Then run the **one heavy phase**: determine the next pending framework (first selected framework whose canonical intermediate does not yet exist), then **load and follow that framework subskill's `SKILL.md` inline, entering at its research stage (Stage 2)** — the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the research, write its working packet, and build a single findings `review` page. Stop for that framework's compiled YAML.
 
-3. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
-4. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
+**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `$journey-map` and tell the user to start a fresh Codex session and re-invoke, reporting progress as "k of N frameworks complete". Do not emit cross-skill routing here — that happens only after synthesis (step 6).
 
-**Advance the loop by self-re-invocation.** For pending framework findings pages, use `Recommended next command after compiling YAML: /journey-map` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, the confirmed-page handoff and terminal message use `Recommended next command: /journey-map` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
+### 4. State B — Synthesis (auto-detected; also `$journey-map --synthesize`)
 
-```
-✔ Framework 1 (JTBD Timeline) findings ready for review.
-Recommended next command after compiling YAML: /journey-map
-(the next run writes this framework's intermediate and picks up the next pending framework automatically.)
-```
-
-Do not emit cross-skill routing here — that happens only after synthesis (step 6).
-
-### 4. State B — Synthesis (auto-detected; also `/journey-map --synthesize`)
-
-Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/journey-map.md` yet exists. An explicit `/journey-map --synthesize` also forces this state.
+Enter synthesis when the run manifest exists, **all** selected framework intermediates exist, and no canonical `research/journey-map.md` yet exists. An explicit `$journey-map --synthesize` also forces this state.
 
 Read all intermediate framework outputs:
 - `research/journey-map-jtbd-timeline.md`
@@ -216,7 +205,7 @@ Build alignment page for synthesis approval with:
 
 After approval: write `research/journey-map.md`, then on this canonical write **archive the run manifest** (`journey-map-run.yaml`) and the synthesis working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, update `research/.progress.yaml` `pipeline_stage` to `journey-map`, and emit the downstream next-step routing (step 6). This is the one place cross-orchestrator routing is allowed.
 
-### 5. State C via Product-Exists Shortcut (`/journey-map product`)
+### 5. State C via Product-Exists Shortcut (`$journey-map product`)
 
 Skip multi-select. Build a `review` alignment page for the shortcut plan with:
 
@@ -238,36 +227,36 @@ selected_frameworks:
     intermediate: research/journey-map-user-story-map.md
 ```
 
-Then enter **state C** and run framework 1 inline per step 3b. The loop advances by re-invoking `/journey-map`.
+Then enter **state C** and run framework 1 inline per step 3b. The loop advances by re-invoking `$journey-map`.
 
 ### 6. Next Steps (after synthesis only)
 
 Priority-ordered decision tree — recommend the **first** match:
 
 1. **Blocking optional research trigger** — the overview exposed a stage, fit, measurement, or product-loop risk that must be resolved before positioning or UX choices harden → use the Optional Research Trigger Map below. Cite the exact journey evidence, why it blocks the next AFPS step, and which existing framework skill owns it.
-2. **Positioning missing** (`research/positioning.md` does not exist) → check `.agents/project.json.enabled_packs` for `business-research` — if `business-research` is not enabled, recommend `npx skillpacks install business-research` from the project shell; if `business-research` is enabled, recommend `/positioning` — Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
-3. **Positioning done, user-flow map missing** → check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell; if `product-design` is enabled, recommend `/user-flow-map` — Map screen flow, decisions, branches, states, and low-fidelity wireframe structure before UI requirements.
-4. **Never** recommend `/spec-interview` from this skill — it is many steps downstream in the AFPS chain.
+2. **Positioning missing** (`research/positioning.md` does not exist) → check `.agents/project.json.enabled_packs` for `business-research` — if `business-research` is not enabled, recommend `npx skillpacks install business-research` from the project shell; if `business-research` is enabled, recommend `$positioning` — Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
+3. **Positioning done, user-flow map missing** → check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell; if `product-design` is enabled, recommend `$user-flow-map` — Map screen flow, decisions, branches, states, and low-fidelity wireframe structure before UI requirements.
+4. **Never** recommend `$spec-interview` from this skill — it is many steps downstream in the AFPS chain.
 
 ## Optional Research Trigger Map
 
-These detours are conditional framework owners, not required AFPS chain links. Use them only when the journey evidence shows that the answer will change positioning, product-loop direction, flow/design shape, or prototype choices. When the trigger is absent, continue to `/positioning` or `/user-flow-map` using the decision tree above.
+These detours are conditional framework owners, not required AFPS chain links. Use them only when the journey evidence shows that the answer will change positioning, product-loop direction, flow/design shape, or prototype choices. When the trigger is absent, continue to `$positioning` or `$user-flow-map` using the decision tree above.
 
 | Journey signal | Existing owner | Trigger threshold |
 | --- | --- | --- |
-| Signup, setup, activation, first-success, or time-to-value path is unclear | `/onboarding-map` | The journey cannot identify the first success path, onboarding drop-offs, or activation criteria well enough to shape UX. |
-| Evaluation, trial, pricing decision, objections, or buyer roles are unresolved | `/conversion-map` | Conversion decision logic affects the primary screen flow, offer, or proof sequence. |
-| Purchase, checkout, payment, fulfillment, refund, dispute, or trust state is material | `/transaction-map` | Transaction mechanics create product risk before UX/prototype choices. |
-| Repeat-use job, return trigger, churn risk, recovery path, or retention signal is unclear | `/retention-map` | The product needs a natural return model before designing engagement, lifecycle messages, or saved state. |
-| Stage instrumentation, leading indicators, or lifecycle handoff metrics are unclear | `/lifecycle-metrics` | The journey has stage risks but needs measurement before growth or implementation planning. Prefer this over `/hook-model` for enterprise, infrastructure, transactional, or naturally infrequent products. |
-| Product value depends on repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `/hook-model` | Use only for consumer, prosumer, PLG, marketplace, community, or B2B-with-consumer-component products where habit-loop design should shape flow and prototype choices before `/user-flow-map`. Do not force this on B2B/enterprise, infrastructure, transactional, or naturally infrequent products; route those to `/lifecycle-metrics` or, when `business-growth` is enabled and a broader success framework is needed, `/metrics`. |
-| Expansion, upgrade, seat growth, referral, advocacy, or land-and-expand path is material | `/expansion-map` | Expansion mechanics change lifecycle sequencing, account roles, or product surface priorities. |
-| Jobs, pains, gains, aha moment, or solution fit are weak, disputed, or need explicit scoring | Check `.agents/project.json.enabled_packs` for `business-research` — if missing, recommend `npx skillpacks install business-research` from the project shell; if enabled, recommend `/value-prop-canvas` | Use the existing Strategyzer-style framework only when fit risk would make positioning or UX premature. |
-| Revenue, channel, cost, defensibility, or unfair-advantage assumptions are material risks | Check `.agents/project.json.enabled_packs` for `business-research` — if missing, recommend `npx skillpacks install business-research` from the project shell; if enabled, recommend `/lean-canvas` | Use the existing Ash Maurya Lean Canvas framework when the journey exposes business-model risk before UX/prototype decisions. |
-| Pricing gates, packaging, free-to-paid timing, or willingness-to-pay moments are central to the journey | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `/monetization` | Use when pricing architecture must be grounded before conversion, transaction, or prototype choices. |
-| Acquisition source, launch channel, messaging route, or early traction mechanism is a journey blocker | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `/gtm` | Use after enough ICP/competitive/journey evidence exists and the channel path changes product or UX priorities. |
+| Signup, setup, activation, first-success, or time-to-value path is unclear | `$onboarding-map` | The journey cannot identify the first success path, onboarding drop-offs, or activation criteria well enough to shape UX. |
+| Evaluation, trial, pricing decision, objections, or buyer roles are unresolved | `$conversion-map` | Conversion decision logic affects the primary screen flow, offer, or proof sequence. |
+| Purchase, checkout, payment, fulfillment, refund, dispute, or trust state is material | `$transaction-map` | Transaction mechanics create product risk before UX/prototype choices. |
+| Repeat-use job, return trigger, churn risk, recovery path, or retention signal is unclear | `$retention-map` | The product needs a natural return model before designing engagement, lifecycle messages, or saved state. |
+| Stage instrumentation, leading indicators, or lifecycle handoff metrics are unclear | `$lifecycle-metrics` | The journey has stage risks but needs measurement before growth or implementation planning. Prefer this over `$hook-model` for enterprise, infrastructure, transactional, or naturally infrequent products. |
+| Product value depends on repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `$hook-model` | Use only for consumer, prosumer, PLG, marketplace, community, or B2B-with-consumer-component products where habit-loop design should shape flow and prototype choices before `$user-flow-map`. Do not force this on B2B/enterprise, infrastructure, transactional, or naturally infrequent products; route those to `$lifecycle-metrics` or, when `business-growth` is enabled and a broader success framework is needed, `$metrics`. |
+| Expansion, upgrade, seat growth, referral, advocacy, or land-and-expand path is material | `$expansion-map` | Expansion mechanics change lifecycle sequencing, account roles, or product surface priorities. |
+| Jobs, pains, gains, aha moment, or solution fit are weak, disputed, or need explicit scoring | Check `.agents/project.json.enabled_packs` for `business-research` — if missing, recommend `npx skillpacks install business-research` from the project shell; if enabled, recommend `$value-prop-canvas` | Use the existing Strategyzer-style framework only when fit risk would make positioning or UX premature. |
+| Revenue, channel, cost, defensibility, or unfair-advantage assumptions are material risks | Check `.agents/project.json.enabled_packs` for `business-research` — if missing, recommend `npx skillpacks install business-research` from the project shell; if enabled, recommend `$lean-canvas` | Use the existing Ash Maurya Lean Canvas framework when the journey exposes business-model risk before UX/prototype decisions. |
+| Pricing gates, packaging, free-to-paid timing, or willingness-to-pay moments are central to the journey | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `$monetization` | Use when pricing architecture must be grounded before conversion, transaction, or prototype choices. |
+| Acquisition source, launch channel, messaging route, or early traction mechanism is a journey blocker | Check `.agents/project.json.enabled_packs` for `business-growth` — if missing, recommend `npx skillpacks install business-growth` from the project shell; if enabled, recommend `$gtm` | Use after enough ICP/competitive/journey evidence exists and the channel path changes product or UX priorities. |
 
-`/growth-model` is an existing Reforge-style framework owner for compounding acquisition, retention, and monetization loops, but do not route to it directly from `journey-map` unless metrics/GTM prerequisites are already satisfied. In most AFPS cases, `/hook-model`, `/metrics`, `/monetization`, or `/gtm` is the earlier business-growth detour.
+`$growth-model` is an existing Reforge-style framework owner for compounding acquisition, retention, and monetization loops, but do not route to it directly from `journey-map` unless metrics/GTM prerequisites are already satisfied. In most AFPS cases, `$hook-model`, `$metrics`, `$monetization`, or `$gtm` is the earlier business-growth detour.
 
 ## Output
 
@@ -320,7 +309,7 @@ Before approval, the next action is review of `alignment/journey-map-{topic}.htm
 
 ## Constraints
 
-- **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It records the selected framework set in the run manifest, runs each selected framework inline, and synthesizes; progress is the existence of canonical intermediates. The loop advances by re-invoking `/journey-map` (clear context between sessions). Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
+- **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It records the selected framework set in the run manifest, runs each selected framework inline, and synthesizes; progress is the existence of canonical intermediates. The loop advances by re-invoking `$journey-map` (fresh Codex session between sessions). Do not queue framework work in `tasks/todo.md` or hand it to `$exec`.
 - **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
 - Ground every important step in ICP, research, specs, feedback, or codebase evidence.

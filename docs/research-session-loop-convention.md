@@ -137,11 +137,20 @@ A self-advancing research orchestrator continues its loop by routing to **its ow
 
 ```
 ✔ Framework 1 (W3 Hypothesis) confirmed and written.
-Next: clear context, then run  /customer-discovery
+Recommended next command: /customer-discovery
 (2 of 4 frameworks complete; the next run picks up framework 2 automatically.)
 ```
 
 This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-routing-contract.md` § Approved Artifact State recognizes a skill's own re-invocation as a valid post-approval route. The cross-skill downstream route is emitted only after final synthesis.
+
+### Approval-boundary labels
+
+Use two distinct labels so review pages do not hide the required continuation command:
+
+- `Recommended next command after compiling YAML:` appears only while a `review` approval gate is pending. It names the same parent orchestrator command, with the same product/research path argument when present, so the user can review the HTML page, compile YAML, start a fresh session, and re-invoke the parent. This is not downstream routing.
+- `Recommended next command:` appears after the agent has consumed approved YAML, written or updated the approved artifact for the gate, and converted the page to `confirmed`. It names the same parent orchestrator command when the current Research Session Loop still has pending frameworks or synthesis.
+
+While any `review` approval gate is pending, do not route to downstream or cross-skill work. Framework subskills remain route-free in loop mode: they do not emit `Recommended next skill`, `Recommended next command`, or path-shaped child framework commands. The parent orchestrator is the only user-facing continuation command during framework loops.
 
 ### Does the skill need to be re-invoked? Can the agent auto-call it?
 
@@ -181,10 +190,10 @@ This convention is **normative for all Pattern A research orchestrators**. The r
 
 | Orchestrator | Version | Cold entry | Run manifest |
 |---|---|---|---|
-| `customer-discovery` | v1.6 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
-| `competitive-analysis` | v0.20 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
-| `positioning` | v0.19 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
-| `journey-map` | v0.18 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
+| `customer-discovery` | v1.11 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
+| `competitive-analysis` | v0.23 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
+| `positioning` | v0.21 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
+| `journey-map` | v0.20 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
 
 `customer-discovery` is the deep-intake reference (state F → E → C… → B → A); the three scoped-intake orchestrators have no deep-interview phase and resolve a cold start directly to state E. The adjacent `afps-status` reader (base, v0.5) is loop-aware: it reports "k of N frameworks complete" from the run manifest and routes a mid-run loop back to its orchestrator.
 

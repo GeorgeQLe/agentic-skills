@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.11
+version: v1.10
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -36,7 +36,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action, and the only command label allowed before approval is `Recommended next command after compiling YAML:` with this same parent orchestrator, such as `/customer-discovery` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `/customer-discovery`, never an execution-loop command or a path-shaped child framework invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
+Do not include downstream or cross-skill command recommendations while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `/customer-discovery`, never an execution-loop command or a path-shaped child framework invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
 
 ## Staged Research Workflow
 
@@ -248,11 +248,11 @@ Then run the **one heavy phase** for this session:
 4. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
 5. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
 
-**Advance the loop by self-re-invocation.** For pending framework findings pages, use `Recommended next command after compiling YAML: /customer-discovery` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, the confirmed-page handoff and terminal message use `Recommended next command: /customer-discovery` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
+**Advance the loop by self-re-invocation.** The confirmed-page handoff and the terminal message name `/customer-discovery` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
 
 ```
 ✔ Framework 1 (W3 Hypothesis) findings ready for review.
-Recommended next command after compiling YAML: /customer-discovery
+Next: review the page and compile YAML, then clear context and run  /customer-discovery
 (the next run writes this framework's intermediate and picks up the next pending framework automatically.)
 ```
 

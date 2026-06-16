@@ -1,3 +1,39 @@
+## Current Implementation - Narrow Research Loop Routing Guardrails
+
+### Goal
+
+Narrow Pattern A Research Session Loop routing rules so pending approval pages may name the same parent orchestrator command for loop continuation, while still blocking downstream or cross-skill routing until approved artifacts are written.
+
+### Scope
+
+- `docs/research-session-loop-convention.md`
+- `packs/business-research/codex/competitive-analysis/SKILL.md`
+- `packs/business-research/codex/customer-discovery/SKILL.md`
+- `packs/business-research/codex/positioning/SKILL.md`
+- `packs/customer-lifecycle/codex/journey-map/SKILL.md`
+- Skill archives and changelogs for the four affected Codex orchestrators
+- Prompt history and task tracking
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record this implementation plan.
+2. Inspect current Research Session Loop convention, affected orchestrator contracts, changelogs, archive script, and routing audit availability.
+3. Archive each active source skill before changing it.
+4. Update the convention to distinguish pending-review continuation labels from confirmed-page continuation labels.
+5. Update each parent orchestrator's approval-boundary wording and explicit same-orchestrator continuation command.
+6. Bump affected versions and add changelog entries.
+7. Run targeted route scans, version checks, routing audit, and diff hygiene.
+8. Record verification results, inspect final diff, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- No affected parent orchestrator carries the broad pre-approval ban on `Recommended next command`.
+- Pending review guidance allows only `Recommended next command after compiling YAML: $<same-orchestrator> [same args]`.
+- Confirmed parent-loop handoff guidance uses `Recommended next command: $<same-orchestrator> [same args]` after approved artifacts are written.
+- Downstream/cross-skill routing remains blocked until final synthesis artifacts are approved and written.
+- Framework subskills remain route-free; the parent orchestrator remains the only user-facing continuation route during framework loops.
+- Versions, archives, changelogs, prompt history, task notes, and verification are complete.
+
 ## Current Implementation - ord-align Staged Review Contract
 
 ### Goal

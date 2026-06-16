@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.21 - 2026-06-15
+
+- Narrowed approval-boundary routing language so pending review pages may name `Recommended next command after compiling YAML: $positioning` for same-orchestrator loop continuation, while downstream and cross-skill routing remain blocked until approved synthesis artifacts are written.
+
 ## v0.20 - 2026-06-15
 
 - Hardened framework-loop routing so pending framework work continues only through the parent orchestrator with the current research path argument, while path-shaped child framework commands remain prohibited.
