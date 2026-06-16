@@ -42,6 +42,7 @@ declare -A IGNORED_REFS=(
   [research]=1
   [benchmarks]=1
   [plan]=1
+  [freeform]=1
 
   # Explicitly negative, hibernated, or future route names documented in skills.
   [analyze-session]=1

@@ -1,3 +1,38 @@
+## Current Implementation - ord-align Staged Review Contract
+
+### Goal
+
+Update the existing mirrored `ord-align` skill contracts so candidate validation uses a lightweight report-first HTML approval gate before namespace checks, synthesized verdicts, downstream routing, or `alignment/ord-<slug>.md` writes.
+
+### Scope
+
+- `packs/ord/codex/ord-align/SKILL.md`
+- `packs/ord/claude/ord-align/SKILL.md`
+- Mirrored `ord-align` archives, changelogs, and bundled `ALIGNMENT-PAGE.md` files
+- Deterministic pack-workflow benchmark assertions for `ord-align`
+- Generated installed/build/showcase artifacts required by skill metadata and behavior changes
+- Prompt history, task review notes, validation, commit, and push
+
+### Plan
+
+1. Capture the visible `targeted-skill-builder` invocation prompt and record this implementation plan.
+2. Inspect `tasks/lessons.md`, current `ord-align` contracts, `ord-scan` staged-review contract, bundled alignment-page guidance, and benchmark registration.
+3. Archive mirrored `ord-align` `v0.0` contracts, bump active contracts to `v0.1`, and add mirrored changelogs.
+4. Add mirrored `ord-align` bundled alignment-page guidance scoped to `alignment/ord-align-{topic}.html`.
+5. Update active `ord-align` contracts with Stage 1 scope review, Stage 2 validation review, and Stage 3 approved finalization.
+6. Tighten deterministic layer4 benchmark assertions for the `ord-align` staged gate.
+7. Refresh generated skill/package/showcase artifacts as required.
+8. Run required validation, record review notes, inspect the final diff, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- `ord-align` no longer permits `npm view`, synthesized GO/NO-GO verdicts, downstream routing, or `alignment/ord-<slug>.md` writes before the relevant compiled YAML approval stage.
+- Stage 1 creates only `alignment/ord-align-<slug>.html` in `review` status and asks for final compiled YAML approval of validation scope.
+- Stage 2 performs lightweight validation in the HTML page and stops for artifact approval without writing markdown.
+- Stage 3 writes `alignment/ord-<slug>.md` only for approved GO outcomes and confirms the HTML page.
+- Codex and Claude contracts remain semantically mirrored, with runner-specific command syntax only.
+- Benchmark coverage deterministically checks the new staged-review contract.
+
 ## Current Implementation - Pack Skill Sunset Alignment Page
 
 ### Goal

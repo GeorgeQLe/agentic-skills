@@ -1,3 +1,47 @@
+## Current Implementation - ord-align Staged Review Contract
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Inspect `tasks/lessons.md`, current `ord-align`, `ord-scan`, alignment-page guidance, and benchmark registration.
+- [x] Archive mirrored `ord-align` `v0.0` contracts.
+- [x] Update mirrored active contracts, versions, changelogs, and bundled alignment-page guidance.
+- [x] Tighten deterministic benchmark assertions.
+- [x] Refresh generated artifacts.
+- [x] Run required validation and record results.
+- [ ] Review final diff, commit, and push.
+
+### Review Notes
+
+- Starting point: working tree had in-progress tracked changes from prior work in `alignment/index.html`, `alignment/pack-skill-sunset-plan.html`, `prompts/pack/...`, and task files. I left unrelated changes intact and scoped edits to the `ord-align` contract work plus required task/prompt artifacts.
+- Skill context: `targeted-skill-builder`, because the user provided a concrete plan to update an existing skill contract from a workflow gap.
+- Evidence intentionally scoped to the current prompt, `tasks/lessons.md`, mirrored active `ord-align`, `ord-scan` staged-review contracts and alignment-page bundle, and benchmark registration. Broad session-history scans were skipped per the supplied plan.
+- Archived `v0.0` for both mirrored `ord-align` skill directories with `scripts/skill-archive.sh`.
+- Bumped active mirrored contracts to `v0.1`, added changelogs, and introduced a lightweight staged validation contract:
+  - Stage 1 writes only `alignment/ord-align-<slug>.html` in `review` status and stops for final compiled YAML approving validation scope.
+  - Stage 2 runs namespace, existing-solution, feasibility, effort, adoption-signal, and evidence checks in the HTML page, then stops for artifact approval.
+  - Stage 3 writes `alignment/ord-<slug>.md` only for approved GO outcomes and confirms the HTML page.
+- Added mirrored `ALIGNMENT-PAGE.md` bundles scoped to `alignment/ord-align-{topic}.html`, derived from `ord-scan` but tightened to a lightweight validation workflow without mandatory working packets.
+- Tightened `tests/layer4/setups/packs/pack-workflows.setup.ts` so the `ord-align` setup requires the review HTML path, report-first approval gate language, final compiled YAML, and blocked markdown writes before approval.
+- Refreshed generated artifacts with:
+  - `npx skillpacks refresh` (rerun with approval after sandbox blocked `.agents/.pack.lock`; completed successfully)
+  - `npm run skillpacks:build`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
+  - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
+- During validation, `./scripts/skill-deps.sh --broken` initially failed on unchanged `customer-discovery -> freeform` because the dependency scanner interpreted "other/freeform" prose as a slash-command dependency. Added `freeform` to the scanner's existing ignored placeholder list, then reran successfully.
+- Validation passed:
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` (79 tests)
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` (passed on sequential rerun after the validator normalized generated assets)
+  - targeted active-source and package-build `rg` checks for `Report-First`, `alignment/ord-align-`, compiled YAML, and blocked `alignment/ord-<slug>.md` writes
+  - normalized Codex/Claude `ord-align` parity diff (raw diff contains only expected `$ord-*` vs `/ord-*` command syntax)
+  - `git diff --check`
+
 ## Current Implementation - Pack Skill Sunset Alignment Page
 
 ### Current Checklist

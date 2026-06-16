@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "e6204d02987abcfabce288f1233329e8de12bd73ace85b20f6662b5496f88023",
+  "source_fingerprint": "484c0aee88cf282ceade23fb97706054d5d1679af233f83d6f039f29c4a2d1d2",
   "packs": [
     {
       "name": "agent-bridge",
@@ -888,10 +888,12 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "base/claude/create-alignment-page/SKILL.md",
-      "content_sha256": "56bdbd25accff71569992b3de4ae09fe681c599350daf422b2f02792592e5479",
-      "archive_versions": [],
+      "content_sha256": "6c2b1fdf45bfea13ae57dce0a1753bab4c9e6e609656f84a84cab6f992622191",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/create-alignment-page",
       "deck_memberships": []
     },
@@ -1101,10 +1103,12 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "base/codex/create-alignment-page/SKILL.md",
-      "content_sha256": "4ddc848fdd7b7efeb0b45f38f247011235543ddea8a08cd7c56d035df6a47aa3",
-      "archive_versions": [],
+      "content_sha256": "a3b8733f742a430bdbc8a15d613a61c364d69a6b90139ec6d8f50937e6e5587c",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$create-alignment-page",
       "deck_memberships": []
     },
@@ -6285,10 +6289,12 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/ord/claude/ord-align/SKILL.md",
-      "content_sha256": "371a3f56db544b5bff86b490a6c3237c9cd08c89a2a700fff516640e41ce5901",
-      "archive_versions": [],
+      "content_sha256": "612845547df2f11ff62e4d42e47b75c5794914bbc3451b2478f5676baf015fce",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/ord-align",
       "deck_memberships": [
         "ord"
@@ -6352,10 +6358,12 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/ord/codex/ord-align/SKILL.md",
-      "content_sha256": "371a3f56db544b5bff86b490a6c3237c9cd08c89a2a700fff516640e41ce5901",
-      "archive_versions": [],
+      "content_sha256": "fac551b14f698457edc746aa068c6e9a9970c1f450a638b53f06b01ae3cb47da",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$ord-align",
       "deck_memberships": [
         "ord"
