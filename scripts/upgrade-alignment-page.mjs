@@ -109,6 +109,37 @@ function optionalConventionTemplate(skillName) {
   return conventionTemplate.replace(automaticIntro, optionalIntro);
 }
 
+function lightweightResearchConventionTemplate(skillName, skillPath) {
+  const workflow = skillPath ? readSkillFrontmatterField(skillPath, "research_workflow") : null;
+  if (workflow !== "lightweight") return null;
+
+  const replacements = [
+    [
+      "**Research quality contract.**",
+      "**Lightweight research quality contract.** For lightweight research or validation outputs, do not run external checks, compare existing solutions, synthesize findings, recommend a final verdict, or write canonical artifacts until the user approves the scope from the `review` alignment page's final compiled response YAML. Before scope approval, do only minimal discovery needed to propose the candidate scope, check plan, assumptions, output paths, and approval questions; label any observed files or source availability as scope evidence, not findings. After scope approval, perform the bounded validation and separate and label `claims` (what the validation concludes), `evidence` (source, repo artifact or file path, command result, quote or observation, date, and confidence), `inference` (why that evidence supports the claim), `assumptions` (what remains unproven), and `decision impact` (what the user should approve, reject, or correct). Do not collapse evidence and inference into unsupported summary prose.",
+    ],
+    [
+      "**Report-only research gates.**",
+      "**Lightweight research gates.** The first `review` alignment page must explicitly contain proposed candidate scope, check plan, assumptions/confidence, recommended HTML output path, proposed final artifact path when applicable, proposed file changes, and approval gates before external checks, existing-solution checks, feasibility synthesis, verdicts, downstream routing, canonical artifact writes, or implementation work begin.",
+    ],
+    [
+      "**Staged research workflow.**",
+      `**Lightweight research workflow.** Lightweight research uses a bounded scope-first three-stage approval workflow. Stage 1 is minimal candidate/scope discovery only: inspect enough repository, user, and source context to propose candidate scope, likely source/check categories, validation plan, assumptions, output paths, and approval questions. Build the \`review\` alignment page before validation work. The page must render the proposed candidate, audience or decision context, boundary/non-goals, available source categories, assumptions/confidence, proposed \`alignment/${skillName}-{topic}.html\` page, proposed final artifact path when applicable, scope-approval gates, and a \`Stage 2 Preview / Expected Review Format\` section. Stop for final compiled response YAML approval of the lightweight research scope. Do not run external availability checks, synthesize findings, synthesize verdicts, recommend a path, write working packets, write canonical artifacts, or emit downstream routing in Stage 1. Stage 2 starts only after final compiled response YAML approves the scope with no unresolved \`needs-clarification\`, unresolved \`down\` feedback, or other unresolved negative feedback. Run only the bounded checks approved in Stage 1, then update the same \`review\` alignment page with structured HTML review UI. Include check results, comparison or feasibility matrices when relevant, effort/risk estimate when relevant, evidence matrix, assumptions/confidence register, source coverage gaps, verdict or recommendation rationale, proposed canonical file changes, and artifact approval gates. Partial compiled responses revise the page and remain in Stage 2. Do not write final canonical artifacts in Stage 2. Stage 3 consumes final compiled response YAML for artifact approval only when it has \`approval_status: ready-for-agent-review\` and no unresolved negative feedback. Apply approved edits first. For approved positive outcomes, write the final artifact and convert the page to \`confirmed\`; for approved negative outcomes, confirm the HTML page and do not create a positive-outcome artifact.`,
+    ],
+    [
+      "**Stage 2 review-page template.**",
+      "**Lightweight Stage 2 review-page template.** Stage 1 scope-review pages must include a `Stage 2 Preview / Expected Review Format` section that previews the exact section sequence, table shapes, evidence treatment, and approval gates the user will see after validation. After scope approval and validation, the Stage 2 review page must include these sections as structured HTML, not as raw Markdown dumps: `Validation Scope Approved` status block with approved scope, check plan, output paths, and unresolved caveats; skill-specific check-result sections; comparison, feasibility, effort, risk, or adoption-signal sections when relevant; `Evidence Matrix` mapping claim, evidence/source/path/command result, inference, confidence, assumptions, and decision impact; `Verdict Review` or a skill-specific recommendation section; `Alternatives / Rejected or Lower-Confidence Findings`; `Source Coverage & Gaps`; `Assumptions / Confidence Register`; `Proposed Final Artifact & File Changes`; a required `User Format Preferences` gate asking whether the layout, tables, grouping, labels, and evidence density match expectations; and a required `Final Artifact Approval` gate for Stage 3 readiness. Raw Markdown, command logs, search logs, or source notes may appear only as supplemental source views after the rendered review UI and never replace the Stage 2 review sections.",
+    ],
+  ];
+
+  let template = conventionTemplate;
+  for (const [heading, replacement] of replacements) {
+    const pattern = new RegExp(`${heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^\\n]*(?:\\n(?!\\n)[^\\n]*)*`);
+    template = template.replace(pattern, replacement);
+  }
+  return template;
+}
+
 // Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
 function bundledContentFor(skillName, skillPath) {
   const specific = skillSpecificGates(skillName, skillPath);
@@ -119,7 +150,9 @@ function bundledContentFor(skillName, skillPath) {
   const skillType = skillPath ? readSkillType(skillPath) : null;
   const glossaryApplies = skillType === 'research' || skillType === 'analysis';
   const glossaryText = glossaryApplies ? glossaryGateText(skillName) : '';
-  const template = isOptionalAlignmentSkill(skillName) ? optionalConventionTemplate(skillName) : conventionTemplate;
+  const template =
+    lightweightResearchConventionTemplate(skillName, skillPath) ??
+    (isOptionalAlignmentSkill(skillName) ? optionalConventionTemplate(skillName) : conventionTemplate);
   const body = template
     .replaceAll("{skill-name}", skillName)
     .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")

@@ -5297,6 +5297,23 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Run focused verification and record review notes.
 - [ ] Commit and push the verified routing fix.
 
+## Active — Lightweight Research Alignment Bundles
+
+- [x] Inspect current generator hooks, ORD-align metadata, and alignment tests.
+- [x] Add a reusable lightweight research workflow selector to the generator.
+- [x] Mark ORD-align mirrors with the selector and regenerate generated bundles/stubs.
+- [x] Add focused regression coverage for ORD-align lightweight validation bundles.
+- [x] Run generator and focused layer1 verification.
+- [x] Record review notes.
+
+### Review Notes — Lightweight Research Alignment Bundles
+
+- Added `research_workflow: lightweight` as an explicit generated-bundle selector for lightweight research or validation skills.
+- `scripts/upgrade-alignment-page.mjs` now renders lightweight alternatives for the research quality, report gates, staged workflow, and Stage 2 template sections while leaving default heavy staged-research bundles unchanged.
+- Marked both ORD-align mirrors with the selector and regenerated their `ALIGNMENT-PAGE.md` bundles; generator output updated only those two bundles.
+- Added layer1 coverage that classifies lightweight generated bundles separately from heavy generated bundles and asserts ORD-align avoids working-packet-specific language.
+- Verification passed: `node --check scripts/upgrade-alignment-page.mjs`; `node scripts/upgrade-alignment-page.mjs --check`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` (33/33); `git diff --check`.
+
 ### Review Notes — Competitive Analysis Framework Routing
 
 - User claim validated: active installed `.codex/skills/competitive-analysis/frameworks/*/SKILL.md` files and mirrored source framework skills advertised path-like commands such as `$competitive-analysis/frameworks/porter-five-forces`.

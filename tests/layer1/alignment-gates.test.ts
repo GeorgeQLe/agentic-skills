@@ -135,6 +135,12 @@ const activeAlignmentSkillFiles = [...activeSkillFiles("base"), ...activeSkillFi
   .sort();
 
 const generatedAlignmentSkillFiles = activeAlignmentSkillFiles.filter(hasBundle);
+const lightweightResearchSkillFiles = generatedAlignmentSkillFiles.filter((path) =>
+  read(path).includes("research_workflow: lightweight"),
+);
+const heavyGeneratedAlignmentSkillFiles = generatedAlignmentSkillFiles.filter(
+  (path) => !lightweightResearchSkillFiles.includes(path),
+);
 
 describe("alignment page gate contract", () => {
   it("points core skills at the bundled convention instead of CLAUDE.md", () => {
@@ -412,8 +418,8 @@ describe("alignment page gate contract", () => {
   });
 
   it("defines staged working-packet handling for report-first research", () => {
-    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
-    for (const path of generatedAlignmentSkillFiles) {
+    expect(heavyGeneratedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of heavyGeneratedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} staged research section`).toContain("**Staged research workflow.**");
       expect(content, `${path} scope-first workflow`).toContain("scope-first three-stage approval workflow");
@@ -465,8 +471,8 @@ describe("alignment page gate contract", () => {
   });
 
   it("defines the Stage 2 research review template and Stage 1 preview gate", () => {
-    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
-    for (const path of generatedAlignmentSkillFiles) {
+    expect(heavyGeneratedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of heavyGeneratedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} stage 2 template section`).toContain("**Stage 2 review-page template.**");
       expect(content, `${path} stage 1 format preview`).toContain(
@@ -500,6 +506,29 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} raw markdown supplemental`).toContain(
         "Raw Markdown packet text, search logs, or source notes may appear only as supplemental source views",
       );
+    }
+  });
+
+  it("supports lightweight research bundles without heavy working packets", () => {
+    expect(lightweightResearchSkillFiles.sort()).toEqual([
+      "packs/ord/claude/ord-align/SKILL.md",
+      "packs/ord/codex/ord-align/SKILL.md",
+    ]);
+
+    for (const path of lightweightResearchSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} lightweight quality`).toContain("**Lightweight research quality contract.**");
+      expect(content, `${path} lightweight gates`).toContain("**Lightweight research gates.**");
+      expect(content, `${path} lightweight workflow`).toContain("**Lightweight research workflow.**");
+      expect(content, `${path} lightweight stage 2`).toContain("**Lightweight Stage 2 review-page template.**");
+      expect(content, `${path} no heavy staged workflow`).not.toContain("**Staged research workflow.**");
+      expect(content, `${path} no working packet paths`).not.toContain("preliminary-ord-align-research.md");
+      expect(content, `${path} no working packet archive`).not.toContain("<original-working-path>");
+      expect(content, `${path} no heavy packet review`).not.toContain("`Working Packet Review`");
+      expect(content, `${path} validation scope approval`).toContain(
+        "Stop for final compiled response YAML approval of the lightweight research scope",
+      );
+      expect(content, `${path} stage 2 validation review`).toContain("`Validation Scope Approved` status block");
     }
   });
 

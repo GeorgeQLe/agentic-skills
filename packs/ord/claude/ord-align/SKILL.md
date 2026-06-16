@@ -4,6 +4,7 @@ description: Validate whether an OSS tool is worth building through staged names
 type: analysis
 version: v0.1
 context_intake: scoped
+research_workflow: lightweight
 ---
 
 # ORD Align
@@ -95,7 +96,7 @@ Stage 3 output for approved NO-GO outcomes is only the confirmed HTML page. End 
 
 ## Alignment Page
 
-When this skill produces durable deliverables (validation reports, verdicts, alignment docs, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ord-align-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ord-align-{topic}.html`.
 
 ## Default Shipping Contract
 

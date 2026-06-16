@@ -3182,3 +3182,11 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Replace path-like direct framework invocations with parent-orchestrator-only instructions for both Codex and Claude mirrors, plus the active installed Codex copies.
 5. Add focused regression coverage that rejects `$competitive-analysis/frameworks/*` and `/competitive-analysis/frameworks/*` command strings.
 6. Run archive/version, routing, build, and diff hygiene verification, then ship the intended changes without touching unrelated in-flight work.
+
+## Current Plan — Lightweight Research Alignment Bundles
+
+1. Add a reusable alignment workflow selector for lightweight research or validation skills instead of hard-coding ORD-align exceptions.
+2. Teach `scripts/upgrade-alignment-page.mjs` to render lightweight workflow language in generated `ALIGNMENT-PAGE.md` bundles while preserving the default heavy staged-research convention for existing research skills.
+3. Mark ORD-align in both Claude and Codex mirrors with the new selector and regenerate its generated bundles/stubs.
+4. Add focused regression coverage proving ORD-align gets lightweight validation language and does not regress to generic working-packet research language.
+5. Run generator and focused layer1 verification, then record results.
