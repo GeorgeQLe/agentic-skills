@@ -3336,3 +3336,12 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Add package-boundary coverage that inspects `npm pack ./packages/skillpacks/build --dry-run --json`, asserting denied path classes are absent and required runtime assets/content are present in the actual publish target.
 5. Run package tests, package verification, exact publish-target dry run, release dry run, and diff hygiene.
 6. Review the final diff, record results, then commit and push the intended package-boundary changes.
+
+## Current Investigation — Repeated Skill Install Context Bloat
+
+1. Capture the `$investigate` invocation and record a narrow task checklist.
+2. Validate the duplicate/repeated skill observation against active `.codex/skills`, `.claude/skills`, package-owned install output, and generated indexes.
+3. Trace whether the repeats come from archive recursion, case mismatches, npm install materialization, stale symlinks, generated bundle manifests, or session-injected skill roots.
+4. Apply the smallest source fix that prevents repeated active skill discovery without deleting legitimate historical archives.
+5. Add focused regression coverage for duplicate/case-normalized skill discovery or install cleanup behavior.
+6. Run focused verification, document findings, then commit and push intended changes.

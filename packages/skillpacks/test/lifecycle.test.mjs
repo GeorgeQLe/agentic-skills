@@ -13,7 +13,7 @@ import {
   writeFileSync
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
@@ -112,6 +112,25 @@ function marker(projectRoot, tool, skill) {
 
 function skillPath(projectRoot, tool, skill) {
   return join(projectRoot, `.${tool}/skills/${skill}`);
+}
+
+function installedSkillFiles(projectRoot, tool, skill) {
+  const root = skillPath(projectRoot, tool, skill);
+  const files = [];
+
+  function visit(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        visit(fullPath);
+      } else if (entry.isFile()) {
+        files.push(relative(root, fullPath));
+      }
+    }
+  }
+
+  visit(root);
+  return files.sort();
 }
 
 function writeManagedInstall(projectRoot, tool, skill, source, options = {}) {
@@ -308,6 +327,19 @@ describe('Node lifecycle commands', () => {
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_sha=[a-f0-9]{64}$/m);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
     assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+  });
+
+  it('does not copy nested skill archives into latest managed installs', async () => {
+    const dir = makeTempProject();
+
+    await runSkillpacks(dir, ['install', 'business-research']);
+
+    for (const tool of ['claude', 'codex']) {
+      const files = installedSkillFiles(dir, tool, 'customer-discovery');
+      assert.equal(files.includes('frameworks/five-rings/SKILL.md'), true);
+      assert.equal(files.some((file) => file.split('/').includes('archive')), false);
+      assert.equal(existsSync(join(skillPath(dir, tool, 'customer-discovery'), 'frameworks/five-rings/archive/v0.0/SKILL.md')), false);
+    }
   });
 
   it('installs the exact exec skill without enabling the exec-loop pack', async () => {

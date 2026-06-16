@@ -5498,3 +5498,21 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - Fix: archived `v0.4`, bumped the eight mirrored framework contracts to `v0.5`, changed their invocation text to parent-orchestrator-only routing, updated the installed Codex copies, and added layer1 assertions rejecting `competitive-analysis/frameworks/*` command strings.
 - Verification passed: focused `competitive-analysis-routing` Vitest (6/6), direct-route `rg` scan clean for active contracts, `skill-archive-audit.sh --strict`, `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`, `skill-mirror-parity-audit.sh`, `npm run skillpacks:build`, `npm run skillpacks:verify`, Skills Showcase generated-data validation, and `git diff --check`.
 - Existing unrelated customer-discovery changes and mixed generated data were left unstaged.
+
+## Active — Repeated Skill Install Context Bloat
+
+- [x] Capture `$investigate` invocation prompt history.
+- [x] Validate repeated skill directories in active installed roots and generated metadata.
+- [x] Trace root cause in package install/discovery code or local pack refresh behavior.
+- [x] Apply minimal fix and focused tests.
+- [x] Run verification and record review notes.
+- [ ] Commit and push the intended changes.
+
+### Review Notes — Repeated Skill Install Context Bloat
+
+- Strategy used: General. User claim confirmed for context bloat from repeated skill entries; the project-local installed roots contained nested framework `archive/*/SKILL.md` files that recursive Codex skill discovery could load as active skills. The specific user-home npm-installed roots did not contain `ship` archive repeats.
+- Root cause: `packages/skillpacks/src/cli/lifecycle.mjs` skipped only a top-level `archive` directory during latest managed installs, then used recursive `cpSync` for subdirectories. Nested framework skill archives such as `customer-discovery/frameworks/five-rings/archive/v0.0/SKILL.md` were copied into `.codex/skills` and `.claude/skills`.
+- Fix: replaced broad recursive copy with archive-filtered active-content copying at every directory level. Pinned installs still use archive symlinks intentionally.
+- Local cleanup: ran `node packages/skillpacks/bin/skillpacks.mjs refresh`; installed project roots now have zero `*/archive/*/SKILL.md` files.
+- Verification passed: `npm --workspace packages/skillpacks run test:node -- lifecycle.test.mjs` (81/81), `npm --workspace packages/skillpacks run build`, `npm --workspace packages/skillpacks run verify:package`, `git diff --check`, and installed-root archive count check (`0`).
+- Generated manifest note: `packages/skillpacks/dist/skillpacks-manifest.json` also refreshed pre-existing generated drift for `create-alignment-page` source version metadata during package build/check.

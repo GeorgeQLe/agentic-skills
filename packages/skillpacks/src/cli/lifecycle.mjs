@@ -352,6 +352,26 @@ function installedSkillVersion(target) {
   return '';
 }
 
+function copyActiveSkillContent(source, target) {
+  for (const entry of readdirSync(source, { withFileTypes: true })) {
+    if (entry.name === 'archive' || entry.name === SKILL_LINK_MARKER) {
+      continue;
+    }
+
+    const sourceEntry = join(source, entry.name);
+    const targetEntry = join(target, entry.name);
+    if (entry.isDirectory()) {
+      mkdirSync(targetEntry, { recursive: true });
+      copyActiveSkillContent(sourceEntry, targetEntry);
+    } else {
+      cpSync(sourceEntry, targetEntry, {
+        recursive: true,
+        dereference: false
+      });
+    }
+  }
+}
+
 function syncSkillInstall(source, target) {
   const oldVersion = installedSkillVersion(target);
   const newVersion = skillSourceVersion(source);
@@ -401,15 +421,7 @@ function syncSkillInstall(source, target) {
     ].join('\n') + '\n'
   );
 
-  for (const entry of readdirSync(source, { withFileTypes: true })) {
-    if (entry.name === 'archive') {
-      continue;
-    }
-    cpSync(join(source, entry.name), join(target, entry.name), {
-      recursive: true,
-      dereference: false
-    });
-  }
+  copyActiveSkillContent(source, target);
 
   return {
     changed: true,
