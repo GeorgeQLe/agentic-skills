@@ -7,6 +7,7 @@ PACKAGE_JSON="$PACKAGE_DIR/package.json"
 MANIFEST_JSON="$PACKAGE_DIR/dist/skillpacks-manifest.json"
 BUILD_DIR="$PACKAGE_DIR/build"
 DRY_RUN=0
+USE_CURRENT=0
 TARGET=""
 TMP_DIRS=()
 RESTORE_DIR=""
@@ -17,7 +18,9 @@ Usage:
   ./publish.sh patch
   ./publish.sh minor
   ./publish.sh 0.1.2
+  ./publish.sh --current
   ./publish.sh --dry-run patch
+  ./publish.sh --dry-run --current
 
 Publishes both npm packages from the same built artifact:
   - skillpacks
@@ -154,6 +157,10 @@ while [[ $# -gt 0 ]]; do
       DRY_RUN=1
       shift
       ;;
+    --current)
+      USE_CURRENT=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -173,24 +180,36 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$TARGET" ]]; then
+if [[ "$USE_CURRENT" == "1" && -n "$TARGET" ]]; then
+  usage >&2
+  fail "--current cannot be combined with a version target."
+fi
+
+if [[ "$USE_CURRENT" != "1" && -z "$TARGET" ]]; then
   usage >&2
   fail "Missing version target."
 fi
 
-case "$TARGET" in
-  major|minor|patch|premajor|preminor|prepatch|prerelease|[0-9]*.[0-9]*.[0-9]*)
-    ;;
-  *)
-    fail "Unsupported version target '$TARGET'. Use patch, minor, major, or an explicit x.y.z version."
-    ;;
-esac
+if [[ "$USE_CURRENT" != "1" ]]; then
+  case "$TARGET" in
+    major|minor|patch|premajor|preminor|prepatch|prerelease|[0-9]*.[0-9]*.[0-9]*)
+      ;;
+    *)
+      fail "Unsupported version target '$TARGET'. Use patch, minor, major, or an explicit x.y.z version."
+      ;;
+  esac
+fi
 
 cd "$ROOT_DIR"
 
-if [[ -n "$(git status --porcelain)" ]]; then
+if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
   git status --short
-  fail "Working tree must be clean before publishing."
+  fail "Tracked working tree changes must be committed before publishing."
+fi
+
+if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
+  git status --short --untracked-files=normal
+  printf 'WARNING: untracked files are present and will not be included unless committed.\n' >&2
 fi
 
 if [[ "$DRY_RUN" == "1" ]]; then
@@ -203,10 +222,26 @@ fi
 
 ORIGINAL_VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 
-log "Bumping packages/skillpacks to $TARGET"
-run_version_bump
+if [[ "$USE_CURRENT" == "1" ]]; then
+  VERSION="$ORIGINAL_VERSION"
+  MANIFEST_VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).package.version)" "$MANIFEST_JSON")
+  if [[ "$MANIFEST_VERSION" != "$VERSION" ]]; then
+    fail "Package version $VERSION does not match manifest version $MANIFEST_VERSION."
+  fi
 
-VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
+  log "Using current committed packages/skillpacks version $VERSION"
+  for package_name in skillpacks @glexcorp/gskp; do
+    if npm view "${package_name}@${VERSION}" version >/dev/null 2>&1; then
+      fail "${package_name}@${VERSION} is already published."
+    fi
+  done
+else
+  log "Bumping packages/skillpacks to $TARGET"
+  run_version_bump
+
+  VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
+fi
+
 log "Building and verifying skillpacks@$VERSION"
 run npm --workspace packages/skillpacks run build:manifest
 run npm --workspace packages/skillpacks run test:node

@@ -55,23 +55,56 @@ function compareVersions(a, b) {
   return 0;
 }
 
-export async function printUpdateNotice(checkPromise, currentVersion) {
+const HUMAN_COMMANDS = new Set([
+  'help',
+  'list',
+  'list-packs',
+  'status',
+  'init',
+  'install',
+  'install-deck',
+  'refresh',
+  'doctor',
+  'prune',
+  'pin',
+  'unpin',
+  'remove',
+  'alignment'
+]);
+
+export function shouldPrintPackageStatus(args = []) {
+  const [command, ...rest] = args;
+  if (!command || command === 'help' || command === '--help' || command === '-h') {
+    return true;
+  }
+  if (command === '--version' || command === '-v') {
+    return false;
+  }
+  if (command === 'list' && rest.includes('--json')) {
+    return false;
+  }
+  return HUMAN_COMMANDS.has(command);
+}
+
+export function formatPackageStatus(currentVersion, latestVersion) {
+  if (!latestVersion || !currentVersion) {
+    return `skillpacks ${currentVersion || 'unknown'} (update check unavailable)`;
+  }
+  if (compareVersions(currentVersion, latestVersion) < 0) {
+    return `skillpacks ${currentVersion} (latest ${latestVersion} available; run: npx skillpacks@latest)`;
+  }
+  return `skillpacks ${currentVersion} (latest)`;
+}
+
+export async function printPackageStatus(checkPromise, currentVersion, options = {}) {
+  if (!options.enabled) {
+    return;
+  }
+
   try {
     const latest = await checkPromise;
-    if (!latest || !currentVersion) return;
-    if (compareVersions(currentVersion, latest) >= 0) return;
-
-    const msg = `  Update available: ${currentVersion} → ${latest}`;
-    const run = '  Run: npx skillpacks@latest';
-    const width = Math.max(msg.length, run.length) + 2;
-    const pad = (s) => s + ' '.repeat(width - s.length);
-    const border = '─'.repeat(width);
-
-    process.stderr.write(
-      `\n╭${border}╮\n` +
-      `│${pad(msg)}│\n` +
-      `│${pad(run)}│\n` +
-      `╰${border}╯\n`
-    );
-  } catch {}
+    process.stderr.write(`${formatPackageStatus(currentVersion, latest)}\n`);
+  } catch {
+    process.stderr.write(`${formatPackageStatus(currentVersion, null)}\n`);
+  }
 }

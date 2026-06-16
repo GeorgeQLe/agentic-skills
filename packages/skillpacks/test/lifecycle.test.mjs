@@ -340,13 +340,76 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
 
-    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep \(pinned v0\.0\)/);
+    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep @ v0\.0 \(pinned\)/);
     assert.doesNotMatch(stdout, / -> /);
     assert.match(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
     assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), true);
     assert.match(readlinkSync(skillPath(dir, 'claude', 'quality-sweep')), /packs\/code-quality\/claude\/quality-sweep\/archive\/v0\.0$/);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'quality-sweep': 'code-quality' });
     assert.deepEqual(readProjectConfig(dir).pinned_versions, { 'quality-sweep': 'v0.0' });
+  });
+
+  it('reports stale managed installs as version updates', async () => {
+    const dir = makeTempProject();
+    writeManagedInstall(
+      dir,
+      'claude',
+      'quality-sweep',
+      join(repoRoot, 'packs/code-quality/claude/quality-sweep'),
+      { sourceVersion: 'v0.0' }
+    );
+    writeManagedInstall(
+      dir,
+      'codex',
+      'quality-sweep',
+      join(repoRoot, 'packs/code-quality/codex/quality-sweep'),
+      { sourceVersion: 'v0.0' }
+    );
+
+    const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
+
+    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.1/);
+    assert.match(stdout, /Updated \.codex\/skills\/quality-sweep v0\.0 -> v0\.1/);
+    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'quality-sweep': 'code-quality' });
+  });
+
+  it('reports pinned installs and pinned updates with explicit versions', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      pinned_versions: {
+        'quality-sweep': 'v0.0'
+      }
+    });
+
+    const fresh = await runSkillpacks(dir, ['install', 'quality-sweep']);
+    assert.match(fresh.stdout, /Installed \.claude\/skills\/quality-sweep @ v0\.0 \(pinned\)/);
+
+    const updatedDir = makeTempProject();
+    await runSkillpacks(updatedDir, ['install', 'quality-sweep']);
+    const config = readProjectConfig(updatedDir);
+    config.pinned_versions = { 'quality-sweep': 'v0.0' };
+    writeProjectConfig(updatedDir, config);
+
+    const updated = await runSkillpacks(updatedDir, ['install', 'quality-sweep']);
+    assert.match(updated.stdout, /Updated \.claude\/skills\/quality-sweep v0\.1 -> v0\.0 \(pinned\)/);
+    assert.match(updated.stdout, /Updated \.codex\/skills\/quality-sweep v0\.1 -> v0\.0 \(pinned\)/);
+  });
+
+  it('keeps already-current managed installs quiet on reinstall', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'quality-sweep']);
+
+    const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
+
+    assert.doesNotMatch(stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Installed \.codex\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Updated \.codex\/skills\/quality-sweep/);
+    assert.match(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
   });
 
   it('removes active packs without deleting unmanaged local skill directories', async () => {
@@ -423,9 +486,8 @@ describe('Node lifecycle commands', () => {
 
     const packageVersion = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).version;
     assert.equal(stdout.includes(`Refreshed project skills to skillpacks@${packageVersion}.`), true);
-    assert.match(stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.1/);
     assert.match(stdout, /Installed \.codex\/skills\/devtool-adoption/);
-    assert.doesNotMatch(stdout, / -> /);
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'devtool-adoption')), true);
     assert.notEqual(
@@ -522,7 +584,7 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['refresh']);
 
-    assert.match(stdout, /Installed \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Updated \.claude\/skills\/codebase-status v0\.0 -> v0\.10/);
     assert.match(stdout, /Installed \.codex\/skills\/pack/);
     assert.match(stdout, /Refreshed project skills to skillpacks@/);
     assert.notEqual(

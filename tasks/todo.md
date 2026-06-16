@@ -1,3 +1,31 @@
+## Current Implementation - skillpacks 0.1.4 Version-Aware Release
+
+### Current Checklist
+
+- [x] Inspect current repo state, CLI, lifecycle output, tests, package versions, and publish script.
+- [x] Implement command-gated package status output.
+- [x] Implement install/update/no-op lifecycle output.
+- [x] Add focused tests for CLI status, lifecycle output, and publish current mode.
+- [x] Bump package and manifest versions to `0.1.4`.
+- [ ] Run local verification.
+- [ ] Commit and push release changes.
+- [ ] Publish `skillpacks@0.1.4` and `@glexcorp/gskp@0.1.4`.
+- [ ] Verify published packages.
+
+### Review Notes
+
+- Starting point: `git status --short --branch` showed `master...origin/master` plus pre-existing untracked `prompts/expert-review/`, which is intentionally left untouched.
+- The Node CLI entry point is `packages/skillpacks/bin/skillpacks.mjs`; command dispatch lives in `packages/skillpacks/src/cli/run-pack-script.mjs`.
+- Existing update-check code prints only an update notice after all invocations; this release changes it to a one-line package status on human-facing commands.
+- Existing lifecycle install code always replaces managed installs and prints generic `Installed ...`; this release will classify the result using existing `.agentic-skills-managed source_version` and `skillSourceVersion()`.
+- Package and generated manifest metadata now both report `0.1.4`.
+- Verification passed before commit:
+  - `npm --workspace packages/skillpacks run test:node` (86 tests; escalated because sandbox blocked child Node/git process spawns)
+  - `npm run skillpacks:verify`
+  - `node packages/skillpacks/bin/skillpacks.mjs --version` with empty stderr
+  - `node packages/skillpacks/bin/skillpacks.mjs list --json` with empty stderr and manifest package version `0.1.4`
+  - `git diff --check`
+
 ## Current Implementation - ord-align Routing Audit Contract Fix
 
 ### Current Checklist

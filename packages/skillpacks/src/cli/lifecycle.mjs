@@ -337,9 +337,31 @@ function syncSkillLink(source, target) {
   return true;
 }
 
+function installedSkillVersion(target) {
+  if (!existsSync(target)) {
+    return '';
+  }
+
+  const stats = lstatSync(target);
+  if (stats.isSymbolicLink()) {
+    return skillSourceVersion(readlinkSync(target));
+  }
+  if (isManagedSkillDir(target)) {
+    return managedMarkerField(target, 'source_version');
+  }
+  return '';
+}
+
 function syncSkillInstall(source, target) {
+  const oldVersion = installedSkillVersion(target);
+  const newVersion = skillSourceVersion(source);
+
   if (isArchiveSource(source)) {
-    return syncSkillLink(source, target);
+    return {
+      changed: syncSkillLink(source, target),
+      oldVersion,
+      newVersion
+    };
   }
 
   if (existsSync(target)) {
@@ -347,10 +369,24 @@ function syncSkillInstall(source, target) {
     if (stats.isSymbolicLink()) {
       unlinkSync(target);
     } else if (isManagedSkillDir(target)) {
+      const currentSha = skillContentSha(source);
+      const currentSource = managedMarkerField(target, 'source');
+      const recordedSha = managedMarkerField(target, 'source_sha');
+      if (currentSource === source && oldVersion === newVersion && recordedSha === currentSha) {
+        return {
+          changed: false,
+          oldVersion,
+          newVersion
+        };
+      }
       rmSync(target, { recursive: true, force: true });
     } else {
       console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
-      return false;
+      return {
+        changed: false,
+        oldVersion,
+        newVersion
+      };
     }
   }
 
@@ -375,7 +411,11 @@ function syncSkillInstall(source, target) {
     });
   }
 
-  return true;
+  return {
+    changed: true,
+    oldVersion,
+    newVersion
+  };
 }
 
 function effectiveSourceForSkill(sourceDir, skillName, config) {
@@ -398,12 +438,24 @@ function linkSkill(projectRoot, tool, skillName, sourceDir, config) {
   mkdirSync(root, { recursive: true });
   const target = join(root, skillName);
   const effective = effectiveSourceForSkill(sourceDir, skillName, config);
+  const result = syncSkillInstall(effective.source, target);
 
-  if (syncSkillInstall(effective.source, target)) {
+  if (result.changed) {
+    const rel = `.${tool}/skills/${skillName}`;
+    const suffix = effective.usingPinned ? ' (pinned)' : '';
+    const version = result.newVersion || 'unknown';
     if (effective.usingPinned) {
-      console.log(`Installed .${tool}/skills/${skillName} (pinned ${effective.pinned})`);
+      if (result.oldVersion) {
+        console.log(`Updated ${rel} ${result.oldVersion} -> ${version}${suffix}`);
+      } else {
+        console.log(`Installed ${rel} @ ${version}${suffix}`);
+      }
     } else {
-      console.log(`Installed .${tool}/skills/${skillName}`);
+      if (result.oldVersion && result.oldVersion !== version) {
+        console.log(`Updated ${rel} ${result.oldVersion} -> ${version}`);
+      } else if (!result.oldVersion) {
+        console.log(`Installed ${rel} @ ${version}`);
+      }
     }
     return true;
   }
@@ -819,7 +871,7 @@ function relinkPinnedSkill(projectRoot, manifest, pack, skillName, version) {
       continue;
     }
 
-    if (syncSkillInstall(source, join(root, skillName))) {
+    if (syncSkillInstall(source, join(root, skillName)).changed) {
       console.log(`Pinned .${tool}/skills/${skillName} (${version})`);
     }
   }
@@ -838,7 +890,7 @@ function relinkUnpinnedSkill(projectRoot, manifest, pack, skillName) {
       continue;
     }
 
-    if (syncSkillInstall(source, join(root, skillName))) {
+    if (syncSkillInstall(source, join(root, skillName)).changed) {
       console.log(`Unpinned .${tool}/skills/${skillName} (latest)`);
     }
   }

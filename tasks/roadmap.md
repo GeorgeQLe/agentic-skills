@@ -1,3 +1,38 @@
+## Current Implementation - skillpacks 0.1.4 Version-Aware Release
+
+### Goal
+
+Publish `skillpacks@0.1.4` and `@glexcorp/gskp@0.1.4` with version-aware CLI status output, clearer install/update messages, and a publish path that preserves package/manifest metadata in the release commit.
+
+### Scope
+
+- `packages/skillpacks/bin/skillpacks.mjs`
+- `packages/skillpacks/src/cli/update-check.mjs`
+- `packages/skillpacks/src/cli/lifecycle.mjs`
+- `packages/skillpacks/test/*.test.mjs`
+- `packages/skillpacks/package.json`
+- `packages/skillpacks/dist/skillpacks-manifest.json`
+- `publish.sh`
+- Task tracking and release verification
+
+### Plan
+
+1. Inspect current CLI, lifecycle install, package metadata, tests, and publish script behavior.
+2. Add command-gated package status output to stderr while preserving clean machine-readable commands.
+3. Classify skill install results as installed, updated, or unchanged using existing managed marker versions and source skill versions.
+4. Add `publish.sh --current` with version parity and unpublished-version checks.
+5. Add focused test coverage for CLI status, lifecycle messages, and publish current dry-run behavior.
+6. Bump package and manifest metadata to `0.1.4`.
+7. Run verification, commit and push the release commit, publish both npm packages, and verify the published packages.
+
+### Acceptance Criteria
+
+- Human CLI commands print `skillpacks 0.1.4 (...)` to stderr.
+- `--version`, `-v`, and `list --json` emit no package-status noise.
+- Fresh, stale, pinned, and no-op installs use the requested output forms.
+- `./publish.sh --dry-run --current` validates the committed package/manifest version without running `npm version`.
+- Both npm packages publish at `0.1.4` from a committed and pushed tree.
+
 ## Current Implementation - ord-align Routing Audit Contract Fix
 
 ### Goal
