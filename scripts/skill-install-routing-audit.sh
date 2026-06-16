@@ -191,26 +191,75 @@ function scanFile(relPath, text, allowlistEntries) {
   const hasSourceCheckoutInstall = /scripts\/pack\.sh install(?:\s|`|<|$)/.test(scanText);
   const hasPackAvailabilityGuard = /Pack Availability Guard/.test(scanText);
   const hasMissingSkillFallback = /Missing Skill Fallback/.test(scanText);
+  const hasMissingSkillPackInstallGuidance =
+    hasMissingSkillFallback
+    && /(uninstalled pack|found in an uninstalled pack|pack-or-skill)/i.test(scanText);
   const hasNpmInstall = /npx\s+skillpacks\s+install(?:\s|`|<|$)/.test(scanText);
   const hasNpmDeckInstall = /npx\s+skillpacks\s+install-deck(?:\s|`|<|$)/.test(scanText);
   const hasInstallDeckText = /install-deck/.test(scanText);
   const hasDeckInstallHeading = /deck install/i.test(scanText);
   const hasWrongDeckRoute = /(?:npx\s+skillpacks\s+install|\/pack install|\$pack install)\s+<deck>/i.test(scanText);
+  const staleAvailabilityPatterns = [
+    {
+      pattern: /Global skills are always valid\./,
+      code: "stale-global-skill-availability",
+      message: "active skill contracts must not assume global skills are available",
+    },
+    {
+      pattern: /global\/default route/,
+      code: "stale-global-default-route",
+      message: "fallback routing must not assume a global/default route is available",
+    },
+    {
+      pattern: /base pack.*no install hint/i,
+      code: "stale-base-no-install-hint",
+      message: "base-skill recommendations must verify availability or include npx skillpacks init",
+    },
+    {
+      pattern: /installed base skills/i,
+      code: "stale-installed-base-skills",
+      message: "base source inventory must not be described as proof of installed base skills",
+    },
+  ];
+  const missingSkillFallbackWithoutBaseInit =
+    /If not found in any pack[\s\S]{0,160}?suggest\s+`?[$/]skills/.test(scanText)
+    && !/npx\s+skillpacks\s+init/.test(scanText)
+    && !/npx\s+skillpacks\s+which/.test(scanText);
 
   const hasAgentOrGenericInstall = hasSlashPackInstall || hasDollarPackInstall || hasGenericPackInstall;
   const hasPackInstallGuidance =
     hasAgentOrGenericInstall
     || hasSourceCheckoutInstall
     || hasPackAvailabilityGuard
-    || hasMissingSkillFallback;
+    || hasMissingSkillPackInstallGuidance;
   const sourceCheckoutOnly =
     hasSourceCheckoutInstall
     && !hasAgentOrGenericInstall
     && !hasPackAvailabilityGuard
-    && !hasMissingSkillFallback
+    && !hasMissingSkillPackInstallGuidance
     && !hasDeckInstallHeading
     && !hasInstallDeckText
     && !hasWrongDeckRoute;
+
+  for (const stale of staleAvailabilityPatterns) {
+    if (stale.pattern.test(scanText)) {
+      findings.push({
+        relPath,
+        line: lineNumberFor(scanText, stale.pattern),
+        code: stale.code,
+        message: stale.message,
+      });
+    }
+  }
+
+  if (missingSkillFallbackWithoutBaseInit) {
+    findings.push({
+      relPath,
+      line: lineNumberFor(scanText, /If not found in any pack[\s\S]{0,160}?suggest\s+`?[$/]skills/),
+      code: "missing-base-init-fallback",
+      message: "missing-skill fallback may suggest skills browsing only when visible; otherwise include npx skillpacks init or npx skillpacks which",
+    });
+  }
 
   if (hasAgentOrGenericInstall && !hasAllowlistedLegacyAgentRoute(relPath, text, allowlistEntries)) {
     findings.push({

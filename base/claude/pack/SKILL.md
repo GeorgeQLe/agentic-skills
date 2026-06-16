@@ -156,7 +156,7 @@ When a user invokes a skill that is not found in the current session:
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
 2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
 3. If found in an **installed pack**: the skill should already be available — suggest the same reload path to pick up the local skill roots.
-4. If **not found in any pack**: suggest `/skills` to browse available skills or `/skills search <keyword>` to search.
+4. If **not found in any pack**: if `/skills` is visible in the active session, suggest `/skills` to browse available skills or `/skills search <keyword>` to search. If `/skills` is not visible, recommend `npx skillpacks init` from the project shell to install base skills, or use `npx skillpacks which <skill-name>` for a direct package lookup.
 
 ## Constraints
 

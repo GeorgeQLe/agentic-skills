@@ -1,3 +1,35 @@
+## Current Implementation - Remove Global/Base Skill Availability Assumptions
+
+### Goal
+
+Update active skill contracts so agents recommend only commands that are currently running, verified available in the active session/project-local install state, or paired with the correct `npx skillpacks install` / `npx skillpacks init` setup guidance.
+
+### Scope
+
+- Active non-archive `SKILL.md` contracts under `base/` and `packs/`
+- Generated/provisioned active guidance in `AGENTS.md`, `CLAUDE.md`, and packaged/build artifacts if refreshed by repo tooling
+- Focused routing audits/tests for pack install guards and missing base-skill fallbacks
+- Prompt history, lessons, task review notes, verification, commit, and push
+
+### Plan
+
+1. Capture the visible `skills` invocation prompt and record this implementation plan.
+2. Audit active source skill contracts and routing tests for stale global/base availability assumptions.
+3. Replace stale Pack Availability Guard wording so only the current skill and verified installed/project-local skills are directly recommendable.
+4. Update base routing contracts in `afps-status`, `skills`, `pack`, and `provision-agentic-config`.
+5. Add a correction lesson and focused regression coverage for unavailable pack and base skill recommendations.
+6. Refresh generated package/local artifacts if required by the repository validation path.
+7. Run targeted stale-contract scans, install-routing audits, skill validation, and diff hygiene.
+8. Review the final diff, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- No active non-archive `base/` or `packs/` `SKILL.md` file contains `Global skills are always valid`, `global/default route`, `base pack — no install hint needed`, or `installed base skills` as an availability guarantee.
+- Pack-provided skills that are not verified available route through `npx skillpacks install <pack-or-skill>`.
+- Missing base skills route through `npx skillpacks init` or a direct availability lookup, not an assumed `$skills`/`/skills` route.
+- Legitimate user-home cleanup references for legacy base installs remain intact.
+- Focused tests and repository audits prove the updated routing behavior.
+
 ## Current Implementation - skillpacks 0.1.4 Version-Aware Release
 
 ### Goal

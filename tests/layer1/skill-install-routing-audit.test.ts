@@ -14,7 +14,7 @@ describe("skill install routing audit", () => {
   it("validates fixture behavior for npm-aware install guidance", () => {
     const output = runAudit(["--fixtures", "tests/fixtures/skill-install-routing"]);
 
-    expect(output).toContain("Fixture SKILL.md files scanned: 12");
+    expect(output).toContain("Fixture SKILL.md files scanned: 16");
     expect(output).toContain("Fixture findings:");
     expect(output).not.toContain("Fixture expectation failures:");
     expect(output).not.toContain("Allowlist failures:");

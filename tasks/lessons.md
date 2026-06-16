@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-16 — Base source inventory is not active skill availability
+
+- A routing plan exposed that agents were treating base skills as directly runnable because the skills exist in the package/source checkout.
+- Before recommending a base skill, verify it is visible in the active session or installed project-local; otherwise recommend `npx skillpacks init` from the project shell before the base command.
+- Pack-provided skills likewise require active-session/project-local verification or `npx skillpacks install <pack-or-skill>` guidance; do not rely on global/default skill availability assumptions.
+
 ## 2026-06-16 — Inspect the actual publish target before release approval
 
 - I initially checked the workspace package tarball, but the release script publishes `packages/skillpacks/build`, which has a different and much larger file boundary.

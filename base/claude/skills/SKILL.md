@@ -8,7 +8,7 @@ argument-hint: "[list | types | search <keyword>]"
 
 # Skills
 
-Discover and search installed base skills plus enabled project-local pack skills, grouped by workflow stage or activity type.
+Discover and search skills visible in the current project plus source-available base and pack skills, grouped by workflow stage or activity type.
 
 ## Process
 
@@ -18,7 +18,7 @@ Discover and search installed base skills plus enabled project-local pack skills
    - If `$ARGUMENTS` starts with `search ` → **search mode** (filter by keyword after `search`).
 
 2. **Discover skills:**
-   - Always scan base Claude skills in `base/claude/*/SKILL.md`.
+   - Scan base Claude source inventory in `base/claude/*/SKILL.md`; this shows available base skills, not proof that those skills are installed or visible in the active target project/session.
    - If `.agents/project.json` exists, read `enabled_packs` and scan `packs/<pack>/claude/*/SKILL.md` for each enabled pack. Also scan sub-directories like `packs/<pack>/claude/<skill>/frameworks/*/SKILL.md` for sub-skills.
    - Also scan all packs in `packs/*/claude/*/SKILL.md` (and `frameworks/*/SKILL.md` children) to discover available-but-not-installed skills.
    - If `.claude/skills/*/SKILL.md` exists in the current project, include those local skills too.
@@ -28,9 +28,9 @@ Discover and search installed base skills plus enabled project-local pack skills
 
 3. **Group skills by workflow stage** using this static mapping:
 
-   The mapping includes base skills and pack-provided skills. Only skills
+   The mapping includes base-source skills and pack-provided skills. Only skills
    discovered in step 2 should be printed, so domain and kanban entries appear
-   only when the corresponding project-local pack is enabled or linked.
+   only when the corresponding project-local pack is enabled, linked, or shown as available-but-not-installed.
    PoketoWork kanban skills are intentionally absent while the kanban packs are hibernated.
 
    | Stage | Skills (pack in parentheses; no label = base) |
@@ -81,10 +81,11 @@ Discover and search installed base skills plus enabled project-local pack skills
 
 6. **Output results:**
    - Print each non-empty group as a `## Group Name` heading.
-   - Under each heading, list installed/base primary and chained skills as `/<name> — <description>  [type]`.
+   - Under each heading, list active-session/project-local primary and chained skills as `/<name> — <description>  [type]`.
    - Show orchestrator skills with an `⚙` prefix: `⚙ /<name> — <description>  [type]`.
    - Show sub-skills indented under their parent skill (identified by the `parent:` frontmatter field or by living under a `frameworks/` directory). Format: `  ↳ /<name> — <description>  [sub-skill]`. If the parent is not in the same group, place sub-skills in a "Sub-skills" subsection at the end of the parent's group.
-   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`npx skillpacks install <skill>\` or \`npx skillpacks install <pack>\` inside Claude Code, or \`npx skillpacks install <pack-or-skill>\` from the project shell`.
+   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`npx skillpacks install <skill>\` or \`npx skillpacks install <pack>\` from the project shell`.
+   - For base-source skills that are not visible in the active session or project-local install state, list as `/<name> — <description>  [type]  ⚠ requires \`npx skillpacks init\` from the project shell`.
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** installed (M sub-skills), **P skills** available via packs` (or `**N skills** matching "<keyword>"`).
 

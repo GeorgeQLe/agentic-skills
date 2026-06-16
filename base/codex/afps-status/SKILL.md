@@ -59,7 +59,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - `ship-needed`: implementation changes are present, completed, or unpushed but validation, task review, commit, push, or deploy packaging is pending.
    - `reconcile-needed`: artifacts conflict enough that the next step should be reconciliation before new research or implementation.
 7. Choose the next route with these rules:
-   - VARD latest traction `Status: graduating`: `$idea-scope-brief` to enter the full Business AFPS pipeline, linking the vard-scan/align/ship-log entries as evidence. `idea-scope-brief` lives in the base pack — no install hint needed.
+   - VARD latest traction `Status: graduating`: `$idea-scope-brief` to enter the full Business AFPS pipeline, linking the vard-scan/align/ship-log entries as evidence. Recommend it directly only when base skills are visible in the active session or project-local install state; otherwise recommend `npx skillpacks init` from the project shell before `$idea-scope-brief`.
    - ORD latest traction `Status: graduating`: `$devtool-user-map` to enter Devtool AFPS (prefix `npx skillpacks install devtool` from the project shell if the `devtool` pack is not enabled, per the step-8 availability gate), or `$idea-scope-brief` for the rare cross-domain Business case.
    - No concept brief or unclear concept: `$idea-scope-brief`
    - Concept exists but business discovery is missing: `npx skillpacks install business-research` from the project shell.
@@ -74,7 +74,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 8. Validate command availability before recommending pack-local routes:
    - Use `scripts/pack.sh list-packs` when present to detect enabled packs.
    - If the best command lives in an uninstalled pack, recommend the package install command instead of the unavailable command: `npx skillpacks install <pack>` from the project shell.
-   - If `scripts/pack.sh` is missing or pack lookup fails, silently fall back to the global/default route and mention the degraded lookup only if it changes confidence.
+   - If `scripts/pack.sh` is missing or pack lookup fails, do not assume base or pack skills are available. Recommend only commands visible in the active session; otherwise recommend `npx skillpacks init` for missing base skills or `npx skillpacks install <pack>` for missing pack skills, and mention the degraded lookup only if it changes confidence.
 
 ## Output
 

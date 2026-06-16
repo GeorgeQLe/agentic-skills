@@ -81,7 +81,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
    - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
-   - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
+   - If not found in any pack, suggest `/skills` or `/skills search <keyword>` only when `/skills` is visible in the active session; otherwise recommend `npx skillpacks init` from the project shell to install base skills, or use `npx skillpacks which <skill-name>` for a direct package lookup.
 
    ### Prompt History
    - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
@@ -202,7 +202,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
    - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
    - If found in an installed pack, suggest the same reload path to pick up the local skill roots.
-   - If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
+   - If not found in any pack, suggest `$skills` or `$skills search <keyword>` only when `$skills` is visible in the active session; otherwise recommend `npx skillpacks init` from the project shell to install base skills, or use `npx skillpacks which <skill-name>` for a direct package lookup.
 
    ### Prompt History
    - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.

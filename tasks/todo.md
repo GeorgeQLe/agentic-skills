@@ -1,3 +1,40 @@
+## Current Implementation - Remove Global/Base Skill Availability Assumptions
+
+### Current Checklist
+
+- [x] Capture the visible `skills` invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Audit active source contracts and routing tests for stale global/base availability assumptions.
+- [x] Update active skill contracts and generated/provisioned guidance.
+- [x] Add correction lesson and focused regression coverage.
+- [x] Run targeted stale-contract scans, routing audits, validation, and diff hygiene.
+- [ ] Review final diff, commit, and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short --branch` showed `master...origin/master` with no tracked or untracked changes.
+- Skill context: `skills`, because the user provided the active skill contract and the implementation plan targets skill availability and routing guidance.
+- Initial source scan found the stale `Global skills are always valid.` sentence across active `packs/**/SKILL.md` contracts and base availability assumptions in `base/{codex,claude}/afps-status`, `base/{codex,claude}/skills`, `base/{codex,claude}/pack`, and `base/{codex,claude}/provision-agentic-config`.
+- Replaced the shared pack guard sentence across active source pack skills with a direct-availability rule: only the currently running skill and verified active/project-local skills are directly recommendable; unavailable pack skills require `npx skillpacks install <pack-or-skill>`, and unavailable base skills require `npx skillpacks init`.
+- Updated `afps-status` to gate base-skill recommendations on active-session/project-local visibility and to avoid global/default route fallback when pack lookup is degraded.
+- Updated `skills` to describe `base/` scanning as source inventory rather than installed availability, and to show `npx skillpacks init` for unavailable base-source skills.
+- Updated `pack`, `provision-agentic-config`, `AGENTS.md`, and `CLAUDE.md` so `$skills`/`/skills` browsing is suggested only when the command is visible; otherwise the route is `npx skillpacks init` or direct `npx skillpacks which <skill-name>`.
+- Added install-routing audit coverage for stale global/base availability language and missing base-init fallback, with valid and invalid fixtures for Codex and Claude forms.
+- Refreshed the package manifest/build with `npm run skillpacks:build`; generated source fingerprint is `02e3d8d058b2284006de265d6cc96a2fdfbebea90254895ec1be79643aa46cf2`.
+- Verification passed:
+  - `rg -n 'Global skills are always valid|global/default route|base pack.*no install hint|installed base skills' base packs --glob 'SKILL.md' --glob '!**/archive/**' --glob '!archive/**'` (no matches)
+  - `bash scripts/skill-install-routing-audit.sh --fixtures tests/fixtures/skill-install-routing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:verify`
+  - `npm --workspace packages/skillpacks run test:node` (87 tests)
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `git diff --check`
+
 ## Current Implementation - Tighten skillpacks NPM Package Boundary
 
 ### Current Checklist

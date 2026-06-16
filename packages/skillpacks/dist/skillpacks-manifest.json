@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.5"
   },
-  "source_fingerprint": "5ffba9550ae361ea5ee0bc08d6abfad8d7ae2c0bbc8868e99e7dc5d4fab59b3c",
+  "source_fingerprint": "bcf0a965587c74755afb22d9c00485696707f55087945238e01d453a32ad1497",
   "packs": [
     {
       "name": "agent-bridge",
@@ -804,7 +804,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "base/claude/afps-status/SKILL.md",
-      "content_sha256": "e6d75d9483cc7ed64991263fba22d99435c66f5ed8a405d4a86a78f047c3302f",
+      "content_sha256": "e7cc805b1a7d3a98299722ce90846674243b3730248ff78a6a06e1788ab4a026",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -972,7 +972,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "base/claude/pack/SKILL.md",
-      "content_sha256": "6a8f41f5b6cea2d4d1d29e3d2132db328217fada5828a1ac4eaf56f83f753c8d",
+      "content_sha256": "174be9fecc8878eaee4e2b14c277798ba18129d5281651c67197bcade8e9e83d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -996,7 +996,7 @@
       "platform": "claude",
       "version": "v0.13",
       "path": "base/claude/provision-agentic-config/SKILL.md",
-      "content_sha256": "e4eda1e97bf433b84f322f6212de6591a6cfd49ba5fc0ee7bb24afa7f37a3149",
+      "content_sha256": "93082a50c9570ee5fab005f86be45bea943720193d395bd77fe32cb3966b42ca",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1023,7 +1023,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "base/claude/skills/SKILL.md",
-      "content_sha256": "4c3634081253d6a4191f102c99d7da239182267ff4f056ce7b32164edd32c8a9",
+      "content_sha256": "c0eb9e8059431b3bcd8622fe6673ed16d26a6c5249f7d262623c39e22b2daa4f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1045,7 +1045,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "base/codex/afps-status/SKILL.md",
-      "content_sha256": "273bcf2cac86ae8305750e26320e8d52863e241d6c17542a120c618cbb9ba453",
+      "content_sha256": "c8fc6803203d9ce84cba8ddb9d3a67c118669a3b6b68efa41144649cbe702983",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1176,7 +1176,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "base/codex/pack/SKILL.md",
-      "content_sha256": "7992e2a940381da1c44a13b42ebf98ba4fd20ba044f28e8e25ff81b695cba2ff",
+      "content_sha256": "52d875709fd9312566947750a846fe9c12b4f2f7bde58579e68aa616fa71eb86",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1200,7 +1200,7 @@
       "platform": "codex",
       "version": "v0.13",
       "path": "base/codex/provision-agentic-config/SKILL.md",
-      "content_sha256": "5cf7d5510ff1748a36335d1162b43ba76ecee811205fdb78dc6a123f6af7d6c5",
+      "content_sha256": "d5e2ff65175581253d62788749badff5088cdad6930b955613fd8ecf267a8248",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1227,7 +1227,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "base/codex/skills/SKILL.md",
-      "content_sha256": "17e4fcc543d6e7f8ce981cf94e9b608f3baf4fbc419c6a188c66105ba9e57edd",
+      "content_sha256": "830b00f300f8ad3eefd04e3ab49d903296839c111b37d95bd7e39679a82a0d40",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1283,7 +1283,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/agent-work-admin/claude/roadmap/SKILL.md",
-      "content_sha256": "7a032a91751c2960bd8109cddbbbb2a27d73cca249993136d71f650fe1656da2",
+      "content_sha256": "04c67f5508fdd3e530a615c7191ba871e7dfca164ca769cf622a15bef142f244",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1309,7 +1309,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/agent-work-admin/claude/spec-drift/SKILL.md",
-      "content_sha256": "16d9cc051b049d23e2fa89ddbb51a41ddda05531f84cc7fac9d5eb02bff388b5",
+      "content_sha256": "24b302e56bc34739a9b2c07814da67f7adcba20d3d2d5247dd6a317709e938fb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1345,7 +1345,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/agent-work-admin/codex/roadmap/SKILL.md",
-      "content_sha256": "b91738e8a649542bb0e4ca96717a3c8b59a9d7e24cb00979efcb1f7551282172",
+      "content_sha256": "b5dd2dfd3d855ebce00d4abad5fe82c33748fe68bd4d2b241c0e272859b62d07",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1371,7 +1371,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/agent-work-admin/codex/spec-drift/SKILL.md",
-      "content_sha256": "da94912a67076dbdf058120fb9ba46bdafc5f7ff2b523b90ce697ddfed621da0",
+      "content_sha256": "a55afac6161abef53c029710115b604d21faf2724ec710f7a58a164b548fb8b4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1604,7 +1604,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/business-growth/claude/experiment/SKILL.md",
-      "content_sha256": "cbcc84946cf65c13a338740c8b80db0aceafe881674fa53984a6c4b218fc9260",
+      "content_sha256": "bba8dfa703622c1ec4a8663014c1489474c9c4aadb7c9dc60744d2a0df6e79cc",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1627,7 +1627,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/growth-model/SKILL.md",
-      "content_sha256": "6c388cfd5aea30866e0bd3b44b7b6901810b5f1a341ddf3daa30ba41170961f3",
+      "content_sha256": "16df9233f0e98fcacc37d4d47677cc75bbe692fa16801c7a070fe313b9007828",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1652,7 +1652,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/business-growth/claude/gtm/SKILL.md",
-      "content_sha256": "beafa4f1fb914bbe1c7918a5a06c80c6c77d28e2021ad2b0c29fa4bb218a36b8",
+      "content_sha256": "d6f20cc9a5b97b10f7be5578570861a8e92ede3ad95e07a9ddcba0ed2a4b9a33",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1680,7 +1680,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/hook-model/SKILL.md",
-      "content_sha256": "0a51300c33cd5124e381a9f059aafaf9ec59673cd3d1b06002197c64b7ea6d3e",
+      "content_sha256": "295eb17d865412a87af27a5ba2dd40222002b35b7de6cc1f75e545241e182fbb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1705,7 +1705,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/landing-copy/SKILL.md",
-      "content_sha256": "effbe99fe5e9692b1ca9decf257b93b96519a965971591e083b9d85346e7d11f",
+      "content_sha256": "94e51a10751fc126d5b7813c2570599a1a69bb074d7bfb0d2b9605ee635dc05c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1730,7 +1730,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-growth/claude/metrics/SKILL.md",
-      "content_sha256": "4a8ea60073b5bdf6a0b2658e91b1503f97b6e82c90c298a855829605e65fa938",
+      "content_sha256": "b5928a2e0a663eed7b4468c80da6782abd44247df2729051061f0edbba8826e8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1751,7 +1751,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/business-growth/claude/monetization/SKILL.md",
-      "content_sha256": "75fb3edb27eca13a0a5c9cf5b9f869875e76aab0c239c9ce5d532fd884ca165e",
+      "content_sha256": "814cd9e9480e8300658afbe8b5b14988d2e4e2a686da26fae0cc8fe4d49a5201",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1779,7 +1779,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-growth/claude/pmf-assessment/SKILL.md",
-      "content_sha256": "5f52466dbd75749a30a1a6147885c9e6ce2936606ef2c6466d8c846262b860b7",
+      "content_sha256": "85c96545d6f39848331e00ebcc082471f8a3d70ed46d86d16af0c1598585467e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1805,7 +1805,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/business-growth/codex/experiment/SKILL.md",
-      "content_sha256": "17d40f72b386ad860a4cd272ff4585ad52617ee4b420628e70926bfba3db48a2",
+      "content_sha256": "bc4eeba41c80869112e3c8fc7e9126dc8c741bb64a542f6b122c6d8f5baa9b6c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1828,7 +1828,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/growth-model/SKILL.md",
-      "content_sha256": "a108d1b3a37fbf7bd38568917079e938e69302899533b1713ddf65a23dc092e3",
+      "content_sha256": "84435efb8b8e2832f58fe32d6b1db06629a7da11ab4b89c51a122d05e4a09252",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1853,7 +1853,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/business-growth/codex/gtm/SKILL.md",
-      "content_sha256": "5657f9829193f89ea70ae0a3bd0e2ce6bae601729edbb4e5be451e924d92bab0",
+      "content_sha256": "7361ac30a64febbfa3a0efefb4580fdc4f528b4b79f485eeed9f84f10a2c2722",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1881,7 +1881,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/hook-model/SKILL.md",
-      "content_sha256": "aebb0dc07d677415d7219977028e10c90d4e3b44e057fb0bedd1882d5f133632",
+      "content_sha256": "df892f19e3cebd6f29aa50af39bca46564ef4225ba3b9842415befeb29bbea76",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1906,7 +1906,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/landing-copy/SKILL.md",
-      "content_sha256": "c3e0e2ba6da9794ee3669d32251e39b0e503f9c59a93b03af64c14dbe30c07b9",
+      "content_sha256": "1f11559cd0ab6b2d02a556cada757759d5b86f25e35769508d56b1c09dde61c0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1931,7 +1931,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-growth/codex/metrics/SKILL.md",
-      "content_sha256": "71026f8a576a50962538b3328c5ed4999e4f747aa0a3db4cd3f33a0d019ca8f8",
+      "content_sha256": "f291736cbdbd0a242e3d869fe20d6e5e91c50ce632d2567cb42b7beac7dc84fb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1952,7 +1952,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/business-growth/codex/monetization/SKILL.md",
-      "content_sha256": "09ac92fe6dac90c040bcc4dc5bef2a550395db18e3dfb2543f6d8e1e3e49b54b",
+      "content_sha256": "0463d4551b158ad85ce5abb8753a1e48b88f18fedec5a98ffe93876fd0b62d0a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1980,7 +1980,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-growth/codex/pmf-assessment/SKILL.md",
-      "content_sha256": "d40ffebaa06ad3d8349e2ddfc9330c25aabd384e6cade731710bb6ef44b39dd0",
+      "content_sha256": "05934aa557642c4fc35cb1bde08daa931ff3f82625f76142a9e89d754a6aac2a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2045,7 +2045,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/cohort-review/SKILL.md",
-      "content_sha256": "91e4a51213316d0afe9a8e69c7caf83817969e761fefa7ef753ff68c426b598d",
+      "content_sha256": "f3b6cc5c630d7278e01a0ecf35689268e288133890081872ea22dff56d1d4c7b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2065,7 +2065,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/investor-update/SKILL.md",
-      "content_sha256": "bd6e6473bd554b74f8d4efbcd17336b9fa07067257e520cf71772217c0d47865",
+      "content_sha256": "37c419a9996b5887da4a47d696defd14e6a7f6b6cf7d898adaff83e541c00e6a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2085,7 +2085,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-ops/claude/mvp-gap/SKILL.md",
-      "content_sha256": "8df9468f2849f7bb1bc82e3aa88c33626beb81fff871a153ba759547651adac7",
+      "content_sha256": "bfd48ba89d9efd418a6f27d20abaaf24db6c5b91b809b876dedeb3907e8e30d9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2111,7 +2111,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-ops/claude/platform-strategy/SKILL.md",
-      "content_sha256": "899ba5545bb62bb6bbff57aadbf806a435ef3880ba673450c0180032e3cfa261",
+      "content_sha256": "6d3ca7712227e5f62f89bbc3f0a98fd6522990e126a776cd5ca6c80d2c2f82d3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2138,7 +2138,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-ops/claude/product-line/SKILL.md",
-      "content_sha256": "bd22184c000098c62c2f498437b22c8399dbadf6b291047390aaa6e0464b7acf",
+      "content_sha256": "d558b062d38ce788c8e0c1ba960eae620c14fb6ae4190d333317268ca2978b0c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2206,7 +2206,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-ops/claude/retro/SKILL.md",
-      "content_sha256": "c468241c144070d27acde1718421d0c4f126c5587e8afc9e0c8305eee3ed9c13",
+      "content_sha256": "2c9a4e478ee7a7714bbddb4882459c5cab1b444f3ca0ff199819c8738e3f3487",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2227,7 +2227,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/risk-register/SKILL.md",
-      "content_sha256": "c28bbe6ed5a2a44a5151b6e7d1bbcfaf44b7d59d7c011128f1c0cf49e92c2108",
+      "content_sha256": "06485b0eec76cfcb1366b2d463bbf147162c87650beb0e6f3037743811afe839",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2247,7 +2247,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/runway-model/SKILL.md",
-      "content_sha256": "a7c7b470240cee38d4f61a1543e64470f811fc173bab3ea54ff84010cb85ff5b",
+      "content_sha256": "f974fad64ef735cd9acfbede3c2c808b78fc85018e3683b04fedab9d11fcdc11",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2267,7 +2267,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-ops/claude/scale-audit/SKILL.md",
-      "content_sha256": "0c6c047822de464833fb42a807724ed3dd7517a81d6d97114a2492fda5fe0efa",
+      "content_sha256": "c691749df947e75a476038f44c479feca757ae67adab37f48db379ca12a9e5e1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2327,7 +2327,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/cohort-review/SKILL.md",
-      "content_sha256": "121521da0804c926008ac8229b3dec0a4fb745bd3803819c64fc04504ee73652",
+      "content_sha256": "1df79b8d5b45fbf47ff65c7954b4b87361ce55f1765dd78d1c49de1aec329ef1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2347,7 +2347,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/investor-update/SKILL.md",
-      "content_sha256": "d5d85d8449981aaba6cc219efe003b16e06a662bfdd5a5bbb9f4bbd1d5c8d9c1",
+      "content_sha256": "89f5077f63360849b28351fb81ef14feeccb2f722c58374a7350843575f4be61",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2367,7 +2367,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-ops/codex/mvp-gap/SKILL.md",
-      "content_sha256": "f5bbde886648d9e1b53d03f81797b83f83c500f5939d26a72be6293ce26ec93b",
+      "content_sha256": "01b55d26a1c16bf5dff7538737ef545a5d1060f9b47c9b93aa95c27c4b1ddc60",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2393,7 +2393,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-ops/codex/platform-strategy/SKILL.md",
-      "content_sha256": "bcc54ae978f08c6f389b3ca5e51e4f3abb244a4803f018942f7ac8ef96f60454",
+      "content_sha256": "71e875ea5618950637ce98928501e44ace3320167e3ce1f306dfb485cb4dc60d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2420,7 +2420,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-ops/codex/product-line/SKILL.md",
-      "content_sha256": "ca73b62431b5ddd95c05d67464589a2f36e8cda47f8ebea480c144feab150195",
+      "content_sha256": "ee16527510adb60b204ba53cde4b15fdcfbb8756e2845a5f29917619ec7df4e6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2488,7 +2488,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-ops/codex/retro/SKILL.md",
-      "content_sha256": "aaa14545199b83ac8f8d8f659d3dc30992349f845495efaaba799c3e0f3a666e",
+      "content_sha256": "288232802ec073ec88344e384f714c6d3016d82eb351583da6cdedbbe73494c6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2509,7 +2509,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/risk-register/SKILL.md",
-      "content_sha256": "8aa42775b3fbb817d01086fedf41eda670c746c96df3b9fd4e0b120db022626c",
+      "content_sha256": "ec5fb4d7333bf734eee045543a3877343d20b4ea482b5cd38223bcf4cab71e36",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2529,7 +2529,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/runway-model/SKILL.md",
-      "content_sha256": "e7c5719a5f8689409796a2b685e1b3d708ef6c0c6f2f5b162371cb069d21d516",
+      "content_sha256": "4845842c67e5d29a46838785f844169c4ecd8cadaa841ac8b6f838997973ba63",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2549,7 +2549,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-ops/codex/scale-audit/SKILL.md",
-      "content_sha256": "a5221f55af56e8f0b9ef36f81d4847070407cb5f61e1e8e6c04cb4ddbf6ecda3",
+      "content_sha256": "e45189e58e49ff8f67dd095e6741e608b745d41ee4947bfd35fe24513b09df50",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2570,7 +2570,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
-      "content_sha256": "6996ce3a4be455966726c3cbe7637b7276d70e5cc4f49012b50611a0481f8fa9",
+      "content_sha256": "238f117e2452d607d25f053a3a06416da4a95529eb09a6349fcdbe5bcc8caf6d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2592,7 +2592,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
-      "content_sha256": "bf873df08e56bfc9e3e6707577b07c2bf77f0c54e856446bcf9754bbedba5710",
+      "content_sha256": "840e8ac9412d2902bd63bf4021b4234215d5b83e80a9c01ccfe2432f3fb8fb75",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2614,7 +2614,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
-      "content_sha256": "9e7fdd96691aed8693ac22e879018fbecb9b4f3b6bcf5f920ec2c03b76b03ba1",
+      "content_sha256": "3f1e4c982cc91ca2a44e4e23148e5e8ddc1e736a4e251d1996624fd767d8df97",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2636,7 +2636,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/swot/SKILL.md",
-      "content_sha256": "8d0edbbc3ea27e8ec99ffb419ac0175a60d1a3e2673eb0e56e4d81d218aea516",
+      "content_sha256": "f60ced30ddfa079d8ac6d2b919949a39b5d8c66c5dc752df8974c09f2f12684d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2658,7 +2658,7 @@
       "platform": "claude",
       "version": "v0.23",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
-      "content_sha256": "5414e3b73fd49b413957e5c1dbd28dd910f5a91fcb992d383dce3d37b7d6b996",
+      "content_sha256": "6f990590f3f6bcae7190e4fdd1fc948ba7e862059c772637250b4925d3bba942",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2697,7 +2697,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/five-rings/SKILL.md",
-      "content_sha256": "e69448c5feea3d89614c0547d4b2198895ce8e80aedbbf42d78ce9e7470ca4ec",
+      "content_sha256": "d3b285577d528d6d0477e14c2758f62b0797bcf221e60186b1b3cf86bd2d807a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2719,7 +2719,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/four-forces/SKILL.md",
-      "content_sha256": "d5d81694062ee31da41f91307ec9538f571c475bb659b241e117545c6c71ae78",
+      "content_sha256": "7cf41fcdded1c0b68c7a82b88c5fef1624be7fb613ec624fbcfc9bc9e48d8836",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2741,7 +2741,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/jtbd-needs/SKILL.md",
-      "content_sha256": "57e4d50fdbc042fa96c952fdfda7465da478071a756d883be1ae741d75b6b337",
+      "content_sha256": "ecca7d5778e6ab71b51167425c77f44a2760459ba1fd482b52821671ad77d701",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2763,7 +2763,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/pmf-engine/SKILL.md",
-      "content_sha256": "55fdae66001f7127e75f9ca717cf3c511179997494301770e7315336d774a3de",
+      "content_sha256": "fcf03c4ecd620211d151d4d0dacdb218e486394c9317d37c4650b3ca3ac1e3e9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2785,7 +2785,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/seven-dimensions/SKILL.md",
-      "content_sha256": "a57c123037fad9c9d58e740b38d749a12515b1dcf2e07a045705c87c5150cefb",
+      "content_sha256": "8dd5d176fca55fe843c621b1156bad66e353e0c66fbf3aa5ba62aeb1053d879f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2807,7 +2807,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
-      "content_sha256": "8b505ad15ff8ea7627e67cbb075a6f202784614f50cd0526cd50c8fb6d8b6cf6",
+      "content_sha256": "52f52cd9b718046acca3c9e49f05421b9e3e1cd1c7dbe7f701652edb1d04307c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2829,7 +2829,7 @@
       "platform": "claude",
       "version": "v1.11",
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
-      "content_sha256": "b4869c961ba282349cb52dd59939529926cc5466c3bbb4e06aab4251075fdf78",
+      "content_sha256": "0957abbdfeffd9d2cf8215a457e961dcd505dc472b60866cd4e64eda1569aa5c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2867,7 +2867,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/customer-feedback/SKILL.md",
-      "content_sha256": "7a49a409a017efac5686c97b17d9f4b3160bfcfb8a7a72f08465445dbb0cbee3",
+      "content_sha256": "a306fac84af7c863911be5191516a0bc194452798f013ff5dbe067fd272a594b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2892,7 +2892,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-research/claude/enterprise-icp/SKILL.md",
-      "content_sha256": "ced543a00db53dbc121d1995ca82a0b2e885c876446c05c2e8e04d75e600672e",
+      "content_sha256": "63d77b146c913930cf9110836a4e6352b3b01d37ccfc350798cd6f90615be0dd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2918,7 +2918,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-research/claude/lean-canvas/SKILL.md",
-      "content_sha256": "371bda9674f2142162242b262546361061f986cec74db853e20bf8f787b0480b",
+      "content_sha256": "187e2696356595d37ab28963d46138613c050e758209a08be4a3d0cef2fc208a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2945,7 +2945,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/category-design/SKILL.md",
-      "content_sha256": "23858cdce2b5497a796e52a0b33b1a6a153c33e70ad71f146d2195157f30caa2",
+      "content_sha256": "7baef2a4c310e20015086042622184c3434e80e6625f1dbfe1784a40fee6f96e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2970,7 +2970,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/jtbd-positioning/SKILL.md",
-      "content_sha256": "bee2b096b679dd56c2b74eb53f00b4f040b3cb5e2c3ad95e3f2f659eed2a3665",
+      "content_sha256": "c679096267118f34b55f4b38b4c42c9631c9a08618855825fbcef80c8855b98a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2995,7 +2995,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/moore-positioning/SKILL.md",
-      "content_sha256": "7169d8d75c16deba612537724938e27e36fbbcecfa9e9e24d7a1bbd3181c0283",
+      "content_sha256": "5243768cbffee56b62587ce2b7c83d614a99a4ae3cd4ac1630924d08c37dca53",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3020,7 +3020,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/obviously-awesome/SKILL.md",
-      "content_sha256": "1a2b80dc829c5438b695456ce8becde8ad91dead61c9096acf851b3403c38057",
+      "content_sha256": "5d209307caf45fff7c67fcf040b44072f9bac9fe61c8fea0f7f91d5920dbe1d4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3045,7 +3045,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/strategic-canvas/SKILL.md",
-      "content_sha256": "1b9f8afcefa8ce30e12ecb326b13c92487ed8463004260e93efca1d71b0e146d",
+      "content_sha256": "18ec5acadd0c4870dee9fe1022f83b719d4806a77435c27634181c01554a2d50",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3070,7 +3070,7 @@
       "platform": "claude",
       "version": "v0.21",
       "path": "packs/business-research/claude/positioning/SKILL.md",
-      "content_sha256": "53bfa9fcbc67ccbc3b22fb6f2f4d502a70c4af1edbd257f30e87810014582dd6",
+      "content_sha256": "1782862f6d3ac631f0809c165bfee65741eafc654566d49e77d6127e55b560a1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3107,7 +3107,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-research/claude/value-prop-canvas/SKILL.md",
-      "content_sha256": "a0b50cd4c41ca7022a7e70384899dc0c67411d23bf42568c2e4f7b65dfef6c9f",
+      "content_sha256": "ec0a308a190914ec91d9ed4aefcbb5e3a42a9a82c2a1bd704323c7b026676a31",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3134,7 +3134,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
-      "content_sha256": "d4dc5a525ea372b8df180ffec7baaf23424e16583bb0c3289030a6f446e2ec47",
+      "content_sha256": "5313524fea29276ff54da9106691fa9417a1b862b9a8d2e9c98343e588ba0948",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3156,7 +3156,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
-      "content_sha256": "1296a64414f18c279a3e256382e91b643b5eeb96cde8b25ce58396aff839ce6d",
+      "content_sha256": "033ef79b36cc45c2ae43d60c5889866ddde5e0f97c432b704e7474aaf4c2916f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3178,7 +3178,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
-      "content_sha256": "7ce408ae85708ef179108fd749fed7801cb218356a4a195f0cb5d0fca970429b",
+      "content_sha256": "cce785aa2e6fa35302a514cef4eb7034c9278a28bd36c0daf72ff1d4734a2d39",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3200,7 +3200,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/swot/SKILL.md",
-      "content_sha256": "1a3f3384268868382b2b1c599758a3f5cdca96832f76c186c3b4cb1307ee141b",
+      "content_sha256": "e410b71e0f7beb42cb6ee171fe6f2727e2bcf81a09fae0e0438578ecc85113b3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3222,7 +3222,7 @@
       "platform": "codex",
       "version": "v0.23",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
-      "content_sha256": "143a7f6235ddeed9ecf1ddd75bd643e55037a97323715d79c70b393452496783",
+      "content_sha256": "de6e289c465ed407e923ca4292243282cd6cfdbc32be4471a387e9e87b0d4fd7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3261,7 +3261,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/five-rings/SKILL.md",
-      "content_sha256": "0045a669a9c23ffc605e5e6b2706c3a118d6fa3e2632d9814934cbc5b234330e",
+      "content_sha256": "f4c5b7726ce5e523926799b8f363c1857d768f74cbfa4e8590f0285384684a3b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3283,7 +3283,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/four-forces/SKILL.md",
-      "content_sha256": "438ff0d10e010f93d11d42b4c5dbba164a3add539c34292cb0c28e1b0e761ae2",
+      "content_sha256": "b6c3e023a84c58446c99ff833c3c0519b30e99b08702586db5f8274d26956860",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3305,7 +3305,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/jtbd-needs/SKILL.md",
-      "content_sha256": "a941ca25e44edc8c05d06fb548faaa8c61e94cc18e80b6f45b8207f359dbee2c",
+      "content_sha256": "b0ea64a66a54bb2630cce87364710b78605232d99f38aa1ecaeecb5f5fbd5a6e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3327,7 +3327,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md",
-      "content_sha256": "9f105f0f73be2781315a4595d218a5a3315949e068598d07e4fa8ee16b7e3947",
+      "content_sha256": "9afae71deba4950fe4263c9d757f521d9609b9ebba4700b1862fc1f1096dfe14",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3349,7 +3349,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/seven-dimensions/SKILL.md",
-      "content_sha256": "55807a99ec600f530266590c06f4c4b8fd57d5fb21dcdc49b41fd351307f4b69",
+      "content_sha256": "1039a4a383fc97d13bd3d1c9b89031b1d508c4b84a55bc1f7d7c80b198af886d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3371,7 +3371,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
-      "content_sha256": "ec0420b17e1dd826485695a6781aab5cd56ecb7ca76da52e798bc5c6f8a4e422",
+      "content_sha256": "cda21c588918f9fdf9075e8bb0b1fb0f75fd175099226edd86741ef192e992b0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3393,7 +3393,7 @@
       "platform": "codex",
       "version": "v1.11",
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
-      "content_sha256": "5f5e75925ec31043ba297124f69f5210778d56dd0f3f0370059fa415b626c275",
+      "content_sha256": "821e562d646c6879fb174f9692b1459769f8cd568cbf9f46689a597a104ff077",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3431,7 +3431,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/customer-feedback/SKILL.md",
-      "content_sha256": "322c57f8436c8ea18cfd86e77be9ebdc481c6f156d47b8aa313ad5b76b46015c",
+      "content_sha256": "2910d235385b475aac1ff3b80cf24974196169d1f7da483df17bcabd9a00059e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3456,7 +3456,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-research/codex/enterprise-icp/SKILL.md",
-      "content_sha256": "57e156a0e01b240594454180d38cd2099b9f1b5ab058d0aed4f8b48a737f449c",
+      "content_sha256": "a6e7c11aed30928c5e166c50fcdc1e60eba79df04d4bd9d361576f85eed8c96f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3482,7 +3482,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-research/codex/lean-canvas/SKILL.md",
-      "content_sha256": "9998582371878dc6732a852e9b4858b0b267d0c908d537d251067d22322fed7f",
+      "content_sha256": "88fe00919875566958c16307eeedd6f3f10b57761b5010245f5881cb58dedba2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3509,7 +3509,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/category-design/SKILL.md",
-      "content_sha256": "f3aac069b9e8caea29d35317b9e0ffea40225c6d658a00b4ef958c700113bf3c",
+      "content_sha256": "438bf344d7d69fc6fe8dca5c825e77842f8db000f4d5339ce6748bf9dd0f8665",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3534,7 +3534,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/jtbd-positioning/SKILL.md",
-      "content_sha256": "1f8b691aee83db81d3d6afb7928b08c521506b97cbb281df4d2bfb0037e6a5da",
+      "content_sha256": "2d5dabc522b7a013a2e829bc2def4befb58d4f0305a4c3b61025d6d3afaaf6ad",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3559,7 +3559,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/moore-positioning/SKILL.md",
-      "content_sha256": "a34d149491d06ec2dda6d05cef119253e944e134c846e7cdd99e1191f5ca223d",
+      "content_sha256": "9ea467200da14f5af4f8e1c238169608541c15402baa7c3b22833be54993f17a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3584,7 +3584,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/obviously-awesome/SKILL.md",
-      "content_sha256": "9a73474c520d3e0fe8b9ca6d78683460d31b0e8b25aba17072616b52a1f90a38",
+      "content_sha256": "6a789d9e8d16a36e977d20988901a24d445a9d955f07c4ae625bc61c782126c9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3609,7 +3609,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/strategic-canvas/SKILL.md",
-      "content_sha256": "d30947d57655de742c1dc47b3850c7d90e44816c3f6ba1d8748fb96d2a0991f3",
+      "content_sha256": "573a7958f766b1dec741d88702a9837a1a7acacd8ffe7fa479d33858550ee932",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3634,7 +3634,7 @@
       "platform": "codex",
       "version": "v0.21",
       "path": "packs/business-research/codex/positioning/SKILL.md",
-      "content_sha256": "c8583edd4a38710c5cb432d3a82104e86496e791889bdebb4b310f23d2a16da3",
+      "content_sha256": "b2deb0b8bf3e7228b01c4e519aef6a53522d39b72dbda37ea75c760967ebba9e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3671,7 +3671,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-research/codex/value-prop-canvas/SKILL.md",
-      "content_sha256": "32e974ef187d6531ac86e7d39b5c119a5255f9a0da343bee0fc8cca0213e8191",
+      "content_sha256": "deebdf695d88a8b71b29f39a0543a877a9e9ace8933d8e68b497c722d1b376c1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4085,7 +4085,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-evidence-schema/SKILL.md",
-      "content_sha256": "c175df55e06bd3d155c1b67ddc888084a9ca55cd57b48e05adfc134414e86d35",
+      "content_sha256": "de186a7bdb39f1551371323f703cd326e495ca95ddcb87be142ed62731ab8524",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4106,7 +4106,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-metrics-review/SKILL.md",
-      "content_sha256": "fdc7ce6f9703a1b33aec9ba77c908f4531c2dbddf89d2a42c261fe830cc75be3",
+      "content_sha256": "d726740da5934bd676fda153f50bf38da0baf9062fc4786544bbde38eddfe426",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4127,7 +4127,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md",
-      "content_sha256": "e6076aea5083c48db945447e337cb15449dd0a4a7dc295b31fc38651a3669ded",
+      "content_sha256": "389e442bcd9898ffb061df375e8cc08690717ff879384bdd2db4b32aee03e462",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4148,7 +4148,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-positioning/SKILL.md",
-      "content_sha256": "a0c46888d76986b36a76c84cd1dfb92d98b22ae02504144dc77a5556f66ec8dd",
+      "content_sha256": "7958fab6e30d05409dc1f7f09d9444326222ced40b08b484b8e0e280dd476b95",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4257,7 +4257,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-evidence-schema/SKILL.md",
-      "content_sha256": "5aec5eebe73feb7ec646db0374eb784c78b6c050f95dd7acd8103a79bd9f5ca1",
+      "content_sha256": "a1aa84b2de1a5762bc088f641e035205784107532b04841a441e9eafeeee93c0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4278,7 +4278,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-metrics-review/SKILL.md",
-      "content_sha256": "23dd8ec37cb45de45e8a0f069ae0e700081cc74eeb2d73d0a91e46b5586afba6",
+      "content_sha256": "b4eec26727d2524cdde6693144166bba5e5aaae7cc8f09b0d09564be975165c8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4299,7 +4299,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md",
-      "content_sha256": "d23e3135dfc240bfb0d1afbb953b0c444e5f5a1e1408a62314676413478daf30",
+      "content_sha256": "6b44346cd0d34b65928b931e6812cf8133819e56067742db2eafcee863b28b19",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4320,7 +4320,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-positioning/SKILL.md",
-      "content_sha256": "148f5f56481a441b719a1e5d74250a04097f7aca262b068bfa8a2bbb81a71291",
+      "content_sha256": "c4770a8f79e0005886c16711b133964c5eab7f68942d82bf52bc9a052e8ae71c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4452,7 +4452,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/customer-journey-canvas/SKILL.md",
-      "content_sha256": "220e61e67840b2264c8ff43fd2a62f9274e068252c2efa8a64bc3c6401d97120",
+      "content_sha256": "28216972978adfbcd6ebb4218034faa0886fe6b60fe7bf75946787816975ec88",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4474,7 +4474,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/experience-map/SKILL.md",
-      "content_sha256": "af240438d382892ec52c9531ffd778bf8f2291ba8ff252afac271e6758e3c2c3",
+      "content_sha256": "7940b142bd6ff89bdc3ab10c52fe5bea8a7403bef7085607f91abe045a70b871",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4496,7 +4496,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/jtbd-timeline/SKILL.md",
-      "content_sha256": "40cfb9a150162c2fbe4075c0f34af23d2261e66f11b2e586ad596f41eb9814f0",
+      "content_sha256": "05287a9fbd57e838353cd2d60c10a7ba69f2e5e9546d4aaf0e7fabbff23cc752",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4518,7 +4518,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/service-blueprint/SKILL.md",
-      "content_sha256": "f150a6c546de831238d83651db9dd8c70974e3e76c7feaaf519c3993774bf3fe",
+      "content_sha256": "f18ebeeccfbca045421cea74c31daa12f840322c58a2f596f708bfa41f94b8e3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4540,7 +4540,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/user-story-map/SKILL.md",
-      "content_sha256": "35a5109020f05028918e57dc80a07724c9680527f42fdd201ce85b7db0830409",
+      "content_sha256": "b89f981b128a5c5c0767950fa493594bdb7b32dfe9a682272f18883109e9e449",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4562,7 +4562,7 @@
       "platform": "claude",
       "version": "v0.20",
       "path": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
-      "content_sha256": "2d9db5ac2e9a3285b2b66089ffad47436c3142fd22e7b5a1423f697098658e19",
+      "content_sha256": "db1cbd1f85627ee41a8c201f9d492bf721b579864208440edb39594f41fbde35",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4724,7 +4724,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/customer-journey-canvas/SKILL.md",
-      "content_sha256": "19b78bf2b73e1fd9962886aa2f2338230c1bdca0ebd239d361ebbf547247d0ad",
+      "content_sha256": "10502099c0159df1d48f26fb9c5ebe5cd2243b443d1b0271e8619314b1f6cae3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4746,7 +4746,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/experience-map/SKILL.md",
-      "content_sha256": "a8038466b8ac1439f072d723457c686c604cef3ce998aedb1dcbfaf67fc860aa",
+      "content_sha256": "e6cd3cf2895e48cedaf54337956f78a2ef89737e74a6bcdeaab72057cca280f6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4768,7 +4768,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/jtbd-timeline/SKILL.md",
-      "content_sha256": "46a3c0f9ac0ef01ca7b8021223d625beaa6373f881bec99b78fd2eb892e54b15",
+      "content_sha256": "6ba15964404f4792bf984319557fe4ca902ab5654661b2731aec199fd6cc8601",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4790,7 +4790,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/service-blueprint/SKILL.md",
-      "content_sha256": "1bfefbd961e3ef360482d791e3ede3a3b36f3c67852b3704ec3be4e27c3ae8d4",
+      "content_sha256": "9447eb02e7f506b82d1a91d0b8d9dca1c853cf8e7b48ceb761b8624503b1b28b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4812,7 +4812,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/user-story-map/SKILL.md",
-      "content_sha256": "5a5449923d387f0589b20306823090e63e938c1a872fa4c44cdaa6c211a5397e",
+      "content_sha256": "ff3d37c434fefe6d515f2cc3ee93585a91a1f588df4b4986eee97d8d0da92d6e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4834,7 +4834,7 @@
       "platform": "codex",
       "version": "v0.20",
       "path": "packs/customer-lifecycle/codex/journey-map/SKILL.md",
-      "content_sha256": "8eb03520fdcd21eda64446a8cca60a139ca170a22b00151f090b80ccdb67faa1",
+      "content_sha256": "5b2e6a87447e99d00d4e189ccdd3ba8a6819c752ac6cfa8d0689317b83f5ff02",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6008,7 +6008,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/guided-walkthrough/claude/uat-guide/SKILL.md",
-      "content_sha256": "cbb9e8b7acb8bd6bc96aa420022cdacb903f339faf8804782268dc914c126bec",
+      "content_sha256": "446ceac705fbf7f109634cc58533cdf8e631ffd168fabe2c5833fc2355bff887",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6042,7 +6042,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/guided-walkthrough/codex/uat-guide/SKILL.md",
-      "content_sha256": "f57f52856e574e34cd50d95fdb2167c13743c423312305f72cad2990283098c7",
+      "content_sha256": "f616c801ef0e93379ae868cdde5fc7d4602d8d2c65195c87d1934e1a76dc709e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6516,7 +6516,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/product-design/claude/feature-interview/SKILL.md",
-      "content_sha256": "d9b742f4d9cd64d3a75d786f1569457de05045baebb31b975250625b503c8d63",
+      "content_sha256": "3f88e6319328446d82e31fdb3da7b13303dc99f3a56453d3b0a390c5eb60f963",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6567,7 +6567,7 @@
       "platform": "claude",
       "version": "v0.14",
       "path": "packs/product-design/claude/spec-interview/SKILL.md",
-      "content_sha256": "7b703332c999f05c3a98282cd67041fa8c8217f67e12aff48bb28dc130944d8e",
+      "content_sha256": "f4c962478cd5698911a4d7921b44155a4e90e402a2fee9b3bf2df380e20aafaf",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6632,7 +6632,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
-      "content_sha256": "c6648f6ad5c5c0578be69a25e25ea3c22c40a1ee388264fff1b5e26c81c3671c",
+      "content_sha256": "fd9550b8de30ec217c5039a6b9ab3819046564878edbb2440616d8522e4f9847",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6765,7 +6765,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/product-design/codex/feature-interview/SKILL.md",
-      "content_sha256": "e86a3e7510f5a747a5aa0d6d9b5353a558d6497f0f7b9112c3898fd0f4fbd18a",
+      "content_sha256": "80c8bd7b5a018a7baca2f0bfaa7f766c3945bdab872e1ec84a89f1c3d1602133",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6816,7 +6816,7 @@
       "platform": "codex",
       "version": "v0.14",
       "path": "packs/product-design/codex/spec-interview/SKILL.md",
-      "content_sha256": "bb137738605c34ddafead54e78fb50179af1a144d53bb776004a42bc6ad616d0",
+      "content_sha256": "3db9bc1c30d2505123485b431ee981ee4a9c66e286578edfde5c4b02f9782a5f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6881,7 +6881,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
-      "content_sha256": "4f93a168ad3736e65f2f0dd33d168d4e46ffc1b5907b1faff23e6bccd65ab10f",
+      "content_sha256": "8e52a257d24e291c1bd2c4d494922fe40d7fdf03b5950eafa202128e0c819ebd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6939,7 +6939,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/product-testing/claude/dogfood/SKILL.md",
-      "content_sha256": "6b02f003cd131887ebf0e20a92b6504d672456c372ab14113018e946355d7e19",
+      "content_sha256": "dd502606c579a725295a10618e3213f09536b2e2ee5d0f8545fb2f1d9ed9fc01",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6957,7 +6957,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/product-testing/claude/uat/SKILL.md",
-      "content_sha256": "0f185b4255e6e6bcd7571efcac8db7befbfcd88f905b0172a48d6be78da25017",
+      "content_sha256": "779a0bb219cdda2c736c75ffb3a3f5dab1f06fd90554e64b4aee4745304b8e07",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6983,7 +6983,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/product-testing/codex/dogfood/SKILL.md",
-      "content_sha256": "8f777454a5b1157dd1798cc6ea789df4baf88938a7a7539019ad487db91fe980",
+      "content_sha256": "d7e7ed747d90b258726a5f97a81fd778e592bad25681d04ce25e6af11152086b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7001,7 +7001,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/product-testing/codex/uat/SKILL.md",
-      "content_sha256": "16adb92acabc262cdf63f5cd1c4fb45d10177e84865ab7c7fa544ed8dc62bd3f",
+      "content_sha256": "cd0642ea198a99143389e821fb88b1033bfd03965801e940251196f10004f1ed",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7207,7 +7207,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/remotion/claude/video-build/SKILL.md",
-      "content_sha256": "45c7e99ed9dc6bcbea3998a8e850840088617be40489c3434e18ede617ad2052",
+      "content_sha256": "cb6656c5bff5744043cc858270114f9986602ec47c36b87106efdf9b94128485",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7223,7 +7223,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/remotion/claude/video-script/SKILL.md",
-      "content_sha256": "f007fedd751c45c828f321583795e75a98de9a811fa2b4baab5da6dc7bb670e4",
+      "content_sha256": "7f6bec377a86fba681832cdc09455c57079670ab8e0e8796030d5f638b54e149",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7239,7 +7239,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/remotion/claude/youtube-format-research/SKILL.md",
-      "content_sha256": "321c9a8524eccb6b602580c08f65a593be03d4a338013214378c94ace582f3dc",
+      "content_sha256": "8a7c0da27cefda79f5b0881b150a15e84d59a8a393e155c2c685e8c426cbf8b0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7259,7 +7259,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/remotion/codex/video-build/SKILL.md",
-      "content_sha256": "5a90593e0baea0623d8818a863abe7fd3d68cf590c67df1aa5318e47e011a95b",
+      "content_sha256": "4cb5dcbd64d0cebca2c61d4edf8471cfdda63f7f4abcbabf3931a36214312df7",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7275,7 +7275,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/remotion/codex/video-script/SKILL.md",
-      "content_sha256": "5bde66b7c1b7e2f003d96c8d2e919dcecc5922e09e276271fc8f06f5ef5ce828",
+      "content_sha256": "69a72f56d01d92e294ff1408e02e3d78be489a2f16ef3f7b08d05b96d8933b32",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7291,7 +7291,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/remotion/codex/youtube-format-research/SKILL.md",
-      "content_sha256": "9cb51a3333ba7bc5122c66544c365cafb53706c0b3462d98c15abef64e986520",
+      "content_sha256": "08027d2f771fed7590b033aebb1c2a933ffb36eba2c37413526141f66f2527e7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7405,7 +7405,7 @@
       "platform": "claude",
       "version": "v0.18",
       "path": "packs/research-admin/claude/research-roadmap/SKILL.md",
-      "content_sha256": "ab9f6f53f53610ca25d114574b533125eb2b7d657bf985d384d37cf512c72fab",
+      "content_sha256": "452432a02061904bdf76dd9f0777e01afb6b016369547b9d498a1c3849174583",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7437,7 +7437,7 @@
       "platform": "codex",
       "version": "v0.18",
       "path": "packs/research-admin/codex/research-roadmap/SKILL.md",
-      "content_sha256": "77431631d81c3675af0756a19eb1be9165e0b2eb2e00585403e9ec603abf4004",
+      "content_sha256": "b52dee7518192beddd3eb7013db73b684470f9312e52381d5192d759b71926f6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7945,7 +7945,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-cadence-diagnosis/SKILL.md",
-      "content_sha256": "6f47e4dc6500f33bc529da25b6206b6889fe674e18398488e0255058c1b971ae",
+      "content_sha256": "5b7fd199c9a8d5a74b8e9f8e5d5fdcb9015d98ce64d928fef47e0fc94ad1bc82",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7965,7 +7965,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-channel-audit/SKILL.md",
-      "content_sha256": "a42b9d2052b3c3c3e6389706875e1bdb9b4c35dc1322fb73d5f60261f1b15bd7",
+      "content_sha256": "379f7dc2ec175e3a1d0196d035c6751bb71776790884b1312ebcb14b7841a5d1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7985,7 +7985,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-competitive-research/SKILL.md",
-      "content_sha256": "91ed9b75c256b91ef3306445d9b838c3bc84c3ae59864d6cf45a709ebc06c8dc",
+      "content_sha256": "c5d16c6d8bada80827d2eb671d9da1fac9ada397623a42a6de8a31a6d5196fab",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8005,7 +8005,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-concept-research/SKILL.md",
-      "content_sha256": "d796568d03523af2c5ebe5e4051749353c17e40565e517a00bb35d4df617dd7c",
+      "content_sha256": "c56e39ce3b6ab33c5a9c63f9f97f73af18a674c25b3b496bac881f09d13acfd2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8025,7 +8025,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/youtube-ops/claude/youtube-derivative-cuts/SKILL.md",
-      "content_sha256": "f469d72010a62c56483d16ae3bb31351e0a1de59032226a886e99a7882ee508e",
+      "content_sha256": "19e3357882d68b5c199d0093c09af83aad8fb6b4c99c0a876310051f52514719",
       "archive_versions": [],
       "command": "/youtube-derivative-cuts",
       "deck_memberships": []
@@ -8038,7 +8038,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-description-optimizer/SKILL.md",
-      "content_sha256": "a869d5012e3afc9da0ca794f9098877ad2036ac80da4c280d773699c3fd03310",
+      "content_sha256": "80e8dfb1fd1f9c4db462d09866c505bc8e47c7eb6e9412660197fe88bde97ede",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8058,7 +8058,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-peer-benchmark/SKILL.md",
-      "content_sha256": "997bb85a6501880dfc2841660fe78ab9ea5c46621f2a71f6fba7f3899819a355",
+      "content_sha256": "9fbef3b7c843035e99417e55e0f7b09fbf3d549470b9505d6f4fcdc21bef8a8a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8078,7 +8078,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-portfolio/SKILL.md",
-      "content_sha256": "01eef431261948cb800104b8ab4121f6b45faa0e60985f4174836659fd8d6022",
+      "content_sha256": "20d4ff5cc90e71873774369acab78d08e4778cf037164be20f91fea484d04bea",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8098,7 +8098,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-search-positioning/SKILL.md",
-      "content_sha256": "184a5fa3fda188bf8afe4b7365edc4a167309f50268a38945b1914ac77dd452e",
+      "content_sha256": "135e9bd6021f18c5bbc5ca0b21b7ce644da56c3e9c3a1491990592201277a4c5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8118,7 +8118,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-title-thumbnail-audit/SKILL.md",
-      "content_sha256": "260ec2107ada45bd80da4adebb310b968cd87441484c6ca39f3bc6f6f2ff64d0",
+      "content_sha256": "62c2fdbfeb08da1a5bce96e2de9a60e33e8fe836c80169982ad6c79bbe756e9e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8138,7 +8138,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-vid-research/SKILL.md",
-      "content_sha256": "faf9624de38568a42983bc3d2cf4997948579bc76456314a098b9265a1255de7",
+      "content_sha256": "952d8c3c7a58efff3b1a6322b610446200dd3d39a4c292acb9c06273a5929506",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8158,7 +8158,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-video-audit/SKILL.md",
-      "content_sha256": "b256f76030b9f75f580b6eed6265afec58c97763c2a4dbfd82e8e1c348fa02bf",
+      "content_sha256": "f6cc63bcfa70b647516e6e8d0010b68144e4662fe1247fba919fc703ec0d27c5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8178,7 +8178,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
-      "content_sha256": "f24ea301a12e9d52b2feb422e9764d0578ed299ae9f411f599c9e07740d7f58d",
+      "content_sha256": "1d6a31925b1efc353bdb7fcff4586beec44a2940cbcb58ed516994e69c22ec37",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8195,7 +8195,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
-      "content_sha256": "89c357c3bd1163725ec22ec35efacd9e18e774708a43cc01bf9a1262b4f60712",
+      "content_sha256": "a1d6b4e348278a30eb1bbff69239b357db89bacffa7b4d127db3b1afb4da84cc",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8232,7 +8232,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-cadence-diagnosis/SKILL.md",
-      "content_sha256": "051a353ed817d4a0d37aa4b88251a269ece44ca762ccdfb08a06e97326b7e74b",
+      "content_sha256": "85c66547463202e41db55e7c0c12d1a8931dbf48de65fb1893dc3d3436a34797",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8252,7 +8252,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-channel-audit/SKILL.md",
-      "content_sha256": "4aeeff89cf03f8930738dfb5af3821b006bd7f4aebe050c657355b74e8c3ee2f",
+      "content_sha256": "7be20f08e82b49b8749352beda11ba5063ca60f48ef2ab86cd14243320905c88",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8272,7 +8272,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-competitive-research/SKILL.md",
-      "content_sha256": "f7f312d224bbc5682c9182f7e9b127f37a171fcf5941f921f5fc8b10b12e1ab4",
+      "content_sha256": "bd9516657e76ea36c349fe2bb1d3e7a15e72875a072c48f098b43e3912690bfe",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8292,7 +8292,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-concept-research/SKILL.md",
-      "content_sha256": "64d7e629081317e87907912fd4a78ed08024a475ac31e071ebab67165ea52633",
+      "content_sha256": "5108598bb656877f01ae88f91e337e23d7b5822f0ac617f84695d74c8b0eba81",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8312,7 +8312,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/youtube-ops/codex/youtube-derivative-cuts/SKILL.md",
-      "content_sha256": "17e4457f94864aa1b1f842d41f915903b4637de631f48a1bca361dd55a010bbb",
+      "content_sha256": "28cfa35f7bffe126420e0da3c6b78238c3a3b9243c71a4259b656c1c77cb2330",
       "archive_versions": [],
       "command": "$youtube-derivative-cuts",
       "deck_memberships": []
@@ -8325,7 +8325,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-description-optimizer/SKILL.md",
-      "content_sha256": "5ab95eb3bd981d9a641e0c15af60dce9ad9e2bf4c8255a6874af8c78c73158bc",
+      "content_sha256": "9b3a4271f745324e58c6408c8f3aafc5b3d9967f79d0677c539697657d22f171",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8345,7 +8345,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-peer-benchmark/SKILL.md",
-      "content_sha256": "ddada4aac22a7f6c36344900481fae707fec95a33e53056e318437a55cf24200",
+      "content_sha256": "d17f1a47fcdff2c6f91b1c046f1bcd6a98f7afc21aa99b44ed7032af2f23c15e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8365,7 +8365,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-portfolio/SKILL.md",
-      "content_sha256": "8b9d99a612000a1b060cbb64c5db43957292be159f05c0ad7eee3b1869ed896b",
+      "content_sha256": "f2dc2ed1661935cf9d2be988706f0070925c90bc662edc1bca393fa9262654d2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8385,7 +8385,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-search-positioning/SKILL.md",
-      "content_sha256": "549ec02ac63045e0a9f00587ee9b253e20cb0c0038bff3c1823f24bb0639244d",
+      "content_sha256": "86afb0897c90730bf719bd2e91840c01e978a38cce500026d553ea8cf9b77fb2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8405,7 +8405,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md",
-      "content_sha256": "cb6d5418ab91038a2099861a7b398d89bad62405dede1f2e60536ab0b0f315a1",
+      "content_sha256": "d555c752d4b31f0d9dda2e0e1bda2cc2c91e80b92d16306ab43574fcfafec1a7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8425,7 +8425,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-vid-research/SKILL.md",
-      "content_sha256": "772529383c2925069acfe6029ec6d8d4fdd9d3372b7fedf2e3c9b8b287970f37",
+      "content_sha256": "c6ae854898f3aae82af0978a0c46a783a28ace345a0b872161af436e278d9c6c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8445,7 +8445,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-video-audit/SKILL.md",
-      "content_sha256": "2da6d857792945b797de1227f1c220097d815bec6d8bcb9cece5ee761f11d156",
+      "content_sha256": "fcd99b6f09b50a66d0f900b6df54ac23357e2848a0e83ecc87e053ac4f4781db",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8465,7 +8465,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
-      "content_sha256": "a6ca2a945e8a033db559838c9f777b04fd9047b3f800fc44a9aeb291e41becf2",
+      "content_sha256": "a75592f585800c0f623631c8883e0af1fd586a7ddbdc8426fadb0b62cab9ffbd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8482,7 +8482,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
-      "content_sha256": "a6fcb5067b85e916175adf6aeac7531340e3382db8cb907f0c8ba1cd2064ccae",
+      "content_sha256": "5a7dea56d211c6a1c9c9e9d9dac61e74f0e5c21df3911c513845aee6dceac98a",
       "archive_versions": [
         "v0.0",
         "v0.1",
