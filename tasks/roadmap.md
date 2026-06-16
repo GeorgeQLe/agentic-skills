@@ -3249,6 +3249,14 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Audit each research skill for generated `ALIGNMENT-PAGE.md` presence, `SKILL.md` alignment-page handoff, staged research workflow language where applicable, category/tier/index/feedback/confirmation/TTS requirements, and drift from the canonical convention.
 5. Run the available convention validation scripts/tests and report confirmed compliance, violations, and prevention checks.
 
+## Current Investigation — skillpacks 0.1.4 Release Need
+
+1. Capture the `$investigate` invocation and preserve the prompt history artifact.
+2. Confirm the npm `skillpacks@0.1.3` publish commit, local package version, and current `HEAD`.
+3. Diff package-included content from the 0.1.3 publish baseline to current `HEAD`, with emphasis on skill and manifest changes.
+4. Classify the delta as package-visible, CLI-visible, docs-only, or repo-only.
+5. Recommend whether to reconcile metadata only or bump/publish `skillpacks@0.1.4`, with verification evidence.
+
 ## Current Plan — skillpacks alignment commands
 
 1. Inspect the package-owned CLI dispatcher, package staging boundary, alignment scripts, and existing package tests before changing behavior.

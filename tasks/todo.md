@@ -5354,6 +5354,23 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Run available alignment-page validation scripts/tests.
 - [x] Record review notes and findings.
 
+## Active — skillpacks 0.1.4 Release Need Investigation
+
+- [x] Capture `$investigate` invocation prompt history.
+- [x] Confirm npm `skillpacks@0.1.3` publish baseline and local metadata state.
+- [x] Diff package-included files from publish baseline to current `HEAD`.
+- [x] Classify whether the delta justifies a new patch release.
+- [x] Record recommendation and verification evidence.
+
+### Review Notes — skillpacks 0.1.4 Release Need Investigation
+
+- npm `skillpacks@0.1.3` was published on 2026-06-15 with `gitHead` `dbcb320489ddf0eadf948ae7bcee531b54ac1db7`, but the published tarball contains package contents beyond that exact commit. The correct release comparison is therefore published tarball contents versus current staged package contents, not only `gitHead..HEAD`.
+- Current `HEAD` is 21 commits after the npm `gitHead`; the package-included commit delta touches 515 files with 25,308 insertions and 2,955 deletions across `base/`, `packs/`, package code, scripts, docs, README, AGENTS, CLAUDE, and generated manifest files.
+- Compared against the actual `skillpacks@0.1.3` tarball, the current staged package has 393 active non-archive skills versus 391 in the tarball: it adds `base/claude/create-alignment-page/SKILL.md` and `base/codex/create-alignment-page/SKILL.md`, removes no active skills, and changes 54 existing active skill contracts.
+- Package support files changed relative to the tarball include `src/cli/run-pack-script.mjs`, `scripts/audit-alignment-pages.mjs`, `scripts/upgrade-alignment-page.mjs`, `docs/alignment-page-convention.md`, `docs/QUICKSTART.md`, `docs/skillpacks-npm-distribution.md`, `README.md`, `package.json`, and `dist/skillpacks-manifest.json`. The current package file list also adds `scripts/open-html-page.mjs` and `scripts/serve-alignment.mjs`, which were absent from `0.1.3`.
+- Recommendation: bump and publish `skillpacks@0.1.4`, not just reconcile metadata. Prerequisite: update package metadata and manifest from local `0.1.2` directly to `0.1.4`, because npm already owns `0.1.3`.
+- Verification: `npm view skillpacks@0.1.3` confirmed registry version, publish time, and gitHead; `npm pack skillpacks@0.1.3` downloaded the published tarball for direct comparison; `npm --workspace packages/skillpacks run build:check` passed with package staging at 383 manifest skills, 41 packs, and source fingerprint `4240adac5fd258f4f19abcecea755420e54556d460c1ead83d1d13b908163147`.
+
 ## Active — skillpacks alignment commands
 
 - [x] Inspect the package CLI, package staging boundary, alignment scripts, and package tests.
