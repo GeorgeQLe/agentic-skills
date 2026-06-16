@@ -27,6 +27,33 @@ Create a review-state alignment page that gives a decision-ready roadmap for ful
 - Page defines current dependencies, sunset target options, readiness blockers, phased roadmap, and explicit approval gates.
 - Page recommends a conservative hold until remaining shell-backed surfaces and package verification are resolved.
 - `alignment/index.html` links the new page with a document badge and date.
+
+## Current Documentation Reconciliation - Recent Task Evidence
+
+### Goal
+
+Reconcile task documentation after recent shipped documentation and routing work so `tasks/todo.md`, `tasks/history.md`, and `tasks/reconciliation-report.md` agree with git evidence.
+
+### Scope
+
+- `tasks/todo.md`
+- `tasks/history.md`
+- `tasks/reconciliation-report.md`
+- Prompt history for this `$reconcile-dev-docs fix tasks` invocation
+
+### Plan
+
+1. Capture the visible `$reconcile-dev-docs fix tasks` invocation.
+2. Read the local `reconcile-dev-docs` skill from the uninstalled `docs-health` pack.
+3. Compare recent task sections against `git log --oneline -50`.
+4. Apply only unambiguous task-doc fixes: missing history entries, stale completed checklist state, and the reconciliation report.
+5. Verify the task-doc diff and commit/push the intended tracked changes.
+
+### Acceptance Criteria
+
+- Missing history coverage for shipped recent work is appended to `tasks/history.md`.
+- Completed todo checklist state matches recent git evidence where unambiguous.
+- Remaining broader cleanup decisions are recorded in `tasks/reconciliation-report.md`.
 - Verification results are recorded in `tasks/todo.md`.
 
 ## Current Investigation - Layer1 Routing Audit Failure Provenance

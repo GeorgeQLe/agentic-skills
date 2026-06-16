@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-06-15 - Framework handoff alias routing coverage
+
+- Completed the Framework Handoff Routing Alias Parity work and shipped it in commit `5adea8c2 Fix framework handoff alias routing coverage`.
+- Synced active top-level installed framework aliases with their nested installed framework copies, covering 30 aliases across Codex and Claude roots.
+- Expanded `tests/layer1/framework-handoff-routing.test.ts` so active top-level installed aliases with framework-loop `parent:` frontmatter participate in the same routing-contract coverage as nested framework subskills.
+- Archived and bumped mirrored `customer-discovery` parent contracts to `v1.10` after direct scans found one remaining source/package placeholder route, replacing concrete `customer-discovery/frameworks/...` wording with generic path-shaped child framework wording.
+- Validation recorded in `tasks/todo.md`: focused framework handoff layer1 tests, direct active-route scan, installed alias parity scan, archive/version/mirror/routing audits, package build/verify, Skills Showcase data validation, and `git diff --check`.
+
+## 2026-06-15 - Alignment convention fallback documentation
+
+- Clarified create-alignment-page fallback and npm guidance in commit `152f1d42 docs: clarify alignment convention fallbacks`.
+- Archived mirrored `create-alignment-page` `v0.0` contracts, bumped active mirrored contracts to `v0.1`, and added changelog entries.
+- Replaced target-repo fallback wording that recommended `npx skillpacks alignment bundles --check` with installed sibling `ALIGNMENT-PAGE.md` discovery and a missing-convention stop condition.
+- Updated public docs to distinguish consumer-safe `alignment pages ...` commands from source/package-maintenance `alignment bundles` and `alignment verify` commands, plus repeat/offline `npx skillpacks` guidance.
+- Validation recorded in `tasks/todo.md`: static active-skill scans, docs/version scans, archive existence checks, archive/version/mirror audits, package node tests, focused layer1 routing/alignment tests, `git diff --check`, and bare-target sanity checks.
+
 ## 2026-06-15 - Layer1 skill alignment routing audit
 
 - Fixed `scripts/skill-alignment-routing-audit.mjs` false positives by making direct `$exec`/`/exec` handoff detection ignore explicitly prohibitive sentences and by replacing the exact alignment stop-contract sentence check with semantic approval-gate requirements.

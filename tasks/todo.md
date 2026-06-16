@@ -25,6 +25,28 @@
 - TTS injection was not run because the audit confirmed the new page already has the required include.
 - Optional browser open was not run; the requested verification plan marked it optional and the page passed file-based validation.
 
+## Current Documentation Reconciliation - Recent Task Evidence
+
+### Current Checklist
+
+- [x] Capture the visible `$reconcile-dev-docs fix tasks` invocation.
+- [x] Locate and read the project-local `reconcile-dev-docs` skill from the uninstalled `docs-health` pack.
+- [x] Inspect task docs, recent history, and recent git evidence.
+- [x] Apply unambiguous task-doc reconciliation fixes.
+- [x] Verify the final task-doc diff.
+- [x] Commit and push the intended tracked changes.
+
+### Review Notes
+
+- Skill lookup: `./scripts/pack.sh which reconcile-dev-docs` reports the skill is provided by the uninstalled `docs-health` pack; used the local source at `packs/docs-health/codex/reconcile-dev-docs/SKILL.md`.
+- Prompt history captured at `prompts/reconcile-dev-docs/skill-prompt-20260615-214620-fix-tasks.md`.
+- Evidence source: `git log --oneline -50`, task docs, auxiliary queues, and existing reconciliation report.
+- Unambiguous fixes found:
+  - `tasks/history.md` lacked entries for `152f1d42 docs: clarify alignment convention fallbacks` and `5adea8c2 Fix framework handoff alias routing coverage`.
+  - `tasks/todo.md` still had the final Framework Handoff Routing Alias Parity ship checkbox unchecked even though commit `5adea8c2` is present on `master`.
+- Verification passed: `git diff --check`; targeted `rg` scan confirmed the new commit references, report entry, and prompt-history artifact.
+- Deferred cleanup: `tasks/roadmap.md` and `tasks/todo.md` still contain many old "Current ..." sections used as historical work notes. Collapsing or migrating them is a larger editorial cleanup, so this pass records it rather than rewriting broad task history.
+
 ## Current Implementation - Layer1 Skill Alignment Routing Audit
 
 ### Current Checklist
@@ -124,7 +146,7 @@
 - [x] Expand layer1 routing coverage to include top-level installed aliases.
 - [x] Run focused routing tests and direct active-route scans.
 - [x] Run package/skill verification and diff hygiene checks.
-- [ ] Review final diff, commit, and push.
+- [x] Review final diff, commit, and push.
 
 ### Review Notes
 

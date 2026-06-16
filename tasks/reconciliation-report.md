@@ -1,5 +1,45 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-15 - `$reconcile-dev-docs fix tasks`
+
+### Errors (2)
+
+- **tasks/history.md** - Recent shipped task work lacked matching history entries. Evidence: `git log --oneline -50` includes `152f1d42 docs: clarify alignment convention fallbacks` and `5adea8c2 Fix framework handoff alias routing coverage`, while targeted scans found those topics only in roadmap/todo, not `tasks/history.md`.
+- **tasks/todo.md** - Framework Handoff Routing Alias Parity had all verification notes present but the final "Review final diff, commit, and push" checklist item remained unchecked. Evidence: `git log --oneline -50` includes `5adea8c2 Fix framework handoff alias routing coverage`.
+
+### Warnings (2)
+
+- **tasks/roadmap.md** - Many old "Current ..." sections remain stacked as historical work notes, so the first visible section is not the current active task. This was previously deferred as a cleanup decision on 2026-05-15.
+- **tasks/todo.md** - Many old "Current ..." sections remain in the active todo surface. Several older unchecked commit/push lines appear to be historical dirty-boundary notes, not current executable work; broad migration needs a separate editorial cleanup pass.
+
+### Info (3)
+
+- **reconcile-dev-docs skill install state** - `./scripts/pack.sh which reconcile-dev-docs` reports the skill is provided by the uninstalled `docs-health` pack. This run used the local source skill at `packs/docs-health/codex/reconcile-dev-docs/SKILL.md`.
+- **tasks/manual-todo.md** - Manual tasks remain deferred Phase 38 production launch items, matching the prior reconciliation report.
+- **tasks/recurring-todo.md** - Recurring docs/spec-drift obligations remain advisory surfaces unless promoted into `tasks/todo.md`.
+
+### Fixed
+
+- [x] `tasks/history.md` - Appended factual history entries for alignment convention fallback documentation and framework handoff alias routing coverage.
+- [x] `tasks/todo.md` - Checked the Framework Handoff Routing Alias Parity final ship checkbox based on commit evidence.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` - Recorded the current reconciliation plan and review notes for this run.
+
+### Deferred
+
+- [ ] `tasks/roadmap.md` - Decide whether to collapse old "Current ..." sections into a historical archive or convert them to dated completed work records.
+- [ ] `tasks/todo.md` - Decide whether to migrate old completed/current sections into `tasks/history.md` or phase archives, preserving evidence without keeping them in the active todo surface.
+- [ ] `tasks/phases/` - Older completed phases still lack full archive coverage, a backfill decision carried from prior reconciliation reports.
+
+### Summary
+
+- Roadmap/todo alignment: issues remain in presentation, but the current unambiguous shipped-work contradiction was fixed.
+- History coverage: fixed for the two recent missing shipped-work entries found in this pass.
+- Phase archives: known historical backfill warning remains.
+- Spec freshness: not evaluated; scope was `tasks`.
+- Recommended next action: commit and push this reconciliation boundary, then run a separate editorial cleanup if the stacked "Current ..." task sections should be collapsed.
+
+---
+
 ## 2026-05-15 - `/reconcile-dev-docs fix tasks`
 
 ### Errors (1)
