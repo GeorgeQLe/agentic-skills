@@ -1,3 +1,27 @@
+## Current Investigation - Layer1 Routing Audit Failure Provenance
+
+### Current Checklist
+
+- [x] Record the investigation plan in task tracking.
+- [x] Capture the visible invocation prompt.
+- [x] Inspect current diff and test/audit command wiring.
+- [x] Run the focused current-tree audit proof.
+- [x] Reproduce from an unmodified `HEAD` checkout/export.
+- [x] Compare scope and record the verdict.
+
+### Review Notes
+
+- Claim under review: `layer1/skill-alignment-routing-audit.test.ts` still fails with the same 44 findings on an unmodified `HEAD` export, so the failure is pre-existing and unrelated to the doc-only change.
+- Strategy used: General, because this is a test failure/provenance claim rather than UI or data behavior.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260615-200110-layer1-routing-audit.md`.
+- Current-tree audit wiring: `tests/layer1/skill-alignment-routing-audit.test.ts` shells out to `node scripts/skill-alignment-routing-audit.mjs --report` and expects `Alignment-routing findings: 0`.
+- Current-tree direct proof: `node scripts/skill-alignment-routing-audit.mjs --report` exited 1 with `Active SKILL.md files scanned: 393` and `Alignment-routing findings: 44`.
+- Focused Vitest proof: `pnpm --dir tests exec vitest run --project layer1 layer1/skill-alignment-routing-audit.test.ts` exited 1; only `keeps active skill contracts free of direct exec handoffs before approval` failed because the report command exited nonzero.
+- Isolated `HEAD` export proof: `git archive HEAD -o /tmp/agentic-skills-head-export-20260615-200110.tar`, unpacked to `/tmp/agentic-skills-head-export-20260615-200110`, then ran the same report command. It exited 1 with the same `393` scanned files and `44` findings.
+- Programmatic comparison result: current-tree and isolated `HEAD` export report stdout were byte-identical, with `findingLines: 44` in both.
+- Scope check: `git status --short -- base packs scripts tests` returned no changes. Current uncommitted changes are only this investigation's task notes and prompt-history file, outside the audit scan roots.
+- Verdict: confirmed. The `layer1/skill-alignment-routing-audit.test.ts` failure is pre-existing on unmodified `HEAD` and unrelated to the current doc-only/task-note changes.
+
 ## Current Implementation - Alignment Fallback And npx Caveat Docs
 
 ### Current Checklist

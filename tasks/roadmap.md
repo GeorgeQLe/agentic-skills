@@ -1,3 +1,32 @@
+## Current Investigation - Layer1 Routing Audit Failure Provenance
+
+### Goal
+
+Validate whether `layer1/skill-alignment-routing-audit.test.ts` still failing with 44 findings is pre-existing on unmodified `HEAD` and unrelated to the current doc-only change.
+
+### Scope
+
+- Current working-tree diff and touched files
+- `tests/layer1/skill-alignment-routing-audit.test.ts`
+- `scripts/skill-alignment-routing-audit.mjs`
+- Isolated unmodified `HEAD` export/worktree reproduction
+- Task notes and prompt history for this investigation
+
+### Plan
+
+1. Capture the visible `$investigate` invocation and record this investigation plan.
+2. Inspect current diff and test/audit command wiring.
+3. Run the focused layer1 audit test or direct report command in the current tree and capture the exact finding count.
+4. Reproduce the same command from an isolated unmodified `HEAD` checkout/export.
+5. Compare results and touched-file scope, then record the verdict and verification evidence.
+
+### Acceptance Criteria
+
+- The exact failing command, exit code, and finding count are captured from current tree output.
+- The same finding count is reproduced from an unmodified `HEAD` checkout/export.
+- The current diff is confirmed as doc-only or otherwise scoped away from the failing audit inputs.
+- Any remaining uncertainty is stated plainly rather than treated as proven.
+
 ## Current Implementation - Alignment Fallback And npx Caveat Docs
 
 ### Goal
