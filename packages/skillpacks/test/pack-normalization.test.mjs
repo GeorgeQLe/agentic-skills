@@ -131,6 +131,13 @@ describe('pack command argument resolution', () => {
     assert.deepEqual(baseSkill.skills, ['idea-scope-brief']);
   });
 
+  it('does not resolve nested framework skills as exact install targets', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['pmf-engine'], { manifest }),
+      /Unknown pack or skill 'pmf-engine'\./
+    );
+  });
+
   it('resolves exact active pack names without alias expansion', () => {
     const resolved = resolvePackCommandArgs('install', ['exec-loop'], { manifest });
 

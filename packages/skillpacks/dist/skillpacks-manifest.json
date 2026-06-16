@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.5"
   },
-  "source_fingerprint": "bcf0a965587c74755afb22d9c00485696707f55087945238e01d453a32ad1497",
+  "source_fingerprint": "91bae5bbc4a503abd7ba5aacfd44a78655a26cdb42bc150b9492a6d3d2c76fba",
   "packs": [
     {
       "name": "agent-bridge",
@@ -165,30 +165,15 @@
         "codex"
       ],
       "skills": [
-        "category-design",
         "competitive-analysis",
         "customer-discovery",
         "customer-feedback",
         "enterprise-icp",
-        "feature-pricing-matrix",
-        "five-rings",
-        "four-forces",
-        "jtbd-needs",
-        "jtbd-positioning",
         "lean-canvas",
-        "moore-positioning",
-        "obviously-awesome",
-        "pmf-engine",
-        "porter-five-forces",
         "positioning",
-        "seven-dimensions",
-        "strategic-canvas",
-        "strategic-group-map",
-        "swot",
-        "value-prop-canvas",
-        "w3-hypothesis"
+        "value-prop-canvas"
       ],
-      "skill_count": 22
+      "skill_count": 7
     },
     {
       "name": "code-debug",
@@ -325,19 +310,14 @@
       ],
       "skills": [
         "conversion-map",
-        "customer-journey-canvas",
         "expansion-map",
-        "experience-map",
         "journey-map",
-        "jtbd-timeline",
         "lifecycle-metrics",
         "onboarding-map",
         "retention-map",
-        "service-blueprint",
-        "transaction-map",
-        "user-story-map"
+        "transaction-map"
       ],
-      "skill_count": 12
+      "skill_count": 7
     },
     {
       "name": "devtool",
@@ -804,6 +784,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "base/claude/afps-status/SKILL.md",
+      "installable": true,
       "content_sha256": "e7cc805b1a7d3a98299722ce90846674243b3730248ff78a6a06e1788ab4a026",
       "archive_versions": [
         "v0.0",
@@ -825,6 +806,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "base/claude/animation-design-planner/SKILL.md",
+      "installable": true,
       "content_sha256": "bebb309f8fbb80450254ea1b8235d380576ab965d6de196c3587f9bf2f5d868a",
       "archive_versions": [
         "v0.0"
@@ -840,6 +822,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "base/claude/autoresearch-prep/SKILL.md",
+      "installable": true,
       "content_sha256": "55ef3ed438050b363f16b63af202474e23d6f3ea2b08f8751867d3d82231b130",
       "archive_versions": [],
       "command": "/autoresearch-prep",
@@ -853,6 +836,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "base/claude/autoresearch/SKILL.md",
+      "installable": true,
       "content_sha256": "8a877a7276a37759aad91885a62a2e98fdd4e44b68e034084ffc39c3bf1808e5",
       "archive_versions": [],
       "command": "/autoresearch",
@@ -866,6 +850,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "base/claude/codebase-status/SKILL.md",
+      "installable": true,
       "content_sha256": "c2ae34f970e25e47d3200a0eaa7c807c78faeae16b13c572cf639cd77c991422",
       "archive_versions": [
         "v0.0",
@@ -890,6 +875,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "base/claude/create-alignment-page/SKILL.md",
+      "installable": true,
       "content_sha256": "6c2b1fdf45bfea13ae57dce0a1753bab4c9e6e609656f84a84cab6f992622191",
       "archive_versions": [
         "v0.0"
@@ -905,6 +891,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "base/claude/fork-idea-branch/SKILL.md",
+      "installable": true,
       "content_sha256": "0ebcb931de77330d260454bcc414c5075543b27bb88e3ecec93883bdfeec27c0",
       "archive_versions": [],
       "command": "/fork-idea-branch",
@@ -918,6 +905,7 @@
       "platform": "claude",
       "version": "v0.16",
       "path": "base/claude/idea-scope-brief/SKILL.md",
+      "installable": true,
       "content_sha256": "5bfa5847e1e601cf752b0bfd6fb0c01ee993a1c6281670e049505eaed3537a3d",
       "archive_versions": [
         "v0.0",
@@ -948,6 +936,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "base/claude/init-agentic-skills/SKILL.md",
+      "installable": true,
       "content_sha256": "108aa44e29dcb92ae0709fd94caf260dc8211c02993a687651c763a3d71b8fce",
       "archive_versions": [
         "v0.0",
@@ -972,6 +961,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "base/claude/pack/SKILL.md",
+      "installable": true,
       "content_sha256": "174be9fecc8878eaee4e2b14c277798ba18129d5281651c67197bcade8e9e83d",
       "archive_versions": [
         "v0.0",
@@ -996,6 +986,7 @@
       "platform": "claude",
       "version": "v0.13",
       "path": "base/claude/provision-agentic-config/SKILL.md",
+      "installable": true,
       "content_sha256": "93082a50c9570ee5fab005f86be45bea943720193d395bd77fe32cb3966b42ca",
       "archive_versions": [
         "v0.0",
@@ -1023,6 +1014,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "base/claude/skills/SKILL.md",
+      "installable": true,
       "content_sha256": "c0eb9e8059431b3bcd8622fe6673ed16d26a6c5249f7d262623c39e22b2daa4f",
       "archive_versions": [
         "v0.0",
@@ -1045,6 +1037,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "base/codex/afps-status/SKILL.md",
+      "installable": true,
       "content_sha256": "c8fc6803203d9ce84cba8ddb9d3a67c118669a3b6b68efa41144649cbe702983",
       "archive_versions": [
         "v0.0",
@@ -1066,6 +1059,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "base/codex/animation-design-planner/SKILL.md",
+      "installable": true,
       "content_sha256": "3865a04702c5f8d68bf2f4cbb43115846cbb4508a91908bf003ede31d5c29f06",
       "archive_versions": [
         "v0.0"
@@ -1081,6 +1075,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "base/codex/codebase-status/SKILL.md",
+      "installable": true,
       "content_sha256": "0e50f3f5fdd9dadea3bc890378e702e6497d885c33456f8b7ce3fbb7049940e9",
       "archive_versions": [
         "v0.0",
@@ -1105,6 +1100,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "base/codex/create-alignment-page/SKILL.md",
+      "installable": true,
       "content_sha256": "a3b8733f742a430bdbc8a15d613a61c364d69a6b90139ec6d8f50937e6e5587c",
       "archive_versions": [
         "v0.0"
@@ -1120,6 +1116,7 @@
       "platform": "codex",
       "version": "v0.17",
       "path": "base/codex/idea-scope-brief/SKILL.md",
+      "installable": true,
       "content_sha256": "15eb69c0f2adb5ce2b59580afa317529b1e59457fab89a45c6668e3869eb1f56",
       "archive_versions": [
         "v0.0",
@@ -1151,6 +1148,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "base/codex/init-agentic-skills/SKILL.md",
+      "installable": true,
       "content_sha256": "d3b40a7f2be6216026b8bebfc3c88188d503d85886e7db58b3b8897ebdddc4c3",
       "archive_versions": [
         "v0.0",
@@ -1176,6 +1174,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "base/codex/pack/SKILL.md",
+      "installable": true,
       "content_sha256": "52d875709fd9312566947750a846fe9c12b4f2f7bde58579e68aa616fa71eb86",
       "archive_versions": [
         "v0.0",
@@ -1200,6 +1199,7 @@
       "platform": "codex",
       "version": "v0.13",
       "path": "base/codex/provision-agentic-config/SKILL.md",
+      "installable": true,
       "content_sha256": "d5e2ff65175581253d62788749badff5088cdad6930b955613fd8ecf267a8248",
       "archive_versions": [
         "v0.0",
@@ -1227,6 +1227,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "base/codex/skills/SKILL.md",
+      "installable": true,
       "content_sha256": "830b00f300f8ad3eefd04e3ab49d903296839c111b37d95bd7e39679a82a0d40",
       "archive_versions": [
         "v0.0",
@@ -1249,6 +1250,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/agent-bridge/claude/delegate/SKILL.md",
+      "installable": true,
       "content_sha256": "c4e8b3561ddd569d297bb18959066f1cc47956a7597511fd3a42cca3f629c543",
       "archive_versions": [
         "v0.0"
@@ -1264,6 +1266,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+      "installable": true,
       "content_sha256": "ff2fe083f846374eb48969fcd11d4e007b7f542574bda714d4ba8cb6a92a95cd",
       "archive_versions": [
         "v0.0",
@@ -1283,6 +1286,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/agent-work-admin/claude/roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "04c67f5508fdd3e530a615c7191ba871e7dfca164ca769cf622a15bef142f244",
       "archive_versions": [
         "v0.0",
@@ -1309,6 +1313,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/agent-work-admin/claude/spec-drift/SKILL.md",
+      "installable": true,
       "content_sha256": "24b302e56bc34739a9b2c07814da67f7adcba20d3d2d5247dd6a317709e938fb",
       "archive_versions": [
         "v0.0",
@@ -1326,6 +1331,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/agent-work-admin/codex/plan-phase/SKILL.md",
+      "installable": true,
       "content_sha256": "a6f5da57cbacc9e00bdf2e3b32dcc0e815b0b8daa77ef593919fedf674e03a9b",
       "archive_versions": [
         "v0.0",
@@ -1345,6 +1351,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/agent-work-admin/codex/roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "b5dd2dfd3d855ebce00d4abad5fe82c33748fe68bd4d2b241c0e272859b62d07",
       "archive_versions": [
         "v0.0",
@@ -1371,6 +1378,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/agent-work-admin/codex/spec-drift/SKILL.md",
+      "installable": true,
       "content_sha256": "a55afac6161abef53c029710115b604d21faf2724ec710f7a58a164b548fb8b4",
       "archive_versions": [
         "v0.0",
@@ -1388,6 +1396,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md",
+      "installable": true,
       "content_sha256": "f92515661bb9282d7436af2913d9fa48ab0af94681b6de49910b436bf59e8bc8",
       "archive_versions": [
         "v0.0",
@@ -1404,6 +1413,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "0f117fbe36081802c36256be1fbecae11f0fb0fb6cc62aa6d32e6e92c2f7335a",
       "archive_versions": [
         "v0.0",
@@ -1420,6 +1430,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md",
+      "installable": true,
       "content_sha256": "a3f067bcac2e0dd3dde9679f504f4cc36185f7cb9934197d0dd8197e0c0c606e",
       "archive_versions": [
         "v0.0",
@@ -1436,6 +1447,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "4c0d9d25abda2e6c4dfd05b3fe0f01163dbf1355d7d7f256a45a3b46a614cfcd",
       "archive_versions": [
         "v0.0",
@@ -1452,6 +1464,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/alignment-loop/claude/destination-doc/SKILL.md",
+      "installable": true,
       "content_sha256": "3f6e3e245b7ae210e73e842f056db847150fe08458b843ec8f77aedadec2220c",
       "archive_versions": [],
       "command": "/destination-doc",
@@ -1465,6 +1478,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/alignment-loop/claude/taste-calibration/SKILL.md",
+      "installable": true,
       "content_sha256": "26ca07a684fdf9e72b26371e74b145a1f3625ec3b83802bfabe5a6b7e45f3b5d",
       "archive_versions": [],
       "command": "/taste-calibration",
@@ -1478,6 +1492,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/alignment-loop/claude/vertical-slice-splitter/SKILL.md",
+      "installable": true,
       "content_sha256": "9a7532628f0088ca53be364bbdf181c2e3edca3c2b8bd8fc00fa47b2ea2b493c",
       "archive_versions": [
         "v0.0",
@@ -1494,6 +1509,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/alignment-loop/codex/destination-doc/SKILL.md",
+      "installable": true,
       "content_sha256": "435809b6507c2890e3f3bcd11761ac1d5049eb7859ffcdd178be373cb94efc8c",
       "archive_versions": [],
       "command": "$destination-doc",
@@ -1507,6 +1523,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/alignment-loop/codex/taste-calibration/SKILL.md",
+      "installable": true,
       "content_sha256": "85a0ab08393e102a508bdac9f22d47fb1dd5444be07b26e1b6b50d483a9b1248",
       "archive_versions": [],
       "command": "$taste-calibration",
@@ -1520,6 +1537,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/alignment-loop/codex/vertical-slice-splitter/SKILL.md",
+      "installable": true,
       "content_sha256": "6dbf097283dfa4ecf1434c648eb7a316fbcd535be6aa07567d9983f2facfcb26",
       "archive_versions": [
         "v0.0",
@@ -1536,6 +1554,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/alignment-page-admin/claude/compile-central-alignment/SKILL.md",
+      "installable": true,
       "content_sha256": "97974f87725f8e98dacf462d69ecb0f182038b7d15890aa186b4f85c037fde5d",
       "archive_versions": [
         "v0.0",
@@ -1553,6 +1572,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/alignment-page-admin/claude/upgrade-alignment-pages/SKILL.md",
+      "installable": true,
       "content_sha256": "50a9e0ae32f29ec3c49503f472f0e08b684d9b1b9e96c7732474ab137014bc3b",
       "archive_versions": [
         "v0.0",
@@ -1570,6 +1590,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/alignment-page-admin/codex/compile-central-alignment/SKILL.md",
+      "installable": true,
       "content_sha256": "13287fb6b60380b42db5943a7b6c5fdea04b559d0bf24585b151a5092b6264c0",
       "archive_versions": [
         "v0.0",
@@ -1587,6 +1608,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/alignment-page-admin/codex/upgrade-alignment-pages/SKILL.md",
+      "installable": true,
       "content_sha256": "8957e17f7ffbd6e036ca33df340e177a92f0140e380bdbe6a1d1912b87ebdf23",
       "archive_versions": [
         "v0.0",
@@ -1604,6 +1626,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/business-growth/claude/experiment/SKILL.md",
+      "installable": true,
       "content_sha256": "bba8dfa703622c1ec4a8663014c1489474c9c4aadb7c9dc60744d2a0df6e79cc",
       "archive_versions": [
         "v0.0",
@@ -1627,6 +1650,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/growth-model/SKILL.md",
+      "installable": true,
       "content_sha256": "16df9233f0e98fcacc37d4d47677cc75bbe692fa16801c7a070fe313b9007828",
       "archive_versions": [
         "v0.0",
@@ -1652,6 +1676,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/business-growth/claude/gtm/SKILL.md",
+      "installable": true,
       "content_sha256": "d6f20cc9a5b97b10f7be5578570861a8e92ede3ad95e07a9ddcba0ed2a4b9a33",
       "archive_versions": [
         "v0.0",
@@ -1680,6 +1705,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/hook-model/SKILL.md",
+      "installable": true,
       "content_sha256": "295eb17d865412a87af27a5ba2dd40222002b35b7de6cc1f75e545241e182fbb",
       "archive_versions": [
         "v0.0",
@@ -1705,6 +1731,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-growth/claude/landing-copy/SKILL.md",
+      "installable": true,
       "content_sha256": "94e51a10751fc126d5b7813c2570599a1a69bb074d7bfb0d2b9605ee635dc05c",
       "archive_versions": [
         "v0.0",
@@ -1730,6 +1757,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-growth/claude/metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "b5928a2e0a663eed7b4468c80da6782abd44247df2729051061f0edbba8826e8",
       "archive_versions": [
         "v0.0",
@@ -1751,6 +1779,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/business-growth/claude/monetization/SKILL.md",
+      "installable": true,
       "content_sha256": "814cd9e9480e8300658afbe8b5b14988d2e4e2a686da26fae0cc8fe4d49a5201",
       "archive_versions": [
         "v0.0",
@@ -1779,6 +1808,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-growth/claude/pmf-assessment/SKILL.md",
+      "installable": true,
       "content_sha256": "85c96545d6f39848331e00ebcc082471f8a3d70ed46d86d16af0c1598585467e",
       "archive_versions": [
         "v0.0",
@@ -1805,6 +1835,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/business-growth/codex/experiment/SKILL.md",
+      "installable": true,
       "content_sha256": "bc4eeba41c80869112e3c8fc7e9126dc8c741bb64a542f6b122c6d8f5baa9b6c",
       "archive_versions": [
         "v0.0",
@@ -1828,6 +1859,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/growth-model/SKILL.md",
+      "installable": true,
       "content_sha256": "84435efb8b8e2832f58fe32d6b1db06629a7da11ab4b89c51a122d05e4a09252",
       "archive_versions": [
         "v0.0",
@@ -1853,6 +1885,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/business-growth/codex/gtm/SKILL.md",
+      "installable": true,
       "content_sha256": "7361ac30a64febbfa3a0efefb4580fdc4f528b4b79f485eeed9f84f10a2c2722",
       "archive_versions": [
         "v0.0",
@@ -1881,6 +1914,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/hook-model/SKILL.md",
+      "installable": true,
       "content_sha256": "df892f19e3cebd6f29aa50af39bca46564ef4225ba3b9842415befeb29bbea76",
       "archive_versions": [
         "v0.0",
@@ -1906,6 +1940,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-growth/codex/landing-copy/SKILL.md",
+      "installable": true,
       "content_sha256": "1f11559cd0ab6b2d02a556cada757759d5b86f25e35769508d56b1c09dde61c0",
       "archive_versions": [
         "v0.0",
@@ -1931,6 +1966,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-growth/codex/metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "f291736cbdbd0a242e3d869fe20d6e5e91c50ce632d2567cb42b7beac7dc84fb",
       "archive_versions": [
         "v0.0",
@@ -1952,6 +1988,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/business-growth/codex/monetization/SKILL.md",
+      "installable": true,
       "content_sha256": "0463d4551b158ad85ce5abb8753a1e48b88f18fedec5a98ffe93876fd0b62d0a",
       "archive_versions": [
         "v0.0",
@@ -1980,6 +2017,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-growth/codex/pmf-assessment/SKILL.md",
+      "installable": true,
       "content_sha256": "05934aa557642c4fc35cb1bde08daa931ff3f82625f76142a9e89d754a6aac2a",
       "archive_versions": [
         "v0.0",
@@ -2006,6 +2044,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/business-ops/claude/assumption-tracker/SKILL.md",
+      "installable": true,
       "content_sha256": "bbeee60b541d605bf524b981f6b5d75f7c727dea82f9e5835b1c28936b72e745",
       "archive_versions": [
         "v0.0",
@@ -2024,6 +2063,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-ops/claude/burn-rate/SKILL.md",
+      "installable": true,
       "content_sha256": "e7d605c7de38622c50d5f584793c3a236d8e75302e29071f8c712cb0f225623c",
       "archive_versions": [
         "v0.0",
@@ -2045,6 +2085,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/cohort-review/SKILL.md",
+      "installable": true,
       "content_sha256": "f3b6cc5c630d7278e01a0ecf35689268e288133890081872ea22dff56d1d4c7b",
       "archive_versions": [
         "v0.0",
@@ -2065,6 +2106,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/investor-update/SKILL.md",
+      "installable": true,
       "content_sha256": "37c419a9996b5887da4a47d696defd14e6a7f6b6cf7d898adaff83e541c00e6a",
       "archive_versions": [
         "v0.0",
@@ -2085,6 +2127,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-ops/claude/mvp-gap/SKILL.md",
+      "installable": true,
       "content_sha256": "bfd48ba89d9efd418a6f27d20abaaf24db6c5b91b809b876dedeb3907e8e30d9",
       "archive_versions": [
         "v0.0",
@@ -2111,6 +2154,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-ops/claude/platform-strategy/SKILL.md",
+      "installable": true,
       "content_sha256": "6d3ca7712227e5f62f89bbc3f0a98fd6522990e126a776cd5ca6c80d2c2f82d3",
       "archive_versions": [
         "v0.0",
@@ -2138,6 +2182,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-ops/claude/product-line/SKILL.md",
+      "installable": true,
       "content_sha256": "d558b062d38ce788c8e0c1ba960eae620c14fb6ae4190d333317268ca2978b0c",
       "archive_versions": [
         "v0.0",
@@ -2160,6 +2205,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-ops/claude/reconcile-research/SKILL.md",
+      "installable": true,
       "content_sha256": "4f60101e94f19ef50fb58751ae0ee729eb1fa20a1b76ca323dc08b179c30c436",
       "archive_versions": [
         "v0.0",
@@ -2186,6 +2232,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/repo-glossary/SKILL.md",
+      "installable": true,
       "content_sha256": "a9e92ef05bb143542a59916ad9a751171196b3180d6a7d7ffaa1c8eb12d8a492",
       "archive_versions": [
         "v0.0",
@@ -2206,6 +2253,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-ops/claude/retro/SKILL.md",
+      "installable": true,
       "content_sha256": "2c9a4e478ee7a7714bbddb4882459c5cab1b444f3ca0ff199819c8738e3f3487",
       "archive_versions": [
         "v0.0",
@@ -2227,6 +2275,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/risk-register/SKILL.md",
+      "installable": true,
       "content_sha256": "06485b0eec76cfcb1366b2d463bbf147162c87650beb0e6f3037743811afe839",
       "archive_versions": [
         "v0.0",
@@ -2247,6 +2296,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/business-ops/claude/runway-model/SKILL.md",
+      "installable": true,
       "content_sha256": "f974fad64ef735cd9acfbede3c2c808b78fc85018e3683b04fedab9d11fcdc11",
       "archive_versions": [
         "v0.0",
@@ -2267,6 +2317,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/business-ops/claude/scale-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "c691749df947e75a476038f44c479feca757ae67adab37f48db379ca12a9e5e1",
       "archive_versions": [
         "v0.0",
@@ -2288,6 +2339,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/business-ops/codex/assumption-tracker/SKILL.md",
+      "installable": true,
       "content_sha256": "d9bb4329fbc65b789eb4dc260ce560c10f235f08d7e8a3985c4bf8fcd64ed765",
       "archive_versions": [
         "v0.0",
@@ -2306,6 +2358,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-ops/codex/burn-rate/SKILL.md",
+      "installable": true,
       "content_sha256": "a4366fc6b5485177b2dc430d217bf4d4bbe9987da628fba1963e55007203763f",
       "archive_versions": [
         "v0.0",
@@ -2327,6 +2380,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/cohort-review/SKILL.md",
+      "installable": true,
       "content_sha256": "1df79b8d5b45fbf47ff65c7954b4b87361ce55f1765dd78d1c49de1aec329ef1",
       "archive_versions": [
         "v0.0",
@@ -2347,6 +2401,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/investor-update/SKILL.md",
+      "installable": true,
       "content_sha256": "89f5077f63360849b28351fb81ef14feeccb2f722c58374a7350843575f4be61",
       "archive_versions": [
         "v0.0",
@@ -2367,6 +2422,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-ops/codex/mvp-gap/SKILL.md",
+      "installable": true,
       "content_sha256": "01b55d26a1c16bf5dff7538737ef545a5d1060f9b47c9b93aa95c27c4b1ddc60",
       "archive_versions": [
         "v0.0",
@@ -2393,6 +2449,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-ops/codex/platform-strategy/SKILL.md",
+      "installable": true,
       "content_sha256": "71e875ea5618950637ce98928501e44ace3320167e3ce1f306dfb485cb4dc60d",
       "archive_versions": [
         "v0.0",
@@ -2420,6 +2477,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-ops/codex/product-line/SKILL.md",
+      "installable": true,
       "content_sha256": "ee16527510adb60b204ba53cde4b15fdcfbb8756e2845a5f29917619ec7df4e6",
       "archive_versions": [
         "v0.0",
@@ -2442,6 +2500,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-ops/codex/reconcile-research/SKILL.md",
+      "installable": true,
       "content_sha256": "8b35851b990976197cdd79aa064264b1e83b1ab66c95e39ed8c1d09d181e7a65",
       "archive_versions": [
         "v0.0",
@@ -2468,6 +2527,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/repo-glossary/SKILL.md",
+      "installable": true,
       "content_sha256": "fad930eb21ed535738acfcb33e6c9ed6ebb90ba1b1e8011e94f9e60a17b50d63",
       "archive_versions": [
         "v0.0",
@@ -2488,6 +2548,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-ops/codex/retro/SKILL.md",
+      "installable": true,
       "content_sha256": "288232802ec073ec88344e384f714c6d3016d82eb351583da6cdedbbe73494c6",
       "archive_versions": [
         "v0.0",
@@ -2509,6 +2570,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/risk-register/SKILL.md",
+      "installable": true,
       "content_sha256": "ec5fb4d7333bf734eee045543a3877343d20b4ea482b5cd38223bcf4cab71e36",
       "archive_versions": [
         "v0.0",
@@ -2529,6 +2591,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/business-ops/codex/runway-model/SKILL.md",
+      "installable": true,
       "content_sha256": "4845842c67e5d29a46838785f844169c4ecd8cadaa841ac8b6f838997973ba63",
       "archive_versions": [
         "v0.0",
@@ -2549,6 +2612,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/business-ops/codex/scale-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "e45189e58e49ff8f67dd095e6741e608b745d41ee4947bfd35fe24513b09df50",
       "archive_versions": [
         "v0.0",
@@ -2570,6 +2634,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
+      "installable": false,
       "content_sha256": "238f117e2452d607d25f053a3a06416da4a95529eb09a6349fcdbe5bcc8caf6d",
       "archive_versions": [
         "v0.0",
@@ -2592,6 +2657,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
+      "installable": false,
       "content_sha256": "840e8ac9412d2902bd63bf4021b4234215d5b83e80a9c01ccfe2432f3fb8fb75",
       "archive_versions": [
         "v0.0",
@@ -2614,6 +2680,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
+      "installable": false,
       "content_sha256": "3f1e4c982cc91ca2a44e4e23148e5e8ddc1e736a4e251d1996624fd767d8df97",
       "archive_versions": [
         "v0.0",
@@ -2636,6 +2703,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/competitive-analysis/frameworks/swot/SKILL.md",
+      "installable": false,
       "content_sha256": "f60ced30ddfa079d8ac6d2b919949a39b5d8c66c5dc752df8974c09f2f12684d",
       "archive_versions": [
         "v0.0",
@@ -2658,6 +2726,7 @@
       "platform": "claude",
       "version": "v0.23",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
+      "installable": true,
       "content_sha256": "6f990590f3f6bcae7190e4fdd1fc948ba7e862059c772637250b4925d3bba942",
       "archive_versions": [
         "v0.0",
@@ -2697,6 +2766,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/five-rings/SKILL.md",
+      "installable": false,
       "content_sha256": "d3b285577d528d6d0477e14c2758f62b0797bcf221e60186b1b3cf86bd2d807a",
       "archive_versions": [
         "v0.0",
@@ -2719,6 +2789,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/four-forces/SKILL.md",
+      "installable": false,
       "content_sha256": "7cf41fcdded1c0b68c7a82b88c5fef1624be7fb613ec624fbcfc9bc9e48d8836",
       "archive_versions": [
         "v0.0",
@@ -2741,6 +2812,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/jtbd-needs/SKILL.md",
+      "installable": false,
       "content_sha256": "ecca7d5778e6ab71b51167425c77f44a2760459ba1fd482b52821671ad77d701",
       "archive_versions": [
         "v0.0",
@@ -2763,6 +2835,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/pmf-engine/SKILL.md",
+      "installable": false,
       "content_sha256": "fcf03c4ecd620211d151d4d0dacdb218e486394c9317d37c4650b3ca3ac1e3e9",
       "archive_versions": [
         "v0.0",
@@ -2785,6 +2858,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/seven-dimensions/SKILL.md",
+      "installable": false,
       "content_sha256": "8dd5d176fca55fe843c621b1156bad66e353e0c66fbf3aa5ba62aeb1053d879f",
       "archive_versions": [
         "v0.0",
@@ -2807,6 +2881,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/business-research/claude/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
+      "installable": false,
       "content_sha256": "52f52cd9b718046acca3c9e49f05421b9e3e1cd1c7dbe7f701652edb1d04307c",
       "archive_versions": [
         "v0.0",
@@ -2829,6 +2904,7 @@
       "platform": "claude",
       "version": "v1.11",
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
+      "installable": true,
       "content_sha256": "0957abbdfeffd9d2cf8215a457e961dcd505dc472b60866cd4e64eda1569aa5c",
       "archive_versions": [
         "v0.0",
@@ -2867,6 +2943,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/customer-feedback/SKILL.md",
+      "installable": true,
       "content_sha256": "a306fac84af7c863911be5191516a0bc194452798f013ff5dbe067fd272a594b",
       "archive_versions": [
         "v0.0",
@@ -2892,6 +2969,7 @@
       "platform": "claude",
       "version": "v0.10",
       "path": "packs/business-research/claude/enterprise-icp/SKILL.md",
+      "installable": true,
       "content_sha256": "63d77b146c913930cf9110836a4e6352b3b01d37ccfc350798cd6f90615be0dd",
       "archive_versions": [
         "v0.0",
@@ -2918,6 +2996,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-research/claude/lean-canvas/SKILL.md",
+      "installable": true,
       "content_sha256": "187e2696356595d37ab28963d46138613c050e758209a08be4a3d0cef2fc208a",
       "archive_versions": [
         "v0.0",
@@ -2945,6 +3024,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/category-design/SKILL.md",
+      "installable": false,
       "content_sha256": "7baef2a4c310e20015086042622184c3434e80e6625f1dbfe1784a40fee6f96e",
       "archive_versions": [
         "v0.0",
@@ -2970,6 +3050,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/jtbd-positioning/SKILL.md",
+      "installable": false,
       "content_sha256": "c679096267118f34b55f4b38b4c42c9631c9a08618855825fbcef80c8855b98a",
       "archive_versions": [
         "v0.0",
@@ -2995,6 +3076,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/moore-positioning/SKILL.md",
+      "installable": false,
       "content_sha256": "5243768cbffee56b62587ce2b7c83d614a99a4ae3cd4ac1630924d08c37dca53",
       "archive_versions": [
         "v0.0",
@@ -3020,6 +3102,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/obviously-awesome/SKILL.md",
+      "installable": false,
       "content_sha256": "5d209307caf45fff7c67fcf040b44072f9bac9fe61c8fea0f7f91d5920dbe1d4",
       "archive_versions": [
         "v0.0",
@@ -3045,6 +3128,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/business-research/claude/positioning/frameworks/strategic-canvas/SKILL.md",
+      "installable": false,
       "content_sha256": "18ec5acadd0c4870dee9fe1022f83b719d4806a77435c27634181c01554a2d50",
       "archive_versions": [
         "v0.0",
@@ -3070,6 +3154,7 @@
       "platform": "claude",
       "version": "v0.21",
       "path": "packs/business-research/claude/positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "1782862f6d3ac631f0809c165bfee65741eafc654566d49e77d6127e55b560a1",
       "archive_versions": [
         "v0.0",
@@ -3107,6 +3192,7 @@
       "platform": "claude",
       "version": "v0.11",
       "path": "packs/business-research/claude/value-prop-canvas/SKILL.md",
+      "installable": true,
       "content_sha256": "ec0a308a190914ec91d9ed4aefcbb5e3a42a9a82c2a1bd704323c7b026676a31",
       "archive_versions": [
         "v0.0",
@@ -3134,6 +3220,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
+      "installable": false,
       "content_sha256": "5313524fea29276ff54da9106691fa9417a1b862b9a8d2e9c98343e588ba0948",
       "archive_versions": [
         "v0.0",
@@ -3156,6 +3243,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
+      "installable": false,
       "content_sha256": "033ef79b36cc45c2ae43d60c5889866ddde5e0f97c432b704e7474aaf4c2916f",
       "archive_versions": [
         "v0.0",
@@ -3178,6 +3266,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
+      "installable": false,
       "content_sha256": "cce785aa2e6fa35302a514cef4eb7034c9278a28bd36c0daf72ff1d4734a2d39",
       "archive_versions": [
         "v0.0",
@@ -3200,6 +3289,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/competitive-analysis/frameworks/swot/SKILL.md",
+      "installable": false,
       "content_sha256": "e410b71e0f7beb42cb6ee171fe6f2727e2bcf81a09fae0e0438578ecc85113b3",
       "archive_versions": [
         "v0.0",
@@ -3222,6 +3312,7 @@
       "platform": "codex",
       "version": "v0.23",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
+      "installable": true,
       "content_sha256": "de6e289c465ed407e923ca4292243282cd6cfdbc32be4471a387e9e87b0d4fd7",
       "archive_versions": [
         "v0.0",
@@ -3261,6 +3352,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/five-rings/SKILL.md",
+      "installable": false,
       "content_sha256": "f4c5b7726ce5e523926799b8f363c1857d768f74cbfa4e8590f0285384684a3b",
       "archive_versions": [
         "v0.0",
@@ -3283,6 +3375,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/four-forces/SKILL.md",
+      "installable": false,
       "content_sha256": "b6c3e023a84c58446c99ff833c3c0519b30e99b08702586db5f8274d26956860",
       "archive_versions": [
         "v0.0",
@@ -3305,6 +3398,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/jtbd-needs/SKILL.md",
+      "installable": false,
       "content_sha256": "b0ea64a66a54bb2630cce87364710b78605232d99f38aa1ecaeecb5f5fbd5a6e",
       "archive_versions": [
         "v0.0",
@@ -3327,6 +3421,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md",
+      "installable": false,
       "content_sha256": "9afae71deba4950fe4263c9d757f521d9609b9ebba4700b1862fc1f1096dfe14",
       "archive_versions": [
         "v0.0",
@@ -3349,6 +3444,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/seven-dimensions/SKILL.md",
+      "installable": false,
       "content_sha256": "1039a4a383fc97d13bd3d1c9b89031b1d508c4b84a55bc1f7d7c80b198af886d",
       "archive_versions": [
         "v0.0",
@@ -3371,6 +3467,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/business-research/codex/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
+      "installable": false,
       "content_sha256": "cda21c588918f9fdf9075e8bb0b1fb0f75fd175099226edd86741ef192e992b0",
       "archive_versions": [
         "v0.0",
@@ -3393,6 +3490,7 @@
       "platform": "codex",
       "version": "v1.11",
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
+      "installable": true,
       "content_sha256": "821e562d646c6879fb174f9692b1459769f8cd568cbf9f46689a597a104ff077",
       "archive_versions": [
         "v0.0",
@@ -3431,6 +3529,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/customer-feedback/SKILL.md",
+      "installable": true,
       "content_sha256": "2910d235385b475aac1ff3b80cf24974196169d1f7da483df17bcabd9a00059e",
       "archive_versions": [
         "v0.0",
@@ -3456,6 +3555,7 @@
       "platform": "codex",
       "version": "v0.10",
       "path": "packs/business-research/codex/enterprise-icp/SKILL.md",
+      "installable": true,
       "content_sha256": "a6e7c11aed30928c5e166c50fcdc1e60eba79df04d4bd9d361576f85eed8c96f",
       "archive_versions": [
         "v0.0",
@@ -3482,6 +3582,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-research/codex/lean-canvas/SKILL.md",
+      "installable": true,
       "content_sha256": "88fe00919875566958c16307eeedd6f3f10b57761b5010245f5881cb58dedba2",
       "archive_versions": [
         "v0.0",
@@ -3509,6 +3610,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/category-design/SKILL.md",
+      "installable": false,
       "content_sha256": "438bf344d7d69fc6fe8dca5c825e77842f8db000f4d5339ce6748bf9dd0f8665",
       "archive_versions": [
         "v0.0",
@@ -3534,6 +3636,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/jtbd-positioning/SKILL.md",
+      "installable": false,
       "content_sha256": "2d5dabc522b7a013a2e829bc2def4befb58d4f0305a4c3b61025d6d3afaaf6ad",
       "archive_versions": [
         "v0.0",
@@ -3559,6 +3662,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/moore-positioning/SKILL.md",
+      "installable": false,
       "content_sha256": "9ea467200da14f5af4f8e1c238169608541c15402baa7c3b22833be54993f17a",
       "archive_versions": [
         "v0.0",
@@ -3584,6 +3688,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/obviously-awesome/SKILL.md",
+      "installable": false,
       "content_sha256": "6a789d9e8d16a36e977d20988901a24d445a9d955f07c4ae625bc61c782126c9",
       "archive_versions": [
         "v0.0",
@@ -3609,6 +3714,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/business-research/codex/positioning/frameworks/strategic-canvas/SKILL.md",
+      "installable": false,
       "content_sha256": "573a7958f766b1dec741d88702a9837a1a7acacd8ffe7fa479d33858550ee932",
       "archive_versions": [
         "v0.0",
@@ -3634,6 +3740,7 @@
       "platform": "codex",
       "version": "v0.21",
       "path": "packs/business-research/codex/positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "b2deb0b8bf3e7228b01c4e519aef6a53522d39b72dbda37ea75c760967ebba9e",
       "archive_versions": [
         "v0.0",
@@ -3671,6 +3778,7 @@
       "platform": "codex",
       "version": "v0.11",
       "path": "packs/business-research/codex/value-prop-canvas/SKILL.md",
+      "installable": true,
       "content_sha256": "deebdf695d88a8b71b29f39a0543a877a9e9ace8933d8e68b497c722d1b376c1",
       "archive_versions": [
         "v0.0",
@@ -3698,6 +3806,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/code-debug/claude/debug/SKILL.md",
+      "installable": true,
       "content_sha256": "8a7730e04e0edd4c5480c574f6c6997720d82625eb2c4555d7bff10b5b264ed6",
       "archive_versions": [
         "v0.0",
@@ -3715,6 +3824,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/code-debug/claude/investigate/SKILL.md",
+      "installable": true,
       "content_sha256": "500022e31af0f1ec4efc5703f56c06249a0012e2fb06cad1acb9f8ad99c23417",
       "archive_versions": [
         "v0.0",
@@ -3731,6 +3841,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-debug/claude/trace/SKILL.md",
+      "installable": true,
       "content_sha256": "289b4d29b440dedb15ff6747abdb636c4f0e0d6258877a83c598663161df9fb4",
       "archive_versions": [
         "v0.0"
@@ -3746,6 +3857,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/code-debug/codex/debug/SKILL.md",
+      "installable": true,
       "content_sha256": "6d78e38411cc30a2d319be25aea54aa7111fcae8cfb773f19e75773c73682028",
       "archive_versions": [
         "v0.0",
@@ -3763,6 +3875,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/code-debug/codex/investigate/SKILL.md",
+      "installable": true,
       "content_sha256": "e02819126ffe1a31300456bfc29787339f85a0eae6b6009b9238b6f189e6b3d6",
       "archive_versions": [
         "v0.0",
@@ -3779,6 +3892,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-debug/codex/trace/SKILL.md",
+      "installable": true,
       "content_sha256": "10fc6a89750ee910fc90bba092ac12a8a2f9a076a66cb63caebcea421369d86c",
       "archive_versions": [
         "v0.0"
@@ -3794,6 +3908,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-maintenance/claude/migrate/SKILL.md",
+      "installable": true,
       "content_sha256": "18ff56aaed81f2ad11305b5b93ebc3214912858ba9e82cf99ed3916d2fcfb289",
       "archive_versions": [
         "v0.0"
@@ -3809,6 +3924,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-maintenance/claude/update-packages/SKILL.md",
+      "installable": true,
       "content_sha256": "a668f91f279de28080b2f51f674033e95fd2b2179070f9e68359e5ffd623b0bf",
       "archive_versions": [
         "v0.0"
@@ -3824,6 +3940,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-maintenance/codex/migrate/SKILL.md",
+      "installable": true,
       "content_sha256": "9153d19b3e25d3ec78ed7841552b7ea9cd9e40e365e12d9df1a94fdc041b87ad",
       "archive_versions": [
         "v0.0"
@@ -3839,6 +3956,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-maintenance/codex/update-packages/SKILL.md",
+      "installable": true,
       "content_sha256": "6167e5d7e3e3c9216d23c758f891a6775b8c02aabbc17c2c9f23bd3ecebe924a",
       "archive_versions": [
         "v0.0"
@@ -3854,6 +3972,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-quality/claude/extract-shared-types/SKILL.md",
+      "installable": true,
       "content_sha256": "98cd844477b705385fe56ccfc99ecc939d25f2f305a3b398bdff3603578aa6f6",
       "archive_versions": [
         "v0.0"
@@ -3869,6 +3988,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-quality/claude/quality-sweep/SKILL.md",
+      "installable": true,
       "content_sha256": "7da45ce1d4d409269d56ab4d5b26d9ad27b25356218719ea1084f21056027373",
       "archive_versions": [
         "v0.0"
@@ -3884,6 +4004,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-quality/codex/extract-shared-types/SKILL.md",
+      "installable": true,
       "content_sha256": "df0255603d5e8d4011c4c20503be77156795f16661a9a0d781d9eb56b2aefeb2",
       "archive_versions": [
         "v0.0"
@@ -3899,6 +4020,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-quality/codex/quality-sweep/SKILL.md",
+      "installable": true,
       "content_sha256": "32798a43cbf2a7497c45d751173d4e1ae110ec7ac7ede7a6b85a763f32456cc5",
       "archive_versions": [
         "v0.0"
@@ -3914,6 +4036,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-review/claude/dead-code/SKILL.md",
+      "installable": true,
       "content_sha256": "6da5ba78b7d89992a6586a9772a38c8025edd6ef874054276e8d848cdc21fa58",
       "archive_versions": [
         "v0.0"
@@ -3929,6 +4052,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-review/claude/expert-review/SKILL.md",
+      "installable": true,
       "content_sha256": "b9f749f73c991e22a6832c5cd056807a1e598190e3e154c1b44193a0ac13c7f9",
       "archive_versions": [
         "v0.0"
@@ -3944,6 +4068,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-review/claude/regression-check/SKILL.md",
+      "installable": true,
       "content_sha256": "cf135394ee2c19660beaef8fc83cfb6712831a7bfea35bb6c2cdfd3d563e5cb6",
       "archive_versions": [
         "v0.0"
@@ -3959,6 +4084,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/code-review/claude/slim-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "be5f5cfe87bac8cbcd28a67f167bb4dc124a53663aea0c6fad1e7b1d368c4bc0",
       "archive_versions": [
         "v0.0"
@@ -3974,6 +4100,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-review/codex/dead-code/SKILL.md",
+      "installable": true,
       "content_sha256": "e172b3407869c6c204e5856977054709618df8523cae72e917229b8502476475",
       "archive_versions": [
         "v0.0"
@@ -3989,6 +4116,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-review/codex/expert-review/SKILL.md",
+      "installable": true,
       "content_sha256": "920aa4869050e84a6706482b8a4b9cf5bfc3bde1539f550681e6a855ceba4435",
       "archive_versions": [
         "v0.0"
@@ -4004,6 +4132,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-review/codex/regression-check/SKILL.md",
+      "installable": true,
       "content_sha256": "6b2417156572759612883cecafa52e2e26ccc9a6ad149dd746a3ad30644bae39",
       "archive_versions": [
         "v0.0"
@@ -4019,6 +4148,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/code-review/codex/slim-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "5ca9943daf285651461cb68afae4a82c34be63e8293e75fd40455b9d90eebd7b",
       "archive_versions": [
         "v0.0"
@@ -4034,6 +4164,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/context-transfer/claude/handoff/SKILL.md",
+      "installable": true,
       "content_sha256": "f670ce09f095ad7a7ec8c0876a03423cc549979a72bc44b7e0ec2f4d975d396c",
       "archive_versions": [
         "v0.0",
@@ -4050,6 +4181,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/context-transfer/codex/handoff/SKILL.md",
+      "installable": true,
       "content_sha256": "6b3fc717ad03b4a51a694496431c21be442847a0134925e6c5d7bf669ef92eb4",
       "archive_versions": [
         "v0.0",
@@ -4066,6 +4198,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/creator-foundation/claude/content-programming/SKILL.md",
+      "installable": true,
       "content_sha256": "e3966cac7ffdea7e341a9c131a4edf6eef81f9d738f9241f887ee8df4606b65c",
       "archive_versions": [
         "v0.0",
@@ -4085,6 +4218,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-evidence-schema/SKILL.md",
+      "installable": true,
       "content_sha256": "de186a7bdb39f1551371323f703cd326e495ca95ddcb87be142ed62731ab8524",
       "archive_versions": [
         "v0.0",
@@ -4106,6 +4240,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-metrics-review/SKILL.md",
+      "installable": true,
       "content_sha256": "d726740da5934bd676fda153f50bf38da0baf9062fc4786544bbde38eddfe426",
       "archive_versions": [
         "v0.0",
@@ -4127,6 +4262,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md",
+      "installable": true,
       "content_sha256": "389e442bcd9898ffb061df375e8cc08690717ff879384bdd2db4b32aee03e462",
       "archive_versions": [
         "v0.0",
@@ -4148,6 +4284,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/creator-foundation/claude/creator-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "7958fab6e30d05409dc1f7f09d9444326222ced40b08b484b8e0e280dd476b95",
       "archive_versions": [
         "v0.0",
@@ -4169,6 +4306,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/creator-foundation/claude/creator-presence-dossier/SKILL.md",
+      "installable": true,
       "content_sha256": "f987ae6ae8d5c8c07eae0646f41c7af6f52239834dd80aaa62346a1a5f366200",
       "archive_versions": [
         "v0.0",
@@ -4188,6 +4326,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/creator-foundation/claude/product-led-media-map/SKILL.md",
+      "installable": true,
       "content_sha256": "7ade75d8d7d6d37ac588d760d019747c654dcfd0617ac09b954b5c1a90790b80",
       "archive_versions": [
         "v0.0",
@@ -4207,6 +4346,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/creator-foundation/claude/research-directory-conventions/SKILL.md",
+      "installable": true,
       "content_sha256": "0f9ff990158bb175fbc715bfac5c46aaa3af717972c19748004f603e42858627",
       "archive_versions": [
         "v0.0"
@@ -4222,6 +4362,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/creator-foundation/claude/series-spec/SKILL.md",
+      "installable": true,
       "content_sha256": "5482ffc8a818d0f8b584899ee883d02f010b77758e4ca3cd1e0699a0d5122253",
       "archive_versions": [
         "v0.0",
@@ -4238,6 +4379,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/creator-foundation/codex/content-programming/SKILL.md",
+      "installable": true,
       "content_sha256": "a96270ce5c0755df2b3218bafd90c0deb2096bfb4198a6c44de7062ff7dfff00",
       "archive_versions": [
         "v0.0",
@@ -4257,6 +4399,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-evidence-schema/SKILL.md",
+      "installable": true,
       "content_sha256": "a1aa84b2de1a5762bc088f641e035205784107532b04841a441e9eafeeee93c0",
       "archive_versions": [
         "v0.0",
@@ -4278,6 +4421,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-metrics-review/SKILL.md",
+      "installable": true,
       "content_sha256": "b4eec26727d2524cdde6693144166bba5e5aaae7cc8f09b0d09564be975165c8",
       "archive_versions": [
         "v0.0",
@@ -4299,6 +4443,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md",
+      "installable": true,
       "content_sha256": "6b44346cd0d34b65928b931e6812cf8133819e56067742db2eafcee863b28b19",
       "archive_versions": [
         "v0.0",
@@ -4320,6 +4465,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/creator-foundation/codex/creator-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "c4770a8f79e0005886c16711b133964c5eab7f68942d82bf52bc9a052e8ae71c",
       "archive_versions": [
         "v0.0",
@@ -4341,6 +4487,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/creator-foundation/codex/creator-presence-dossier/SKILL.md",
+      "installable": true,
       "content_sha256": "0b2b05bb755d8db2611d9b2259e2314e9676efce861f121467270e4369f772bb",
       "archive_versions": [
         "v0.0",
@@ -4360,6 +4507,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/creator-foundation/codex/product-led-media-map/SKILL.md",
+      "installable": true,
       "content_sha256": "e26f0fc1c6468cd7254ec174cc69b448b6061f119e77da9ea7130fc147c53563",
       "archive_versions": [
         "v0.0",
@@ -4379,6 +4527,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/creator-foundation/codex/research-directory-conventions/SKILL.md",
+      "installable": true,
       "content_sha256": "3fabc4c603a9e412a9611dc2623dc676d840781a4c72e0c51b0e506df8aae946",
       "archive_versions": [
         "v0.0"
@@ -4394,6 +4543,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/creator-foundation/codex/series-spec/SKILL.md",
+      "installable": true,
       "content_sha256": "92169b37b344b8e92dbfc30727d7251584483555151dd048d70249534a779acf",
       "archive_versions": [
         "v0.0",
@@ -4410,6 +4560,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/conversion-map/SKILL.md",
+      "installable": true,
       "content_sha256": "66885f2cce310a21db008898ab93802935fd053c3a30a3e7897e2c23f7975c49",
       "archive_versions": [
         "v0.0",
@@ -4431,6 +4582,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/expansion-map/SKILL.md",
+      "installable": true,
       "content_sha256": "fa94a0589c9498149447a81dcdb7756a7e52e1641eaf85cf664e1c288c24275f",
       "archive_versions": [
         "v0.0",
@@ -4452,6 +4604,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/customer-journey-canvas/SKILL.md",
+      "installable": false,
       "content_sha256": "28216972978adfbcd6ebb4218034faa0886fe6b60fe7bf75946787816975ec88",
       "archive_versions": [
         "v0.0",
@@ -4474,6 +4627,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/experience-map/SKILL.md",
+      "installable": false,
       "content_sha256": "7940b142bd6ff89bdc3ab10c52fe5bea8a7403bef7085607f91abe045a70b871",
       "archive_versions": [
         "v0.0",
@@ -4496,6 +4650,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/jtbd-timeline/SKILL.md",
+      "installable": false,
       "content_sha256": "05287a9fbd57e838353cd2d60c10a7ba69f2e5e9546d4aaf0e7fabbff23cc752",
       "archive_versions": [
         "v0.0",
@@ -4518,6 +4673,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/service-blueprint/SKILL.md",
+      "installable": false,
       "content_sha256": "f18ebeeccfbca045421cea74c31daa12f840322c58a2f596f708bfa41f94b8e3",
       "archive_versions": [
         "v0.0",
@@ -4540,6 +4696,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/user-story-map/SKILL.md",
+      "installable": false,
       "content_sha256": "b89f981b128a5c5c0767950fa493594bdb7b32dfe9a682272f18883109e9e449",
       "archive_versions": [
         "v0.0",
@@ -4562,6 +4719,7 @@
       "platform": "claude",
       "version": "v0.20",
       "path": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
+      "installable": true,
       "content_sha256": "db1cbd1f85627ee41a8c201f9d492bf721b579864208440edb39594f41fbde35",
       "archive_versions": [
         "v0.0",
@@ -4598,6 +4756,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/lifecycle-metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "8b2929fa0e171989ff47cad6ff7bc45998fe5d52527c5e147096cfd7f8977b29",
       "archive_versions": [
         "v0.0",
@@ -4619,6 +4778,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/onboarding-map/SKILL.md",
+      "installable": true,
       "content_sha256": "0c3f3a50a8c71e32bb9216803f96ebc02401b7f7c247b3e95e93fef291680566",
       "archive_versions": [
         "v0.0",
@@ -4640,6 +4800,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/retention-map/SKILL.md",
+      "installable": true,
       "content_sha256": "0f4d53fcf93bfd05ff640c31a2e9248185535e894d3891b24dbfd4c15c32bf06",
       "archive_versions": [
         "v0.0",
@@ -4661,6 +4822,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/claude/transaction-map/SKILL.md",
+      "installable": true,
       "content_sha256": "35c4e40d275a6e0e4b6807229f99a218470ef6257af68a918a32716dae01b897",
       "archive_versions": [
         "v0.0",
@@ -4682,6 +4844,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/conversion-map/SKILL.md",
+      "installable": true,
       "content_sha256": "25baa57723ad38ed0b38ed24c20c0dfe93aa152d97d06f75c656448862e415f8",
       "archive_versions": [
         "v0.0",
@@ -4703,6 +4866,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/expansion-map/SKILL.md",
+      "installable": true,
       "content_sha256": "a93ae0a55f4e60a874e82a1162763021d5a585585321c24ef06b33ee5f134f79",
       "archive_versions": [
         "v0.0",
@@ -4724,6 +4888,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/customer-journey-canvas/SKILL.md",
+      "installable": false,
       "content_sha256": "10502099c0159df1d48f26fb9c5ebe5cd2243b443d1b0271e8619314b1f6cae3",
       "archive_versions": [
         "v0.0",
@@ -4746,6 +4911,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/experience-map/SKILL.md",
+      "installable": false,
       "content_sha256": "e6cd3cf2895e48cedaf54337956f78a2ef89737e74a6bcdeaab72057cca280f6",
       "archive_versions": [
         "v0.0",
@@ -4768,6 +4934,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/jtbd-timeline/SKILL.md",
+      "installable": false,
       "content_sha256": "6ba15964404f4792bf984319557fe4ca902ab5654661b2731aec199fd6cc8601",
       "archive_versions": [
         "v0.0",
@@ -4790,6 +4957,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/service-blueprint/SKILL.md",
+      "installable": false,
       "content_sha256": "9447eb02e7f506b82d1a91d0b8d9dca1c853cf8e7b48ceb761b8624503b1b28b",
       "archive_versions": [
         "v0.0",
@@ -4812,6 +4980,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/user-story-map/SKILL.md",
+      "installable": false,
       "content_sha256": "ff3d37c434fefe6d515f2cc3ee93585a91a1f588df4b4986eee97d8d0da92d6e",
       "archive_versions": [
         "v0.0",
@@ -4834,6 +5003,7 @@
       "platform": "codex",
       "version": "v0.20",
       "path": "packs/customer-lifecycle/codex/journey-map/SKILL.md",
+      "installable": true,
       "content_sha256": "5b2e6a87447e99d00d4e189ccdd3ba8a6819c752ac6cfa8d0689317b83f5ff02",
       "archive_versions": [
         "v0.0",
@@ -4870,6 +5040,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/lifecycle-metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "02c3e6a8ff98418990541c20dd6540212736b81cc2794ee1a5a3c35e8cb72a84",
       "archive_versions": [
         "v0.0",
@@ -4891,6 +5062,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/onboarding-map/SKILL.md",
+      "installable": true,
       "content_sha256": "31612d01ada877edc0e5376906e739d80df3963040d00d918c1f76c87f951c16",
       "archive_versions": [
         "v0.0",
@@ -4912,6 +5084,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/retention-map/SKILL.md",
+      "installable": true,
       "content_sha256": "d92fe3f9e10d145f61013dbd92705beb50d68adb01ae7e99a681e3c8c4027c4f",
       "archive_versions": [
         "v0.0",
@@ -4933,6 +5106,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/customer-lifecycle/codex/transaction-map/SKILL.md",
+      "installable": true,
       "content_sha256": "87a9369d999a9b2600e76760dd9e410d9b0d5cf516d8e7753307377dd951458c",
       "archive_versions": [
         "v0.0",
@@ -4954,6 +5128,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "packs/devtool/claude/devtool-adoption/SKILL.md",
+      "installable": true,
       "content_sha256": "52861397502355fc1f2bfe58a8abf1fb266362232f70e4312d8488311584a6f3",
       "archive_versions": [
         "v0.0",
@@ -4978,6 +5153,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/devtool/claude/devtool-docs-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "02c4f0f62614e7ff49dd8d06690b1fe959554426f426c93c4d6f3ecadd90133f",
       "archive_versions": [
         "v0.0",
@@ -4996,6 +5172,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/devtool/claude/devtool-dx-journey/SKILL.md",
+      "installable": true,
       "content_sha256": "fde1fd0aed3557dae1d6a44ceddd1efd472bc5d5fa9484e9471ca4b22f58ab32",
       "archive_versions": [
         "v0.0",
@@ -5016,6 +5193,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/devtool/claude/devtool-integration-map/SKILL.md",
+      "installable": true,
       "content_sha256": "42412f02534fee240339df308688788d0898dc0fe9aa8ab261f63171255ff890",
       "archive_versions": [
         "v0.0",
@@ -5036,6 +5214,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "packs/devtool/claude/devtool-monetization/SKILL.md",
+      "installable": true,
       "content_sha256": "23baa643dfd1e85d90985be197419a55bbd04e25acbd418a2e2560c0351cb34b",
       "archive_versions": [
         "v0.0",
@@ -5060,6 +5239,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "packs/devtool/claude/devtool-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "f39c295ec55a7e89a8b2f7889392559f55047a3fa3ef43644e9bd5766663b974",
       "archive_versions": [
         "v0.0",
@@ -5084,6 +5264,7 @@
       "platform": "claude",
       "version": "v0.8",
       "path": "packs/devtool/claude/devtool-user-map/SKILL.md",
+      "installable": true,
       "content_sha256": "6fce306bcc386f2628a1d3fbf07750d40bde6b730e53a56b3acb1a0a003df492",
       "archive_versions": [
         "v0.0",
@@ -5108,6 +5289,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/devtool/claude/devtool-workflow/SKILL.md",
+      "installable": true,
       "content_sha256": "479704199400e3cdcdbd81907779648c9f3159550c982d86b02de4ca77985b16",
       "archive_versions": [
         "v0.0",
@@ -5127,6 +5309,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "packs/devtool/codex/devtool-adoption/SKILL.md",
+      "installable": true,
       "content_sha256": "668aa76589c8085b2f33b3db707f770111e9182773ba3776fe7f380bc1587e3a",
       "archive_versions": [
         "v0.0",
@@ -5151,6 +5334,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/devtool/codex/devtool-docs-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "174d0fd3711b89b6e8f3e2a04d4b18b0cd02975c9c33cd10211f03db4ec81f13",
       "archive_versions": [
         "v0.0",
@@ -5169,6 +5353,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/devtool/codex/devtool-dx-journey/SKILL.md",
+      "installable": true,
       "content_sha256": "288f44c812a42cc80a1d5f3b0503fe6588427ae39d536e79eede889dd6d88811",
       "archive_versions": [
         "v0.0",
@@ -5189,6 +5374,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/devtool/codex/devtool-integration-map/SKILL.md",
+      "installable": true,
       "content_sha256": "0e367eef9c2d6cb2e7cf7391107f674b3c72c4ce5a46c91b01e3012500607584",
       "archive_versions": [
         "v0.0",
@@ -5209,6 +5395,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "packs/devtool/codex/devtool-monetization/SKILL.md",
+      "installable": true,
       "content_sha256": "96900826f2c6b3cf06c747014d073a0d5f0c24b428e3750d2ed856d427175fa9",
       "archive_versions": [
         "v0.0",
@@ -5233,6 +5420,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "packs/devtool/codex/devtool-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "318176872757474d28c25a9af31325c0d5a15db182f3250ef6928b7ebfd6bc62",
       "archive_versions": [
         "v0.0",
@@ -5257,6 +5445,7 @@
       "platform": "codex",
       "version": "v0.8",
       "path": "packs/devtool/codex/devtool-user-map/SKILL.md",
+      "installable": true,
       "content_sha256": "7b227ff53c841bc38b76bc940b0a2da55154c13ed5a3a075cbb221cb7989edc9",
       "archive_versions": [
         "v0.0",
@@ -5281,6 +5470,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/devtool/codex/devtool-workflow/SKILL.md",
+      "installable": true,
       "content_sha256": "bff1830978cd111ff8255883b441d2c674438b0467dcf2692811bd7b2d295934",
       "archive_versions": [
         "v0.0",
@@ -5300,6 +5490,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/docs-health/claude/hygiene/SKILL.md",
+      "installable": true,
       "content_sha256": "944bd67a51aeefc10c9ff267ccbbd72e82553d2cb15656cac67a6c3aa215b25f",
       "archive_versions": [],
       "command": "/hygiene",
@@ -5313,6 +5504,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/docs-health/claude/reconcile-dev-docs/SKILL.md",
+      "installable": true,
       "content_sha256": "c64727fbd9777271365f2b8f571a91e6b4f551c666b04f43c0c8ffe6bafb8b25",
       "archive_versions": [
         "v0.0",
@@ -5329,6 +5521,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/docs-health/codex/hygiene/SKILL.md",
+      "installable": true,
       "content_sha256": "d205f062196a135b7352e0fecf4150fa6c9b23d609c3ebd774a64cb5277f5e45",
       "archive_versions": [],
       "command": "$hygiene",
@@ -5342,6 +5535,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/docs-health/codex/reconcile-dev-docs/SKILL.md",
+      "installable": true,
       "content_sha256": "75803aef0ded4daf6aa406935536c3932301a981e60c63cbab3ff927ebc0c522",
       "archive_versions": [
         "v0.0",
@@ -5358,6 +5552,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/exec-loop/claude/exec/SKILL.md",
+      "installable": true,
       "content_sha256": "8686e6d2716d88e78d6445900c3c2a28522b7038da89f744d19da4aa3c5bf593",
       "archive_versions": [
         "v0.0",
@@ -5377,6 +5572,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
+      "installable": true,
       "content_sha256": "110aec3216c82b722fd3246e48c0dc2682eee8a06ccfa3104297759affc50652",
       "archive_versions": [
         "v0.0",
@@ -5395,6 +5591,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/exec-loop/claude/ship/SKILL.md",
+      "installable": true,
       "content_sha256": "3951703402f7eb956800d4407efc5de621d51e8b9081eb28a1c02f7c79d0c5b2",
       "archive_versions": [
         "v0.0",
@@ -5416,6 +5613,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/exec-loop/codex/exec/SKILL.md",
+      "installable": true,
       "content_sha256": "d5e9d36dc7ce95ee7fe42fe307d302644a623cdba4b8953456df8cc67fd9943b",
       "archive_versions": [
         "v0.0",
@@ -5433,6 +5631,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/exec-loop/codex/ship-end/SKILL.md",
+      "installable": true,
       "content_sha256": "4514f5a235a82fe39e77d7699edf1d18825df3b65d0c9d122b1f666e77c14df1",
       "archive_versions": [
         "v0.0",
@@ -5451,6 +5650,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/exec-loop/codex/ship/SKILL.md",
+      "installable": true,
       "content_sha256": "29b18fc0557c448415b11489710c06fc21121f0dbb9ac8171414e2b740b344fe",
       "archive_versions": [
         "v0.0",
@@ -5472,6 +5672,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/exec-profile/claude/patch-exec-profile/SKILL.md",
+      "installable": true,
       "content_sha256": "cb517b78be3e58454160190bcdb1c5cb91c75daca0fe99b4cbf83e4a360752fb",
       "archive_versions": [],
       "command": "/patch-exec-profile",
@@ -5485,6 +5686,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-audience/SKILL.md",
+      "installable": true,
       "content_sha256": "8efb12f071e548d2ea57c38236c34de33c37c88bbdf0a663bf0a6138ef63e389",
       "archive_versions": [
         "v0.0",
@@ -5506,6 +5708,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-comparables/SKILL.md",
+      "installable": true,
       "content_sha256": "fd1ab16b777b4794ccd63c28f9718ff9eaa439d3274121ca9d9ad5103d77fba7",
       "archive_versions": [
         "v0.0",
@@ -5527,6 +5730,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/game/claude/game-core-loop/SKILL.md",
+      "installable": true,
       "content_sha256": "888b1006023ef52881ebf330114772efbe6353e94b635b1c5cdd9ab051d320d2",
       "archive_versions": [
         "v0.0",
@@ -5545,6 +5749,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-fantasy/SKILL.md",
+      "installable": true,
       "content_sha256": "7c8098eb09b844482aff9404166b49ade7454918c9bbefa4e63ce7a6fa0de22e",
       "archive_versions": [
         "v0.0",
@@ -5566,6 +5771,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-genre-map/SKILL.md",
+      "installable": true,
       "content_sha256": "7651d106c77b27530982368fe929a846e1437e451247363908488f030ab4f910",
       "archive_versions": [
         "v0.0",
@@ -5587,6 +5793,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-launch/SKILL.md",
+      "installable": true,
       "content_sha256": "fe7393ade91cb70a6a679e356a4536631f8a45424362bee7c15b27d03433d40a",
       "archive_versions": [
         "v0.0",
@@ -5608,6 +5815,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/game/claude/game-playtest-metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "b14c30fdc10f85ad4a2fd240c00b93efc968219ba3934264be2dc02937d7973b",
       "archive_versions": [
         "v0.0",
@@ -5626,6 +5834,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/game/claude/game-prototype-test/SKILL.md",
+      "installable": true,
       "content_sha256": "c4078b8c3c72243c5d18e2133666517642c2cb93f9b34d464b6a9edf547d4e51",
       "archive_versions": [
         "v0.0",
@@ -5644,6 +5853,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/game/claude/game-roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "2610412710363889725cbc5e62139275b7bbc5ec4d2af1dfb6756c600000cb9a",
       "archive_versions": [
         "v0.0",
@@ -5664,6 +5874,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/game/claude/game-store-page-test/SKILL.md",
+      "installable": true,
       "content_sha256": "936fc98ce06bade8f851e7ecdac85244469a1dc1d8a1697770858c6cd89bf6e1",
       "archive_versions": [
         "v0.0",
@@ -5685,6 +5896,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/game/claude/game-workflow/SKILL.md",
+      "installable": true,
       "content_sha256": "142fc5bc046ebddd9e280ea5b66ec9d6e75b357fac467f8a3b19b6937c990941",
       "archive_versions": [
         "v0.0",
@@ -5704,6 +5916,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-audience/SKILL.md",
+      "installable": true,
       "content_sha256": "d5745ef4db76dbaaf1a4efdc582bf7142ca91aa089f2ddc5f40a012646cce034",
       "archive_versions": [
         "v0.0",
@@ -5725,6 +5938,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-comparables/SKILL.md",
+      "installable": true,
       "content_sha256": "1d3602ffd11bc273cb2cadf5353170f5bb9eee968419a0c0ffef60f3afad13e1",
       "archive_versions": [
         "v0.0",
@@ -5746,6 +5960,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/game/codex/game-core-loop/SKILL.md",
+      "installable": true,
       "content_sha256": "93c462b6482c2a0183f76a3b76d8d98ecc7518b8ee80196727ba62f3977f02ce",
       "archive_versions": [
         "v0.0",
@@ -5764,6 +5979,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-fantasy/SKILL.md",
+      "installable": true,
       "content_sha256": "0897906e045da62ea14e08ef16035f8a22bbeb87bb4c488f74859f84f68395dc",
       "archive_versions": [
         "v0.0",
@@ -5785,6 +6001,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-genre-map/SKILL.md",
+      "installable": true,
       "content_sha256": "fea1dd48ba4b1f60ad587f442cd8377e69c90251affed78bdceb00616abc6391",
       "archive_versions": [
         "v0.0",
@@ -5806,6 +6023,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-launch/SKILL.md",
+      "installable": true,
       "content_sha256": "57f5fdf1b7ea2b65b172031f141c739268b4c5b479c748992d751c39ae6c4f2a",
       "archive_versions": [
         "v0.0",
@@ -5827,6 +6045,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/game/codex/game-playtest-metrics/SKILL.md",
+      "installable": true,
       "content_sha256": "43a455d2858a126be1c48fa65b09b80a92eabb2a9d27c614cb88b40c481fdb70",
       "archive_versions": [
         "v0.0",
@@ -5845,6 +6064,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/game/codex/game-prototype-test/SKILL.md",
+      "installable": true,
       "content_sha256": "cf645300d99cd341ae05265af4fe6f830b33da2262f38a524d72a7bc0668a76d",
       "archive_versions": [
         "v0.0",
@@ -5863,6 +6083,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/game/codex/game-roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "6db120aaf621ebde3aac56ab09235456e0acf349d0e1fb74fb9c6c164244d591",
       "archive_versions": [
         "v0.0",
@@ -5883,6 +6104,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/game/codex/game-store-page-test/SKILL.md",
+      "installable": true,
       "content_sha256": "99b8cedc98f4fee8b8574bda7bb92eaeaf82590fedea46c2c3a78a89186d1ccc",
       "archive_versions": [
         "v0.0",
@@ -5904,6 +6126,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/game/codex/game-workflow/SKILL.md",
+      "installable": true,
       "content_sha256": "b7524e50eb1147b3fe1dbd8bd918aacafc4d1801209128f7bc037ac3294b708f",
       "archive_versions": [
         "v0.0",
@@ -5923,6 +6146,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/gitops/claude/commit-and-push-by-feature/SKILL.md",
+      "installable": true,
       "content_sha256": "2ab59041d1a578f5356f5c375210c6ece9466766f6d2e0a157d71e1b6c0a3f3c",
       "archive_versions": [
         "v0.0"
@@ -5938,6 +6162,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/gitops/claude/sync/SKILL.md",
+      "installable": true,
       "content_sha256": "87a316fc94cf50ec8a8de4fe4e77e016afd43ea82d7bbce3ecf71a22f32b82e2",
       "archive_versions": [
         "v0.0",
@@ -5958,6 +6183,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/gitops/codex/commit-and-push-by-feature/SKILL.md",
+      "installable": true,
       "content_sha256": "c3669484a10de5a5c6822748f97cf097fe8eb16616defa756b7cd94ae218ceb8",
       "archive_versions": [
         "v0.0"
@@ -5973,6 +6199,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/gitops/codex/sync/SKILL.md",
+      "installable": true,
       "content_sha256": "3cab76515d481c14a04d7bd07db796cd8dfc9e237c6081b6e35d776e5d11ac13",
       "archive_versions": [
         "v0.0",
@@ -5993,6 +6220,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/guided-walkthrough/claude/guide/SKILL.md",
+      "installable": true,
       "content_sha256": "019e93c58371bc71b3dbe7384cc1afb7dfd0e7ee91bfa861a66d0a1db69c36ff",
       "archive_versions": [
         "v0.0"
@@ -6008,6 +6236,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/guided-walkthrough/claude/uat-guide/SKILL.md",
+      "installable": true,
       "content_sha256": "446ceac705fbf7f109634cc58533cdf8e631ffd168fabe2c5833fc2355bff887",
       "archive_versions": [
         "v0.0",
@@ -6027,6 +6256,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/guided-walkthrough/codex/guide/SKILL.md",
+      "installable": true,
       "content_sha256": "25d991b63bd68c6f93b0fa24de534094bc312f88f2257809b9145a2f18f0a779",
       "archive_versions": [
         "v0.0"
@@ -6042,6 +6272,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/guided-walkthrough/codex/uat-guide/SKILL.md",
+      "installable": true,
       "content_sha256": "f616c801ef0e93379ae868cdde5fc7d4602d8d2c65195c87d1934e1a76dc709e",
       "archive_versions": [
         "v0.0",
@@ -6061,6 +6292,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/knowledge-check/claude/quiz-me/SKILL.md",
+      "installable": true,
       "content_sha256": "f6c72ba82b6dc22fe9bf8e7dc133e154da7bfff68e6819788adda46177b08aef",
       "archive_versions": [],
       "command": "/quiz-me",
@@ -6074,6 +6306,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/knowledge-check/codex/quiz-me/SKILL.md",
+      "installable": true,
       "content_sha256": "bdaa448f5328397abb1b7a244733e446f5038790df00dca0ffdf3d60fc78ce49",
       "archive_versions": [],
       "command": "$quiz-me",
@@ -6087,6 +6320,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/monorepo/claude/affected/SKILL.md",
+      "installable": true,
       "content_sha256": "0e60cf6e1427644eafea6d71c39b90453b97f53713f785b84abcf590eeef1690",
       "archive_versions": [
         "v0.0"
@@ -6102,6 +6336,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/monorepo/claude/mono-detect/SKILL.md",
+      "installable": true,
       "content_sha256": "07d7715c1fa9f8d474e9e9158639ad1852bf4b4760fc30aa7c8f398e7ec2c3b2",
       "archive_versions": [
         "v0.0"
@@ -6117,6 +6352,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/monorepo/claude/mono-exec/SKILL.md",
+      "installable": true,
       "content_sha256": "2c4c3b106faa479d8bb28c105ed9f90537f5fe95ca594f5be68a32a249c6677a",
       "archive_versions": [
         "v0.0"
@@ -6132,6 +6368,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/monorepo/claude/mono-guard/SKILL.md",
+      "installable": true,
       "content_sha256": "076ee13a25384d74031ebc4eb45fd12c60b79dfffba36c0c517331f7222fb0b1",
       "archive_versions": [
         "v0.0"
@@ -6147,6 +6384,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/monorepo/claude/mono-plan/SKILL.md",
+      "installable": true,
       "content_sha256": "4408ea82f13d6231d21fbde4007a037eadb1ebcbfc78c16b6780bd9634238b48",
       "archive_versions": [
         "v0.0",
@@ -6163,6 +6401,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/monorepo/claude/mono-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "9211e133cc68053f00e0323996c2240aff7ccbcab0d840ed478ec6432689082b",
       "archive_versions": [],
       "command": "/mono-ship",
@@ -6176,6 +6415,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/monorepo/claude/scaffold/SKILL.md",
+      "installable": true,
       "content_sha256": "e6ac40183a93043c7a2bc781fb448ac4e23b4d67d2a8db40e5bd92bc4192ae4d",
       "archive_versions": [
         "v0.0",
@@ -6193,6 +6433,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/monorepo/codex/affected/SKILL.md",
+      "installable": true,
       "content_sha256": "b5d9cc002c0033196a40ade2535a53d31d13adb9a9ef43999e31e0ea76026456",
       "archive_versions": [
         "v0.0"
@@ -6208,6 +6449,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/monorepo/codex/mono-detect/SKILL.md",
+      "installable": true,
       "content_sha256": "2f3f7819b314abe562b1f22567bbd3aadee8436c2c309aaa386111ab6f4bd62f",
       "archive_versions": [
         "v0.0"
@@ -6223,6 +6465,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/monorepo/codex/mono-exec/SKILL.md",
+      "installable": true,
       "content_sha256": "b5228c68dee55360ac08fa5e74d455e5dc5961209453bb006cffaf9037601eba",
       "archive_versions": [
         "v0.0"
@@ -6238,6 +6481,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/monorepo/codex/mono-guard/SKILL.md",
+      "installable": true,
       "content_sha256": "6b96dbe2f57b612345f84a624453d9b80e30d0f9f2d0aea36e3770c20da9bae0",
       "archive_versions": [
         "v0.0"
@@ -6253,6 +6497,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/monorepo/codex/mono-plan/SKILL.md",
+      "installable": true,
       "content_sha256": "e8ba18af4ce55cd6ae17d0979d307a0998250c18e23560a2d0ebdf78fc1e4330",
       "archive_versions": [
         "v0.0",
@@ -6269,6 +6514,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/monorepo/codex/mono-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "b5836963b8c7688b6c9def9d68ca332b86c19905f45c9627d23119012ac8b319",
       "archive_versions": [],
       "command": "$mono-ship",
@@ -6282,6 +6528,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/monorepo/codex/scaffold/SKILL.md",
+      "installable": true,
       "content_sha256": "e35efb37cceca3cd11d6d0ac3aa95727299cc696d6977ed0f6a5aea717dfa7c2",
       "archive_versions": [
         "v0.0",
@@ -6299,6 +6546,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/ord/claude/ord-align/SKILL.md",
+      "installable": true,
       "content_sha256": "083b906ce3fd03226dae6b447d73f2d5cf34eb306e2a8be0015772bb69bc7588",
       "archive_versions": [
         "v0.0",
@@ -6317,6 +6565,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/ord/claude/ord-scan/SKILL.md",
+      "installable": true,
       "content_sha256": "638195e78121d7657e97e913217edb5d1119fa8ccb1ea9a189d24d3bf68566cb",
       "archive_versions": [
         "v0.0",
@@ -6335,6 +6584,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/ord/claude/ord-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "54d492fc23e455a085c998172370753bbe88f6d9eef146f46514aed70c0b1877",
       "archive_versions": [
         "v0.0",
@@ -6354,6 +6604,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/ord/claude/ord-traction/SKILL.md",
+      "installable": true,
       "content_sha256": "d6fe6a64a933c1f1416e50c1f8da89c9dd0a99605a69e4baa0609521496118e3",
       "archive_versions": [],
       "command": "/ord-traction",
@@ -6369,6 +6620,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/ord/codex/ord-align/SKILL.md",
+      "installable": true,
       "content_sha256": "83fe897e0cdf75ee457eb151a9efe0d0b63e6d4047b73b4662dfd31c88315d01",
       "archive_versions": [
         "v0.0",
@@ -6387,6 +6639,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/ord/codex/ord-scan/SKILL.md",
+      "installable": true,
       "content_sha256": "70f2b69746307126d271a65e6aeed6907172cf7e446858ff72eed322f02d9546",
       "archive_versions": [
         "v0.0",
@@ -6405,6 +6658,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/ord/codex/ord-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "596f6436b2a4a5f841b7141f0823baf77b381f6d4235c79cab879b3ed21e23b2",
       "archive_versions": [
         "v0.0",
@@ -6424,6 +6678,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/ord/codex/ord-traction/SKILL.md",
+      "installable": true,
       "content_sha256": "d6fe6a64a933c1f1416e50c1f8da89c9dd0a99605a69e4baa0609521496118e3",
       "archive_versions": [],
       "command": "$ord-traction",
@@ -6439,6 +6694,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/product-design/claude/brainstorm/SKILL.md",
+      "installable": true,
       "content_sha256": "3ea4684eedee128bf8da35fc9cb2a8c1c569261834b9cd100e54cfb0e1b29c86",
       "archive_versions": [
         "v0.0",
@@ -6456,6 +6712,7 @@
       "platform": "claude",
       "version": "v0.14",
       "path": "packs/product-design/claude/consolidate-variations/SKILL.md",
+      "installable": true,
       "content_sha256": "1f4c1592a651c3cf5e3d73e00e831cfbb2bd4cb0ae73fe17bff2e60d8b7946a5",
       "archive_versions": [
         "v0.0",
@@ -6484,6 +6741,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/product-design/claude/design-inspirations/SKILL.md",
+      "installable": true,
       "content_sha256": "db80a75e8f5d4c2f02763175c66a2475ac9d33a327afaa406955ea990dd01748",
       "archive_versions": [
         "v0.0"
@@ -6499,6 +6757,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/product-design/claude/design-system/SKILL.md",
+      "installable": true,
       "content_sha256": "28c04e5aa7d801083f9426c05dbaa7c626d0a5bf4704ea8ba4e2b8fec7f656b8",
       "archive_versions": [
         "v0.0",
@@ -6516,6 +6775,7 @@
       "platform": "claude",
       "version": "v0.7",
       "path": "packs/product-design/claude/feature-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "3f88e6319328446d82e31fdb3da7b13303dc99f3a56453d3b0a390c5eb60f963",
       "archive_versions": [
         "v0.0",
@@ -6537,6 +6797,7 @@
       "platform": "claude",
       "version": "v0.16",
       "path": "packs/product-design/claude/prototype/SKILL.md",
+      "installable": true,
       "content_sha256": "b037ed91638362be7f270fe4f0b46beeaced0bce764cd52fb6de25ff75693108",
       "archive_versions": [
         "v0.0",
@@ -6567,6 +6828,7 @@
       "platform": "claude",
       "version": "v0.14",
       "path": "packs/product-design/claude/spec-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "f4c962478cd5698911a4d7921b44155a4e90e402a2fee9b3bf2df380e20aafaf",
       "archive_versions": [
         "v0.0",
@@ -6595,6 +6857,7 @@
       "platform": "claude",
       "version": "v0.23",
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "23db19d82ddef6841d2ebca32b42419a5fc57cf236d7538eccf0ff9df613d051",
       "archive_versions": [
         "v0.0",
@@ -6632,6 +6895,7 @@
       "platform": "claude",
       "version": "v0.9",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
+      "installable": true,
       "content_sha256": "fd9550b8de30ec217c5039a6b9ab3819046564878edbb2440616d8522e4f9847",
       "archive_versions": [
         "v0.0",
@@ -6655,6 +6919,7 @@
       "platform": "claude",
       "version": "v0.21",
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
+      "installable": true,
       "content_sha256": "63395cd06a0a83e186be6e85b941d53c2905c86120e0cc1678c0723ed7f0b8c3",
       "archive_versions": [
         "v0.0",
@@ -6690,6 +6955,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/product-design/codex/brainstorm/SKILL.md",
+      "installable": true,
       "content_sha256": "c6068ac3860643303ac76bb19e3f4cf25d051759c18dff30cb96b587ff4d611b",
       "archive_versions": [
         "v0.0",
@@ -6707,6 +6973,7 @@
       "platform": "codex",
       "version": "v0.14",
       "path": "packs/product-design/codex/consolidate-variations/SKILL.md",
+      "installable": true,
       "content_sha256": "81680e58b04195a3840ce5efc04dd49c02eec61d79a81a3c6713f078219f0228",
       "archive_versions": [
         "v0.0",
@@ -6735,6 +7002,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/product-design/codex/design-inspirations/SKILL.md",
+      "installable": true,
       "content_sha256": "a3df6d5c86ce2aa909e80d1784a473761ff97c815128d189c7f52954d879840f",
       "archive_versions": [
         "v0.0"
@@ -6750,6 +7018,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/product-design/codex/design-system/SKILL.md",
+      "installable": true,
       "content_sha256": "603b6658911cd9b6f80405a154365a270bb47db5b9cac952dab4a8985df4494d",
       "archive_versions": [
         "v0.0"
@@ -6765,6 +7034,7 @@
       "platform": "codex",
       "version": "v0.7",
       "path": "packs/product-design/codex/feature-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "80c8bd7b5a018a7baca2f0bfaa7f766c3945bdab872e1ec84a89f1c3d1602133",
       "archive_versions": [
         "v0.0",
@@ -6786,6 +7056,7 @@
       "platform": "codex",
       "version": "v0.16",
       "path": "packs/product-design/codex/prototype/SKILL.md",
+      "installable": true,
       "content_sha256": "90d39f420e9d7b2a231d418928d6a3a8058ef15fa2197a1c606f2dc88282420c",
       "archive_versions": [
         "v0.0",
@@ -6816,6 +7087,7 @@
       "platform": "codex",
       "version": "v0.14",
       "path": "packs/product-design/codex/spec-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "3db9bc1c30d2505123485b431ee981ee4a9c66e286578edfde5c4b02f9782a5f",
       "archive_versions": [
         "v0.0",
@@ -6844,6 +7116,7 @@
       "platform": "codex",
       "version": "v0.23",
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "15036f049774b0d7173beaa12a93f195b1acd48eaa1ac1dc6382af41d27338a7",
       "archive_versions": [
         "v0.0",
@@ -6881,6 +7154,7 @@
       "platform": "codex",
       "version": "v0.9",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
+      "installable": true,
       "content_sha256": "8e52a257d24e291c1bd2c4d494922fe40d7fdf03b5950eafa202128e0c819ebd",
       "archive_versions": [
         "v0.0",
@@ -6904,6 +7178,7 @@
       "platform": "codex",
       "version": "v0.21",
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
+      "installable": true,
       "content_sha256": "02c26550526f3ffaa07b4b842677ba91ec8fb956d8ed9bb8febc42cb9bdfa8dd",
       "archive_versions": [
         "v0.0",
@@ -6939,6 +7214,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/product-testing/claude/dogfood/SKILL.md",
+      "installable": true,
       "content_sha256": "dd502606c579a725295a10618e3213f09536b2e2ee5d0f8545fb2f1d9ed9fc01",
       "archive_versions": [
         "v0.0",
@@ -6957,6 +7233,7 @@
       "platform": "claude",
       "version": "v0.12",
       "path": "packs/product-testing/claude/uat/SKILL.md",
+      "installable": true,
       "content_sha256": "779a0bb219cdda2c736c75ffb3a3f5dab1f06fd90554e64b4aee4745304b8e07",
       "archive_versions": [
         "v0.0",
@@ -6983,6 +7260,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/product-testing/codex/dogfood/SKILL.md",
+      "installable": true,
       "content_sha256": "d7e7ed747d90b258726a5f97a81fd778e592bad25681d04ce25e6af11152086b",
       "archive_versions": [
         "v0.0",
@@ -7001,6 +7279,7 @@
       "platform": "codex",
       "version": "v0.12",
       "path": "packs/product-testing/codex/uat/SKILL.md",
+      "installable": true,
       "content_sha256": "cd0642ea198a99143389e821fb88b1033bfd03965801e940251196f10004f1ed",
       "archive_versions": [
         "v0.0",
@@ -7027,6 +7306,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/project-fleet/claude/clone-spec-store/SKILL.md",
+      "installable": true,
       "content_sha256": "c60c065eaf907c2f980c686c2185a03353ff7f24fe749c8940fd443c24ad3efa",
       "archive_versions": [
         "v0.0"
@@ -7042,6 +7322,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/project-fleet/claude/skill-inventory/SKILL.md",
+      "installable": true,
       "content_sha256": "dd78efcfc540d976bb669055abd81abf5f1d4910b6410889d46beca5cca53323",
       "archive_versions": [
         "v0.0"
@@ -7057,6 +7338,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/project-fleet/codex/clone-spec-store/SKILL.md",
+      "installable": true,
       "content_sha256": "91e625ed10e030e804894abb6dc6caadeac06cf93bb72af036cf8f091aef6739",
       "archive_versions": [
         "v0.0"
@@ -7072,6 +7354,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/project-fleet/codex/project-fleet/SKILL.md",
+      "installable": true,
       "content_sha256": "bf954c83b509f27b6f75b7a8351c10e1b9ed8b846704c138560e1aac19c6ecaf",
       "archive_versions": [
         "v0.0"
@@ -7087,6 +7370,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/project-fleet/codex/skill-inventory/SKILL.md",
+      "installable": true,
       "content_sha256": "78b36716ff6eec9bcdbc16bc7df3a07b0f05446361221d67f12305c53e38124c",
       "archive_versions": [
         "v0.0"
@@ -7102,6 +7386,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/project-fleet/codex/spin-off/SKILL.md",
+      "installable": true,
       "content_sha256": "61effeded02fe426e018f8cef3854392655a4becd01402b2f420f766252627f7",
       "archive_versions": [
         "v0.0"
@@ -7117,6 +7402,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/release-ops/claude/branch-lifecycle/SKILL.md",
+      "installable": true,
       "content_sha256": "1051409773d623f9da0dccb968101981692202364de3f5daede04e8f57180b9a",
       "archive_versions": [
         "v0.0",
@@ -7133,6 +7419,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/release-ops/claude/deploy/SKILL.md",
+      "installable": true,
       "content_sha256": "0b5776dd7817204272f5489c6a6a1844659708049fca3e0edae8b4d47f8ef782",
       "archive_versions": [],
       "command": "/deploy",
@@ -7146,6 +7433,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/release-ops/claude/release/SKILL.md",
+      "installable": true,
       "content_sha256": "47645cab1935f9a51264820f9ccef75238f154845c5458e42ecc0c2b151ce865",
       "archive_versions": [
         "v0.0",
@@ -7162,6 +7450,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/release-ops/codex/branch-lifecycle/SKILL.md",
+      "installable": true,
       "content_sha256": "8a00388cacb056e7dd9a8db05228e74b155adf69abbee72f624419e85e1c38d0",
       "archive_versions": [
         "v0.0",
@@ -7178,6 +7467,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/release-ops/codex/deploy/SKILL.md",
+      "installable": true,
       "content_sha256": "dd956ad4166267a4010637908567d66a697dde45b404a67ca557a80c6a356a16",
       "archive_versions": [],
       "command": "$deploy",
@@ -7191,6 +7481,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/release-ops/codex/release/SKILL.md",
+      "installable": true,
       "content_sha256": "539c2c220186c2586d32389f246bcc98ebd7bbc93817bff9b540ef7161ae6950",
       "archive_versions": [
         "v0.0",
@@ -7207,6 +7498,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/remotion/claude/video-build/SKILL.md",
+      "installable": true,
       "content_sha256": "cb6656c5bff5744043cc858270114f9986602ec47c36b87106efdf9b94128485",
       "archive_versions": [
         "v0.0",
@@ -7223,6 +7515,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/remotion/claude/video-script/SKILL.md",
+      "installable": true,
       "content_sha256": "7f6bec377a86fba681832cdc09455c57079670ab8e0e8796030d5f638b54e149",
       "archive_versions": [
         "v0.0",
@@ -7239,6 +7532,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/remotion/claude/youtube-format-research/SKILL.md",
+      "installable": true,
       "content_sha256": "8a7c0da27cefda79f5b0881b150a15e84d59a8a393e155c2c685e8c426cbf8b0",
       "archive_versions": [
         "v0.0",
@@ -7259,6 +7553,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/remotion/codex/video-build/SKILL.md",
+      "installable": true,
       "content_sha256": "4cb5dcbd64d0cebca2c61d4edf8471cfdda63f7f4abcbabf3931a36214312df7",
       "archive_versions": [
         "v0.0",
@@ -7275,6 +7570,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/remotion/codex/video-script/SKILL.md",
+      "installable": true,
       "content_sha256": "69a72f56d01d92e294ff1408e02e3d78be489a2f16ef3f7b08d05b96d8933b32",
       "archive_versions": [
         "v0.0",
@@ -7291,6 +7587,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/remotion/codex/youtube-format-research/SKILL.md",
+      "installable": true,
       "content_sha256": "08027d2f771fed7590b033aebb1c2a933ffb36eba2c37413526141f66f2527e7",
       "archive_versions": [
         "v0.0",
@@ -7311,6 +7608,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/repo-maintenance/claude/bootstrap-repo/SKILL.md",
+      "installable": true,
       "content_sha256": "569d9068a4c5694ddaea4e57dded87f24e5db908447b5b20bdd812bb3975034c",
       "archive_versions": [
         "v0.0",
@@ -7330,6 +7628,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/repo-maintenance/claude/env-setup/SKILL.md",
+      "installable": true,
       "content_sha256": "f4fd1658ede0068e91b813fb7c331f0e3ee8451bd4f44400a23fcab2e7481ae9",
       "archive_versions": [],
       "command": "/env-setup",
@@ -7343,6 +7642,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/repo-maintenance/codex/bootstrap-repo/SKILL.md",
+      "installable": true,
       "content_sha256": "98e8c62b9b62aa937df831dabe52fbd2249ea4dd23e1f07f304c1ef0017a83de",
       "archive_versions": [
         "v0.0",
@@ -7362,6 +7662,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/repo-maintenance/codex/env-setup/SKILL.md",
+      "installable": true,
       "content_sha256": "ccce2ca31d059b6341c594fb038b76e1afa7ca0b05d5696e8dfccb339c7bd35f",
       "archive_versions": [],
       "command": "$env-setup",
@@ -7375,6 +7676,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/report-gen/claude/report-website/SKILL.md",
+      "installable": true,
       "content_sha256": "c9940721006554dba9e3fb4b17bf7bc76ee6f78a0693de823f165d35fa681630",
       "archive_versions": [
         "v0.0"
@@ -7390,6 +7692,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/report-gen/codex/report-website/SKILL.md",
+      "installable": true,
       "content_sha256": "78904d1413860922342ef1b42b445d309dff4dcbf351a3f0a6e1e7ca8ba61620",
       "archive_versions": [
         "v0.0"
@@ -7405,6 +7708,7 @@
       "platform": "claude",
       "version": "v0.18",
       "path": "packs/research-admin/claude/research-roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "452432a02061904bdf76dd9f0777e01afb6b016369547b9d498a1c3849174583",
       "archive_versions": [
         "v0.0",
@@ -7437,6 +7741,7 @@
       "platform": "codex",
       "version": "v0.18",
       "path": "packs/research-admin/codex/research-roadmap/SKILL.md",
+      "installable": true,
       "content_sha256": "b52dee7518192beddd3eb7013db73b684470f9312e52381d5192d759b71926f6",
       "archive_versions": [
         "v0.0",
@@ -7469,6 +7774,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/session-analytics/claude/analyze-sessions/SKILL.md",
+      "installable": true,
       "content_sha256": "52583b49de2ec219465ec446b19dc06b5a8d47917a696e80a1cac52b522b1bd9",
       "archive_versions": [
         "v0.0",
@@ -7487,6 +7793,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/session-analytics/claude/prompt-history-backfill/SKILL.md",
+      "installable": true,
       "content_sha256": "8a5bcc906a70a932758922f73815dc69c12c82b01ff5458d027dc212d0987a4b",
       "archive_versions": [
         "v0.0",
@@ -7503,6 +7810,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
+      "installable": true,
       "content_sha256": "dc351c4addfe2747b064c2b0396ef8a55761a8cab6b6c9a444563f844f19e1d9",
       "archive_versions": [
         "v0.0",
@@ -7519,6 +7827,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/session-analytics/codex/analyze-sessions/SKILL.md",
+      "installable": true,
       "content_sha256": "b6690318eaaf069b8dc6226ef7aca7cd27e906584c2517e70953bafe4527e545",
       "archive_versions": [
         "v0.0",
@@ -7536,6 +7845,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/session-analytics/codex/prompt-history-backfill/SKILL.md",
+      "installable": true,
       "content_sha256": "b391fe89c8c7727fde8664286845ac00fa10bc148f5bd8260f77c2ced0c0ad44",
       "archive_versions": [
         "v0.0",
@@ -7552,6 +7862,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
+      "installable": true,
       "content_sha256": "c00c9dd7fbf9e4caa465f5255ffcf5db14016af487398eecc3d9f5019fb67233",
       "archive_versions": [
         "v0.0"
@@ -7567,6 +7878,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/skill-dev/claude/create-agentic-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "3111b66695c8be8e2e8c597ffdf26a3e154b19029a6bbf796f68e9457baafe21",
       "archive_versions": [
         "v0.0",
@@ -7584,6 +7896,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/skill-dev/claude/create-local-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "8d16db97d12db596683033cec39f69f540f28e4e8c25d32f4a72f817daeebfb0",
       "archive_versions": [
         "v0.0",
@@ -7600,6 +7913,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/skill-dev/claude/skill-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "fdad94e1355e52c6efba3a728fe0d7777c6ce08ea0cb2b1f940e0995f217e61c",
       "archive_versions": [
         "v0.0",
@@ -7616,6 +7930,7 @@
       "platform": "claude",
       "version": "v0.4",
       "path": "packs/skill-dev/claude/targeted-skill-builder/SKILL.md",
+      "installable": true,
       "content_sha256": "c9ea5f1678b83eeee16e69f29e79687a4367b2423a95be5cdb5496da1e096b71",
       "archive_versions": [
         "v0.0",
@@ -7634,6 +7949,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/skill-dev/codex/create-agentic-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "043d64abb734c7663405921d58ce4e10a39fb8becda234b152f9a406dcc229e4",
       "archive_versions": [
         "v0.0",
@@ -7651,6 +7967,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/skill-dev/codex/create-local-skill/SKILL.md",
+      "installable": true,
       "content_sha256": "c90acc39721483ae320b8553c842b631186839925e33d478d75558763109268e",
       "archive_versions": [
         "v0.0",
@@ -7667,6 +7984,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/skill-dev/codex/skill-interview/SKILL.md",
+      "installable": true,
       "content_sha256": "183804c75577c8c19c3fc083523ae1f3ae96ecb1bd0c49bb7df23bbbb4be192f",
       "archive_versions": [
         "v0.0",
@@ -7683,6 +8001,7 @@
       "platform": "codex",
       "version": "v0.4",
       "path": "packs/skill-dev/codex/targeted-skill-builder/SKILL.md",
+      "installable": true,
       "content_sha256": "2dde33f197d9e545691f72bc40ba02d5d68a640e57222fb215a3e55ddf3cea02",
       "archive_versions": [
         "v0.0",
@@ -7701,6 +8020,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/teardown/claude/decommission/SKILL.md",
+      "installable": true,
       "content_sha256": "8af921275166eb3bce5f4e649367fd00a87326b3b205104eb825a1eb34d74d78",
       "archive_versions": [
         "v0.0"
@@ -7716,6 +8036,7 @@
       "platform": "claude",
       "version": "v0.5",
       "path": "packs/teardown/claude/desk-flip/SKILL.md",
+      "installable": true,
       "content_sha256": "e717ef3e4ca95568beac967cf9783f5c1026a932a9229b1424c4c4c28a3a92fc",
       "archive_versions": [
         "v0.0",
@@ -7735,6 +8056,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/teardown/codex/decommission/SKILL.md",
+      "installable": true,
       "content_sha256": "5d93c43d9b4d9a7daac06d395ec6ba7b0b0f8ecea07c3be16874c32792a44377",
       "archive_versions": [
         "v0.0"
@@ -7750,6 +8072,7 @@
       "platform": "codex",
       "version": "v0.5",
       "path": "packs/teardown/codex/desk-flip/SKILL.md",
+      "installable": true,
       "content_sha256": "e1562b6dab4444550505404dfb366ba8c3a488f05283a8f572db2ebd7c9e5ece",
       "archive_versions": [
         "v0.0",
@@ -7769,6 +8092,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/vard/claude/vard-align/SKILL.md",
+      "installable": true,
       "content_sha256": "6dbfd8655f35cd1ff20441d71a982e0681fd59566da2fb51bbf3fc78e865ff0c",
       "archive_versions": [],
       "command": "/vard-align",
@@ -7784,6 +8108,7 @@
       "platform": "claude",
       "version": "v0.2",
       "path": "packs/vard/claude/vard-scan/SKILL.md",
+      "installable": true,
       "content_sha256": "41b36ae9b0e23faaa473d49a5bd1b2d5b7bc78a85b3d75ccc43c355b86eda141",
       "archive_versions": [
         "v0.0",
@@ -7802,6 +8127,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/vard/claude/vard-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "015b27305b931cb71d007e4af1cdc000a42b4f6e4e39dd699b2dd883c7cdffd9",
       "archive_versions": [],
       "command": "/vard-ship",
@@ -7817,6 +8143,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/vard/claude/vard-traction/SKILL.md",
+      "installable": true,
       "content_sha256": "43c1b0970f8325f43731f252b856880f7106fdf18fcd26a74d5bf9e4282f4cdd",
       "archive_versions": [],
       "command": "/vard-traction",
@@ -7832,6 +8159,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/vard/codex/vard-align/SKILL.md",
+      "installable": true,
       "content_sha256": "6dbfd8655f35cd1ff20441d71a982e0681fd59566da2fb51bbf3fc78e865ff0c",
       "archive_versions": [],
       "command": "$vard-align",
@@ -7847,6 +8175,7 @@
       "platform": "codex",
       "version": "v0.2",
       "path": "packs/vard/codex/vard-scan/SKILL.md",
+      "installable": true,
       "content_sha256": "b5210ab65e8cbf0258469b8d680c4fd4acc6cc6221403443388d4d193309502a",
       "archive_versions": [
         "v0.0",
@@ -7865,6 +8194,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/vard/codex/vard-ship/SKILL.md",
+      "installable": true,
       "content_sha256": "015b27305b931cb71d007e4af1cdc000a42b4f6e4e39dd699b2dd883c7cdffd9",
       "archive_versions": [],
       "command": "$vard-ship",
@@ -7880,6 +8210,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/vard/codex/vard-traction/SKILL.md",
+      "installable": true,
       "content_sha256": "43c1b0970f8325f43731f252b856880f7106fdf18fcd26a74d5bf9e4282f4cdd",
       "archive_versions": [],
       "command": "$vard-traction",
@@ -7895,6 +8226,7 @@
       "platform": "claude",
       "version": "v0.1",
       "path": "packs/website-polish/claude/icon-handler/SKILL.md",
+      "installable": true,
       "content_sha256": "dd70cd9e885c1a1cdb080198a2e4260d8060e952ba86c620626ade8925a40698",
       "archive_versions": [
         "v0.0"
@@ -7910,6 +8242,7 @@
       "platform": "codex",
       "version": "v0.1",
       "path": "packs/website-polish/codex/icon-handler/SKILL.md",
+      "installable": true,
       "content_sha256": "e7150ce9b27b99219450681ed13c647c07adaf4027fc058867ae3db31f69da80",
       "archive_versions": [
         "v0.0"
@@ -7925,6 +8258,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "009fe17fc4784771aa7c2fac90087356917c727b4d891c5f7c9da5b1f293959f",
       "archive_versions": [
         "v0.0",
@@ -7945,6 +8279,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-cadence-diagnosis/SKILL.md",
+      "installable": true,
       "content_sha256": "5b7fd199c9a8d5a74b8e9f8e5d5fdcb9015d98ce64d928fef47e0fc94ad1bc82",
       "archive_versions": [
         "v0.0",
@@ -7965,6 +8300,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-channel-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "379f7dc2ec175e3a1d0196d035c6751bb71776790884b1312ebcb14b7841a5d1",
       "archive_versions": [
         "v0.0",
@@ -7985,6 +8321,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-competitive-research/SKILL.md",
+      "installable": true,
       "content_sha256": "c5d16c6d8bada80827d2eb671d9da1fac9ada397623a42a6de8a31a6d5196fab",
       "archive_versions": [
         "v0.0",
@@ -8005,6 +8342,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-concept-research/SKILL.md",
+      "installable": true,
       "content_sha256": "c56e39ce3b6ab33c5a9c63f9f97f73af18a674c25b3b496bac881f09d13acfd2",
       "archive_versions": [
         "v0.0",
@@ -8025,6 +8363,7 @@
       "platform": "claude",
       "version": "v0.0",
       "path": "packs/youtube-ops/claude/youtube-derivative-cuts/SKILL.md",
+      "installable": true,
       "content_sha256": "19e3357882d68b5c199d0093c09af83aad8fb6b4c99c0a876310051f52514719",
       "archive_versions": [],
       "command": "/youtube-derivative-cuts",
@@ -8038,6 +8377,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-description-optimizer/SKILL.md",
+      "installable": true,
       "content_sha256": "80e8dfb1fd1f9c4db462d09866c505bc8e47c7eb6e9412660197fe88bde97ede",
       "archive_versions": [
         "v0.0",
@@ -8058,6 +8398,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-peer-benchmark/SKILL.md",
+      "installable": true,
       "content_sha256": "9fbef3b7c843035e99417e55e0f7b09fbf3d549470b9505d6f4fcdc21bef8a8a",
       "archive_versions": [
         "v0.0",
@@ -8078,6 +8419,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-portfolio/SKILL.md",
+      "installable": true,
       "content_sha256": "20d4ff5cc90e71873774369acab78d08e4778cf037164be20f91fea484d04bea",
       "archive_versions": [
         "v0.0",
@@ -8098,6 +8440,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-search-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "135e9bd6021f18c5bbc5ca0b21b7ce644da56c3e9c3a1491990592201277a4c5",
       "archive_versions": [
         "v0.0",
@@ -8118,6 +8461,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-title-thumbnail-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "62c2fdbfeb08da1a5bce96e2de9a60e33e8fe836c80169982ad6c79bbe756e9e",
       "archive_versions": [
         "v0.0",
@@ -8138,6 +8482,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-vid-research/SKILL.md",
+      "installable": true,
       "content_sha256": "952d8c3c7a58efff3b1a6322b610446200dd3d39a4c292acb9c06273a5929506",
       "archive_versions": [
         "v0.0",
@@ -8158,6 +8503,7 @@
       "platform": "claude",
       "version": "v0.6",
       "path": "packs/youtube-ops/claude/youtube-video-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "f6cc63bcfa70b647516e6e8d0010b68144e4662fe1247fba919fc703ec0d27c5",
       "archive_versions": [
         "v0.0",
@@ -8178,6 +8524,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "1d6a31925b1efc353bdb7fcff4586beec44a2940cbcb58ed516994e69c22ec37",
       "archive_versions": [
         "v0.0",
@@ -8195,6 +8542,7 @@
       "platform": "claude",
       "version": "v0.3",
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
+      "installable": true,
       "content_sha256": "a1d6b4e348278a30eb1bbff69239b357db89bacffa7b4d127db3b1afb4da84cc",
       "archive_versions": [
         "v0.0",
@@ -8212,6 +8560,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "7e811ef617fd7d35caa458882b8b399d1252830d371dfaa538705ee41d4ec5a6",
       "archive_versions": [
         "v0.0",
@@ -8232,6 +8581,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-cadence-diagnosis/SKILL.md",
+      "installable": true,
       "content_sha256": "85c66547463202e41db55e7c0c12d1a8931dbf48de65fb1893dc3d3436a34797",
       "archive_versions": [
         "v0.0",
@@ -8252,6 +8602,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-channel-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "7be20f08e82b49b8749352beda11ba5063ca60f48ef2ab86cd14243320905c88",
       "archive_versions": [
         "v0.0",
@@ -8272,6 +8623,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-competitive-research/SKILL.md",
+      "installable": true,
       "content_sha256": "bd9516657e76ea36c349fe2bb1d3e7a15e72875a072c48f098b43e3912690bfe",
       "archive_versions": [
         "v0.0",
@@ -8292,6 +8644,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-concept-research/SKILL.md",
+      "installable": true,
       "content_sha256": "5108598bb656877f01ae88f91e337e23d7b5822f0ac617f84695d74c8b0eba81",
       "archive_versions": [
         "v0.0",
@@ -8312,6 +8665,7 @@
       "platform": "codex",
       "version": "v0.0",
       "path": "packs/youtube-ops/codex/youtube-derivative-cuts/SKILL.md",
+      "installable": true,
       "content_sha256": "28cfa35f7bffe126420e0da3c6b78238c3a3b9243c71a4259b656c1c77cb2330",
       "archive_versions": [],
       "command": "$youtube-derivative-cuts",
@@ -8325,6 +8679,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-description-optimizer/SKILL.md",
+      "installable": true,
       "content_sha256": "9b3a4271f745324e58c6408c8f3aafc5b3d9967f79d0677c539697657d22f171",
       "archive_versions": [
         "v0.0",
@@ -8345,6 +8700,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-peer-benchmark/SKILL.md",
+      "installable": true,
       "content_sha256": "d17f1a47fcdff2c6f91b1c046f1bcd6a98f7afc21aa99b44ed7032af2f23c15e",
       "archive_versions": [
         "v0.0",
@@ -8365,6 +8721,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-portfolio/SKILL.md",
+      "installable": true,
       "content_sha256": "f2dc2ed1661935cf9d2be988706f0070925c90bc662edc1bca393fa9262654d2",
       "archive_versions": [
         "v0.0",
@@ -8385,6 +8742,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-search-positioning/SKILL.md",
+      "installable": true,
       "content_sha256": "86afb0897c90730bf719bd2e91840c01e978a38cce500026d553ea8cf9b77fb2",
       "archive_versions": [
         "v0.0",
@@ -8405,6 +8763,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "d555c752d4b31f0d9dda2e0e1bda2cc2c91e80b92d16306ab43574fcfafec1a7",
       "archive_versions": [
         "v0.0",
@@ -8425,6 +8784,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-vid-research/SKILL.md",
+      "installable": true,
       "content_sha256": "c6ae854898f3aae82af0978a0c46a783a28ace345a0b872161af436e278d9c6c",
       "archive_versions": [
         "v0.0",
@@ -8445,6 +8805,7 @@
       "platform": "codex",
       "version": "v0.6",
       "path": "packs/youtube-ops/codex/youtube-video-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "fcd99b6f09b50a66d0f900b6df54ac23357e2848a0e83ecc87e053ac4f4781db",
       "archive_versions": [
         "v0.0",
@@ -8465,6 +8826,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
+      "installable": true,
       "content_sha256": "a75592f585800c0f623631c8883e0af1fd586a7ddbdc8426fadb0b62cab9ffbd",
       "archive_versions": [
         "v0.0",
@@ -8482,6 +8844,7 @@
       "platform": "codex",
       "version": "v0.3",
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
+      "installable": true,
       "content_sha256": "5a7dea56d211c6a1c9c9e9d9dac61e74f0e5c21df3911c513845aee6dceac98a",
       "archive_versions": [
         "v0.0",

@@ -115,19 +115,23 @@ function manifestSkills(manifest) {
   });
 }
 
+function installableSkill(skill) {
+  return skill.installable !== false;
+}
+
 function activePackExists(manifest, packName) {
   return activePackNames(manifest).includes(packName);
 }
 
 function packSkillEntries(manifest, packName, tool) {
   return manifestSkills(manifest).filter((skill) => {
-    return skill.pack === packName && skill.platform === tool && skill.path;
+    return installableSkill(skill) && skill.pack === packName && skill.platform === tool && skill.path;
   });
 }
 
 function baseSkillEntries(manifest, tool) {
   return manifestSkills(manifest).filter((skill) => {
-    return skill.scope === 'base' && skill.platform === tool && skill.path;
+    return installableSkill(skill) && skill.scope === 'base' && skill.platform === tool && skill.path;
   });
 }
 
@@ -135,7 +139,7 @@ function uniquePackSkillNames(manifest, packName) {
   return [
     ...new Set(
       manifestSkills(manifest)
-        .filter((skill) => skill.pack === packName && skill.name)
+        .filter((skill) => installableSkill(skill) && skill.pack === packName && skill.name)
         .map((skill) => skill.name)
     )
   ].sort((a, b) => a.localeCompare(b));
@@ -145,31 +149,41 @@ function uniqueBaseSkillNames(manifest) {
   return [
     ...new Set(
       manifestSkills(manifest)
-        .filter((skill) => skill.scope === 'base' && skill.name)
+        .filter((skill) => installableSkill(skill) && skill.scope === 'base' && skill.name)
         .map((skill) => skill.name)
     )
   ].sort((a, b) => a.localeCompare(b));
 }
 
 function findPackForSkill(manifest, skillName) {
-  return manifestSkills(manifest).find((skill) => skill.name === skillName && skill.pack)?.pack || null;
+  return manifestSkills(manifest).find((skill) => {
+    return installableSkill(skill) && skill.name === skillName && skill.pack;
+  })?.pack || null;
 }
 
 function hasBaseSkill(manifest, skillName) {
   return manifestSkills(manifest).some((skill) => {
-    return skill.scope === 'base' && skill.name === skillName && skill.path;
+    return installableSkill(skill) && skill.scope === 'base' && skill.name === skillName && skill.path;
   });
 }
 
 function findSkillEntry(manifest, packName, tool, skillName) {
   return manifestSkills(manifest).find((skill) => {
-    return skill.pack === packName && skill.platform === tool && skill.name === skillName && skill.path;
+    return installableSkill(skill)
+      && skill.pack === packName
+      && skill.platform === tool
+      && skill.name === skillName
+      && skill.path;
   });
 }
 
 function findBaseSkillEntry(manifest, tool, skillName) {
   return manifestSkills(manifest).find((skill) => {
-    return skill.scope === 'base' && skill.platform === tool && skill.name === skillName && skill.path;
+    return installableSkill(skill)
+      && skill.scope === 'base'
+      && skill.platform === tool
+      && skill.name === skillName
+      && skill.path;
   });
 }
 
@@ -1464,6 +1478,7 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
     for (const skill of skills) {
       installSingleSkill(projectRoot, manifest, skill);
     }
+    pruneOrphanedSkillRoots({ manifest, projectRoot });
     console.log(`Refreshed project skills to ${manifestPackageLabel(manifest)}.`);
     printSessionReloadNotice();
     return 0;

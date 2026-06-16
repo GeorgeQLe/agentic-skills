@@ -337,8 +337,13 @@ describe('Node lifecycle commands', () => {
     for (const tool of ['claude', 'codex']) {
       const files = installedSkillFiles(dir, tool, 'customer-discovery');
       assert.equal(files.includes('frameworks/five-rings/SKILL.md'), true);
+      assert.equal(files.includes('frameworks/pmf-engine/SKILL.md'), true);
+      assert.equal(files.includes('frameworks/w3-hypothesis/SKILL.md'), true);
       assert.equal(files.some((file) => file.split('/').includes('archive')), false);
       assert.equal(existsSync(join(skillPath(dir, tool, 'customer-discovery'), 'frameworks/five-rings/archive/v0.0/SKILL.md')), false);
+      assert.equal(existsSync(skillPath(dir, tool, 'five-rings')), false);
+      assert.equal(existsSync(skillPath(dir, tool, 'pmf-engine')), false);
+      assert.equal(existsSync(skillPath(dir, tool, 'w3-hypothesis')), false);
     }
   });
 
@@ -566,6 +571,35 @@ describe('Node lifecycle commands', () => {
     );
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'devtool-adoption': 'devtool' });
+  });
+
+  it('refresh prunes old repo-managed top-level framework installs but keeps unmanaged roots', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'business-app',
+      enabled_packs: ['business-research'],
+      skill_pack_version: 1
+    });
+    writeManagedInstall(
+      dir,
+      'codex',
+      'pmf-engine',
+      join(repoRoot, 'packs/business-research/codex/customer-discovery/frameworks/pmf-engine')
+    );
+    const unmanaged = skillPath(dir, 'claude', 'pmf-engine');
+    mkdirSync(unmanaged, { recursive: true });
+    writeFileSync(join(unmanaged, 'SKILL.md'), 'local unmanaged skill\n');
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /removed  \.codex\/skills\/pmf-engine \(pack not enabled\)/);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'pmf-engine')), false);
+    assert.equal(existsSync(unmanaged), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'customer-discovery')), true);
+    assert.equal(
+      existsSync(join(skillPath(dir, 'codex', 'customer-discovery'), 'frameworks/pmf-engine/SKILL.md')),
+      true
+    );
   });
 
   it('refresh reconciles a renamed enabled pack alias before installing', async () => {

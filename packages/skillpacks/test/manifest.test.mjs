@@ -10,6 +10,10 @@ function deckByName(name) {
   return manifest.decks.find((deck) => deck.name === name);
 }
 
+function skillByPath(skillPath) {
+  return manifest.skills.find((skill) => skill.path === skillPath);
+}
+
 describe('skillpacks manifest deck metadata', () => {
   it('models Game AFPS as a deliberate game deck backed by the game pack', () => {
     const deck = deckByName('game-afps');
@@ -33,6 +37,26 @@ describe('skillpacks manifest deck metadata', () => {
     assert.ok(
       gameSkills.every((skill) => skill.deck_memberships.includes('game-afps')),
       'every game skill should belong to game-afps'
+    );
+  });
+
+  it('keeps nested framework skills in inventory but marks them non-installable', () => {
+    const parent = skillByPath('packs/business-research/codex/customer-discovery/SKILL.md');
+    const framework = skillByPath('packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md');
+    const baseSkill = skillByPath('base/codex/skills/SKILL.md');
+
+    assert.ok(parent, 'customer-discovery parent skill should exist');
+    assert.ok(framework, 'nested pmf-engine framework skill should remain in the manifest');
+    assert.ok(baseSkill, 'base skill should exist');
+    assert.equal(parent.installable, true);
+    assert.equal(framework.installable, false);
+    assert.equal(baseSkill.installable, true);
+    assert.equal(
+      manifest.packs
+        .find((pack) => pack.name === 'business-research')
+        .skills.includes('pmf-engine'),
+      false,
+      'non-installable nested framework skills should not count as top-level pack skills'
     );
   });
 });

@@ -1,3 +1,38 @@
+## Current Implementation - skillpacks Refresh Duplicate Framework Installs
+
+### Goal
+
+Prevent `skillpacks refresh` and pack installs from creating top-level duplicate framework skill roots while preserving nested framework files inside their parent orchestrator installs and keeping framework entries visible in the manifest inventory.
+
+### Scope
+
+- `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`
+- `packages/skillpacks/src/cli/lifecycle.mjs`
+- `packages/skillpacks/src/cli/pack-normalization.mjs`
+- `packages/skillpacks/test/manifest.test.mjs`
+- `packages/skillpacks/test/lifecycle.test.mjs`
+- Generated manifest/package artifacts if required by package verification
+- Prompt history and task tracking for this `$investigate` invocation
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record this implementation plan.
+2. Trace manifest generation, install argument normalization, lifecycle sync, and pruning behavior.
+3. Add an `installable` manifest flag that excludes nested pack skills from top-level install targets while keeping base skills and top-level pack skills installable.
+4. Filter pack installs, refreshes, expected-root counts, exact skill resolution, and remove/prune calculations to installable skills only.
+5. Ensure refresh prunes obsolete repo-managed top-level framework roots while preserving unmanaged same-name roots.
+6. Add focused manifest and lifecycle regression coverage.
+7. Run package tests/build verification, inspect the diff, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- Nested framework/subskill `SKILL.md` entries remain in the manifest with `installable: false`.
+- `install business-research` installs `customer-discovery` without creating top-level `five-rings`, `pmf-engine`, or `w3-hypothesis` roots.
+- Nested framework files remain present under the installed `customer-discovery/frameworks/*` tree.
+- `refresh` removes old repo-managed duplicate top-level framework roots once they are no longer expected.
+- `refresh` does not delete unmanaged local roots with the same names.
+- Focused package verification passes.
+
 ## Current Implementation - Single Base Skill Install Support
 
 ### Goal

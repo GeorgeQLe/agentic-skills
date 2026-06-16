@@ -147,7 +147,7 @@ function buildPacks(files, skills) {
   ]);
 
   return packNames.map((name) => {
-    const packSkills = skills.filter((skill) => skill.pack === name);
+    const packSkills = skills.filter((skill) => skill.pack === name && isInstallableSkill(skill));
     const packSkillNames = unique(packSkills.map((skill) => skill.name));
     const pack = metadata.get(name);
 
@@ -165,6 +165,16 @@ function buildPacks(files, skills) {
   });
 }
 
+function isInstallableSkill(skill) {
+  if (skill.scope === "base") {
+    return true;
+  }
+  if (skill.scope !== "pack") {
+    return false;
+  }
+  return /^packs\/[^/]+\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path);
+}
+
 function buildSkills(skills) {
   return skills
     .map((skill) => {
@@ -176,6 +186,7 @@ function buildSkills(skills) {
         platform: skill.platform,
         version: skill.version,
         path: skill.path,
+        installable: isInstallableSkill(skill),
         content_sha256: skillContentHash(skill.path),
         archive_versions: discoverArchiveVersions(repoRoot, skill.path),
         command: skill.command,

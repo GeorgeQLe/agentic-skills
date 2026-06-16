@@ -391,6 +391,9 @@ function skillInstallSourceMap(manifest) {
   });
 
   for (const skill of skills) {
+    if (skill.installable === false) {
+      continue;
+    }
     if (!skill.name || map.has(skill.name)) {
       continue;
     }

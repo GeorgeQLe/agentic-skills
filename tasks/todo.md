@@ -1,3 +1,36 @@
+## Current Implementation - skillpacks Refresh Duplicate Framework Installs
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Trace manifest/lifecycle installability paths and existing tests.
+- [x] Implement installable manifest filtering and refresh pruning.
+- [x] Add focused manifest and lifecycle regression tests.
+- [x] Run package verification.
+- [x] Review final diff, commit, and push intended changes.
+
+### Review Notes
+
+- Strategy used: General, because the bug is in CLI manifest/install behavior rather than UI or runtime data state.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260616-144412-skillpacks-refresh-duplicates.md`.
+- Starting point: `git status --short` reported no dirty tracked or untracked changes in this checkout.
+- User claim verdict: confirmed. The manifest was recursively inventorying non-archive `packs/*/{claude,codex}/**/SKILL.md` files, and lifecycle install/refresh paths used those pack entries directly, so nested framework skills could become top-level managed roots.
+- Root cause: `packages/skillpacks/scripts/build-skillpacks-manifest.mjs` did not distinguish top-level install targets from nested framework inventory entries, and `packages/skillpacks/src/cli/lifecycle.mjs` / `pack-normalization.mjs` treated every manifest skill as installable.
+- Fix applied: generated manifest skill entries now include `installable`; base and top-level pack skills are installable, nested pack skills remain in inventory with `installable: false`, and pack counts/install resolution/lifecycle syncing use installable entries only.
+- Refresh now runs managed-root pruning after syncing expected roots, which removes old repo-managed top-level framework duplicates while preserving unmanaged local roots.
+- Existing content-copy behavior already skipped `archive/` and preserved nested framework files under parent installs, so no copy-path rewrite was needed.
+- Verification passed:
+  - `node --test packages/skillpacks/test/manifest.test.mjs`
+  - `node --test packages/skillpacks/test/pack-normalization.test.mjs`
+  - `node --test packages/skillpacks/test/lifecycle.test.mjs`
+  - `npm --workspace packages/skillpacks run build:check`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `pnpm --dir=packages/skillpacks run test:node` (92 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+- The requested `pnpm --dir packages/skillpacks test` spelling failed in this shell because pnpm parsed `packages/skillpacks` as the command. `pnpm --dir=packages/skillpacks test` also exited 1 with no output because `packages/skillpacks/package.json` has no `test` script; the package's actual pnpm test command is `pnpm --dir=packages/skillpacks run test:node`.
+
 ## Current Implementation - Single Base Skill Install Support
 
 ### Current Checklist
