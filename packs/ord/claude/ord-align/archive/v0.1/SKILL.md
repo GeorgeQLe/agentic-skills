@@ -2,7 +2,7 @@
 name: ord-align
 description: Validate whether an OSS tool is worth building through staged namespace, existing-solution, and feasibility review
 type: analysis
-version: v0.2
+version: v0.1
 context_intake: scoped
 research_workflow: lightweight
 ---
@@ -21,7 +21,7 @@ Stage 1 output is a lightweight `review` HTML alignment page at `alignment/ord-a
 
 After final compiled YAML approves the validation scope, perform the lightweight ORD validation in the same `review` HTML page. Run the npm namespace checks, existing-solution checks, feasibility analysis, effort estimate, adoption-signal review, and evidence review. Then stop again for feedback-only YAML or final compiled YAML artifact approval before writing the markdown alignment doc.
 
-Only after final compiled YAML approves a GO artifact may this skill write `alignment/ord-<slug>.md` and convert the HTML page to `confirmed`. Emit downstream routing after approved artifacts have been written or updated: route to `/ord-ship` after an approved GO markdown doc is written, or route back to `/ord-scan` after an approved NO-GO outcome is preserved in the confirmed HTML page.
+Only after final compiled YAML approves a GO artifact may this skill write `alignment/ord-<slug>.md`, convert the HTML page to `confirmed`, and emit `/ord-ship` routing. For NO-GO outcomes, keep the decision in the confirmed HTML page and do not write `alignment/ord-<slug>.md`; route back to `/ord-scan` only after final approval.
 
 ## Staged Alignment Workflow
 
@@ -29,7 +29,7 @@ Use this staged workflow for every candidate validation.
 
 1. **Stage 1 - Candidate scope discovery and approval.** Read the most recent approved ord-scan output or `$ARGUMENTS` for the candidate. Inspect only enough context to identify the tool concept, candidate package names, target developer persona, intended v1 boundary, licensing/dependency concerns, and source categories to check. Ask 1-3 required user questions only when the available context is missing, contradictory, or unsafe to interpret. Build `alignment/ord-align-<slug>.html` in `review` status and stop for final compiled YAML approving the validation scope.
 2. **Stage 2 - Validation and artifact review.** Only after approved scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, run the validation checks. Check npm namespace availability with `npm view <name>` when possible, inspect existing solutions, evaluate whether v1 can ship in 1-3 days, estimate effort, and review adoption signals. Update the same HTML page with the complete validation substance as structured review UI: namespace results, existing-solution comparison, feasibility matrix, effort estimate, evidence notes, assumptions/confidence, verdict rationale, proposed final artifact path, and artifact approval gates. Stop for feedback-only YAML or final compiled YAML artifact approval. Do not write `alignment/ord-<slug>.md` in Stage 2.
-3. **Stage 3 - Finalize approved outcome.** Consume final compiled YAML for artifact approval only when it has `approval_status: ready-for-agent-review` and no unresolved negative feedback. Apply approved edits first. If the approved verdict is GO, write the one-page markdown alignment doc to `alignment/ord-<slug>.md` and convert the HTML page to `confirmed` with the approval record preserved. If the approved verdict is NO-GO, confirm the HTML page with the approval record and do not create the markdown alignment doc. Emit routing only after the approved artifact has been written or updated.
+3. **Stage 3 - Finalize approved outcome.** Consume final compiled YAML for artifact approval only when it has `approval_status: ready-for-agent-review` and no unresolved negative feedback. Apply approved edits first. If the approved verdict is GO, write the one-page markdown alignment doc to `alignment/ord-<slug>.md` and convert the HTML page to `confirmed` with the approval record preserved. If the approved verdict is NO-GO, confirm the HTML page with the approval record and do not create the markdown alignment doc.
 
 ## Evidence And Feedback Handling
 

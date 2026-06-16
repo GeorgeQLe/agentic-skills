@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.2"
   },
-  "source_fingerprint": "87c23697b936236589f70f37b62a5d5ddfe3aa0dc3c07b5916a9f4a1e1d5549b",
+  "source_fingerprint": "74fb461078404139f78d9a553b811f39a82bb2d6a8884bcf06b1bc09dc3a5934",
   "packs": [
     {
       "name": "agent-bridge",
@@ -6297,11 +6297,12 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/ord/claude/ord-align/SKILL.md",
-      "content_sha256": "7ef682e338176a8b0f17a999b46e9236c6c741f7bbda63e15710aa96ba9e13a1",
+      "content_sha256": "083b906ce3fd03226dae6b447d73f2d5cf34eb306e2a8be0015772bb69bc7588",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/ord-align",
       "deck_memberships": [
@@ -6366,11 +6367,12 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/ord/codex/ord-align/SKILL.md",
-      "content_sha256": "175a0d4859d1fd5c2c024745082335cedab16a38239a5dd692d2fcb22478a3b2",
+      "content_sha256": "83fe897e0cdf75ee457eb151a9efe0d0b63e6d4047b73b4662dfd31c88315d01",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$ord-align",
       "deck_memberships": [

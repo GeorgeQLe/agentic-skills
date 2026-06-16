@@ -1,3 +1,32 @@
+## Current Implementation - ord-align Routing Audit Contract Fix
+
+### Goal
+
+Fix the pre-existing `ord-align` routing audit findings by clarifying that downstream routing is emitted only after approved artifacts have been written or updated.
+
+### Scope
+
+- `packs/ord/codex/ord-align/SKILL.md`
+- `packs/ord/claude/ord-align/SKILL.md`
+- Mirrored `ord-align` archives and changelogs
+- `tasks/lessons.md`
+- Task tracking and verification
+
+### Plan
+
+1. Archive mirrored active `ord-align` `v0.1` contracts.
+2. Bump mirrored active contracts to `v0.2` and add changelog entries.
+3. Add minimal routing-after-approved-write wording without changing the staged workflow.
+4. Run routing audit, version/archive/parity checks, and diff hygiene.
+5. Record results, commit, and push the fix on `master`.
+
+### Acceptance Criteria
+
+- `node scripts/skill-alignment-routing-audit.mjs` exits 0.
+- Mirrored active contracts are `v0.2` with `archive/v0.1/SKILL.md` snapshots.
+- Codex and Claude contracts remain semantically mirrored with only runner command syntax differences.
+- The fix does not alter ORD validation stage boundaries beyond clarifying the routing point.
+
 ## Current Investigation - ord-align Routing Audit Provenance
 
 ### Goal

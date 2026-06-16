@@ -1,3 +1,31 @@
+## Current Implementation - ord-align Routing Audit Contract Fix
+
+### Current Checklist
+
+- [x] Archive mirrored active `ord-align` `v0.1` contracts.
+- [x] Bump mirrored active contracts to `v0.2` and update changelogs.
+- [x] Clarify downstream routing occurs after approved artifacts are written or updated.
+- [x] Run routing audit, version/archive/parity checks, and diff hygiene.
+- [x] Record review notes, commit, and push.
+
+### Review Notes
+
+- User correction: the previous provenance investigation confirmed the findings were pre-existing but did not apply the available fix.
+- Revision classification: replace. The remediation changes the canonical active contracts from "pre-existing finding documented" to "finding fixed" without adding extra caveats to the skill body.
+- Archived current contracts:
+  - `packs/ord/codex/ord-align/archive/v0.1/SKILL.md`
+  - `packs/ord/claude/ord-align/archive/v0.1/SKILL.md`
+- Active mirrored contracts now explicitly state that downstream routing is emitted after approved artifacts have been written or updated.
+- Refreshed package manifest with `npm run skillpacks:build`; the package source fingerprint changed to `4240adac5fd258f4f19abcecea755420e54556d460c1ead83d1d13b908163147`.
+- Verification passed:
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+
 ## Current Investigation - ord-align Routing Audit Provenance
 
 ### Current Checklist

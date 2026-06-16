@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-16 — Pre-existing provenance does not close a real failing gate
+
+- A provenance investigation correctly proved that `ord-align` routing audit findings reproduced from unmodified `HEAD`, but I stopped after documenting that instead of also offering or applying the small available fix.
+- When a user asks whether a failing verification is unrelated, distinguish two outcomes: provenance for the current work and remediation for the underlying gate.
+- If the underlying fix is narrow, low-risk, and in-scope for the current repository, apply it after proving provenance unless the user explicitly asked for evidence only.
+
 ## 2026-06-15 — Verify ownership before deleting untracked files
 
 - A cleanup plan treated all untracked files as disposable refresh fallout, but some untracked files can be prior or concurrent work that has not been committed yet.
