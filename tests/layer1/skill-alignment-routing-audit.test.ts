@@ -20,13 +20,15 @@ describe("skill alignment routing audit", () => {
       output = String((error as { stdout?: Buffer | string }).stdout ?? "");
     }
 
-    expect(output).toContain("Fixture SKILL.md files scanned: 4");
+    expect(output).toContain("Fixture SKILL.md files scanned: 6");
     expect(output).toContain("non-exec-direct-exec-handoff");
     expect(output).toContain("missing-alignment-yaml-stop-contract");
     expect(output).toContain("invalid/non-exec-recommends-exec/SKILL.md");
     expect(output).toContain("invalid/preapproval-routing/SKILL.md");
     expect(output).not.toContain("valid/game-no-exec/SKILL.md");
     expect(output).not.toContain("valid/exec-loop-allowed/SKILL.md");
+    expect(output).not.toContain("valid/non-exec-prohibits-exec/SKILL.md");
+    expect(output).not.toContain("valid/staged-current-wording/SKILL.md");
   });
 
   it("keeps active skill contracts free of direct exec handoffs before approval", () => {

@@ -77,10 +77,51 @@ const execHandoffPatterns = [
   /\b`?(?:\$exec|\/exec)`?\s+(?:drives|handles|executes|to begin|to start)\b/g,
 ];
 
+function sentenceAround(text, index) {
+  const before = text.slice(0, index);
+  const after = text.slice(index);
+  const start = Math.max(
+    before.lastIndexOf("\n"),
+    before.lastIndexOf("."),
+    before.lastIndexOf("!"),
+    before.lastIndexOf("?"),
+  ) + 1;
+  const endCandidates = [
+    after.indexOf("\n"),
+    after.indexOf("."),
+    after.indexOf("!"),
+    after.indexOf("?"),
+  ].filter((candidate) => candidate >= 0);
+  const end = endCandidates.length > 0
+    ? index + Math.min(...endCandidates)
+    : text.length;
+  return text.slice(start, end).trim();
+}
+
+function isProhibitiveExecMention(text, index) {
+  const sentence = sentenceAround(text, index);
+  return /\b(?:do not|don't|never|must not|should not|cannot|can't|no)\b/i.test(sentence)
+    && /(?:route|hand\s*off|handoff|recommend|run)[\s\S]*?(?:\$exec|\/exec)/i.test(sentence);
+}
+
 function hasAlignmentArtifactContract(text) {
-  return /final compiled YAML/.test(text)
-    && /review/.test(text)
-    && /Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language/.test(text);
+  const hasFinalCompiledYaml = /final compiled(?: response)? YAML/i.test(text);
+  const hasReview = /\breview\b/i.test(text);
+  const hasApprovalStop = /approval request itself is the next action/i.test(text)
+    || /\bstop (?:again )?for (?:either )?(?:feedback-only YAML or )?final compiled(?: response)? YAML/i.test(text)
+    || /while an alignment page is in `?review`?[\s\S]{0,240}next action is review[\s\S]{0,120}not downstream routing/i.test(text);
+  const approvedArtifactsWritten = /approved artifact(?:s)?\s+(?:(?:has|have|are)\s+)?(?:been\s+)?written or updated/i;
+  const onlyEmitAfterApprovedWrite = /only emit[\s\S]{0,160}(?:routing|\$[a-z0-9-]+|consumer)[\s\S]{0,160}after[\s\S]{0,160}(?:approved[\s\S]{0,120}(?:written|updated)|(?:artifact|brief|icp\.md)[\s\S]{0,120}approved and written)/i;
+  const continuationAfterApprovedWrite = /(?:routing|continuation)[\s\S]{0,120}(?:allowed )?only after[\s\S]{0,120}approved[\s\S]{0,120}(?:written|updated)/i;
+  const blocksDownstreamUntilApproved = onlyEmitAfterApprovedWrite.test(text)
+    || continuationAfterApprovedWrite.test(text)
+    || /downstream routing after approved artifact(?:s)?\s+(?:(?:has|have|are)\s+)?(?:been\s+)?written or updated/i.test(text)
+    || (/do not include[\s\S]{0,180}downstream routing language until after/i.test(text) && approvedArtifactsWritten.test(text));
+
+  return hasFinalCompiledYaml
+    && hasReview
+    && hasApprovalStop
+    && blocksDownstreamUntilApproved;
 }
 
 const GAME_ALIGNMENT_SKILLS = new Set([
@@ -116,6 +157,7 @@ function scanSkill(file, root = repoRoot) {
       pattern.lastIndex = 0;
       let match;
       while ((match = pattern.exec(scanText)) !== null) {
+        if (isProhibitiveExecMention(scanText, match.index)) continue;
         findings.push({
           relPath,
           line: lineNumber(scanText, match.index),

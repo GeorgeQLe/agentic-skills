@@ -1,3 +1,32 @@
+## Current Implementation - Layer1 Skill Alignment Routing Audit
+
+### Current Checklist
+
+- [x] Capture the visible invocation prompt.
+- [x] Inspect the audit script, fixtures, and layer1 regression test.
+- [x] Patch direct exec handoff detection to ignore prohibitive `$exec`/`/exec` sentences.
+- [x] Replace the brittle exact alignment stop-contract check with semantic approval-gate requirements.
+- [x] Add focused valid fixtures for prohibitive exec language and current staged research wording.
+- [x] Run fixture, active-report, layer1 Vitest, and diff-hygiene verification.
+- [x] Record review notes, history, and ship manifest.
+- [x] Commit and push the verified changes.
+
+### Review Notes
+
+- User goal: fix `layer1/skill-alignment-routing-audit.test.ts` by correcting false positives in `scripts/skill-alignment-routing-audit.mjs`, not by editing the 44 active skill contracts.
+- Starting point: working tree was clean before this implementation.
+- Prompt history captured at `prompts/exec/skill-prompt-20260615-210807-layer1-routing-audit.md`.
+- Implementation kept active `SKILL.md` contracts untouched; no skill version bump, archive, or Skills Showcase refresh was needed.
+- Direct-exec handoff detection now skips matched sentences only when the surrounding sentence is explicitly prohibitive, such as "Do not route to `$exec`".
+- Alignment artifact contract detection now requires the semantic bundle: final compiled YAML, review, explicit approval/stop boundary, and downstream routing blocked until approved artifacts are written or updated.
+- Added valid fixtures for the false-positive cases while preserving invalid positive `$exec` and preapproval-routing fixtures.
+- Verification passed:
+  - `node scripts/skill-alignment-routing-audit.mjs --fixtures tests/fixtures/skill-alignment-routing` exited 1 by design with only the two invalid fixture findings.
+  - `node scripts/skill-alignment-routing-audit.mjs --report` exited 0 with `Alignment-routing findings: 0`.
+  - `pnpm --dir tests exec vitest run --project layer1 layer1/skill-alignment-routing-audit.test.ts` passed, 2 tests.
+  - `git diff --check` passed.
+- Deploy skipped: changed paths are audit/test/task/prompt artifacts only, which `tasks/deploy.md` classifies as non-showcase, non-deploying changes.
+
 ## Current Investigation - Layer1 Routing Audit Failure Provenance
 
 ### Current Checklist

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-15 - Layer1 skill alignment routing audit
+
+- Fixed `scripts/skill-alignment-routing-audit.mjs` false positives by making direct `$exec`/`/exec` handoff detection ignore explicitly prohibitive sentences and by replacing the exact alignment stop-contract sentence check with semantic approval-gate requirements.
+- Added valid fixtures for non-exec prohibitive exec language and current staged research approval wording; kept invalid positive `$exec` handoff and preapproval-routing fixtures failing.
+- Verification passed: fixture audit produced only the two invalid fixture findings, active report scanned 393 skills with 0 findings, focused layer1 Vitest passed 2 tests, and `git diff --check` passed.
+- Captured the visible `$exec` invocation at `prompts/exec/skill-prompt-20260615-210807-layer1-routing-audit.md`.
+- Manifest: `tasks/ship-manifest-2026-06-15-layer1-skill-alignment-routing-audit.md`.
+
 ## 2026-06-15 - Competitive analysis re-entry routing guard
 
 - Updated the existing `competitive-analysis` orchestrator in both Codex and Claude business-research pack sources from `v0.20` to `v0.21`.
