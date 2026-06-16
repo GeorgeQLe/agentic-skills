@@ -14429,3 +14429,15 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed: typecheck clean, 144 Vitest (prior 141 non-regressed), 5 Playwright (Chromium), build 16/16 pages, alignment audit exit 0.
 - Captured the visible `/exec` invocation in `prompts/exec/skill-prompt-20260616-113920-deck-builder-blueprint-morph-slice.md`.
 - Manifest: `tasks/ship-manifest-2026-06-16-deck-builder-blueprint-morph.md`.
+
+## 2026-06-16 — Deck-builder §F debug-harness extension
+
+- Extended the animation debug harness to cover the deck route per `apps/skills-showcase/docs/animation-plan-deck-builder.md` §F. `steps.ts`: added `DECK_OPEN_STEPS` (`blueprint-tap → url-push → builder-mount → blueprint-morph-in → builder-content-in`) and `DECK_CLOSE_STEPS` (`dismiss-trigger → builder-exit → blueprint-morph-out` [apex] `→ table-restored`), extended the `Phase` union, and folded both into `ALL_STEPS`. `FLIGHT_STEPS`/flight-layer deferred to the card-flight slice (contract B).
+- `animationMachine.ts`: added `deck-shell` + `builder` lanes with runtime nodes, 9 deck transitions, and a `deckShell`/`builder` runtime slice (types, defaults, merge, snapshot active-node wiring, and `isReset` extension so an active deck is not misread as reset). Added a local `DeckFlowPhase` so the model carries no React-shell dependency.
+- `DebugController.tsx`: added `openDeck`/`dismissDeck` drivers + timeline-reset wiring. `DebugPanel.tsx`: deck driver buttons, DECK OPEN/DECK CLOSE timelines, and testids (`debug-open`, `drive-openDeck`, `drive-dismissDeck`).
+- New `DeckDebugHarness.tsx` mounts `DebugProvider` + `DebugPanel` on both deck routes (`/prototype/deck-routing-spike`, `/deck/[slug]`) and bridges observed phase → step marks + runtime report and registers the deck drivers via the shell's real DOM. **Zero rework in `DeckTableShell.tsx`** — the morph already routes through `dbg.scaleT`; the bridge is additive and strictly zero-overhead when debug is off.
+- Regenerated `apps/skills-showcase/alignment/animation-state-machine.html` and bumped the graph viewBox (2400×800) for the new lanes/gate nodes.
+- Adversarial review (general-purpose subagent): no material correctness bugs; applied its optional improvement (guard `observer.observe` behind `enabled`).
+- Validation passed: typecheck clean, 152 Vitest (prior 144 non-regressed + 8 new deck-harness model tests), 6 Playwright (Chromium, prior 5 + 1 new harness-driver test), build 16/16 pages, alignment audit exit 0.
+- Captured the visible `/ship` invocation in `prompts/ship/skill-prompt-20260616-131824-deck-builder-debug-harness.md`.
+- Manifest: `tasks/ship-manifest-2026-06-16-deck-builder-debug-harness.md`.
