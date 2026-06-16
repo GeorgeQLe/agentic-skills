@@ -3327,3 +3327,12 @@ icp -> competitive-analysis -> journey-map -> positioning
 3. Mark ORD-align in both Claude and Codex mirrors with the new selector and regenerate its generated bundles/stubs.
 4. Add focused regression coverage proving ORD-align gets lightweight validation language and does not regress to generic working-packet research language.
 5. Run generator and focused layer1 verification, then record results.
+
+## Current Plan — Tighten skillpacks NPM Package Boundary
+
+1. Confirm whether `skillpacks@0.1.4` remains unpublished; keep `0.1.4` unless npm already has it.
+2. Remove repo docs, agent instruction docs, prompts, apps, alignment pages, tasks, tests, and showcase artifacts from the staged npm publish target while retaining `README.md`, `LICENSE`, CLI/runtime code, manifest data, runtime scripts, `base/`, and `packs/`.
+3. Stage the alignment-page convention as a package runtime asset under `assets/` and make packaged alignment maintenance scripts read that asset when repo docs are absent.
+4. Add package-boundary coverage that inspects `npm pack ./packages/skillpacks/build --dry-run --json`, asserting denied path classes are absent and required runtime assets/content are present in the actual publish target.
+5. Run package tests, package verification, exact publish-target dry run, release dry run, and diff hygiene.
+6. Review the final diff, record results, then commit and push the intended package-boundary changes.

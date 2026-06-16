@@ -1,6 +1,6 @@
 {
   "name": "skillpacks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {
@@ -34,16 +34,9 @@
     "scripts/alignment-skip-list.txt",
     "scripts/alignment-bespoke-list.txt",
     "scripts/prepublish-auth-check.mjs",
-    "docs/alignment-page-convention.md",
-    "docs/prototype-session-loop-convention.md",
-    "docs/decks.md",
-    "docs/packs.md",
-    "docs/QUICKSTART.md",
-    "docs/skillpacks-npm-distribution.md",
+    "assets/alignment-page-convention.md",
     "README.md",
-    "LICENSE",
-    "AGENTS.md",
-    "CLAUDE.md"
+    "LICENSE"
   ],
   "scripts": {
     "build": "npm run build:manifest && node scripts/build-package.mjs",

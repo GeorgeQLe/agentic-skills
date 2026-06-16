@@ -1,3 +1,41 @@
+## Current Implementation - Tighten skillpacks NPM Package Boundary
+
+### Current Checklist
+
+- [x] Inspect current package staging, package metadata, alignment runtime scripts, and tests.
+- [x] Confirm whether `skillpacks@0.1.4` remains unpublished.
+- [x] Tighten build staging to exclude repo docs and agent instruction docs.
+- [x] Stage the alignment convention as a runtime `assets/` package file and update script fallback behavior.
+- [x] Add actual publish-target package-boundary coverage.
+- [x] Run local package verification.
+- [x] Run release dry run from a clean tracked tree.
+- [x] Review final diff, commit, and push release-boundary changes.
+
+### Review Notes
+
+- Starting point: `git status --short` showed a pre-existing untracked `prompts/expert-review/`, which is intentionally left untouched.
+- Current build staging still copied `docs/decks.md`, `docs/packs.md`, `docs/QUICKSTART.md`, `docs/skillpacks-npm-distribution.md`, `docs/alignment-page-convention.md`, `docs/prototype-session-loop-convention.md`, `AGENTS.md`, and `CLAUDE.md` into the npm build.
+- Existing staging boundary denied `apps`, `tasks`, `prompts`, `alignment`, `tests`, and `docs/history`, but not all `docs/`, `AGENTS.md`, or `CLAUDE.md`.
+- Existing alignment package test checks the build directory, not the exact `npm pack ./build --dry-run --json` publish target.
+- `npm view skillpacks@0.1.4 version` and `npm view @glexcorp/gskp@0.1.4 version` both returned `0.1.4`, so package and manifest metadata were bumped to `0.1.5`.
+- Package staging now copies `docs/alignment-page-convention.md` to `assets/alignment-page-convention.md` and no longer stages any `docs/`, `AGENTS.md`, or `CLAUDE.md` paths.
+- `scripts/upgrade-alignment-page.mjs` still reads `docs/alignment-page-convention.md` in source checkouts, and falls back to the packaged `assets/alignment-page-convention.md` when the target root has no repo docs.
+- Added `packages/skillpacks/test/package-boundary.test.mjs`, which runs `npm pack ./build --dry-run --json --silent` against the staged publish target and asserts denied path classes are absent while required runtime entries are present.
+- Removed the older build-directory-only alignment staging test to avoid concurrent tests racing on the shared `packages/skillpacks/build` directory; the new publish-target test is stricter.
+- Verification passed:
+  - `npm --workspace packages/skillpacks run build:manifest`
+  - `npm --workspace packages/skillpacks run test:node` (86 tests)
+  - `npm run skillpacks:verify`
+  - `npm pack ./packages/skillpacks/build --dry-run --json --silent`
+  - `node --test packages/skillpacks/test/package-boundary.test.mjs` (rerun escalated after sandbox blocked child `git`)
+  - Escalated nested dry-run checker confirmed denied classes absent: `docs`, `AGENTS.md`, `CLAUDE.md`, `prompts`, `apps`, `alignment`, `tasks`, and `tests`.
+  - The dry-run package was `skillpacks@0.1.5`, size `7032726`, unpacked size `47373276`, entry count `3246`.
+- Release dry run passed from a clean tracked tree:
+  - `./publish.sh --dry-run --current`
+  - It rebuilt the manifest, reran `npm --workspace packages/skillpacks run test:node`, reran `npm run skillpacks:verify`, staged both packages, and completed `npm publish --dry-run` for `skillpacks@0.1.5` and `@glexcorp/gskp@0.1.5`.
+  - The dry run warned about pre-existing untracked `prompts/expert-review/`, which remained uncommitted and outside the package.
+- Commit prepared with message `Tighten skillpacks package boundary`.
+
 ## Current Implementation - skillpacks 0.1.4 Version-Aware Release
 
 ### Current Checklist

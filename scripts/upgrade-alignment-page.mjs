@@ -18,7 +18,8 @@ for (let i = 0; i < argv.length; i += 1) {
     flags.add(argv[i]);
   }
 }
-const repoRoot = rootOverride ? resolve(rootOverride) : dirname(dirname(fileURLToPath(import.meta.url)));
+const scriptRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+const repoRoot = rootOverride ? resolve(rootOverride) : scriptRoot;
 const dryRun = flags.has("--dry-run");
 // --check: no writes; generated-bundle drift (stale/missing bundle or stale
 // SKILL.md stub for an ownable skill) becomes a failing diagnostic instead of
@@ -55,15 +56,18 @@ function skillNameFor(file) {
   return parts[parts.length - 2];
 }
 
-// Single authoring source: the marked block inside docs/alignment-page-convention.md.
-const conventionPath = `${repoRoot}/docs/alignment-page-convention.md`;
+// Source checkouts author the convention in docs/. Packaged npm installs carry
+// the same convention as a runtime asset because repo docs are not published.
+const authoringConventionPath = `${repoRoot}/docs/alignment-page-convention.md`;
+const packagedConventionPath = `${scriptRoot}/assets/alignment-page-convention.md`;
+const conventionPath = existsSync(authoringConventionPath) ? authoringConventionPath : packagedConventionPath;
 const conventionFile = readFileSync(conventionPath, "utf8");
 const markerMatch = conventionFile.match(
   /<!-- alignment-convention:start -->\n([\s\S]*?)\n<!-- alignment-convention:end -->/,
 );
 if (!markerMatch) {
   console.error(
-    "Could not find <!-- alignment-convention:start --> / :end markers in docs/alignment-page-convention.md",
+    `Could not find <!-- alignment-convention:start --> / :end markers in ${relative(repoRoot, conventionPath)}`,
   );
   process.exit(1);
 }

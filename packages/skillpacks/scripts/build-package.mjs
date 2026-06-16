@@ -36,16 +36,9 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "scripts/alignment-chart-snippets.js", to: "scripts/alignment-chart-snippets.js" },
   { fromRoot: repoRoot, from: "scripts/alignment-skip-list.txt", to: "scripts/alignment-skip-list.txt" },
   { fromRoot: repoRoot, from: "scripts/alignment-bespoke-list.txt", to: "scripts/alignment-bespoke-list.txt" },
-  { fromRoot: repoRoot, from: "docs/decks.md", to: "docs/decks.md" },
-  { fromRoot: repoRoot, from: "docs/packs.md", to: "docs/packs.md" },
-  { fromRoot: repoRoot, from: "docs/QUICKSTART.md", to: "docs/QUICKSTART.md" },
-  { fromRoot: repoRoot, from: "docs/skillpacks-npm-distribution.md", to: "docs/skillpacks-npm-distribution.md" },
-  { fromRoot: repoRoot, from: "docs/alignment-page-convention.md", to: "docs/alignment-page-convention.md" },
-  { fromRoot: repoRoot, from: "docs/prototype-session-loop-convention.md", to: "docs/prototype-session-loop-convention.md" },
+  { fromRoot: repoRoot, from: "docs/alignment-page-convention.md", to: "assets/alignment-page-convention.md" },
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
-  { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" },
-  { fromRoot: repoRoot, from: "AGENTS.md", to: "AGENTS.md" },
-  { fromRoot: repoRoot, from: "CLAUDE.md", to: "CLAUDE.md" }
+  { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" }
 ];
 
 const requiredBuildFiles = [
@@ -65,8 +58,7 @@ const requiredBuildFiles = [
   "scripts/alignment-chart-snippets.js",
   "scripts/alignment-skip-list.txt",
   "scripts/alignment-bespoke-list.txt",
-  "docs/alignment-page-convention.md",
-  "docs/prototype-session-loop-convention.md",
+  "assets/alignment-page-convention.md",
   "LICENSE",
   "base/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"
@@ -78,7 +70,9 @@ const deniedBuildPaths = [
   "prompts",
   "alignment",
   "tests",
-  "docs/history"
+  "docs",
+  "AGENTS.md",
+  "CLAUDE.md"
 ];
 
 const websiteOwnedGeneratedPaths = [

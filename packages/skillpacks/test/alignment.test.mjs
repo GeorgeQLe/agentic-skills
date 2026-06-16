@@ -1,13 +1,10 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { afterEach, describe, it } from 'node:test';
 import { resolveAlignmentCommand, runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const repoRoot = resolve(packageRoot, '..', '..');
 const tmpDirs = [];
 
 function makeTempProject() {
@@ -204,44 +201,5 @@ describe('skillpacks alignment command parsing', () => {
       () => resolveAlignmentCommand(['pages', 'serve', '--port', '9000', '--port=9001']),
       /--port can only be provided once/
     );
-  });
-});
-
-describe('skillpacks package staging boundary for alignment commands', () => {
-  it('stages alignment scripts and assets while keeping denied paths out', async () => {
-    const { spawnSync } = await import('node:child_process');
-    const result = spawnSync(process.execPath, ['scripts/build-package.mjs', '--check'], {
-      cwd: packageRoot,
-      encoding: 'utf8'
-    });
-
-    assert.equal(result.status, 0, result.stderr || result.stdout);
-
-    for (const relativePath of [
-      'scripts/upgrade-alignment-page.mjs',
-      'scripts/audit-alignment-pages.mjs',
-      'scripts/open-html-page.mjs',
-      'scripts/serve-alignment.mjs',
-      'scripts/inject-tts.mjs',
-      'scripts/alignment-tts-kokoro.js',
-      'scripts/alignment-chart-snippets.js',
-      'scripts/alignment-skip-list.txt',
-      'scripts/alignment-bespoke-list.txt',
-      'docs/alignment-page-convention.md'
-    ]) {
-      assert.equal(
-        existsSync(join(packageRoot, 'build', relativePath)),
-        true,
-        `${relativePath} should be staged`
-      );
-    }
-
-    for (const deniedPath of ['alignment', 'tasks', 'prompts']) {
-      assert.equal(
-        existsSync(join(packageRoot, 'build', deniedPath)),
-        false,
-        `${deniedPath} should remain outside the package`
-      );
-    }
   });
 });
