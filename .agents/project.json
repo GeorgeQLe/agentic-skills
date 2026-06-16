@@ -1,20 +1,6 @@
 {
   "project_type": "devtool",
-  "enabled_packs": [],
+  "enabled_packs": ["exec-loop"],
   "skill_pack_version": 1,
-  "enabled_skills": {
-    "ship-end": "exec-loop",
-    "sync": "gitops",
-    "analyze-sessions": "session-analytics",
-    "ship": "exec-loop",
-    "expert-review": "code-review",
-    "investigate": "code-debug",
-    "session-triage": "session-analytics",
-    "repo-glossary": "business-ops",
-    "brainstorm": "product-design",
-    "user-flow-map": "product-design",
-    "ui-interview": "product-design",
-    "guide": "guided-walkthrough",
-    "ux-variations": "product-design"
-  }
+  "enabled_skills": {"ship-end":"exec-loop","sync":"gitops","analyze-sessions":"session-analytics","ship":"exec-loop","expert-review":"code-review","investigate":"code-debug","session-triage":"session-analytics","repo-glossary":"business-ops","brainstorm":"product-design","user-flow-map":"product-design","ui-interview":"product-design","guide":"guided-walkthrough","ux-variations":"product-design"}
 }
