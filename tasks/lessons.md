@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-16 — Inspect the actual publish target before release approval
+
+- I initially checked the workspace package tarball, but the release script publishes `packages/skillpacks/build`, which has a different and much larger file boundary.
+- Before saying an npm package is ready to publish, run `npm pack ./packages/skillpacks/build --dry-run --json` or the exact publish target used by the release script and inspect included path classes.
+- Treat prompts, generated sites, active alignment outputs, and broad repo documentation as release-boundary questions that must be explicitly allowed or excluded before npm auth/publish.
+
 ## 2026-06-16 — Pre-existing provenance does not close a real failing gate
 
 - A provenance investigation correctly proved that `ord-align` routing audit findings reproduced from unmodified `HEAD`, but I stopped after documenting that instead of also offering or applying the small available fix.
