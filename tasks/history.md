@@ -14418,3 +14418,14 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed for regeneration, generator syntax, Excalidraw element shape/text invariants, conflict-marker scan, unmerged-path scan, scoped alignment-page audit, and whitespace. The full primary-worktree alignment audit remains blocked only by unrelated untracked alignment pages.
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260611-092513-resolve-local-merge-conflicts.md`.
 - Manifest: `tasks/ship-manifest-2026-06-11-local-merge-conflicts.md`.
+
+## 2026-06-16 — Deck-builder `blueprint-morph` motion slice
+
+- Implemented contract A `blueprint-morph` (open + close) on the deck-builder skeleton per `apps/skills-showcase/docs/animation-plan-deck-builder.md` §A/§D/§E: blueprint↔builder layout morph via shared `layoutId="deck-blueprint-${slug}"`, content stagger-in, reduced-motion crossfade (layoutId omitted), hard-load skip-open.
+- Phase machine is now async-driven: open advances `blueprint-morphing→builder-open` on BuilderPanel `onLayoutAnimationComplete`; close advances `builder-dismissing→table` on `AnimatePresence onExitComplete`. One-shot latches per cycle; `setPhase` keeps `phaseRef` synchronous; reduced motion fires completions back-to-back for an identical chain.
+- Source blueprint persistently owns its `layoutId` (SealedPack pattern) so the morph always has an origin; `closingSlug` keeps the dismissing source hidden through the morph-back so the exiting panel morphs cleanly (no flash/double-vision). Focus restores to the originating blueprint on close.
+- §G proof gate: Vitest phase-order/one-shot/reduced-motion (driven via a `__deckMorphComplete` window bridge since jsdom doesn't fire framer layout callbacks); Playwright per-frame double-vision sampler (caught and fixed a real 2-frame morph-back flash), content-gating, focus-restore, Back→table.
+- Adversarial `/code-review`: extracted a shared `MORPH_LAYOUT_TRANSITION` so the two paired layoutId owners can't drift; verifier REFUTED the "missing fallback timer wedge" (sibling timers guard different mechanisms; morph always has a real layout delta).
+- Validation passed: typecheck clean, 144 Vitest (prior 141 non-regressed), 5 Playwright (Chromium), build 16/16 pages, alignment audit exit 0.
+- Captured the visible `/exec` invocation in `prompts/exec/skill-prompt-20260616-113920-deck-builder-blueprint-morph-slice.md`.
+- Manifest: `tasks/ship-manifest-2026-06-16-deck-builder-blueprint-morph.md`.
