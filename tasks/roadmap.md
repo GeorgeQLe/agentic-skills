@@ -1,3 +1,32 @@
+## Current Investigation - ord-align Routing Audit Provenance
+
+### Goal
+
+Validate whether `node scripts/skill-alignment-routing-audit.mjs` still reports the existing `ord-align` findings on unmodified `HEAD`, making them pre-existing and unrelated to the current work.
+
+### Scope
+
+- Current working-tree diff and touched files
+- `scripts/skill-alignment-routing-audit.mjs`
+- Current-tree audit output
+- Isolated unmodified `HEAD` audit output
+- Task notes and prompt history for this `$investigate` invocation
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record this investigation plan.
+2. Run the direct routing audit in the current tree and capture exit code, scan count, and `ord-align` findings.
+3. Reproduce the same command from an isolated unmodified `HEAD` export.
+4. Compare current and `HEAD` outputs, check touched-file scope, and classify the user claim.
+5. Record verification results, commit, and push intended prompt/task artifacts if no source fix is needed.
+
+### Acceptance Criteria
+
+- Current-tree output shows the exact `ord-align` findings and exit code.
+- Unmodified `HEAD` output reproduces the same findings.
+- Current uncommitted changes are confirmed not to touch the audit script or active `ord-align` inputs.
+- The final report states whether a source fix was applied or why no fix was needed.
+
 ## Current Implementation - Narrow Research Loop Routing Guardrails
 
 ### Goal

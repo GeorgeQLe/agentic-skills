@@ -1,3 +1,28 @@
+## Current Investigation - ord-align Routing Audit Provenance
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the investigation plan in task tracking.
+- [x] Run the current-tree routing audit proof.
+- [x] Reproduce the audit from unmodified `HEAD`.
+- [x] Compare scope and record the verdict.
+- [x] Commit and push intended prompt/task artifacts if no source fix is needed.
+
+### Review Notes
+
+- Claim under review: `node scripts/skill-alignment-routing-audit.mjs` still reports existing `ord-align` findings, and those findings reproduce from unmodified `HEAD`, so they are pre-existing and unrelated.
+- Strategy used: General, because this is an audit/provenance claim rather than UI or data behavior.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260615-234228-ord-align-routing-audit.md`.
+- Current-tree proof: `node scripts/skill-alignment-routing-audit.mjs` exited 1 with exactly two findings:
+  - `packs/ord/claude/ord-align/SKILL.md:1: missing-alignment-yaml-stop-contract`
+  - `packs/ord/codex/ord-align/SKILL.md:1: missing-alignment-yaml-stop-contract`
+- Isolated `HEAD` proof: `git archive HEAD --format=tar --output /tmp/agentic-skills-head-ord-align-audit-20260615-234228.tar`, unpacked to `/tmp/agentic-skills-head-ord-align-audit-20260615-234228`, then ran the same audit command. It exited 1 with the same two `ord-align` findings.
+- Scope check: `git diff -- scripts/skill-alignment-routing-audit.mjs packs/ord/codex/ord-align/SKILL.md packs/ord/claude/ord-align/SKILL.md` was empty, and `git status --short -- scripts tests base packs .codex .claude prompts/investigate tasks/roadmap.md tasks/todo.md` showed only this investigation's task/prompt artifacts.
+- Root-cause evidence: `scripts/skill-alignment-routing-audit.mjs` requires alignment-producing skills to include final compiled YAML, review state, an approval stop, and downstream routing blocked until approved artifacts are written or updated. The mirrored `ord-align` contracts have staged approval language, but the active wording routes after final compiled YAML approval rather than matching the audit's "approved artifact written/updated before routing" contract. Those active `ord-align` lines were introduced by `09756c5f Update ord-align staged review contract` and remain present in unmodified `HEAD`.
+- User claim verdict: confirmed. The two `ord-align` audit findings are pre-existing on unmodified `HEAD` and unrelated to this investigation's tracked prompt/task changes.
+- Fix applied: no source fix. This invocation only records investigation evidence and prompt history.
+
 ## Current Implementation - Narrow Research Loop Routing Guardrails
 
 ### Current Checklist
