@@ -1,3 +1,30 @@
+## Current Implementation - Pack Skill Sunset Alignment Page
+
+### Current Checklist
+
+- [x] Capture the visible `pack` invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Inspect pack skill, shell launcher, Node CLI, root instructions, docs, tests, and alignment convention.
+- [x] Create the review-state sunset alignment page.
+- [x] Register the page in `alignment/index.html`.
+- [x] Run alignment audit, TTS, and diff hygiene verification.
+- [ ] Review final diff, commit, and push.
+
+### Review Notes
+
+- Starting point: working tree was clean before this implementation.
+- Skill context: `pack`, because the user provided the active skill invocation and asked for a sunset planning artifact for that skill.
+- Prompt history captured at `prompts/pack/skill-prompt-20260615-215237-pack-skill-sunset-plan.md`.
+- Scope is planning-only. No active `pack` skill, launcher, package CLI, docs, or tests should be removed or deprecated in this change.
+- Inspection found active mirrored `pack` skill contracts at v0.10, direct root-instruction dependency on `scripts/pack.sh which`, Node-owned package lifecycle commands, and compatibility tests classifying `recommend`, `which`, and `install-deck` as shell-backed or hybrid surfaces.
+- Added `alignment/pack-skill-sunset-plan.html` as a review-state, document-tier, utility alignment page with dark-mode styling, in-flow table of contents, evidence tables, readiness blockers, phased roadmap, decision gates, section feedback controls, bottom response YAML compile controls, and TTS include.
+- Registered the page in `alignment/index.html` with `[doc]` badge and `2026-06-16` metadata.
+- Verification passed:
+  - `node scripts/audit-alignment-pages.mjs` reported 52 active pages with exact TTS include, page metadata, viewport meta, embed prohibition, alignment status controls, and index integrity.
+  - `git diff --check` passed.
+- TTS injection was not run because the audit confirmed the new page already has the required include.
+- Optional browser open was not run; the requested verification plan marked it optional and the page passed file-based validation.
+
 ## Current Implementation - Layer1 Skill Alignment Routing Audit
 
 ### Current Checklist

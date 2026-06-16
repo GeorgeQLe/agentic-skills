@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en" data-alignment-category="utility" data-visual-tier="document" data-alignment-status="review">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pack Skill Sunset Plan</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c2333;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1120px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 40px 0 64px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+h1 { margin: 0 0 10px; font-size: 2.35rem; }
+h2 { margin: 0; color: var(--accent); font-size: 1.45rem; }
+h3 { margin: 26px 0 10px; font-size: 1.05rem; }
+p { margin: 10px 0; }
+a { color: var(--accent); }
+code {
+  color: #fff;
+  background: #0b1018;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .92em;
+}
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+}
+.meta-line, .muted { color: var(--text-muted); }
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid var(--purple);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: #fff;
+  background: rgba(188, 140, 255, .12);
+  font-weight: 700;
+  font-size: .9rem;
+}
+.toc, section {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.toc h2 { margin-bottom: 10px; }
+.toc ul { columns: 2; padding-left: 22px; margin: 10px 0 0; }
+.toc li { break-inside: avoid; margin: 5px 0; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.feedback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+button, .option {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: #0b1018;
+  color: var(--text);
+  font: inherit;
+}
+button { cursor: pointer; }
+button:hover, .option:hover { border-color: var(--accent); }
+.fb-btn[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
+.fb-btn[data-choice="down"].active { border-color: var(--red); color: var(--red); }
+.fb-btn[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+.feedback-panel, .local-yaml, #compiled-yaml {
+  display: none;
+  margin-top: 10px;
+}
+.feedback-panel.visible, .local-yaml.visible, #compiled-yaml.visible { display: block; }
+textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #0b1018;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+.yaml-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  min-height: 150px;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--surface);
+  color: #fff;
+  position: relative;
+}
+tr:last-child td { border-bottom: 0; }
+.callout {
+  border: 1px solid var(--purple);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.warning {
+  border-color: var(--orange);
+  background: rgba(210, 153, 34, .08);
+}
+.success {
+  border-color: var(--green);
+  background: rgba(63, 185, 80, .08);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: 12px;
+}
+.tile {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0b1018;
+  padding: 14px;
+}
+.tile strong { display: block; color: #fff; margin-bottom: 4px; }
+.question {
+  border: 1px solid var(--purple);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.question h3 {
+  color: var(--purple);
+  margin-top: 0;
+}
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 10px;
+}
+.option {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.option input { margin-top: 5px; }
+.notes {
+  display: none;
+  margin-top: 10px;
+}
+.notes.visible { display: block; }
+.compile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+.copy-status { color: var(--text-muted); }
+@media (max-width: 860px) {
+  .toc ul { columns: 1; }
+}
+@media (max-width: 560px) {
+  main { width: min(100vw - 24px, 1120px); padding-top: 24px; }
+  h1 { font-size: 1.9rem; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="status">alignment_status: review</p>
+    <h1>Pack Skill Sunset Plan</h1>
+    <p class="meta-line">Alignment date: 2026-06-16 | Category: Utility &amp; Maintenance | Visual tier: document | Artifact: <code>alignment/pack-skill-sunset-plan.html</code></p>
+    <p>This page is a decision review for sunsetting the active <code>pack</code> skill. It records current dependency surfaces, a conservative replacement model, readiness blockers, phased implementation, and gates that must be approved before any implementation begins.</p>
+    <div class="callout warning">
+      <strong>Pre-approval stop:</strong> no skill, launcher, CLI, documentation, or test surface should be removed, deprecated, or rewritten from this page alone. Implementation starts only after bottom compiled response YAML has <code>approval_status: ready-for-agent-review</code>.
+    </div>
+  </header>
+
+  <section class="toc" id="toc">
+    <div class="section-head">
+      <h2>Table of Contents</h2>
+      <div class="feedback" data-section="Table of Contents"></div>
+    </div>
+    <ul>
+      <li><a href="#summary">Recommendation Summary</a></li>
+      <li><a href="#evidence">Current Dependency Evidence</a></li>
+      <li><a href="#sunset-definition">Sunset Definition</a></li>
+      <li><a href="#target-model">Target Replacement Model</a></li>
+      <li><a href="#blockers">Readiness Blockers</a></li>
+      <li><a href="#phases">Implementation Phases</a></li>
+      <li><a href="#verification">Release Verification</a></li>
+      <li><a href="#approval-gates">Decision Gates</a></li>
+      <li><a href="#compile">Compile Responses</a></li>
+    </ul>
+  </section>
+
+  <section id="summary">
+    <div class="section-head">
+      <h2>Recommendation Summary</h2>
+      <div class="feedback" data-section="Recommendation Summary"></div>
+    </div>
+    <div class="grid">
+      <div class="tile">
+        <strong>Default recommendation</strong>
+        <p>Do not fully sunset <code>pack</code> yet. Keep the active skill and shell launcher until Node CLI ownership covers the remaining shell-backed surfaces and package verification is green.</p>
+      </div>
+      <div class="tile">
+        <strong>Best near-term target</strong>
+        <p>Deprecate user guidance for <code>/pack</code> and <code>$pack</code> only after <code>npx skillpacks</code> / <code>gskp</code> owns the same workflows without relying on shell fallbacks.</p>
+      </div>
+      <div class="tile">
+        <strong>Conservative end state</strong>
+        <p>Retain a thin compatibility shim for one release cycle after docs and root instructions route users to the npm CLI.</p>
+      </div>
+      <div class="tile">
+        <strong>Hard stop</strong>
+        <p>Do not remove the skill while root instructions still use <code>scripts/pack.sh which</code> as the missing-skill fallback.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <div class="section-head">
+      <h2>Current Dependency Evidence</h2>
+      <div class="feedback" data-section="Current Dependency Evidence"></div>
+    </div>
+    <p>The repository currently has multiple live entry points for pack behavior. The most important risk is that some user-facing and root-instruction paths still name the skill or shell launcher directly.</p>
+    <div class="table-wrap" data-tts-narrative="This table lists current pack dependency surfaces. The active skill mirrors and root instructions still depend on scripts/pack.sh, while the npm CLI owns several commands and delegates remaining commands to the shell script.">
+      <table>
+        <thead>
+          <tr>
+            <th>Surface</th>
+            <th>Repo path</th>
+            <th>Observed dependency type</th>
+            <th>Sunset impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Codex <code>$pack</code> skill</td>
+            <td><code>base/codex/pack/SKILL.md</code></td>
+            <td>Active v0.10 skill. Explicit commands route to <code>scripts/pack.sh</code>; package consumers are told to use <code>npx skillpacks install</code> for installs.</td>
+            <td>Cannot remove until Codex missing-skill fallback and guided setup have a replacement route.</td>
+          </tr>
+          <tr>
+            <td>Claude <code>/pack</code> skill</td>
+            <td><code>base/claude/pack/SKILL.md</code></td>
+            <td>Active v0.10 skill. Guided setup uses AskUserQuestion, then <code>scripts/pack.sh install</code> in source checkouts.</td>
+            <td>Cannot remove until Claude users have an equivalent guided flow or docs clearly route to npm CLI commands.</td>
+          </tr>
+          <tr>
+            <td>Shell pack manager</td>
+            <td><code>scripts/pack.sh</code></td>
+            <td>Implements broad command set including <code>recommend</code>, <code>which</code>, <code>install</code>, <code>refresh</code>, <code>pin</code>, <code>prune</code>, and lock handling.</td>
+            <td>Removal is larger than skill sunset. Treat it as a separate CLI backend migration.</td>
+          </tr>
+          <tr>
+            <td>Npm CLI command router</td>
+            <td><code>packages/skillpacks/src/cli/run-pack-script.mjs</code></td>
+            <td>Node owns <code>init</code>, <code>install</code>, <code>remove</code>, <code>refresh</code>, <code>doctor</code>, <code>prune</code>, <code>pin</code>, <code>unpin</code>, alignment commands, status, and mode commands. Remaining recognized pack commands fall through to <code>bash scripts/pack.sh</code>.</td>
+            <td>Primary replacement surface exists but is not complete enough to justify full shell or skill removal.</td>
+          </tr>
+          <tr>
+            <td>Node lifecycle implementation</td>
+            <td><code>packages/skillpacks/src/cli/lifecycle.mjs</code></td>
+            <td>Contains manifest-backed install, remove, refresh, doctor, pruning, skill pinning, managed root sync, and base-skill initialization.</td>
+            <td>Good foundation for replacement, but not a full parity proof for guided recommendation and lookup workflows.</td>
+          </tr>
+          <tr>
+            <td>Node project config and locking</td>
+            <td><code>packages/skillpacks/src/cli/project-config.mjs</code></td>
+            <td>Provides project config read/write, lock handling, status output, and project type inference without jq.</td>
+            <td>Supports moving more behavior out of shell, but root instructions must be migrated after parity is proven.</td>
+          </tr>
+          <tr>
+            <td>Compatibility contract tests</td>
+            <td><code>packages/skillpacks/test/compatibility.test.mjs</code></td>
+            <td>Explicitly classifies <code>recommend</code> as shell-backed, <code>which &lt;skill&gt;</code> as shell-backed, and <code>install-deck</code> as hybrid shell materialization requiring bash and jq.</td>
+            <td>These tests should change only after the implementation changes and docs move with it.</td>
+          </tr>
+          <tr>
+            <td>Root missing-skill fallback</td>
+            <td><code>AGENTS.md</code>, <code>CLAUDE.md</code></td>
+            <td>Both instruct agents to run <code>scripts/pack.sh which &lt;skill-name&gt;</code> when a command-like skill is missing.</td>
+            <td>This is a direct blocker for removing or hiding the shell-backed lookup route.</td>
+          </tr>
+          <tr>
+            <td>Public docs</td>
+            <td><code>README.md</code>, <code>docs/skills-reference.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/decks.md</code></td>
+            <td>Docs already promote <code>npx skillpacks</code> and <code>gskp</code>, but still document <code>/pack</code>, <code>$pack</code>, source-checkout <code>scripts/pack.sh</code>, and shell-backed deck caveats.</td>
+            <td>Docs can be migrated after CLI ownership decisions, not before.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sunset-definition">
+    <div class="section-head">
+      <h2>Sunset Definition</h2>
+      <div class="feedback" data-section="Sunset Definition"></div>
+    </div>
+    <p>"Fully sunset" can mean three different outcomes. The review decision should pick one target before implementation begins.</p>
+    <div class="table-wrap" data-tts-narrative="This table compares three sunset definitions: remove the skill, deprecate it while keeping compatibility, or keep it as an active facade. The conservative choice is deprecate and retain compatibility for one release cycle.">
+      <table>
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Meaning</th>
+            <th>Advantages</th>
+            <th>Risks</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Remove <code>pack</code> skill</td>
+            <td>Delete active <code>base/claude/pack</code> and <code>base/codex/pack</code> skill roots after docs and installed mirrors are updated.</td>
+            <td>Eliminates duplicate agent entry points and forces a single CLI route.</td>
+            <td>Breaks users and agents trained to use <code>/pack</code> or <code>$pack</code>; risky while root instructions still mention shell fallback.</td>
+            <td>Not recommended as the first implementation step.</td>
+          </tr>
+          <tr>
+            <td>Deprecate and retain compatibility shim</td>
+            <td>Update skill text to say it is deprecated, route explicit work to <code>npx skillpacks</code> / <code>gskp</code>, and retain minimal fallback guidance for one release cycle.</td>
+            <td>Preserves existing workflows while shifting users to the replacement route.</td>
+            <td>Still carries a visible old entry point temporarily.</td>
+            <td>Recommended after CLI parity is complete and verified.</td>
+          </tr>
+          <tr>
+            <td>Keep as active facade</td>
+            <td>Keep <code>pack</code> as the agent-facing UX and let it call npm or shell helpers internally.</td>
+            <td>Lowest disruption for agents.</td>
+            <td>Does not accomplish a true sunset; keeps skill registry clutter.</td>
+            <td>Acceptable only if the goal changes from sunset to stabilization.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="target-model">
+    <div class="section-head">
+      <h2>Target Replacement Model</h2>
+      <div class="feedback" data-section="Target Replacement Model"></div>
+    </div>
+    <p>The target model should make the npm CLI the canonical route and reduce the skill to either no surface or a temporary compatibility notice.</p>
+    <div class="grid">
+      <div class="tile">
+        <strong>Canonical user command</strong>
+        <p><code>npx skillpacks &lt;command&gt;</code> and the <code>gskp</code> alias own pack lifecycle behavior for package consumers.</p>
+      </div>
+      <div class="tile">
+        <strong>Source checkout fallback</strong>
+        <p><code>scripts/pack.sh</code> remains documented only for maintainers or explicitly shell-backed commands until parity is complete.</p>
+      </div>
+      <div class="tile">
+        <strong>Agent missing-skill lookup</strong>
+        <p>Root instructions should use <code>npx skillpacks which &lt;skill&gt;</code> or a Node-owned lookup before they stop mentioning <code>scripts/pack.sh which</code>.</p>
+      </div>
+      <div class="tile">
+        <strong>Guided setup</strong>
+        <p>Replace skill-mediated guided setup with either a Node-owned <code>recommend</code> flow or explicit docs that require user confirmation before installing packs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="blockers">
+    <div class="section-head">
+      <h2>Readiness Blockers</h2>
+      <div class="feedback" data-section="Readiness Blockers"></div>
+    </div>
+    <div class="table-wrap" data-tts-narrative="This blocker table identifies unresolved work before the pack skill can be sunset. The main blockers are Node ownership of recommend, which, and install-deck, root instruction migration, docs cleanup, and green package verification.">
+      <table>
+        <thead>
+          <tr>
+            <th>Blocker</th>
+            <th>Why it blocks sunset</th>
+            <th>Required proof</th>
+            <th>Owner surface</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Node-owned <code>recommend</code></td>
+            <td>The guided skill flow currently starts from <code>scripts/pack.sh recommend</code>. Removing the skill without a replacement loses the recommendation checkpoint.</td>
+            <td><code>npx skillpacks recommend</code> works without shell fallback and has tests for repo-signal classification.</td>
+            <td><code>packages/skillpacks/src/cli/*</code>, package tests, docs.</td>
+          </tr>
+          <tr>
+            <td>Node-owned <code>which</code></td>
+            <td>Root instructions use <code>scripts/pack.sh which</code> for missing-skill fallback. This is the most direct removal blocker.</td>
+            <td><code>npx skillpacks which &lt;skill&gt;</code> resolves pack, install state, and hibernated pack cases without shell fallback.</td>
+            <td><code>run-pack-script.mjs</code>, manifest lookup helpers, root instructions.</td>
+          </tr>
+          <tr>
+            <td><code>install-deck</code> ownership decision</td>
+            <td>Docs and tests state deck materialization still requires bash and jq through packaged shell backend.</td>
+            <td>Either port deck materialization to Node or explicitly classify it as a permanent shell compatibility surface.</td>
+            <td><code>docs/decks.md</code>, compatibility matrix, CLI tests.</td>
+          </tr>
+          <tr>
+            <td>Root instruction migration</td>
+            <td><code>AGENTS.md</code> and <code>CLAUDE.md</code> currently name the shell lookup fallback.</td>
+            <td>Root docs route to npm CLI lookup and preserve reload guidance for Claude and Codex.</td>
+            <td>Provisioned instruction source plus generated root files.</td>
+          </tr>
+          <tr>
+            <td>Docs and tests cleanup</td>
+            <td>Public docs still teach <code>/pack</code>, <code>$pack</code>, and source checkout helper usage in places.</td>
+            <td>Docs consistently distinguish canonical npm route from maintainer-only shell fallback; compatibility tests match the new contract.</td>
+            <td><code>README.md</code>, <code>docs/*</code>, <code>packages/skillpacks/test/*</code>.</td>
+          </tr>
+          <tr>
+            <td>Package test health</td>
+            <td>Sunset changes affect install, refresh, docs, compatibility, and active skill registry behavior.</td>
+            <td>Package node tests, build check, alignment audit, skill mirror/version checks, and relevant layer1 routing tests pass.</td>
+            <td>Package test suite and repo-level verification scripts.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="phases">
+    <div class="section-head">
+      <h2>Implementation Phases</h2>
+      <div class="feedback" data-section="Implementation Phases"></div>
+    </div>
+    <div class="table-wrap" data-tts-narrative="This roadmap proposes six phases: assessment, Node parity, agent instruction migration, docs and tests cleanup, deprecation or removal, and release verification.">
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Work</th>
+            <th>Exit criteria</th>
+            <th>Proceed gate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Assessment</td>
+            <td>Inventory active skill, shell, npm, docs, tests, installed roots, generated package outputs, and root instruction references.</td>
+            <td>Evidence table is current and all shell-backed commands are classified.</td>
+            <td>Approve current dependency map.</td>
+          </tr>
+          <tr>
+            <td>2. Node parity</td>
+            <td>Port or explicitly classify <code>recommend</code>, <code>which</code>, and <code>install-deck</code>. Add tests before changing docs.</td>
+            <td>CLI ownership matrix is green and no accidental shell fallback remains for commands claimed as Node-owned.</td>
+            <td>Approve CLI ownership decision.</td>
+          </tr>
+          <tr>
+            <td>3. Agent instruction migration</td>
+            <td>Update root instruction source and generated root docs so missing-skill fallback uses the canonical CLI route.</td>
+            <td>Generated <code>AGENTS.md</code> and <code>CLAUDE.md</code> no longer require <code>scripts/pack.sh which</code> unless that is deliberately retained.</td>
+            <td>Approve user-facing route.</td>
+          </tr>
+          <tr>
+            <td>4. Docs and tests cleanup</td>
+            <td>Update README, skills reference, Codex workflow, decks docs, compatibility matrix, and regression tests.</td>
+            <td>Docs consistently separate package consumer, source maintainer, and compatibility routes.</td>
+            <td>Approve docs/test contract.</td>
+          </tr>
+          <tr>
+            <td>5. Deprecation or removal</td>
+            <td>Either rewrite <code>pack</code> as a deprecation shim or remove it from active base mirrors with archives/changelogs as required.</td>
+            <td>Skill versioning and archive rules are satisfied; installed roots/package builds are refreshed if behavior changes.</td>
+            <td>Approve selected sunset target.</td>
+          </tr>
+          <tr>
+            <td>6. Release verification</td>
+            <td>Run package, skill, docs, alignment, and install-route verification; update ship manifest; commit and push.</td>
+            <td>All required checks pass or any pre-existing failure is proven against unmodified baseline.</td>
+            <td>Approve release readiness.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="verification">
+    <div class="section-head">
+      <h2>Release Verification</h2>
+      <div class="feedback" data-section="Release Verification"></div>
+    </div>
+    <p>The final implementation should use a wider verification set than this planning page because it would touch active skill contracts, generated package outputs, public docs, and CLI behavior.</p>
+    <div class="grid">
+      <div class="tile"><strong>Page-only checks</strong><p><code>node scripts/audit-alignment-pages.mjs</code>, TTS injection if missing, and <code>git diff --check</code>.</p></div>
+      <div class="tile"><strong>CLI checks</strong><p><code>npm --workspace packages/skillpacks run test:node</code> and <code>npm --workspace packages/skillpacks run build:check</code>.</p></div>
+      <div class="tile"><strong>Skill contract checks</strong><p><code>bash scripts/skill-archive-audit.sh --strict</code>, <code>bash scripts/skill-versions.sh --missing</code>, and mirror parity checks after skill edits.</p></div>
+      <div class="tile"><strong>Routing checks</strong><p>Focused layer1 tests for install routing, skill next-step routing, and root instruction generated-block integrity.</p></div>
+    </div>
+  </section>
+
+  <section id="approval-gates">
+    <div class="section-head">
+      <h2>Decision Gates</h2>
+      <div class="feedback" data-section="Decision Gates"></div>
+    </div>
+    <p>Answer these gates with the bottom compile control before any implementation starts. Partial responses are allowed and should be treated as review feedback, not implementation approval.</p>
+
+    <div class="question" data-gate="sunset-target" data-gate-type="scope/non-goals" data-required="true">
+      <h3>Gate 1: Sunset Target</h3>
+      <p>What is the intended end state for the <code>pack</code> skill?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="sunset-target" value="deprecate-and-retain-shim" data-answer="Deprecate pack and retain a thin compatibility shim for one release cycle."> Deprecate and retain shim (recommended)</label>
+        <label class="option"><input type="radio" name="sunset-target" value="remove-active-skill" data-answer="Remove active pack skill after all replacement routes are verified."> Remove active skill</label>
+        <label class="option"><input type="radio" name="sunset-target" value="keep-active-facade" data-answer="Keep pack as the active agent-facing facade."> Keep active facade</label>
+        <label class="option"><input type="radio" name="sunset-target" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="sunset-target" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="sunset-target" placeholder="Optional notes or other target"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="cli-ownership" data-gate-type="coverage checkpoint" data-required="true">
+      <h3>Gate 2: CLI Ownership</h3>
+      <p>How should remaining shell-backed commands be handled?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="cli-ownership" value="port-before-sunset" data-answer="Port recommend, which, and install-deck materialization before deprecating pack."> Port before sunset (recommended)</label>
+        <label class="option"><input type="radio" name="cli-ownership" value="port-recommend-which-only" data-answer="Port recommend and which; document install-deck as a permanent compatibility surface."> Port recommend and which only</label>
+        <label class="option"><input type="radio" name="cli-ownership" value="document-shell-permanent" data-answer="Document remaining shell-backed commands as permanent compatibility surfaces."> Document shell compatibility</label>
+        <label class="option"><input type="radio" name="cli-ownership" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="cli-ownership" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="cli-ownership" placeholder="Optional notes or ownership constraint"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="user-route" data-gate-type="post-approval route" data-required="true">
+      <h3>Gate 3: User-Facing Route</h3>
+      <p>What should docs and root instructions present as the standard route?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="user-route" value="standardize-npm" data-answer="Standardize on npx skillpacks / gskp and remove pack guidance after compatibility is ready."> Standardize on npm CLI (recommended)</label>
+        <label class="option"><input type="radio" name="user-route" value="dual-route" data-answer="Keep pack and npm CLI as documented peer routes."> Keep dual route</label>
+        <label class="option"><input type="radio" name="user-route" value="source-first" data-answer="Keep source-checkout scripts/pack.sh guidance prominent for maintainers."> Source-checkout first</label>
+        <label class="option"><input type="radio" name="user-route" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="user-route" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="user-route" placeholder="Optional notes or route wording"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="implementation-approval" data-gate-type="proposed file changes" data-required="true">
+      <h3>Gate 4: Approval To Proceed</h3>
+      <p>May an agent proceed with implementation after this page is reviewed?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="implementation-approval" value="approve-planning-only" data-answer="Approve this planning artifact only; do not implement sunset changes yet."> Approve planning only (recommended)</label>
+        <label class="option"><input type="radio" name="implementation-approval" value="approve-implementation-after-parity" data-answer="Approve implementation only after Node parity work is planned and verified."> Approve after parity plan</label>
+        <label class="option"><input type="radio" name="implementation-approval" value="approve-immediate-implementation" data-answer="Approve immediate implementation using the selected gates."> Approve immediate implementation</label>
+        <label class="option"><input type="radio" name="implementation-approval" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="implementation-approval" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="implementation-approval" placeholder="Optional notes, file boundaries, or timing constraints"></textarea></div>
+    </div>
+  </section>
+
+  <section id="compile">
+    <div class="section-head">
+      <h2>Compile Responses</h2>
+      <div class="feedback" data-section="Compile Responses"></div>
+    </div>
+    <p>Use this section to compile gate answers and selected section feedback into YAML. Complete approval requires all four required gates answered and no unresolved negative or clarification feedback.</p>
+    <div class="compile-actions">
+      <button id="compile-btn" type="button">Compile Responses</button>
+      <button id="copy-compiled-btn" type="button">Copy YAML</button>
+      <span id="compile-status" class="copy-status">No responses compiled yet.</span>
+    </div>
+    <textarea id="compiled-yaml" class="yaml-output" readonly aria-label="Compiled response YAML"></textarea>
+  </section>
+</main>
+
+<script>
+const PAGE_PATH = 'alignment/pack-skill-sunset-plan.html';
+const REQUIRED_GATES = ['sunset-target', 'cli-ownership', 'user-route', 'implementation-approval'];
+const feedbackContainers = [...document.querySelectorAll('.feedback[data-section]')];
+
+function yamlQuote(value) {
+  const text = String(value || '');
+  if (!text) return "''";
+  return JSON.stringify(text);
+}
+
+function makeFeedbackControls(container) {
+  const section = container.dataset.section;
+  const id = section.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  container.innerHTML = `
+    <button type="button" class="fb-btn" data-choice="emphasize" aria-label="Emphasize ${section}">emphasize</button>
+    <button type="button" class="fb-btn" data-choice="down" aria-label="Reject or flag concern for ${section}">thumbs down</button>
+    <button type="button" class="fb-btn" data-choice="needs-clarification" aria-label="Request clarification for ${section}">clarification needed</button>
+    <div class="feedback-panel" data-feedback-panel="${id}">
+      <textarea data-feedback-notes="${id}" placeholder="Optional section feedback notes"></textarea>
+      <div class="compile-actions">
+        <button type="button" data-local-compile="${id}">Compile Feedback YAML</button>
+        <button type="button" data-local-copy="${id}">Copy YAML</button>
+        <span class="copy-status" data-local-status="${id}"></span>
+      </div>
+      <textarea class="yaml-output local-yaml" data-local-yaml="${id}" readonly aria-label="Local feedback YAML"></textarea>
+    </div>`;
+}
+
+feedbackContainers.forEach(makeFeedbackControls);
+
+function feedbackAction(choice) {
+  if (choice === 'emphasize') return 'add-weight-to-section';
+  if (choice === 'down') return 'investigate-and-revise';
+  return 'clarify-before-approval';
+}
+
+function selectedFeedbackEntries() {
+  return feedbackContainers.flatMap((container) => {
+    const active = container.querySelector('.fb-btn.active');
+    if (!active) return [];
+    const section = container.dataset.section;
+    const id = section.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const notes = container.querySelector(`[data-feedback-notes="${id}"]`).value.trim();
+    return [{
+      section,
+      feedback: active.dataset.choice,
+      notes,
+      requested_agent_action: feedbackAction(active.dataset.choice)
+    }];
+  });
+}
+
+function unansweredGates() {
+  return REQUIRED_GATES.filter((gate) => !document.querySelector(`input[name="${gate}"]:checked`));
+}
+
+function gateAnswers() {
+  return REQUIRED_GATES.flatMap((gate) => {
+    const input = document.querySelector(`input[name="${gate}"]:checked`);
+    if (!input) return [];
+    const question = input.closest('.question');
+    const notes = question.querySelector(`[data-notes-for="${gate}"]`).value.trim();
+    const status = input.value === 'other' ? 'other' : input.value === 'needs-clarification' ? 'needs-clarification' : 'answered';
+    const lines = [
+      '  - section: ' + yamlQuote(question.querySelector('h3').textContent.trim()),
+      '    gate_type: ' + yamlQuote(question.dataset.gateType),
+      '    status: ' + yamlQuote(status),
+      '    answer: ' + yamlQuote(input.dataset.answer || input.value)
+    ];
+    if (notes) lines.push('    notes: ' + yamlQuote(notes));
+    if (gate === 'implementation-approval') lines.push('    target_path: ' + yamlQuote(PAGE_PATH));
+    return [lines.join('\n')];
+  });
+}
+
+function sectionFeedbackYaml(entries, indent = '  ') {
+  return entries.map((entry) => {
+    const lines = [
+      `${indent}- section: ${yamlQuote(entry.section)}`,
+      `${indent}  feedback: ${yamlQuote(entry.feedback)}`,
+      `${indent}  requested_agent_action: ${yamlQuote(entry.requested_agent_action)}`
+    ];
+    if (entry.notes) lines.splice(2, 0, `${indent}  notes: ${yamlQuote(entry.notes)}`);
+    return lines.join('\n');
+  }).join('\n');
+}
+
+function approvalStatus(unanswered, answers, feedbackEntries) {
+  const hasNegativeFeedback = feedbackEntries.some((entry) => entry.feedback === 'down' || entry.feedback === 'needs-clarification');
+  const hasClarificationGate = answers.some((answer) => answer.includes('status: "needs-clarification"'));
+  return unanswered.length === 0 && !hasNegativeFeedback && !hasClarificationGate
+    ? 'ready-for-agent-review'
+    : 'not-approved';
+}
+
+function compileYaml() {
+  const unanswered = unansweredGates();
+  const answers = gateAnswers();
+  const feedbackEntries = selectedFeedbackEntries();
+  const responseStatus = unanswered.length === 0 ? 'complete' : 'partial';
+  const lines = [
+    'alignment_page: ' + yamlQuote(PAGE_PATH),
+    'response_status: ' + yamlQuote(responseStatus),
+    'approval_status: ' + yamlQuote(approvalStatus(unanswered, answers, feedbackEntries)),
+    'required_gate_status: ' + yamlQuote(unanswered.length === 0 ? 'complete' : 'incomplete'),
+    'unanswered_required_questions:'
+  ];
+  if (unanswered.length === 0) {
+    lines.push('  []');
+  } else {
+    unanswered.forEach((gate) => lines.push('  - ' + yamlQuote(gate)));
+  }
+  if (answers.length > 0) {
+    lines.push('gate_answers:');
+    lines.push(answers.join('\n'));
+  }
+  if (feedbackEntries.length > 0) {
+    lines.push('section_feedback:');
+    lines.push(sectionFeedbackYaml(feedbackEntries));
+  }
+  return lines.join('\n') + '\n';
+}
+
+async function copyText(text, statusEl) {
+  try {
+    await navigator.clipboard.writeText(text);
+    statusEl.textContent = 'Copied YAML to clipboard.';
+  } catch {
+    statusEl.textContent = 'Clipboard blocked; YAML is selected for copying.';
+  }
+}
+
+document.addEventListener('click', (event) => {
+  const fbButton = event.target.closest('.fb-btn');
+  if (fbButton) {
+    const container = fbButton.closest('.feedback');
+    const panel = container.querySelector('.feedback-panel');
+    const wasActive = fbButton.classList.contains('active');
+    container.querySelectorAll('.fb-btn').forEach((btn) => btn.classList.remove('active'));
+    if (wasActive) {
+      panel.classList.remove('visible');
+      container.dataset.feedback = '';
+    } else {
+      fbButton.classList.add('active');
+      panel.classList.add('visible');
+      container.dataset.feedback = fbButton.dataset.choice;
+    }
+  }
+
+  const localCompile = event.target.closest('[data-local-compile]');
+  if (localCompile) {
+    const id = localCompile.dataset.localCompile;
+    const container = localCompile.closest('.feedback');
+    const entry = selectedFeedbackEntries().find((candidate) => candidate.section === container.dataset.section);
+    const output = container.querySelector(`[data-local-yaml="${id}"]`);
+    const status = container.querySelector(`[data-local-status="${id}"]`);
+    if (!entry) {
+      status.textContent = 'Select section feedback first.';
+      return;
+    }
+    output.value = [
+      'alignment_page: ' + yamlQuote(PAGE_PATH),
+      'feedback_status: "revision-request"',
+      'approval_status: "not-approved"',
+      'unanswered_required_questions:',
+      ...unansweredGates().map((gate) => '  - ' + yamlQuote(gate)),
+      'section_feedback:',
+      sectionFeedbackYaml([entry])
+    ].join('\n') + '\n';
+    output.classList.add('visible');
+    copyText(output.value, status);
+  }
+
+  const localCopy = event.target.closest('[data-local-copy]');
+  if (localCopy) {
+    const id = localCopy.dataset.localCopy;
+    const container = localCopy.closest('.feedback');
+    const output = container.querySelector(`[data-local-yaml="${id}"]`);
+    const status = container.querySelector(`[data-local-status="${id}"]`);
+    if (output.value) copyText(output.value, status);
+  }
+});
+
+document.querySelectorAll('.question input[type="radio"]').forEach((input) => {
+  input.addEventListener('change', () => {
+    const question = input.closest('.question');
+    question.querySelector('.notes').classList.add('visible');
+  });
+});
+
+document.getElementById('compile-btn').addEventListener('click', () => {
+  const yaml = compileYaml();
+  const output = document.getElementById('compiled-yaml');
+  const status = document.getElementById('compile-status');
+  if (gateAnswers().length === 0 && selectedFeedbackEntries().length === 0) {
+    status.textContent = 'Answer a gate question or select section feedback first.';
+    return;
+  }
+  output.value = yaml;
+  output.classList.add('visible');
+  copyText(yaml, status);
+});
+
+document.getElementById('copy-compiled-btn').addEventListener('click', () => {
+  const output = document.getElementById('compiled-yaml');
+  const status = document.getElementById('compile-status');
+  if (output.value) copyText(output.value, status);
+});
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

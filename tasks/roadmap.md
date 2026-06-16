@@ -1,3 +1,34 @@
+## Current Implementation - Pack Skill Sunset Alignment Page
+
+### Goal
+
+Create a review-state alignment page that gives a decision-ready roadmap for fully sunsetting the `pack` skill without performing any sunset mutations.
+
+### Scope
+
+- New `alignment/pack-skill-sunset-plan.html` document-tier utility review page
+- `alignment/index.html` registration
+- Evidence from `base/{codex,claude}/pack/SKILL.md`, `scripts/pack.sh`, `packages/skillpacks/src/cli/*`, root instructions, docs, and tests
+- Prompt history and task tracking
+- Alignment page audit, TTS presence, and diff hygiene verification
+
+### Plan
+
+1. Capture the visible `pack` invocation prompt and record this implementation plan.
+2. Inspect current pack skill contracts, shell launcher, Node CLI routing, root instructions, docs, tests, and alignment-page convention.
+3. Author a dark-mode document-tier review page with in-flow TOC, evidence tables, section feedback controls, decision gates, bottom compile controls, and TTS include.
+4. Register the page in `alignment/index.html` with date metadata and a `[doc]` badge.
+5. Run alignment audit, inject TTS if needed, run diff hygiene, and optionally open the page when practical.
+6. Record review notes, inspect the final diff, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Page stays in review status and does not remove, deprecate, or edit the active `pack` skill.
+- Page defines current dependencies, sunset target options, readiness blockers, phased roadmap, and explicit approval gates.
+- Page recommends a conservative hold until remaining shell-backed surfaces and package verification are resolved.
+- `alignment/index.html` links the new page with a document badge and date.
+- Verification results are recorded in `tasks/todo.md`.
+
 ## Current Investigation - Layer1 Routing Audit Failure Provenance
 
 ### Goal
