@@ -31,6 +31,16 @@
   - `git diff --check`
 - The requested `pnpm --dir packages/skillpacks test` spelling failed in this shell because pnpm parsed `packages/skillpacks` as the command. `pnpm --dir=packages/skillpacks test` also exited 1 with no output because `packages/skillpacks/package.json` has no `test` script; the package's actual pnpm test command is `pnpm --dir=packages/skillpacks run test:node`.
 
+### Release & Live Verification — skillpacks 0.1.5 (2026-06-16)
+
+- Published `skillpacks@0.1.5` to npm (was unpublished; npm latest had been `0.1.4`, cut ~10h before the fix landed). `npm view skillpacks version` now reports `0.1.5`; `verify:published` passed (license MIT, install/pin/unpin/refresh smoke tests green).
+- Tagged `v0.1.5` (annotated) on commit `6fe9ad16` and pushed to origin — repo's first git tag, establishing the `vX.Y.Z` convention.
+- End-to-end duplicate-install verification against the **published** 0.1.5 package:
+  - Reproduced the bug on `0.1.4`: `install business-research` produced 22 top-level roots, including duplicate nested frameworks as their own roots (`pmf-engine`, `w3-hypothesis`, `five-rings`, `four-forces`, `jtbd-needs`, `seven-dimensions`, plus competitive-analysis/positioning frameworks).
+  - On `0.1.5`: fresh `install business-research` yields 7 correct top-level parent roots and 0 framework duplicates; every framework stays nested under its parent (`customer-discovery/frameworks`, `competitive-analysis/frameworks`, `positioning/frameworks`).
+  - `install customer-discovery` (single skill) and a subsequent `refresh` both stay clean (1 root, frameworks nested).
+  - `refresh` over a `0.1.4`-created dirty install prunes the duplicate framework roots while preserving the nested frameworks and unmanaged directories.
+
 ## Current Implementation - Single Base Skill Install Support
 
 ### Current Checklist

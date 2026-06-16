@@ -14441,3 +14441,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Validation passed: typecheck clean, 152 Vitest (prior 144 non-regressed + 8 new deck-harness model tests), 6 Playwright (Chromium, prior 5 + 1 new harness-driver test), build 16/16 pages, alignment audit exit 0.
 - Captured the visible `/ship` invocation in `prompts/ship/skill-prompt-20260616-131824-deck-builder-debug-harness.md`.
 - Manifest: `tasks/ship-manifest-2026-06-16-deck-builder-debug-harness.md`.
+
+## 2026-06-16 — skillpacks 0.1.5 release & duplicate-install verification
+
+- Verified the already-committed framework-refresh-duplicate fix (commit `6fe9ad16`): all skillpacks node test suites green (92 tests), `skillpacks:verify` exit 0, manifest in sync, `git diff --check` clean. The fix was committed but not yet released — npm latest was `0.1.4` (cut ~10h before the fix landed).
+- Published `skillpacks@0.1.5` to npm (logged in as `glexcorp`); `verify:published` passed (license MIT, install/pin/unpin/refresh smoke tests green). Tagged `v0.1.5` (annotated, on `6fe9ad16`) and pushed — repo's first git tag.
+- End-to-end duplicate-install test against the published package: reproduced the bug on `0.1.4` (`install business-research` → 22 top-level roots incl. duplicate nested frameworks pmf-engine/w3-hypothesis/five-rings/etc.); confirmed `0.1.5` fresh pack install yields 7 correct parent roots + 0 framework duplicates, frameworks stay nested under parents, and `refresh` over a `0.1.4`-dirty install prunes the duplicate roots while preserving nested frameworks and unmanaged dirs.
