@@ -8,7 +8,7 @@
 - [x] Update active skill contracts and generated/provisioned guidance.
 - [x] Add correction lesson and focused regression coverage.
 - [x] Run targeted stale-contract scans, routing audits, validation, and diff hygiene.
-- [ ] Review final diff, commit, and push intended changes.
+- [x] Review final diff, commit, and push intended changes.
 
 ### Review Notes
 
