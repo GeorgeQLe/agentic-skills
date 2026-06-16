@@ -1,3 +1,32 @@
+## Current Investigation - Codex Skill Startup Context
+
+### Goal
+
+Validate why Codex startup context is consuming roughly 5-8% for simple prompts, determine whether installed skill count is the cause, and apply the smallest local remediation if the repo or generated skill configuration is responsible.
+
+### Scope
+
+- Active Codex skill inventory under project-local and user-local skill roots
+- Repo scripts and manifests that install or expose skills to Codex
+- Prompt history and task tracking for this `$investigate` invocation
+- Focused verification for any local fix
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record this investigation plan.
+2. Inventory Codex-visible skill roots and count installed skills by source.
+3. Estimate the initial skill-list context footprint from names, descriptions, and paths.
+4. Trace which repo artifacts or install flows caused unexpectedly large skill visibility.
+5. Apply a minimal remediation only if the root cause is local and safely fixable.
+6. Run focused verification, record results, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- The investigation reports installed skill counts by root/source.
+- The user claim is classified with concrete evidence.
+- The largest contributors to initial context are identified.
+- Any fix is verified with a repeatable command, or the report explains why no source fix was applied.
+
 ## Current Implementation - Remove Global/Base Skill Availability Assumptions
 
 ### Goal

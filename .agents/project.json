@@ -1,15 +1,6 @@
 {
   "project_type": "devtool",
-  "enabled_packs": [
-    "agentic-skills-bench",
-    "exec-loop",
-    "code-debug",
-    "skill-dev",
-    "gitops",
-    "session-analytics",
-    "devtool",
-    "business-research"
-  ],
+  "enabled_packs": [],
   "skill_pack_version": 1,
   "enabled_skills": {
     "ship-end": "exec-loop",

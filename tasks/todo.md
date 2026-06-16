@@ -1,3 +1,39 @@
+## Current Investigation - Codex Skill Startup Context
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the investigation plan in task tracking.
+- [x] Inventory Codex-visible skill roots and source counts.
+- [x] Quantify the startup skill-list context footprint.
+- [x] Trace root cause to repo/install artifacts and recent history.
+- [x] Apply minimal remediation if warranted.
+- [x] Run verification and record review notes.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- Strategy used: General, because the report concerns startup context and skill discovery behavior rather than UI or runtime data state.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260616-133327-codex-skill-context.md`.
+- User claim verdict: confirmed. The current session had 89 Codex-visible skills across project-local and user-local roots before remediation, even though the tracked source roots were not themselves installed. The bloat came from generated local skill installs.
+- Before remediation, `.codex/skills` contained 69 project-local `SKILL.md` files, with 54 managed install roots and 15 duplicate skill names caused by installing framework skills both as top-level commands and nested parent-framework entries.
+- Source breakdown before remediation: `business-research` contributed 22 project-local skills, `devtool` 8, `product-design` 4, `skill-dev` 4, `code-debug` 3, `exec-loop` 3, `session-analytics` 3, `gitops` 2, `agentic-skills-bench` 2, and single entries from `business-ops`, `code-review`, and `guided-walkthrough`; user-local roots added 20 more skills.
+- The startup skill-summary estimate before remediation was 19,766 chars / 2,082 words / about 4,942 chars-per-4 tokens. The full skill bodies were much larger, but Codex startup context primarily includes the summarized skill list plus tool/plugin instructions until a skill is invoked.
+- Root cause: `.agents/project.json` listed eight broad `enabled_packs`, which `packages/skillpacks/src/cli/lifecycle.mjs` installs by expanding every skill in each pack. The same config also had a narrower `enabled_skills` map, but the broad packs dominated the visible skill inventory.
+- Recent history: `git blame .agents/project.json` shows the broad pack set was introduced by `30357704 chore(pack): install brainstorm skill` on 2026-06-10, and `business-research` was added by `20a9ca32 feat(skillpacks): rename business-discovery -> business-research and add fuzzy skill resolution` on 2026-06-11.
+- Fix applied: changed `.agents/project.json.enabled_packs` to `[]` and preserved the existing 13 explicit `enabled_skills`.
+- Regeneration path:
+  - `npx skillpacks refresh` failed with `sh: gskp: command not found` in this checkout session.
+  - `node packages/skillpacks/bin/skillpacks.mjs refresh` succeeded and refreshed the explicit skills.
+  - `node packages/skillpacks/bin/skillpacks.mjs prune` removed 82 generated orphan installs across `.claude/skills` and `.codex/skills`.
+- After remediation, project-local Codex has 13 explicit skills: `analyze-sessions`, `brainstorm`, `expert-review`, `guide`, `investigate`, `repo-glossary`, `session-triage`, `ship`, `ship-end`, `sync`, `ui-interview`, `user-flow-map`, and `ux-variations`.
+- After remediation, combined project-local plus user-local skill inventory is 33 skills, with zero duplicate names. The startup skill-summary estimate dropped to 8,512 chars / 938 words / about 2,128 chars-per-4 tokens.
+- Verification passed:
+  - `node packages/skillpacks/bin/skillpacks.mjs doctor` reported all 26 project-local Claude/Codex generated installs as `ok`.
+  - `node packages/skillpacks/bin/skillpacks.mjs status` showed no enabled packs and the 13 individually installed skills.
+  - `find .codex/skills -name SKILL.md -print | sort` listed only the 13 explicit Codex project-local skills.
+- Remaining contributor: `~/.codex/skills` still contains 20 user-local skills, including 8 legacy repo-managed global-base installs. The current base contract says user-home base installs are retired, but removing those requires explicit confirmation because it mutates user-home skill state outside this repo.
+
 ## Current Implementation - Remove Global/Base Skill Availability Assumptions
 
 ### Current Checklist
