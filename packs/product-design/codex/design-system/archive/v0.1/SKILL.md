@@ -2,7 +2,7 @@
 name: design-system
 description: Extract or scan design tokens from a consolidated UI spec or existing codebase and produce a DESIGN.md file following the Google Labs Stitch format — machine-readable YAML frontmatter with prose rationale sections
 type: planning
-version: v0.3
+version: v0.1
 argument-hint: "[spec path | --scan | --update]"
 visual_tier: prototype
 ---
@@ -17,7 +17,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 
 ## Modes
 
-- **Default**: reads `specs/ui-final-*.md` or `prototypes/*/consolidated/` (or a user-provided spec path) and extracts tokens.
+- **Default**: reads `specs/ui-final-*.md` (or a user-provided spec path) and extracts tokens.
 - **`--scan`**: scans the codebase for CSS custom properties, Tailwind config, theme files, and component patterns to reverse-engineer a DESIGN.md.
 - **`--update`**: reads an existing `DESIGN.md` alongside new spec changes and produces an updated version.
 
@@ -145,7 +145,6 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 - Do not include tokens for features that don't exist yet — scope to the current spec or codebase.
 - Keep the YAML frontmatter machine-readable. No comments in YAML. Put rationale in prose sections.
 - Token cross-references use curly braces: `{colors.primary}`, `{spacing.md}`, `{rounded.lg}`.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 - When updating an existing DESIGN.md, preserve token names and values that haven't changed. Only modify tokens that the new spec explicitly changes.
 
 ## Alignment Page

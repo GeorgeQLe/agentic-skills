@@ -2,7 +2,7 @@
 name: design-system
 description: Extract or scan design tokens from a consolidated UI spec or existing codebase and produce a DESIGN.md file following the Google Labs Stitch format — machine-readable YAML frontmatter with prose rationale sections
 type: planning
-version: v0.3
+version: v0.2
 argument-hint: "[spec path | --scan | --update]"
 visual_tier: prototype
 ---
@@ -17,7 +17,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 
 ## Modes
 
-- **Default**: reads `specs/ui-final-*.md` or `prototypes/*/consolidated/` (or a user-provided spec path) and extracts tokens.
+- **Default**: reads `specs/ui-final-*.md` (or a user-provided spec path) and extracts tokens.
 - **`--scan`**: scans the codebase for CSS custom properties, Tailwind config, theme files, and component patterns to reverse-engineer a DESIGN.md.
 - **`--update`**: reads an existing `DESIGN.md` alongside new spec changes and produces an updated version.
 

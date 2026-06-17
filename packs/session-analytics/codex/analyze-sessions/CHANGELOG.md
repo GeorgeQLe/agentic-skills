@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-17
+
+- Caught Codex up to the Claude mirror with npm-aware cross-pack recommendation guidance, clearer full-history analysis constraints, and skill-dev pack labeling while preserving `$...` route syntax.
+
 ## v0.3 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

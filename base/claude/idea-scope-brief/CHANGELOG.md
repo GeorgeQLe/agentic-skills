@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.17 - 2026-06-17
+
+- Caught Claude up to the Codex mirror with Deck Fit Handoff routing for saved and canonical workflow decks, preserving Claude `/...` route syntax.
+
 ## v0.16 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

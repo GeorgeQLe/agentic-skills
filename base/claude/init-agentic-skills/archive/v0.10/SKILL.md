@@ -2,7 +2,7 @@
 name: init-agentic-skills
 description: Make the base agentic-skills available in a project by installing them project-local with npx skillpacks init, report and fix skill-install drift, clean up legacy user-home installs, and route domain packs to the pack skill. Use when Claude needs to enable base skills for a project, repair stale installs, confirm initialization status, remove old global installs, or explain how to enable packs.
 type: ops
-version: v0.11
+version: v0.10
 argument-hint: "[init|status|doctor|refresh|uninstall-global]"
 ---
 

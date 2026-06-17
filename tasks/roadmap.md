@@ -1,3 +1,43 @@
+## Current Implementation - Codex/Claude Skill Version Parity Catch-Up
+
+### Goal
+
+Verify current Codex/Claude skill version gaps, classify intentional split implementations versus stale drift, and patch only the portable parity gaps while preserving runner-native command syntax.
+
+### Scope
+
+- Pack parity targets:
+  - `packs/product-design/{codex,claude}/design-system`
+  - `packs/session-analytics/{codex,claude}/analyze-sessions`
+  - `packs/session-analytics/{codex,claude}/session-triage`
+- Base parity targets:
+  - `base/{codex,claude}/init-agentic-skills`
+  - `base/{codex,claude}/idea-scope-brief`
+- Parity enforcement scripts/tests for the patched gaps
+- Archive snapshots and changelog entries for stale skill sides
+- Generated manifests/showcase data only if metadata regeneration changes them
+- Task review notes and verification output
+
+### Plan
+
+1. Run a read-only active skill version audit across `packs`, `base`, `.claude/skills`, and `.codex/skills`.
+2. Confirm that the only patchable version gaps are the five named targets after excluding intentional splits: `exec`, `delegate`, `patch-exec-profile`, `project-fleet`, and `spin-off`.
+3. For each target, compare active `SKILL.md` and `CHANGELOG.md` pairs and identify runner-neutral behavior from the newer side.
+4. Archive each stale active `SKILL.md` with `scripts/skill-archive.sh`, then patch the stale side to the higher existing version while preserving `$...` versus `/...` command syntax and agent-specific wording.
+5. Update parity enforcement by removing resolved pack version-drift allowances, clarifying the intentional `exec` drift reason, and adding targeted base-version parity coverage.
+6. Regenerate package/showcase metadata with existing generators when changed skill metadata requires it.
+7. Run parity checks, version/archive checks, targeted tests, package/showcase validation as needed, and `git diff --check`.
+8. Record review notes, then commit and push intended tracked changes on the primary branch.
+
+### Acceptance Criteria
+
+- `design-system`, `analyze-sessions`, `session-triage`, `init-agentic-skills`, and `idea-scope-brief` have matching active versions across Codex/Claude.
+- Stale sides have archive snapshots for their previous versions and changelog entries for the catch-up.
+- Runner-native invocation syntax remains unchanged: Codex uses `$...`; Claude uses `/...`.
+- Pack parity allowlists no longer hide the three resolved pack version gaps.
+- Intentional one-sided and split implementations remain allowlisted with accurate reasons.
+- Static version presence, parity, targeted tests, and package/showcase validation pass or any unrelated pre-existing failure is proven.
+
 ## Current Implementation - Ship-End Research/Design Route Precedence
 
 ### Goal

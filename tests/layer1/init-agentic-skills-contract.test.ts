@@ -17,7 +17,7 @@ describe("init-agentic-skills project-local contract", () => {
     {
       skillPath: "base/claude/init-agentic-skills/SKILL.md",
       packCommand: "/pack",
-      version: "v0.10",
+      version: "v0.11",
     },
   ];
 

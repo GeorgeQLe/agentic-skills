@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-17
+
+- Caught Codex up to the Claude mirror with npm-aware cross-pack recommendation guidance and skill-dev pack labeling while preserving `$...` route syntax.
+
 ## v0.0
 
 - Archived previous skill contract.

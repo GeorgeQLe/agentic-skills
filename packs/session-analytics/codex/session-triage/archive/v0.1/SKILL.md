@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.2
+version: v0.1
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -61,7 +61,7 @@ Use `$analyze-sessions` instead when the user wants broad cross-session trends, 
    - Provide concrete rule text or workflow-step wording when a skill-contract change is justified.
    - Include validation checks that prove the revised behavior prevents the issue, such as targeted `rg` checks, mirrored contract checks, version checks, replay of the decision path, or the failing test/log command.
    - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
-   - Route verified skill changes to `$targeted-skill-builder` (skill-dev pack) for a narrow update or `$create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
+   - Route verified skill changes to `$targeted-skill-builder` for a narrow update or `$create-agentic-skill` for a new repo-managed skill.
 
 ## Output
 
@@ -76,7 +76,7 @@ Produce a structured report with:
 - Recommended fix: exact file(s), section(s), and proposed wording or behavior change.
 - Validation plan: commands or checks to prove the fix.
 - Confidence and evidence gaps: what is known, what could not be verified, and whether `$analyze-sessions` is needed for recurrence analysis.
-- Recommended next skill: `$targeted-skill-builder` (skill-dev pack), `$create-agentic-skill` (skill-dev pack), `$analyze-sessions`, or `none` when no follow-up is justified.
+- Recommended next skill: `$targeted-skill-builder`, `$create-agentic-skill`, `$analyze-sessions`, or `none` when no follow-up is justified.
 
 ## Constraints
 
@@ -87,7 +87,6 @@ Produce a structured report with:
 - Do not create or suggest `$analyze-session`; use `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Default Shipping Contract
 

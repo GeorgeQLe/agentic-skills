@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.5"
   },
-  "source_fingerprint": "accb610e3a58b756544a5bb25adcb1b9f0b3df65d5bbacd8932da77b9ad6dde9",
+  "source_fingerprint": "8cc2b70d83a983d92de815aebb5a67573a3c76023787247d10d38f6bfac9ae85",
   "packs": [
     {
       "name": "agent-bridge",
@@ -903,10 +903,10 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.16",
+      "version": "v0.17",
       "path": "base/claude/idea-scope-brief/SKILL.md",
       "installable": true,
-      "content_sha256": "5bfa5847e1e601cf752b0bfd6fb0c01ee993a1c6281670e049505eaed3537a3d",
+      "content_sha256": "0c5cdf4374ba3b43c7a619b9a60b266e4ff15b9568152cd303ba033cbfce0bcb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -916,6 +916,7 @@
         "v0.13",
         "v0.14",
         "v0.15",
+        "v0.16",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -934,13 +935,14 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "path": "base/claude/init-agentic-skills/SKILL.md",
       "installable": true,
-      "content_sha256": "108aa44e29dcb92ae0709fd94caf260dc8211c02993a687651c763a3d71b8fce",
+      "content_sha256": "86fe312b9b5610c2f65270e433d5860ae0a9c7a51931a63720e11eea185ae5bf",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7118,12 +7120,14 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.3",
       "path": "packs/product-design/codex/design-system/SKILL.md",
       "installable": true,
-      "content_sha256": "603b6658911cd9b6f80405a154365a270bb47db5b9cac952dab4a8985df4494d",
+      "content_sha256": "083380d4fcd50de222fc1592e7558c2415486fb56501d1d61eb80e3e48705885",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1",
+        "v0.2"
       ],
       "command": "$design-system",
       "deck_memberships": []
@@ -7927,14 +7931,15 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "path": "packs/session-analytics/codex/analyze-sessions/SKILL.md",
       "installable": true,
-      "content_sha256": "b6690318eaaf069b8dc6226ef7aca7cd27e906584c2517e70953bafe4527e545",
+      "content_sha256": "b5fa55642b6a412874bbf3446fe4f9703ee29b0bb00d16bae28c951b9be49a84",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$analyze-sessions",
       "deck_memberships": []
@@ -7962,12 +7967,13 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "c00c9dd7fbf9e4caa465f5255ffcf5db14016af487398eecc3d9f5019fb67233",
+      "content_sha256": "deaf033b4323cb03f24c053a3c50695ab05e21971b64ac27d7c24f6a2d92da39",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$session-triage",
       "deck_memberships": []

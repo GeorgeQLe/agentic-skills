@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.4
+version: v0.3
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 context_intake: artifact_only
 visual_tier: visual
@@ -85,10 +85,10 @@ If the user asks about one current session, one mistake, one correction, one rep
 
 ## Remediation-Ready Handoffs
 
-When a broad verified workflow gap routes to `$targeted-skill-builder` (skill-dev pack):
+When a broad verified workflow gap routes to `$targeted-skill-builder`:
 
-- Emit one final next route using the current runner command convention only: `$targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>`.
-- The command argument must name the workflow gap and likely owner surface, not just `analyze-sessions` or `targeted-skill-builder`; for example: `$targeted-skill-builder` (skill-dev pack) `run post-doc-edit validation and lessons capture gate`.
+- Emit one final next route using the current runner command convention only: `$targeted-skill-builder <concrete gap phrase>`.
+- The command argument must name the workflow gap and likely owner surface, not just `analyze-sessions` or `targeted-skill-builder`; for example: `$targeted-skill-builder run post-doc-edit validation and lessons capture gate`.
 - In the recommendation table or next-work sentence, name the likely owner surface and one validation expectation, such as a layer1 contract test, focused benchmark smoke, or skill-specific validation command. If ownership is uncertain, state which evidence would decide it instead of guessing.
 - Do not put both Claude slash and Codex dollar commands in the final handoff. It is fine to mention the counterpart route in cross-tool analysis, but the final `Recommended next command:` must be one Codex-native command.
 - Distinguish explicit evidence from inference when labeling source, runner, project, or owner. Use language such as "explicitly says", "implies", or "not stated" rather than assigning runner ownership to sparse logs.
@@ -108,20 +108,18 @@ Produce a structured report with:
 
 ## Constraints
 
-- Process the entire available history for broad usage analysis, not just a sample.
-- Use actual message examples from the history, not hypothetical ones.
-- Be specific about frequencies; show exact counts where possible.
+- Use real message examples from history.
+- Show exact counts where possible.
 - Show exact token counts where available and clearly distinguish logged costs from estimated costs.
 - Do not infer token counts from message length when usage metadata is missing.
 - Do not estimate dollar cost from remembered or stale model pricing. Use explicit log cost fields, a user-provided price table, or a current provider source verified during the run; otherwise report cost as unavailable.
 - Avoid double-counting cumulative token snapshots. For Codex `token_count` events, aggregate final session totals from `total_token_usage` and use `last_token_usage` only for deduplicated timeline or turn-level analysis.
-- Group near-identical prompts together.
+- Group near-identical prompts into one pattern.
 - Deduplicate Codex prompts that appear in both `~/.codex/history.jsonl` and rollout files by `(session_id, timestamp, normalized text)` where possible.
 - Do not include system, developer, base instruction, or tool output text in repeated-prompt counts.
 - Do not diagnose one immediate issue here; route it to `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If one source is missing or unreadable, report that clearly and continue with the other source instead of guessing.
-- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Alignment Page
 

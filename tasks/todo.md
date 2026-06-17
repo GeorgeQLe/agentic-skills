@@ -1,3 +1,38 @@
+## Current Implementation - Codex/Claude Skill Version Parity Catch-Up
+
+### Current Checklist
+
+- [x] Run read-only active version audits and classify intentional drift.
+- [x] Compare target `SKILL.md` and `CHANGELOG.md` pairs for portable behavior.
+- [x] Archive stale skill versions before patching.
+- [x] Patch stale skill sides and changelogs to parity.
+- [x] Update parity enforcement for resolved pack gaps and targeted base gaps.
+- [x] Regenerate derived metadata if required.
+- [x] Run verification commands and inspect diffs.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` shows one pre-existing untracked prompt-history file at `prompts/investigate/skill-prompt-20260617-102230-codex-claude-version-gaps.md`; it is outside this implementation boundary unless final shipping explicitly includes it.
+- Initial pack parity audit passes only because `product-design/design-system`, `session-analytics/analyze-sessions`, and `session-analytics/session-triage` are currently allowed version drifts.
+- Initial active version inventory found only the planned gaps: `exec` intentional drift, the three patchable pack drifts, the two patchable base drifts, four intentional one-sided pack skills (`delegate`, `patch-exec-profile`, `project-fleet`, `spin-off`), and three base Claude-only inventory decisions (`autoresearch`, `autoresearch-prep`, `fork-idea-branch`).
+- Fix applied: archived stale skill contracts, brought `design-system`, `analyze-sessions`, `session-triage`, `init-agentic-skills`, and `idea-scope-brief` to parity at the higher existing versions, preserved `$...` versus `/...` command syntax, removed resolved pack version-drift allowlist entries, clarified the intentional `exec` version split, and added `scripts/base-skill-version-parity-audit.sh`.
+- Generated metadata refreshed: `packages/skillpacks/dist/skillpacks-manifest.json`, Skills Showcase data/proof assets, and package staging via `npm run skillpacks:build`.
+- Verification passed:
+  - `scripts/skill-mirror-parity-audit.sh --verbose`
+  - `scripts/base-skill-version-parity-audit.sh`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-versions.sh --missing`
+  - active version presence/expected-version Node check across `packs`, `base`, `.claude/skills`, and `.codex/skills`
+  - active version-gap inventory expecting only intentional one-sided entries and `exec` drift
+  - `pnpm --dir tests exec vitest run layer1/install.test.ts layer1/init-agentic-skills-contract.test.ts layer1/global-customer-discovery-routing.test.ts layer1/product-design-customer-discovery-routing.test.ts layer1/alignment-gates.test.ts`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `git diff --check`
+- Verification remediation: `init-agentic-skills-contract.test.ts` expected Claude `v0.10`; updated it to `v0.11` to match the planned base parity bump. Strict archive audit also required a `design-system` `archive/v0.2/SKILL.md` snapshot after jumping Codex from `v0.1` to `v0.3`; added the missing archive snapshot and regenerated metadata.
+
 ## Current Implementation - Ship-End Research/Design Route Precedence
 
 ### Current Checklist

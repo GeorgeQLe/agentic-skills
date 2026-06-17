@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-06-17
+
+- Caught Claude up to the Codex mirror version after the project-local `npx skillpacks init` sunset of user-home/global base installs, preserving Claude `/pack` route syntax.
+
 ## v0.10 - 2026-06-13
 
 - Sunset the user-home (global) install path. Base skills now install **project-local** via `npx skillpacks init` only; there is no `init.sh`, `--global`, or `~/.claude/skills` base install. Rewrote the process around `npx skillpacks` (`init`/`refresh`/`status`/`doctor`) and added an `uninstall-global` mode that runs `npx skillpacks uninstall-global` to clean up legacy repo-managed installs left in `~/.claude/skills` and `~/.codex/skills`. Dropped the `update`/`latest` checkout-refresh flow and the first-run drift-preference prompts that depended on the retired launcher.
