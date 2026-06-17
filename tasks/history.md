@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-17 - skillpacks 0.1.6 npm publish
+
+- Published `skillpacks@0.1.6` and `@glexcorp/gskp@0.1.6`; npm metadata now reports both package latest versions as `0.1.6`.
+- The first scoped-alias verification attempt observed stale npm metadata (`@glexcorp/gskp@latest` still reported `0.1.4`), but a subsequent registry check and rerun passed after metadata propagation.
+- Published-package smoke verification passed for both package names, covering metadata, list, install, remove, pin/unpin, deck install/remove, and unsupported direct skill-version syntax checks.
+- Release bookkeeping updated the workspace package version, package manifest version/fingerprint, and public package changelog.
+
 ## 2026-06-17 - Finalized artifact routing lesson
 
 - Recorded the correction that finalized research/alignment artifact handoffs must still end with explicit next-step routing; open status and verification are not substitutes.

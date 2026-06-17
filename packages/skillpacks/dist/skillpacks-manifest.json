@@ -2,9 +2,9 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.5"
+    "version": "0.1.6"
   },
-  "source_fingerprint": "d27a12eeaa8b62f9866c62ccdd35e2b0b88c8464fef1ef74deb20c5c2c9b2a45",
+  "source_fingerprint": "cc116cb36807bcccef8c4943104d653984757b047ac01dd1c12990c1440ba56f",
   "packs": [
     {
       "name": "agent-bridge",

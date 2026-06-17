@@ -16,6 +16,23 @@
 - Verification for this wrap-up is documentation/task hygiene only; no source or package runtime behavior changed.
 - Deploy classification: skipped because `tasks/deploy.md` says task-doc and prompt-history changes are non-deploying evidence.
 
+## Current Implementation - skillpacks 0.1.6 npm Publish
+
+### Current Checklist
+
+- [x] Publish `skillpacks@0.1.6`.
+- [x] Publish `@glexcorp/gskp@0.1.6`.
+- [x] Verify npm metadata reports both latest versions as `0.1.6`.
+- [x] Rerun published-package smoke verification for both package names.
+- [x] Update public package changelog.
+- [ ] Commit, tag, and push release bookkeeping.
+
+### Review Notes
+
+- Initial scoped-alias verification saw stale npm metadata (`@glexcorp/gskp@latest` as `0.1.4`), but `npm view` later reported `0.1.6` for both packages.
+- Verification passed for both `skillpacks@0.1.6` and `@glexcorp/gskp@0.1.6`: metadata, list, pack install, individual skill install, deck install, remove flows, pin/unpin, and unsupported direct skill-version syntax checks.
+- The real publish left `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.6`; these are intended release-state changes.
+
 ## Current Implementation - Release Parity And npm Login Runbook
 
 ### Current Checklist

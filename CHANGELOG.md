@@ -6,6 +6,19 @@ This file tracks npm package releases: CLI behavior, package contents, bundled s
 
 Keep this file updated before every npm package publish.
 
+## [0.1.6] - 2026-06-17
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Changed
+
+- Refreshed the bundled package snapshot after release-process, prompt-history, skill parity, and routing-contract updates.
+- Restored same-version npm release parity for the canonical package and scoped alias.
+
+### Verification
+
+- Published-package verification passed for `skillpacks@0.1.6` and `@glexcorp/gskp@0.1.6`, including metadata, install, remove, pin/unpin, deck install, and unsupported direct version syntax smoke checks.
+
 ## [0.1.5] - 2026-06-16
 
 Published for `skillpacks`. No matching `@glexcorp/gskp@0.1.5` publication is present in npm metadata as of 2026-06-17; the scoped alias latest remains `0.1.4`.
