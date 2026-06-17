@@ -10,7 +10,10 @@
 - [x] Fix archive-audit version semantics exposed by verification.
 - [x] Run focused verification and inspect diffs.
 - [x] Record review notes.
-- [ ] Commit and push intended changes.
+- [x] Re-verify the committed self-routing change in a follow-up pass.
+- [x] Tighten handoff-audit coverage for the complete `agent_routing` payload fields.
+- [x] Run package verification and package Node tests after the audit hardening.
+- [x] Commit and push intended changes.
 
 ### Review Notes
 
@@ -34,6 +37,21 @@
   - `npm run skillpacks:build`
   - `npm --workspace packages/skillpacks run test:node` (92 tests)
   - `npm run skillpacks:verify`
+  - `git diff --check`
+- Follow-up verification captured at `prompts/investigate/skill-prompt-20260617-100245-verify-agent-routing.md`.
+- Follow-up verdict: the shared docs and active Pattern A contracts already contain the complete `agent_routing` payload, including parent skill/command, product path, gate type, framework context when active, run manifest, and parent-owned next resolution.
+- Follow-up remediation: `scripts/skill-research-loop-handoff-audit.sh` now enforces `product_path`, `gate_type`, and `run_manifest` for parent contracts and `product_path` plus `run_manifest` for framework subskills, closing the audit coverage gap discovered during verification.
+- Follow-up verification passed:
+  - `bash scripts/skill-research-loop-handoff-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `npm run skillpacks:verify`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
   - `git diff --check`
 
 ## Current Implementation - Research Loop Terminal Handoff Sections

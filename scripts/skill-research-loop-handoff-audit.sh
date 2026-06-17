@@ -60,7 +60,10 @@ for (const { pack, name, canonical } of orchestrators) {
     requireText(file, text, "workflow: pattern-a-research-loop", "Pattern A workflow routing marker");
     requireText(file, text, `parent_skill: ${name}`, "parent skill routing metadata");
     requireText(file, text, `command: "${cmd} research/{slug}"`, "parent command routing metadata");
+    requireText(file, text, "product_path: research/{slug}", "product path routing metadata");
     requireText(file, text, "gate_owner: parent-orchestrator", "parent gate-owner routing metadata");
+    requireText(file, text, "gate_type: framework-findings", "gate type routing metadata");
+    requireText(file, text, `run_manifest: research/{slug}/_working/${name}-run.yaml`, "run manifest routing metadata");
     requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
     requireText(file, text, "The `command` field must be the same parent command shown under `## Recommended Next Command After Compiling YAML`.", "command parity guard");
 
@@ -89,10 +92,12 @@ for (const { pack, name } of orchestrators) {
       requireText(file, text, "workflow: pattern-a-research-loop", "Pattern A workflow routing marker");
       requireText(file, text, `parent_skill: ${name}`, "parent skill routing metadata");
       requireText(file, text, `command: "${cmd} research/{slug}"`, "parent command routing metadata");
+      requireText(file, text, "product_path: research/{slug}", "product path routing metadata");
       requireText(file, text, "gate_owner: parent-orchestrator", "parent gate-owner routing metadata");
       requireText(file, text, "gate_type: framework-findings", "framework gate type routing metadata");
       requireText(file, text, `framework_slug: ${entry.name}`, "framework slug routing metadata");
       requireText(file, text, "framework_mode: inline-subskill", "inline framework routing metadata");
+      requireText(file, text, `run_manifest: research/{slug}/_working/${name}-run.yaml`, "run manifest routing metadata");
       requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
       requireText(file, text, "never replace it with a child framework path command", "child-command routing guard");
     }
