@@ -449,6 +449,8 @@ One-off `npx skillpacks ...` works when the network is available or the npm cach
 
 ## Publishing
 
+Maintainers should use the concise release procedure in [`docs/release-runbook.md`](release-runbook.md). This section documents the package architecture behind that runbook.
+
 Do not publish manually from `packages/skillpacks/build`. That directory is an intermediate source-package build, not the dual-package release boundary.
 
 Use the root release script:
@@ -458,10 +460,14 @@ Use the root release script:
 ./publish.sh minor
 ./publish.sh 0.1.2
 ./publish.sh --dry-run patch
+./publish.sh --current
 ```
 
 Release rules:
 
+- The npm publisher must be logged in with `npm login --registry https://registry.npmjs.org/` and verified with `npm whoami --registry https://registry.npmjs.org/`.
+- The expected publisher is `glexcorp` unless `SKILLPACKS_NPM_PUBLISHER=<npm-username>` is intentionally set for another authorized account.
+- The publishing account must have access to `skillpacks` and scoped-package publish rights for `@glexcorp/gskp`.
 - The script requires a clean git working tree before it starts.
 - It bumps `packages/skillpacks/package.json` with `npm --workspace packages/skillpacks version <target> --no-git-tag-version`.
 - It runs `npm --workspace packages/skillpacks run test:node` and `npm run skillpacks:verify` before staging publish directories.
@@ -471,7 +477,14 @@ Release rules:
 - It publishes `skillpacks` first, then `@glexcorp/gskp --access public`.
 - It verifies both published package specs after a real publish.
 
-Every npm publish requires a new version. `skillpacks` and `@glexcorp/gskp` versions must stay identical.
+Every npm publish requires a new version. Same-version parity is a hard release gate: `skillpacks` and `@glexcorp/gskp` versions must stay identical, including recovery after a partial publish. If `skillpacks` publishes but `@glexcorp/gskp` fails, fix npm auth/access and rerun `./publish.sh --current`; do not manually publish only one package.
+
+After a real publish, verify npm registry parity:
+
+```bash
+npm view skillpacks version
+npm view @glexcorp/gskp version
+```
 
 After a real publish, verification can also be run directly:
 
@@ -596,8 +609,11 @@ Tasks:
 
 - Verify working tree is clean except intended release changes.
 - Run package tests, tarball validation, and package metadata checks.
-- Run `./publish.sh patch` or another explicit version target.
+- Follow [`docs/release-runbook.md`](release-runbook.md), including `npm login`, `npm whoami`, scoped-package access, and OTP readiness.
+- Run `./publish.sh --dry-run patch`, then `./publish.sh patch` or another explicit version target.
+- Treat same-version parity as a hard release gate: `skillpacks` and `@glexcorp/gskp` must publish at the same version, and partial-publish recovery must use `./publish.sh --current`.
 - Verify `npx skillpacks@latest list` and `npx @glexcorp/gskp@latest list` against the published packages.
+- Verify `npm view skillpacks version` and `npm view @glexcorp/gskp version` report the same version.
 - Install into a fresh temp repo and verify one pack, one individual skill, and one deck.
 - Commit and push release docs and any package version changes.
 

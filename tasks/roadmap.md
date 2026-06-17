@@ -1,3 +1,35 @@
+## Current Implementation - Release Parity And npm Login Runbook
+
+### Goal
+
+Document the `skillpacks` / `@glexcorp/gskp` maintainer publish process with explicit npm login, OTP/access expectations, same-version release parity gates, and partial-publish recovery.
+
+### Scope
+
+- New maintainer release runbook under `docs/`
+- Cross-links from the npm distribution design and README npm section
+- Small `publish.sh` output hardening before real publish
+- Task review notes and verification output
+
+### Plan
+
+1. Inspect the current release docs, README, package metadata, and `publish.sh` behavior.
+2. Add `docs/release-runbook.md` with npm auth, expected publisher, dry-run/current release commands, no-manual-one-package rule, partial-publish recovery, and post-publish parity checks.
+3. Point Phase 5 / publication guidance in `docs/skillpacks-npm-distribution.md` at the runbook and make same-version parity a hard release gate.
+4. Add a short README maintainer note near the npm CLI/package section.
+5. Harden `publish.sh` output with a final prereq/recovery reminder before non-dry-run publishes.
+6. Run package tests, package verification, dry-run publish verification, targeted doc-gate checks, and diff hygiene.
+7. Record review notes, then commit and push intended tracked changes on the primary branch.
+
+### Acceptance Criteria
+
+- Maintainers can follow a concise runbook for publishing both packages.
+- The docs require `npm login` / `npm whoami`, the expected `glexcorp` publisher, scoped access for `@glexcorp/gskp`, and OTP readiness.
+- Release docs state that `skillpacks` and `@glexcorp/gskp` must publish at the same version and must be verified with `npm view`.
+- Docs prohibit manual one-package `npm publish` recovery and direct maintainers to `./publish.sh --current` after fixing npm auth/access.
+- `publish.sh` reminds maintainers of auth, two-package parity, and the `--current` recovery command before real publish.
+- Verification passes, or any unavailable external check is recorded.
+
 ## Current Implementation - Public npm Package Changelog
 
 ### Goal

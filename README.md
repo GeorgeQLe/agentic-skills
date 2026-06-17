@@ -60,6 +60,8 @@ npx skillpacks status
 
 The same release is also published as the scoped alias package `@glexcorp/gskp`, so `npx @glexcorp/gskp init` is equivalent to `npx skillpacks init` at the same version. Both packages install both `gskp` and `skillpacks` binaries for global or local `npm exec --package skillpacks ...` or `npm exec --package @glexcorp/gskp ...` usage. Do not use `npx skillpack ...` singular; that is an unrelated npm package with a different project format.
 
+**Maintainer release note.** Publish with [`docs/release-runbook.md`](docs/release-runbook.md) and `./publish.sh`, not manual one-package `npm publish`. Each release must keep `skillpacks` and `@glexcorp/gskp` at the same version; if the scoped alias fails after `skillpacks` publishes, fix npm auth/access and rerun `./publish.sh --current`.
+
 See [`CHANGELOG.md`](CHANGELOG.md) for public package-level release notes across npm versions. Skill-specific changes remain in each skill's local `CHANGELOG.md`.
 
 ## Initialization

@@ -1,3 +1,30 @@
+## Current Implementation - Release Parity And npm Login Runbook
+
+### Current Checklist
+
+- [x] Inspect release docs, README, publish script, and task context.
+- [x] Add the maintainer release runbook.
+- [x] Update npm distribution docs and README discoverability.
+- [x] Harden `publish.sh` real-publish output.
+- [x] Run verification commands and targeted doc-gate checks.
+- [x] Record review notes.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` shows one pre-existing untracked prompt-history file at `prompts/investigate/skill-prompt-20260617-102230-codex-claude-version-gaps.md`; it is outside this implementation boundary.
+- Initial script finding: `publish.sh` already builds one artifact, stages `skillpacks` and `@glexcorp/gskp`, runs npm auth preflight for both stages, publishes both packages, and verifies both published versions. The gap is maintainer-facing runbook clarity and a final real-publish reminder.
+- Fix applied: added `docs/release-runbook.md`, linked it from the README npm section, updated `docs/skillpacks-npm-distribution.md` publishing and Phase 5 guidance with npm auth/access and parity gates, and added a non-dry-run `publish.sh` reminder for npm login, expected publisher, target version, and `./publish.sh --current` recovery.
+- Verification note: initial parallel `npm --workspace packages/skillpacks run test:node` and `npm run skillpacks:verify` raced on `packages/skillpacks/build` and failed; rerunning sequentially passed.
+- Command hygiene note: an initial doc-gate shell search accidentally used backticks in a pattern and invoked `npm publish`; it failed before publishing because the local npm cache has root-owned files. Reran the search with fixed-string quoted patterns.
+- Verification passed:
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `npm run skillpacks:verify`
+  - fixed-string targeted `rg` for npm login, whoami, expected publisher, both package names, manual publish prohibition, `./publish.sh --current`, and `npm view` parity checks
+  - `git diff --check`
+- Post-commit verification passed: `./publish.sh --dry-run patch` staged `0.1.6`, ran package tests and package verification, dry-ran both `skillpacks@0.1.6` and `@glexcorp/gskp@0.1.6`, then restored `packages/skillpacks/package.json` to `0.1.5`.
+- Dry-run note: `npm version` printed `Cannot read properties of null (reading 'matches')` after writing `0.1.6`; `publish.sh` detected the manifest bump and continued as designed.
+
 ## Current Implementation - Public npm Package Changelog
 
 ### Current Checklist

@@ -334,6 +334,14 @@ if [[ "$DRY_RUN" == "1" ]]; then
   exit 0
 fi
 
+cat <<EOF
+Release prerequisite reminder:
+  - Confirm npm login: npm whoami --registry https://registry.npmjs.org/
+  - Expected publisher: ${SKILLPACKS_NPM_PUBLISHER:-glexcorp}
+  - Publishing both packages at version: $VERSION
+  - If skillpacks publishes but @glexcorp/gskp fails, fix npm auth/access and rerun: ./publish.sh --current
+EOF
+
 run npm publish "$SKILLPACKS_STAGE"
 run npm publish "$GSKP_STAGE" --access public
 
