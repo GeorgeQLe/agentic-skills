@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-17 - Ship-end research/design route precedence
+
+- Updated mirrored `ship-end` contracts in `packs/exec-loop/{codex,claude}/ship-end` from `v0.4` to `v0.5`.
+- Added owning-route precedence so research, alignment, design, UI, UX, prototype-test, and copy-audit review artifacts route to their owning skill, user review, or compiled-YAML step before `$exec` or `/exec` fallback.
+- Archived prior `v0.4` contracts, updated changelogs, and added `scripts/skill-ship-end-routing-audit.sh`.
+- Refreshed Skills Showcase generated data and the skillpacks package manifest after the skill behavior/version change.
+- Refreshed local generated skill installs and verified `.codex/skills/ship-end/SKILL.md` and `.claude/skills/ship-end/SKILL.md` contain `v0.5` and the new route rule; generated skill roots remain uncommitted.
+- Validation passed: focused ship-end route audit, version/archive/mirror/next-step/install/pack/alignment routing audits, Skills Showcase validation, `npm run skillpacks:build`, `npm run skillpacks:verify`, `npm --workspace packages/skillpacks run test:node` (92 tests), local generated-copy `rg` verification, and `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-17-ship-end-route-precedence.md`.
+
 ## 2026-06-15 - Framework handoff alias routing coverage
 
 - Completed the Framework Handoff Routing Alias Parity work and shipped it in commit `5adea8c2 Fix framework handoff alias routing coverage`.

@@ -1,3 +1,37 @@
+## Current Implementation - Ship-End Research/Design Route Precedence
+
+### Goal
+
+Update `ship-end` so session wrap-up recommendations preserve direct research, alignment, design, UI, UX, prototype-test, and copy-audit routes instead of defaulting those review workflows into `$exec` or `/exec`.
+
+### Scope
+
+- `packs/exec-loop/codex/ship-end/SKILL.md`
+- `packs/exec-loop/claude/ship-end/SKILL.md`
+- Corresponding `archive/v0.4/SKILL.md` snapshots and `CHANGELOG.md` files
+- Focused route-precedence audit coverage under `scripts/`
+- Prompt history, task tracking, correction lesson, and history notes for this skill edit
+- Generated package/showcase artifacts only if required by validation
+
+### Plan
+
+1. Capture the visible invocation prompt and record this implementation plan.
+2. Archive active mirrored `ship-end` contracts and bump them from `v0.4` to `v0.5`.
+3. Add an explicit Next-Step Routing precedence rule: when the next item names research/alignment/design/UI/UX/prototype-test/copy-audit artifacts or review pages, recommend the owning skill or required review/compiled-YAML route directly.
+4. Keep `$exec` and `/exec` as fallbacks only when no narrower installed skill, artifact contract, or review route owns the next action.
+5. Add focused audit coverage that fails if the mirrored `ship-end` contracts lack the owning-route precedence rule or the `$exec`/`/exec` fallback limit.
+6. Update `tasks/lessons.md`, task review notes, and history.
+7. Run focused verification, source audits, and diff hygiene, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- Codex and Claude `ship-end` contracts both contain the same owning-route precedence behavior with runner-native syntax.
+- The route rule covers research, alignment, design, UI, UX, prototype-test, and copy-audit artifacts/review pages.
+- `$exec`/`/exec` remain valid only as fallback routes when no narrower owner exists.
+- A focused audit proves both mirrors contain the route-precedence contract.
+- Existing version/archive/changelog audits pass.
+- The prompt-history artifact and correction lesson are included in the shipping boundary.
+
 ## Current Investigation - Self-Routing Pattern A Continuation Payload
 
 ### Goal

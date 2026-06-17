@@ -1,3 +1,42 @@
+## Current Implementation - Ship-End Research/Design Route Precedence
+
+### Current Checklist
+
+- [x] Capture the visible skill-edit invocation prompt.
+- [x] Record the implementation plan in task tracking.
+- [x] Archive and bump mirrored `ship-end` contracts from `v0.4` to `v0.5`.
+- [x] Patch Codex and Claude Next-Step Routing rules with owning-route precedence.
+- [x] Add focused audit coverage for research/design review route precedence.
+- [x] Update correction lesson, changelogs, and task/history review notes.
+- [x] Run focused verification and inspect diffs.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- Strategy used: `skill-creator`, because the task updates existing skill contracts.
+- `analyze-sessions` was not used for broad history analysis because the pasted contract routes one concrete skill failure/correction to narrow triage, and the provided triage already identifies the owner surface.
+- Prompt history captured at `prompts/skill-creator/skill-prompt-20260617-101925-ship-end-routing.md`.
+- Starting point: `git status --short` was clean.
+- Initial finding: `.codex/skills/ship-end` and `.claude/skills/ship-end` are generated local installs, not tracked source files; the canonical tracked source is `packs/exec-loop/{codex,claude}/ship-end`.
+- Existing lesson found: `tasks/lessons.md` already includes "Do not wrap direct skill routes in exec-loop by default"; this fix will extend that lesson to research/design review routes.
+- Fix applied: archived `ship-end` `v0.4`, bumped both source mirrors to `v0.5`, added owning-route precedence before exec-loop inference defaults, updated changelogs, and added `scripts/skill-ship-end-routing-audit.sh`.
+- Generated local install check: `scripts/pack.sh refresh` updated `.codex/skills/ship-end/SKILL.md` and `.claude/skills/ship-end/SKILL.md`; `rg` confirmed both generated copies and both canonical source mirrors contain `version: v0.5` plus the owning-route precedence rule.
+- Verification passed:
+  - `bash scripts/skill-ship-end-routing-audit.sh`
+  - `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `/opt/homebrew/bin/bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+  - `npm run skillpacks:build`
+  - `npm run skillpacks:verify`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `git diff --check`
+  - ``rg -n 'version: v0.5|Prefer an owning workflow/domain route|Use `\\$exec` only|Use `/exec` only|research, alignment, design, UI, UX' .codex/skills/ship-end/SKILL.md .claude/skills/ship-end/SKILL.md packs/exec-loop/codex/ship-end/SKILL.md packs/exec-loop/claude/ship-end/SKILL.md``
+
 ## Current Investigation - Self-Routing Pattern A Continuation Payload
 
 ### Current Checklist

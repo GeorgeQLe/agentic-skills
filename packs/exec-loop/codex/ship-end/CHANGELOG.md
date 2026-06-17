@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-17
+
+- Added owning-route precedence for research, alignment, design, UI, UX, prototype-test, and copy-audit review artifacts so `$ship-end` does not route those workflows through `$exec` when a narrower skill, review, or compiled-YAML route owns the next action.
+
 ## v0.4 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

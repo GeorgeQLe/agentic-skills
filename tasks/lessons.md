@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-17 — Research/design review routes stay outside exec-loop by default
+
+- A `$ship-end` handoff routed "Review and resolve the Deployment Plan First prototype/copy review pages" to `$exec` because the fallback prioritized the runner surface over the owning review workflow.
+- When next work names research, alignment, design, UI, UX, prototype-test, copy-audit, or review-page artifacts, identify the owning skill or review contract first and route directly to that skill, user review, or compiled-YAML step.
+- Use `$exec` or `/exec` only after proving no narrower installed skill, artifact contract, or review route owns the next action; invocation syntax is a command-text fallback, not ownership evidence.
+
 ## 2026-06-17 — Pattern A continuation YAML should route to the parent, not a child
 
 - A research-loop handoff contract relied on explicit parent re-invocation plus pasted YAML, while the YAML itself carried no routing context; this left fresh sessions dependent on the user retyping the right command and made child-framework routing tempting.
