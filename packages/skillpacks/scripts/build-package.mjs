@@ -38,6 +38,7 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "scripts/alignment-bespoke-list.txt", to: "scripts/alignment-bespoke-list.txt" },
   { fromRoot: repoRoot, from: "docs/alignment-page-convention.md", to: "assets/alignment-page-convention.md" },
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
+  { fromRoot: repoRoot, from: "CHANGELOG.md", to: "CHANGELOG.md" },
   { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" }
 ];
 
@@ -59,6 +60,7 @@ const requiredBuildFiles = [
   "scripts/alignment-skip-list.txt",
   "scripts/alignment-bespoke-list.txt",
   "assets/alignment-page-convention.md",
+  "CHANGELOG.md",
   "LICENSE",
   "base/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"

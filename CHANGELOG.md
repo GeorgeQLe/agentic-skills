@@ -1,0 +1,100 @@
+# Changelog
+
+Public package-level changelog for the `skillpacks` npm package and its scoped alias package `@glexcorp/gskp`.
+
+This file tracks npm package releases: CLI behavior, package contents, bundled skill snapshots, and release-process changes. Individual skills keep their own `CHANGELOG.md` files next to each `SKILL.md`; those files remain the source of truth for skill-specific behavior changes.
+
+Keep this file updated before every npm package publish.
+
+## [0.1.5] - 2026-06-16
+
+Published for `skillpacks`. No matching `@glexcorp/gskp@0.1.5` publication is present in npm metadata as of 2026-06-17; the scoped alias latest remains `0.1.4`.
+
+### Fixed
+
+- Prevented `skillpacks refresh` and pack installs from creating top-level duplicate roots for nested framework skills. Nested framework skills remain available inside their parent orchestrator directories, while only installable parent skills become top-level managed roots.
+- Added refresh pruning for old repo-managed duplicate framework roots created by earlier package versions, while preserving unmanaged local directories.
+
+### Changed
+
+- Tightened npm package boundaries so the tarball includes runtime files, base skills, packs, alignment runtime assets, README, and license, but excludes repository docs, task files, prompts, app sources, tests, `AGENTS.md`, and `CLAUDE.md`.
+- Moved the packaged alignment-page convention fallback to `assets/alignment-page-convention.md` while preserving source-checkout behavior that reads `docs/alignment-page-convention.md`.
+
+### Verification
+
+- Published-package verification confirmed `skillpacks@0.1.5` as npm latest, passed package smoke tests, and reproduced the duplicate-framework bug on `0.1.4` before confirming it was fixed on `0.1.5`.
+- First git release tag created: `v0.1.5`.
+
+## [0.1.4] - 2026-06-16
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Added
+
+- Added version-aware CLI status output for human-facing commands, including latest-version availability.
+- Added install/update/no-op lifecycle messages that distinguish fresh installs, updates, and unchanged managed roots.
+- Added tests for update-check formatting, lifecycle output, and current-version publish flow.
+
+### Changed
+
+- Added `publish.sh --current` support so release publishing can preserve an already-committed package/manifest version instead of always running a new version bump.
+
+## [0.1.3] - 2026-06-15
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Changed
+
+- Refreshed the bundled skill and documentation snapshot after several workflow-contract updates.
+- Included package-visible documentation updates such as the prototype session loop convention in the release snapshot.
+- Continued the dual-package release line for `skillpacks` and `@glexcorp/gskp`.
+
+### Notes
+
+- Registry metadata for this release points at commit `dbcb3204`, which is a documentation-only commit. No distinct package-specific CLI source change was identified for this version beyond the bundled snapshot update.
+
+## [0.1.2] - 2026-06-13
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Added
+
+- Added dual npm publish automation so `skillpacks` and `@glexcorp/gskp` can be staged and published from the same built artifact at the same version.
+- Added `gskp` as a supported binary alias alongside `skillpacks`.
+
+### Changed
+
+- Rebranded user-facing package docs around `gSkillPacks` / `gskp` while keeping `skillpacks` as the primary npm package.
+- Renamed packaged `global/` skill roots to `base/` and continued the move from user-home global installs toward project-local base skills.
+- Shipped Node-doctor parity and related package metadata refreshes to npm users.
+
+## [0.1.1] - 2026-06-12
+
+Published for `skillpacks`. `@glexcorp/gskp@0.1.1` was published on 2026-06-13 when the scoped alias line was introduced.
+
+### Added
+
+- Added project-local base initialization through the npm CLI.
+- Added exact skill resolution for installs.
+- Added published-package verification tooling.
+- Added npm prepublish auth/version guard wiring for future real publishes.
+
+### Fixed
+
+- Included required CLI module and alignment-page runtime files in the package boundary after validation found missing release contents.
+- Refreshed package manifest artifacts for the `0.1.1` release snapshot.
+
+## [0.1.0] - 2026-06-10
+
+Published for `skillpacks` only. The scoped alias package did not exist yet.
+
+### Added
+
+- Initial public npm package release.
+- Packaged the markdown skill library, base install support, project-local pack installation, individual skill installation, deck installation, refresh, doctor, and status workflows.
+- Published MIT package metadata, GitHub repository links, README, license, package manifest, base skills, packs, and runtime scripts.
+- Added post-publish smoke verification for fresh temp-project installs from npm.
+
+### Notes
+
+- `skillpack` singular is unrelated; this project uses `skillpacks` plural and the later scoped alias `@glexcorp/gskp`.

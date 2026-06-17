@@ -1,3 +1,27 @@
+## Current Implementation - Public npm Package Changelog
+
+### Current Checklist
+
+- [x] Reconstruct published npm package versions and local release evidence.
+- [x] Draft package-level changelog entries.
+- [x] Add README/package discoverability.
+- [x] Run documentation and diff hygiene verification.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` shows one pre-existing untracked prompt-history file at `prompts/investigate/skill-prompt-20260617-102230-codex-claude-version-gaps.md`; it is outside this implementation boundary.
+- Npm metadata check: `skillpacks` versions are `0.1.0` through `0.1.5`; `@glexcorp/gskp` versions are `0.1.1` through `0.1.4`.
+- Added root `CHANGELOG.md` with package-level release entries, linked it from `README.md`, and included it in the staged npm package/tarball boundary.
+- Verification passed:
+  - `npm --workspace packages/skillpacks run build:check`
+  - `node --test packages/skillpacks/test/package-boundary.test.mjs` (rerun escalated after sandbox blocked spawned `npm pack`)
+  - `npm run skillpacks:verify`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests, rerun escalated and alone after an initial parallel run raced on `packages/skillpacks/build`)
+  - `git diff --check`
+- Generated manifest refresh changed only `source_fingerprint`, as expected for a package-boundary metadata change.
+
 ## Current Implementation - Codex/Claude Skill Version Parity Catch-Up
 
 ### Current Checklist

@@ -10,7 +10,7 @@ function run(command, args) {
   const result = spawnSync(command, args, {
     cwd: packageRoot,
     encoding: 'utf8',
-    maxBuffer: 32 * 1024 * 1024
+    maxBuffer: 64 * 1024 * 1024
   });
 
   assert.equal(
@@ -62,6 +62,7 @@ describe('skillpacks npm publish target boundary', () => {
     for (const requiredPath of [
       'package.json',
       'README.md',
+      'CHANGELOG.md',
       'LICENSE',
       'bin/skillpacks.mjs',
       'dist/skillpacks-manifest.json',

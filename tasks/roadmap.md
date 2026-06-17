@@ -1,3 +1,32 @@
+## Current Implementation - Public npm Package Changelog
+
+### Goal
+
+Create a public package-level changelog for the `skillpacks` / `@glexcorp/gskp` npm releases, retroactively covering published versions and establishing the file as the maintained release-history surface going forward.
+
+### Scope
+
+- Package-level changelog documentation
+- README discoverability link if no package changelog link exists
+- Task review notes and verification output
+
+### Plan
+
+1. Reconstruct published package versions from npm metadata and local git history.
+2. Review release-related docs and ship manifests to summarize user-facing package differences.
+3. Add a public changelog that distinguishes package releases from per-skill `CHANGELOG.md` files.
+4. Link the changelog from the README/npm package docs.
+5. Run documentation/diff hygiene checks.
+6. Commit and push intended tracked changes.
+
+### Acceptance Criteria
+
+- A package-level changelog exists at a conventional public path.
+- It covers all known npm package versions available from npm metadata or repo evidence.
+- It documents that future npm package releases must update this file.
+- README/package docs make the changelog discoverable.
+- Verification passes, or any unavailable external check is recorded.
+
 ## Current Implementation - Codex/Claude Skill Version Parity Catch-Up
 
 ### Goal

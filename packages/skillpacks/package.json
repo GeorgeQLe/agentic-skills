@@ -36,6 +36,7 @@
     "scripts/prepublish-auth-check.mjs",
     "assets/alignment-page-convention.md",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
