@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.5"
   },
-  "source_fingerprint": "91bae5bbc4a503abd7ba5aacfd44a78655a26cdb42bc150b9492a6d3d2c76fba",
+  "source_fingerprint": "63f3bebd88d58a762c5259e8ecb8c52625985867da67b9063bc147261caaad87",
   "packs": [
     {
       "name": "agent-bridge",
@@ -4717,10 +4717,10 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
       "installable": true,
-      "content_sha256": "db1cbd1f85627ee41a8c201f9d492bf721b579864208440edb39594f41fbde35",
+      "content_sha256": "267f8f2ffac32c64d4944c77a2634c23a7e18be6713d71924e74e9471f81720a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4735,6 +4735,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -5001,10 +5002,10 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.20",
+      "version": "v0.21",
       "path": "packs/customer-lifecycle/codex/journey-map/SKILL.md",
       "installable": true,
-      "content_sha256": "5b2e6a87447e99d00d4e189ccdd3ba8a6819c752ac6cfa8d0689317b83f5ff02",
+      "content_sha256": "50f6aa4c2d872ec304a8b5e7ac6766a22b3ee9ccfc620bed1caddb1b4160c980",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5019,6 +5020,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",

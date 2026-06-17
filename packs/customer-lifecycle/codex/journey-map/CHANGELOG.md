@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.21 - 2026-06-16
+
+- Prohibited framework status, approval, blocker, and gate metadata inside the run manifest; framework completion must be inferred only from canonical intermediate file existence.
+- Tightened the State C handoff after approved framework canonicalization: recalculate pending frameworks and route to `$journey-map --synthesize` when all selected intermediates exist and no unified journey map exists.
+
 ## v0.20 - 2026-06-15
 
 - Narrowed approval-boundary routing language so pending review pages may name `Recommended next command after compiling YAML: $journey-map` for same-orchestrator loop continuation, while downstream and cross-skill routing remain blocked until approved synthesis artifacts are written.

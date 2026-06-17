@@ -1,3 +1,36 @@
+## Current Investigation - Journey Map Routing Non-Compliance
+
+### Goal
+
+Validate the reported `$journey-map` next-step routing non-compliance in `/Users/georgele/projects/tools/dev/alignmeant`, identify the prevention point, and apply the smallest durable fix in `agentic-skills` or the target repo state if warranted.
+
+### Scope
+
+- Visible active conversation and provided triage summary
+- `/Users/georgele/projects/tools/dev/alignmeant/.codex/skills/session-triage/SKILL.md`
+- `/Users/georgele/projects/tools/dev/alignmeant/.codex/skills/journey-map/SKILL.md`
+- `/Users/georgele/projects/tools/dev/alignmeant/.claude/skills/journey-map/SKILL.md`
+- Target journey-map run manifest, intermediates, progress, and task docs
+- `tasks/lessons.md` and task tracking in this repository
+- Prompt history for this `$investigate` invocation
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record the investigation plan.
+2. Gather narrow evidence from the target repo contracts, run manifest, canonical intermediates, progress, tasks, and relevant git history.
+3. Validate the user-provided claims against the target repo state and contract text.
+4. Determine whether prevention belongs in the target repo state, journey-map skill contract, mirrored skill contracts, repo lessons, or no code change.
+5. Apply the minimal durable fix if the evidence supports one.
+6. Run focused validation checks and record review notes.
+
+### Acceptance Criteria
+
+- The report distinguishes the user-identified issue from the agent-verified issue.
+- The next-step routing state is replayed from manifest/intermediate/canonical-file existence.
+- Any modified manifest or skill contract is validated by targeted `rg` and existence checks.
+- A correction lesson is added or an existing lesson is explicitly reused.
+- The final answer states the exact next safe `$journey-map` command.
+
 ## Current Implementation - skillpacks Refresh Duplicate Framework Installs
 
 ### Goal

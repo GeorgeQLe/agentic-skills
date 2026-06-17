@@ -1,3 +1,47 @@
+## Current Investigation - Journey Map Routing Non-Compliance
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the investigation plan in task tracking.
+- [x] Gather target repo skill contracts, manifests, progress, tasks, and history.
+- [x] Validate the user-provided triage claims.
+- [x] Apply the minimal durable prevention fix if warranted.
+- [x] Run focused validation checks.
+- [x] Record review notes.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- Strategy used: General, because the issue is workflow/routing compliance rather than UI or runtime data state.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260616-231349-journey-map-routing.md`.
+- Starting point in `agentic-skills`: `git status --short` reported no dirty tracked or untracked changes before prompt/task tracking edits.
+- User claim verdict: partially confirmed. The generated `alignmeant` journey-map skill does contain State B synthesis routing, but the committed target repo state at `129eb0b` had non-contract manifest fields (`status`, `blocking_feedback`) and the source `agentic-skills` journey-map contracts lacked both the explicit manifest-schema prohibition and the final-framework handoff to `--synthesize`.
+- Root cause: the source contract left enough ambiguity for an agent to treat the run manifest as an approval ledger and to answer "what's next" with a generic parent rerun instead of replaying the state ladder after the last framework intermediate.
+- Fix applied: archived mirrored journey-map `v0.20`, bumped active contracts to `v0.21`, added manifest schema guardrails, tightened State C to recalculate pending frameworks and route to synthesis when all intermediates exist, and added a correction lesson.
+- Target repo state replay: current `/Users/georgele/projects/tools/dev/alignmeant` has `research/alignmeant/_working/journey-map-run.yaml`, both selected intermediates exist, and `research/alignmeant/journey-map.md` does not exist; therefore the correct next phase is State B synthesis and the safest next command is `$journey-map --synthesize`.
+- Target repo caveat: `alignmeant` still has uncommitted changes from the current session, including the manifest repair that removes `status` and `blocking_feedback`; this investigation did not mutate or commit the target repo.
+- Verification passed:
+  - `rg -n 'version: v0.21|Do not add `status`|Recommended next command: \$journey-map --synthesize|Recommended next command: /journey-map --synthesize' packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md`
+  - `test -f packs/customer-lifecycle/codex/journey-map/archive/v0.20/SKILL.md`
+  - `test -f packs/customer-lifecycle/claude/journey-map/archive/v0.20/SKILL.md`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `npm run skillpacks:build`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+- Target repo validation passed:
+  - `rg -n 'status:|approval:|blocking_feedback|needs_revision' research/alignmeant/_working/journey-map-run.yaml` returned no matches.
+  - `test -f research/alignmeant/journey-map-jtbd-timeline.md`
+  - `test -f research/alignmeant/journey-map-experience-map.md`
+  - `test ! -f research/alignmeant/journey-map.md`
+- Rerun note: an initial parallel `npm run skillpacks:verify` / `npm --workspace packages/skillpacks run test:node` attempt raced on the shared `packages/skillpacks/build` directory, causing an `ENOTEMPTY` staging error and one package-boundary failure. Sequential reruns passed.
+
 ## Current Implementation - skillpacks Refresh Duplicate Framework Installs
 
 ### Current Checklist

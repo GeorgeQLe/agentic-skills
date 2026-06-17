@@ -2,7 +2,7 @@
 name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: research
-version: v0.20
+version: v0.21
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator
 context_intake: scoped
@@ -66,7 +66,7 @@ State lives in two places only:
       intermediate: research/skills-showcase/journey-map-experience-map.md
   ```
 
-- **Canonical-intermediate existence** — a selected framework is *done* when `research/journey-map-{framework}.md` (or `research/{slug}/journey-map-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status.
+- **Canonical-intermediate existence** — a selected framework is *done* when `research/journey-map-{framework}.md` (or `research/{slug}/journey-map-{framework}.md`) exists, *pending* otherwise. `pending = selected − existing-intermediates`. The manifest stores selection only, not per-framework status. Do not add `status`, `approval`, `blocking_feedback`, notes, timestamps, or gate metadata to framework entries; preserve only `slug` and `intermediate` (plus top-level `orchestrator` and optional `slug`).
 
 `research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
 
@@ -164,20 +164,14 @@ This multi-select approval **is** the Stage-1 scope approval for the whole selec
 This session consumes the approved multi-select YAML (state 0→C) or advances after a prior framework's approval. At the **head** of the session, do the light bookkeeping first:
 
 1. **Write the run manifest** if it does not yet exist: `research/_working/journey-map-run.yaml` (flat) or `research/{slug}/_working/journey-map-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
-2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/journey-map-{fw}.md` (or `research/{slug}/journey-map-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
+2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/journey-map-{fw}.md` (or `research/{slug}/journey-map-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page. Do not mark framework completion inside the run manifest; completion is inferred from canonical intermediate existence only.
 
 Then run the **one heavy phase** for this session:
 
 3. **Determine the next pending framework** = the first framework in `selected_frameworks` whose canonical intermediate does not yet exist.
 4. **Load and follow that framework subskill's `SKILL.md` inline**, entering at its **research stage (Stage 2)**: the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the framework's research, write its working packet, and build a single findings `review` page for that framework. Stop for that framework's compiled YAML.
 
-**Advance the loop by self-re-invocation.** For pending framework findings pages, use `Recommended next command after compiling YAML: /journey-map` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, the confirmed-page handoff and terminal message use `Recommended next command: /journey-map` and tell the user to clear context and re-invoke; report progress as "k of N frameworks complete":
-
-```
-✔ Framework 1 (JTBD Timeline) findings ready for review.
-Recommended next command after compiling YAML: /journey-map
-(the next run writes this framework's intermediate and picks up the next pending framework automatically.)
-```
+**Advance the loop by self-re-invocation.** For pending framework findings pages, use `Recommended next command after compiling YAML: /journey-map` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, recalculate pending frameworks from the manifest and filesystem before writing handoff text. If pending frameworks remain, the confirmed-page handoff and terminal message use `Recommended next command: /journey-map` and report progress as "k of N frameworks complete". If no pending frameworks remain and no canonical `journey-map.md` exists, the next phase is State B synthesis; use `Recommended next command: /journey-map --synthesize` (or `/journey-map` with the same product/research path argument when forcing is unnecessary), and state that the next run builds the unified synthesis review page.
 
 Do not emit cross-skill routing here — that happens only after synthesis (step 6).
 

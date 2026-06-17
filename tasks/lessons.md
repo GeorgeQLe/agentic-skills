@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-16 — Research run manifests are selection schemas, not approval ledgers
+
+- A journey-map continuation answer drifted after an agent encoded framework approval state into `research/alignmeant/_working/journey-map-run.yaml` with `status`, `approval`, and `blocking_feedback` fields.
+- Pattern A research orchestrator run manifests should store only selected framework identities and intermediate paths; done/pending state must be recalculated from canonical intermediate existence before every handoff.
+- After canonicalizing the last selected framework intermediate, do not give a generic parent rerun route. Replay the state ladder: if all intermediates exist and the unified canonical artifact is missing, route explicitly to the synthesis state (`$<orchestrator> --synthesize` or runner equivalent) and say the next output is a synthesis review page.
+
 ## 2026-06-16 — Base source inventory is not active skill availability
 
 - A routing plan exposed that agents were treating base skills as directly runnable because the skills exist in the package/source checkout.
