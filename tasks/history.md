@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-17 - Finalized artifact routing lesson
+
+- Recorded the correction that finalized research/alignment artifact handoffs must still end with explicit next-step routing; open status and verification are not substitutes.
+- Confirmed the active `positioning` / Pattern A contracts already require terminal `Next Work` and command sections; the observed JTBD output was agent noncompliance, with package publish/refresh still relevant for downstream installs.
+- Included the previously untracked `investigate` prompt-history artifact and captured the visible `ship-end` invocation prompt.
+- Diagnosed the `./publish.sh --dry-run 0.1.6` blocker as the tracked dirty `tasks/lessons.md` change.
+- Manifest: `tasks/ship-manifest-2026-06-17-finalized-artifact-routing-lesson.md`.
+
 ## 2026-06-17 - Ship-end research/design route precedence
 
 - Updated mirrored `ship-end` contracts in `packs/exec-loop/{codex,claude}/ship-end` from `v0.4` to `v0.5`.

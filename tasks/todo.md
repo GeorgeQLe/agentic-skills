@@ -1,3 +1,21 @@
+## Current Implementation - Finalized Artifact Routing Lesson
+
+### Current Checklist
+
+- [x] Record the finalized-artifact routing correction in `tasks/lessons.md`.
+- [x] Capture visible skill invocation prompt history for this wrap-up.
+- [x] Commit the previously untracked investigate prompt-history artifact.
+- [x] Document validation and residual risk in a ship manifest.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- User correction: a finalized JTBD positioning handoff with changed files, verification, and open status was still wrong because it lacked an explicit `Next Work` / `Recommended Next Command` route.
+- Follow-up clarification: active `positioning` and Pattern A contracts already contain terminal handoff requirements; downstream users may still need the `0.1.6` npm package published/refreshed, but this specific output gap was agent noncompliance.
+- Publish blocker diagnosed: `./publish.sh --dry-run 0.1.6` failed because `tasks/lessons.md` was a tracked dirty file. The untracked `prompts/investigate/...` file would only warn, but prompt history is tracked by default and is included here.
+- Verification for this wrap-up is documentation/task hygiene only; no source or package runtime behavior changed.
+- Deploy classification: skipped because `tasks/deploy.md` says task-doc and prompt-history changes are non-deploying evidence.
+
 ## Current Implementation - Release Parity And npm Login Runbook
 
 ### Current Checklist

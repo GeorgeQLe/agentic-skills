@@ -1,3 +1,24 @@
+## Current Implementation - Finalized Artifact Routing Lesson
+
+### Goal
+
+Ship the correction that finalized research/alignment artifact handoffs need explicit terminal next-step routing, and clear the tracked dirty-file blocker before the `0.1.6` npm publish dry run.
+
+### Plan
+
+1. Inspect the dirty tree and confirm the publish blocker.
+2. Preserve the finalized-artifact routing correction in `tasks/lessons.md`.
+3. Capture required prompt history for the `ship-end` invocation and include the existing untracked investigate prompt log.
+4. Record task/history notes and a ship manifest with correction enforcement rationale.
+5. Run documentation/diff hygiene checks, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- `tasks/lessons.md` contains the current correction.
+- Prompt-history artifacts for the relevant skill invocations are tracked.
+- Task/history/manifest files document the boundary and state that no source/package runtime changes were made.
+- The tracked tree is clean after commit/push so `./publish.sh --dry-run 0.1.6` can proceed.
+
 ## Current Implementation - Release Parity And npm Login Runbook
 
 ### Goal

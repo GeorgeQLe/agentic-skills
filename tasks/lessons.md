@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-17 — Finalized research artifacts still need explicit next-step routing
+
+- A finalized JTBD positioning handoff listed changed files, verification, and open status, but omitted an explicit next-step route after converting the alignment page to confirmed/read-only.
+- Even when a research or alignment artifact is complete, final output should state the concrete route: the next skill/command if workflow work remains, or "no automated next step" with the human/manual decision expected next.
+- Do not treat "Open status" or archived working-packet proof as a substitute for next-step routing; terminal handoffs need a distinct `Next`/`Next Command`/`Next Work` line.
+
 ## 2026-06-17 — Research/design review routes stay outside exec-loop by default
 
 - A `$ship-end` handoff routed "Review and resolve the Deployment Plan First prototype/copy review pages" to `$exec` because the fallback prioritized the runner surface over the owning review workflow.
