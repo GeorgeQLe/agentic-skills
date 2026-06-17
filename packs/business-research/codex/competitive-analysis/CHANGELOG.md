@@ -1,5 +1,9 @@
 # competitive-analysis changelog (codex)
 
+## v0.24 - 2026-06-17
+
+- Added a required terminal handoff contract so Pattern A loop stops end with `## Next Work` plus the appropriate parent-owned recommended command section, including explicit synthesis routing after the last framework intermediate is written.
+
 ## v0.23 - 2026-06-15
 
 - Narrowed approval-boundary routing language so pending review pages may name `Recommended next command after compiling YAML: $competitive-analysis` for same-orchestrator loop continuation, while downstream and cross-skill routing remain blocked until approved synthesis artifacts are written.

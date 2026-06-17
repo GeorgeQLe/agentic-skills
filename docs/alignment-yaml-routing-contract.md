@@ -10,7 +10,9 @@ While an alignment page is in `review`, the page owns the next action:
 - Final compiled YAML approves the complete reviewed artifact set.
 - Downstream routing is blocked until final compiled YAML approval is consumed and approved canonical artifacts are written or updated.
 
-Skills must not use a `review` alignment page as a command handoff. Do not include `Recommended next skill`, `Recommended next command`, `$exec`, `/exec`, or equivalent execution-loop routing before final compiled YAML approval.
+Skills must not use a `review` alignment page as a command handoff. Do not include `Recommended next skill`, `Recommended next command`, `$exec`, `/exec`, or equivalent execution-loop routing inside the review page before final compiled YAML approval.
+
+Exception: self-advancing Pattern A research orchestrators may end the **terminal message outside the page** with `## Next Work` and `## Recommended Next Command After Compiling YAML`, naming the same parent orchestrator command. This is loop continuation guidance, not downstream routing, and the alignment page itself remains a review artifact rather than a command handoff.
 
 ## Approved Artifact State
 

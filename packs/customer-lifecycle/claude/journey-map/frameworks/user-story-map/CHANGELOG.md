@@ -1,5 +1,9 @@
 # user-story-map changelog (claude)
 
+## v0.7 - 2026-06-17
+
+- Added parent-owned terminal handoff guidance for inline framework stops: framework review output ends with `## Next Work` and `## Recommended Next Command After Compiling YAML` naming only the parent orchestrator.
+
 ## v0.6 - 2026-06-15
 
 - Hardened framework-loop routing so this subskill runs only through the parent orchestrator, prohibits path-shaped child framework handoffs, and suppresses downstream routing labels.

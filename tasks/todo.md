@@ -1,3 +1,37 @@
+## Current Implementation - Research Loop Terminal Handoff Sections
+
+### Current Checklist
+
+- [x] Inspect current Research Session Loop, Pattern A orchestrator, and framework subskill contracts.
+- [x] Record the implementation plan in task tracking.
+- [x] Confirm the final handoff contract before editing skill contracts.
+- [x] Archive and bump changed Pattern A orchestrators and framework subskills.
+- [x] Update shared conventions and mirrored active skill contracts.
+- [x] Add correction lesson and focused audit coverage.
+- [x] Run repository verification.
+- [x] Review final diff, record review notes, commit, and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short --branch` showed `master...origin/master` with no dirty tracked or untracked changes.
+- User correction classified as an add/reweight request: keep existing no-downstream-routing guardrails, but require cleaner final terminal sections for research loop continuation.
+- Initial finding: `docs/research-session-loop-convention.md` already allows parent self-reinvocation and distinguishes review-pending vs post-write labels, but it does not require a final `Next Work` block. Framework subskills currently forbid command recommendations entirely, so the durable contract must define parent-owned loop continuation without reintroducing child framework commands.
+- Contract applied: Pattern A loop stops now end with `## Next Work` plus `## Recommended Next Command After Compiling YAML` for review-pending gates or `## Recommended Next Command` after approved writes, with the final framework handoff recalculating state and routing to the parent `--synthesize`.
+- Fix applied: archived and bumped mirrored Pattern A orchestrators, updated their framework subskills, refreshed changelogs, added `scripts/skill-research-loop-handoff-audit.sh`, and updated shared research/orchestrator/alignment-routing conventions.
+- Verification passed:
+  - `bash scripts/skill-research-loop-handoff-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `npm run skillpacks:build`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+
 ## Current Investigation - Journey Map Routing Non-Compliance
 
 ### Current Checklist

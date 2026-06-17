@@ -1,3 +1,43 @@
+## Current Implementation - Research Loop Terminal Handoff Sections
+
+### Goal
+
+Make Pattern A research orchestrators and their framework subskills end each loop stop with a clean, predictable terminal handoff: a `Next Work` section that names the immediate next action and a `Recommended Next Command` section that names the exact parent-orchestrator command to run next.
+
+### Scope
+
+- `docs/research-session-loop-convention.md`
+- `docs/orchestrator-convention.md`
+- Active mirrored Pattern A orchestrator contracts:
+  - `packs/business-research/{codex,claude}/customer-discovery/SKILL.md`
+  - `packs/business-research/{codex,claude}/competitive-analysis/SKILL.md`
+  - `packs/business-research/{codex,claude}/positioning/SKILL.md`
+  - `packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md`
+- Active mirrored Pattern A framework subskills under those orchestrators' `frameworks/` directories
+- Corresponding `CHANGELOG.md` and `archive/<old-version>/SKILL.md` snapshots for any changed skill
+- `tasks/lessons.md` correction note, task review notes, generated package artifacts if required by verification
+
+### Plan
+
+1. Record this implementation plan and confirm the exact terminal handoff contract.
+2. Archive and bump versions for every changed Pattern A orchestrator and framework subskill.
+3. Update the shared Research Session Loop and orchestrator conventions with the final-output format.
+4. Update mirrored orchestrator contracts so review-pending, post-framework-write, final-framework-to-synthesis, and post-synthesis states all specify `Next Work` plus `Recommended Next Command` as the final terminal sections.
+5. Update framework subskill contracts so inline framework stops use the parent-owned handoff format without introducing direct subskill commands or downstream routing.
+6. Add a correction lesson and focused audits for the new handoff language.
+7. Run version/archive/mirror/routing audits, package build/tests, verification, and diff hygiene.
+8. Commit and push the intended changes on `master`.
+
+### Acceptance Criteria
+
+- Pattern A review stops end with `Next Work` and `Recommended Next Command After Compiling YAML` naming only the parent orchestrator command.
+- Pattern A post-write stops end with `Next Work` and `Recommended Next Command` naming the parent orchestrator; the last framework routes explicitly to the synthesis phase.
+- Framework subskills do not recommend child path commands, `$exec`, `/exec`, or downstream skills; any command handoff they define is parent-owned loop continuation only.
+- Post-synthesis downstream routing still appears only after canonical synthesis has been approved and written.
+- Codex/Claude mirrors stay semantically aligned, with `$` vs `/` command syntax differences only.
+- All changed `SKILL.md` files have version bumps, archive snapshots, and changelog entries.
+- Verification commands pass, or any pre-existing unrelated failure is proven.
+
 ## Current Investigation - Journey Map Routing Non-Compliance
 
 ### Goal

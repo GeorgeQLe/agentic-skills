@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Audits Pattern A research-loop terminal handoff contracts.
+# Usage: skill-research-loop-handoff-audit.sh
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+node - "$REPO_ROOT" <<'NODE'
+const fs = require("fs");
+const path = require("path");
+
+const root = process.argv[2];
+
+const orchestrators = [
+  { pack: "business-research", name: "customer-discovery", canonical: "icp.md" },
+  { pack: "business-research", name: "competitive-analysis", canonical: "competitive-analysis.md" },
+  { pack: "business-research", name: "positioning", canonical: "positioning.md" },
+  { pack: "customer-lifecycle", name: "journey-map", canonical: "journey-map.md" },
+];
+
+const frameworkNames = new Set();
+const failures = [];
+
+function rel(file) {
+  return path.relative(root, file);
+}
+
+function read(file) {
+  return fs.readFileSync(file, "utf8");
+}
+
+function fail(file, message) {
+  failures.push(`${rel(file)}: ${message}`);
+}
+
+function command(agent, name) {
+  return `${agent === "codex" ? "$" : "/"}${name}`;
+}
+
+function requireText(file, text, snippet, label) {
+  if (!text.includes(snippet)) fail(file, `missing ${label}`);
+}
+
+for (const { pack, name, canonical } of orchestrators) {
+  for (const agent of ["codex", "claude"]) {
+    const file = path.join(root, "packs", pack, agent, name, "SKILL.md");
+    const text = read(file);
+    const cmd = command(agent, name);
+
+    requireText(file, text, "### Terminal Handoff Contract", "terminal handoff contract");
+    requireText(file, text, "## Next Work", "Next Work section name");
+    requireText(file, text, "## Recommended Next Command After Compiling YAML", "review-pending command section name");
+    requireText(file, text, "## Recommended Next Command", "post-write command section name");
+    requireText(file, text, `${cmd} --synthesize`, "explicit synthesis command");
+    requireText(file, text, canonical, "canonical synthesis artifact reference");
+    requireText(file, text, "Do not put any other section after the applicable command section.", "final-section guard");
+
+    if (/Recommended next command after compiling YAML:/i.test(text)) {
+      fail(file, "uses old inline recommended-next-command label");
+    }
+  }
+}
+
+for (const { pack, name } of orchestrators) {
+  for (const agent of ["codex", "claude"]) {
+    const dir = path.join(root, "packs", pack, agent, name, "frameworks");
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const file = path.join(dir, entry.name, "SKILL.md");
+      frameworkNames.add(entry.name);
+      const text = read(file);
+      const cmd = command(agent, name);
+
+      requireText(file, text, "## Terminal Handoff Contract", "terminal handoff contract");
+      requireText(file, text, "## Next Work", "Next Work section name");
+      requireText(file, text, "## Recommended Next Command After Compiling YAML", "review-pending command section name");
+      requireText(file, text, cmd, "parent orchestrator command");
+      requireText(file, text, "Do not decide from inside the framework whether the next parent run executes another framework or synthesis", "parent recalculation guard");
+    }
+  }
+}
+
+const childCommandRe = new RegExp(String.raw`(^|[\\s\`\"'])[$/](${[...frameworkNames].join("|")})(?=[\\s\`\"'])`, "g");
+for (const { pack, name } of orchestrators) {
+  for (const agent of ["codex", "claude"]) {
+    const dir = path.join(root, "packs", pack, agent, name, "frameworks");
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const file = path.join(dir, entry.name, "SKILL.md");
+      const text = read(file);
+      const matches = [...text.matchAll(childCommandRe)].filter((match) => match[2] !== name);
+      if (matches.length > 0) {
+        fail(file, `contains child framework command reference ${matches.map((m) => m[0].trim()).join(", ")}`);
+      }
+    }
+  }
+}
+
+if (failures.length > 0) {
+  console.log("Pattern A terminal handoff audit failures:");
+  for (const failure of failures) console.log(`  ${failure}`);
+  process.exit(1);
+}
+
+console.log("Pattern A terminal handoff contracts are present.");
+NODE

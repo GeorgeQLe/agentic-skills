@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-17 — Research loop stops need terminal handoff sections
+
+- A journey-map routing fix made synthesis routing explicit, but the broader Pattern A research loop still relied on scattered prose for "what is next."
+- Pattern A orchestrator and inline framework stops should end terminal output with `## Next Work` plus either `## Recommended Next Command After Compiling YAML` for review-pending gates or `## Recommended Next Command` after approved artifact writes.
+- Framework subskills must keep routing parent-owned: no path-shaped child commands, no execution-loop commands, and no downstream commands before synthesis. After the last framework intermediate is written, the parent must recalculate file state and route explicitly to synthesis.
+
 ## 2026-06-16 — Research run manifests are selection schemas, not approval ledgers
 
 - A journey-map continuation answer drifted after an agent encoded framework approval state into `research/alignmeant/_working/journey-map-run.yaml` with `status`, `approval`, and `blocking_feedback` fields.

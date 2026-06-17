@@ -2,7 +2,7 @@
 name: four-forces
 description: Moesta Four Forces of Progress — map Push, Pull, Anxiety, and Habit forces per ICP candidate to identify switching catalysts and barriers
 type: research
-version: v0.6
+version: v0.7
 invocation: sub-skill
 parent: customer-discovery
 ---
@@ -17,7 +17,21 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Run only through the parent orchestrator `$customer-discovery` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to start a fresh Codex session and re-invoke `$customer-discovery` with the same product/research path argument when present, for example `$customer-discovery research/afps-tracker`.
 
-Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels, child-framework commands, execution-loop commands, or downstream skill recommendations from this framework subskill.
+
+## Terminal Handoff Contract
+
+When this framework is run inline and stops on its findings `review` page, the terminal response must end with:
+
+```markdown
+## Next Work
+Review the framework findings page and compile YAML. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
+
+## Recommended Next Command After Compiling YAML
+$customer-discovery
+```
+
+Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
 
 ## Report-First Approval Gate
 
@@ -27,7 +41,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while scope or artifact approval is pending. The approval request itself is the next action. Parent-loop continuation is allowed only after the approved artifact has been written or updated: tell the user to start a fresh Codex CLI session and re-invoke `$customer-discovery`.
+Do not include downstream or cross-skill command recommendations while scope or artifact approval is pending. While the framework findings page is in `review`, use only the parent-owned terminal handoff sections above. Parent-loop continuation is not downstream routing, but it must name only `$customer-discovery`. Downstream routing belongs to parent synthesis only after approved synthesis artifacts are written or updated.
 
 ## Staged Research Workflow
 
@@ -317,7 +331,7 @@ Present force maps, scores, balance analysis, and switching catalyst recommendat
 - Do not prescribe UI or architecture — describe the switching dynamics, not the solution.
 - Present findings before writing.
 - Do not overwrite existing output without asking the user first.
-- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or path-shaped child framework invocations. After approved artifact finalization, hand control back to parent-loop continuation through `$customer-discovery`.
+- This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or path-shaped child framework invocations. Inline framework handoff sections must name only the parent command `$customer-discovery`.
 
 ## Alignment Page
 

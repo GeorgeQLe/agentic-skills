@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.22 - 2026-06-17
+
+- Added a required terminal handoff contract so Pattern A loop stops end with `## Next Work` plus the appropriate parent-owned recommended command section, including explicit synthesis routing after the last framework intermediate is written.
+
 ## v0.21 - 2026-06-16
 
 - Prohibited framework status, approval, blocker, and gate metadata inside the run manifest; framework completion must be inferred only from canonical intermediate file existence.

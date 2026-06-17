@@ -137,20 +137,37 @@ A self-advancing research orchestrator continues its loop by routing to **its ow
 
 ```
 ✔ Framework 1 (W3 Hypothesis) confirmed and written.
-Recommended next command: /customer-discovery
-(2 of 4 frameworks complete; the next run picks up framework 2 automatically.)
+## Next Work
+Start a fresh context and let the parent run the next pending framework. Progress: 2 of 4 frameworks complete.
+
+## Recommended Next Command
+/customer-discovery
 ```
 
 This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-routing-contract.md` § Approved Artifact State recognizes a skill's own re-invocation as a valid post-approval route. The cross-skill downstream route is emitted only after final synthesis.
+
+### Terminal handoff format
+
+Every terminal message for a Pattern A loop stop ends with these sections, in this order:
+
+1. `## Next Work` — one or two sentences naming the immediate next work state: review the alignment page, run the next pending framework, build synthesis, or move to the first downstream skill after approved synthesis.
+2. `## Recommended Next Command After Compiling YAML` — use only while a `review` approval gate is pending. Name the same parent orchestrator command with the same product/research path argument when present.
+3. `## Recommended Next Command` — use only after approved YAML has been consumed and the approved artifact has been written or updated. Name the same parent orchestrator command while frameworks or synthesis remain; after final synthesis, name the first downstream command selected by the orchestrator's routing tree.
+
+Do not place any other section after the applicable command section. If no command is appropriate after final synthesis, write `No follow-up command recommended` under `## Recommended Next Command`.
+
+For the last framework write, recalculate pending frameworks from the run manifest plus canonical-intermediate existence before writing the handoff. If no frameworks remain and the synthesized canonical artifact is missing, `## Next Work` must say the next run builds the unified synthesis review page, and `## Recommended Next Command` must name the parent synthesis route, for example `/customer-discovery --synthesize` or `/customer-discovery --synthesize research/afps-tracker`.
+
+Framework subskills do not own user-facing routing. When a framework is run inline, its final handoff is still the parent orchestrator's handoff and must use the same two-section format with the parent command only.
 
 ### Approval-boundary labels
 
 Use two distinct labels so review pages do not hide the required continuation command:
 
-- `Recommended next command after compiling YAML:` appears only while a `review` approval gate is pending. It names the same parent orchestrator command, with the same product/research path argument when present, so the user can review the HTML page, compile YAML, start a fresh session, and re-invoke the parent. This is not downstream routing.
-- `Recommended next command:` appears after the agent has consumed approved YAML, written or updated the approved artifact for the gate, and converted the page to `confirmed`. It names the same parent orchestrator command when the current Research Session Loop still has pending frameworks or synthesis.
+- `## Recommended Next Command After Compiling YAML` appears only while a `review` approval gate is pending. It names the same parent orchestrator command, with the same product/research path argument when present, so the user can review the HTML page, compile YAML, start a fresh session, and re-invoke the parent. This is not downstream routing.
+- `## Recommended Next Command` appears after the agent has consumed approved YAML, written or updated the approved artifact for the gate, and converted the page to `confirmed`. It names the same parent orchestrator command when the current Research Session Loop still has pending frameworks or synthesis.
 
-While any `review` approval gate is pending, do not route to downstream or cross-skill work. Framework subskills remain route-free in loop mode: they do not emit `Recommended next skill`, `Recommended next command`, or path-shaped child framework commands. The parent orchestrator is the only user-facing continuation command during framework loops.
+While any `review` approval gate is pending, do not route to downstream or cross-skill work. Framework subskills remain downstream-route-free in loop mode: they do not emit `Recommended next skill`, path-shaped child framework commands, `$exec`, `/exec`, or downstream commands. The parent orchestrator is the only user-facing continuation command during framework loops.
 
 ### Does the skill need to be re-invoked? Can the agent auto-call it?
 
@@ -190,10 +207,10 @@ This convention is **normative for all Pattern A research orchestrators**. The r
 
 | Orchestrator | Version | Cold entry | Run manifest |
 |---|---|---|---|
-| `customer-discovery` | v1.11 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
-| `competitive-analysis` | v0.23 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
-| `positioning` | v0.21 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
-| `journey-map` | v0.20 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
+| `customer-discovery` | v1.12 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
+| `competitive-analysis` | v0.24 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
+| `positioning` | v0.22 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
+| `journey-map` | v0.22 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
 
 `customer-discovery` is the deep-intake reference (state F → E → C… → B → A); the three scoped-intake orchestrators have no deep-interview phase and resolve a cold start directly to state E. The adjacent `afps-status` reader (base, v0.5) is loop-aware: it reports "k of N frameworks complete" from the run manifest and routes a mid-run loop back to its orchestrator.
 
@@ -206,10 +223,10 @@ Each of `customer-discovery`, `competitive-analysis`, `positioning`, `journey-ma
 3. Add the deep-interview → preliminary-handoff → stop step (state F) and the build-multi-select-from-handoff step (state E).
 4. Add the selected-set run manifest write on multi-select approval (state 0/C head) and the file-existence pending-detection (state C).
 5. Update synthesis (state B) to archive the run manifest and emit the next-skill route on canonical write.
-6. Set post-approval routing to self-re-invocation: name the orchestrator's own command with "clear context" guidance.
-7. Bump `version:` per `docs/skill-versioning.md` (decimal bump — behavioral change), archive the prior `SKILL.md`, and add a `CHANGELOG.md` entry. Apply the same to each framework subskill only if its contract changes (it should not — subskills are still single-framework staged-research skills).
+6. Set terminal handoff routing to self-re-invocation: end every loop stop with `## Next Work` plus the appropriate parent-owned command section.
+7. Bump `version:` per `docs/skill-versioning.md` (decimal bump — behavioral change), archive the prior `SKILL.md`, and add a `CHANGELOG.md` entry. Apply the same to each framework subskill when its parent-owned handoff contract changes; subskills remain single-framework staged-research skills and do not become user-facing commands.
 
 ### Adjacent updates
 
 - **`afps-status`** (done, v0.5) — when reconciling a research stage in progress, it reads the selected-set run manifest (`research/{slug}/_working/{orchestrator}-run.yaml`), compares against existing canonical intermediates to report "k of N frameworks complete," and routes a mid-run loop back to its orchestrator. `.progress.yaml` stays a pointer.
-- **Audit** — `scripts/skill-alignment-routing-audit.mjs` recognizes self-re-invocation routing as valid for these skills.
+- **Audit** — `scripts/skill-alignment-routing-audit.mjs` recognizes self-re-invocation routing as valid for these skills, and `scripts/skill-research-loop-handoff-audit.sh` checks the terminal handoff contract.

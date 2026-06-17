@@ -2,7 +2,7 @@
 name: porter-five-forces
 description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
-version: v0.6
+version: v0.7
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -17,11 +17,21 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Run only through the parent orchestrator `$competitive-analysis` as part of its Research Session Loop. If the user needs to continue pending framework work, tell them to start a fresh Codex session and re-invoke `$competitive-analysis` with the same product/research path argument when present, for example `$competitive-analysis research/afps-tracker`.
 
-Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels or command recommendations from this framework subskill; parent synthesis owns downstream routing after canonical artifacts are approved.
+Do not ask users to invoke this framework directly or with a path-shaped child framework command. Do not emit downstream routing labels, child-framework commands, execution-loop commands, or downstream skill recommendations from this framework subskill.
 
-Run only through the parent orchestrator `$competitive-analysis`; do not ask the user to invoke this framework directly.
+## Terminal Handoff Contract
 
-This is a framework subskill for `$competitive-analysis`. It analyzes industry structure and competitive pressure. It produces an intermediate artifact for parent synthesis and must not emit downstream next-step routing.
+When this framework is run inline and stops on its findings `review` page, the terminal response must end with:
+
+```markdown
+## Next Work
+Review the framework findings page and compile YAML. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
+
+## Recommended Next Command After Compiling YAML
+$competitive-analysis
+```
+
+Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
 
 ## Report-First Approval Gate
 
@@ -31,7 +41,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream routing language. The approval request itself is the next action. Parent synthesis owns downstream routing after approved artifacts are written or updated.
+Do not include downstream routing language. While the framework findings page is in `review`, use only the parent-owned terminal handoff sections above. Parent synthesis owns downstream routing only after approved synthesis artifacts are written or updated.
 
 ## Staged Research Workflow
 
