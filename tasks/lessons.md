@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-17 — Pattern A continuation YAML should route to the parent, not a child
+
+- A research-loop handoff contract relied on explicit parent re-invocation plus pasted YAML, while the YAML itself carried no routing context; this left fresh sessions dependent on the user retyping the right command and made child-framework routing tempting.
+- Pattern A review-page compiled YAML should include `agent_routing` with `workflow: pattern-a-research-loop`, the parent skill, the parent command, active gate type, run manifest, and `next_resolution: parent-resolves-from-yaml-and-filesystem`.
+- Treat `agent_routing` as metadata only: the parent orchestrator still owns interpretation, artifact writes, archiving, filesystem-derived progress, and inline framework loading. Never expose path-shaped framework child commands as the user-facing continuation route.
+
 ## 2026-06-17 — Research loop stops need terminal handoff sections
 
 - A journey-map routing fix made synthesis routing explicit, but the broader Pattern A research loop still relied on scattered prose for "what is next."

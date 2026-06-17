@@ -2,7 +2,7 @@
 name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
-version: v0.10
+version: v0.11
 invocation: sub-skill
 parent: positioning
 ---
@@ -32,6 +32,24 @@ $positioning
 ```
 
 Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
+
+The findings `review` page must also include `agent_routing` in bottom compiled YAML with this parent-owned shape:
+
+```yaml
+agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: positioning
+  command: "$positioning research/{slug}"
+  product_path: research/{slug}
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings
+  framework_slug: category-design
+  framework_mode: inline-subskill
+  run_manifest: research/{slug}/_working/positioning-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+```
+
+Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Recommended Next Command After Compiling YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

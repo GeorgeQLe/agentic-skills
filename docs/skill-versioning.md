@@ -128,7 +128,7 @@ bash scripts/skill-archive-audit.sh --strict  # exit 1 on any violation
 
 The archive audit checks:
 1. Every `archive/<version>/SKILL.md` has a `version:` field matching its directory name
-2. Any skill at `v0.1`+ has corresponding archive entries for prior versions
+2. Any prior skill version named in `CHANGELOG.md` has a corresponding archive entry
 3. If `archive/` has entries, `CHANGELOG.md` must exist
 4. Each archived version has a heading in `CHANGELOG.md`
 

@@ -60,7 +60,7 @@ packs/<pack>/claude/<orchestrator>/
 2. **Framework recommendation** — present available frameworks as a multi-select alignment page with mode-appropriate defaults pre-checked and optional frameworks available.
 3. **Self-advancing execution** — record the approved framework selection in a run manifest, then advance one phase per invocation: each re-invocation runs the next pending framework's subskill inline (following its staged research workflow) and stops. State is the run manifest plus canonical-intermediate file existence — no separate task queue. Progress is derived from which intermediates exist. See `docs/research-session-loop-convention.md`.
 4. **Synthesis** — once every selected framework intermediate exists (auto-detected; an explicit `--synthesize` may also be accepted), read all intermediates and synthesize into the canonical deliverable. Present via alignment page before writing, then archive the run manifest.
-5. **Terminal handoff** — every loop stop ends with `## Next Work` and either `## Recommended Next Command After Compiling YAML` for pending review gates or `## Recommended Next Command` after an approved artifact write. Cross-skill routing appears only after synthesis is approved and written. To continue the loop before then, route to the orchestrator's **own** re-invocation.
+5. **Terminal handoff** — every loop stop ends with `## Next Work` and either `## Recommended Next Command After Compiling YAML` for pending review gates or `## Recommended Next Command` after an approved artifact write. Pending review pages also include `agent_routing` in the compiled YAML so a fresh agent can route to the parent orchestrator. Cross-skill routing appears only after synthesis is approved and written. To continue the loop before then, route to the orchestrator's **own** re-invocation.
 
 ### Subskill Responsibilities
 
@@ -109,7 +109,7 @@ Mode is auto-detected from pasted-YAML + filesystem state on each invocation (th
 | Synthesize | all selected intermediates exist, no canonical | synthesize → alignment page → write canonical |
 | Shortcut | per-orchestrator keyword | record fixed framework set → enter Advance |
 
-A pasted compiled YAML is consumed first: `ready-for-agent-review` applies the gate then falls through to the next state; `not-approved` amends the named page (a refinement session).
+A pasted compiled YAML is consumed first: `ready-for-agent-review` applies the gate then falls through to the next state; `not-approved` amends the named page (a refinement session). Pattern A compiled YAML may include `agent_routing.workflow: pattern-a-research-loop` and a parent `command` to help a fresh agent select the parent orchestrator, but this metadata does not replace parent-owned interpretation. The parent still validates the YAML, resolves the active gate from the run manifest and filesystem, writes or amends artifacts, archives consumed sources, and decides whether to load a framework subskill inline.
 
 ---
 

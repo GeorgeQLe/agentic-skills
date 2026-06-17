@@ -146,6 +146,30 @@ Start a fresh context and let the parent run the next pending framework. Progres
 
 This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-routing-contract.md` § Approved Artifact State recognizes a skill's own re-invocation as a valid post-approval route. The cross-skill downstream route is emitted only after final synthesis.
 
+### Self-routing continuation payload
+
+Pattern A review pages should make the bottom compiled YAML **self-routing data** by including an `agent_routing` mapping. This mapping gives a fresh agent enough context to route back to the parent orchestrator when the user pastes the YAML, while preserving the rule that the parent orchestrator owns interpretation, state resolution, artifact writing, archiving, and inline framework loading.
+
+Example for an inline framework findings gate:
+
+```yaml
+agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: competitive-analysis
+  command: "$competitive-analysis research/afps-tracker"
+  product_path: research/afps-tracker
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings
+  framework_slug: swot
+  framework_mode: inline-subskill
+  run_manifest: research/afps-tracker/_working/competitive-analysis-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+```
+
+For non-framework gates, use the same mapping and set `gate_type` to the active gate (`framework-selection`, `shortcut-selection`, or `synthesis`); omit `framework_slug` and `framework_mode` when no framework is active. In flat mode, omit `product_path` or set it to an empty value. The `command` must be the same parent-orchestrator command shown under `## Recommended Next Command After Compiling YAML`, including the same product/research path argument when present. It must never be a path-shaped child framework command.
+
+`agent_routing` is routing metadata, not execution authority. The receiving parent still validates `approval_status`, identifies which gate the YAML answers, derives progress from the run manifest plus canonical-intermediate file existence, writes or amends the appropriate artifact, archives consumed sources, and decides whether to load a framework subskill inline. Do not put framework-owned commands, downstream-skill commands, `$exec`, or `/exec` in this mapping.
+
 ### Terminal handoff format
 
 Every terminal message for a Pattern A loop stop ends with these sections, in this order:
@@ -172,7 +196,7 @@ While any `review` approval gate is pending, do not route to downstream or cross
 ### Does the skill need to be re-invoked? Can the agent auto-call it?
 
 - **The skill is required to interpret the YAML.** The rules for what a compiled YAML means (which gate it answers, what to write, what to archive) live in the orchestrator's `SKILL.md`, not in the YAML. The YAML is data.
-- **Do not rely on auto-call.** A bare pasted YAML blob does not reliably trigger a skill; skills fire on explicit invocation or description match. The robust pattern is the **page/terminal naming the literal next command** (above) so the user always re-invokes explicitly.
+- **Do not rely on auto-call.** A bare pasted YAML blob does not reliably trigger a skill; skills fire on explicit invocation or description match. The robust pattern is the **compiled YAML carrying `agent_routing` plus the page/terminal naming the literal next parent command** (above). If a fresh agent can use `agent_routing` to select the parent skill, it should still let that parent resolve state from YAML and filesystem rather than treating the YAML as a standalone command.
 - **Framework subskills are followed inline, not separately invoked.** When the orchestrator self-advances into a framework (step C), it loads and follows that framework subskill's `SKILL.md` instructions within its own session. The user does not invoke the framework skill; the user only ever invokes the orchestrator.
 
 ## Heavy vs. light phases
@@ -207,10 +231,10 @@ This convention is **normative for all Pattern A research orchestrators**. The r
 
 | Orchestrator | Version | Cold entry | Run manifest |
 |---|---|---|---|
-| `customer-discovery` | v1.12 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
-| `competitive-analysis` | v0.24 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
-| `positioning` | v0.22 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
-| `journey-map` | v0.22 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
+| `customer-discovery` | v1.13 | state F (deep interview — `context_intake: deep`) | `research/{slug}/_working/customer-discovery-run.yaml` |
+| `competitive-analysis` | v0.25 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/competitive-analysis-run.yaml` |
+| `positioning` | v0.23 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/positioning-run.yaml` |
+| `journey-map` | v0.23 | state E (`context_intake: scoped` — no deep interview) | `research/{slug}/_working/journey-map-run.yaml` |
 
 `customer-discovery` is the deep-intake reference (state F → E → C… → B → A); the three scoped-intake orchestrators have no deep-interview phase and resolve a cold start directly to state E. The adjacent `afps-status` reader (base, v0.5) is loop-aware: it reports "k of N frameworks complete" from the run manifest and routes a mid-run loop back to its orchestrator.
 

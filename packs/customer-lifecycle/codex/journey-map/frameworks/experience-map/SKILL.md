@@ -2,7 +2,7 @@
 name: experience-map
 description: Adaptive Path experience map — emotional arc with doing/thinking/feeling layers, pain/delight moments, and channel transitions
 type: research
-version: v0.7
+version: v0.8
 invocation: sub-skill
 parent: journey-map
 ---
@@ -32,6 +32,24 @@ $journey-map
 ```
 
 Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
+
+The findings `review` page must also include `agent_routing` in bottom compiled YAML with this parent-owned shape:
+
+```yaml
+agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: journey-map
+  command: "$journey-map research/{slug}"
+  product_path: research/{slug}
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings
+  framework_slug: experience-map
+  framework_mode: inline-subskill
+  run_manifest: research/{slug}/_working/journey-map-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+```
+
+Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Recommended Next Command After Compiling YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

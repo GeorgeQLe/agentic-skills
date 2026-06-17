@@ -1,3 +1,36 @@
+## Current Investigation - Self-Routing Pattern A Continuation Payload
+
+### Goal
+
+Validate the reported mismatch between Pattern A continuation handoffs and the research-loop contract, then update the minimal contract/code/tests so compiled YAML can carry parent-orchestrator routing context without turning framework subskills into user-facing commands.
+
+### Scope
+
+- `docs/research-session-loop-convention.md`
+- Pattern A orchestrator and framework skill contracts under `packs/business-research/` and `packs/customer-lifecycle/`
+- Research-loop handoff/routing audits and fixtures
+- Generated package artifacts if required by verification
+- Prompt history and task tracking for this `$investigate` invocation
+
+### Plan
+
+1. Capture the visible `$investigate` invocation prompt and record this investigation plan.
+2. Validate the user claims against the research-loop convention, active Pattern A skill contracts, generated examples, and recent git history.
+3. Identify the smallest durable contract change for self-routing continuation payloads.
+4. Update docs, skill contracts, versions/archives/changelogs, and audits/tests only where needed.
+5. Fix any verification-only remediation required to make the contract checks meaningful.
+6. Run focused verification and inspect the final diff.
+7. Commit and push intended tracked changes on the primary branch.
+
+### Acceptance Criteria
+
+- Review-gate YAML examples include `agent_routing` with the parent orchestrator command, product path, gate owner/type, framework context when applicable, run manifest, and parent-owned next resolution.
+- The contract states that self-routing YAML routes a fresh agent to the parent orchestrator, but the parent still interprets state, writes artifacts, archives, and decides whether to load framework subskills inline.
+- No active Pattern A contract exposes path-shaped framework child commands as the user-facing route.
+- Existing terminal command handoffs remain compatible for explicit re-invocation.
+- Version/archive/changelog requirements are satisfied for changed skills.
+- Focused audits/tests pass.
+
 ## Current Implementation - Research Loop Terminal Handoff Sections
 
 ### Goal

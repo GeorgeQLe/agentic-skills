@@ -2,7 +2,7 @@
 name: porter-five-forces
 description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
-version: v0.7
+version: v0.8
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -32,6 +32,24 @@ Review the framework findings page and compile YAML. The parent will consume tha
 ```
 
 Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
+
+The findings `review` page must also include `agent_routing` in bottom compiled YAML with this parent-owned shape:
+
+```yaml
+agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: competitive-analysis
+  command: "/competitive-analysis research/{slug}"
+  product_path: research/{slug}
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings
+  framework_slug: porter-five-forces
+  framework_mode: inline-subskill
+  run_manifest: research/{slug}/_working/competitive-analysis-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+```
+
+Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Recommended Next Command After Compiling YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

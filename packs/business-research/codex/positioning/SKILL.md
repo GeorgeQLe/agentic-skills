@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.22
+version: v0.23
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -68,6 +68,26 @@ When a framework is pending, the only user-facing continuation route is re-invok
 ### Terminal Handoff Contract
 
 Every terminal response for this Research Session Loop must end with `## Next Work` and one command section. Use `## Recommended Next Command After Compiling YAML` only while a `review` page is waiting for compiled YAML. Use `## Recommended Next Command` only after approved YAML has been consumed and the approved artifact has been written or updated. Do not put any other section after the applicable command section.
+
+### Self-Routing Continuation Payload
+
+Every `review` alignment page this parent creates must include `agent_routing` in the bottom compiled YAML. The mapping routes a fresh agent back to this parent orchestrator; it does not authorize direct framework invocation or replace parent-owned state resolution. Use this shape, preserving the current product/research path argument when present:
+
+```yaml
+agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: positioning
+  command: "$positioning research/{slug}"
+  product_path: research/{slug}        # omit in flat mode
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings        # or framework-selection, shortcut-selection, synthesis
+  framework_slug: <framework-slug>     # only for framework-findings gates
+  framework_mode: inline-subskill      # only for framework-findings gates
+  run_manifest: research/{slug}/_working/positioning-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+```
+
+For framework selection, shortcut, and synthesis gates, omit `framework_slug` and `framework_mode`; `gate_type` must name the actual gate. The `command` field must be the same parent command shown under `## Recommended Next Command After Compiling YAML`. The parent consumes the YAML, writes or amends the artifact, archives consumed sources, derives progress from the run manifest plus canonical-intermediate files, and decides whether to load a framework subskill inline.
 
 For review-pending framework, selection, shortcut, or synthesis pages, `## Next Work` tells the user to review the alignment page and compile YAML, and the command section names `$positioning` with the same product/research path argument when present, then start a fresh Codex session if the skill list or context is stale. For post-write pending-framework states, `## Next Work` reports progress as "k of N frameworks complete" and says the next run executes the next pending framework; `## Recommended Next Command` names `$positioning`.
 

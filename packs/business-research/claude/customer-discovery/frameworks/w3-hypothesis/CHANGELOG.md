@@ -1,5 +1,9 @@
 # w3-hypothesis changelog (claude)
 
+## v0.8 - 2026-06-17
+
+- Added parent-owned `agent_routing` guidance for inline framework findings YAML so fresh sessions route back to the parent orchestrator, not a child framework command.
+
 ## v0.7 - 2026-06-17
 
 - Added parent-owned terminal handoff guidance for inline framework stops: framework review output ends with `## Next Work` and `## Recommended Next Command After Compiling YAML` naming only the parent orchestrator.

@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.25 - 2026-06-17
+
+- Added self-routing Pattern A continuation metadata (`agent_routing`) to review-gate YAML requirements so fresh sessions can route to the parent orchestrator while preserving parent-owned state resolution and inline framework loading.
+
 ## v0.24 - 2026-06-17
 
 - Added a required terminal handoff contract so Pattern A loop stops end with `## Next Work` plus the appropriate parent-owned recommended command section, including explicit synthesis routing after the last framework intermediate is written.

@@ -1,3 +1,41 @@
+## Current Investigation - Self-Routing Pattern A Continuation Payload
+
+### Current Checklist
+
+- [x] Capture the visible `$investigate` invocation prompt.
+- [x] Record the investigation plan in task tracking.
+- [x] Validate the user claims against docs, active contracts, and git history.
+- [x] Identify the minimal durable self-routing payload contract.
+- [x] Update docs/contracts/tests with version/archive/changelog handling where needed.
+- [x] Fix archive-audit version semantics exposed by verification.
+- [x] Run focused verification and inspect diffs.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Strategy used: General, because the issue is workflow/routing contract behavior rather than UI or runtime data state.
+- Prompt history captured at `prompts/investigate/skill-prompt-20260617-094639-self-routing-continuation.md`.
+- User claim verdict: confirmed. `docs/research-session-loop-convention.md` said bare YAML is data and should not be relied on for auto-call, while active Pattern A contracts only named explicit parent re-invocation in terminal handoffs and had no `agent_routing` payload.
+- Recent history: `c4174450` standardized terminal `## Next Work` / command handoffs, but did not add YAML routing metadata; earlier `658a1269` hardened parent-owned framework routing without solving fresh-session self-routing from the YAML itself.
+- Root cause: the continuation contract made the terminal command explicit but left compiled YAML unable to identify the parent orchestrator, active gate, inline framework context, run manifest, or parent-owned resolution rule.
+- Fix applied so far: added `agent_routing` to the shared Research Session Loop and Alignment YAML routing conventions, mirrored it into active Pattern A orchestrator and framework contracts, bumped/archived/changeloged changed skills, tightened the research-loop handoff audit, and added a correction lesson.
+- Verification remediation: strict archive audit initially failed because `scripts/skill-archive-audit.sh` parsed only the minor component of `v1.13` and incorrectly expected `archive/v0.12` while missing same-major gaps.
+- Archive remediation applied: fixed the archive audit to require prior versions named in `CHANGELOG.md`, restored missing `customer-discovery` `archive/v1.6/SKILL.md` snapshots from commit `b62f42d7`, and updated `docs/skill-versioning.md`.
+- Verification passed:
+  - `bash scripts/skill-research-loop-handoff-audit.sh`
+  - `bash scripts/skill-versions.sh --missing`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `bash scripts/skill-mirror-parity-audit.sh`
+  - `bash scripts/skill-next-step-routing.sh --missing`
+  - `bash scripts/skill-install-routing-audit.sh --active`
+  - `bash scripts/skill-pack-routing-audit.sh`
+  - `node scripts/skill-alignment-routing-audit.mjs`
+  - `npm run skillpacks:build`
+  - `npm --workspace packages/skillpacks run test:node` (92 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+
 ## Current Implementation - Research Loop Terminal Handoff Sections
 
 ### Current Checklist

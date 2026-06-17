@@ -55,6 +55,14 @@ for (const { pack, name, canonical } of orchestrators) {
     requireText(file, text, `${cmd} --synthesize`, "explicit synthesis command");
     requireText(file, text, canonical, "canonical synthesis artifact reference");
     requireText(file, text, "Do not put any other section after the applicable command section.", "final-section guard");
+    requireText(file, text, "### Self-Routing Continuation Payload", "self-routing continuation payload section");
+    requireText(file, text, "agent_routing:", "agent_routing YAML metadata");
+    requireText(file, text, "workflow: pattern-a-research-loop", "Pattern A workflow routing marker");
+    requireText(file, text, `parent_skill: ${name}`, "parent skill routing metadata");
+    requireText(file, text, `command: "${cmd} research/{slug}"`, "parent command routing metadata");
+    requireText(file, text, "gate_owner: parent-orchestrator", "parent gate-owner routing metadata");
+    requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
+    requireText(file, text, "The `command` field must be the same parent command shown under `## Recommended Next Command After Compiling YAML`.", "command parity guard");
 
     if (/Recommended next command after compiling YAML:/i.test(text)) {
       fail(file, "uses old inline recommended-next-command label");
@@ -77,6 +85,16 @@ for (const { pack, name } of orchestrators) {
       requireText(file, text, "## Recommended Next Command After Compiling YAML", "review-pending command section name");
       requireText(file, text, cmd, "parent orchestrator command");
       requireText(file, text, "Do not decide from inside the framework whether the next parent run executes another framework or synthesis", "parent recalculation guard");
+      requireText(file, text, "agent_routing:", "agent_routing YAML metadata");
+      requireText(file, text, "workflow: pattern-a-research-loop", "Pattern A workflow routing marker");
+      requireText(file, text, `parent_skill: ${name}`, "parent skill routing metadata");
+      requireText(file, text, `command: "${cmd} research/{slug}"`, "parent command routing metadata");
+      requireText(file, text, "gate_owner: parent-orchestrator", "parent gate-owner routing metadata");
+      requireText(file, text, "gate_type: framework-findings", "framework gate type routing metadata");
+      requireText(file, text, `framework_slug: ${entry.name}`, "framework slug routing metadata");
+      requireText(file, text, "framework_mode: inline-subskill", "inline framework routing metadata");
+      requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
+      requireText(file, text, "never replace it with a child framework path command", "child-command routing guard");
     }
   }
 }

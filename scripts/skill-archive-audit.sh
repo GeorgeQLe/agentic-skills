@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Checks:"
       echo "  1. Every archive/<version>/SKILL.md has a version: matching its directory"
-      echo "  2. Skills at v0.1+ have archive entries for prior versions"
+      echo "  2. Skills have archive entries for prior versions named in CHANGELOG.md"
       echo "  3. If archive/ has entries, CHANGELOG.md must exist"
       echo "  4. Each archived version has a heading in CHANGELOG.md"
       echo ""
@@ -53,9 +53,32 @@ extract_version() {
   done < "$file"
 }
 
-version_decimal() {
+version_major() {
+  local v="$1"
+  echo "$v" | sed 's/^v//' | cut -d. -f1
+}
+
+version_minor() {
   local v="$1"
   echo "$v" | sed 's/^v//' | cut -d. -f2
+}
+
+version_lt() {
+  local a="$1"
+  local b="$2"
+  local a_major a_minor b_major b_minor
+  a_major="$(version_major "$a")"
+  a_minor="$(version_minor "$a")"
+  b_major="$(version_major "$b")"
+  b_minor="$(version_minor "$b")"
+
+  if [[ "$a_major" -lt "$b_major" ]] 2>/dev/null; then
+    return 0
+  fi
+  if [[ "$a_major" -eq "$b_major" && "$a_minor" -lt "$b_minor" ]] 2>/dev/null; then
+    return 0
+  fi
+  return 1
 }
 
 check_skill() {
@@ -72,18 +95,29 @@ check_skill() {
   current_version="$(extract_version "$skill_file")"
   [[ -n "$current_version" ]] || return 0
 
-  local decimal
-  decimal="$(version_decimal "$current_version")"
-
-  if [[ "$decimal" -ge 1 ]] 2>/dev/null; then
-    local i=0
-    while [[ "$i" -lt "$decimal" ]]; do
-      local expected="v0.$i"
-      if [[ ! -f "$archive_dir/$expected/SKILL.md" ]]; then
-        violations+=("$rel_path: missing archive/$expected/SKILL.md (current is $current_version)")
+  if [[ -f "$changelog" ]]; then
+    while IFS= read -r heading_version; do
+      [[ -n "$heading_version" ]] || continue
+      [[ "$heading_version" == "$current_version" ]] && continue
+      if version_lt "$heading_version" "$current_version" && [[ ! -f "$archive_dir/$heading_version/SKILL.md" ]]; then
+        violations+=("$rel_path: missing archive/$heading_version/SKILL.md (current is $current_version)")
       fi
-      i=$((i + 1))
-    done
+    done < <(grep -E '^## v[0-9]+\.[0-9]+' "$changelog" 2>/dev/null | sed -E 's/^## (v[0-9]+\.[0-9]+).*/\1/')
+  else
+    local major minor
+    major="$(version_major "$current_version")"
+    minor="$(version_minor "$current_version")"
+
+    if [[ "$minor" -ge 1 ]] 2>/dev/null; then
+      local i=0
+      while [[ "$i" -lt "$minor" ]]; do
+        local expected="v$major.$i"
+        if [[ ! -f "$archive_dir/$expected/SKILL.md" ]]; then
+          violations+=("$rel_path: missing archive/$expected/SKILL.md (current is $current_version)")
+        fi
+        i=$((i + 1))
+      done
+    fi
   fi
 
   if [[ -d "$archive_dir" ]]; then
