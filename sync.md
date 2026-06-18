@@ -10,27 +10,29 @@ Inside this monorepo, invoke the workspace bin directly. Bare `npx skillpacks re
 node packages/skillpacks/bin/skillpacks.mjs refresh
 ```
 
-Alias `publish-skills` to this clone's release-steps script so it is runnable as
-`! publish-skills` inside the Claude Code CLI. The alias must live in `~/.zshenv`, not
-`~/.zshrc`: the CLI's `!` runs a **non-interactive** `zsh -c`, which sources `~/.zshenv`
-only (`~/.zshrc` is interactive-only and would not be read). It points at the absolute path
-of `scripts/publish-steps.sh` in this checkout. Idempotent — the tagged line is rewritten,
-not duplicated. Takes effect for new `!` commands immediately (no reload needed, since every
-zsh invocation sources `~/.zshenv`). (zsh-only; skip or adapt if the device uses a different shell.)
+Make `publish-skills` runnable as `! publish-skills` inside the Claude Code CLI. The CLI's
+`!` runs a shell that does **not** source the user's shell startup files (`~/.zshrc`/`~/.zshenv`),
+so a shell alias or function is never seen — the only thing it resolves is an executable on the
+inherited `PATH`. So install a small wrapper named `publish-skills` (it `exec`s this clone's
+`scripts/publish-steps.sh` by absolute path — a symlink would break the script's own
+path-resolution) into `~/.local/bin`, which is the conventional user bin on `PATH`. Idempotent
+(rewritten each sync). If `~/.local/bin` is not on `PATH`, it warns so the user can add it.
 
 ```sh
 SCRIPT="$(pwd)/scripts/publish-steps.sh"
-ENV="$HOME/.zshenv"
-TAG="# agentic-skills: publish-skills alias"
+BIN_DIR="$HOME/.local/bin"
+BIN="$BIN_DIR/publish-skills"
 if [ -f "$SCRIPT" ]; then
-  touch "$ENV"
-  tmp="$(mktemp)"
-  grep -v -F "$TAG" "$ENV" > "$tmp" || true
-  printf 'alias publish-skills="%s" %s\n' "$SCRIPT" "$TAG" >> "$tmp"
-  mv "$tmp" "$ENV"
-  echo "aliased publish-skills -> $SCRIPT in $ENV"
+  mkdir -p "$BIN_DIR"
+  printf '#!/usr/bin/env bash\n# agentic-skills: publish-skills -> release steps (managed by sync.md)\nexec "%s" "$@"\n' "$SCRIPT" > "$BIN"
+  chmod +x "$BIN"
+  echo "installed publish-skills -> $SCRIPT at $BIN"
+  case ":$PATH:" in
+    *":$BIN_DIR:"*) : ;;
+    *) echo "WARNING: $BIN_DIR is not on PATH — add it (e.g. in ~/.zshenv) so '! publish-skills' resolves" ;;
+  esac
 else
-  echo "skipped publish-skills alias: $SCRIPT not found"
+  echo "skipped publish-skills install: $SCRIPT not found"
 fi
 ```
 

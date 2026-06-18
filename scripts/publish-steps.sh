@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Print this repo's npm publishing steps. Run from anywhere:
-#   ! publish-skills                  (alias set up by sync.md in ~/.zshenv)
+#   ! publish-skills                  (wrapper installed on PATH by sync.md: ~/.local/bin)
 #   ! scripts/publish-steps.sh        (inside the Claude Code CLI)
 #   bash scripts/publish-steps.sh
 # Canonical source of truth: docs/release-runbook.md
