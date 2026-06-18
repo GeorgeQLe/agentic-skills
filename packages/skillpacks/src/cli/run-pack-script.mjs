@@ -10,13 +10,16 @@ import {
 } from './project-config.mjs';
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
 import {
+  doctorAllProjects,
   doctorProject,
   initProject,
   installResolved,
   pinSkill,
   pruneProject,
+  refreshAllProjects,
   refreshProject,
   removeResolved,
+  statusAllProjects,
   uninstallGlobal,
   unpinSkill
 } from './lifecycle.mjs';
@@ -505,6 +508,7 @@ Commands:
   list --json                  Print the packaged skillpacks manifest as JSON
   list-packs                   List enabled packs from .agents/project.json
   status                       Show project designation and installed skills
+  status --all                 Status for every project below the current directory
   recommend                    Recommend packs from repository signals
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
@@ -512,7 +516,9 @@ Commands:
   uninstall-global             Remove legacy repo-managed base skills from ~/.claude and ~/.codex
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
+  refresh --all [--dry-run]    Refresh every project under the current directory
   doctor                       Report skill-install drift
+  doctor --all                 Drift report across every project below
   doctor --fix                 Clean generated skill-root drift
   doctor --fix --agent-docs [--dry-run]
                                Also migrate generated AGENTS.md/CLAUDE.md blocks
@@ -561,6 +567,13 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'status') {
+    if (rest.includes('--all')) {
+      const others = rest.filter((arg) => arg !== '--all');
+      if (others.length > 0) {
+        throw new Error('status does not accept arguments');
+      }
+      return statusAllProjects({ rootDir: process.cwd() });
+    }
     if (rest.length > 0) {
       throw new Error('status does not accept arguments');
     }
@@ -638,8 +651,28 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'refresh') {
-    if (rest.length > 0) {
-      throw new Error('refresh does not accept arguments');
+    let all = false;
+    let dryRun = false;
+    for (const arg of rest) {
+      if (arg === '--all') {
+        all = true;
+        continue;
+      }
+      if (arg === '--dry-run') {
+        dryRun = true;
+        continue;
+      }
+      throw new Error(`refresh: unknown option '${arg}'`);
+    }
+    if (dryRun && !all) {
+      throw new Error('refresh --dry-run is only supported with --all');
+    }
+    if (all) {
+      return refreshAllProjects({
+        manifest: readManifest(),
+        rootDir: process.cwd(),
+        dryRun
+      });
     }
     return refreshProject({
       manifest: readManifest(),
@@ -648,6 +681,13 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'doctor') {
+    if (rest.includes('--all')) {
+      return doctorAllProjects({
+        manifest: readManifest(),
+        rootDir: process.cwd(),
+        args: rest.filter((arg) => arg !== '--all')
+      });
+    }
     return doctorProject({
       manifest: readManifest(),
       projectRoot: process.cwd(),

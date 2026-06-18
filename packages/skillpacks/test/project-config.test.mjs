@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, it } from 'node:test';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
+import { discoverProjectRoots } from '../src/cli/project-config.mjs';
 
 const tmpDirs = [];
 
@@ -189,5 +190,58 @@ describe('Node project config commands', () => {
         mode: 'warn'
       }
     });
+  });
+});
+
+describe('discoverProjectRoots', () => {
+  it('finds nested project markers and includes the root itself', () => {
+    const parent = makeTempProject();
+    writeProjectConfig(parent, { enabled_packs: [] });
+    const a = join(parent, 'a');
+    const b = join(parent, 'nested', 'b');
+    writeProjectConfig(a, { enabled_packs: [] });
+    writeProjectConfig(b, { enabled_packs: [] });
+
+    const roots = discoverProjectRoots(parent);
+
+    assert.deepEqual(roots, [parent]);
+  });
+
+  it('finds sibling projects under a non-project parent', () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    const b = join(parent, 'b');
+    writeProjectConfig(a, { enabled_packs: [] });
+    writeProjectConfig(b, { enabled_packs: [] });
+
+    const roots = discoverProjectRoots(parent);
+
+    assert.deepEqual(roots, [a, b].sort());
+  });
+
+  it('skips node_modules, .git, dot-dirs, and archive', () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    writeProjectConfig(a, { enabled_packs: [] });
+    writeProjectConfig(join(parent, 'node_modules', 'x'), { enabled_packs: [] });
+    writeProjectConfig(join(parent, '.git', 'y'), { enabled_packs: [] });
+    writeProjectConfig(join(parent, '.cache', 'z'), { enabled_packs: [] });
+    writeProjectConfig(join(parent, 'archive', 'old'), { enabled_packs: [] });
+
+    const roots = discoverProjectRoots(parent);
+
+    assert.deepEqual(roots, [a]);
+  });
+
+  it('does not descend past a found project root', () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    writeProjectConfig(a, { enabled_packs: [] });
+    // A nested project inside an already-found root is not a separate project.
+    writeProjectConfig(join(a, 'sub'), { enabled_packs: [] });
+
+    const roots = discoverProjectRoots(parent);
+
+    assert.deepEqual(roots, [a]);
   });
 });

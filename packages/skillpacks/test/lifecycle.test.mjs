@@ -1074,3 +1074,98 @@ describe('Node lifecycle commands', () => {
     assert.equal(readlinkSync(skillPath(dir, 'claude', 'local-link')), localLinkSource);
   });
 });
+
+describe('Node multi-repo --all commands', () => {
+  function makeParent() {
+    const dir = mkdtempSync(join(tmpdir(), 'skillpacks-all-'));
+    tmpDirs.push(dir);
+    return dir;
+  }
+
+  it('refresh --all refreshes each project, skips failures, and ignores node_modules', async () => {
+    const parent = makeParent();
+    const a = join(parent, 'a');
+    const b = join(parent, 'b');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1
+    });
+    writeProjectConfig(b, {}); // empty config -> refreshProject throws, but the run continues
+    writeProjectConfig(join(parent, 'node_modules', 'x'), {
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1
+    });
+
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all']);
+
+    assert.equal(existsSync(skillPath(a, 'claude', 'quality-sweep')), true);
+    assert.match(stdout, /=== a ===/);
+    assert.match(stdout, /=== b ===/);
+    assert.doesNotMatch(stdout, /node_modules/);
+    assert.match(stdout, /failed: No enabled packs or skills/);
+    assert.match(stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 1 failed across 2 project\(s\)\./);
+    assert.equal(exitCode, 1);
+  });
+
+  it('refresh --all --dry-run reports drift without mutating', async () => {
+    const parent = makeParent();
+    const a = join(parent, 'a');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1
+    });
+    writeManagedInstall(
+      a,
+      'claude',
+      'quality-sweep',
+      join(repoRoot, 'packs/code-quality/claude/quality-sweep')
+    );
+
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run']);
+
+    assert.match(stdout, /=== a ===/);
+    assert.match(stdout, /STALE\s+\.claude\/skills\/quality-sweep/);
+    assert.equal(
+      readFileSync(join(skillPath(a, 'claude', 'quality-sweep'), 'SKILL.md'), 'utf8'),
+      'stale\n'
+    );
+    assert.equal(exitCode, 1);
+  });
+
+  it('refresh --dry-run without --all is rejected', async () => {
+    const parent = makeParent();
+    const error = await runSkillpacksExpectError(parent, ['refresh', '--dry-run']);
+    assert.match(error.message, /--dry-run is only supported with --all/);
+  });
+
+  it('status --all reports when no projects are found', async () => {
+    const parent = makeParent();
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['status', '--all']);
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /No projects with \.agents\/project\.json found under/);
+  });
+
+  it('doctor --all reports drift per repo', async () => {
+    const parent = makeParent();
+    const a = join(parent, 'a');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1
+    });
+    writeManagedInstall(
+      a,
+      'claude',
+      'quality-sweep',
+      join(repoRoot, 'packs/code-quality/claude/quality-sweep')
+    );
+
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['doctor', '--all']);
+
+    assert.match(stdout, /=== a ===/);
+    assert.match(stdout, /STALE\s+\.claude\/skills\/quality-sweep/);
+    assert.equal(exitCode, 1);
+  });
+});

@@ -24,6 +24,50 @@ function projectLockDir(projectRoot) {
   return join(projectRoot, '.agents', '.pack.lock');
 }
 
+const DISCOVERY_EXCLUDE_NAMES = new Set(['node_modules', 'archive']);
+
+export function discoverProjectRoots(rootDir = process.cwd(), { maxDepth = Infinity } = {}) {
+  const found = [];
+
+  function visit(dir, depth) {
+    if (depth > maxDepth || !existsSync(dir)) {
+      return;
+    }
+
+    // A project's own nested directories are not separate projects: record the
+    // root and stop descending (this also skips its node_modules/.claude/etc.).
+    if (existsSync(projectFilePath(dir))) {
+      found.push(dir);
+      return;
+    }
+
+    if (depth >= maxDepth) {
+      return;
+    }
+
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      const name = entry.name;
+      if (DISCOVERY_EXCLUDE_NAMES.has(name) || name.startsWith('.')) {
+        continue;
+      }
+      visit(join(dir, name), depth + 1);
+    }
+  }
+
+  visit(rootDir, 0);
+  return found.sort();
+}
+
 export function readProjectConfig(projectRoot = process.cwd()) {
   const filePath = projectFilePath(projectRoot);
   if (!existsSync(filePath)) {

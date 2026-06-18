@@ -22,7 +22,9 @@ import {
   normalizePack
 } from './pack-normalization.mjs';
 import {
+  discoverProjectRoots,
   inferProjectType,
+  printProjectStatus,
   readProjectConfig,
   writeProjectConfig,
   withProjectLock
@@ -1482,5 +1484,70 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
     console.log(`Refreshed project skills to ${manifestPackageLabel(manifest)}.`);
     printSessionReloadNotice();
     return 0;
+  });
+}
+
+export async function runAcrossProjects({ rootDir = process.cwd(), label, run } = {}) {
+  const roots = discoverProjectRoots(rootDir);
+
+  if (roots.length === 0) {
+    console.log(`No projects with .agents/project.json found under ${rootDir}`);
+    return 0;
+  }
+
+  let succeeded = 0;
+  let flagged = 0;
+  let failed = 0;
+
+  for (const root of roots) {
+    const rel = relative(rootDir, root) || '.';
+    console.log('');
+    console.log(`=== ${rel} ===`);
+    try {
+      const code = await run(root);
+      if (code !== 0) {
+        flagged += 1;
+      } else {
+        succeeded += 1;
+      }
+    } catch (error) {
+      failed += 1;
+      const message = error instanceof Error ? error.message : String(error);
+      console.log(`  failed: ${message}`);
+    }
+  }
+
+  console.log('');
+  console.log(
+    `Summary${label ? ` (${label})` : ''}: ${succeeded} ok, ${flagged} flagged, ${failed} failed across ${roots.length} project(s).`
+  );
+
+  return failed > 0 || flagged > 0 ? 1 : 0;
+}
+
+export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dryRun = false } = {}) {
+  return runAcrossProjects({
+    rootDir,
+    label: dryRun ? 'refresh --all --dry-run' : 'refresh --all',
+    run: (root) =>
+      dryRun
+        ? doctorProject({ manifest, projectRoot: root, args: [] })
+        : refreshProject({ manifest, projectRoot: root })
+  });
+}
+
+export async function doctorAllProjects({ manifest, rootDir = process.cwd(), args = [] } = {}) {
+  return runAcrossProjects({
+    rootDir,
+    label: 'doctor --all',
+    run: (root) => doctorProject({ manifest, projectRoot: root, args })
+  });
+}
+
+export async function statusAllProjects({ rootDir = process.cwd() } = {}) {
+  return runAcrossProjects({
+    rootDir,
+    label: 'status --all',
+    run: (root) => printProjectStatus(root)
   });
 }
