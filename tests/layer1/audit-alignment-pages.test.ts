@@ -377,3 +377,32 @@ describe("root instruction contract for direct alignment edits", () => {
     }
   });
 });
+
+// Interrogation-page direct-edit contract: the same root files must require the
+// interrogation audit to pass before committing direct edits to interrogation/*.html.
+describe("root instruction contract for direct interrogation edits", () => {
+  const rootSections = [
+    { path: "CLAUDE.md", heading: "### Alignment Page Template" },
+    { path: "AGENTS.md", heading: "### Interrogation Page Convention" },
+  ];
+
+  function sectionText(path: string, heading: string): string {
+    const content = readFileSync(join(REPO_ROOT, path), "utf8");
+    const start = content.indexOf(heading);
+    expect(start, `${path} has section ${heading}`).toBeGreaterThanOrEqual(0);
+    const rest = content.slice(start + heading.length);
+    const next = rest.search(/^##/m);
+    return next === -1 ? rest : rest.slice(0, next);
+  }
+
+  it("requires the interrogation direct-edit audit to pass before commit in both root files", () => {
+    for (const { path, heading } of rootSections) {
+      const section = sectionText(path, heading);
+      expect(section, `${path} direct-edit scope`).toContain("interrogation/*.html");
+      expect(section, `${path} audit command`).toContain("node scripts/audit-interrogation-pages.mjs");
+      expect(section, `${path} pass requirement`).toContain("(exit 0) before commit");
+      expect(section, `${path} TTS fixer routing`).toContain("node scripts/inject-tts.mjs --dir interrogation");
+      expect(section, `${path} archive exemption`).toContain("docs/history/archive/");
+    }
+  });
+});

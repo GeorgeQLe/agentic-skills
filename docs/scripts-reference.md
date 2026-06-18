@@ -81,3 +81,12 @@ Compact command index for all scripts in this repository.
 | --- | --- |
 | `node scripts/open-html-page.mjs <html-path-or-url> --browser auto` | Open or focus a local HTML page with best-effort cross-platform browser handling |
 | `node scripts/upgrade-alignment-page.mjs` | Regenerate per-skill ALIGNMENT-PAGE.md from convention |
+| `node scripts/audit-alignment-pages.mjs [--root <path>]` | Read-only convention audit for active `alignment/*.html` pages |
+| `node scripts/inject-tts.mjs [--dir <subdir>] [--force] [<page>]` | Inject the Brief Me TTS include into pages (default `alignment/`; `--dir interrogation` for interrogation pages) |
+
+## Interrogation Page Management
+
+| Command | Description |
+| --- | --- |
+| `node scripts/upgrade-interrogation-page.mjs [--check] [--dry-run]` | Regenerate per-skill INTERROGATION-PAGE.md from `docs/interrogation-page-convention.md` for participating skills; `--check` is the repo-state drift gate |
+| `node scripts/audit-interrogation-pages.mjs [--root <path>]` | Read-only convention audit for active `interrogation/*.html` pages (TTS, metadata, ≥1 open input, confidence gate, round naming, answer sidecar) |

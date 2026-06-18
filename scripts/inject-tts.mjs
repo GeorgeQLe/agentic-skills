@@ -3,8 +3,9 @@
  * Injects the alignment TTS module tag into existing alignment HTML pages.
  * Idempotent — skips pages that already have the Kokoro TTS module.
  *
- * Usage: node scripts/inject-tts.mjs [--root <path>] [--dry-run] [--force] [alignment/specific-page.html]
+ * Usage: node scripts/inject-tts.mjs [--root <path>] [--dir <subdir>] [--dry-run] [--force] [<subdir>/specific-page.html]
  *        Default: processes all alignment/*.html except index.html
+ *        --dir interrogation: batch-process interrogation/*.html instead
  *
  * --force: replaces any existing TTS code (old inline IIFE or prior module tag)
  */
@@ -15,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
 let rootOverride = null;
+let dirOverride = null;
 const passthroughArgs = [];
 for (let i = 0; i < argv.length; i += 1) {
   if (argv[i] === '--root') {
@@ -26,10 +28,20 @@ for (let i = 0; i < argv.length; i += 1) {
     }
     continue;
   }
+  if (argv[i] === '--dir') {
+    dirOverride = argv[i + 1];
+    i += 1;
+    if (!dirOverride) {
+      console.error('--dir requires a path argument');
+      process.exit(1);
+    }
+    continue;
+  }
   passthroughArgs.push(argv[i]);
 }
 const ROOT = rootOverride ? path.resolve(rootOverride) : path.resolve(__dirname, '..');
-const ALIGNMENT_DIR = path.join(ROOT, 'alignment');
+// Default to alignment/; --dir interrogation batch-processes interrogation/.
+const TARGET_DIR = path.join(ROOT, dirOverride ?? 'alignment');
 
 const dryRun = passthroughArgs.includes('--dry-run');
 const force = passthroughArgs.includes('--force');
@@ -96,12 +108,12 @@ if (specificFile) {
   const full = path.resolve(ROOT, specificFile);
   files = [full];
 } else {
-  files = readdirSync(ALIGNMENT_DIR)
+  files = readdirSync(TARGET_DIR)
     .filter(f => f.endsWith('.html') && f !== 'index.html')
-    .map(f => path.join(ALIGNMENT_DIR, f));
+    .map(f => path.join(TARGET_DIR, f));
 }
 
-console.log(`${dryRun ? '[DRY RUN] ' : ''}Injecting Kokoro TTS into ${files.length} alignment page(s)...`);
+console.log(`${dryRun ? '[DRY RUN] ' : ''}Injecting Kokoro TTS into ${files.length} page(s)...`);
 let count = 0;
 for (const f of files) {
   if (inject(f)) count++;

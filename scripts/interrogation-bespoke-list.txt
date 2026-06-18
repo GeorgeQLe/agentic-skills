@@ -1,0 +1,11 @@
+# Skills whose `## Interrogation Page` sections are intentionally hand-authored
+# in BOTH mirrors (claude and codex). The generator preserves these sections
+# verbatim and does not bundle INTERROGATION-PAGE.md for them.
+#
+# This list is exact: a bespoke section whose skill is not listed here, a
+# listed skill with no bespoke section remaining, or a skill with one mirror
+# generated and the other bespoke all fail scripts/upgrade-interrogation-page.mjs.
+#
+# One skill name per line. Lines starting with # are comments.
+#
+# Currently empty.

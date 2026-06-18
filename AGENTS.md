@@ -73,6 +73,10 @@
 - A skill's `## Alignment Page` section is a short stub that points at the sibling `ALIGNMENT-PAGE.md`; codex bundled files use the same content as claude.
 - Direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
 
+### Interrogation Page Convention
+- The stage-zero **interrogation page** archetype is authored canonically in `docs/interrogation-page-convention.md` (between the `interrogation-convention` markers) and bundled per-skill as `INTERROGATION-PAGE.md` by `scripts/upgrade-interrogation-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated bundle.
+- Direct edits to active `interrogation/*.html` pages made without invoking a skill must pass `node scripts/audit-interrogation-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs --dir interrogation`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items

@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.16
+version: v1.15
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -123,41 +123,38 @@ State lives in two places only:
 
 `research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
 
-### State resolution (resolve the first match; YAML first, then most-progressed A→G)
+### State resolution (resolve the first match; YAML first, then most-progressed A→F)
 
 On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 
 | State | Detected when | Heavy phase this session | Emits / stops with |
 |---|---|---|---|
-| **0 — pasted YAML** | a compiled alignment or interrogation YAML is pasted | branch on `approval_status`/`round_status`: an approved alignment YAML applies the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then falls through to the next pending state below; an interrogation round YAML writes the round's answer sidecar, runs the confidence gate, and emits the next round or the completion handoff; `not-approved` → amend the named page (refinement session) and stop | amended page, next round, completion handoff, or proceeds ↓ |
+| **0 — pasted YAML** | a compiled alignment YAML is pasted | branch on `approval_status`: `ready-for-agent-review` → apply the approval for the gate it answers (light: write manifest and/or prior framework intermediate, archive consumed source), then fall through to the next pending state below; `not-approved` → amend the named page (refinement session) and stop | amended page, or proceeds ↓ |
 | **A — done** | canonical `research/icp.md` (or `research/{slug}/icp.md`) exists | — | done; emit next-skill route (step 9) |
 | **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `icp.md` (also forced by `--synthesize`) | **synthesis** (step 6) | synthesis `review` page |
 | **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 5b) | that framework's findings `review` page |
 | **E — build selection** | preliminary interview handoff exists, no run manifest, no multi-select page | mode detect → candidate bootstrap → build multi-select page (steps 1–5a) | multi-select `review` page |
-| **F — interview** | interrogation completion handoff exists, no preliminary interview handoff | consume the elicited answers into the preliminary interview handoff (light — folds into the head of state E when cheap) | preliminary interview handoff, or proceeds ↓ |
-| **G — interrogate** | nothing yet (no handoff, no manifest, no interrogation rounds) | **run one stage-zero interrogation round** (see **State G — Stage-Zero Interrogation Loop** below) | an `interrogation/customer-discovery-r{N}-{branch}.html` round page; on confidence-gate pass, the interrogation completion handoff |
+| **F — interview** | nothing yet (no handoff, no manifest) | deep interview — Phases 1–4 (see **State F — Deep Interview** below) | Phase 2 assumptions manifest → Phase 4 coverage checkpoint → handoff, then stop |
 
-**State G handoff.** The full interrogation procedure is in **State G — Stage-Zero Interrogation Loop (run before any handoff)** below. The handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) may be written **only after the confidence gate passes** at the coverage checkpoint; writing it before completing at least one interrogation round and the coverage checkpoint is a contract violation. Do not bootstrap candidates or build the multi-select page in the interrogation session.
+**State F handoff.** The full Phase 1–4 procedure is in **State F — Deep Interview (run before any handoff)** below. The handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) may be written **only after the Phase 4 coverage checkpoint is confirmed**; writing it before completing the Phase 2 assumptions manifest and the Phase 4 checkpoint is a contract violation. Do not bootstrap candidates or build the multi-select page in the interview session.
 
-**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, consuming interrogation answers into the completion handoff, and archiving a consumed source are *light* — they fold into the head of the next heavy session and do not get their own round-trip. The heavy phase (one interrogation round, one framework's research, synthesis) is the only thing isolated per session.
+**Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session and do not get their own round-trip. The heavy phase (interview, one framework's research, synthesis) is the only thing isolated per session.
 
 **Shortcuts.** `$customer-discovery discovery` and `$customer-discovery validate` short-circuit states E→C: they write a fixed framework set straight into the run manifest after the user approves the shortcut plan, then enter state C (steps 7–8).
 
-### State G — Stage-Zero Interrogation Loop (run before any handoff)
+### State F — Deep Interview (run before any handoff)
 
-State G is the deep-intake heavy phase (`context_intake: deep`), and it runs **in HTML, not the terminal**, as the stage-zero interrogation loop defined in `INTERROGATION-PAGE.md` / `docs/interrogation-page-convention.md`. The interrogation is the gate: **the preliminary interview handoff may be written only after the confidence gate passes** at the coverage checkpoint. Reading SKILL.md, `.progress.yaml`, the idea brief, and prior notes and then writing the handoff directly is the failure mode this section exists to prevent — if you ran zero interrogation rounds, the interview did not happen and the handoff must not be written. This skill **cannot advance to stage one (state E) until** the confidence gate passes with at least one completed round and every interview area covered or waived.
+State F is the deep-interview heavy phase (`context_intake: deep`). Run all four phases **in the terminal** before writing anything. The interview is the gate: **the preliminary interview handoff may be written only after Phase 4 is confirmed. Writing it before completing Phases 2 and 4 is a contract violation.** Reading SKILL.md, `.progress.yaml`, the idea brief, and prior interview notes and then writing the handoff directly is the failure mode this section exists to prevent — if you asked the user zero questions, the interview did not happen and the handoff must not be written.
 
-**Phase 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, `research/idea-brief.md` (or `research/{slug}/idea-brief.md`) and any notes, plus argument-provided context. Build an internal evidence base. Do **not** write the handoff at this point — Phase 1 is preparation for round 1, not a substitute for it.
+**Phase 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, `research/idea-brief.md` (or `research/{slug}/idea-brief.md`) and any interview notes, plus argument-provided context. Build an internal evidence base. Do **not** write the handoff at this point — Phase 1 is preparation for the interview, not a substitute for it.
 
-**Round 1 — Assumptions manifest (interrogation page).** Build `interrogation/customer-discovery-r1-{branch}.html` rendering 3–7 source-tagged assumptions (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`) as confirm/correct/flag controls, plus the first batch of genuinely open questions (each marked `data-open-input`) only where no assumption is derivable. Set `data-interrogation-round="1"` and `data-interrogation-gate="continue"`, name the answer sidecar `research/_working/interrogation-customer-discovery-r1.yaml` (or product-path equivalent), open the page, and **stop** for the compiled round YAML.
+**Phase 2 — Assumptions manifest (terminal gate).** Present 3–7 assumptions about the user's situation, goals, and constraints as terminal turn-text (per the Manifest Visibility Rule in `docs/interview-convention.md`). Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm or correct each, then **stop and wait** for the user's response. Do not assume confirmation and do not proceed to write any file from this phase.
 
-**Rounds 2..N — Adaptive follow-ups (interrogation pages).** A fresh session reads the prior round's compiled YAML, writes its answer sidecar, and runs the confidence gate. If areas that shape candidate generation and framework selection remain uncovered, build the next round seeded by the prior answers (drill into corrections, resolve contradictions; recommend-and-override over bare open prompts) and stop.
+**Phase 3 — Focused interview.** Ask 1–3 questions per turn. Research and recommend by default — present options with a recommended default. Continue until all areas that shape candidate generation and framework selection are covered or the user signals enough.
 
-**Coverage checkpoint — Confidence-gate exit.** When every area is covered or waived, build the exit round with `data-interrogation-gate="coverage-checkpoint"` summarizing everything established and asking the user to confirm completeness or flag gaps. On confirmation, write the preliminary interview handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) and **stop** — do not bootstrap candidates or build the multi-select page in this session. Flagging a gap raises the round number and continues the loop.
+**Phase 4 — Coverage checkpoint (terminal gate).** Present a summary of everything established and ask the user to confirm completeness. **Only after the user confirms coverage**, write the preliminary interview handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) and **stop** — do not bootstrap candidates or build the multi-select page in this session.
 
-The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with the evidence seen so far), context summary, recommended framework subset with rationale, and all elicited answers that shape candidate generation and framework selection. The next `$customer-discovery` run reads only this file to perform authoritative mode detection, candidate bootstrap, and build the multi-select page.
-
-**Terminal fallback.** Only when an HTML interrogation page genuinely cannot be opened, fall back to terminal questioning (1–3 questions per turn, assumptions manifest and coverage checkpoint as terminal gates per the Manifest Visibility Rule). The fallback is degraded, not co-equal; build the HTML page by default. Each interrogation round ends the terminal message with `## Next Work` and `## Continue In A Fresh Session` naming `$customer-discovery`, per the loop-continuation contract.
+The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with the evidence seen so far), context summary, recommended framework subset with rationale, and all user answers that shape candidate generation and framework selection. The next `$customer-discovery` run reads only this file to perform authoritative mode detection, candidate bootstrap, and build the multi-select page.
 
 ---
 
@@ -348,10 +345,6 @@ Product-path manifest updated when secondary ICPs create parked or promotable pa
 - **Do not overwrite existing `research/icp.md`** without asking.
 - **Minimum 8 web search queries** before identifying ICP candidates.
 - **Present before writing.**
-
-## Interrogation Page
-
-Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/customer-discovery-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Alignment Page
 

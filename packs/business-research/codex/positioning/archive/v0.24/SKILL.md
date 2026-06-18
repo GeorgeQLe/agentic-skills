@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.25
+version: v0.24
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped
 visual_tier: visual
@@ -112,7 +112,7 @@ State lives in two places only:
 
 `research/.progress.yaml` stays coarse — its `pipeline_stage` is a pointer, not per-framework status.
 
-### State resolution (resolve the first match; YAML first, then most-progressed A→G)
+### State resolution (resolve the first match; YAML first, then most-progressed A→E)
 
 On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 
@@ -122,14 +122,9 @@ On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 | **A — done** | canonical `research/positioning.md` (or `research/{slug}/positioning.md`) exists | — | done; emit next-skill route (step 6) |
 | **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `positioning.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
 | **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3b) | that framework's findings `review` page |
-| **E — build selection** | interrogation completion handoff exists, no run manifest, no canonical | mode detect → load context → recommend frameworks → build multi-select page (steps 1–3a) | multi-select `review` page |
-| **G — interrogate** | nothing on disk (cold start), after the hard prerequisites are satisfied | **run one stage-zero interrogation round** (see **State G — Stage-Zero Interrogation Loop** below) | an `interrogation/positioning-r{N}-{branch}.html` round page; on confidence-gate pass, the interrogation completion handoff |
+| **E — build selection** | no run manifest and no canonical (cold start) | mode detect → load context → recommend frameworks → build multi-select page (steps 1–3a) | multi-select `review` page |
 
-**Cold entry (state G).** This orchestrator uses `context_intake: scoped`, but elicitation is no longer a 1–3-question terminal cap — it runs as the **stage-zero interrogation loop** in HTML. A cold start (nothing on disk, after the hard `research/icp.md` + `research/competitive-analysis.md` prerequisites are satisfied) resolves to **state G**; positioning **cannot advance to stage one (state E) until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. The completion handoff then feeds state E. The `product`/`post-launch`/`obviously-awesome` shortcut still short-circuits E→C with a fixed framework set (step 5) after its own interrogation round.
-
-### State G — Stage-Zero Interrogation Loop
-
-Run elicitation as the stage-zero interrogation loop defined in `INTERROGATION-PAGE.md` / `docs/interrogation-page-convention.md` before building the framework multi-select page. Round 1 builds `interrogation/positioning-r1-{branch}.html` rendering 3–7 source-tagged assumptions as confirm/correct/flag controls plus the first open questions (each marked `data-open-input`), with `data-interrogation-round="1"`, `data-interrogation-gate="continue"`, and the answer sidecar `research/_working/interrogation-positioning-r1.yaml` (or product-path equivalent). Rounds 2..N are adaptive follow-ups seeded by the prior round's compiled answers. The coverage-checkpoint round (`data-interrogation-gate="coverage-checkpoint"`) summarizes everything established; on the user's completeness confirmation, write the interrogation completion handoff (`research/_working/interrogation-positioning-handoff.md` or the product-path equivalent) and stop. Each round ends the terminal message with `## Next Work` and `## Continue In A Fresh Session` naming `$positioning`. Terminal questioning is the degraded fallback only when the HTML page cannot be opened.
+**Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk, after the hard `research/icp.md` + `research/competitive-analysis.md` prerequisites are satisfied) resolves directly to **state E**; the 1–3 light scope questions fold into the head of the E session. The `product`/`post-launch`/`obviously-awesome` shortcut short-circuits E→C with a fixed framework set (step 5).
 
 **Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
 
@@ -304,10 +299,6 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Parent owns the research loop.** It records selected frameworks in the run manifest and runs one pending framework inline per invocation. Do not queue framework work in `tasks/todo.md` or hand it to `$exec`.
 - **Synthesis requires at least one framework output.**
 - **Do not overwrite existing `research/positioning.md`** without asking first.
-
-## Interrogation Page
-
-Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/positioning-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Alignment Page
 

@@ -1,0 +1,9 @@
+# Participating skills excluded from the generated interrogation-page bundle.
+# The interrogation archetype is opt-in via INTERROGATION_SKILLS in
+# scripts/upgrade-interrogation-page.mjs; this list lets a registered skill be
+# temporarily excluded without removing it from the registry.
+#
+# One skill name per line. Lines starting with # are comments.
+# Skill names match the directory basename (e.g. "positioning").
+
+# Currently empty.

@@ -2,12 +2,14 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.18
+version: v0.17
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
 ---
 
 # Idea Scope Brief
+
+Invoke as `$idea-scope-brief`.
 
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-customer-discovery: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
@@ -40,17 +42,15 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/customer focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
    - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `scope_path`, `status`, `source_skill`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/customer-discovery <path/audience>`; if `business-research` is not enabled, recommend `npx skillpacks install business-research` from the project shell, before `/customer-discovery`.
-   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, before `/product-line`.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$customer-discovery <path/audience>`; if `business-research` is not enabled, recommend `npx skillpacks install business-research` from the project shell, before `$customer-discovery`.
+   - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management; if `business-ops` is not enabled, recommend `npx skillpacks install business-ops` from the project shell, before `$product-line`.
 
 2. **Keep the boundary clear**
    - Do not run customer discovery, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
    - Do not validate the market with broad web research. Use light repo/context inspection only; downstream research skills own evidence gathering.
    - Treat every user claim as a hypothesis unless supported by existing project files.
 
-Steps 3–5 are the **stage-zero interrogation loop** (see `## Interrogation Page` / `INTERROGATION-PAGE.md`): elicit the concept in HTML interrogation rounds before the stage-two alignment preview in step 6. Round 1 is the Idea Assumptions Manifest, rounds 2..N are adaptive follow-ups, and the step-5 coverage checkpoint is the loop's confidence-gate exit. This skill **cannot advance to the alignment preview until** the confidence gate passes with at least one completed round and every area covered or waived. Terminal questioning is the degraded fallback only when an HTML page cannot be opened.
-
-3. **Surface an Idea Assumptions Manifest (interrogation round 1)**
+3. **Surface an Idea Assumptions Manifest**
    - Before deep questioning, present what you think the concept is.
    - Tag assumptions as `[from prompt]`, `[from repo]`, `[from research]`, or `[inferred]`.
    - Cover:
@@ -62,8 +62,8 @@ Steps 3–5 are the **stage-zero interrogation loop** (see `## Interrogation Pag
      - constraints
      - non-goals
      - riskiest unknowns
-   - Render the assumptions as confirm/correct/flag controls in `interrogation/idea-scope-brief-r1-{branch}.html`, alongside the first batch of genuinely open questions (each marked `data-open-input`) where no assumption is derivable. Set `data-interrogation-round="1"`, `data-interrogation-gate="continue"`, and the answer sidecar `research/_working/interrogation-idea-scope-brief-r1.yaml`, open the page, and stop for the compiled round YAML.
-   - Terminal fallback only: deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn. AskUserQuestion option previews may mirror the manifest as a supplement but are never the sole channel. Never emit it only as mid-turn text in a turn that ends with a tool call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
+   - Ask the user to confirm, correct, or flag assumptions before writing.
+   - Deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 ### Market Structure Handoff
 
@@ -97,10 +97,10 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
    - Include deck slug/title, source (`saved_decks`, `decks`, `docs/decks.md`, or manifest), domain fit, tempo fit, confidence, key evidence signals, and the install command.
    - For canonical decks, the primary install command is `npx skillpacks install-deck <deck>`.
    - For customized saved decks, do not use `install-deck` unless they preserve a canonical slug as described above. Use the saved `install_command` / `install` when present, or explicit package-install guidance such as `npx skillpacks install <pack...>` when the saved entry lists packs.
-   - After a deck recommendation exists, keep downstream skill routing as secondary context only. For example, after `business-afps` installs the `business-research` pack, name the likely first post-install skill (`/customer-discovery`, `/devtool-positioning`, `/ord-scan`, `/vard-scan`, or `/game-audience`) without making it the primary command.
+   - After a deck recommendation exists, keep downstream skill routing as secondary context only. For example, after `business-afps` installs the `business-research` pack, name the likely first post-install skill (`$customer-discovery`, `$devtool-positioning`, `$ord-scan`, `$vard-scan`, or `$game-audience`) without making it the primary command.
 
-4. **Interrogate until idea-ready (adaptive rounds 2..N)**
-   - Build adaptive follow-up interrogation rounds (`interrogation/idea-scope-brief-r{N}-{branch}.html`) seeded by the prior round's compiled answers, each with at least one open input (`data-open-input`) and its own answer sidecar. Terminal fallback only: ask 1 to 3 focused questions per turn.
+4. **Interview until concept-ready**
+   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -111,7 +111,7 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
    - When unsure, recommend a practical default and clearly mark it as an assumption.
 
 5. **Coverage checkpoint**
-   - This checkpoint is the interrogation loop's **confidence-gate exit**: build the exit interrogation round with `data-interrogation-gate="coverage-checkpoint"` presenting the final concept summary, unknowns, and readiness for customer discovery. Do not advance to step 6 until the user confirms completeness or every area is waived; flagging a gap raises the round number and continues the loop. (Terminal fallback: present the checkpoint inline per the Manifest Visibility Rule.)
+   - Present the final concept summary, unknowns, and readiness for customer discovery.
    - Restate the resolved concept identity, slug, and exact output paths before writing.
    - If the conversation pivoted from the initial concept to a different central concept, write the pivoted concept to its own slugged brief and preserve the initial concept as a related or future concept in the brief and interview log. Do not merge both concepts into one generic project-level brief.
    - Ask whether any core premise, constraint, or non-goal is wrong before writing.
@@ -158,7 +158,7 @@ The idea brief must include:
 - `## Deck Fit Handoff`
 - `## Next Steps`
 
-The `## Customer Discovery Readiness` section must state whether the concept is ready for `/customer-discovery`, what inputs `/customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `/customer-discovery` to validate or refute. If a high-confidence Deck Fit Handoff exists, explain that deck installation is the primary next command and customer discovery or other first workflow skills are secondary post-install context.
+The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute. If a high-confidence Deck Fit Handoff exists, explain that deck installation is the primary next command and customer discovery or other first workflow skills are secondary post-install context.
 
 The `## Deck Fit Handoff` section must state the best candidate deck, whether it came from saved repo config or canonical fallback metadata, the confidence level, the domain/tempo signals, the install command, and the likely first post-install skill. If no deck has high confidence, state the strongest candidates and why fallback routing is safer.
 
@@ -168,9 +168,9 @@ The `## Next Steps` section must recommend exactly one primary command:
 - If Deck Fit Handoff confidence is high for a customized saved deck with an explicit install command: use that exact saved install command.
 - If Deck Fit Handoff confidence is high for a customized saved deck with a pack list but no install command: `npx skillpacks install <pack...>`.
 - If no deck has high confidence and the concept appears to be a business app or user-facing product while the business research lane is not enabled: `npx skillpacks install business-research` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If no deck has high confidence and `business-research` or the compatibility `business-app` alias is enabled: `/customer-discovery`.
+- If no deck has high confidence and `business-research` or the compatibility `business-app` alias is enabled: `$customer-discovery`.
 - If no deck has high confidence and the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `npx skillpacks install customer-lifecycle` from the project shell.
-- If no deck has high confidence and project type is unclear: `/pack recommend`.
+- If no deck has high confidence and project type is unclear: `$pack recommend`.
 
 When a deck primary command is available, downstream research, discovery, or first-workflow skill routing must appear only as secondary context, not as the primary command.
 
@@ -184,14 +184,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `/scaffold` requires the monorepo pack (`npx skillpacks install monorepo` from the project shell).
+- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `$scaffold` requires the monorepo pack (`npx skillpacks install monorepo` from the project shell).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing idea brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. Write only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.
-
-## Interrogation Page
-
-Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/idea-scope-brief-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 

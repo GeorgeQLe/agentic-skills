@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.16 - 2026-06-18
+
+- Moved the deep interview out of the terminal into the stage-zero **interrogation page** loop (`docs/interrogation-page-convention.md`). Renamed State F to **State G — Stage-Zero Interrogation Loop** (round 1 = assumptions manifest; rounds 2..N = adaptive follow-ups; coverage checkpoint = confidence-gate exit) and added a light **State F** that consumes elicited answers into the preliminary interview handoff. The skill cannot advance to stage one (state E) until the confidence gate passes with ≥1 completed round; each round page must carry ≥1 open input. Terminal `AskUserQuestion` survives only as the degraded fallback. Added the `## Interrogation Page` bundle stub (`INTERROGATION-PAGE.md`).
+
 ## v1.15 - 2026-06-18
 
 - Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.25 - 2026-06-18
+
+- Reclassified cold-start elicitation from a 1–3-question terminal scope cap to a real **stage-zero interrogation loop** (`docs/interrogation-page-convention.md`). Added **State G — Stage-Zero Interrogation Loop** (round 1 = assumptions manifest; rounds 2..N = adaptive follow-ups; coverage checkpoint = confidence-gate exit) producing an interrogation completion handoff that feeds state E; the skill cannot advance to stage one until the confidence gate passes. Rewrote Context Gathering to route through the loop (removed the `AskUserQuestion` scope-question step). Added the `## Interrogation Page` bundle stub (`INTERROGATION-PAGE.md`).
+
 ## v0.24 - 2026-06-18
 
 - Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.

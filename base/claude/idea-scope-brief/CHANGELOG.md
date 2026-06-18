@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.18 - 2026-06-18
+
+- Routed concept elicitation (steps 3–5) through the stage-zero **interrogation page** loop (`docs/interrogation-page-convention.md`): the Idea Assumptions Manifest is interrogation round 1, the interview becomes adaptive rounds 2..N, and the coverage checkpoint is the confidence-gate exit. The skill cannot advance to the alignment preview (step 6) until the confidence gate passes; each round page carries ≥1 open input. Terminal questioning is the degraded fallback. Added the `## Interrogation Page` bundle stub (`INTERROGATION-PAGE.md`). Primary dogfood vehicle for the archetype.
+
 ## v0.17 - 2026-06-17
 
 - Caught Claude up to the Codex mirror with Deck Fit Handoff routing for saved and canonical workflow decks, preserving Claude `/...` route syntax.

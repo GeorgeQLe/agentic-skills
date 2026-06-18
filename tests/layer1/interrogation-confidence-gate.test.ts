@@ -1,0 +1,50 @@
+import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+
+const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const REPO_ROOT = resolve(TESTS_ROOT, "..");
+const GENERATOR = resolve(REPO_ROOT, "scripts/upgrade-interrogation-page.mjs");
+
+// Participating skills (both mirrors) — must match INTERROGATION_SKILLS in the generator.
+const participatingSkillDirs = [
+  "base/claude/idea-scope-brief",
+  "base/codex/idea-scope-brief",
+  "packs/business-research/claude/positioning",
+  "packs/business-research/codex/positioning",
+  "packs/business-research/claude/customer-discovery",
+  "packs/business-research/codex/customer-discovery",
+];
+
+describe("interrogation confidence-gate contract", () => {
+  for (const dir of participatingSkillDirs) {
+    it(`${dir}/SKILL.md carries the confidence-gate blocking language and open-input rule`, () => {
+      const text = readFileSync(join(REPO_ROOT, dir, "SKILL.md"), "utf8");
+      expect(text, `${dir} interrogation section`).toContain("## Interrogation Page");
+      expect(text, `${dir} blocking language`).toContain("cannot advance to stage one");
+      expect(text, `${dir} open-input rule`).toContain("at least one genuinely open input");
+    });
+
+    it(`${dir}/INTERROGATION-PAGE.md carries the confidence gate and ≥1-open-input rule`, () => {
+      const text = readFileSync(join(REPO_ROOT, dir, "INTERROGATION-PAGE.md"), "utf8");
+      expect(text, `${dir} bundle blocking language`).toContain("cannot advance to stage one until");
+      expect(text, `${dir} bundle open-input rule`).toContain("must contain at least one genuinely open input");
+      expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
+    });
+  }
+
+  it("the generated bundles are in sync (dry-run reports Updated: 0)", () => {
+    const result = spawnSync(process.execPath, [GENERATOR, "--dry-run"], { encoding: "utf8" });
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Updated: 0");
+  });
+
+  it("the generator passes its --check drift gate", () => {
+    const result = spawnSync(process.execPath, [GENERATOR, "--check"], { encoding: "utf8" });
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Generated bundles: 6 ownable, exact");
+  });
+});

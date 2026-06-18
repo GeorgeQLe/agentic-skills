@@ -55,9 +55,32 @@ Because every session starts cold, mode detection must resolve purely from **pas
 | C | Selection recorded, ≥1 framework pending | **run next pending framework** — load its subskill inline and enter at its research stage (the multi-select approval already satisfied its scope gate) | that framework's `review` page |
 | D | Multi-select page in `review`, selection not yet recorded | — (waiting) | points user to the page |
 | E | Preliminary interview handoff exists, no multi-select page | build framework multi-select `review` page | multi-select page |
-| F | Nothing yet | run the deep interview | preliminary interview handoff |
+| F | Interrogation completion handoff exists, no preliminary interview handoff (deep) — or it doubles as the handoff (scoped) | run the deep interview pass (deep orchestrators); scoped orchestrators fold this into state E | preliminary interview handoff, or proceeds ↓ |
+| G | **Nothing yet** (genuinely cold, no on-disk artifacts) for an interrogation-page participant | run **one stage-zero interrogation round** (the looping interrogation page) | an `interrogation/{orchestrator}-r{N}-{branch}.html` round page; on confidence-gate pass, the **interrogation completion handoff** |
 
-Resolution order is **YAML first, then most-progressed state backward** (A→F). "Pending framework" = a selected framework whose canonical intermediate file does not yet exist.
+Resolution order is **YAML first, then most-progressed state backward** (A→G). "Pending framework" = a selected framework whose canonical intermediate file does not yet exist. State G applies only to skills participating in the interrogation-page archetype (`docs/interrogation-page-convention.md`); non-participating orchestrators have no state G and cold-start at state F (deep) or E (scoped) as before.
+
+### Stage-zero interrogation loop (state G)
+
+For interrogation-page participants, a genuinely cold start resolves to **state G**: elicitation runs as the looping HTML interrogation page *before* the framework/scope page. State G is itself a self-advancing sub-loop — each round is one heavy session:
+
+```
+state G round = 1
+build interrogation/{orchestrator}-r{round}-{branch}.html   (assumptions manifest if round==1, else follow-ups)
+STOP → user answers → compiled answers YAML
+next session (state 0): write research/_working/interrogation-{orchestrator}-r{round}.yaml,
+    run the CONFIDENCE GATE:
+        NOT covered → round += 1; build the next round; STOP
+        covered/waived → write the interrogation completion handoff; fall through to state F/E
+```
+
+- **Round page:** `interrogation/{orchestrator}-r{N}-{branch}.html` (`{branch}` is the product-path slug, or the topic slug in flat mode).
+- **Per-round answer sidecar:** `research/_working/interrogation-{orchestrator}-r{N}.yaml` (or `research/{slug}/_working/…`).
+- **Interrogation completion handoff:** `research/_working/interrogation-{orchestrator}-handoff.md` (or `research/{slug}/_working/…`) — analogous to the preliminary interview handoff, a complete context transfer summarizing the elicited assumptions, answers, and confidence-gate result. For deep orchestrators it precedes (or doubles as) the preliminary interview handoff; for scoped orchestrators it stands in for the 1–3 scope questions and state E reads it directly.
+
+A round's confidence gate is the loop exit: the orchestrator **cannot advance to state F/E until** at least one interrogation round is completed and every interview area is covered or explicitly waived at the coverage checkpoint. The round page carries `data-interrogation-gate="coverage-checkpoint"` on the exit round; flagging a gap raises the round number and continues the loop.
+
+**Loop continuation reuses the line-15 self-advancing exception** (`docs/alignment-yaml-routing-contract.md` line 15): each round ends the terminal message with `## Next Work` and `## Continue In A Fresh Session`, and the round page's compiled YAML carries `agent_routing` with `command` naming the parent orchestrator (never a child framework path command) and `gate_type: interrogation-round`. Detection resolves purely from pasted-YAML + filesystem: the next session reads the pasted round YAML and the on-disk round sidecars to decide whether to emit the next round or write the completion handoff.
 
 ### Framework approval granularity
 
@@ -107,6 +130,9 @@ Self-advancing orchestrators use **two minimal pieces of state**, and deliberate
 
 | Artifact | Flat path | Product-path |
 |---|---|---|
+| Interrogation round page | `interrogation/{orchestrator}-r{N}-{branch}.html` | `interrogation/{orchestrator}-r{N}-{slug}.html` |
+| Interrogation round answer sidecar | `research/_working/interrogation-{orchestrator}-r{N}.yaml` | `research/{slug}/_working/interrogation-{orchestrator}-r{N}.yaml` |
+| Interrogation completion handoff | `research/_working/interrogation-{orchestrator}-handoff.md` | `research/{slug}/_working/interrogation-{orchestrator}-handoff.md` |
 | Preliminary interview handoff | `research/_working/preliminary-{orchestrator}-interview.md` | `research/{slug}/_working/preliminary-{orchestrator}-interview.md` |
 | Selected-set run manifest | `research/_working/{orchestrator}-run.yaml` | `research/{slug}/_working/{orchestrator}-run.yaml` |
 | Framework working packet (staged) | `research/_working/preliminary-{framework}-research.md` | `research/{slug}/_working/preliminary-{framework}-research.md` |
@@ -119,6 +145,7 @@ The preliminary interview handoff and the run manifest live under `_working/` an
 
 **Archive a source only when its consumer's output is committed**, never when the next page is merely built:
 
+- Archive the interrogation completion handoff and its round answer sidecars at **handoff-consume** (when state F/E first reads the completion handoff to produce the preliminary interview handoff or multi-select page). The interrogation round pages themselves are durable per-round artifacts and are not archived on every round; archive a round page only when it is rebuilt before its answers are consumed (see the interrogation convention).
 - Archive the preliminary interview handoff at **selection-commit** (when the run manifest is written, step 0 head of the first framework session) — not when session E builds the multi-select page. A rejected multi-select page must still be able to rebuild from the handoff.
 - Archive a superseded alignment page at **commit** (when its approved artifact is written), per the alignment-page archive-first rule: `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/{name}-{topic}.html`.
 - Archive the run manifest at **synthesis** (when the canonical `research/{orchestrator}.md` is written).

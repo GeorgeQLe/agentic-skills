@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.17
+version: v0.18
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
 ---
@@ -50,7 +50,9 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Do not validate the market with broad web research. Use light repo/context inspection only; downstream research skills own evidence gathering.
    - Treat every user claim as a hypothesis unless supported by existing project files.
 
-3. **Surface an Idea Assumptions Manifest**
+Steps 3–5 are the **stage-zero interrogation loop** (see `## Interrogation Page` / `INTERROGATION-PAGE.md`): elicit the concept in HTML interrogation rounds before the stage-two alignment preview in step 6. Round 1 is the Idea Assumptions Manifest, rounds 2..N are adaptive follow-ups, and the step-5 coverage checkpoint is the loop's confidence-gate exit. This skill **cannot advance to the alignment preview until** the confidence gate passes with at least one completed round and every area covered or waived. Terminal questioning is the degraded fallback only when an HTML page cannot be opened.
+
+3. **Surface an Idea Assumptions Manifest (interrogation round 1)**
    - Before deep questioning, present what you think the concept is.
    - Tag assumptions as `[from prompt]`, `[from repo]`, `[from research]`, or `[inferred]`.
    - Cover:
@@ -62,8 +64,8 @@ When product path `{slug}` is active, read and write research under `research/{s
      - constraints
      - non-goals
      - riskiest unknowns
-   - Ask the user to confirm, correct, or flag assumptions before writing.
-   - Deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
+   - Render the assumptions as confirm/correct/flag controls in `interrogation/idea-scope-brief-r1-{branch}.html`, alongside the first batch of genuinely open questions (each marked `data-open-input`) where no assumption is derivable. Set `data-interrogation-round="1"`, `data-interrogation-gate="continue"`, and the answer sidecar `research/_working/interrogation-idea-scope-brief-r1.yaml`, open the page, and stop for the compiled round YAML.
+   - Terminal fallback only: deliver the manifest inline as the final message text of its own turn; ask the confirmation question in the next turn (consistent with the one-question-per-turn cadence). Never emit it only as mid-turn text in a turn that ends with a tool or command call — harness rendering does not guarantee mid-turn text is shown. A confirmation question must never reference content the user has not been shown.
 
 ### Market Structure Handoff
 
@@ -99,8 +101,9 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
    - For customized saved decks, do not use `install-deck` unless they preserve a canonical slug as described above. Use the saved `install_command` / `install` when present, or explicit package-install guidance such as `npx skillpacks install <pack...>` when the saved entry lists packs.
    - After a deck recommendation exists, keep downstream skill routing as secondary context only. For example, after `business-afps` installs the `business-research` pack, name the likely first post-install skill (`$customer-discovery`, `$devtool-positioning`, `$ord-scan`, `$vard-scan`, or `$game-audience`) without making it the primary command.
 
-4. **Interview until concept-ready**
-   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+4. **Interrogate until concept-ready (adaptive rounds 2..N)**
+   - Build adaptive follow-up interrogation rounds (`interrogation/idea-scope-brief-r{N}-{branch}.html`) seeded by the prior round's compiled answers, each with at least one open input (`data-open-input`) and its own answer sidecar.
+   - Terminal fallback cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -111,7 +114,7 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
    - When unsure, recommend a practical default and clearly mark it as an assumption.
 
 5. **Coverage checkpoint**
-   - Present the final concept summary, unknowns, and readiness for customer discovery.
+   - This checkpoint is the interrogation loop's **confidence-gate exit**: build the exit interrogation round with `data-interrogation-gate="coverage-checkpoint"` presenting the final concept summary, unknowns, and readiness for customer discovery. Do not advance to step 6 until the user confirms completeness or every area is waived; flagging a gap raises the round number and continues the loop. (Terminal fallback: present the checkpoint inline per the Manifest Visibility Rule.)
    - Restate the resolved concept identity, slug, and exact output paths before writing.
    - If the conversation pivoted from the initial concept to a different central concept, write the pivoted concept to its own slugged brief and preserve the initial concept as a related or future concept in the brief and interview log. Do not merge both concepts into one generic project-level brief.
    - Ask whether any core premise, constraint, or non-goal is wrong before writing.
@@ -188,6 +191,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing idea brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. Write only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/idea-scope-brief-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 
