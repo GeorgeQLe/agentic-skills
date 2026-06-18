@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.14
+version: v1.13
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -134,27 +134,13 @@ On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 | **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `icp.md` (also forced by `--synthesize`) | **synthesis** (step 6) | synthesis `review` page |
 | **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 5b) | that framework's findings `review` page |
 | **E — build selection** | preliminary interview handoff exists, no run manifest, no multi-select page | mode detect → candidate bootstrap → build multi-select page (steps 1–5a) | multi-select `review` page |
-| **F — interview** | nothing yet (no handoff, no manifest) | deep interview — Phases 1–4 (see **State F — Deep Interview** below) | Phase 2 assumptions manifest → Phase 4 coverage checkpoint → handoff, then stop |
+| **F — interview** | nothing yet (no handoff, no manifest) | deep interview (`context_intake: deep`) | preliminary interview handoff, stop |
 
-**State F handoff.** The full Phase 1–4 procedure is in **State F — Deep Interview (run before any handoff)** below. The handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) may be written **only after the Phase 4 coverage checkpoint is confirmed**; writing it before completing the Phase 2 assumptions manifest and the Phase 4 checkpoint is a contract violation. Do not bootstrap candidates or build the multi-select page in the interview session.
+**State F handoff.** When the deep interview completes, write the preliminary interview handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) and **stop** — do not bootstrap candidates or build the multi-select page in the interview session. The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with evidence), context summary, recommended framework subset with rationale, and all user answers that shape candidate generation and framework selection.
 
 **Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session and do not get their own round-trip. The heavy phase (interview, one framework's research, synthesis) is the only thing isolated per session.
 
 **Shortcuts.** `$customer-discovery discovery` and `$customer-discovery validate` short-circuit states E→C: they write a fixed framework set straight into the run manifest after the user approves the shortcut plan, then enter state C (steps 7–8).
-
-### State F — Deep Interview (run before any handoff)
-
-State F is the deep-interview heavy phase (`context_intake: deep`). Run all four phases **in the terminal** before writing anything. The interview is the gate: **the preliminary interview handoff may be written only after Phase 4 is confirmed. Writing it before completing Phases 2 and 4 is a contract violation.** Reading SKILL.md, `.progress.yaml`, the idea brief, and prior interview notes and then writing the handoff directly is the failure mode this section exists to prevent — if you asked the user zero questions, the interview did not happen and the handoff must not be written.
-
-**Phase 1 — Gather context.** Read `.agents/project.json`, README, CLAUDE.md, existing research and specs, git history, `research/idea-brief.md` (or `research/{slug}/idea-brief.md`) and any interview notes, plus argument-provided context. Build an internal evidence base. Do **not** write the handoff at this point — Phase 1 is preparation for the interview, not a substitute for it.
-
-**Phase 2 — Assumptions manifest (terminal gate).** Present 3–7 assumptions about the user's situation, goals, and constraints as terminal turn-text (per the Manifest Visibility Rule in `docs/interview-convention.md`). Tag each with source (`[from prompt]`, `[from repo]`, `[from research]`, `[inferred]`). Ask the user to confirm or correct each, then **stop and wait** for the user's response. Do not assume confirmation and do not proceed to write any file from this phase.
-
-**Phase 3 — Focused interview.** Ask 1–3 questions per turn. Research and recommend by default — present options with a recommended default. Continue until all areas that shape candidate generation and framework selection are covered or the user signals enough.
-
-**Phase 4 — Coverage checkpoint (terminal gate).** Present a summary of everything established and ask the user to confirm completeness. **Only after the user confirms coverage**, write the preliminary interview handoff to `research/_working/preliminary-customer-discovery-interview.md` (or `research/{slug}/_working/preliminary-customer-discovery-interview.md`) and **stop** — do not bootstrap candidates or build the multi-select page in this session.
-
-The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with the evidence seen so far), context summary, recommended framework subset with rationale, and all user answers that shape candidate generation and framework selection. The next `$customer-discovery` run reads only this file to perform authoritative mode detection, candidate bootstrap, and build the multi-select page.
 
 ---
 
