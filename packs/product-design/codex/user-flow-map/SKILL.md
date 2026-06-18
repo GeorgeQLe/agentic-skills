@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v0.9
+version: v1.0
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
 visual_tier: prototype
@@ -196,10 +196,10 @@ The prototype build plan must include:
 - Revision/defer/drop rationale for branches not ready to build.
 - Flow-tree manifest build item IDs and artifact references.
 
-After approved files are written, present this handoff choice instead of auto-running or auto-invoking the next skill:
+After approved files are written, hand off to the next skill instead of auto-running or auto-invoking it. How you hand off depends on how the approval YAML was consumed:
 
-1. Stop here so the user can clear context and run `$ux-variations [specific-user-flow]` in a fresh session.
-2. Continue immediately in this session with `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
+- **Same session that built the page** (the page-building conversation is still in context): present a two-option choice — (1) stop here so the user can clear context and run `$ux-variations [specific-user-flow]` in a fresh session, or (2) continue immediately in this session with `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch.
+- **Already-fresh session** (the page-building conversation is not in context — e.g. the user cleared context and pasted the compiled approval YAML to start this session): there is no accumulated build context to shed, so do not present or recommend another context clear. Default to continue-now — invoke `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch and immediately enter its first required interaction gate. The user may still choose to stop.
 
 After approved prototype-build-plan files are written, route to `$prototype [topic]` or `$prototype [topic] --variant N` for the first pending build item. Do not route to `$prototype` before the build plan exists unless the user explicitly accepts an untracked ad hoc prototype run.
 
@@ -224,7 +224,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not collapse branches or states into generic "standard flow" language. Name each branch/state or mark it explicitly out of scope.
 - Do not route directly to `$ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `$user-flow-map` -> `$ux-variations [specific-user-flow]` -> `$ui-interview [specific-ux-variation]`.
 - Do not write pre-prototype flow maps to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
-- Do not auto-run or auto-invoke downstream skills after approval. Present the stop/clear-context versus continue-now choice, and preserve the next skill's required gates either way.
+- Do not auto-run or auto-invoke downstream skills after approval. When consuming the approval YAML in the same session that built the page, present the stop/clear-context versus continue-now choice; when consuming it in an already-fresh session (no build context to shed), default to continue-now without prompting another context clear. Either way, preserve the next skill's required gates — continue-now means invoking the next skill and immediately entering its own interaction gates under user control, not running it unattended.
 - Do not treat `design/ux-variations-*.md` as the prototype todo list once branch decisions exist. Use prototype-build-plan mode to create the explicit ledger before `$prototype`.
 - Do not use `tasks/todo.md` for design/prototype branch progress. Human prototype evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.

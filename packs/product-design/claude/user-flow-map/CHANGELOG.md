@@ -1,5 +1,10 @@
 # user-flow-map changelog (claude)
 
+## v1.0 - 2026-06-18
+
+- Made the downstream handoff fresh-session aware. When the approval YAML is consumed in an already-fresh session (the page-building conversation is no longer in context — e.g. the user cleared context and pasted the compiled YAML to start the session), there is no build context to shed, so the skill no longer prompts another context clear; it defaults to continue-now, invoking `/ux-variations [specific-user-flow]` and immediately entering its first required gate. The stop/clear-context-vs-continue-now choice is now offered only when consuming in the same session that built the page.
+- Reframed the line-227 constraint accordingly: continue-now means invoking the next skill and immediately entering its own interaction gates under user control, not running it unattended — the no-auto-run intent is preserved either way.
+
 ## v0.9 - 2026-06-14
 
 - Added intra-skill substep chunking for large flows: when the flow is large (screen/route inventory ≥ ~6 screens, and `--no-chunk` is not passed), `user-flow-map` splits into a setup session (steps 1–2 + step-3 sub-steps 1–5, writes a pure-context shared brief and stops), one spec session per step-3 heavy section (in order: `screen-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs`, each authoring a single `{section-id}.md` intermediate), and a final assemble+approve session (step 4 + deliverables + the one alignment page).

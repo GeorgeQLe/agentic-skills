@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "1bd0f030562b45a64ba515ccf99255e4d5343287fb710236773375f7f9121f2e",
+  "source_fingerprint": "673c1cb3d62e6dbf716e76ea4861f0d18ead08fef94a540de4a913f8f0bff513",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2737,7 +2737,7 @@
       "version": "v0.26",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "7c248188903cbeb30ec31391ed915f91972d30609fbab298e5e3f39eacb605c7",
+      "content_sha256": "d199fbe6fd0ccca48c4711d5b4eef0d40464fbdd8d3bc06298a27065ce5f7799",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3364,7 +3364,7 @@
       "version": "v0.26",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "6e423208fe9289aa3f3ac1814a0fb042becd15ab9372dd70e5876b858cec226f",
+      "content_sha256": "eab49db3c524f2853f1360e5d1e158403621ab822110850551cea3d5a59bf1f8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7007,10 +7007,10 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v1.0",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "fd9550b8de30ec217c5039a6b9ab3819046564878edbb2440616d8522e4f9847",
+      "content_sha256": "a31061f81eab93802819c8c3202bf0d3cc9cf7e50c3e1414a4ecb87d435166a6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7020,7 +7020,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -7268,10 +7269,10 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v1.0",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "8e52a257d24e291c1bd2c4d494922fe40d7fdf03b5950eafa202128e0c819ebd",
+      "content_sha256": "2eff1ab436fb1da7f49cd3d61860fc90de01f3c6fe1e1d90f2edb3805b00b017",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7281,7 +7282,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []
