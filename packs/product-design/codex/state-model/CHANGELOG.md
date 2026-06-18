@@ -1,5 +1,9 @@
 # state-model changelog (codex)
 
+## v0.1 - 2026-06-18
+
+- Setup-session and framework spec-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next pending framework named in **plain English** by what it models (never only its internal `{framework-slug}`), and the **exact** resolved next command with `{topic}` filled in (e.g. `$state-model alignment-page-review`). When no frameworks remain, the handoff routes to the synthesis session. Strengthens the prior bare `$state-model [topic]` handoff so the user always sees what the next unit is, not just the command.
+
 ## v0.0 - 2026-06-18
 
 - New orchestrator skill: authors the flow-anchored **logical** domain/state/logic model (entities, value objects, aggregates, state machines, events, commands, read models, policies, logical command/query contracts, ubiquitous-language glossary) from an approved user-flow map.

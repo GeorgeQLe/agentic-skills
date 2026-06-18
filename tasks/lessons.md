@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-18 — Pack-install handoffs should preserve the destination skill
+
+- A competitive-analysis final handoff correctly recommended `npx skillpacks install customer-lifecycle` because `journey-map` was unavailable, but the terminal command alone did not tell the user that `$journey-map` was the intended next skill after install.
+- When a workflow route is blocked by a missing pack, make the install command the immediate recommended command, but keep the destination skill visible in `Next Work`, the report rationale, or equivalent handoff text.
+- The durable pattern is: "install `<pack>` now; after refresh or a fresh session, run `<skill>`." Do not collapse that into only the prerequisite command unless no destination skill is known.
+
 ## 2026-06-17 — Finalized research artifacts still need explicit next-step routing
 
 - A finalized JTBD positioning handoff listed changed files, verification, and open status, but omitted an explicit next-step route after converting the alignment page to confirmed/read-only.
@@ -677,3 +683,10 @@
 - A `skillpacks refresh` output line reported `Installed .claude/skills/icon-handler -> /home/.../.npm/_npx/.../node_modules/skillpacks/...`, which made the temporary `npx` package cache look like the install destination.
 - Rule: package CLI install/refresh/pin/unpin output should name the user-facing installed skill root (`.claude/skills/<name>` or `.codex/skills/<name>`) and relevant version/pin status, not the source package path.
 - Reserve package source paths for diagnostics such as doctor/marker inspection, where the source is the subject being debugged.
+
+## 2026-06-18 — Chunked-session STOP handoffs need plain-English next-unit + exact command
+
+- In a chunked `/user-flow-map` run, a spec session ended with only the internal section ID — "next run should continue with action-state-matrices" — giving no plain-English explanation of that section and no command to run. The user could not tell what the unit was or how to continue.
+- Root cause: `docs/prototype-session-loop-convention.md` had a bare `→ STOP / re-invoke` in its per-session shape and no "Terminal handoff format" section, unlike the research loop (`docs/research-session-loop-convention.md:200`) which mandates `## Next Work` + `## Recommended Next Command`. All four chunking skills (`user-flow-map`, `ux-variations`, `ui-interview`, `state-model`, both variants) inherited the gap.
+- Rule: every chunked/STOP-and-re-invoke handoff must emit (1) the intermediate just written, (2) the next missing unit named in **plain English** — never only a bare internal `{unit-id}`/`{section-id}`/`{framework-slug}` — and (3) the **exact** next-invocation command with `{slug}`/`{topic}`/path resolved to literal values. When the last unit was written, route to the assemble+approve (or synthesis) session, not another spec session.
+- Fixed by adding a normative `### Terminal handoff format` to `docs/prototype-session-loop-convention.md` and restating it at each skill's setup- and spec-session STOP lines (user-flow-map v1.1, ux-variations v0.22, ui-interview v0.24, state-model v0.1, both mirrors).

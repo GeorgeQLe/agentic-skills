@@ -81,7 +81,8 @@ setup session       run the light phases together → write the brief (pure cont
                     → init the manifest entries at their pre-approval status → STOP
    → spec sessions  read brief + scan which {unit-id}.md intermediates exist
    (one per unit)   → author the one missing unit's full spec to its intermediate path
-                    → append any cross-unit facts to the brief → STOP / re-invoke
+                    → append any cross-unit facts to the brief
+                    → STOP / re-invoke (see Terminal handoff format)
       → assemble+approve session   when all intermediates exist: assemble the canonical
                                    artifact → ONE alignment-page review → confirmed gate
                                    → on approval flip manifest statuses + archive brief
@@ -89,6 +90,17 @@ setup session       run the light phases together → write the brief (pure cont
 ```
 
 The setup session runs the cheap upfront phases (scope, assumptions, interview, concept set) together and stops the moment it has written the brief — those phases are individually light, so they fold into one head session rather than each taking a round-trip. Each spec session resolves its work purely from filesystem state (brief present + which intermediates exist), authors exactly one unit, and stops. The assemble+approve session is the only session that touches the alignment-page lifecycle.
+
+### Terminal handoff format
+
+Every chunked stop — the setup session and every spec session — must end its terminal message with a handoff that lets the user continue without knowing the skill's internal unit IDs. A bare `→ STOP / re-invoke continue with {unit-id}` is **not** a compliant handoff: an internal ID like `action-state-matrices` is meaningless to the user on its own. Each stop ends with, in this order:
+
+1. **What was just written** — the intermediate path written this session (the brief for the setup session, or the one `{unit-id}.md` for a spec session).
+2. **Next missing unit, in plain English** — name the next pending unit and describe what it is, never only the internal `{unit-id}`. Example: "Next section: **action–state matrices** — the per-screen matrix of actions, navigation, validation, and visual state for every screen in the inventory," not "continue with `action-state-matrices`." Derive pending from the filesystem (`planned-units − existing-intermediates`), exactly as the per-session shape resolves the cursor.
+3. **Exact next-invocation command** — the concrete command to run, with `{slug}`/`{topic}`/product-path resolved to literal values, not placeholders. Example: `/user-flow-map alignment-page-review` (claude) or `$user-flow-map alignment-page-review` (codex), pointing at the resolved intermediate directory `design/alignmeant/user-flow-map-alignment-page-review/`.
+4. **Last unit → assemble+approve** — when the unit just written was the final pending unit (no intermediates remain unwritten), the handoff must instead point to the assemble+approve session (the single alignment-page review), not another spec session, and give that session's exact command.
+
+The handoff's continue-vs-stop framing reuses the **Routing Rules** section above rather than restating it: when the stop happens in a session that still carries build context, offer the stop/clear-context-versus-continue choice; when the stop is already a fresh cold session, default to continue-now and simply state the exact next command. Do not duplicate the Routing Rules text — reference it.
 
 ### Approval: exactly one final gate
 

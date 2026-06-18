@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.22 - 2026-06-18
+
+- Chunked setup-session and spec-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next missing variation named in **plain English** by its concept thesis (never only the internal `{variation-id}`), and the **exact** resolved next command (e.g. `/ux-variations alignment-page-review`). When the last variation was written, the handoff routes to the assemble+approve session. Fixes chunked stops that ended with only a bare internal unit ID.
+
 ## v0.21 - 2026-06-14
 
 - Added intra-skill substep chunking: when the approved concept count is N ≥ 4 (and `--no-chunk` is not passed), `ux-variations` splits into a setup session (steps 0–6, writes a pure-context shared brief and stops), one spec session per variation (step 7, authors a single `{variation-id}.md` intermediate), and a final assemble+approve session (steps 8–9 + deliverables + the one alignment page).
@@ -50,7 +54,6 @@
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.
 
-
 ## v0.11 - 2026-06-04
 
 - Restored version parity with the Codex mirror after verifying the solo-evaluator default is present in the Claude contract.
@@ -77,7 +80,6 @@
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.
 - Excluded `research/_archive/`, legacy `abandoned`, `archived`, `deferred`, `revisit_candidate`, and `promoted` paths from active target selection while preserving flat `research/*.md` compatibility.
-
 
 ## v0.5 - 2026-05-27
 

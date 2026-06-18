@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: research
-version: v0.0
+version: v0.1
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 invocation: orchestrator
 context_intake: scoped
@@ -140,7 +140,7 @@ Present a **Domain Modeling Scope Checkpoint** inline as the final message text 
 - Confirmed assumptions about domain boundaries and explicit non-goals (especially the logical-only boundary — no storage/endpoints/auth/migrations).
 - Candidate ubiquitous-language seeds.
 
-Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working$state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and hand off with a clear-context / re-invoke instruction (unless folding per the Execution Model, in which case continue directly to §3).
+Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working$state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), and give the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). (Unless folding per the Execution Model, in which case continue directly to §3.)
 
 ### 3. Run Next Pending Framework (framework session)
 
@@ -154,7 +154,7 @@ Run that one framework inline against the flow context in the brief, producing *
 - Flag any term that belongs in the ubiquitous-language glossary.
 - Keep strictly to logical concerns; defer every physical concern to `$spec-interview` with an explicit note rather than inventing storage/endpoint/auth detail.
 
-Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and re-invoke for the next pending framework. After writing, recalculate `pending`; if frameworks remain, the handoff says the next run executes the next pending framework via `$state-model [topic]`; if none remain, the next run synthesizes (§4).
+Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), and gives the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
 
 ### 4. Synthesis + Assemble & Approve (assemble session)
 

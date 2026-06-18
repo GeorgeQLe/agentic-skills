@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.24 - 2026-06-18
+
+- Chunked setup-session and spec-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next missing page named in **plain English** (never only the internal `{page-id}`), and the **exact** resolved next command (e.g. `$ui-interview alignment-page-review`). When the last page was written, the handoff routes to the assemble+approve session. Fixes chunked stops that ended with only a bare internal unit ID.
+
 ## v0.23 - 2026-06-14
 
 - Added intra-skill substep chunking for large branches: in full UI mode, when the page count is N ≥ 4 (and `--no-chunk` is not passed), `ui-interview` splits into a setup session (steps 1–5, writes a pure-context shared brief and stops, keeping the HTML visual mockup whole), one spec session per page (step 6, authors a single `{page-id}.md` intermediate), and a final assemble+approve session (steps 7–9 + deliverables + the one alignment page).
@@ -71,7 +75,6 @@
 
 - Changed alignment-page section feedback so the positive option is `emphasize` with `feedback: emphasize` and `requested_agent_action: add-weight-to-section`, making it a revision/weighting request instead of approval as-is.
 
-
 ## v0.9 - 2026-05-31
 
 - Required alignment pages to use a top in-flow Table of Contents instead of sidebar navigation, and to avoid sticky/fixed bottom compile banners.
@@ -94,7 +97,6 @@
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.
 - Excluded `research/_archive/`, legacy `abandoned`, `archived`, `deferred`, `revisit_candidate`, and `promoted` paths from active target selection while preserving flat `research/*.md` compatibility.
-
 
 ## v0.0
 

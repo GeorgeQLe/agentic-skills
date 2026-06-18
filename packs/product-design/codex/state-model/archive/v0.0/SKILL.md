@@ -204,7 +204,7 @@ Same envelope as `design/flow-tree.schema.json` (`schema_version`, `topic`, `mod
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment$state-model-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/state-model-{topic}.html`.
 
 ## Archive-First Replacement Policy
 

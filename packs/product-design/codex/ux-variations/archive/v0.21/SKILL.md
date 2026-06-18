@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.22
+version: v0.21
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 visual_tier: prototype
 ---
@@ -199,14 +199,14 @@ This skill authors up to five full build-grade variation specs (step 7); holding
      - Write the shared context brief to `design/{slug}/_working/ux-variations-{topic}-brief.md` (flat mode: `design/_working/ux-variations-{topic}-brief.md`).
      - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
      - Initialize the scoped flow-tree `ux_variations[]` entries at `proposed` (existing status enum, §0b — no schema change).
-     - STOP and emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
+     - STOP and hand off with a clear-context / re-invoke instruction so each variation gets its own cold spec session (step 7).
      - In non-chunked mode, continue directly to step 7 in this same session.
 
 7. **Specify each approved variation enough to build**
    - **Chunked-mode spec session (one variation per session)**: When chunked mode is active, each spec session:
      - Reads the brief at `design/{slug}/_working/ux-variations-{topic}-brief.md` and scans which `{variation-id}.md` files already exist under `design/{slug}/ux-variations-{topic}/`.
      - Picks the first variation whose intermediate file does **not** yet exist and writes its full build spec (the attribute list below, plus the layout-mode additions when applicable) to `design/{slug}/ux-variations-{topic}/{variation-id}.md`.
-     - Appends any cross-variation facts to the brief, then STOPs and emits the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: state the intermediate just written, name the next missing variation in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call, e.g. `$ux-variations alignment-page-review`. When the variation just written was the last one, the handoff points to the assemble+approve session instead of another spec session; continue-vs-stop framing follows that convention's Routing Rules. Context per session is the brief plus one spec.
+     - Appends any cross-variation facts to the brief, then STOPs and re-invokes for the next variation. Context per session is the brief plus one spec.
      - In non-chunked mode, specify all approved variations in this same session as before. The spec content below is identical in both modes — chunking changes only how many variations one session writes.
    - For each variation, define:
      - Name and design thesis

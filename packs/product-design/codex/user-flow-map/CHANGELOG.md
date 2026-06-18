@@ -1,5 +1,9 @@
 # user-flow-map changelog (codex)
 
+## v1.1 - 2026-06-18
+
+- Chunked spec-session and setup-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next missing section named in **plain English** (never only the internal `{section-id}` — e.g. "action–state matrices: the per-screen actions/navigation/validation/state matrix"), and the **exact** resolved next command with `{slug}`/`{topic}` filled in (e.g. `$user-flow-map alignment-page-review`). When the last section was written, the handoff routes to the assemble+approve session instead of another spec session. Fixes the regression where a chunked stop ended with only a bare internal unit ID the user could not act on.
+
 ## v1.0 - 2026-06-18
 
 - Made the downstream handoff fresh-session aware. When the approval YAML is consumed in an already-fresh session (the page-building conversation is no longer in context — e.g. the user cleared context and pasted the compiled YAML to start the session), there is no build context to shed, so the skill no longer prompts another context clear; it defaults to continue-now, invoking `$ux-variations [specific-user-flow]` and immediately entering its first required gate. The stop/clear-context-vs-continue-now choice is now offered only when consuming in the same session that built the page.
