@@ -34,11 +34,15 @@ export function discoverProjectRoots(rootDir = process.cwd(), { maxDepth = Infin
       return;
     }
 
-    // A project's own nested directories are not separate projects: record the
-    // root and stop descending (this also skips its node_modules/.claude/etc.).
     if (existsSync(projectFilePath(dir))) {
       found.push(dir);
-      return;
+      // A *discovered* child project absorbs its own nested dirs; stop there
+      // (this also skips its node_modules/.claude/etc.). But the scan root is a
+      // scan origin, not a boundary — keep descending so `--all` reaches
+      // projects nested under a root that is itself a project.
+      if (depth > 0) {
+        return;
+      }
     }
 
     if (depth >= maxDepth) {

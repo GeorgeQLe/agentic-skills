@@ -194,7 +194,7 @@ describe('Node project config commands', () => {
 });
 
 describe('discoverProjectRoots', () => {
-  it('finds nested project markers and includes the root itself', () => {
+  it('includes the root project and descends into nested projects', () => {
     const parent = makeTempProject();
     writeProjectConfig(parent, { enabled_packs: [] });
     const a = join(parent, 'a');
@@ -204,7 +204,7 @@ describe('discoverProjectRoots', () => {
 
     const roots = discoverProjectRoots(parent);
 
-    assert.deepEqual(roots, [parent]);
+    assert.deepEqual(roots, [parent, a, b].sort());
   });
 
   it('finds sibling projects under a non-project parent', () => {

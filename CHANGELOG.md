@@ -6,6 +6,14 @@ This file tracks npm package releases: CLI behavior, package contents, bundled s
 
 Keep this file updated before every npm package publish.
 
+## [0.1.8] - 2026-06-18
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Fixed
+
+- `refresh --all` (and `status --all` / `doctor --all`) now reach projects nested under a scan root that is itself a project. `discoverProjectRoots` previously returned immediately when the scan root contained a `.agents/project.json`, pruning the entire subtree and reporting "1 project(s)". The root is still recorded, but discovery now keeps descending from depth 0; discovered *child* projects (depth > 0) still absorb their own nested directories.
+
 ## [0.1.7] - 2026-06-18
 
 Published for both `skillpacks` and `@glexcorp/gskp`.
