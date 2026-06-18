@@ -6,6 +6,18 @@ This file tracks npm package releases: CLI behavior, package contents, bundled s
 
 Keep this file updated before every npm package publish.
 
+## [0.1.7] - 2026-06-18
+
+Published for both `skillpacks` and `@glexcorp/gskp`.
+
+### Changed
+
+- Refreshed the bundled package snapshot. Pattern A research orchestrators (`competitive-analysis`, `customer-discovery`, `positioning`, `journey-map`) and their framework subskills now use a `## Continue In A Fresh Session` review-step handoff in place of `## Recommended Next Command After Compiling YAML`: review pages instruct the user to compile the bottom YAML and paste it into a fresh session, which then emits the real `## Recommended Next Command` after writing the artifact.
+
+### Verification
+
+- npm metadata confirms `skillpacks@0.1.7` and `@glexcorp/gskp@0.1.7` are both published with latest dist-tag `0.1.7`. The release run's `verify:published` reported a transient registry-propagation lag for the scoped alias immediately after publish; a re-check shows both packages at version parity.
+
 ## [0.1.6] - 2026-06-17
 
 Published for both `skillpacks` and `@glexcorp/gskp`.
