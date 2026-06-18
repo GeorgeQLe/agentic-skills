@@ -80,6 +80,11 @@
     "last_updated": {
       "type": "string",
       "format": "date-time"
+    },
+    "model_tree_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional repo-relative path to the orthogonal model-tree manifest (design/**/model-tree-{topic}.yaml) owned by the state-model skill. Backward-compatible: never required, and the route array is unaffected."
     }
   },
   "$defs": {

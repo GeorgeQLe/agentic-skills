@@ -36,6 +36,7 @@ idea-scope-brief
   -> journey-map
   -> positioning (market mode: framework selection + sequential /exec execution + synthesis)
   -> user-flow-map
+  -> state-model (optional: flow-anchored logical domain/state/logic model before variation work; orthogonal sibling, not a flow-tree route step)
   -> ui-interview --requirements-only
   -> ux-variations --layout-mode
   -> prototype

@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-skills.local/design/model-tree.schema.json",
+  "title": "Product Design Model Tree Manifest",
+  "description": "Domain-shaped sibling to flow-tree.schema.json. Tracks the LOGICAL domain/state/logic model (entities, state machines, events, commands, read models, policies, logical contracts) anchored to one flow tree. Logical only — no storage, endpoints, auth, migrations, or indexes; those stay owned by spec-interview. Doc/contract artifact: no validator runs in scripts/.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "topic",
+    "mode",
+    "flow_tree_ref",
+    "source_artifacts",
+    "frameworks"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "v0.1"
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_path": {
+      "type": "string",
+      "pattern": "^research/[^/]+/$"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["flat", "product-path"]
+    },
+    "flow_tree_ref": {
+      "$ref": "#/$defs/artifact_ref"
+    },
+    "frameworks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "event-modeling",
+          "event-storming",
+          "domain-model",
+          "state-machine",
+          "data-model",
+          "contract-map"
+        ]
+      }
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entity" },
+      "default": []
+    },
+    "state_machines": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/state_machine" },
+      "default": []
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/named_element" },
+      "default": []
+    },
+    "commands": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/named_element" },
+      "default": []
+    },
+    "read_models": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/named_element" },
+      "default": []
+    },
+    "policies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/named_element" },
+      "default": []
+    },
+    "contracts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/contract" },
+      "default": []
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "artifact_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "confirmed", "rejected", "deferred"]
+    },
+    "access": {
+      "type": "string",
+      "enum": ["reads", "writes", "triggers", "displays", "transitions"]
+    },
+    "flow_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["flow_node_ref", "access"],
+      "properties": {
+        "flow_node_ref": { "type": "string", "minLength": 1 },
+        "access": { "$ref": "#/$defs/access" }
+      }
+    },
+    "flow_bindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/flow_binding" },
+      "default": []
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "cardinality"],
+      "properties": {
+        "target": { "type": "string", "minLength": 1 },
+        "cardinality": {
+          "type": "string",
+          "enum": ["one-to-one", "one-to-many", "many-to-one", "many-to-many"]
+        },
+        "label": { "type": "string" }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "status", "flow_bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["entity", "value-object", "aggregate-root"]
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "attributes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "default": []
+        },
+        "relationships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relationship" },
+          "default": []
+        },
+        "lifecycle_ref": {
+          "type": "string",
+          "description": "id of a state_machine governing this entity's lifecycle"
+        },
+        "flow_bindings": { "$ref": "#/$defs/flow_bindings" }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "maps_to_ui_state": {
+          "type": "string",
+          "description": "the flow/UI state this logical state presents as, when one exists"
+        }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "event"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "event": { "type": "string", "minLength": 1 },
+        "guard": { "type": "string" },
+        "action": { "type": "string" }
+      }
+    },
+    "state_machine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "status", "states", "transitions", "flow_bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "subject": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/status" },
+        "states": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/state" }
+        },
+        "transitions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/transition" }
+        },
+        "flow_bindings": { "$ref": "#/$defs/flow_bindings" }
+      }
+    },
+    "named_element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status", "flow_bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/status" },
+        "description": { "type": "string" },
+        "flow_bindings": { "$ref": "#/$defs/flow_bindings" }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "status", "flow_bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["command", "query"]
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "request": {
+          "type": "string",
+          "description": "logical request shape — fields only, no transport or endpoint"
+        },
+        "response": {
+          "type": "string",
+          "description": "logical response shape — fields only, no transport or endpoint"
+        },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "default": []
+        },
+        "flow_bindings": { "$ref": "#/$defs/flow_bindings" }
+      }
+    }
+  }
+}

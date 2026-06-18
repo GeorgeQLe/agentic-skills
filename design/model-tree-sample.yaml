@@ -1,0 +1,116 @@
+schema_version: v0.1
+topic: invoice-approval
+mode: flat
+flow_tree_ref: design/flow-tree-invoice-approval.yaml
+source_artifacts:
+  - design/user-flow-invoice-approval.md
+  - design/flow-tree-invoice-approval.yaml
+frameworks:
+  - event-storming
+  - domain-model
+  - state-machine
+  - data-model
+  - contract-map
+entities:
+  - id: invoice
+    label: Invoice
+    kind: aggregate-root
+    status: proposed
+    attributes:
+      - amount
+      - currency
+      - submitted_by
+    relationships:
+      - target: approval
+        cardinality: one-to-many
+        label: has approvals
+    lifecycle_ref: invoice-lifecycle
+    flow_bindings:
+      - flow_node_ref: review-invoice-screen
+        access: displays
+      - flow_node_ref: submit-invoice-action
+        access: writes
+  - id: money
+    label: Money
+    kind: value-object
+    status: proposed
+    attributes:
+      - amount
+      - currency
+    flow_bindings: []
+state_machines:
+  - id: invoice-lifecycle
+    subject: invoice
+    status: proposed
+    states:
+      - id: draft
+        label: Draft
+        maps_to_ui_state: editing
+      - id: submitted
+        label: Submitted
+        maps_to_ui_state: pending-review
+      - id: approved
+        label: Approved
+        maps_to_ui_state: success
+      - id: rejected
+        label: Rejected
+        maps_to_ui_state: error
+    transitions:
+      - from: draft
+        to: submitted
+        event: SubmitInvoice
+        guard: amount > 0
+        action: emit InvoiceSubmitted
+      - from: submitted
+        to: approved
+        event: ApproveInvoice
+        guard: reviewer has authority
+        action: emit InvoiceApproved
+      - from: submitted
+        to: rejected
+        event: RejectInvoice
+        action: emit InvoiceRejected
+    flow_bindings:
+      - flow_node_ref: approve-invoice-action
+        access: transitions
+events:
+  - id: invoice-submitted
+    label: InvoiceSubmitted
+    status: proposed
+    description: An invoice was submitted for approval.
+    flow_bindings:
+      - flow_node_ref: submit-invoice-action
+        access: triggers
+commands:
+  - id: approve-invoice
+    label: ApproveInvoice
+    status: proposed
+    flow_bindings:
+      - flow_node_ref: approve-invoice-action
+        access: triggers
+read_models:
+  - id: pending-approvals
+    label: PendingApprovals
+    status: proposed
+    flow_bindings:
+      - flow_node_ref: review-invoice-screen
+        access: reads
+policies:
+  - id: auto-escalate-stale
+    label: AutoEscalateStaleInvoices
+    status: deferred
+    flow_bindings: []
+contracts:
+  - id: approve-invoice-cmd
+    label: ApproveInvoice
+    kind: command
+    status: proposed
+    request: "{ invoice_id, reviewer_id, note? }"
+    response: "{ invoice_id, state }"
+    errors:
+      - NotAuthorized
+      - InvoiceNotPending
+    flow_bindings:
+      - flow_node_ref: approve-invoice-action
+        access: triggers
+last_updated: "2026-06-18T00:00:00Z"
