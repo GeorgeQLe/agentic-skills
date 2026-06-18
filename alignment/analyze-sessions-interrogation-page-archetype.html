@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interrogation Page Archetype — Stage Zero Spec</title>
+  <style>
+    :root { --bg: #0d1117; --surface: #161b22; --surface-2: #1c2333; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+      --chart-1: #58a6ff; --chart-2: #3fb950; --chart-3: #d29922; --chart-4: #bc8cff; --chart-5: #f85149; --chart-6: #79c0ff; --chart-7: #f0883e; --chart-8: #a5d6ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; max-width: 100%; overflow-wrap: break-word; }
+    h1, h2, h3, h4 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 12px; }
+    h2 { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { margin-top: 24px; color: var(--accent); }
+    h4 { margin-top: 18px; color: var(--text); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code { background: #111722; border: 1px solid var(--border); border-radius: 6px; padding: 1px 5px; }
+    pre { background: #0b111b; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; }
+    pre code { background: none; border: 0; padding: 0; }
+    .lede { color: var(--text-muted); max-width: 940px; font-size: 1.05rem; }
+    .status { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; margin: 22px 0; }
+    .stat, .toc, .callout, .question, .feedback, .compile, .note { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .stat strong { display: block; color: #fff; font-size: 1.3rem; }
+    .stat span { color: var(--text-muted); }
+    .callout { border-left: 3px solid var(--accent); }
+    .toc ul { margin: 8px 0 0; padding-left: 20px; columns: 2; }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+    .feedback { margin: 14px 0 22px; }
+    .feedback .controls, .answers, .buttons { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button, .radio-card { min-height: 44px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: #111722; color: var(--text); cursor: pointer; }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+    .feedback button[data-value="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea { width: 100%; min-height: 96px; margin-top: 10px; resize: vertical; border-radius: 8px; border: 1px solid var(--border); background: #0b111b; color: var(--text); padding: 12px; font: inherit; }
+    .feedback .local-yaml, .feedback .notes { display: none; }
+    .feedback[data-active="true"] .local-yaml { display: block; margin-top: 10px; }
+    .feedback[data-active="true"] .notes { display: block; }
+    .question { margin: 18px 0; background: var(--surface-2); border-color: #33415f; }
+    .question h3 { margin: 0 0 8px; color: var(--purple); }
+    .radio-card { display: inline-flex; gap: 8px; align-items: center; }
+    .radio-card input { transform: translateY(1px); }
+    .notes-for-answer { display: none; }
+    .question:has(input:checked) .notes-for-answer { display: block; }
+    .muted { color: var(--text-muted); }
+    .table-wrap { overflow-x: auto; margin: 14px 0 24px; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: left; }
+    th { background: var(--surface); color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+    .pill { display: inline-block; margin: 2px 4px 2px 0; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-muted); background: #111722; font-size: 0.9rem; }
+    .tag-green { color: var(--green); border-color: var(--green); }
+    .tag-red { color: var(--red); border-color: var(--red); }
+    .tag-purple { color: var(--purple); border-color: var(--purple); }
+    blockquote { margin: 12px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: #101723; color: var(--text); }
+    .chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 16px 0; }
+    .chart-container canvas { max-width: 100%; }
+    .compile { margin-top: 28px; }
+    .copy-status { color: var(--text-muted); min-height: 24px; }
+    .flow { background: #0b111b; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin: 14px 0; }
+    @media (max-width: 860px) { main { width: min(100% - 24px, 1180px); padding-top: 24px; } .toc ul { columns: 1; } }
+    @media (max-width: 560px) { .status { grid-template-columns: 1fr; } button, .radio-card { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Interrogation Page Archetype — Stage Zero Spec</h1>
+  <p class="lede">Alignment status: <strong>review</strong>. Report-only design spec for moving research-skill interrogation out of the terminal and into a dedicated, looping HTML <code>interrogation/</code> page that runs as <strong>stage zero</strong> before the existing framework/scope page and the alignment review page. No conventions or skills are modified by this page — it exists to align on the design before any implementation.</p>
+
+  <div class="status" aria-label="Key evidence stats">
+    <div class="stat"><strong>13.1 &rarr; 0.4</strong><span>mean agent questions per research session, before vs after alignment pages (Codex transcripts)</span></div>
+    <div class="stat"><strong>2026-05-21</strong><span>inflection: commit a839142e "require alignment pages for all skills"</span></div>
+    <div class="stat"><strong>~25+</strong><span>research/analysis skills classified <code>scoped</code> (1&ndash;3 question cap)</span></div>
+    <div class="stat"><strong>0</strong><span>open free-text fields driving research across all 77 alignment pages produced</span></div>
+  </div>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#problem">The Problem (Evidence Recap)</a></li>
+      <li><a href="#decisions">Decisions Already Made</a></li>
+      <li><a href="#archetype">Proposed: Interrogation Page Archetype</a></li>
+      <li><a href="#stages">Stage Model: 0 / 1 / 2</a></li>
+      <li><a href="#loop">The Round Loop & Confidence Gate</a></li>
+      <li><a href="#manifest">Round 1 = Assumptions Manifest</a></li>
+      <li><a href="#files">File Naming, Location & Answer Capture</a></li>
+      <li><a href="#integration">Convention Integration Map</a></li>
+      <li><a href="#tradeoffs">Open Tradeoffs</a></li>
+      <li><a href="#evidence">Evidence Matrix</a></li>
+      <li><a href="#assumptions">Assumptions, Alternatives & Gaps</a></li>
+      <li><a href="#glossary">Glossary Additions</a></li>
+      <li><a href="#gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Feedback And Answers</a></li>
+    </ul>
+  </section>
+
+  <section id="problem" data-section="The Problem">
+    <h2>The Problem (Evidence Recap)</h2>
+    <div class="feedback" data-section="The Problem">
+      <div class="controls" aria-label="Section feedback for The Problem">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Audited Claude + Codex history confirmed the felt regression. In Codex research-skill sessions, mean agent questions fell from a peak of <strong>~28/session</strong> (early May) to <strong>~0.3/session</strong> (June). The drop is precisely datable to the <strong>2026-05-21</strong> "require alignment pages for all skills" commit.</p>
+    <p>The root cause is <em>not</em> the alignment page absorbing questions. It is two compounding structural facts:</p>
+    <ul>
+      <li><strong>Tier classification.</strong> ~25+ research/analysis skills are <code>context_intake: scoped</code>, which caps user interrogation at 1&ndash;3 questions by design (<code>docs/interview-convention.md:41</code>), and per-skill instructions often make even those optional ("only if unclear", <code>competitive-analysis/SKILL.md:430</code>).</li>
+      <li><strong>Cold-start routing.</strong> 3 of 4 flagship research orchestrators (<code>competitive-analysis</code>, <code>positioning</code>, <code>journey-map</code>) route a cold start "directly to state E" — the framework-selection page — with no deep interview at all (<code>docs/research-session-loop-convention.md:234&ndash;239</code>).</li>
+    </ul>
+    <p>The produced pages then make it <em>feel</em> like rubber-stamping: across all 77 alignment pages, the only controls are approve / thumbs-down / clarification triads plus multiple-choice routing gates whose options the agent pre-authored. There is not a single open free-text field that shapes the research before it is produced.</p>
+
+    <div class="chart-container" data-tts-narrative="Bar chart of mean agent questions per research session over time. April 2026 averaged 6.3 questions, May 1 to 18 peaked at 28.0, May 19 to 31 dropped to 3.2, and June 2026 fell to 0.3 — a collapse coinciding with the May 21 mandatory-alignment-page commit.">
+      <div class="section-head"><h3 style="margin-top:0">Agent Questions Per Research Session Over Time</h3><button type="button" id="toggle-chart">View as table</button></div>
+      <canvas id="qchart" width="900" height="300" aria-label="Bar chart: mean agent questions per research session. April 6.3, May 1-18 28.0, May 19-31 3.2, June 0.3."></canvas>
+      <div class="table-wrap" id="qchart-table" hidden>
+        <table><thead><tr><th>Period</th><th>Mean agent questions / research session</th></tr></thead>
+        <tbody>
+          <tr><td>2026-04</td><td>6.3</td></tr>
+          <tr><td>2026-05-01 to 05-18</td><td>28.0</td></tr>
+          <tr><td>2026-05-19 to 05-31</td><td>3.2</td></tr>
+          <tr><td>2026-06</td><td>0.3</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="feedback" data-section="The Problem" id="fb-problem-bottom">
+      <div class="controls" aria-label="Section feedback for The Problem (bottom)">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="decisions" data-section="Decisions Already Made">
+    <h2>Decisions Already Made</h2>
+    <div class="feedback" data-section="Decisions Already Made">
+      <div class="controls" aria-label="Section feedback for Decisions Already Made">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>These were settled in conversation before this page. They frame the spec below; the gates let you reopen any of them.</p>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Decision</th><th>Rationale</th></tr></thead><tbody>
+      <tr><td>D1</td><td>Interrogation moves <strong>out of the terminal</strong> into its own HTML page.</td><td>User preference: the terminal interview is no longer the desired surface; interaction should be HTML, like alignment review.</td></tr>
+      <tr><td>D2</td><td>It is a <strong>stage zero</strong>, not a replacement of the existing framework/scope page (stage one).</td><td>Elicitation must precede selection so framework options are informed by answers, not pre-authored blind.</td></tr>
+      <tr><td>D3</td><td>It <strong>repeats over and over</strong> as an iterative loop until the agent's confidence gate passes.</td><td>Restores adaptivity — each round's follow-ups depend on the prior round's answers, recreating "relentless interrogation".</td></tr>
+      <tr><td>D4</td><td>The assumptions manifest is <strong>incorporated as round 1</strong>, not replaced.</td><td>The manifest forces evidence-grounded, non-lazy questioning; it is the ideal seed for the loop.</td></tr>
+      <tr><td>D5</td><td>Each round is a <strong>separate per-round file</strong> (proposed default, see open tradeoff).</td><td>Provenance: each round's questions and answers become a durable, diffable artifact, matching the Research Session Loop's artifact-per-phase model.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="archetype" data-section="Interrogation Page Archetype">
+    <h2>Proposed: Interrogation Page Archetype</h2>
+    <div class="feedback" data-section="Interrogation Page Archetype">
+      <div class="controls" aria-label="Section feedback for Interrogation Page Archetype">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>A new HTML page archetype, <strong>distinct from the alignment page</strong>, governed by its own convention doc (<code>docs/interrogation-page-convention.md</code>, to be authored) and its own audit. Its purpose is <em>elicitation before research</em>, the inverse of the alignment page's <em>approval after research</em>.</p>
+    <h3>Defining contrasts vs. the alignment page</h3>
+    <div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Interrogation page (new)</th><th>Alignment page (existing)</th></tr></thead><tbody>
+      <tr><td>Purpose</td><td>Elicit unknowns the agent cannot infer</td><td>Review/approve produced deliverables</td></tr>
+      <tr><td>Timing</td><td>Before research (stage zero)</td><td>After research (stage two)</td></tr>
+      <tr><td>Primary control</td><td><strong>Open free-text answers + recommend-by-default choices</strong></td><td>Approve / thumbs-down / clarification + routing radios</td></tr>
+      <tr><td>Lifecycle</td><td>Loops: round N spawns round N+1 until confidence gate passes</td><td>Single page, review &rarr; confirmed</td></tr>
+      <tr><td>Directory</td><td><code>interrogation/</code></td><td><code>alignment/</code></td></tr>
+      <tr><td>Audit</td><td>New <code>audit-interrogation-pages.mjs</code> (must require real open questions)</td><td><code>audit-alignment-pages.mjs</code></td></tr>
+    </tbody></table></div>
+    <h3>What it must NOT become</h3>
+    <p>The audit for this archetype must enforce that it does not collapse back into approve-only UX. Minimum: each round page must contain at least one genuinely open input (free-text or recommend-and-override) that shapes downstream research, not only accept/reject on pre-generated content. This is the structural guard against re-introducing the rubber-stamp problem in a new wrapper.</p>
+    <div class="feedback" data-section="Interrogation Page Archetype" id="fb-archetype-bottom">
+      <div class="controls" aria-label="Section feedback for Interrogation Page Archetype (bottom)">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="stages" data-section="Stage Model">
+    <h2>Stage Model: 0 / 1 / 2</h2>
+    <div class="feedback" data-section="Stage Model">
+      <div class="controls" aria-label="Section feedback for Stage Model">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Interrogation is inserted as a new state <em>before</em> the existing first interaction. It does not replace stage one; for <code>scoped</code> skills it will <em>feel</em> like the new first screen because framework selection used to be first.</p>
+    <pre class="flow"><code>stage 0  &rarr;  interrogation/{skill}-r1..rN.html   [ELICITATION: open input drives research]
+              loop until confidence gate passes
+stage 1  &rarr;  alignment framework/scope page       [SELECTION: options informed by stage 0]
+              research runs
+stage 2  &rarr;  alignment/{skill}-{topic}.html        [REVIEW/APPROVAL of deliverables]</code></pre>
+    <p>This preserves the convention's firewall semantically — intake &rarr; selection &rarr; review — and only changes <em>where</em> intake happens (HTML, not terminal). It generalizes across tiers: <code>deep</code> skills get a rich stage-zero loop; <code>scoped</code> skills get a lighter one. No tier needs terminal interrogation anymore.</p>
+  </section>
+
+  <section id="loop" data-section="Round Loop And Confidence Gate">
+    <h2>The Round Loop &amp; Confidence Gate</h2>
+    <div class="feedback" data-section="Round Loop And Confidence Gate">
+      <div class="controls" aria-label="Section feedback for Round Loop And Confidence Gate">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Each round is one heavy phase of the Research Session Loop: the agent builds an interrogation page, stops, the user answers, the agent reads the answers and runs its confidence gate.</p>
+    <pre class="flow"><code>round = 1
+build interrogation/{skill}-r{round}-{branch}.html   (manifest if round==1, else follow-ups)
+STOP &rarr; user answers &rarr; compiled answers YAML
+agent reads answers, runs CONFIDENCE GATE:
+    confident enough to produce useful research?
+        NO  &rarr; round += 1; build next round of deeper/follow-up questions; repeat
+        YES &rarr; write coverage checkpoint; advance to stage 1</code></pre>
+    <h3>Confidence gate (loop exit)</h3>
+    <p>The gate is a contract, not a fixed round count. It restores the "relentless until confident" feeling. Proposed enforcement: the agent may not advance to stage one until (a) at least one interrogation round is completed, and (b) every interview area defined by the skill is covered or explicitly waived by the user. The coverage checkpoint (today's deep-tier Phase 4, <code>interview-convention.md:31</code>) becomes the loop's <strong>exit gate</strong> — the agent's "here is everything we established, confirm completeness or flag gaps" page.</p>
+    <h3>Volume expectation</h3>
+    <p>Fewer artifacts than it sounds. A 30&ndash;40-question terminal interview was ~12 chunked turns; rounds of 6&ndash;8 questions each land at ~3&ndash;6 rounds for a deep skill, 1&ndash;2 for a scoped one.</p>
+    <div class="feedback" data-section="Round Loop And Confidence Gate" id="fb-loop-bottom">
+      <div class="controls" aria-label="Section feedback for Round Loop And Confidence Gate (bottom)">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="manifest" data-section="Round 1 Equals Assumptions Manifest">
+    <h2>Round 1 = Assumptions Manifest</h2>
+    <div class="feedback" data-section="Round 1 Equals Assumptions Manifest">
+      <div class="controls" aria-label="Section feedback for Round 1 Equals Assumptions Manifest">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>The assumptions manifest (<code>interview-convention.md:27</code>) is not a separate concern from interrogation — it is the ideal <strong>first round</strong> of it. It bans lazy "tell me about..." questions by forcing the agent to do its homework first and ask only where it has no basis to assume. Incorporating it beats replacing it: delete it and round 1 regresses to open filler prompts.</p>
+    <div class="table-wrap"><table><thead><tr><th>Round 1 element</th><th>Source today</th><th>Rendered as</th></tr></thead><tbody>
+      <tr><td>3&ndash;7 source-tagged assumptions (<code>[from prompt]</code>, <code>[from repo]</code>, <code>[inferred]</code>)</td><td>Assumptions manifest, Phase 2</td><td>Interactive confirm / correct / flag controls (the approve/edit/reject/flag gate the alignment convention already has)</td></tr>
+      <tr><td>First batch of genuine open questions</td><td>Phase 3 interview loop, opening turn</td><td>Free-text answer fields + recommend-and-override choices, only where no assumption is derivable</td></tr>
+    </tbody></table></div>
+    <p>Every correction you make to an assumption seeds round 2's follow-ups — that is the mechanism that makes the loop adaptive. So the manifest <strong>bookends</strong> the loop: assumptions manifest = entry (round 1), coverage checkpoint = exit.</p>
+    <div class="feedback" data-section="Round 1 Equals Assumptions Manifest" id="fb-manifest-bottom">
+      <div class="controls" aria-label="Section feedback for Round 1 Equals Assumptions Manifest (bottom)">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="files" data-section="File Naming Location And Answer Capture">
+    <h2>File Naming, Location &amp; Answer Capture</h2>
+    <div class="feedback" data-section="File Naming Location And Answer Capture">
+      <div class="controls" aria-label="Section feedback for File Naming Location And Answer Capture">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <h3>Location and naming</h3>
+    <ul>
+      <li><strong>Directory:</strong> <code>interrogation/</code>, a sibling of <code>alignment/</code>. Keeping these out of <code>alignment/</code> matters concretely — <code>scripts/audit-alignment-pages.mjs</code> audits <code>alignment/*.html</code> against the alignment-page contract, which elicitation pages won't and shouldn't satisfy.</li>
+      <li><strong>Filename:</strong> <code>interrogation/{skill}-r{N}-{branch}.html</code>. The <code>{branch}</code> stub handles research forks (multiple product paths &rarr; parallel question threads); in the flat common case <code>{branch}</code> == the topic slug, matching today's <code>{skill}-{topic}</code> naming.</li>
+    </ul>
+    <h3>Answer capture (what drives "repeat over and over")</h3>
+    <p>Each round page needs a captured-answers sidecar — the same "Compile YAML" mechanism the alignment page already uses — so the agent reads round N's answers back, runs the confidence gate, and only then decides whether to emit round N+1 or write the coverage checkpoint. Proposed sidecar path: <code>research/_working/interrogation-{skill}-r{N}.yaml</code> (or the product-path equivalent), preserving the round-by-round audit trail.</p>
+    <div class="feedback" data-section="File Naming Location And Answer Capture" id="fb-files-bottom">
+      <div class="controls" aria-label="Section feedback for File Naming Location And Answer Capture (bottom)">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="integration" data-section="Convention Integration Map">
+    <h2>Convention Integration Map</h2>
+    <div class="feedback" data-section="Convention Integration Map">
+      <div class="controls" aria-label="Section feedback for Convention Integration Map">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Where the change lands if approved (report-only — none of these are edited yet).</p>
+    <div class="table-wrap"><table><thead><tr><th>Surface</th><th>Change</th></tr></thead><tbody>
+      <tr><td><code>docs/interrogation-page-convention.md</code> (new)</td><td>Author the archetype: page structure, round loop, confidence gate, manifest-as-round-1, answer sidecar, file naming.</td></tr>
+      <tr><td><code>docs/interview-convention.md</code></td><td>Replace "happens before alignment-page review" terminal-intake language (line 11) and the per-tier phase prose so intake is delivered via interrogation pages, not terminal turns. Map Phase 2 manifest &rarr; round 1; Phase 4 coverage checkpoint &rarr; loop exit gate.</td></tr>
+      <tr><td><code>docs/research-session-loop-convention.md</code></td><td>Add a stage-zero interrogation state before state E for the scoped orchestrators (lines 234&ndash;239); model each round as one loop session.</td></tr>
+      <tr><td><code>docs/alignment-page-convention.md</code></td><td>Add a cross-reference clarifying alignment pages are stage two only; elicitation lives in the interrogation page.</td></tr>
+      <tr><td><code>scripts/audit-interrogation-pages.mjs</code> (new)</td><td>Audit the new archetype; enforce ≥1 open input per round and presence of the confidence/coverage exit gate.</td></tr>
+      <tr><td>Contract test (new)</td><td>Assert a skill cannot reach stage one until the confidence gate passes with ≥1 completed interrogation round — mirroring <code>customer-discovery</code>'s existing "zero questions = contract violation" enforcement.</td></tr>
+      <tr><td>Per-skill <code>SKILL.md</code> (scoped strategy skills)</td><td>Reclassify judgment-heavy skills (<code>positioning</code>, <code>value-prop-canvas</code>, <code>lean-canvas</code>, <code>pmf-assessment</code>, <code>journey-map</code>) so they get a real stage-zero loop, not a 1&ndash;3-question cap.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="tradeoffs" data-section="Open Tradeoffs">
+    <h2>Open Tradeoffs</h2>
+    <div class="feedback" data-section="Open Tradeoffs">
+      <div class="controls" aria-label="Section feedback for Open Tradeoffs">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Open question</th><th>Option A (recommended)</th><th>Option B</th><th>Decided by gate</th></tr></thead><tbody>
+      <tr><td>Per-round files vs. single evolving page</td><td><strong>Per-round files</strong> — clean provenance, clear "round done", matches archive-before-replace ethos</td><td>One evolving <code>{skill}-interrogation-{topic}.html</code> — fewer files but mutates in place, loses round audit, awkward to re-open</td><td>Round-File Model gate</td></tr>
+      <tr><td>Does HTML interrogation fully replace terminal questioning?</td><td>Replace for research/analysis skills; keep terminal <code>AskUserQuestion</code> only as a degraded fallback when HTML can't be opened</td><td>Allow both surfaces interchangeably</td><td>Scope &amp; Non-Goals gate</td></tr>
+      <tr><td>Scope of first implementation</td><td>Pilot on 1&ndash;2 skills (e.g. <code>positioning</code>, <code>customer-discovery</code>) before repo-wide rollout</td><td>Roll out to all research skills at once</td><td>Post-Approval Route gate</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="evidence" data-section="Evidence Matrix">
+    <h2>Evidence Matrix</h2>
+    <div class="feedback" data-section="Evidence Matrix">
+      <div class="controls" aria-label="Section feedback for Evidence Matrix">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead><tbody>
+      <tr><td>Question volume collapsed at alignment-page rollout</td><td>Codex transcripts: mean 13.1 (before May 19) &rarr; 0.4 (after); monthly 6.3 / 28.0 / 3.2 / 0.3; commit a839142e dated 2026-05-21</td><td>The mandatory alignment page coincides exactly with the drop</td><td>High</td><td>"?" is a proxy for questions, validated by spot-reading numbered interview turns; ratio too large to be noise</td><td>Justifies a structural intake change, not a per-skill tweak</td></tr>
+      <tr><td>Root cause is tier classification, not the page</td><td><code>interview-convention.md:41</code> caps scoped intake at 1&ndash;3 questions; <code>competitive-analysis/SKILL.md:430</code> "only if unclear"; <code>research-session-loop-convention.md:234&ndash;239</code> cold start &rarr; state E</td><td>Skills that should interrogate deeply are classified <code>scoped</code> with an optional question budget</td><td>High</td><td>Tier assignments and routing are explicit in cited lines; causal link to the felt drop is well-supported inference</td><td>Stage-zero interrogation + reclassification both required</td></tr>
+      <tr><td>Produced pages are approve-only</td><td>Across 77 alignment pages: only approve/down/clarification triads + canned routing radios; zero open <code>type="text"</code> fields driving research</td><td>The page surface makes intake feel like rubber-stamping even where questions exist</td><td>High</td><td>Counts from grep + deep reads of ~14 pages; remainder inferred from shared template</td><td>New archetype must enforce ≥1 open input per round</td></tr>
+      <tr><td>Deep tier still works when assigned</td><td><code>customer-discovery/SKILL.md</code>: "if you asked the user zero questions, the interview did not happen... contract violation"</td><td>The enforcement pattern exists and can be generalized to the confidence gate</td><td>High</td><td>Quoted directly from the skill</td><td>Model the new contract test on this</td></tr>
+      <tr><td>"30&ndash;40 questions, 3-question chunks" was never a literal spec</td><td>No git match for fixed counts or "3 at a time"; deep tier always said "1&ndash;3 per turn... until covered"</td><td>The felt loss is real but the old behavior was emergent, not a deleted script</td><td>Medium-high</td><td>Based on absence-of-evidence in git history</td><td>Spec a confidence/coverage gate rather than a hardcoded question count</td></tr>
+    </tbody></table></div>
+    <div class="question gate-question" data-section="Research Completeness" data-gate-type="research-completeness">
+      <h3>Research Completeness</h3>
+      <p>Is the evidence behind this spec sufficient, or should more be gathered before committing to the design?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-complete" value="Evidence is sufficient to commit to the design direction">Sufficient to commit to the design</label>
+        <label class="radio-card"><input type="radio" name="q-complete" value="Sufficient for direction but pilot before repo-wide rollout">Sufficient for direction; pilot first</label>
+        <label class="radio-card"><input type="radio" name="q-complete" value="Need more evidence (specify what) before deciding">Need more evidence first</label>
+        <label class="radio-card"><input type="radio" name="q-complete" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-complete" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="assumptions" data-section="Assumptions Alternatives And Gaps">
+    <h2>Assumptions, Alternatives &amp; Gaps</h2>
+    <div class="feedback" data-section="Assumptions Alternatives And Gaps">
+      <div class="controls" aria-label="Section feedback for Assumptions Alternatives And Gaps">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <h3>Confidence Register</h3>
+    <div class="table-wrap"><table><thead><tr><th>Assumption</th><th>Meaning</th><th>Confidence</th><th>What would change it</th></tr></thead><tbody>
+      <tr><td>HTML elicitation can carry adaptive interrogation</td><td>A loop of per-round pages reproduces the adaptivity of a terminal interview</td><td>Medium</td><td>A pilot showing users tolerate multi-round page-opening without fatigue</td></tr>
+      <tr><td>The confidence gate is enforceable</td><td>A contract test can block stage one until coverage is met</td><td>Medium-high</td><td>Whether "coverage" can be checked mechanically vs. needing agent judgment</td></tr>
+      <tr><td>Per-round files are the right provenance unit</td><td>Round-by-round artifacts beat one evolving page</td><td>Medium</td><td>Open tradeoff — decided by the Round-File Model gate</td></tr>
+    </tbody></table></div>
+    <h3>Alternatives Considered</h3>
+    <div class="table-wrap"><table><thead><tr><th>Alternative</th><th>Reason not chosen</th></tr></thead><tbody>
+      <tr><td>Keep interrogation in the terminal, just reclassify skills to <code>deep</code></td><td>Rejected by user (D1): the terminal is no longer the desired surface</td></tr>
+      <tr><td>Replace stage one with the interrogation page</td><td>Rejected (D2): merging elicitation and selection makes framework options uninformed</td></tr>
+      <tr><td>Single static interrogation page</td><td>Rejected (D3): a static form can't branch; loses the adaptivity that is the whole point</td></tr>
+      <tr><td>Replace the assumptions manifest</td><td>Rejected (D4): the manifest is the discipline that prevents lazy open questions</td></tr>
+    </tbody></table></div>
+    <h3>Gaps</h3>
+    <div class="table-wrap"><table><thead><tr><th>Gap</th><th>Effect</th></tr></thead><tbody>
+      <tr><td>Claude agent questions not directly countable</td><td>The before/after numbers come from Codex transcripts; Claude's <code>AskUserQuestion</code> usage couldn't be quantified from logs</td></tr>
+      <tr><td>No prototype of the round loop yet</td><td>Page-fatigue risk is estimated, not measured; a pilot would de-risk it</td></tr>
+      <tr><td>Mechanical "coverage" definition undefined</td><td>The confidence gate's enforceability depends on resolving this during implementation</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="glossary" data-section="Glossary Additions">
+    <h2>Glossary Additions</h2>
+    <div class="feedback" data-section="Glossary Additions">
+      <div class="controls" aria-label="Section feedback for Glossary Additions">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p>Proposed terms introduced by this spec. Only approved terms are appended to <code>research/glossary.md</code> during the confirmed-page write step.</p>
+    <div class="table-wrap"><table><thead><tr><th>Term</th><th>Definition</th><th>Source</th><th>Category</th><th>Decision</th></tr></thead><tbody>
+      <tr><td>Interrogation page</td><td>HTML page archetype for eliciting user input before research (stage zero), distinct from the alignment page which reviews output after research</td><td>analyze-sessions</td><td>workflow</td><td><label class="radio-card"><input type="radio" name="g-interrogation-page" value="approve">Approve</label> <label class="radio-card"><input type="radio" name="g-interrogation-page" value="edit">Edit</label> <label class="radio-card"><input type="radio" name="g-interrogation-page" value="reject">Reject</label> <label class="radio-card"><input type="radio" name="g-interrogation-page" value="flag">Flag</label></td></tr>
+      <tr><td>Stage zero</td><td>The elicitation phase inserted before the framework/scope page (stage one) and the alignment review page (stage two)</td><td>analyze-sessions</td><td>workflow</td><td><label class="radio-card"><input type="radio" name="g-stage-zero" value="approve">Approve</label> <label class="radio-card"><input type="radio" name="g-stage-zero" value="edit">Edit</label> <label class="radio-card"><input type="radio" name="g-stage-zero" value="reject">Reject</label> <label class="radio-card"><input type="radio" name="g-stage-zero" value="flag">Flag</label></td></tr>
+      <tr><td>Confidence gate</td><td>The loop-exit contract that blocks advance to stage one until the agent has run ≥1 interrogation round and covered all defined interview areas or had them waived</td><td>analyze-sessions</td><td>workflow</td><td><label class="radio-card"><input type="radio" name="g-confidence-gate" value="approve">Approve</label> <label class="radio-card"><input type="radio" name="g-confidence-gate" value="edit">Edit</label> <label class="radio-card"><input type="radio" name="g-confidence-gate" value="reject">Reject</label> <label class="radio-card"><input type="radio" name="g-confidence-gate" value="flag">Flag</label></td></tr>
+      <tr><td>Interrogation round</td><td>One iteration of the stage-zero loop: a single interrogation page plus its captured-answers sidecar</td><td>analyze-sessions</td><td>workflow</td><td><label class="radio-card"><input type="radio" name="g-round" value="approve">Approve</label> <label class="radio-card"><input type="radio" name="g-round" value="edit">Edit</label> <label class="radio-card"><input type="radio" name="g-round" value="reject">Reject</label> <label class="radio-card"><input type="radio" name="g-round" value="flag">Flag</label></td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="gates" data-section="Review Gates">
+    <h2>Review Gates</h2>
+    <div class="feedback" data-section="Review Gates">
+      <div class="controls" aria-label="Section feedback for Review Gates">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="question gate-question" data-section="Spec Direction" data-gate-type="scope-approval">
+      <h3>Spec Direction</h3>
+      <p>Approve the interrogation-page archetype as specified — stage zero, looping rounds, round 1 = assumptions manifest, confidence-gate exit?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-direction" value="Approve the archetype as specified">Approve as specified</label>
+        <label class="radio-card"><input type="radio" name="q-direction" value="Approve the direction but change details noted below">Approve direction, change details (notes)</label>
+        <label class="radio-card"><input type="radio" name="q-direction" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-direction" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+
+    <div class="question gate-question" data-section="Round-File Model" data-gate-type="design-decision">
+      <h3>Round-File Model</h3>
+      <p>How should rounds be stored?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-roundfile" value="Per-round files: interrogation/{skill}-r{N}-{branch}.html">Per-round files (recommended)</label>
+        <label class="radio-card"><input type="radio" name="q-roundfile" value="Single evolving page the agent appends rounds to">Single evolving page</label>
+        <label class="radio-card"><input type="radio" name="q-roundfile" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-roundfile" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+
+    <div class="question gate-question" data-section="Scope And Non-Goals" data-gate-type="scope-non-goals">
+      <h3>Scope &amp; Non-Goals</h3>
+      <p>Should the HTML interrogation page fully replace terminal questioning for research/analysis skills?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-scope" value="Replace terminal questioning; keep AskUserQuestion only as a fallback when HTML cannot be opened">Replace; terminal only as fallback</label>
+        <label class="radio-card"><input type="radio" name="q-scope" value="Allow both HTML and terminal questioning interchangeably">Allow both interchangeably</label>
+        <label class="radio-card"><input type="radio" name="q-scope" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-scope" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+
+    <div class="question gate-question" data-section="Artifact Destination" data-gate-type="artifact destination" data-target-path="alignment/analyze-sessions-interrogation-page-archetype.html">
+      <h3>Artifact Destination</h3>
+      <p>Where should this spec live?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-dest" value="This alignment page only for now (report-only, no doc yet)">This alignment page only (report-only)</label>
+        <label class="radio-card"><input type="radio" name="q-dest" value="Also write a draft spec doc to docs/interrogation-page-convention.md">Also draft docs/interrogation-page-convention.md</label>
+        <label class="radio-card"><input type="radio" name="q-dest" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-dest" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+
+    <div class="question gate-question" data-section="Proposed File Changes" data-gate-type="proposed file changes">
+      <h3>Proposed File Changes</h3>
+      <p>This is report-only. Confirm that no conventions, skills, scripts, or tests are edited until implementation is separately approved.</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-changes" value="Confirmed: no source changes now; implementation is a separate approved step">Confirmed: no source changes now</label>
+        <label class="radio-card"><input type="radio" name="q-changes" value="Begin implementing the integration map immediately after this approval">Begin implementing now</label>
+        <label class="radio-card"><input type="radio" name="q-changes" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-changes" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+
+    <div class="question gate-question" data-section="Post-Approval Route" data-gate-type="post-approval-route">
+      <h3>Post-Approval Route</h3>
+      <p>After approval, how should this route next work?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q-route" value="Route to /targeted-skill-builder to build the interrogation-page archetype, piloting on 1-2 skills">Build the archetype (pilot first)</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="No immediate next command; revisit later">No immediate next command</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q-route" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile" data-section="Compile Feedback And Answers">
+    <h2>Compile Feedback And Answers</h2>
+    <p class="muted">Use section feedback (emphasize / thumbs-down / clarification) for concerns on any single section before answering all gates. Use Compile Responses for gate answers and/or selected section feedback; it enables as soon as one gate is answered or one section feedback is selected.</p>
+    <div class="buttons">
+      <button type="button" id="compile-answers">Compile Responses</button>
+      <button type="button" id="copy-compiled">Copy YAML</button>
+      <span id="answer-count" class="copy-status"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+  const alignmentPage = "alignment/analyze-sessions-interrogation-page-archetype.html";
+  const feedbackBlocks = Array.from(document.querySelectorAll(".feedback"));
+  const gateQuestions = Array.from(document.querySelectorAll(".gate-question"));
+  const compiled = document.getElementById("compiled-yaml");
+  const answerCount = document.getElementById("answer-count");
+  const compileAnswers = document.getElementById("compile-answers");
+  function yamlString(value) { return JSON.stringify(String(value || "")); }
+  function actionFor(feedback) { return feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval"; }
+  function selectedFeedback(block) {
+    const active = block.querySelector("button.active");
+    if (!active) return null;
+    const feedback = active.dataset.value;
+    return { section: block.dataset.section, feedback, notes: block.querySelector(".notes").value.trim(), requested_agent_action: actionFor(feedback) };
+  }
+  // De-dup by section (top/bottom paired controls share a data-section).
+  function dedupFeedback() {
+    const seen = new Map();
+    feedbackBlocks.forEach(b => { const e = selectedFeedback(b); if (e) { const prev = seen.get(e.section); if (!prev || (!prev.notes && e.notes)) seen.set(e.section, e); } });
+    return Array.from(seen.values());
+  }
+  function unansweredRequired() { return gateQuestions.filter(q => !q.querySelector("input:checked")).map(q => q.dataset.section); }
+  function feedbackYaml(entries) {
+    const unanswered = unansweredRequired();
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "feedback_status: revision-request", "approval_status: not-approved", "unanswered_required_questions:"];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q))); else lines.push("  []");
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    return lines.join("\n");
+  }
+  function copyText(text, statusEl) {
+    const done = () => { if (statusEl) statusEl.textContent = "Copied"; };
+    const fallback = () => { compiled.focus(); compiled.select(); if (statusEl) statusEl.textContent = "Select and copy the YAML"; };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done).catch(fallback); else fallback();
+  }
+  function syncPair(section, feedback, notes) {
+    feedbackBlocks.filter(b => b.dataset.section === section).forEach(b => {
+      b.querySelectorAll("button[data-value]").forEach(x => x.classList.toggle("active", !!feedback && x.dataset.value === feedback));
+      b.dataset.active = feedback ? "true" : "false";
+      const ta = b.querySelector(".notes"); if (notes !== null && ta.value !== notes) ta.value = notes;
+    });
+  }
+  feedbackBlocks.forEach(block => {
+    block.querySelectorAll("button[data-value]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wasActive = btn.classList.contains("active");
+        const fb = wasActive ? null : btn.dataset.value;
+        syncPair(block.dataset.section, fb, null);
+        updateAnswerState();
+      });
+    });
+    block.querySelector(".notes").addEventListener("input", e => syncPair(block.dataset.section, block.querySelector("button.active") ? block.querySelector("button.active").dataset.value : null, e.target.value));
+    block.querySelector(".compile-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = feedbackYaml(entry ? [entry] : []);
+      block.querySelectorAll(".yaml-output").forEach(o => o.value = yaml);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+    block.querySelector(".copy-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = block.querySelector(".yaml-output").value || feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+  });
+  function updateAnswerState() {
+    const unanswered = unansweredRequired();
+    const anyFeedback = dedupFeedback().length > 0;
+    const anyAnswer = gateQuestions.some(q => q.querySelector("input:checked"));
+    compileAnswers.disabled = !(anyAnswer || anyFeedback);
+    answerCount.textContent = unanswered.length ? `${unanswered.length} required gate question(s) unanswered` : "All required gate questions answered";
+  }
+  gateQuestions.forEach(q => q.addEventListener("change", updateAnswerState));
+  updateAnswerState();
+  compileAnswers.addEventListener("click", () => {
+    const anyAnswer = gateQuestions.some(q => q.querySelector("input:checked"));
+    const entries = dedupFeedback();
+    if (!anyAnswer && !entries.length) { answerCount.textContent = "Answer a gate question or select section feedback first"; return; }
+    const unanswered = unansweredRequired();
+    const requiredComplete = unanswered.length === 0;
+    const negative = entries.some(e => e.feedback === "down" || e.feedback === "needs-clarification") || gateQuestions.some(q => { const s = q.querySelector("input:checked"); return s && (s.value === "Need clarification"); });
+    const approval = (requiredComplete && !negative) ? "ready-for-agent-review" : "not-approved";
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "response_status: " + yamlString(requiredComplete ? "complete" : "partial"), "approval_status: " + yamlString(approval), "required_gate_status: " + yamlString(requiredComplete ? "complete" : "incomplete"), "unanswered_required_questions:"];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q))); else lines.push("  []");
+    lines.push("gate_answers:");
+    const answered = gateQuestions.filter(q => q.querySelector("input:checked"));
+    if (!answered.length) lines.push("  []");
+    answered.forEach(q => {
+      const selected = q.querySelector("input:checked");
+      const notes = q.querySelector(".notes-for-answer").value.trim();
+      const status = selected.value === "Need clarification" ? "needs-clarification" : selected.value.startsWith("Other / None") ? "other" : "answered";
+      lines.push("  - section: " + yamlString(q.dataset.section));
+      lines.push("    gate_type: " + yamlString(q.dataset.gateType));
+      lines.push("    status: " + yamlString(status));
+      lines.push("    answer: " + yamlString(selected.value));
+      if (q.dataset.targetPath) lines.push("    target_path: " + yamlString(q.dataset.targetPath));
+      if (notes) lines.push("    notes: " + yamlString(notes));
+    });
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    const yaml = lines.join("\n");
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+  document.getElementById("copy-compiled").addEventListener("click", () => copyText(compiled.value, answerCount));
+
+  // Chart: agent questions per research session over time.
+  (function(){
+    const data = [{label:"Apr", v:6.3},{label:"May 1-18", v:28.0},{label:"May 19-31", v:3.2},{label:"Jun", v:0.3}];
+    const cv = document.getElementById("qchart"); if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext("2d"); const W = cv.width, H = cv.height;
+    const css = getComputedStyle(document.documentElement);
+    const colors = [css.getPropertyValue("--chart-2").trim()||"#3fb950", css.getPropertyValue("--chart-1").trim()||"#58a6ff", css.getPropertyValue("--chart-3").trim()||"#d29922", css.getPropertyValue("--chart-5").trim()||"#f85149"];
+    const padL=48, padB=40, padT=16, padR=16; const max=30;
+    const plotW=W-padL-padR, plotH=H-padT-padB;
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle=css.getPropertyValue("--border").trim()||"#30363d"; ctx.fillStyle=css.getPropertyValue("--text-muted").trim()||"#8b949e"; ctx.font="13px system-ui";
+    for(let g=0; g<=max; g+=10){ const y=padT+plotH-(g/max)*plotH; ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke(); ctx.fillText(String(g), 12, y+4); }
+    const bw=plotW/data.length*0.6, gap=plotW/data.length;
+    data.forEach((d,i)=>{ const x=padL+gap*i+(gap-bw)/2; const h=(d.v/max)*plotH; const y=padT+plotH-h;
+      ctx.fillStyle=colors[i%colors.length]; ctx.fillRect(x,y,bw,h);
+      ctx.fillStyle=css.getPropertyValue("--text").trim()||"#c9d1d9"; ctx.textAlign="center"; ctx.fillText(d.v.toFixed(1), x+bw/2, y-6); ctx.fillText(d.label, x+bw/2, H-14); ctx.textAlign="start"; });
+    const btn=document.getElementById("toggle-chart"), tbl=document.getElementById("qchart-table");
+    btn.addEventListener("click",()=>{ const showTable=tbl.hasAttribute("hidden"); if(showTable){tbl.removeAttribute("hidden"); cv.style.display="none"; btn.textContent="View as chart";} else {tbl.setAttribute("hidden",""); cv.style.display=""; btn.textContent="View as table";} });
+  })();
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
