@@ -166,7 +166,7 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-For non-framework gates, use the same mapping and set `gate_type` to the active gate (`framework-selection`, `shortcut-selection`, or `synthesis`); omit `framework_slug` and `framework_mode` when no framework is active. In flat mode, omit `product_path` or set it to an empty value. The `command` must be the same parent-orchestrator command shown under `## Recommended Next Command After Compiling YAML`, including the same product/research path argument when present. It must never be a path-shaped child framework command.
+For non-framework gates, use the same mapping and set `gate_type` to the active gate (`framework-selection`, `shortcut-selection`, or `synthesis`); omit `framework_slug` and `framework_mode` when no framework is active. In flat mode, omit `product_path` or set it to an empty value. The `command` must be the same parent-orchestrator command shown under `## Continue In A Fresh Session`, including the same product/research path argument when present. It must never be a path-shaped child framework command.
 
 `agent_routing` is routing metadata, not execution authority. The receiving parent still validates `approval_status`, identifies which gate the YAML answers, derives progress from the run manifest plus canonical-intermediate file existence, writes or amends the appropriate artifact, archives consumed sources, and decides whether to load a framework subskill inline. Do not put framework-owned commands, downstream-skill commands, `$exec`, or `/exec` in this mapping.
 
@@ -175,7 +175,7 @@ For non-framework gates, use the same mapping and set `gate_type` to the active 
 Every terminal message for a Pattern A loop stop ends with these sections, in this order:
 
 1. `## Next Work` — one or two sentences naming the immediate next work state: review the alignment page, run the next pending framework, build synthesis, or move to the first downstream skill after approved synthesis.
-2. `## Recommended Next Command After Compiling YAML` — use only while a `review` approval gate is pending. Name the same parent orchestrator command with the same product/research path argument when present.
+2. `## Continue In A Fresh Session` — use only while a `review` approval gate is pending. Instruct the user to compile the bottom YAML and **paste it into a fresh session**, naming the same parent orchestrator command with the same product/research path argument when present as that fresh session's invocation, and noting that the compiled `agent_routing` carries the same command. The review step does **not** emit `## Recommended Next Command`; the fresh session emits it after consuming the YAML and writing the artifact.
 3. `## Recommended Next Command` — use only after approved YAML has been consumed and the approved artifact has been written or updated. Name the same parent orchestrator command while frameworks or synthesis remain; after final synthesis, name the first downstream command selected by the orchestrator's routing tree.
 
 Do not place any other section after the applicable command section. If no command is appropriate after final synthesis, write `No follow-up command recommended` under `## Recommended Next Command`.
@@ -188,7 +188,7 @@ Framework subskills do not own user-facing routing. When a framework is run inli
 
 Use two distinct labels so review pages do not hide the required continuation command:
 
-- `## Recommended Next Command After Compiling YAML` appears only while a `review` approval gate is pending. It names the same parent orchestrator command, with the same product/research path argument when present, so the user can review the HTML page, compile YAML, start a fresh session, and re-invoke the parent. This is not downstream routing.
+- `## Continue In A Fresh Session` appears only while a `review` approval gate is pending. It tells the user to review the HTML page, compile the bottom YAML, and paste it into a fresh session, naming the same parent orchestrator command, with the same product/research path argument when present, as that fresh session's invocation. This is not downstream routing.
 - `## Recommended Next Command` appears after the agent has consumed approved YAML, written or updated the approved artifact for the gate, and converted the page to `confirmed`. It names the same parent orchestrator command when the current Research Session Loop still has pending frameworks or synthesis.
 
 While any `review` approval gate is pending, do not route to downstream or cross-skill work. Framework subskills remain downstream-route-free in loop mode: they do not emit `Recommended next skill`, path-shaped child framework commands, `$exec`, `/exec`, or downstream commands. The parent orchestrator is the only user-facing continuation command during framework loops.
@@ -196,7 +196,7 @@ While any `review` approval gate is pending, do not route to downstream or cross
 ### Does the skill need to be re-invoked? Can the agent auto-call it?
 
 - **The skill is required to interpret the YAML.** The rules for what a compiled YAML means (which gate it answers, what to write, what to archive) live in the orchestrator's `SKILL.md`, not in the YAML. The YAML is data.
-- **Do not rely on auto-call.** A bare pasted YAML blob does not reliably trigger a skill; skills fire on explicit invocation or description match. The robust pattern is the **compiled YAML carrying `agent_routing` plus the page/terminal naming the literal next parent command** (above). If a fresh agent can use `agent_routing` to select the parent skill, it should still let that parent resolve state from YAML and filesystem rather than treating the YAML as a standalone command.
+- **Do not rely on auto-call.** A bare pasted YAML blob does not reliably trigger a skill; skills fire on explicit invocation or description match. The robust pattern is the **compiled YAML carrying `agent_routing` plus the `## Continue In A Fresh Session` section naming the literal parent command to invoke in the fresh session** (above). If a fresh agent can use `agent_routing` to select the parent skill, it should still let that parent resolve state from YAML and filesystem rather than treating the YAML as a standalone command.
 - **Framework subskills are followed inline, not separately invoked.** When the orchestrator self-advances into a framework (step C), it loads and follows that framework subskill's `SKILL.md` instructions within its own session. The user does not invoke the framework skill; the user only ever invokes the orchestrator.
 
 ## Heavy vs. light phases

@@ -27,7 +27,7 @@ When this framework is run inline and stops on its findings `review` page, the t
 ## Next Work
 Review the framework findings page and compile YAML. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
 
-## Recommended Next Command After Compiling YAML
+## Continue In A Fresh Session
 $positioning
 ```
 
@@ -49,7 +49,7 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Recommended Next Command After Compiling YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
+Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Continue In A Fresh Session`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.15 - 2026-06-18
+
+- Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.
+
 ## v1.14 - 2026-06-17
 
 - Made the State F deep interview self-contained and gated: added an inline **State F — Deep Interview (run before any handoff)** section enumerating Phases 1–4 (Phase 2 assumptions manifest and Phase 4 coverage checkpoint as terminal gates) and stated explicitly that the preliminary interview handoff may be written only after Phase 4 is confirmed — writing it before completing Phases 2 and 4 is a contract violation. Tightened the state-table row and State F handoff note to point at the new section. Closes a verified incident where a Codex run skipped the entire deep interview (asked zero questions) and wrote the handoff directly by reading the by-reference-only State F spec as "write the file and stop."

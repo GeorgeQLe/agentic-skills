@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.26 - 2026-06-18
+
+- Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.
+
 ## v0.25 - 2026-06-17
 
 - Added self-routing Pattern A continuation metadata (`agent_routing`) to review-gate YAML requirements so fresh sessions can route to the parent orchestrator while preserving parent-owned state resolution and inline framework loading.
