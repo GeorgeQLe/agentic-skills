@@ -12,8 +12,15 @@ import {
   listSkills,
   packManifestPaths,
   parsePack,
+  prefetchIndex,
   unique
 } from "../../../scripts/catalog/index.mjs";
+
+// The committed manifest must be a pure function of the git index (what the
+// committing session is staging), so a concurrent session's unstaged edits on
+// the shared working tree never leak into it. All content reads below go
+// through the index; discovery (gitFiles) already reads the index.
+const MANIFEST_SOURCE = { source: "index" };
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(packageRoot, "../..");
@@ -87,13 +94,13 @@ function readPackageJson() {
 }
 
 function skillContentHash(skillPath) {
-  return contentHash(repoRoot, skillPath);
+  return contentHash(repoRoot, skillPath, MANIFEST_SOURCE);
 }
 
 function packMetadataByName(files) {
   return new Map(
     packManifestPaths(files).map((packPath) => {
-      const pack = parsePack(repoRoot, packPath);
+      const pack = parsePack(repoRoot, packPath, MANIFEST_SOURCE);
       return [pack.name, pack];
     })
   );
@@ -175,7 +182,7 @@ function isInstallableSkill(skill) {
   return /^packs\/[^/]+\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path);
 }
 
-function buildSkills(skills) {
+function buildSkills(skills, files) {
   return skills
     .map((skill) => {
       return {
@@ -188,7 +195,7 @@ function buildSkills(skills) {
         path: skill.path,
         installable: isInstallableSkill(skill),
         content_sha256: skillContentHash(skill.path),
-        archive_versions: discoverArchiveVersions(repoRoot, skill.path),
+        archive_versions: discoverArchiveVersions(repoRoot, skill.path, { ...MANIFEST_SOURCE, files }),
         command: skill.command,
         deck_memberships: deckMembershipsForPack(skill.pack)
       };
@@ -198,8 +205,7 @@ function buildSkills(skills) {
 
 function buildManifest() {
   const files = gitFiles(repoRoot);
-  const skills = listSkills(repoRoot, files);
-  const packageJson = readPackageJson();
+  const archivePaths = files.filter((file) => /\/archive\/[^/]+\/SKILL\.md$/.test(file));
   const manifestSources = unique([
     ...activeSkillPaths(files),
     ...packManifestPaths(files),
@@ -209,15 +215,22 @@ function buildManifest() {
     "scripts/catalog/index.mjs"
   ]);
 
+  // Warm the index cache once so per-skill content reads below cost a single
+  // `git cat-file` spawn rather than one per file.
+  prefetchIndex(repoRoot, unique([...manifestSources, ...archivePaths]));
+
+  const skills = listSkills(repoRoot, files, MANIFEST_SOURCE);
+  const packageJson = readPackageJson();
+
   const manifest = {
     schema_version: 1,
     package: {
       name: packageJson.name,
       version: packageJson.version
     },
-    source_fingerprint: fileFingerprint(repoRoot, manifestSources),
+    source_fingerprint: fileFingerprint(repoRoot, manifestSources, MANIFEST_SOURCE),
     packs: buildPacks(files, skills),
-    skills: buildSkills(skills),
+    skills: buildSkills(skills, files),
     decks: buildDecks()
   };
 

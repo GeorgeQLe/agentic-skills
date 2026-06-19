@@ -178,12 +178,18 @@ function buildPackage() {
   const files = gitFiles(repoRoot);
   const skills = listSkills(repoRoot, files);
   const packs = listPacks(repoRoot, files, skills);
+  // Source fingerprint reads the git index (like the manifest generator) so it
+  // is a pure function of staged content and unaffected by a concurrent
+  // session's unstaged edits on the shared working tree. The website-boundary
+  // fingerprints below stay on the working tree on purpose: they exist to
+  // detect in-build mutation of website-owned generated assets, which is a
+  // working-tree concern.
   const sourceFingerprint = fileFingerprint(repoRoot, [
     ...activeSkillPaths(files),
     ...packManifestPaths(files),
     "scripts/pack.sh",
     "scripts/skill-links.sh"
-  ]);
+  ], { source: "index" });
 
   rmSync(buildRoot, { recursive: true, force: true });
   mkdirSync(buildRoot, { recursive: true });

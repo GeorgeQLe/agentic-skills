@@ -15,6 +15,92 @@ export function readText(repoRoot, relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), "utf8");
 }
 
+// ---------------------------------------------------------------------------
+// Git-index content source (opt-in).
+//
+// Discovery (gitFiles) already reads the index; by default content readers
+// (readText/contentHash/fileFingerprint/...) read the working tree. That mix
+// is fine for a clean single session but bakes another session's *unstaged*
+// edits into whole-repo artifacts on a shared working tree. Callers that must
+// be a pure function of what is staged opt into `{ source: "index" }`, which
+// routes content reads through the git index instead. Default stays "worktree"
+// so existing callers are byte-for-byte unaffected.
+// ---------------------------------------------------------------------------
+
+const indexContentCache = new Map();
+
+function indexCacheFor(repoRoot) {
+  let cache = indexContentCache.get(repoRoot);
+  if (!cache) {
+    cache = new Map();
+    indexContentCache.set(repoRoot, cache);
+  }
+  return cache;
+}
+
+function gitCatFileBatch(repoRoot, refs) {
+  const result = new Map();
+  if (refs.length === 0) {
+    return result;
+  }
+
+  const stdout = execFileSync("git", ["cat-file", "--batch"], {
+    cwd: repoRoot,
+    input: `${refs.join("\n")}\n`,
+    maxBuffer: 1024 * 1024 * 1024
+  });
+
+  let offset = 0;
+  for (const ref of refs) {
+    const newline = stdout.indexOf(0x0a, offset);
+    const header = stdout.toString("utf8", offset, newline);
+    offset = newline + 1;
+    const refPath = ref.slice(1); // strip leading ":"
+
+    const parts = header.split(" ");
+    if (parts[parts.length - 1] === "missing") {
+      result.set(refPath, null);
+      continue;
+    }
+
+    const size = Number.parseInt(parts[parts.length - 1], 10);
+    const content = stdout.toString("utf8", offset, offset + size);
+    offset += size + 1; // skip the content and its trailing newline
+    result.set(refPath, content);
+  }
+
+  return result;
+}
+
+// Batch-read the staged content of `paths` into the per-repo cache. Cheap to
+// call repeatedly: already-cached paths are skipped, so a single up-front call
+// followed by per-path reads costs one `git cat-file` spawn, not one per file.
+export function prefetchIndex(repoRoot, paths) {
+  const cache = indexCacheFor(repoRoot);
+  const missing = Array.from(new Set(paths)).filter((relativePath) => !cache.has(relativePath));
+  if (missing.length === 0) {
+    return;
+  }
+  const fetched = gitCatFileBatch(repoRoot, missing.map((relativePath) => `:${relativePath}`));
+  for (const [relativePath, content] of fetched) {
+    cache.set(relativePath, content);
+  }
+}
+
+// Read a path's staged content. Returns the content string, or null when the
+// path is not in the index (mirrors the existsSync guard of working-tree reads).
+export function readTextFromIndex(repoRoot, relativePath) {
+  const cache = indexCacheFor(repoRoot);
+  if (!cache.has(relativePath)) {
+    prefetchIndex(repoRoot, [relativePath]);
+  }
+  return cache.get(relativePath) ?? null;
+}
+
+function readContent(repoRoot, relativePath, source) {
+  return source === "index" ? readTextFromIndex(repoRoot, relativePath) : readText(repoRoot, relativePath);
+}
+
 export function readJson(repoRoot, relativePath) {
   const absolutePath = path.join(repoRoot, relativePath);
   if (!existsSync(absolutePath)) return null;
@@ -112,8 +198,8 @@ export function skillTags({ name, type, scope, pack, platform }) {
   return unique(raw).slice(0, 8);
 }
 
-export function parseSkill(repoRoot, relativePath) {
-  const text = readText(repoRoot, relativePath);
+export function parseSkill(repoRoot, relativePath, { source = "worktree" } = {}) {
+  const text = readContent(repoRoot, relativePath, source);
   const fields = parseFrontmatter(text);
   const segments = relativePath.split("/");
   const scope = segments[0] === "base" ? "base" : "pack";
@@ -142,8 +228,8 @@ export function parseSkill(repoRoot, relativePath) {
   };
 }
 
-export function parsePack(repoRoot, relativePath) {
-  const text = readText(repoRoot, relativePath);
+export function parsePack(repoRoot, relativePath, { source = "worktree" } = {}) {
+  const text = readContent(repoRoot, relativePath, source);
   const fields = parseFrontmatter(text);
   const name = relativePath.split("/")[1];
   const heading = text.match(/^#\s+(.+)$/m);
@@ -155,16 +241,21 @@ export function parsePack(repoRoot, relativePath) {
   };
 }
 
-export function listSkills(repoRoot, files = gitFiles(repoRoot)) {
+export function listSkills(repoRoot, files = gitFiles(repoRoot), { source = "worktree" } = {}) {
   return activeSkillPaths(files)
-    .map((skillPath) => parseSkill(repoRoot, skillPath))
+    .map((skillPath) => parseSkill(repoRoot, skillPath, { source }))
     .sort((a, b) => a.path.localeCompare(b.path));
 }
 
-export function listPacks(repoRoot, files = gitFiles(repoRoot), skills = listSkills(repoRoot, files)) {
+export function listPacks(
+  repoRoot,
+  files = gitFiles(repoRoot),
+  skills = listSkills(repoRoot, files),
+  { source = "worktree" } = {}
+) {
   const metadata = new Map(
     packManifestPaths(files).map((packPath) => {
-      const pack = parsePack(repoRoot, packPath);
+      const pack = parsePack(repoRoot, packPath, { source });
       return [pack.name, pack];
     })
   );
@@ -188,30 +279,39 @@ export function listPacks(repoRoot, files = gitFiles(repoRoot), skills = listSki
     });
 }
 
-export function fingerprintFiles(repoRoot, files) {
+export function fingerprintFiles(repoRoot, files, { source = "worktree" } = {}) {
+  if (source === "index") {
+    prefetchIndex(repoRoot, files);
+  }
   const hash = createHash("sha256");
   for (const relativePath of files) {
     hash.update(relativePath);
     hash.update("\0");
-    hash.update(readText(repoRoot, relativePath));
+    hash.update(readContent(repoRoot, relativePath, source) ?? "");
     hash.update("\0");
   }
   return hash.digest("hex");
 }
 
-export function contentHash(repoRoot, relativePath) {
+export function contentHash(repoRoot, relativePath, { source = "worktree" } = {}) {
   return createHash("sha256")
-    .update(readText(repoRoot, relativePath))
+    .update(readContent(repoRoot, relativePath, source) ?? "")
     .digest("hex");
 }
 
-export function fileFingerprint(repoRoot, files) {
+export function fileFingerprint(repoRoot, files, { source = "worktree" } = {}) {
+  if (source === "index") {
+    prefetchIndex(repoRoot, files);
+  }
   const hash = createHash("sha256");
   for (const relativePath of files) {
     hash.update(relativePath);
     hash.update("\0");
-    if (existsSync(path.join(repoRoot, relativePath))) {
-      hash.update(readText(repoRoot, relativePath));
+    const present = source === "index"
+      ? readTextFromIndex(repoRoot, relativePath) !== null
+      : existsSync(path.join(repoRoot, relativePath));
+    if (present) {
+      hash.update(readContent(repoRoot, relativePath, source));
     }
     hash.update("\0");
   }
@@ -238,7 +338,23 @@ export function discoverBenchmarkRunReportPaths(repoRoot) {
     .sort();
 }
 
-export function discoverArchiveVersions(repoRoot, skillPath) {
+export function discoverArchiveVersions(repoRoot, skillPath, { source = "worktree", files = null } = {}) {
+  if (source === "index") {
+    const skillDir = skillPath.split("/").slice(0, -1).join("/");
+    const archivePrefix = `${skillDir}/archive/`;
+    const fileList = files || gitFiles(repoRoot);
+    return fileList
+      .filter((file) => file.startsWith(archivePrefix) && file.endsWith("/SKILL.md"))
+      .filter((file) => file.slice(archivePrefix.length).split("/").length === 2)
+      .map((file) => {
+        const dirName = file.slice(archivePrefix.length).split("/")[0];
+        const fields = parseFrontmatter(readTextFromIndex(repoRoot, file) ?? "");
+        return fields.version || dirName;
+      })
+      .filter(Boolean)
+      .sort();
+  }
+
   const skillDir = path.dirname(path.join(repoRoot, skillPath));
   const archiveDir = path.join(skillDir, "archive");
   if (!existsSync(archiveDir)) {
