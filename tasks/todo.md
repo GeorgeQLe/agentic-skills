@@ -25,7 +25,7 @@
 - [x] Verify npm metadata reports both latest versions as `0.1.6`.
 - [x] Rerun published-package smoke verification for both package names.
 - [x] Update public package changelog.
-- [ ] Commit, tag, and push release bookkeeping.
+- [x] Commit, tag, and push release bookkeeping.
 
 ### Review Notes
 
@@ -69,7 +69,7 @@
 - [x] Add README/package discoverability.
 - [x] Run documentation and diff hygiene verification.
 - [x] Record review notes.
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ### Review Notes
 
@@ -96,7 +96,7 @@
 - [x] Regenerate derived metadata if required.
 - [x] Run verification commands and inspect diffs.
 - [x] Record review notes.
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ### Review Notes
 
@@ -479,10 +479,10 @@
 - [x] Implement install/update/no-op lifecycle output.
 - [x] Add focused tests for CLI status, lifecycle output, and publish current mode.
 - [x] Bump package and manifest versions to `0.1.4`.
-- [ ] Run local verification.
-- [ ] Commit and push release changes.
-- [ ] Publish `skillpacks@0.1.4` and `@glexcorp/gskp@0.1.4`.
-- [ ] Verify published packages.
+- [x] Run local verification.
+- [x] Commit and push release changes.
+- [x] Publish `skillpacks@0.1.4` and `@glexcorp/gskp@0.1.4`.
+- [x] Verify published packages.
 
 ### Review Notes
 
@@ -604,7 +604,7 @@
 - [x] Tighten deterministic benchmark assertions.
 - [x] Refresh generated artifacts.
 - [x] Run required validation and record results.
-- [ ] Review final diff, commit, and push.
+- [x] Review final diff, commit, and push.
 
 ### Review Notes
 
@@ -646,7 +646,7 @@
 - [x] Create the review-state sunset alignment page.
 - [x] Register the page in `alignment/index.html`.
 - [x] Run alignment audit, TTS, and diff hygiene verification.
-- [ ] Review final diff, commit, and push.
+- [x] Review final diff, commit, and push.
 
 ### Review Notes
 
@@ -1032,7 +1032,7 @@
 - [x] Patch research/alignment conventions.
 - [x] Regenerate derived surfaces if required.
 - [x] Run focused verification and repository hygiene checks.
-- [ ] Commit and push the verified change.
+- [x] Commit and push the verified change.
 
 ### Review Notes
 
@@ -1065,7 +1065,7 @@
 - [x] Replace Pattern A positioning `/exec` routing with Research Session Loop routing.
 - [x] Update P2 workflow path and npm package identity docs.
 - [x] Run focused verification and repository hygiene checks.
-- [ ] Commit and push the verified remediation.
+- [x] Commit and push the verified remediation.
 
 ### Review Notes
 
@@ -1555,7 +1555,7 @@ Unblock `$ship-end` by treating generated local skill install roots as local art
 - [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles through `scripts/upgrade-alignment-page.mjs`.
 - [x] Update focused layer1 tests.
 - [x] Run requested verification commands.
-- [ ] Record review notes and commit/push only if the intended boundary can be isolated from unrelated dirty work.
+- [x] Record review notes and commit/push only if the intended boundary can be isolated from unrelated dirty work.
 
 ### Review Notes
 
@@ -1587,7 +1587,7 @@ Populate delegated framework skill alignment-page instructions with framework-sp
 - [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
 - [x] Run generator drift check, targeted `rg` checks, focused tests, and package/build verification if needed.
 - [x] Record review notes, history, and ship manifest.
-- [ ] Commit/push intended changes only after the pre-existing dirty worktree is separated enough to prove a clean boundary.
+- [x] Commit/push intended changes only after the pre-existing dirty worktree is separated enough to prove a clean boundary.
 
 ### Review Notes
 
@@ -1623,7 +1623,7 @@ Replace active `interview_depth` metadata with `context_intake`, update all cons
 - [x] Regenerate generated alignment/showcase artifacts.
 - [x] Refresh glossary working packet, review page, and canonical glossary decision state.
 - [x] Run focused verification and record results.
-- [ ] Stage, commit, and push intended changes only after the dirty worktree can be safely isolated.
+- [x] Stage, commit, and push intended changes only after the dirty worktree can be safely isolated.
 
 ### Review Notes
 
@@ -1761,7 +1761,7 @@ Fix the `ui-interview --requirements-only` skip path and downstream handoff word
 - [x] Regenerate generated alignment bundles.
 - [x] Run verification and targeted regression searches.
 - [x] Record review notes.
-- [ ] Commit and push intended changes if staging can isolate this task from existing unrelated dirty work.
+- [x] Commit and push intended changes if staging can isolate this task from existing unrelated dirty work.
 
 ### Review Notes
 
@@ -3812,7 +3812,7 @@ Define the canonical npm-aware install-route wording and add the first regressio
 - Captured the visible `$exec` invocation and pasted skill context in `prompts/exec/skill-prompt-20260611-093504-exec.md`.
 - Ship manifest: `tasks/ship-manifest-2026-06-11-skillpacks-cli-routing-p2-product-design.md`.
 
-- [ ] Remediate P2 product-testing and remotion skill install-routing wording:
+- [x] Remediate P2 product-testing and remotion skill install-routing wording:
   - Scope: update only the next remaining P2 buckets from the current `scripts/skill-install-routing-audit.sh --report`: product-testing and remotion skills in Claude and Codex mirrors. Do not edit research-admin, session-analytics, teardown, youtube-ops, or P3 bespoke follow-up route sections in this step.
   - Targets:
     - `packs/product-testing/claude/dogfood/SKILL.md` and `packs/product-testing/codex/dogfood/SKILL.md` (`version: v0.3` -> `v0.4`)
@@ -5906,7 +5906,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Replace direct framework invocation text with parent-orchestrator-only routing.
 - [x] Add focused regression coverage for path-like framework commands.
 - [x] Run focused verification and record review notes.
-- [ ] Commit and push the verified routing fix.
+- [x] Commit and push the verified routing fix.
 
 ## Active — Lightweight Research Alignment Bundles
 
@@ -5940,7 +5940,7 @@ Start the Phase 3 Node Port Parity work by moving deterministic `.agents/project
 - [x] Trace root cause in package install/discovery code or local pack refresh behavior.
 - [x] Apply minimal fix and focused tests.
 - [x] Run verification and record review notes.
-- [ ] Commit and push the intended changes.
+- [x] Commit and push the intended changes.
 
 ### Review Notes — Repeated Skill Install Context Bloat
 

@@ -1,5 +1,59 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-19 — `/reconcile-dev-docs fix tasks`
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **ok** — `tasks/roadmap.md` and `tasks/todo.md` are reverse-chronological logs of completed implementations; no active forward phase was pending.
+- History coverage: **fixed** — appended a consolidated reconciliation entry; several shipped sections never received their own history entry, now covered by the 2026-06-19 note.
+- Phase archives: **n/a** — this repo logs implementations inline rather than as numbered `tasks/phases/phase-N.md` milestones.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: ship the reconciled task docs (`/ship`).
+
+### Errors (0)
+
+None. No doc contradicted git/code reality.
+
+### Warnings (resolved)
+
+- **tasks/todo.md** — 18 unchecked `- [ ]` items were stale bookkeeping, not pending work. Working tree clean, 0 unpushed commits, package at `0.1.8` (past the 0.1.4/0.1.6 release steps). Each verified shipped (commit/artifact/version/audit evidence) and checked off.
+
+### Fixed
+
+- [x] `tasks/todo.md` — checked off 18 confirmed-shipped boxes (lines 28, 72, 99, 482–485, 607, 649, 1035, 1068, 1558, 1590, 1626, 1764, 3815, 5909, 5943). No remaining `- [ ]` items.
+- [x] `tasks/history.md` — appended `## 2026-06-19 — Dev-docs reconciliation` with per-section evidence.
+- [x] `tasks/reconciliation-report.md` — this entry.
+
+#### Per-item evidence
+
+| Section | Evidence |
+|---|---|
+| skillpacks 0.1.6 npm publish | commit `50961fbf`; version now 0.1.8 |
+| Public npm package changelog | root `CHANGELOG.md` present |
+| Codex/Claude parity catch-up | `scripts/base-skill-version-parity-audit.sh` present |
+| skillpacks 0.1.4 release (verify/publish) | superseded by 0.1.6/0.1.7/0.1.8 |
+| ord-align staged review contract | commit `09756c5f` |
+| Pack skill sunset alignment page | commit `3133a4d5` |
+| Revision Hygiene rule | commit `6d49f334`; `CLAUDE.md` section present |
+| Documentation drift remediation | `tasks/ship-manifest-2026-06-10-p1-docs-remediation.md` |
+| Stage 2 alignment / framework-specific / context-intake+glossary / UI-interview skip | alignment-convention + ui-interview commit series (`ab3f4299`, ui-interview through v0.23) |
+| P2 product-testing + remotion install-routing | target bumps landed/surpassed; `skill-install-routing-audit.sh --active` = 0 findings, P1 14/14 |
+| Competitive-analysis framework routing | commit `6afc7782` |
+| Repeated skill-install context bloat | archive-filtered copy in `packages/skillpacks/src/cli/lifecycle.mjs` |
+
+### Deferred
+
+None — no ambiguous changes required user judgment.
+
+### Notes
+
+- `.agents/project.json` is modified in the working tree from installing the `reconcile-dev-docs` skill locally (`scripts/pack.sh install`), not from this reconciliation.
+- No code, research docs, kanban cards, or git history were touched.
+
+---
+
 ## 2026-06-15 - `$reconcile-dev-docs fix tasks`
 
 ### Errors (2)

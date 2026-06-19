@@ -14492,3 +14492,21 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Verified the already-committed framework-refresh-duplicate fix (commit `6fe9ad16`): all skillpacks node test suites green (92 tests), `skillpacks:verify` exit 0, manifest in sync, `git diff --check` clean. The fix was committed but not yet released — npm latest was `0.1.4` (cut ~10h before the fix landed).
 - Published `skillpacks@0.1.5` to npm (logged in as `glexcorp`); `verify:published` passed (license MIT, install/pin/unpin/refresh smoke tests green). Tagged `v0.1.5` (annotated, on `6fe9ad16`) and pushed — repo's first git tag.
 - End-to-end duplicate-install test against the published package: reproduced the bug on `0.1.4` (`install business-research` → 22 top-level roots incl. duplicate nested frameworks pmf-engine/w3-hypothesis/five-rings/etc.); confirmed `0.1.5` fresh pack install yields 7 correct parent roots + 0 framework duplicates, frameworks stay nested under parents, and `refresh` over a `0.1.4`-dirty install prunes the duplicate roots while preserving nested frameworks and unmanaged dirs.
+
+## 2026-06-19 — Dev-docs reconciliation: stale todo checkboxes
+
+- Ran `/reconcile-dev-docs fix tasks`. `tasks/todo.md` had 18 unchecked `- [ ]` items that were stale bookkeeping, not pending work — the working tree was clean and there were 0 unpushed commits.
+- Verified each item shipped via concrete evidence and checked them off:
+  - skillpacks 0.1.4/0.1.6 release + verify/publish steps — superseded by `0.1.8` (`package.json`); release commits `50961fbf` (0.1.6), `386af345` (0.1.7) present.
+  - Public npm package changelog — root `CHANGELOG.md` exists.
+  - Codex/Claude skill version parity catch-up — `scripts/base-skill-version-parity-audit.sh` exists.
+  - ord-align staged review contract — commit `09756c5f`.
+  - Pack skill sunset alignment page — commit `3133a4d5`.
+  - Revision Hygiene rule — commit `6d49f334`; `CLAUDE.md` contains the section.
+  - Documentation drift remediation — manifest `tasks/ship-manifest-2026-06-10-p1-docs-remediation.md`.
+  - Stage 2 alignment page template / framework-specific alignment / context-intake+glossary bootstrap / UI-interview skipping — shipped via the alignment-convention and ui-interview commit series (`ab3f4299` glossary bootstrap; ui-interview history through `v0.23`).
+  - P2 product-testing + remotion install-routing remediation (todo §"Skillpacks CLI Routing Remediation") — target version bumps landed and were surpassed (uat `v0.12` ≥ planned `v0.11`, youtube-format-research `v0.6` ≥ planned `v0.5`); `scripts/skill-install-routing-audit.sh --active` now reports 0 findings (P1 14/14, 395 files).
+  - Competitive-analysis framework routing — commit `6afc7782`.
+  - Repeated skill-install context bloat — archive-filtered copy in `packages/skillpacks/src/cli/lifecycle.mjs`.
+- No code, research docs, or git history were modified; only `tasks/todo.md` checkbox state, this append, and `tasks/reconciliation-report.md`.
+- `.agents/project.json` shows as modified from installing the `reconcile-dev-docs` skill locally (`scripts/pack.sh install`), not from this reconciliation.
