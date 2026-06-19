@@ -1,8 +1,8 @@
 ---
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
-type: research
-version: v0.1
+type: planning
+version: v0.2
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 invocation: orchestrator
 context_intake: scoped
@@ -98,7 +98,7 @@ Resolve scope by product path before using code or app structure as a hint:
 3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
 4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target.
 5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
-6. If no product directories exist, use flat single-product mode.
+6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint.
 
 When product path `{slug}` is active, read and write pre-prototype design artifacts under `design/{slug}/` and treat top-level `design/*.md` files as flat-mode documents. The topic slug derives from the flow-tree `topic` being modeled.

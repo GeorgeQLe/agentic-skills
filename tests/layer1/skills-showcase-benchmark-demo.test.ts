@@ -78,7 +78,12 @@ describe("skills showcase benchmark demos", () => {
     const data = loadShowcaseData();
     const packSkill = data.skills.find((skill) => skill.name === "pack" && skill.platform === "codex");
 
-    expect(packSkill?.benchmarkEvidence?.demo).toBeUndefined();
+    // pack now has raw run artifacts, so the regenerated showcase carries its
+    // benchmark-backed prompt/output demo.
+    expect(packSkill?.benchmarkEvidence?.demo).toBeDefined();
+    expect(packSkill?.benchmarkEvidence?.demo?.prompt).toBeTruthy();
+    expect(packSkill?.benchmarkEvidence?.demo?.output).toBeTruthy();
+    expect(packSkill?.benchmarkEvidence?.demo?.runPath).toContain("pack-codex");
   });
 });
 

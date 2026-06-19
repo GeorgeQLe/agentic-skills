@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.17
+version: v1.16
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
 context_intake: deep
@@ -175,7 +175,7 @@ Resolve research scope by product path before using code or app structure as a h
 6. If no product directories exist, use flat `research/` single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`. Product paths are research scopes, not git branches or parallel implementation lanes; preserve secondary `product_paths[]` without treating them as git branches.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`.
 
 0b. **Product-path manifest**: Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection.
 

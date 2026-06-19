@@ -1455,8 +1455,8 @@ describe("benchmark setup registry", () => {
       },
       {
         path: "packs/session-analytics/codex/analyze-sessions/SKILL.md",
-        route: "$targeted-skill-builder <concrete gap phrase>",
-        example: "$targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+        route: "$targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>",
+        example: "$targeted-skill-builder` (skill-dev pack) `run post-doc-edit validation and lessons capture gate",
         runner: "Codex-native",
       },
     ];

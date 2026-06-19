@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-18
+
+- Conformed to the staged-research lifecycle contract: Stage 1 now uses the canonical "rank candidates" literal, and a full `## Product-Path Scope Resolution` section was added (research/{slug} resolution, archived/abandoned/deferred exclusion, flat-mode fallback, monorepo-as-secondary-hint) so the skill satisfies the research-approval-gate and product-path-manifest contracts.
+
 ## v0.1 - 2026-06-15
 
 - Added explicit `business-research` availability wording around the `customer-discovery` reference so cross-pack routing remains guarded.

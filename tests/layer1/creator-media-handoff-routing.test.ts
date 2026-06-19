@@ -33,7 +33,7 @@ describe("creator-media artifact handoff and intent routing contracts", () => {
       const content = readFileSync(resolve(ROOT_DIR, relPath), "utf-8");
 
       expect(content).toContain("## Intent-Aware Routing");
-      expect(content).toMatch(/Before applying the default (`## Next-Skill Routing` sequence|next-step routing)/i);
+      expect(content).toMatch(/Before applying the default (`## Next-Skill Routing` sequence|`## Next-Step Routing` sequence|next-step routing)/i);
       expect(content).toMatch(/Strategy refresh/i);
       expect(content).toMatch(/Recording prep/i);
       expect(content).toMatch(/Upload prep/i);

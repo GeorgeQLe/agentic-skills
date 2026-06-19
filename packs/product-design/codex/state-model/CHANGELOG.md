@@ -1,5 +1,10 @@
 # state-model changelog (codex)
 
+## v0.2 - 2026-06-18
+
+- Reclassified `type: research` → `type: planning` to match its product-design pipeline siblings (`user-flow-map`, `ux-variations`, `ui-interview`). state-model is a logical-domain-modeling orchestrator anchored to a local approved flow map; it performs no synthesized/web research and writes no `research/_working` packets, so the staged-research lifecycle contract does not apply. (Benchmark coverage registers it as a blocked pack skill pending a deterministic multi-artifact fixture.)
+- Completed the Product-Path Scope Resolution flat-mode literal ("use flat `research/` single-product mode") so the skill satisfies the product-path-manifest scope-resolution contract.
+
 ## v0.1 - 2026-06-18
 
 - Setup-session and framework spec-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next pending framework named in **plain English** by what it models (never only its internal `{framework-slug}`), and the **exact** resolved next command with `{topic}` filled in (e.g. `$state-model alignment-page-review`). When no frameworks remain, the handoff routes to the synthesis session. Strengthens the prior bare `$state-model [topic]` handoff so the user always sees what the next unit is, not just the command.

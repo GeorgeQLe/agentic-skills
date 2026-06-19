@@ -70,7 +70,11 @@ describe("AFPS alignment preview gates", () => {
       expect(content, `${path} scope approval before synthesis`).toContain("final compiled YAML approves the research scope");
       expect(content, `${path} staged scope discovery`).toContain("Stage 1 - Scope discovery and approval");
       expect(content, `${path} proposed changes`).toContain("proposed canonical file changes");
-      expect(content, `${path} downstream stop`).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language");
+      // Accept either the canonical downstream-stop literal or the unified
+      // paraphrase the AFPS research orchestrators deliberately share.
+      expect(content, `${path} downstream stop`).toMatch(
+        /Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language|Do not include downstream or cross-skill command recommendations/,
+      );
     }
   });
 

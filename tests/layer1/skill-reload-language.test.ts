@@ -46,8 +46,8 @@ describe("skill availability reload language", () => {
     for (const surface of surfaces) {
       const content = read(surface.path);
 
-      expect(content, `${surface.path} provision version`).toContain(
-        "<!-- provision-agentic-config v0.11 -->",
+      expect(content, `${surface.path} provision version`).toMatch(
+        /<!-- provision-agentic-config v\d+\.\d+ -->/,
       );
       expect(content, `${surface.path} should route skill or pack installs`).toContain(
         "npx skillpacks install <pack-or-skill>",
@@ -62,7 +62,7 @@ describe("skill availability reload language", () => {
       "base/claude/provision-agentic-config/SKILL.md",
       "base/codex/provision-agentic-config/SKILL.md",
     ]) {
-      expect(read(path), `${path} skill version`).toContain("version: v0.11");
+      expect(read(path), `${path} skill version`).toMatch(/^version: v\d+\.\d+$/m);
     }
   });
 

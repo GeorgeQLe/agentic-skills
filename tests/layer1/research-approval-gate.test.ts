@@ -16,7 +16,11 @@ const skillFiles = [
 describe("research skill approval gates", () => {
   const stagedResearchSkills = skillFiles.filter((filePath) => {
     const raw = readFileSync(filePath, "utf-8");
-    return raw.includes("## Report-First Approval Gate") || raw.includes("## Staged Research Workflow");
+    // Only `type: research` skills carry the staged-research-writing contract.
+    // `type: analysis` skills (e.g. ord-align) may have their own report-first
+    // gate without being forced into the research-writing workflow.
+    const isTypeResearch = /^type:\s*research\s*$/m.test(raw);
+    return isTypeResearch && (raw.includes("## Report-First Approval Gate") || raw.includes("## Staged Research Workflow"));
   });
 
   it("finds staged research/report skills", () => {

@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v1.1
+version: v1.2
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
 visual_tier: prototype
@@ -198,9 +198,9 @@ The prototype build plan must include:
 - Revision/defer/drop rationale for branches not ready to build.
 - Flow-tree manifest build item IDs and artifact references.
 
-After approved files are written, hand off to the next skill instead of auto-running or auto-invoking it. How you hand off depends on how the approval YAML was consumed:
+After approved files are written, hand off instead of auto-running or auto-invoking the next skill. How you hand off depends on how the approval YAML was consumed:
 
-- **Same session that built the page** (the page-building conversation is still in context): present a two-option choice — (1) stop here so the user can clear context and run `$state-model [topic]` (recommended) or `$ux-variations [specific-user-flow]` in a fresh session, or (2) continue immediately in this session with `$state-model [topic]` to author the logical domain model before variation work, or `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch when the domain is trivial.
+- **Same session that built the page** (the page-building conversation is still in context): present a two-option choice — (1) Stop here so the user can clear context and run `$state-model [topic]` (recommended) or `$ux-variations [specific-user-flow]` in a fresh session, or (2) Continue immediately in this session with `$state-model [topic]` to author the logical domain model before variation work, or `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch when the domain is trivial.
 - **Already-fresh session** (the page-building conversation is not in context — e.g. the user cleared context and pasted the compiled approval YAML to start this session): there is no accumulated build context to shed, so do not present or recommend another context clear. Default to continue-now — invoke `$state-model [topic]` (recommended) to author the logical domain model before variation work, or `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch when the domain is trivial, and immediately enter its first required interaction gate. The user may still choose to stop.
 
 After approved prototype-build-plan files are written, route to `$prototype [topic]` or `$prototype [topic] --variant N` for the first pending build item. Do not route to `$prototype` before the build plan exists unless the user explicitly accepts an untracked ad hoc prototype run.

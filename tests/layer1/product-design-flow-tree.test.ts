@@ -116,7 +116,7 @@ describe("product-design flow tree artifact boundaries", () => {
 
   it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {
     const expectedRoute =
-      "user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
+      "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
 
     expect(read("docs/skill-next-step-contracts.md")).toContain(expectedRoute);
 

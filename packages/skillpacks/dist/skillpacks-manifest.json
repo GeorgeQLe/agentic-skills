@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "9c41f8ca060374b8de6782f84a273b6ffae93104884a786b5134440c6dcdeb1f",
+  "source_fingerprint": "a100bbf1a0a327b8b2e53d1bfc4e06da362e270133a5eeb025520e658d3603c7",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2930,10 +2930,10 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v1.16",
+      "version": "v1.17",
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "393c1ff94040510d29e08ea080a7d17ffc61262fa216657ed410f0f04e9dd069",
+      "content_sha256": "05f0f13e4a6ada757cc92cb9761baa7c06f7c61a44d2f76de59a959b67154cb5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2955,6 +2955,7 @@
         "v1.13",
         "v1.14",
         "v1.15",
+        "v1.16",
         "v1.2",
         "v1.3",
         "v1.4",
@@ -3559,10 +3560,10 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v1.16",
+      "version": "v1.17",
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "85e6804b3abe0be66ec1e942edb7a2abe2ac7193f1a2df127668eb6926a12330",
+      "content_sha256": "c7c8ababe018f862411874944f627343bd6ae2ebe805f2bccbfef665f9a89ee4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3584,6 +3585,7 @@
         "v1.13",
         "v1.14",
         "v1.15",
+        "v1.16",
         "v1.2",
         "v1.3",
         "v1.4",
@@ -6860,12 +6862,13 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/product-design/claude/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "db80a75e8f5d4c2f02763175c66a2475ac9d33a327afaa406955ea990dd01748",
+      "content_sha256": "22669d85db50f3859088f3b8cb34d0f41f5bb67804b9a9de8fb930ab62d0deba",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/design-inspirations",
       "deck_memberships": []
@@ -6976,12 +6979,13 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "7ff6c0b2d1b1c4b31335c6ca9d1a89e92010f7e576e5c12435c5d77a5901ec13",
+      "content_sha256": "b9b4e182f814ad3e839b2473d3f0ad4045df0905ccb53dd2ab077047ed0fb135",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/state-model",
       "deck_memberships": []
@@ -7031,10 +7035,10 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v1.1",
+      "version": "v1.2",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "db78691031419df2048e382d183db8477dfac9b91c45a1bd170d29b03f537bae",
+      "content_sha256": "6960e10ea73ddb5ab124a3578abdc24fd8d18ed450287fe87fe0be2212490499",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7046,7 +7050,8 @@
         "v0.7",
         "v0.8",
         "v0.9",
-        "v1.0"
+        "v1.0",
+        "v1.1"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -7141,12 +7146,13 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/product-design/codex/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "a3df6d5c86ce2aa909e80d1784a473761ff97c815128d189c7f52954d879840f",
+      "content_sha256": "6878b6597776d1ade5eb2794b878af31ee40c301a4841e50e855d00fd91405bb",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$design-inspirations",
       "deck_memberships": []
@@ -7257,12 +7263,13 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "4ceaebc1c8302b8d4c9a42987adc3d393b2667c39d1156436fa935ebfdc41e09",
+      "content_sha256": "1d663e010bfc77d875b81ebbaf99e30aeea6cd5a6754f5ad06c8450cc2ddfe0f",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$state-model",
       "deck_memberships": []
@@ -7312,10 +7319,10 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v1.1",
+      "version": "v1.2",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "dce48ff64f5dc6c68e7ea9411f7915d0288b060c99858defd1a79134ae775682",
+      "content_sha256": "46dc2119bf14a208ca81033c1754c5f7b06d9ad59ff170a682e214297169bb8f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7327,7 +7334,8 @@
         "v0.7",
         "v0.8",
         "v0.9",
-        "v1.0"
+        "v1.0",
+        "v1.1"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []
@@ -8526,11 +8534,13 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/youtube-ops/claude/youtube-derivative-cuts/SKILL.md",
       "installable": true,
-      "content_sha256": "19e3357882d68b5c199d0093c09af83aad8fb6b4c99c0a876310051f52514719",
-      "archive_versions": [],
+      "content_sha256": "426ee8e84be90a58fa43dd42948918da36028d971caa52e751f713ac1cb44467",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/youtube-derivative-cuts",
       "deck_memberships": []
     },
@@ -8828,11 +8838,13 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "path": "packs/youtube-ops/codex/youtube-derivative-cuts/SKILL.md",
       "installable": true,
-      "content_sha256": "28cfa35f7bffe126420e0da3c6b78238c3a3b9243c71a4259b656c1c77cb2330",
-      "archive_versions": [],
+      "content_sha256": "214d5565d5777715ebf157159cedce9e6a4d839498f25b1906857079b9e25626",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$youtube-derivative-cuts",
       "deck_memberships": []
     },

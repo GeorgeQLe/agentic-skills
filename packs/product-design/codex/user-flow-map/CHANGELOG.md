@@ -1,5 +1,9 @@
 # user-flow-map changelog (codex)
 
+## v1.2 - 2026-06-18
+
+- Aligned the post-approval handoff wording to the canonical contract literals required by the codex-interview-cadence handoff contract: "instead of auto-running or auto-invoking the next skill" (was "auto-invoking it"), and capitalized the explicit option labels "Stop here so the user can clear context" / "Continue immediately in this session".
+
 ## v1.1 - 2026-06-18
 
 - Chunked spec-session and setup-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next missing section named in **plain English** (never only the internal `{section-id}` — e.g. "action–state matrices: the per-screen actions/navigation/validation/state matrix"), and the **exact** resolved next command with `{slug}`/`{topic}` filled in (e.g. `$user-flow-map alignment-page-review`). When the last section was written, the handoff routes to the assemble+approve session instead of another spec session. Fixes the regression where a chunked stop ended with only a bare internal unit ID the user could not act on.

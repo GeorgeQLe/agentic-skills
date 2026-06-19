@@ -2,7 +2,7 @@
 name: youtube-derivative-cuts
 description: Plan a prioritized derivative content slate from one long YouTube source video using metadata, transcript, chapters, audits, portfolio evidence, and available metrics
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "<video URL | video ID | source audit path> [--audit <path>] [--portfolio <path>] [--metrics <path>] [--transcript <path>] [--chapters <path>] [--max-shorts N]"
 context_intake: artifact_only
 ---
@@ -273,15 +273,12 @@ After an approved synthesized write, explicit write/update mode, or any direct a
 
 Before applying the default `## Next-Step Routing` sequence, classify the user's immediate intent and route to the missing action that best serves that intent:
 
-- Strategy refresh: recommend the missing or stale positioning, programming, portfolio, or product-media artifact before derivative planning.
-- Recording prep: recommend the missing series spec, script, or build proof needed before producing the source video these cuts derive from.
 - Derivative slate planning: use this skill for clips, Shorts from this video, derivative cuts, repurposing a long video, and publish-sequence planning.
-- Upload prep: route upload-ready description, tags, links, and final metadata polish to `/youtube-description-optimizer`, and thumbnail/title Test-and-Compare questions to `/youtube-title-thumbnail-audit`.
+- Packaging: route thumbnail or Test and Compare questions to `/youtube-title-thumbnail-audit`.
+- Upload prep: route upload-ready description, tags, links, and final metadata polish to `/youtube-description-optimizer`.
+- Editing or production execution: route to human/editor workflow or `youtube-format-research` when the installed pack context supports format work.
 - Performance review: route to `/youtube-video-audit` or `/creator-metrics-review` when the user asks how published derivatives performed.
-- Owner analytics or private/manual platform evidence: route to an explicit manual/guide handoff instead of inventing unavailable metrics.
 - Dirty intended artifacts: route to shipping/commit/handoff first, not another creator strategy skill.
-
-Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
 ## Next-Step Routing
 
