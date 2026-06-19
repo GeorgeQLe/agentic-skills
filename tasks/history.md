@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-06-18 — competitive-analysis missing-pack follow-up routing
+
+- **Change**: in `competitive-analysis` Next Steps, missing-pack routes that recommend `npx skillpacks install <pack>` now also name the intended follow-up skill (e.g. `/journey-map`, `/user-flow-map`, `/gtm`, `/mvp-gap`, `/brainstorm`) to run after the pack is installed and the skill list is reloaded (`/reload-skills` or a fresh Claude session; refresh or a fresh Codex session). Previously the install handoff dropped which skill to run next. Applied to both claude + codex SKILL.md (Recommended + Other options blocks) with matching CHANGELOG bullets under the existing v0.26 (within-version refinement, no version bump).
+- **Regenerated**: tracked skillpacks manifest + skills-showcase `skills-data.js` (docs + app mirrors) from the git index after staging the source edit. `benchmark-results-matrix.md` working-tree drift (unrelated `exec-codex` run hash) was restored, not committed, per the concurrent-session rule.
+- **Verified**: `npm run build:check` (manifest in sync with index + package staging boundary) passed.
+
 ## 2026-06-18 — user-flow-map fresh-session handoff fix (v1.0)
 
 - **Problem**: in an already-fresh session (user cleared context and pasted the compiled approval YAML to start it), `user-flow-map`'s post-approval handoff still told the user to "stop and clear context, then run `/ux-variations` in a fresh session" — pure friction, since there is no accumulated build context to shed. The 0.1.7 alignment-routing work hardened a different axis (premature `$exec`/`/exec` routing out of `review` pages) and never touched fresh-session awareness.

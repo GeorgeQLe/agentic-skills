@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "a100bbf1a0a327b8b2e53d1bfc4e06da362e270133a5eeb025520e658d3603c7",
+  "source_fingerprint": "ff86c77c485c3359a92f1755f6e5fbd55441ce99b68ca40e057092451c7c19fb",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2740,7 +2740,7 @@
       "version": "v0.26",
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "7c248188903cbeb30ec31391ed915f91972d30609fbab298e5e3f39eacb605c7",
+      "content_sha256": "d199fbe6fd0ccca48c4711d5b4eef0d40464fbdd8d3bc06298a27065ce5f7799",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3370,7 +3370,7 @@
       "version": "v0.26",
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "6e423208fe9289aa3f3ac1814a0fb042becd15ab9372dd70e5876b858cec226f",
+      "content_sha256": "eab49db3c524f2853f1360e5d1e158403621ab822110850551cea3d5a59bf1f8",
       "archive_versions": [
         "v0.0",
         "v0.1",

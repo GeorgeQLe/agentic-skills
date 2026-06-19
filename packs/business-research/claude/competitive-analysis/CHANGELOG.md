@@ -3,6 +3,7 @@
 ## v0.26 - 2026-06-18
 
 - Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.
+- Missing-pack next-step routes now preserve the intended follow-up skill in the report rationale, so `npx skillpacks install <pack>` handoffs also tell the user which skill to run after `/reload-skills` or a fresh Claude session.
 
 ## v0.25 - 2026-06-17
 
