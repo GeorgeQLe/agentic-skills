@@ -37,6 +37,31 @@ fail() {
   exit 1
 }
 
+package_published() {
+  local package_name=$1
+  local version=$2
+  npm view "${package_name}@${version}" version >/dev/null 2>&1
+}
+
+tracked_changes_allowed_for_current_recovery() {
+  local status_output=$1
+  local line path
+
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    path=${line:3}
+    case "$path" in
+      packages/skillpacks/package.json|packages/skillpacks/dist/skillpacks-manifest.json)
+        ;;
+      *)
+        return 1
+        ;;
+    esac
+  done <<< "$status_output"
+
+  return 0
+}
+
 run() {
   printf '+'
   printf ' %q' "$@"
@@ -202,9 +227,15 @@ fi
 
 cd "$ROOT_DIR"
 
-if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+TRACKED_STATUS=$(git status --porcelain --untracked-files=no)
+if [[ -n "$TRACKED_STATUS" ]]; then
   git status --short
-  fail "Tracked working tree changes must be committed before publishing."
+  if [[ "$USE_CURRENT" == "1" ]] && tracked_changes_allowed_for_current_recovery "$TRACKED_STATUS"; then
+    printf 'WARNING: --current recovery is continuing with only release-state tracked changes present.\n' >&2
+    printf 'WARNING: Commit/tag/push packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json after recovery succeeds.\n' >&2
+  else
+    fail "Tracked working tree changes must be committed before publishing."
+  fi
 fi
 
 if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
@@ -229,12 +260,27 @@ if [[ "$USE_CURRENT" == "1" ]]; then
     fail "Package version $VERSION does not match manifest version $MANIFEST_VERSION."
   fi
 
-  log "Using current committed packages/skillpacks version $VERSION"
-  for package_name in skillpacks @glexcorp/gskp; do
-    if npm view "${package_name}@${VERSION}" version >/dev/null 2>&1; then
-      fail "${package_name}@${VERSION} is already published."
-    fi
-  done
+  log "Using current packages/skillpacks version $VERSION for partial-publish recovery"
+  SKILLPACKS_ALREADY_PUBLISHED=0
+  GSKP_ALREADY_PUBLISHED=0
+  if package_published skillpacks "$VERSION"; then
+    SKILLPACKS_ALREADY_PUBLISHED=1
+  fi
+  if package_published @glexcorp/gskp "$VERSION"; then
+    GSKP_ALREADY_PUBLISHED=1
+  fi
+
+  if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "1" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
+    fail "Recovery already complete: skillpacks@$VERSION and @glexcorp/gskp@$VERSION are both published."
+  fi
+  if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "0" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
+    fail "Inconsistent registry state: @glexcorp/gskp@$VERSION is published but skillpacks@$VERSION is missing."
+  fi
+  if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "0" && "$GSKP_ALREADY_PUBLISHED" == "0" ]]; then
+    fail "--current is only for partial-publish recovery. Neither skillpacks@$VERSION nor @glexcorp/gskp@$VERSION is published; use a version target instead."
+  fi
+
+  log "Recovery state confirmed: skillpacks@$VERSION exists and @glexcorp/gskp@$VERSION is missing"
 else
   log "Bumping packages/skillpacks to $TARGET"
   run_version_bump
@@ -318,7 +364,10 @@ if (failures.length) {
 NODE
 
 log "Running npm auth preflight"
-if [[ "$DRY_RUN" == "1" ]]; then
+if [[ "$USE_CURRENT" == "1" ]]; then
+  (cd "$SKILLPACKS_STAGE" && SKILLPACKS_NPM_ALLOW_PUBLISHED=true node scripts/prepublish-auth-check.mjs)
+  (cd "$GSKP_STAGE" && node scripts/prepublish-auth-check.mjs)
+elif [[ "$DRY_RUN" == "1" ]]; then
   (cd "$SKILLPACKS_STAGE" && npm_config_dry_run=true node scripts/prepublish-auth-check.mjs)
   (cd "$GSKP_STAGE" && npm_config_dry_run=true node scripts/prepublish-auth-check.mjs)
 else
@@ -328,7 +377,11 @@ fi
 
 log "Publishing staged packages"
 if [[ "$DRY_RUN" == "1" ]]; then
-  run npm publish "$SKILLPACKS_STAGE" --dry-run
+  if [[ "$USE_CURRENT" == "1" ]]; then
+    log "Recovery dry run: skipping skillpacks@$VERSION because it is already published."
+  else
+    run npm publish "$SKILLPACKS_STAGE" --dry-run
+  fi
   run npm publish "$GSKP_STAGE" --access public --dry-run
   log "Dry run complete; skipped published-package verification."
   exit 0
@@ -342,7 +395,11 @@ Release prerequisite reminder:
   - If skillpacks publishes but @glexcorp/gskp fails, fix npm auth/access and rerun: ./publish.sh --current
 EOF
 
-run npm publish "$SKILLPACKS_STAGE"
+if [[ "$USE_CURRENT" == "1" ]]; then
+  log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
+else
+  run npm publish "$SKILLPACKS_STAGE"
+fi
 run npm publish "$GSKP_STAGE" --access public
 
 log "Verifying published packages"
@@ -350,3 +407,8 @@ run env SKILLPACKS_PACKAGE_NAME=skillpacks SKILLPACKS_EXPECTED_VERSION="$VERSION
 run env SKILLPACKS_PACKAGE_NAME=@glexcorp/gskp SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_NPM_SPEC="@glexcorp/gskp@$VERSION" npm run skillpacks:verify-published
 
 log "Published skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
+cat <<EOF
+Post-publish source-state requirement:
+  1. Commit packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json at version $VERSION.
+  2. Tag the release, then push the commit and tag before starting another release.
+EOF

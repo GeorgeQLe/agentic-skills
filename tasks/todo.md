@@ -1,3 +1,37 @@
+## Current Implementation - npm Publish Recovery Hardening
+
+### Current Checklist
+
+- [x] Inspect release scripts, tests, docs, and current dirty tree.
+- [x] Implement `--current` partial-publish recovery behavior.
+- [x] Add dry-run auth/access preflight behavior.
+- [x] Add focused release recovery and auth preflight tests.
+- [x] Update release runbook and task review notes.
+- [x] Run package tests, build check, dry-run publish verification, and diff hygiene.
+- [x] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` shows unrelated Skills Showcase changes under `apps/skills-showcase/`; those are outside this implementation boundary and will not be reverted or included.
+- Current `publish.sh --current` rejects any already-published package version, which blocks the documented recovery state after `skillpacks@VERSION` publishes and `@glexcorp/gskp@VERSION` fails.
+- Current `prepublish-auth-check.mjs` skips auth during dry runs, so `./publish.sh --dry-run patch` does not prove the maintainer can publish both package names.
+- Implementation stance: preserve same-version parity, keep manual one-package publish prohibited, and allow recovery only through the release script.
+- Fix applied: `publish.sh --current` now confirms the recovery registry state, skips republishing `skillpacks`, publishes only `@glexcorp/gskp`, and still verifies both published package specs for real recovery runs.
+- Dirty-tree safety: normal publishes still require a clean tracked tree; `--current` recovery may continue only when the tracked changes are the expected release-state files, `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+- Dry-run preflight fix: `prepublish-auth-check.mjs` now runs npm auth, maintainer/scope, and target-version checks even with `npm_config_dry_run=true`; the recovery path uses `SKILLPACKS_NPM_ALLOW_PUBLISHED=true` only for the already-published `skillpacks` stage.
+- Test coverage added:
+  - `packages/skillpacks/test/publish-recovery.test.mjs` covers alias-only recovery publish, already-recovered registry state, and inconsistent alias-only registry state with mocked `npm`/`git`.
+  - `packages/skillpacks/test/prepublish-auth-check.test.mjs` now covers dry-run auth enforcement, scoped alias maintainer parsing, and explicit already-published allowance.
+- Focused verification passed:
+  - `node --test packages/skillpacks/test/prepublish-auth-check.test.mjs`
+  - `node --test packages/skillpacks/test/publish-recovery.test.mjs`
+- Full package verification passed after rerunning sequentially to avoid the known shared `packages/skillpacks/build` race:
+  - `npm --workspace packages/skillpacks run test:node` (112 tests)
+  - `npm --workspace packages/skillpacks run build:check`
+  - `git diff --check`
+- Verification note: the first parallel `test:node`/`build:check` run failed because both commands manipulate `packages/skillpacks/build`; rerunning sequentially passed.
+- Publish dry-run note: `./publish.sh --dry-run patch` currently exits at the clean-tree guard because the worktree has tracked edits. This is expected before committing this release-flow change; unrelated Skills Showcase edits were already present at session start and remain outside this boundary.
+
 ## Current Implementation - Guarantee Skill Convention Bundles
 
 ### Current Checklist

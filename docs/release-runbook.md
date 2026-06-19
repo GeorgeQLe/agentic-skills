@@ -47,7 +47,7 @@ Hard gates:
 
 - Do not run manual `npm publish` for only one package.
 - Do not publish if the staged `skillpacks` and `@glexcorp/gskp` versions differ.
-- Do not publish unless the npm account can publish both packages.
+- Do not publish unless the npm account can publish both packages. The dry run performs read-only `npm whoami`, maintainer/scope, and target-version checks for both staged package names.
 - Do not publish unless the dry run completes for both staged packages.
 
 ## Publish
@@ -66,19 +66,38 @@ For an explicit semver target:
 
 The script publishes `skillpacks` first, then `@glexcorp/gskp --access public`, and verifies both published package specs afterward.
 
+After a successful publish, commit and push the source release state immediately:
+
+```bash
+git add packages/skillpacks/package.json packages/skillpacks/dist/skillpacks-manifest.json
+git commit -m "Release skillpacks <version>"
+git tag skillpacks-v<version>
+git push
+git push origin skillpacks-v<version>
+```
+
+Use the actual published version in the commit message and tag. Do this before starting another release so npm and git do not drift.
+
 ## Partial-Publish Recovery
 
 If `skillpacks` publishes but `@glexcorp/gskp` fails:
 
 1. Do not run manual `npm publish` from either staged package directory.
 2. Fix npm auth, scope access, or OTP state.
-3. Rerun the release from the current committed package version:
+3. Leave the source release-state files at the failed release version. The recovery script allows only these tracked edits while recovering:
+   - `packages/skillpacks/package.json`
+   - `packages/skillpacks/dist/skillpacks-manifest.json`
+4. Rerun the release from the current package version:
 
 ```bash
 ./publish.sh --current
 ```
 
-`--current` is the recovery path because npm versions are immutable and the already-published `skillpacks` version must be matched by the scoped alias.
+`--current` is the recovery path because npm versions are immutable and the already-published `skillpacks` version must be matched by the scoped alias. It requires `skillpacks@<version>` to already exist, requires `@glexcorp/gskp@<version>` to be missing, skips republishing `skillpacks`, publishes only `@glexcorp/gskp`, then verifies both package specs.
+
+If both package versions already exist, recovery is complete and the script exits without publishing. If only `@glexcorp/gskp` exists, stop and investigate the inconsistent registry state.
+
+After recovery succeeds, commit, tag, and push the same source release-state files as described in the publish section.
 
 ## Post-Publish Verification
 

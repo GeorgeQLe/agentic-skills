@@ -1,3 +1,36 @@
+## Current Implementation - npm Publish Recovery Hardening
+
+### Goal
+
+Make the npm release process recoverable and auditable before the next publish by fixing `./publish.sh --current`, adding real auth/access checks to dry-run preflights, and documenting the source commit/tag requirements after successful publication.
+
+### Scope
+
+- `publish.sh` recovery, staging, registry-state checks, and dry-run auth preflight behavior
+- `packages/skillpacks/scripts/prepublish-auth-check.mjs`
+- Focused Node tests for release recovery and auth preflight behavior
+- `docs/release-runbook.md`
+- Task review notes and verification output
+
+### Plan
+
+1. Inspect current release script behavior, auth preflight tests, runbook guidance, and existing dirty tree state.
+2. Make `--current` a true partial-publish recovery path: require `skillpacks@VERSION` to exist, require `@glexcorp/gskp@VERSION` to be missing, skip republishing `skillpacks`, publish only the alias from the staged artifact, and verify both package specs afterward.
+3. Preserve safety by allowing `--current` recovery only from a clean tracked tree or from the expected release-state edits to `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+4. Add dry-run auth/access preflight behavior that still checks `npm whoami`, maintainer/scope access, and target-version availability without publishing.
+5. Extend tests for `--current` registry states and auth preflight behavior, including scoped alias maintainer parsing.
+6. Update the release runbook with recovery and post-publish commit/tag/push requirements.
+7. Run package tests, build check, publish dry run, and diff hygiene; record results.
+
+### Acceptance Criteria
+
+- `./publish.sh --current` succeeds only when `skillpacks@VERSION` exists and `@glexcorp/gskp@VERSION` is missing.
+- `./publish.sh --current` publishes only the alias package and still verifies both published specs.
+- Registry states where both packages exist or only the alias exists fail with clear messages.
+- Dry-run preflight proves npm auth and package access instead of skipping auth checks.
+- Successful releases leave explicit instructions and checks for committing/tagging/pushing the source version and manifest state.
+- Verification passes, or any unavailable external checks are recorded.
+
 ## Current Implementation - Guarantee Skill Convention Bundles
 
 ### Goal

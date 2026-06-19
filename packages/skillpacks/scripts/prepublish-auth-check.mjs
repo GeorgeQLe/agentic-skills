@@ -12,6 +12,7 @@ const packageVersion = packageJson.version;
 const registry = process.env.npm_config_registry || "https://registry.npmjs.org/";
 const expectedPublisher = process.env.SKILLPACKS_NPM_PUBLISHER || "glexcorp";
 const isDryRun = String(process.env.npm_config_dry_run || "").toLowerCase() === "true";
+const allowPublished = String(process.env.SKILLPACKS_NPM_ALLOW_PUBLISHED || "").toLowerCase() === "true";
 const npmTimeoutMs = Number(process.env.SKILLPACKS_NPM_PREFLIGHT_TIMEOUT_MS || 15000);
 
 function npm(args) {
@@ -55,11 +56,6 @@ function parseMaintainerNames(value) {
     return [value.name];
   }
   return [];
-}
-
-if (isDryRun) {
-  console.error("Skipping npm auth preflight for publish dry-run.");
-  process.exit(0);
 }
 
 const whoami = npm(["whoami"]);
@@ -116,10 +112,13 @@ if (maintainers.status === 0) {
 
 const publishedVersion = npm(["view", `${packageName}@${packageVersion}`, "version", "--json"]);
 if (publishedVersion.status === 0) {
-  fail(`${packageName}@${packageVersion} is already published to ${registry}.`);
-}
-if (!/E404|404/.test(`${publishedVersion.stdout}\n${publishedVersion.stderr}`)) {
+  if (allowPublished) {
+    console.error(`${packageName}@${packageVersion} is already published to ${registry}; continuing because SKILLPACKS_NPM_ALLOW_PUBLISHED=true.`);
+  } else {
+    fail(`${packageName}@${packageVersion} is already published to ${registry}.`);
+  }
+} else if (!/E404|404/.test(`${publishedVersion.stdout}\n${publishedVersion.stderr}`)) {
   fail(`Could not verify whether ${packageName}@${packageVersion} is already published.`, publishedVersion);
 }
 
-console.error(`npm publish auth preflight passed for ${packageName}@${packageVersion} as ${actualPublisher}.`);
+console.error(`npm publish auth preflight passed for ${packageName}@${packageVersion} as ${actualPublisher}${isDryRun ? " (dry run)" : ""}.`);
