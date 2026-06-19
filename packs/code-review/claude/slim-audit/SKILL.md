@@ -3,6 +3,7 @@ name: slim-audit
 description: Audit codebase for opportunities to reduce lines of code while preserving functionality, performance, and quality
 type: analysis
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[optional: specific package, directory, or file to scope the audit]"
 ---
 

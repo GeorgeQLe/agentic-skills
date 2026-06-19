@@ -3,6 +3,7 @@ name: pmf-engine
 description: Vohra/Supan PMF Engine - evaluate existing user data with Sean Ellis PMF signal, very-disappointed segmentation, retention/usage evidence, and High-Expectation Customer synthesis
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
 ---

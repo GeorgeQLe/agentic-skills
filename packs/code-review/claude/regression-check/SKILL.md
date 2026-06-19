@@ -3,6 +3,7 @@ name: regression-check
 description: Run a comprehensive health check across the monorepo after completing a phase or major change
 type: review
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[optional: specific package or directory to focus on]"
 ---
 

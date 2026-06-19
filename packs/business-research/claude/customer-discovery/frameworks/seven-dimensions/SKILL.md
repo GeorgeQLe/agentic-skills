@@ -3,6 +3,7 @@ name: seven-dimensions
 description: Lincoln Murphy 7 Dimensions of ICP — score ICP candidates on Readiness, Willingness, Ability, Success Potential, Acquisition Efficiency, Ascension Potential, and Advocacy Potential for composite fitness scoring
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
 ---

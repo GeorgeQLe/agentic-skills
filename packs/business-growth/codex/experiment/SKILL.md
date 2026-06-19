@@ -3,6 +3,7 @@ name: experiment
 description: Design lean validation experiments — hypothesis, method, success criteria, sample size, timeline, and decision rules
 type: planning
 version: v0.7
+required_conventions: [alignment-page]
 argument-hint: <hypothesis or assumption to test>
 context_intake: scoped
 ---

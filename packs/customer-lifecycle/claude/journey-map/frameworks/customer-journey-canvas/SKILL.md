@@ -3,6 +3,7 @@ name: customer-journey-canvas
 description: Stickdorn customer journey canvas — stage×touchpoints×actions×emotion×backstage×pain×opportunities grid
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: journey-map
 ---

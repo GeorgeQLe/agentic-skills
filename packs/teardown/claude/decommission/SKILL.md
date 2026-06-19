@@ -3,6 +3,7 @@ name: decommission
 description: Systematically tear down and remove a service, package, or infrastructure component
 type: execution
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: <what to decommission, e.g. "bismarck-v0.3" or "packages/old-auth">
 ---
 

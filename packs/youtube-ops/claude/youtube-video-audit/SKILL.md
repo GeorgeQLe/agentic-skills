@@ -3,6 +3,7 @@ name: youtube-video-audit
 description: Audit one YouTube video in depth using public metadata, transcript/content evidence, release timing, comments, and optional owner analytics
 type: research
 version: v0.6
+required_conventions: [alignment-page]
 argument-hint: "<video URL or ID> [--owner-analytics <path>] [--comments N] [--compare-channel <slug>]"
 context_intake: artifact_only
 ---

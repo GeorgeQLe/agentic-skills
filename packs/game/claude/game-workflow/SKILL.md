@@ -3,6 +3,7 @@ name: game-workflow
 description: Use only for video game projects; route research, validation, roadmap, metrics, and launch work through the game pack
 type: planning
 version: v0.3
+required_conventions: [alignment-page]
 invocation: orchestrator
 context_intake: artifact_only
 ---

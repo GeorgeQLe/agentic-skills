@@ -3,6 +3,7 @@ name: devtool-positioning
 description: Use only for developer-facing products; position against alternatives by workflow, ecosystem, trust, and switching cost
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 context_intake: scoped
 visual_tier: visual
 ---

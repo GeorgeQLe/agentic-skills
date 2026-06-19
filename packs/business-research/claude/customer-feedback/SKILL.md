@@ -3,6 +3,7 @@ name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
 type: research
 version: v0.9
+required_conventions: [alignment-page]
 argument-hint: "[file path, pasted text, or empty to be prompted]"
 context_intake: scoped
 visual_tier: visual

@@ -3,6 +3,7 @@ name: extract-shared-types
 description: Extract shared type definitions into a dedicated types directory without runtime behavior changes
 type: execution
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[optional: package, app, directory, or domain to refactor]"
 ---
 

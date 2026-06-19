@@ -3,6 +3,7 @@ name: release
 description: Version bump, generate changelog, tag, and prepare a release
 type: shipping
 version: v0.2
+required_conventions: [alignment-page]
 argument-hint: "[patch|minor|major] or [specific version like 1.2.3]"
 ---
 

@@ -3,6 +3,7 @@ name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
 type: shipping
 version: v0.2
+required_conventions: [alignment-page]
 argument-hint: "[focus area] [--target=codex]"
 ---
 

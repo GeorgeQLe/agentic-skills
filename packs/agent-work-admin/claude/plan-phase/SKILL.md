@@ -3,6 +3,7 @@ name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
 version: v0.5
+required_conventions: [alignment-page]
 argument-hint: "[phase-number] [--no-tdd]"
 invocation: sub-skill
 parent: exec

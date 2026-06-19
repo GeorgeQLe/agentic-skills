@@ -3,6 +3,7 @@ name: jtbd-needs
 description: Ulwick/Christensen JTBD — identify jobs, map desired outcomes, score importance vs satisfaction, and segment ICP candidates by unmet needs
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
 ---

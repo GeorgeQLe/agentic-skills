@@ -3,6 +3,7 @@ name: youtube-video-prelaunch-audit
 description: Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, packaging, title, description, chapters, publish settings, launch timing, and social cross-sharing strategy
 type: research
 version: v0.3
+required_conventions: [alignment-page]
 argument-hint: "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]"
 context_intake: artifact_only
 ---

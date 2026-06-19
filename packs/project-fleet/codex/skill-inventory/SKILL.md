@@ -3,6 +3,7 @@ name: skill-inventory
 description: Inventory downstream repository Claude and Codex skill installs from a control-repo manifest, classify managed local skill-copy drift against canonical agentic-skills sources, and produce report-only Markdown or JSON guidance without refreshing, deleting, or mutating downstream repos.
 type: ops
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[--manifest <path>] [--repo <path>] [--format markdown|json]"
 ---
 

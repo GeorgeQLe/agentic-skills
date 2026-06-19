@@ -3,6 +3,7 @@ name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
 version: v0.13
+required_conventions: [alignment-page]
 ---
 
 # Install Workflow Orchestration

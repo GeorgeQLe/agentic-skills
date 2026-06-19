@@ -3,6 +3,7 @@ name: youtube-derivative-cuts
 description: Plan a prioritized derivative content slate from one long YouTube source video using metadata, transcript, chapters, audits, portfolio evidence, and available metrics
 type: research
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "<video URL | video ID | source audit path> [--audit <path>] [--portfolio <path>] [--metrics <path>] [--transcript <path>] [--chapters <path>] [--max-shorts N]"
 context_intake: artifact_only
 ---

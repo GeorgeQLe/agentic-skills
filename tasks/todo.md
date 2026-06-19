@@ -1,3 +1,38 @@
+## Current Implementation - Guarantee Skill Convention Bundles
+
+### Current Checklist
+
+- [x] Inspect convention generator, package staging, metadata, and install test patterns.
+- [x] Add convention registry and read-only audit.
+- [x] Seed `required_conventions` metadata on active bundled skills.
+- [x] Wire audit into package verification and package boundary checks.
+- [x] Add install/refresh regression coverage for declared bundles.
+- [x] Run generator checks, global audit, refresh/doctor, package tests, package verification, and diff hygiene.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` shows unrelated dirty files under `apps/skills-showcase/`; those are outside this implementation boundary and will not be reverted or included.
+- Existing generator pattern: canonical convention docs live under `docs/`, packaged fallbacks live under `assets/`, and sibling bundles are generated into skill roots for runtime availability.
+- Existing package boundary already denies top-level `docs/`; this task keeps that contract and adds explicit bundle dependency metadata plus a global audit layer.
+- Fix applied: added `scripts/skill-convention-registry.mjs` and `scripts/skill-convention-bundle-audit.mjs`, seeded `required_conventions` on 304 active bundled skills, exposed `required_conventions` in the package manifest, and staged the interrogation convention generator/asset into the npm package boundary.
+- Audit behavior: the global audit checks declared-but-missing bundles, undeclared sibling bundles, undeclared convention references, tracked bundle presence, generator drift, and package staging coverage for registry scripts/assets. It intentionally allows declared source/package maintenance references to canonical `docs/*convention*` files while keeping top-level `docs/` unpublished.
+- Install/refresh proof: new lifecycle tests install and refresh representative `idea-scope-brief` and `user-flow-map` roots, then assert every declared convention bundle exists in both `.claude/skills/<skill>` and `.codex/skills/<skill>`.
+- Manifest proof: `packages/skillpacks/dist/skillpacks-manifest.json` now includes `required_conventions`, with tests covering alignment+interrogation, alignment+prototype, and no-convention skills.
+- Verification passed:
+  - `node scripts/upgrade-alignment-page.mjs --check`
+  - `node scripts/upgrade-interrogation-page.mjs --check`
+  - `node scripts/upgrade-prototype-session-loop.mjs --check`
+  - `node scripts/skill-convention-bundle-audit.mjs`
+  - `scripts/pack.sh refresh`
+  - `scripts/pack.sh doctor`
+  - `npm --workspace packages/skillpacks run test:node` (107 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+  - `git diff --cached --check`
+- Verification note: `npm run skillpacks:verify` produced a very large `npm pack --dry-run --json` file listing; the relevant gates passed and the listing includes the registry/audit scripts plus all three convention assets while top-level `docs/` remains excluded.
+
 ## Current Implementation - Prototype Convention Bundle Distribution
 
 ### Current Checklist

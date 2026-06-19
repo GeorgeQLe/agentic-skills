@@ -3,6 +3,7 @@ name: game-store-page-test
 description: Use only for video game projects; plan Steam/store page, capsule, trailer, screenshot, tag, and wishlist validation
 type: research
 version: v0.5
+required_conventions: [alignment-page]
 context_intake: scoped
 visual_tier: prototype
 ---

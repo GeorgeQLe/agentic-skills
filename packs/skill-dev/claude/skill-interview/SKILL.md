@@ -3,6 +3,7 @@ name: skill-interview
 description: Interview the user to define the characteristics of a skill they want created
 type: planning
 version: v0.2
+required_conventions: [alignment-page]
 argument-hint: "[skill-name-or-topic]"
 context_intake: deep
 ---

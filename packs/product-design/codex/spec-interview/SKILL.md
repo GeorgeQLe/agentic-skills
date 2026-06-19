@@ -3,6 +3,7 @@ name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
 version: v0.14
+required_conventions: [alignment-page]
 argument-hint: "[--ideas]"
 context_intake: deep
 ---

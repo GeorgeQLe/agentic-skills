@@ -3,6 +3,7 @@ name: design-inspirations
 description: Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills
 type: research
 version: v0.2
+required_conventions: [alignment-page, prototype-session-loop]
 argument-hint: "[optional: surface, product class, or reference products]"
 context_intake: scoped
 visual_tier: document

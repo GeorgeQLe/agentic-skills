@@ -3,6 +3,7 @@ name: consolidate-variations
 description: Compare multiple built UI variations, interview the user on what works and what doesn't, cherry-pick best elements, resolve conflicts, and produce a final consolidated prototype
 type: planning
 version: v0.14
+required_conventions: [alignment-page, prototype-session-loop]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
 ---

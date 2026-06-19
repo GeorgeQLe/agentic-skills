@@ -3,6 +3,7 @@ name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
 version: v0.11
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
 ---

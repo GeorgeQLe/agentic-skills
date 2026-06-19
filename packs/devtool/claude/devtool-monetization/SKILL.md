@@ -3,6 +3,7 @@ name: devtool-monetization
 description: Use only for developer-facing products; design pricing, packaging, limits, open-source strategy, and team conversion
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 context_intake: scoped
 visual_tier: visual
 ---

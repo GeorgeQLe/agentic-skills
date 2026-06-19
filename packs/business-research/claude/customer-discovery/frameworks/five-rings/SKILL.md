@@ -3,6 +3,7 @@ name: five-rings
 description: Revella Five Rings of Buying Insight — map Priority Initiatives, Success Factors, Perceived Barriers, Decision Criteria, and Buyer's Journey per ICP candidate to understand B2B buyer decision psychology
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
 ---

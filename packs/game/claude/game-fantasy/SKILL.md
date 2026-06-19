@@ -3,6 +3,7 @@ name: game-fantasy
 description: Use only for video game projects; define the emotional promise, player fantasy, vibe references, and hook
 type: research
 version: v0.5
+required_conventions: [alignment-page]
 context_intake: scoped
 ---
 

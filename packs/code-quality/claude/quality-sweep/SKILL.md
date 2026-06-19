@@ -3,6 +3,7 @@ name: quality-sweep
 description: Audit and implement behavior-preserving cleanup across types, dead code, dependencies, errors, and comments
 type: execution
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[audit|fix|full] [optional: package, app, directory, or domain]"
 ---
 

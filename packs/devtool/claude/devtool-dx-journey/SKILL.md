@@ -3,6 +3,7 @@ name: devtool-dx-journey
 description: Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys
 type: analysis
 version: v0.4
+required_conventions: [alignment-page]
 context_intake: artifact_only
 visual_tier: visual
 ---

@@ -192,6 +192,7 @@ function buildSkills(skills, files) {
         pack: skill.pack,
         platform: skill.platform,
         version: skill.version,
+        required_conventions: skill.requiredConventions,
         path: skill.path,
         installable: isInstallableSkill(skill),
         content_sha256: skillContentHash(skill.path),
@@ -212,7 +213,8 @@ function buildManifest() {
     "docs/decks.md",
     "packages/skillpacks/package.json",
     "packages/skillpacks/scripts/build-skillpacks-manifest.mjs",
-    "scripts/catalog/index.mjs"
+    "scripts/catalog/index.mjs",
+    "scripts/skill-convention-registry.mjs"
   ]);
 
   // Warm the index cache once so per-skill content reads below cost a single

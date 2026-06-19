@@ -3,6 +3,7 @@ name: creator-evidence-schema
 description: Define normalized creator evidence records, raw evidence paths, confidence fields, privacy notes, and collection constraints for multi-platform audits
 type: research
 version: v0.7
+required_conventions: [alignment-page]
 argument-hint: "[creator or project slug]"
 context_intake: artifact_only
 ---

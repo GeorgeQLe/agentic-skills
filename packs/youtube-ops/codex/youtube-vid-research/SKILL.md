@@ -3,6 +3,7 @@ name: youtube-vid-research
 description: Research one or more external YouTube videos for context, claims, structure, examples, terminology, and transferable takeaways
 type: research
 version: v0.6
+required_conventions: [alignment-page]
 argument-hint: "<video URL or ID...> [--focus context|claims|summary|references] [--compare-channel <slug>]"
 context_intake: artifact_only
 ---

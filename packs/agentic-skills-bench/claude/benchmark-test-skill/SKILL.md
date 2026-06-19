@@ -3,6 +3,7 @@ name: benchmark-test-skill
 description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
 type: execution
 version: v0.2
+required_conventions: [alignment-page]
 argument-hint: "<skill name>"
 ---
 

@@ -3,6 +3,7 @@ name: user-story-map
 description: Jeff Patton user story map — activity→task→story hierarchy with release slicing and walking skeleton identification
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: journey-map
 ---

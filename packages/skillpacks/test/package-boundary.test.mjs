@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
+import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -69,21 +70,31 @@ describe('skillpacks npm publish target boundary', () => {
       'src/cli/run-pack-script.mjs',
       'scripts/pack.sh',
       'scripts/skill-links.sh',
+      'scripts/skill-convention-bundle-audit.mjs',
+      'scripts/skill-convention-registry.mjs',
       'scripts/upgrade-alignment-page.mjs',
+      'scripts/upgrade-interrogation-page.mjs',
       'scripts/upgrade-prototype-session-loop.mjs',
       'scripts/audit-alignment-pages.mjs',
       'scripts/inject-tts.mjs',
       'scripts/alignment-tts-kokoro.js',
       'assets/alignment-page-convention.md',
+      'assets/interrogation-page-convention.md',
       'assets/prototype-session-loop-convention.md',
       'base/codex/pack/SKILL.md',
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
+      'base/codex/idea-scope-brief/INTERROGATION-PAGE.md',
       'packs/product-design/codex/user-flow-map/PROTOTYPE-SESSION-LOOP.md',
       'packs/product-testing/codex/uat/PROTOTYPE-SESSION-LOOP.md',
       'packs/code-quality/PACK.md'
     ]) {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published`);
+    }
+
+    for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
+      assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
+      assert.equal(paths.has(convention.packageAsset), true, `${id} package asset should be published`);
     }
   });
 });

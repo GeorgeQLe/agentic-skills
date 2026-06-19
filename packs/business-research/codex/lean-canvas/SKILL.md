@@ -3,6 +3,7 @@ name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
 version: v0.11
+required_conventions: [alignment-page]
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 context_intake: scoped
 visual_tier: visual

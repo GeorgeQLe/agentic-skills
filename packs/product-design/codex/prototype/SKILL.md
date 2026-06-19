@@ -3,6 +3,7 @@ name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
 version: v0.16
+required_conventions: [alignment-page, prototype-session-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---

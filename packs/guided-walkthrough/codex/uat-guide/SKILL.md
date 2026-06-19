@@ -3,6 +3,7 @@ name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
 version: v0.5
+required_conventions: [alignment-page]
 argument-hint: "[optional: journey number, journey name, or 'next']"
 visual_tier: prototype
 ---

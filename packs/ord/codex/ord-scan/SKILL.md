@@ -3,6 +3,7 @@ name: ord-scan
 description: Scan for OSS tool opportunities from npm gaps, GitHub trends, and developer pain points
 type: research
 version: v0.2
+required_conventions: [alignment-page]
 context_intake: artifact_only
 ---
 

@@ -3,6 +3,7 @@ name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
 type: research
 version: v0.26
+required_conventions: [alignment-page]
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 context_intake: scoped

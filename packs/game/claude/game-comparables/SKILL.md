@@ -3,6 +3,7 @@ name: game-comparables
 description: Use only for video game projects; research comparable titles, tags, prices, player signals, and positioning patterns
 type: research
 version: v0.5
+required_conventions: [alignment-page]
 context_intake: scoped
 visual_tier: visual
 ---

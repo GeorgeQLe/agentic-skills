@@ -3,6 +3,7 @@ name: dead-code
 description: Scan for unused exports, unreachable code, orphaned files, and stale dependencies
 type: analysis
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: "[optional: specific package or directory to scope the scan]"
 ---
 

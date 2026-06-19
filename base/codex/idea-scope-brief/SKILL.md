@@ -3,6 +3,7 @@ name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
 version: v0.18
+required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
 ---

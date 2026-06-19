@@ -3,6 +3,7 @@ name: moore-positioning
 description: Geoffrey Moore positioning hypothesis — generate positioning statement using the Crossing the Chasm template
 type: research
 version: v0.11
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
 ---

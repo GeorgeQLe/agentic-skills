@@ -3,6 +3,7 @@ name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
 type: analysis
 version: v0.5
+required_conventions: [alignment-page]
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 context_intake: deep
 visual_tier: visual

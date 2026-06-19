@@ -3,6 +3,7 @@ name: decommission
 description: Systematically tear down and remove a service, package, or infrastructure component
 type: execution
 version: v0.1
+required_conventions: [alignment-page]
 ---
 
 # Decommission

@@ -3,6 +3,7 @@ name: ord-align
 description: Validate whether an OSS tool is worth building through staged namespace, existing-solution, and feasibility review
 type: analysis
 version: v0.2
+required_conventions: [alignment-page]
 context_intake: scoped
 research_workflow: lightweight
 ---

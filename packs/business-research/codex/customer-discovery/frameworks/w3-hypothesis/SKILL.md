@@ -3,6 +3,7 @@ name: w3-hypothesis
 description: Schwartzfarb W3 — define WHO/WHAT/WHY for each ICP candidate, generate disproval hypotheses, and validate via targeted research
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
 ---

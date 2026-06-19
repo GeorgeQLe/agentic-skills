@@ -3,6 +3,7 @@ name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
 version: v0.12
+required_conventions: [alignment-page]
 argument-hint: "[--existing] [path-to-spec]"
 ---
 

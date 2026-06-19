@@ -3,6 +3,7 @@ name: fork-idea-branch
 description: Split an active research path into multiple parallel product paths, archiving the original and scaffolding fresh starts per branch
 type: planning
 version: v0.0
+required_conventions: [alignment-page]
 argument-hint: "[path-a-label] [path-b-label] [--from <skill>] [--reuse <artifact-types>]"
 ---
 

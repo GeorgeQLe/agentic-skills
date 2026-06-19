@@ -3,6 +3,7 @@ name: investor-update
 description: Generate structured monthly stakeholder update from current research state, metrics, roadmap, and feedback
 type: analysis
 version: v0.4
+required_conventions: [alignment-page]
 argument-hint: "[optional: month e.g. \"March 2026\"]"
 context_intake: artifact_only
 visual_tier: visual

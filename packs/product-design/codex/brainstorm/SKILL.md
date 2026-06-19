@@ -3,6 +3,7 @@ name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with $feature-interview
 type: planning
 version: v0.3
+required_conventions: [alignment-page]
 argument-hint: "[optional focus area]"
 context_intake: scoped
 visual_tier: prototype

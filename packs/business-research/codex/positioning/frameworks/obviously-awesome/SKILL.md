@@ -3,6 +3,7 @@ name: obviously-awesome
 description: April Dunford Obviously Awesome methodology — 5-step positioning from real customer evidence
 type: research
 version: v0.11
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
 ---

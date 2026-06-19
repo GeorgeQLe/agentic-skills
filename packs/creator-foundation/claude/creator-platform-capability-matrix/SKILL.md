@@ -3,6 +3,7 @@ name: creator-platform-capability-matrix
 description: Map creator platforms to free/manual evidence sources, available fields, audit depth, operational risk, and recommended next skill
 type: research
 version: v0.7
+required_conventions: [alignment-page]
 argument-hint: "[creator or project slug]"
 context_intake: artifact_only
 visual_tier: visual

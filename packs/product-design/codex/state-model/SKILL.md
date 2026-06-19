@@ -3,6 +3,7 @@ name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
 version: v0.2
+required_conventions: [alignment-page, prototype-session-loop]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 invocation: orchestrator
 context_intake: scoped

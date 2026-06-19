@@ -3,6 +3,7 @@ name: retention-map
 description: Plan repeat-use loops, lifecycle triggers, churn risks, recovery paths, and retention signals
 type: analysis
 version: v0.5
+required_conventions: [alignment-page]
 argument-hint: "[optional: app, persona, or retention stage]"
 context_intake: deep
 visual_tier: visual

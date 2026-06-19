@@ -3,6 +3,7 @@ name: strategic-group-map
 description: Strategic group map competitive analysis - cluster competitors by market axes and identify segment whitespace
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: competitive-analysis
 ---

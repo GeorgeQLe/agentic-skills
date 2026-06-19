@@ -19,6 +19,7 @@ import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
 import { uninstallGlobal } from '../src/cli/lifecycle.mjs';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
+import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '..', '..');
@@ -131,6 +132,30 @@ function installedSkillFiles(projectRoot, tool, skill) {
 
   visit(root);
   return files.sort();
+}
+
+function requiredConventionIds(projectRoot, tool, skill) {
+  const skillMarkdown = readFileSync(join(skillPath(projectRoot, tool, skill), 'SKILL.md'), 'utf8');
+  const match = skillMarkdown.match(/^required_conventions:\s*\[([^\]]*)\]\s*$/m);
+  if (!match) return [];
+  return match[1]
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
+function assertDeclaredBundlesInstalled(projectRoot, tool, skill) {
+  const required = requiredConventionIds(projectRoot, tool, skill);
+  assert.notEqual(required.length, 0, `${tool}/${skill} should declare required conventions`);
+  for (const id of required) {
+    const convention = SKILL_CONVENTIONS[id];
+    assert.ok(convention, `${tool}/${skill} declares known convention ${id}`);
+    assert.equal(
+      existsSync(join(skillPath(projectRoot, tool, skill), convention.bundleFile)),
+      true,
+      `${tool}/${skill} should install ${convention.bundleFile}`
+    );
+  }
 }
 
 function writeManagedInstall(projectRoot, tool, skill, source, options = {}) {
@@ -382,6 +407,18 @@ describe('Node lifecycle commands', () => {
     assert.equal(Object.hasOwn(readProjectConfig(dir), 'base_skills'), false);
   });
 
+  it('installs declared convention bundles into local skill roots', async () => {
+    const dir = makeTempProject();
+
+    await runSkillpacks(dir, ['install', 'idea-scope-brief']);
+    await runSkillpacks(dir, ['install', 'user-flow-map']);
+
+    for (const tool of ['claude', 'codex']) {
+      assertDeclaredBundlesInstalled(dir, tool, 'idea-scope-brief');
+      assertDeclaredBundlesInstalled(dir, tool, 'user-flow-map');
+    }
+  });
+
   it('refreshes individually enabled base skills', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {
@@ -400,6 +437,26 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
     assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
+  });
+
+  it('refreshes declared convention bundles into local skill roots', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'idea-scope-brief': 'base',
+        'user-flow-map': 'product-design'
+      }
+    });
+
+    await runSkillpacks(dir, ['refresh']);
+
+    for (const tool of ['claude', 'codex']) {
+      assertDeclaredBundlesInstalled(dir, tool, 'idea-scope-brief');
+      assertDeclaredBundlesInstalled(dir, tool, 'user-flow-map');
+    }
   });
 
   it('installs individual pinned skills as archive symlinks and tracks enabled skills', async () => {

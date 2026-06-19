@@ -148,6 +148,36 @@ export function parseFrontmatter(markdown) {
   return fields;
 }
 
+export function parseFrontmatterList(markdown, field) {
+  const frontmatter = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontmatter) return [];
+
+  const fields = parseFrontmatter(markdown);
+  const scalar = fields[field];
+  if (scalar) {
+    const inline = scalar.match(/^\[(.*)\]$/);
+    const raw = inline ? inline[1] : scalar;
+    return raw
+      .split(",")
+      .map((value) => value.trim().replace(/^['"]|['"]$/g, ""))
+      .filter(Boolean)
+      .sort();
+  }
+
+  const lines = frontmatter[1].split("\n");
+  const start = lines.findIndex((line) => line === `${field}:`);
+  if (start === -1) return [];
+
+  const values = [];
+  for (let index = start + 1; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (/^[A-Za-z0-9_-]+:\s*/.test(line)) break;
+    const item = line.match(/^\s*-\s*([^#]+?)\s*(?:#.*)?$/);
+    if (item) values.push(item[1].trim().replace(/^['"]|['"]$/g, ""));
+  }
+  return values.filter(Boolean).sort();
+}
+
 export function titleize(name) {
   return name
     .split(/[-_]+/)
@@ -217,6 +247,7 @@ export function parseSkill(repoRoot, relativePath, { source = "worktree" } = {})
     contextIntake: fields.context_intake || null,
     visualTier: fields.visual_tier || null,
     version: fields.version || null,
+    requiredConventions: parseFrontmatterList(text, "required_conventions"),
     argumentHint: fields["argument-hint"] || null,
     platform,
     command: platform === "claude" ? `/${name}` : `$${name}`,

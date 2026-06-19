@@ -3,6 +3,7 @@ name: experience-map
 description: Adaptive Path experience map — emotional arc with doing/thinking/feeling layers, pain/delight moments, and channel transitions
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: journey-map
 ---

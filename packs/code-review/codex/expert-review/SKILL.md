@@ -3,6 +3,7 @@ name: expert-review
 description: Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents
 type: review
 version: v0.1
+required_conventions: [alignment-page]
 ---
 
 # Expert Review

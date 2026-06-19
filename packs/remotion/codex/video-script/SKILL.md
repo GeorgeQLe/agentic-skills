@@ -3,6 +3,7 @@ name: video-script
 description: Draft a scene-by-scene video script with timing, visual direction, narration, and source attribution from upstream creator-media artifacts
 type: planning
 version: v0.2
+required_conventions: [alignment-page]
 argument-hint: "<topic or slug> [--type launch|explainer|demo|testimonial] [--duration short|medium|long] [--series <series-slug>]"
 ---
 

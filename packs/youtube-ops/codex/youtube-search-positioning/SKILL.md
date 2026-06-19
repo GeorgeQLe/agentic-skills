@@ -3,6 +3,7 @@ name: youtube-search-positioning
 description: Find YouTube search opportunities by comparing channel topics against query demand, ranking competition, and underserved results
 type: research
 version: v0.6
+required_conventions: [alignment-page]
 argument-hint: "<channel slug or handle> [--keywords <kw1,kw2,...>] [--count N]"
 context_intake: artifact_only
 ---

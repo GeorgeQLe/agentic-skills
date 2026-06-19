@@ -3,6 +3,7 @@ name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
 version: v0.12
+required_conventions: [alignment-page]
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 context_intake: deep
 visual_tier: visual

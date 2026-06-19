@@ -3,6 +3,7 @@ name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
 version: v0.7
+required_conventions: [alignment-page]
 argument-hint: "[optional project path, product path, or focus]"
 ---
 

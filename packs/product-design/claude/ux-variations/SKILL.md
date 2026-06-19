@@ -3,6 +3,7 @@ name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
 version: v0.22
+required_conventions: [alignment-page, prototype-session-loop]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 visual_tier: prototype
 ---

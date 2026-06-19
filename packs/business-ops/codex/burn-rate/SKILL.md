@@ -3,6 +3,7 @@ name: burn-rate
 description: "Estimate monthly burn rate from infrastructure signals and calculate payback period against revenue projections"
 type: analysis
 version: v0.5
+required_conventions: [alignment-page]
 context_intake: scoped
 visual_tier: visual
 ---

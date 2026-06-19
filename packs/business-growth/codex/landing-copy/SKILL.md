@@ -3,6 +3,7 @@ name: landing-copy
 description: Generate or audit landing page copy grounded in upstream research — hero, benefits, social proof, pricing, FAQ, and CTAs
 type: research
 version: v0.9
+required_conventions: [alignment-page]
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 context_intake: deep
 visual_tier: prototype

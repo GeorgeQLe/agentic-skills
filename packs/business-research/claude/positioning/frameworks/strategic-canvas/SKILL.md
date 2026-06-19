@@ -3,6 +3,7 @@ name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, identify eliminate/reduce/raise/create moves
 type: research
 version: v0.11
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
 ---

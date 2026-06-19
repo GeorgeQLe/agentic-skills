@@ -3,6 +3,7 @@ name: migrate
 description: Guide a structural migration or dependency upgrade with a step-by-step plan and verification
 type: execution
 version: v0.1
+required_conventions: [alignment-page]
 argument-hint: <description of migration, e.g. "move components into subdirectories" or "upgrade Next.js to 15">
 ---
 

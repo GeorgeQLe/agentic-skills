@@ -3,6 +3,7 @@ name: service-blueprint
 description: Shostack service blueprint — map front-stage/backstage/support/evidence lines and identify operational gaps
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: journey-map
 ---

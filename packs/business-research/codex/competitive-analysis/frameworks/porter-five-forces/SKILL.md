@@ -3,6 +3,7 @@ name: porter-five-forces
 description: Porter's Five Forces competitive analysis - industry structure, rivalry, substitutes, entrants, buyer power, and supplier power
 type: research
 version: v0.8
+required_conventions: [alignment-page]
 invocation: sub-skill
 parent: competitive-analysis
 ---

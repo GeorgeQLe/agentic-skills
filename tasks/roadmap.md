@@ -1,3 +1,36 @@
+## Current Implementation - Guarantee Skill Convention Bundles
+
+### Goal
+
+Make convention bundle dependencies explicit, audited, and package-gated so any active skill that needs a convention bundle declares it in `SKILL.md` frontmatter and source/package/install checks fail if the bundle is missing, stale, unpublished, or not copied into local skill roots.
+
+### Scope
+
+- Active `base/**/SKILL.md` and `packs/**/SKILL.md` frontmatter metadata
+- Convention registry and global bundle audit scripts under `scripts/`
+- Package staging and package boundary checks
+- Skillpacks install/refresh regression coverage for representative convention-bundled skills
+- Task review notes and verification output
+
+### Plan
+
+1. Inspect the existing alignment, interrogation, and prototype convention generators, package staging, active skill metadata, and install/refresh tests.
+2. Add a central convention registry that maps each convention ID to its canonical docs path, sibling bundle filename, packaged asset path, and check command.
+3. Seed `required_conventions` frontmatter on active skills from existing sibling bundles.
+4. Add a read-only global audit that checks declared/missing/undeclared bundles, stale generated content, references without declarations, package staging asset/script coverage, and tracked bundle presence.
+5. Wire the audit into package build verification and focused package boundary tests while keeping top-level `docs/` unpublished.
+6. Add install/refresh regression coverage using temp projects to prove representative skills copy every declared bundle into `.claude/skills/*` and `.codex/skills/*`.
+7. Run generator checks, the new audit, refresh/doctor, package tests, package verification, and diff hygiene.
+8. Record review notes, then commit and push intended tracked changes on the primary branch.
+
+### Acceptance Criteria
+
+- Every active skill with `ALIGNMENT-PAGE.md`, `INTERROGATION-PAGE.md`, or `PROTOTYPE-SESSION-LOOP.md` declares the matching convention ID in `required_conventions`.
+- The global audit fails on missing declared bundles, undeclared sibling bundles, convention references without declarations, generated bundle drift, missing tracked required bundles, and package staging omissions.
+- The npm package includes convention maintenance scripts/assets and sibling runtime bundles, while top-level `docs/` remains unpublished.
+- Install/refresh tests prove declared bundles are copied into local `.claude/skills` and `.codex/skills` roots.
+- Verification passes, or any unrelated pre-existing failure is proven.
+
 ## Current Implementation - Prototype Convention Bundle Distribution
 
 ### Goal

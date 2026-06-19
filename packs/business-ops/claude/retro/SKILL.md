@@ -3,6 +3,7 @@ name: retro
 description: Strategic decision retrospective — review research decisions against actual outcomes, update confidence levels
 type: analysis
 version: v0.5
+required_conventions: [alignment-page]
 argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 context_intake: scoped
 ---

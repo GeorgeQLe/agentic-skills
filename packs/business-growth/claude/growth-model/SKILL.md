@@ -2,6 +2,7 @@
 name: growth-model
 type: research
 version: v0.9
+required_conventions: [alignment-page]
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
 context_intake: scoped
