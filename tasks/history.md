@@ -14510,3 +14510,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
   - Repeated skill-install context bloat — archive-filtered copy in `packages/skillpacks/src/cli/lifecycle.mjs`.
 - No code, research docs, or git history were modified; only `tasks/todo.md` checkbox state, this append, and `tasks/reconciliation-report.md`.
 - `.agents/project.json` shows as modified from installing the `reconcile-dev-docs` skill locally (`scripts/pack.sh install`), not from this reconciliation.
+
+## 2026-06-19 — Deck-builder UX Phase 2: promote pack opening (thin first cut)
+
+- Wired the tear-open booster-pack ritual into the builder as the card-flight source, replacing the flat `.deck-shelf`. New `BuilderPackFlow` (in `apps/skills-showcase/src/deck-builder/DeckTableShell.tsx`) owns the `PackFlowPhase` machine (verbatim from `PrototypeInner`) and composes the existing primitives: one `SealedPack` (deck-as-pack) → `BottomSheet` → `PackOpener`. Fanned cards feed the already-built `flyCard`/`flyAll` handlers.
+- `PackOpener.tsx` gained additive optional props (`onCollect`, `collectedIds`, `onCollectAll`, `disableSharedMorph`); `/prototype` (`PrototypeInner`) left untouched and renders identically (props default off).
+- Engineering decisions forced by embedding Tailwind-styled primitives into the non-Tailwind deck route: added scoped Tailwind for `/deck` (`app/deck/layout.tsx` + `deck.css`, mirroring `prototype.css`); portaled `BottomSheet` to `document.body` (the builder's `layoutId` panel keeps a residual transform that was reparenting the "fixed" sheet); disabled the shared `pack-card` morph in-builder (cross-transform/portal projection blew card 0 up); non-uniform flight clone scale (tall cards → wide/short slots); flight scrolls the target slot above the fixed sheet; moved "Collect all" into the fan (scrim/portal accessibility); hardened the blueprint focus-restore to a double-rAF (heavier exit subtree widened the teardown race).
+- Deck-as-pack confirmed as the modeling default (one `SealedPack` per deck); per-pack grouping deferred.
+- Verified: `npm run typecheck` clean; `npm test` 161/161; `npm run test:e2e` 13/13 (flight specs adapted to the fan source + new tear→fan→collect happy-path with a real drag gesture, stable across reruns); `npm run build` all pages; `node scripts/audit-alignment-pages.mjs` exit 0.
