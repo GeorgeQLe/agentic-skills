@@ -17,6 +17,7 @@
     "user-flow-map": "product-design",
     "ui-interview": "product-design",
     "guide": "guided-walkthrough",
-    "ux-variations": "product-design"
+    "ux-variations": "product-design",
+    "reconcile-dev-docs": "docs-health"
   }
 }
