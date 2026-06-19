@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-19
+
+- Documented a named "Comparison Mode": model/config A-B comparison (e.g. Opus 4.6 vs 4.7, gpt 5.5 low vs xhigh, Claude vs Codex) on cost + observable quality signals, with regime attribution, sample sizes, and evidence-vs-inference labeling. Captured as a mode rather than a separate skill to avoid creep.
+
 ## v0.5 - 2026-06-19
 
 - Re-chartered the skill to own informational history questions — single or trend — and softened the route-away rule so only live incidents needing a verified fix go to `$session-triage`; pure informational lookups (find a past conversation, explain a skill recommendation, check one run's tokens) stay here.

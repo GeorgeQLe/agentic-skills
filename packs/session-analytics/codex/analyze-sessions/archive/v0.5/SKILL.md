@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.6
+version: v0.5
 required_conventions: [alignment-page]
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 context_intake: artifact_only
@@ -11,9 +11,11 @@ visual_tier: visual
 
 # Analyze Sessions
 
+Invoke as `$analyze-sessions`.
+
 Use this skill to answer questions against your local Claude Code and Codex history — both broad cross-session trends AND one-off lookups. That spans broad trend analysis, repeated prompt patterns, recurring frustrations, workflow evolution, automation opportunities, and skill performance over multiple sessions, as well as single informational questions such as finding a past conversation, explaining why a skill recommended a particular path, or checking one run's token spend.
 
-Route to `/session-triage` only when the user needs a *verified fix for a live incident*: a correction to act on, a failed run to repair, a repo incident, or a suspected skill failure. Pure informational history questions stay here even when they are about one session.
+Route to `$session-triage` only when the user needs a *verified fix for a live incident*: a correction to act on, a failed run to repair, a repo incident, or a suspected skill failure. Pure informational history questions stay here even when they are about one session.
 
 ## Inputs
 
@@ -28,8 +30,8 @@ Route to `/session-triage` only when the user needs a *verified fix for a live i
 
 1. Confirm the request is an informational history question for this skill:
    - Continue for overall history, usage breakdowns, repeated prompts, recurring workflow issues, cross-tool changes, automation opportunities, or performance trends across multiple sessions — and for single informational lookups such as finding a past conversation, explaining why a skill recommended a path, or checking one run's token spend. Scale the read to the question.
-   - Route to `/session-triage` only when the user needs a verified fix for a live incident: a correction to act on, a failed run to repair, a repo incident, or a suspected skill failure.
-   - When a request contains both a live incident and recurrence questions, recommend `/session-triage` first for the incident and use this skill afterward for frequency or trend evidence.
+   - Route to `$session-triage` only when the user needs a verified fix for a live incident: a correction to act on, a failed run to repair, a repo incident, or a suspected skill failure.
+   - When a request contains both a live incident and recurrence questions, recommend `$session-triage` first for the incident and use this skill afterward for frequency or trend evidence.
 
 2. Read the full available history for the selected scope, not a sample.
 
@@ -80,16 +82,7 @@ Route to `/session-triage` only when the user needs a *verified fix for a live i
    - Agent: complex exploratory or autonomous work.
    - Plugin/integration: external-service or persistent-connection workflow.
    - Standing instruction/project convention: behavior that should always apply.
-   - `/session-triage`: one concrete incident needs verification before a durable fix is designed.
-
-## Comparison Mode
-
-A recurring question shape is a **model/config A-B comparison**: compare two model or config regimes across sessions on cost and output quality — for example "Opus 4.6 vs 4.7 token usage and quality", "gpt 5.5 low vs xhigh reasoning effort", or "Claude vs Codex UI quality". When the request fits this shape:
-
-- Identify the two regimes from the user's question (model, provider, reasoning effort, tool, or config) and the sessions that belong to each, stating how you attributed each session when the field is sparse.
-- Compare on token/cost per the cost section above and on observable quality signals from the history — correction rate, retries, follow-up prompts, abandonment, or explicit user praise/complaints — not on assumed model capability.
-- Report the comparison as a side-by-side: regime A vs regime B on tokens, estimated cost (or `cost unavailable`), and the quality signals, with sample sizes and the date range each regime covers.
-- Label quality signals as observed evidence vs inference, and call out when one regime has too few sessions to compare fairly.
+   - `$session-triage`: one concrete incident needs verification before a durable fix is designed.
 
 ## Output
 
@@ -102,7 +95,7 @@ Produce a structured report with:
 - Skill performance trends when requested or visible in the scoped data.
 - Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description.
 - Highest-impact section: top 5 automations by avoided manual prompts.
-- Recommended next skill: `/session-triage` for any concrete incident that needs verification, `/targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>` for a broad verified workflow gap, or `none` when no follow-up is justified. When recommending `/targeted-skill-builder` (skill-dev pack), include the likely owner surface and validation expectation in the report.
+- Recommended next skill: `$session-triage` for any concrete incident that needs verification, `$targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>` for a broad verified workflow gap, or `none` when no follow-up is justified. When recommending `$targeted-skill-builder` (skill-dev pack), include the likely owner surface and validation expectation in the report.
 
 ## Constraints
 
@@ -116,7 +109,7 @@ Produce a structured report with:
 - Group near-identical prompts together.
 - Deduplicate Codex prompts that appear in both `~/.codex/history.jsonl` and rollout files by `(session_id, timestamp, normalized text)` where possible.
 - Do not include system, developer, base instruction, or tool output text in repeated-prompt counts.
-- Answer informational history questions here, single or trend; do not work up a verified fix for a live incident — route that to `/session-triage`.
+- Answer informational history questions here, single or trend; do not work up a verified fix for a live incident — route that to `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If one source is missing or unreadable, report that clearly and continue with the other source instead of guessing.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.

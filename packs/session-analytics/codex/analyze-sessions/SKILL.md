@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.5
+version: v0.6
 required_conventions: [alignment-page]
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 context_intake: artifact_only
@@ -83,6 +83,15 @@ Route to `$session-triage` only when the user needs a *verified fix for a live i
    - Plugin/integration: external-service or persistent-connection workflow.
    - Standing instruction/project convention: behavior that should always apply.
    - `$session-triage`: one concrete incident needs verification before a durable fix is designed.
+
+## Comparison Mode
+
+A recurring question shape is a **model/config A-B comparison**: compare two model or config regimes across sessions on cost and output quality — for example "Opus 4.6 vs 4.7 token usage and quality", "gpt 5.5 low vs xhigh reasoning effort", or "Claude vs Codex UI quality". When the request fits this shape:
+
+- Identify the two regimes from the user's question (model, provider, reasoning effort, tool, or config) and the sessions that belong to each, stating how you attributed each session when the field is sparse.
+- Compare on token/cost per the cost section above and on observable quality signals from the history — correction rate, retries, follow-up prompts, abandonment, or explicit user praise/complaints — not on assumed model capability.
+- Report the comparison as a side-by-side: regime A vs regime B on tokens, estimated cost (or `cost unavailable`), and the quality signals, with sample sizes and the date range each regime covers.
+- Label quality signals as observed evidence vs inference, and call out when one regime has too few sessions to compare fairly.
 
 ## Output
 

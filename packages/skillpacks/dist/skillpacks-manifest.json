@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "b01534be9fe8cae5115b9e4fc2b9ee7105e14b2dc7acc15271baaeb2d5b420ca",
+  "source_fingerprint": "a0f155a8862cdc4d8199fe18eeddf50847d4b25dd584bb73e7d671e6c0965cfe",
   "packs": [
     {
       "name": "agent-bridge",
@@ -8812,19 +8812,20 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/session-analytics/claude/analyze-sessions/SKILL.md",
       "installable": true,
-      "content_sha256": "35787cdd127b4249e7a9b932f816fee828f84208f9e8ce06d13aea0c6e083d37",
+      "content_sha256": "e3145ffd21720edf32de7a3f182870be8e477aaf1257eeb6ad01e1801231628d",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/analyze-sessions",
       "deck_memberships": []
@@ -8874,19 +8875,20 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.5",
+      "version": "v0.6",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/session-analytics/codex/analyze-sessions/SKILL.md",
       "installable": true,
-      "content_sha256": "6e122b2474977e62f6bd0cc57005d90c1be98d619f9afa1ee3fad546da62e2c0",
+      "content_sha256": "3e7d22fee3291d798d370f58f6a8985a01764e1ba00a73f78bca809c42299585",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$analyze-sessions",
       "deck_memberships": []
