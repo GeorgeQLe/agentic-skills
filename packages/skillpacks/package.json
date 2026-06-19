@@ -25,6 +25,7 @@
     "scripts/pack.sh",
     "scripts/skill-links.sh",
     "scripts/upgrade-alignment-page.mjs",
+    "scripts/upgrade-prototype-session-loop.mjs",
     "scripts/audit-alignment-pages.mjs",
     "scripts/open-html-page.mjs",
     "scripts/serve-alignment.mjs",
@@ -35,6 +36,7 @@
     "scripts/alignment-bespoke-list.txt",
     "scripts/prepublish-auth-check.mjs",
     "assets/alignment-page-convention.md",
+    "assets/prototype-session-loop-convention.md",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"

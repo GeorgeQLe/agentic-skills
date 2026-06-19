@@ -3,7 +3,11 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, it } from 'node:test';
-import { resolveAlignmentCommand, runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
+import {
+  resolveAlignmentCommand,
+  resolvePrototypeCommand,
+  runSkillpacksCli
+} from '../src/cli/run-pack-script.mjs';
 
 const tmpDirs = [];
 
@@ -200,6 +204,35 @@ describe('skillpacks alignment command parsing', () => {
     assert.throws(
       () => resolveAlignmentCommand(['pages', 'serve', '--port', '9000', '--port=9001']),
       /--port can only be provided once/
+    );
+  });
+});
+
+describe('skillpacks prototype command parsing', () => {
+  it('prints prototype-specific help', async () => {
+    const { exitCode, stdout } = await captureCli(['prototype', '--help']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /gskp prototype/);
+    assert.match(stdout, /prototype bundles \[--dry-run\] \[--check\]/);
+  });
+
+  it('wraps prototype bundle generation with --root set to the target project', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolvePrototypeCommand(['bundles', '--check'], { projectRoot });
+
+    assert.equal(command.kind, 'run');
+    assert.equal(command.command, process.execPath);
+    assert.deepEqual(command.args.slice(1), ['--root', projectRoot, '--check']);
+    assert.equal(command.args[0].endsWith('scripts/upgrade-prototype-session-loop.mjs'), true);
+  });
+
+  it('rejects unknown prototype subcommands and conflicting bundle flags', () => {
+    assert.throws(() => resolvePrototypeCommand(['pages', 'audit']), /prototype: unknown command/);
+    assert.throws(
+      () => resolvePrototypeCommand(['bundles', '--dry-run', '--check']),
+      /prototype bundles accepts either --dry-run or --check/,
     );
   });
 });

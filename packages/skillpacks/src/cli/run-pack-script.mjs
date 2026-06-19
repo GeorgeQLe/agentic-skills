@@ -31,6 +31,7 @@ const packageJsonPath = join(packageRoot, 'package.json');
 const packScriptPath = resolvePackagedPath('scripts/pack.sh');
 const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
+const prototypeSessionUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-prototype-session-loop.mjs');
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
 const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
 const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
@@ -165,6 +166,18 @@ Commands:
   pages serve                Serve alignment pages from the current repo over localhost
   pages inject-tts           Add the packaged Brief Me TTS script tag to pages
   verify                     Run the focused alignment verification set when present`);
+}
+
+function prototypeHelp() {
+  console.log(`gskp prototype
+
+Usage:
+  gskp prototype bundles [--dry-run] [--check]
+
+Commands:
+  bundles                    Generate per-skill PROTOTYPE-SESSION-LOOP.md bundles
+  bundles --dry-run          Preview generated bundle changes
+  bundles --check            Fail on generated-bundle drift without writing`);
 }
 
 function validateArgs(command, args, options) {
@@ -411,6 +424,31 @@ export function resolveAlignmentCommand(args, options = {}) {
   throw new Error(`alignment: unknown command '${scope}'`);
 }
 
+export function resolvePrototypeCommand(args, options = {}) {
+  const projectRoot = resolve(options.projectRoot || process.cwd());
+  const [scope, ...rest] = args;
+
+  if (!scope || scope === 'help' || scope === '--help' || scope === '-h') {
+    return { kind: 'help' };
+  }
+
+  if (scope === 'bundles') {
+    validateArgs('prototype bundles', rest, {
+      allowedFlags: new Set(['--dry-run', '--check'])
+    });
+    if (rest.includes('--dry-run') && rest.includes('--check')) {
+      throw new Error('prototype bundles accepts either --dry-run or --check, not both');
+    }
+    return {
+      kind: 'run',
+      command: process.execPath,
+      args: [prototypeSessionUpgradeScriptPath, '--root', projectRoot, ...rest]
+    };
+  }
+
+  throw new Error(`prototype: unknown command '${scope}'`);
+}
+
 function targetHasAlignmentVerifyTests(projectRoot) {
   const required = [
     'tests/package.json',
@@ -445,6 +483,17 @@ function runAlignment(args) {
     ensureAlignmentTtsAsset(process.cwd());
   }
   return runCommand(resolved.command, resolved.args, { env: resolved.env || process.env });
+}
+
+function runPrototype(args) {
+  const resolved = resolvePrototypeCommand(args, { projectRoot: process.cwd() });
+  if (resolved.kind === 'help') {
+    prototypeHelp();
+    return 0;
+  }
+
+  requireCommand('node', 'Install Node.js before running gskp prototype commands.');
+  return runCommand(resolved.command, resolved.args);
 }
 
 function printManifestJson(args) {
@@ -524,6 +573,8 @@ Commands:
                                Also migrate generated AGENTS.md/CLAUDE.md blocks
   alignment bundles [--dry-run] [--check]
                                Generate/check per-skill ALIGNMENT-PAGE.md bundles
+  prototype bundles [--dry-run] [--check]
+                               Generate/check per-skill PROTOTYPE-SESSION-LOOP.md bundles
   alignment pages audit        Audit active rendered alignment/*.html pages
   alignment pages open <alignment/page.html> [--browser <browser>]
                                Open or focus an alignment HTML page
@@ -611,6 +662,10 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'alignment') {
     return runAlignment(rest);
+  }
+
+  if (command === 'prototype') {
+    return runPrototype(rest);
   }
 
   if (command === 'init') {

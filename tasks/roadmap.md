@@ -1,3 +1,36 @@
+## Current Implementation - Prototype Convention Bundle Distribution
+
+### Goal
+
+Fix the prototype-session-loop convention distribution gap by keeping `docs/prototype-session-loop-convention.md` as the canonical authoring file while generating package/refreshed per-skill runtime bundles beside every active skill that references the convention.
+
+### Scope
+
+- `docs/prototype-session-loop-convention.md` remains canonical and unpublished as top-level `docs/`.
+- New `PROTOTYPE-SESSION-LOOP.md` bundles for active prototype-phase skills that cite the convention.
+- Skill references updated to point at the sibling bundle instead of top-level `docs/`.
+- Generator/check command and package staging boundary updates.
+- Package boundary tests and focused verification.
+
+### Plan
+
+1. Inspect the existing alignment/interrogation bundle generators, package staging, active prototype-phase skill references, and package boundary tests.
+2. Add a prototype-session-loop bundle generator that reads the canonical docs file, writes `PROTOTYPE-SESSION-LOOP.md` beside participating skills, and checks drift in `--check` mode.
+3. Wire the generator into `scripts/pack.sh` / package CLI surfaces and staged npm package assets without publishing top-level `docs/`.
+4. Generate bundles and update every active skill reference from `docs/prototype-session-loop-convention.md` to `PROTOTYPE-SESSION-LOOP.md`.
+5. Update package boundary tests to require the generator, packaged asset, and representative bundled skill files while still denying top-level `docs/`.
+6. Run refresh, doctor, focused package tests, package verification, and diff hygiene.
+7. Record review notes, then commit and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Every active skill that references the prototype session-loop convention has a sibling `PROTOTYPE-SESSION-LOOP.md`.
+- Active skill contracts refer to the sibling bundle, not `docs/prototype-session-loop-convention.md`.
+- The canonical docs file is still the source for generated bundles.
+- The npm package includes runtime assets/scripts/bundles but does not include top-level `docs/`.
+- `scripts/pack.sh refresh` installs the sibling bundles into local skill roots.
+- Focused checks and package tests pass, or unrelated pre-existing failures are proven.
+
 ## Current Implementation - Finalized Artifact Routing Lesson
 
 ### Goal

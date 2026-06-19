@@ -15,7 +15,7 @@ Use this skill after the user has built and evaluated multiple UI layout variati
 
 Users with manually built variations (not from the `/ux-variations` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
+Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
 
 ## Process
 

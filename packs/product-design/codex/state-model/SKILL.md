@@ -23,7 +23,7 @@ The model it produces is a property of the *flow*, not of any one UI presentatio
 
 **Logical only.** This skill owns entities, value objects, aggregates, state machines, events, commands, read models, policies, and logical command/query contracts (request/response/error *shapes*). It does **not** own physical concerns — storage engines, real endpoints/URLs, authentication, migrations, indexes, or deployment. Those stay owned by `$spec-interview` downstream. See Constraints.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill is a prototype-phase orchestrator: its live loop cursor is **filesystem existence of per-framework intermediates**, not a Pattern A selected-framework run manifest. It does not use `tasks/todo.md` for framework progress.
+Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill is a prototype-phase orchestrator: its live loop cursor is **filesystem existence of per-framework intermediates**, not a Pattern A selected-framework run manifest. It does not use `tasks/todo.md` for framework progress.
 
 ## Architecture — Orthogonal Sibling To The Flow Tree
 
@@ -44,7 +44,7 @@ Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, 
 
 ## Execution Model — Prototype Session Loop (intra-skill substep chunking)
 
-This orchestrator runs as a **prototype-phase intra-skill substep loop** per `docs/prototype-session-loop-convention.md` (Intra-Skill Substep Chunking + Shared Context Brief). Each invocation starts cold, resolves its state from the filesystem, runs **one heavy phase**, and stops. The user advances the loop by clearing context and re-invoking `$state-model` with the same topic argument.
+This orchestrator runs as a **prototype-phase intra-skill substep loop** per `PROTOTYPE-SESSION-LOOP.md` (Intra-Skill Substep Chunking + Shared Context Brief). Each invocation starts cold, resolves its state from the filesystem, runs **one heavy phase**, and stops. The user advances the loop by clearing context and re-invoking `$state-model` with the same topic argument.
 
 Three-tier state, exactly as the convention defines it:
 
@@ -140,7 +140,7 @@ Present a **Domain Modeling Scope Checkpoint** inline as the final message text 
 - Confirmed assumptions about domain boundaries and explicit non-goals (especially the logical-only boundary — no storage/endpoints/auth/migrations).
 - Candidate ubiquitous-language seeds.
 
-Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working$state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), and give the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). (Unless folding per the Execution Model, in which case continue directly to §3.)
+Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working$state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `PROTOTYPE-SESSION-LOOP.md`: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), and give the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). (Unless folding per the Execution Model, in which case continue directly to §3.)
 
 ### 3. Run Next Pending Framework (framework session)
 
@@ -154,7 +154,7 @@ Run that one framework inline against the flow context in the brief, producing *
 - Flag any term that belongs in the ubiquitous-language glossary.
 - Keep strictly to logical concerns; defer every physical concern to `$spec-interview` with an explicit note rather than inventing storage/endpoint/auth detail.
 
-Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), and gives the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
+Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `PROTOTYPE-SESSION-LOOP.md`. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), and gives the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
 
 ### 4. Synthesis + Assemble & Approve (assemble session)
 

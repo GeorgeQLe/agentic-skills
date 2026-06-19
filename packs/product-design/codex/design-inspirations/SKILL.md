@@ -16,7 +16,7 @@ Single-pass web-research feeder for prototype-phase design work. This is the **o
 
 It runs as a single pass (gather → working packet → `review` alignment page → approved canonical write), **not** a multi-session loop — the gathering is one heavy phase with no per-framework decomposition to chunk. Model the staged workflow and search-log artifact on `$customer-discovery`'s WebSearch pattern when `business-research` is installed; if it is not installed, use the staged workflow described below without recommending `$customer-discovery`.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. The inspiration brief is referenced from the scoped flow-tree manifest `source_artifacts[]` (a free-form artifact path — no schema change); it is a gather-once feeder, not a mandatory branch stage in the `route`.
+Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. The inspiration brief is referenced from the scoped flow-tree manifest `source_artifacts[]` (a free-form artifact path — no schema change); it is a gather-once feeder, not a mandatory branch stage in the `route`.
 
 ## Report-First Approval Gate
 

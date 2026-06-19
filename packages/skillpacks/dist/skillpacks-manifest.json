@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "04262ac112777c65dc6318aeb2a210f22d7201a3ae296c5f22c5f6a36128fe91",
+  "source_fingerprint": "9b1c57e5666127eac053f2d2f30bac43a46dc9630acc526cbc71aac50ce7e0d7",
   "packs": [
     {
       "name": "agent-bridge",
@@ -6836,7 +6836,7 @@
       "version": "v0.14",
       "path": "packs/product-design/claude/consolidate-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "1f4c1592a651c3cf5e3d73e00e831cfbb2bd4cb0ae73fe17bff2e60d8b7946a5",
+      "content_sha256": "997bc12f31f08cc020db2fb9d444fea5e3f32abc5d667270900c38abbbae2e00",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6865,7 +6865,7 @@
       "version": "v0.2",
       "path": "packs/product-design/claude/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "22669d85db50f3859088f3b8cb34d0f41f5bb67804b9a9de8fb930ab62d0deba",
+      "content_sha256": "a412b2f311172eb5e9fbf77f70cec34cbc245e47b75dbf0d7dbf0867464c45fe",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -6922,7 +6922,7 @@
       "version": "v0.16",
       "path": "packs/product-design/claude/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "b037ed91638362be7f270fe4f0b46beeaced0bce764cd52fb6de25ff75693108",
+      "content_sha256": "e757a096af3978892910d67f4777d739f1712255f1b1fd1c7acabc8017cb4394",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6982,7 +6982,7 @@
       "version": "v0.2",
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "b9b4e182f814ad3e839b2473d3f0ad4045df0905ccb53dd2ab077047ed0fb135",
+      "content_sha256": "db36257e7bfe1e2476f467d8be429980e9b267a69d5d190bd05255280fb9ee6e",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -6999,7 +6999,7 @@
       "version": "v0.24",
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "7ce059f4010ce37172f20febcb0ea1196a3afb8f34ac9fbffe58225ab8e0ab2a",
+      "content_sha256": "8187730108304aba3dd400ccf48207df802b2b4cec22d4c318f482411bf06fb2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7038,7 +7038,7 @@
       "version": "v1.2",
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "6960e10ea73ddb5ab124a3578abdc24fd8d18ed450287fe87fe0be2212490499",
+      "content_sha256": "79d3a394907fc7059de5e200f869be92f1a6d0b84c6c50a4bd5b47d0ef46a0fa",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7065,7 +7065,7 @@
       "version": "v0.22",
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "f60e7a180373fbbc8ef55010c02ff922e9237e90e120e1afb45c0bcaefff297e",
+      "content_sha256": "e9ade1ca98867ee98aeb26b298a315791d79310591e76521bd18d187c9521d81",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7120,7 +7120,7 @@
       "version": "v0.14",
       "path": "packs/product-design/codex/consolidate-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "81680e58b04195a3840ce5efc04dd49c02eec61d79a81a3c6713f078219f0228",
+      "content_sha256": "38f551f62ac2ef93f81f8b0c7dd2a15c85951ecb2931c73456612eb2651fb455",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7149,7 +7149,7 @@
       "version": "v0.2",
       "path": "packs/product-design/codex/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "6878b6597776d1ade5eb2794b878af31ee40c301a4841e50e855d00fd91405bb",
+      "content_sha256": "24bfdc37d1170c991056ac7ccaebef85c09ca445ae2cc950d3124e41eaa1d5bd",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7206,7 +7206,7 @@
       "version": "v0.16",
       "path": "packs/product-design/codex/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "90d39f420e9d7b2a231d418928d6a3a8058ef15fa2197a1c606f2dc88282420c",
+      "content_sha256": "0ab3c814359e4e6e22a70570dcb0467a928b8d4d7c9076a5d013c000e3a5e6d3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7266,7 +7266,7 @@
       "version": "v0.2",
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "1d663e010bfc77d875b81ebbaf99e30aeea6cd5a6754f5ad06c8450cc2ddfe0f",
+      "content_sha256": "e378923f4edd7f3d128ebc10d2f93378858bf638fdbc2eb94ca08b6179a13ea2",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7283,7 +7283,7 @@
       "version": "v0.24",
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "00b9f5e1102453d14bae1019f46fe7b1f898c38a6d5556cc222b9aaed60d0d25",
+      "content_sha256": "3149de6ba166e7657c6d8d642726944f8c203ba3fdec349275fdd46ed9027ace",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7322,7 +7322,7 @@
       "version": "v1.2",
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "46dc2119bf14a208ca81033c1754c5f7b06d9ad59ff170a682e214297169bb8f",
+      "content_sha256": "a06151d610d0fc3024a737ce6a9a5628d3e0f564fa4037c82a493ccddb8f8de9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7349,7 +7349,7 @@
       "version": "v0.22",
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "ed89f6df020ba394f374ef9eff5950adcd376b87230387fb7fdc6cfd49211e28",
+      "content_sha256": "55f8ef6cbc017c5246f6adff9bfe436f09f9dd98512cec3af5959566f0f9bb76",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7405,7 +7405,7 @@
       "version": "v0.12",
       "path": "packs/product-testing/claude/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "779a0bb219cdda2c736c75ffb3a3f5dab1f06fd90554e64b4aee4745304b8e07",
+      "content_sha256": "087e2c193c164647edbb8f51d166206f09d5d9e335df25166264fcf57f445ea5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7451,7 +7451,7 @@
       "version": "v0.12",
       "path": "packs/product-testing/codex/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "cd0642ea198a99143389e821fb88b1033bfd03965801e940251196f10004f1ed",
+      "content_sha256": "b68166bc5601890f015f113e18042ee962d4e11e1770db6d5b61fb7e30bde357",
       "archive_versions": [
         "v0.0",
         "v0.1",

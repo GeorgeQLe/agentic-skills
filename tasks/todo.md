@@ -1,3 +1,34 @@
+## Current Implementation - Prototype Convention Bundle Distribution
+
+### Current Checklist
+
+- [x] Inspect existing bundle generator/package patterns and active prototype convention references.
+- [x] Add prototype-session bundle generator and CLI/package wiring.
+- [x] Generate sibling bundles and update active skill references.
+- [x] Update package boundary coverage.
+- [x] Run refresh, doctor, package tests, and diff checks.
+- [x] Record review notes.
+- [ ] Commit and push intended changes.
+
+### Review Notes
+
+- Starting point: `git status --short` was clean.
+- Root cause from the prior plan is confirmed by current package patterns: runtime installs copy skill roots and packaged runtime assets, not top-level `docs/`.
+- Active-skill scope is broader than the early plan examples: `design-inspirations`, `state-model`, `prototype`, `consolidate-variations`, and `uat` already cite `docs/prototype-session-loop-convention.md`, so all active references are in scope.
+- Fix applied: added `scripts/upgrade-prototype-session-loop.mjs`, wired `gskp prototype bundles [--dry-run] [--check]`, packaged `assets/prototype-session-loop-convention.md`, generated `PROTOTYPE-SESSION-LOOP.md` beside 16 active product-design/product-testing skill mirrors, and updated their `SKILL.md` references to the sibling bundle.
+- Package boundary: top-level `docs/` remains denied; package tests now require the prototype generator, packaged convention asset, and representative bundled skill files.
+- Refresh proof: `scripts/pack.sh refresh` copied the sibling bundle into `.codex/skills/user-flow-map` and `.claude/skills/user-flow-map`; `scripts/pack.sh doctor` reported all installed managed roots as `ok`.
+- Verification passed:
+  - `node packages/skillpacks/bin/skillpacks.mjs prototype bundles --check`
+  - `scripts/pack.sh doctor`
+  - `npm --workspace packages/skillpacks run build:check`
+  - `node --test packages/skillpacks/test/package-boundary.test.mjs`
+  - `npm --workspace packages/skillpacks run test:node` (104 tests)
+  - `npm run skillpacks:verify`
+  - `git diff --check`
+  - `git diff --cached --check`
+- Verification note: an initial parallel package build and package-boundary test raced on `packages/skillpacks/build`; rerunning sequentially passed. The first package-boundary rerun also proved new bundle files must be tracked because package staging copies active skill trees from `git ls-files`.
+
 ## Current Implementation - Finalized Artifact Routing Lesson
 
 ### Current Checklist

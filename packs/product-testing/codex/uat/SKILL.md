@@ -23,7 +23,7 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
 
 When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$consolidate-variations`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
+Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 
 ## Process
 

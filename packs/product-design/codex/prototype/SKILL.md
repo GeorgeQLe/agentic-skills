@@ -15,7 +15,7 @@ Build tangible, runnable prototypes before production spec work begins. Create t
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
 
-Follow `docs/prototype-session-loop-convention.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
+Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
 
 ## Gate
 
