@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5 - 2026-06-19
+
+- Re-chartered the skill to own informational history questions — single or trend — and softened the route-away rule so only live incidents needing a verified fix go to `$session-triage`; pure informational lookups (find a past conversation, explain a skill recommendation, check one run's tokens) stay here.
+- Removed the prescriptive "Remediation-Ready Handoffs" house-style section; the concise `$targeted-skill-builder` (skill-dev pack) routing with owner surface + validation expectation is preserved in the Output section.
+- Kept the token-spend/cost section unchanged (in active use).
+
 ## v0.4 - 2026-06-17
 
 - Caught Codex up to the Claude mirror with npm-aware cross-pack recommendation guidance, clearer full-history analysis constraints, and skill-dev pack labeling while preserving `$...` route syntax.

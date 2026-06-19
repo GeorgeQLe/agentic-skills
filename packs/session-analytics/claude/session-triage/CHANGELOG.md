@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-19
+
+- Updated the `/analyze-sessions` pointer to reflect the new split: analyze-sessions owns informational history questions (single or trend); session-triage owns live incidents that need a verified fix.
+
 ## v0.2 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

@@ -2,17 +2,15 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
 # Session Triage
 
-Invoke as `$session-triage`.
-
 Use this skill when the user wants a focused investigation of one immediate issue: a current conversation problem, one correction, one session, one repo incident, one failed run, or one suspected skill failure. This skill verifies what happened before recommending a durable fix.
 
-Use `$analyze-sessions` instead for informational history questions — single or trend — such as broad cross-session breakdowns, recurring frustration analysis, performance over time, repeated prompt patterns, automation opportunities, finding a past conversation, or checking one run's token spend. This skill owns live incidents that need a verified fix.
+Use `/analyze-sessions` instead when the user wants broad cross-session trends, recurring frustration analysis, performance evaluation over time, repeated prompt patterns, or automation opportunities.
 
 ## Inputs
 
@@ -28,14 +26,14 @@ Use `$analyze-sessions` instead for informational history questions — single o
    - Treat the current conversation and current working directory as the default scope.
    - Prefer user-provided session IDs, files, repo paths, skill names, exact correction phrases, errors, logs, and test failures over broad history searches.
    - Resolve named skills from `base/codex`, `base/claude`, `packs`, project-local `.agents`, `.codex`, `.claude`, and installed `~/.codex/skills` or `~/.claude/skills` as read-only fallback evidence.
-   - Do not create an `$analyze-session` alias or route; use this distinct command name to avoid singular/plural confusion.
+   - Do not create an `/analyze-session` alias or route; use this distinct command name to avoid singular/plural confusion.
 
 2. Gather narrow evidence first:
    - Read the target skill contract when a skill is named.
    - Read directly relevant project instructions such as `AGENTS.md`, `CLAUDE.md`, task docs, pack docs, logs, or test output.
    - Search only the scoped repo/session/history for the issue text, skill name, invocation command, relevant file paths, user correction, and nearby agent actions.
    - Include the active conversation as evidence when the correction is happening now.
-   - Broaden to `$analyze-sessions` only when recurrence, frequency, or trend evidence is needed.
+   - Broaden to `/analyze-sessions` only when recurrence, frequency, or trend evidence is needed.
 
 3. Verify the issue before diagnosing:
    - Separate the **user-identified issue** from the **agent-verified issue**.
@@ -61,7 +59,7 @@ Use `$analyze-sessions` instead for informational history questions — single o
    - Provide concrete rule text or workflow-step wording when a skill-contract change is justified.
    - Include validation checks that prove the revised behavior prevents the issue, such as targeted `rg` checks, mirrored contract checks, version checks, replay of the decision path, or the failing test/log command.
    - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
-   - Route verified skill changes to `$targeted-skill-builder` (skill-dev pack) for a narrow update or `$create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
+   - Route verified skill changes to `/targeted-skill-builder` (skill-dev pack) for a narrow update or `/create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
 
 ## Output
 
@@ -75,8 +73,8 @@ Produce a structured report with:
 - Responsible contract gap: skill, project instruction, task doc, or none.
 - Recommended fix: exact file(s), section(s), and proposed wording or behavior change.
 - Validation plan: commands or checks to prove the fix.
-- Confidence and evidence gaps: what is known, what could not be verified, and whether `$analyze-sessions` is needed for recurrence analysis.
-- Recommended next skill: `$targeted-skill-builder` (skill-dev pack), `$create-agentic-skill` (skill-dev pack), `$analyze-sessions`, or `none` when no follow-up is justified.
+- Confidence and evidence gaps: what is known, what could not be verified, and whether `/analyze-sessions` is needed for recurrence analysis.
+- Recommended next skill: `/targeted-skill-builder` (skill-dev pack), `/create-agentic-skill` (skill-dev pack), `/analyze-sessions`, or `none` when no follow-up is justified.
 
 ## Constraints
 
@@ -84,7 +82,7 @@ Produce a structured report with:
 - Do not claim a user-identified issue is agent-verified without independent evidence.
 - Do not modify the target skill during analysis unless the user also asked for implementation and the active workflow permits edits.
 - Do not recommend a skill change when the evidence points only to one-off agent noncompliance and the contract is already clear.
-- Do not create or suggest `$analyze-session`; use `$session-triage`.
+- Do not create or suggest `/analyze-session`; use `/session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.

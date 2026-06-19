@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -12,7 +12,7 @@ Invoke as `$session-triage`.
 
 Use this skill when the user wants a focused investigation of one immediate issue: a current conversation problem, one correction, one session, one repo incident, one failed run, or one suspected skill failure. This skill verifies what happened before recommending a durable fix.
 
-Use `$analyze-sessions` instead for informational history questions — single or trend — such as broad cross-session breakdowns, recurring frustration analysis, performance over time, repeated prompt patterns, automation opportunities, finding a past conversation, or checking one run's token spend. This skill owns live incidents that need a verified fix.
+Use `$analyze-sessions` instead when the user wants broad cross-session trends, recurring frustration analysis, performance evaluation over time, repeated prompt patterns, or automation opportunities.
 
 ## Inputs
 
