@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { globSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "../..");
@@ -70,12 +70,18 @@ describe("AFPS alignment preview gates", () => {
       expect(content, `${path} scope approval before synthesis`).toContain("final compiled YAML approves the research scope");
       expect(content, `${path} staged scope discovery`).toContain("Stage 1 - Scope discovery and approval");
       expect(content, `${path} proposed changes`).toContain("proposed canonical file changes");
-      // Accept either the canonical downstream-stop literal or the unified
-      // paraphrase the AFPS research orchestrators deliberately share.
-      expect(content, `${path} downstream stop`).toMatch(
-        /Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language|Do not include downstream or cross-skill command recommendations/,
+      expect(content, `${path} downstream stop`).toContain(
+        "Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language",
       );
     }
+  });
+
+  it("never carries the legacy downstream-stop paraphrase in any active packs SKILL.md", () => {
+    const paraphrase = "Do not include downstream or cross-skill command recommendations";
+    const offenders = globSync("packs/**/SKILL.md", { cwd: ROOT })
+      .filter((rel) => !rel.includes("/archive/"))
+      .filter((rel) => read(rel).includes(paraphrase));
+    expect(offenders, `active SKILL.md files still using the legacy paraphrase`).toEqual([]);
   });
 
   it("keeps later durable AFPS skills locally gated before canonical writes and routing", () => {

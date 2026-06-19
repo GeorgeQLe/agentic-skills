@@ -59,7 +59,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include downstream or cross-skill command recommendations while scope or artifact approval is pending. While the framework findings page is in `review`, use only the parent-owned terminal handoff sections above. Parent-loop continuation is not downstream routing, but it must name only `/customer-discovery`. Downstream routing belongs to parent synthesis only after approved synthesis artifacts are written or updated.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while scope or artifact approval is pending. While the framework findings page is in `review`, use only the parent-owned terminal handoff sections above. Parent-loop continuation is not downstream routing, but it must name only `/customer-discovery`. Downstream routing belongs to parent synthesis only after approved synthesis artifacts are written or updated.
 
 ## Staged Research Workflow
 

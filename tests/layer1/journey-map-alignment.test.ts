@@ -33,10 +33,8 @@ describe("journey-map alignment preview contract", () => {
       expect(content, `${check.command} stops for research scope approval`).toContain(
         "Stop for final compiled YAML approval of the research scope",
       );
-      // Accept either the canonical downstream-stop literal or the unified
-      // paraphrase the AFPS research orchestrators deliberately share.
-      expect(content, `${check.command} suppresses downstream routing before approval`).toMatch(
-        /Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language|Do not include downstream or cross-skill command recommendations/,
+      expect(content, `${check.command} suppresses downstream routing before approval`).toContain(
+        "Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language",
       );
       expect(content, `${check.command} uses journey page path`).toContain(
         "alignment/journey-map-{topic}.html",
