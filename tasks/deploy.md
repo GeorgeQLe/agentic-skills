@@ -85,16 +85,17 @@ The validator fingerprints all four generated assets across both `docs/skills-sh
 
 ### Routes
 
-The Next.js app produces 8 routes (7 static + 1 dynamic API). Verify after deploy:
+As of unified-experience Phase 6, `/` is the only content front door (the pack-first landing mounts the deck Table + card surfaces). Verify after deploy:
 
-- `/`
-- `/workflows/`
-- `/packs/`
-- `/catalog/`
-- `/inspect/`
-- `/follow/`
-- `/admin/newsletter`
+- `/` (static — pack-first landing)
+- `/follow/` (static)
+- `/admin/newsletter` (static)
+- `/prototype/` (static)
+- `/card/[id]` (196 SSG pages; soft-nav from `/` opens the `@modal` overlay, hard load / direct link lands on the standalone page)
+- `/deck/[slug]` (dynamic — pushState morph from the Table)
 - `/api/trpc/*` (dynamic)
+
+The five legacy marketing routes are folded into `/` and **308-redirect** there via `next.config` `redirects()`: `/catalog`, `/packs`, `/workflows`, `/benchmarks`, `/inspect`. Confirm each returns a 308 to `/` after deploy.
 
 ### Manual Vercel Setup
 
@@ -111,6 +112,7 @@ The Next.js app produces 8 routes (7 static + 1 dynamic API). Verify after deplo
 - Confirm generated data is fresh across both output paths.
 - Confirm `DATABASE_URL` is set and the Neon database is reachable.
 - Confirm `NEWSLETTER_ADMIN_SECRET` is set and `/admin/newsletter` auth gate works.
-- Confirm `/inspect/` and `/follow/` do not claim live LexCorp metrics, visitor analytics, community counts, or newsletter performance.
-- Confirm LexCorp, YouTube, X/Twitter, Discord, GitHub, catalog, inspect, and newsletter actions are visible.
+- Confirm `/follow/` does not claim live LexCorp metrics, visitor analytics, community counts, or newsletter performance.
+- Confirm the global nav resolves (brand → `/`, Cards → `/`, Follow → `/follow`, external LexCorp) and LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions are visible.
+- Confirm the deck-debug gear is hidden on production `/` (it renders only in development).
 - Confirm desktop and mobile layouts are readable.
