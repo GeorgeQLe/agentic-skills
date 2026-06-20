@@ -3574,6 +3574,57 @@ describe("benchmark coverage matrix", () => {
       ).toMatchObject({ pass: true });
     }
   });
+
+  it("covers competitive-analysis framework subskills as parent-routed custom fixtures", () => {
+    const matrix = benchmarkCoverageMatrix();
+    const competitiveAnalysisSubskills = [
+      "swot",
+      "porter-five-forces",
+      "strategic-group-map",
+      "feature-pricing-matrix",
+    ];
+
+    for (const skill of competitiveAnalysisSubskills) {
+      expect(matrix.find((row) => row.skill === skill), `${skill} coverage row`).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+        agent_scope: "codex",
+        fixture_type: "pack-local-fixture",
+      });
+
+      const setup = resolveBenchSetup(skill);
+      expect(setup, `${skill} registered setup`).toBe(CUSTOM_BENCH_SETUPS[skill]);
+      expect(setup?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
+        expect.arrayContaining(["pack-skill-context", "business-discovery-context"]),
+      );
+
+      const workDir = mkdtempSync(resolve(tmpdir(), `competitive-analysis-subskill-${skill}-`));
+      setup!.setupProject(workDir);
+      expect(existsSync(resolve(workDir, "research/_working/preliminary-competitive-analysis-research.md")), `${skill} preliminary seed`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/_working/competitive-analysis-run.yaml")), `${skill} run manifest`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/glossary.md")), `${skill} glossary header`).toBe(true);
+      const runManifest = readFileSync(resolve(workDir, "research/_working/competitive-analysis-run.yaml"), "utf8");
+      expect(runManifest, `${skill} run manifest selects framework`).toContain(`slug: ${skill}`);
+
+      writeFileSync(
+        resolve(workDir, "pack-benchmark-output.md"),
+        [
+          `Pack: business-discovery. Skill: ${skill}.`,
+          `Executing the ${skill} framework inline at State C through the competitive-analysis parent orchestrator.`,
+          "Evidence: research/_working/competitive-analysis-run.yaml and research/_working/preliminary-competitive-analysis-research.md.",
+          "Recommended next skill: /competitive-analysis",
+        ].join("\n"),
+      );
+      const claudeRoute = setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir, files: ["pack-benchmark-output.md"] },
+        { agent: "claude" },
+      );
+      expect(
+        claudeRoute.find((assertion) => assertion.description === "Output recommends /competitive-analysis"),
+        `${skill} routes to parent /competitive-analysis`,
+      ).toMatchObject({ pass: true });
+    }
+  });
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
