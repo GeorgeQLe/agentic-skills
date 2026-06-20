@@ -3469,6 +3469,58 @@ describe("benchmark coverage matrix", () => {
       );
     }
   });
+
+  it("covers journey-map framework subskills as parent-routed custom fixtures", () => {
+    const matrix = benchmarkCoverageMatrix();
+    const journeyMapSubskills = [
+      "service-blueprint",
+      "experience-map",
+      "user-story-map",
+      "jtbd-timeline",
+      "customer-journey-canvas",
+    ];
+
+    for (const skill of journeyMapSubskills) {
+      expect(matrix.find((row) => row.skill === skill), `${skill} coverage row`).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+        agent_scope: "codex",
+        fixture_type: "pack-local-fixture",
+      });
+
+      const setup = resolveBenchSetup(skill);
+      expect(setup, `${skill} registered setup`).toBe(CUSTOM_BENCH_SETUPS[skill]);
+      expect(setup?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
+        expect.arrayContaining(["pack-skill-context", "customer-lifecycle-context"]),
+      );
+
+      const workDir = mkdtempSync(resolve(tmpdir(), `journey-map-subskill-${skill}-`));
+      setup!.setupProject(workDir);
+      expect(existsSync(resolve(workDir, "research/icp.md")), `${skill} ICP seed`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/_working/journey-map-run.yaml")), `${skill} run manifest`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/glossary.md")), `${skill} glossary header`).toBe(true);
+      const runManifest = readFileSync(resolve(workDir, "research/_working/journey-map-run.yaml"), "utf8");
+      expect(runManifest, `${skill} run manifest selects framework`).toContain(`slug: ${skill}`);
+
+      writeFileSync(
+        resolve(workDir, "pack-benchmark-output.md"),
+        [
+          `Pack: customer-lifecycle. Skill: ${skill}.`,
+          `Executing the ${skill} framework inline at State C through the journey-map parent orchestrator.`,
+          "Evidence: research/_working/journey-map-run.yaml and research/icp.md.",
+          "Recommended next skill: /journey-map",
+        ].join("\n"),
+      );
+      const claudeRoute = setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir, files: ["pack-benchmark-output.md"] },
+        { agent: "claude" },
+      );
+      expect(
+        claudeRoute.find((assertion) => assertion.description === "Output recommends /journey-map"),
+        `${skill} routes to parent /journey-map`,
+      ).toMatchObject({ pass: true });
+    }
+  });
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
