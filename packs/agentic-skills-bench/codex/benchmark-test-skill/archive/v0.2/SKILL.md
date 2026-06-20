@@ -2,7 +2,7 @@
 name: benchmark-test-skill
 description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
 type: execution
-version: v0.3
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "<skill name>"
 ---
@@ -81,20 +81,6 @@ pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 - Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
 - If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `$targeted-skill-builder <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
 
-### Step 3.5 - Regression Check
-
-Run only if the bench step produced an evaluated report (skip if every run was infrastructure-blocked). This closes the benchmark loop by comparing the fresh grade to the prior grade in `benchmark/grade-history.json`:
-
-```bash
-node scripts/benchmark-regression-check.mjs <SKILL>
-```
-
-- The script reads the newest `report.json` per agent, appends the new grade to `benchmark/grade-history.json` (tracked — `git add` it with this run's changes per the index-generated build discipline in CLAUDE.md), and prints an `improvement` / `stable` / `regression` verdict per agent.
-- A `regression` verdict (passRate, Wilson lower bound, or output-quality drop >= 10pp, or a status-badge demotion) is distinct from an absolute benchmark failure: the skill may still pass its thresholds yet score materially worse than its last graded run. The script exits non-zero on regression.
-- On a `regression` verdict, carry the printed prior-vs-new delta block into the next step and route to `$session-triage <SKILL> benchmark regression` so a human decides whether it is a real behavioral regression or harness/rubric drift. Do not auto-fix.
-- On `improvement` or `stable`, continue to the report; note the verdict in the report.
-- See `docs/benchmark-improvement-loop.md` for the full human-approved cycle this step participates in.
-
 ### Step 4 - Report
 
 Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` at the repository root. Use the current date.
@@ -106,7 +92,6 @@ Populate the report from `report.json` and verify the output includes:
 - failed assertions, if any
 - output-quality score summary when the setup defines a quality evaluator, including threshold failures, critical failures, and lowest-scoring criteria when present
 - infrastructure-blocked runs, if any
-- regression verdict from Step 3.5 (`improvement` / `stable` / `regression`) with the prior-vs-new delta when a prior grade existed
 - latency p50, p95, and p99
 - cost per run and total cost
 - mean pairwise similarity and outlier count
@@ -152,8 +137,6 @@ If the skill has blocked benchmark coverage, recommend the row's `next_command`.
 If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `$targeted-skill-builder <skill> benchmark coverage`.
 
 If the skill fails verification, hard benchmark assertions, or configured quality thresholds, recommend `$session-triage <skill> benchmark failure`.
-
-If `scripts/benchmark-regression-check.mjs` reports a `regression` verdict (the skill still grades but materially worse than its last graded run), recommend `$session-triage <skill> benchmark regression` and carry the prior-vs-new delta block into that handoff.
 
 If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `$benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
 

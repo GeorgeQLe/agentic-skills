@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-20
+
+- Added Step 3.5 - Regression Check: after `pnpm bench`, run `node scripts/benchmark-regression-check.mjs <skill>` to compare the fresh grade against the prior grade in `benchmark/grade-history.json`. On a `regression` verdict (distinct from an absolute failure), route to `/session-triage <skill> benchmark regression` carrying the prior-vs-new delta. Closes the benchmark → triage → version-bump → re-benchmark loop documented in `docs/benchmark-improvement-loop.md`.
+
 ## v0.2 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

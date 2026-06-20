@@ -13,3 +13,4 @@ tests/runs/
 tests/benchmarks/
 packages/skillpacks/build/
 *.tsbuildinfo
+.session-insights/

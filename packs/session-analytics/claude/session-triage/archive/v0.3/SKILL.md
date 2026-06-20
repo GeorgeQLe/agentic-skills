@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.4
+version: v0.3
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -19,7 +19,6 @@ Use `/analyze-sessions` instead for informational history questions — single o
 - Optional repository path or current working directory.
 - Optional skill name or `SKILL.md` path.
 - Optional user correction text, error output, test failure, log excerpt, file path, commit, or issue description.
-- Optional `benchmark regression` mode: invoked as `/session-triage <skill> benchmark regression` by `/benchmark-test-skill` when `scripts/benchmark-regression-check.mjs` reports a `regression` verdict. The prior-vs-new delta block (passRate, Wilson lower bound, output-quality, status badge, prior and new grade dates) is carried in as evidence; the appended grade rows live in `benchmark/grade-history.json`.
 
 ## Process
 
@@ -54,9 +53,6 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Compare Claude and Codex skill versions when both exist and flag mirrored drift.
    - Check `tasks/lessons.md` when working in `agentic-skills`; reuse existing lessons or recommend a new lesson when the pattern is novel.
    - For benchmark failures, check recent same-skill `benchmark/triage-<skill>-*.md` reports and `tasks/lessons.md` before recommending a narrow tolerance patch. If two or more recent reports classify the same family of valid outputs as benchmark false negatives, stop patching individual phrasings and route to a generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix that covers the family.
-   - For a `benchmark regression` invocation, the absolute thresholds may still pass — the issue is a *drop relative to the prior grade*. Use the carried delta and `benchmark/grade-history.json` to confirm the regression is real (not a one-run sampling artifact: small evaluated-run counts and wide Wilson intervals can move >=10pp by chance — say so and recommend a confirming re-run when the sample is thin). Then classify the cause:
-     - **Real behavioral regression** — the skill contract or a dependency changed and the agent now produces worse output. Route the fix to `/targeted-skill-builder <skill> benchmark regression` naming the contract section that drifted, and confirm the loop closes by re-running `/benchmark-test-skill <skill>` to verify the grade recovers in `grade-history.json`.
-     - **Harness / rubric drift** — the skill behavior is unchanged but a setup, fixture, evaluator, or pricing/threshold change moved the score. Reuse the false-negative-family logic above (steps 5-6): name the owning harness/setup file and the family-level behavior to recognize, rather than patching one phrasing.
 
 6. Recommend the smallest durable fix:
    - Name exact skill file(s), instruction file(s), or docs to change.
@@ -64,11 +60,6 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Include validation checks that prove the revised behavior prevents the issue, such as targeted `rg` checks, mirrored contract checks, version checks, replay of the decision path, or the failing test/log command.
    - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
    - Route verified skill changes to `/targeted-skill-builder` (skill-dev pack) for a narrow update or `/create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
-
-7. Optionally enrich the persistent insights memory (secondary writer):
-   - When the triaged incident is a verified, generalizable pattern (not a pure one-off), append it to the machine-local `.session-insights/insights.md` store that `/analyze-sessions` accumulates, so live incidents and cross-session trends share one memory.
-   - The store is gitignored and may not exist yet; create it with the standard keyed table header (`| Insight | Category | First Seen | Last Seen | Occurrences | Status |`) if absent. If a semantically matching row already exists, increment its Occurrences and advance Last Seen instead of adding a duplicate; otherwise add a row with Occurrences `1` and Status `confirmed` (triage incidents are verified).
-   - This is additive memory only — `tasks/lessons.md` remains the authoritative correction log; do not move lessons content into the insights store.
 
 ## Output
 
@@ -83,7 +74,7 @@ Produce a structured report with:
 - Recommended fix: exact file(s), section(s), and proposed wording or behavior change.
 - Validation plan: commands or checks to prove the fix.
 - Confidence and evidence gaps: what is known, what could not be verified, and whether `/analyze-sessions` is needed for recurrence analysis.
-- Recommended next skill: `/targeted-skill-builder` (skill-dev pack), `/create-agentic-skill` (skill-dev pack), `/analyze-sessions`, or `none` when no follow-up is justified. For a confirmed real `benchmark regression`, recommend `/targeted-skill-builder <skill> benchmark regression` and name re-running `/benchmark-test-skill <skill>` as the loop-closing verification (see `docs/benchmark-improvement-loop.md`).
+- Recommended next skill: `/targeted-skill-builder` (skill-dev pack), `/create-agentic-skill` (skill-dev pack), `/analyze-sessions`, or `none` when no follow-up is justified.
 
 ## Constraints
 

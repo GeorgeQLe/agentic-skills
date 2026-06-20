@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-20
+
+- Added a Persistent Insights Memory: a machine-local, gitignored `.session-insights/insights.md` keyed table plus `.session-insights/watermark.json`. A Recall step reads the store and parses only history newer than the watermark layered on recalled insights; a Write step merges findings (dedup/increment Occurrences, advance Last Seen, append new rows) and advances the watermark. Makes the skill accumulate across runs instead of recomputing from raw history every time.
+
 ## v0.6 - 2026-06-19
 
 - Documented a named "Comparison Mode": model/config A-B comparison (e.g. Opus 4.6 vs 4.7, gpt 5.5 low vs xhigh, Claude vs Codex) on cost + observable quality signals, with regime attribution, sample sizes, and evidence-vs-inference labeling. Captured as a mode rather than a separate skill to avoid creep.

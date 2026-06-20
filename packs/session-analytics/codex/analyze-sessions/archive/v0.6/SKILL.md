@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.7
+version: v0.6
 required_conventions: [alignment-page]
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 context_intake: artifact_only
@@ -25,25 +25,6 @@ Route to `$session-triage` only when the user needs a *verified fix for a live i
 - Optional paths from the user. Accept history files, session directories, repository directories, or exported logs.
 - Optional filters such as repo path, project name, date range, command/skill name, exact phrase, or trend question.
 - Optional model pricing table or explicit request to verify current provider pricing. Use pricing only when it is supplied by the user, present in the logs, or verified from an authoritative provider source during the run.
-- Persistent insights store (machine-local, gitignored): `.session-insights/insights.md` (accumulated findings) and `.session-insights/watermark.json` (last-processed timestamp per history source). These let the skill accumulate across runs instead of recomputing from raw history every time.
-
-## Persistent Insights Memory
-
-This skill maintains an accumulating memory so cross-session findings compound, mirroring the read-at-start discipline of `tasks/lessons.md` and the keyed Terms-table shape of the shared glossary. The store is **machine-local and gitignored** — it derives from this developer's private `~/.claude` / `~/.codex` history, so committing it would be noisy and a privacy leak.
-
-- `.session-insights/insights.md`: a keyed table `| Insight | Category | First Seen | Last Seen | Occurrences | Status |`, plus a `## Recently Added` audit table for the most recent run's new/updated rows. Insights are deduped by semantic match (same discipline `tasks/lessons.md` uses), not exact string match.
-- `.session-insights/watermark.json`: last-processed timestamp per history source — `~/.claude/history.jsonl`, `~/.codex/history.jsonl`, and `~/.codex/sessions/**`.
-
-**Recall step (run first, before parsing history):**
-- Read `.session-insights/insights.md` and `.session-insights/watermark.json` if they exist. Treat the recalled insights as established context for this run. If neither exists yet, this is a cold start — process the full history (per the existing "read the full available history" rule) and create the store at the write step.
-- When the store exists, parse only history records *newer than* the per-source watermark, then layer the newly parsed activity on top of the recalled insights. Do not re-derive the recalled findings from scratch.
-- For an explicit full-history request, or when the user passes a custom scope/date range that predates the watermark, ignore the watermark for that run (read the full requested scope) but still merge results into the store at the end.
-
-**Write step (run last, after reporting):**
-- Merge this run's findings into `.session-insights/insights.md`: for each finding that semantically matches an existing row, increment `Occurrences` and advance `Last Seen`; for genuinely new findings, append a row with `First Seen` = `Last Seen` = this run's date, `Occurrences` = the count observed, and `Status` = `proposed` (promote to `confirmed` once corroborated across runs or by `$session-triage`).
-- Record the new/updated rows in the `## Recently Added` audit table.
-- Advance `.session-insights/watermark.json` to the newest timestamp processed per source. Create the store (with the standard header) if it did not exist.
-- Never commit `.session-insights/` — it is gitignored. If `git status` shows it tracked, stop and report instead of committing.
 
 ## Process
 
@@ -52,7 +33,7 @@ This skill maintains an accumulating memory so cross-session findings compound, 
    - Route to `$session-triage` only when the user needs a verified fix for a live incident: a correction to act on, a failed run to repair, a repo incident, or a suspected skill failure.
    - When a request contains both a live incident and recurrence questions, recommend `$session-triage` first for the incident and use this skill afterward for frequency or trend evidence.
 
-2. Run the Recall step from Persistent Insights Memory first, then read history for the selected scope: the full available history on a cold start (no store) or an explicit full-history request, or only records newer than the per-source watermark when the insights store exists. Read the full selected scope, not a sample.
+2. Read the full available history for the selected scope, not a sample.
 
 3. Use a scriptable approach for scale. Prefer streaming or line-by-line processing for large files.
 
@@ -103,8 +84,6 @@ This skill maintains an accumulating memory so cross-session findings compound, 
    - Standing instruction/project convention: behavior that should always apply.
    - `$session-triage`: one concrete incident needs verification before a durable fix is designed.
 
-10. Run the Write step from Persistent Insights Memory last: merge this run's findings into `.session-insights/insights.md` (dedup/increment Occurrences, advance Last Seen, append new rows), update the `## Recently Added` table, and advance the watermark. Do not commit the gitignored store.
-
 ## Comparison Mode
 
 A recurring question shape is a **model/config A-B comparison**: compare two model or config regimes across sessions on cost and output quality — for example "Opus 4.6 vs 4.7 token usage and quality", "gpt 5.5 low vs xhigh reasoning effort", or "Claude vs Codex UI quality". When the request fits this shape:
@@ -129,8 +108,7 @@ Produce a structured report with:
 
 ## Constraints
 
-- Process the entire available history for broad usage analysis on a cold start or full-history request; when the persistent insights store exists, process every record newer than the watermark layered on the recalled insights, never a sample of that window.
-- Treat `.session-insights/` as machine-local and gitignored. Never commit it; if `git status` shows it tracked, stop and report.
+- Process the entire available history for broad usage analysis, not just a sample.
 - Use actual message examples from the history, not hypothetical ones.
 - Be specific about frequencies; show exact counts where possible.
 - Show exact token counts where available and clearly distinguish logged costs from estimated costs.
