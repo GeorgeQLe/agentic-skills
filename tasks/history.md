@@ -14619,3 +14619,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Fix per the CLAUDE.md "Skillpacks Manifest Is Index-Generated" rule (clean tree, index == HEAD, sources already committed): regenerated via `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs` and committed the manifest alone (175 insertions / 127 deletions — captured frontmatter `version` + handoff text). Confirmed `git status` showed only the manifest before committing.
 - Verified: `--check` → "Manifest check passed"; `npm run skillpacks:verify` exits 0 (bundle audit for 385 active skills, manifest check, staging boundary check all pass).
 - Commit `12993824` pushed to master. No showcase impact (manifest-only, outside `apps/skills-showcase/**` Vercel path trigger).
+
+## 2026-06-20 — Unified Experience phase archive
+
+- Ran `$exec` after Unified Experience Phase 7 was already complete in `tasks/todo.md`.
+- Archived the completed Phase 7 task state to `tasks/phases/phase-7.md` and reset `tasks/todo.md` to a no-active-phase handoff.
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260620-160118-exec.md`.
+- Validation: task-only diff hygiene (`git diff --check`) passed.
