@@ -3521,6 +3521,59 @@ describe("benchmark coverage matrix", () => {
       ).toMatchObject({ pass: true });
     }
   });
+
+  it("covers customer-discovery framework subskills as parent-routed custom fixtures", () => {
+    const matrix = benchmarkCoverageMatrix();
+    const customerDiscoverySubskills = [
+      "jtbd-needs",
+      "w3-hypothesis",
+      "four-forces",
+      "five-rings",
+      "seven-dimensions",
+      "pmf-engine",
+    ];
+
+    for (const skill of customerDiscoverySubskills) {
+      expect(matrix.find((row) => row.skill === skill), `${skill} coverage row`).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+        agent_scope: "codex",
+        fixture_type: "pack-local-fixture",
+      });
+
+      const setup = resolveBenchSetup(skill);
+      expect(setup, `${skill} registered setup`).toBe(CUSTOM_BENCH_SETUPS[skill]);
+      expect(setup?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
+        expect.arrayContaining(["pack-skill-context", "business-discovery-context"]),
+      );
+
+      const workDir = mkdtempSync(resolve(tmpdir(), `customer-discovery-subskill-${skill}-`));
+      setup!.setupProject(workDir);
+      expect(existsSync(resolve(workDir, "research/_working/preliminary-customer-discovery-research.md")), `${skill} preliminary seed`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/_working/customer-discovery-run.yaml")), `${skill} run manifest`).toBe(true);
+      expect(existsSync(resolve(workDir, "research/glossary.md")), `${skill} glossary header`).toBe(true);
+      const runManifest = readFileSync(resolve(workDir, "research/_working/customer-discovery-run.yaml"), "utf8");
+      expect(runManifest, `${skill} run manifest selects framework`).toContain(`slug: ${skill}`);
+
+      writeFileSync(
+        resolve(workDir, "pack-benchmark-output.md"),
+        [
+          `Pack: business-discovery. Skill: ${skill}.`,
+          `Executing the ${skill} framework inline at State C through the customer-discovery parent orchestrator.`,
+          "Evidence: research/_working/customer-discovery-run.yaml and research/_working/preliminary-customer-discovery-research.md.",
+          "Recommended next skill: /customer-discovery",
+        ].join("\n"),
+      );
+      const claudeRoute = setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir, files: ["pack-benchmark-output.md"] },
+        { agent: "claude" },
+      );
+      expect(
+        claudeRoute.find((assertion) => assertion.description === "Output recommends /customer-discovery"),
+        `${skill} routes to parent /customer-discovery`,
+      ).toMatchObject({ pass: true });
+    }
+  });
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
