@@ -42,6 +42,10 @@ function requireText(file, text, snippet, label) {
   if (!text.includes(snippet)) fail(file, `missing ${label}`);
 }
 
+function rejectText(file, text, snippet, label) {
+  if (text.includes(snippet)) fail(file, `contains ${label}`);
+}
+
 for (const { pack, name, canonical } of orchestrators) {
   for (const agent of ["codex", "claude"]) {
     const file = path.join(root, "packs", pack, agent, name, "SKILL.md");
@@ -50,7 +54,7 @@ for (const { pack, name, canonical } of orchestrators) {
 
     requireText(file, text, "### Terminal Handoff Contract", "terminal handoff contract");
     requireText(file, text, "## Next Work", "Next Work section name");
-    requireText(file, text, "## Recommended Next Command After Compiling YAML", "review-pending command section name");
+    requireText(file, text, "## Invoke With YAML", "review-pending command section name");
     requireText(file, text, "## Recommended Next Command", "post-write command section name");
     requireText(file, text, `${cmd} --synthesize`, "explicit synthesis command");
     requireText(file, text, canonical, "canonical synthesis artifact reference");
@@ -65,11 +69,13 @@ for (const { pack, name, canonical } of orchestrators) {
     requireText(file, text, "gate_type: framework-findings", "gate type routing metadata");
     requireText(file, text, `run_manifest: research/{slug}/_working/${name}-run.yaml`, "run manifest routing metadata");
     requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
-    requireText(file, text, "The `command` field must be the same parent command shown under `## Recommended Next Command After Compiling YAML`.", "command parity guard");
+    requireText(file, text, "The `command` field must be the same parent command shown under `## Invoke With YAML`.", "command parity guard");
 
     if (/Recommended next command after compiling YAML:/i.test(text)) {
       fail(file, "uses old inline recommended-next-command label");
     }
+    rejectText(file, text, "## Continue In A Fresh Session", "old review-pending fresh-session heading");
+    rejectText(file, text, "## Recommended Next Command After Compiling YAML", "old review-pending command heading");
   }
 }
 
@@ -85,7 +91,7 @@ for (const { pack, name } of orchestrators) {
 
       requireText(file, text, "## Terminal Handoff Contract", "terminal handoff contract");
       requireText(file, text, "## Next Work", "Next Work section name");
-      requireText(file, text, "## Recommended Next Command After Compiling YAML", "review-pending command section name");
+      requireText(file, text, "## Invoke With YAML", "review-pending command section name");
       requireText(file, text, cmd, "parent orchestrator command");
       requireText(file, text, "Do not decide from inside the framework whether the next parent run executes another framework or synthesis", "parent recalculation guard");
       requireText(file, text, "agent_routing:", "agent_routing YAML metadata");
@@ -100,6 +106,8 @@ for (const { pack, name } of orchestrators) {
       requireText(file, text, `run_manifest: research/{slug}/_working/${name}-run.yaml`, "run manifest routing metadata");
       requireText(file, text, "next_resolution: parent-resolves-from-yaml-and-filesystem", "parent-owned next-resolution routing metadata");
       requireText(file, text, "never replace it with a child framework path command", "child-command routing guard");
+      rejectText(file, text, "## Continue In A Fresh Session", "old review-pending fresh-session heading");
+      rejectText(file, text, "## Recommended Next Command After Compiling YAML", "old review-pending command heading");
     }
   }
 }

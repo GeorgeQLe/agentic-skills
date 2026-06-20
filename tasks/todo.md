@@ -1,3 +1,17 @@
+# Pattern A Routing Wording
+
+- [x] Capture `$investigate` prompt history.
+- [x] Validate the wording issue against active Pattern A routing contracts.
+- [x] Update conventions, audits, and active skill wording.
+- [x] Run focused verification.
+- [x] Record review, commit, and push.
+
+## Pattern A Routing Wording Review
+
+- User claim validated: the review-pending command section repeated fresh-session routing that `Next Work` already covered.
+- Changed the pending-YAML command section to `## Invoke With YAML` so it only names the parent invocation.
+- Regenerated the skillpacks package snapshot and verified the Pattern A audit, package build check, and diff hygiene.
+
 # Unified Experience — Phase 7: Deferred polish (custom-deck output + reduced-motion branches)
 
 > Full design context: `apps/skills-showcase/docs/unified-experience.md` — §"Build phasing" step 7 ("Deferred polish — custom-deck output + overlay install lines; reduced-motion branches for `SealedPack`/`PackOpener` fan stagger"), §"Distribution / install lines" (line ~129: starter → one-line `install-deck`; custom/modified → explicit `install <pack>` list + overlay lines + `?c=` share encoding), and §"Persistence" (line ~189: `?c=` share-deck URL param). Phases 1–6 shipped — see `tasks/history.md` (2026-06-19 ×3, 2026-06-20 ×3) and commits through Phase 6 (legacy archive + nav rebuild).

@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-20 — Compiled-YAML handoffs should not duplicate fresh-session routing
+
+- A Pattern A review-pending handoff used both `## Next Work` to tell the user to review/compile/paste YAML and `## Continue In A Fresh Session` to repeat fresh-session routing.
+- Keep review/compile/paste instructions in `## Next Work`; the command section for pending YAML gates should only name the parent invocation to use with the compiled YAML.
+- Do not have a pre-approval handoff describe the next phase's post-write routing. The receiving parent skill resolves state from YAML plus filesystem and emits its own `## Recommended Next Command` after it writes or amends the approved artifact.
+
 ## 2026-06-18 — Pack-install handoffs should preserve the destination skill
 
 - A competitive-analysis final handoff correctly recommended `npx skillpacks install customer-lifecycle` because `journey-map` was unavailable, but the terminal command alone did not tell the user that `$journey-map` was the intended next skill after install.

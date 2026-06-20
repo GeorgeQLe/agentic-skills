@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.18 - 2026-06-20
+
+- Changed the review-pending Pattern A handoff to `## Invoke With YAML`; the section now only names the parent skill invocation to use with compiled YAML while `## Next Work` owns the review/compile/paste instructions.
+
 ## v1.17 - 2026-06-18
 
 - Product-Path Scope Resolution now disambiguates product paths from git branches ("Product paths are research scopes, not git branches or parallel implementation lanes"), restoring the manifest-contract phrasing the product-path-manifest contract expects.

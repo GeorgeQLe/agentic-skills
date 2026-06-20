@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-20
+
+- Changed the review-pending Pattern A handoff to `## Invoke With YAML`; the section now only names the parent skill invocation to use with compiled YAML while `## Next Work` owns the review/compile/paste instructions.
+
 ## v0.11 - 2026-06-17
 
 - Added parent-owned `agent_routing` guidance for inline framework findings YAML so fresh sessions route back to the parent orchestrator, not a child framework command.

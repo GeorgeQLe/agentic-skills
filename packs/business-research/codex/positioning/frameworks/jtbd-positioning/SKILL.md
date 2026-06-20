@@ -2,7 +2,7 @@
 name: jtbd-positioning
 description: Jobs-to-be-Done positioning analysis — identify primary job, map functional/social/emotional dimensions, position around job outcome
 type: research
-version: v0.11
+version: v0.12
 required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
@@ -26,9 +26,9 @@ When this framework is run inline and stops on its findings `review` page, the t
 
 ```markdown
 ## Next Work
-Review the framework findings page and compile YAML. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
+Review the framework findings page, compile YAML, and paste it into a session invoking the parent skill. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
 
-## Continue In A Fresh Session
+## Invoke With YAML
 $positioning
 ```
 
@@ -50,7 +50,7 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Continue In A Fresh Session`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
+Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Invoke With YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

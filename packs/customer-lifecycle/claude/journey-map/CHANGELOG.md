@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.25 - 2026-06-20
+
+- Changed the review-pending Pattern A handoff to `## Invoke With YAML`; the section now only names the parent skill invocation to use with compiled YAML while `## Next Work` owns the review/compile/paste instructions.
+
 ## v0.24 - 2026-06-18
 
 - Review-step terminal handoff renamed `## Recommended Next Command After Compiling YAML` → `## Continue In A Fresh Session`; review pages now instruct compile-YAML-and-paste-into-a-fresh-session, and the fresh session emits the real `## Recommended Next Command`.

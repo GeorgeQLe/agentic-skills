@@ -1,3 +1,25 @@
+## Current Implementation - Pattern A Routing Wording
+
+### Goal
+
+Remove redundant review-pending "Continue In A Fresh Session" wording from Pattern A research-loop skill handoffs while keeping compiled YAML self-routing and parent-owned state resolution intact.
+
+### Plan
+
+1. Capture the `$investigate` prompt and validate the user's wording concern against active skills, conventions, and audits.
+2. Replace the review-pending handoff label with a concise YAML invocation section that only names the parent command.
+3. Update active Pattern A orchestrator and framework skill contracts for Codex and Claude, including required version archives/changelogs.
+4. Update the handoff audit so future skills enforce the new label and command parity wording.
+5. Run the focused handoff audit and diff hygiene, record the review, then commit and push.
+
+### Acceptance Criteria
+
+- Review-pending handoffs no longer use `## Continue In A Fresh Session`.
+- `## Next Work` remains the place that tells the user to review, compile, and paste YAML.
+- The command section names only the parent skill invocation to use with the compiled YAML.
+- Post-approval routing still uses `## Recommended Next Command`.
+- Pattern A handoff audit passes.
+
 ## Current Implementation - npm Publish Recovery Hardening
 
 ### Goal

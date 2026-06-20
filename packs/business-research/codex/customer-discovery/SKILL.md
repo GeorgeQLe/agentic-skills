@@ -2,7 +2,7 @@
 name: customer-discovery
 description: Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research
 type: research
-version: v1.17
+version: v1.18
 required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional: \"discovery\" | \"validate\" | \"--synthesize\" | concept/idea, spec file path]"
 invocation: orchestrator
@@ -39,7 +39,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action, and the only terminal command section allowed before approval is `## Continue In A Fresh Session`, which tells the user to compile the bottom YAML and paste it into a fresh session that invokes this same parent orchestrator, such as `$customer-discovery` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `$customer-discovery`, never an execution-loop command or a path-shaped child framework invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action, and the only terminal command section allowed before approval is `## Invoke With YAML`, which names the parent command to invoke with the compiled YAML, such as `$customer-discovery` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing: after framework completion, hand control back to `$customer-discovery`, never an execution-loop command or a path-shaped child framework invocation. Only emit downstream next-skill routing after the synthesized `icp.md` artifact has been approved and written.
 
 ## Staged Research Workflow
 
@@ -79,7 +79,7 @@ When a framework is pending, the only user-facing continuation route is re-invok
 
 ### Terminal Handoff Contract
 
-Every terminal response for this Research Session Loop must end with `## Next Work` and one command section. Use `## Continue In A Fresh Session` only while a `review` page is waiting for compiled YAML; it tells the user to compile the bottom YAML and paste it into a fresh session that invokes this parent command, and that fresh session emits the real `## Recommended Next Command`. Use `## Recommended Next Command` only after approved YAML has been consumed and the approved artifact has been written or updated. Do not put any other section after the applicable command section.
+Every terminal response for this Research Session Loop must end with `## Next Work` and one command section. Use `## Invoke With YAML` only while a `review` page is waiting for compiled YAML; it names the parent command to invoke with the compiled YAML. Use `## Recommended Next Command` only after approved YAML has been consumed and the approved artifact has been written or updated. Do not put any other section after the applicable command section.
 
 ### Self-Routing Continuation Payload
 
@@ -99,9 +99,9 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-For framework selection, shortcut, and synthesis gates, omit `framework_slug` and `framework_mode`; `gate_type` must name the actual gate. The `command` field must be the same parent command shown under `## Continue In A Fresh Session`. The parent consumes the YAML, writes or amends the artifact, archives consumed sources, derives progress from the run manifest plus canonical-intermediate files, and decides whether to load a framework subskill inline.
+For framework selection, shortcut, and synthesis gates, omit `framework_slug` and `framework_mode`; `gate_type` must name the actual gate. The `command` field must be the same parent command shown under `## Invoke With YAML`. The parent consumes the YAML, writes or amends the artifact, archives consumed sources, derives progress from the run manifest plus canonical-intermediate files, and decides whether to load a framework subskill inline.
 
-For review-pending framework, selection, shortcut, or synthesis pages, `## Next Work` tells the user to review the alignment page, compile YAML, and paste it into a fresh session that invokes `$customer-discovery` with the same product/research path argument when present. For post-write pending-framework states, `## Next Work` reports progress as "k of N frameworks complete" and says the next run executes the next pending framework; `## Recommended Next Command` names `$customer-discovery`.
+For review-pending framework, selection, shortcut, or synthesis pages, `## Next Work` tells the user to review the alignment page, compile YAML, and paste it into a session invoking `$customer-discovery` with the same product/research path argument when present. For post-write pending-framework states, `## Next Work` reports progress as "k of N frameworks complete" and says the next run executes the next pending framework; `## Recommended Next Command` names `$customer-discovery`.
 
 After every framework write, recalculate pending frameworks from the run manifest and canonical-intermediate files before writing this handoff. If no selected frameworks remain and canonical `icp.md` is missing, `## Next Work` says the next run builds the unified synthesis review page, and `## Recommended Next Command` names `$customer-discovery --synthesize` with the same product/research path argument when present. After approved synthesis writes canonical `icp.md`, the final command section names only the first downstream command selected by the Next Steps decision tree.
 
@@ -158,7 +158,7 @@ State G is the deep-intake heavy phase (`context_intake: deep`), and it runs **i
 
 The handoff is a complete context transfer for the next cold session (state E): provisional mode signal (pre-product vs product-exists, with the evidence seen so far), context summary, recommended framework subset with rationale, and all elicited answers that shape candidate generation and framework selection. The next `$customer-discovery` run reads only this file to perform authoritative mode detection, candidate bootstrap, and build the multi-select page.
 
-**Terminal fallback.** Only when an HTML interrogation page genuinely cannot be opened, fall back to terminal questioning (1–3 questions per turn, assumptions manifest and coverage checkpoint as terminal gates per the Manifest Visibility Rule). The fallback is degraded, not co-equal; build the HTML page by default. Each interrogation round ends the terminal message with `## Next Work` and `## Continue In A Fresh Session` naming `$customer-discovery`, per the loop-continuation contract.
+**Terminal fallback.** Only when an HTML interrogation page genuinely cannot be opened, fall back to terminal questioning (1–3 questions per turn, assumptions manifest and coverage checkpoint as terminal gates per the Manifest Visibility Rule). The fallback is degraded, not co-equal; build the HTML page by default. Each interrogation round ends the terminal message with `## Next Work` and `## Invoke With YAML` naming `$customer-discovery`, per the loop-continuation contract.
 
 ---
 
@@ -261,7 +261,7 @@ This session consumes the approved multi-select YAML (state 0→C) or advances a
 
 Then run the **one heavy phase**: determine the next pending framework (first selected framework whose canonical intermediate does not yet exist), then **load and follow that framework subskill's `SKILL.md` inline, entering at its research stage (Stage 2)** — the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the research, write its working packet, and build a single findings `review` page. Stop for that framework's compiled YAML.
 
-**Advance the loop by self-re-invocation.** When a framework findings page is in `review`, end the terminal message with `## Next Work` telling the user to review the page and compile YAML, followed by `## Continue In A Fresh Session` telling the user to compile the YAML and paste it into a fresh session that invokes `$customer-discovery` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, recalculate pending frameworks from the manifest and filesystem before writing the handoff. If pending frameworks remain, end with `## Next Work` reporting progress as "k of N frameworks complete" and saying the next run executes the next pending framework, followed by `## Recommended Next Command` naming `$customer-discovery`. If no pending frameworks remain and canonical `icp.md` is missing, end with `## Next Work` saying the next run builds the unified synthesis review page, followed by `## Recommended Next Command` naming `$customer-discovery --synthesize` with the same product/research path argument when present. Do not emit cross-skill routing here — that happens only after synthesis.
+**Advance the loop by self-re-invocation.** When a framework findings page is in `review`, end the terminal message with `## Next Work` telling the user to review the page and compile YAML, followed by `## Invoke With YAML` naming `$customer-discovery` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, recalculate pending frameworks from the manifest and filesystem before writing the handoff. If pending frameworks remain, end with `## Next Work` reporting progress as "k of N frameworks complete" and saying the next run executes the next pending framework, followed by `## Recommended Next Command` naming `$customer-discovery`. If no pending frameworks remain and canonical `icp.md` is missing, end with `## Next Work` saying the next run builds the unified synthesis review page, followed by `## Recommended Next Command` naming `$customer-discovery --synthesize` with the same product/research path argument when present. Do not emit cross-skill routing here — that happens only after synthesis.
 
 
 ### 6. State B — Synthesis (auto-detected; also `$customer-discovery --synthesize`)
