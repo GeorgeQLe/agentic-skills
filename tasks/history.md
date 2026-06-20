@@ -1,5 +1,23 @@
 # Session History
 
+## 2026-06-20 — Close & compound the human-governed self-improvement loop
+
+- Implemented the two-workstream plan to close the benchmark loop and add persistent session memory. Human-approved throughout — new code only adds **detection** and **recall**, never autonomous action (every routing step stays advisory `Recommended next skill:`). Shipped in commit `5082c09b`.
+- **Workstream A — closed benchmark → triage → version-bump → re-benchmark loop:**
+  - New `scripts/benchmark-regression-check.mjs`: reads the newest `report.json` per agent (working-tree run evidence, the documented `.gitignore` exception), compares against the prior grade in `benchmark/grade-history.json`, emits `improvement`/`stable`/`regression` (≥10pp drop in passRate / Wilson lower bound / output-quality averageScore, or a status-badge demotion `graded → partially graded → blocked`), appends the new grade, exits non-zero on regression, and prints the `/session-triage <skill> benchmark regression` handoff. Thresholds documented in the script header.
+  - New tracked, append-only `benchmark/grade-history.json` keyed `"<skill>|<agent>"` (ships empty `{}`).
+  - `benchmark-test-skill` (claude+codex, v0.2→v0.3): new **Step 3.5 — Regression Check** runs the comparator after `pnpm bench`, routes a `regression` verdict (distinct from absolute failure) to `/session-triage`, and the report records the verdict.
+  - `session-triage` (claude+codex, v0.3→v0.4): new `benchmark regression` mode — confirms the regression is real vs a thin-sample artifact, then splits a real behavioral regression (→ `/targeted-skill-builder <skill> benchmark regression`, re-benchmark to confirm recovery) from harness/rubric drift (reuse false-negative-family logic).
+  - New `docs/benchmark-improvement-loop.md` documenting the full human-approved cycle, referenced from both skills.
+- **Workstream B — persistent session-insights memory:**
+  - `analyze-sessions` (claude+codex, v0.6→v0.7): new **Persistent Insights Memory** — a Recall step reads `.session-insights/insights.md` + `watermark.json` and parses only post-watermark history layered on recalled insights; a Write step merges findings (dedup/increment Occurrences, advance Last Seen, append new rows) and advances the watermark. Makes the skill accumulate instead of recompute from raw history every run.
+  - `session-triage` gained an optional secondary-writer append to the same store (covered by the A4 bump, no separate version event).
+  - `.session-insights/` added to `.gitignore` (machine-local; derives from the developer's private `~/.claude` / `~/.codex` history — committing would be noisy and a privacy leak).
+- **Verified:** comparator end-to-end (baseline seeds exit 0 → simulated ≥10pp drop → `regression` verdict + handoff, exit 1 → stable re-run exit 0); `.session-insights/` confirmed gitignored; `skill-archive-audit.sh --strict` (0 violations), `skill-mirror-parity-audit.sh` (0 failures), `base-skill-version-parity-audit.sh` (0 failures); `skills-data.js` diff = exactly the 6 version bumps; skillpacks `build:check` passes after regenerating the manifest from the git index. All bumped skills archived with CHANGELOG entries, claude/codex parity maintained.
+- **Ship boundary:** scoped to my own work — deliberately reverted an unrelated `github-proof-data.js` regeneration whose only diff came from a concurrent session's `tasks/history.md` Phase 6/7 entries already at HEAD.
+- **Out of scope (separate project):** the autonomous-swarm engine ("HulaLoops") shaped via `/idea-scope-brief` — it consumes this repo's deck/skill manifest and must not fork the skill library.
+- Deploy: not applicable to the showcase runtime (skill source + generated public-data version rows only); manual `/deploy` lane needs `release-ops`, not in `enabled_packs`.
+
 ## 2026-06-20 — Unified-experience Phase 6: Legacy archive + nav rebuild
 
 - Made `/` the only content front door. **308-redirected** the five folded marketing routes (`/catalog`, `/packs`, `/workflows`, `/benchmarks`, `/inspect`) → `/` via config-level `next.config.mjs` `async redirects()` (one source of truth, real permanent redirects, no React render), and deleted their `app/<route>/page.tsx` files so the redirect (not a stale page) serves each path.
