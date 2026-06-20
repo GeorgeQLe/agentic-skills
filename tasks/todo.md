@@ -56,5 +56,14 @@ Close out the two deferred items from the design doc:
 - Vitest all-green (extended DeckTableShell test); Playwright all-green (37 existing + new `?c=` + reduced-motion assertions).
 - Manual (`/run` or dev server): build a custom deck, copy the share link, open it in a fresh tab → same deck; toggle OS reduced-motion → packs open without stagger.
 
+## Phase 7 review (COMPLETE — 2026-06-20)
+
+- [x] **Custom-deck output.** New `src/deck-builder/shareDeck.ts` owns the backend-free `?c=` codec: `encodeDeckParam`/`decodeDeckParam` (base64url(JSON), byte-compatible with Node `Buffer.toString("base64url")`), `buildCustomDeck` (resolves the payload against the catalog into a synthetic `custom`-slug `Deck` with phases + overlay packs), and `customInstallLines` (one `npx skillpacks install <pack>` per distinct core pack + overlay packs). Moved `deckPacks` to `decks.ts` (now takes `Skill[]`) and extended `Deck` with optional `overlayPacks`/`overlaySkills` + `CUSTOM_SLUG`.
+- [x] **BuilderCliPanel** detects the `custom` slug → always-unlocked multi-line explicit install list (`data-custom`/`data-multiline`) + a `ShareDeckControl` ("Share deck" → `/deck/custom?c=…`, clipboard best-effort + selectable `deck-share-url` readout). Canonical decks keep the locked/unlocked one-line `install-deck`. `DeckCompletionPanel` command + share are custom-aware too.
+- [x] **`/deck/custom?c=` hard-load.** `app/deck/[slug]/page.tsx` reads `searchParams.c` → threads `customDeckParam` through `DeckDebugHarness` → `DeckTableShell`, which decodes it into the active deck. The custom panel opens/closes **morphless** (crossfade, no `layoutId`) since it has no blueprint tile to morph against; AnimatePresence still drives the close completion.
+- [x] **Reduced-motion branches.** `SealedPack` open (tear / drag-up / click) collapses to an instant reveal that calls `proceedToOpen` directly — no clip/curl sweep or card-rise — with `onTear`/`onOpeningApex`/`onOpen` still firing (no deadlock). `PackOpener` fan entrance drops the staggered spring for a flat 120 ms crossfade (no per-card delay, no transform); the last card's `onAnimationComplete` still advances `onOpenMorphComplete`.
+- [x] **Tests.** `shareDeck.test.ts` (codec round-trip, byte-compat, malformed-param null, buildCustomDeck, install lines). `DeckTableShell.test.tsx` +1 (custom `?c=` hard-load → install list + share link). e2e +2 (`?c=` round-trip incl. re-share; reduced-motion tear → fan opens → ritual completes).
+- [x] **Verified:** `npm run typecheck` clean · `npm run build` (`/` static + 196 SSG cards, `/deck/[slug]` dynamic for `?c=`) · Vitest 132/132 (was 125, +7) · Playwright 39/39 (was 37, +2).
+
 ## Ship-one-step handoff contract
 Implement **only Phase 7**, validate it (all acceptance criteria green, custom-deck round-trip + reduced-motion verified, existing suite unchanged), then run `/ship` when done. This is the final unified-experience phase — on completion the build is done.
