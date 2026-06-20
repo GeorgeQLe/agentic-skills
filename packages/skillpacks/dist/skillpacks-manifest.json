@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "f15537238df150cba0464d5890fadaf79d3478f9d524add41898c8d85ee92ee2",
+  "source_fingerprint": "636c895c1216941cc40c1710bf06e99b4d5fb12022601250a467ddd868346745",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2853,13 +2853,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
       "installable": false,
-      "content_sha256": "f0fc0f5c53fae0c8610fa26ddeeb4c5ad38d1234badd0c71373a14366c9d69ca",
+      "content_sha256": "00e9a98f2696d6bdaaa888f58382310c03f1e3063a367e0bdb078eaa351954c6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2868,7 +2868,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/feature-pricing-matrix",
       "deck_memberships": [
@@ -2881,13 +2882,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "c892ffc09c9ac4560f55ba22a106d04877c03741f97f2696d1f8e5a43ee876d7",
+      "content_sha256": "0080175bfa56597a9d74b789391717bc6c9bd6f49dbe884676f038f52ecc0088",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2896,7 +2897,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/porter-five-forces",
       "deck_memberships": [
@@ -2909,13 +2911,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
       "installable": false,
-      "content_sha256": "2eb376d69e132492f234481049cf2ea920f39216c6bd73b903ede2e014c42dd3",
+      "content_sha256": "be498e36244488ed5f417e512288453e6c49c35ee598026d59fa00ee9627bdf4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2924,7 +2926,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/strategic-group-map",
       "deck_memberships": [
@@ -2937,13 +2940,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/swot/SKILL.md",
       "installable": false,
-      "content_sha256": "bff2085e98851afdc09b2521fb069a618455a2f99e1f9703d130759e4c873144",
+      "content_sha256": "ecf7aba57984ffec1fa3c64cb9508db9d0e015291157d2363429a84e8ec0c495",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2952,7 +2955,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/swot",
       "deck_memberships": [
@@ -2965,13 +2969,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "5725de00e6622759ecd5236245138da0c90f011c774520b6f094a32ea53cc43e",
+      "content_sha256": "b586ee47fc55614b12be3d925f33efdd6c154ce850c17d9c0b46db8bbd0f81c9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2992,6 +2996,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -3011,13 +3016,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/five-rings/SKILL.md",
       "installable": false,
-      "content_sha256": "fe8e0007db157bc2ef62ed61df192d404db1ae02dff82babd4361f3b829f8ae8",
+      "content_sha256": "51b8eb08e0747697a25e5447a638d3dc0f0c6dd7bc22b2df725e3b4776d5955c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3026,7 +3031,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/five-rings",
       "deck_memberships": [
@@ -3039,13 +3045,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/four-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "032aed00efd41955ed32314657aecbcdec9eefdd5f8f028b1ac102357820b437",
+      "content_sha256": "fc8004ecd6f7b463edd8f4db3e300e095eacc85ef778712557a5a13baaacd3a8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3054,7 +3060,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/four-forces",
       "deck_memberships": [
@@ -3067,13 +3074,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/jtbd-needs/SKILL.md",
       "installable": false,
-      "content_sha256": "f9b4920b1cd3c84440eb331b54b9d22a0744c8c96c3002aed745f1895502309a",
+      "content_sha256": "bf1c15a312dc9bbcd85697efb137b42a2365df476ee52806fb39c0a19e2c95fa",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3082,7 +3089,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/jtbd-needs",
       "deck_memberships": [
@@ -3095,13 +3103,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/pmf-engine/SKILL.md",
       "installable": false,
-      "content_sha256": "2e1f6c150cf05ae4cf5a30ff7de8ffde620ae163c367286403d07dcea1e18e35",
+      "content_sha256": "9ca47e36be2ddc8e870081bb5dae3c4973a08cd8cd09122d0c0b505a85613c08",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3110,7 +3118,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/pmf-engine",
       "deck_memberships": [
@@ -3123,13 +3132,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/seven-dimensions/SKILL.md",
       "installable": false,
-      "content_sha256": "9beb0defd21dbacbd0d620aba7c80e9c88fde5b68674be98fe2f39142d6dcb9e",
+      "content_sha256": "905385c3a7120d4b3c8e6fa5e1fa243778ccb8a001bb6711dcbf4be84a7dfe30",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3138,7 +3147,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/seven-dimensions",
       "deck_memberships": [
@@ -3151,13 +3161,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
       "installable": false,
-      "content_sha256": "4a6cbffce28e880f9379f85fdf23398c2e75184b201e369298049295f499fc0e",
+      "content_sha256": "2d1df1ad8c4c33e226df3563d66181702431ee4fdb3919c0925aa03b694421ef",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3166,7 +3176,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/w3-hypothesis",
       "deck_memberships": [
@@ -3179,14 +3190,14 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v1.17",
+      "version": "v1.18",
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
       ],
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "58dcdb9a677bf51353c4bf7a5b16559c6c9bc3f3fbe7a83072ec0d716c6cffff",
+      "content_sha256": "07335e590c1f75fe7f44d157f52c544f858a5b93c71839446b68a2ef89ca437f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3209,6 +3220,7 @@
         "v1.14",
         "v1.15",
         "v1.16",
+        "v1.17",
         "v1.2",
         "v1.3",
         "v1.4",
@@ -3319,17 +3331,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/positioning/frameworks/category-design/SKILL.md",
       "installable": false,
-      "content_sha256": "1fbb45130c9cf88062f86379e59b8d71ae33d52cf8f528f95faafe7ce6ba4f16",
+      "content_sha256": "6a19ae75a3c361f8c81b3bd4de61a6c1958c955b3ba3cf4f9560f2be2e88ab0a",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3350,17 +3363,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/positioning/frameworks/jtbd-positioning/SKILL.md",
       "installable": false,
-      "content_sha256": "c9e8947e35d567fa73de960461781a13e05a705fda9beeb1cdf36fdcefce1a66",
+      "content_sha256": "a0270119c66b10d1c433f13d528d1c2e01e3c311cbf73b04c0a4abe90bce952e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3381,17 +3395,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/positioning/frameworks/moore-positioning/SKILL.md",
       "installable": false,
-      "content_sha256": "53e7d2dc549a6f046babe3e70d38d132efde5940b4fe6ca529ac79323e3558fe",
+      "content_sha256": "d02e6dbe786013ddc4c86d88229c7388b363c9015386d26e16a0a556df65a308",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3412,17 +3427,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/positioning/frameworks/obviously-awesome/SKILL.md",
       "installable": false,
-      "content_sha256": "d2026a3aaacdf9a8ae8096d29712f3d160a7e050326071013405cd148ec8461c",
+      "content_sha256": "627e87de45b1fcae77ec571a6bfa51847903f2f8389c423da8a5e0b3f4e91c6d",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3443,17 +3459,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/claude/positioning/frameworks/strategic-canvas/SKILL.md",
       "installable": false,
-      "content_sha256": "43e19772d93f62d9139ae98c236cf3bbb988fef9868e6fc073d2f0d8e88bdbde",
+      "content_sha256": "be1aea8df8b72f8a019ba8b4772a2c8110236b954ac1c0ab0268e02634dee28e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3474,14 +3491,14 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.25",
+      "version": "v0.26",
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
       ],
       "path": "packs/business-research/claude/positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "ef187c529b040467ecfb6b08a153e4b5f0b4b29adf7c9161ecbcb31fa7226821",
+      "content_sha256": "91da44717c2a16d42ca4e85cfc4f42f4bea5a3b7ba9d52502ec94133f631a939",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3501,6 +3518,7 @@
         "v0.22",
         "v0.23",
         "v0.24",
+        "v0.25",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -3551,13 +3569,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
       "installable": false,
-      "content_sha256": "78b8aaadc79dfe240a2d9b5ac4130e27fbca69f9c6e2d5a9f21dcadf22842346",
+      "content_sha256": "2690fdb106bac110ba264ba9977a9c71336fc6dfbea9bd0cf46cb51486722978",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3566,7 +3584,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$feature-pricing-matrix",
       "deck_memberships": [
@@ -3579,13 +3598,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "62d401702e81fa04bf56a9d983971666f2640c4d1dae7e319b16925731146649",
+      "content_sha256": "20c699d6cfbf8e87a4ece9a07ed41057cb01af160433dcbb83fb064233f02073",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3594,7 +3613,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$porter-five-forces",
       "deck_memberships": [
@@ -3607,13 +3627,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
       "installable": false,
-      "content_sha256": "f232cb4ff4fc5cd109e81cba66c1feefca6231a8bf22cc48d64b34cedc18d53b",
+      "content_sha256": "590ee56f40e2f4a8e9df6e436645681275fae0f22f00e494273f79edee75c563",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3622,7 +3642,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$strategic-group-map",
       "deck_memberships": [
@@ -3635,13 +3656,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/swot/SKILL.md",
       "installable": false,
-      "content_sha256": "816b05a9674c335fd0106d0c1f35ada0daa93c0ba27c67904c920340ce4debcc",
+      "content_sha256": "3c4b7521a46e4506aaaad640d7e3c9ba7dce162e34ce42b8c5aee6be718790bc",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3650,7 +3671,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$swot",
       "deck_memberships": [
@@ -3663,13 +3685,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "e67a6bec82b144430f9a555396f162e3eca139bfbe122968003e3addde3941ca",
+      "content_sha256": "1379982561f5cbce147d3163b0eb1888d4365559b782f8c34545603f160a84fb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3690,6 +3712,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -3709,13 +3732,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/five-rings/SKILL.md",
       "installable": false,
-      "content_sha256": "c15402b623a07864bf6b81063305157bb29f6b12b28c8a3fce5b264b2e54d7e5",
+      "content_sha256": "211cde615244c9ca8019077174816674d17647c279ac6e4b65dec1fe4bc81584",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3724,7 +3747,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$five-rings",
       "deck_memberships": [
@@ -3737,13 +3761,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/four-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "e78a0853149467eb0421628b8b6e18369d0dcaeefe9a436a5f9a9a997457ab8e",
+      "content_sha256": "9c31e9ca85c73cfa0dc7ab36d644a275b318b01dcdc832084184145867e612fb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3752,7 +3776,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$four-forces",
       "deck_memberships": [
@@ -3765,13 +3790,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/jtbd-needs/SKILL.md",
       "installable": false,
-      "content_sha256": "ec03a0769de269c37372598fc83a6e7e5234ce6f39614af907e7176b7fa5b9c1",
+      "content_sha256": "652046a276fe182a0c4870f7d217e3b6661b38c3701b3ff1a87a98d0321f60e7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3780,7 +3805,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$jtbd-needs",
       "deck_memberships": [
@@ -3793,13 +3819,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md",
       "installable": false,
-      "content_sha256": "f6943f4eb5eb3193fd61bed404ce203eb24d5bff1dd71635c2c71d60f7b62393",
+      "content_sha256": "d566162e43a857c2d1317c479467f5e88894d30f1ae0ea3514e8eb051856e54b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3808,7 +3834,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$pmf-engine",
       "deck_memberships": [
@@ -3821,13 +3848,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/seven-dimensions/SKILL.md",
       "installable": false,
-      "content_sha256": "ec32df2b8e28af38948dec8a7478c153ab15e677460da8ed8731867ee25ab10d",
+      "content_sha256": "ff8fbbdfbf400a5abe426b9f4659a4aad746a96fbde80b0d8c91fe97c666a40c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3836,7 +3863,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$seven-dimensions",
       "deck_memberships": [
@@ -3849,13 +3877,13 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/frameworks/w3-hypothesis/SKILL.md",
       "installable": false,
-      "content_sha256": "7290931d99337d5bfe2a8f8d90714d81b9130d9aea5b26fd71269ea5f0c968d2",
+      "content_sha256": "fc01145c7e3d110f92133ef491bbe4589cd02acd7c3f53ad1cb802f61618fdc6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3864,7 +3892,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$w3-hypothesis",
       "deck_memberships": [
@@ -3877,14 +3906,14 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v1.17",
+      "version": "v1.18",
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
       ],
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "bf077e7202d2d3355708fdac8fee71c797cfcf6d88d53ebdb857a7775ff8720d",
+      "content_sha256": "0c89cd15c61090fc437bd3ee60cc41c08569aa5086a19d9940ad9bb535764709",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3907,6 +3936,7 @@
         "v1.14",
         "v1.15",
         "v1.16",
+        "v1.17",
         "v1.2",
         "v1.3",
         "v1.4",
@@ -4017,17 +4047,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/positioning/frameworks/category-design/SKILL.md",
       "installable": false,
-      "content_sha256": "19016f8e6c2058fe079f8d25582781465a2096a11624011d6fa38f16d38c7cf3",
+      "content_sha256": "3c46b5dbb4b49869a3a21b925a8530eab6823a8777e3dc775bdf3c1210c55c9f",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4048,17 +4079,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/positioning/frameworks/jtbd-positioning/SKILL.md",
       "installable": false,
-      "content_sha256": "e79d940484bc5b039bf816c752f82c80650a19544acb1248347eabca29068e9d",
+      "content_sha256": "984bad6b12ac8e83a4c94f2187dac54e50a69f5fb6b153093940f51b79587a33",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4079,17 +4111,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/positioning/frameworks/moore-positioning/SKILL.md",
       "installable": false,
-      "content_sha256": "209300d50143e7106a69a34c0228dff30b776946bf05e97a3312f77c5d67c689",
+      "content_sha256": "e5a6b3be5a92b498d5b59eaa6db855096e37e90893ff0f75b892ba56c14f0c2e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4110,17 +4143,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/positioning/frameworks/obviously-awesome/SKILL.md",
       "installable": false,
-      "content_sha256": "41285f3b7672ebd4517229a0cc073c389fd42f97f06eb7caa425d45fe8e50ba5",
+      "content_sha256": "f9a9d27795d5cedbfe8eded5c7ba2421c6efb6387f093b6cc9053feaf178cbec",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4141,17 +4175,18 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/business-research/codex/positioning/frameworks/strategic-canvas/SKILL.md",
       "installable": false,
-      "content_sha256": "fea7a6f5357771b085a069ed119852fda7079710c6f7909d8b323466c79d0e59",
+      "content_sha256": "114aafcc4314083006e401ae3d0e0025cf19fb18816e0cff9b2d302ef5254118",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4172,14 +4207,14 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.25",
+      "version": "v0.26",
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
       ],
       "path": "packs/business-research/codex/positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "47349e214b0cd195759412c11bd29b382dc1cafc8dde886cd1d09d6511c58996",
+      "content_sha256": "f41cd504e31481680e88af5136f62ae2a1ba6d61444caf065943b010f364965e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4199,6 +4234,7 @@
         "v0.22",
         "v0.23",
         "v0.24",
+        "v0.25",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -5163,13 +5199,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/customer-journey-canvas/SKILL.md",
       "installable": false,
-      "content_sha256": "c795bc4bd3766fc6552c40e49971053a9e5e4e371a2191a30a0fc756de0862c3",
+      "content_sha256": "4aff0be5fec0fb6e5a5d4caace01069b7d7b5bb926c4083d7b4b94b27e58eacf",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5178,7 +5214,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/customer-journey-canvas",
       "deck_memberships": [
@@ -5191,13 +5228,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/experience-map/SKILL.md",
       "installable": false,
-      "content_sha256": "f8fdc5ef1ba52180787162916aa59d1578a57afcf0eec59b6033fcd46c7a7c38",
+      "content_sha256": "8cad780ebd2988c18feafd2e7fd6b97e75beca99453f770cd228e6b981cd9c66",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5206,7 +5243,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/experience-map",
       "deck_memberships": [
@@ -5219,13 +5257,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/jtbd-timeline/SKILL.md",
       "installable": false,
-      "content_sha256": "2160937ebec0b26debddc78dfdc1f9f302661286f36e7c6430856fa7c6801c2d",
+      "content_sha256": "c9b89f6c541e52cabc3c7bd16f396bdf6b27492f7d21e877947330d777ea9c17",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5234,7 +5272,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/jtbd-timeline",
       "deck_memberships": [
@@ -5247,13 +5286,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/service-blueprint/SKILL.md",
       "installable": false,
-      "content_sha256": "1837f086aab526318ab9d888fce85fa8217c2b57dc77057bd0e729e89db9473c",
+      "content_sha256": "291f4741c5cb76f49155b1df44fb9f76def89c1bd6fed532115d589260397624",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5262,7 +5301,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/service-blueprint",
       "deck_memberships": [
@@ -5275,13 +5315,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/frameworks/user-story-map/SKILL.md",
       "installable": false,
-      "content_sha256": "b2d57b125cd791b4de0b119660e4279a4b52e762f088d6e190b2fce667f4f1dd",
+      "content_sha256": "00ef78a9bc73a0b75120da3053a7043e5c44449db2fa40de3c44b54318452a6e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5290,7 +5330,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/user-story-map",
       "deck_memberships": [
@@ -5303,13 +5344,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "claude",
-      "version": "v0.24",
+      "version": "v0.25",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
       "installable": true,
-      "content_sha256": "e58062ab2539cebc9c4f51ac9e03b1612a18bf2e12095087d5c22ed7d26bc3ae",
+      "content_sha256": "9eafb9a24e1b1167d91bde33fd672b2dbf75097697a986a539abee8d2c4e9889",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5328,6 +5369,7 @@
         "v0.21",
         "v0.22",
         "v0.23",
+        "v0.24",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -5497,13 +5539,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/customer-journey-canvas/SKILL.md",
       "installable": false,
-      "content_sha256": "dd587b22e1a12efabc9ead7bcb43e17d0de633cd184fa360519a131c2e9020ab",
+      "content_sha256": "3ffca514bf5d26e5415b6932b9aad1ae7e76bc5f73c0660ba5ceb6d1a4161db1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5512,7 +5554,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$customer-journey-canvas",
       "deck_memberships": [
@@ -5525,13 +5568,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/experience-map/SKILL.md",
       "installable": false,
-      "content_sha256": "61a2c6e123702f5b98d01376fa7ad1a93eddcf10d42154f2b736914cca3e8148",
+      "content_sha256": "b0ae64cb596ebf0a57d9153ba2e85d6c1706cbc0454f55cb26149905184c6dc0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5540,7 +5583,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$experience-map",
       "deck_memberships": [
@@ -5553,13 +5597,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/jtbd-timeline/SKILL.md",
       "installable": false,
-      "content_sha256": "c3ac198d1b5e4a97fad4eee32ad52cb43725175746c5d1343ae8b6ed9bbe2bcf",
+      "content_sha256": "e1c25364ce671e8a610aaa9a128053a748d861b4f2bc6a4b551db6085764b527",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5568,7 +5612,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$jtbd-timeline",
       "deck_memberships": [
@@ -5581,13 +5626,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/service-blueprint/SKILL.md",
       "installable": false,
-      "content_sha256": "98036d8a1985b0d1483303cd79ad4e7677e507b4480f723f4263b0f895c4e187",
+      "content_sha256": "ed86cd38e3b76fa192f13ccd040baf896fc699cc2b693fa0379c77279e636d0b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5596,7 +5641,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$service-blueprint",
       "deck_memberships": [
@@ -5609,13 +5655,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/frameworks/user-story-map/SKILL.md",
       "installable": false,
-      "content_sha256": "892a2296ba9bbc58df655654be33e246e22a68742c4864d216f7b4a26deb48d5",
+      "content_sha256": "46f86d069c751a5e4fe63dd271ab7729f348046c15488cb651dc40e8e30b3e3f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5624,7 +5670,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$user-story-map",
       "deck_memberships": [
@@ -5637,13 +5684,13 @@
       "scope": "pack",
       "pack": "customer-lifecycle",
       "platform": "codex",
-      "version": "v0.24",
+      "version": "v0.25",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/customer-lifecycle/codex/journey-map/SKILL.md",
       "installable": true,
-      "content_sha256": "53c3903711eacc9449d60355f7427740a6152f3f505255fe43720971e28f4d27",
+      "content_sha256": "2de0b42a24d726c8dab255e4a9e3ca8cad8f0e14d5f901eaa9fd8a214f699e29",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -5662,6 +5709,7 @@
         "v0.21",
         "v0.22",
         "v0.23",
+        "v0.24",
         "v0.3",
         "v0.4",
         "v0.5",
