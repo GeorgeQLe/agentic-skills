@@ -14612,3 +14612,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **Ship boundary:** a concurrent session had benchmark/session-analytics work staged on the shared tree — scoped commits to Phase 7 paths only via explicit pathspecs, left the concurrent work untouched.
 - Deploy: push-triggered via Vercel path-based Ignored Build Step (change touches `apps/skills-showcase/**`). Manual `/deploy` lane needs `release-ops`, not in `enabled_packs` — no manual action.
 - Unified-experience build COMPLETE (Phases 1–7 all shipped).
+
+## 2026-06-20 — Skillpacks manifest regeneration (post-v0.9 handoff wording)
+
+- `npm run skillpacks:verify` was failing at `build:manifest:check`: the committed `packages/skillpacks/dist/skillpacks-manifest.json` was stale after commit `85e80792` ("Update Pattern A YAML handoff wording") bumped ~144 `SKILL.md` files `version: v0.8 → v0.9` and reworded their YAML handoff frontmatter without regenerating the index-generated manifest.
+- Fix per the CLAUDE.md "Skillpacks Manifest Is Index-Generated" rule (clean tree, index == HEAD, sources already committed): regenerated via `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs` and committed the manifest alone (175 insertions / 127 deletions — captured frontmatter `version` + handoff text). Confirmed `git status` showed only the manifest before committing.
+- Verified: `--check` → "Manifest check passed"; `npm run skillpacks:verify` exits 0 (bundle audit for 385 active skills, manifest check, staging boundary check all pass).
+- Commit `12993824` pushed to master. No showcase impact (manifest-only, outside `apps/skills-showcase/**` Vercel path trigger).
