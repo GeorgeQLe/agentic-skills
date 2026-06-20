@@ -45,7 +45,68 @@ const deckDefinitions = [
     default_packs: ["business-research"],
     full_packs: ["business-research", "customer-lifecycle", "business-growth", "business-ops"],
     tags: ["deck:business-afps", "stage:discovery"],
-    full_tags: ["deck:business-afps", "stage:discovery", "lane:full"]
+    full_tags: ["deck:business-afps", "stage:discovery", "lane:full"],
+    phases: [
+      {
+        key: "discover",
+        name: "Discover",
+        cards: [
+          "competitive-analysis",
+          "customer-discovery",
+          "customer-feedback",
+          "enterprise-icp",
+          "lean-canvas",
+          "positioning",
+          "value-prop-canvas"
+        ]
+      },
+      {
+        key: "lifecycle",
+        name: "Lifecycle",
+        cards: [
+          "conversion-map",
+          "expansion-map",
+          "journey-map",
+          "lifecycle-metrics",
+          "onboarding-map",
+          "retention-map",
+          "transaction-map"
+        ]
+      },
+      {
+        key: "grow",
+        name: "Grow",
+        cards: [
+          "experiment",
+          "growth-model",
+          "gtm",
+          "hook-model",
+          "landing-copy",
+          "metrics",
+          "monetization",
+          "pmf-assessment"
+        ]
+      },
+      {
+        key: "operate",
+        name: "Operate",
+        cards: [
+          "assumption-tracker",
+          "burn-rate",
+          "cohort-review",
+          "investor-update",
+          "mvp-gap",
+          "platform-strategy",
+          "product-line",
+          "reconcile-research",
+          "repo-glossary",
+          "retro",
+          "risk-register",
+          "runway-model",
+          "scale-audit"
+        ]
+      }
+    ]
   },
   {
     name: "devtool-afps",
@@ -55,7 +116,18 @@ const deckDefinitions = [
     default_packs: ["devtool"],
     full_packs: ["devtool"],
     tags: ["deck:devtool-afps"],
-    full_tags: ["deck:devtool-afps"]
+    full_tags: ["deck:devtool-afps"],
+    phases: [
+      { key: "position", name: "Position", cards: ["devtool-positioning"] },
+      { key: "adopt", name: "Adopt", cards: ["devtool-adoption", "devtool-user-map"] },
+      {
+        key: "journey",
+        name: "Journey",
+        cards: ["devtool-dx-journey", "devtool-workflow", "devtool-integration-map"]
+      },
+      { key: "docs", name: "Docs", cards: ["devtool-docs-audit"] },
+      { key: "monetize", name: "Monetize", cards: ["devtool-monetization"] }
+    ]
   },
   {
     name: "game-afps",
@@ -65,7 +137,29 @@ const deckDefinitions = [
     default_packs: ["game"],
     full_packs: ["game"],
     tags: ["deck:game-afps"],
-    full_tags: ["deck:game-afps"]
+    full_tags: ["deck:game-afps"],
+    phases: [
+      {
+        key: "align",
+        name: "Align",
+        cards: ["game-audience", "game-fantasy", "game-genre-map", "game-comparables"]
+      },
+      {
+        key: "validate",
+        name: "Validate",
+        cards: [
+          "game-core-loop",
+          "game-prototype-test",
+          "game-playtest-metrics",
+          "game-store-page-test"
+        ]
+      },
+      {
+        key: "launch",
+        name: "Launch",
+        cards: ["game-launch", "game-roadmap", "game-workflow"]
+      }
+    ]
   },
   {
     name: "ord",
@@ -75,7 +169,12 @@ const deckDefinitions = [
     default_packs: ["ord"],
     full_packs: ["ord"],
     tags: ["deck:ord"],
-    full_tags: ["deck:ord"]
+    full_tags: ["deck:ord"],
+    phases: [
+      { key: "scan", name: "Scan", cards: ["ord-scan"] },
+      { key: "align", name: "Align", cards: ["ord-align"] },
+      { key: "ship", name: "Ship", cards: ["ord-ship"] }
+    ]
   },
   {
     name: "vard",
@@ -85,7 +184,12 @@ const deckDefinitions = [
     default_packs: ["vard"],
     full_packs: ["vard"],
     tags: ["deck:vard"],
-    full_tags: ["deck:vard"]
+    full_tags: ["deck:vard"],
+    phases: [
+      { key: "scan", name: "Scan", cards: ["vard-scan"] },
+      { key: "align", name: "Align", cards: ["vard-align"] },
+      { key: "ship", name: "Ship", cards: ["vard-ship"] }
+    ]
   }
 ];
 
@@ -123,6 +227,11 @@ function buildDecks() {
       const fullPacks = [...deck.full_packs];
       const tags = [...deck.tags];
       const fullTags = [...deck.full_tags];
+      const phases = (deck.phases ?? []).map((phase) => ({
+        key: phase.key,
+        name: phase.name,
+        cards: [...phase.cards]
+      }));
 
       return {
         name: deck.name,
@@ -133,6 +242,7 @@ function buildDecks() {
         full_packs: fullPacks,
         tags,
         full_tags: fullTags,
+        phases,
         package_list: {
           default: defaultPacks,
           full: fullPacks
@@ -251,6 +361,15 @@ function validateManifest(manifest) {
   const errors = [];
   const activePackNames = new Set(manifest.packs.map((pack) => pack.name));
 
+  // pack -> Set of installable skill names, the same resolution package_list
+  // relies on, reused to assert every phase card is a real deck skill.
+  const skillNamesByPack = new Map();
+  for (const skill of manifest.skills) {
+    if (!skill.pack || !skill.installable) continue;
+    if (!skillNamesByPack.has(skill.pack)) skillNamesByPack.set(skill.pack, new Set());
+    skillNamesByPack.get(skill.pack).add(skill.name);
+  }
+
   for (const skill of manifest.skills) {
     if (!existsSync(path.join(repoRoot, skill.path))) {
       errors.push(`skill path is missing: ${skill.path}`);
@@ -269,6 +388,26 @@ function validateManifest(manifest) {
     for (const packName of unique([...deck.default_packs, ...deck.full_packs])) {
       if (!activePackNames.has(packName)) {
         errors.push(`deck '${deck.name}' references missing active pack directory: ${packName}`);
+      }
+    }
+
+    if (!Array.isArray(deck.phases) || deck.phases.length === 0) {
+      errors.push(`deck '${deck.name}' is missing phases`);
+      continue;
+    }
+    // Every phase card must resolve to a skill that exists in one of the deck's
+    // full_packs — the phase array is machine truth for the builder's columns.
+    const deckSkillNames = new Set();
+    for (const packName of deck.full_packs) {
+      for (const skillName of skillNamesByPack.get(packName) ?? []) {
+        deckSkillNames.add(skillName);
+      }
+    }
+    for (const phase of deck.phases) {
+      for (const card of phase.cards) {
+        if (!deckSkillNames.has(card)) {
+          errors.push(`deck ${deck.name} phase ${phase.key}: unknown card ${card}`);
+        }
       }
     }
   }

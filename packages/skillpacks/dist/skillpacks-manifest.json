@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "a0f155a8862cdc4d8199fe18eeddf50847d4b25dd584bb73e7d671e6c0965cfe",
+  "source_fingerprint": "4064ddede569e9f4c399f90031e100bb3cc7bb782b05b4aec8e856d4445d1a39",
   "packs": [
     {
       "name": "agent-bridge",
@@ -10077,6 +10077,67 @@
         "stage:discovery",
         "lane:full"
       ],
+      "phases": [
+        {
+          "key": "discover",
+          "name": "Discover",
+          "cards": [
+            "competitive-analysis",
+            "customer-discovery",
+            "customer-feedback",
+            "enterprise-icp",
+            "lean-canvas",
+            "positioning",
+            "value-prop-canvas"
+          ]
+        },
+        {
+          "key": "lifecycle",
+          "name": "Lifecycle",
+          "cards": [
+            "conversion-map",
+            "expansion-map",
+            "journey-map",
+            "lifecycle-metrics",
+            "onboarding-map",
+            "retention-map",
+            "transaction-map"
+          ]
+        },
+        {
+          "key": "grow",
+          "name": "Grow",
+          "cards": [
+            "experiment",
+            "growth-model",
+            "gtm",
+            "hook-model",
+            "landing-copy",
+            "metrics",
+            "monetization",
+            "pmf-assessment"
+          ]
+        },
+        {
+          "key": "operate",
+          "name": "Operate",
+          "cards": [
+            "assumption-tracker",
+            "burn-rate",
+            "cohort-review",
+            "investor-update",
+            "mvp-gap",
+            "platform-strategy",
+            "product-line",
+            "reconcile-research",
+            "repo-glossary",
+            "retro",
+            "risk-register",
+            "runway-model",
+            "scale-audit"
+          ]
+        }
+      ],
       "package_list": {
         "default": [
           "business-research"
@@ -10117,6 +10178,46 @@
       "full_tags": [
         "deck:devtool-afps"
       ],
+      "phases": [
+        {
+          "key": "position",
+          "name": "Position",
+          "cards": [
+            "devtool-positioning"
+          ]
+        },
+        {
+          "key": "adopt",
+          "name": "Adopt",
+          "cards": [
+            "devtool-adoption",
+            "devtool-user-map"
+          ]
+        },
+        {
+          "key": "journey",
+          "name": "Journey",
+          "cards": [
+            "devtool-dx-journey",
+            "devtool-workflow",
+            "devtool-integration-map"
+          ]
+        },
+        {
+          "key": "docs",
+          "name": "Docs",
+          "cards": [
+            "devtool-docs-audit"
+          ]
+        },
+        {
+          "key": "monetize",
+          "name": "Monetize",
+          "cards": [
+            "devtool-monetization"
+          ]
+        }
+      ],
       "package_list": {
         "default": [
           "devtool"
@@ -10150,6 +10251,37 @@
       ],
       "full_tags": [
         "deck:game-afps"
+      ],
+      "phases": [
+        {
+          "key": "align",
+          "name": "Align",
+          "cards": [
+            "game-audience",
+            "game-fantasy",
+            "game-genre-map",
+            "game-comparables"
+          ]
+        },
+        {
+          "key": "validate",
+          "name": "Validate",
+          "cards": [
+            "game-core-loop",
+            "game-prototype-test",
+            "game-playtest-metrics",
+            "game-store-page-test"
+          ]
+        },
+        {
+          "key": "launch",
+          "name": "Launch",
+          "cards": [
+            "game-launch",
+            "game-roadmap",
+            "game-workflow"
+          ]
+        }
       ],
       "package_list": {
         "default": [
@@ -10185,6 +10317,29 @@
       "full_tags": [
         "deck:ord"
       ],
+      "phases": [
+        {
+          "key": "scan",
+          "name": "Scan",
+          "cards": [
+            "ord-scan"
+          ]
+        },
+        {
+          "key": "align",
+          "name": "Align",
+          "cards": [
+            "ord-align"
+          ]
+        },
+        {
+          "key": "ship",
+          "name": "Ship",
+          "cards": [
+            "ord-ship"
+          ]
+        }
+      ],
       "package_list": {
         "default": [
           "ord"
@@ -10218,6 +10373,29 @@
       ],
       "full_tags": [
         "deck:vard"
+      ],
+      "phases": [
+        {
+          "key": "scan",
+          "name": "Scan",
+          "cards": [
+            "vard-scan"
+          ]
+        },
+        {
+          "key": "align",
+          "name": "Align",
+          "cards": [
+            "vard-align"
+          ]
+        },
+        {
+          "key": "ship",
+          "name": "Ship",
+          "cards": [
+            "vard-ship"
+          ]
+        }
       ],
       "package_list": {
         "default": [
