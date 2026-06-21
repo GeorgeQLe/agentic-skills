@@ -14626,3 +14626,18 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Archived the completed Phase 7 task state to `tasks/phases/phase-7.md` and reset `tasks/todo.md` to a no-active-phase handoff.
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260620-160118-exec.md`.
 - Validation: task-only diff hygiene (`git diff --check`) passed.
+
+## 2026-06-21 — Landing redesign: staged journey + light/dark theme
+
+- Implemented the approved 6-phase landing redesign for `apps/skills-showcase` (`/`): a guided three-stage journey (Select → Open → Build) plus a real light/dark surface theme. One atomic commit per phase, pushed to master.
+- **Phase 1 — theme foundation.** Themed token tier in `globals.css` (base `:root` = dark = former hardcoded card literals; `[data-theme="light"]` = prior light palette); new `--surface-*`/`--accent`/`--header-bg`/`--panel-soft` tokens; Tailwind v4 `@custom-variant dark`; `layout.tsx` no-flash inline script (`localStorage` → OS `prefers-color-scheme` → dark) + `suppressHydrationWarning`; `ThemeToggle` (lucide Sun/Moon) in header; `theme.ts`.
+- **Phase 2 — tokenize dark surfaces.** Replaced ~95 deck/landing slate/teal literals with surface/accent tokens; teal alpha variants use `color-mix(in srgb, var(--accent) N%, transparent)` so dark renders byte-identical. Added `LIGHT dark:DARK` variant pairs to 7 card components (CardFace, SkillCard, SealedPack, CardDetail, CardDetailModal, BottomSheet, PackOpener). Delegated to two parallel subagents (non-overlapping file sets), diffs reviewed.
+- **Phase 3 — stage scaffolding (contract-critical).** `useStageMachine` (stage 1|2|3 + selectedDeckSlug; selectProject/goToBuild/back/restart), `StageProgress`, always-mounted `BuildStage` (inactive = `visibility:hidden`, not `display:none`, preserving the layoutId morph origin). `LandingExperience` became a stage controller; stages 1/2 in `AnimatePresence` (sync mode — exit never completes in jsdom under `mode="wait"`), Stage 3 visibility-toggled. `types.ts` extracted. Bridge gained `stage/select/build/back`, kept `openAll`.
+- **Phase 4 — Stage 1 SELECT.** `SelectStage` + `projectMeta.ts` (hand-authored goal/blurb/outcome for vard, ord, business-afps, devtool-afps, game-afps; graceful deck-name fallback). Primary project grid + secondary deck-grouped list.
+- **Phase 5 — Stage 2 OPEN.** `OpenStage` extracted; workflow phase ribbon from the deck's phases (`Scan · Align · Ship`, "Where these cards will go."); reframed handoff (load starter hard-load / build-in-place → goToBuild).
+- **Phase 6 — polish.** Marketing chrome made theme-aware (`.button` text → `--paper` to avoid white-on-white in dark; panels → `--panel-soft`); dead landing CSS removed; `theme.spec.ts` added.
+- **Contract preserved:** the full `e2e/deck-table-shell.spec.ts` morph/mount-id/popstate/flight suite passes unchanged via a new `revealTable()` helper — `DeckTableShell` still mounts exactly once across stage changes.
+- **Product decision:** marketing pages follow the theme (go dark); light theme stays pixel-identical to before.
+- **Verified:** `tsc --noEmit` clean per phase; Vitest 133/133; Playwright 45/45; `next build` succeeds (206 pages). Visual QA via screenshots in both themes (Stage 1/2/3, deck builder, /follow) — contrast clean, dark-only builder now legible in light, no light remnants in dark marketing.
+- **Deploy:** push-triggered via Vercel path-based Ignored Build Step (change touches `apps/skills-showcase/**`). Manual `/deploy` lane needs `release-ops`, not in `enabled_packs` — no manual action. No data regeneration (UI-only, hand-authored copy).
+- Commits: `07ee9941` (P1), `1bdd0577` (P2), `db172e91` (P3), `cdcd233d` (P4), `0d0bf7f9` (P5), `ebca5806` (P6).
