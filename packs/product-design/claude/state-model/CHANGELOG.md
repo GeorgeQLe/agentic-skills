@@ -1,5 +1,11 @@
 # state-model changelog (claude)
 
+## v0.3 - 2026-06-21
+
+- Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.
+- Removed the incorrect `invocation: orchestrator` — it is a per-branch pipeline skill (per-user-flow-branch `model_ref` attachment), not the root orchestrator.
+- Joined the stage-zero interrogation set (`## Interrogation Page` / `INTERROGATION-PAGE.md`).
+
 ## v0.2 - 2026-06-18
 
 - Reclassified `type: research` → `type: planning` to match its product-design pipeline siblings (`user-flow-map`, `ux-variations`, `ui-interview`). state-model is a logical-domain-modeling orchestrator anchored to a local approved flow map; it performs no synthesized/web research and writes no `research/_working` packets, so the staged-research lifecycle contract does not apply. (Benchmark coverage registers it as a blocked pack skill pending a deterministic multi-artifact fixture.)

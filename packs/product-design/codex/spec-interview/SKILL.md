@@ -2,8 +2,8 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.14
-required_conventions: [alignment-page]
+version: v0.15
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[--ideas]"
 context_intake: deep
 ---
@@ -26,6 +26,20 @@ If both gates pass, proceed with the interview.
 Invoke as `$spec-interview`.
 
 Use this skill when the user has a consolidated prototype and research context that needs to be turned into a complete production implementation specification. For half-formed product ideas, run `$idea-scope-brief` before this skill.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **terminal spec writer**, formalizing the approved MVP into a production-ready v1 specification. The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, research frame, and that no unchecked post-prototype items remain.
+- **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream evidence.
+- **Stage 2 — Design**: walk each screen/page to extract production behaviors, data, contracts, and acceptance criteria.
+- **Stage 3 — Plan**: the screen-by-screen spec outline is the slice the implementation phase realizes.
+- **Stage 4 — Implement (scoped)**: write the production specification, keeping `specs/` as the canonical output directory, behind the single binding alignment gate.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the approved tree, resolves the consolidated MVP ready to specify, runs the staged flow, writes the spec on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** If specification reveals an unresolved design flaw, record a `modify` decision whose `targets[]` re-opens the upstream `model_ref` or user-flow branch rather than encoding the gap into the spec.
 
 ## Process
 
@@ -129,6 +143,16 @@ Append an **Assumptions & Risks** section to the end of the spec listing: each c
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/spec-interview-{topic}.html`.
 
+## Next Work
+
+**Next work:** the specification is the design tree's terminal artifact. After approval, hand off to implementation/execution — verify the target pack is enabled in `.agents/project.json` `enabled_packs` before recommending `$roadmap` then `$exec` (agent-work-admin pack).
+
+**Recommended next command:** implementation handoff via `$roadmap`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved implementation-handoff command, `{slug}`/`{topic}` filled to literal values: `$roadmap` then `$exec` (agent-work-admin pack; `npx skillpacks install agent-work-admin` if not enabled).
+
 ## Constraints
 
 - Do not assume draft text is final.
@@ -155,6 +179,10 @@ Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/`.
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
 - Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/spec-interview-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 

@@ -2,8 +2,8 @@
 name: consolidate-variations
 description: Compare multiple built UI variations after UAT evidence, interview the user on what works and what does not, resolve conflicts, and produce a final consolidated prototype
 type: planning
-version: v0.14
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.15
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
 ---
@@ -17,6 +17,20 @@ Use this skill after the user has built and evaluated multiple UI layout variati
 Users with manually built variations can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, converging the validated tree into a cohesive **MVP**. The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the variation-selection checkpoint — confirm which evaluated variations to consolidate and the UAT evidence backing each.
+- **Stage 1 — Research**: read the built variations, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/flow-tree-[topic].yaml`, and the `$uat --variant-evaluation` evidence.
+- **Stage 2 — Design**: interview keep/reject per variation, resolve conflicts, and decide the consolidated direction.
+- **Stage 3 — Plan**: the keep/reject/resolve matrix is the build-plan slice this run realizes.
+- **Stage 4 — Implement (scoped)**: **runnable** — build the consolidated MVP under `prototypes/{topic}/consolidated/`, mark the tree `consolidated`, and pass the single binding alignment gate before any canonical write.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the validated variation set ready to converge, runs the staged flow, writes the consolidated MVP on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** When consolidation surfaces a flaw in an upstream node, record a `modify` decision whose `targets[]` re-opens that `model_ref` or user-flow branch; convergence resumes once the re-opened node is re-approved.
 
 ## Process
 
@@ -110,6 +124,16 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/consolidate-variations-{topic}.html`.
 
+## Next Work
+
+**Next work:** after the consolidated MVP is approved, run the post-prototype research pass (`$research-roadmap --post-prototype`) and then formalize the MVP into a production spec with `$spec-interview`.
+
+**Recommended next command:** `$spec-interview`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}` filled to literal values: `$research-roadmap --post-prototype`, then `$spec-interview`.
+
 ## Constraints
 
 - Do not proceed without evaluation evidence unless the user explicitly says they have reviewed the variants and is ready to converge.
@@ -127,6 +151,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/consolidate-variations-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 

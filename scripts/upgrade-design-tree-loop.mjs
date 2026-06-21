@@ -42,6 +42,7 @@ const DESIGN_TREE_SKILLS = new Set([
   "consolidate-variations",
   "design-inspirations",
   "prototype",
+  "spec-interview",
   "state-model",
   "uat",
   "ui-interview",

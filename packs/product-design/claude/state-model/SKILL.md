@@ -2,10 +2,9 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.2
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.3
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
-invocation: orchestrator
 context_intake: scoped
 visual_tier: visual
 ---
@@ -87,6 +86,20 @@ setup session       §0 scope → §1 run-order detection → §2 load flow cont
 **Approval: exactly one final gate.** The framework sessions are pre-approval `_working/`-band drafting — they write intermediates, not canonical artifacts, so no checkpoint inside them authorizes a canonical write. The Domain Modeling Scope Checkpoint (setup) and any per-framework coverage checkpoints are confirmations, not approvals. The single binding alignment-page `review → confirmed` gate is in the assemble+approve session and approves the whole model at once.
 
 ---
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, scoped to the **per-user-flow-branch model attachment** it owns (`branches[].model_ref`). The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the **Domain Modeling Scope Checkpoint** (§2) — confirm the framework set/order, domain boundaries, and the logical-only line.
+- **Stage 1 — Research**: **Run-Order Detection** (§1) and **Load Flow Context** (§2) — read the approved flow tree and soft prerequisites, then plan which domain-modeling frameworks run.
+- **Stage 2 — Design**: **Run Next Pending Framework** (§3) — author the per-framework logical intermediates with their `flow_bindings`.
+- **Stage 3 — Plan**: the confirmed framework set + run order is the build-plan slice; it folds into setup for fewer-than-3-framework domains.
+- **Stage 4 — Implement (scoped)**: **Synthesis + Assemble & Approve** (§4) — write `design/domain-model-{topic}.md` + `model-tree-{topic}.yaml`, attach it to the branch via `branches[].model_ref` (legacy top-level `model_tree_ref` stays back-compat), and pass the single binding alignment gate.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first user-flow branch with no confirmed `model_ref`** (honoring any explicit branch argument), runs the staged flow scoped to that branch, attaches the model on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** A downstream `modify` decision whose `targets[]` names this branch's `model_ref` returns the attachment to pending, so this skill re-runs its flow on that branch; descendant UX/UI branches below it are marked stale for re-validation.
 
 ## Process
 
@@ -202,6 +215,20 @@ Same envelope as `design/flow-tree.schema.json` (`schema_version`, `topic`, `mod
 - `events[]`, `commands[]`, `read_models[]`, `policies[]`.
 - `contracts[]` — `kind: command|query`; request/response/error shapes, **logical only**.
 - Every element carries `flow_bindings[]: {flow_node_ref, access: reads|writes|triggers|displays|transitions}`. Bindings live in the model-tree only and are never duplicated into the flow tree.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/state-model-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+
+## Next Work
+
+**Next work:** after the domain model is approved and attached, grow the first unresolved user-flow branch's variations with `/ux-variations [specific-user-flow]` — the variation work now has a real logical substrate to present. If user-flow branches remain without a model, the next work is re-invoking `/state-model [topic]` for the next branch.
+
+**Recommended next command:** `/ux-variations [specific-user-flow]`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `/ux-variations [specific-user-flow]` once every user-flow branch carries a confirmed model; otherwise `/state-model [topic]` for the next unmodelled branch.
 
 ## Alignment Page
 

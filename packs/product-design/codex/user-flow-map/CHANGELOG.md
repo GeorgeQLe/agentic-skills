@@ -1,5 +1,11 @@
 # user-flow-map changelog (codex)
 
+## v1.3 - 2026-06-21
+
+- Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.
+- Added `invocation: orchestrator` (root orchestrator of the design tree).
+- Joined the stage-zero interrogation set (`## Interrogation Page` / `INTERROGATION-PAGE.md`).
+
 ## v1.2 - 2026-06-18
 
 - Aligned the post-approval handoff wording to the canonical contract literals required by the codex-interview-cadence handoff contract: "instead of auto-running or auto-invoking the next skill" (was "auto-invoking it"), and capitalized the explicit option labels "Stop here so the user can clear context" / "Continue immediately in this session".

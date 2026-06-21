@@ -2,10 +2,12 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.12
+version: v0.13
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
+invocation: sub-skill
+parent: prototype
 ---
 
 ## Pack Availability Guard
@@ -25,6 +27,10 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
 When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$consolidate-variations`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
+
+## Design-Tree Role
+
+`uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `prototype`, and it is also invoked inline by `consolidate-variations` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `$consolidate-variations`, `$customer-discovery`) are fallback suggestions, not design-tree branch routing.
 
 ## Process
 

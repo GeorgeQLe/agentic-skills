@@ -2,11 +2,13 @@
 name: design-inspirations
 description: Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills
 type: research
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: surface, product class, or reference products]"
 context_intake: scoped
 visual_tier: document
+invocation: sub-skill
+parent: ui-interview
 ---
 
 # Design Inspirations
@@ -59,6 +61,10 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 - For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
 - When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
 - When uncertain, say what is known, what is inferred, and what would change the conclusion.
+
+## Design-Tree Role
+
+`design-inspirations` is a **sub-skill** of `ui-interview` (its `parent:`) in the design-tree loop (`DESIGN-TREE-LOOP.md`). It is invoked **inline by the parent** and enters at its own **research stage** — gathering named patterns, conventions, component-library references, and annotated links into the cited brief. It does **no downstream routing**: it returns the brief to the invoking `ui-interview` run, which owns the handoff and the design tree's `source_artifacts[]` reference.
 
 ## Process
 

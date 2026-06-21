@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.16
+version: v0.17
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -36,6 +36,20 @@ If either is missing, halt with a clear message:
 > - `design/prototype-build-plan-*.md` — run `/user-flow-map --prototype-build-plan [topic]` to create the prototype todo ledger.
 
 Do not proceed past this gate until both prerequisites exist.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **validation layer**, producing the literal runnable prototype. The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: folds — there is no blocking interrogation gate; scope comes from the approved build-plan slice (`design/prototype-build-plan-[topic].md`).
+- **Stage 1 — Research**: resolve context and research integration (steps 1–2) — read the build plan plus `design/ux-variations-[topic].md`, `design/ui-[topic].md`, and `design/**/flow-tree-*.yaml`.
+- **Stage 2 — Design**: project-type dispatch and scope rules (steps 3–4) decide what each narrow-scope build realizes.
+- **Stage 3 — Plan**: the build item resolved from the build ledger (`pending` / `needs-revision`) is the slice this run builds.
+- **Stage 4 — Implement (scoped)**: **runnable** — build each variation under `prototypes/{topic}/variation-{N}/` and the hub (steps 5–6), record a `decisions[]` entry, and pass the single binding alignment gate before downstream routing.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first build item with status `pending` or `needs-revision`** (honoring `--variant N`), builds it, records its decision, and stops with the handoff in `## Next Work`. Items the user defers are marked `deferred`; abandoned items `dropped`.
+
+**Modify-back originates here.** Human validation can `approve`, `reject`, `retry`, or `modify`. A `modify` decision **requires `targets[]`** naming the upstream node(s) to re-open — a `state-model` model attachment or a `user-flow` branch — returning each to pending so its owning skill re-runs its flow; descendant branches below the re-opened node are marked stale.
 
 ## Process
 
@@ -196,6 +210,16 @@ After prototypes are built, recommend:
 > Recommended next command: `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
+
+## Next Work
+
+**Next work:** after the prototype preview is approved, route the built variants to `/uat --variant-evaluation` for hands-on evaluation evidence before `/consolidate-variations`. Do not route downstream until the prototype preview is approved.
+
+**Recommended next command:** `/uat --variant-evaluation`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants, then `/consolidate-variations` once evaluation evidence exists.
 
 ## Constraints
 

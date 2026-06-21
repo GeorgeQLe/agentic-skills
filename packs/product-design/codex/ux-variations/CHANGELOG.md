@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.23 - 2026-06-21
+
+- Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.
+- Added `context_intake: scoped`.
+- Joined the stage-zero interrogation set (`## Interrogation Page` / `INTERROGATION-PAGE.md`).
+
 ## v0.22 - 2026-06-18
 
 - Chunked setup-session and spec-session STOPs now emit the **Terminal handoff format** from `docs/prototype-session-loop-convention.md`: the intermediate just written, the next missing variation named in **plain English** by its concept thesis (never only the internal `{variation-id}`), and the **exact** resolved next command (e.g. `$ux-variations alignment-page-review`). When the last variation was written, the handoff routes to the assemble+approve session. Fixes chunked stops that ended with only a bare internal unit ID.

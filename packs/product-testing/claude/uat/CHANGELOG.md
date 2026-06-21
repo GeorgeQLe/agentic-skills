@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-06-21
+
+- Reframed to the unified design-tree loop (`DESIGN-TREE-LOOP.md`) as a sub-skill: marked `invocation: sub-skill` with `parent: prototype`; added the `## Design-Tree Role` note (enters at its checklist/evaluation stage, parent-owned handoff) and regenerated its alignment bundle for the sub-skill translation.
+
 ## v0.12 - 2026-06-14
 
 - Cited `docs/prototype-session-loop-convention.md` as the prototype-phase contract.

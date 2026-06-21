@@ -66,7 +66,7 @@ describe('skillpacks manifest deck metadata', () => {
     const packSkill = skillByPath('base/codex/pack/SKILL.md');
 
     assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'interrogation-page']);
-    assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'design-tree-loop']);
+    assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'design-tree-loop', 'interrogation-page']);
     assert.deepEqual(packSkill.required_conventions, []);
   });
 });

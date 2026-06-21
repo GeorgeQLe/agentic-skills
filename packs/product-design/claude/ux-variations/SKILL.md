@@ -2,9 +2,10 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.22
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.23
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
+context_intake: scoped
 visual_tier: prototype
 ---
 
@@ -23,6 +24,20 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 Use `/user-flow-map` first when the interface has no credible flow structure. Use this skill directly only when a user-flow map, current implementation, screenshot, prototype, explicit user prompt, or clear feature scope already identifies the flow being varied. Do not require a finalized UI requirements spec before default UX variation work; the point is to compare alternative progression paths before a single branch becomes a UI proposal.
 
 When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode is an explicit bounded mode for cases where both the flow and content contract are already fixed; otherwise default to progression-path UX variations. Layout-mode takes a fixed flow contract from `design/user-flow-[topic].md` plus a fixed content contract from `design/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `/consolidate-variations`.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, scoped to the **UX-variation branches** it grows (up to five `ux_variations[]` on one modelled user-flow branch). The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the variation-scope and concept-set checkpoints — confirm what varies vs. stays fixed and the concept set before authoring.
+- **Stage 1 — Research**: resolve context — read the parent user-flow doc, the branch's `design/domain-model-{topic}.md` substrate when present, and existing UI/inspiration evidence.
+- **Stage 2 — Design**: author the concept set and up to five build-grade variation specs (`design/ux-variations-[topic].md`).
+- **Stage 3 — Plan**: the approved variation set is the build-plan slice each variation's `/prototype` run realizes.
+- **Stage 4 — Implement (scoped)**: write the variation specs, grow up to five `ux_variation` child branches on the modelled flow, and pass the single binding alignment gate before any canonical write.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first modelled user-flow branch with no `ux_variations`** (it will not grow UX branches until that branch's `model_ref` is confirmed), runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** A downstream `modify` decision can re-open this branch's `model_ref` or its parent user-flow branch via `targets[]`; when an upstream node re-opens, these UX variations are marked stale and re-authored once the upstream node is re-approved.
 
 ## Process
 
@@ -176,6 +191,16 @@ This skill authors up to five full build-grade variation specs (step 7), and hol
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ux-variations-{topic}.html`.
 
+## Next Work
+
+**Next work:** after the variation plan is approved, route the chosen variation branch to `/ui-interview [specific-ux-variation]` for visual mockup and UI-experiment growth. In layout-mode, build the variations via `/prototype`, then evaluate with `/uat --variant-evaluation` before `/consolidate-variations`.
+
+**Recommended next command:** `/ui-interview [specific-ux-variation]`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `/ui-interview [specific-ux-variation]` for the selected variation; in layout-mode, `/prototype` then `/uat --variant-evaluation`.
+
 ## Constraints
 
 - Do not present superficial variants that differ only by color palette, typography, or decorative treatment.
@@ -197,6 +222,10 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/ux-variations-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 

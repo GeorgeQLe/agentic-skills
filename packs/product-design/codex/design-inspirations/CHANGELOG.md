@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-21
+
+- Reframed to the unified design-tree loop (`DESIGN-TREE-LOOP.md`) as a sub-skill: marked `invocation: sub-skill` with `parent: ui-interview`; added the `## Design-Tree Role` note (enters at its research stage, parent-owned handoff) and regenerated its alignment bundle for the sub-skill translation.
+
 ## v0.2 - 2026-06-18
 
 - Conformed to the staged-research lifecycle contract: Stage 1 now uses the canonical "rank candidates" literal, and a full `## Product-Path Scope Resolution` section was added (research/{slug} resolution, archived/abandoned/deferred exclusion, flat-mode fallback, monorepo-as-secondary-hint) so the skill satisfies the research-approval-gate and product-path-manifest contracts.

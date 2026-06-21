@@ -2,11 +2,12 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v1.2
-required_conventions: [alignment-page, design-tree-loop]
+version: v1.3
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
 visual_tier: prototype
+invocation: orchestrator
 ---
 
 ## Pack Availability Guard
@@ -24,6 +25,20 @@ Use `$user-flow-map --prototype-build-plan [topic]` after `$ui-interview` branch
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill owns the wireframe-tree root and later build-plan synthesis; it does not use Pattern A selected-framework manifests or `tasks/todo.md` for branch progress.
 
 This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action." Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, and is the **root orchestrator** that creates the design tree. The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the **Flow Assumptions Checkpoint** (step 2) — confirm persona, scope, and flow boundaries before mapping.
+- **Stage 1 — Research**: **Resolve Context** (step 1) — read idea/research/positioning/journey evidence and existing `design/` artifacts; Product-Path Scope Resolution and the Design Flow Tree Manifest (steps 0/0b) resolve where the tree lives.
+- **Stage 2 — Design**: **Map The Flow** (step 3) and the **Flow Coverage Checkpoint** (step 4) — author flow structure, screens, states, branches, and low-fidelity wireframe notes.
+- **Stage 3 — Plan**: **Prototype Build-Plan Synthesis Mode** (step 5) — synthesize the approved tree into the `design/prototype-build-plan-[topic].md` slice `$prototype` realizes.
+- **Stage 4 — Implement (scoped)**: write the flow doc, initialize the `flow-tree-[topic].yaml` root, grow one user-flow branch per flow, and pass the single binding alignment gate (`## Alignment Page`) before any canonical write.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next pending unit (the next unmapped flow, or in build-plan mode the next branch needing a build item), runs the staged flow scoped to it, grows the child nodes on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** Downstream validation can re-open this root's branches: a `modify` decision recorded in the flow-tree `decisions[]` names `targets[]` pointing at a user-flow branch to re-open, returning it to pending so this skill re-runs its flow on that branch and marks descendant branches stale.
 
 ## Process
 
@@ -207,6 +222,23 @@ After approved files are written, hand off instead of auto-running or auto-invok
 After approved prototype-build-plan files are written, route to `$prototype [topic]` or `$prototype [topic] --variant N` for the first pending build item. Do not route to `$prototype` before the build plan exists unless the user explicitly accepts an untracked ad hoc prototype run.
 
 If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path, and it does not count as `ui-interview` interview completion.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/user-flow-map-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+
+## Next Work
+
+**Next work:** after the flow map is approved, author the flow-anchored logical domain model with `$state-model [topic]` (optional sibling), or grow the first unresolved user-flow branch with `$ux-variations [specific-user-flow]` when the domain is trivial. In prototype-build-plan mode, the next work is the first pending build item via `$prototype [topic]`. Name the next pending branch in plain English in the handoff; never route by internal `{branch-id}`.
+
+**Recommended next command:** `$state-model [topic]` (or `$ux-variations [specific-user-flow]`).
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values:
+
+- Default: `$state-model [topic]`, then `$ux-variations [specific-user-flow]`.
+- Build-plan mode: `$user-flow-map --prototype-build-plan [topic]` → `$prototype [topic]`.
 
 ## Alignment Page
 

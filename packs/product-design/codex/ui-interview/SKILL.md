@@ -2,8 +2,8 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.24
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.25
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
 visual_tier: prototype
@@ -24,6 +24,20 @@ When invoked with `--requirements-only` (or when the user says "just requirement
 Default branch-review handoff guard: upstream `$user-flow-map` approval and `$ux-variations` output may provide source evidence, but they do not count as `ui-interview` approval. Upstream approval does not count as `ui-interview` interview completion. Requirements-only runs must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest. `ui-interview` must still investigate cross-flow and cross-variation coordination, design a proposed UI, render the visual mockup in HTML, ask the user for alignment or feedback, and record an explicit approve/reject/retry branch decision.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill records UI review decisions in the flow-tree manifest only after its own approval lifecycle permits canonical writes; checkpoint confirmations are not final approval.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, scoped to the **UI-experiment branches** it grows (`ui_experiments[]` under one UX variation). The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the UI Assumptions Manifest — confirm scope, the selected UX variation branch, and the prototype-first boundary.
+- **Stage 1 — Research**: resolve context and gather references; consult the `design-inspirations` sub-skill for named patterns and conventions when inspiration is thin.
+- **Stage 2 — Design**: author the UI experiment packet and (full mode) the HTML visual mockup — `design/ui-[topic].md`, `design/ui-requirements-[topic].md`.
+- **Stage 3 — Plan**: the approved UI packet is the build-plan slice; the branch decision (approve/reject/retry) feeds the prototype build ledger.
+- **Stage 4 — Implement (scoped)**: write the UI packet, grow `ui_experiment` child branches under the UX variation, and pass the single binding alignment gate before any canonical write.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first UX variation with no `ui_experiments`**, runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** A downstream `modify` decision can re-open an upstream `model_ref` or user-flow branch via `targets[]`; UI experiments below a re-opened node are marked stale and re-authored once that node is re-approved.
 
 ## Process
 
@@ -224,6 +238,16 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 The page is built pre-approval in `review` state per step 9, before any canonical spec write, and converts to `confirmed` only after final compiled YAML approval and canonical writes.
 
+## Next Work
+
+**Next work:** route based on the branch decision recorded in the prototype build ledger. When the variation's UI experiments are approved, synthesize the build plan with `$user-flow-map --prototype-build-plan [topic]`; when more UX variations remain to explore, route back to `$ux-variations [specific-user-flow]`.
+
+**Recommended next command:** `$user-flow-map --prototype-build-plan [topic]`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$user-flow-map --prototype-build-plan [topic]` once the variation's UI experiments are decided, or `$ux-variations [specific-user-flow]` for the next unexplored flow.
+
 ## Constraints
 
 - Do not skip small interface elements. Buttons, links, icons, menus, and empty states are part of the spec.
@@ -243,6 +267,10 @@ The page is built pre-approval in `review` state per step 9, before any canonica
 - After the archive snapshot exists, write the updated document to the original canonical path.
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/ui-interview-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Default Shipping Contract
 

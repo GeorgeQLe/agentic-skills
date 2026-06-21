@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.15 - 2026-06-21
+
+- Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.
+- Added the `design-tree-loop` required convention and its `DESIGN-TREE-LOOP.md` citation; joined the stage-zero interrogation set.
+
 ## v0.14 - 2026-06-13
 
 - Updated post-prototype spec interviews to consume `design/user-flow-*`, `design/ux-variations-*`, `design/ui-*`, and scoped flow-tree manifests as upstream design evidence.
