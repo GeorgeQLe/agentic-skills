@@ -1,4 +1,30 @@
-# Current Research - Managed Skill Library SaaS Prompt
+# Latest Implementation - Skills Library + Browse Revamp Complete
+
+## Status
+
+Shipped 2026-06-21 (commits `a793c76c`, `8aad0695`, `200eba13`). No active phase selected.
+
+## Review
+
+- Replaced the weak Stage-1 `.select-secondary` deck-pill list with a two-audience
+  browse surface: a dedicated SSG `/library` route (Skills + Decks tabs, live
+  search/Type/Platform/Pack filtering, card-grid tiles → `/card/[id]` modal, deck
+  cards → `/deck/<slug>` builder hard-load) and an inline `BrowseSection` on `/`
+  (shared `DeckCard`s + "Browse the full library →"). `Library` added to nav.
+- Contract preserved: deck mount-once morph, 5 legacy 308 redirects, and the
+  staged-journey controller/`BuildStage`/`__landing` bridge are untouched.
+- Verified: `tsc` clean, Vitest 159/159, `next build` OK (`/library` prerendered
+  static, 196 crawlable `/card` anchors), Playwright 33/33 on the new + locked
+  specs; deck-table-shell 18/18 real tests green (2 dev-only debug-driver tests
+  can't run under a prod build). See `tasks/history.md` for the full record.
+
+## Next Work
+
+Discover the next concrete product, workflow, documentation, or package-maintenance phase, or explicitly park the project.
+
+**Recommended next command:** `$brainstorm`
+
+# Prior Research - Managed Skill Library SaaS Prompt
 
 ## Status
 
