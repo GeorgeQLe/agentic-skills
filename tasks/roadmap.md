@@ -1,3 +1,24 @@
+## Current Research - Managed Skill Library SaaS Prompt
+
+### Goal
+
+Research the market context for a managed SaaS spin-off inspired by the `skillpacks` npm package, then prepare a prompt that can be run in a separate product repo with `$idea-scope-brief`.
+
+### Plan
+
+1. Capture the `$idea-scope-brief`-targeting prompt and confirm local `skillpacks` package positioning from repo docs.
+2. Research current public competitors and adjacent surfaces, especially skills.sh, Claude Skills, OpenAI custom GPT/agent-builder surfaces, agent marketplaces, and prompt/library management products.
+3. Synthesize likely market gap hypotheses for managed white-label skill libraries.
+4. Write a reusable separate-repo prompt with concept assumptions, competitor context, differentiation hypotheses, constraints, non-goals, and research questions.
+5. Verify links and repo diffs, record review notes, then commit and push intended tracked artifacts.
+
+### Acceptance Criteria
+
+- The deliverable is usable as a direct `$idea-scope-brief` invocation in a new skill-library product repo.
+- Competitor and market notes distinguish sourced facts from hypotheses.
+- The prompt preserves the user's core question: whether managed SaaS leaves a gap beyond skills.sh and the existing npm package.
+- Task review records sources and verification.
+
 ## Current Implementation - Pattern A Routing Wording
 
 ### Goal

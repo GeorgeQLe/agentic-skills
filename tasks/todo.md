@@ -1,4 +1,31 @@
-# Current Implementation - Landing Redesign Complete
+# Current Research - Managed Skill Library SaaS Prompt
+
+## Status
+
+Research and prompt drafting complete.
+
+## Plan
+
+- [x] Capture prompt history and local package context.
+- [x] Research current competitor and adjacent product surfaces.
+- [x] Draft the separate-repo `$idea-scope-brief` prompt.
+- [x] Verify source links and diff hygiene.
+- [x] Record review notes, commit, and push intended artifacts.
+
+## Review
+
+- Read the active `idea-scope-brief` skill contract and used it as the target prompt format, while keeping the actual deliverable separate from a canonical idea-brief run.
+- Confirmed local `skillpacks` context from `README.md`, `packages/skillpacks/package.json`, and `docs/skillpacks-npm-distribution.md`.
+- Researched skills.sh public positioning, docs, CLI, API, audit page, and official-skills directory.
+- Researched adjacent Claude Skills, Agent Skills standard, OpenAI GPT/agent surfaces, and recent agent-skill ecosystem/security papers.
+- Wrote the reusable prompt at `research/managed-skill-library-saas-prompt.md`.
+- Verified the prompt distinguishes sourced facts from hypotheses and preserves the core gap question: managed/private/white-label SaaS versus public directory/CLI package.
+
+## Next Work
+
+No immediate implementation work remains for this prompt-preparation task.
+
+# Previous Implementation - Landing Redesign Complete
 
 ## Status
 
