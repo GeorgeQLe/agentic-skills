@@ -7,6 +7,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { collapsingFillDiagnostics } from "./lib/collapsing-fill-audit.mjs";
 
 const argv = process.argv.slice(2);
 let rootOverride = null;
@@ -42,6 +43,7 @@ const viewportDiagnostics = [];
 const embedDiagnostics = [];
 const alignmentStatusDiagnostics = [];
 const indexDiagnostics = [];
+const collapsingFillDiag = [];
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
   const match = htmlTag.match(new RegExp(`\\b${attribute}="([^"]*)"`));
@@ -101,6 +103,8 @@ for (const file of pages) {
       `Embedded content in ${rel} — uses ${[...embedTags].sort().join(", ")}; the embed prohibition requires rendering content directly in the page.`,
     );
   }
+
+  collapsingFillDiag.push(...collapsingFillDiagnostics(html, rel));
 
   if (file === "index.html") continue;
 
@@ -213,6 +217,7 @@ console.log(`TTS include: ${activePages.length} pages, ${ttsDiagnostics.length ?
 console.log(`Page metadata: ${activePages.length} pages, ${metadataDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length ? "DRIFT" : "exact"}`);
 console.log(`Alignment status controls: ${activePages.length} pages, ${alignmentStatusDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length ? "DRIFT" : "exact"}`);
 
@@ -221,6 +226,7 @@ const groups = [
   ["Page metadata drift:", metadataDiagnostics],
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],
+  ["Collapsing fill drift:", collapsingFillDiag],
   ["Alignment status controls drift:", alignmentStatusDiagnostics],
   ["Index integrity drift:", indexDiagnostics],
 ];

@@ -8,6 +8,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { collapsingFillDiagnostics } from "./lib/collapsing-fill-audit.mjs";
 
 const argv = process.argv.slice(2);
 let rootOverride = null;
@@ -45,6 +46,7 @@ const openInputDiagnostics = [];
 const gateDiagnostics = [];
 const namingDiagnostics = [];
 const sidecarDiagnostics = [];
+const collapsingFillDiag = [];
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
   const match = htmlTag.match(new RegExp(`\\b${attribute}="([^"]*)"`));
@@ -81,6 +83,8 @@ for (const file of pages) {
       `Embedded content in ${rel} — uses ${[...embedTags].sort().join(", ")}; the embed prohibition requires rendering content directly in the page.`,
     );
   }
+
+  collapsingFillDiag.push(...collapsingFillDiagnostics(html, rel));
 
   const kokoroTag = html.match(KOKORO_TAG_RE);
   if (!kokoroTag) {
@@ -173,6 +177,7 @@ console.log(`Open input: ${pages.length} pages, ${openInputDiagnostics.length ? 
 console.log(`Confidence gate: ${pages.length} pages, ${gateDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Round naming: ${pages.length} pages, ${namingDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Answer sidecar: ${pages.length} pages, ${sidecarDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length ? "DRIFT" : "exact"}`);
 
 const groups = [
   ["TTS include drift:", ttsDiagnostics],
@@ -183,6 +188,7 @@ const groups = [
   ["Confidence gate drift:", gateDiagnostics],
   ["Round naming drift:", namingDiagnostics],
   ["Answer sidecar drift:", sidecarDiagnostics],
+  ["Collapsing fill drift:", collapsingFillDiag],
 ];
 let failed = false;
 for (const [title, diagnostics] of groups) {

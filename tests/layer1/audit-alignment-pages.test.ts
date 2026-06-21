@@ -100,6 +100,7 @@ describe("audit-alignment-pages repo state", () => {
     expect(result.stdout).toMatch(/Page metadata: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Viewport meta: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Embed prohibition: \d+ pages, exact/);
+    expect(result.stdout).toMatch(/Collapsing fill: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Index integrity: \d+ entries, exact/);
   });
 });
@@ -293,6 +294,32 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stderr).toContain("Embedded content in alignment/page-a.html");
     expect(result.stderr).toContain("<iframe>");
     expect(result.stdout).toContain("Embed prohibition: 2 pages, DRIFT");
+  });
+
+  it("fails on a collapsing min-height-only bar fill", () => {
+    const root = makeFixtureRoot();
+    const css = "<style>.bar{min-height:18px;overflow:hidden}.bar span{display:block;height:100%;background:#3fb950}</style>";
+    writePage(root, "page-a.html", pageHtml({ body: `${css}<div class="bar"><span style="width:100%"></span></div>` }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Collapsing fill drift:");
+    expect(result.stderr).toContain("Collapsing fill in alignment/page-a.html");
+    expect(result.stderr).toContain('its container ".bar"');
+    expect(result.stdout).toContain("Collapsing fill: 2 pages, DRIFT");
+  });
+
+  it("passes a bar with an explicit container height", () => {
+    const root = makeFixtureRoot();
+    const css = "<style>.bar{height:18px;overflow:hidden}.bar span{display:block;height:100%;min-height:18px;background:#3fb950}</style>";
+    writePage(root, "page-a.html", pageHtml({ body: `${css}<div class="bar"><span style="width:100%"></span></div>` }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Collapsing fill: 2 pages, exact");
   });
 
   it("fails when active pages exist but the central index is missing", () => {
