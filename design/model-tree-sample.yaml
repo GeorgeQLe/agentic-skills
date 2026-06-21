@@ -1,7 +1,8 @@
-schema_version: v0.1
+schema_version: v0.2
 topic: invoice-approval
 mode: flat
 flow_tree_ref: design/flow-tree-invoice-approval.yaml
+user_flow_branch_ref: submit-and-approve
 source_artifacts:
   - design/user-flow-invoice-approval.md
   - design/flow-tree-invoice-approval.yaml

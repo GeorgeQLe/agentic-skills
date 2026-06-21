@@ -43,6 +43,20 @@ Every invocation of a self-advancing research orchestrator is:
 
 The YAML-in and gate-out are cheap bookends; the **heavy phase in the middle is the only thing that bloats context**, so that is the unit isolated per session. A phase whose context cost is negligible (e.g. recording an approved selection) is **not** given its own session — it folds into the *head* of the next heavy session. Do not spend a fresh-context round-trip on an almost-empty session.
 
+## Stage taxonomy (shared meta-pattern)
+
+This Research Session Loop and the **Design Tree Loop** (`docs/design-tree-loop-convention.md`) are two instances of **one meta-pattern**: `interrogation → research → ⟨transform⟩ → ⟨gate⟩ → implement`. The universal stages are interrogation, research, and implement; the two middle stages vary by phase. The Research phase loop's instance is **interrogation → research → plan → review → implement(docs)**, which maps onto this document's session ladder as:
+
+| Stage word | Research Session Loop reality |
+|---|---|
+| **interrogation** | state G — the looping stage-zero interrogation page + confidence gate |
+| **research** | states F + C — the deep interview and running each selected framework inline |
+| **plan** | state E — the framework multi-select page (deciding *which* frameworks; the multi-select approval is the per-set scope plan) |
+| **review** | each framework's findings `review` page + the synthesis `review` page — **interleaved per gate**, not one terminal review |
+| **implement(docs)** | state A — writing the canonical `research/{orchestrator}.md` |
+
+The Design Tree Loop's instance instead uses **interrogation → research → design → plan → implement(scoped)** with **one binding alignment gate per skill-run-on-a-branch**. The stage words are shared vocabulary so the meta-pattern is legible across both loops; this document remains the **normative** authority for Pattern A research orchestrators (the design doc references this mapping but does not redefine it). See `docs/design-tree-loop-convention.md` §0.
+
 ## The session ladder
 
 Because every session starts cold, mode detection must resolve purely from **pasted-YAML + filesystem state**. On each invocation, the orchestrator resolves the first matching state:

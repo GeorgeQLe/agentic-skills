@@ -1,0 +1,74 @@
+schema_version: v0.2
+topic: invoice-approval
+mode: flat
+route:
+  - user-flow-map
+  - ux-variations
+  - ui-interview
+  - prototype
+  - consolidate-variations
+  - spec-interview
+source_artifacts:
+  - design/user-flow-invoice-approval.md
+branches:
+  - id: submit-and-approve
+    label: Submit and approve an invoice
+    status: ready-for-ui
+    # v0.2 primary per-user-flow-branch model attachment (state-model).
+    model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml
+    artifacts:
+      - design/user-flow-invoice-approval.md
+    ux_variations:
+      - id: guided-wizard
+        label: Guided multi-step wizard
+        status: approved
+        artifacts:
+          - design/ux-variations-invoice-approval.md
+        ui_experiments:
+          - id: wizard-stepper
+            label: Stepper-driven approval form
+            status: approved
+            artifacts:
+              - design/ui-invoice-approval.md
+            decision_id: approve-wizard-stepper
+      - id: single-page-dense
+        label: Single dense review page
+        status: retry-needed
+        artifacts:
+          - design/ux-variations-invoice-approval.md
+        ui_experiments:
+          - id: dense-table
+            label: Dense table with inline approve
+            status: rejected
+            artifacts:
+              - design/ui-invoice-approval.md
+            decision_id: modify-dense-table
+decisions:
+  - id: approve-wizard-stepper
+    branch_ref: submit-and-approve/guided-wizard/wizard-stepper
+    decision: approve
+    rationale: Prototype validated; reviewers completed approval without errors.
+    recorded_at: "2026-06-21T00:00:00Z"
+  - id: modify-dense-table
+    branch_ref: submit-and-approve/single-page-dense/dense-table
+    decision: modify
+    # modify re-opens upstream nodes — here the per-branch model and the user-flow branch.
+    targets:
+      - design/model-tree-invoice-approval-submit-and-approve.yaml
+      - submit-and-approve
+    rationale: UAT showed the approval authority rule is wrong in the model; re-open the state-model before re-skinning.
+    recorded_at: "2026-06-21T00:00:00Z"
+prototype_build_plan:
+  artifacts:
+    - design/prototype-build-plan-invoice-approval.md
+  items:
+    - id: wizard-stepper-proto
+      label: Stepper-driven approval prototype
+      status: built
+      user_flow_branch_id: submit-and-approve
+      ux_variation_id: guided-wizard
+      ui_experiment_id: wizard-stepper
+      artifacts:
+        - design/ui-invoice-approval.md
+      prototype_path: prototypes/invoice-approval/variation-1/
+last_updated: "2026-06-21T00:00:00Z"

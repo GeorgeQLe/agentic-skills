@@ -12,9 +12,10 @@ const command = {
 } as const;
 
 describe("product-design flow tree artifact boundaries", () => {
-  it("defines a machine-readable design flow-tree manifest schema", () => {
+  it("defines a machine-readable design flow-tree manifest schema (v0.2)", () => {
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
 
+    expect(schema.properties.schema_version.const).toBe("v0.2");
     expect(schema.properties.route.prefixItems.map((item: { const: string }) => item.const)).toEqual([
       "user-flow-map",
       "ux-variations",
@@ -24,7 +25,20 @@ describe("product-design flow tree artifact boundaries", () => {
       "spec-interview",
     ]);
     expect(schema.properties.mode.enum).toEqual(["flat", "product-path"]);
-    expect(schema.$defs.decision.properties.decision.enum).toEqual(["approve", "reject", "retry"]);
+    // v0.2: `modify` feeds validation decisions back up the tree.
+    expect(schema.$defs.decision.properties.decision.enum).toEqual(["approve", "reject", "retry", "modify"]);
+    // A `modify` decision must name the upstream node(s) to re-open.
+    const modifyRule = schema.$defs.decision.allOf?.[0];
+    expect(modifyRule?.if?.properties?.decision?.const).toBe("modify");
+    expect(modifyRule?.then?.required).toContain("targets");
+    // v0.2: per-user-flow-branch model attachment replaces the top-level model_tree_ref as primary.
+    expect(schema.$defs.user_flow_branch.properties.model_ref).toBeDefined();
+    expect(schema.properties.model_tree_ref).toBeDefined();
+    // v0.2: UI review child nodes renamed to UI experiments.
+    expect(schema.$defs.ux_variation_branch.required).toContain("ui_experiments");
+    expect(schema.$defs.ux_variation_branch.properties.ui_experiments.items.$ref).toBe("#/$defs/ui_experiment");
+    expect(schema.$defs.ui_experiment).toBeDefined();
+    expect(schema.$defs.prototype_build_item.required).toContain("ui_experiment_id");
     expect(schema.properties.prototype_build_plan.$ref).toBe("#/$defs/prototype_build_plan");
     expect(schema.$defs.prototype_build_status.enum).toEqual([
       "pending",
@@ -33,6 +47,23 @@ describe("product-design flow tree artifact boundaries", () => {
       "deferred",
       "dropped",
     ]);
+  });
+
+  it("ships a v0.2 sample manifest exercising model_ref and modify-back decisions", () => {
+    const sample = read("design/flow-tree-sample.yaml");
+    expect(sample).toContain("schema_version: v0.2");
+    // per-branch model attachment round-trips
+    expect(sample).toContain("model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml");
+    // renamed UI experiment nodes + build-plan linkage
+    expect(sample).toContain("ui_experiments:");
+    expect(sample).toContain("ui_experiment_id: wizard-stepper");
+    // modify decision feeds back up to the model + user-flow branch
+    expect(sample).toContain("decision: modify");
+    expect(sample).toMatch(/targets:\s*\n\s*- design\/model-tree-invoice-approval-submit-and-approve\.yaml/);
+
+    const modelSample = read("design/model-tree-sample.yaml");
+    expect(modelSample).toContain("schema_version: v0.2");
+    expect(modelSample).toContain("user_flow_branch_ref: submit-and-approve");
   });
 
   it("routes pre-prototype flow maps, UX variations, and UI branch packets through design artifacts", () => {

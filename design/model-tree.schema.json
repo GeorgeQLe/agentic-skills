@@ -16,7 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "v0.1"
+      "const": "v0.2"
     },
     "topic": {
       "type": "string",
@@ -32,6 +32,11 @@
     },
     "flow_tree_ref": {
       "$ref": "#/$defs/artifact_ref"
+    },
+    "user_flow_branch_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "v0.2 per-branch attachment back-link: the id of the user_flow_branch in flow_tree_ref that this model is attached to (the branch whose model_ref points back at this manifest). Optional for single-model/legacy repos; present whenever state-model attaches a per-branch model."
     },
     "frameworks": {
       "type": "array",

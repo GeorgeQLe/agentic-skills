@@ -16,7 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "v0.1"
+      "const": "v0.2"
     },
     "topic": {
       "type": "string",
@@ -84,7 +84,7 @@
     "model_tree_ref": {
       "type": "string",
       "minLength": 1,
-      "description": "Optional repo-relative path to the orthogonal model-tree manifest (design/**/model-tree-{topic}.yaml) owned by the state-model skill. Backward-compatible: never required, and the route array is unaffected."
+      "description": "DEPRECATED back-compat (pre-v0.2): single top-level path to a model-tree manifest. Superseded by per-user-flow-branch user_flow_branch.model_ref, which is now the primary state-model linkage. Retained, never required, route array unaffected."
     }
   },
   "$defs": {
@@ -136,7 +136,7 @@
     "prototype_build_item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "status", "user_flow_branch_id", "ux_variation_id", "ui_review_id", "artifacts"],
+      "required": ["id", "label", "status", "user_flow_branch_id", "ux_variation_id", "ui_experiment_id", "artifacts"],
       "properties": {
         "id": {
           "type": "string",
@@ -157,7 +157,7 @@
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9-]*$"
         },
-        "ui_review_id": {
+        "ui_experiment_id": {
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9-]*$"
         },
@@ -192,6 +192,11 @@
         "status": {
           "$ref": "#/$defs/status"
         },
+        "model_ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Primary (v0.2) per-user-flow-branch model attachment: repo-relative path to this branch's model-tree manifest (design/**/model-tree-{topic}-{branch}.yaml) owned by state-model. The domain/state/logic model is a property of the flow, so each user-flow branch attaches its own model. ux-variations does not grow UX branches until model_ref is present and its model confirmed."
+        },
         "artifacts": {
           "type": "array",
           "items": {
@@ -209,7 +214,7 @@
     "ux_variation_branch": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "status", "artifacts", "ui_reviews"],
+      "required": ["id", "label", "status", "artifacts", "ui_experiments"],
       "properties": {
         "id": {
           "type": "string",
@@ -228,15 +233,15 @@
             "$ref": "#/$defs/artifact_ref"
           }
         },
-        "ui_reviews": {
+        "ui_experiments": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ui_review"
+            "$ref": "#/$defs/ui_experiment"
           }
         }
       }
     },
-    "ui_review": {
+    "ui_experiment": {
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "status", "artifacts"],
@@ -275,7 +280,15 @@
         },
         "decision": {
           "type": "string",
-          "enum": ["approve", "reject", "retry"]
+          "enum": ["approve", "reject", "retry", "modify"]
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Required only when decision is `modify`: repo-relative refs to the upstream node(s) to re-open (a user-flow branch id, or a branch's model_ref / model-tree manifest). Recording a modify returns each target to a pending status so its owning skill re-runs its 5-stage flow; descendant branches below the re-opened node are marked stale for re-validation. This is how validation flows back up the design tree."
         },
         "rationale": {
           "type": "string",
@@ -285,7 +298,20 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "decision": { "const": "modify" } }
+          },
+          "then": {
+            "required": ["targets"],
+            "properties": {
+              "targets": { "minItems": 1 }
+            }
+          }
+        }
+      ]
     }
   }
 }
