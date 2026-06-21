@@ -28,7 +28,7 @@
     "scripts/skill-convention-registry.mjs",
     "scripts/upgrade-alignment-page.mjs",
     "scripts/upgrade-interrogation-page.mjs",
-    "scripts/upgrade-prototype-session-loop.mjs",
+    "scripts/upgrade-design-tree-loop.mjs",
     "scripts/audit-alignment-pages.mjs",
     "scripts/open-html-page.mjs",
     "scripts/serve-alignment.mjs",
@@ -40,7 +40,7 @@
     "scripts/prepublish-auth-check.mjs",
     "assets/alignment-page-convention.md",
     "assets/interrogation-page-convention.md",
-    "assets/prototype-session-loop-convention.md",
+    "assets/design-tree-loop-convention.md",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"

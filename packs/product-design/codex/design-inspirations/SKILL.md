@@ -3,7 +3,7 @@ name: design-inspirations
 description: Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills
 type: research
 version: v0.2
-required_conventions: [alignment-page, prototype-session-loop]
+required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: surface, product class, or reference products]"
 context_intake: scoped
 visual_tier: document
@@ -17,7 +17,7 @@ Single-pass web-research feeder for prototype-phase design work. This is the **o
 
 It runs as a single pass (gather → working packet → `review` alignment page → approved canonical write), **not** a multi-session loop — the gathering is one heavy phase with no per-framework decomposition to chunk. Model the staged workflow and search-log artifact on `$customer-discovery`'s WebSearch pattern when `business-research` is installed; if it is not installed, use the staged workflow described below without recommending `$customer-discovery`.
 
-Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. The inspiration brief is referenced from the scoped flow-tree manifest `source_artifacts[]` (a free-form artifact path — no schema change); it is a gather-once feeder, not a mandatory branch stage in the `route`.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. The inspiration brief is referenced from the scoped flow-tree manifest `source_artifacts[]` (a free-form artifact path — no schema change); it is a gather-once feeder, not a mandatory branch stage in the `route`.
 
 ## Report-First Approval Gate
 

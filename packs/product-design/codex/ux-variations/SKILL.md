@@ -3,7 +3,7 @@ name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
 version: v0.22
-required_conventions: [alignment-page, prototype-session-loop]
+required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 visual_tier: prototype
 ---
@@ -18,7 +18,7 @@ In the normal AFPS product route, use `$user-flow-map` first to establish the wi
 
 When `$state-model` ran between `$user-flow-map` and this skill, **consume `design/domain-model-{topic}.md` (and `design/model-tree-{topic}.yaml`) when present** as the logical substrate every variation re-skins: the entities, state machines, events, and logical contracts are fixed by the flow, while this skill varies how they are presented and progressed through. This is a soft input, not a hard gate — proceed without it when it is absent.
 
-Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. UX progression and layout branch state belongs in `design/**/flow-tree-*.yaml`, not Pattern A selected-framework manifests, `research/.progress.yaml`, or `tasks/todo.md`.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. UX progression and layout branch state belongs in `design/**/flow-tree-*.yaml`, not Pattern A selected-framework manifests, `research/.progress.yaml`, or `tasks/todo.md`.
 
 Use `$user-flow-map` first when the interface has no credible flow structure. Use this skill directly only when a user-flow map, current implementation, screenshot, prototype, explicit user prompt, or clear feature scope already identifies the flow being varied. Do not require a finalized UI requirements spec before default UX variation work; the point is to compare alternative progression paths before a single branch becomes a UI proposal.
 
@@ -55,7 +55,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 This skill authors up to five full build-grade variation specs (step 7); holding all of them in one context is the dominant per-session cost. After the concept-set checkpoint (step 6), decide the session model:
 
 - **Trigger**: if the approved concept count is **N ≥ 4** and `--no-chunk` was not passed, enter **chunked mode**; otherwise run straight through in one continuous session, exactly as a single pass through steps 0–9.
-- **Mechanism**: chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `PROTOTYPE-SESSION-LOOP.md`:
+- **Mechanism**: chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `DESIGN-TREE-LOOP.md`:
   - Setup session = steps 0–6 → write a pure-context brief → STOP.
   - Spec sessions = step 7, one variation each → author a single variation's intermediate → STOP / re-invoke.
   - Assemble+approve session = steps 8–9 + deliverables + the one alignment page → assemble the canonical plan behind the single existing alignment gate.
@@ -200,14 +200,14 @@ This skill authors up to five full build-grade variation specs (step 7); holding
      - Write the shared context brief to `design/{slug}/_working/ux-variations-{topic}-brief.md` (flat mode: `design/_working/ux-variations-{topic}-brief.md`).
      - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
      - Initialize the scoped flow-tree `ux_variations[]` entries at `proposed` (existing status enum, §0b — no schema change).
-     - STOP and emit the **Terminal handoff format** from `PROTOTYPE-SESSION-LOOP.md`: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
+     - STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
      - In non-chunked mode, continue directly to step 7 in this same session.
 
 7. **Specify each approved variation enough to build**
    - **Chunked-mode spec session (one variation per session)**: When chunked mode is active, each spec session:
      - Reads the brief at `design/{slug}/_working/ux-variations-{topic}-brief.md` and scans which `{variation-id}.md` files already exist under `design/{slug}/ux-variations-{topic}/`.
      - Picks the first variation whose intermediate file does **not** yet exist and writes its full build spec (the attribute list below, plus the layout-mode additions when applicable) to `design/{slug}/ux-variations-{topic}/{variation-id}.md`.
-     - Appends any cross-variation facts to the brief, then STOPs and emits the **Terminal handoff format** from `PROTOTYPE-SESSION-LOOP.md`: state the intermediate just written, name the next missing variation in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call, e.g. `$ux-variations alignment-page-review`. When the variation just written was the last one, the handoff points to the assemble+approve session instead of another spec session; continue-vs-stop framing follows that convention's Routing Rules. Context per session is the brief plus one spec.
+     - Appends any cross-variation facts to the brief, then STOPs and emits the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`: state the intermediate just written, name the next missing variation in **plain English** (its concept thesis, never only the internal `{variation-id}`), and give the **exact** resolved next tool or command call, e.g. `$ux-variations alignment-page-review`. When the variation just written was the last one, the handoff points to the assemble+approve session instead of another spec session; continue-vs-stop framing follows that convention's Routing Rules. Context per session is the brief plus one spec.
      - In non-chunked mode, specify all approved variations in this same session as before. The spec content below is identical in both modes — chunking changes only how many variations one session writes.
    - For each variation, define:
      - Name and design thesis

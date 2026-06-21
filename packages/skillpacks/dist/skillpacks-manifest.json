@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.8"
   },
-  "source_fingerprint": "636c895c1216941cc40c1710bf06e99b4d5fb12022601250a467ddd868346745",
+  "source_fingerprint": "d25d8f0903c27de3be4388c73129d4ccd1cbe32ecf32b96225c664a34e1da790",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7598,11 +7598,11 @@
       "version": "v0.14",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/consolidate-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "790ffd581f43c81733b57eabc1638ee0d01a8258438b26888044297f43bb29a6",
+      "content_sha256": "478db6d4ce7624bcebe9b8f218195747a21dc56f76ad45038a64191a3b08e648",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7631,11 +7631,11 @@
       "version": "v0.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "b7480e56dc7e3744922e0bd4117104a42e1730ca197a227b4e62541d477ffa51",
+      "content_sha256": "553a4ddef7f6c1ae9a06c50158f03d700b78e5a2bee3c7e67af229a96185f73d",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7698,11 +7698,11 @@
       "version": "v0.16",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "f9ab3bc6c0dc907a2ea566349efbd9897cffe0b9d5eceff25119625db88c645a",
+      "content_sha256": "ea9ebf7b4640a755980014c0e9bf73d3d1e3dd766ccdafc144b80404c8721e09",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7765,11 +7765,11 @@
       "version": "v0.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "f0f3ad59ebc26be885194fcac0058de78daf995f948eae324703fdc0e04d598a",
+      "content_sha256": "3a70af6d7cf243e84bd4ede453c92d11712fe7d921093caf3bc825691f69b3ca",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -7786,11 +7786,11 @@
       "version": "v0.24",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "43d4fdd44edf5b93c738c59cb486355a5b09e2e0476229b87e0a4f23c0a4a5b9",
+      "content_sha256": "c5af7186c5ecdde9f340c7eaa7b2665c87e067090ac0c5c5a58464163e06c942",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7829,11 +7829,11 @@
       "version": "v1.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "2d4d6e92905b3f96486c88165f36320c14badabb9d82b262f7a69ac9ceb8e4ab",
+      "content_sha256": "2b424cdb1fd58f6198b93131618bb77ff9a64eeec49e9855e44b8ab21eabe7a5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7860,11 +7860,11 @@
       "version": "v0.22",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "f2f9d5f3d44390ccf9d1a1e4429747e68479ae75187006f0267df89ac03bb170",
+      "content_sha256": "63d025ee2088b1a1559d4b7aeb99bc5026bbecfe5ad67bf8fbd26c522abd99dd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7922,11 +7922,11 @@
       "version": "v0.14",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/consolidate-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "eef815ee61c412663a6412f0ba236b6d512426b84ca35ca74e2ecc1d1361a854",
+      "content_sha256": "df0c50fcfda157a930d91be7a00c8c14c54c010b57439c741396c201dddc2916",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7955,11 +7955,11 @@
       "version": "v0.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/design-inspirations/SKILL.md",
       "installable": true,
-      "content_sha256": "0e9b514fb0474b3d0b18b3aa1cd2985dfa4c5b2a08143a6a30037e273f858c78",
+      "content_sha256": "67acfaa832230c3862f8494fe52121891770e618bd404a2cd41b7b9dea2af800",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -8022,11 +8022,11 @@
       "version": "v0.16",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "2de9b89c6e3b88620f26c93f77572906e836e8f4241ee9aef02a00aebae672f3",
+      "content_sha256": "de27aa39813aa52b5ce37a0b18fa8bafa4bc1f0bd13c6c5508776fca7b5ae64e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8089,11 +8089,11 @@
       "version": "v0.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "79abf4eff289b91d4f304691391856d91dbc183bb76a2806b439bc086b3dfa2e",
+      "content_sha256": "712f28410a48949b640868102bdabceddad5e7f64a6717ac5a45e4261b05baaf",
       "archive_versions": [
         "v0.0",
         "v0.1"
@@ -8110,11 +8110,11 @@
       "version": "v0.24",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "4f4e8ac0a55bd363323539349b7a393738cffbd4b71a5be79627bed4e7e0c667",
+      "content_sha256": "20edcd77ef00259d77c01c1e033d9805b17259643c223c099a39f5bf70b36aa3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8153,11 +8153,11 @@
       "version": "v1.2",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "b34522f19193d60d775376b3ce0261c713d7090a47e8c99f06a42f2f9be9f85e",
+      "content_sha256": "51458cf2365cb3b0e1a0784feef425385e3d054d890b1afaddb9b221d154b1ed",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8184,11 +8184,11 @@
       "version": "v0.22",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "6d90da8040b517320c003babcbb4f7bf6a469ba7ac9df73a77b795f782c81706",
+      "content_sha256": "8cb00da247510fd16d4b218b6298fdeb35448b7e901d06f42d09d4016c382d76",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8247,11 +8247,11 @@
       "version": "v0.12",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-testing/claude/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "5264b51741b1fb940fce0518d5b0cb64b92d30a27484c8754dc2381e2ac4977e",
+      "content_sha256": "e6fb53c3c5f56300353321829ff849c19a34398881a3a0f0d3fd795e37667a9f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8300,11 +8300,11 @@
       "version": "v0.12",
       "required_conventions": [
         "alignment-page",
-        "prototype-session-loop"
+        "design-tree-loop"
       ],
       "path": "packs/product-testing/codex/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "abbdc414e7ed0261595f4589f7aa54a8e983dd243ff026412d9c7e88e2c58a56",
+      "content_sha256": "91e0864a70d9a87aa3e2fd309ef9aa45df10a143cec3485ac1203d8df3fbeacb",
       "archive_versions": [
         "v0.0",
         "v0.1",

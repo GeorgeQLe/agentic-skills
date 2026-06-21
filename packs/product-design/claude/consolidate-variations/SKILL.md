@@ -3,7 +3,7 @@ name: consolidate-variations
 description: Compare multiple built UI variations, interview the user on what works and what doesn't, cherry-pick best elements, resolve conflicts, and produce a final consolidated prototype
 type: planning
 version: v0.14
-required_conventions: [alignment-page, prototype-session-loop]
+required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
 ---
@@ -16,7 +16,7 @@ Use this skill after the user has built and evaluated multiple UI layout variati
 
 Users with manually built variations (not from the `/ux-variations` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
-Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
 
 ## Process
 

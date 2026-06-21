@@ -31,7 +31,7 @@ const packageJsonPath = join(packageRoot, 'package.json');
 const packScriptPath = resolvePackagedPath('scripts/pack.sh');
 const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
-const prototypeSessionUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-prototype-session-loop.mjs');
+const designTreeUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-design-tree-loop.mjs');
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
 const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
 const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
@@ -175,7 +175,7 @@ Usage:
   gskp prototype bundles [--dry-run] [--check]
 
 Commands:
-  bundles                    Generate per-skill PROTOTYPE-SESSION-LOOP.md bundles
+  bundles                    Generate per-skill DESIGN-TREE-LOOP.md bundles
   bundles --dry-run          Preview generated bundle changes
   bundles --check            Fail on generated-bundle drift without writing`);
 }
@@ -442,7 +442,7 @@ export function resolvePrototypeCommand(args, options = {}) {
     return {
       kind: 'run',
       command: process.execPath,
-      args: [prototypeSessionUpgradeScriptPath, '--root', projectRoot, ...rest]
+      args: [designTreeUpgradeScriptPath, '--root', projectRoot, ...rest]
     };
   }
 
@@ -574,7 +574,7 @@ Commands:
   alignment bundles [--dry-run] [--check]
                                Generate/check per-skill ALIGNMENT-PAGE.md bundles
   prototype bundles [--dry-run] [--check]
-                               Generate/check per-skill PROTOTYPE-SESSION-LOOP.md bundles
+                               Generate/check per-skill DESIGN-TREE-LOOP.md bundles
   alignment pages audit        Audit active rendered alignment/*.html pages
   alignment pages open <alignment/page.html> [--browser <browser>]
                                Open or focus an alignment HTML page

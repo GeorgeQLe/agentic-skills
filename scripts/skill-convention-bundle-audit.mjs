@@ -152,7 +152,7 @@ const declaredCount = execFileSync("git", ["ls-files"], {
 })
   .split("\n")
   .filter(Boolean)
-  .filter((file) => /\/(?:ALIGNMENT-PAGE|INTERROGATION-PAGE|PROTOTYPE-SESSION-LOOP)\.md$/.test(file))
+  .filter((file) => /\/(?:ALIGNMENT-PAGE|INTERROGATION-PAGE|DESIGN-TREE-LOOP)\.md$/.test(file))
   .length;
 
 console.log(`Skill convention bundle audit passed for ${skills.length} active skills and ${declaredCount} tracked bundle(s).`);

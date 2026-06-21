@@ -13,12 +13,12 @@ export const SKILL_CONVENTIONS = {
     generatorScript: "scripts/upgrade-interrogation-page.mjs",
     checkCommand: ["node", "scripts/upgrade-interrogation-page.mjs", "--check"],
   },
-  "prototype-session-loop": {
-    canonicalDoc: "docs/prototype-session-loop-convention.md",
-    bundleFile: "PROTOTYPE-SESSION-LOOP.md",
-    packageAsset: "assets/prototype-session-loop-convention.md",
-    generatorScript: "scripts/upgrade-prototype-session-loop.mjs",
-    checkCommand: ["node", "scripts/upgrade-prototype-session-loop.mjs", "--check"],
+  "design-tree-loop": {
+    canonicalDoc: "docs/design-tree-loop-convention.md",
+    bundleFile: "DESIGN-TREE-LOOP.md",
+    packageAsset: "assets/design-tree-loop-convention.md",
+    generatorScript: "scripts/upgrade-design-tree-loop.mjs",
+    checkCommand: ["node", "scripts/upgrade-design-tree-loop.mjs", "--check"],
   },
 };
 

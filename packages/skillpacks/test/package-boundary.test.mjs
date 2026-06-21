@@ -74,19 +74,19 @@ describe('skillpacks npm publish target boundary', () => {
       'scripts/skill-convention-registry.mjs',
       'scripts/upgrade-alignment-page.mjs',
       'scripts/upgrade-interrogation-page.mjs',
-      'scripts/upgrade-prototype-session-loop.mjs',
+      'scripts/upgrade-design-tree-loop.mjs',
       'scripts/audit-alignment-pages.mjs',
       'scripts/inject-tts.mjs',
       'scripts/alignment-tts-kokoro.js',
       'assets/alignment-page-convention.md',
       'assets/interrogation-page-convention.md',
-      'assets/prototype-session-loop-convention.md',
+      'assets/design-tree-loop-convention.md',
       'base/codex/pack/SKILL.md',
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
       'base/codex/idea-scope-brief/INTERROGATION-PAGE.md',
-      'packs/product-design/codex/user-flow-map/PROTOTYPE-SESSION-LOOP.md',
-      'packs/product-testing/codex/uat/PROTOTYPE-SESSION-LOOP.md',
+      'packs/product-design/codex/user-flow-map/DESIGN-TREE-LOOP.md',
+      'packs/product-testing/codex/uat/DESIGN-TREE-LOOP.md',
       'packs/code-quality/PACK.md'
     ]) {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published`);

@@ -225,7 +225,7 @@ describe('skillpacks prototype command parsing', () => {
     assert.equal(command.kind, 'run');
     assert.equal(command.command, process.execPath);
     assert.deepEqual(command.args.slice(1), ['--root', projectRoot, '--check']);
-    assert.equal(command.args[0].endsWith('scripts/upgrade-prototype-session-loop.mjs'), true);
+    assert.equal(command.args[0].endsWith('scripts/upgrade-design-tree-loop.mjs'), true);
   });
 
   it('rejects unknown prototype subcommands and conflicting bundle flags', () => {

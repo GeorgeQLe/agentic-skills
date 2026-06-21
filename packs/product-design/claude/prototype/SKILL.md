@@ -3,7 +3,7 @@ name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
 version: v0.16
-required_conventions: [alignment-page, prototype-session-loop]
+required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -16,7 +16,7 @@ Build tangible, runnable prototypes before production spec work begins. Create t
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
 
-Follow `PROTOTYPE-SESSION-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Prototype build state is stored in `design/prototype-build-plan-*.md` and `design/**/flow-tree-*.yaml`, never in `tasks/todo.md`.
 
 ## Gate
 
