@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-22 — Question-like alignment YAML needs intake classification before mutation
+
+- Fresh-session `needs-clarification` / `clarify-before-approval` YAML can represent a question, concern, premise challenge, or tradeoff rather than an instruction to edit the HTML page.
+- Before mutating alignment artifacts from section feedback YAML, classify the user intent as answer-only, amend-page, investigate-before-amend, pushback-needed, or ask-user-before-amend.
+- Answer or push back on question-like and ambiguous feedback before editing; reserve direct page mutation for plainly factual clarifications or explicit amendment requests.
+
 ## 2026-06-22 — Multi-project failures need end summaries, not only inline logs
 
 - A `skillpacks refresh --all` UX change improved dry-run summaries but left real refresh failures only inline per project, which makes failures easy to miss after long multi-project output.

@@ -1,3 +1,37 @@
+# Current Implementation - Alignment Feedback YAML Clarification Intake
+
+## Goal
+
+Require agents to classify alignment feedback YAML intent before mutating alignment pages, especially for fresh-session `needs-clarification` / `clarify-before-approval` snippets that are questions, concerns, or premise challenges.
+
+## Plan
+
+- [x] Record the task plan in task docs.
+- [x] Patch the canonical alignment-page convention.
+- [x] Update Layer 1 regression assertions.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Add prevention lesson.
+- [x] Run requested verification gates and inspect generated diff.
+- [x] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- Existing YAML fields and review lifecycle are preserved.
+- Feedback is classified as `answer-only`, `amend-page`, `investigate-before-amend`, `pushback-needed`, or `ask-user-before-amend` before mutation.
+- Question-like or ambiguous clarification feedback is answered or pushed back before editing.
+- Direct page edits remain allowed for plainly factual clarification or explicit amendment requests.
+- Unresolved clarification or negative feedback blocks confirmation and downstream routing.
+
+## Review
+
+- Updated `docs/alignment-page-convention.md` to add `Feedback intake before mutation`, requiring `answer-only`, `amend-page`, `investigate-before-amend`, `pushback-needed`, or `ask-user-before-amend` classification before artifact edits.
+- Tightened section-feedback YAML, pre-approval stop, and after-approval handling language so `clarify-before-approval` means resolve clarification before approval, not silently patch HTML.
+- Regenerated 304 generated `ALIGNMENT-PAGE.md` bundles from the canonical source; no `SKILL.md` versions were changed.
+- Added Layer 1 regression coverage for feedback-intake classification and updated approval-handling assertions.
+- Added a prevention lesson for question-like alignment YAML.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --check`, `pnpm --dir tests exec vitest run layer1/alignment-gates.test.ts layer1/upgrade-alignment-page-bespoke.test.ts` (51/51), `node scripts/audit-alignment-pages.mjs`, and `git diff --check`.
+- The requested `node --test tests/layer1/*.test.ts` commands were attempted but are not the correct harness for these Vitest files; both failed before assertions with Vitest runner initialization errors, then passed under the repo Vitest runner.
+
 # Current Implementation - Skillpacks Refresh Dry-Run UX
 
 ## Goal

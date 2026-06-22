@@ -389,20 +389,58 @@ describe("alignment page gate contract", () => {
     for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} after approval section`).toContain("**After approval handling.**");
-      expect(content, `${path} edits before confirmation`).toContain(
-        "If it contains approvals plus user-requested edits, first update the page, research, and proposed canonical artifacts",
+      expect(content, `${path} classify edits before confirmation`).toContain(
+        "If it contains approvals plus user-requested edits, first classify the edit intent under the Feedback intake before mutation rule",
+      );
+      expect(content, `${path} confirmed amendments before confirmation`).toContain(
+        "then update the page, research, and proposed canonical artifacts to satisfy confirmed amendments",
       );
       expect(content, `${path} confirm after writing`).toContain(
         "then write or update the approved canonical artifacts and confirm the page",
       );
       expect(content, `${path} unresolved feedback returns to review`).toContain(
-        "If it contains `needs-clarification`, unresolved `down` feedback, or any unresolved negative feedback",
+        "If it contains `needs-clarification`, unresolved `down` feedback, unresolved pushback, or any unresolved negative feedback",
+      );
+      expect(content, `${path} unresolved feedback uses intake rule`).toContain(
+        "resolve that feedback under the Feedback intake before mutation rule and return the page to `review` instead of marking it `confirmed`",
       );
       expect(content, `${path} archive before replace`).toMatch(
         /Before replacing any existing alignment page, archive it to `docs\/history\/archive\/YYYY-MM-DD\/HHMMSS\/alignment\/[^`]+\.html`/,
       );
       expect(content, `${path} future amendments`).toContain(
         "Future amendments to confirmed pages follow the same archive-first rule",
+      );
+    }
+  });
+
+  it("requires feedback intent classification before mutating alignment artifacts", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} feedback intake section`).toContain("**Feedback intake before mutation.**");
+      expect(content, `${path} intake classes`).toContain(
+        "`answer-only` (the note is a question that can be answered without changing the page)",
+      );
+      expect(content, `${path} amend class`).toContain(
+        "`amend-page` (the user explicitly asks for a page/artifact change or the correction is plainly factual)",
+      );
+      expect(content, `${path} investigate class`).toContain("`investigate-before-amend`");
+      expect(content, `${path} pushback class`).toContain("`pushback-needed`");
+      expect(content, `${path} ask user class`).toContain("`ask-user-before-amend`");
+      expect(content, `${path} question-like feedback`).toContain(
+        'If the note is a question, concern, premise challenge, "can we...", "would X not...", or ambiguous tradeoff',
+      );
+      expect(content, `${path} answer before mutation`).toContain(
+        "answer the question, state the pushback, or ask the needed follow-up in the agent response before mutating the HTML page",
+      );
+      expect(content, `${path} factual direct edits`).toContain(
+        "Edit the page directly only when the clarification is plainly factual",
+      );
+      expect(content, `${path} clarify semantics`).toContain(
+        "`clarify-before-approval` means resolve the clarification before approval; it does not mean silently patch the HTML",
+      );
+      expect(content, `${path} unresolved blocks confirmation`).toContain(
+        "Never mark the page `confirmed`, write approved canonical artifacts, or route downstream while unresolved clarification",
       );
     }
   });
@@ -844,6 +882,9 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} emphasize semantics`).toContain("this is a revision request, not approval");
       expect(content, `${path} investigate action`).toContain("investigate-and-revise");
       expect(content, `${path} clarification action`).toContain("clarify-before-approval");
+      expect(content, `${path} classification before mutation`).toContain(
+        "classify the feedback intent before mutation under the Feedback intake before mutation rule",
+      );
       expect(content, `${path} stale up feedback value`).not.toContain("`feedback` (`up`, `down`, or `needs-clarification`)");
       expect(content, `${path} stale accept action`).not.toContain("accept-as-is");
       expect(content, `${path} do not require gates for partial responses`).toContain(

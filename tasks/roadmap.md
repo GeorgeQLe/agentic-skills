@@ -1,3 +1,28 @@
+## Current Implementation - Alignment Feedback YAML Clarification Intake
+
+### Goal
+
+Patch the shared alignment-page convention so fresh-session `needs-clarification` / `clarify-before-approval` YAML is not treated as an automatic HTML-edit instruction. Preserve the existing YAML schema and review lifecycle while requiring agents to classify feedback intent before mutating artifacts.
+
+### Plan
+
+1. Update task tracking with this implementation plan and active checklist.
+2. Edit only `docs/alignment-page-convention.md` inside the `alignment-convention` block.
+3. Add feedback-intake-before-mutation language that classifies feedback as `answer-only`, `amend-page`, `investigate-before-amend`, `pushback-needed`, or `ask-user-before-amend`.
+4. Tighten the section-feedback YAML, pre-approval stop, and after-approval handling language so clarification means resolve before approval, not silently patch HTML.
+5. Regenerate generated `ALIGNMENT-PAGE.md` bundles with `node scripts/upgrade-alignment-page.mjs`.
+6. Update Layer 1 assertions for the new intake-classification contract.
+7. Add a prevention lesson for question-like alignment YAML.
+8. Run the requested alignment generator checks, focused tests, active-page audit, and diff hygiene.
+
+### Acceptance Criteria
+
+- Public YAML fields remain unchanged: no new schema fields or page controls.
+- Question-like, concern-like, premise-challenge, and ambiguous tradeoff feedback is answered or pushed back before page mutation.
+- Plain factual clarifications and explicit amendment requests can still amend the page directly.
+- Pages are never confirmed or routed downstream while unresolved clarification or negative feedback remains.
+- Generated alignment bundles are in sync with the canonical convention.
+
 ## Current Implementation - Skillpacks Refresh Dry-Run UX
 
 ### Goal
