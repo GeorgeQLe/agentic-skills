@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-22 — Verify cleanup commands against observed targets
+
+- A legacy global-skill cleanup recommendation treated `npx skillpacks uninstall-global` as sufficient, but the user's run returned "Removed 0" while previously inspected `~/.codex/skills/idea-scope-brief` and `~/.claude/skills/idea-scope-brief` still had `.agentic-skills-managed` markers.
+- When recommending cleanup, verify the post-state against the exact observed target paths. A command that exits 0 but removes 0 is not success if the target evidence predicted removals.
+- For legacy marker migrations, inspect the recognition predicate too: a cleanup command may only remove installs whose source path still satisfies current ownership checks, leaving older managed markers behind.
+
 ## 2026-06-22 — Question-like alignment YAML needs intake classification before mutation
 
 - Fresh-session `needs-clarification` / `clarify-before-approval` YAML can represent a question, concern, premise challenge, or tradeoff rather than an instruction to edit the HTML page.
