@@ -1179,6 +1179,7 @@ describe('Node multi-repo --all commands', () => {
     assert.doesNotMatch(stdout, /node_modules/);
     assert.match(stdout, /failed: No enabled packs or skills/);
     assert.match(stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 1 failed across 2 project\(s\)\./);
+    assert.match(stdout, /Failures:\n  b: No enabled packs or skills in \.agents\/project\.json/);
     assert.equal(exitCode, 1);
   });
 

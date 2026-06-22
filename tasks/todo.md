@@ -17,6 +17,7 @@ Fix `skillpacks refresh` reload guidance and `refresh --all --dry-run` planning 
 
 - No-op `refresh` exits 0 without reload guidance or false `.agents/project.json` update noise.
 - Changing `refresh` still prints reload guidance for stale updates and managed orphan removals.
+- `refresh --all` repeats failed project paths and emitted error messages in the final summary.
 - `refresh --all --dry-run` reports proposed install/update/remove counts, affected skills/targets, failures, unmanaged skips, and `Safe to run: yes/no`.
 - Failed dry-run project config returns nonzero with `Safe to run: no`.
 
@@ -26,6 +27,7 @@ Fix `skillpacks refresh` reload guidance and `refresh --all --dry-run` planning 
 - Added no-op config-write guards for pack/skill config helpers so unchanged `.agents/project.json` content is neither rewritten nor logged.
 - Added a refresh-specific `refresh --all --dry-run` planner that reports proposed installs, updates, removals, skipped unmanaged roots, per-project counts, aggregate affected targets, failures, `Safe to run: yes/no`, and `skillpacks refresh --all` when safe.
 - Preserved `refresh --dry-run` without `--all` rejection.
+- Added a final failure-detail section for non-dry-run `refresh --all` so project failures and emitted error messages are visible after long output.
 - Updated package changelog and regenerated `packages/skillpacks/dist/skillpacks-manifest.json`.
 - Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs` (46/46), `npm --workspace packages/skillpacks run verify:package`, and `git diff --check`.
 

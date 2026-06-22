@@ -1764,7 +1764,12 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
   });
 }
 
-export async function runAcrossProjects({ rootDir = process.cwd(), label, run } = {}) {
+export async function runAcrossProjects({
+  rootDir = process.cwd(),
+  label,
+  run,
+  summarizeFailures = false
+} = {}) {
   const roots = discoverProjectRoots(rootDir);
 
   if (roots.length === 0) {
@@ -1775,6 +1780,7 @@ export async function runAcrossProjects({ rootDir = process.cwd(), label, run } 
   let succeeded = 0;
   let flagged = 0;
   let failed = 0;
+  const failures = [];
 
   for (const root of roots) {
     const rel = relative(rootDir, root) || '.';
@@ -1791,6 +1797,7 @@ export async function runAcrossProjects({ rootDir = process.cwd(), label, run } 
       failed += 1;
       const message = error instanceof Error ? error.message : String(error);
       console.log(`  failed: ${message}`);
+      failures.push({ rel, message });
     }
   }
 
@@ -1798,6 +1805,12 @@ export async function runAcrossProjects({ rootDir = process.cwd(), label, run } 
   console.log(
     `Summary${label ? ` (${label})` : ''}: ${succeeded} ok, ${flagged} flagged, ${failed} failed across ${roots.length} project(s).`
   );
+  if (summarizeFailures && failures.length > 0) {
+    console.log('Failures:');
+    for (const failure of failures) {
+      console.log(`  ${failure.rel}: ${failure.message}`);
+    }
+  }
 
   return failed > 0 || flagged > 0 ? 1 : 0;
 }
@@ -1877,7 +1890,8 @@ export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dr
   return runAcrossProjects({
     rootDir,
     label: 'refresh --all',
-    run: (root) => refreshProject({ manifest, projectRoot: root })
+    run: (root) => refreshProject({ manifest, projectRoot: root }),
+    summarizeFailures: true
   });
 }
 

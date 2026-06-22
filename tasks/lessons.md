@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-22 — Multi-project failures need end summaries, not only inline logs
+
+- A `skillpacks refresh --all` UX change improved dry-run summaries but left real refresh failures only inline per project, which makes failures easy to miss after long multi-project output.
+- For multi-project commands that continue past failures, collect each failed project and emitted error message, then repeat them in the final summary.
+- Add regression coverage for both the inline failure and the final failure-detail section so future summary work does not regress operational scanability.
+
 ## 2026-06-20 — Compiled-YAML handoffs should not duplicate fresh-session routing
 
 - A Pattern A review-pending handoff used both `## Next Work` to tell the user to review/compile/paste YAML and `## Continue In A Fresh Session` to repeat fresh-session routing.

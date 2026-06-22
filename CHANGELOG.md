@@ -11,6 +11,7 @@ Keep this file updated before every npm package publish.
 ### Changed
 
 - `skillpacks refresh` now prints session reload guidance only when project-local skill roots are installed, updated, or removed, and avoids no-op `.agents/project.json` update noise.
+- `skillpacks refresh --all` now repeats failed project paths and emitted error messages in the final summary.
 - `skillpacks refresh --all --dry-run` now uses a refresh-specific planner with per-project proposed install/update/remove counts, affected skill targets, failures, skipped unmanaged roots, and an aggregate `Safe to run` verdict.
 
 ## [0.1.10] - 2026-06-22
