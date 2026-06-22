@@ -1,3 +1,27 @@
+## Current Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
+
+### Goal
+
+Make `skillpacks uninstall-global` remove legacy user-home global skill installs created by older `agentic-skills` versions while preserving unmanaged, markerless, and foreign managed skill directories.
+
+### Plan
+
+1. Record active task tracking in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Update `packages/skillpacks/src/cli/lifecycle.mjs` so uninstall cleanup recognizes current `base/*` and `packs` sources plus legacy `global/*` skillpacks-owned sources.
+3. Require directory markers to include `managed_by=agentic-skills` before deletion.
+4. Extend lifecycle tests for legacy `global/claude`, legacy `global/codex`, user-defined markerless dirs, foreign sources, and suspicious unmanaged markers.
+5. Update `CHANGELOG.md` with the npm-package behavior fix.
+6. Run package verification and publish dry-run gates.
+7. Publish with `./publish.sh patch`, verify published behavior, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- `uninstall-global` removes current and legacy skillpacks-owned user-home installs under `~/.claude/skills` and `~/.codex/skills`.
+- Markerless user skills remain untouched.
+- Directories with marker sources outside known skillpacks-owned roots remain untouched.
+- Directories whose marker does not declare `managed_by=agentic-skills` remain untouched even with suspicious sources.
+- Public CLI command surface remains unchanged.
+
 ## Current Implementation - Alignment Feedback YAML Clarification Intake
 
 ### Goal

@@ -306,6 +306,8 @@ describe('Node lifecycle commands', () => {
     // Repo-managed installs (source owned by skillpacks) — must be removed.
     writeManagedSkillDir(join(claudeRoot, 'codebase-status'), join(repoRoot, 'base/claude/codebase-status'));
     writeManagedSkillDir(join(codexRoot, 'afps-status'), join(repoRoot, 'base/codex/afps-status'));
+    writeManagedSkillDir(join(claudeRoot, 'legacy-claude'), join(repoRoot, 'global/claude/legacy-claude'));
+    writeManagedSkillDir(join(codexRoot, 'legacy-codex'), join(repoRoot, 'global/codex/legacy-codex'));
 
     // Unmanaged installs — must be left untouched.
     const unmanagedDir = join(claudeRoot, 'my-local-skill');
@@ -314,17 +316,29 @@ describe('Node lifecycle commands', () => {
     const foreignSource = join(home, 'somewhere-else');
     mkdirSync(foreignSource, { recursive: true });
     writeManagedSkillDir(join(codexRoot, 'foreign-managed'), foreignSource);
+    const unmanagedMarkerDir = join(claudeRoot, 'suspicious-unmanaged-marker');
+    mkdirSync(unmanagedMarkerDir, { recursive: true });
+    writeFileSync(
+      join(unmanagedMarkerDir, '.agentic-skills-managed'),
+      ['source=' + join(repoRoot, 'global/claude/suspicious-unmanaged-marker'), 'managed_by=someone-else'].join('\n') + '\n'
+    );
+    writeFileSync(join(unmanagedMarkerDir, 'SKILL.md'), 'foreign marker owner\n');
 
     const { stdout, exitCode } = await captureConsole(() => uninstallGlobal({ homeRoot: home }));
 
     assert.equal(exitCode, 0);
     assert.match(stdout, /Removed \.claude\/skills\/codebase-status/);
     assert.match(stdout, /Removed \.codex\/skills\/afps-status/);
-    assert.match(stdout, /Removed 2 repo-managed base skill install\(s\)/);
+    assert.match(stdout, /Removed \.claude\/skills\/legacy-claude/);
+    assert.match(stdout, /Removed \.codex\/skills\/legacy-codex/);
+    assert.match(stdout, /Removed 4 repo-managed base skill install\(s\)/);
     assert.equal(existsSync(join(claudeRoot, 'codebase-status')), false);
     assert.equal(existsSync(join(codexRoot, 'afps-status')), false);
+    assert.equal(existsSync(join(claudeRoot, 'legacy-claude')), false);
+    assert.equal(existsSync(join(codexRoot, 'legacy-codex')), false);
     assert.equal(existsSync(unmanagedDir), true);
     assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
+    assert.equal(existsSync(unmanagedMarkerDir), true);
   });
 
   it('rejects arguments to uninstall-global', async () => {

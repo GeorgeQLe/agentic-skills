@@ -301,12 +301,24 @@ function sourceOwnedBySkillpacks(source) {
     join(packageRoot, 'base', 'claude'),
     join(packageRoot, 'base', 'codex'),
     join(packageRoot, 'packs'),
+    join(packageRoot, 'global', 'claude'),
+    join(packageRoot, 'global', 'codex'),
+    join(packageRoot, 'global', 'packs'),
+    join(packageRoot, 'global'),
     join(checkoutRoot, 'base', 'claude'),
     join(checkoutRoot, 'base', 'codex'),
-    join(checkoutRoot, 'packs')
+    join(checkoutRoot, 'packs'),
+    join(checkoutRoot, 'global', 'claude'),
+    join(checkoutRoot, 'global', 'codex'),
+    join(checkoutRoot, 'global', 'packs'),
+    join(checkoutRoot, 'global')
   ];
 
   return ownedPrefixes.some((prefix) => source === prefix || source.startsWith(`${prefix}/`));
+}
+
+function targetManagedBySkillpacks(target) {
+  return managedMarkerField(target, 'managed_by') === 'agentic-skills';
 }
 
 function removeRepoSkillInstall(target) {
@@ -326,7 +338,7 @@ function removeRepoSkillInstall(target) {
 
   if (isManagedSkillDir(target)) {
     const source = managedMarkerField(target, 'source');
-    if (sourceOwnedBySkillpacks(source)) {
+    if (targetManagedBySkillpacks(target) && sourceOwnedBySkillpacks(source)) {
       rmSync(target, { recursive: true, force: true });
       return true;
     }

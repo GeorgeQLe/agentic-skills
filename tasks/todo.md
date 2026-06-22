@@ -1,3 +1,36 @@
+# Current Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
+
+## Goal
+
+Make `skillpacks uninstall-global` clean up legacy skillpacks-owned global installs without deleting user-defined or foreign managed skills.
+
+## Plan
+
+- [x] Record active task tracking in task docs.
+- [x] Patch uninstall ownership and marker checks.
+- [x] Add focused lifecycle fixtures for legacy and foreign marker cases.
+- [x] Update package changelog.
+- [ ] Run verification gates and publish dry run.
+- [ ] Publish patch release and verify npm behavior.
+- [ ] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- Legacy `global/claude/*` and `global/codex/*` managed installs are removed.
+- Current `base/*` and `packs/*` skillpacks-owned installs remain removable.
+- Markerless user skills remain.
+- Foreign-source markers remain.
+- Markers without `managed_by=agentic-skills` remain.
+
+## Review
+
+- Updated `packages/skillpacks/src/cli/lifecycle.mjs` so `uninstall-global` recognizes current `base/*` and `packs/*` sources plus retired `global/*` source roots from this package/repo lineage.
+- Tightened managed directory removal to require `.agentic-skills-managed` with `managed_by=agentic-skills`; foreign marker owners now remain even if their `source=` resembles a legacy owned path.
+- Extended `packages/skillpacks/test/lifecycle.test.mjs` to remove current and legacy managed installs while preserving markerless local skills, foreign-source markers, and non-agentic marker owners.
+- Updated `CHANGELOG.md` under `Unreleased`.
+- Verification passed so far: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`.
+- `./publish.sh --dry-run patch` was attempted before commit and correctly refused to run with tracked working tree changes; the release script requires committing implementation changes before dry-run or real publish.
+
 # Current Implementation - Alignment Feedback YAML Clarification Intake
 
 ## Goal
