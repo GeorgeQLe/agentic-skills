@@ -4,6 +4,13 @@ import { describe, expect, it } from "vitest";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const read = (path: string) => readFileSync(resolve(ROOT, path), "utf8");
+const between = (content: string, start: string, end: string) => {
+  const startIndex = content.indexOf(start);
+  expect(startIndex, `missing start marker: ${start}`).toBeGreaterThanOrEqual(0);
+  const endIndex = content.indexOf(end, startIndex + start.length);
+  expect(endIndex, `missing end marker: ${end}`).toBeGreaterThan(startIndex);
+  return content.slice(startIndex, endIndex);
+};
 
 const mirrors = ["codex", "claude"] as const;
 const command = {
@@ -184,6 +191,84 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(convention).toContain("Progress Handoff Block");
     expect(convention).toContain("The block is required even when the next command is the same");
     expect(convention).toContain("Durable cursor");
+  });
+
+  it("requires HTML-first canonical writes for chunked design deliverables", () => {
+    const convention = read("docs/design-tree-loop-convention.md");
+
+    expect(convention).toContain("HTML-first canonical write rule");
+    expect(convention).toMatch(
+      /Chunked design skills may write `_working\/` briefs and per-unit Markdown intermediates before\s+approval/,
+    );
+    expect(convention).toMatch(/The final assembled\s+deliverable remains \*\*proposed review content\*\*/);
+    expect(convention).toContain("Canonical `design/**/*.md` and `design/**/*.yaml` writes");
+    expect(convention).toMatch(/happen only after that\s+confirmed alignment approval/);
+
+    for (const mirror of mirrors) {
+      const stateModel = read(`packs/product-design/${mirror}/state-model/SKILL.md`);
+      const uxVariations = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
+
+      const statePreApproval = between(
+        stateModel,
+        "Assemble the per-framework intermediates plus the brief into proposed review content for the alignment page:",
+        "On approval (compiled YAML with no unresolved negative feedback):",
+      );
+      expect(statePreApproval).toContain("Proposed domain model doc content");
+      expect(statePreApproval).toContain("Proposed synthesized manifest content");
+      expect(statePreApproval).toContain("Build the **one** alignment page");
+      expect(statePreApproval).not.toContain("**Canonical doc**");
+      expect(statePreApproval).not.toMatch(/Write `design\/domain-model-\{topic\}\.md`/);
+      expect(statePreApproval).not.toMatch(/Write `design\/model-tree-\{topic\}\.yaml`/);
+
+      const stateApproval = stateModel.slice(
+        stateModel.indexOf("On approval (compiled YAML with no unresolved negative feedback):"),
+        stateModel.indexOf("### 5. Next Steps (after synthesis only)"),
+      );
+      expect(stateApproval).toContain("Write `design/domain-model-{topic}.md` and `design/model-tree-{topic}.yaml`.");
+      expect(stateApproval).toContain("Attach the branch-scoped model via `branches[].model_ref`");
+      expect(stateApproval).toContain("Write the optional top-level `model_tree_ref` pointer");
+      expect(stateApproval).toContain("Append only user-approved glossary terms");
+      expect(stateApproval).toContain("Archive the brief and per-framework intermediates");
+
+      const uxSetup = between(
+        uxVariations,
+        "**Chunked-mode setup handoff**",
+        "7. **Specify each approved variation enough to build**",
+      );
+      expect(uxSetup).toContain("do not initialize or update scoped flow-tree `ux_variations[]` entries before alignment approval");
+      expect(uxSetup).not.toContain("Initialize the scoped flow-tree `ux_variations[]` entries");
+
+      const uxAssemble = between(
+        uxVariations,
+        "**Chunked-mode assemble+approve session**",
+        "   - Recommend serial full buildout",
+      );
+      expect(uxAssemble).toContain("proposed whole-set review content");
+      expect(uxAssemble).toContain("build the **one** alignment page before any canonical writes");
+      expect(uxAssemble).toContain("On approval, write the final variation plan and interview log");
+      expect(uxAssemble).toContain("create or update the scoped flow-tree `ux_variations[]` status/artifact entries");
+      expect(uxAssemble).not.toContain("single canonical `design/{slug}/ux-variations-[topic].md`");
+      expect(uxAssemble).not.toContain("whole assembled set");
+
+      const uxDeliverablesPreApproval = between(
+        uxVariations,
+        "## Deliverables",
+        "On approval (compiled YAML with no unresolved negative feedback):",
+      );
+      expect(uxDeliverablesPreApproval).toContain("Before approval, build `alignment/ux-variations-{topic}.html`");
+      expect(uxDeliverablesPreApproval).toContain("complete proposed variation plan");
+      expect(uxDeliverablesPreApproval).not.toMatch(/Write the variation plan to `design\/ux-variations-\[topic\]\.md`/);
+
+      const uxApproval = between(
+        uxVariations,
+        "On approval (compiled YAML with no unresolved negative feedback):",
+        "### Alignment Page",
+      );
+      expect(uxApproval).toContain("Write the variation plan to `design/ux-variations-[topic].md`");
+      expect(uxApproval).toContain("Write the interview log to `design/ux-variations-[topic]-interview.md`");
+      expect(uxApproval).toContain("Update the scoped flow-tree manifest with UX variation branch IDs");
+      expect(uxApproval).toContain("Archive the brief and per-variation intermediates");
+    }
   });
 
   it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {

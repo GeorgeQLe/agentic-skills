@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.25
+version: v0.24
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
@@ -31,9 +31,9 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the variation-scope and concept-set checkpoints — confirm what varies vs. stays fixed and the concept set before authoring.
 - **Stage 1 — Research**: resolve context — read the parent user-flow doc, the branch's `design/domain-model-{topic}.md` substrate when present, and existing UI/inspiration evidence.
-- **Stage 2 — Design**: author the concept set and up to five build-grade proposed variation specs for review.
+- **Stage 2 — Design**: author the concept set and up to five build-grade variation specs (`design/ux-variations-[topic].md`).
 - **Stage 3 — Plan**: the approved variation set is the build-plan slice each variation's `$prototype` run realizes.
-- **Stage 4 — Implement (scoped)**: assemble the complete proposed variation plan for the alignment page, then after confirmed approval write the canonical variation specs and grow up to five `ux_variation` child branches on the modelled flow.
+- **Stage 4 — Implement (scoped)**: write the variation specs, grow up to five `ux_variation` child branches on the modelled flow, and pass the single binding alignment gate before any canonical write.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first modelled user-flow branch with no `ux_variations`** (it will not grow UX branches until that branch's `model_ref` is confirmed), runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`.
 
@@ -61,7 +61,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode reads and updates `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
-- On approval, add one `ux_variations[]` entry under the selected parent user-flow branch for each approved progression branch. Each entry must include `id`, `label`, `status`, and artifact references.
+- Add one `ux_variations[]` entry under the selected parent user-flow branch for each proposed progression branch. Each entry must include `id`, `label`, `status`, and artifact references.
 - Keep UX variation branch state in the design manifest. Do not write ordinary UX branch state to `research/.progress.yaml`; use that file only when a variant or route experiment creates a materially different product path or product line.
 - Do not mirror UX progression, layout-variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
 
@@ -73,7 +73,7 @@ This skill authors up to five full build-grade variation specs (step 7); holding
 - **Mechanism**: chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `DESIGN-TREE-LOOP.md`:
   - Setup session = steps 0–6 → write a pure-context brief → STOP.
   - Spec sessions = step 7, one variation each → author a single variation's intermediate → STOP / re-invoke.
-  - Assemble+approve session = steps 8–9 + deliverables + the one alignment page → assemble proposed whole-set review content for the single existing alignment gate.
+  - Assemble+approve session = steps 8–9 + deliverables + the one alignment page → assemble the canonical plan behind the single existing alignment gate.
 - **Cursor**: progress is intermediate-file existence; the brief carries no step list. No `design/flow-tree.schema.json` change and no `tasks/todo.md` use.
 - **Fold (small runs)**: for N < 4 or `--no-chunk`, write no brief and no intermediates and behave exactly as v0.20 did, so small runs stay cheap.
 
@@ -229,7 +229,7 @@ Use the same `$ux-variations` command for setup → first variation, variation �
    - **Chunked-mode setup handoff**: When chunked mode is active (step 0c — N ≥ 4 approved concepts and no `--no-chunk`), this checkpoint ends the setup session:
      - Write the shared context brief to `design/{slug}/_working/ux-variations-{topic}-brief.md` (flat mode: `design/_working/ux-variations-{topic}-brief.md`).
      - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
-     - Record proposed branch IDs and artifact paths in the brief/intermediates only; do not initialize or update scoped flow-tree `ux_variations[]` entries before alignment approval.
+     - Initialize the scoped flow-tree `ux_variations[]` entries at `proposed` (existing status enum, §0b — no schema change).
      - STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
      - In non-chunked mode, continue directly to step 7 in this same session.
 
@@ -278,10 +278,10 @@ Use the same `$ux-variations` command for setup → first variation, variation �
 
 8. **Plan experimentation**
    - **Chunked-mode assemble+approve session**: When chunked mode is active, begin this session only once every approved variation's `{variation-id}.md` intermediate exists under `design/{slug}/ux-variations-{topic}/`:
-     - Assemble those per-variation intermediates into proposed whole-set review content for the final `design/{slug}/ux-variations-[topic].md` deliverable.
-     - Run this experimentation step and the coverage checkpoint (step 9) over the whole proposed set, then build the **one** alignment page before any canonical writes.
+     - Assemble those per-variation intermediates into the single canonical `design/{slug}/ux-variations-[topic].md` (the deliverable below).
+     - Run this experimentation step and the coverage checkpoint (step 9) over the whole assembled set, then build the **one** alignment page.
      - Before stopping for approval, emit the required Progress Handoff Block with the completed count equal to the approved variation count, the durable cursor checked, and the next phase described as whole-set alignment review and approval.
-     - On approval, write the final variation plan and interview log, create or update the scoped flow-tree `ux_variations[]` status/artifact entries, and archive the brief plus the per-variation intermediates per the convention's archive-at-canonical-write timing.
+     - On approval, flip the scoped flow-tree `ux_variations[].status` values and archive the brief plus the per-variation intermediates per the convention's archive-at-canonical-write timing.
      - There is exactly one alignment gate for the whole set, not one per variation, so whole-set comparison is preserved.
    - Recommend serial full buildout of all approved variants when the user is using layout-mode or explicitly wants to compare built interfaces. Do not recommend building a subset first unless the user asks for a smaller experiment.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
@@ -310,16 +310,11 @@ Use the same `$ux-variations` command for setup → first variation, variation �
 
 ## Deliverables
 
-Before approval, build `alignment/ux-variations-{topic}.html` from the complete proposed variation plan, proposed interview-log content, proposed branch-routing section, and proposed flow-tree changes. Stop for compiled YAML.
-
-On approval (compiled YAML with no unresolved negative feedback):
-
 - Write the variation plan to `design/ux-variations-[topic].md` in flat mode or `design/{slug}/ux-variations-[topic].md` in product-path mode.
 - Write the interview log to `design/ux-variations-[topic]-interview.md` in flat mode or `design/{slug}/ux-variations-[topic]-interview.md` in product-path mode.
 - Update the scoped flow-tree manifest with UX variation branch IDs, statuses, artifact references, and the recommended next `$ui-interview [specific-ux-variation]` branch.
 - Update `research/.progress.yaml` only when variant or route experiments create materially different product paths; downstream research remains active-path-only until a path is activated. Do not use `research/.progress.yaml` for ordinary UX branch approve/reject/retry state.
 - Include a branch-routing section that names the parent user flow, each UX variation branch, sibling flow/variation dependencies, and the recommended next `$ui-interview [specific-ux-variation]` branch.
-- Archive the brief and per-variation intermediates under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>` at canonical-write timing.
 
 ### Alignment Page
 

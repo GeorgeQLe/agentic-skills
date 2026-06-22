@@ -77,7 +77,7 @@ bounded inputs instead of the full conversation + all prior artifacts:
 |---|---|---|---|
 | **Machine cursor** | flow-tree manifest (`design/**/flow-tree-*.yaml`) | Names *which committed branch state* exists; the post-approval source of truth (unchanged from today) | Permanent |
 | **Shared context brief** *(new)* | `design/{slug}/_working/{skill}-{topic}-brief.md` | Compact prose: distilled setup + carried decisions — **pure context, no step list.** It carries *what every substep needs to know* (assumptions, constraints, theses, criteria, carried decisions), never *which step is next*. **This is the "enough context to do the current substep" doc.** | `_working/`, throwaway, archived at canonical write |
-| **Per-substep intermediates** *(new)* | `design/{slug}/{skill}-{topic}/{unit-id}.md` | The actual work product of each substep, accumulating one file per unit; assembled into the single canonical doc at the end. **Their existence IS the cursor** — the next substep is the first unit whose intermediate file does not yet exist (mirroring the research loop's "progress = file existence", `research-session-loop-convention.md:100`). | `_working`-band until the final gate, then assembled into canonical |
+| **Per-substep intermediates** *(new)* | `design/{slug}/{skill}-{topic}/{unit-id}.md` | The actual work product of each substep, accumulating one file per unit; assembled into proposed review content for the HTML alignment page. **Their existence IS the cursor** — the next substep is the first unit whose intermediate file does not yet exist (mirroring the research loop's "progress = file existence", `research-session-loop-convention.md:100`). | `_working`-band until the final gate, then written to canonical only after approval |
 
 ### The per-session shape (research loop's unifying rule, applied intra-skill)
 
@@ -279,8 +279,8 @@ the brief + one spec.
   are cheap and benefit from being co-located. Its durable output is the **shared brief**
   `design/{slug}/_working/ux-variations-{topic}-brief.md` containing pure context only: the decision
   surface, the confirmed assumptions, the locked shared constraints (stack/design-system), the 5
-  concept theses, the evaluation criteria, and any carried decisions — **no step list.** Initialize
-  the flow-tree `branches[].ux_variations[]` entries at their existing `proposed` status. Stop.
+  concept theses, the evaluation criteria, proposed branch IDs, and any carried decisions — **no step list.**
+  Do not initialize flow-tree `branches[].ux_variations[]` entries before approval. Stop.
 - **Spec sessions (one per variation):** read the brief + scan which `{variation-id}.md` files already
   exist → pick the next variation whose intermediate file does not yet exist → write its full build
   spec (step 7, `SKILL.md:125-140`) to `design/{slug}/ux-variations-{topic}/{variation-id}.md` →
@@ -288,9 +288,10 @@ the brief + one spec.
   the brief → stop with a clear-context / re-invoke handoff (mirroring
   `user-flow-map/SKILL.md:191-194`). Context per session ≈ brief + one spec — bounded.
 - **Assemble + approve session:** when every variation's intermediate file exists, assemble the per-variation files into
-  the single canonical `design/{slug}/ux-variations-{topic}.md`, build **one** `review` alignment page
-  over the whole set, and on approval write canonical + flip manifest statuses + archive the brief and
-  intermediates. One binding gate, whole-set comparison preserved.
+  proposed whole-set review content for `alignment/ux-variations-{topic}.html`, build **one** `review`
+  alignment page over the whole set, and on approval write the canonical variation plan, create or
+  update manifest statuses/artifacts, and archive the brief and intermediates. One binding gate,
+  whole-set comparison preserved.
 - **No schema change** (cursor is intermediate-file existence). **Small runs fold:** if a run has few variations, the
   loop's own "do not spend a round-trip on a near-empty session" rule
   (`research-session-loop-convention.md:44,160`) collapses it back toward one session — so a threshold

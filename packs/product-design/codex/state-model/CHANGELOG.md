@@ -1,5 +1,10 @@
 # state-model changelog (codex)
 
+## v0.5 - 2026-06-22
+
+- Enforced HTML-first canonical writes: synthesis now assembles proposed domain-model and manifest content for `alignment/state-model-{topic}.html` before any canonical `design/**/*.md` or `design/**/*.yaml` write.
+- Kept canonical domain-model docs, model-tree manifests, branch `model_ref`, top-level `model_tree_ref`, glossary write-forward, and archive cleanup inside the approval-gated path.
+
 ## v0.4 - 2026-06-22
 
 - Added the required chunked Progress Handoff Block for setup, per-framework, and synthesis-ready stops so repeated `$state-model` invocations visibly explain completed framework count, durable cursor, current phase, next phase, fresh-session guidance, and the exact command.

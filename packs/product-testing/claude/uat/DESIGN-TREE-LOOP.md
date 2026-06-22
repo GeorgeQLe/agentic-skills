@@ -200,6 +200,17 @@ near-empty session. Archive the brief and intermediates at canonical write (fina
 a rejected final page can still rebuild. This adds **no schema change** and **no new alignment
 gate**.
 
+### HTML-first canonical write rule
+
+Chunked design skills may write `_working/` briefs and per-unit Markdown intermediates before
+approval because those files are durable cursors, not approved deliverables. The final assembled
+deliverable remains **proposed review content** until it is rendered in
+`alignment/{skill}-{topic}.html` and confirmed through the single binding alignment gate.
+Canonical `design/**/*.md` and `design/**/*.yaml` writes, flow-tree child growth or back-pointer
+updates, glossary write-forward, and archive-at-canonical-write cleanup happen only after that
+confirmed alignment approval. Pre-approval assemble wording must describe proposed content for
+the HTML page, not replacement of canonical design Markdown/YAML.
+
 ---
 
 ## 3. Orchestrator vs. Pipeline vs. Subskill

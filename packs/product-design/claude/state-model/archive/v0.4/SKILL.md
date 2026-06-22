@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.5
+version: v0.4
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -17,7 +17,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/state-model`.
 
-This is an **orchestrator skill** that authors the **logical** domain/state/logic model anchored to an approved user-flow map, running **one domain-modeling framework per session** and synthesizing their outputs into a proposed domain model plus a `model-tree` manifest for HTML alignment review. It writes the canonical domain model and manifest only after confirmed approval. It sits **after `/user-flow-map`, before `/ux-variations`** in the product-design prototype pipeline.
+This is an **orchestrator skill** that authors the **logical** domain/state/logic model anchored to an approved user-flow map, running **one domain-modeling framework per session** and synthesizing their outputs into a single canonical domain model plus a `model-tree` manifest. It sits **after `/user-flow-map`, before `/ux-variations`** in the product-design prototype pipeline.
 
 The model it produces is a property of the *flow*, not of any one UI presentation: UX variations re-skin the same underlying entities, actions, and states, so authoring the logical model once gives `/ux-variations` and `/ui-interview` a real substrate to present, and turns `/spec-interview` into "harden this model to production" rather than "invent it."
 
@@ -31,7 +31,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 - The flow-tree `route` array stays a locked six-step sequence (`user-flow-map, ux-variations, ui-interview, prototype, consolidate-variations, spec-interview`). This skill does **not** appear in or modify that array. Ordering is enforced by next-step recommendations, not the route enum.
 - This skill owns its own `design/model-tree-{topic}.yaml` manifest, a domain-shaped sibling to `design/flow-tree-{topic}.yaml`.
-- On approval it writes an **optional** top-level `model_tree_ref` pointer into the flow-tree manifest so downstream skills can discover the model. The pointer is backward-compatible and never required.
+- On synthesis it writes an **optional** top-level `model_tree_ref` pointer into the flow-tree manifest so downstream skills can discover the model. The pointer is backward-compatible and never required.
 - **Flow bindings are authoritative in the model-tree only.** Every model element records `flow_bindings[]` pointing at flow-tree nodes. These bindings are never duplicated into the flow tree, to prevent drift.
 
 ## Prerequisites
@@ -66,8 +66,7 @@ setup session       §0 scope → §1 run-order detection → §2 load flow cont
    sessions          → run the first pending framework inline → write its intermediate
    (one per fw)      → append cross-framework facts to the brief → STOP / re-invoke
       → assemble+approve session   when all planned intermediates exist (or --synthesize):
-                                   §4 assemble proposed domain model + model-tree manifest
-                                   for the alignment page
+                                   §4 assemble domain-model-{topic}.md + model-tree-{topic}.yaml
                                    → ONE alignment-page review → confirmed gate
                                    → on approval write canonical doc + manifest + flow-tree
                                      model_tree_ref back-pointer + archive brief/intermediates
@@ -111,7 +110,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 - **Stage 1 — Research**: **Run-Order Detection** (§1) and **Load Flow Context** (§2) — read the approved flow tree and soft prerequisites, then plan which domain-modeling frameworks run.
 - **Stage 2 — Design**: **Run Next Pending Framework** (§3) — author the per-framework logical intermediates with their `flow_bindings`.
 - **Stage 3 — Plan**: the confirmed framework set + run order is the build-plan slice; it folds into setup for fewer-than-3-framework domains.
-- **Stage 4 — Implement (scoped)**: **Synthesis + Assemble & Approve** (§4) — assemble the proposed `design/domain-model-{topic}.md` and `model-tree-{topic}.yaml` content for the alignment page, then after confirmed approval write the canonical artifacts and attach the model to the branch via `branches[].model_ref` (legacy top-level `model_tree_ref` stays back-compat).
+- **Stage 4 — Implement (scoped)**: **Synthesis + Assemble & Approve** (§4) — write `design/domain-model-{topic}.md` + `model-tree-{topic}.yaml`, attach it to the branch via `branches[].model_ref` (legacy top-level `model_tree_ref` stays back-compat), and pass the single binding alignment gate.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first user-flow branch with no confirmed `model_ref`** (honoring any explicit branch argument), runs the staged flow scoped to that branch, attaches the model on approval, and stops with the handoff in `## Next Work`.
 
@@ -190,17 +189,16 @@ Append any cross-framework facts (renamed entities, merged aggregates, newly dis
 
 Enter when the brief exists, **all** planned framework intermediates exist, and no canonical domain model exists yet (also forced by `/state-model --synthesize [topic]`).
 
-Assemble the per-framework intermediates plus the brief into proposed review content for the alignment page:
+Assemble the per-framework intermediates plus the brief into:
 
-1. **Proposed domain model doc content** for `design/domain-model-{topic}.md` (flat) or `design/{slug}/domain-model-{topic}.md`, with sections: ubiquitous-language glossary, entities (with kind, attributes, relationships), state machines (states, transitions, `maps_to_ui_state`), events, commands, read models, policies, logical contracts, an evidence/flow-binding matrix, assumptions/confidence, and explicit physical-concern deferrals to `/spec-interview`.
-2. **Proposed synthesized manifest content** for `design/model-tree-{topic}.yaml` (flat) or `design/{slug}/model-tree-{topic}.yaml`, per the `design/model-tree.schema.json` contract and the shape below.
+1. **Canonical doc** `design/domain-model-{topic}.md` (flat) or `design/{slug}/domain-model-{topic}.md`, with sections: ubiquitous-language glossary, entities (with kind, attributes, relationships), state machines (states, transitions, `maps_to_ui_state`), events, commands, read models, policies, logical contracts, an evidence/flow-binding matrix, assumptions/confidence, and explicit physical-concern deferrals to `/spec-interview`.
+2. **Synthesized manifest** `design/model-tree-{topic}.yaml` (flat) or `design/{slug}/model-tree-{topic}.yaml`, per the `design/model-tree.schema.json` contract and the shape below.
 
 Build the **one** alignment page (`alignment/state-model-{topic}.html`) rendering the full proposed domain model, the flow-binding matrix, the state-machine/ERD diagrams (visual tier), assumptions/confidence, the proposed file changes, the glossary-additions gate, and the approval gate. Stop for compiled YAML.
 
 On approval (compiled YAML with no unresolved negative feedback):
 
 - Write `design/domain-model-{topic}.md` and `design/model-tree-{topic}.yaml`.
-- Attach the branch-scoped model via `branches[].model_ref` in the flow-tree manifest.
 - Write the optional top-level `model_tree_ref` pointer into the flow-tree manifest (`design/{flow-tree}-{topic}.yaml`), pointing at the new model-tree path. Do **not** touch the flow-tree `route` array or duplicate any binding into the flow tree.
 - Append only user-approved glossary terms to the target glossary per the glossary write-forward convention.
 - Archive the brief and per-framework intermediates under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>` (archive-at-canonical-write timing).
@@ -220,7 +218,7 @@ Do not emit cross-skill routing before synthesis is approved and written. While 
 
 - Setup session: the Domain Modeling Scope Checkpoint (inline) + the shared context brief.
 - Framework session: one `design/{slug}/state-model-{topic}/{framework}.md` intermediate per planned framework.
-- Assemble session: proposed `design/domain-model-{topic}.md` and `design/model-tree-{topic}.yaml` content rendered into the `alignment/state-model-{topic}.html` review page; after approval, the canonical doc, manifest, branch `model_ref`, flow-tree `model_tree_ref` back-pointer, glossary additions, and archive cleanup are written.
+- Assemble session: `design/domain-model-{topic}.md`, `design/model-tree-{topic}.yaml`, the flow-tree `model_tree_ref` back-pointer, and the `alignment/state-model-{topic}.html` review page.
 
 ### `model-tree-{topic}.yaml` shape
 

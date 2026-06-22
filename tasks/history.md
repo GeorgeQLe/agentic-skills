@@ -14599,6 +14599,15 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Deploy: push-triggered via Vercel path-based Ignored Build Step (change touches `apps/skills-showcase/**`). Manual `/deploy` lane needs `release-ops`, not in `enabled_packs` — no manual action.
 - Phase 5 (Tailwind-to-root + CSS unify) intentionally NOT started (ship-one-step handoff).
 
+## 2026-06-22 — HTML-first canonical write contract for design chunks
+
+- Tightened the design-tree loop so chunked `_working/` briefs and per-unit Markdown intermediates remain valid durable cursors, but final assembled deliverables are only proposed review content until rendered in `alignment/{skill}-{topic}.html` and confirmed.
+- Patched both Codex and Claude `state-model` mirrors (`v0.4 -> v0.5`) so synthesis builds proposed domain-model/manifest content first; canonical model docs, model-tree YAML, branch `model_ref`, top-level `model_tree_ref`, glossary writes, and archive cleanup are approval-gated.
+- Patched both Codex and Claude `ux-variations` mirrors (`v0.24 -> v0.25`) so chunked assembly builds proposed whole-set review content first; final variation plan, interview log, flow-tree `ux_variations[]` updates, and archive cleanup are approval-gated.
+- Regenerated `DESIGN-TREE-LOOP.md` bundles, Skills Showcase generated assets, and `packages/skillpacks/dist/skillpacks-manifest.json`; generated metadata now reports `state-model v0.5` and `ux-variations v0.25`.
+- Added Layer 1 regression coverage for the HTML-first rule and approval-gated canonical writes.
+- Verified: design-tree bundle check, convention bundle audit, focused Vitest 1106/1106, strict archive audit, mirror parity audit, `npm run skillpacks:build`, `npm run skillpacks:verify`, showcase generated-data validation, and `git diff --check`.
+
 ## 2026-06-20 — Unified-experience Phase 5: Tailwind-to-root + CSS unify
 
 - Moved the Tailwind import to the root (`apps/skills-showcase/app/globals.css` now carries the single `@import "tailwindcss";`) so utilities resolve on every route, then retired the four scoped imports that only existed because the root had none. CSS-plumbing only — zero component markup changes.

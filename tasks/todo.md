@@ -1,4 +1,39 @@
-# Current Implementation - Clarify Chunked Skill Progress
+# Current Implementation - HTML-First Canonical Write Contract
+
+## Goal
+
+Tighten product-design contracts so `state-model` and `ux-variations` may use Markdown intermediates as durable chunk cursors, but final canonical `design/**` Markdown/YAML writes, flow-tree growth, glossary writes, and archive-at-canonical-write cleanup happen only after the HTML alignment page is reviewed and confirmed.
+
+## Plan
+
+- [x] Add an HTML-first canonical write rule to `docs/design-tree-loop-convention.md`.
+- [x] Archive and bump mirrored `state-model` skills from `v0.4` to `v0.5`; reword synthesis as proposed review content until alignment approval.
+- [x] Archive and bump mirrored `ux-variations` skills from `v0.24` to `v0.25`; reword chunked assembly as proposed review content until alignment approval.
+- [x] Regenerate `DESIGN-TREE-LOOP.md` bundles.
+- [x] Extend Layer 1 regression coverage for proposed review content vs approval-gated canonical writes.
+- [x] Run the requested convention, audit, test, build, showcase, and diff-hygiene checks; fix any failures.
+- [x] Record review notes, ship manifest, commit, and push intended changes on the primary branch.
+
+## Acceptance Criteria
+
+- `_working/` briefs and per-unit intermediates remain allowed as Markdown before approval.
+- Final assembled deliverables are treated as proposed review content until rendered in `alignment/{skill}-{topic}.html`.
+- Canonical `design/**/*.md`, `design/**/*.yaml`, flow-tree child growth/back-pointers, glossary writes, and archive cleanup appear only in approval-gated wording.
+- Active Codex and Claude `state-model` and `ux-variations` mirrors distinguish proposed review content from canonical writes.
+- Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
+- Regression coverage fails if canonical design Markdown/YAML writes drift back into pre-approval assemble wording.
+
+## Review
+
+- Added the HTML-first canonical write rule to `docs/design-tree-loop-convention.md`; regenerated all design-tree bundles.
+- Archived and bumped mirrored `state-model` contracts to `v0.5`; synthesis now assembles proposed domain model/manifest content for `alignment/state-model-{topic}.html`, with canonical docs, YAML, `model_ref`, `model_tree_ref`, glossary writes, and archive cleanup gated under approval.
+- Archived and bumped mirrored `ux-variations` contracts to `v0.25`; chunked assembly now produces proposed whole-set review content for `alignment/ux-variations-{topic}.html`, with final variation plan, interview log, flow-tree `ux_variations[]` updates, and archive cleanup gated under approval.
+- Updated the older design-loop audit note so it no longer says chunked assembly initializes flow-tree entries or writes a single canonical doc before review.
+- Added Layer 1 regression coverage for convention wording, active `state-model`/`ux-variations` pre-approval wording, and approval-gated canonical writes.
+- Regenerated Skills Showcase assets and `packages/skillpacks/dist/skillpacks-manifest.json` from the staged index so generated metadata reports `state-model v0.5` and `ux-variations v0.25`.
+- Verification passed: `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; `pnpm --dir tests exec vitest run layer1/product-design-flow-tree.test.ts layer1/skill-alignment-routing-audit.test.ts layer1/frontmatter.test.ts` (1106 passing); `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `npm run skillpacks:build`; `npm run skillpacks:verify`; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+
+# Previous Implementation - Clarify Chunked Skill Progress
 
 ## Goal
 

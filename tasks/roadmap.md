@@ -1,3 +1,28 @@
+## Current Implementation - HTML-First Canonical Write Contract
+
+### Goal
+
+Tighten product-design contracts so `state-model` and `ux-variations` may use Markdown intermediates as durable chunk cursors, but final canonical `design/**` Markdown/YAML writes, flow-tree growth, glossary writes, and archive-at-canonical-write cleanup happen only after the HTML alignment page is reviewed and confirmed.
+
+### Plan
+
+1. Add an HTML-first canonical write rule to `docs/design-tree-loop-convention.md`.
+2. Archive and bump mirrored `state-model` skills from `v0.4` to `v0.5`; reword synthesis as proposed review content until alignment approval.
+3. Archive and bump mirrored `ux-variations` skills from `v0.24` to `v0.25`; reword chunked assembly as proposed review content until alignment approval.
+4. Regenerate `DESIGN-TREE-LOOP.md` bundles.
+5. Extend Layer 1 regression coverage for proposed review content vs approval-gated canonical writes.
+6. Run the requested convention, audit, test, build, showcase, and diff-hygiene checks; fix any failures.
+7. Record review notes, ship manifest, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- `_working/` briefs and per-unit intermediates remain allowed as Markdown before approval.
+- Final assembled deliverables are treated as proposed review content until rendered in `alignment/{skill}-{topic}.html`.
+- Canonical `design/**/*.md`, `design/**/*.yaml`, flow-tree child growth/back-pointers, glossary writes, and archive cleanup appear only in approval-gated wording.
+- Active Codex and Claude `state-model` and `ux-variations` mirrors distinguish proposed review content from canonical writes.
+- Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
+- Regression coverage fails if canonical design Markdown/YAML writes drift back into pre-approval assemble wording.
+
 ## Current Implementation - Clarify Chunked Skill Progress
 
 ### Goal

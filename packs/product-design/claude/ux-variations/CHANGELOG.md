@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.25 - 2026-06-22
+
+- Enforced HTML-first canonical writes: chunked assembly now produces proposed whole-set review content for `alignment/ux-variations-{topic}.html` before any final variation plan, interview log, or flow-tree update.
+- Moved final variation plan, interview log, `ux_variations[]` status/artifact updates, and archive cleanup into the approval-gated path.
+
 ## v0.24 - 2026-06-22
 
 - Added the required chunked Progress Handoff Block for setup, per-variation, and assemble-ready stops so repeated `/ux-variations` invocations visibly explain completed variation count, durable cursor, current phase, next phase, fresh-session guidance, and the exact command.
