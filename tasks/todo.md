@@ -30,6 +30,9 @@ Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by 
 - npm registry checks passed: `skillpacks` latest is `0.1.8`, `@glexcorp/gskp` latest is `0.1.8`, and both `skillpacks@0.1.9` and `@glexcorp/gskp@0.1.9` return npm `E404`.
 - Dry-run publish was not run because `npm whoami --registry https://registry.npmjs.org/` returns npm `E401 Unauthorized`.
 - Committed and pushed metadata cleanup to `master` as `e072d0f7` (`Document skillpacks 0.1.9 publish readiness`).
+- Follow-up npm cache ownership verification found `/Users/georgele/.npm` owned by `georgele:staff` with no ownership drift; no repair was run.
+- Follow-up cache/package verification passed: `npm cache verify` and `npm pack ./packages/skillpacks/build --dry-run --json --silent`.
+- Follow-up npm auth check still fails with npm `E401 Unauthorized`, so the remaining blocker is registry authentication, not cache ownership.
 - Remaining human action before dry-run publish: authenticate with npm using `npm login --registry https://registry.npmjs.org/` as `glexcorp` or another explicitly authorized publisher, then confirm with `npm whoami --registry https://registry.npmjs.org/`.
 
 # Previous Implementation - Clarify Chunked Skill Progress

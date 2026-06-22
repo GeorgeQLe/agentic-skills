@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-22 - npm cache ownership verification
+
+- Confirmed npm cache configuration remains `/Users/georgele/.npm` with current UID/GID `501:20`.
+- Verified the cache directory is owned by `georgele:staff` and the ownership drift scan returned no files, so no `chown` repair was run.
+- Verified `npm cache verify` exits 0 and the previously failing `npm pack ./packages/skillpacks/build --dry-run --json --silent` succeeds against the normal cache.
+- Confirmed release readiness is still blocked by npm auth: `npm whoami --registry https://registry.npmjs.org/` returns npm `E401 Unauthorized`.
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260622-001159-wrap-up.md`.
+
 ## 2026-06-22 - Clarify chunked product-design progress handoffs
 
 - Added a required Progress Handoff Block to the canonical design-tree loop convention and regenerated all 18 `DESIGN-TREE-LOOP.md` bundles so chunked setup, per-unit, and assemble stops show completed count, durable cursor, current phase, next phase, repeated-command rationale, fresh-session guidance, and exact next command.
