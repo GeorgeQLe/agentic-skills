@@ -1,4 +1,35 @@
-# Current Implementation - Prepare skillpacks 0.1.10 Publish
+# Current Implementation - Skillpacks Refresh Dry-Run UX
+
+## Goal
+
+Fix `skillpacks refresh` reload guidance and `refresh --all --dry-run` planning output.
+
+## Plan
+
+- [x] Inspect lifecycle implementation and tests for refresh/install/remove behavior.
+- [x] Record the task plan in task docs.
+- [x] Implement change-count refresh behavior and dry-run planner summary.
+- [x] Add/adjust lifecycle tests and changelog entry.
+- [x] Run focused and package verification, then review diff.
+- [ ] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- No-op `refresh` exits 0 without reload guidance or false `.agents/project.json` update noise.
+- Changing `refresh` still prints reload guidance for stale updates and managed orphan removals.
+- `refresh --all --dry-run` reports proposed install/update/remove counts, affected skills/targets, failures, unmanaged skips, and `Safe to run: yes/no`.
+- Failed dry-run project config returns nonzero with `Safe to run: no`.
+
+## Review
+
+- Updated `packages/skillpacks/src/cli/lifecycle.mjs` so `refresh` uses direct expected-root sync plus orphan prune counts instead of re-running install helpers that rewrite/log config on no-ops.
+- Added no-op config-write guards for pack/skill config helpers so unchanged `.agents/project.json` content is neither rewritten nor logged.
+- Added a refresh-specific `refresh --all --dry-run` planner that reports proposed installs, updates, removals, skipped unmanaged roots, per-project counts, aggregate affected targets, failures, `Safe to run: yes/no`, and `skillpacks refresh --all` when safe.
+- Preserved `refresh --dry-run` without `--all` rejection.
+- Updated package changelog and regenerated `packages/skillpacks/dist/skillpacks-manifest.json`.
+- Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs` (46/46), `npm --workspace packages/skillpacks run verify:package`, and `git diff --check`.
+
+# Previous Implementation - Prepare skillpacks 0.1.10 Publish
 
 ## Goal
 

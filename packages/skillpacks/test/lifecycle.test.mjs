@@ -434,7 +434,7 @@ describe('Node lifecycle commands', () => {
 
     assert.match(stdout, /Installed \.claude\/skills\/idea-scope-brief/);
     assert.match(stdout, /Installed \.codex\/skills\/idea-scope-brief/);
-    assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
+    assert.doesNotMatch(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
     assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
   });
@@ -541,7 +541,21 @@ describe('Node lifecycle commands', () => {
     assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Installed \.codex\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Updated \.codex\/skills\/quality-sweep/);
-    assert.match(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
+    assert.doesNotMatch(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
+  });
+
+  it('keeps no-op refresh quiet except for the refresh summary', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'quality-sweep']);
+
+    const { stdout, exitCode } = await runSkillpacksRaw(dir, ['refresh']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Refreshed project skills to skillpacks@/);
+    assert.doesNotMatch(stdout, /Skill installs changed/);
+    assert.doesNotMatch(stdout, /Updated \.agents\/project\.json/);
+    assert.doesNotMatch(stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
   });
 
   it('removes active packs without deleting unmanaged local skill directories', async () => {
@@ -657,6 +671,7 @@ describe('Node lifecycle commands', () => {
       existsSync(join(skillPath(dir, 'codex', 'customer-discovery'), 'frameworks/pmf-engine/SKILL.md')),
       true
     );
+    assert.match(stdout, /Skill installs changed/);
   });
 
   it('refresh reconciles a renamed enabled pack alias before installing', async () => {
@@ -706,7 +721,7 @@ describe('Node lifecycle commands', () => {
 
     assert.match(stdout, /Reconciled \.agents\/project\.json pack names/);
     assert.match(stdout, /Installed \.claude\/skills\/customer-discovery/);
-    assert.match(stdout, /Updated \.agents\/project\.json \(skill: customer-discovery from pack: business-research\)/);
+    assert.doesNotMatch(stdout, /Updated \.agents\/project\.json \(skill: customer-discovery from pack: business-research\)/);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'customer-discovery': 'business-research' });
     assert.equal(existsSync(skillPath(dir, 'codex', 'customer-discovery')), true);
@@ -1170,6 +1185,7 @@ describe('Node multi-repo --all commands', () => {
   it('refresh --all --dry-run reports drift without mutating', async () => {
     const parent = makeParent();
     const a = join(parent, 'a');
+    const b = join(parent, 'b');
     writeProjectConfig(a, {
       project_type: 'devtool',
       enabled_packs: ['code-quality'],
@@ -1181,15 +1197,60 @@ describe('Node multi-repo --all commands', () => {
       'quality-sweep',
       join(repoRoot, 'packs/code-quality/claude/quality-sweep')
     );
+    writeManagedInstall(
+      a,
+      'codex',
+      'orphan-skill',
+      join(repoRoot, 'packs/code-quality/codex/quality-sweep')
+    );
+    writeProjectConfig(b, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1
+    });
 
     const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run']);
 
     assert.match(stdout, /=== a ===/);
-    assert.match(stdout, /STALE\s+\.claude\/skills\/quality-sweep/);
+    assert.match(stdout, /Proposed: 3 install, 1 update, 1 remove\./);
+    assert.match(stdout, /install  \.claude\/skills\/extract-shared-types @ v0\.1/);
+    assert.match(stdout, /update   \.claude\/skills\/quality-sweep \(v0\.0 -> v0\.1\)/);
+    assert.match(stdout, /remove   \.codex\/skills\/orphan-skill \(pack not enabled\)/);
+    assert.match(stdout, /=== b ===/);
+    assert.match(stdout, /install  \.claude\/skills\/devtool-adoption/);
+    assert.match(stdout, /Summary \(refresh --all --dry-run\): 2 project\(s\) scanned\./);
+    assert.match(stdout, /a: 3 install, 1 update, 1 remove/);
+    assert.match(stdout, /b: [0-9]+ install, 0 update, 0 remove/);
+    assert.match(stdout, /Affected skills:/);
+    assert.match(stdout, /a: update quality-sweep \(\.claude\/skills\/quality-sweep\)/);
+    assert.match(stdout, /Safe to run: yes/);
+    assert.match(stdout, /Recommended command: skillpacks refresh --all/);
     assert.equal(
       readFileSync(join(skillPath(a, 'claude', 'quality-sweep'), 'SKILL.md'), 'utf8'),
       'stale\n'
     );
+    assert.equal(existsSync(skillPath(a, 'codex', 'orphan-skill')), true);
+    assert.equal(existsSync(skillPath(b, 'claude', 'devtool-adoption')), false);
+    assert.equal(exitCode, 0);
+  });
+
+  it('refresh --all --dry-run reports failed project config as unsafe', async () => {
+    const parent = makeParent();
+    const a = join(parent, 'a');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool-kanban'],
+      skill_pack_version: 1
+    });
+
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run']);
+
+    assert.match(stdout, /=== a ===/);
+    assert.match(stdout, /failed: ERROR: PoketoWork kanban pack 'devtool-kanban' is hibernated/);
+    assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
+    assert.match(stdout, /Failures:/);
+    assert.match(stdout, /Safe to run: no/);
+    assert.doesNotMatch(stdout, /Recommended command: skillpacks refresh --all/);
     assert.equal(exitCode, 1);
   });
 

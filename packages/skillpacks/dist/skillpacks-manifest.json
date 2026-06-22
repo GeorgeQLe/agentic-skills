@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.10"
   },
-  "source_fingerprint": "18ce1d515d3e6a89b75f44273033325e6422c4d9d6a78aedfcc326dea8c331db",
+  "source_fingerprint": "bf64df134bbe2447b610ecea5a3f13ce93f981c91752b8ec991cd8688626faf4",
   "packs": [
     {
       "name": "agent-bridge",

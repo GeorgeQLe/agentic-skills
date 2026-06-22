@@ -1,3 +1,27 @@
+## Current Implementation - Skillpacks Refresh Dry-Run UX
+
+### Goal
+
+Fix `skillpacks refresh` so reload guidance appears only when project-local skill installs actually changed, and make `skillpacks refresh --all --dry-run` report planned refresh changes with an aggregate safe-to-run verdict.
+
+### Plan
+
+1. Inspect lifecycle helpers, project config writes, and existing lifecycle tests for refresh/install/remove behavior.
+2. Refactor refresh internals so skill-root sync and prune operations return concrete change counts.
+3. Keep `.agents/project.json` writes and logs quiet during no-op refreshes.
+4. Replace `refresh --all --dry-run` doctor delegation with a refresh-specific planner that reports proposed installs, updates, removals, skipped unmanaged roots, and project failures.
+5. Add aggregate dry-run summary output with projects scanned, per-project counts, affected skills/targets, safe verdict, and recommended command when safe.
+6. Update lifecycle tests and package changelog for the user-visible CLI behavior.
+7. Run focused lifecycle tests and package verification, then review diff hygiene.
+
+### Acceptance Criteria
+
+- No-op `skillpacks refresh` exits 0 without `Skill installs changed` or false `.agents/project.json` update logs.
+- Stale managed updates and managed orphan removals still print reload guidance.
+- `skillpacks refresh --all --dry-run` is read-only and reports missing installs, stale updates, managed removals, skipped unmanaged roots, failures, aggregate affected skills, and `Safe to run: yes/no`.
+- Failed project config in dry-run returns nonzero and marks the aggregate verdict unsafe.
+- `refresh --dry-run` without `--all` remains rejected.
+
 ## Current Implementation - Prepare skillpacks 0.1.10 Publish
 
 ### Goal

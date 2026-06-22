@@ -531,7 +531,24 @@ function writePackProjectConfig(projectRoot, pack, packs) {
   }
   next.enabled_packs = packs;
   next.skill_pack_version = 1;
+  return writeProjectConfigIfChanged(projectRoot, next);
+}
+
+function projectConfigText(config) {
+  return `${JSON.stringify(config, null, 2)}\n`;
+}
+
+function projectConfigsEqual(left, right) {
+  return projectConfigText(left) === projectConfigText(right);
+}
+
+function writeProjectConfigIfChanged(projectRoot, next) {
+  const existing = readProjectConfig(projectRoot);
+  if (existing && projectConfigsEqual(existing, next)) {
+    return false;
+  }
   writeProjectConfig(projectRoot, next);
+  return true;
 }
 
 function writeBaseProjectConfig(projectRoot) {
@@ -586,8 +603,9 @@ function installPack(projectRoot, manifest, pack) {
 
   const packs = [...enabledPacks(readProjectConfig(projectRoot)), pack]
     .filter((candidate, index, all) => all.indexOf(candidate) === index);
-  writePackProjectConfig(projectRoot, pack, packs);
-  console.log('Updated .agents/project.json');
+  if (writePackProjectConfig(projectRoot, pack, packs)) {
+    console.log('Updated .agents/project.json');
+  }
 }
 
 function ensureProjectConfigForSkill(projectRoot) {
@@ -630,8 +648,9 @@ function installSingleSkill(projectRoot, manifest, skillName) {
     : {};
   enabledSkills[skillName] = pack || 'base';
   next.enabled_skills = enabledSkills;
-  writeProjectConfig(projectRoot, next);
-  console.log(`Updated .agents/project.json (skill: ${skillName} from ${pack ? `pack: ${pack}` : 'base'})`);
+  if (writeProjectConfigIfChanged(projectRoot, next)) {
+    console.log(`Updated .agents/project.json (skill: ${skillName} from ${pack ? `pack: ${pack}` : 'base'})`);
+  }
 }
 
 function removeEnabledSkill(projectRoot, skillName) {
@@ -650,7 +669,7 @@ function removeEnabledSkill(projectRoot, skillName) {
       delete next.enabled_skills;
     }
   }
-  writeProjectConfig(projectRoot, next);
+  writeProjectConfigIfChanged(projectRoot, next);
 }
 
 function removeSingleSkill(projectRoot, manifest, skillName) {
@@ -670,8 +689,12 @@ function removeSingleSkill(projectRoot, manifest, skillName) {
     }
   }
 
+  const before = readProjectConfig(projectRoot);
   removeEnabledSkill(projectRoot, skillName);
-  console.log(`Updated .agents/project.json (removed skill: ${skillName})`);
+  const after = readProjectConfig(projectRoot);
+  if (!projectConfigsEqual(before, after)) {
+    console.log(`Updated .agents/project.json (removed skill: ${skillName})`);
+  }
 }
 
 function removePack(projectRoot, manifest, pack) {
@@ -696,8 +719,9 @@ function removePack(projectRoot, manifest, pack) {
   }
 
   const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => candidate !== pack);
-  writePackProjectConfig(projectRoot, pack, packs);
-  console.log('Updated .agents/project.json');
+  if (writePackProjectConfig(projectRoot, pack, packs)) {
+    console.log('Updated .agents/project.json');
+  }
 }
 
 function enabledSkillEntries(config) {
@@ -966,6 +990,263 @@ function expectedSkillNames(manifest, config) {
   }
 
   return expected;
+}
+
+function expectedSkillInstallEntries(manifest, config, projectRoot) {
+  const entries = [];
+  const seen = new Set();
+
+  function add(tool, skillName, sourceDir) {
+    const effective = effectiveSourceForSkill(sourceDir, skillName, config);
+    const target = targetPath(projectRoot, tool, skillName);
+    const key = relativeProjectPath(projectRoot, target);
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    entries.push({
+      tool,
+      skillName,
+      source: effective.source,
+      target,
+      rel: key,
+      version: skillSourceVersion(effective.source)
+    });
+  }
+
+  if (baseSkillsEnabled(config)) {
+    for (const tool of TOOLS) {
+      for (const skill of baseSkillEntries(manifest, tool)) {
+        add(tool, skill.name, skillSourceDir(skill));
+      }
+    }
+  }
+
+  for (const pack of enabledPacks(config)) {
+    for (const tool of TOOLS) {
+      for (const skill of packSkillEntries(manifest, pack, tool)) {
+        add(tool, skill.name, skillSourceDir(skill));
+      }
+    }
+  }
+
+  for (const [skillName, pack] of enabledSkillEntries(config)) {
+    for (const tool of TOOLS) {
+      const skill = pack === 'base'
+        ? findBaseSkillEntry(manifest, tool, skillName)
+        : findSkillEntry(manifest, pack, tool, skillName);
+      if (skill) {
+        add(tool, skillName, skillSourceDir(skill));
+      }
+    }
+  }
+
+  return entries.sort((a, b) => comparePathStrings(a.rel, b.rel));
+}
+
+function plannedExpectedSkillChange(entry) {
+  if (!existsSync(entry.target)) {
+    return {
+      type: 'install',
+      skillName: entry.skillName,
+      target: entry.rel,
+      fromVersion: '',
+      toVersion: entry.version
+    };
+  }
+
+  const stats = lstatSync(entry.target);
+  if (stats.isSymbolicLink()) {
+    const currentSource = readlinkSync(entry.target);
+    if (!sourceOwnedBySkillpacks(currentSource)) {
+      return {
+        type: 'skip',
+        skillName: entry.skillName,
+        target: entry.rel,
+        reason: 'not repo-managed'
+      };
+    }
+    if (currentSource === entry.source) {
+      return null;
+    }
+    return {
+      type: 'update',
+      skillName: entry.skillName,
+      target: entry.rel,
+      fromVersion: skillSourceVersion(currentSource),
+      toVersion: entry.version
+    };
+  }
+
+  if (!isManagedSkillDir(entry.target)) {
+    return {
+      type: 'skip',
+      skillName: entry.skillName,
+      target: entry.rel,
+      reason: 'not repo-managed'
+    };
+  }
+
+  const currentSha = skillContentSha(entry.source);
+  const currentSource = managedMarkerField(entry.target, 'source');
+  const recordedSha = managedMarkerField(entry.target, 'source_sha');
+  const fromVersion = managedMarkerField(entry.target, 'source_version');
+
+  if (currentSource === entry.source && fromVersion === entry.version && recordedSha === currentSha) {
+    return null;
+  }
+
+  return {
+    type: 'update',
+    skillName: entry.skillName,
+    target: entry.rel,
+    fromVersion,
+    toVersion: entry.version
+  };
+}
+
+function readOnlyReconciledProjectConfig(projectRoot, manifest) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    return null;
+  }
+
+  const next = { ...config };
+
+  if (Array.isArray(config.enabled_packs)) {
+    const packs = [];
+    for (const pack of config.enabled_packs) {
+      const canonical = reconcileStoredPack(manifest, pack, 'enabled_packs');
+      if (!packs.includes(canonical)) {
+        packs.push(canonical);
+      }
+    }
+    next.enabled_packs = packs;
+  }
+
+  if (config.enabled_skills && typeof config.enabled_skills === 'object') {
+    const enabledSkills = {};
+    for (const [skillName, pack] of Object.entries(config.enabled_skills)) {
+      const canonical = findPackForSkill(manifest, skillName);
+      const baseSkill = !canonical && hasBaseSkill(manifest, skillName);
+      enabledSkills[skillName] = canonical || (baseSkill ? 'base' : pack);
+    }
+    next.enabled_skills = enabledSkills;
+  }
+
+  return next;
+}
+
+function planRefreshProject({ manifest, projectRoot }) {
+  const config = readOnlyReconciledProjectConfig(projectRoot, manifest);
+  const packs = enabledPacks(config);
+  const skills = enabledSkillEntries(config).map(([skill]) => skill);
+  const base = baseSkillsEnabled(config);
+
+  if (!base && packs.length === 0 && skills.length === 0) {
+    throw new Error('No enabled packs or skills in .agents/project.json');
+  }
+
+  const expected = expectedSkillNames(manifest, config);
+  const plan = {
+    installs: [],
+    updates: [],
+    removals: [],
+    skips: []
+  };
+
+  for (const entry of expectedSkillInstallEntries(manifest, config, projectRoot)) {
+    const change = plannedExpectedSkillChange(entry);
+    if (!change) {
+      continue;
+    }
+    if (change.type === 'install') {
+      plan.installs.push(change);
+    } else if (change.type === 'update') {
+      plan.updates.push(change);
+    } else if (change.type === 'skip') {
+      plan.skips.push(change);
+    }
+  }
+
+  for (const target of installedSkillTargets(projectRoot)) {
+    const status = skillInstallStatus(target);
+    const rel = relativeProjectPath(projectRoot, target);
+    const skillName = basename(target);
+
+    if (status.status === 'not-managed') {
+      plan.skips.push({
+        type: 'skip',
+        skillName,
+        target: rel,
+        reason: 'not repo-managed'
+      });
+      continue;
+    }
+
+    let reason = '';
+    if (status.status === 'missing-source') {
+      reason = 'source no longer exists';
+    } else if (!expected.has(skillName)) {
+      reason = 'pack not enabled';
+    }
+
+    if (reason) {
+      plan.removals.push({
+        type: 'remove',
+        skillName,
+        target: rel,
+        reason
+      });
+    }
+  }
+
+  return plan;
+}
+
+function planChangeCount(plan) {
+  return plan.installs.length + plan.updates.length + plan.removals.length;
+}
+
+function printRefreshDryRunProjectPlan(plan) {
+  console.log(
+    `  Proposed: ${plan.installs.length} install, ${plan.updates.length} update, ${plan.removals.length} remove.`
+  );
+
+  for (const item of plan.installs) {
+    const version = item.toVersion || 'unknown';
+    console.log(`  install  ${item.target} @ ${version}`);
+  }
+  for (const item of plan.updates) {
+    console.log(`  update   ${item.target} (${item.fromVersion || '?'} -> ${item.toVersion || '?'})`);
+  }
+  for (const item of plan.removals) {
+    console.log(`  remove   ${item.target} (${item.reason})`);
+  }
+  for (const item of plan.skips) {
+    console.log(`  skip     ${item.target} (${item.reason})`);
+  }
+
+  if (planChangeCount(plan) === 0 && plan.skips.length === 0) {
+    console.log('  No refresh changes proposed.');
+  }
+}
+
+function affectedRefreshItems(projectPlans) {
+  const items = [];
+  for (const project of projectPlans) {
+    for (const change of [...project.plan.installs, ...project.plan.updates, ...project.plan.removals]) {
+      items.push({
+        project: project.rel,
+        skillName: change.skillName,
+        target: change.target,
+        type: change.type
+      });
+    }
+  }
+  return items.sort((a, b) => {
+    return comparePathStrings(`${a.project}/${a.target}/${a.type}`, `${b.project}/${b.target}/${b.type}`);
+  });
 }
 
 export function printSessionReloadNotice() {
@@ -1442,7 +1723,9 @@ export async function pruneProject({
       console.log(`${removed} orphan(s) removed.`);
     }
 
-    printSessionReloadNotice();
+    if (!dryRun && removed > 0) {
+      printSessionReloadNotice();
+    }
     return 0;
   });
 }
@@ -1471,18 +1754,12 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
       throw new Error('No enabled packs or skills in .agents/project.json');
     }
 
-    if (base) {
-      installBaseSkills(projectRoot, manifest, config);
-    }
-    for (const pack of packs) {
-      installPack(projectRoot, manifest, pack);
-    }
-    for (const skill of skills) {
-      installSingleSkill(projectRoot, manifest, skill);
-    }
-    pruneOrphanedSkillRoots({ manifest, projectRoot });
+    const synced = syncExpectedSkillRoots(projectRoot, manifest);
+    const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
     console.log(`Refreshed project skills to ${manifestPackageLabel(manifest)}.`);
-    printSessionReloadNotice();
+    if (synced > 0 || removed > 0) {
+      printSessionReloadNotice();
+    }
     return 0;
   });
 }
@@ -1526,13 +1803,81 @@ export async function runAcrossProjects({ rootDir = process.cwd(), label, run } 
 }
 
 export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dryRun = false } = {}) {
+  if (dryRun) {
+    const roots = discoverProjectRoots(rootDir);
+
+    if (roots.length === 0) {
+      console.log(`No projects with .agents/project.json found under ${rootDir}`);
+      return 0;
+    }
+
+    const projectPlans = [];
+    const failures = [];
+
+    for (const root of roots) {
+      const rel = relative(rootDir, root) || '.';
+      console.log('');
+      console.log(`=== ${rel} ===`);
+      try {
+        const plan = planRefreshProject({ manifest, projectRoot: root });
+        printRefreshDryRunProjectPlan(plan);
+        projectPlans.push({ rel, plan });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.log(`  failed: ${message}`);
+        failures.push({ rel, message });
+      }
+    }
+
+    const totals = projectPlans.reduce(
+      (sum, project) => {
+        sum.installs += project.plan.installs.length;
+        sum.updates += project.plan.updates.length;
+        sum.removals += project.plan.removals.length;
+        sum.skips += project.plan.skips.length;
+        return sum;
+      },
+      { installs: 0, updates: 0, removals: 0, skips: 0 }
+    );
+    const safe = failures.length === 0;
+    const affected = affectedRefreshItems(projectPlans);
+
+    console.log('');
+    console.log(`Summary (refresh --all --dry-run): ${roots.length} project(s) scanned.`);
+    for (const project of projectPlans) {
+      console.log(
+        `  ${project.rel}: ${project.plan.installs.length} install, ${project.plan.updates.length} update, ${project.plan.removals.length} remove`
+      );
+    }
+    if (failures.length > 0) {
+      console.log('  Failures:');
+      for (const failure of failures) {
+        console.log(`    ${failure.rel}: ${failure.message}`);
+      }
+    }
+    console.log(
+      `  Totals: ${totals.installs} install, ${totals.updates} update, ${totals.removals} remove, ${totals.skips} skipped unmanaged.`
+    );
+    if (affected.length > 0) {
+      console.log('  Affected skills:');
+      for (const item of affected) {
+        console.log(`    ${item.project}: ${item.type} ${item.skillName} (${item.target})`);
+      }
+    } else {
+      console.log('  Affected skills: none');
+    }
+    console.log(`Safe to run: ${safe ? 'yes' : 'no'}`);
+    if (safe) {
+      console.log('Recommended command: skillpacks refresh --all');
+    }
+
+    return safe ? 0 : 1;
+  }
+
   return runAcrossProjects({
     rootDir,
-    label: dryRun ? 'refresh --all --dry-run' : 'refresh --all',
-    run: (root) =>
-      dryRun
-        ? doctorProject({ manifest, projectRoot: root, args: [] })
-        : refreshProject({ manifest, projectRoot: root })
+    label: 'refresh --all',
+    run: (root) => refreshProject({ manifest, projectRoot: root })
   });
 }
 
