@@ -11,7 +11,7 @@ Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by 
 - [x] Record release-readiness status and the remaining npm-auth human action in task tracking.
 - [x] Run the release gates in order: package tests, package verify, convention bundle audit, alignment audit, interrogation audit, and npm registry checks.
 - [x] Check npm auth and skip `./publish.sh --dry-run patch` because `npm whoami --registry https://registry.npmjs.org/` currently fails with npm `E401`.
-- [ ] Commit and push metadata cleanup before any real publish attempt.
+- [x] Commit and push metadata cleanup before any real publish attempt.
 
 ## Acceptance Criteria
 
@@ -29,6 +29,7 @@ Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by 
 - Verification passed: `npm --workspace packages/skillpacks run test:node` (112/112), `npm run skillpacks:verify` (385 skills, 41 packs, package boundary passed), `node scripts/skill-convention-bundle-audit.mjs` (385 active skills, 368 tracked bundles), `node scripts/audit-alignment-pages.mjs` (53 active pages), and `node scripts/audit-interrogation-pages.mjs` (0 active pages).
 - npm registry checks passed: `skillpacks` latest is `0.1.8`, `@glexcorp/gskp` latest is `0.1.8`, and both `skillpacks@0.1.9` and `@glexcorp/gskp@0.1.9` return npm `E404`.
 - Dry-run publish was not run because `npm whoami --registry https://registry.npmjs.org/` returns npm `E401 Unauthorized`.
+- Committed and pushed metadata cleanup to `master` as `e072d0f7` (`Document skillpacks 0.1.9 publish readiness`).
 - Remaining human action before dry-run publish: authenticate with npm using `npm login --registry https://registry.npmjs.org/` as `glexcorp` or another explicitly authorized publisher, then confirm with `npm whoami --registry https://registry.npmjs.org/`.
 
 # Previous Implementation - Clarify Chunked Skill Progress
