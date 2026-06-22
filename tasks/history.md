@@ -8,6 +8,13 @@
 - Confirmed release readiness is still blocked by npm auth: `npm whoami --registry https://registry.npmjs.org/` returns npm `E401 Unauthorized`.
 - Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260622-001159-wrap-up.md`.
 
+## 2026-06-22 - skillpacks 0.1.9 npm publish
+
+- User completed the npm publish for both package names.
+- npm metadata confirms `skillpacks@0.1.9` and `@glexcorp/gskp@0.1.9` are both published with latest dist-tag parity.
+- Post-publish smoke verification passed for `@glexcorp/gskp@0.1.9` via `npx @glexcorp/gskp@0.1.9 list` and for `skillpacks@0.1.9` via clean temp install and `./node_modules/.bin/skillpacks list`.
+- Source release state preserves the publish-produced `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` version bump to `0.1.9`.
+
 ## 2026-06-22 - Clarify chunked product-design progress handoffs
 
 - Added a required Progress Handoff Block to the canonical design-tree loop convention and regenerated all 18 `DESIGN-TREE-LOOP.md` bundles so chunked setup, per-unit, and assemble stops show completed count, durable cursor, current phase, next phase, repeated-command rationale, fresh-session guidance, and exact next command.

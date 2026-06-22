@@ -33,7 +33,9 @@ Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by 
 - Follow-up npm cache ownership verification found `/Users/georgele/.npm` owned by `georgele:staff` with no ownership drift; no repair was run.
 - Follow-up cache/package verification passed: `npm cache verify` and `npm pack ./packages/skillpacks/build --dry-run --json --silent`.
 - Follow-up npm auth check still fails with npm `E401 Unauthorized`, so the remaining blocker is registry authentication, not cache ownership.
-- Remaining human action before dry-run publish: authenticate with npm using `npm login --registry https://registry.npmjs.org/` as `glexcorp` or another explicitly authorized publisher, then confirm with `npm whoami --registry https://registry.npmjs.org/`.
+- User completed the npm publish. Post-publish verification confirms `skillpacks@0.1.9` and `@glexcorp/gskp@0.1.9` are both published as latest with package-version parity.
+- Published-package smoke checks passed for `@glexcorp/gskp@0.1.9` via `npx @glexcorp/gskp@0.1.9 list` and for `skillpacks@0.1.9` via clean temp install and `./node_modules/.bin/skillpacks list`.
+- Source release state is now updated to `0.1.9` in `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
 
 # Previous Implementation - Clarify Chunked Skill Progress
 

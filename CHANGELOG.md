@@ -8,7 +8,7 @@ Keep this file updated before every npm package publish.
 
 ## [0.1.9] - 2026-06-22
 
-Prepared for both `skillpacks` and `@glexcorp/gskp`; pending npm authentication and publish.
+Published for both `skillpacks` and `@glexcorp/gskp`.
 
 ### Added
 
@@ -26,7 +26,8 @@ Prepared for both `skillpacks` and `@glexcorp/gskp`; pending npm authentication 
 
 - Release gates passed before publish: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `node scripts/skill-convention-bundle-audit.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/audit-interrogation-pages.mjs`.
 - npm registry checks showed both package `latest` dist-tags still at `0.1.8`, and `skillpacks@0.1.9` / `@glexcorp/gskp@0.1.9` unavailable before publish.
-- Publish dry run is blocked until an authorized npm account logs in with `npm login --registry https://registry.npmjs.org/` and `npm whoami --registry https://registry.npmjs.org/` succeeds.
+- Post-publish npm metadata confirms both `skillpacks` and `@glexcorp/gskp` latest versions are `0.1.9`.
+- Published-package smoke checks passed for `@glexcorp/gskp@0.1.9` via `npx @glexcorp/gskp@0.1.9 list` and for `skillpacks@0.1.9` via clean temp install and `./node_modules/.bin/skillpacks list`.
 
 ## [0.1.8] - 2026-06-18
 
