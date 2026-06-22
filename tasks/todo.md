@@ -1,3 +1,35 @@
+# Current Implementation - Fix Alignment-Page Review Routing
+
+## Goal
+
+Fix product-design routing contracts and repair Alignmeant's invalid alignment-page-review prototype state.
+
+## Plan
+
+- [x] Inspect relevant skill contracts, schema, task docs, and repo states.
+- [x] Archive current skill versions before contract edits.
+- [x] Patch `ux-variations` and `prototype` contracts and changelogs.
+- [x] Repair Alignmeant active artifacts with archive preservation.
+- [x] Run requested verification gates and targeted routing checks.
+- [ ] Commit and push intended tracked changes in both repos.
+
+## Acceptance Criteria
+
+- `$ux-variations` default mode routes to `$ui-interview [specific-ux-variation]`, not pre-UI prototype buildout.
+- `$prototype` rejects build-plan items that only name UX variation IDs without UI experiment/review linkage.
+- Alignmeant active state has no prototype build-plan or prototype hub routing for alignment-page-review.
+- Invalid Alignmeant prototypes remain preserved under archive only.
+- The next active route is `$ui-interview uxv-alignment-page-review-trust-first-review-page`.
+
+## Review
+
+- Archived and bumped mirrored `ux-variations` contracts to `v0.27`; default progression mode now routes approved branches to `$ui-interview [specific-ux-variation]` before prototype build-plan synthesis.
+- Archived and bumped mirrored `prototype` contracts to `v0.19`; prototype now gates buildable items on `ui_experiment_id` or equivalent UI review linkage.
+- Updated the installed Codex `ux-variations` copy under `.codex/skills/ux-variations` after archiving its `v0.26` snapshot.
+- Repaired Alignmeant active routing by archiving invalid prototype artifacts under `docs/history/archive/2026-06-22/131528/`, removing active prototype files, and routing next to `$ui-interview uxv-alignment-page-review-trust-first-review-page`.
+- Verification passed: targeted `rg` route checks, `find design/alignmeant -name 'ui-*.md'` empty, active `prototypes/` empty, `scripts/skill-archive-audit.sh`, `scripts/skill-mirror-parity-audit.sh`, `npm run skillpacks:build`, and `git diff --check` in both repos.
+- Alignmeant alignment audit was run with `node /Users/georgele/projects/tools/agentic-skills/scripts/audit-alignment-pages.mjs --root /Users/georgele/projects/tools/dev/alignmeant`; it still fails on pre-existing project-wide alignment drift in older confirmed pages and one legacy page missing TTS/metadata.
+
 # Current Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
 
 ## Goal

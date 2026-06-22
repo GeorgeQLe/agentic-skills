@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.19 - 2026-06-22
+
+- Added a hard gate requiring prototype build-plan items to reference a UI experiment/review branch, matching the `ui_experiment_id` requirement in `design/flow-tree.schema.json`.
+- Clarified that build plans with only UX variation IDs halt before building unless the user explicitly records an ad hoc bypass.
+
 ## v0.18 - 2026-06-22
 
 - Updated post-UAT prototype handoff routing to `/consolidate-prototypes`.

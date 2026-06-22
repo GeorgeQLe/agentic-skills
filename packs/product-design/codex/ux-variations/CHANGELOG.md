@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.27 - 2026-06-22
+
+- Tightened default progression-mode routing so approved UX variation branches route to `$ui-interview [specific-ux-variation]` before prototype build-plan synthesis.
+- Clarified that route experiments in default mode are proposed validation targets only until approved UI experiment branches exist.
+- Limited pre-UI prototype buildout to `--layout-mode` or explicit ad hoc user bypasses recorded in the variation plan.
+
 ## v0.26 - 2026-06-22
 
 - Updated downstream design-tree route references to use `$consolidate-prototypes` as the primary post-UAT consolidation skill.

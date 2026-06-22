@@ -1,3 +1,28 @@
+## Current Implementation - Fix Alignment-Page Review Routing
+
+### Goal
+
+Correct product-design routing so default `$ux-variations` cannot skip `$ui-interview`, and repair Alignmeant's active alignment-page-review state so invalid prototypes are archived and active routing returns to the first UI interview branch.
+
+### Plan
+
+1. Record this implementation in `tasks/roadmap.md` and `tasks/todo.md`.
+2. Archive and bump `ux-variations` from `v0.26` to `v0.27` and `prototype` from `v0.18` to `v0.19` across product-design Codex/Claude sources and installed Codex copies where writable.
+3. Tighten `ux-variations` default progression mode so route experiments are validation targets, not prototype buildout instructions, until an approved `$ui-interview` branch exists.
+4. Tighten `prototype` so build-plan items must carry UI experiment/review linkage, matching `design/flow-tree.schema.json`.
+5. Archive invalid Alignmeant active prototype artifacts before removing active build-plan/prototype references.
+6. Update Alignmeant flow-tree and UX variation artifacts to route to `$ui-interview uxv-alignment-page-review-trust-first-review-page`.
+7. Run archive/parity/build checks in `agentic-skills` and targeted routing checks in `alignmeant`.
+8. Commit and push intended changes in each mutated repo.
+
+### Acceptance Criteria
+
+- Default UX variation progression routes to `$ui-interview [specific-ux-variation]` before build-plan synthesis or `$prototype`.
+- Pre-UI prototype buildout is allowed only for layout-mode or explicit ad hoc bypass recorded as an override.
+- Prototype build-plan items without `ui_experiment_id` or equivalent UI review linkage halt before building.
+- Alignmeant keeps invalid prototype artifacts only under `docs/history/archive/**`.
+- Alignmeant active routing points to `$ui-interview uxv-alignment-page-review-trust-first-review-page`.
+
 ## Current Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
 
 ### Goal

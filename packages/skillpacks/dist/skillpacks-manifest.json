@@ -2,9 +2,9 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.10"
+    "version": "0.1.11"
   },
-  "source_fingerprint": "bf64df134bbe2447b610ecea5a3f13ce93f981c91752b8ec991cd8688626faf4",
+  "source_fingerprint": "9c987e8d34f545b63ee0118656a92c7efb42ce4f01d6d323163d9f81456d6fcc",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7725,14 +7725,14 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.18",
+      "version": "v0.19",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
       ],
       "path": "packs/product-design/claude/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "730873abbe31e942d0ecbdc6e51d4a5f683ad7f64d696adadca6bc1134fb8c6c",
+      "content_sha256": "0ef3f7c79feaf3ea4d684c64842254d3f1f05ab45d9c85494a9504ebdc68ae9b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7744,6 +7744,7 @@
         "v0.15",
         "v0.16",
         "v0.17",
+        "v0.18",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7904,7 +7905,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7912,7 +7913,7 @@
       ],
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "20dba8caca6edd5f6c621d7bebc7439ea17110e5dce09428d9e7c65055ea2013",
+      "content_sha256": "7372c9fc94c40f5c85999abe56791a55d6ffb616df3bc2104f4c5233f553bea5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7933,6 +7934,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8092,14 +8094,14 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.18",
+      "version": "v0.19",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
       ],
       "path": "packs/product-design/codex/prototype/SKILL.md",
       "installable": true,
-      "content_sha256": "79c79369a4bc5e0f70388ee3184d348bd005a170ce4f81d89c7781b218167660",
+      "content_sha256": "e2c954aa46b7186de617f8277e01defa73342f5d44cb964c394224022d8fd98b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8111,6 +8113,7 @@
         "v0.15",
         "v0.16",
         "v0.17",
+        "v0.18",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -8271,7 +8274,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8279,7 +8282,7 @@
       ],
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "2859df69d8d51d96f4fad88fdc36c015c33a1d981fc67a284f10e080a82fcb97",
+      "content_sha256": "9ddcd03ff2eb7c9f8ab796c3c96b466a5eaf03884cf6e45543610c29ed978244",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8300,6 +8303,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
