@@ -1,3 +1,37 @@
+# Current Implementation - Clarify Chunked Skill Progress
+
+## Goal
+
+Make product-design chunked self-routing stops visibly explain progress and continuation, while fixing the active Codex `state-model` path contract to match the canonical pack source layout.
+
+## Plan
+
+- [x] Update the canonical design-tree loop convention with a required Progress Handoff Block for chunked setup, per-unit, and assemble stops.
+- [x] Regenerate `DESIGN-TREE-LOOP.md` bundles from the convention.
+- [x] Archive and bump mirrored `state-model` skills from `v0.3` to `v0.4`; fix Codex malformed paths and add explicit progress-handoff requirements.
+- [x] Archive and bump mirrored `ux-variations` skills from `v0.23` to `v0.24`; add explicit progress-handoff requirements.
+- [x] Add focused Layer 1 coverage for malformed Codex `state-model` paths and missing chunked progress copy.
+- [x] Run malformed-path, progress-handoff, convention, and focused test checks; fix any failures.
+- [x] Record review notes, commit, and push intended changes on `master`.
+
+## Acceptance Criteria
+
+- Active Codex and Claude pack skills require a user-facing Progress Handoff Block at every chunked stop.
+- The handoff copy explains completed count, durable cursor, completed/current phase, next phase, why the same command is repeated, fresh-session guidance, and exact next command.
+- Codex `state-model` active paths use `design/{slug}/_working/state-model-{topic}-brief.md`, `design/{slug}/state-model-{topic}/{framework}.md`, and `alignment/state-model-{topic}.html`.
+- Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
+- Regression coverage fails on the malformed `$state-model` paths and missing progress-handoff language.
+
+## Review
+
+- Added a required Progress Handoff Block to `docs/design-tree-loop-convention.md`; regenerated all `DESIGN-TREE-LOOP.md` bundles so every design-tree skill receives the convention update.
+- Archived and bumped mirrored `state-model` skills to `v0.4`; Codex path literals now use slash-delimited active paths for the context brief, framework intermediates, and alignment page.
+- Archived and bumped mirrored `ux-variations` skills to `v0.24`; chunked setup, variation, and assemble stops now require the explicit progress block and repeated-command explanation.
+- Added Layer 1 regression coverage in `tests/layer1/product-design-flow-tree.test.ts` for active `state-model` paths and progress handoff copy.
+- Regenerated Skills Showcase generated data and package staging metadata required by the skill version changes.
+- Verification passed: active malformed-path guard with archive exclusion; progress-handoff guard; `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; corrected focused Vitest command (`pnpm --dir tests exec vitest run layer1/product-design-flow-tree.test.ts layer1/skill-alignment-routing-audit.test.ts layer1/frontmatter.test.ts`) with 1105 passing tests; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `npm run skillpacks:build`; `npm run skillpacks:verify`; `git diff --check`; `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `scripts/base-skill-version-parity-audit.sh`.
+- The original malformed-path guard over all `packs/product-design` still reports historical archive hits, including the newly archived Codex `state-model` v0.3 snapshot. Active-source validation uses `--glob '!**/archive/**'`, matching the archive-retention assumption.
+
 # Latest Implementation - Skills Library + Browse Revamp Complete
 
 ## Status

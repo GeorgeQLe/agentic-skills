@@ -1,5 +1,9 @@
 # state-model changelog (claude)
 
+## v0.4 - 2026-06-22
+
+- Added the required chunked Progress Handoff Block for setup, per-framework, and synthesis-ready stops so repeated `/state-model` invocations visibly explain completed framework count, durable cursor, current phase, next phase, fresh-session guidance, and the exact command.
+
 ## v0.3 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

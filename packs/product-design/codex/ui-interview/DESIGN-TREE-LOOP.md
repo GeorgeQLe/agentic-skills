@@ -272,6 +272,29 @@ can advance without knowing internal IDs. Reuse the existing payload shape:
   command with `{slug}` / `{topic}` / branch filled to literal values (claude `/skill …`,
   codex `$skill …`).
 
+For any self-routing stop inside **intra-skill substep chunking** (setup stop, per-unit stop,
+or assemble handoff), `## Next Work` must begin with a visible **Progress Handoff Block** before
+the prose handoff. Use this structure:
+
+```markdown
+**Progress Handoff — <skill/topic/branch label>**
+- Completed: <completed unit count> / <total unit count>.
+- Durable cursor: <exact brief path and intermediate directory checked>.
+- Current phase complete: <setup | unit name | assemble prep> is complete.
+- Next phase: <plain-English description of the next unit or assemble+approve work>.
+- Why repeat this command: the repeated command is intentional; the skill cold-starts, reads the durable cursor, and advances the next pending unit.
+- Session guidance: fresh session recommended for heavy next work; continuing in this session is allowed only if enough context remains.
+- Exact next command: `<resolved command with literal topic/branch>`.
+```
+
+The block is required even when the next command is the same as the command that produced the
+handoff. The first line is the progress label; `Completed`, `Durable cursor`, `Current phase
+complete`, `Next phase`, `Why repeat this command`, `Session guidance`, and `Exact next
+command` are required fields. The next phase must be in plain English, not only an internal
+`{unit-id}` / `{framework}` / `{variation-id}`. The durable cursor line must state that the
+brief path and intermediate directory were checked, because those filesystem facts are the
+only progress ledger.
+
 Continue-vs-stop framing follows the routing rules: when the stop carries heavy build context,
 offer stop/clear-context-versus-continue; when already cold, default to continue-now with the
 exact next command. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff

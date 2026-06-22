@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-22 - Clarify chunked product-design progress handoffs
+
+- Added a required Progress Handoff Block to the canonical design-tree loop convention and regenerated all 18 `DESIGN-TREE-LOOP.md` bundles so chunked setup, per-unit, and assemble stops show completed count, durable cursor, current phase, next phase, repeated-command rationale, fresh-session guidance, and exact next command.
+- Archived and bumped mirrored `state-model` skills from `v0.3` to `v0.4`; fixed active Codex malformed path literals to `design/{slug}/_working/state-model-{topic}-brief.md`, `design/{slug}/state-model-{topic}/{framework}.md`, and `alignment/state-model-{topic}.html`.
+- Archived and bumped mirrored `ux-variations` skills from `v0.23` to `v0.24`; added explicit progress-handoff requirements for setup, per-variation, and assemble-ready stops.
+- Added focused Layer 1 regression coverage for active `state-model` path shape and chunked progress copy.
+- Regenerated Skills Showcase data and package staging metadata for the skill version changes.
+- Verified: active malformed-path guard clean with `--glob '!**/archive/**'`; progress-handoff guard; design-tree generator check; convention bundle audit; focused Layer 1 Vitest 1105/1105; Skills Showcase data validation; skillpacks build and package verification; diff check; strict archive audit; mirror parity audit; base version parity audit.
+- Manifest: `tasks/ship-manifest-2026-06-22-chunked-skill-progress.md`.
+
 ## 2026-06-20 — Close & compound the human-governed self-improvement loop
 
 - Implemented the two-workstream plan to close the benchmark loop and add persistent session memory. Human-approved throughout — new code only adds **detection** and **recall**, never autonomous action (every routing step stays advisory `Recommended next skill:`). Shipped in commit `5082c09b`.

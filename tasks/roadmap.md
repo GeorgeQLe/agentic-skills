@@ -1,3 +1,27 @@
+## Current Implementation - Clarify Chunked Skill Progress
+
+### Goal
+
+Make product-design chunked self-routing stops visibly explain progress and continuation, while fixing the active Codex `state-model` path contract to match the canonical pack source layout.
+
+### Plan
+
+1. Update the canonical design-tree loop convention with a required Progress Handoff Block for chunked setup, per-unit, and assemble stops.
+2. Regenerate `DESIGN-TREE-LOOP.md` bundles from the convention.
+3. Archive and bump mirrored `state-model` skills from `v0.3` to `v0.4`; fix Codex malformed paths and add explicit progress-handoff requirements.
+4. Archive and bump mirrored `ux-variations` skills from `v0.23` to `v0.24`; add explicit progress-handoff requirements.
+5. Add focused Layer 1 coverage for malformed Codex `state-model` paths and missing chunked progress copy.
+6. Run malformed-path, progress-handoff, convention, and focused test checks; fix any failures.
+7. Record review notes, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Active Codex and Claude pack skills require a user-facing Progress Handoff Block at every chunked stop.
+- The handoff copy explains completed count, durable cursor, completed/current phase, next phase, why the same command is repeated, fresh-session guidance, and exact next command.
+- Codex `state-model` active paths use `design/{slug}/_working/state-model-{topic}-brief.md`, `design/{slug}/state-model-{topic}/{framework}.md`, and `alignment/state-model-{topic}.html`.
+- Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
+- Regression coverage fails on the malformed `$state-model` paths and missing progress-handoff language.
+
 ## Current Research - Managed Skill Library SaaS Prompt
 
 ### Goal

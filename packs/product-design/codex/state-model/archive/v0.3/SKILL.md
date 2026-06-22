@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.4
+version: v0.3
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -39,7 +39,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 - **Hard**: an approved `design/flow-tree-{topic}.yaml` (or `design/{slug}/flow-tree-{topic}.yaml`) and its companion `design/user-flow-{topic}.md` user-flow doc must exist. If they do not, stop and recommend `$user-flow-map [topic]` first — the logical model anchors to named flow nodes, so there must be a flow to anchor to.
 - **Soft**: read these if they exist:
   - `research/positioning.md`, `research/journey-map.md`, `research/icp.md` — domain language and lifecycle context.
-  - Existing `design/ux-variations-*.md`, `design/ui-requirements-*.md` — only as supplementary domain evidence; the model must not encode any single UI presentation.
+  - Existing `design$ux-variations-*.md`, `design/ui-requirements-*.md` — only as supplementary domain evidence; the model must not encode any single UI presentation.
   - `research/glossary.md` (or scoped) — existing ubiquitous-language terms.
 
 ## Execution Model — Prototype Session Loop (intra-skill substep chunking)
@@ -51,8 +51,8 @@ Three-tier state, exactly as the convention defines it:
 | Tier | Store | Role |
 |---|---|---|
 | Machine cursor | `design/model-tree-{topic}.yaml` (committed, **post-approval** synthesized manifest) | Authoritative model state. Written **only** at synthesis, never as a live run-manifest. |
-| Shared context brief | `design/{slug}/_working/state-model-{topic}-brief.md` (flat: `design/_working/...`) | **Pure context, no step list**: confirmed scope/assumptions, the flow nodes in play, the planned framework set + run order with each framework's thesis, ubiquitous-language seeds, carried cross-framework decisions. |
-| Per-framework intermediates | `design/{slug}/state-model-{topic}/{framework}.md` (flat: `design/state-model-{topic}/...`) | One framework's logical findings each. **Their existence IS the cursor** — the next pending framework is the first planned framework whose intermediate file does not yet exist. |
+| Shared context brief | `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working/...`) | **Pure context, no step list**: confirmed scope/assumptions, the flow nodes in play, the planned framework set + run order with each framework's thesis, ubiquitous-language seeds, carried cross-framework decisions. |
+| Per-framework intermediates | `design/{slug}$state-model-{topic}/{framework}.md` (flat: `design$state-model-{topic}/...`) | One framework's logical findings each. **Their existence IS the cursor** — the next pending framework is the first planned framework whose intermediate file does not yet exist. |
 
 `pending = planned-frameworks − existing-intermediates`. The brief carries no status field and is never a rival ledger. There is **no `design/flow-tree.schema.json` change** for the cursor and **no `tasks/todo.md` use**.
 
@@ -84,21 +84,6 @@ setup session       §0 scope → §1 run-order detection → §2 load flow cont
 **Fold for small domains.** When run-order detection plans **fewer than 3** frameworks (or `--no-chunk` is passed), do **not** spend fresh-context round-trips per framework: run setup, all framework passes, and synthesis straight through in one session, writing no brief and no intermediates, exactly as a single pass through §0–§4. Chunk only when the planned framework count is ≥ 3.
 
 **Approval: exactly one final gate.** The framework sessions are pre-approval `_working/`-band drafting — they write intermediates, not canonical artifacts, so no checkpoint inside them authorizes a canonical write. The Domain Modeling Scope Checkpoint (setup) and any per-framework coverage checkpoints are confirmations, not approvals. The single binding alignment-page `review → confirmed` gate is in the assemble+approve session and approves the whole model at once.
-
-### Required Progress Handoff Block
-
-Every chunked stop (setup, each framework, and the synthesis-ready handoff) must start `## Next Work` with the Progress Handoff Block from `DESIGN-TREE-LOOP.md`. The block must include:
-
-- `**Progress Handoff — state-model/<topic-or-branch>**` as the first line.
-- `Completed: <completed framework count> / <planned framework count>.`
-- `Durable cursor: checked design/{slug}/_working/state-model-{topic}-brief.md and design/{slug}/state-model-{topic}/.`
-- `Current phase complete: <setup | framework name | synthesis preparation> is complete.`
-- `Next phase: <plain-English framework purpose or assemble+approve work>.`
-- `Why repeat this command: the repeated command is intentional; $state-model cold-starts, reads the durable cursor, and advances the next pending framework or synthesis.`
-- `Session guidance: fresh session recommended for heavy next work; continuing in this session is allowed only if enough context remains.`
-- `Exact next command: $state-model <literal topic-or-branch>.`
-
-Use the same `$state-model` command for setup → first framework, framework → next framework, and final framework → synthesis; explain that the repeated command is intentional because filesystem existence is the cursor.
 
 ---
 
@@ -169,13 +154,13 @@ Present a **Domain Modeling Scope Checkpoint** inline as the final message text 
 - Confirmed assumptions about domain boundaries and explicit non-goals (especially the logical-only boundary — no storage/endpoints/auth/migrations).
 - Candidate ubiquitous-language seeds.
 
-Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working/state-model-{topic}-brief.md` (flat: `design/_working/state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), explain why the same `$state-model` command is repeated, and give the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). (Unless folding per the Execution Model, in which case continue directly to §3.)
+Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working$state-model-{topic}-brief.md` (flat: `design/_working$state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), and give the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). (Unless folding per the Execution Model, in which case continue directly to §3.)
 
 ### 3. Run Next Pending Framework (framework session)
 
-Each framework session resolves its work purely from the filesystem: read the brief, scan which `{framework}.md` intermediates already exist under `design/{slug}/state-model-{topic}/`, and run the **first planned framework whose intermediate does not yet exist**.
+Each framework session resolves its work purely from the filesystem: read the brief, scan which `{framework}.md` intermediates already exist under `design/{slug}$state-model-{topic}/`, and run the **first planned framework whose intermediate does not yet exist**.
 
-Run that one framework inline against the flow context in the brief, producing **logical** findings only, and write them to `design/{slug}/state-model-{topic}/{framework}.md`. Each intermediate must, where the framework applies:
+Run that one framework inline against the flow context in the brief, producing **logical** findings only, and write them to `design/{slug}$state-model-{topic}/{framework}.md`. Each intermediate must, where the framework applies:
 
 - Name the model elements it introduces or refines (entities/value-objects/aggregates, states/transitions, events, commands, read models, policies, contracts).
 - Record each element's `flow_bindings` — which flow node(s) it reads, writes, triggers, displays, or transitions — using flow-tree node references.
@@ -183,7 +168,7 @@ Run that one framework inline against the flow context in the brief, producing *
 - Flag any term that belongs in the ubiquitous-language glossary.
 - Keep strictly to logical concerns; defer every physical concern to `$spec-interview` with an explicit note rather than inventing storage/endpoint/auth detail.
 
-Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), explains why the same `$state-model` command is repeated, and gives the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
+Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), and gives the **exact** resolved next tool or command call with `{topic}` filled in, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
 
 ### 4. Synthesis + Assemble & Approve (assemble session)
 
@@ -194,7 +179,7 @@ Assemble the per-framework intermediates plus the brief into:
 1. **Canonical doc** `design/domain-model-{topic}.md` (flat) or `design/{slug}/domain-model-{topic}.md`, with sections: ubiquitous-language glossary, entities (with kind, attributes, relationships), state machines (states, transitions, `maps_to_ui_state`), events, commands, read models, policies, logical contracts, an evidence/flow-binding matrix, assumptions/confidence, and explicit physical-concern deferrals to `$spec-interview`.
 2. **Synthesized manifest** `design/model-tree-{topic}.yaml` (flat) or `design/{slug}/model-tree-{topic}.yaml`, per the `design/model-tree.schema.json` contract and the shape below.
 
-Build the **one** alignment page (`alignment/state-model-{topic}.html`) rendering the full proposed domain model, the flow-binding matrix, the state-machine/ERD diagrams (visual tier), assumptions/confidence, the proposed file changes, the glossary-additions gate, and the approval gate. Stop for compiled YAML.
+Build the **one** alignment page (`alignment$state-model-{topic}.html`) rendering the full proposed domain model, the flow-binding matrix, the state-machine/ERD diagrams (visual tier), assumptions/confidence, the proposed file changes, the glossary-additions gate, and the approval gate. Stop for compiled YAML.
 
 On approval (compiled YAML with no unresolved negative feedback):
 
@@ -217,8 +202,8 @@ Do not emit cross-skill routing before synthesis is approved and written. While 
 ## Output
 
 - Setup session: the Domain Modeling Scope Checkpoint (inline) + the shared context brief.
-- Framework session: one `design/{slug}/state-model-{topic}/{framework}.md` intermediate per planned framework.
-- Assemble session: `design/domain-model-{topic}.md`, `design/model-tree-{topic}.yaml`, the flow-tree `model_tree_ref` back-pointer, and the `alignment/state-model-{topic}.html` review page.
+- Framework session: one `design/{slug}$state-model-{topic}/{framework}.md` intermediate per planned framework.
+- Assemble session: `design/domain-model-{topic}.md`, `design/model-tree-{topic}.yaml`, the flow-tree `model_tree_ref` back-pointer, and the `alignment$state-model-{topic}.html` review page.
 
 ### `model-tree-{topic}.yaml` shape
 

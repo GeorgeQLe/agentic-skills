@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.24 - 2026-06-22
+
+- Added the required chunked Progress Handoff Block for setup, per-variation, and assemble-ready stops so repeated `/ux-variations` invocations visibly explain completed variation count, durable cursor, current phase, next phase, fresh-session guidance, and the exact command.
+
 ## v0.23 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

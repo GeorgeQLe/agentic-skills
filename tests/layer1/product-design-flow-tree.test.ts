@@ -145,6 +145,47 @@ describe("product-design flow tree artifact boundaries", () => {
     }
   });
 
+  it("keeps state-model active paths slash-delimited and aligned across mirrors", () => {
+    const codexStateModel = read("packs/product-design/codex/state-model/SKILL.md");
+
+    expect(codexStateModel).toContain("design/{slug}/_working/state-model-{topic}-brief.md");
+    expect(codexStateModel).toContain("design/{slug}/state-model-{topic}/{framework}.md");
+    expect(codexStateModel).toContain("alignment/state-model-{topic}.html");
+    expect(codexStateModel).not.toMatch(
+      /design\/\{slug\}\$state-model|alignment\$state-model|_working\$state-model|design\$state-model/,
+    );
+
+    for (const mirror of mirrors) {
+      const stateModel = read(`packs/product-design/${mirror}/state-model/SKILL.md`);
+      expect(stateModel).toContain("design/{slug}/_working/state-model-{topic}-brief.md");
+      expect(stateModel).toContain("design/{slug}/state-model-{topic}/{framework}.md");
+      expect(stateModel).toContain("alignment/state-model-{topic}.html");
+    }
+  });
+
+  it("requires progress handoff blocks for chunked product-design self-routing stops", () => {
+    for (const mirror of mirrors) {
+      for (const skill of ["state-model", "ux-variations"] as const) {
+        const content = read(`packs/product-design/${mirror}/${skill}/SKILL.md`);
+
+        expect(content).toContain("Required Progress Handoff Block");
+        expect(content).toContain("Progress Handoff");
+        expect(content).toMatch(/Completed: <completed (framework|variation) count> \/ <(planned framework|approved variation) count>\./);
+        expect(content).toContain("Durable cursor: checked");
+        expect(content).toContain("Current phase complete:");
+        expect(content).toContain("Next phase:");
+        expect(content).toContain("the repeated command is intentional");
+        expect(content).toContain("fresh session recommended");
+        expect(content).toContain("Exact next command:");
+      }
+    }
+
+    const convention = read("docs/design-tree-loop-convention.md");
+    expect(convention).toContain("Progress Handoff Block");
+    expect(convention).toContain("The block is required even when the next command is the same");
+    expect(convention).toContain("Durable cursor");
+  });
+
   it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {
     const expectedRoute =
       "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
