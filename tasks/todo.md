@@ -31,7 +31,7 @@ Tighten product-design contracts so `state-model` and `ux-variations` may use Ma
 - Updated the older design-loop audit note so it no longer says chunked assembly initializes flow-tree entries or writes a single canonical doc before review.
 - Added Layer 1 regression coverage for convention wording, active `state-model`/`ux-variations` pre-approval wording, and approval-gated canonical writes.
 - Regenerated Skills Showcase assets and `packages/skillpacks/dist/skillpacks-manifest.json` from the staged index so generated metadata reports `state-model v0.5` and `ux-variations v0.25`.
-- Verification passed: `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; `pnpm --dir tests exec vitest run layer1/product-design-flow-tree.test.ts layer1/skill-alignment-routing-audit.test.ts layer1/frontmatter.test.ts` (1106 passing); `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `npm run skillpacks:build`; `npm run skillpacks:verify`; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Verification passed: `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; `pnpm --dir tests exec vitest run layer1/product-design-flow-tree.test.ts layer1/skill-alignment-routing-audit.test.ts layer1/frontmatter.test.ts` (1106 passing); `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `npm run skillpacks:build`; `npm run skillpacks:verify`; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
 
 # Previous Implementation - Clarify Chunked Skill Progress
 

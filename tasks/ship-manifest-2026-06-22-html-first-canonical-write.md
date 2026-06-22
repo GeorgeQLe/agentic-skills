@@ -46,6 +46,7 @@ Tighten `state-model` and `ux-variations` so Markdown intermediates remain allow
 - `npm run skillpacks:build`
 - `npm run skillpacks:verify`
 - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+- `pnpm --dir apps/skills-showcase build`
 - `git diff --check`
 
 ## Skipped Tests
@@ -61,6 +62,7 @@ Tighten `state-model` and `ux-variations` so Markdown intermediates remain allow
 ## Residual Risk
 
 - The stricter contract is wording/test enforced, not schema enforced. That is appropriate because the request clarifies timing around existing gates without adding a new schema or alignment gate.
+- Deploy is push-triggered by Vercel path gating because generated Skills Showcase public assets changed; no manual Vercel action was run from this session.
 
 ## Rollback Note
 

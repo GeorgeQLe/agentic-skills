@@ -14606,7 +14606,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Patched both Codex and Claude `ux-variations` mirrors (`v0.24 -> v0.25`) so chunked assembly builds proposed whole-set review content first; final variation plan, interview log, flow-tree `ux_variations[]` updates, and archive cleanup are approval-gated.
 - Regenerated `DESIGN-TREE-LOOP.md` bundles, Skills Showcase generated assets, and `packages/skillpacks/dist/skillpacks-manifest.json`; generated metadata now reports `state-model v0.5` and `ux-variations v0.25`.
 - Added Layer 1 regression coverage for the HTML-first rule and approval-gated canonical writes.
-- Verified: design-tree bundle check, convention bundle audit, focused Vitest 1106/1106, strict archive audit, mirror parity audit, `npm run skillpacks:build`, `npm run skillpacks:verify`, showcase generated-data validation, and `git diff --check`.
+- Verified: design-tree bundle check, convention bundle audit, focused Vitest 1106/1106, strict archive audit, mirror parity audit, `npm run skillpacks:build`, `npm run skillpacks:verify`, showcase generated-data validation, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
 
 ## 2026-06-20 — Unified-experience Phase 5: Tailwind-to-root + CSS unify
 
