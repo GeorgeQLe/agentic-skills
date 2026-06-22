@@ -745,7 +745,9 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['refresh']);
 
-    assert.match(stdout, /Updated \.claude\/skills\/codebase-status v0\.0 -> v0\.10/);
+    const currentVersion = readFileSync(join(repoRoot, 'base/claude/codebase-status/SKILL.md'), 'utf8')
+      .match(/^version:\s*(\S+)/m)[1];
+    assert.match(stdout, new RegExp(`Updated \\.claude\\/skills\\/codebase-status v0\\.0 -> ${currentVersion}`));
     assert.match(stdout, /Installed \.codex\/skills\/pack/);
     assert.match(stdout, /Refreshed project skills to skillpacks@/);
     assert.notEqual(

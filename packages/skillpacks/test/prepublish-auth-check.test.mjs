@@ -68,7 +68,7 @@ function runPreflight(extraEnv = {}, options = {}) {
     version: JSON.parse(readFileSync(path.join(packageRoot, "package.json"), "utf8")).version
   };
   const mockPath = makeMockNpm(stage.version);
-  return spawnSync(process.execPath, [stage.script], {
+  const result = spawnSync(process.execPath, [stage.script], {
     cwd: stage.root,
     encoding: "utf8",
     env: {
@@ -77,6 +77,8 @@ function runPreflight(extraEnv = {}, options = {}) {
       ...extraEnv
     }
   });
+  result.packageVersion = stage.version;
+  return result;
 }
 
 test("runs npm auth checks for publish dry-runs", () => {
@@ -89,9 +91,7 @@ test("runs npm auth checks for publish dry-runs", () => {
 
 test("passes for the expected npm maintainer when the version is unpublished", () => {
   const result = runPreflight();
-  const packageVersion = JSON.parse(
-    readFileSync(path.join(packageRoot, "package.json"), "utf8")
-  ).version;
+  const packageVersion = result.packageVersion;
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stderr, new RegExp(`preflight passed for skillpacks@${packageVersion.replaceAll(".", "\\.")} as glexcorp`));
@@ -114,9 +114,7 @@ test("fails when authenticated as the wrong npm user", () => {
 
 test("fails before publish if the package version already exists", () => {
   const result = runPreflight({ NPM_MOCK_VERSION_EXISTS: "1" });
-  const packageVersion = JSON.parse(
-    readFileSync(path.join(packageRoot, "package.json"), "utf8")
-  ).version;
+  const packageVersion = result.packageVersion;
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, new RegExp(`skillpacks@${packageVersion.replaceAll(".", "\\.")} is already published`));
@@ -130,9 +128,7 @@ test("passes for scoped alias maintainer output during dry-run preflight", () =>
     },
     { packageName: "@glexcorp/gskp" }
   );
-  const packageVersion = JSON.parse(
-    readFileSync(path.join(packageRoot, "package.json"), "utf8")
-  ).version;
+  const packageVersion = result.packageVersion;
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stderr, new RegExp(`preflight passed for @glexcorp/gskp@${packageVersion.replaceAll(".", "\\.")} as glexcorp \\(dry run\\)`));
@@ -143,9 +139,7 @@ test("allows already-published versions only when explicitly requested", () => {
     NPM_MOCK_VERSION_EXISTS: "1",
     SKILLPACKS_NPM_ALLOW_PUBLISHED: "true"
   });
-  const packageVersion = JSON.parse(
-    readFileSync(path.join(packageRoot, "package.json"), "utf8")
-  ).version;
+  const packageVersion = result.packageVersion;
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stderr, new RegExp(`skillpacks@${packageVersion.replaceAll(".", "\\.")} is already published`));

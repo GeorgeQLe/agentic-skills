@@ -1,3 +1,27 @@
+## Current Implementation - Prepare skillpacks 0.1.10 Publish
+
+### Goal
+
+Prepare the already-shipped consolidate-prototypes/graduation work for the next public `skillpacks` / `@glexcorp/gskp` release without running the real publish command.
+
+### Plan
+
+1. Inspect release state, package version, generated artifacts, and changed skill contracts.
+2. Fix any publish-blocking contract/version inconsistencies found during release prep.
+3. Archive and bump active skills whose behavior changes before publish.
+4. Regenerate package and Skills Showcase generated artifacts from the staged skill boundary.
+5. Add package changelog and task review records for the pending `0.1.10` release.
+6. Run release gates and a dry-run publish check without publishing.
+7. Commit and push the publish-prep source state so the real `./publish.sh patch` can run from a clean tree.
+
+### Acceptance Criteria
+
+- Active product-design contracts are internally consistent: `consolidate-prototypes` writes AFPS graduation and `spec-interview` gates on it.
+- Changed active skills have archive snapshots and changelog entries.
+- Generated package manifest and Skills Showcase data reflect the corrected active versions.
+- `CHANGELOG.md` has a pending `0.1.10` release entry.
+- The real publish command is left for the user and can run from a clean committed tree.
+
 ## Current Implementation - Clean Up 0.1.9 Publish Blockers
 
 ### Goal

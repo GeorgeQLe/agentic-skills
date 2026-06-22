@@ -6,6 +6,25 @@ This file tracks npm package releases: CLI behavior, package contents, bundled s
 
 Keep this file updated before every npm package publish.
 
+## [0.1.10] - 2026-06-22
+
+Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
+
+### Fixed
+
+- Corrected the active `consolidate-prototypes` Claude and Codex contracts so they actually write the AFPS graduation document required by the v0.16 rename/graduation release notes.
+- Corrected the active `spec-interview` Claude and Codex prototype gates so production spec work requires the consolidated prototype, AFPS graduation readiness, and no blocking post-prototype cleanup items.
+
+### Changed
+
+- Refreshed the bundled package snapshot and Skills Showcase generated data after the product-design graduation contract correction.
+
+### Verification
+
+- Publish-prep verification passed in source: package tests, package verification, archive/version audits, mirror/base parity audits, generated-data validation, convention bundle audit, and `./publish.sh --dry-run patch`.
+- The intended release command is `./publish.sh patch`, which will bump the package artifact from `0.1.9` to `0.1.10` before staging and publishing both npm package names.
+- Dry-run note: npm CLI emitted `Cannot read properties of null (reading 'matches')` during `npm version`, but `publish.sh` detected that `0.1.10` was written, continued with verified manifest/package staging, and completed the dry run successfully.
+
 ## [0.1.9] - 2026-06-22
 
 Published for both `skillpacks` and `@glexcorp/gskp`.

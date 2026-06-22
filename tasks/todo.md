@@ -1,3 +1,38 @@
+# Current Implementation - Prepare skillpacks 0.1.10 Publish
+
+## Goal
+
+Prepare the consolidate-prototypes/graduation release boundary for the next public `skillpacks` / `@glexcorp/gskp` publish without running the real publish command.
+
+## Plan
+
+- [x] Inspect release state, package version, generated artifacts, and changed skill contracts.
+- [x] Fix publish-blocking contract/version inconsistencies found during release prep.
+- [x] Archive and bump active skills whose behavior changes before publish.
+- [x] Regenerate package and Skills Showcase generated artifacts from the staged skill boundary.
+- [x] Add package changelog and task review records for the pending `0.1.10` release.
+- [x] Run release gates without publishing.
+- [x] Run dry-run publish check without publishing.
+- [ ] Commit and push the publish-prep source state so the real `./publish.sh patch` can run from a clean tree.
+
+## Acceptance Criteria
+
+- Active product-design contracts are internally consistent: `consolidate-prototypes` writes AFPS graduation and `spec-interview` gates on it.
+- Changed active skills have archive snapshots and changelog entries.
+- Generated package manifest and Skills Showcase data reflect the corrected active versions.
+- `CHANGELOG.md` has a pending `0.1.10` release entry.
+- The real publish command is left for the user and can run from a clean committed tree.
+
+## Review
+
+- Publish-prep found and fixed a release-blocking inconsistency: active `consolidate-prototypes` v0.16 still said not to write AFPS graduation while its changelog and design-tree convention said graduation was required.
+- Archived current `v0.16` snapshots and bumped mirrored `consolidate-prototypes` and `spec-interview` skills to `v0.17`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and Skills Showcase generated data from the staged skill boundary.
+- Updated `packages/skillpacks/test/lifecycle.test.mjs` so the base-skill refresh test reads the current `codebase-status` version from the source snapshot instead of pinning a stale literal.
+- Verification passed: `npm --workspace packages/skillpacks run test:node` (112/112), `npm run skillpacks:verify`, `pnpm --dir apps/skills-showcase validate:data`, `node scripts/skill-convention-bundle-audit.mjs`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-mirror-parity-audit.sh --verbose`, `scripts/base-skill-version-parity-audit.sh`, and `git diff --check`.
+- Dry-run publish check passed: `./publish.sh --dry-run patch` staged `skillpacks@0.1.10` and `@glexcorp/gskp@0.1.10`, completed both dry-run publishes, and restored source package state to `0.1.9`.
+- Dry-run note: npm CLI emitted `Cannot read properties of null (reading 'matches')` during `npm version`, but `publish.sh` detected that `0.1.10` was written and continued successfully.
+
 # Current Implementation - Rename Consolidation Skill And Add AFPS Graduation
 
 ## Goal

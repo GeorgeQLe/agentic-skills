@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.17 - 2026-06-22
+
+- Corrected the active prototype gate to require an AFPS graduation document and explicit graduation readiness before production spec work.
+- Added AFPS graduation as required upstream evidence alongside the consolidated prototype and blocking post-prototype cleanup queue.
+
 ## v0.16 - 2026-06-22
 
 - Updated the prototype gate to accept an AFPS graduation document as the explicit readiness signal after `/consolidate-prototypes`.

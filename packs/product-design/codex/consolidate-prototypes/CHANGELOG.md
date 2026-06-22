@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.17 - 2026-06-22
+
+- Corrected the active consolidation contract to require the AFPS graduation document promised by v0.16.
+- Added the graduation document to deliverables and made the handoff depend on both the consolidated MVP and graduation approval before `$research-roadmap --post-prototype`.
+
 ## v0.16 - 2026-06-22
 
 - Renamed the primary skill from `consolidate-variations` to `consolidate-prototypes`, keeping the old command as a deprecated compatibility alias for one transition period.

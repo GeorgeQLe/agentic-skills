@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.17
+version: v0.16
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional-topic-override] [--ideas]"
 context_intake: deep
@@ -17,9 +17,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 Before starting the interview process, verify:
 
 1. A consolidated prototype exists at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `/consolidate-prototypes` first.
-2. An AFPS graduation document exists at `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`. If missing, halt and recommend `/consolidate-prototypes` to produce the graduation document before spec work.
-3. The AFPS graduation document marks the consolidated MVP ready for post-prototype cleanup and production specification. If it lists unresolved consolidation decisions or blocking prototype risks, halt and recommend resolving those first.
-4. All blocking research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research, contradicted research, stale research, or pre-spec blockers. If unchecked blocking post-prototype items remain, halt and recommend completing those first.
+2. All blocking research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research, contradicted research, stale research, or pre-spec blockers. If unchecked blocking post-prototype items remain, halt and recommend completing those first.
 
 If both gates pass, proceed with the interview.
 
@@ -31,7 +29,7 @@ Interview the user to validate, refine, and complete an implementation specifica
 
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **terminal spec writer**, formalizing the approved MVP into a production-ready v1 specification. The `## Process` steps below group by stage:
 
-- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, AFPS graduation readiness, research frame, and that no unchecked blocking post-prototype items remain.
+- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, research frame, and that no unchecked blocking post-prototype items remain.
 - **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream evidence.
 - **Stage 2 — Design**: walk each screen/page to extract production behaviors, data, contracts, and acceptance criteria.
 - **Stage 3 — Plan**: the screen-by-screen spec outline is the slice the implementation phase realizes.
@@ -59,7 +57,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 1. **Read consolidated prototype and research context:**
    - Read the consolidated prototype directory at `prototypes/{topic}/consolidated/` as the primary input. Walk through every screen, component, and interaction in the prototype to understand the current state.
-   - Read `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` as the readiness signal from consolidation into post-prototype cleanup and production specification.
    - Read the consolidation interview log and `alignment/consolidate-prototypes-{topic}.html` when present. Treat final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, and stale-research cleanup notes as upstream evidence, not as a separate production-readiness state store.
    - If `.agents/project.json` exists, read `project_type` and `enabled_packs` before choosing a research frame.
    - For `business-app`, read `research/icp.md` when present and ground solution decisions against the ICP.

@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.17
+version: v0.16
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -119,8 +119,8 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
    - Flag any gaps and resolve via AskUserQuestion before writing.
 
 8. **Production-ready handoff boundary**
-   - Write the required AFPS graduation document at `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode.
-   - Record final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, stale-research cleanup needs, and production-spec readiness in the consolidation interview log, AFPS graduation document, and alignment page.
+   - Do not write an AFPS graduation document or create a new production-readiness state file from this skill.
+   - Record final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, and stale-research cleanup needs in the consolidation interview log and alignment page.
    - The recommended next route must name `/research-roadmap --post-prototype`, then `/spec-interview`.
    - The Production Ready Approval gate is owned by `/spec-interview` and follows `docs/production-ready-approval.md`.
 
@@ -128,7 +128,6 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 - Write the consolidated prototype to `prototypes/{topic}/consolidated/`.
 - Write the consolidation interview log to `design/consolidate-prototypes-[topic]-interview.md` in flat mode or `design/{slug}/consolidate-prototypes-[topic]-interview.md` in product-path mode.
-- Write the AFPS graduation document to `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode. Include the approved MVP scope, prototype evidence, keep/reject decisions, unresolved risks, stale-research cleanup status, and whether the project is ready for `/research-roadmap --post-prototype` and `/spec-interview`.
 - Update the scoped flow-tree manifest to mark consolidated branches as `consolidated` or `promoted-to-prototype` when applicable.
 
 ### Alignment Page
@@ -137,7 +136,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Next Work
 
-**Next work:** after the consolidated MVP and AFPS graduation document are approved, run the post-prototype research pass (`/research-roadmap --post-prototype`) and then formalize the MVP into a production spec with `/spec-interview`. The Production Ready Approval gate is owned by that spec handoff; do not create a separate production-readiness state file or lifecycle registry here.
+**Next work:** after the consolidated MVP is approved, run the post-prototype research pass (`/research-roadmap --post-prototype`) and then formalize the MVP into a production spec with `/spec-interview`. The Production Ready Approval gate is owned by that spec handoff; do not create a separate production-readiness state file or lifecycle registry here.
 
 **Recommended next command:** `/research-roadmap --post-prototype`.
 
