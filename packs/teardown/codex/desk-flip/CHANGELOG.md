@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-22
+
+- Updated fresh-start product routing to use `$consolidate-prototypes` as the primary post-UAT consolidation handoff.
+
 ## v0.5 - 2026-06-12
 
 - Updated fresh-start product routing to use the AFPS prototype flow tree: `$user-flow-map` -> `$ux-variations [specific-user-flow]` -> `$ui-interview [specific-ux-variation]`, with requirements-only/layout-mode as explicit bounded detours.

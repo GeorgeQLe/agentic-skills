@@ -291,7 +291,7 @@ If you are used to this Claude Code rhythm:
 9. `$ux-variations --layout-mode`
 10. `$prototype`
 11. `$uat --variant-evaluation`
-12. `$consolidate-variations`
+12. `$consolidate-prototypes`
 13. `$research-roadmap --post-prototype`
 14. `$spec-interview`
 15. `$research-roadmap --post-spec`
@@ -317,7 +317,7 @@ The closest Codex translation is:
 9. `$ux-variations --layout-mode`
 10. `$prototype`
 11. `$uat --variant-evaluation`
-12. `$consolidate-variations`
+12. `$consolidate-prototypes`
 13. `$research-roadmap --post-prototype`
 14. `$spec-interview`
 15. `$research-roadmap --post-spec`

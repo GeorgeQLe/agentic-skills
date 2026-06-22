@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-22
+
+- Updated AFPS route references to use `$consolidate-prototypes` as the primary post-UAT consolidation handoff.
+
 ## v0.7 - 2026-06-15
 
 - Brought the Codex side to parity with Claude on rapid-pipeline awareness: added the "Rapid pipeline artifacts" inspection bullet, a new "Detect rapid pipeline activity" step (step 5, renumbering classify/route/validate to 6/7/8), and the "active rapid pipelines (VARD/ORD)" Overview + "Rapid Pipeline Status" output additions.

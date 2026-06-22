@@ -6,7 +6,7 @@ route:
   - ux-variations
   - ui-interview
   - prototype
-  - consolidate-variations
+  - consolidate-prototypes
   - spec-interview
 source_artifacts:
   - design/user-flow-invoice-approval.md

@@ -16,7 +16,7 @@ const oneQuestionCodexSkills = [
   "base/codex/idea-scope-brief/SKILL.md",
   "packs/product-design/codex/ui-interview/SKILL.md",
   "packs/product-design/codex/ux-variations/SKILL.md",
-  "packs/product-design/codex/consolidate-variations/SKILL.md",
+  "packs/product-design/codex/consolidate-prototypes/SKILL.md",
   "packs/agent-work-admin/codex/roadmap/SKILL.md",
   "packs/product-design/codex/design-system/SKILL.md",
   "packs/business-research/codex/enterprise-icp/SKILL.md",

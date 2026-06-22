@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.8
+version: v0.9
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -39,7 +39,7 @@ Discover and search skills visible in the current project plus source-available 
    | Discovery & Market Fit | `customer-discovery`, `enterprise-icp` |
    | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
    | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |
-   | Planning | `brainstorm`, `idea-scope-brief`, `feature-interview`, `user-flow-map`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variations`, `consolidate-variations`, `experiment`, `clone-spec-store` (project-fleet pack) |
+   | Planning | `brainstorm`, `idea-scope-brief`, `feature-interview`, `user-flow-map`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variations`, `consolidate-prototypes`, `experiment`, `clone-spec-store` (project-fleet pack) |
    | Mapping | `journey-map`, `metrics` |
    | Strategize | `roadmap`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |

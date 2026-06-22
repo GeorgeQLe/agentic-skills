@@ -2,7 +2,7 @@
 name: bootstrap-repo
 description: Initialize or reset a repository README and agent workflow docs from a short project brief
 type: execution
-version: v0.5
+version: v0.6
 argument-hint: "<project brief>"
 ---
 
@@ -64,7 +64,7 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - If UX variation branches exist but no branch has an approved UI direction, recommend `/ui-interview [specific-ux-variation]`.
    - Recommend `/ui-interview --requirements-only <topic>` only when the user explicitly needs a fixed content/data/action contract before `/ux-variations --layout-mode <topic>`.
    - Only route directly to `/roadmap` or `/exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
-   - The intended product sequence after reset is: `/customer-discovery` -> `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
+   - The intended product sequence after reset is: `/customer-discovery` -> `/competitive-analysis` -> `/journey-map` -> `/positioning` -> `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-prototypes` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
 
 ## Output
 

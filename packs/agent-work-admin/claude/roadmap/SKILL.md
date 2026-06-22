@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.12
+version: v0.13
 required_conventions: [alignment-page]
 argument-hint: "[--existing] [path-to-spec]"
 ---
@@ -420,7 +420,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `/roadmap` as the next command from a `/roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview` (product-design pack), `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ux-variations` (product-design pack), `/ui-interview` (product-design pack), `/prototype` (product-design pack), `/consolidate-variations` (product-design pack), `/research-roadmap` (research-admin pack), `/plan-phase N`, `/ship-end --no-deploy` (exec-loop pack), `/reconcile-dev-docs fix tasks` (docs-health pack), `/exec` (exec-loop pack), `/guide` (guided-walkthrough pack), or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` (docs-health pack) with evidence.
+- Never recommend `/roadmap` as the next command from a `/roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview` (product-design pack), `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), `/user-flow-map` (product-design pack), `/ux-variations` (product-design pack), `/ui-interview` (product-design pack), `/prototype` (product-design pack), `/consolidate-prototypes` (product-design pack), `/research-roadmap` (research-admin pack), `/plan-phase N`, `/ship-end --no-deploy` (exec-loop pack), `/reconcile-dev-docs fix tasks` (docs-health pack), `/exec` (exec-loop pack), `/guide` (guided-walkthrough pack), or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` (docs-health pack) with evidence.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/exec` (exec-loop pack), `/delegate` (agent-bridge pack)) or orchestration-heavy work → recommend the matching `/...` route.

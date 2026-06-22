@@ -1,5 +1,9 @@
 # bootstrap-repo changelog (claude)
 
+## v0.6 - 2026-06-22
+
+- Updated fresh product routing to use `/consolidate-prototypes` as the primary post-UAT consolidation handoff.
+
 ## v0.5 - 2026-06-12
 
 - Updated product bootstrap routing to use the AFPS prototype flow tree: `/user-flow-map` -> `/ux-variations [specific-user-flow]` -> `/ui-interview [specific-ux-variation]`, with requirements-only/layout-mode as explicit bounded detours.

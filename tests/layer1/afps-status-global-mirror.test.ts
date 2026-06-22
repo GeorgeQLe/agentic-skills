@@ -27,4 +27,21 @@ describe("afps-status base mirror", () => {
     expect(claudeSkills).toContain("| Context & Session | `afps-status`, `codebase-status`");
     expect(codexSkills).toContain("| Context & Session | `afps-status`, `codebase-status`");
   });
+
+  it("treats Production Ready Approval as an alignment artifact, not a lifecycle registry", () => {
+    const contract = read("docs/production-ready-approval.md");
+    const claude = read("base/claude/afps-status/SKILL.md");
+    const codex = read("base/codex/afps-status/SKILL.md");
+
+    expect(contract).toContain("artifact convention, not a lifecycle database");
+    expect(contract).toContain("spec-interview` owns the Production Ready Approval");
+    expect(contract).toContain("not treat the artifact as a new source-of-truth lifecycle store");
+
+    for (const content of [claude, codex]) {
+      expect(content).toContain("Production Ready Approval records");
+      expect(content).toContain("confirmed alignment-page artifact");
+      expect(content).toContain("not a competing lifecycle registry");
+    }
+  });
+
 });

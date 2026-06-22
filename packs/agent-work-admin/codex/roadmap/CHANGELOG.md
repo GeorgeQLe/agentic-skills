@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-06-22
+
+- Updated actionable design-gate route examples to use `$consolidate-prototypes` as the primary post-UAT consolidation skill.
+
 ## v0.12 - 2026-06-12
 
 - Updated user-facing design-gate routing to treat `$ux-variations [specific-user-flow]` before `$ui-interview [specific-ux-variation]` as the default AFPS prototype path, with requirements-only/layout-mode as explicit detours.

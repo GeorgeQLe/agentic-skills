@@ -517,14 +517,14 @@
       </div>
     </div>
 
-    <!-- Step 9: consolidate-variations -->
+    <!-- Step 9: consolidate-prototypes -->
     <div class="pipeline-step">
       <div class="pipeline-line">
         <div class="pipeline-dot changed"></div>
         <div class="pipeline-connector"></div>
       </div>
       <div class="pipeline-card" style="border-color: var(--orange);">
-        <h4><span class="badge badge-renamed">Renamed</span> <span class="badge badge-changed">Changed</span> /consolidate-variations</h4>
+        <h4><span class="badge badge-renamed">Renamed</span> <span class="badge badge-changed">Changed</span> /consolidate-prototypes</h4>
         <p>Formerly <code>ui-consolidate</code>. Cherry-picks best elements from evaluated prototypes, resolves conflicts, and <strong>builds a single consolidated clickable prototype</strong> (not a spec document). The merged prototype is the deliverable — spec-interview will extract the production spec from it.</p>
       </div>
     </div>
@@ -658,7 +658,7 @@
         <li><code>/ui-interview</code> per variation + alignment pages</li>
         <li><strong><code>/prototype</code> (build all variations)</strong></li>
         <li><code>/uat --variant-evaluation</code></li>
-        <li><strong><code>/consolidate-variations</code> (merged prototype)</strong></li>
+        <li><strong><code>/consolidate-prototypes</code> (merged prototype)</strong></li>
         <li><strong><code>/research-roadmap --post-prototype</code> (refresh research)</strong></li>
         <li><strong><code>/spec-interview</code> (post-prototype deep dive)</strong></li>
         <li><strong><code>/research-roadmap --post-spec</code> (refresh research again)</strong></li>
@@ -688,7 +688,7 @@
         <td>Pluralized to reflect multiple variations output. Add alignment HTML generation via shared framework.</td>
       </tr>
       <tr>
-        <td><code>ui-consolidate</code> <span class="arrow">→</span> <code>consolidate-variations</code></td>
+        <td><code>ui-consolidate</code> <span class="arrow">→</span> <code>consolidate-prototypes</code></td>
         <td><span class="badge badge-renamed">Renamed</span> <span class="badge badge-changed">Changed</span></td>
         <td>Renamed. Now outputs a consolidated clickable prototype instead of a spec document. Spec responsibility moves to spec-interview.</td>
       </tr>
@@ -725,7 +725,7 @@
       <tr>
         <td><code>research-roadmap</code></td>
         <td><span class="badge badge-changed">Changed</span></td>
-        <td>Two new modes: <code>--post-prototype</code> (after consolidate-variations) and <code>--post-spec</code> (after spec-interview). Scans research docs against prototype/spec findings, flags stale or contradicted docs, queues updates so roadmap has fully current research context.</td>
+        <td>Two new modes: <code>--post-prototype</code> (after consolidate-prototypes) and <code>--post-spec</code> (after spec-interview). Scans research docs against prototype/spec findings, flags stale or contradicted docs, queues updates so roadmap has fully current research context.</td>
       </tr>
       <tr>
         <td>Alignment Pages</td>
@@ -788,7 +788,7 @@
         <span class="label">Location</span>
         <span class="value"><code>alignment/{skill}-{topic}.html</code> (temporary, archived or deleted after alignment confirmed)</span>
         <span class="label">Produced by</span>
-        <span class="value">All interview skills: idea-scope-brief, ux-variations, ui-interview, spec-interview, consolidate-variations, feature-interview</span>
+        <span class="value">All interview skills: idea-scope-brief, ux-variations, ui-interview, spec-interview, consolidate-prototypes, feature-interview</span>
       </div>
       <h4>Key principles:</h4>
       <ul>
@@ -811,7 +811,7 @@
       <h3><span class="mono">/spec-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Major Change</span></h3>
       <h4>What changes:</h4>
       <ul>
-        <li><strong>Position in pipeline:</strong> Moves from pre-prototype (step 3) to post-prototype (step 10). Now sits after <code>/consolidate-variations</code>.</li>
+        <li><strong>Position in pipeline:</strong> Moves from pre-prototype (step 3) to post-prototype (step 10). Now sits after <code>/consolidate-prototypes</code>.</li>
         <li><strong>Input:</strong> Takes the consolidated clickable prototype as primary input, not a concept brief or draft spec.</li>
         <li><strong>Interview mode:</strong> Screen-by-screen walkthrough of the prototype. For each screen/page asks:
           <ul>
@@ -874,12 +874,12 @@
       </ul>
     </div>
 
-    <!-- consolidate-variations -->
+    <!-- consolidate-prototypes -->
     <div class="skill-card" style="border-color: var(--orange);">
-      <h3><span class="mono">/consolidate-variations</span> <span class="badge badge-renamed" style="font-size: 0.75rem;">Renamed</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h3><span class="mono">/consolidate-prototypes</span> <span class="badge badge-renamed" style="font-size: 0.75rem;">Renamed</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
       <h4>What changes:</h4>
       <ul>
-        <li><strong>Name:</strong> <code>ui-consolidate</code> → <code>consolidate-variations</code></li>
+        <li><strong>Name:</strong> <code>ui-consolidate</code> → <code>consolidate-prototypes</code></li>
         <li><strong>Output:</strong> Now builds a <strong>consolidated clickable prototype</strong> instead of a spec document. Merges the best elements from evaluated prototype variations into a single runnable artifact.</li>
         <li><strong>Process:</strong> Same per-variation interview (keep/reject/neutral), cross-variation synthesis, conflict resolution — but the deliverable is a built prototype, not a document.</li>
         <li><strong>Next step:</strong> Routes to <code>/spec-interview</code> (which will extract the production spec from this prototype)</li>
@@ -913,7 +913,7 @@
       <h3><span class="mono">/research-roadmap</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
       <h4>What changes:</h4>
       <ul>
-        <li><strong>New mode: <code>--post-prototype</code></strong> — After consolidate-variations. Scans all research docs against the consolidated prototype. Flags docs where prototype findings contradict or supersede earlier research (e.g., "journey map onboarding stage doesn't match the prototype's actual onboarding flow," "ICP assumed technical users but prototype feedback shows non-technical users engage more").</li>
+        <li><strong>New mode: <code>--post-prototype</code></strong> — After consolidate-prototypes. Scans all research docs against the consolidated prototype. Flags docs where prototype findings contradict or supersede earlier research (e.g., "journey map onboarding stage doesn't match the prototype's actual onboarding flow," "ICP assumed technical users but prototype feedback shows non-technical users engage more").</li>
         <li><strong>New mode: <code>--post-spec</code></strong> — After spec-interview. Scans research docs against production spec constraints. Flags docs invalidated by production realities (e.g., "competitive analysis positioned us on real-time, but spec shows we'll use batch processing," "positioning doc claims instant setup but spec requires OAuth config").</li>
         <li><strong>Both passes must complete</strong> before /roadmap will proceed. Ensures roadmap is built on fully current, prototype-validated, spec-validated research.</li>
       </ul>
@@ -959,7 +959,7 @@
     <ul style="font-size: 0.9rem; margin-left: 1.25rem;">
       <li><code>/ux-variations</code> requires: journey-map exists</li>
       <li><code>/prototype</code> requires: ux-variations spec + at least one ui-interview output</li>
-      <li><code>/consolidate-variations</code> requires: built prototypes + UAT evaluation evidence OR explicit user override</li>
+      <li><code>/consolidate-prototypes</code> requires: built prototypes + UAT evaluation evidence OR explicit user override</li>
       <li><code>/research-roadmap --post-prototype</code> requires: consolidated prototype exists. Populates <code>tasks/todo.md</code> with stale research skills (e.g., <code>/icp</code>) that need re-running.</li>
       <li><code>/spec-interview</code> requires: consolidated prototype exists + all research tasks queued by <code>--post-prototype</code> pass are completed</li>
       <li><code>/research-roadmap --post-spec</code> requires: production spec exists. Populates <code>tasks/todo.md</code> with research skills invalidated by production constraints.</li>
@@ -988,7 +988,7 @@
       <span class="verdict">New /prototype skill, universal, all-at-once</span>
     </div>
     <div class="decision">
-      <h4>What does consolidate-variations output?</h4>
+      <h4>What does consolidate-prototypes output?</h4>
       <p>A merged clickable prototype (not a spec). spec-interview extracts the production spec from the consolidated prototype.</p>
       <span class="verdict">Consolidated prototype only, spec comes later</span>
     </div>
@@ -1091,7 +1091,7 @@
     <div class="flow-step">
       <div class="step-num">9</div>
       <div class="step-content">
-        <span class="cmd">/consolidate-variations</span>
+        <span class="cmd">/consolidate-prototypes</span>
         <span class="desc">— Merge best elements into single consolidated prototype. Cherry-pick from variations 2 and 4, resolve layout conflict.</span>
       </div>
     </div>
@@ -1159,7 +1159,7 @@
     <div class="flow-step">
       <div class="step-num">5</div>
       <div class="step-content">
-        <span class="cmd">/uat → /consolidate-variations</span>
+        <span class="cmd">/uat → /consolidate-prototypes</span>
         <span class="desc">— Evaluate CLIs. Merge: imperative commands with declarative config files, skip TUI wizard.</span>
       </div>
     </div>
@@ -1213,7 +1213,7 @@
   <div class="skill-grid">
     <div class="skill-card">
       <h3 style="color: var(--orange);">Skill Renaming Breaks Existing Projects</h3>
-      <p style="font-size: 0.9rem;"><strong>Risk:</strong> Renaming <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-variations</code> breaks existing references in roadmaps, specs, interview logs, and next-step routing.</p>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> Renaming <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-prototypes</code> breaks existing references in roadmaps, specs, interview logs, and next-step routing.</p>
       <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> Clean break. No aliases or redirects. <code>/hygiene</code> handles cleanup — it flags stale references to old skill names during audits. Existing projects run <code>/hygiene --fix</code> to update references.</p>
     </div>
     <div class="skill-card">
@@ -1274,7 +1274,7 @@
       </div>
       <div class="pipeline-card">
         <h4>Phase 3: Rename & Refactor Core Skills</h4>
-        <p>Rename <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-variations</code>. Update consolidate-variations to output a consolidated prototype instead of a spec document. Add alignment page instructions to all renamed/refactored skills.</p>
+        <p>Rename <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-prototypes</code>. Update consolidate-prototypes to output a consolidated prototype instead of a spec document. Add alignment page instructions to all renamed/refactored skills.</p>
       </div>
     </div>
 

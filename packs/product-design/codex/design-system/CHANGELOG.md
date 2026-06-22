@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-22
+
+- Updated consolidation-source references to use `$consolidate-prototypes` as the primary consolidated-MVP producer.
+
 ## v0.3 - 2026-06-17
 
 - Caught Codex up to the Claude mirror by accepting consolidated prototype outputs as default token sources and standardizing cross-pack recommendations on `npx skillpacks install <pack-name>` while preserving Codex-native interview and `$...` command wording.

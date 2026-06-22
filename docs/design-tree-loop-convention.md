@@ -13,7 +13,7 @@
 ## Why this exists
 
 The design-phase skills — `user-flow-map`, `state-model`, `ux-variations`, `ui-interview`,
-`prototype`, `consolidate-variations`, `spec-interview`, and their subskills
+`prototype`, `consolidate-prototypes`, `spec-interview`, and their subskills
 `design-inspirations` and `uat` — were previously split across three loop conventions
 (Pattern A research substeps, the prototype session loop, and the implementation exec loop).
 They share one job: **grow a design tree from a product concept to a runnable, validated,
@@ -29,7 +29,7 @@ The state lives with the design artifacts, never in `tasks/todo.md`:
 - `design/**/flow-tree-*.yaml` — the design-tree manifest (branch + decision + model-attachment state).
 - `design/**/model-tree-*-{branch}.yaml` — the per-user-flow-branch domain/state/logic model.
 - `design/**/*.md` — canonical per-node design artifacts (user-flow doc, UX variation specs, UI experiment packets, build-plan slices).
-- `prototypes/{topic}/` — runnable prototype output (owned by `prototype` / `consolidate-variations`).
+- `prototypes/{topic}/` — runnable prototype output (owned by `prototype` / `consolidate-prototypes`).
 - `research/**/uat-*.md` — UAT plans and human evidence logs.
 - `tasks/manual-todo.md` — human-only UAT / prototype evaluation tasks an agent must not mark complete.
 
@@ -53,7 +53,7 @@ stages vary by phase. The two concrete instances:
 
 | Phase loop | Stage sequence | `⟨transform⟩` | `⟨gate⟩` | `implement` deliverable |
 |---|---|---|---|---|
-| **Design / prototype** *(this doc)* | interrogation → research → **design** → **plan** → implement(scoped) | author the scoped design (flow, model, UX, UI, consolidation) | the build-plan slice the implement stage/`prototype` realizes | scoped canonical artifact + tree growth; **runnable** for `prototype` / `consolidate-variations` |
+| **Design / prototype** *(this doc)* | interrogation → research → **design** → **plan** → implement(scoped) | author the scoped design (flow, model, UX, UI, consolidation) | the build-plan slice the implement stage/`prototype` realizes | scoped canonical artifact + tree growth; **runnable** for `prototype` / `consolidate-prototypes` |
 | **Research** *(Pattern A — `docs/research-session-loop-convention.md`, normative there; referenced here, not redefined)* | interrogation → research → **plan** → **review** → implement(docs) | run the selected frameworks | framework multi-select = the plan; each framework's + synthesis alignment page = review | canonical research doc (`research/{orchestrator}.md`) |
 
 **Does the research mapping match reality?** Yes — it is the Research Session Loop's session
@@ -115,7 +115,8 @@ root (one per topic)
 | **ux-variation branch** | `branches[].ux_variations[]` | `ux-variations` | `design/ux-variations-{topic}.md` |
 | **ui-experiment branch** | `branches[].ux_variations[].ui_experiments[]` | `ui-interview` | `design/ui-{topic}.md`, `design/ui-requirements-{topic}.md` |
 | **prototype** | `prototype_build_plan.items[]` | `prototype` | `prototypes/{topic}/variation-{N}/` |
-| **consolidated MVP** | manifest status `consolidated` | `consolidate-variations` | `prototypes/{topic}/consolidated/` |
+| **consolidated MVP** | manifest status `consolidated` | `consolidate-prototypes` | `prototypes/{topic}/consolidated/` |
+| **AFPS graduation** | downstream of MVP approval | `consolidate-prototypes` | `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` |
 | **spec** | downstream of MVP approval | `spec-interview` | `specs/{topic}.md` |
 
 ### Per-user-flow-branch model attachment
@@ -141,9 +142,13 @@ to **re-open** — returning that node to a pending status so the owning skill r
 
 ### Consolidation and spec
 
-`consolidate-variations` converges the validated tree into a cohesive **MVP** at
-`prototypes/{topic}/consolidated/`. On MVP approval, `spec-interview` formalizes it into a
-**production-ready v1** specification at `specs/{topic}.md`.
+`consolidate-prototypes` converges the validated tree into a cohesive **MVP** at
+`prototypes/{topic}/consolidated/`. On MVP approval, it also writes the AFPS graduation
+document at `design/afps-graduation-{topic}.md` or
+`design/{slug}/afps-graduation-{topic}.md`. That graduation document is the durable marker
+that research/prototyping is complete. `research-roadmap --post-prototype` then runs the
+narrow cleanup pass before `spec-interview` formalizes the MVP into a **production-ready v1**
+specification at `specs/{topic}.md`.
 
 ---
 
@@ -179,7 +184,7 @@ slice `prototype` will later realize** — not runnable code.
 | `ux-variations` | UX variation specs + up to 5 `ux_variation` child branches on the modelled flow |
 | `ui-interview` | UI experiment packet(s) + `ui_experiment` child branches under the UX variation |
 | `prototype` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` + build-plan + decision |
-| `consolidate-variations` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` |
+| `consolidate-prototypes` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` plus AFPS graduation under `design/` |
 | `spec-interview` | Production-ready specification under `specs/{topic}.md` |
 
 ### Intra-skill substep chunking (absorbed from the prototype loop)
@@ -214,8 +219,8 @@ the HTML page, not replacement of canonical design Markdown/YAML.
 | Role | Skills | Contract |
 |---|---|---|
 | **Root orchestrator** | `user-flow-map` | Creates the design-tree root and the `flow-tree-{topic}.yaml` manifest; grows one user-flow branch per flow. Owns the build-plan scaffold (`--prototype-build-plan`). `invocation: orchestrator`. |
-| **Pipeline** | `state-model`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-variations`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. |
-| **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `prototype`, `consolidate-variations`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
+| **Pipeline** | `state-model`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. |
+| **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `prototype`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
 
 ### Per-branch iteration contract (pipeline skills)
 
@@ -319,13 +324,15 @@ only — they hand results back to the invoking parent and do **not** route down
 - `ux-variations` requires the branch's `model_ref` confirmed; do not grow UX branches first.
 - Do not route to `prototype` before the build-plan slice exists unless the user explicitly
   accepts an untracked ad hoc prototype run.
-- Do not route from built variants directly to `consolidate-variations`; route through
+- Do not route from built variants directly to `consolidate-prototypes`; route through
   `uat` (variant evaluation) unless the user explicitly says they already evaluated and are
   ready to converge.
 - Do not route design-tree branch progress through `/exec`, `$exec`, `tasks/roadmap.md`, or
   `tasks/todo.md`.
 - The top-level `route` tuple stays the **6-skill sequence** (`user-flow-map → ux-variations →
-  ui-interview → prototype → consolidate-variations → spec-interview`). `state-model` is a
+  ui-interview → prototype → consolidate-prototypes → spec-interview`), with
+  `research-roadmap --post-prototype` as the graduation-aware cleanup pass between
+  consolidation and specification. `state-model` is a
   **per-branch attachment** (`model_ref`), not a route position — keeping the route stable
   while the model rides each branch.
 

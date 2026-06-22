@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18 - 2026-06-22
+
+- Updated post-UAT prototype handoff routing to `/consolidate-prototypes`.
+
 ## v0.17 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

@@ -272,7 +272,7 @@
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
 | `brainstorm` | primary | user | Idea generation needed |
-| `consolidate-variations` | chained | after ux-variations + evaluation | Variations need convergence |
+| `consolidate-prototypes` | chained | after ux-variations + evaluation | Variations need convergence |
 | `design-system` | primary | user | Design system needed |
 | `feature-interview` | primary | user | Feature requirements interview |
 | `prototype` | chained | after ui-interview | Prototype build needed |

@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.12
+version: v0.13
 required_conventions: [alignment-page]
 argument-hint: "[--existing] [path-to-spec]"
 ---
@@ -366,7 +366,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or completion of the current queues. Do not use agent mode itself as the next work item.
-- Never recommend `$roadmap` as the next command from a `$roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$user-flow-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-variations`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$exec`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
+- Never recommend `$roadmap` as the next command from a `$roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$user-flow-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-prototypes`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$exec`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:

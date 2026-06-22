@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-22 - Rename consolidation skill and add AFPS graduation
+
+- Renamed the primary product-design consolidation skill to `consolidate-prototypes` in both Claude and Codex mirrors, archived `v0.15`, bumped active contracts to `v0.16`, and kept `consolidate-variations` as a deprecated compatibility alias.
+- Added the AFPS graduation artifact contract under `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`, including source prototypes, UAT evidence, final MVP decisions, rejected alternatives, unresolved risks, stale-research cleanup status, and production-readiness guidance.
+- Made `research-roadmap --post-prototype` graduation-aware and updated `spec-interview` gates to require the consolidated prototype, graduation readiness evidence, and no unchecked blocking post-prototype cleanup.
+- Updated active route docs, design-tree schema/sample, routing maps, product-testing UAT handoffs, base status guidance, generated design-tree/alignment/interrogation bundles, Skills Showcase data, and the skillpacks package manifest.
+- Verified: active-reference scan leaves only the deprecated alias/historical notes; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; `node scripts/audit-alignment-pages.mjs`; `node scripts/audit-interrogation-pages.mjs`; `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `scripts/base-skill-version-parity-audit.sh`; focused Vitest 1485/1485; `npm run skillpacks:verify`; `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-22-consolidate-prototypes-graduation.md`.
+
 ## 2026-06-22 - npm cache ownership verification
 
 - Confirmed npm cache configuration remains `/Users/georgele/.npm` with current UID/GID `501:20`.

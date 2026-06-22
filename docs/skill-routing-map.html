@@ -298,7 +298,7 @@ const PACKS = {
 const AFPS_CHAIN = [
   'idea-scope-brief', 'icp', 'competitive-analysis', 'journey-map',
   'positioning', 'user-flow-map', 'ux-variations', 'ui-interview', 'prototype',
-  'uat', 'consolidate-variations', 'research-roadmap', 'spec-interview',
+  'uat', 'consolidate-prototypes', 'research-roadmap', 'spec-interview',
   'roadmap', 'plan-phase', 'run', 'ship', 'ship-end'
 ];
 
@@ -358,8 +358,8 @@ const EDGES = [
   { from: 'ux-variations',       to: 'ui-interview',          type: 'default',     condition: 'Specific UX variation branch ready for visual mockup' },
   { from: 'ui-interview',        to: 'prototype',             type: 'default',     condition: 'Branch mockup approved' },
   { from: 'prototype',           to: 'uat',                   type: 'default',     condition: 'Prototype built' },
-  { from: 'uat',                 to: 'consolidate-variations', type: 'default',    condition: 'UAT evaluation evidence exists' },
-  { from: 'consolidate-variations', to: 'research-roadmap',   type: 'default',     condition: 'Variants consolidated' },
+  { from: 'uat',                 to: 'consolidate-prototypes', type: 'default',    condition: 'UAT evaluation evidence exists' },
+  { from: 'consolidate-prototypes', to: 'research-roadmap',   type: 'default',     condition: 'Variants consolidated' },
   { from: 'research-roadmap',    to: 'spec-interview',        type: 'default',     condition: 'Research roadmap → post-prototype' },
   { from: 'spec-interview',      to: 'roadmap',               type: 'default',     condition: 'Specs written' },
   { from: 'roadmap',             to: 'plan-phase',            type: 'default',     condition: 'Roadmap created' },

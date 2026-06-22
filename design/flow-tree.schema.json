@@ -39,7 +39,7 @@
           "ux-variations",
           "ui-interview",
           "prototype",
-          "consolidate-variations",
+          "consolidate-prototypes",
           "spec-interview"
         ]
       },
@@ -48,7 +48,7 @@
         { "const": "ux-variations" },
         { "const": "ui-interview" },
         { "const": "prototype" },
-        { "const": "consolidate-variations" },
+        { "const": "consolidate-prototypes" },
         { "const": "spec-interview" }
       ],
       "minItems": 6,

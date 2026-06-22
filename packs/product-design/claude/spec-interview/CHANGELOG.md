@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.16 - 2026-06-22
+
+- Updated the prototype gate to accept an AFPS graduation document as the explicit readiness signal after `/consolidate-prototypes`.
+- Kept the consolidated prototype requirement and post-prototype cleanup blocker check before production spec work begins.
+
 ## v0.15 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

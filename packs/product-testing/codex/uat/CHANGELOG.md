@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-06-22
+
+- Updated variant-evaluation readiness and post-evaluation recommendations to hand off to `$consolidate-prototypes`.
+
 ## v0.13 - 2026-06-21
 
 - Reframed to the unified design-tree loop (`DESIGN-TREE-LOOP.md`) as a sub-skill: marked `invocation: sub-skill` with `parent: prototype`; added the `## Design-Tree Role` note (enters at its checklist/evaluation stage, parent-owned handoff) and regenerated its alignment bundle for the sub-skill translation.

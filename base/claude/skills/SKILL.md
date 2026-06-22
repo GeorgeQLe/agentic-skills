@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.8
+version: v0.9
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -39,7 +39,7 @@ Discover and search skills visible in the current project plus source-available 
    | Discovery & Market Fit | `customer-discovery` (business-discovery), `enterprise-icp` (business-discovery) |
    | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
    | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
-   | Planning | `idea-scope-brief`, `brainstorm` (product-design), `feature-interview` (product-design), `user-flow-map` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-variations` (product-design), `experiment` (business-growth) |
+   | Planning | `idea-scope-brief`, `brainstorm` (product-design), `feature-interview` (product-design), `user-flow-map` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-prototypes` (product-design), `experiment` (business-growth) |
    | Mapping | `journey-map` (customer-lifecycle), `metrics` (business-ops) |
    | Strategize | `roadmap` (agent-work-admin), `competitive-analysis` (business-discovery), `platform-strategy` (business-growth), `gtm` (business-growth), `landing-copy` (business-growth), `monetization` (business-growth), `positioning` (business-discovery), `runway-model` (business-ops) |
    | Evaluate | `dogfood` (product-testing), `mvp-gap` (business-discovery), `scale-audit` (business-ops), `customer-feedback` (customer-lifecycle), `assumption-tracker` (business-discovery), `cohort-review` (customer-lifecycle), `retro` (business-ops) |

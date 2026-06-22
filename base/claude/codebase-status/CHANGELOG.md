@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-06-22
+
+- Updated codebase-status AFPS route guidance to use `/consolidate-prototypes` as the primary post-UAT consolidation skill.
+
 ## v0.10 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

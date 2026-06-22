@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.7
+version: v0.8
 required_conventions: [alignment-page]
 argument-hint: "[optional project path, product path, or focus]"
 ---
@@ -33,13 +33,13 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Concept artifacts: `research/idea-brief*.md`, app-scoped `research/*/idea-brief*.md`, and concept/interview notes.
    - Discovery artifacts: customer-discovery docs such as `research/icp.md`, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
-   - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, and alignment pages under `alignment/`.
+   - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, Production Ready Approval records under `alignment/spec-interview-{topic}.html` or `alignment/production-ready-{topic}.html`, and other alignment pages under `alignment/`.
    - Execution artifacts: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases/`, and recent validation notes.
    - Rapid pipeline artifacts: `research/vard-ship-log.md` (VARD experiments), `research/ord-ship-log.md` (ORD packages), and `alignment/vard-*.md` or `alignment/ord-*.md` alignment docs.
    - Git evidence: `git status --short`, current branch/upstream, last relevant commits, unpushed commits, and changed files.
 4. Reconcile evidence instead of trusting one file:
    - Distinguish missing artifacts, stale artifacts, contradictory artifacts, completed work, active implementation tasks, manual blockers, unvalidated implementation, and unshipped local changes.
-   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts. Its `pipeline_stage` is a pointer to which orchestrator stage last ran, not per-framework status.
+   - Treat `research/.progress.yaml` as a manifest of product/app/customer focus, not as the source of truth over concrete artifacts. Its `pipeline_stage` is a pointer to which orchestrator stage last ran, not per-framework status. Treat Production Ready Approval as a confirmed alignment-page artifact, not a new lifecycle database or registry.
    - For a self-advancing research orchestrator, derive framework progress from the run manifest + canonical-intermediate existence and report it as "k of N frameworks complete," not from `tasks/todo.md` checkboxes (the migrated orchestrators no longer queue framework work there).
    - If product-path manifest entries are missing or stale, report the exact proposed update in prose. Do not write `research/.progress.yaml` unless the user explicitly asks for mutation.
    - If task docs contradict research/spec/code/git evidence, call out the contradiction and route to reconciliation rather than choosing whichever artifact is newest.
@@ -98,7 +98,7 @@ End with exactly:
 ## Constraints
 
 - Read-only by default. Do not modify workflow state, task docs, research docs, specs, or git state unless the user explicitly asks for mutation.
-- Do not create a new AFPS state file or schema. Use existing artifacts, especially `research/.progress.yaml`, `research/`, `specs/`, `tasks/`, `alignment/`, and git.
+- Do not create a new AFPS state file or schema. Use existing artifacts, especially `research/.progress.yaml`, `research/`, `specs/`, `tasks/`, `alignment/`, and git. Production Ready Approval is an alignment-page artifact convention, not a competing lifecycle registry.
 - Propose missing `research/.progress.yaml` updates in the report instead of writing them by default.
 - Do not run expensive tests, installs, web research, deploys, or external-account actions during status synthesis.
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues unless an item has clearly been promoted into `tasks/todo.md`.

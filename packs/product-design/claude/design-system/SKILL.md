@@ -2,7 +2,7 @@
 name: design-system
 description: Extract or scan design tokens from a consolidated UI spec or existing codebase and produce a DESIGN.md file following the Google Labs Stitch format — machine-readable YAML frontmatter with prose rationale sections
 type: planning
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page]
 argument-hint: "[spec path | --scan | --update]"
 visual_tier: prototype
@@ -12,7 +12,7 @@ visual_tier: prototype
 
 Invoke as `/design-system`.
 
-Use this skill after `/consolidate-variations` to lock design decisions into machine-readable tokens before implementation begins. It bridges the gap between prose UI specs and code — without it, agents interpret "dark surface with primary accent" differently each session, causing UI consistency drift.
+Use this skill after `/consolidate-prototypes` to lock design decisions into machine-readable tokens before implementation begins. It bridges the gap between prose UI specs and code — without it, agents interpret "dark surface with primary accent" differently each session, causing UI consistency drift.
 
 Also use this skill retroactively on an existing codebase (`--scan`) to generate a DESIGN.md from tokens already in use.
 

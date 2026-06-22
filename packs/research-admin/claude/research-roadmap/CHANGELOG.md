@@ -1,5 +1,10 @@
 # research-roadmap changelog (claude)
 
+## v0.19 - 2026-06-22
+
+- Made `--post-prototype` graduation-aware: read `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` when present, then queue only contradicted, stale, or pre-spec-blocking research.
+- Updated the post-prototype gate and default AFPS route to use `/consolidate-prototypes` as the primary handoff after variant evaluation.
+
 ## v0.18 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

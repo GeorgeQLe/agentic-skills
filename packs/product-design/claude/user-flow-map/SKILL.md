@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v1.3
+version: v1.4
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -62,7 +62,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
-- Initialize the manifest when writing the flow map. Set `schema_version: v0.1`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-variations, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
+- Initialize the manifest when writing the flow map. Set `schema_version: v0.1`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
 - In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references and one build item per approved UI review that should be prototyped.
 - Track user-flow, UX-variation, UI review, prototype build item, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Reference all pre-prototype design artifacts from the manifest using repo-relative paths.

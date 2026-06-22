@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-22
+
+- Updated the Planning catalog to list `consolidate-prototypes` as the primary product-design consolidation skill.
+
 ## v0.8 - 2026-06-13
 
 - Renamed the scanned skill set from "global" to "base": now scans `base/<tool>/*/SKILL.md`, and ungrouped skills are labeled `base` instead of `global`.

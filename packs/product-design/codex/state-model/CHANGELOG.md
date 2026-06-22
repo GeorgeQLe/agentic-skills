@@ -1,5 +1,9 @@
 # state-model changelog (codex)
 
+## v0.6 - 2026-06-22
+
+- Updated design-tree route references to use `$consolidate-prototypes` as the primary consolidation skill.
+
 ## v0.5 - 2026-06-22
 
 - Enforced HTML-first canonical writes: synthesis now assembles proposed domain-model and manifest content for `alignment/state-model-{topic}.html` before any canonical `design/**/*.md` or `design/**/*.yaml` write.

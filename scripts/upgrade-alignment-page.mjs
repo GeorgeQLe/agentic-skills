@@ -205,7 +205,7 @@ const VISUAL_TIER_SKILLS = new Set([
 
 const PROTOTYPE_TIER_SKILLS = new Set([
   'ux-variations', 'prototype', 'design-system', 'ui-interview', 'user-flow-map',
-  'consolidate-variations', 'brainstorm', 'game-prototype-test', 'game-store-page-test',
+  'consolidate-prototypes', 'brainstorm', 'game-prototype-test', 'game-store-page-test',
   'landing-copy', 'uat-guide', 'animation-design-planner',
 ]);
 
@@ -423,7 +423,7 @@ function skillSpecificGates(skillName, skillPath) {
     "ux-variations": `**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, output-location/change-scope decisions, and coverage checkpoint as gates before writing final variation plans. ${outputGateDedup}`,
     "design-inspirations": `**Inspiration-feeder gates.** Render the inspiration scope (surface, product class, reference products, anti-patterns to avoid) as a scope gate before any synthesized web research. Render named-pattern/convention coverage, component-library references, competitor/comparable UX notes, and annotated reference links with per-item source/link evidence and a confidence marker. Render the honest pixel-limit caveat as a first-class gate — this brief captures named patterns, conventions, and links, not a rendered pixel-level moodboard — so the reviewer confirms the scope limit explicitly. Render output-location/change-scope decisions (canonical brief path, search-log path, and the flow-tree \`source_artifacts[]\` reference) as gates before writing the canonical inspiration brief. ${outputGateDedup}`,
     "spec-interview": `**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, output-location/change-scope decisions, and post-approval route as gates before writing or replacing specs. ${outputGateDedup}`,
-    "consolidate-variations": `**Consolidation-specific gates.** Render UAT evidence coverage, variation verdicts, selected concept, rejected alternatives, unresolved assumptions, output-location/change-scope decisions, and coverage checkpoint as gates. ${outputGateDedup}`,
+    "consolidate-prototypes": `**Consolidation-specific gates.** Render UAT evidence coverage, source prototype verdicts, selected MVP decisions, rejected alternatives, unresolved assumptions, AFPS graduation output, output-location/change-scope decisions, and coverage checkpoint as gates. ${outputGateDedup}`,
     "prototype": `**Prototype-specific gates.** Render source-spec coverage, prototype scope, non-goals and deferred infrastructure, route/file destinations, file mutation scope, validation plan, and post-approval UAT route as gates. ${outputGateDedup}`,
     "uat": `**UAT-specific gates.** Render journey coverage, participant or evaluator assumptions, acceptance verdicts, evidence gaps, output-location/change-scope decisions, and post-approval route as gates. ${outputGateDedup}`,
     "icp": "**ICP research translation.** Render segment claims, exclusion rationale, buyer/user distinction, source coverage by customer category, evidence-backed pain intensity, uncertainty about reachable audiences, and the recommended next research or positioning decision as first-class research gates.",

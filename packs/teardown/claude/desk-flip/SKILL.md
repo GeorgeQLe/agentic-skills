@@ -2,7 +2,7 @@
 name: desk-flip
 description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via /bootstrap-repo reset or new-repo bootstrap
 type: execution
-version: v0.5
+version: v0.6
 required_conventions: [alignment-page]
 argument-hint: "<project-path>"
 ---
@@ -66,7 +66,7 @@ Always desk-flip. If the user invoked it, the decision to restart is already mad
    - Show the user a terminal summary of the report.
    - Recommend the appropriate `/bootstrap-repo` (repo-maintenance pack) command with the recommended bootstrap input from the report.
    - Do NOT create the new repo or run `/bootstrap-repo` — the user does this.
-   - After bootstrap, route product/app restarts into the research-first alignment workflow using the high-level concept seed as input: `/customer-discovery` to define who this is for, `/competitive-analysis` to map the market, `/journey-map` to map lifecycle and task flow, `/positioning` to lock the product direction, `/user-flow-map` to map screen flow, `/ux-variations [specific-user-flow]` to explore progression branches, `/ui-interview [specific-ux-variation]` to render and approve/reject a branch mockup, then prototype work, `/uat --variant-evaluation`, and `/consolidate-variations` before `/spec-interview` or `/roadmap`. Use `/ui-interview --requirements-only` and `/ux-variations --layout-mode` only when the user explicitly needs a fixed content contract and layout-only alternatives.
+   - After bootstrap, route product/app restarts into the research-first alignment workflow using the high-level concept seed as input: `/customer-discovery` to define who this is for, `/competitive-analysis` to map the market, `/journey-map` to map lifecycle and task flow, `/positioning` to lock the product direction, `/user-flow-map` to map screen flow, `/ux-variations [specific-user-flow]` to explore progression branches, `/ui-interview [specific-ux-variation]` to render and approve/reject a branch mockup, then prototype work, `/uat --variant-evaluation`, and `/consolidate-prototypes` before `/spec-interview` or `/roadmap`. Use `/ui-interview --requirements-only` and `/ux-variations --layout-mode` only when the user explicitly needs a fixed content contract and layout-only alternatives.
    - If the business-discovery or customer-lifecycle packs are not enabled in the fresh repo, recommend `npx skillpacks install business-discovery` and `npx skillpacks install customer-lifecycle` before the research sequence.
 
 ## Output

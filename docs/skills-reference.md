@@ -415,7 +415,7 @@ Two engineering packs are **Claude-only** (no Codex mirror):
 ## Product, Design & Walkthrough Packs
 
 ```bash
-npx skillpacks install product-design       # brainstorm, consolidate-variations, design-system,
+npx skillpacks install product-design       # brainstorm, consolidate-prototypes, design-system,
                                               #   feature-interview, prototype, spec-interview,
                                               #   ui-interview, user-flow-map, ux-variations
 npx skillpacks install product-testing      # dogfood, uat

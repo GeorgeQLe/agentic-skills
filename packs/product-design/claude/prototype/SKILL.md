@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from design-phase UX variation and UI branch packets — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.17
+version: v0.18
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -213,13 +213,13 @@ The user should interact with each prototype variation hands-on before consolida
 
 ## Next Work
 
-**Next work:** after the prototype preview is approved, route the built variants to `/uat --variant-evaluation` for hands-on evaluation evidence before `/consolidate-variations`. Do not route downstream until the prototype preview is approved.
+**Next work:** after the prototype preview is approved, route the built variants to `/uat --variant-evaluation` for hands-on evaluation evidence before `/consolidate-prototypes`. Do not route downstream until the prototype preview is approved.
 
 **Recommended next command:** `/uat --variant-evaluation`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants, then `/consolidate-variations` once evaluation evidence exists.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants, then `/consolidate-prototypes` once evaluation evidence exists.
 
 ## Constraints
 

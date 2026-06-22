@@ -35,8 +35,8 @@ const localPlanningPreviewSkills: Array<[path: string, specificGates: string]> =
   ["packs/product-design/codex/ui-interview/SKILL.md", "**UI-specific gates.**"],
   ["packs/product-testing/claude/uat/SKILL.md", "**UAT-specific gates.**"],
   ["packs/product-testing/codex/uat/SKILL.md", "**UAT-specific gates.**"],
-  ["packs/product-design/claude/consolidate-variations/SKILL.md", "**Consolidation-specific gates.**"],
-  ["packs/product-design/codex/consolidate-variations/SKILL.md", "**Consolidation-specific gates.**"],
+  ["packs/product-design/claude/consolidate-prototypes/SKILL.md", "**Consolidation-specific gates.**"],
+  ["packs/product-design/codex/consolidate-prototypes/SKILL.md", "**Consolidation-specific gates.**"],
   ["packs/product-design/claude/spec-interview/SKILL.md", "**Spec-specific gates.**"],
   ["packs/product-design/codex/spec-interview/SKILL.md", "**Spec-specific gates.**"],
 ];

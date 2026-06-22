@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-22
+
+- Updated AFPS route references to use `/consolidate-prototypes` as the primary post-UAT consolidation handoff.
+
 ## v0.7 - 2026-06-15
 
 - Surfaced VARD/ORD graduation as a concrete next command: the rapid-pipeline detect step now reads the **latest** ship-log traction entry's persisted `Status:` (`iterating` | `graduating` | `archived`) and `Recommendation:` line deterministically instead of inferring readiness from raw signals, and the next-route ladder gained high-priority graduation rules — VARD `Status: graduating` → `/idea-scope-brief` (base pack), ORD `Status: graduating` → `/devtool-user-map` (install `devtool` if needed) or `/idea-scope-brief` for the rare cross-domain case — so the `Recommended next command:` footer now emits the graduation command.

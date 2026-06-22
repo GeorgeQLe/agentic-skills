@@ -1,4 +1,43 @@
-# Current Implementation - Clean Up 0.1.9 Publish Blockers
+# Current Implementation - Rename Consolidation Skill And Add AFPS Graduation
+
+## Goal
+
+Rename `consolidate-variations` to `consolidate-prototypes` as the primary product-design consolidation skill and add an AFPS graduation artifact that closes research/prototyping before post-prototype cleanup and production spec work.
+
+## Plan
+
+- [x] Inspect active consolidation, research-roadmap, spec-interview, routing, and generated catalog contracts.
+- [x] Archive and rename mirrored primary consolidation skills to `consolidate-prototypes`.
+- [x] Add deprecated `consolidate-variations` compatibility aliases for Claude and Codex.
+- [x] Add AFPS graduation output requirements to `consolidate-prototypes`.
+- [x] Make `research-roadmap --post-prototype` graduation-aware and keep cleanup narrowly scoped.
+- [x] Update `spec-interview` gates to accept graduation readiness while preserving prototype and cleanup blockers.
+- [x] Update active route docs, design-tree convention/schema, UAT handoffs, maps, and generated bundles.
+- [x] Regenerate Skills Showcase assets and the skillpacks manifest.
+- [x] Run focused validation and record the shipping manifest.
+
+## Acceptance Criteria
+
+- Active product-design routes prefer `$consolidate-prototypes` or `/consolidate-prototypes`.
+- `consolidate-variations` remains only as a deprecated alias plus historical/benchmark references.
+- AFPS graduation outputs are documented under `design/`.
+- Post-prototype cleanup reads graduation when present and avoids broad non-blocking research recommendations.
+- `spec-interview` still requires the consolidated prototype and a clean blocking post-prototype queue.
+
+## Review
+
+- Primary mirrors now live at `packs/product-design/{claude,codex}/consolidate-prototypes/` with active version `v0.16`; `consolidate-variations` is a small deprecated alias.
+- Graduation-aware handoff sequence is now: `$prototype` -> `$uat --variant-evaluation` -> `$consolidate-prototypes` -> `$research-roadmap --post-prototype` -> `$spec-interview` -> `$roadmap`/`$exec`.
+- Verification passed: active-reference scan, generated-data validation, design-tree bundle check, convention bundle audit, alignment/interrogation audits, strict archive audit, mirror parity, base parity, focused Vitest 1485/1485, `npm run skillpacks:verify`, and `git diff --check`.
+- Deploy skipped: no production deploy requested; this change updates skill/source catalogs and generated package metadata only.
+
+## Next Work
+
+Run the next discovery or maintenance phase when needed; there is no blocking follow-up for this rename.
+
+**Recommended next command:** `$brainstorm`
+
+# Previous Implementation - Clean Up 0.1.9 Publish Blockers
 
 ## Goal
 

@@ -41,7 +41,7 @@ idea-scope-brief
   -> ux-variations --layout-mode
   -> prototype
   -> uat --variant-evaluation
-  -> consolidate-variations
+  -> consolidate-prototypes
   -> research-roadmap --post-prototype
   -> spec-interview
   -> research-roadmap --post-spec
@@ -114,7 +114,7 @@ npx skillpacks install business-growth           # optional: when repeat-use, pr
 /ux-variations --layout-mode
 /prototype
 /uat --variant-evaluation
-/consolidate-variations
+/consolidate-prototypes
 /research-roadmap --post-prototype
 /spec-interview
 /research-roadmap --post-spec
@@ -148,7 +148,7 @@ $ui-interview --requirements-only
 $ux-variations --layout-mode
 $prototype
 $uat --variant-evaluation
-$consolidate-variations
+$consolidate-prototypes
 $research-roadmap --post-prototype
 $spec-interview
 $research-roadmap --post-spec
@@ -179,7 +179,7 @@ The current `roadmap` contract distinguishes unresolved ideas from confirmed ful
 | No specs and missing journey for user-facing work | Queue `journey-map` first. |
 | No specs, unresolved idea, unclear destination | Queue `feature-interview`. |
 | No specs, user already selected full production spec creation | Queue `spec-interview`. |
-| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ux-variations [specific-user-flow]`, `ui-interview [specific-ux-variation]`, `user-flow-map --prototype-build-plan [topic]`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only when a fixed content contract and layout-only alternatives are explicitly needed. |
+| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ux-variations [specific-user-flow]`, `ui-interview [specific-ux-variation]`, `user-flow-map --prototype-build-plan [topic]`, `prototype`, `uat --variant-evaluation`, `consolidate-prototypes`, or post-prototype refresh. Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only when a fixed content contract and layout-only alternatives are explicitly needed. |
 | Production spec exists, roadmap missing | Build or update `tasks/roadmap.md`, then seed `plan-phase`. |
 | All roadmap phases complete | Queue `research-roadmap`, then route to `brainstorm` unless a concrete idea is selected. |
 
@@ -200,9 +200,9 @@ The current product-spec path is gated by built and reviewed prototypes:
 3. `ux-variations --layout-mode` creates multiple layout directions from research, journey, flow, and UI-requirement evidence.
 4. `prototype` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
 5. `uat --variant-evaluation` creates the human-run comparison plan and evidence capture.
-6. `consolidate-variations` compares reviewed variants, interviews the user on keep/reject decisions, resolves conflicts, and builds `prototypes/{topic}/consolidated/`.
-7. `research-roadmap --post-prototype` checks whether prototype decisions stale or contradict research.
-8. `spec-interview` walks the consolidated prototype screen by screen and produces `specs/{topic}.md`.
+6. `consolidate-prototypes` compares reviewed prototypes, interviews the user on keep/reject decisions, resolves conflicts, builds `prototypes/{topic}/consolidated/`, and writes AFPS graduation under `design/`.
+7. `research-roadmap --post-prototype` reads the graduation document when present and checks only for contradicted, stale, or pre-spec-blocking research.
+8. `spec-interview` walks the consolidated prototype and graduation document screen by screen and produces `specs/{topic}.md`.
 9. `research-roadmap --post-spec` checks whether production-spec decisions stale or contradict research.
 10. `roadmap` sequences the spec into phases.
 
@@ -294,14 +294,15 @@ The old report had pieces of the prototype path but still treated spec creation 
 
 **Resolution in this report:** post-spec addition routing is now part of the canonical model.
 
-### Finding 6: Consolidate-Variations Contract Has Tension Around Output Shape
+### Finding 6: Consolidation Contract Resolves Output Shape
 
-The current `consolidate-variations` contract says the skill produces a consolidated prototype and an interview log, and its description says it produces a final implementation-ready UI specification. The workflow later relies on `spec-interview` to turn the consolidated prototype into the production implementation spec. That can be read two ways:
+The current `consolidate-prototypes` contract says the skill produces a consolidated prototype, consolidation interview log, and AFPS graduation document. It no longer claims ownership of the production implementation specification. The workflow relies on `spec-interview` to turn the consolidated prototype and graduation evidence into the production implementation spec.
 
-- consolidation writes an implementation-ready UI specification for the final design surface; or
-- consolidation writes a consolidated prototype and evidence log, while production implementation details wait for `spec-interview`.
+- consolidation writes `prototypes/{topic}/consolidated/`, `design/consolidate-prototypes-[topic]-interview.md`, and `design/afps-graduation-{topic}.md` or scoped equivalents.
+- post-prototype cleanup reads graduation and queues only contradicted, stale, or blocking research.
+- production implementation details wait for `spec-interview`.
 
-**Audit note:** this task does not patch skill contracts. The ambiguity should be handled as a future skill-contract cleanup if it causes agents to skip `spec-interview` or treat the consolidated prototype as the production spec.
+**Resolution in this report:** the consolidation/spec boundary is explicit, and the graduation document is the readiness marker between prototype approval and production spec creation.
 
 ## Canonical Decision Rules
 
@@ -330,7 +331,8 @@ idea-scope-brief
   -> ux-variations --layout-mode
   -> prototype
   -> uat --variant-evaluation
-  -> consolidate-variations
+  -> consolidate-prototypes
+  -> AFPS graduation document
   -> research-roadmap --post-prototype
   -> spec-interview
   -> research-roadmap --post-spec
@@ -362,10 +364,9 @@ research-roadmap
 
 ## Confidence And Open Questions
 
-Confidence is high that this report reflects the current stated contracts because the same routing appears in `roadmap`, `research-roadmap`, `prototype`, `uat`, `consolidate-variations`, `spec-interview`, `feature-interview`, pack docs, and recent lessons.
+Confidence is high that this report reflects the current stated contracts because the same routing appears in `roadmap`, `research-roadmap`, `prototype`, `uat`, `consolidate-prototypes`, `spec-interview`, `feature-interview`, pack docs, and recent lessons.
 
 Open questions:
 
-- Whether `consolidate-variations` should explicitly write a Markdown UI spec in addition to the consolidated prototype and interview log.
 - Whether docs should standardize the exact optional order among `value-prop-canvas`, `positioning`, `lean-canvas`, `metrics`, `monetization`, `gtm`, and `growth-model` by product type.
 - Whether `business-app` compatibility alias language should be further reduced in user-facing docs to prevent broad-pack defaulting.

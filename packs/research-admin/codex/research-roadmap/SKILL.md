@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.18
+version: v0.19
 required_conventions: [alignment-page]
 invocation: orchestrator
 ---
@@ -237,7 +237,7 @@ $idea-scope-brief
         -> $ux-variations --layout-mode
           -> $prototype
           -> $uat --variant-evaluation
-            -> $consolidate-variations
+            -> $consolidate-prototypes
               -> $research-roadmap --post-prototype
                 -> $spec-interview
                   -> $roadmap
@@ -400,25 +400,30 @@ Rules:
 
 ### Gate
 
-A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-variations` first.
+A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-prototypes` first.
+
+When an AFPS graduation document exists at `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`, read it before scanning research. Treat it as the durable marker that research/prototyping is complete and production planning can begin after cleanup and `$spec-interview`.
 
 ### Scan
 
 1. Read the consolidated prototype directory to understand what was built.
-2. Read all research docs: `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files. Read `specs/user-flow-*.md` when present as the approved flow-structure bridge between research and prototype.
-3. For each research document, compare against the consolidated prototype:
+2. Read the AFPS graduation document when present. Use its source prototypes reviewed, UAT evidence used, final MVP decisions, rejected alternatives, unresolved risks or assumptions, and stale research cleanup status to bound the cleanup pass.
+3. Read only research docs needed to validate contradictions, stale assumptions, or blocking pre-spec risks. Start with `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any research explicitly named by the graduation document. Read `specs/user-flow-*.md` when present as the approved flow-structure bridge between research and prototype.
+4. For each relevant research document, compare against the consolidated prototype and graduation decisions:
    - **User flows**: Does the prototype's flow match the journey map's discovery -> onboarding -> aha -> conversion -> retention path?
    - **Approved flow map**: Does the prototype preserve the `specs/user-flow-*.md` entry points, screen order, decisions, branches, required states, failure/recovery paths, and handoffs?
    - **Onboarding**: Does the prototype's first-run experience match ICP expectations for technical sophistication and time-to-value?
    - **Density and copy**: Does the prototype's information density and copy tone match ICP communication preferences?
    - **Interactions**: Do the prototype's interaction patterns match journey-map touchpoints and competitive differentiation?
    - **Differentiation**: Does the prototype demonstrate the competitive advantages identified in competitive analysis?
-4. Flag research documents that are contradicted or made stale by prototype decisions.
-5. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag as: "Positioning was hypothesized pre-product. Prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
+5. Queue only research that is contradicted, made stale by prototype/graduation decisions, or required before `$spec-interview`. Do not reload broad research packs or recommend broad discovery skills merely because they are normally upstream.
+6. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag it only when the graduation document or consolidated prototype contains customer-facing product evidence that contradicts or materially sharpens the existing positioning. Use: "Positioning was hypothesized pre-product. Prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
 
 ### Output
 
 Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running, using the same format as the standard process. Each item must explain what the prototype revealed that contradicts or supersedes the current research document.
+
+If the graduation document is present and no contradictions, stale assumptions, or blocking pre-spec research gaps are found, write the checked status item: `- [x] Post-prototype research cleanup is current; AFPS graduation reviewed and no blocking research refresh is required before $spec-interview.`
 
 **Next step:** first unchecked queued item in `tasks/todo.md`, using the direct skill command written in that item.
 

@@ -39,7 +39,7 @@ const noWrites = dryRun || checkMode;
 const previewPrefix = checkMode ? "[check] " : dryRun ? "[dry-run] " : "";
 
 const DESIGN_TREE_SKILLS = new Set([
-  "consolidate-variations",
+  "consolidate-prototypes",
   "design-inspirations",
   "prototype",
   "spec-interview",

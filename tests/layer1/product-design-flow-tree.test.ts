@@ -28,7 +28,7 @@ describe("product-design flow tree artifact boundaries", () => {
       "ux-variations",
       "ui-interview",
       "prototype",
-      "consolidate-variations",
+      "consolidate-prototypes",
       "spec-interview",
     ]);
     expect(schema.properties.mode.enum).toEqual(["flat", "product-path"]);
@@ -79,7 +79,7 @@ describe("product-design flow tree artifact boundaries", () => {
       const uxVariations = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
       const uiInterview = read(`packs/product-design/${mirror}/ui-interview/SKILL.md`);
       const prototype = read(`packs/product-design/${mirror}/prototype/SKILL.md`);
-      const consolidate = read(`packs/product-design/${mirror}/consolidate-variations/SKILL.md`);
+      const consolidate = read(`packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`);
       const sigil = command[mirror];
 
       expect(userFlow).toContain("design/flow-tree.schema.json");
@@ -148,6 +148,9 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(specInterview).toContain("design/**/flow-tree-*.yaml");
       expect(specInterview).toContain("Keep `specs/` as the canonical output directory");
       expect(specInterview).toContain("`specs/[topic].md`");
+      expect(specInterview).toContain("Production Ready Approval");
+      expect(specInterview).toContain("docs/production-ready-approval.md");
+      expect(specInterview).toContain("Do not create a new state database");
       expect(specInterview).not.toContain("`design/[topic].md`");
     }
   });
@@ -273,7 +276,7 @@ describe("product-design flow tree artifact boundaries", () => {
 
   it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {
     const expectedRoute =
-      "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview";
+      "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-prototypes -> research-roadmap --post-prototype -> spec-interview";
 
     expect(read("docs/skill-next-step-contracts.md")).toContain(expectedRoute);
 

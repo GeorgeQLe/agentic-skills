@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.26 - 2026-06-22
+
+- Updated downstream design-tree route references to use `$consolidate-prototypes` as the primary post-UAT consolidation skill.
+
 ## v0.25 - 2026-06-22
 
 - Enforced HTML-first canonical writes: chunked assembly now produces proposed whole-set review content for `alignment/ux-variations-{topic}.html` before any final variation plan, interview log, or flow-tree update.

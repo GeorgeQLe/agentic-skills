@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.15
+version: v0.16
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional-topic-override] [--ideas]"
 context_intake: deep
@@ -16,8 +16,8 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Before starting the interview process, verify:
 
-1. A consolidated prototype exists at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `/consolidate-variations` first.
-2. All research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research. If unchecked post-prototype items remain, halt and recommend completing those first.
+1. A consolidated prototype exists at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `/consolidate-prototypes` first.
+2. All blocking research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research, contradicted research, stale research, or pre-spec blockers. If unchecked blocking post-prototype items remain, halt and recommend completing those first.
 
 If both gates pass, proceed with the interview.
 
@@ -29,11 +29,11 @@ Interview the user to validate, refine, and complete an implementation specifica
 
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **terminal spec writer**, formalizing the approved MVP into a production-ready v1 specification. The `## Process` steps below group by stage:
 
-- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, research frame, and that no unchecked post-prototype items remain.
+- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, research frame, and that no unchecked blocking post-prototype items remain.
 - **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream evidence.
 - **Stage 2 — Design**: walk each screen/page to extract production behaviors, data, contracts, and acceptance criteria.
 - **Stage 3 — Plan**: the screen-by-screen spec outline is the slice the implementation phase realizes.
-- **Stage 4 — Implement (scoped)**: write the production specification, keeping `specs/` as the canonical output directory, behind the single binding alignment gate.
+- **Stage 4 — Implement (scoped)**: write the production specification, keeping `specs/` as the canonical output directory, behind the single binding alignment gate. This same confirmed alignment record owns the Production Ready Approval: approval to move from concept/prototype/spec into a production product build, not proof that the product is already shipped.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the approved tree, resolves the consolidated MVP ready to specify, runs the staged flow, writes the spec on approval, and stops with the handoff in `## Next Work`.
 
@@ -57,6 +57,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 1. **Read consolidated prototype and research context:**
    - Read the consolidated prototype directory at `prototypes/{topic}/consolidated/` as the primary input. Walk through every screen, component, and interaction in the prototype to understand the current state.
+   - Read the consolidation interview log and `alignment/consolidate-prototypes-{topic}.html` when present. Treat final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, and stale-research cleanup notes as upstream evidence, not as a separate production-readiness state store.
    - If `.agents/project.json` exists, read `project_type` and `enabled_packs` before choosing a research frame.
    - For `business-app`, read `research/icp.md` when present and ground solution decisions against the ICP.
    - For `game`, read game research artifacts when present: `research/game-audience.md`, `research/game-fantasy.md`, `research/game-core-loop.md`.
@@ -123,6 +124,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - `## Assumptions & Risks` (the checkpoint output)
      Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
    - Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
+   - Include a **Production Ready Approval** section in the spec or alignment page before implementation handoff. Follow `docs/production-ready-approval.md`: record the approved MVP scope, evidence basis, remaining blockers, and whether the concept/prototype is approved to enter production build. Do not create a new state database, `research/.progress.yaml` schema, or competing lifecycle registry.
    - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the Assumptions Checkpoint as presented, user corrections, and a summary of significant deviations from the original spec.
 
 ## Output
@@ -138,7 +140,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Next Work
 
-**Next work:** the specification is the design tree's terminal artifact. After approval, hand off to implementation/execution — verify the target pack is enabled in `.agents/project.json` `enabled_packs` before recommending `/roadmap` then `/exec` (agent-work-admin pack).
+**Next work:** the specification is the design tree's terminal artifact. After the Production Ready Approval is confirmed, hand off to implementation/execution — verify the target pack is enabled in `.agents/project.json` `enabled_packs` before recommending `/roadmap` then `/exec` (agent-work-admin pack).
 
 **Recommended next command:** implementation handoff via `/roadmap`.
 

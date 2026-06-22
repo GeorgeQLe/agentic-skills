@@ -1,5 +1,9 @@
 # user-flow-map changelog (codex)
 
+## v1.4 - 2026-06-22
+
+- Updated flow-tree route initialization to use `consolidate-prototypes` as the primary consolidation step.
+
 ## v1.3 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

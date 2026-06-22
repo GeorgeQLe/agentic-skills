@@ -26,7 +26,7 @@ Exploration corrected two premises before any recommendation could be made:
    (`ux-variations/SKILL.md:18`, `ui-interview/SKILL.md:25`, `user-flow-map/SKILL.md:23`). They
    already chunk heavy work across fresh contexts — but by **cross-skill chaining**
    (`user-flow-map` → `/ux-variations` → `/ui-interview` → `prototype` →
-   `consolidate-variations`), encoded in the flow-tree manifest `route` field
+   `consolidate-prototypes`), encoded in the flow-tree manifest `route` field
    (`design/flow-tree.schema.json:33-56`; `user-flow-map/SKILL.md:49`) — **not** by a single skill
    re-invoking itself. State is the flow-tree manifest plus canonical-artifact existence, and these
    skills explicitly opt **out** of Pattern A run manifests and `tasks/todo.md`
@@ -459,7 +459,7 @@ inspiration exactly one home, and keeps the other three skills deliberately loca
 
 - **Route placement:** early — *before or alongside* `ux-variations`. In the flow-tree `route`
   (`flow-tree.schema.json:33-56`) the canonical six-stage route is
-  `[user-flow-map, ux-variations, ui-interview, prototype, consolidate-variations, spec-interview]`.
+  `[user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`.
   `design-inspirations` is a **gather-once feeder**, not a stage every branch passes through, so the
   better fit is **not** inserting a 7th `route` enum value (which would force a schema change and
   imply every flow must pass through it). Instead, place it as an **optional pre-step** whose output

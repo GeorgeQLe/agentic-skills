@@ -3127,7 +3127,7 @@ describe("benchmark coverage matrix", () => {
       "spec-drift",
       "trace",
       "uat",
-      "consolidate-variations",
+      "consolidate-prototypes",
       "prototype",
       "ui-interview",
       "ux-variations",

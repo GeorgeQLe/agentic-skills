@@ -6932,7 +6932,7 @@
       "lineHeight": 1.25
     },
     {
-      "id": "skill-product-design-consolidate-variations",
+      "id": "skill-product-design-consolidate-prototypes",
       "type": "text",
       "x": 2190,
       "y": 1526,
@@ -6960,14 +6960,14 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "consolidate-variations",
-      "rawText": "consolidate-variations",
+      "text": "consolidate-prototypes",
+      "rawText": "consolidate-prototypes",
       "fontSize": 13,
       "fontFamily": 3,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "consolidate-variations",
+      "originalText": "consolidate-prototypes",
       "autoResize": true,
       "lineHeight": 1.25
     },
