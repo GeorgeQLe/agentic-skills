@@ -1,37 +1,35 @@
-# Current Implementation - HTML-First Canonical Write Contract
+# Current Implementation - Clean Up 0.1.9 Publish Blockers
 
 ## Goal
 
-Tighten product-design contracts so `state-model` and `ux-variations` may use Markdown intermediates as durable chunk cursors, but final canonical `design/**` Markdown/YAML writes, flow-tree growth, glossary writes, and archive-at-canonical-write cleanup happen only after the HTML alignment page is reviewed and confirmed.
+Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by fixing release metadata, recording already-verified release-readiness evidence, and rerunning the exact release gates before any publish.
 
 ## Plan
 
-- [x] Add an HTML-first canonical write rule to `docs/design-tree-loop-convention.md`.
-- [x] Archive and bump mirrored `state-model` skills from `v0.4` to `v0.5`; reword synthesis as proposed review content until alignment approval.
-- [x] Archive and bump mirrored `ux-variations` skills from `v0.24` to `v0.25`; reword chunked assembly as proposed review content until alignment approval.
-- [x] Regenerate `DESIGN-TREE-LOOP.md` bundles.
-- [x] Extend Layer 1 regression coverage for proposed review content vs approval-gated canonical writes.
-- [x] Run the requested convention, audit, test, build, showcase, and diff-hygiene checks; fix any failures.
-- [x] Record review notes, ship manifest, commit, and push intended changes on the primary branch.
+- [x] Inspect current release metadata, task tracking, package version state, and release runbook.
+- [x] Add the `0.1.9` package changelog entry and correct the stale `0.1.8` publication wording.
+- [x] Record release-readiness status and the remaining npm-auth human action in task tracking.
+- [x] Run the release gates in order: package tests, package verify, convention bundle audit, alignment audit, interrogation audit, and npm registry checks.
+- [x] Check npm auth and skip `./publish.sh --dry-run patch` because `npm whoami --registry https://registry.npmjs.org/` currently fails with npm `E401`.
+- [ ] Commit and push metadata cleanup before any real publish attempt.
 
 ## Acceptance Criteria
 
-- `_working/` briefs and per-unit intermediates remain allowed as Markdown before approval.
-- Final assembled deliverables are treated as proposed review content until rendered in `alignment/{skill}-{topic}.html`.
-- Canonical `design/**/*.md`, `design/**/*.yaml`, flow-tree child growth/back-pointers, glossary writes, and archive cleanup appear only in approval-gated wording.
-- Active Codex and Claude `state-model` and `ux-variations` mirrors distinguish proposed review content from canonical writes.
-- Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
-- Regression coverage fails if canonical design Markdown/YAML writes drift back into pre-approval assemble wording.
+- `CHANGELOG.md` documents `0.1.9` release contents and pre-publish verification status.
+- `CHANGELOG.md` no longer says `0.1.8` is unpublished.
+- Active skill version hygiene is recorded as passing: no missing `version:`, no bumped active skill missing archive/changelog, and no package-boundary failure after clean rebuild.
+- The remaining human action is clear: run `npm login --registry https://registry.npmjs.org/` as `glexcorp` or an explicitly authorized publisher.
+- No runtime code changes are made unless a deterministic verification failure reproduces from a clean build.
 
 ## Review
 
-- Added the HTML-first canonical write rule to `docs/design-tree-loop-convention.md`; regenerated all design-tree bundles.
-- Archived and bumped mirrored `state-model` contracts to `v0.5`; synthesis now assembles proposed domain model/manifest content for `alignment/state-model-{topic}.html`, with canonical docs, YAML, `model_ref`, `model_tree_ref`, glossary writes, and archive cleanup gated under approval.
-- Archived and bumped mirrored `ux-variations` contracts to `v0.25`; chunked assembly now produces proposed whole-set review content for `alignment/ux-variations-{topic}.html`, with final variation plan, interview log, flow-tree `ux_variations[]` updates, and archive cleanup gated under approval.
-- Updated the older design-loop audit note so it no longer says chunked assembly initializes flow-tree entries or writes a single canonical doc before review.
-- Added Layer 1 regression coverage for convention wording, active `state-model`/`ux-variations` pre-approval wording, and approval-gated canonical writes.
-- Regenerated Skills Showcase assets and `packages/skillpacks/dist/skillpacks-manifest.json` from the staged index so generated metadata reports `state-model v0.5` and `ux-variations v0.25`.
-- Verification passed: `node scripts/upgrade-design-tree-loop.mjs --check`; `node scripts/skill-convention-bundle-audit.mjs`; `pnpm --dir tests exec vitest run layer1/product-design-flow-tree.test.ts layer1/skill-alignment-routing-audit.test.ts layer1/frontmatter.test.ts` (1106 passing); `scripts/skill-archive-audit.sh --strict`; `scripts/skill-mirror-parity-audit.sh --verbose`; `npm run skillpacks:build`; `npm run skillpacks:verify`; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- Added the `0.1.9` package changelog entry covering post-`0.1.8` convention, bundle, publish-recovery, Pattern A handoff, benchmark/self-improvement, and bundled-snapshot changes.
+- Corrected the `0.1.8` changelog status to published for both packages.
+- Release-readiness evidence from the prior audit is preserved here: active skill version hygiene passed, no bumped active skill was missing an archive/changelog entry, and the earlier package-boundary failure was stale `packages/skillpacks/build` state that passed after a clean rebuild.
+- Verification passed: `npm --workspace packages/skillpacks run test:node` (112/112), `npm run skillpacks:verify` (385 skills, 41 packs, package boundary passed), `node scripts/skill-convention-bundle-audit.mjs` (385 active skills, 368 tracked bundles), `node scripts/audit-alignment-pages.mjs` (53 active pages), and `node scripts/audit-interrogation-pages.mjs` (0 active pages).
+- npm registry checks passed: `skillpacks` latest is `0.1.8`, `@glexcorp/gskp` latest is `0.1.8`, and both `skillpacks@0.1.9` and `@glexcorp/gskp@0.1.9` return npm `E404`.
+- Dry-run publish was not run because `npm whoami --registry https://registry.npmjs.org/` returns npm `E401 Unauthorized`.
+- Remaining human action before dry-run publish: authenticate with npm using `npm login --registry https://registry.npmjs.org/` as `glexcorp` or another explicitly authorized publisher, then confirm with `npm whoami --registry https://registry.npmjs.org/`.
 
 # Previous Implementation - Clarify Chunked Skill Progress
 

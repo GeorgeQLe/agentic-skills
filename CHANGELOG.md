@@ -6,9 +6,31 @@ This file tracks npm package releases: CLI behavior, package contents, bundled s
 
 Keep this file updated before every npm package publish.
 
+## [0.1.9] - 2026-06-22
+
+Prepared for both `skillpacks` and `@glexcorp/gskp`; pending npm authentication and publish.
+
+### Added
+
+- Added product-design convention updates for design-tree HTML-first canonical writes and state-model/UX-variation flow state, including refreshed bundled `DESIGN-TREE-LOOP.md` snapshots.
+- Added the interrogation-page convention bundle path, generator, active-skill bundles, and package audit coverage.
+- Added the convention-bundle registry and package-gated audit coverage so declared skill convention bundles are checked across source, generated bundles, and npm staging.
+
+### Changed
+
+- Refreshed the bundled skill snapshot after Pattern A research-loop handoff wording, benchmark/self-improvement updates, design-tree/state-model work, interrogation-page convention work, and convention-bundle packaging.
+- Hardened publish recovery and dry-run behavior so `./publish.sh --current` supports partial-publish recovery and dry runs prove npm auth/access before a real publish.
+- Updated Pattern A review-pending handoffs so `## Next Work` owns review/compile/paste instructions and the command section only names the parent invocation for compiled YAML.
+
+### Verification
+
+- Release gates passed before publish: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `node scripts/skill-convention-bundle-audit.mjs`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/audit-interrogation-pages.mjs`.
+- npm registry checks showed both package `latest` dist-tags still at `0.1.8`, and `skillpacks@0.1.9` / `@glexcorp/gskp@0.1.9` unavailable before publish.
+- Publish dry run is blocked until an authorized npm account logs in with `npm login --registry https://registry.npmjs.org/` and `npm whoami --registry https://registry.npmjs.org/` succeeds.
+
 ## [0.1.8] - 2026-06-18
 
-Prepared for both `skillpacks` and `@glexcorp/gskp`; not yet published.
+Published for both `skillpacks` and `@glexcorp/gskp`.
 
 ### Fixed
 

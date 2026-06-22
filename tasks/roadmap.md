@@ -1,3 +1,27 @@
+## Current Implementation - Clean Up 0.1.9 Publish Blockers
+
+### Goal
+
+Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by fixing release metadata, documenting the release-readiness audit result, and rerunning the exact release gates before any publish.
+
+### Plan
+
+1. Inspect current release metadata, task tracking, package version state, and release runbook.
+2. Add the `0.1.9` package changelog entry and correct the stale `0.1.8` publication wording.
+3. Record release-readiness status and the remaining npm-auth human action in task tracking.
+4. Run the release gates in order: package tests, package verify, convention bundle audit, alignment audit, interrogation audit, and npm registry checks.
+5. Check npm auth and run `./publish.sh --dry-run patch` only if `npm whoami --registry https://registry.npmjs.org/` succeeds.
+6. Commit and push metadata cleanup before any real publish attempt.
+
+### Acceptance Criteria
+
+- `CHANGELOG.md` documents `0.1.9` release contents and pre-publish verification status.
+- `CHANGELOG.md` no longer says `0.1.8` is unpublished.
+- Active skill version hygiene is recorded as passing: no missing `version:`, no bumped active skill missing archive/changelog, and no package-boundary failure after clean rebuild.
+- The remaining human action is clear: run `npm login --registry https://registry.npmjs.org/` as `glexcorp` or an explicitly authorized publisher.
+- Runtime code remains untouched unless a deterministic verification failure reproduces from a clean build.
+- Metadata cleanup is committed and pushed before any real publish attempt.
+
 ## Current Implementation - HTML-First Canonical Write Contract
 
 ### Goal
