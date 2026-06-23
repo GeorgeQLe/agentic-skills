@@ -1,3 +1,26 @@
+## Current Implementation - Confirm Workflow Design Alignment Page
+
+### Goal
+
+Consume the approved gate-answer YAML for `alignment/workflow-design-three-pipelines.html`, reconcile the live page to the approved decisions, and confirm the alignment page without disturbing unrelated active release-prep or skill work in this dirty worktree.
+
+### Plan
+
+1. Record the scoped plan in task tracking.
+2. Archive the current active alignment page before replacement.
+3. Update the live page so the approved answers are reflected as the current decision record: five decks, COA B, four-step rapid ceremony with traction, devtool front-half on demand, semi-auto graduation, and two dedicated rapid decks backed by `packs/vard/` and `packs/ord/`.
+4. Remove review/compile controls and mark the page confirmed.
+5. Run the active alignment-page audit and diff hygiene checks.
+6. Record review results and commit/push only if the resulting tracked changes can be safely isolated from unrelated worktree edits.
+
+### Acceptance Criteria
+
+- The previous active page is archived under `docs/history/archive/`.
+- The live page is confirmed and has no active gate, section-feedback, or compile-response controls.
+- Stale "3-step" rapid-pipeline wording is reconciled to the approved four-step scan/align/ship/traction ceremony.
+- The approval record preserves all six supplied gate answers, including the "two dedicated decks, not packs" note.
+- Verification results are recorded before completion.
+
 ## Current Implementation - Prevent Pack Install From Installing Archived Skills
 
 ### Goal
