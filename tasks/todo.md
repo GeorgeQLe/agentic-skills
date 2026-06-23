@@ -2,7 +2,11 @@
 
 ## Status
 
-Active implementation queue: interrogation intake validation clarification.
+Active implementation queue: none executable.
+
+Last promoted queue completed: interrogation intake validation clarification.
+
+Current blocker: the next roadmap item, `Deferred Implementation - Design-Tree Branch Prioritization And UI Experiment Split`, needs `$plan-phase` decomposition before `$exec` can implement it. `scripts/pack.sh which plan-phase` reports `plan-phase` is provided by the uninstalled `agent-work-admin` pack, and `.codex/skills/plan-phase/SKILL.md` is not present in this active Codex session.
 
 This file is the current execution contract, not a historical work log. Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
@@ -159,6 +163,12 @@ After a shipped implementation, `tasks/todo.md` must contain only the current ac
 - `tasks/recurring-todo.md` has two due advisory items: Devtool docs audit refresh and spec drift check. They remain advisory unless explicitly promoted into active work.
 - `tasks/roadmap.md` still contains older reverse-chronological implementation notes with stale `Current Implementation` headings. This run fixed the active todo surface; a broader roadmap archival rewrite is a separate editorial cleanup because the roadmap file is large and historically overloaded.
 
+## Exec Blocker - 2026-06-23
+
+`$exec` could not start the next roadmap implementation safely because the next deferred roadmap item has acceptance criteria but no `### Tests First`, `### Implementation`, or `### Execution Profile` detail. Per the `exec` contract, that phase must be decomposed by `$plan-phase` first.
+
+Resolution path: install or enable `agent-work-admin` / `plan-phase`, refresh the Codex skill registry with a fresh session if needed, then run `$plan-phase` for `Design-Tree Branch Prioritization And UI Experiment Split` or rerun `$exec` after the phase is decomposed.
+
 ## Next Work
 
-Decide whether to promote one advisory item from `tasks/recurring-todo.md` or start a new planned implementation/research phase.
+Decompose `Deferred Implementation - Design-Tree Branch Prioritization And UI Experiment Split` into an executable current phase with tests, implementation steps, files, and an execution profile.

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-23 - Exec blocked by missing plan-phase skill
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-123103-exec.md`.
+- Confirmed the active `tasks/todo.md` implementation queue was already fully checked and reviewed, with no executable unchecked step remaining.
+- Identified the next roadmap work as `Deferred Implementation - Design-Tree Branch Prioritization And UI Experiment Split`, but it still needs phase decomposition because it has roadmap-level acceptance criteria rather than current-phase tests, implementation steps, and an execution profile.
+- Verified `scripts/pack.sh which plan-phase` reports `plan-phase` is provided by the uninstalled `agent-work-admin` pack, and `.codex/skills/plan-phase/SKILL.md` is not present in the active Codex skill registry.
+- Recorded the blocker and next handoff in `tasks/todo.md` without adding a stale unchecked executable item.
+
 ## 2026-06-23 - Task-doc routing audit and roadmap cleanup
 
 - Added `scripts/audit-task-docs.mjs`, a read-only task-doc routing audit that fails when `tasks/todo.md` contains stale unchecked work outside the current active task or when `tasks/roadmap.md` has ambiguous `Current Implementation` headings not explicitly promoted into `tasks/todo.md`.
