@@ -157,6 +157,15 @@ console.log(`Verified built package metadata for skillpacks@${version}.`);
 NODE
 }
 
+atomic_restore_file() {
+  local source=$1
+  local target=$2
+  local tmp="${target}.restore.$$"
+
+  cp "$source" "$tmp"
+  mv "$tmp" "$target"
+}
+
 cleanup() {
   local dir
   for dir in "${TMP_DIRS[@]}"; do
@@ -166,9 +175,9 @@ cleanup() {
   done
 
   if [[ "$DRY_RUN" == "1" && -n "$RESTORE_DIR" && -d "$RESTORE_DIR" ]]; then
-    cp "$RESTORE_DIR/package.json" "$PACKAGE_JSON"
+    atomic_restore_file "$RESTORE_DIR/package.json" "$PACKAGE_JSON"
     if [[ -f "$RESTORE_DIR/skillpacks-manifest.json" ]]; then
-      cp "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON"
+      atomic_restore_file "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON"
     fi
     rm -rf "$RESTORE_DIR"
   fi
