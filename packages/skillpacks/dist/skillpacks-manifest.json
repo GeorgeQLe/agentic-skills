@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "2f2efade272a82fb727257594c6da784c2a5d42e56c621a8f05d6f3a8fd9a8b6",
+  "source_fingerprint": "11c4649eddc0d2c636c8f78ad28ba7268173e549491e61bcb472227d6c79ee2a",
   "packs": [
     {
       "name": "agent-bridge",
@@ -906,14 +906,16 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "base/claude/fork-idea-branch/SKILL.md",
       "installable": true,
-      "content_sha256": "241d1d82d7f1a56223d5cc77a42faa80bc02256ad44642c50f72037443bd9944",
-      "archive_versions": [],
+      "content_sha256": "d6412a7318eeaea260736a210a23d8689dd9894e66b792f95cd342b5e3b152ff",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/fork-idea-branch",
       "deck_memberships": []
     },

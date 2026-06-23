@@ -1,3 +1,36 @@
+# Current Implementation - Update Fork Idea Branch Additive Spawning
+
+## Goal
+
+Change `fork-idea-branch` so approved default use spawns multiple new research product paths while preserving the existing source path, with source archival available only through `--archive`.
+
+## Plan
+
+- [x] Record prompt history and active task tracking.
+- [x] Archive current `fork-idea-branch` `v0.0` and bump the active skill to `v0.1`.
+- [x] Update the skill contract for default additive spawning and explicit `--archive`.
+- [x] Update changelog and generated metadata if required.
+- [x] Run targeted validation and diff hygiene.
+- [ ] Record review results and ship intended changes where safe.
+
+## Acceptance Criteria
+
+- Default mode creates two or more approved `research/{slug}/` stubs without moving existing research.
+- `--archive` is required before the source path can be archived.
+- Alignment review confirms branch count, names/slugs, per-branch notes, planned file changes, and kickoff prompts.
+- Restart prompts for `$idea-scope-brief {slug}` are part of the review and final handoff.
+- Version/archive/changelog checks pass for the changed skill.
+
+## Review
+
+- Archived `base/claude/fork-idea-branch/SKILL.md` `v0.0` to `base/claude/fork-idea-branch/archive/v0.0/SKILL.md` and bumped the active skill to `v0.1`.
+- Rewrote default behavior as additive spawning of approved `research/{slug}/` product-path stubs, with source archival gated behind explicit `--archive` plus final compiled alignment-page approval.
+- Expanded the alignment-page contract to verify branch count, names/slugs, per-branch seed content, proposed file changes, reuse decisions, and per-branch `/idea-scope-brief {slug}` kickoff prompts.
+- Updated the benchmark fixture so the default fork case preserves `research/poketo-core/` when `--archive` is not passed.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and Skills Showcase generated assets for the new skill version, description, argument hint, and archive version.
+- Verification passed: `scripts/skill-archive-audit.sh --strict`, `scripts/base-skill-version-parity-audit.sh`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, stale archive-default phrase scan, positive contract scan, `git diff --check`, and `git diff --cached --check`.
+- Focused Vitest command `pnpm --dir tests exec vitest run layer1/bench-setups.test.ts layer1/frontmatter.test.ts layer1/skill-inventory.test.ts` still fails on known unrelated `analyze-sessions`, `spec-interview`, and `consolidate-variations` expectations documented by prior task history; this task did not touch those skill contracts.
+
 # Previous Implementation - Confirm Workflow Design Alignment Page
 
 ## Goal

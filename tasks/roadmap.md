@@ -1,3 +1,27 @@
+## Current Implementation - Update Fork Idea Branch Additive Spawning
+
+### Goal
+
+Revise `fork-idea-branch` so the default approved action creates two or more new `research/{descriptive-product-path}` stubs without archiving the existing path, and reserves source-path archival for explicit `--archive` invocations.
+
+### Plan
+
+1. Record prompt history and task tracking for the skill update.
+2. Archive the current `fork-idea-branch` `v0.0` skill contract, bump the active skill to `v0.1`, and update the skill-local changelog.
+3. Rewrite the skill contract around default additive branch spawning: parse user-provided ICP/product-path list, proposed stub names, and notes; compile an alignment page that verifies count, names, per-branch notes, proposed files, and kickoff prompts before mutation.
+4. Add explicit `--archive` mode that archives the existing source path only after approval, while default mode preserves existing active research and records fork lineage in `research/.progress.yaml`.
+5. Regenerate package/showcase metadata only where required by changed skill frontmatter or archive state.
+6. Run targeted validation for version/archive hygiene, generated metadata consistency, routing text, and diff hygiene.
+7. Record review results and commit/push only intended changes if the worktree can be safely isolated from unrelated existing edits.
+
+### Acceptance Criteria
+
+- Default `fork-idea-branch` behavior does not archive or move an existing `research/` path.
+- `--archive` is the only path that archives the source research path, and it still requires final compiled alignment-page approval before mutation.
+- The alignment page verifies the number of branches, branch/product-path names, notes, source context, planned stubs, and per-branch `$idea-scope-brief` kickoff prompts.
+- New branch stubs use `research/{slug}/_working/fork-seed.md` and manifest entries with clear product-path lineage and next-skill routing.
+- The skill version, archive snapshot, changelog, and generated metadata remain consistent.
+
 ## Previous Implementation - Confirm Workflow Design Alignment Page
 
 ### Goal
