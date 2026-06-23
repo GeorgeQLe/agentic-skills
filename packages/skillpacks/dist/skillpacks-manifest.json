@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "e0afad169e0d3a830bae097b6c3a3c31da939dda286974112454cfeaab8ce5c0",
+  "source_fingerprint": "2083b02541085087e380145c4c153c212374ed988e409effcc30e1171ed8b567",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7915,7 +7915,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.27",
+      "version": "v0.28",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7923,7 +7923,7 @@
       ],
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "7372c9fc94c40f5c85999abe56791a55d6ffb616df3bc2104f4c5233f553bea5",
+      "content_sha256": "85978584fb6ffc2759cf6406deacaa9f7847c998c15e19785b5382ce4215b248",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7945,6 +7945,7 @@
         "v0.24",
         "v0.25",
         "v0.26",
+        "v0.27",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8285,7 +8286,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.27",
+      "version": "v0.28",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8293,7 +8294,7 @@
       ],
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "9ddcd03ff2eb7c9f8ab796c3c96b466a5eaf03884cf6e45543610c29ed978244",
+      "content_sha256": "096364a5936289bde5f8cf807fd5811e997740d03711f60330fff04e85cc9f83",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8315,6 +8316,7 @@
         "v0.24",
         "v0.25",
         "v0.26",
+        "v0.27",
         "v0.3",
         "v0.4",
         "v0.5",

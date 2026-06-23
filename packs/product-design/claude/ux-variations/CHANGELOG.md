@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.28 - 2026-06-23
+
+- Replaced first-pending user-flow branch selection with deterministic branch routing: explicit user override, journey sequence, activation fit, first-value fit, evaluation priority, status, then stable array order.
+- Required user branch-order overrides to be recorded with rationale in the flow-tree manifest before authoring UX variations.
+
 ## v0.27 - 2026-06-22
 
 - Tightened default progression-mode routing so approved UX variation branches route to `/ui-interview [specific-ux-variation]` before prototype build-plan synthesis.

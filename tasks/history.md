@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-23 - UX variations branch selection contract
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-145541-exec.md`.
+- Archived mirrored `ux-variations` v0.27 contracts and bumped both active contracts to v0.28.
+- Replaced first-pending branch selection with deterministic routing: explicit user override, journey sequence, activation fit, first-value fit, evaluation priority, status, then stable array order.
+- Required explicit user branch-order overrides to be recorded with rationale in the flow-tree manifest before authoring UX variations.
+- Refreshed skillpacks manifest and Skills Showcase generated assets from the staged index; excluded unrelated generated benchmark-matrix drift from an untracked benchmark run.
+- Verification passed or matched the expected red TDD state: strict archive audit passed, focused layer1 now has 12 passed / 2 expected red failures, Skills Showcase validation passed, `npm run skillpacks:verify` passed, and diff hygiene passed. Mirror parity still reports the known unrelated `session-triage` shared-section drift.
+- Manifest: `tasks/ship-manifest-2026-06-23-ux-variations-branch-selection.md`.
+
 ## 2026-06-23 - User-flow-map branch ordering contracts
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-144400-exec.md`.

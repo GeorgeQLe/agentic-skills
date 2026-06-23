@@ -67,7 +67,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
   - Require any user override to be recorded in `design/user-flow-[topic].md`, the interview log, and the flow-tree manifest metadata.
   - Require each branch to explain the first value moment, primary task path, and progressive review sequence.
 
-- [ ] Step 1.5: Update and version the mirrored `ux-variations` contracts
+- [x] Step 1.5: Update and version the mirrored `ux-variations` contracts
   - Files: archive and modify `packs/product-design/{codex,claude}/ux-variations/SKILL.md`; update both `CHANGELOG.md` files.
   - Run `scripts/skill-archive.sh packs/product-design/codex/ux-variations` and `scripts/skill-archive.sh packs/product-design/claude/ux-variations` before bumping versions.
   - Replace "first modelled branch with no `ux_variations`" as the sole default with deterministic branch selection using journey order, user overrides, first-value/activation fit, and evaluation priority.
@@ -144,12 +144,16 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - Step 1.4 complete. Archived mirrored `user-flow-map` v1.4 contracts to `packs/product-design/{codex,claude}/user-flow-map/archive/v1.4/SKILL.md`, bumped both active contracts to v1.5, and updated both changelogs.
 - Added `user-flow-map` contract requirements for journey-ordered `branches[]`, branch progressive-review metadata, and explicit branch-order override persistence in `design/user-flow-[topic].md`, `design/user-flow-[topic]-interview.md`, and `design/**/flow-tree-*.yaml`.
 - Verification: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` now has 11 passed / 3 failed. The `user-flow-map` assertion passes; the remaining expected red failures are the mirrored `ux-variations`, `ui-interview`, and missing `create-ui-experiment` contract assertions scheduled for Steps 1.5-1.7.
+- Step 1.5 complete. Archived mirrored `ux-variations` v0.27 contracts to `packs/product-design/{codex,claude}/ux-variations/archive/v0.27/SKILL.md`, bumped both active contracts to v0.28, and updated both changelogs.
+- Replaced first-pending branch selection with deterministic UX variation routing: explicit user override, `journey_sequence`, `activation_fit`, `first_value_fit`, `evaluation_priority`, `status`, then stable array order. Added override/rationale persistence in the flow-tree manifest and kept default progression-mode output as planning/future experiment targets, not prototype buildout.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, `docs/skills-showcase/assets/skills-data.js`, and `apps/skills-showcase/public/assets/skills-data.js` for the skill version/content change. Excluded unrelated local benchmark-matrix churn caused by an untracked ignored benchmark run.
+- Verification: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` now has 12 passed / 2 failed. The `ux-variations` assertion passes; the remaining expected red failures are the mirrored `ui-interview` and missing `create-ui-experiment` contract assertions scheduled for Steps 1.6-1.7. `scripts/skill-archive-audit.sh --strict` passed. `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed. `npm run skillpacks:verify` passed after regenerating the package manifest. `scripts/skill-mirror-parity-audit.sh --verbose` still reports only the known unrelated `session-analytics/session-triage` shared-section drift.
 
-### Next Step Plan - Step 1.5
+### Next Step Plan - Step 1.6
 
-- Archive both mirrored `ux-variations` skill contracts before editing: run `scripts/skill-archive.sh packs/product-design/codex/ux-variations` and `scripts/skill-archive.sh packs/product-design/claude/ux-variations`.
-- Bump both `packs/product-design/{codex,claude}/ux-variations/SKILL.md` versions by one decimal and update both `CHANGELOG.md` files with the deterministic branch-selection behavior change.
-- Replace the default "first modelled/modeled user-flow branch with no `ux_variations`" selector with this exact contract: `Branch selection order: explicit user override, journey_sequence, activation_fit, first_value_fit, evaluation_priority, status, then stable array order.`
-- Add explicit language that raw first-pending array order is not the default branch selector and that user overrides must be recorded in the design tree manifest.
-- Keep default progression-mode output as design planning and future experiment targets; do not add prototype buildout or route implementation instructions before UI experiment approval.
-- Verification target: run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm the `ux-variations` assertion passes while the remaining expected red failures map to Steps 1.6-1.7; run archive/version audits for the new skill archives.
+- Archive both mirrored `ui-interview` skill contracts before editing: run `scripts/skill-archive.sh packs/product-design/codex/ui-interview` and `scripts/skill-archive.sh packs/product-design/claude/ui-interview`.
+- Bump both `packs/product-design/{codex,claude}/ui-interview/SKILL.md` versions by one decimal and update both `CHANGELOG.md` files with the UI experiment ownership/non-buildout behavior change.
+- Replace all active `ui_reviews[]` language with `ui_experiments[]`, including manifest update, chunked assembly, deliverables, branch IDs, and decision wording. Ensure `rg 'ui_reviews\\[\\]' packs/product-design/{codex,claude}/ui-interview/SKILL.md` returns no matches.
+- Add the exact contract required by layer1 coverage: "Write UI branch state to `ui_experiments[]`", "Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.", and mirrored clickable-experiment routing to `$create-ui-experiment [approved-ui-experiment]` / `/create-ui-experiment [approved-ui-experiment]`.
+- Keep `ui-interview` focused on UI requirements, UI branch packet authoring, static or bounded HTML mockup review, and branch decisions. Do not let default full UI mode write or route clickable prototype buildout; approved clickable route experiment needs go to the dedicated owner.
+- Verification target: run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm the `ui-interview` assertion passes while the remaining expected red failure maps to Step 1.7 (`create-ui-experiment`); run archive/version audits for the new skill archives.
