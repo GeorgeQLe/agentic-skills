@@ -2,6 +2,58 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Design-Tree Branch Prioritization And UI Experiment Split
+
+### Goal
+
+Make the product-design tree choose downstream branches in a journey-aware order, separate clickable UI experiment/prototype work from `ui-interview`, and ensure review surfaces introduce UI progressively instead of dropping reviewers into an overloaded all-at-once screen.
+
+### Plan
+
+1. Add explicit journey-aware branch ordering metadata to `design/flow-tree.schema.json`, such as `journey_stage`, `journey_sequence`, `priority_rationale`, and a progressive learning/review field.
+2. Update `$user-flow-map` so `branches[]` are ordered by user journey progression by default, with user overrides captured in the flow map, interview log, and manifest.
+3. Update `$ux-variations` so the recommended next child branch is selected by parent flow journey order, activation/first-value fit, and stated evaluation priority rather than only first-pending array order.
+4. Update `$ui-interview` to stop owning clickable prototype/buildout behavior by default; keep it focused on requirements, UI packet, static or bounded visual review, and branch decision capture.
+5. Design or add a dedicated `create-ui-experiment` skill to own clickable UI experiments, lightweight route prototypes, progressive reveal/review behavior, and experiment handoff into prototype/UAT.
+6. Add progressive UI review requirements so generated review/mockup surfaces teach the interface step by step, emphasizing first value, primary task path, and staged disclosure before showing dense controls.
+7. Fix the manifest naming drift between `ui-interview` guidance and `design/flow-tree.schema.json` (`ui_reviews[]` vs. `ui_experiments[]`).
+8. Run focused verification: schema validation or fixture checks, skill archive/changelog/version checks for any changed skills, generated bundle parity checks, and relevant repo audits.
+9. Document review results, commit, and push the completed change set on the primary branch.
+
+### Acceptance Criteria
+
+- Branch routing is deterministic and explicitly tied to journey sequence or a recorded user override.
+- `ux-variations` and `ui-interview` no longer rely only on implicit "first pending" order when recommending child branches.
+- Clickable UI experiment buildout has a dedicated owner separate from default `ui-interview` behavior.
+- Review artifacts present complex interfaces progressively, with clear first-step and primary-path focus before dense secondary controls.
+- The flow-tree schema and skill language use matching branch names for UI experiment/review nodes.
+- Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
+
+## Historical Implementation - Interrogation Open-Answer Evidence Validation
+
+### Goal
+
+Address the customer-discovery interrogation issue where "Real buyer or user language" prompts can elicit founder hunches rather than real buyer quotes, and add a shared interrogation convention requiring agents to research and validate open answers before treating them as evidence.
+
+### Plan
+
+1. Capture prompt history and review relevant lessons.
+2. Validate the user claim against the current customer-discovery interrogation bundle, generator, convention, and git history.
+3. Update `docs/interrogation-page-convention.md` so open answers are treated as claims/hypotheses requiring evidence checks, confidence labels, and pushback when unsupported or contradicted.
+4. Regenerate generated interrogation bundles through `scripts/upgrade-interrogation-page.mjs`.
+5. Add focused regression coverage asserting generated bundles carry the new open-answer evidence-validation rule.
+6. Run focused verification: interrogation generator check, layer1 interrogation tests, task-doc audit, diff hygiene, and broader package verification if the touched surface requires it.
+7. Document review results, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Interrogation convention explicitly says user open-question answers are intake evidence, not automatically validated facts.
+- Agents must check user-supplied open answers against repo context, prior research, code/git evidence, and approved external research when needed before using them in downstream research.
+- Agents must label supported, unsupported, hunch/inferred, contradicted, or needs-research answers and push back clearly when evidence is missing or contrary.
+- Customer-language / buyer-language responses specifically require quote/source/provenance checks or are treated as hypotheses needing research.
+- Generated `INTERROGATION-PAGE.md` bundles are in sync and tests cover the durable rule.
+- Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
+
 ## Historical Implementation - Fix Recurring Stale Task-Doc Routing
 
 ### Goal

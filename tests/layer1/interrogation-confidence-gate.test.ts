@@ -19,6 +19,13 @@ const participatingSkillDirs = [
 ];
 
 describe("interrogation confidence-gate contract", () => {
+  it("the canonical convention treats open answers as evidence to validate before downstream use", () => {
+    const text = readFileSync(join(REPO_ROOT, "docs/interrogation-page-convention.md"), "utf8");
+    expect(text).toContain("Open-answer evidence validation");
+    expect(text).toContain("not automatically validated facts");
+    expect(text).toContain("founder/user hunch language that needs research");
+  });
+
   for (const dir of participatingSkillDirs) {
     it(`${dir}/SKILL.md carries the confidence-gate blocking language and open-input rule`, () => {
       const text = readFileSync(join(REPO_ROOT, dir, "SKILL.md"), "utf8");
@@ -31,6 +38,8 @@ describe("interrogation confidence-gate contract", () => {
       const text = readFileSync(join(REPO_ROOT, dir, "INTERROGATION-PAGE.md"), "utf8");
       expect(text, `${dir} bundle blocking language`).toContain("cannot advance to stage one until");
       expect(text, `${dir} bundle open-input rule`).toContain("must contain at least one genuinely open input");
+      expect(text, `${dir} bundle evidence validation`).toContain("Open-answer evidence validation");
+      expect(text, `${dir} bundle hunch handling`).toContain("founder/user hunch language that needs research");
       expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
     });
   }

@@ -33,6 +33,40 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - The flow-tree schema and skill language use matching branch names for UI experiment/review nodes.
 - Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
 
+## Latest Completed Work - Interrogation Open-Answer Evidence Validation
+
+### Goal
+
+Address the customer-discovery interrogation issue where "Real buyer or user language" prompts can elicit founder hunches rather than real buyer quotes, and add a shared interrogation convention requiring agents to research and validate open answers before treating them as evidence.
+
+### Plan
+
+- [x] Capture prompt history and review relevant lessons.
+- [x] Validate the user claim against the current customer-discovery interrogation bundle, generator, convention, and git history.
+- [x] Update `docs/interrogation-page-convention.md` so open answers are treated as claims/hypotheses requiring evidence checks, confidence labels, and pushback when unsupported or contradicted.
+- [x] Regenerate generated interrogation bundles through `scripts/upgrade-interrogation-page.mjs`.
+- [x] Add focused regression coverage asserting generated bundles carry the new open-answer evidence-validation rule.
+- [x] Run focused verification: interrogation generator check, layer1 interrogation tests, task-doc audit, diff hygiene, and broader package verification if the touched surface requires it.
+- [x] Document review results, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Interrogation convention explicitly says user open-question answers are intake evidence, not automatically validated facts.
+- Agents must check user-supplied open answers against repo context, prior research, code/git evidence, and approved external research when needed before using them in downstream research.
+- Agents must label supported, unsupported, hunch/inferred, contradicted, or needs-research answers and push back clearly when evidence is missing or contrary.
+- Customer-language / buyer-language responses specifically require quote/source/provenance checks or are treated as hypotheses needing research.
+- Generated `INTERROGATION-PAGE.md` bundles are in sync and tests cover the durable rule.
+- Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
+
+### Review
+
+- Confirmed the customer-discovery generated interrogation bundle required "real buyer language" but the shared convention did not require validating open answers before using them as evidence.
+- Added `Open-answer evidence validation` to `docs/interrogation-page-convention.md`, requiring factual/customer-language open answers to be checked against repo context, prior research, code/git evidence, and approved external research when needed.
+- Regenerated all 18 participating generated `INTERROGATION-PAGE.md` bundles and refreshed `packages/skillpacks/dist/skillpacks-manifest.json`.
+- Added layer1 assertions so the canonical convention and generated bundles retain the new evidence-validation language.
+- Verification passed: `node scripts/upgrade-interrogation-page.mjs --check`, `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`, `node scripts/audit-interrogation-pages.mjs`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and `npm run skillpacks:verify`.
+- Verification residual: `pnpm --dir tests test:layer1 -- interrogation-confidence-gate` unexpectedly ran the broader layer1 suite and failed on unrelated pre-existing benchmark/spec-contract issues (`consolidate-variations` missing from benchmark coverage matrix, analyze-sessions remediation handoff text, and spec-interview post-prototype wording). The exact focused interrogation test passed.
+
 ## Latest Completed Work - Task-Doc Routing Prevention Fix
 
 ### Goal
