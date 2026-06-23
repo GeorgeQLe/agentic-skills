@@ -104,9 +104,9 @@ Prepare the repository so the next real release command is unambiguous: `./publi
 
 - [x] Record prompt history and active task tracking.
 - [x] Confirm npm registry state for both package names is still `0.1.10`.
-- [ ] Reset source release-state package versions to the last published version, `0.1.10`.
-- [ ] Move pending package changelog notes into a prepared `0.1.11` release section.
-- [ ] Document why source stays at `0.1.10` before the real patch publish command.
+- [x] Reset source release-state package versions to the last published version, `0.1.10`.
+- [x] Move pending package changelog notes into a prepared `0.1.11` release section.
+- [x] Document why source stays at `0.1.10` before the real patch publish command.
 - [ ] Run package verification gates and dry-run publish without a real npm publish.
 - [ ] Commit and push intended release-prep changes on `master`.
 
@@ -122,6 +122,9 @@ Prepare the repository so the next real release command is unambiguous: `./publi
 
 - Registry preflight passed: `npm view skillpacks version` and `npm view @glexcorp/gskp version` both returned `0.1.10`.
 - Release-state reset is intentional: source stays at `0.1.10` until `./publish.sh patch` performs the real publish-time bump to `0.1.11`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` so the manifest package version matches `packages/skillpacks/package.json` at `0.1.10`.
+- Verification passed so far: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`.
+- `./publish.sh --dry-run patch` still needs a clean committed tree before it can run because `publish.sh` rejects tracked working-tree changes.
 
 # Previous Implementation - Prevent Pack Install From Installing Archived Skills
 

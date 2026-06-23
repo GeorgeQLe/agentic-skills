@@ -8,6 +8,12 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-06-23
+
+Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
+
+Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.10`, so the real `./publish.sh patch` command can bump and publish `0.1.11` from a clean tree.
+
 ### Changed
 
 - `skillpacks install` and install-argument resolution now defensively ignore any manifest skill entry whose path is under `archive/**`, preventing stale or malformed manifests from installing archived framework/orchestrator subskills as top-level project skills.
@@ -17,6 +23,12 @@ Keep this file updated before every npm package publish.
 - `skillpacks refresh` now prints session reload guidance only when project-local skill roots are installed, updated, or removed, and avoids no-op `.agents/project.json` update noise.
 - `skillpacks refresh --all` now repeats failed project paths and emitted error messages in the final summary.
 - `skillpacks refresh --all --dry-run` now uses a refresh-specific planner with per-project proposed install/update/remove counts, affected skill targets, failures, skipped unmanaged roots, and an aggregate `Safe to run` verdict.
+
+### Verification
+
+- Registry state before release prep confirmed both package names remain published at `0.1.10`.
+- Release-prep verification passed in source so far: package tests, package verification, and diff hygiene. Clean-tree dry-run patch publish is the final gate before push.
+- The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.10` to `0.1.11` before staging and publishing both npm package names.
 
 ## [0.1.10] - 2026-06-22
 
