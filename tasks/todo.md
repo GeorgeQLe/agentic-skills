@@ -11,7 +11,7 @@ Change `fork-idea-branch` so approved default use spawns multiple new research p
 - [x] Update the skill contract for default additive spawning and explicit `--archive`.
 - [x] Update changelog and generated metadata if required.
 - [x] Run targeted validation and diff hygiene.
-- [ ] Record review results and ship intended changes where safe.
+- [x] Record review results and ship intended changes where safe.
 
 ## Acceptance Criteria
 
@@ -30,6 +30,8 @@ Change `fork-idea-branch` so approved default use spawns multiple new research p
 - Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and Skills Showcase generated assets for the new skill version, description, argument hint, and archive version.
 - Verification passed: `scripts/skill-archive-audit.sh --strict`, `scripts/base-skill-version-parity-audit.sh`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, stale archive-default phrase scan, positive contract scan, `git diff --check`, and `git diff --cached --check`.
 - Focused Vitest command `pnpm --dir tests exec vitest run layer1/bench-setups.test.ts layer1/frontmatter.test.ts layer1/skill-inventory.test.ts` still fails on known unrelated `analyze-sessions`, `spec-interview`, and `consolidate-variations` expectations documented by prior task history; this task did not touch those skill contracts.
+- Clean detached-worktree verification passed at commit `65131883`: `npm run skillpacks:verify` and `scripts/skill-archive-audit.sh --strict`.
+- Shipped to `master` as `65131883`.
 
 # Previous Implementation - Confirm Workflow Design Alignment Page
 
