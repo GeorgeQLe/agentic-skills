@@ -2,7 +2,33 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Design-Tree Branch Prioritization And UI Experiment Split
+## Current Implementation - Interrogation Intake Validation Clarification
+
+### Goal
+
+Clarify the interrogation-page convention so open-answer claims are validated and classified when compiled answers are consumed, while deeper evidence gathering is deferred into explicit research work unless contradiction or confidence-gate completeness requires immediate pushback.
+
+### Plan
+
+1. Update `docs/interrogation-page-convention.md` in the `Open-answer evidence validation` section to distinguish interrogation-time validation from post-interrogation research.
+2. Regenerate all generated `INTERROGATION-PAGE.md` bundles with `node scripts/upgrade-interrogation-page.mjs`.
+3. Update the focused layer1 interrogation confidence-gate test with assertions for compiled-answer consumption timing, deeper-research deferral, and `needs-research` handling.
+4. Refresh generated package metadata if `npm run skillpacks:verify` reports manifest drift.
+5. Run verification: `node scripts/upgrade-interrogation-page.mjs --check`, `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and `npm run skillpacks:verify`.
+6. Document review results, commit, and push the completed change set on the primary branch.
+
+### Acceptance Criteria
+
+- Open-answer validation is explicitly tied to compiled-answer consumption before confidence-gate or downstream research use.
+- Interrogation-time validation is limited to available evidence checks: repo context, prior research, code/git evidence, supplied sources, and already-approved external research.
+- Stage-zero interrogation does not require full synthesized research; deeper evidence gathering is deferred as a research item unless contradiction or confidence-gate completeness requires pushback.
+- `supported` and `partially-supported` claims can inform the confidence gate with confidence labeling.
+- `hunch/inferred` and `needs-research` claims become research questions or source-plan items, not proven evidence.
+- `unsupported` and `contradicted` claims trigger pushback in the next round or coverage checkpoint when they affect confidence-gate completeness, candidate selection, buyer language, or downstream scope.
+- Founder-supplied buyer/user/customer phrasing without provenance is labeled as hunch language and converted into a research target.
+- Generated bundles, focused tests, task-doc audit, diff hygiene, and package verification pass or any residual failure is proven unrelated.
+
+## Deferred Implementation - Design-Tree Branch Prioritization And UI Experiment Split
 
 ### Goal
 

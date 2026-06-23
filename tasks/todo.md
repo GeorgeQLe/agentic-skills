@@ -2,36 +2,46 @@
 
 ## Status
 
-Active implementation queue: design-tree branch prioritization and progressive UI experiment ownership.
+Active implementation queue: interrogation intake validation clarification.
 
 This file is the current execution contract, not a historical work log. Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Current Implementation - Design-Tree Branch Prioritization And UI Experiment Split
+## Current Implementation - Interrogation Intake Validation Clarification
 
 ### Goal
 
-Make the product-design tree choose downstream branches in a journey-aware order, separate clickable UI experiment/prototype work from `ui-interview`, and ensure review surfaces introduce UI progressively instead of dropping reviewers into an overloaded all-at-once screen.
+Clarify the interrogation-page convention so open-answer claims are validated and classified when compiled answers are consumed, while deeper evidence gathering is deferred into explicit research work unless contradiction or confidence-gate completeness requires immediate pushback.
 
 ### Plan
 
-- [ ] Add explicit journey-aware branch ordering metadata to `design/flow-tree.schema.json`, such as `journey_stage`, `journey_sequence`, `priority_rationale`, and a progressive learning/review field.
-- [ ] Update `$user-flow-map` so `branches[]` are ordered by user journey progression by default, with user overrides captured in the flow map, interview log, and manifest.
-- [ ] Update `$ux-variations` so the recommended next child branch is selected by parent flow journey order, activation/first-value fit, and stated evaluation priority rather than only first-pending array order.
-- [ ] Update `$ui-interview` to stop owning clickable prototype/buildout behavior by default; keep it focused on requirements, UI packet, static or bounded visual review, and branch decision capture.
-- [ ] Design or add a dedicated `create-ui-experiment` skill to own clickable UI experiments, lightweight route prototypes, progressive reveal/review behavior, and experiment handoff into prototype/UAT.
-- [ ] Add progressive UI review requirements so generated review/mockup surfaces teach the interface step by step, emphasizing first value, primary task path, and staged disclosure before showing dense controls.
-- [ ] Fix the manifest naming drift between `ui-interview` guidance and `design/flow-tree.schema.json` (`ui_reviews[]` vs. `ui_experiments[]`).
-- [ ] Run focused verification: schema validation or fixture checks, skill archive/changelog/version checks for any changed skills, generated bundle parity checks, and relevant repo audits.
-- [ ] Document review results, commit, and push the completed change set on the primary branch.
+- [x] Update `docs/interrogation-page-convention.md` in the `Open-answer evidence validation` section to distinguish interrogation-time validation from post-interrogation research.
+- [x] Regenerate all generated `INTERROGATION-PAGE.md` bundles with `node scripts/upgrade-interrogation-page.mjs`.
+- [x] Update the focused layer1 interrogation confidence-gate test with assertions for compiled-answer consumption timing, deeper-research deferral, and `needs-research` handling.
+- [x] Confirm generated package metadata did not need refresh because `npm run skillpacks:verify` reported the manifest in sync.
+- [x] Run verification: `node scripts/upgrade-interrogation-page.mjs --check`, `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and `npm run skillpacks:verify`.
+- [x] Document review results, commit, and push the completed change set on the primary branch.
 
 ### Acceptance Criteria
 
-- Branch routing is deterministic and explicitly tied to journey sequence or a recorded user override.
-- `ux-variations` and `ui-interview` no longer rely only on implicit “first pending” order when recommending child branches.
-- Clickable UI experiment buildout has a dedicated owner separate from default `ui-interview` behavior.
-- Review artifacts present complex interfaces progressively, with clear first-step and primary-path focus before dense secondary controls.
-- The flow-tree schema and skill language use matching branch names for UI experiment/review nodes.
-- Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
+- Open-answer validation is explicitly tied to compiled-answer consumption before confidence-gate or downstream research use.
+- Interrogation-time validation is limited to available evidence checks: repo context, prior research, code/git evidence, supplied sources, and already-approved external research.
+- Stage-zero interrogation does not require full synthesized research; deeper evidence gathering is deferred as a research item unless contradiction or confidence-gate completeness requires pushback.
+- `supported` and `partially-supported` claims can inform the confidence gate with confidence labeling.
+- `hunch/inferred` and `needs-research` claims become research questions or source-plan items, not proven evidence.
+- `unsupported` and `contradicted` claims trigger pushback in the next round or coverage checkpoint when they affect confidence-gate completeness, candidate selection, buyer language, or downstream scope.
+- Founder-supplied buyer/user/customer phrasing without provenance is labeled as hunch language and converted into a research target.
+- Generated bundles, focused tests, task-doc audit, diff hygiene, and package verification pass or any residual failure is proven unrelated.
+
+### Review
+
+- Clarified `docs/interrogation-page-convention.md` so validation happens during compiled-answer consumption before answers satisfy the confidence gate or shape downstream research.
+- Limited interrogation-time validation to available evidence checks and made full synthesized research a deferred research question or source-plan item unless contradiction or confidence-gate completeness requires pushback.
+- Added the explicit decision rule for `supported`, `partially-supported`, `hunch/inferred`, `needs-research`, `unsupported`, and `contradicted` claim handling.
+- Clarified that founder-supplied buyer/user/customer phrasing without provenance is hunch language, must become a research target, and must not count as real buyer language.
+- Regenerated all 18 generated `INTERROGATION-PAGE.md` bundles.
+- Added focused layer1 assertions for compiled-answer consumption timing, deeper-research deferral, and `needs-research` handling.
+- Verification passed: `node scripts/upgrade-interrogation-page.mjs --check`, `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and `npm run skillpacks:verify`.
+- `npm run skillpacks:verify` reported `packages/skillpacks/dist/skillpacks-manifest.json` in sync, so no generated package metadata refresh was needed.
 
 ## Latest Completed Work - Interrogation Open-Answer Evidence Validation
 

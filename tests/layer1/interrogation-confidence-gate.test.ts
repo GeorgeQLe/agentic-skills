@@ -23,7 +23,10 @@ describe("interrogation confidence-gate contract", () => {
     const text = readFileSync(join(REPO_ROOT, "docs/interrogation-page-convention.md"), "utf8");
     expect(text).toContain("Open-answer evidence validation");
     expect(text).toContain("not automatically validated facts");
-    expect(text).toContain("founder/user hunch language that needs research");
+    expect(text).toContain("Validation happens during compiled-answer consumption");
+    expect(text).toContain("defer deeper research as an explicit research question or source-plan item");
+    expect(text).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
+    expect(text).toContain("Founder-supplied phrasing without provenance is hunch language");
   });
 
   for (const dir of participatingSkillDirs) {
@@ -39,7 +42,9 @@ describe("interrogation confidence-gate contract", () => {
       expect(text, `${dir} bundle blocking language`).toContain("cannot advance to stage one until");
       expect(text, `${dir} bundle open-input rule`).toContain("must contain at least one genuinely open input");
       expect(text, `${dir} bundle evidence validation`).toContain("Open-answer evidence validation");
-      expect(text, `${dir} bundle hunch handling`).toContain("founder/user hunch language that needs research");
+      expect(text, `${dir} bundle validation timing`).toContain("Validation happens during compiled-answer consumption");
+      expect(text, `${dir} bundle research deferral`).toContain("defer deeper research as an explicit research question or source-plan item");
+      expect(text, `${dir} bundle needs-research handling`).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
       expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
     });
   }
