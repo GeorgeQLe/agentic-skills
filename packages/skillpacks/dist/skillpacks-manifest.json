@@ -2,7 +2,7 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.10"
+    "version": "0.1.11"
   },
   "source_fingerprint": "e4f4be2609fb19cc86ea000334650fecb1dfd5222abfcae74714ba912a294923",
   "packs": [
