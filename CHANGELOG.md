@@ -10,6 +10,8 @@ Keep this file updated before every npm package publish.
 
 ### Changed
 
+- `skillpacks refresh --all` and `skillpacks refresh --all --dry-run` now flag legacy skillpacks-owned user-home installs under `~/.claude/skills` and `~/.codex/skills`, continue scanning project roots, and exit nonzero with cleanup guidance.
+- `skillpacks uninstall-global --reinstall-base` now removes legacy skillpacks-owned user-home installs, then enables and refreshes project-local base skills for discovered `.agents/project.json` roots below the current directory; when none are found, it initializes the current directory.
 - `skillpacks uninstall-global` now removes legacy skillpacks-owned user-home installs whose managed markers point at retired `global/claude`, `global/codex`, or pack-era `global` source paths, while still leaving markerless user skills and foreign managed directories untouched.
 - `skillpacks refresh` now prints session reload guidance only when project-local skill roots are installed, updated, or removed, and avoids no-op `.agents/project.json` update noise.
 - `skillpacks refresh --all` now repeats failed project paths and emitted error messages in the final summary.

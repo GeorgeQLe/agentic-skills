@@ -17,7 +17,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
-import { uninstallGlobal } from '../src/cli/lifecycle.mjs';
+import { refreshAllProjects, uninstallGlobal } from '../src/cli/lifecycle.mjs';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
 import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
 
@@ -45,6 +45,10 @@ function readProjectConfig(projectRoot) {
   return JSON.parse(readFileSync(projectConfigPath(projectRoot), 'utf8'));
 }
 
+function readManifest() {
+  return JSON.parse(readFileSync(join(packageRoot, 'dist/skillpacks-manifest.json'), 'utf8'));
+}
+
 async function runSkillpacks(projectRoot, args, options = {}) {
   const result = await runSkillpacksRaw(projectRoot, args, options);
   assert.equal(result.exitCode, 0, result.stderr);
@@ -54,6 +58,7 @@ async function runSkillpacks(projectRoot, args, options = {}) {
 async function runSkillpacksRaw(projectRoot, args, options = {}) {
   const originalCwd = process.cwd();
   const originalPath = process.env.PATH;
+  const originalHome = process.env.HOME;
   const originalLog = console.log;
   const originalError = console.error;
   let stdout = '';
@@ -69,6 +74,9 @@ async function runSkillpacksRaw(projectRoot, args, options = {}) {
   try {
     process.chdir(projectRoot);
     process.env.PATH = options.path ?? '';
+    if (options.home) {
+      process.env.HOME = options.home;
+    }
     const exitCode = await runSkillpacksCli(args);
     return { exitCode, stdout, stderr };
   } finally {
@@ -77,6 +85,11 @@ async function runSkillpacksRaw(projectRoot, args, options = {}) {
       delete process.env.PATH;
     } else {
       process.env.PATH = originalPath;
+    }
+    if (originalHome === undefined) {
+      delete process.env.HOME;
+    } else {
+      process.env.HOME = originalHome;
     }
     console.log = originalLog;
     console.error = originalError;
@@ -346,7 +359,158 @@ describe('Node lifecycle commands', () => {
 
     const error = await runSkillpacksExpectError(dir, ['uninstall-global', 'extra']);
 
-    assert.match(error.message, /uninstall-global does not accept arguments/);
+    assert.match(error.message, /uninstall-global: unexpected argument 'extra'/);
+  });
+
+  it('rejects unsupported uninstall-global flags', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['uninstall-global', '--bad']);
+
+    assert.match(error.message, /uninstall-global: unsupported flag '--bad'/);
+  });
+
+  it('refresh --all flags legacy user-home installs while still refreshing projects', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const project = join(root, 'project-a');
+    mkdirSync(project, { recursive: true });
+    writeProjectConfig(project, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      base_skills: true
+    });
+    writeManagedSkillDir(
+      join(home, '.claude/skills/codebase-status'),
+      join(repoRoot, 'base/claude/codebase-status')
+    );
+
+    const { exitCode, stdout } = await captureConsole(() => refreshAllProjects({
+      manifest: readManifest(),
+      rootDir: root,
+      homeRoot: home
+    }));
+
+    assert.equal(exitCode, 1);
+    assert.match(stdout, /WARNING: Found 1 legacy user-home skillpacks install\(s\)/);
+    assert.match(stdout, /\.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Recommended cleanup: npx skillpacks uninstall-global/);
+    assert.match(stdout, /=== project-a ===/);
+    assert.match(stdout, /Refreshed project skills to skillpacks@/);
+    assert.match(stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 0 failed across 1 project\(s\)\./);
+    assert.equal(existsSync(skillPath(project, 'claude', 'codebase-status')), true);
+  });
+
+  it('refresh --all --dry-run flags legacy user-home installs without mutating projects', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const project = join(root, 'project-a');
+    mkdirSync(project, { recursive: true });
+    writeProjectConfig(project, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      base_skills: true
+    });
+    writeManagedSkillDir(
+      join(home, '.codex/skills/afps-status'),
+      join(repoRoot, 'base/codex/afps-status')
+    );
+
+    const { exitCode, stdout } = await captureConsole(() => refreshAllProjects({
+      manifest: readManifest(),
+      rootDir: root,
+      homeRoot: home,
+      dryRun: true
+    }));
+
+    assert.equal(exitCode, 1);
+    assert.match(stdout, /WARNING: Found 1 legacy user-home skillpacks install\(s\)/);
+    assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
+    assert.match(stdout, /Safe to run: no/);
+    assert.equal(existsSync(skillPath(project, 'claude', 'codebase-status')), false);
+    assert.equal(existsSync(skillPath(project, 'codex', 'afps-status')), false);
+  });
+
+  it('uninstall-global --reinstall-base removes owned globals and enables local base skills in discovered projects', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const projectA = join(root, 'project-a');
+    const projectB = join(root, 'nested/project-b');
+    mkdirSync(projectA, { recursive: true });
+    mkdirSync(projectB, { recursive: true });
+    writeProjectConfig(projectA, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      notes: ['preserve me']
+    });
+    writeProjectConfig(projectB, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      skill_updates: { mode: 'warn' }
+    });
+
+    const claudeRoot = join(home, '.claude/skills');
+    const codexRoot = join(home, '.codex/skills');
+    writeManagedSkillDir(join(claudeRoot, 'codebase-status'), join(repoRoot, 'base/claude/codebase-status'));
+    writeManagedSkillDir(join(codexRoot, 'legacy-codex'), join(repoRoot, 'global/codex/legacy-codex'));
+    const unmanagedDir = join(claudeRoot, 'my-local-skill');
+    mkdirSync(unmanagedDir, { recursive: true });
+    writeFileSync(join(unmanagedDir, 'SKILL.md'), 'local\n');
+    const foreignSource = join(home, 'foreign-source');
+    mkdirSync(foreignSource, { recursive: true });
+    writeManagedSkillDir(join(codexRoot, 'foreign-managed'), foreignSource);
+
+    const { exitCode, stdout } = await captureConsole(() => uninstallGlobal({
+      homeRoot: home,
+      manifest: readManifest(),
+      reinstallBase: true,
+      rootDir: root
+    }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Removed \.codex\/skills\/legacy-codex/);
+    assert.match(stdout, /Reinstalling project-local base skills in 2 project\(s\)/);
+    assert.match(stdout, /=== project-a ===/);
+    assert.match(stdout, /=== nested\/project-b ===/);
+    assert.equal(existsSync(join(claudeRoot, 'codebase-status')), false);
+    assert.equal(existsSync(join(codexRoot, 'legacy-codex')), false);
+    assert.equal(existsSync(unmanagedDir), true);
+    assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
+    assert.equal(existsSync(skillPath(projectA, 'claude', 'codebase-status')), true);
+    assert.equal(existsSync(skillPath(projectA, 'codex', 'pack')), true);
+    assert.equal(existsSync(skillPath(projectB, 'claude', 'afps-status')), true);
+    assert.equal(readProjectConfig(projectA).base_skills, true);
+    assert.deepEqual(readProjectConfig(projectA).notes, ['preserve me']);
+    assert.equal(readProjectConfig(projectB).base_skills, true);
+    assert.deepEqual(readProjectConfig(projectB).skill_updates, { mode: 'warn' });
+  });
+
+  it('uninstall-global --reinstall-base initializes the current directory when no projects are discovered', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    writeManagedSkillDir(
+      join(home, '.claude/skills/codebase-status'),
+      join(repoRoot, 'base/claude/codebase-status')
+    );
+
+    const { exitCode, stdout } = await captureConsole(() => uninstallGlobal({
+      homeRoot: home,
+      manifest: readManifest(),
+      reinstallBase: true,
+      rootDir: root
+    }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /No projects with \.agents\/project\.json found/);
+    assert.match(stdout, /Initialized project base skills to skillpacks@/);
+    assert.equal(readProjectConfig(root).base_skills, true);
+    assert.equal(existsSync(skillPath(root, 'claude', 'codebase-status')), true);
+    assert.equal(existsSync(skillPath(root, 'codex', 'pack')), true);
   });
 
   it('installs active packs without bash or jq and writes managed markers', async () => {
@@ -1185,7 +1349,7 @@ describe('Node multi-repo --all commands', () => {
       skill_pack_version: 1
     });
 
-    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all']);
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all'], { home: makeParent() });
 
     assert.equal(existsSync(skillPath(a, 'claude', 'quality-sweep')), true);
     assert.match(stdout, /=== a ===/);
@@ -1224,7 +1388,7 @@ describe('Node multi-repo --all commands', () => {
       skill_pack_version: 1
     });
 
-    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run']);
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run'], { home: makeParent() });
 
     assert.match(stdout, /=== a ===/);
     assert.match(stdout, /Proposed: 3 install, 1 update, 1 remove\./);
@@ -1258,7 +1422,7 @@ describe('Node multi-repo --all commands', () => {
       skill_pack_version: 1
     });
 
-    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run']);
+    const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run'], { home: makeParent() });
 
     assert.match(stdout, /=== a ===/);
     assert.match(stdout, /failed: ERROR: PoketoWork kanban pack 'devtool-kanban' is hibernated/);

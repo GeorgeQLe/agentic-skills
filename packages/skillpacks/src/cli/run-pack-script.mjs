@@ -562,7 +562,8 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  uninstall-global             Remove legacy repo-managed base skills from ~/.claude and ~/.codex
+  uninstall-global [--reinstall-base]
+                               Remove legacy repo-managed base skills from ~/.claude and ~/.codex
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   refresh --all [--dry-run]    Refresh every project under the current directory
@@ -646,8 +647,22 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'uninstall-global') {
-    assertNoArgs('uninstall-global', rest);
-    return uninstallGlobal();
+    let reinstallBase = false;
+    for (const arg of rest) {
+      if (arg === '--reinstall-base') {
+        reinstallBase = true;
+        continue;
+      }
+      if (arg.startsWith('-')) {
+        throw new Error(`uninstall-global: unsupported flag '${arg}'`);
+      }
+      throw new Error(`uninstall-global: unexpected argument '${arg}'`);
+    }
+    return uninstallGlobal({
+      manifest: reinstallBase ? readManifest() : null,
+      reinstallBase,
+      rootDir: process.cwd()
+    });
   }
 
   if (command === 'install-deck') {

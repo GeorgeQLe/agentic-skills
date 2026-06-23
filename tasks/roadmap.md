@@ -1,3 +1,28 @@
+## Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
+
+### Goal
+
+Make `skillpacks refresh --all` surface legacy user-home global installs, and add `skillpacks uninstall-global --reinstall-base` so users can remove those globals while enabling project-local base skills across discovered projects.
+
+### Plan
+
+1. Record prompt history and task tracking for the `investigate`-driven implementation.
+2. Add a reusable legacy-global detector that uses the same skillpacks-owned marker/source rules as uninstall cleanup.
+3. Wire the detector into `refresh --all` and `refresh --all --dry-run` so project scanning still runs but the command exits nonzero when globals are flagged.
+4. Add `uninstall-global --reinstall-base` to remove skillpacks-owned globals, discover project roots below the current directory, enable `base_skills: true`, refresh project-local skill roots, and initialize the current directory when no project roots are found.
+5. Extend lifecycle tests for warning, dry-run read-only behavior, reinstall-base migration, fallback init, and unsupported args.
+6. Update CLI help, package changelog, and npm distribution docs.
+7. Run focused package tests and build checks, then review diff hygiene.
+
+### Acceptance Criteria
+
+- `refresh --all` and `refresh --all --dry-run` flag skillpacks-owned installs under `~/.claude/skills` and `~/.codex/skills`, suggest `npx skillpacks uninstall-global`, still process project roots, and return `1`.
+- Dry-run global detection does not mutate project skill roots.
+- `uninstall-global --reinstall-base` preserves unmanaged and foreign global skills while removing skillpacks-owned global installs.
+- Reinstall mode preserves existing project config fields while setting `base_skills: true` and installing local base skills for each discovered project.
+- With no discovered project roots, reinstall mode initializes the current directory with base skills.
+- Existing `uninstall-global` no-arg behavior remains supported and unsupported args still fail.
+
 ## Current Implementation - Fix Alignment-Page Review Routing
 
 ### Goal

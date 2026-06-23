@@ -347,6 +347,64 @@ function removeRepoSkillInstall(target) {
   return false;
 }
 
+function repoSkillInstallOwned(target) {
+  if (!existsSync(target)) {
+    return false;
+  }
+
+  const stats = lstatSync(target);
+  if (stats.isSymbolicLink()) {
+    return sourceOwnedBySkillpacks(readlinkSync(target));
+  }
+
+  if (isManagedSkillDir(target)) {
+    const source = managedMarkerField(target, 'source');
+    return targetManagedBySkillpacks(target) && sourceOwnedBySkillpacks(source);
+  }
+
+  return false;
+}
+
+function globalRepoSkillInstalls(homeRoot = homedir()) {
+  const installs = [];
+
+  for (const tool of TOOLS) {
+    const root = join(homeRoot, `.${tool}`, 'skills');
+    if (!existsSync(root)) {
+      continue;
+    }
+
+    for (const entry of readdirSync(root).sort((a, b) => a.localeCompare(b))) {
+      const target = join(root, entry);
+      if (repoSkillInstallOwned(target)) {
+        installs.push({
+          tool,
+          skillName: entry,
+          target,
+          rel: relative(homeRoot, target)
+        });
+      }
+    }
+  }
+
+  return installs.sort((a, b) => comparePathStrings(a.rel, b.rel));
+}
+
+function printGlobalRepoSkillWarning(installs, homeRoot = homedir()) {
+  if (installs.length === 0) {
+    return;
+  }
+
+  console.log(
+    `WARNING: Found ${installs.length} legacy user-home skillpacks install(s) under ${homeRoot}.`
+  );
+  for (const install of installs) {
+    console.log(`  ${install.rel}`);
+  }
+  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks uninstall-global');
+  console.log('To clean up and enable project-local base skills below the current directory: npx skillpacks uninstall-global --reinstall-base');
+}
+
 function comparePathStrings(left, right) {
   if (left < right) {
     return -1;
@@ -1279,7 +1337,47 @@ export async function initProject({ manifest, projectRoot = process.cwd() }) {
   });
 }
 
-export async function uninstallGlobal({ homeRoot = homedir() } = {}) {
+function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'uninstall-global --reinstall-base') {
+  return withProjectLock(projectRoot, lockCommand, async () => {
+    const existing = readProjectConfig(projectRoot);
+    const next = existing
+      ? { ...existing }
+      : {
+          project_type: inferProjectType(projectRoot),
+          enabled_packs: [],
+          skill_pack_version: 1
+        };
+
+    if (!next.project_type) {
+      next.project_type = inferProjectType(projectRoot);
+    }
+    if (!Array.isArray(next.enabled_packs)) {
+      next.enabled_packs = [];
+    }
+    next.base_skills = true;
+    next.skill_pack_version = 1;
+
+    if (writeProjectConfigIfChanged(projectRoot, next)) {
+      console.log('Updated .agents/project.json (base skills enabled)');
+    }
+
+    reconcileProjectConfig(projectRoot, manifest);
+    const synced = syncExpectedSkillRoots(projectRoot, manifest);
+    const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
+    console.log(`Refreshed project base skills to ${manifestPackageLabel(manifest)}.`);
+    if (synced > 0 || removed > 0) {
+      printSessionReloadNotice();
+    }
+    return 0;
+  });
+}
+
+export async function uninstallGlobal({
+  homeRoot = homedir(),
+  manifest = null,
+  reinstallBase = false,
+  rootDir = process.cwd()
+} = {}) {
   let removed = 0;
 
   for (const tool of TOOLS) {
@@ -1299,7 +1397,48 @@ export async function uninstallGlobal({ homeRoot = homedir() } = {}) {
 
   console.log(`Done. Removed ${removed} repo-managed base skill install(s) from ${homeRoot}.`);
   console.log('Base skills now install project-local via `npx skillpacks init`.');
-  return 0;
+
+  if (!reinstallBase) {
+    return 0;
+  }
+
+  if (!manifest) {
+    throw new Error('uninstall-global --reinstall-base requires a packaged manifest');
+  }
+
+  const roots = discoverProjectRoots(rootDir);
+  if (roots.length === 0) {
+    console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing current directory.`);
+    return initProject({ manifest, projectRoot: rootDir });
+  }
+
+  console.log(`Reinstalling project-local base skills in ${roots.length} project(s) under ${rootDir}.`);
+  let failed = 0;
+  const failures = [];
+  for (const root of roots) {
+    const rel = relative(rootDir, root) || '.';
+    console.log('');
+    console.log(`=== ${rel} ===`);
+    try {
+      await enableProjectLocalBaseSkills(root, manifest);
+    } catch (error) {
+      failed += 1;
+      const message = error instanceof Error ? error.message : String(error);
+      console.log(`  failed: ${message}`);
+      failures.push({ rel, message });
+    }
+  }
+
+  console.log('');
+  console.log(`Summary (uninstall-global --reinstall-base): ${roots.length - failed} ok, ${failed} failed across ${roots.length} project(s).`);
+  if (failures.length > 0) {
+    console.log('Failures:');
+    for (const failure of failures) {
+      console.log(`  ${failure.rel}: ${failure.message}`);
+    }
+  }
+
+  return failed > 0 ? 1 : 0;
 }
 
 export async function installResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
@@ -1827,13 +1966,24 @@ export async function runAcrossProjects({
   return failed > 0 || flagged > 0 ? 1 : 0;
 }
 
-export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dryRun = false } = {}) {
+export async function refreshAllProjects({
+  manifest,
+  rootDir = process.cwd(),
+  dryRun = false,
+  homeRoot = homedir()
+} = {}) {
+  const globalInstalls = globalRepoSkillInstalls(homeRoot);
+  printGlobalRepoSkillWarning(globalInstalls, homeRoot);
+  if (globalInstalls.length > 0) {
+    console.log('');
+  }
+
   if (dryRun) {
     const roots = discoverProjectRoots(rootDir);
 
     if (roots.length === 0) {
       console.log(`No projects with .agents/project.json found under ${rootDir}`);
-      return 0;
+      return globalInstalls.length > 0 ? 1 : 0;
     }
 
     const projectPlans = [];
@@ -1864,7 +2014,7 @@ export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dr
       },
       { installs: 0, updates: 0, removals: 0, skips: 0 }
     );
-    const safe = failures.length === 0;
+    const safe = failures.length === 0 && globalInstalls.length === 0;
     const affected = affectedRefreshItems(projectPlans);
 
     console.log('');
@@ -1899,12 +2049,13 @@ export async function refreshAllProjects({ manifest, rootDir = process.cwd(), dr
     return safe ? 0 : 1;
   }
 
-  return runAcrossProjects({
+  const projectExitCode = await runAcrossProjects({
     rootDir,
     label: 'refresh --all',
     run: (root) => refreshProject({ manifest, projectRoot: root }),
     summarizeFailures: true
   });
+  return globalInstalls.length > 0 ? 1 : projectExitCode;
 }
 
 export async function doctorAllProjects({ manifest, rootDir = process.cwd(), args = [] } = {}) {

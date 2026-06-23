@@ -1,3 +1,34 @@
+# Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
+
+## Goal
+
+Flag legacy user-home global skill installs during `refresh --all`, and add a migration path that removes those globals while reinstalling base skills project-locally.
+
+## Plan
+
+- [x] Record prompt history and task tracking.
+- [x] Implement the global install detector and refresh warning/exit behavior.
+- [x] Implement `uninstall-global --reinstall-base`.
+- [x] Add focused lifecycle tests.
+- [x] Update CLI help and docs/changelog.
+- [x] Run package verification and review diff hygiene.
+- [ ] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- `refresh --all` and `refresh --all --dry-run` flag skillpacks-owned user-home globals, keep scanning projects, suggest `npx skillpacks uninstall-global`, and exit `1`.
+- `uninstall-global --reinstall-base` removes only skillpacks-owned globals, preserves unmanaged/foreign installs, enables local base skills in discovered projects, and initializes the current directory when no project roots exist.
+- Existing `uninstall-global` behavior and unsupported-arg failures are preserved.
+
+## Review
+
+- Added a reusable global skillpacks-owned install detector in `packages/skillpacks/src/cli/lifecycle.mjs` and wired it into `refresh --all` / `refresh --all --dry-run`; both commands now warn, suggest cleanup, continue project scanning, and return nonzero while legacy globals exist.
+- Added `uninstall-global --reinstall-base` in the Node CLI parser and lifecycle: it removes owned globals, discovers project roots below the current directory, preserves existing config fields while enabling `base_skills: true`, refreshes local skill roots, and initializes the current directory if no projects are found.
+- Updated CLI help, compatibility matrix expectations, package changelog, and npm distribution docs.
+- Added lifecycle coverage for warning behavior, dry-run non-mutation, reinstall-base migration, fallback init, and unsupported uninstall-global args.
+- Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs`, `npm --workspace packages/skillpacks run test:node`, `npm --workspace packages/skillpacks run build:check`, and `git diff --check`.
+- Note: an initial parallel verification run caused package-build scratch-directory contention between `test:node` and `build:check`; rerunning the required gates sequentially passed.
+
 # Current Implementation - Fix Alignment-Page Review Routing
 
 ## Goal

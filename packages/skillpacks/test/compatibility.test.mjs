@@ -15,7 +15,7 @@ const expectedMatrix = new Map([
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
-  ['uninstall-global', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['uninstall-global [--reinstall-base]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -111,8 +111,8 @@ describe('skillpacks compatibility matrix', () => {
     );
     assert.match(
       cliSource,
-      /if \(command === 'uninstall-global'\) \{[\s\S]*return uninstallGlobal\(\)/,
-      'uninstall-global should be a Node-owned command that cleans legacy user-home installs'
+      /if \(command === 'uninstall-global'\) \{[\s\S]*--reinstall-base[\s\S]*return uninstallGlobal\(\{/,
+      'uninstall-global should be a Node-owned command that cleans legacy user-home installs and supports reinstall-base'
     );
     assert.doesNotMatch(
       cliSource,
