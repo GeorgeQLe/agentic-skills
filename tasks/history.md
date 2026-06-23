@@ -14864,3 +14864,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - The skill contract keeps UI experiments pre-production: fake/fixture/local/in-memory data only, progressive first-value reveal, primary task path before secondary controls, and review evidence before `$prototype`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan`.
 - Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, Skills Showcase generated data/proof assets, and `docs/benchmark-results-matrix.md` from the staged boundary.
 - Verified: focused product-design flow-tree test expected-red before edits, then passed 14/14 after edits; design-tree and alignment generators `--check`; skill archive audit; Skills Showcase data validation; `npm run skillpacks:verify`; task-doc audit; and diff hygiene. Mirror parity still reports only the known unrelated `session-analytics/session-triage` drift.
+
+## 2026-06-23 — Product Design Step 1.8: regeneration freshness pass
+
+- Ran the planned post-`create-ui-experiment` regeneration pass for design-tree bundles, alignment bundles, package manifest, Skills Showcase data, GitHub proof data, and showcase validation.
+- Confirmed the generators produced no tracked generated-file drift; the only committed changes for this step are prompt history and task/history/manifest documentation.
+- Skipped interrogation bundle generation because `create-ui-experiment` was not added to `INTERROGATION_SKILLS`, so no `INTERROGATION-PAGE.md` bundle is expected.
+- Verified: design-tree bundle check, alignment bundle check, Skills Showcase data validation, `npm run skillpacks:verify`, and `git diff --check`.

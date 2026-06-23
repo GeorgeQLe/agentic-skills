@@ -87,7 +87,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
   - Require progressive reveal/review behavior: the experiment introduces first value and primary task path before dense secondary controls.
   - Require handoff into `$prototype`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan` only after the experiment has explicit review evidence.
 
-- [ ] Step 1.8: Regenerate bundles and public/package metadata for changed skill surfaces
+- [x] Step 1.8: Regenerate bundles and public/package metadata for changed skill surfaces
   - Files: generated `DESIGN-TREE-LOOP.md`, `ALIGNMENT-PAGE.md`, `INTERROGATION-PAGE.md` if applicable, `packages/skillpacks/dist/skillpacks-manifest.json`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and related generated proof data if the generators update it.
   - Run `node scripts/upgrade-design-tree-loop.mjs`.
   - Run `node scripts/upgrade-alignment-page.mjs` and `node scripts/upgrade-interrogation-page.mjs` if new or changed skills require those bundles.
@@ -161,11 +161,14 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - Verification: pre-edit focused test reproduced the expected red state (13 passed / 1 failed, missing `create-ui-experiment`). Post-edit `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed (14/14). `node scripts/upgrade-design-tree-loop.mjs --check` passed. `node scripts/upgrade-alignment-page.mjs --check` passed. `scripts/skill-archive-audit.sh --strict` passed. `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed. `npm run skillpacks:verify` passed. `node scripts/audit-task-docs.mjs` passed with informational advisory counts only. `git diff --check` passed.
 - Accepted residual: `scripts/skill-mirror-parity-audit.sh --verbose` still exits non-zero only for the known unrelated `session-analytics/session-triage` `Pack Availability Guard` shared-section drift documented by prior phase review notes; no product-design mirror drift was introduced.
 
-### Next Step Plan - Step 1.8
+- Step 1.8 complete as a no-drift regeneration freshness pass. `node scripts/upgrade-design-tree-loop.mjs` checked 20 skills with 0 reference updates and 0 bundle writes. `node scripts/upgrade-alignment-page.mjs` reported 0 updates and 0 bundled file writes. `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` all completed successfully, and `git diff` showed no tracked generated-file drift.
+- `node scripts/upgrade-interrogation-page.mjs` was not run because Step 1.7 did not add `create-ui-experiment` to `INTERROGATION_SKILLS`; no `INTERROGATION-PAGE.md` bundle is expected.
+- Verification: `node scripts/upgrade-design-tree-loop.mjs --check` passed; `node scripts/upgrade-alignment-page.mjs --check` passed; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed; `npm run skillpacks:verify` passed; `git diff --check` passed.
 
-- Treat Step 1.8 as a regeneration freshness pass over the already-created `create-ui-experiment` surfaces. Source edits from Step 1.7 were staged before package/showcase regeneration, so the expected result is no additional source contract changes unless a generator exposes drift.
-- Run `node scripts/upgrade-design-tree-loop.mjs` and confirm no changes beyond already generated `packs/product-design/{codex,claude}/create-ui-experiment/DESIGN-TREE-LOOP.md`.
-- Run `node scripts/upgrade-alignment-page.mjs` and confirm no changes beyond already generated `packs/product-design/{codex,claude}/create-ui-experiment/ALIGNMENT-PAGE.md`.
-- Do not run `node scripts/upgrade-interrogation-page.mjs` unless `create-ui-experiment` is explicitly added to `INTERROGATION_SKILLS`; Step 1.7 did not add it, so no `INTERROGATION-PAGE.md` is expected.
-- Re-run `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs`, stage `packages/skillpacks/dist/skillpacks-manifest.json` if it changes, then re-run and stage the required showcase generators: `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`.
-- Verification target: `node scripts/upgrade-design-tree-loop.mjs --check`, `node scripts/upgrade-alignment-page.mjs --check`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, `npm run skillpacks:verify`, and `git diff --check`. If no files change, record Step 1.8 as a no-op freshness closeout and move to Step 1.9.
+### Next Step Plan - Step 1.9
+
+- Treat Step 1.9 as the full focused/repository validation closeout for the design-tree branch-prioritization phase. No source changes are expected unless validation exposes concrete drift.
+- Run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts`; expected result is all 14 focused assertions passing after Steps 1.2-1.7.
+- Run generator checks: `node scripts/upgrade-design-tree-loop.mjs --check` and `node scripts/upgrade-alignment-page.mjs --check`. Continue to skip `node scripts/upgrade-interrogation-page.mjs --check` unless `create-ui-experiment` has been registered in `INTERROGATION_SKILLS`.
+- Run repository contract checks: `scripts/skill-archive-audit.sh --strict`, `scripts/skill-mirror-parity-audit.sh --verbose`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, `npm run skillpacks:verify`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+- If `scripts/skill-mirror-parity-audit.sh --verbose` still reports only the known unrelated `session-analytics/session-triage` `Pack Availability Guard` drift, record it as an accepted residual and do not modify product-design files.
