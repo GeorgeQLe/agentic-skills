@@ -12,7 +12,7 @@ Flag legacy user-home global skill installs during `refresh --all`, and add a mi
 - [x] Add focused lifecycle tests.
 - [x] Update CLI help and docs/changelog.
 - [x] Run package verification and review diff hygiene.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ## Acceptance Criteria
 
