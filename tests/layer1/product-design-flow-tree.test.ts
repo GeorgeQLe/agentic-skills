@@ -11,6 +11,11 @@ const between = (content: string, start: string, end: string) => {
   expect(endIndex, `missing end marker: ${end}`).toBeGreaterThan(startIndex);
   return content.slice(startIndex, endIndex);
 };
+const expectContainsAll = (content: string, expected: string[]) => {
+  for (const value of expected) {
+    expect(content).toContain(value);
+  }
+};
 
 const mirrors = ["codex", "claude"] as const;
 const command = {
@@ -19,10 +24,10 @@ const command = {
 } as const;
 
 describe("product-design flow tree artifact boundaries", () => {
-  it("defines a machine-readable design flow-tree manifest schema (v0.2)", () => {
+  it("defines a machine-readable design flow-tree manifest schema (v0.3)", () => {
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
 
-    expect(schema.properties.schema_version.const).toBe("v0.2");
+    expect(schema.properties.schema_version.const).toBe("v0.3");
     expect(schema.properties.route.prefixItems.map((item: { const: string }) => item.const)).toEqual([
       "user-flow-map",
       "ux-variations",
@@ -56,11 +61,77 @@ describe("product-design flow tree artifact boundaries", () => {
     ]);
   });
 
-  it("ships a v0.2 sample manifest exercising model_ref and modify-back decisions", () => {
+  it("requires deterministic branch-order metadata on flow-tree branches", () => {
+    const schema = JSON.parse(read("design/flow-tree.schema.json"));
+    const userFlowBranch = schema.$defs.user_flow_branch;
+    const uxVariationBranch = schema.$defs.ux_variation_branch;
+    const progressiveReview = schema.$defs.progressive_review_guidance;
+
+    expect(userFlowBranch.required).toEqual(
+      expect.arrayContaining(["journey_stage", "journey_sequence", "priority_rationale", "progressive_review"]),
+    );
+    expect(userFlowBranch.properties.journey_stage.enum).toEqual([
+      "discovery",
+      "activation",
+      "first-value",
+      "ongoing-use",
+      "recovery",
+      "handoff",
+    ]);
+    expect(userFlowBranch.properties.journey_sequence.type).toBe("integer");
+    expect(userFlowBranch.properties.journey_sequence.minimum).toBe(1);
+    expect(userFlowBranch.properties.priority_rationale.minLength).toBe(1);
+    expect(userFlowBranch.properties.progressive_review.$ref).toBe("#/$defs/progressive_review_guidance");
+
+    expect(uxVariationBranch.required).toEqual(
+      expect.arrayContaining([
+        "evaluation_priority",
+        "activation_fit",
+        "first_value_fit",
+        "priority_rationale",
+        "progressive_review",
+      ]),
+    );
+    expect(uxVariationBranch.properties.evaluation_priority.type).toBe("integer");
+    expect(uxVariationBranch.properties.evaluation_priority.minimum).toBe(1);
+    expect(uxVariationBranch.properties.activation_fit.enum).toEqual(["high", "medium", "low"]);
+    expect(uxVariationBranch.properties.first_value_fit.enum).toEqual(["high", "medium", "low"]);
+    expect(uxVariationBranch.properties.priority_rationale.minLength).toBe(1);
+    expect(uxVariationBranch.properties.progressive_review.$ref).toBe("#/$defs/progressive_review_guidance");
+
+    expect(progressiveReview.required).toEqual(
+      expect.arrayContaining([
+        "first_value_step",
+        "primary_task_path",
+        "staged_disclosure_notes",
+        "evidence_required",
+      ]),
+    );
+    expect(progressiveReview.properties.first_value_step.minLength).toBe(1);
+    expect(progressiveReview.properties.primary_task_path.minLength).toBe(1);
+    expect(progressiveReview.properties.staged_disclosure_notes.minLength).toBe(1);
+    expect(progressiveReview.properties.evidence_required.items.minLength).toBe(1);
+  });
+
+  it("ships a v0.3 sample manifest exercising ordering metadata and modify-back decisions", () => {
     const sample = read("design/flow-tree-sample.yaml");
-    expect(sample).toContain("schema_version: v0.2");
+    expect(sample).toContain("schema_version: v0.3");
     // per-branch model attachment round-trips
     expect(sample).toContain("model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml");
+    expectContainsAll(sample, [
+      "journey_stage: activation",
+      "journey_sequence: 1",
+      "priority_rationale:",
+      "progressive_review:",
+      "first_value_step:",
+      "primary_task_path:",
+      "staged_disclosure_notes:",
+      "evidence_required:",
+      "evaluation_priority: 1",
+      "activation_fit: high",
+      "first_value_fit: high",
+    ]);
+    expect(sample).toMatch(/branch_order_override:|user_override:|override_rationale:/);
     // renamed UI experiment nodes + build-plan linkage
     expect(sample).toContain("ui_experiments:");
     expect(sample).toContain("ui_experiment_id: wizard-stepper");
@@ -71,6 +142,72 @@ describe("product-design flow tree artifact boundaries", () => {
     const modelSample = read("design/model-tree-sample.yaml");
     expect(modelSample).toContain("schema_version: v0.2");
     expect(modelSample).toContain("user_flow_branch_ref: submit-and-approve");
+  });
+
+  it("requires mirrored user-flow maps to order branches by journey progression and persist overrides", () => {
+    for (const mirror of mirrors) {
+      const userFlow = read(`packs/product-design/${mirror}/user-flow-map/SKILL.md`);
+
+      expectContainsAll(userFlow, [
+        "Order `branches[]` by journey progression by default",
+        "Record explicit user branch-order overrides in `design/user-flow-[topic].md`",
+        "Record explicit user branch-order overrides in `design/user-flow-[topic]-interview.md`",
+        "Persist branch order override metadata in `design/**/flow-tree-*.yaml`",
+        "first value moment",
+        "primary task path",
+        "progressive review sequence",
+      ]);
+    }
+  });
+
+  it("requires mirrored UX variations to select child branches by journey and value priority", () => {
+    for (const mirror of mirrors) {
+      const uxVariations = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
+
+      expect(uxVariations).toContain(
+        "Branch selection order: explicit user override, journey_sequence, activation_fit, first_value_fit, evaluation_priority, status, then stable array order.",
+      );
+      expect(uxVariations).toContain("Do not use raw first-pending array order as the default branch selector.");
+      expect(uxVariations).not.toContain("first modelled user-flow branch with no `ux_variations`");
+      expect(uxVariations).not.toContain("first modeled user-flow branch with no `ux_variations`");
+    }
+  });
+
+  it("keeps mirrored UI interview non-buildout and delegates clickable experiments", () => {
+    for (const mirror of mirrors) {
+      const uiInterview = read(`packs/product-design/${mirror}/ui-interview/SKILL.md`);
+      const sigil = command[mirror];
+
+      expectContainsAll(uiInterview, [
+        "Write UI branch state to `ui_experiments[]`",
+        "Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.",
+        `Route approved clickable route experiment needs to ${sigil}create-ui-experiment [approved-ui-experiment]`,
+        "Do not write or route default clickable prototype buildout from `ui-interview`.",
+      ]);
+      expect(uiInterview).not.toContain("ui_reviews[]");
+    }
+  });
+
+  it("defines mirrored create-ui-experiment contracts as the clickable experiment owner", () => {
+    const pack = read("packs/product-design/PACK.md");
+    expect(pack).toContain("`create-ui-experiment`: Own clickable UI experiment routes");
+
+    for (const mirror of mirrors) {
+      const createUiExperiment = read(`packs/product-design/${mirror}/create-ui-experiment/SKILL.md`);
+      const sigil = command[mirror];
+
+      expectContainsAll(createUiExperiment, [
+        "name: create-ui-experiment",
+        "version: v0.0",
+        "Own clickable UI experiment routes or project-native lightweight prototypes",
+        "fake, fixture, local, or in-memory data",
+        "first-value journey",
+        "progressive reveal",
+        `${sigil}prototype`,
+        `${sigil}uat --variant-evaluation`,
+        `${sigil}user-flow-map --prototype-build-plan`,
+      ]);
+    }
   });
 
   it("routes pre-prototype flow maps, UX variations, and UI branch packets through design artifacts", () => {

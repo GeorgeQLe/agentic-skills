@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-23 - Design-tree branch routing red coverage
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-141557-layer1-coverage-routing-ui-ownership.md`.
+- Added failing layer1 coverage in `tests/layer1/product-design-flow-tree.test.ts` for flow-tree schema `v0.3`, deterministic user-flow and UX-variation branch metadata, sample ordering examples, mirrored branch-routing contracts, non-buildout `ui-interview`, and mirrored `create-ui-experiment` ownership.
+- Verified the focused layer1 file passed before edits (`1 passed, 9 tests`) and fails after edits as expected for the red TDD step (`14 tests, 7 failed / 7 passed`).
+- Updated `tasks/todo.md` with Step 1.1 completion evidence and a self-contained Step 1.2 plan.
+- Manifest: `tasks/ship-manifest-2026-06-23-design-tree-branch-routing-red.md`.
+
 ## 2026-06-23 - Plan design-tree branch prioritization phase
 
 - Ran the repo-local `plan-phase` contract from `packs/agent-work-admin/codex/plan-phase/SKILL.md` because `plan-phase` is provided by the uninstalled `agent-work-admin` pack and is not visible in the active Codex registry.

@@ -35,7 +35,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
 
 ### Tests First
 
-- [ ] Step 1.1: Write failing layer1 coverage for deterministic branch routing and UI experiment ownership
+- [x] Step 1.1: Write failing layer1 coverage for deterministic branch routing and UI experiment ownership
   - Files: modify `tests/layer1/product-design-flow-tree.test.ts`
   - Add assertions that `design/flow-tree.schema.json` exposes a new schema version with branch ordering metadata on user-flow branches and UX variation branches, including journey stage, sequence/priority, rationale, and progressive-review guidance.
   - Add assertions that `design/flow-tree-sample.yaml` exercises the new ordering fields and a user override or rationale example.
@@ -131,4 +131,15 @@ Make the product-design tree choose downstream branches in a journey-aware order
 
 ### Review
 
-- Pending. This phase has been decomposed by the repo-local `plan-phase` contract and is ready for `$exec` Step 1.1.
+- Step 1.1 complete as an expected red TDD step.
+- Baseline before edits: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed (1 file, 9 tests).
+- Red proof after edits: the same focused command fails as expected (1 file, 14 tests, 7 failed / 7 passed). Failures are the new contract assertions for schema `v0.3`, branch-order metadata, sample ordering metadata, mirrored user-flow branch ordering/override persistence, mirrored UX variation priority selection, non-buildout `ui-interview` delegation, and missing `create-ui-experiment` contracts.
+- No Step 1.1 manual blocker was present in `tasks/manual-todo.md`.
+
+### Next Step Plan - Step 1.2
+
+- Update only `design/flow-tree.schema.json` and `design/flow-tree-sample.yaml`.
+- Make the schema/sample portions of the new layer1 coverage pass by introducing schema `v0.3`, user-flow branch ordering metadata, UX variation priority metadata, and shared progressive-review guidance.
+- Keep `ui_experiments[]` as the canonical child branch name and do not reintroduce `ui_reviews[]`.
+- Leave mirrored skill-contract and `create-ui-experiment` assertions red for later steps unless a schema/sample edit directly requires a wording touch elsewhere.
+- Verification target: rerun `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm any remaining failures are downstream contract assertions scheduled for Steps 1.3-1.7.
