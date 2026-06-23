@@ -1,5 +1,35 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-23 — Task-doc routing prevention fix
+
+- **Mode:** fix · **Scope:** tasks/workflow contracts
+
+### Summary
+
+- Roadmap/todo alignment: **fixed mechanically** — `tasks/roadmap.md` no longer exposes historical implementation notes as repeated `Current Implementation` sections, and `tasks/todo.md` remains the only executable current-task surface.
+- History coverage: **updated** — `tasks/history.md` now records the audit, roadmap cleanup, and skill contract bumps.
+- Workflow enforcement: **added** — `scripts/audit-task-docs.mjs` and updated `reconcile-dev-docs`, `ship`, and `ship-end` contracts prevent stale roadmap/advisory surfaces from silently becoming next work.
+- Recommended next action: run the standard verification suite and ship this remediation.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md** — Historical reverse-chronological entries still used `Current Implementation` headings after `tasks/todo.md` was reset, leaving next-work routing ambiguous. Evidence: the new audit failed before cleanup with 89 roadmap `Current Implementation` sections.
+
+### Fixed
+
+- [x] `scripts/audit-task-docs.mjs` - Added a read-only audit for current-only `tasks/todo.md`, promoted roadmap current-section parity, and advisory unchecked-item reporting.
+- [x] `tasks/roadmap.md` - Converted stale historical `Current Implementation` headings to `Historical Implementation`, leaving only the promoted current task as current during execution.
+- [x] `packs/docs-health/{codex,claude}/reconcile-dev-docs` - Archived `v0.2`, bumped to `v0.3`, and added explicit overloaded-task-doc detection/fix rules plus the audit gate.
+- [x] `packs/exec-loop/{codex,claude}/ship` - Archived `v0.7`, bumped to `v0.8`, and required current-only routing plus task-doc audit checks when task docs changed.
+- [x] `packs/exec-loop/{codex,claude}/ship-end` - Archived `v0.5`, bumped to `v0.6`, and required current-only routing plus task-doc audit checks when task docs changed.
+
+### Validation
+
+- Pre-cleanup proof: `node scripts/audit-task-docs.mjs` exited 1 because `tasks/roadmap.md` had 89 `Current Implementation` sections.
+- Post-cleanup proof: `node scripts/audit-task-docs.mjs` exited 0 with advisory counts only for `tasks/manual-todo.md` and `tasks/recurring-todo.md`.
+
+---
+
 ## 2026-06-23 — `$reconcile-dev-docs fix tasks`
 
 - **Mode:** fix · **Scope:** tasks

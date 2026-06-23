@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-23 - Task-doc routing audit and roadmap cleanup
+
+- Added `scripts/audit-task-docs.mjs`, a read-only task-doc routing audit that fails when `tasks/todo.md` contains stale unchecked work outside the current active task or when `tasks/roadmap.md` has ambiguous `Current Implementation` headings not explicitly promoted into `tasks/todo.md`.
+- Verified the audit failed before cleanup because `tasks/roadmap.md` had 89 `Current Implementation` sections, then converted historical roadmap entries to `Historical Implementation` while keeping the one promoted active task.
+- Archived and bumped mirrored `reconcile-dev-docs` contracts from `v0.2` to `v0.3` with explicit current-only task-doc checks and fix-mode cleanup requirements.
+- Archived and bumped mirrored `ship` contracts from `v0.7` to `v0.8`, and mirrored `ship-end` contracts from `v0.5` to `v0.6`, so final next-work routing runs the audit when task docs changed and selects executable work only from the current active section of `tasks/todo.md`.
+
 ## 2026-06-23 - Development docs active-task reset
 
 - Reconciled `tasks/todo.md` after `$reconcile-dev-docs fix tasks` and collapsed it from a historical stack of completed implementation sections back to a current-only task state.

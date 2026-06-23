@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-23
+
+- Added task-doc audit gating and current-only next-work routing so historical roadmap/advisory unchecked items are not selected as executable work unless promoted into `tasks/todo.md`.
+
 ## v0.7 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

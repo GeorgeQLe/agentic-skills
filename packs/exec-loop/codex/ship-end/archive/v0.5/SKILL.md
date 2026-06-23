@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.6
+version: v0.5
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -20,7 +20,6 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
 3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
 3c. Check `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist — note unchecked advisory counts only. Do NOT treat them as blockers unless an item has been promoted into `tasks/todo.md`.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
-4b. If `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` changed and `scripts/audit-task-docs.mjs` exists, run `node scripts/audit-task-docs.mjs` and fix any failures before final next-work routing.
 5. **Pre-ship validation:**
    - First check conversation context for lint/typecheck/test/build output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
    - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test/build targets), `package.json` (lint/typecheck/check/test/build scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
@@ -71,7 +70,6 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, outstanding session work, or the absence of any remaining work. Do not use agent mode itself as the next work item.
-- Treat `tasks/todo.md` as the only executable current-task surface. Historical roadmap entries and unchecked advisory/manual/record/recurring items are reconciliation candidates, not next executable work, unless the current active todo section explicitly promotes them.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Prefer an owning workflow/domain route over execution-loop defaults. If the next work item names a research, alignment, design, UI, UX, prototype-test, or copy-audit artifact or review page, recommend the specific owning skill, required user review, or compiled-YAML step directly. Use `$exec` only when no narrower installed skill, artifact contract, or review route owns the next action.
 - Inference defaults:
@@ -88,7 +86,6 @@ Rules:
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not modify `CLAUDE.md` as part of progress tracking.
 - Do not execute or block wrap-up on `tasks/record-todo.md` or `tasks/recurring-todo.md` items unless they were explicitly promoted into `tasks/todo.md`.
-- When task docs changed, do not finish with a next-work recommendation until `node scripts/audit-task-docs.mjs` passes, if that script exists.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.

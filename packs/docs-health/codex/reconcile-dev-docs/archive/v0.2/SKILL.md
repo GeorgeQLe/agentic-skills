@@ -2,7 +2,7 @@
 name: reconcile-dev-docs
 description: Reconcile development docs by auditing roadmap, todo, history, phase archives, specs, git history, and code reality
 type: analysis
-version: v0.3
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "[audit|fix] [tasks|specs|all]"
 ---
@@ -56,7 +56,6 @@ Read git/code evidence:
 - `git log --oneline -50`
 - `git log --name-only --since=<latest relevant doc date>` when timestamps suggest docs may be stale
 - Targeted file existence and `rg` checks for claims marked complete
-- `node scripts/audit-task-docs.mjs` when present, to mechanically detect overloaded current-task routing surfaces
 
 ### 3. Reconcile Rules
 
@@ -71,8 +70,6 @@ Classify findings:
 Use these specific checks:
 
 - `tasks/todo.md` checked steps should be reflected in `tasks/history.md` after shipping.
-- `tasks/todo.md` must be current-only: it may contain one active `## Current Implementation - ...` section, a no-active-task state, and review/evidence notes, but it must not retain multiple historical implementation sections or stale unchecked terminal items outside the current active task.
-- `tasks/roadmap.md` must not use `## Current Implementation - ...` for historical reverse-chronological notes. A roadmap `Current Implementation` heading is valid only when exactly one exists and its title is explicitly promoted into `tasks/todo.md`.
 - Completed roadmap phases should have corresponding `tasks/phases/phase-N.md` archives.
 - The active `tasks/todo.md` phase should match the first incomplete roadmap phase.
 - `tasks/manual-todo.md` should not contain unchecked blockers for completed todo steps unless the user explicitly overrode them.
@@ -80,7 +77,6 @@ Use these specific checks:
 - `tasks/manual-todo.md` should not contain non-blocking records unless they require human-only external action tied to a `blocks` or `after` step; move clear cases to `tasks/record-todo.md`.
 - `tasks/manual-todo.md` should not contain agent-executable work such as repo edits, SDK wiring, generated assets, local commands, tests, audits, or authenticated CLI/API operations; move clear cases to `tasks/todo.md`.
 - `tasks/recurring-todo.md` due items should remain advisory unless explicitly promoted into `tasks/todo.md`.
-- Unchecked boxes in `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, or historical roadmap/report sections are advisory or reconciliation evidence, not executable next work, unless promoted into the current active section of `tasks/todo.md`.
 - Recent commits that complete user-facing work should have a matching history entry.
 - Specs whose described areas changed after their last modification date should be flagged for `$spec-drift`.
 - Claimed completed work should have either git evidence, file evidence, test evidence, or an explicit note explaining why evidence is unavailable.
@@ -96,12 +92,9 @@ In `fix` mode, apply only unambiguous development-doc changes:
 - Move clearly misclassified non-blocking condition-gated records from `tasks/todo.md` or `tasks/manual-todo.md` into `tasks/record-todo.md`.
 - Move clearly misclassified cadence-based obligations from `tasks/todo.md` or `tasks/manual-todo.md` into `tasks/recurring-todo.md`.
 - Move clearly misclassified agent-executable work from `tasks/manual-todo.md` into `tasks/todo.md` with enough file/command detail for `$exec`.
-- If `tasks/todo.md` contains stacked historical implementation sections, collapse completed/superseded details into `tasks/history.md` and `tasks/reconciliation-report.md`, then leave `tasks/todo.md` with only the current active task or an explicit no-active-task state.
-- If `tasks/roadmap.md` contains stale `Current Implementation` headings, rename historical entries to non-current historical headings or archive/summarize them; leave `Current Implementation` only for the single task promoted into `tasks/todo.md`.
 - Add unresolved contradictions to `tasks/todo.md` under `## Development Docs Reconciliation`.
 - Archive existing `specs/` or `docs/specifications/` files before replacing or substantively rewriting them.
 - Write `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings.
-- Run `node scripts/audit-task-docs.mjs` after task-doc fixes when the script exists; do not report task-doc routing as fixed while that audit still fails.
 
 Ask before applying any ambiguous change. If already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask plainly in chat.
 
@@ -148,7 +141,6 @@ Report the same sections plus:
 - Do not modify code, research docs, kanban cards, git history, or deployment state.
 - Do not rewrite or delete old `tasks/history.md` entries; append corrections or superseding notes.
 - Do not uncheck completed work automatically. Report unsupported completion claims unless the user approves the correction.
-- Do not route next work from historical roadmap sections or advisory todo surfaces. Select executable next work only from the current active task in `tasks/todo.md`; otherwise report that advisory items must be explicitly promoted first.
 - Treat `tasks/roadmap.md` as the strategic source of truth, `tasks/todo.md` as the active execution contract, `tasks/manual-todo.md` as human-only external step-linked work, `tasks/record-todo.md` and `tasks/recurring-todo.md` as advisory surfaces, and `tasks/history.md` as append-only evidence.
 
 ## Alignment Page

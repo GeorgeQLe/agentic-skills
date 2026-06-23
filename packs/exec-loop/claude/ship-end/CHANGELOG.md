@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-23
+
+- Added task-doc audit gating and current-only next-work routing so stale roadmap/advisory unchecked items are not recommended as executable session follow-up unless promoted into `tasks/todo.md`.
+
 ## v0.5 - 2026-06-17
 
 - Added owning-route precedence for research, alignment, design, UI, UX, prototype-test, and copy-audit review artifacts so `/ship-end` does not route those workflows through `/exec` when a narrower skill, review, or compiled-YAML route owns the next action.

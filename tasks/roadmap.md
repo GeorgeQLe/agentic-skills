@@ -1,8 +1,35 @@
 ## Roadmap Usage Note - 2026-06-23
 
-`tasks/todo.md` is the current execution contract. This roadmap currently contains historical reverse-chronological implementation notes, including older `Current Implementation` headings retained from prior sessions. Do not treat an old roadmap heading as active work unless it is explicitly promoted into `tasks/todo.md`.
+`tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Add `uninstall-global --dry-run`
+## Historical Implementation - Fix Recurring Stale Task-Doc Routing
+
+### Goal
+
+Prevent stale historical task sections from being routed as active next work by enforcing that `tasks/todo.md` is current-only, `tasks/roadmap.md` does not present historical entries as repeated active `Current Implementation` sections, and shipping/reconciliation skills consult only the promoted current task when selecting next work.
+
+### Plan
+
+1. Inspect current docs, existing audit scripts, and relevant skill contracts.
+2. Add `scripts/audit-task-docs.mjs` to flag overloaded todo/roadmap routing surfaces.
+3. Confirm the new audit fails against the pre-cleanup roadmap state.
+4. Archive and bump mirrored `reconcile-dev-docs` contracts from `v0.2` to `v0.3`, then update changelogs.
+5. Update `ship` and `ship-end` contracts so task-doc changes run the audit and next-work routing reads only the current active todo section.
+6. Rewrite the top-level roadmap headings so historical implementation notes are explicitly historical, with only promoted current work using `Current Implementation`.
+7. Add history/reconciliation evidence for this prevention fix.
+8. Run verification: task-doc audit, diff hygiene, archive audit, mirror parity audit, and `npm run skillpacks:verify`.
+9. Review final diff, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- `scripts/audit-task-docs.mjs` fails on ambiguous stale active-task routing and passes on the cleaned docs.
+- `tasks/todo.md` contains only this current task during execution, then returns to a no-active-task or explicitly promoted state before ship completion.
+- `tasks/roadmap.md` no longer contains multiple historical `Current Implementation` sections.
+- `reconcile-dev-docs` fix mode explicitly detects and repairs overloaded current-task sections.
+- `ship` and `ship-end` do not recommend historical/advisory unchecked boxes as next executable work.
+- Required verification passes or any failure is fixed and rerun.
+
+## Historical Implementation - Add `uninstall-global --dry-run`
 
 ### Goal
 
@@ -26,7 +53,7 @@ Add a read-only preview mode for `npx skillpacks uninstall-global --dry-run`, in
 - CLI help advertises `uninstall-global [--reinstall-base] [--dry-run]`.
 - Required verification passes or any failure is fixed and rerun before shipping.
 
-## Current Implementation - Explain Unsafe Refresh Dry Runs
+## Historical Implementation - Explain Unsafe Refresh Dry Runs
 
 ### Goal
 
@@ -48,7 +75,7 @@ Make `npx skillpacks refresh --all --dry-run` explain why its final safety summa
 - Regression tests cover the stale/no-reason case.
 - Focused CLI tests and package verification pass before shipping.
 
-## Current Implementation - Fix npm Publish Verification Lag
+## Historical Implementation - Fix npm Publish Verification Lag
 
 ### Goal
 
@@ -74,7 +101,7 @@ Make `packages/skillpacks/scripts/verify-published-package.sh` tolerate bounded 
 - The existing `0.1.11` post-publish source state is tagged separately from the unpublished retry-fix commit.
 - Requested verification commands pass or any unrelated/pre-existing failures are proven and documented.
 
-## Current Implementation - Update Fork Idea Branch Additive Spawning
+## Historical Implementation - Update Fork Idea Branch Additive Spawning
 
 ### Goal
 
@@ -145,7 +172,7 @@ Add a `spinoff-idea` skill that inspects the invoking repository and produces a 
 - The skill avoids copying secrets, private URLs, customer data, proprietary implementation details, or unrelated repo history into the prompt.
 - Targeted skill validation and diff hygiene pass.
 
-## Current Implementation - Prepare skillpacks 0.1.11 Publish Boundary
+## Historical Implementation - Prepare skillpacks 0.1.11 Publish Boundary
 
 ### Goal
 
@@ -243,7 +270,7 @@ Make `skillpacks refresh --all` surface legacy user-home global installs, and ad
 - With no discovered project roots, reinstall mode initializes the current directory with base skills.
 - Existing `uninstall-global` no-arg behavior remains supported and unsupported args still fail.
 
-## Current Implementation - Fix Alignment-Page Review Routing
+## Historical Implementation - Fix Alignment-Page Review Routing
 
 ### Goal
 
@@ -268,7 +295,7 @@ Correct product-design routing so default `$ux-variations` cannot skip `$ui-inte
 - Alignmeant keeps invalid prototype artifacts only under `docs/history/archive/**`.
 - Alignmeant active routing points to `$ui-interview uxv-alignment-page-review-trust-first-review-page`.
 
-## Current Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
+## Historical Implementation - Fix `skillpacks uninstall-global` Legacy Cleanup
 
 ### Goal
 
@@ -292,7 +319,7 @@ Make `skillpacks uninstall-global` remove legacy user-home global skill installs
 - Directories whose marker does not declare `managed_by=agentic-skills` remain untouched even with suspicious sources.
 - Public CLI command surface remains unchanged.
 
-## Current Implementation - Alignment Feedback YAML Clarification Intake
+## Historical Implementation - Alignment Feedback YAML Clarification Intake
 
 ### Goal
 
@@ -365,7 +392,7 @@ Prepare the already-shipped consolidate-prototypes/graduation work for the next 
 - `CHANGELOG.md` has a pending `0.1.10` release entry.
 - The real publish command is left for the user and can run from a clean committed tree.
 
-## Current Implementation - Clean Up 0.1.9 Publish Blockers
+## Historical Implementation - Clean Up 0.1.9 Publish Blockers
 
 ### Goal
 
@@ -389,7 +416,7 @@ Prepare the repo for a clean `skillpacks` / `@glexcorp/gskp` `0.1.9` publish by 
 - Runtime code remains untouched unless a deterministic verification failure reproduces from a clean build.
 - Metadata cleanup is committed and pushed before any real publish attempt.
 
-## Current Implementation - HTML-First Canonical Write Contract
+## Historical Implementation - HTML-First Canonical Write Contract
 
 ### Goal
 
@@ -414,7 +441,7 @@ Tighten product-design contracts so `state-model` and `ux-variations` may use Ma
 - Generated `DESIGN-TREE-LOOP.md` bundles are in sync with `docs/design-tree-loop-convention.md`.
 - Regression coverage fails if canonical design Markdown/YAML writes drift back into pre-approval assemble wording.
 
-## Current Implementation - Clarify Chunked Skill Progress
+## Historical Implementation - Clarify Chunked Skill Progress
 
 ### Goal
 
@@ -459,7 +486,7 @@ Research the market context for a managed SaaS spin-off inspired by the `skillpa
 - The prompt preserves the user's core question: whether managed SaaS leaves a gap beyond skills.sh and the existing npm package.
 - Task review records sources and verification.
 
-## Current Implementation - Pattern A Routing Wording
+## Historical Implementation - Pattern A Routing Wording
 
 ### Goal
 
@@ -481,7 +508,7 @@ Remove redundant review-pending "Continue In A Fresh Session" wording from Patte
 - Post-approval routing still uses `## Recommended Next Command`.
 - Pattern A handoff audit passes.
 
-## Current Implementation - npm Publish Recovery Hardening
+## Historical Implementation - npm Publish Recovery Hardening
 
 ### Goal
 
@@ -514,7 +541,7 @@ Make the npm release process recoverable and auditable before the next publish b
 - Successful releases leave explicit instructions and checks for committing/tagging/pushing the source version and manifest state.
 - Verification passes, or any unavailable external checks are recorded.
 
-## Current Implementation - Guarantee Skill Convention Bundles
+## Historical Implementation - Guarantee Skill Convention Bundles
 
 ### Goal
 
@@ -547,7 +574,7 @@ Make convention bundle dependencies explicit, audited, and package-gated so any 
 - Install/refresh tests prove declared bundles are copied into local `.claude/skills` and `.codex/skills` roots.
 - Verification passes, or any unrelated pre-existing failure is proven.
 
-## Current Implementation - Prototype Convention Bundle Distribution
+## Historical Implementation - Prototype Convention Bundle Distribution
 
 ### Goal
 
@@ -580,7 +607,7 @@ Fix the prototype-session-loop convention distribution gap by keeping `docs/prot
 - `scripts/pack.sh refresh` installs the sibling bundles into local skill roots.
 - Focused checks and package tests pass, or unrelated pre-existing failures are proven.
 
-## Current Implementation - Finalized Artifact Routing Lesson
+## Historical Implementation - Finalized Artifact Routing Lesson
 
 ### Goal
 
@@ -601,7 +628,7 @@ Ship the correction that finalized research/alignment artifact handoffs need exp
 - Task/history/manifest files document the boundary and state that no source/package runtime changes were made.
 - The tracked tree is clean after commit/push so `./publish.sh --dry-run 0.1.6` can proceed.
 
-## Current Implementation - Release Parity And npm Login Runbook
+## Historical Implementation - Release Parity And npm Login Runbook
 
 ### Goal
 
@@ -633,7 +660,7 @@ Document the `skillpacks` / `@glexcorp/gskp` maintainer publish process with exp
 - `publish.sh` reminds maintainers of auth, two-package parity, and the `--current` recovery command before real publish.
 - Verification passes, or any unavailable external check is recorded.
 
-## Current Implementation - Public npm Package Changelog
+## Historical Implementation - Public npm Package Changelog
 
 ### Goal
 
@@ -662,7 +689,7 @@ Create a public package-level changelog for the `skillpacks` / `@glexcorp/gskp` 
 - README/package docs make the changelog discoverable.
 - Verification passes, or any unavailable external check is recorded.
 
-## Current Implementation - Codex/Claude Skill Version Parity Catch-Up
+## Historical Implementation - Codex/Claude Skill Version Parity Catch-Up
 
 ### Goal
 
@@ -702,7 +729,7 @@ Verify current Codex/Claude skill version gaps, classify intentional split imple
 - Intentional one-sided and split implementations remain allowlisted with accurate reasons.
 - Static version presence, parity, targeted tests, and package/showcase validation pass or any unrelated pre-existing failure is proven.
 
-## Current Implementation - Ship-End Research/Design Route Precedence
+## Historical Implementation - Ship-End Research/Design Route Precedence
 
 ### Goal
 
@@ -769,7 +796,7 @@ Validate the reported mismatch between Pattern A continuation handoffs and the r
 - Version/archive/changelog requirements are satisfied for changed skills.
 - Focused audits/tests pass.
 
-## Current Implementation - Research Loop Terminal Handoff Sections
+## Historical Implementation - Research Loop Terminal Handoff Sections
 
 ### Goal
 
@@ -842,7 +869,7 @@ Validate the reported `$journey-map` next-step routing non-compliance in `/Users
 - A correction lesson is added or an existing lesson is explicitly reused.
 - The final answer states the exact next safe `$journey-map` command.
 
-## Current Implementation - skillpacks Refresh Duplicate Framework Installs
+## Historical Implementation - skillpacks Refresh Duplicate Framework Installs
 
 ### Goal
 
@@ -877,7 +904,7 @@ Prevent `skillpacks refresh` and pack installs from creating top-level duplicate
 - `refresh` does not delete unmanaged local roots with the same names.
 - Focused package verification passes.
 
-## Current Implementation - Single Base Skill Install Support
+## Historical Implementation - Single Base Skill Install Support
 
 ### Goal
 
@@ -935,7 +962,7 @@ Validate why Codex startup context is consuming roughly 5-8% for simple prompts,
 - The largest contributors to initial context are identified.
 - Any fix is verified with a repeatable command, or the report explains why no source fix was applied.
 
-## Current Implementation - Remove Global/Base Skill Availability Assumptions
+## Historical Implementation - Remove Global/Base Skill Availability Assumptions
 
 ### Goal
 
@@ -967,7 +994,7 @@ Update active skill contracts so agents recommend only commands that are current
 - Legitimate user-home cleanup references for legacy base installs remain intact.
 - Focused tests and repository audits prove the updated routing behavior.
 
-## Current Implementation - skillpacks 0.1.4 Version-Aware Release
+## Historical Implementation - skillpacks 0.1.4 Version-Aware Release
 
 ### Goal
 
@@ -1002,7 +1029,7 @@ Publish `skillpacks@0.1.4` and `@glexcorp/gskp@0.1.4` with version-aware CLI sta
 - `./publish.sh --dry-run --current` validates the committed package/manifest version without running `npm version`.
 - Both npm packages publish at `0.1.4` from a committed and pushed tree.
 
-## Current Implementation - ord-align Routing Audit Contract Fix
+## Historical Implementation - ord-align Routing Audit Contract Fix
 
 ### Goal
 
@@ -1060,7 +1087,7 @@ Validate whether `node scripts/skill-alignment-routing-audit.mjs` still reports 
 - Current uncommitted changes are confirmed not to touch the audit script or active `ord-align` inputs.
 - The final report states whether a source fix was applied or why no fix was needed.
 
-## Current Implementation - Narrow Research Loop Routing Guardrails
+## Historical Implementation - Narrow Research Loop Routing Guardrails
 
 ### Goal
 
@@ -1096,7 +1123,7 @@ Narrow Pattern A Research Session Loop routing rules so pending approval pages m
 - Framework subskills remain route-free; the parent orchestrator remains the only user-facing continuation route during framework loops.
 - Versions, archives, changelogs, prompt history, task notes, and verification are complete.
 
-## Current Implementation - ord-align Staged Review Contract
+## Historical Implementation - ord-align Staged Review Contract
 
 ### Goal
 
@@ -1131,7 +1158,7 @@ Update the existing mirrored `ord-align` skill contracts so candidate validation
 - Codex and Claude contracts remain semantically mirrored, with runner-specific command syntax only.
 - Benchmark coverage deterministically checks the new staged-review contract.
 
-## Current Implementation - Pack Skill Sunset Alignment Page
+## Historical Implementation - Pack Skill Sunset Alignment Page
 
 ### Goal
 
@@ -1218,7 +1245,7 @@ Validate whether `layer1/skill-alignment-routing-audit.test.ts` still failing wi
 - The current diff is confirmed as doc-only or otherwise scoped away from the failing audit inputs.
 - Any remaining uncertainty is stated plainly rather than treated as proven.
 
-## Current Implementation - Alignment Fallback And npx Caveat Docs
+## Historical Implementation - Alignment Fallback And npx Caveat Docs
 
 ### Goal
 
@@ -1253,7 +1280,7 @@ Correct the create-alignment-page fallback contract and public docs so target re
 - CLI behavior, command names, package files, and `scripts/upgrade-alignment-page.mjs` remain unchanged.
 - Verification results are recorded in `tasks/todo.md`.
 
-## Current Implementation - Framework Handoff Routing Alias Parity
+## Historical Implementation - Framework Handoff Routing Alias Parity
 
 ### Goal
 
@@ -1284,7 +1311,7 @@ Close the remaining framework handoff routing gap by making active top-level ins
 - Focused layer1 routing tests cover both nested framework paths and top-level installed aliases with relevant `parent:` frontmatter.
 - Package/skill verification passes, with generated surfaces refreshed only when needed.
 
-## Current Implementation - Alignment Portability
+## Historical Implementation - Alignment Portability
 
 ### Goal
 
@@ -1317,7 +1344,7 @@ Make alignment-page creation, audit, TTS injection, and browser opening portable
 - `$create-alignment-page` exists for Codex and Claude and instructs agents to use bundled per-skill conventions first, then packaged convention guidance, with audit/open handled through `npx skillpacks alignment ...`.
 - Verification output is recorded in `tasks/todo.md`.
 
-## Current Implementation - Alignment Gate Reactivity Contract
+## Historical Implementation - Alignment Gate Reactivity Contract
 
 ### Goal
 
@@ -1349,7 +1376,7 @@ Update the shared alignment-page convention and active-page audit so feedback-dr
 - Active confirmed pages containing retained controls fail the audit with the new diagnostic group.
 - Review pages with active controls continue to pass the audit.
 
-## Current Implementation - Alignment Gate Reactivity Session Analysis
+## Historical Implementation - Alignment Gate Reactivity Session Analysis
 
 ### Goal
 
@@ -1378,7 +1405,7 @@ Investigate recurring cases where alignment-page gate questions were not reactiv
 - Cost is reported as unavailable unless explicit logged cost fields or verified current pricing are used.
 - No alignment page is created unless the investigation finds a clarification need that cannot be handled inline.
 
-## Current Implementation - YouTube Derivative Cuts Skill
+## Historical Implementation - YouTube Derivative Cuts Skill
 
 ### Goal
 
@@ -1411,7 +1438,7 @@ Add a mirrored `youtube-ops` research skill that plans a prioritized derivative 
 - Benchmark coverage registers `youtube-derivative-cuts` and checks the new workflow expectations.
 - Generated showcase assets are refreshed and validated.
 
-## Current Implementation - Root Agent Instruction Audit
+## Historical Implementation - Root Agent Instruction Audit
 
 ### Goal
 
@@ -1439,7 +1466,7 @@ Audit every provisioned section of `CLAUDE.md` and `AGENTS.md` from `provision-a
 - No root instruction policy is edited during the audit unless the user approves a concrete reduction plan.
 - Verification and review notes are recorded in `tasks/todo.md`.
 
-## Current Implementation - Revision Hygiene Rule
+## Historical Implementation - Revision Hygiene Rule
 
 ### Goal
 
@@ -1471,7 +1498,7 @@ Add a durable revision hygiene rule that makes feedback-driven edits converge on
 - Generated alignment bundles are in sync with the canonical convention.
 - Verification output is recorded in `tasks/todo.md`.
 
-## Current Implementation - Documentation Drift Remediation
+## Historical Implementation - Documentation Drift Remediation
 
 ### Goal
 
@@ -1505,7 +1532,7 @@ Patch all P1 and P2 drift identified by `alignment/devtool-docs-audit-docs-drift
 - The npm distribution doc consistently presents `skillpacks` as primary and `@glexcorp/gskp` as the scoped alias.
 - Verification output is recorded in `tasks/todo.md`.
 
-## Current Implementation - Documentation Drift Inventory
+## Historical Implementation - Documentation Drift Inventory
 
 ### Goal
 
@@ -1536,7 +1563,7 @@ Inventory the repository's documentation surfaces and identify drift between can
 - The alignment page renders the complete audit content directly and includes required review controls.
 - Verification includes at least markdown/HTML hygiene checks and repository diff review.
 
-## Current Implementation - Prototype Session Loop Convention Refactor
+## Historical Implementation - Prototype Session Loop Convention Refactor
 
 ### Goal
 
@@ -1574,7 +1601,7 @@ Create `docs/prototype-session-loop-convention.md` as the named contract for pro
 - UAT variant-evaluation reads `design/ux-variations-*`, `design/ui-requirements-*`, and `design/ui-layout-variations-*` first, with `specs/` only as legacy fallback evidence.
 - Generated package output and installed local copies are refreshed from source, not hand-edited.
 
-## Current Implementation - Product Design Prototype Routing Cleanup
+## Historical Implementation - Product Design Prototype Routing Cleanup
 
 ### Goal
 
@@ -1605,7 +1632,7 @@ Remove premature roadmap/agent-work-admin routing from the research/prototyping 
 - Active `.codex/skills/user-flow-map` includes `--prototype-build-plan`.
 - Layer1 coverage checks the exact post-`ui-interview` synthesis route.
 
-## Current Implementation - Dual npm Publish Automation
+## Historical Implementation - Dual npm Publish Automation
 
 ### Goal
 
@@ -1637,7 +1664,7 @@ Publish the established `skillpacks` package and the scoped alias `@glexcorp/gsk
 - Public docs prefer `npx skillpacks ...` and mention `npx @glexcorp/gskp ...` as an equivalent scoped alias.
 - Verification passes before commit/push.
 
-## Current Implementation - npm Age-Gate Warning Cleanup
+## Historical Implementation - npm Age-Gate Warning Cleanup
 
 ### Goal
 
@@ -1668,7 +1695,7 @@ Stop `update-packages` guidance and benchmark fixtures from recommending package
 - Reversed ownership assertions still fail.
 - Skill archive/version hygiene passes.
 
-## Current Implementation - Short npm CLI Rename
+## Historical Implementation - Short npm CLI Rename
 
 ### Goal
 
@@ -1700,7 +1727,7 @@ Make `gskp` the short primary npm package and CLI command for gSkillPacks, while
 - Docs explicitly warn that `skillpack` singular is unrelated.
 - Package build/check and focused package tests pass.
 
-## Current Implementation - Product Design Flow Tree Artifact Boundaries
+## Historical Implementation - Product Design Flow Tree Artifact Boundaries
 
 ### Goal
 
@@ -1740,7 +1767,7 @@ Move pre-prototype product-design artifacts from `specs/` into a dedicated `desi
 - `spec-interview` still writes finalized production implementation specs to `specs/`.
 - Claude and Codex product-design mirrors preserve `user-flow-map -> ux-variations -> ui-interview -> prototype -> consolidate-variations -> spec-interview`.
 
-## Current Implementation - Prototype Build Plan Ledger
+## Historical Implementation - Prototype Build Plan Ledger
 
 ### Goal
 
@@ -1837,7 +1864,7 @@ Evaluate whether the shipped product-design route `user-flow-map -> ux-variation
 - Name any conditions where the workflow should branch or be amended.
 - Provide a concrete recommended default route for the AFPS prototype phase.
 
-## Current Implementation - Product Design Flow Tree Routing
+## Historical Implementation - Product Design Flow Tree Routing
 
 ### Goal
 
@@ -1871,7 +1898,7 @@ Rework the product-design skill sequence so `$user-flow-map` starts a wireframe 
 - Version archives and changelog entries exist for every changed active `SKILL.md`.
 - Focused validation passes or any pre-existing unrelated failure is clearly isolated.
 
-## Current Implementation - skillpacks refresh rename reconciliation
+## Historical Implementation - skillpacks refresh rename reconciliation
 
 ### Goal
 
@@ -1969,7 +1996,7 @@ Wrap the current dirty working tree: complete validation, document the ship boun
 - `git ls-files .codex/skills .claude/skills` returns no tracked generated local skill roots.
 - The broad validation-remediation boundary is ready to commit and push.
 
-## Current Implementation - Stage 2 Alignment Page Template
+## Historical Implementation - Stage 2 Alignment Page Template
 
 ### Goal
 
@@ -2000,7 +2027,7 @@ Enhance the canonical alignment-page convention so Stage 1 scope-review pages pr
 - Verification results are documented before final handoff.
 - No generated `ALIGNMENT-PAGE.md` files are hand-edited.
 
-## Current Implementation - Framework-Specific Alignment Guidance
+## Historical Implementation - Framework-Specific Alignment Guidance
 
 ### Goal
 
@@ -2044,7 +2071,7 @@ Populate generated `ALIGNMENT-PAGE.md` guidance for delegated framework skills w
 
 ---
 
-## Current Implementation - Context Intake Metadata And Glossary Bootstrap
+## Historical Implementation - Context Intake Metadata And Glossary Bootstrap
 
 ### Goal
 
@@ -2131,7 +2158,7 @@ Investigate the claim that delegated/framework skills such as `w3-hypothesis` pr
 
 ---
 
-## Current Implementation - Optional Alignment Pages For Operational Skills
+## Historical Implementation - Optional Alignment Pages For Operational Skills
 
 ### Goal
 
@@ -2227,7 +2254,7 @@ Determine whether interview-style skills should get a dedicated skill type/conve
 
 ---
 
-## Current Implementation - UI Interview Skipping And Context Routing
+## Historical Implementation - UI Interview Skipping And Context Routing
 
 ### Goal
 
@@ -2275,7 +2302,7 @@ Prevent `ui-interview --requirements-only` from treating upstream `user-flow-map
 
 ---
 
-## Current Implementation - Repo-Wide Packet Dump Remediation
+## Historical Implementation - Repo-Wide Packet Dump Remediation
 
 ### Goal
 
@@ -2417,7 +2444,7 @@ Generated `ALIGNMENT-PAGE.md` hit counts by pack:
 
 ---
 
-## Current Implementation - UI Interview Alignment Review Clarity
+## Historical Implementation - UI Interview Alignment Review Clarity
 
 ### Goal
 
@@ -2470,7 +2497,7 @@ Make the current `ui-interview` requirements review page and future `ui-intervie
 
 ---
 
-## Current Implementation - Skillpacks Install Route And Agent Doc Migration
+## Historical Implementation - Skillpacks Install Route And Agent Doc Migration
 
 ### Goal
 
@@ -2726,7 +2753,7 @@ Consume the approved `alignment/user-flow-map-skill-execution-handoff.html` resp
 
 ---
 
-## Current Implementation - Skillpacks Init Global Alias
+## Historical Implementation - Skillpacks Init Global Alias
 
 ### Goal
 
@@ -2770,7 +2797,7 @@ Add a compatibility alias so `npx skillpacks init --global` performs the same us
 
 ---
 
-## Current Implementation - Skillpacks 0.1.1 Publish Readiness
+## Historical Implementation - Skillpacks 0.1.1 Publish Readiness
 
 ### Goal
 
@@ -2823,7 +2850,7 @@ Ship-end addendum: real publish attempts now run `packages/skillpacks/scripts/pr
 
 ---
 
-## Current Implementation - Deck-Builder Animation Approval And Routing Spike
+## Historical Implementation - Deck-Builder Animation Approval And Routing Spike
 
 ### Goal
 
@@ -2866,7 +2893,7 @@ Consume the approved `animation-design-planner` response for the deck-builder tr
 
 ---
 
-## Current Implementation - Idea-Scope-Brief Deck-Fit Routing
+## Historical Implementation - Idea-Scope-Brief Deck-Fit Routing
 
 ### Goal
 
@@ -2912,7 +2939,7 @@ Update `$idea-scope-brief` so completed idea briefs recommend the closest workfl
 
 ---
 
-## Current Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
+## Historical Implementation - Ship-End Missing CLI Module And Alignment Artifact Cleanup
 
 ### Goal
 
@@ -2953,7 +2980,7 @@ Finish the `$ship-end` wrap-up by committing and pushing the current local artif
 
 ---
 
-## Current Implementation - Strict Exact Skillpacks Install Resolution
+## Historical Implementation - Strict Exact Skillpacks Install Resolution
 
 ### Goal
 
@@ -3000,7 +3027,7 @@ Fix `npx skillpacks install exec` so install resolution prefers the exact `exec`
 
 ---
 
-## Current Implementation - Skillpacks Project-Local Base Init
+## Historical Implementation - Skillpacks Project-Local Base Init
 
 ### Goal
 
@@ -3045,7 +3072,7 @@ Validate the pack-refresh/global-skill update gap and, if confirmed, add a proje
 
 ---
 
-## Current Implementation - Alignment Compile Responses Convention
+## Historical Implementation - Alignment Compile Responses Convention
 
 ### Goal
 
@@ -3096,7 +3123,7 @@ Unify generated alignment-page response compilation so answered gate questions a
 
 ---
 
-## Current Implementation - Alignment Browser-Open Fallback Contract
+## Historical Implementation - Alignment Browser-Open Fallback Contract
 
 ### Goal
 
@@ -3145,7 +3172,7 @@ Patch the shared generated alignment-page browser-open contract so skills do not
 
 ---
 
-## Current Implementation - Research-ish Skill Lifecycle Audit
+## Historical Implementation - Research-ish Skill Lifecycle Audit
 
 ### Goal
 
@@ -3208,7 +3235,7 @@ Add a read-only audit for active research-ish skills, generate the inventory rep
 
 ---
 
-## Current Implementation - VARD/ORD Scan Staged Research Contract
+## Historical Implementation - VARD/ORD Scan Staged Research Contract
 
 ### Goal
 
@@ -3264,7 +3291,7 @@ Upgrade the active VARD and ORD scan skills so they follow the strict scope-firs
 
 ---
 
-## Current Implementation - Skillpacks CLI Routing Remediation
+## Historical Implementation - Skillpacks CLI Routing Remediation
 
 ### Goal
 
@@ -3330,7 +3357,7 @@ Every remediation batch that changes an active `SKILL.md` must follow the repo s
 
 ---
 
-## Current Implementation - Skillpacks CLI Routing Audit
+## Historical Implementation - Skillpacks CLI Routing Audit
 
 ### Goal
 
@@ -3359,7 +3386,7 @@ Audit all active repo skills for install-routing text that needs to reflect the 
 
 ---
 
-## Current Implementation - Prompt History Artifact Reconciliation
+## Historical Implementation - Prompt History Artifact Reconciliation
 
 ### Goal
 
@@ -3385,7 +3412,7 @@ Confirm the pack routing-audit prompt-history artifact is already tracked, then 
 
 ---
 
-## Current Implementation - P1/P2 Verification Rerun
+## Historical Implementation - P1/P2 Verification Rerun
 
 ### Goal
 
@@ -3412,7 +3439,7 @@ Rerun the already-shipped P1 docs remediation and P2 Skills Showcase count recon
 
 ---
 
-## Current Implementation - P1 Docs Remediation Pass
+## Historical Implementation - P1 Docs Remediation Pass
 
 ### Goal
 
@@ -3443,7 +3470,7 @@ Fix the P1 public documentation issues reported by the 2026-06-10 repo documenta
 
 ---
 
-## Current Implementation - P2 Skills Showcase Count Reconciliation
+## Historical Implementation - P2 Skills Showcase Count Reconciliation
 
 ### Goal
 
@@ -3466,7 +3493,7 @@ Resolve the remaining P2 documentation drift from the 2026-06-10 docs audit: Ski
 
 ---
 
-## Current Implementation - Repo Documentation Alignment Audit
+## Historical Implementation - Repo Documentation Alignment Audit
 
 ### Goal
 
@@ -3504,7 +3531,7 @@ Audit the repository's documentation surfaces for inconsistencies across workflo
 
 ---
 
-## Current Implementation - Skillpacks npm Package Walkthrough Alignment Page
+## Historical Implementation - Skillpacks npm Package Walkthrough Alignment Page
 
 ### Goal
 
@@ -3530,7 +3557,7 @@ Create a current document-tier alignment page that explains how to use the publi
 
 ---
 
-## Current Implementation - Published Skillpacks npm Smoke Script
+## Historical Implementation - Published Skillpacks npm Smoke Script
 
 ### Goal
 
@@ -3559,7 +3586,7 @@ Capture the manual `npx --package skillpacks@latest -- skillpacks ...` verificat
 - The script uses only `/tmp` temp projects and does not modify the local checkout except for tracked script/task/package metadata edits.
 - Temp directories are kept by default and printed for inspection.
 
-## Current Implementation - Alignment Diff Highlighting Convention
+## Historical Implementation - Alignment Diff Highlighting Convention
 
 ### Goal
 
@@ -3582,7 +3609,7 @@ Clarify the shared alignment-page convention so any update to an existing HTML a
 
 ---
 
-## Current Implementation - Alignment Pages Game AFPS Refresh
+## Historical Implementation - Alignment Pages Game AFPS Refresh
 
 ### Goal
 
@@ -3610,7 +3637,7 @@ Archive stale active alignment pages that still frame the workflow model as the 
 
 ---
 
-## Current Implementation - Game AFPS Deck Model
+## Historical Implementation - Game AFPS Deck Model
 
 ### Goal
 
@@ -3634,7 +3661,7 @@ Add `game-afps` as a first-class deliberate deck over the existing `game` pack, 
    - [x] Run whitespace checks and review the diff.
    - [x] Commit and push the intended changes.
 
-## Current Implementation - Skillpacks npm Distribution Phase 3
+## Historical Implementation - Skillpacks npm Distribution Phase 3
 
 ### Goal
 
@@ -3668,7 +3695,7 @@ Reduce the `skillpacks` npm package's dependency on bash/jq by porting determini
 - [x] Step 3.4: Locking And Drift Parity.
 - [x] Step 3.5: Compatibility Closure.
 
-## Current Implementation - Skillpacks npm Distribution Phase 4
+## Historical Implementation - Skillpacks npm Distribution Phase 4
 
 ### Goal
 
@@ -3700,7 +3727,7 @@ Prepare the `skillpacks` npm package for a dry-run release by tightening package
 - [x] Step 4.3: Dry-run release checks.
 - [x] Step 4.4: Ship.
 
-## Current Implementation - Skillpacks npm Distribution Phase 5
+## Historical Implementation - Skillpacks npm Distribution Phase 5
 
 ### Goal
 
@@ -3737,7 +3764,7 @@ Publish the first stable public `skillpacks` npm package after release validatio
 
 ---
 
-## Current Implementation - Dated Alignment Index Entries
+## Historical Implementation - Dated Alignment Index Entries
 
 ### Goal
 
@@ -3758,7 +3785,7 @@ Require central alignment index entries to carry dated metadata from each page's
    - [x] Review generated diff and run whitespace checks.
    - [x] Commit the convention and regenerated files together.
 
-## Current Implementation - Research Scope Approval Before Alignment Research
+## Historical Implementation - Research Scope Approval Before Alignment Research
 
 ### Goal
 
@@ -3784,7 +3811,7 @@ Ensure active research-producing skill flows do not synthesize research before t
    - [x] Run the requested generator, test, version, archive, dependency, showcase, and diff checks.
    - [ ] Commit and push the intended changes only.
 
-## Current Implementation - YouTube Prelaunch Audit Skill
+## Historical Implementation - YouTube Prelaunch Audit Skill
 
 ### Goal
 
@@ -3852,7 +3879,7 @@ Consolidate by making the repo source of truth stricter instead of relying on si
 
 No source fix has been implemented yet. Proceed only after approval of this plan.
 
-## Current Implementation - Separate Skills Showcase From Skillpacks Package
+## Historical Implementation - Separate Skills Showcase From Skillpacks Package
 
 ### Goal
 
@@ -3887,7 +3914,7 @@ Keep one git repository while separating the public Skills Showcase app from the
    - [ ] Run package, website, repository integrity, boundary, and tarball exclusion checks.
    - [ ] Record review notes in `tasks/todo.md` and history, then commit and push intended changes.
 
-## Current Implementation - Skillpacks npm Distribution Phase 2
+## Historical Implementation - Skillpacks npm Distribution Phase 2
 
 ### Goal
 
@@ -3916,7 +3943,7 @@ Add generated package metadata that makes deck installation COA B/C-shaped: a ma
    - [x] Run package dry-run and temp consumer install checks.
    - [x] Avoid skill/pack catalog generated-data changes when tracked `SKILL.md` / `PACK.md` metadata does not change.
 
-## Current Implementation - Skillpacks npm Distribution Phase 0/1
+## Historical Implementation - Skillpacks npm Distribution Phase 0/1
 
 ### Goal
 
@@ -4069,7 +4096,7 @@ Audit repository documentation for freshness, duplicated or superseded guidance,
    - [x] Add review notes to `tasks/todo.md`.
    - [x] Run targeted verification commands and `git diff --check`.
 
-## Current Implementation — Add Scriptability Findings To Alignment Pages
+## Historical Implementation — Add Scriptability Findings To Alignment Pages
 
 ### Goal
 

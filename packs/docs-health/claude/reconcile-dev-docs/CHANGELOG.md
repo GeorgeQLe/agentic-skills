@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-23
+
+- Added current-only task-doc routing checks for overloaded `tasks/todo.md`, stale roadmap `Current Implementation` headings, advisory unchecked items, and the `scripts/audit-task-docs.mjs` verification gate.
+
 ## v0.2 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

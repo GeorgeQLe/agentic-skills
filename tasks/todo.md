@@ -2,9 +2,44 @@
 
 ## Status
 
-No active implementation task is pending in `tasks/todo.md` after the 2026-06-23 development-docs reconciliation.
+No active implementation task is pending in `tasks/todo.md` after the 2026-06-23 task-doc routing prevention fix.
 
-This file is the current execution contract, not a historical work log. Completed implementation records now live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+This file is the current execution contract, not a historical work log. Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Latest Completed Work - Task-Doc Routing Prevention Fix
+
+### Goal
+
+Prevent stale historical task sections from being routed as active next work by enforcing that `tasks/todo.md` is current-only, `tasks/roadmap.md` does not present historical entries as repeated active `Current Implementation` sections, and shipping/reconciliation skills consult only the promoted current task when selecting next work.
+
+### Plan
+
+- [x] Inspect current docs, existing audit scripts, and relevant skill contracts.
+- [x] Add `scripts/audit-task-docs.mjs` to flag overloaded todo/roadmap routing surfaces.
+- [x] Confirm the new audit fails against the pre-cleanup roadmap state.
+- [x] Archive and bump mirrored `reconcile-dev-docs` contracts from `v0.2` to `v0.3`, then update changelogs.
+- [x] Update `ship` and `ship-end` contracts so task-doc changes run the audit and next-work routing reads only the current active todo section.
+- [x] Rewrite the top-level roadmap headings so historical implementation notes are explicitly historical, with only promoted current work using `Current Implementation`.
+- [x] Add history/reconciliation evidence for this prevention fix.
+- [x] Run verification: task-doc audit, diff hygiene, archive audit, mirror parity audit, and `npm run skillpacks:verify`.
+- [x] Review final diff, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- `scripts/audit-task-docs.mjs` fails on ambiguous stale active-task routing and passes on the cleaned docs.
+- `tasks/todo.md` contains only this current task during execution, then returns to a no-active-task or explicitly promoted state before ship completion.
+- `tasks/roadmap.md` no longer contains multiple historical `Current Implementation` sections.
+- `reconcile-dev-docs` fix mode explicitly detects and repairs overloaded current-task sections.
+- `ship` and `ship-end` do not recommend historical/advisory unchecked boxes as next executable work.
+- Required verification passes or any failure is fixed and rerun.
+
+### Review
+
+- Added `scripts/audit-task-docs.mjs`; it failed before cleanup with 89 roadmap `Current Implementation` sections and passed after heading cleanup.
+- Archived and bumped `reconcile-dev-docs` to `v0.3`, `ship` to `v0.8`, and `ship-end` to `v0.6` across Codex and Claude mirrors.
+- Converted stale roadmap current headings to historical headings, then returned `tasks/todo.md` to this no-active-task state.
+- Verification passed: `node scripts/audit-task-docs.mjs`, `git diff --check`, `scripts/skill-archive-audit.sh --strict`, Skills Showcase data validation, and `npm run skillpacks:verify`.
+- Verification residual: `scripts/skill-mirror-parity-audit.sh --verbose` still fails on the unrelated pre-existing `session-analytics/session-triage` `Pack Availability Guard` shared-section drift; this task did not modify session-triage.
 
 ## Latest Completed Work - Development Docs Reconciliation
 

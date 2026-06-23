@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.8
+version: v0.7
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -63,12 +63,11 @@ When writing a ship manifest, summary, task review note, or final response with 
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).
 c) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
-d) If `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` changed and `scripts/audit-task-docs.mjs` exists, run `node scripts/audit-task-docs.mjs` and fix any failures before final next-work routing.
-e) **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):**
+d) **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):**
    Run `scripts/save-conversation.sh` to export the current Claude Code conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., not running in Claude Code, no local conversation history), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
    - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
 
-f) Ship the changes using the /commit-and-push-by-feature workflow:
+e) Ship the changes using the /commit-and-push-by-feature workflow:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
    - Land the resulting commits on `main` or `master`, not on an existing feature branch.
@@ -91,7 +90,7 @@ b) **Invoke `/deploy`** (release-ops pack) targeting the default environment (st
 **Prerequisite:** If neither `tasks/todo.md` nor `tasks/roadmap.md` exists, or if no uncompleted steps remain, there is no plan to continue. Run `/roadmap` to scan task pipeline health and recommend the next context-aware action (stale todo, missing steps, etc.). Then stop (do not enter plan mode).
 
 a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
-b) Read only the current active task/phase in `tasks/todo.md` to identify the next uncompleted step. Do not select unchecked boxes from completed sections, historical roadmap notes, reconciliation reports, manual/record/recurring advisory files, or any roadmap section not explicitly promoted into the current todo surface.
+b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
 b2) If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
 c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
    - If **YES — Phase transition:**
@@ -156,7 +155,6 @@ Output exactly two lines beyond the normal ship summary:
 Rules:
 
 - Make the next work item primary. Derive it from the next-step plan, `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Treat `tasks/todo.md` as the only executable current-task surface. Historical roadmap entries and unchecked advisory/manual/record/recurring items are reconciliation candidates, not next executable work, unless the current active todo section explicitly promotes them.
 - If no remaining work exists — no unchecked steps in `tasks/todo.md`, no phases remaining in `tasks/roadmap.md`, no pending manual blockers, no validation gaps, and no deploy failures — emit `**Next work:** none` and `**Recommended next command:** none — all planned work is complete`. Do not force a route to `/exec` when there is genuinely nothing to execute.
 - Never recommend `/ship`, `/ship --no-deploy`, or `/ship --no-plan` as the routine next command from a completed `/ship` run. `/ship` packages current work; after it completes, hand off to the next executable route such as `/exec`, check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell first; if `agent-work-admin` is enabled, recommend `/roadmap`, check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `npx skillpacks install guided-walkthrough` from the project shell first; if `guided-walkthrough` is enabled, recommend `/guide`, or check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `npx skillpacks install docs-health` from the project shell first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` based on project state. Recommend `/ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
@@ -184,7 +182,6 @@ Rules:
 - The plan shown to the clear-context implementation session must include the ship-one-step handoff: "implement only this step, validate it, then run `/ship` when done." The plan-mode prompt is the human approval boundary that prevents a runaway loop.
 - The plan must be actionable, not vague. Include specific file paths, technical details, and the current phase's `### Execution Profile`.
 - Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.
-- When task docs changed, do not finish with a next-work recommendation until `node scripts/audit-task-docs.mjs` passes, if that script exists.
 
 
 ## Default Shipping Contract

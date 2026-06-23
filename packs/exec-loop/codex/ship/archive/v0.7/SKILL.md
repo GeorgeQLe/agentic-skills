@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: v0.8
+version: v0.7
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -37,7 +37,6 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
-   - If `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` changed and `scripts/audit-task-docs.mjs` exists, run `node scripts/audit-task-docs.mjs` and fix any failures before final next-work routing.
    - **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):** Run `scripts/save-conversation.sh` to export the current conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., no local conversation history available), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
      - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
    - Commit and push using the `$commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
@@ -52,7 +51,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - If `$deploy` reports failure, report the error. Do not retry.
 4. Plan the next step:
    - **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
-   - Read only the current active task/phase in `tasks/todo.md` to identify the next uncompleted step. Do not select unchecked boxes from completed sections, historical roadmap notes, reconciliation reports, manual/record/recurring advisory files, or any roadmap section not explicitly promoted into the current todo surface.
+   - Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
    - If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**
@@ -90,7 +89,6 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or completion of the current queues. Do not use agent mode itself as the next work item.
-- Treat `tasks/todo.md` as the only executable current-task surface. Historical roadmap entries and unchecked advisory/manual/record/recurring items are reconciliation candidates, not next executable work, unless the current active todo section explicitly promotes them.
 - Never recommend `$ship`, `$ship --no-deploy`, or `$ship --no-plan` as the routine next command from a completed `$ship` run. `$ship` packages current work; after it completes, hand off to the next executable route such as `$exec`, check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell first; if `agent-work-admin` is enabled, recommend `$roadmap`, check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `npx skillpacks install guided-walkthrough` from the project shell first; if `guided-walkthrough` is enabled, recommend `$guide`, or check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `npx skillpacks install docs-health` from the project shell first; if `docs-health` is enabled, recommend `$reconcile-dev-docs fix tasks` based on project state. Recommend `$ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
 - `$brainstorm` routing: when all planned phases, documentation work, and promotable advisory items are exhausted but the project is not parked, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`. This is distinct from `none`.
 - `none` routing: emit `Recommended next command: none` only when the project is genuinely complete or explicitly parked/archived by the user. Do not emit `none` merely because the current phase is done.
@@ -119,7 +117,6 @@ Rules:
 - The plan must be actionable with specific file paths, technical details, and the current phase's `### Execution Profile`.
 - In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$exec` for the normal execute-and-ship loop.
 - Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.
-- When task docs changed, do not finish with a next-work recommendation until `node scripts/audit-task-docs.mjs` passes, if that script exists.
 - `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
