@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-23 - Prompt-history closeout before create-ui-experiment
+
+- Captured the visible `continue` invocation from the prior `$exec` handoff in `prompts/exec/skill-prompt-20260623-182433-continue.md`.
+- Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260623-183536-ship-end.md`.
+- Confirmed the tracked source tree was already at `origin/master` before closeout; this ship boundary contains prompt/task bookkeeping only.
+- Left the active implementation queue unchanged: Step 1.7 is still to add mirrored `create-ui-experiment` skills and routing metadata.
+- Manifest: `tasks/ship-manifest-2026-06-23-prompt-history-closeout.md`.
+
 ## 2026-06-23 - UI interview non-buildout experiment handoff
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-175520-exec.md`.
