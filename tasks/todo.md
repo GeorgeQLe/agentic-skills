@@ -1,3 +1,36 @@
+# Current Implementation - Fix Cross-Pack Routing Guard in Session Triage
+
+## Goal
+
+Make benchmark regression follow-up routing in `session-triage` verify that `agentic-skills-bench` is enabled before recommending or relying on `benchmark-test-skill`.
+
+## Plan
+
+- [x] Inspect active mirrors, changelogs, archive state, routing audit expectations, and git status.
+- [x] Archive current Codex and Claude `v0.4` skill mirrors.
+- [x] Bump active mirrors to `v0.5` and add the `Pack Availability Guard`.
+- [x] Update both changelogs.
+- [x] Run routing audits, dependency checks, targeted Layer 1 tests, and diff hygiene.
+- [x] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- Both mirrors have `archive/v0.4/SKILL.md` snapshots.
+- Both mirrors have active `version: v0.5`.
+- Both mirrors check `.agents/project.json` `enabled_packs` for `agentic-skills-bench` before recommending or relying on `benchmark-test-skill`.
+- Missing pack guidance uses `npx skillpacks install agentic-skills-bench`.
+- Codex and Claude reload guidance use runner-appropriate wording.
+
+## Review
+
+- Archived current `v0.4` Codex and Claude `session-triage` contracts under each mirror's `archive/v0.4/SKILL.md`.
+- Bumped both active mirrors to `v0.5`.
+- Added `## Pack Availability Guard` to both mirrors, requiring `.agents/project.json` `enabled_packs` verification for cross-pack recommendations and explicitly guarding benchmark regression loop-closing through `agentic-skills-bench`.
+- Preserved existing benchmark regression routing while making the `$benchmark-test-skill <skill>` / `/benchmark-test-skill <skill>` rerun recommendation dependent on the guard.
+- Updated both changelogs with the `v0.5` cross-pack routing fix.
+- Verification passed: `scripts/skill-pack-routing-audit.sh`, `scripts/skill-install-routing-audit.sh --active`, `node scripts/skill-alignment-routing-audit.mjs`, `scripts/skill-deps.sh --broken`, `pnpm --dir tests exec vitest run --project layer1 layer1/skill-alignment-routing-audit.test.ts layer1/skill-install-routing-audit.test.ts layer1/routing-graph.test.ts layer1/skill-inventory.test.ts layer1/researchish-skill-lifecycle-audit.test.ts layer1/skill-links-install.test.ts`, and `git diff --check`.
+- Left pre-existing untracked prompt logs untouched: `prompts/analyze-sessions/skill-prompt-20260622-111105-prototype-feedback-yaml.md` and `prompts/session-triage/skill-prompt-20260622-125302-alignment-routing.md`.
+
 # Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
 
 ## Goal

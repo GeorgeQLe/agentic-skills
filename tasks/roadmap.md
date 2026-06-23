@@ -1,3 +1,29 @@
+## Current Implementation - Fix Cross-Pack Routing Guard in Session Triage
+
+### Goal
+
+Make `session-triage` benchmark regression routing explicitly guard access to `benchmark-test-skill` by checking whether `agentic-skills-bench` is enabled before recommending the loop-closing benchmark rerun.
+
+### Plan
+
+1. Record active task tracking for the cross-pack routing fix.
+2. Archive current `session-triage` `v0.4` Codex and Claude skill mirrors.
+3. Bump both active mirrors to `v0.5`.
+4. Add a `Pack Availability Guard` section that checks `.agents/project.json` `enabled_packs`, recommends `npx skillpacks install agentic-skills-bench` when missing, and gives runner-specific reload guidance.
+5. Keep benchmark regression diagnosis and loop-closing routing intact while routing the `/benchmark-test-skill` / `$benchmark-test-skill` recommendation through the guard.
+6. Update both changelogs.
+7. Run routing audits, dependency checks, targeted Layer 1 tests, and diff hygiene.
+8. Commit and push intended tracked changes on `master`.
+
+### Acceptance Criteria
+
+- Active Codex and Claude `session-triage` mirrors are archived at `archive/v0.4/SKILL.md` before bumping to `v0.5`.
+- Both mirrors explicitly check for `agentic-skills-bench` in `.agents/project.json` `enabled_packs` before recommending or relying on `benchmark-test-skill`.
+- Missing `agentic-skills-bench` recommendations use `npx skillpacks install agentic-skills-bench` from the project shell.
+- Codex reload guidance says to start a fresh Codex CLI session if the `$` skill list remains stale.
+- Claude reload guidance says to run `/reload-skills`, then `/clear` or restart if still invisible.
+- Existing benchmark regression workflow remains intact.
+
 ## Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
 
 ### Goal

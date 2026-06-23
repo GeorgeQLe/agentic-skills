@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-23
+
+- Added an explicit Pack Availability Guard for benchmark regression loop-closing: check `.agents/project.json` `enabled_packs` for `agentic-skills-bench` before recommending or relying on `/benchmark-test-skill <skill>`, recommend `npx skillpacks install agentic-skills-bench` when missing, and tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible after install.
+
 ## v0.4 - 2026-06-20
 
 - Added `benchmark regression` mode: accepts the prior-vs-new delta carried from `/benchmark-test-skill` (and `benchmark/grade-history.json`), confirms the regression is real vs a thin-sample artifact, then distinguishes a real behavioral regression (route to `/targeted-skill-builder <skill> benchmark regression`, re-benchmark to confirm recovery) from harness/rubric drift (reuse the false-negative-family logic). See `docs/benchmark-improvement-loop.md`.

@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -72,6 +72,12 @@ Use `$analyze-sessions` instead for informational history questions — single o
    - The store is gitignored and may not exist yet; create it with the standard keyed table header (`| Insight | Category | First Seen | Last Seen | Occurrences | Status |`) if absent. If a semantically matching row already exists, increment its Occurrences and advance Last Seen instead of adding a duplicate; otherwise add a row with Occurrences `1` and Status `confirmed` (triage incidents are verified).
    - This is additive memory only — `tasks/lessons.md` remains the authoritative correction log; do not move lessons content into the insights store.
 
+## Pack Availability Guard
+
+Before recommending a skill from another pack, verify the target pack is enabled via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell before the skill invocation.
+
+For benchmark regression loop-closing, treat `$benchmark-test-skill` as owned by `agentic-skills-bench`: check whether `.agents/project.json` `enabled_packs` includes `agentic-skills-bench` before recommending or relying on `$benchmark-test-skill <skill>`. If `agentic-skills-bench` is not enabled, recommend `npx skillpacks install agentic-skills-bench` from the project shell first, then tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale after install.
+
 ## Output
 
 Produce a structured report with:
@@ -85,7 +91,7 @@ Produce a structured report with:
 - Recommended fix: exact file(s), section(s), and proposed wording or behavior change.
 - Validation plan: commands or checks to prove the fix.
 - Confidence and evidence gaps: what is known, what could not be verified, and whether `$analyze-sessions` is needed for recurrence analysis.
-- Recommended next skill: `$targeted-skill-builder` (skill-dev pack), `$create-agentic-skill` (skill-dev pack), `$analyze-sessions`, or `none` when no follow-up is justified. For a confirmed real `benchmark regression`, recommend `$targeted-skill-builder <skill> benchmark regression` and name re-running `$benchmark-test-skill <skill>` as the loop-closing verification (see `docs/benchmark-improvement-loop.md`).
+- Recommended next skill: `$targeted-skill-builder` (skill-dev pack), `$create-agentic-skill` (skill-dev pack), `$analyze-sessions`, or `none` when no follow-up is justified. For a confirmed real `benchmark regression`, recommend `$targeted-skill-builder <skill> benchmark regression` and, after applying the Pack Availability Guard for `agentic-skills-bench`, name re-running `$benchmark-test-skill <skill>` as the loop-closing verification (see `docs/benchmark-improvement-loop.md`).
 
 ## Constraints
 
