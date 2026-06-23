@@ -23,6 +23,7 @@ scripts/pack.sh refresh
 - `design-inspirations`: Gather UI/UX inspiration once via web research — named patterns, conventions, component-library references, and annotated links — into a durable cited brief that feeds `ui-interview` and `ux-variations`.
 - `user-flow-map`: Map positioned product goals into the root of a wireframe tree with user-flow branches, decisions, states, handoffs, and low-fidelity wireframe notes.
 - `ui-interview`: Investigate a specific UX variation branch, propose an HTML visual mockup, interview for alignment, and approve/reject/retry the branch before routing onward.
+- `create-ui-experiment`: Own clickable UI experiment routes or project-native lightweight prototypes for approved UI branches before prototype build-plan synthesis or UAT.
 - `spec-interview`: Conduct a structured interview to produce a detailed product specification.
 - `ux-variations`: Expand a selected user flow into alternate progression branches users can compare before one branch moves into UI proposal work.
 - `consolidate-prototypes`: Converge evaluated prototype branches into an approved MVP, write AFPS graduation, and hand off to post-prototype cleanup.

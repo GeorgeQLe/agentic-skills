@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "21b92b820a8daf555454d729f72c5a57d79593193ae73c4eb6313b02dbc63b57",
+  "source_fingerprint": "21b5e15980422364ae101f309aef051ea66e3b5bc988212d9f574d75f3b63672",
   "packs": [
     {
       "name": "agent-bridge",
@@ -524,6 +524,7 @@
         "brainstorm",
         "consolidate-prototypes",
         "consolidate-variations",
+        "create-ui-experiment",
         "design-inspirations",
         "design-system",
         "feature-interview",
@@ -534,7 +535,7 @@
         "user-flow-map",
         "ux-variations"
       ],
-      "skill_count": 12
+      "skill_count": 13
     },
     {
       "name": "product-testing",
@@ -7660,6 +7661,24 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-claude-create-ui-experiment",
+      "name": "create-ui-experiment",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "claude",
+      "version": "v0.0",
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/claude/create-ui-experiment/SKILL.md",
+      "installable": true,
+      "content_sha256": "6720d364d23c6e934270529834901f2595a595435e6d7e68d9891b2684dd01fd",
+      "archive_versions": [],
+      "command": "/create-ui-experiment",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-claude-design-inspirations",
       "name": "design-inspirations",
       "scope": "pack",
@@ -8029,6 +8048,24 @@
       "content_sha256": "8cbe1edd06389f998f782585008a9be38c97f215caa5897ae9a96b6e017d571f",
       "archive_versions": [],
       "command": "$consolidate-variations",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-product-design-codex-create-ui-experiment",
+      "name": "create-ui-experiment",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "codex",
+      "version": "v0.0",
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/codex/create-ui-experiment/SKILL.md",
+      "installable": true,
+      "content_sha256": "aba72f2f9bfcd05184b5dedf04854820967d7979035ea61d01373bb1d6497c07",
+      "archive_versions": [],
+      "command": "$create-ui-experiment",
       "deck_memberships": []
     },
     {

@@ -14856,3 +14856,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Fixed a `publish.sh` dry-run cleanup race by restoring dry-run backups atomically through same-directory temp files plus `mv`; this prevents nested recovery dry-runs from exposing half-written JSON to concurrent tests.
 - Verified: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `./publish.sh --dry-run patch`, `git diff --check`, and `git diff --cached --check`.
 - The dry-run staged both package names at `0.1.11`, skipped real publish, and restored source release-state files to `0.1.10`.
+
+## 2026-06-23 — Product Design Step 1.7: create-ui-experiment skill
+
+- Added mirrored `packs/product-design/{codex,claude}/create-ui-experiment/` skill roots at `version: v0.0`, including `SKILL.md`, `CHANGELOG.md`, generated `DESIGN-TREE-LOOP.md`, and generated `ALIGNMENT-PAGE.md`.
+- Registered `create-ui-experiment` in `packs/product-design/PACK.md` as the owner of clickable UI experiment routes or project-native lightweight prototypes for approved UI branches.
+- The skill contract keeps UI experiments pre-production: fake/fixture/local/in-memory data only, progressive first-value reveal, primary task path before secondary controls, and review evidence before `$prototype`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan`.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, Skills Showcase generated data/proof assets, and `docs/benchmark-results-matrix.md` from the staged boundary.
+- Verified: focused product-design flow-tree test expected-red before edits, then passed 14/14 after edits; design-tree and alignment generators `--check`; skill archive audit; Skills Showcase data validation; `npm run skillpacks:verify`; task-doc audit; and diff hygiene. Mirror parity still reports only the known unrelated `session-analytics/session-triage` drift.
