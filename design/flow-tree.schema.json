@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agentic-skills.local/design/flow-tree.schema.json",
   "title": "Product Design Flow Tree Manifest",
-  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow.",
+  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow. v0.3 adds deterministic branch-order metadata and progressive review guidance so branch selection is explicit instead of raw array-order dependent.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "v0.2"
+      "const": "v0.3"
     },
     "topic": {
       "type": "string",
@@ -77,6 +77,9 @@
     "prototype_build_plan": {
       "$ref": "#/$defs/prototype_build_plan"
     },
+    "branch_order_override": {
+      "$ref": "#/$defs/branch_order_override"
+    },
     "last_updated": {
       "type": "string",
       "format": "date-time"
@@ -114,6 +117,42 @@
         "dropped"
       ]
     },
+    "progressive_review_guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "first_value_step",
+        "primary_task_path",
+        "staged_disclosure_notes",
+        "evidence_required"
+      ],
+      "properties": {
+        "first_value_step": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The first visible moment where the user receives meaningful value from this branch."
+        },
+        "primary_task_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The primary path to review before secondary controls, alternate states, or dense administrative surfaces."
+        },
+        "staged_disclosure_notes": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How review should introduce complexity progressively instead of presenting the full interface at once."
+        },
+        "evidence_required": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Evidence required before moving deeper into the design tree or promoting the branch."
+        }
+      }
+    },
     "prototype_build_plan": {
       "type": "object",
       "additionalProperties": false,
@@ -132,6 +171,49 @@
           }
         }
       }
+    },
+    "branch_order_override": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "ordered_branch_ids", "override_rationale", "recorded_at"],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "enum": ["user-flow", "ux-variation"],
+          "description": "The branch level whose default journey/evaluation ordering was explicitly overridden by the user."
+        },
+        "parent_branch_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Required for UX-variation overrides: the user-flow branch whose child variation order is overridden."
+        },
+        "ordered_branch_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          }
+        },
+        "override_rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "scope": { "const": "ux-variation" } }
+          },
+          "then": {
+            "required": ["parent_branch_id"]
+          }
+        }
+      ]
     },
     "prototype_build_item": {
       "type": "object",
@@ -179,7 +261,17 @@
     "user_flow_branch": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "status", "artifacts", "ux_variations"],
+      "required": [
+        "id",
+        "label",
+        "status",
+        "journey_stage",
+        "journey_sequence",
+        "priority_rationale",
+        "progressive_review",
+        "artifacts",
+        "ux_variations"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -192,10 +284,35 @@
         "status": {
           "$ref": "#/$defs/status"
         },
+        "journey_stage": {
+          "type": "string",
+          "enum": [
+            "discovery",
+            "activation",
+            "first-value",
+            "ongoing-use",
+            "recovery",
+            "handoff"
+          ],
+          "description": "The journey stage this user-flow branch primarily covers. Used with journey_sequence for deterministic default branch ordering."
+        },
+        "journey_sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Ascending default order for user-flow branch selection within the journey, unless an explicit user override is recorded."
+        },
+        "priority_rationale": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this branch has its current journey order or override priority."
+        },
+        "progressive_review": {
+          "$ref": "#/$defs/progressive_review_guidance"
+        },
         "model_ref": {
           "type": "string",
           "minLength": 1,
-          "description": "Primary (v0.2) per-user-flow-branch model attachment: repo-relative path to this branch's model-tree manifest (design/**/model-tree-{topic}-{branch}.yaml) owned by state-model. The domain/state/logic model is a property of the flow, so each user-flow branch attaches its own model. ux-variations does not grow UX branches until model_ref is present and its model confirmed."
+          "description": "Primary (v0.2+) per-user-flow-branch model attachment: repo-relative path to this branch's model-tree manifest (design/**/model-tree-{topic}-{branch}.yaml) owned by state-model. The domain/state/logic model is a property of the flow, so each user-flow branch attaches its own model. ux-variations does not grow UX branches until model_ref is present and its model confirmed."
         },
         "artifacts": {
           "type": "array",
@@ -214,7 +331,18 @@
     "ux_variation_branch": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "status", "artifacts", "ui_experiments"],
+      "required": [
+        "id",
+        "label",
+        "status",
+        "evaluation_priority",
+        "activation_fit",
+        "first_value_fit",
+        "priority_rationale",
+        "progressive_review",
+        "artifacts",
+        "ui_experiments"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -226,6 +354,29 @@
         },
         "status": {
           "$ref": "#/$defs/status"
+        },
+        "evaluation_priority": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Ascending priority for evaluating UX variation branches within a selected user-flow branch."
+        },
+        "activation_fit": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "How well this variation supports activation."
+        },
+        "first_value_fit": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "How directly this variation gets the user to the first-value moment."
+        },
+        "priority_rationale": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this variation has its evaluation priority and fit scores."
+        },
+        "progressive_review": {
+          "$ref": "#/$defs/progressive_review_guidance"
         },
         "artifacts": {
           "type": "array",

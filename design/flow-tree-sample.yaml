@@ -1,4 +1,4 @@
-schema_version: v0.2
+schema_version: v0.3
 topic: invoice-approval
 mode: flat
 route:
@@ -10,10 +10,26 @@ route:
   - spec-interview
 source_artifacts:
   - design/user-flow-invoice-approval.md
+branch_order_override:
+  scope: user-flow
+  ordered_branch_ids:
+    - submit-and-approve
+  override_rationale: User asked to validate invoice submission before recovery or reporting flows.
+  recorded_at: "2026-06-21T00:00:00Z"
 branches:
   - id: submit-and-approve
     label: Submit and approve an invoice
     status: ready-for-ui
+    journey_stage: activation
+    journey_sequence: 1
+    priority_rationale: Submission and approval is the first value path before exceptions, recovery, or reporting.
+    progressive_review:
+      first_value_step: Submit a complete invoice for approval.
+      primary_task_path: Draft invoice -> submit -> reviewer approves.
+      staged_disclosure_notes: Start with the submit-and-approve path, then expose exception handling and dense finance controls after the primary path is understood.
+      evidence_required:
+        - Reviewer can complete the primary approval path without rule confusion.
+        - Submitter understands the approval status after submission.
     # v0.2 primary per-user-flow-branch model attachment (state-model).
     model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml
     artifacts:
@@ -22,6 +38,17 @@ branches:
       - id: guided-wizard
         label: Guided multi-step wizard
         status: approved
+        evaluation_priority: 1
+        activation_fit: high
+        first_value_fit: high
+        priority_rationale: The wizard isolates one decision at a time and reaches approval with the least reviewer setup.
+        progressive_review:
+          first_value_step: Complete the first approval step in the wizard.
+          primary_task_path: Review invoice summary -> confirm policy checks -> approve.
+          staged_disclosure_notes: Reveal approval context first, then add line-item details and policy exceptions.
+          evidence_required:
+            - Reviewer can identify the next required wizard action.
+            - Reviewer can approve without opening secondary panels.
         artifacts:
           - design/ux-variations-invoice-approval.md
         ui_experiments:
@@ -34,6 +61,17 @@ branches:
       - id: single-page-dense
         label: Single dense review page
         status: retry-needed
+        evaluation_priority: 2
+        activation_fit: medium
+        first_value_fit: low
+        priority_rationale: The dense page may help expert reviewers later, but it delays first value for new approvers.
+        progressive_review:
+          first_value_step: Find the approve action on the dense page.
+          primary_task_path: Scan invoice table -> inspect approval rule -> approve inline.
+          staged_disclosure_notes: Validate the inline approval path before exposing filters, bulk actions, and accounting exports.
+          evidence_required:
+            - Reviewer can find the approve action without training.
+            - Reviewer understands which approval authority rule applies.
         artifacts:
           - design/ux-variations-invoice-approval.md
         ui_experiments:

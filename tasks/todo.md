@@ -47,7 +47,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
 
 ### Implementation
 
-- [ ] Step 1.2: Extend the flow-tree schema and sample with branch-order metadata
+- [x] Step 1.2: Extend the flow-tree schema and sample with branch-order metadata
   - Files: modify `design/flow-tree.schema.json`, `design/flow-tree-sample.yaml`
   - Bump the flow-tree schema version only if the new metadata is required or semantically breaking; otherwise document the additive compatibility choice in the schema descriptions and tests.
   - Add deterministic branch-order fields to `user_flow_branch`, such as `journey_stage`, `journey_sequence`, `priority_rationale`, and a progressive-review field/object that names first-value step, primary task path, staged-disclosure notes, and evidence required before moving deeper.
@@ -135,11 +135,15 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - Baseline before edits: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed (1 file, 9 tests).
 - Red proof after edits: the same focused command fails as expected (1 file, 14 tests, 7 failed / 7 passed). Failures are the new contract assertions for schema `v0.3`, branch-order metadata, sample ordering metadata, mirrored user-flow branch ordering/override persistence, mirrored UX variation priority selection, non-buildout `ui-interview` delegation, and missing `create-ui-experiment` contracts.
 - No Step 1.1 manual blocker was present in `tasks/manual-todo.md`.
+- Step 1.2 complete. Updated `design/flow-tree.schema.json` to `v0.3` with required user-flow journey ordering fields, UX-variation evaluation/fit fields, a shared `progressive_review_guidance` object, and optional `branch_order_override` metadata.
+- Updated `design/flow-tree-sample.yaml` to exercise the new metadata and override rationale while preserving `ui_experiments[]` as the canonical UI child branch name.
+- Verification: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` now has 10 passed / 4 failed. The schema/sample assertions pass; the remaining expected red failures are the mirrored `user-flow-map`, `ux-variations`, `ui-interview`, and missing `create-ui-experiment` contract assertions scheduled for Steps 1.3-1.7.
 
-### Next Step Plan - Step 1.2
+### Next Step Plan - Step 1.3
 
-- Update only `design/flow-tree.schema.json` and `design/flow-tree-sample.yaml`.
-- Make the schema/sample portions of the new layer1 coverage pass by introducing schema `v0.3`, user-flow branch ordering metadata, UX variation priority metadata, and shared progressive-review guidance.
-- Keep `ui_experiments[]` as the canonical child branch name and do not reintroduce `ui_reviews[]`.
-- Leave mirrored skill-contract and `create-ui-experiment` assertions red for later steps unless a schema/sample edit directly requires a wording touch elsewhere.
-- Verification target: rerun `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm any remaining failures are downstream contract assertions scheduled for Steps 1.3-1.7.
+- Update only `docs/design-tree-loop-convention.md` and `scripts/upgrade-design-tree-loop.mjs`.
+- Define the branch-selection algorithm in the canonical convention: explicit user override first, then ascending `journey_sequence` for user-flow branches or `evaluation_priority` for UX variation branches, then `activation_fit`, `first_value_fit`, current status, and stable array order only as the final tiebreaker.
+- Add progressive-review requirements for complex UI surfaces: review the first-value step, primary task path, and staged disclosure before dense secondary controls.
+- Add `create-ui-experiment` to the design-tree skill set in `scripts/upgrade-design-tree-loop.mjs` only if the new skill is meant to carry generated `DESIGN-TREE-LOOP.md` bundles; otherwise record the reason in the review notes for Step 1.3.
+- Keep mirrored skill `SKILL.md` version bumps and new skill creation for Steps 1.4-1.7.
+- Verification target: rerun `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm any remaining failures belong to Steps 1.4-1.7, plus run `node scripts/upgrade-design-tree-loop.mjs --check` after generator updates.

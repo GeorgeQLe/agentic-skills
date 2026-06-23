@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-23 - Design-tree flow schema branch ordering
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-142634-exec.md`.
+- Updated `design/flow-tree.schema.json` to `schema_version` `v0.3` with required deterministic ordering metadata for `user_flow_branch` and `ux_variation_branch`.
+- Added shared `progressive_review_guidance` and optional `branch_order_override` metadata so manifests can record first-value review sequencing and explicit user branch-order overrides.
+- Updated `design/flow-tree-sample.yaml` to exercise journey stage/sequence, evaluation priority, activation/first-value fit, progressive review guidance, and an override rationale while preserving `ui_experiments[]`.
+- Focused verification: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` now has 10 passed / 4 expected red failures. The remaining failures are the mirrored skill-contract and missing `create-ui-experiment` assertions planned for later steps.
+- Manifest: `tasks/ship-manifest-2026-06-23-design-tree-flow-schema-branch-ordering.md`.
+
 ## 2026-06-23 - Design-tree branch routing red coverage
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-141557-layer1-coverage-routing-ui-ownership.md`.
