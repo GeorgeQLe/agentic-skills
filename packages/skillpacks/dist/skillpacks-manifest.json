@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "9c987e8d34f545b63ee0118656a92c7efb42ce4f01d6d323163d9f81456d6fcc",
+  "source_fingerprint": "9008f04f3412246d3523ec4c1582785b54a7514ceb9b0fd2549fc79ea15eac19",
   "packs": [
     {
       "name": "agent-bridge",
@@ -9014,16 +9014,17 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "required_conventions": [],
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "668febad9ac2da8663eabe31b01f13498a187ee0af7fa014271e475ab23eb954",
+      "content_sha256": "e2232adb8951657fe0f599c6e4cc8517b789ed93a76022ea850f376e78d31ea9",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/session-triage",
       "deck_memberships": []
@@ -9079,16 +9080,17 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "required_conventions": [],
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "7473833355703c711db986393ac36ef8b5487a731853c150b75e1e31bb905daf",
+      "content_sha256": "810df8254944482797e410b91a93139e132db1140ca3503d889f8f57f803818c",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$session-triage",
       "deck_memberships": []

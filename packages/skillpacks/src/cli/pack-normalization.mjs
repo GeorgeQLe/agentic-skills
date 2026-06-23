@@ -391,7 +391,7 @@ function skillInstallSourceMap(manifest) {
   });
 
   for (const skill of skills) {
-    if (skill.installable === false) {
+    if (skill.installable === false || String(skill.path || '').split('/').includes('archive')) {
       continue;
     }
     if (!skill.name || map.has(skill.name)) {

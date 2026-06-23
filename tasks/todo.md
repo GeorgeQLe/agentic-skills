@@ -1,3 +1,34 @@
+# Current Implementation - Prevent Pack Install From Installing Archived Skills
+
+## Goal
+
+Stop `skillpacks install <pack>` from installing archived skills, especially archived customer-discovery orchestrator subskills when installing `business-afps`.
+
+## Plan
+
+- [x] Record prompt history and task tracking.
+- [x] Validate the archive-install claim against source, generated metadata, and git history.
+- [x] Reproduce the leak path or identify the exact stale package boundary.
+- [x] Patch archive filtering with focused tests.
+- [x] Run package verification and diff hygiene.
+- [x] Commit and push intended tracked changes.
+
+## Acceptance Criteria
+
+- Pack installs exclude `archive/**` skill directories.
+- `business-afps` does not install archived customer-discovery orchestrator subskills.
+- Active pack skills continue to install.
+- Tests cover the archived-skill regression.
+
+## Review
+
+- Current `master` and tag `v0.1.10` generated manifests do not contain archived `business-research` / `customer-lifecycle` skill entries, and `npx skillpacks install business-afps` is rejected because `business-afps` is a deck name; the deck route is `npx skillpacks install-deck business-afps`.
+- Confirmed a real defensive gap: if a stale or malformed packaged manifest contains an installable `archive/**/SKILL.md` entry, lifecycle install candidate filtering would trust it and could create a top-level archived skill root.
+- Patched lifecycle install filtering and install-argument resolution to ignore any manifest skill path containing an `archive` segment.
+- Added regression coverage using an injected archived `five-rings` customer-discovery framework entry to prove `business-research` pack install and individual skill resolution do not install archived subskills.
+- Focused verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs` and `node --test packages/skillpacks/test/pack-normalization.test.mjs`.
+- Full package verification passed: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`. The first `skillpacks:verify` run failed because the manifest fingerprint was out of date after source changes; regenerating `packages/skillpacks/dist/skillpacks-manifest.json` fixed it and the rerun passed.
+
 # Previous Implementation - Fix Cross-Pack Routing Guard in Session Triage
 
 ## Goal

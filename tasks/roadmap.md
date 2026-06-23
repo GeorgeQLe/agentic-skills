@@ -1,3 +1,26 @@
+## Current Implementation - Prevent Pack Install From Installing Archived Skills
+
+### Goal
+
+Audit `npx skillpacks install <pack>` and prevent pack installs from copying archived skills, with `business-afps` / customer-discovery orchestrator subskills as the regression case.
+
+### Plan
+
+1. Record prompt history and active task tracking.
+2. Validate the user's claim against installer source, generated package metadata, and git history.
+3. Reproduce or prove the archive leak path for `business-afps`.
+4. Patch the minimal source/generation path so archived skills are excluded from install candidates.
+5. Add focused regression coverage for pack installs and archived orchestrator subskills.
+6. Run package verification and diff hygiene.
+7. Document results, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- `skillpacks install business-afps` does not install archived customer-discovery/orchestrator subskills.
+- Pack install candidate discovery ignores `archive/**` skill roots regardless of whether archived files contain valid `SKILL.md` frontmatter.
+- Existing active pack skills still install normally.
+- Regression tests fail on the archived-skill leak and pass after the fix.
+
 ## Previous Implementation - Fix Cross-Pack Routing Guard in Session Triage
 
 ### Goal

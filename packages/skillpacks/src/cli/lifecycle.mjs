@@ -117,8 +117,12 @@ function manifestSkills(manifest) {
   });
 }
 
+function archiveSkillPath(skill) {
+  return String(skill.path || '').split('/').includes('archive');
+}
+
 function installableSkill(skill) {
-  return skill.installable !== false;
+  return skill.installable !== false && !archiveSkillPath(skill);
 }
 
 function activePackExists(manifest, packName) {

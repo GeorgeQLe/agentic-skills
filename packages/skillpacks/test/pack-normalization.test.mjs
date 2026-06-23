@@ -138,6 +138,28 @@ describe('pack command argument resolution', () => {
     );
   });
 
+  it('does not resolve archived manifest entries as install targets', () => {
+    const activeSkill = manifest.skills.find((skill) => skill.path === 'packs/business-research/claude/customer-discovery/SKILL.md');
+    const staleManifest = {
+      ...manifest,
+      skills: [
+        ...manifest.skills,
+        {
+          ...activeSkill,
+          id: 'pack-business-research-claude-five-rings-archived',
+          name: 'five-rings',
+          path: 'packs/business-research/claude/customer-discovery/frameworks/five-rings/archive/v0.0/SKILL.md',
+          installable: true
+        }
+      ]
+    };
+
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['five-rings'], { manifest: staleManifest }),
+      /Unknown pack or skill 'five-rings'\./
+    );
+  });
+
   it('resolves exact active pack names without alias expansion', () => {
     const resolved = resolvePackCommandArgs('install', ['exec-loop'], { manifest });
 

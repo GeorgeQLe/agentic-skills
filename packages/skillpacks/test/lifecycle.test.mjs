@@ -17,7 +17,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
-import { refreshAllProjects, uninstallGlobal } from '../src/cli/lifecycle.mjs';
+import { installResolved, refreshAllProjects, uninstallGlobal } from '../src/cli/lifecycle.mjs';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
 import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
 
@@ -548,6 +548,38 @@ describe('Node lifecycle commands', () => {
       assert.equal(existsSync(skillPath(dir, tool, 'pmf-engine')), false);
       assert.equal(existsSync(skillPath(dir, tool, 'w3-hypothesis')), false);
     }
+  });
+
+  it('ignores archive skill entries if a packaged manifest contains them', async () => {
+    const dir = makeTempProject();
+    const manifest = readManifest();
+    const archivePath = 'packs/business-research/claude/customer-discovery/frameworks/five-rings/archive/v0.0/SKILL.md';
+    const activeSkill = manifest.skills.find((skill) => skill.path === 'packs/business-research/claude/customer-discovery/SKILL.md');
+
+    assert.ok(activeSkill, 'business-research customer-discovery fixture should exist');
+    assert.equal(existsSync(join(repoRoot, archivePath)), true, 'archive fixture should exist');
+
+    await installResolved({
+      manifest: {
+        ...manifest,
+        skills: [
+          ...manifest.skills,
+          {
+            ...activeSkill,
+            id: 'pack-business-research-claude-five-rings-archived',
+            name: 'five-rings',
+            path: archivePath,
+            installable: true
+          }
+        ]
+      },
+      projectRoot: dir,
+      packs: ['business-research']
+    });
+
+    assert.equal(existsSync(skillPath(dir, 'claude', 'customer-discovery')), true);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'five-rings')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'five-rings')), false);
   });
 
   it('installs the exact exec skill without enabling the exec-loop pack', async () => {
