@@ -14717,3 +14717,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **Regenerated** `dist/skillpacks-manifest.json` and the showcase data (stage-before-build from the git index). Updated three hardcoded-count test assertions (interrogation bundle 6→18; package manifest `user-flow-map` required-conventions).
 - **Verified:** layer1 2320 pass / 1 pre-existing unrelated `bench-setups` analyze-sessions failure; parity, archive (`--strict`), alignment-page, interrogation-page, convention-bundle, and alignment-routing audits clean; generators `--check` clean (0/0); package `build:check` + `test:node` (112) green.
 - **Deploy:** the commit touches generated showcase assets under `apps/skills-showcase/public/assets/**`, so Vercel's path-based Ignored Build Step auto-deploys on push. No manual `/deploy` lane (`release-ops` not in `enabled_packs`).
+
+## 2026-06-22 — Skills Showcase landing title nowrap
+
+- Patched `apps/skills-showcase/app/globals.css` so `.landing-title` overrides the global marketing `h1` max-width, keeps `What are you building?` on one line where horizontal space is available, and uses a smaller mobile clamp under 700px.
+- Verified the focused landing suite: `pnpm --dir apps/skills-showcase test src/showcase/landing/LandingExperience.test.tsx` (1 file, 8 tests).
+- Verified rendered layout with Playwright at 1440px, 700px, and 390px: text range line count stayed `1` for all three, and mobile `body.scrollWidth` / `documentElement.scrollWidth` both equaled the 390px viewport.
