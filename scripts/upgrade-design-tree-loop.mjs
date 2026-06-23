@@ -40,6 +40,7 @@ const previewPrefix = checkMode ? "[check] " : dryRun ? "[dry-run] " : "";
 
 const DESIGN_TREE_SKILLS = new Set([
   "consolidate-prototypes",
+  "create-ui-experiment",
   "design-inspirations",
   "prototype",
   "spec-interview",

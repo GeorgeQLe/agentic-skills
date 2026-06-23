@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-23 - Design-tree loop branch routing convention
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-143423-exec.md`.
+- Updated `docs/design-tree-loop-convention.md` with deterministic branch selection: explicit user override, journey sequence or evaluation priority, first-value/activation fit, current status, then stable array order as the final tiebreaker.
+- Added progressive-review requirements for dense UI surfaces and clarified that approved clickable UI experiment work belongs to `create-ui-experiment` before prototype buildout, without replacing the canonical six-skill route.
+- Added `create-ui-experiment` to the design-tree bundle generator allowlist and regenerated the 18 existing `DESIGN-TREE-LOOP.md` bundles.
+- Verification passed: `node scripts/upgrade-design-tree-loop.mjs --check`, `node scripts/audit-task-docs.mjs`, `git diff --cached --check`, and `npm run skillpacks:verify`. Focused layer1 remains expected-red with 10 passed / 4 failed for Steps 1.4-1.7.
+- Manifest: `tasks/ship-manifest-2026-06-23-design-tree-loop-routing.md`.
+
 ## 2026-06-23 - Design-tree flow schema branch ordering
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-142634-exec.md`.

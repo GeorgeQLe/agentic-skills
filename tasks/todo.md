@@ -54,7 +54,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
   - Add equivalent or narrower selection metadata to `ux_variation_branch`, such as `evaluation_priority`, `activation_fit`, `first_value_fit`, `priority_rationale`, and progressive-review notes.
   - Keep `ui_experiments[]` as the canonical child branch name and do not reintroduce `ui_reviews[]`.
 
-- [ ] Step 1.3: Update the canonical design-tree loop convention and generated bundle inputs
+- [x] Step 1.3: Update the canonical design-tree loop convention and generated bundle inputs
   - Files: modify `docs/design-tree-loop-convention.md`, `scripts/upgrade-design-tree-loop.mjs`
   - Define the branch-selection algorithm: explicit user override first, then ascending journey sequence/evaluation priority, then first-value/activation fit, then current status, with raw array order only as a final stable tiebreaker.
   - Add progressive-review requirements for complex UI surfaces: review first value, primary path, and staged disclosure before dense secondary controls.
@@ -138,12 +138,15 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - Step 1.2 complete. Updated `design/flow-tree.schema.json` to `v0.3` with required user-flow journey ordering fields, UX-variation evaluation/fit fields, a shared `progressive_review_guidance` object, and optional `branch_order_override` metadata.
 - Updated `design/flow-tree-sample.yaml` to exercise the new metadata and override rationale while preserving `ui_experiments[]` as the canonical UI child branch name.
 - Verification: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` now has 10 passed / 4 failed. The schema/sample assertions pass; the remaining expected red failures are the mirrored `user-flow-map`, `ux-variations`, `ui-interview`, and missing `create-ui-experiment` contract assertions scheduled for Steps 1.3-1.7.
+- Step 1.3 complete. Updated the canonical design-tree loop convention with the deterministic branch-selection algorithm, progressive-review requirements for dense UI surfaces, and default `ui-interview`/`create-ui-experiment` ownership boundary.
+- Updated `scripts/upgrade-design-tree-loop.mjs` so future `create-ui-experiment` skill roots receive generated `DESIGN-TREE-LOOP.md` bundles, then regenerated the existing 18 design-tree bundles so the canonical convention and generated copies stay in sync.
+- Verification: `node scripts/upgrade-design-tree-loop.mjs --check` passed. `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` still has 10 passed / 4 failed; the remaining expected red failures are the mirrored `user-flow-map`, `ux-variations`, `ui-interview`, and missing `create-ui-experiment` contract assertions scheduled for Steps 1.4-1.7.
 
-### Next Step Plan - Step 1.3
+### Next Step Plan - Step 1.4
 
-- Update only `docs/design-tree-loop-convention.md` and `scripts/upgrade-design-tree-loop.mjs`.
-- Define the branch-selection algorithm in the canonical convention: explicit user override first, then ascending `journey_sequence` for user-flow branches or `evaluation_priority` for UX variation branches, then `activation_fit`, `first_value_fit`, current status, and stable array order only as the final tiebreaker.
-- Add progressive-review requirements for complex UI surfaces: review the first-value step, primary task path, and staged disclosure before dense secondary controls.
-- Add `create-ui-experiment` to the design-tree skill set in `scripts/upgrade-design-tree-loop.mjs` only if the new skill is meant to carry generated `DESIGN-TREE-LOOP.md` bundles; otherwise record the reason in the review notes for Step 1.3.
-- Keep mirrored skill `SKILL.md` version bumps and new skill creation for Steps 1.4-1.7.
-- Verification target: rerun `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm any remaining failures belong to Steps 1.4-1.7, plus run `node scripts/upgrade-design-tree-loop.mjs --check` after generator updates.
+- Archive both mirrored `user-flow-map` skill contracts before editing: run `scripts/skill-archive.sh packs/product-design/codex/user-flow-map` and `scripts/skill-archive.sh packs/product-design/claude/user-flow-map`.
+- Bump both `packs/product-design/{codex,claude}/user-flow-map/SKILL.md` versions by one decimal and update both `CHANGELOG.md` files with the branch-ordering behavior change.
+- Add contract language requiring `branches[]` to be ordered by journey progression by default, with each branch carrying first value moment, primary task path, and progressive review sequence.
+- Add explicit override persistence requirements: record branch-order overrides in `design/user-flow-[topic].md`, `design/user-flow-[topic]-interview.md`, and `design/**/flow-tree-*.yaml` metadata.
+- Keep the change scoped to `user-flow-map`; do not edit `ux-variations`, `ui-interview`, or create `create-ui-experiment` in this step.
+- Verification target: run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` and confirm the user-flow-map assertion passes while the remaining expected red failures map to Steps 1.5-1.7; run archive/version audits if the archive script or changelog changes require them.

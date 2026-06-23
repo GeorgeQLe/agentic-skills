@@ -17,7 +17,7 @@ Generated from `docs/design-tree-loop-convention.md`. Edit the canonical docs fi
 ## Why this exists
 
 The design-phase skills — `user-flow-map`, `state-model`, `ux-variations`, `ui-interview`,
-`prototype`, `consolidate-prototypes`, `spec-interview`, and their subskills
+`create-ui-experiment`, `prototype`, `consolidate-prototypes`, `spec-interview`, and their subskills
 `design-inspirations` and `uat` — were previously split across three loop conventions
 (Pattern A research substeps, the prototype session loop, and the implementation exec loop).
 They share one job: **grow a design tree from a product concept to a runnable, validated,
@@ -187,6 +187,7 @@ slice `prototype` will later realize** — not runnable code.
 | `state-model` | Per-branch `model-tree` manifest + canonical model doc, attached via `branches[].model_ref` |
 | `ux-variations` | UX variation specs + up to 5 `ux_variation` child branches on the modelled flow |
 | `ui-interview` | UI experiment packet(s) + `ui_experiment` child branches under the UX variation |
+| `create-ui-experiment` | Clickable UI experiment route or project-native lightweight prototype for one approved UI branch, using fake, fixture, local, or in-memory data |
 | `prototype` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` + build-plan + decision |
 | `consolidate-prototypes` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` plus AFPS graduation under `design/` |
 | `spec-interview` | Production-ready specification under `specs/{topic}.md` |
@@ -223,7 +224,7 @@ the HTML page, not replacement of canonical design Markdown/YAML.
 | Role | Skills | Contract |
 |---|---|---|
 | **Root orchestrator** | `user-flow-map` | Creates the design-tree root and the `flow-tree-{topic}.yaml` manifest; grows one user-flow branch per flow. Owns the build-plan scaffold (`--prototype-build-plan`). `invocation: orchestrator`. |
-| **Pipeline** | `state-model`, `ux-variations`, `ui-interview`, `prototype`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. |
+| **Pipeline** | `state-model`, `ux-variations`, `ui-interview`, `create-ui-experiment`, `prototype`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. |
 | **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `prototype`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
 
 ### Per-branch iteration contract (pipeline skills)
@@ -244,6 +245,39 @@ Each pipeline-skill session:
 
 A skill that finds **no pending branch** for its role reports the tree is current for its
 stage and routes to the next skill in the route.
+
+### Deterministic branch selection
+
+Pipeline skills must not depend on raw manifest array order as the default selector. Resolve
+the next child branch with this stable priority stack:
+
+1. **Explicit user override** — if the user names a branch or the manifest records a
+   `branch_order_override` / override rationale for the relevant level, select that branch and
+   record the override in the owning artifact, interview log, and flow-tree manifest metadata.
+2. **Journey or evaluation order** — for `user-flow` branches, sort by ascending
+   `journey_sequence`; for `ux_variation` branches, sort by ascending `evaluation_priority`.
+3. **First-value and activation fit** — prefer branches with stronger `first_value_fit` and
+   `activation_fit` when sequence/priority ties or when the user asks for the fastest path to
+   value.
+4. **Current status** — prefer work that is explicitly pending or needs revision before
+   deferred, dropped, approved, or otherwise terminal branches.
+5. **Stable array order** — use manifest array order only as the final tiebreaker after the
+   deterministic metadata above.
+
+`user-flow-map` is responsible for authoring `branches[]` in journey progression by default.
+`ux-variations`, `ui-interview`, and downstream prototype-facing skills must use the metadata
+rather than "first pending" shortcuts when recommending a child branch.
+
+### Progressive review for dense UI surfaces
+
+Complex UI artifacts must introduce the interface in a staged sequence before asking the user
+to approve dense secondary controls. For each user-flow and UX-variation branch, carry
+`progressive_review` guidance that names the first-value step, the primary task path, staged
+disclosure notes, and the evidence required before moving deeper. Review surfaces should first
+show the first-value moment, then the primary path, then secondary controls and edge cases.
+Clickable UI experiment work belongs to `create-ui-experiment` after the UI branch is approved;
+default `ui-interview` runs stop at requirements, branch packet, bounded visual review, and
+branch decision capture.
 
 ---
 
@@ -331,6 +365,10 @@ only — they hand results back to the invoking parent and do **not** route down
 - Do not route from built variants directly to `consolidate-prototypes`; route through
   `uat` (variant evaluation) unless the user explicitly says they already evaluated and are
   ready to converge.
+- Route approved clickable route experiment needs to `create-ui-experiment` before prototype
+  buildout. `create-ui-experiment` is a branch experiment owner, not a replacement top-level
+  route position; the canonical route still reaches build sequencing through
+  `user-flow-map --prototype-build-plan` and `prototype`.
 - Do not route design-tree branch progress through `/exec`, `$exec`, `tasks/roadmap.md`, or
   `tasks/todo.md`.
 - The top-level `route` tuple stays the **6-skill sequence** (`user-flow-map → ux-variations →
