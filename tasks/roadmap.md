@@ -1,3 +1,25 @@
+## Current Implementation - Explain Unsafe Refresh Dry Runs
+
+### Goal
+
+Make `npx skillpacks refresh --all --dry-run` explain why its final safety summary says `Safe to run: no`, without weakening the existing safety gate.
+
+### Plan
+
+1. Record prompt history and active task tracking for the `$investigate` run.
+2. Reproduce the reported dry-run output and validate the user claim against current CLI behavior.
+3. Trace the `Safe to run` calculation through source and recent git history.
+4. Apply the smallest CLI/test change so unsafe dry runs emit concrete reasons.
+5. Run focused package tests, package verification, and diff hygiene.
+6. Record review results, then commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Any `refresh --all --dry-run` output that ends with `Safe to run: no` includes at least one human-readable reason.
+- Existing safety semantics remain unchanged.
+- Regression tests cover the stale/no-reason case.
+- Focused CLI tests and package verification pass before shipping.
+
 ## Current Implementation - Fix npm Publish Verification Lag
 
 ### Goal

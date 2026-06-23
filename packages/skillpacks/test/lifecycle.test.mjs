@@ -428,6 +428,9 @@ describe('Node lifecycle commands', () => {
     assert.equal(exitCode, 1);
     assert.match(stdout, /WARNING: Found 1 legacy user-home skillpacks install\(s\)/);
     assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
+    assert.match(stdout, /Unsafe reasons:/);
+    assert.match(stdout, /Found 1 legacy user-home skillpacks install\(s\) under /);
+    assert.match(stdout, /Cleanup: npx skillpacks uninstall-global/);
     assert.match(stdout, /Safe to run: no/);
     assert.equal(existsSync(skillPath(project, 'claude', 'codebase-status')), false);
     assert.equal(existsSync(skillPath(project, 'codex', 'afps-status')), false);
@@ -1434,6 +1437,7 @@ describe('Node multi-repo --all commands', () => {
     assert.match(stdout, /b: [0-9]+ install, 0 update, 0 remove/);
     assert.match(stdout, /Affected skills:/);
     assert.match(stdout, /a: update quality-sweep \(\.claude\/skills\/quality-sweep\)/);
+    assert.doesNotMatch(stdout, /Unsafe reasons:/);
     assert.match(stdout, /Safe to run: yes/);
     assert.match(stdout, /Recommended command: skillpacks refresh --all/);
     assert.equal(
@@ -1460,6 +1464,8 @@ describe('Node multi-repo --all commands', () => {
     assert.match(stdout, /failed: ERROR: PoketoWork kanban pack 'devtool-kanban' is hibernated/);
     assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
     assert.match(stdout, /Failures:/);
+    assert.match(stdout, /Unsafe reasons:/);
+    assert.match(stdout, /1 project\(s\) failed dry-run planning; see Failures above\./);
     assert.match(stdout, /Safe to run: no/);
     assert.doesNotMatch(stdout, /Recommended command: skillpacks refresh --all/);
     assert.equal(exitCode, 1);

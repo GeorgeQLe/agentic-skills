@@ -2045,6 +2045,18 @@ export async function refreshAllProjects({
     } else {
       console.log('  Affected skills: none');
     }
+    if (!safe) {
+      console.log('  Unsafe reasons:');
+      if (globalInstalls.length > 0) {
+        console.log(
+          `    - Found ${globalInstalls.length} legacy user-home skillpacks install(s) under ${homeRoot}.`
+        );
+        console.log('      Cleanup: npx skillpacks uninstall-global');
+      }
+      if (failures.length > 0) {
+        console.log(`    - ${failures.length} project(s) failed dry-run planning; see Failures above.`);
+      }
+    }
     console.log(`Safe to run: ${safe ? 'yes' : 'no'}`);
     if (safe) {
       console.log('Recommended command: skillpacks refresh --all');

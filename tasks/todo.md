@@ -1,3 +1,35 @@
+# Current Implementation - Explain Unsafe Refresh Dry Runs
+
+## Goal
+
+Make unsafe `skillpacks refresh --all --dry-run` summaries explain the reason for `Safe to run: no`.
+
+## Plan
+
+- [x] Record prompt history and active task tracking.
+- [x] Reproduce the reported output and validate the user claim.
+- [x] Trace the safety-summary calculation and recent history.
+- [x] Patch the minimal CLI/test surface.
+- [x] Run focused and package verification.
+- [x] Record review results and ship intended changes.
+
+## Acceptance Criteria
+
+- `Safe to run: no` is accompanied by concrete diagnostic text.
+- Dry-run remains read-only and safety semantics are unchanged.
+- Regression coverage proves this case cannot silently regress.
+
+## Review
+
+- Confirmed the local package entrypoint reproduced the report: `node packages/skillpacks/bin/skillpacks.mjs refresh --all --dry-run` ended with `Safe to run: no` and `skillpacks 0.1.11 (latest)` while the final summary did not repeat the unsafe reason.
+- The unsafe blocker was 16 legacy user-home skillpacks installs under `/Users/georgele`; the warning appeared only before the per-project plan, making the final safety verdict hard to interpret.
+- Root cause: `packages/skillpacks/src/cli/lifecycle.mjs` computed `safe` from dry-run failures plus `globalInstalls.length`, but only failures were summarized near the final verdict.
+- Added a final `Unsafe reasons:` block for dry-run summaries when `safe` is false, covering legacy user-home installs and dry-run planning failures without changing exit codes or safety semantics.
+- Updated lifecycle tests for legacy global installs, failed project planning, and safe dry-run output.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json`; no tracked manifest diff was needed after regeneration.
+- Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs`, reproduced local dry-run output, `npm --workspace packages/skillpacks run build:manifest`, `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`.
+- Exact `npx skillpacks ...` from the workspace root hit a workspace-local npm shim issue (`gskp: command not found`); published bin metadata has both `gskp` and `skillpacks`, and `npx --yes skillpacks@0.1.11 --version` works from `/private/tmp`.
+
 # Current Implementation - Fix npm Publish Verification Lag
 
 ## Goal

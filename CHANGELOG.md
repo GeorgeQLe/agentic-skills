@@ -11,6 +11,7 @@ Keep this file updated before every npm package publish.
 ### Fixed
 
 - Published-package verification now polls npm metadata with `--prefer-online` before failing, so `./publish.sh patch` can tolerate bounded registry propagation lag after a successful publish without weakening version, dist-tag, license, or versions-list checks.
+- `skillpacks refresh --all --dry-run` now prints final unsafe reasons when its summary says `Safe to run: no`, including legacy user-home installs and dry-run planning failures.
 
 ## [0.1.11] - 2026-06-23
 
