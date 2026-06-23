@@ -1,5 +1,56 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-22 — `$reconcile-dev-docs fix tasks`
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **issues remain** — recent proven completed sections were corrected, but some older current-style entries need broader archival cleanup.
+- History coverage: **ok for recent guard work** — `tasks/history.md` covers the session-triage benchmark guard and recent prompt-history cleanup.
+- Phase archives: **not fully audited** — no unambiguous missing phase archive was created.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: ship this reconciliation boundary, then run a broader roadmap archival cleanup only if desired.
+
+### Errors (remaining)
+
+- **tasks/todo.md** — Active task state is still noisy: several historical sections remain under current-style headings or have unchecked terminal items. Evidence: `tasks/todo.md` still includes open items for cross-repo/publish work that require external verification.
+
+### Warnings (remaining)
+
+- **tasks/roadmap.md** — The roadmap is being used as an append-only activity log with many `Current Implementation` headings, so the strategic source of truth is hard to distinguish from history. Recommended follow-up: a broader task-doc reconciliation pass focused on roadmap section archival.
+- **tasks/recurring-todo.md** — Two recurring advisory items are past due (`Devtool docs audit refresh`, `Spec drift check`). They remain advisory because neither was explicitly promoted into `tasks/todo.md` during this invocation.
+
+### Info
+
+- **tasks/manual-todo.md** — Manual launch tasks remain correctly classified as human-only external setup for the Skills Showcase newsletter/admin environment.
+- **tasks/record-todo.md** — File is absent; no condition-gated records were found in this pass that were safe to move there without broader review.
+
+### Fixed
+
+- [x] `tasks/todo.md` - Marked `Fix Cross-Pack Routing Guard in Session Triage` as a previous implementation. Evidence: all plan items checked in `tasks/todo.md`; commits `d8511e71` and `56344c47` on `master`.
+- [x] `tasks/roadmap.md` - Marked `Fix Cross-Pack Routing Guard in Session Triage` as a previous implementation. Evidence: `tasks/history.md` entry dated 2026-06-22 and commits `d8511e71` / `56344c47`.
+- [x] `tasks/todo.md` and `tasks/roadmap.md` - Marked `Flag Legacy Global Skills and Reinstall Base Locally` as previous. Evidence: all todo items checked and commit `524a94df Update global cleanup task status`.
+- [x] `tasks/todo.md` - Checked the stale `Skillpacks Refresh Dry-Run UX` commit/push item and marked the section previous. Evidence: commit `7457ed83 Improve skillpacks refresh dry-run UX`; follow-up prompt/history evidence in `f96ffa6d Summarize skillpacks refresh failures`.
+- [x] `tasks/roadmap.md` - Marked `Skillpacks Refresh Dry-Run UX` as previous. Evidence: commit `7457ed83`.
+- [x] `tasks/todo.md` - Checked the stale `Prepare skillpacks 0.1.10 Publish` commit/push item and added reconciliation evidence. Evidence: commits `60a610c8 Prepare skillpacks 0.1.10 publish` and `3ea1902d Record skillpacks 0.1.10 publish source state`.
+- [x] `tasks/roadmap.md` - Marked `Prepare skillpacks 0.1.10 Publish` as previous. Evidence: commits `60a610c8` and `3ea1902d`.
+- [x] `tasks/todo.md` - Added the current `Development Docs Reconciliation` section so this invocation has an active execution record.
+
+### Deferred
+
+- [ ] `tasks/todo.md` - `Fix Alignment-Page Review Routing` still has an unchecked "Commit and push intended tracked changes in both repos" item. Evidence in this repository supports the agentic-skills side (`87ed1017 Fix product-design prototype routing gates`), but this pass did not inspect the external Alignmeant repository. Requires cross-repo verification before checking.
+- [ ] `tasks/todo.md` - `Fix skillpacks uninstall-global Legacy Cleanup` still has unchecked publish and final commit/push items. Evidence supports implementation (`64db1892 Fix legacy uninstall-global cleanup`) but not a completed patch publish for that specific task. Requires release-state verification before checking.
+- [ ] `tasks/roadmap.md` - Many older sections still use `Current Implementation` headings. This pass fixed recent proven sections only; a broader roadmap archival cleanup should be done separately because older entries need phase/archive/git correlation.
+- [ ] `tasks/recurring-todo.md` - Two recurring advisory items are past due (`Devtool docs audit refresh`, `Spec drift check`). They remain advisory because neither was explicitly promoted into `tasks/todo.md` during this invocation.
+
+### Validation
+
+- Evidence inspected: `git status --short --branch`, `git log --oneline -50`, targeted `git show --stat` for recent commits, `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, and `tasks/phases`.
+- Verification to run before shipping this reconciliation: `git diff --check`.
+
+---
+
 ## 2026-06-19 — `/reconcile-dev-docs fix tasks`
 
 - **Mode:** fix · **Scope:** tasks

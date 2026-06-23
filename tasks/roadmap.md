@@ -1,4 +1,4 @@
-## Current Implementation - Fix Cross-Pack Routing Guard in Session Triage
+## Previous Implementation - Fix Cross-Pack Routing Guard in Session Triage
 
 ### Goal
 
@@ -24,7 +24,7 @@ Make `session-triage` benchmark regression routing explicitly guard access to `b
 - Claude reload guidance says to run `/reload-skills`, then `/clear` or restart if still invisible.
 - Existing benchmark regression workflow remains intact.
 
-## Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
+## Previous Implementation - Flag Legacy Global Skills and Reinstall Base Locally
 
 ### Goal
 
@@ -123,7 +123,7 @@ Patch the shared alignment-page convention so fresh-session `needs-clarification
 - Pages are never confirmed or routed downstream while unresolved clarification or negative feedback remains.
 - Generated alignment bundles are in sync with the canonical convention.
 
-## Current Implementation - Skillpacks Refresh Dry-Run UX
+## Previous Implementation - Skillpacks Refresh Dry-Run UX
 
 ### Goal
 
@@ -147,7 +147,7 @@ Fix `skillpacks refresh` so reload guidance appears only when project-local skil
 - Failed project config in dry-run returns nonzero and marks the aggregate verdict unsafe.
 - `refresh --dry-run` without `--all` remains rejected.
 
-## Current Implementation - Prepare skillpacks 0.1.10 Publish
+## Previous Implementation - Prepare skillpacks 0.1.10 Publish
 
 ### Goal
 

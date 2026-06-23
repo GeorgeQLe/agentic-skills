@@ -1,4 +1,4 @@
-# Current Implementation - Fix Cross-Pack Routing Guard in Session Triage
+# Previous Implementation - Fix Cross-Pack Routing Guard in Session Triage
 
 ## Goal
 
@@ -31,7 +31,7 @@ Make benchmark regression follow-up routing in `session-triage` verify that `age
 - Verification passed: `scripts/skill-pack-routing-audit.sh`, `scripts/skill-install-routing-audit.sh --active`, `node scripts/skill-alignment-routing-audit.mjs`, `scripts/skill-deps.sh --broken`, `pnpm --dir tests exec vitest run --project layer1 layer1/skill-alignment-routing-audit.test.ts layer1/skill-install-routing-audit.test.ts layer1/routing-graph.test.ts layer1/skill-inventory.test.ts layer1/researchish-skill-lifecycle-audit.test.ts layer1/skill-links-install.test.ts`, and `git diff --check`.
 - Left pre-existing untracked prompt logs untouched: `prompts/analyze-sessions/skill-prompt-20260622-111105-prototype-feedback-yaml.md` and `prompts/session-triage/skill-prompt-20260622-125302-alignment-routing.md`.
 
-# Current Implementation - Flag Legacy Global Skills and Reinstall Base Locally
+# Previous Implementation - Flag Legacy Global Skills and Reinstall Base Locally
 
 ## Goal
 
@@ -161,7 +161,7 @@ Require agents to classify alignment feedback YAML intent before mutating alignm
 - Verification passed: `node scripts/upgrade-alignment-page.mjs --check`, `pnpm --dir tests exec vitest run layer1/alignment-gates.test.ts layer1/upgrade-alignment-page-bespoke.test.ts` (51/51), `node scripts/audit-alignment-pages.mjs`, and `git diff --check`.
 - The requested `node --test tests/layer1/*.test.ts` commands were attempted but are not the correct harness for these Vitest files; both failed before assertions with Vitest runner initialization errors, then passed under the repo Vitest runner.
 
-# Current Implementation - Skillpacks Refresh Dry-Run UX
+# Previous Implementation - Skillpacks Refresh Dry-Run UX
 
 ## Goal
 
@@ -174,7 +174,7 @@ Fix `skillpacks refresh` reload guidance and `refresh --all --dry-run` planning 
 - [x] Implement change-count refresh behavior and dry-run planner summary.
 - [x] Add/adjust lifecycle tests and changelog entry.
 - [x] Run focused and package verification, then review diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ## Acceptance Criteria
 
@@ -193,6 +193,7 @@ Fix `skillpacks refresh` reload guidance and `refresh --all --dry-run` planning 
 - Added a final failure-detail section for non-dry-run `refresh --all` so project failures and emitted error messages are visible after long output.
 - Updated package changelog and regenerated `packages/skillpacks/dist/skillpacks-manifest.json`.
 - Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs` (46/46), `npm --workspace packages/skillpacks run verify:package`, and `git diff --check`.
+- Reconciliation note: shipped on `master` as `7457ed83 Improve skillpacks refresh dry-run UX`; subsequent `f96ffa6d Summarize skillpacks refresh failures` recorded the follow-up prompt/history evidence.
 
 # Previous Implementation - Prepare skillpacks 0.1.10 Publish
 
@@ -209,7 +210,7 @@ Prepare the consolidate-prototypes/graduation release boundary for the next publ
 - [x] Add package changelog and task review records for the pending `0.1.10` release.
 - [x] Run release gates without publishing.
 - [x] Run dry-run publish check without publishing.
-- [ ] Commit and push the publish-prep source state so the real `./publish.sh patch` can run from a clean tree.
+- [x] Commit and push the publish-prep source state so the real `./publish.sh patch` can run from a clean tree.
 
 ## Acceptance Criteria
 
@@ -228,6 +229,28 @@ Prepare the consolidate-prototypes/graduation release boundary for the next publ
 - Verification passed: `npm --workspace packages/skillpacks run test:node` (112/112), `npm run skillpacks:verify`, `pnpm --dir apps/skills-showcase validate:data`, `node scripts/skill-convention-bundle-audit.mjs`, `scripts/skill-archive-audit.sh --strict`, `scripts/skill-mirror-parity-audit.sh --verbose`, `scripts/base-skill-version-parity-audit.sh`, and `git diff --check`.
 - Dry-run publish check passed: `./publish.sh --dry-run patch` staged `skillpacks@0.1.10` and `@glexcorp/gskp@0.1.10`, completed both dry-run publishes, and restored source package state to `0.1.9`.
 - Dry-run note: npm CLI emitted `Cannot read properties of null (reading 'matches')` during `npm version`, but `publish.sh` detected that `0.1.10` was written and continued successfully.
+- Reconciliation note: source publish-prep was committed on `master` as `60a610c8 Prepare skillpacks 0.1.10 publish`; `3ea1902d Record skillpacks 0.1.10 publish source state` recorded the follow-up package state.
+
+# Current Implementation - Development Docs Reconciliation
+
+## Goal
+
+Reconcile stale task-doc state against recent git/history evidence without modifying code or non-task artifacts.
+
+## Plan
+
+- [x] Capture the visible `$reconcile-dev-docs fix tasks` invocation.
+- [x] Audit `tasks/todo.md`, `tasks/roadmap.md`, manual/advisory task docs, phase archives, history, and recent git commits.
+- [x] Mark unambiguous completed task sections as previous/completed.
+- [x] Write `tasks/reconciliation-report.md` with fixed, deferred, and remaining findings.
+- [x] Validate the reconciliation diff.
+- [x] Commit and push task-doc reconciliation changes.
+
+## Review
+
+- Fixed proven stale task status for `Fix Cross-Pack Routing Guard in Session Triage`, `Flag Legacy Global Skills and Reinstall Base Locally`, `Skillpacks Refresh Dry-Run UX`, and `Prepare skillpacks 0.1.10 Publish`.
+- Deferred ambiguous items that require cross-repo or publication evidence before changing checked state.
+- Verification passed: `git diff --check`.
 
 # Current Implementation - Rename Consolidation Skill And Add AFPS Graduation
 
