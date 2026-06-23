@@ -158,7 +158,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `codebase-status` | Claude | `tests/benchmarks/runs/codebase-status-claude-c4d0b304/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `consolidate-prototypes` | Claude | `tests/benchmarks/runs/consolidate-variations-claude-b5ffa772/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `create-agentic-skill` | Codex | `tests/benchmarks/runs/create-agentic-skill-codex-cc806349/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `exec` | Codex | `tests/benchmarks/runs/exec-codex-c37fe5dd/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
+| `exec` | Codex | `tests/benchmarks/runs/exec-codex-abbaef13/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 | `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-bd781522/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `migrate` | Codex | `tests/benchmarks/runs/migrate-codex-ade9693c/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |

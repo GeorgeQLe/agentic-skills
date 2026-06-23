@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.26 - 2026-06-23
+
+- Replaced active flow-tree child-state language from `ui_reviews[]` to `ui_experiments[]`.
+- Made default full UI mode explicitly non-buildout: it stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.
+- Routed approved clickable route experiment needs to `/create-ui-experiment [approved-ui-experiment]` instead of default prototype buildout from `ui-interview`.
+
 ## v0.25 - 2026-06-21
 
 - Reframed the body to the unified 5-stage design-tree flow (`interrogation -> research -> design -> plan -> implement(scoped)`) from `DESIGN-TREE-LOOP.md`: added the `## Design-Tree Flow` stage map, the per-branch iteration contract, and modify-back handling, plus explicit `## Next Work` / `## Invoke With YAML` self-routing handoff sections.

@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-23 - UI interview non-buildout experiment handoff
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-175520-exec.md`.
+- Archived mirrored `ui-interview` v0.25 contracts and bumped both active contracts to v0.26.
+- Replaced active `ui_reviews[]` flow-tree language with `ui_experiments[]` and verified no active mirrored `ui-interview` contract still contains `ui_reviews[]`.
+- Made default full UI mode explicitly non-buildout: it stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.
+- Routed approved clickable route experiment needs to `$create-ui-experiment [approved-ui-experiment]` / `/create-ui-experiment [approved-ui-experiment]` instead of default prototype buildout from `ui-interview`.
+- Refreshed skillpacks manifest and Skills Showcase generated assets from the staged boundary. The generated benchmark matrix also advanced to the current local ignored `exec` benchmark report because the showcase validator owns that file.
+- Verification passed or matched the expected red TDD state: strict archive audit passed, focused layer1 now has 13 passed / 1 expected red failure for Step 1.7, Skills Showcase validation passed, and `npm run skillpacks:verify` passed. Mirror parity still reports the known unrelated `session-triage` shared-section drift.
+- Manifest: `tasks/ship-manifest-2026-06-23-ui-interview-non-buildout.md`.
+
 ## 2026-06-23 - UX variations branch selection contract
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-145541-exec.md`.

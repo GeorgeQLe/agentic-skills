@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.25
+version: v0.26
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -23,7 +23,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
 
 Default branch-review handoff guard: upstream `$user-flow-map` approval and `$ux-variations` output may provide source evidence, but they do not count as `ui-interview` approval. Upstream approval does not count as `ui-interview` interview completion. Requirements-only runs must still present and confirm its own UI Assumptions Manifest, then its own Content Requirements Manifest. `ui-interview` must still investigate cross-flow and cross-variation coordination, design a proposed UI, render the visual mockup in HTML, ask the user for alignment or feedback, and record an explicit approve/reject/retry branch decision.
 
-Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill records UI review decisions in the flow-tree manifest only after its own approval lifecycle permits canonical writes; checkpoint confirmations are not final approval.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill records UI experiment branch decisions in the flow-tree manifest only after its own approval lifecycle permits canonical writes; checkpoint confirmations are not final approval.
 
 ## Design-Tree Flow
 
@@ -36,6 +36,8 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 - **Stage 4 — Implement (scoped)**: write the UI packet, grow `ui_experiment` child branches under the UX variation, and pass the single binding alignment gate before any canonical write.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first UX variation with no `ui_experiments`**, runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`.
+
+**Non-buildout boundary.** Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision. Do not write or route default clickable prototype buildout from `ui-interview`. Route approved clickable route experiment needs to $create-ui-experiment [approved-ui-experiment] so a dedicated experiment owner can build and evaluate the clickable route separately.
 
 **Modify-back.** A downstream `modify` decision can re-open an upstream `model_ref` or user-flow branch via `targets[]`; UI experiments below a re-opened node are marked stale and re-authored once that node is re-approved.
 
@@ -61,9 +63,9 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode reads and updates `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
-- Add one `ui_reviews[]` entry under the selected UX variation branch for each proposed UI review. Each entry must include `id`, `status`, artifact references, and `decision_id` when a decision is recorded.
+- Write UI branch state to `ui_experiments[]`; add one entry under the selected UX variation branch for each proposed UI experiment. Each entry must include `id`, `status`, artifact references, and `decision_id` when a decision is recorded.
 - Record approve/reject/retry decisions in the manifest `decisions[]` list. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
-- Do not mirror UI review, approve/reject/retry, prototype build, or branch progress into `tasks/todo.md`.
+- Do not mirror UI experiment review, approve/reject/retry, prototype build, or branch progress into `tasks/todo.md`.
 
 ### 0c. Session model — chunked per-page spec sessions vs. one continuous session
 
@@ -178,7 +180,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - This confirmation is non-final: it only establishes that the draft is ready for the pre-approval lifecycle in step 9. It does not authorize canonical spec writes.
 
 9. **Build pre-approval alignment page**
-   - **Chunked-mode assemble+approve session**: When chunked mode is active, begin this session only once every page's `{page-id}.md` intermediate exists under `design/{slug}/ui-interview-{topic}/`. Assemble those per-page intermediates plus the brief into the single working packet below, then run step 7 (research/recommend) and step 8 (coverage checkpoint) over the whole assembled branch spec and build the **one** alignment page. On final compiled YAML approval, write the canonical UI branch packet, flip the scoped flow-tree `ui_reviews[]` decision, and archive the brief and the per-page intermediates per the convention's archive-at-canonical-write timing. There is exactly one alignment gate for the whole branch, not one per page (the existing one-gate-per-branch behavior is unchanged).
+   - **Chunked-mode assemble+approve session**: When chunked mode is active, begin this session only once every page's `{page-id}.md` intermediate exists under `design/{slug}/ui-interview-{topic}/`. Assemble those per-page intermediates plus the brief into the single working packet below, then run step 7 (research/recommend) and step 8 (coverage checkpoint) over the whole assembled branch spec and build the **one** alignment page. On final compiled YAML approval, write the canonical UI branch packet, flip the scoped flow-tree `ui_experiments[]` decision, and archive the brief and the per-page intermediates per the convention's archive-at-canonical-write timing. There is exactly one alignment gate for the whole branch, not one per page (the existing one-gate-per-branch behavior is unchanged).
    - Before writing any canonical `design/ui-[topic].md`, `design/ui-requirements-[topic].md`, or interview log, write the full draft (spec or requirements content plus interview record) only to the working packet `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active).
    - Build `alignment/ui-interview-{topic}.html` as a `review`-state page rendering the complete working-packet substance as structured HTML review UI: the manifest, branch investigation, HTML visual mockup, page-by-page decisions, coverage checkpoint, proposed canonical file destinations, and approval/rejection gates.
    - Include **Interview provenance** in the page and working packet with exactly one of these values: `live-ui-interview` when this run completed the required manifest confirmations with the user; `evidence-synthesis-with-explicit-skip` when the current invocation explicitly asked to skip live questions or synthesize from evidence; `invalid-missing-ui-interview` when neither condition is true. `invalid-missing-ui-interview` pages must route unresolved decisions to a resumed `$ui-interview` and must not imply interview completion or readiness for canonical writes.
@@ -195,7 +197,7 @@ Before writing anything in this section, verify the alignment page has final com
 
 - Write the completed UI branch packet to `design/ui-[topic].md` in flat mode or `design/{slug}/ui-[topic].md` in product-path mode.
 - Write the interview log to `design/ui-[topic]-interview.md` in flat mode or `design/{slug}/ui-[topic]-interview.md` in product-path mode.
-- Update the scoped flow-tree manifest with the UI review status, artifact references, and approve/reject/retry decision record.
+- Update the scoped flow-tree manifest with the UI experiment status, artifact references, and approve/reject/retry decision record.
 
 After the canonical files are written, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, and convert the alignment page from `review` to `confirmed`.
 
@@ -206,7 +208,7 @@ The UI specification must include:
 - Parent user flow, selected UX variation branch, touched sibling flows, and coordination dependencies
 - HTML visual mockup path or embedded review section for the proposed UI
 - Branch decision record: approved, rejected, or retry needed, with next branch/user-flow route
-- Flow-tree manifest branch IDs, UI review ID, and decision ID.
+- Flow-tree manifest branch IDs, UI experiment ID, and decision ID.
 - Page inventory and route map
 - Global shell and navigation rules
 - Detailed page-by-page anatomy
@@ -230,7 +232,7 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
+Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$create-ui-experiment [approved-ui-experiment]` when an approved branch needs a clickable route experiment, `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$prototype`, `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
 
 ### Alignment Page
 
@@ -240,13 +242,13 @@ The page is built pre-approval in `review` state per step 9, before any canonica
 
 ## Next Work
 
-**Next work:** route based on the branch decision recorded in the prototype build ledger. When the variation's UI experiments are approved, synthesize the build plan with `$user-flow-map --prototype-build-plan [topic]`; when more UX variations remain to explore, route back to `$ux-variations [specific-user-flow]`.
+**Next work:** route based on the branch decision recorded in the prototype build ledger. When an approved UI branch needs a clickable route experiment, hand it to `$create-ui-experiment [approved-ui-experiment]`; when the variation's UI experiments are all approved and evaluated, synthesize the build plan with `$user-flow-map --prototype-build-plan [topic]`; when more UX variations remain to explore, route back to `$ux-variations [specific-user-flow]`.
 
-**Recommended next command:** `$user-flow-map --prototype-build-plan [topic]`.
+**Recommended next command:** `$create-ui-experiment [approved-ui-experiment]`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$user-flow-map --prototype-build-plan [topic]` once the variation's UI experiments are decided, or `$ux-variations [specific-user-flow]` for the next unexplored flow.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$create-ui-experiment [approved-ui-experiment]` when an approved UI branch needs a clickable route experiment, `$user-flow-map --prototype-build-plan [topic]` once the variation's UI experiments are decided and evaluated, or `$ux-variations [specific-user-flow]` for the next unexplored flow.
 
 ## Constraints
 
