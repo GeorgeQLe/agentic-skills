@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "48ad93edea2eeb59f6534f6853dc65a8e433f43ddd37dbc4fa479245a8cade6d",
+  "source_fingerprint": "e0afad169e0d3a830bae097b6c3a3c31da939dda286974112454cfeaab8ce5c0",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7880,7 +7880,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v1.4",
+      "version": "v1.5",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7888,7 +7888,7 @@
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "e7ce0b48b585c0a7d5449f2e142f56b4cac9e95b89d6e26a2e8efdbe574ee36a",
+      "content_sha256": "1d7cd3ff033cef32f4abc762aa2d6d3c6e050d0491f04fe5d4fc8cdbe6411fb2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7903,7 +7903,8 @@
         "v1.0",
         "v1.1",
         "v1.2",
-        "v1.3"
+        "v1.3",
+        "v1.4"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -8249,7 +8250,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v1.4",
+      "version": "v1.5",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8257,7 +8258,7 @@
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "232415cbb8c44973c0b889723071f56591f71d731ff1448764973faaa6158edc",
+      "content_sha256": "0a6e4e68e96693ab27dc64dfb4f97c78d2d5a1725f1cc22247b663fa10380f1a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8272,7 +8273,8 @@
         "v1.0",
         "v1.1",
         "v1.2",
-        "v1.3"
+        "v1.3",
+        "v1.4"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []

@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-23 - User-flow-map branch ordering contracts
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-144400-exec.md`.
+- Archived mirrored `user-flow-map` v1.4 contracts and bumped both active contracts to v1.5.
+- Required `user-flow-map` to order `branches[]` by journey progression by default, record explicit branch-order overrides in the flow doc and interview log, and persist override metadata in `design/**/flow-tree-*.yaml`.
+- Required each user-flow branch to carry first-value, primary-task-path, and progressive-review sequencing guidance before downstream UX/UI work.
+- Refreshed skillpacks manifest and Skills Showcase generated assets from the staged index; excluded unrelated generated benchmark-matrix drift from an untracked benchmark run.
+- Verification passed: strict archive audit, focused layer1 now 11 passed / 3 expected red failures, Skills Showcase validation, `npm run skillpacks:verify`, task-doc audit, and diff hygiene. Mirror parity still reports the known unrelated `session-triage` shared-section drift.
+- Manifest: `tasks/ship-manifest-2026-06-23-user-flow-map-branch-ordering.md`.
+
 ## 2026-06-23 - Design-tree loop branch routing convention
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-143423-exec.md`.

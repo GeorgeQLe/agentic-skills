@@ -1,5 +1,9 @@
 # user-flow-map changelog (claude)
 
+## v1.5 - 2026-06-23
+
+- Required journey-ordered `branches[]` output, progressive review metadata on each user-flow branch, and explicit branch-order override persistence in the flow doc, interview log, and flow-tree manifest.
+
 ## v1.4 - 2026-06-22
 
 - Updated flow-tree route initialization to use `consolidate-prototypes` as the primary consolidation step.

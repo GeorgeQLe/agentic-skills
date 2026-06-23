@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v1.5
+version: v1.4
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -62,10 +62,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
-- Initialize the manifest when writing the flow map. Set `schema_version: v0.3`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
-- Order `branches[]` by journey progression by default: activation or setup before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
-- Each user-flow branch must include `journey_stage`, `journey_sequence`, `priority_rationale`, and `progressive_review` metadata. The progressive review entry must name the first value moment, primary task path, and progressive review sequence for reviewers before downstream UX/UI work begins.
-- If the user explicitly overrides the default branch order, keep the user-chosen order and explain the override in `priority_rationale`. Persist branch order override metadata in `design/**/flow-tree-*.yaml` with who/what changed and why.
+- Initialize the manifest when writing the flow map. Set `schema_version: v0.1`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
 - In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references and one build item per approved UI review that should be prototyped.
 - Track user-flow, UX-variation, UI review, prototype build item, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Reference all pre-prototype design artifacts from the manifest using repo-relative paths.
@@ -121,7 +118,6 @@ Every chunked STOP (setup and each spec session) must emit the **Terminal handof
 3. Write the happy path as ordered steps with the screen/route used by each step.
 4. List alternate paths, including optional setup, skip paths, backtracking, cancellation, save-for-later, review/edit, and escalation.
 5. List decision points and branch rules. Distinguish user decisions, system decisions, permissions decisions, and external/manual decisions.
-5a. Order `branches[]` by journey progression by default when turning named flows into manifest branches. Record any explicit user branch-order override before writing deliverables.
 6. Create a screen/route inventory with purpose, inputs, outputs, source evidence, and downstream destination.
 7. For each screen, list required actions, available navigation, disabled/blocked rules, validation rules, and state coverage.
 8. Map failures and recovery: invalid input, no data, permissions, lost connection, backend failure, timeouts, interrupted work, and contradictory user choices.
@@ -201,8 +197,6 @@ The user-flow spec must include:
 - Open questions, risks, and explicit non-goals.
 - Downstream handoff choices for `/ux-variations [specific-user-flow]`.
 - Flow-tree manifest branch IDs and artifact references.
-- Ordered branch table showing journey stage, journey sequence, priority rationale, first value moment, primary task path, and progressive review sequence for each `branches[]` entry.
-- Record explicit user branch-order overrides in `design/user-flow-[topic].md`, including the requested order, rationale, affected branch IDs, and whether the override changes first-value or activation review order.
 
 The interview log must include:
 
@@ -210,7 +204,6 @@ The interview log must include:
 - The Flow Assumptions Checkpoint and user corrections.
 - Questions asked, options presented, recommendations, and user responses.
 - Flow Coverage Checkpoint and remaining gaps.
-- Record explicit user branch-order overrides in `design/user-flow-[topic]-interview.md`, including the question or checkpoint where the override was captured and any rejected default ordering.
 
 The prototype build plan must include:
 
