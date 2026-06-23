@@ -32,7 +32,7 @@ compatibility alias = old broad name kept for existing commands
 | Game AFPS product workflow | `game` | `code-quality` for implementation cleanup | audience -> fantasy -> genre -> comparables -> loop -> prototype -> playtest -> store page -> launch -> roadmap | `npx skillpacks install game` |
 | Monorepo execution overlay | `monorepo` | any domain pack that describes the product work | wraps `run` and `ship` with detection, branch-backed lane specs, guards, PR review, and scoped validation | `npx skillpacks install monorepo` |
 | Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `npx skillpacks install code-quality` |
-| Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spin-off | `npx skillpacks install project-fleet` |
+| Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spinoff idea -> spin-off | `npx skillpacks install project-fleet` |
 | Alignment-first planning | `alignment-loop` | a domain pack once the project type is clear | grill -> destination doc -> vertical slice -> implementation | `npx skillpacks install alignment-loop` |
 | PoketoWork kanban flows | hibernated | wait for Poketo.work rebuild | archived board-aware workflows | not installable |
 
@@ -65,7 +65,7 @@ youtube-format-research -> video-script -> video-build
 Project fleet:
 
 ```text
-clone-spec-store -> project-fleet -> spin-off
+clone-spec-store -> project-fleet -> spinoff-idea -> spin-off
 ```
 
 Alignment loop:

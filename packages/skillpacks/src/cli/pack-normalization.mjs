@@ -78,7 +78,9 @@ const PACK_ALIAS_GROUPS = [
       'portfolio_ops',
       'clone-spec-store',
       'spin-off',
-      'spinoff'
+      'spinoff',
+      'spinoff-idea',
+      'spinoff_idea'
     ],
     packs: ['project-fleet']
   },

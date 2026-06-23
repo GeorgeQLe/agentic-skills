@@ -1,4 +1,4 @@
-## Current Implementation - Confirm Workflow Design Alignment Page
+## Previous Implementation - Confirm Workflow Design Alignment Page
 
 ### Goal
 
@@ -21,7 +21,55 @@ Consume the approved gate-answer YAML for `alignment/workflow-design-three-pipel
 - The approval record preserves all six supplied gate answers, including the "two dedicated decks, not packs" note.
 - Verification results are recorded before completion.
 
-## Current Implementation - Prevent Pack Install From Installing Archived Skills
+## Previous Implementation - Create `spinoff-idea` Skill
+
+### Goal
+
+Add a `spinoff-idea` skill that inspects the invoking repository and produces a transfer-ready prompt for starting `$idea-scope-brief` in a separate target repository, without extracting code or mutating the target repo.
+
+### Plan
+
+1. Record prompt history and active task tracking.
+2. Confirm the right skill home by comparing existing `spin-off`, `project-fleet`, and `idea-scope-brief` contracts.
+3. Scaffold `spinoff-idea` under the selected pack with required metadata, versioning, and UI metadata where applicable.
+4. Write a concise skill contract covering source-repo intake, spinoff hypothesis extraction, target-repo prompt composition, safety boundaries, and output format.
+5. Update pack indexes or generated metadata only if required by repo conventions.
+6. Run targeted validation for frontmatter, versioning, routing, and manifest/build drift.
+7. Record review results, then commit and push intended changes if verification passes.
+
+### Acceptance Criteria
+
+- `spinoff-idea` is discoverable in the appropriate skill pack and has `version: v0.0`.
+- The skill clearly differs from `spin-off`: it produces an `$idea-scope-brief` kickoff prompt for another repo rather than creating or extracting a code repository.
+- The output contract includes a complete prompt with source-repo context, idea hypothesis, constraints, non-goals, evidence references, unknowns, and target-repo instructions.
+- The skill avoids copying secrets, private URLs, customer data, proprietary implementation details, or unrelated repo history into the prompt.
+- Targeted skill validation and diff hygiene pass.
+
+## Current Implementation - Prepare skillpacks 0.1.11 Publish Boundary
+
+### Goal
+
+Prepare the repository so `./publish.sh patch` can publish `skillpacks@0.1.11` and `@glexcorp/gskp@0.1.11` from a clean committed `master`, while preserving the repo convention that checked-in source release-state files remain at the last published package version before a real patch publish.
+
+### Plan
+
+1. Record prompt history and active task tracking.
+2. Confirm npm registry state for both `skillpacks` and `@glexcorp/gskp` is still `0.1.10`.
+3. Reset `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` package versions from `0.1.11` to `0.1.10`.
+4. Move the pending package changelog notes from `Unreleased` into a prepared `0.1.11` section dated 2026-06-23, leaving a fresh empty `Unreleased` section.
+5. Update task docs and ship manifest to explain the release-prep boundary and source-version convention.
+6. Run release-prep verification: package node tests, full package verification, dry-run patch publish, and diff hygiene.
+7. Commit and push the intended release-prep state on `master`.
+
+### Acceptance Criteria
+
+- Source package release-state files are committed at `0.1.10`, matching the currently published npm latest versions.
+- `CHANGELOG.md` records the prepared `0.1.11` release contents and the intended real command `./publish.sh patch`.
+- The dry-run patch publish proves `0.1.11` staging without a real npm publish and restores source release-state files to `0.1.10`.
+- `git status --short` contains only intended release-prep changes before commit, and `master` is clean after push.
+- App files, including `apps/skills-showcase/app/globals.css` and `apps/skills-showcase/next-env.d.ts`, are not modified by this pass.
+
+## Previous Implementation - Prevent Pack Install From Installing Archived Skills
 
 ### Goal
 

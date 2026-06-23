@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-23 - Spinoff idea skill
+
+- Added `spinoff-idea` as a Codex-only `project-fleet` planning skill for producing portable `$idea-scope-brief` kickoff prompts from a source repo without extracting code or mutating a target repo.
+- Registered the skill in `packs/project-fleet/PACK.md`, project-fleet alias normalization, docs, generated skillpacks manifest, Skills Showcase generated assets, benchmark coverage, and pack workflow fixtures.
+- Added Codex UI metadata, skill-local changelog, and prompt-history artifacts for the creation and shipping invocations.
+- Verification passed: Skills Showcase data validation, `npm run skillpacks:verify`, focused package Node tests, `scripts/pack.sh which spinoff-idea`, `scripts/skill-archive-audit.sh`, `pnpm --dir apps/skills-showcase build`, and diff hygiene.
+- Known unrelated verification failure remains: `scripts/skill-mirror-parity-audit.sh` still fails on `session-analytics/session-triage` shared-section drift.
+- Manifest: `tasks/ship-manifest-2026-06-23-spinoff-idea.md`.
+
 ## 2026-06-22 - Session triage benchmark pack guard
 
 - Updated mirrored `session-triage` contracts in `packs/session-analytics/{codex,claude}/session-triage` from `v0.4` to `v0.5`.

@@ -292,6 +292,7 @@
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
 | `clone-spec-store` | primary | user | Clone specs across projects |
+| `spinoff-idea` | primary | user | Repo-derived idea prompt needed for another repo |
 | `skill-inventory` | primary | user | Inventory skills across fleet |
 
 ### Pack: release-ops

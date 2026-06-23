@@ -46,6 +46,7 @@ const approvedOneSided = new Map([
   ["exec-profile/patch-exec-profile", "Claude-only execution-profile patch helper."],
   ["project-fleet/project-fleet", "Codex-only project fleet command surface."],
   ["project-fleet/spin-off", "Codex-only project fleet command surface."],
+  ["project-fleet/spinoff-idea", "Codex-only project fleet command surface."],
 ]);
 
 const approvedFrontmatterDrift = new Map([

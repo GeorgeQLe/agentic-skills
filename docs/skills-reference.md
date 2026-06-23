@@ -330,13 +330,13 @@ npx skillpacks install project-fleet
 Skills:
 
 ```text
-clone-spec-store, project-fleet, spin-off
+clone-spec-store, project-fleet, spin-off, spinoff-idea
 ```
 
 Default flow:
 
 ```text
-clone-spec-store -> project-fleet -> spin-off
+clone-spec-store -> project-fleet -> spinoff-idea -> spin-off
 ```
 
 ## Alignment Loop Pack

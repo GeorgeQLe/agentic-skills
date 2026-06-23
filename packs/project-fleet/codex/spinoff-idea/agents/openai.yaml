@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spinoff Idea"
+  short_description: "Draft a portable spinoff idea prompt"
+  default_prompt: "Use $spinoff-idea to turn this repo into a kickoff prompt for $idea-scope-brief in a new repo."

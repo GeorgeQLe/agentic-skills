@@ -128,7 +128,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `youtube-ops` for YouTube channel/video audits, unlisted prelaunch reviews, external-video context, competitive research, packaging, metadata, portfolio, benchmarking, search, and cadence.
 - Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
 - Use `remotion` for Remotion-oriented format research, scene-by-scene video scripting, and build/scaffold planning.
-- Use `project-fleet` for control repos that manage many downstream repos, clone/spec-store portfolios, or spin-offs.
+- Use `project-fleet` for control repos that manage many downstream repos, clone/spec-store portfolios, spinoff idea prompts, or spin-offs.
 - Use `alignment-loop` for lightweight operator-agent calibration before committing to a full spec-interview pipeline.
 - PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt.
 

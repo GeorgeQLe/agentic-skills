@@ -223,7 +223,7 @@ normalize_pack() {
     creator-foundation|creator_foundation|creator-strategy|creator_strategy|founder-media-foundation) echo "creator-foundation" ;;
     youtube|youtube-media|youtube_media|youtube-ops|youtube_ops) echo "youtube-ops" ;;
     remotion|video-production|video_production|video-build|videobuild|video-script|videoscript) echo "remotion" ;;
-    project-fleet|project_fleet|fleet|portfolio|portfolio-ops|portfolio_ops|clone-spec-store|spin-off|spinoff) echo "project-fleet" ;;
+    project-fleet|project_fleet|fleet|portfolio|portfolio-ops|portfolio_ops|clone-spec-store|spin-off|spinoff|spinoff-idea|spinoff_idea) echo "project-fleet" ;;
     quality|codequality|code_quality|code-quality) echo "code-quality" ;;
     games) echo "game" ;;
     dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;

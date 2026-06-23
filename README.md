@@ -336,7 +336,7 @@ The baseline is owner exports, manual snapshots, public unauthenticated captures
 For control repositories managing many downstream repos, clone/spec-store portfolios, or bounded spin-offs.
 
 ```text
-clone-spec-store, project-fleet, spin-off
+clone-spec-store, project-fleet, spin-off, spinoff-idea
 ```
 
 ### Alignment Loop

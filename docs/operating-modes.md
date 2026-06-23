@@ -234,7 +234,7 @@ This section tags every base skill and every pack with a **primary CLI role** �
 | `creator-media` | Both | Compatibility alias for `creator-foundation` and `youtube-ops`; add `remotion` separately for production work |
 | `youtube-ops` | Both | YouTube audit, prelaunch review, packaging, portfolio, benchmarking, search, cadence, external video research |
 | `remotion` | Both | Format research, scene-by-scene scripts, Remotion build specs and scaffolds |
-| `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, and spin-off workflows |
+| `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, spinoff prompts, and spin-off workflows |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
 | `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |
 | `monorepo` | Both | Workspace-aware detection, branch-backed lane specs, guardrails, and scoped shipping overlay |

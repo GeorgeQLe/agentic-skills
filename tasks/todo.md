@@ -1,4 +1,4 @@
-# Current Implementation - Confirm Workflow Design Alignment Page
+# Previous Implementation - Confirm Workflow Design Alignment Page
 
 ## Goal
 
@@ -27,7 +27,68 @@ Confirm `alignment/workflow-design-three-pipelines.html` from the approved gate-
 - Updated `alignment/index.html` metadata for the confirmed visual page.
 - Verification passed: `node scripts/audit-alignment-pages.mjs`, `git diff --check`, archive file existence check, and a no-match scan for retained active approval controls in the confirmed page.
 
-# Current Implementation - Prevent Pack Install From Installing Archived Skills
+# Previous Implementation - Create `spinoff-idea` Skill
+
+## Goal
+
+Create a `spinoff-idea` skill that derives a portable idea brief kickoff prompt from the current repo for use with `$idea-scope-brief` in another repo.
+
+## Plan
+
+- [x] Record prompt history and active task tracking.
+- [x] Inspect related `spin-off`, `project-fleet`, and `idea-scope-brief` contracts.
+- [x] Scaffold the new skill in the selected pack.
+- [x] Write the skill contract and required metadata.
+- [x] Run targeted validation and diff hygiene.
+- [x] Record review results and commit/push intended changes.
+
+## Acceptance Criteria
+
+- New skill has `version: v0.0` and follows existing pack conventions.
+- Skill output is a ready-to-paste `$idea-scope-brief` prompt for a different repo.
+- Skill contract includes repo-intake, evidence, safety, and output boundaries.
+- Verification results are recorded before completion.
+
+## Review
+
+- Added `packs/project-fleet/codex/spinoff-idea/SKILL.md` at `version: v0.0` with a prompt-generation workflow for starting `$idea-scope-brief` in another repo.
+- Added Codex UI metadata, a new skill changelog, pack index references, docs references, pack alias routing, benchmark coverage entries, and a Codex-only mirror parity exception.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and Skills Showcase assets; generated data now lists 388 skills and includes `pack-project-fleet-codex-spinoff-idea`.
+- Passed: `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, `npm run skillpacks:verify`, `node --test packages/skillpacks/test/pack-normalization.test.mjs packages/skillpacks/test/manifest.test.mjs`, `scripts/pack.sh which spinoff-idea`, `scripts/skill-archive-audit.sh`, and `git diff --check`.
+- System `quick_validate.py` could not run because its environment is missing `PyYAML`; repo-specific validation passed.
+- Known unrelated failures remain: `scripts/skill-mirror-parity-audit.sh` fails on `session-analytics/session-triage` shared-section drift, and `pnpm --dir tests exec vitest run layer1/bench-setups.test.ts` fails on pre-existing `analyze-sessions`, `spec-interview`, and `consolidate-variations` expectations.
+- Shipped via `$ship` with manifest `tasks/ship-manifest-2026-06-23-spinoff-idea.md`.
+
+# Current Implementation - Prepare skillpacks 0.1.11 Publish Boundary
+
+## Goal
+
+Prepare the repository so the next real release command is unambiguous: `./publish.sh patch` should publish `skillpacks@0.1.11` and `@glexcorp/gskp@0.1.11` from a clean committed `master`.
+
+## Plan
+
+- [x] Record prompt history and active task tracking.
+- [x] Confirm npm registry state for both package names is still `0.1.10`.
+- [ ] Reset source release-state package versions to the last published version, `0.1.10`.
+- [ ] Move pending package changelog notes into a prepared `0.1.11` release section.
+- [ ] Document why source stays at `0.1.10` before the real patch publish command.
+- [ ] Run package verification gates and dry-run publish without a real npm publish.
+- [ ] Commit and push intended release-prep changes on `master`.
+
+## Acceptance Criteria
+
+- `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` both carry package version `0.1.10` in the committed prep state.
+- `CHANGELOG.md` has an empty `Unreleased` section above a prepared `0.1.11` section dated 2026-06-23.
+- The `0.1.11` changelog section records `./publish.sh patch` as the intended real publish command.
+- Required gates pass: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `./publish.sh --dry-run patch`, and `git diff --check`.
+- No app files are included in the release-prep boundary.
+
+## Review
+
+- Registry preflight passed: `npm view skillpacks version` and `npm view @glexcorp/gskp version` both returned `0.1.10`.
+- Release-state reset is intentional: source stays at `0.1.10` until `./publish.sh patch` performs the real publish-time bump to `0.1.11`.
+
+# Previous Implementation - Prevent Pack Install From Installing Archived Skills
 
 ## Goal
 

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "9008f04f3412246d3523ec4c1582785b54a7514ceb9b0fd2549fc79ea15eac19",
+  "source_fingerprint": "2f2efade272a82fb727257594c6da784c2a5d42e56c621a8f05d6f3a8fd9a8b6",
   "packs": [
     {
       "name": "agent-bridge",
@@ -568,9 +568,10 @@
         "clone-spec-store",
         "project-fleet",
         "skill-inventory",
-        "spin-off"
+        "spin-off",
+        "spinoff-idea"
       ],
-      "skill_count": 4
+      "skill_count": 5
     },
     {
       "name": "release-ops",
@@ -8537,6 +8538,21 @@
         "v0.0"
       ],
       "command": "$spin-off",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-project-fleet-codex-spinoff-idea",
+      "name": "spinoff-idea",
+      "scope": "pack",
+      "pack": "project-fleet",
+      "platform": "codex",
+      "version": "v0.0",
+      "required_conventions": [],
+      "path": "packs/project-fleet/codex/spinoff-idea/SKILL.md",
+      "installable": true,
+      "content_sha256": "6a0a8010f8dc482b5e7c87f3ed3f5984a4b88a58b961886d8803b01b61cb6050",
+      "archive_versions": [],
+      "command": "$spinoff-idea",
       "deck_memberships": []
     },
     {
