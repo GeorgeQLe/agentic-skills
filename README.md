@@ -84,6 +84,8 @@ There is no user-home (global) base install. To clean up legacy repo-managed bas
 npx skillpacks uninstall-global
 ```
 
+Add `--dry-run` to preview legacy global cleanup without removing anything.
+
 ## Project Packs
 
 Project packs are enabled per repository.

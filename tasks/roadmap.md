@@ -1,3 +1,27 @@
+## Current Implementation - Add `uninstall-global --dry-run`
+
+### Goal
+
+Add a read-only preview mode for `npx skillpacks uninstall-global --dry-run`, including `--reinstall-base --dry-run`, so users can see exactly which global installs and project-local base-skill migration actions would happen without mutating global skills or project files.
+
+### Plan
+
+1. Record prompt history and active task tracking.
+2. Inspect the current `uninstall-global` parser, help text, cleanup ownership logic, reinstall-base migration flow, and lifecycle tests.
+3. Refactor global uninstall logic so discovery/planning is separated from mutation while preserving normal `Removed ...` output.
+4. Add dry-run output for global removals and reinstall-base project migration previews without calling project initialization, project config writes, skill-root sync, or pruning.
+5. Extend lifecycle/parser coverage for plain dry-run, both `--reinstall-base --dry-run` flag orders, existing-project preview, no-project preview, and unsupported args.
+6. Run focused lifecycle tests, package node tests, full skillpacks verification, and diff hygiene.
+7. Record review results, then commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `uninstall-global --dry-run` exits `0`, prints `Would remove ...` for repo-managed base skill installs, skips unmanaged/foreign installs, and leaves files in place.
+- `uninstall-global --reinstall-base --dry-run` previews global cleanup and project-local base-skill migration without modifying `.agents/project.json`, installing roots, pruning roots, or initializing a project.
+- Both dry-run flag orders work and unknown flags/positional args still fail with the existing unsupported-argument style.
+- CLI help advertises `uninstall-global [--reinstall-base] [--dry-run]`.
+- Required verification passes or any failure is fixed and rerun before shipping.
+
 ## Current Implementation - Explain Unsafe Refresh Dry Runs
 
 ### Goal

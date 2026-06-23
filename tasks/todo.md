@@ -1,3 +1,36 @@
+# Current Implementation - Add `uninstall-global --dry-run`
+
+## Goal
+
+Add read-only preview support for `npx skillpacks uninstall-global --dry-run`, including `--reinstall-base --dry-run`, without mutating global installs or project-local base-skill state.
+
+## Plan
+
+- [x] Record prompt history and active task tracking.
+- [x] Inspect current parser, lifecycle source, reinstall-base helpers, and existing tests.
+- [x] Implement dry-run parsing/help, global cleanup planning, and reinstall-base preview behavior.
+- [x] Add focused lifecycle/parser regression tests.
+- [x] Run focused and package verification plus diff hygiene.
+- [x] Record review results and ship intended changes.
+
+## Acceptance Criteria
+
+- Plain dry-run lists repo-managed removals as `Would remove ...`, exits `0`, and leaves managed/unmanaged/foreign installs untouched.
+- Reinstall-base dry-run previews discovered-project migration or current-directory initialization without writing `.agents/project.json`, syncing roots, pruning roots, or initializing.
+- `--dry-run --reinstall-base` and `--reinstall-base --dry-run` both work; unsupported args still fail.
+- Help text shows `uninstall-global [--reinstall-base] [--dry-run]`.
+
+## Review
+
+- Added `--dry-run` parsing for `uninstall-global` in either order with `--reinstall-base`, while preserving existing errors for unsupported flags and positional args.
+- Refactored base-skill project config construction into one helper shared by real init/reinstall paths and the dry-run planner.
+- Plain dry-run now uses the existing repo-managed ownership detector, prints `Would remove ...`, reports the would-remove count, and skips deletion.
+- Reinstall-base dry-run discovers the same project roots, previews `.agents/project.json` updates and skill-root install/update/remove plans through the refresh dry-run planner, and skips project locks, config writes, skill-root sync, pruning, and initialization.
+- No-project reinstall-base dry-run reports that the current directory would be initialized with base skills and leaves `.agents/project.json` absent.
+- Updated CLI help, compatibility docs/tests, package changelog, and user docs for the new dry-run surface.
+- Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs`, `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`.
+- Ship manifest: `tasks/ship-manifest-2026-06-23-uninstall-global-dry-run.md`.
+
 # Current Implementation - Explain Unsafe Refresh Dry Runs
 
 ## Goal

@@ -35,7 +35,7 @@ npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI installs base skills **project-local only** — there is no user-home (global) install path. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. To clean up legacy user-home base installs from the retired init path, run `npx skillpacks uninstall-global`. Domain packs are never installed as base skills.
+The npm CLI installs base skills **project-local only** — there is no user-home (global) install path. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. To clean up legacy user-home base installs from the retired init path, run `npx skillpacks uninstall-global`; use `npx skillpacks uninstall-global --dry-run` to preview the cleanup first. Domain packs are never installed as base skills.
 
 The scoped alias package is published from the same release artifact and version. Users who prefer that package identity can run `npx @glexcorp/gskp init`, `npx @glexcorp/gskp install devtool`, and the same subcommands.
 

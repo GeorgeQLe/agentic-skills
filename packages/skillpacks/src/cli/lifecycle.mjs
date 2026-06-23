@@ -625,8 +625,7 @@ function writeProjectConfigIfChanged(projectRoot, next) {
   return true;
 }
 
-function writeBaseProjectConfig(projectRoot) {
-  const existing = readProjectConfig(projectRoot);
+function nextBaseSkillsProjectConfig(projectRoot, existing = readProjectConfig(projectRoot)) {
   const next = existing
     ? { ...existing }
     : {
@@ -643,6 +642,11 @@ function writeBaseProjectConfig(projectRoot) {
   }
   next.base_skills = true;
   next.skill_pack_version = 1;
+  return next;
+}
+
+function writeBaseProjectConfig(projectRoot) {
+  const next = nextBaseSkillsProjectConfig(projectRoot);
   writeProjectConfig(projectRoot, next);
 }
 
@@ -1179,8 +1183,7 @@ function plannedExpectedSkillChange(entry) {
   };
 }
 
-function readOnlyReconciledProjectConfig(projectRoot, manifest) {
-  const config = readProjectConfig(projectRoot);
+function readOnlyReconciledConfig(manifest, config) {
   if (!config) {
     return null;
   }
@@ -1211,8 +1214,16 @@ function readOnlyReconciledProjectConfig(projectRoot, manifest) {
   return next;
 }
 
-function planRefreshProject({ manifest, projectRoot }) {
-  const config = readOnlyReconciledProjectConfig(projectRoot, manifest);
+function readOnlyReconciledProjectConfig(projectRoot, manifest) {
+  return readOnlyReconciledConfig(manifest, readProjectConfig(projectRoot));
+}
+
+function readOnlyBaseSkillsProjectConfig(projectRoot, manifest) {
+  return readOnlyReconciledConfig(manifest, nextBaseSkillsProjectConfig(projectRoot));
+}
+
+function planRefreshProject({ manifest, projectRoot, config = null }) {
+  config = config || readOnlyReconciledProjectConfig(projectRoot, manifest);
   const packs = enabledPacks(config);
   const skills = enabledSkillEntries(config).map(([skill]) => skill);
   const base = baseSkillsEnabled(config);
@@ -1276,6 +1287,17 @@ function planRefreshProject({ manifest, projectRoot }) {
   }
 
   return plan;
+}
+
+function planProjectLocalBaseSkills({ manifest, projectRoot }) {
+  const existing = readProjectConfig(projectRoot);
+  const next = readOnlyBaseSkillsProjectConfig(projectRoot, manifest);
+  const plan = planRefreshProject({ manifest, projectRoot, config: next });
+  return {
+    configChanged: !projectConfigsEqual(existing, next),
+    baseSkillsChanged: existing?.base_skills !== true,
+    plan
+  };
 }
 
 function planChangeCount(plan) {
@@ -1343,23 +1365,7 @@ export async function initProject({ manifest, projectRoot = process.cwd() }) {
 
 function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'uninstall-global --reinstall-base') {
   return withProjectLock(projectRoot, lockCommand, async () => {
-    const existing = readProjectConfig(projectRoot);
-    const next = existing
-      ? { ...existing }
-      : {
-          project_type: inferProjectType(projectRoot),
-          enabled_packs: [],
-          skill_pack_version: 1
-        };
-
-    if (!next.project_type) {
-      next.project_type = inferProjectType(projectRoot);
-    }
-    if (!Array.isArray(next.enabled_packs)) {
-      next.enabled_packs = [];
-    }
-    next.base_skills = true;
-    next.skill_pack_version = 1;
+    const next = nextBaseSkillsProjectConfig(projectRoot);
 
     if (writeProjectConfigIfChanged(projectRoot, next)) {
       console.log('Updated .agents/project.json (base skills enabled)');
@@ -1380,27 +1386,33 @@ export async function uninstallGlobal({
   homeRoot = homedir(),
   manifest = null,
   reinstallBase = false,
-  rootDir = process.cwd()
+  rootDir = process.cwd(),
+  dryRun = false
 } = {}) {
-  let removed = 0;
+  const installs = globalRepoSkillInstalls(homeRoot);
+  let removed = installs.length;
 
-  for (const tool of TOOLS) {
-    const root = join(homeRoot, `.${tool}`, 'skills');
-    if (!existsSync(root)) {
-      continue;
+  if (dryRun) {
+    for (const install of installs) {
+      console.log(`Would remove ${install.rel}`);
     }
-
-    for (const entry of readdirSync(root).sort((a, b) => a.localeCompare(b))) {
-      const target = join(root, entry);
-      if (removeRepoSkillInstall(target)) {
-        console.log(`Removed ${relative(homeRoot, target)}`);
+    console.log(`Dry run. Would remove ${removed} repo-managed base skill install(s) from ${homeRoot}.`);
+  } else {
+    removed = 0;
+    for (const install of installs) {
+      if (removeRepoSkillInstall(install.target)) {
+        console.log(`Removed ${install.rel}`);
         removed += 1;
       }
     }
+    console.log(`Done. Removed ${removed} repo-managed base skill install(s) from ${homeRoot}.`);
   }
 
-  console.log(`Done. Removed ${removed} repo-managed base skill install(s) from ${homeRoot}.`);
-  console.log('Base skills now install project-local via `npx skillpacks init`.');
+  if (dryRun) {
+    console.log('Base skills install project-local via `npx skillpacks init`.');
+  } else {
+    console.log('Base skills now install project-local via `npx skillpacks init`.');
+  }
 
   if (!reinstallBase) {
     return 0;
@@ -1412,8 +1424,69 @@ export async function uninstallGlobal({
 
   const roots = discoverProjectRoots(rootDir);
   if (roots.length === 0) {
+    if (dryRun) {
+      console.log(`No projects with .agents/project.json found under ${rootDir}. Would initialize current directory with base skills.`);
+      console.log(`Dry run. Would initialize project base skills to ${manifestPackageLabel(manifest)}.`);
+      return 0;
+    }
     console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing current directory.`);
     return initProject({ manifest, projectRoot: rootDir });
+  }
+
+  if (dryRun) {
+    console.log(`Dry run. Would reinstall project-local base skills in ${roots.length} project(s) under ${rootDir}.`);
+    const projectPlans = [];
+    const failures = [];
+
+    for (const root of roots) {
+      const rel = relative(rootDir, root) || '.';
+      console.log('');
+      console.log(`=== ${rel} ===`);
+      try {
+        const migration = planProjectLocalBaseSkills({ manifest, projectRoot: root });
+        if (migration.configChanged) {
+          const suffix = migration.baseSkillsChanged ? ' (base skills enabled)' : '';
+          console.log(`  would update .agents/project.json${suffix}`);
+        }
+        printRefreshDryRunProjectPlan(migration.plan);
+        projectPlans.push({ rel, plan: migration.plan, configChanged: migration.configChanged });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.log(`  failed: ${message}`);
+        failures.push({ rel, message });
+      }
+    }
+
+    const totals = projectPlans.reduce(
+      (sum, project) => {
+        sum.configs += project.configChanged ? 1 : 0;
+        sum.installs += project.plan.installs.length;
+        sum.updates += project.plan.updates.length;
+        sum.removals += project.plan.removals.length;
+        sum.skips += project.plan.skips.length;
+        return sum;
+      },
+      { configs: 0, installs: 0, updates: 0, removals: 0, skips: 0 }
+    );
+
+    console.log('');
+    console.log(`Summary (uninstall-global --reinstall-base --dry-run): ${roots.length} project(s) scanned.`);
+    for (const project of projectPlans) {
+      console.log(
+        `  ${project.rel}: ${project.configChanged ? 1 : 0} config, ${project.plan.installs.length} install, ${project.plan.updates.length} update, ${project.plan.removals.length} remove`
+      );
+    }
+    if (failures.length > 0) {
+      console.log('  Failures:');
+      for (const failure of failures) {
+        console.log(`    ${failure.rel}: ${failure.message}`);
+      }
+    }
+    console.log(
+      `  Totals: ${totals.configs} config, ${totals.installs} install, ${totals.updates} update, ${totals.removals} remove, ${totals.skips} skipped unmanaged.`
+    );
+    console.log('Dry run. No global skills or project files were changed.');
+    return failures.length > 0 ? 1 : 0;
   }
 
   console.log(`Reinstalling project-local base skills in ${roots.length} project(s) under ${rootDir}.`);

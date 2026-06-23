@@ -354,6 +354,46 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(unmanagedMarkerDir), true);
   });
 
+  it('uninstall-global --dry-run previews only repo-managed installs without removing them', async () => {
+    const home = makeTempProject();
+    const claudeRoot = join(home, '.claude/skills');
+    const codexRoot = join(home, '.codex/skills');
+    mkdirSync(claudeRoot, { recursive: true });
+    mkdirSync(codexRoot, { recursive: true });
+
+    writeManagedSkillDir(join(claudeRoot, 'codebase-status'), join(repoRoot, 'base/claude/codebase-status'));
+    writeManagedSkillDir(join(codexRoot, 'afps-status'), join(repoRoot, 'base/codex/afps-status'));
+    writeManagedSkillDir(join(claudeRoot, 'legacy-claude'), join(repoRoot, 'global/claude/legacy-claude'));
+    writeManagedSkillDir(join(codexRoot, 'legacy-codex'), join(repoRoot, 'global/codex/legacy-codex'));
+
+    const unmanagedDir = join(claudeRoot, 'my-local-skill');
+    mkdirSync(unmanagedDir, { recursive: true });
+    writeFileSync(join(unmanagedDir, 'SKILL.md'), 'local\n');
+    const foreignSource = join(home, 'somewhere-else');
+    mkdirSync(foreignSource, { recursive: true });
+    writeManagedSkillDir(join(codexRoot, 'foreign-managed'), foreignSource);
+
+    const { stdout, exitCode } = await captureConsole(() => uninstallGlobal({
+      homeRoot: home,
+      dryRun: true
+    }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Would remove \.codex\/skills\/afps-status/);
+    assert.match(stdout, /Would remove \.claude\/skills\/legacy-claude/);
+    assert.match(stdout, /Would remove \.codex\/skills\/legacy-codex/);
+    assert.match(stdout, /Dry run\. Would remove 4 repo-managed base skill install\(s\)/);
+    assert.doesNotMatch(stdout, /foreign-managed/);
+    assert.doesNotMatch(stdout, /my-local-skill/);
+    assert.equal(existsSync(join(claudeRoot, 'codebase-status')), true);
+    assert.equal(existsSync(join(codexRoot, 'afps-status')), true);
+    assert.equal(existsSync(join(claudeRoot, 'legacy-claude')), true);
+    assert.equal(existsSync(join(codexRoot, 'legacy-codex')), true);
+    assert.equal(existsSync(unmanagedDir), true);
+    assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
+  });
+
   it('rejects arguments to uninstall-global', async () => {
     const dir = makeTempProject();
 
@@ -368,6 +408,21 @@ describe('Node lifecycle commands', () => {
     const error = await runSkillpacksExpectError(dir, ['uninstall-global', '--bad']);
 
     assert.match(error.message, /uninstall-global: unsupported flag '--bad'/);
+  });
+
+  it('accepts uninstall-global dry-run flags in either order', async () => {
+    const first = makeTempProject();
+    const second = makeTempProject();
+
+    const firstResult = await runSkillpacksRaw(first, ['uninstall-global', '--dry-run', '--reinstall-base']);
+    const secondResult = await runSkillpacksRaw(second, ['uninstall-global', '--reinstall-base', '--dry-run']);
+
+    assert.equal(firstResult.exitCode, 0, firstResult.stderr);
+    assert.equal(secondResult.exitCode, 0, secondResult.stderr);
+    assert.match(firstResult.stdout, /Would initialize current directory with base skills/);
+    assert.match(secondResult.stdout, /Would initialize current directory with base skills/);
+    assert.equal(existsSync(projectConfigPath(first)), false);
+    assert.equal(existsSync(projectConfigPath(second)), false);
   });
 
   it('refresh --all flags legacy user-home installs while still refreshing projects', async () => {
@@ -493,6 +548,63 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(readProjectConfig(projectB).skill_updates, { mode: 'warn' });
   });
 
+  it('uninstall-global --reinstall-base --dry-run previews project migration without mutating projects', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const projectA = join(root, 'project-a');
+    const projectB = join(root, 'nested/project-b');
+    mkdirSync(projectA, { recursive: true });
+    mkdirSync(projectB, { recursive: true });
+    writeProjectConfig(projectA, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      notes: ['preserve me']
+    });
+    writeProjectConfig(projectB, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      skill_updates: { mode: 'warn' }
+    });
+    const projectAText = readFileSync(projectConfigPath(projectA), 'utf8');
+    const projectBText = readFileSync(projectConfigPath(projectB), 'utf8');
+
+    const claudeRoot = join(home, '.claude/skills');
+    const codexRoot = join(home, '.codex/skills');
+    writeManagedSkillDir(join(claudeRoot, 'codebase-status'), join(repoRoot, 'base/claude/codebase-status'));
+    writeManagedSkillDir(join(codexRoot, 'legacy-codex'), join(repoRoot, 'global/codex/legacy-codex'));
+
+    const { exitCode, stdout } = await captureConsole(() => uninstallGlobal({
+      homeRoot: home,
+      manifest: readManifest(),
+      reinstallBase: true,
+      rootDir: root,
+      dryRun: true
+    }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Would remove \.codex\/skills\/legacy-codex/);
+    assert.match(stdout, /Dry run\. Would reinstall project-local base skills in 2 project\(s\)/);
+    assert.match(stdout, /=== project-a ===/);
+    assert.match(stdout, /=== nested\/project-b ===/);
+    assert.match(stdout, /would update \.agents\/project\.json \(base skills enabled\)/);
+    assert.match(stdout, /install\s+\.claude\/skills\/codebase-status/);
+    assert.match(stdout, /install\s+\.codex\/skills\/pack/);
+    assert.match(stdout, /Summary \(uninstall-global --reinstall-base --dry-run\): 2 project\(s\) scanned/);
+    assert.match(stdout, /Dry run\. No global skills or project files were changed/);
+    assert.equal(existsSync(join(claudeRoot, 'codebase-status')), true);
+    assert.equal(existsSync(join(codexRoot, 'legacy-codex')), true);
+    assert.equal(readFileSync(projectConfigPath(projectA), 'utf8'), projectAText);
+    assert.equal(readFileSync(projectConfigPath(projectB), 'utf8'), projectBText);
+    assert.equal(existsSync(skillPath(projectA, 'claude', 'codebase-status')), false);
+    assert.equal(existsSync(skillPath(projectA, 'codex', 'pack')), false);
+    assert.equal(existsSync(skillPath(projectB, 'claude', 'afps-status')), false);
+    assert.equal(existsSync(lockDir(projectA)), false);
+    assert.equal(existsSync(lockDir(projectB)), false);
+  });
+
   it('uninstall-global --reinstall-base initializes the current directory when no projects are discovered', async () => {
     const root = makeTempProject();
     const home = makeTempProject();
@@ -514,6 +626,32 @@ describe('Node lifecycle commands', () => {
     assert.equal(readProjectConfig(root).base_skills, true);
     assert.equal(existsSync(skillPath(root, 'claude', 'codebase-status')), true);
     assert.equal(existsSync(skillPath(root, 'codex', 'pack')), true);
+  });
+
+  it('uninstall-global --reinstall-base --dry-run previews current-directory init without creating project config', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    writeManagedSkillDir(
+      join(home, '.claude/skills/codebase-status'),
+      join(repoRoot, 'base/claude/codebase-status')
+    );
+
+    const { exitCode, stdout } = await captureConsole(() => uninstallGlobal({
+      homeRoot: home,
+      manifest: readManifest(),
+      reinstallBase: true,
+      rootDir: root,
+      dryRun: true
+    }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Would initialize current directory with base skills/);
+    assert.match(stdout, /Dry run\. Would initialize project base skills to skillpacks@/);
+    assert.equal(existsSync(join(home, '.claude/skills/codebase-status')), true);
+    assert.equal(existsSync(projectConfigPath(root)), false);
+    assert.equal(existsSync(skillPath(root, 'claude', 'codebase-status')), false);
+    assert.equal(existsSync(skillPath(root, 'codex', 'pack')), false);
   });
 
   it('installs active packs without bash or jq and writes managed markers', async () => {

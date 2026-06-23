@@ -562,7 +562,7 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  uninstall-global [--reinstall-base]
+  uninstall-global [--reinstall-base] [--dry-run]
                                Remove legacy repo-managed base skills from ~/.claude and ~/.codex
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
@@ -648,9 +648,14 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'uninstall-global') {
     let reinstallBase = false;
+    let dryRun = false;
     for (const arg of rest) {
       if (arg === '--reinstall-base') {
         reinstallBase = true;
+        continue;
+      }
+      if (arg === '--dry-run') {
+        dryRun = true;
         continue;
       }
       if (arg.startsWith('-')) {
@@ -661,7 +666,8 @@ export async function runSkillpacksCli(args) {
     return uninstallGlobal({
       manifest: reinstallBase ? readManifest() : null,
       reinstallBase,
-      rootDir: process.cwd()
+      rootDir: process.cwd(),
+      dryRun
     });
   }
 

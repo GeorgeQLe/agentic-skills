@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-23 - `uninstall-global --dry-run`
+
+- Added `npx skillpacks uninstall-global --dry-run` and `npx skillpacks uninstall-global --reinstall-base --dry-run`.
+- Dry-run cleanup now previews repo-managed legacy global removals with `Would remove ...` while leaving unmanaged and foreign managed installs untouched.
+- Reinstall-base dry-run previews discovered project migration using the existing refresh planner and reports no-project current-directory initialization without writing `.agents/project.json`, installing roots, pruning roots, acquiring project locks, or deleting globals.
+- Updated CLI help, compatibility matrix coverage, package changelog, README/docs references, prompt history, and active task tracking.
+- Verification passed: `node --test packages/skillpacks/test/lifecycle.test.mjs`, `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, and `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-23-uninstall-global-dry-run.md`.
+
 ## 2026-06-23 - Spinoff idea skill
 
 - Added `spinoff-idea` as a Codex-only `project-fleet` planning skill for producing portable `$idea-scope-brief` kickoff prompts from a source repo without extracting code or mutating a target repo.
