@@ -80,7 +80,7 @@ Diff-aware review checked that the new skill remains narrow: it does not create 
 
 ## Rollback Note
 
-Revert the shipping commit to remove the new skill roots, pack entry, regenerated metadata, prompt log, and task/history updates. No production deploy or external state was changed.
+Revert the shipping commit to remove the new skill roots, pack entry, regenerated metadata, prompt log, and task/history updates. No manual production deploy was run. The Vercel ignored-build helper classifies the commit as deploy-relevant because generated Skills Showcase public assets changed, so the normal push-triggered Vercel path may build the site.
 
 ## Next Command
 
