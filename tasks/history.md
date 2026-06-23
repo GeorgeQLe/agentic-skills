@@ -14732,3 +14732,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Patched `apps/skills-showcase/app/globals.css` so `.landing-title` overrides the global marketing `h1` max-width, keeps `What are you building?` on one line where horizontal space is available, and uses a smaller mobile clamp under 700px.
 - Verified the focused landing suite: `pnpm --dir apps/skills-showcase test src/showcase/landing/LandingExperience.test.tsx` (1 file, 8 tests).
 - Verified rendered layout with Playwright at 1440px, 700px, and 390px: text range line count stayed `1` for all three, and mobile `body.scrollWidth` / `documentElement.scrollWidth` both equaled the 390px viewport.
+
+## 2026-06-23 — skillpacks 0.1.11 publish prep
+
+- Prepared `skillpacks@0.1.11` / `@glexcorp/gskp@0.1.11` for the next real publish while keeping committed source release-state files at the last published version, `0.1.10`, so `./publish.sh patch` can perform the real bump from a clean tree.
+- Moved the pending package changelog notes into a prepared `0.1.11` section and regenerated `packages/skillpacks/dist/skillpacks-manifest.json` so its package version matches `packages/skillpacks/package.json`.
+- Fixed a `publish.sh` dry-run cleanup race by restoring dry-run backups atomically through same-directory temp files plus `mv`; this prevents nested recovery dry-runs from exposing half-written JSON to concurrent tests.
+- Verified: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `./publish.sh --dry-run patch`, `git diff --check`, and `git diff --cached --check`.
+- The dry-run staged both package names at `0.1.11`, skipped real publish, and restored source release-state files to `0.1.10`.

@@ -27,7 +27,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 ### Verification
 
 - Registry state before release prep confirmed both package names remain published at `0.1.10`.
-- Release-prep verification passed in source so far: package tests, package verification, and diff hygiene. Clean-tree dry-run patch publish is the final gate before push.
+- Release-prep verification passed in source: package tests, package verification, clean-tree dry-run patch publish, and diff hygiene.
 - The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.10` to `0.1.11` before staging and publishing both npm package names.
 
 ## [0.1.10] - 2026-06-22
