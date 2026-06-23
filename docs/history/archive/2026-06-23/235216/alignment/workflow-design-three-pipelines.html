@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
+<html lang="en" data-alignment-category="research" data-visual-tier="document">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,10 +68,10 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 
 <!-- Section 1: Header + Status -->
 <h1>Five-Deck Workflow Model</h1>
-<div class="status">alignment_status: confirmed &nbsp; generated: 2026-06-08 &nbsp; amended: 2026-06-15 &nbsp; confirmed: 2026-06-23</div>
+<div class="status">alignment_status: reviewed &nbsp; generated: 2026-06-08 &nbsp; amended: 2026-06-15</div>
 <p class="lead">Formalizing five workflow decks &mdash; VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS &mdash; to support the "Apps as Distribution" thesis while giving game work its own deliberate AFPS track. This page preserves the original VARD/ORD/devtool decisions and supersedes the old matrix with the Game AFPS deck-model update.</p>
 <div class="callout callout-green"><strong>Amendment note:</strong> Superseded by the 2026-06-10 Game AFPS deck-model update. The active model is now five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS.</div>
-<div class="callout callout-green"><strong>Confirmation note (2026-06-23, agent review):</strong> All six gates are approved: five decks; COA B; four-step rapid ceremony with scan, align, ship, and traction; devtool front-half on demand after ORD graduations reveal gaps; semi-auto graduation where traction skills recommend and the user confirms; and two dedicated rapid decks backed by <code>packs/vard/</code> and <code>packs/ord/</code>. <code>vard-traction</code> and <code>ord-traction</code> are part of the canonical rapid ceremony now, while <code>afps-status</code> graduation surfacing remains a later enhancement.</div>
+<div class="callout callout-green"><strong>Gate 5 resolution (2026-06-15, agent review):</strong> All six gates answered (five decks; COA B; 3-step core; devtool front-half on demand; semi-auto graduation; <code>packs/vard/</code> + <code>packs/ord/</code>). Agent review found that semi-auto graduation depends on the traction skills COA B deferred to Phase 3, so it could not function. Resolution: <strong>pull <code>vard-traction</code> and <code>ord-traction</code> into Phase 1</strong>, making the rapid pipelines effectively 4-step and the semi-auto graduation gate functional now. Both traction skills are built (claude + codex, v0.0) and registered in their PACK.md flows. The <code>afps-status</code> graduation-surfacing wiring remains a later (Phase 3) enhancement; the recommend-and-confirm loop lives inside the traction skills.</div>
 
 <!-- Section 2: TOC -->
 <nav class="toc">
@@ -91,13 +91,23 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
     <li><a href="#coa-c">COA C: Unified Mode Flag + Rapid</a></li>
     <li><a href="#coa-compare">COA Comparison</a></li>
     <li><a href="#evidence">Evidence &amp; Assumptions</a></li>
-    <li><a href="#approval-record">Approval Record</a></li>
+    <li><a href="#gates">Review Gates</a></li>
+    <li><a href="#compile">Compile YAML</a></li>
   </ol>
 </nav>
 
 <!-- Section 3: Apps as Distribution Thesis -->
 <section id="thesis">
   <div class="section-head"><h2>Apps as Distribution Thesis</h2></div>
+  <div class="section-feedback" data-section="Apps as Distribution Thesis" id="feedback-thesis">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p><strong>Core thesis:</strong> Apps are distribution. Every shipped tool &mdash; whether a quick experiment, polished product, developer package, or playable game &mdash; compounds brand, audience, and surface area. The active deck model now recognizes three domains and two tempos, with five named decks currently defined:</p>
 
@@ -145,6 +155,15 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
 <!-- Section 4: Current State -->
 <section id="current-state">
   <div class="section-head"><h2>Current State</h2></div>
+  <div class="section-feedback" data-section="Current State" id="feedback-current-state">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <h3>Business AFPS Pipeline (complete)</h3>
   <pre>
@@ -181,7 +200,7 @@ devtool-workflow (orchestrator)
   &rarr; devtool-docs-audit        (review, v0.1)</pre>
 
   <h3>Rapid Decks (now active)</h3>
-  <p>The original review identified a missing rapid-tempo path. That gap has since been closed with active VARD and ORD decks, each using a scan &rarr; align &rarr; ship &rarr; traction sequence. Graduation now happens through the traction skills: they recommend iterate, graduate, or archive, and the user confirms the action. The remaining strategic question is how much devtool front-half structure should be added after real ORD graduations create evidence.</p>
+  <p>The original review identified a missing rapid-tempo path. That gap has since been closed with active VARD and ORD packs, each using a scan &rarr; align &rarr; ship sequence. The remaining strategic question is how those rapid decks graduate into deliberate AFPS work and how much devtool front-half structure should be added before real ORD graduations create evidence.</p>
 
   <h3>Game AFPS Deck (new active model)</h3>
   <p>Game work now has a deliberate AFPS deck backed by the existing <code>game</code> pack. The active route starts with audience, fantasy, genre, and comparable alignment, then validates the core loop, prototype, playtest metrics, store-page promise, launch plan, and roadmap. Game AFPS currently has no rapid feeder deck.</p>
@@ -190,6 +209,15 @@ devtool-workflow (orchestrator)
 <!-- Section 5: Five Decks Overview -->
 <section id="three-pipelines">
   <div class="section-head"><h2>The Five Decks Overview</h2></div>
+  <div class="section-feedback" data-section="Five Decks Overview" id="feedback-three-pipelines">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <div class="table-wrap">
     <table>
@@ -197,7 +225,7 @@ devtool-workflow (orchestrator)
       <tbody>
         <tr><td>Domain</td><td>Business / viral apps</td><td>Devtools / OSS</td><td>Games / playable entertainment</td><td>Business / viral apps</td><td>Devtools / OSS</td></tr>
         <tr><td>Tempo</td><td>Deliberate</td><td>Deliberate</td><td>Deliberate</td><td>Rapid</td><td>Rapid</td></tr>
-        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Full game proof gates</td><td>Minimal (4 steps)</td><td>Minimal (4 steps)</td></tr>
+        <tr><td>Ceremony</td><td>Full (20+ steps)</td><td>Medium (12&ndash;15 steps)</td><td>Full game proof gates</td><td>Minimal (3 steps)</td><td>Minimal (3 steps)</td></tr>
         <tr><td>Discovery depth</td><td>Deep ICP, competitive, journey</td><td>Developer user map, DX journey</td><td>Audience, fantasy, genre, comparables, playtests</td><td>Quick viral/market scan</td><td>Quick ecosystem scan</td></tr>
         <tr><td>Output</td><td>Spec, prototype, UAT, roadmap</td><td>Spec, docs, package</td><td>Playable proof, store-page promise, launch plan, roadmap</td><td>Deployed app + landing page</td><td>npm package + README</td></tr>
         <tr><td>Graduation from</td><td>VARD</td><td>ORD</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
@@ -213,6 +241,15 @@ devtool-workflow (orchestrator)
 <!-- Section 6: Deck A — Business AFPS -->
 <section id="pipeline-a">
   <div class="section-head"><h2>Deck A: Business AFPS</h2></div>
+  <div class="section-feedback" data-section="Deck A: Business AFPS" id="feedback-pipeline-a">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>The existing durable business product pipeline. <strong>No changes needed.</strong> It receives graduates from VARD (viral apps that showed traction) and from Devtool AFPS (devtools that need full business treatment). Entry triggers: revenue potential, enterprise demand, or product complexity warranting full customer discovery, spec, prototype, and UAT.</p>
 
@@ -231,6 +268,15 @@ devtool-workflow (orchestrator)
 <!-- Section 7: Deck B — Devtool AFPS -->
 <section id="pipeline-b">
   <div class="section-head"><h2>Deck B: Devtool AFPS</h2></div>
+  <div class="section-feedback" data-section="Deck B: Devtool AFPS" id="feedback-pipeline-b">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>The devtool pack has a strong back half (user-map through docs-audit) but lacks the front half that Business AFPS gets from its discovery and lifecycle packs. The proposed front half mirrors business-discovery&rsquo;s structure but is developer-specific.</p>
 
@@ -259,10 +305,19 @@ POST-RESEARCH:
 <!-- Section 8: Deck C — VARD -->
 <section id="pipeline-c">
   <div class="section-head"><h2>Deck C: VARD (Viral App Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Deck C: VARD" id="feedback-pipeline-c">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>The rapid-tempo deck for shipping small viral apps and consumer-facing tools as distribution touchpoints. Mirrors the ORD philosophy but for the business/consumer domain. Designed for 1&ndash;3 day cycle time and minimum viable ceremony.</p>
 
-  <h4>Canonical VARD pipeline (4 steps)</h4>
+  <h4>Proposed VARD pipeline (3-step core)</h4>
   <pre>
 1. vard-scan         Quick market scan: viral potential, audience, distribution channel.
                      Output: 1-page scan doc with go/no-go recommendation.
@@ -271,13 +326,10 @@ POST-RESEARCH:
                      Output: Mini alignment page (3 gates max) or skip if solo.
 
 3. vard-ship         Build, deploy, announce.
-                     Output: Deployed app + landing page + social announcement.
-
-4. vard-traction     Check back after 1-2 weeks for users, shares, engagement, and revenue signals.
-                     Output: Recommendation to iterate, graduate to Business AFPS, or archive; user confirms.</pre>
+                     Output: Deployed app + landing page + social announcement.</pre>
 
   <div class="callout">
-    <strong>Confirmed ceremony:</strong> Traction is no longer optional follow-up in the model; it is the fourth rapid-deck step that makes semi-auto graduation functional.
+    <strong>4th step (built — Gate 5 resolution):</strong> <code>vard-traction</code> &mdash; check back after 1&ndash;2 weeks. Users, shares, engagement, revenue signals. Recommends: iterate, graduate to Business AFPS, or archive (user confirms).
   </div>
 
   <h4>How VARD differs from ORD</h4>
@@ -295,31 +347,46 @@ POST-RESEARCH:
 <!-- Section 8b: Deck D — ORD -->
 <section id="pipeline-d">
   <div class="section-head"><h2>Deck D: ORD (OSS Rapid Distribution)</h2></div>
+  <div class="section-feedback" data-section="Deck D: ORD" id="feedback-pipeline-d">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>The devtool rapid-tempo workflow for shipping small OSS developer tools. Same rapid philosophy as VARD but targeting the developer ecosystem.</p>
 
-  <h4>Canonical ORD pipeline (4 steps)</h4>
+  <h4>Proposed ORD pipeline (3-step core)</h4>
   <pre>
-1. ord-scan          Quick research: what exists, what is the gap, who cares?
+1. ord-scan          Quick research: what exists, what&rsquo;s the gap, who cares?
                      Output: 1-page scan doc with go/no-go recommendation.
 
 2. ord-align         Lightweight alignment: confirm scope, name, target user.
                      Output: Mini alignment page (3 gates max) or skip if solo.
 
 3. ord-ship          Build, package, publish, announce.
-                     Output: npm package + GitHub repo + README + optional announcement.
-
-4. ord-traction      Check back after 1-2 weeks for stars, installs, issues, and mentions.
-                     Output: Recommendation to iterate, graduate to Devtool AFPS or Business AFPS, or archive; user confirms.</pre>
+                     Output: npm package + GitHub repo + README + optional tweet.</pre>
 
   <div class="callout">
-    <strong>Confirmed ceremony:</strong> Traction is the fourth rapid-deck step and the semi-auto graduation mechanism for ORD.
+    <strong>4th step (built — Gate 5 resolution):</strong> <code>ord-traction</code> &mdash; check back after 1&ndash;2 weeks. Stars, installs, issues, mentions. Recommends: iterate, graduate to Devtool AFPS (or cross-domain Business AFPS), or archive (user confirms).
   </div>
 </section>
 
 <!-- Section 8c: Deck E — Game AFPS -->
 <section id="deck-game-afps">
   <div class="section-head"><h2>Deck E: Game AFPS</h2></div>
+  <div class="section-feedback" data-section="Deck E: Game AFPS" id="feedback-deck-game-afps">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>The deliberate AFPS deck for video games and playable entertainment. Game AFPS uses the AFPS tempo but replaces generic product proof with game-specific evidence: audience, fantasy, genre expectations, comparable games, core loop, prototype tests, playtest metrics, store-page promise, launch plan, and roadmap.</p>
 
@@ -335,6 +402,15 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 9: Graduation Path -->
 <section id="graduation">
   <div class="section-head"><h2>Graduation Path</h2></div>
+  <div class="section-feedback" data-section="Graduation Path" id="feedback-graduation">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <p>Rapid-pipeline tools (VARD and ORD) that show traction graduate into their domain&rsquo;s deliberate pipeline. The graduation path depends on the tool&rsquo;s domain and ambition.</p>
 
@@ -371,6 +447,15 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 10: COA A — Build Full Deck Coverage -->
 <section id="coa-a">
   <div class="section-head"><h2>COA A: Build Full Deck Coverage Now</h2></div>
+  <div class="section-feedback" data-section="COA A: Build Full Deck Coverage" id="feedback-coa-a">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <div class="coa-card coa-a">
     <h3><span class="tag tag-a">COA A</span> Build complete deck coverage simultaneously</h3>
@@ -404,8 +489,8 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <table>
         <thead><tr><th>Phase</th><th>Duration</th><th>Deliverable</th></tr></thead>
         <tbody>
-          <tr><td>VARD deck (4 rapid skills)</td><td>1&ndash;2 days</td><td>Functional VARD workflow</td></tr>
-          <tr><td>ORD deck (4 rapid skills)</td><td>1&ndash;2 days</td><td>Functional ORD workflow</td></tr>
+          <tr><td>VARD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional VARD workflow</td></tr>
+          <tr><td>ORD pack (3 core + 1 optional)</td><td>1&ndash;2 days</td><td>Functional ORD workflow</td></tr>
           <tr><td>Devtool front-half (3 skills)</td><td>1&ndash;2 days</td><td>Complete devtool pipeline</td></tr>
           <tr><td>Graduation routing</td><td>0.5 day</td><td>afps-status updates, cross-pack routing</td></tr>
           <tr><td>Integration testing</td><td>0.5 day</td><td>End-to-end pipeline validation</td></tr>
@@ -420,17 +505,26 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 11: COA B — Rapid Pipelines First -->
 <section id="coa-b">
   <div class="section-head"><h2>COA B: Rapid Pipelines First, Evolve Devtool</h2></div>
+  <div class="section-feedback" data-section="COA B: Rapid Pipelines First" id="feedback-coa-b">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <div class="coa-card coa-b">
     <h3><span class="tag tag-b">COA B</span> Ship both rapid pipelines now, evolve devtool front-half on demand <em>(Recommended)</em></h3>
-    <p><strong>Philosophy:</strong> Fastest to value. Build VARD and ORD decks first (8 skills, sharing structure). Start shipping both viral apps and OSS tools immediately. Let real graduations reveal what the devtool front-half actually needs.</p>
+    <p><strong>Philosophy:</strong> Fastest to value. Build VARD and ORD packs first (6 skills, sharing structure). Start shipping both viral apps and OSS tools immediately. Let real graduations reveal what the devtool front-half actually needs.</p>
 
     <h4>Phase 1: VARD + ORD packs (immediate)</h4>
     <ul>
-      <li>Build <code>vard-scan</code>, <code>vard-align</code>, <code>vard-ship</code>, and <code>vard-traction</code> (business rapid)</li>
-      <li>Build <code>ord-scan</code>, <code>ord-align</code>, <code>ord-ship</code>, and <code>ord-traction</code> (devtool rapid)</li>
+      <li>Build <code>vard-scan</code>, <code>vard-align</code>, <code>vard-ship</code> (business rapid)</li>
+      <li>Build <code>ord-scan</code>, <code>ord-align</code>, <code>ord-ship</code> (devtool rapid)</li>
       <li>VARD and ORD share structure &mdash; build one, adapt the other</li>
-      <li>Graduation routing: semi-auto through traction-skill recommendations, with user confirmation before graduation, iteration, or archive action</li>
+      <li>Graduation routing: manual initially (user runs <code>/idea-scope-brief</code> or <code>/devtool-workflow</code>)</li>
     </ul>
 
     <h4>Phase 2: Devtool front-half (on demand)</h4>
@@ -440,14 +534,14 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <li>May discover the existing devtool-user-map is a sufficient entry point</li>
     </ul>
 
-    <h4>Phase 3: Graduation status surfacing (later)</h4>
+    <h4>Phase 3: Graduation automation (later)</h4>
     <ul>
-      <li>Wire persisted traction recommendations into <code>afps-status</code> so the status skill can surface graduation-ready VARD and ORD items</li>
-      <li>Keep action authority with the user; <code>afps-status</code> reports readiness, while traction skills create the recommendation record</li>
+      <li>Add <code>vard-traction</code> and <code>ord-traction</code> for structured traction checking</li>
+      <li>Wire graduation triggers into <code>afps-status</code></li>
     </ul>
 
     <h4>Effort estimate</h4>
-    <p>Phase 1: 2.5&ndash;3.5 days (8 skills, shared structure). Phase 2: 1&ndash;2 days when needed. Phase 3: 0.5 day. Total: ~4&ndash;6 days, spread over weeks/months.</p>
+    <p>Phase 1: 2&ndash;3 days (6 skills, shared structure). Phase 2: 1&ndash;2 days when needed. Phase 3: 0.5 day. Total: ~4&ndash;5.5 days, spread over weeks/months.</p>
 
     <div class="callout callout-green"><strong>Why recommended:</strong> Both rapid pipelines ship fast because they share structure. Generates real data about what the devtool front-half needs before building it. Lowest risk of over-engineering. VARD and ORD can be adapted from the same skeleton. Phase 2 may turn out to be unnecessary.</div>
   </div>
@@ -456,6 +550,15 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 12: COA C — Unified Mode Flag -->
 <section id="coa-c">
   <div class="section-head"><h2>COA C: Unified Mode Flag + Rapid Packs</h2></div>
+  <div class="section-feedback" data-section="COA C: Unified Mode Flag + Rapid" id="feedback-coa-c">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <div class="coa-card coa-c">
     <h3><span class="tag tag-c">COA C</span> Add mode flags to existing AFPS + build both rapid packs</h3>
@@ -466,7 +569,7 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <li><code>idea-scope-brief --mode=devtool</code> &rarr; developer-focused brief, skips consumer sections</li>
       <li><code>customer-discovery --mode=devtool</code> &rarr; developer ICP template, DX-focused questions</li>
       <li><code>competitive-analysis --mode=devtool</code> &rarr; ecosystem/alternatives focus</li>
-      <li>VARD and ORD decks exist separately for the rapid 4-step workflows</li>
+      <li>VARD and ORD packs exist separately for the rapid 3-step workflows</li>
     </ul>
 
     <h4>New work</h4>
@@ -474,8 +577,8 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <table>
         <thead><tr><th>Item</th><th>Effort</th></tr></thead>
         <tbody>
-          <tr><td>VARD deck (4 skills)</td><td>1&ndash;2 days</td></tr>
-          <tr><td>ORD deck (4 skills)</td><td>1&ndash;2 days</td></tr>
+          <tr><td>VARD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
+          <tr><td>ORD pack (3 skills)</td><td>1&ndash;2 days</td></tr>
           <tr><td>Mode flag infrastructure in AFPS skills</td><td>2&ndash;3 days</td></tr>
           <tr><td>Devtool mode templates for 5&ndash;8 existing skills</td><td>1&ndash;2 days</td></tr>
           <tr><td>Testing across modes</td><td>1 day</td></tr>
@@ -493,18 +596,27 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 13: COA Comparison -->
 <section id="coa-compare">
   <div class="section-head"><h2>COA Comparison</h2></div>
+  <div class="section-feedback" data-section="COA Comparison" id="feedback-coa-compare">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <div class="table-wrap">
     <table>
       <thead><tr><th>Dimension</th><th><span class="tag tag-a">COA A</span> Build All</th><th><span class="tag tag-b">COA B</span> Rapid First</th><th><span class="tag tag-c">COA C</span> Mode Flags</th></tr></thead>
       <tbody>
         <tr><td>Time to first rapid tool</td><td>5&ndash;7 days</td><td><strong>2&ndash;3 days</strong></td><td>2&ndash;3 days</td></tr>
-        <tr><td>Total effort</td><td>5&ndash;7 days</td><td>4&ndash;6 days (spread)</td><td>6&ndash;10 days</td></tr>
+        <tr><td>Total effort</td><td>5&ndash;7 days</td><td>4&ndash;5.5 days (spread)</td><td>6&ndash;10 days</td></tr>
         <tr><td>Risk to existing skills</td><td>None</td><td>None</td><td><strong>High</strong> (modifies 5&ndash;8)</td></tr>
         <tr><td>Data-driven devtool design</td><td>No</td><td><strong>Yes</strong></td><td>Partial</td></tr>
         <tr><td>Upfront completeness</td><td><strong>Full</strong></td><td>Partial</td><td>Full</td></tr>
         <tr><td>Over-engineering risk</td><td>High</td><td><strong>Low</strong></td><td>Medium</td></tr>
-        <tr><td>Maintenance complexity</td><td>11 new skills</td><td>8 now, more later</td><td>Mode logic in 8+ skills + 8 rapid</td></tr>
+        <tr><td>Maintenance complexity</td><td>11 new skills</td><td>6 now, more later</td><td>Mode logic in 8+ skills + 6 rapid</td></tr>
       </tbody>
     </table>
   </div>
@@ -516,7 +628,7 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <tbody>
         <tr><td>Over-build devtool front-half</td><td>Wasted effort</td><td>High</td><td>None</td><td>Medium</td></tr>
         <tr><td>Break existing business skills</td><td>Pipeline disruption</td><td>None</td><td>None</td><td>High</td></tr>
-        <tr><td>Graduation friction</td><td>Slow graduation</td><td>Low</td><td>Low (traction skill recommends, user confirms)</td><td>Low</td></tr>
+        <tr><td>Graduation friction</td><td>Slow graduation</td><td>Low</td><td>Medium (manual)</td><td>Low</td></tr>
         <tr><td>Skill sprawl</td><td>Maintenance burden</td><td>High (11 at once)</td><td>Low (incremental)</td><td>Medium</td></tr>
         <tr><td>Delayed rapid launch</td><td>Lost distribution momentum</td><td>Medium</td><td>None</td><td>Medium</td></tr>
         <tr><td>VARD/ORD diverge more than expected</td><td>Duplicated maintenance</td><td>Medium</td><td>Low (adapt as needed)</td><td>Medium</td></tr>
@@ -530,6 +642,15 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
 <!-- Section 14: Evidence & Assumptions -->
 <section id="evidence">
   <div class="section-head"><h2>Evidence &amp; Assumptions</h2></div>
+  <div class="section-feedback" data-section="Evidence and Assumptions" id="feedback-evidence">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
 
   <h3>Evidence</h3>
   <div class="table-wrap">
@@ -539,7 +660,7 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
         <tr><td>Business AFPS is complete and operational</td><td>40+ skills across 4 packs, documented in canonical-workflow-report</td><td>High</td></tr>
         <tr><td>Devtool pack covers research through docs</td><td>8 skills in packs/devtool/claude, v0.1&ndash;v0.4</td><td>High</td></tr>
         <tr><td>Devtool pack lacks front-half</td><td>No idea-brief, discovery, or competitive skills in pack</td><td>High</td></tr>
-        <tr><td>Original rapid-workflow gap is closed</td><td>Active VARD and ORD decks now exist with scan, align, ship, and traction skills in <code>packs/vard/</code> and <code>packs/ord/</code></td><td>High</td></tr>
+        <tr><td>No rapid workflow exists</td><td>No VARD or ORD pack or rapid-mode skills in repository</td><td>High</td></tr>
         <tr><td>Business-discovery structure is a good model for devtool front-half</td><td>Similar shape: ICP &rarr; competitive &rarr; journey &rarr; positioning</td><td>Medium</td></tr>
       </tbody>
     </table>
@@ -551,7 +672,7 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
       <thead><tr><th>Assumption</th><th>Risk if wrong</th><th>Validation approach</th></tr></thead>
       <tbody>
         <tr><td>Weekly rapid tool shipping is sustainable</td><td>VARD/ORD pipelines underused</td><td>Ship 3&ndash;5 tools through each, measure cadence</td></tr>
-        <tr><td>4-step rapid pipeline is enough ceremony</td><td>Quality, scoping, or traction follow-up issues</td><td>Retrospective after first 5 tools per pipeline</td></tr>
+        <tr><td>3-step rapid pipeline is enough ceremony</td><td>Quality or scoping issues</td><td>Retrospective after first 5 tools per pipeline</td></tr>
         <tr><td>VARD and ORD share enough structure to build from one skeleton</td><td>More divergence than expected, rework needed</td><td>Build ORD first, adapt for VARD, measure delta</td></tr>
         <tr><td>Traction signals are measurable</td><td>Graduation decisions are subjective</td><td>Define thresholds, track actuals</td></tr>
         <tr><td>Devtool front-half needs differ from business</td><td>Unnecessary skill duplication</td><td>Let ORD graduations reveal actual gaps</td></tr>
@@ -561,33 +682,213 @@ game-audience &rarr; game-fantasy &rarr; game-genre-map &rarr; game-comparables
   </div>
 </section>
 
-<!-- Section 15: Approval Record -->
-<section id="approval-record">
-  <div class="section-head"><h2>Approval Record</h2></div>
-  <div class="callout callout-green"><strong>Confirmed 2026-06-23:</strong> Final gate-answer YAML approved this five-deck workflow model. No section feedback items were included in the approval payload.</div>
-
-  <div class="table-wrap" data-tts-narrative="The approval record confirms five decks, COA B, four rapid steps with traction, on-demand devtool front-half work, semi-automatic graduation, and two dedicated rapid decks backed by the VARD and ORD pack directories.">
-    <table>
-      <thead><tr><th>Gate</th><th>Decision</th><th>Confirmed implication</th></tr></thead>
-      <tbody>
-        <tr><td>Deck Architecture</td><td>Five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS</td><td>The canonical model uses two rapid decks and three deliberate AFPS decks.</td></tr>
-        <tr><td>COA Selection</td><td>COA B: Rapid Pipelines First, Evolve Devtool</td><td>Prioritize VARD and ORD rapid-deck operation before building devtool front-half skills.</td></tr>
-        <tr><td>Rapid Ceremony</td><td>4 steps: scan, align, ship, traction</td><td><code>vard-traction</code> and <code>ord-traction</code> are part of the canonical rapid ceremony, not deferred optional work.</td></tr>
-        <tr><td>Devtool Front-Half</td><td>On demand after ORD graduations reveal gaps</td><td>Do not build devtool idea/discovery/competitive front-half skills until ORD graduation evidence shows the gap.</td></tr>
-        <tr><td>Graduation Triggers</td><td>Semi-auto: traction skill recommends, user confirms</td><td>Traction skills create the recommendation record; the user confirms before graduation, iteration, or archive action.</td></tr>
-        <tr><td>Rapid Pack Location</td><td>Two dedicated rapid decks backed by <code>packs/vard/</code> and <code>packs/ord/</code></td><td>The user note clarifies these are dedicated decks, not merely a pack-location decision.</td></tr>
-      </tbody>
-    </table>
+<!-- Section 15: Review Gates -->
+<section id="gates">
+  <div class="section-head"><h2>Review Gates</h2></div>
+  <div class="section-feedback" data-section="Review Gates" id="feedback-gates">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
   </div>
 
-  <h3>Confirmed Artifact Boundary</h3>
-  <ul>
-    <li><strong>Confirmed page:</strong> <code>alignment/workflow-design-three-pipelines.html</code></li>
-    <li><strong>Archived prior page:</strong> <code>docs/history/archive/2026-06-23/235216/alignment/workflow-design-three-pipelines.html</code></li>
-    <li><strong>Implementation backing:</strong> active VARD and ORD deck skills under <code>packs/vard/</code> and <code>packs/ord/</code>, with traction skills as the recommend-and-confirm graduation gate.</li>
-    <li><strong>Later enhancement:</strong> <code>afps-status</code> may surface persisted graduation-ready records, but it does not replace traction-skill recommendations or user confirmation.</li>
-  </ul>
+  <!-- Gate 1: Deck Architecture -->
+  <div class="gate question-block" data-section="Deck Architecture" data-gate-type="architecture" data-question-id="pipeline-architecture" data-target-path="">
+    <h3>Gate 1: Deck Architecture</h3>
+    <p>Which deck model should be treated as canonical now?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="pipeline-architecture" value="Five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS"> <span>Five decks: VARD, ORD, Business AFPS, Devtool AFPS, and Game AFPS</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Delay Game AFPS from canonical deck status until more game proof exists"> <span>Delay Game AFPS from canonical status until more game proof exists</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Unify rapid decks but keep the three deliberate AFPS decks"> <span>Unify rapid decks but keep the three deliberate AFPS decks</span></label>
+      <label><input type="radio" name="pipeline-architecture" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 2: COA Selection -->
+  <div class="gate question-block" data-section="COA Selection" data-gate-type="recommended-path" data-question-id="coa-selection" data-target-path="">
+    <h3>Gate 2: COA Selection</h3>
+    <p>Which course of action should we pursue?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="coa-selection" value="COA B: Rapid Pipelines First, Evolve Devtool (recommended)"> <span>COA B: Rapid Pipelines First, Evolve Devtool (recommended)</span></label>
+      <label><input type="radio" name="coa-selection" value="COA A: Build Full Deck Coverage Now"> <span>COA A: Build Full Deck Coverage Now</span></label>
+      <label><input type="radio" name="coa-selection" value="COA C: Unified Mode Flag + Rapid Packs"> <span>COA C: Unified Mode Flag + Rapid Packs</span></label>
+      <label><input type="radio" name="coa-selection" value="Hybrid (specify in notes)"> <span>Hybrid (specify in notes)</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 3: Rapid Pipeline Ceremony Level -->
+  <div class="gate question-block" data-section="Rapid Ceremony" data-gate-type="ceremony-level" data-question-id="ord-ceremony" data-target-path="">
+    <h3>Gate 3: Rapid Pipeline Ceremony Level</h3>
+    <p>How many steps should the VARD and ORD pipelines have? (Same structure for both, different domain content.)</p>
+    <div class="radio-group">
+      <label><input type="radio" name="ord-ceremony" value="3 steps: scan, align, ship (minimal)"> <span>3 steps: scan, align, ship (minimal)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="4 steps: scan, align, ship, traction (with follow-up)"> <span>4 steps: scan, align, ship, traction (with follow-up)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="2 steps: scan+align combined, ship (ultra-minimal)"> <span>2 steps: scan+align combined, ship (ultra-minimal)</span></label>
+      <label><input type="radio" name="ord-ceremony" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 4: Devtool Front-Half -->
+  <div class="gate question-block" data-section="Devtool Front-Half" data-gate-type="implementation-approach" data-question-id="devtool-front-half" data-target-path="">
+    <h3>Gate 4: Devtool AFPS Front-Half Approach</h3>
+    <p>When/how should the devtool front-half be built?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="devtool-front-half" value="On demand after ORD graduations reveal gaps (COA B approach)"> <span>On demand after ORD graduations reveal gaps (COA B approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Build new dedicated devtool skills now (COA A approach)"> <span>Build new dedicated devtool skills now (COA A approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Mode flags on existing business skills (COA C approach)"> <span>Mode flags on existing business skills (COA C approach)</span></label>
+      <label><input type="radio" name="devtool-front-half" value="Skip entirely — existing devtool-user-map is a sufficient entry point"> <span>Skip entirely &mdash; existing devtool-user-map is sufficient</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 5: Graduation Triggers -->
+  <div class="gate question-block" data-section="Graduation Triggers" data-gate-type="automation-level" data-question-id="graduation-triggers" data-target-path="">
+    <h3>Gate 5: Graduation Trigger Mechanism</h3>
+    <p>How should VARD/ORD-to-deliberate-pipeline graduation work?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="graduation-triggers" value="Manual — user decides when to graduate a tool"> <span>Manual &mdash; user decides when to graduate</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Semi-auto — traction skill recommends, user confirms"> <span>Semi-auto &mdash; traction skill recommends, user confirms</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Automated — afps-status detects traction thresholds and routes"> <span>Automated &mdash; afps-status detects and routes</span></label>
+      <label><input type="radio" name="graduation-triggers" value="Need clarification" data-special="clarification"> <span>Need clarification</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
+
+  <!-- Gate 6: Rapid Pack Location -->
+  <div class="gate question-block" data-section="Rapid Pack Location" data-gate-type="pack-structure" data-question-id="ord-pack-location" data-target-path="">
+    <h3>Gate 6: Rapid Pack Location</h3>
+    <p>Where should the VARD and ORD skills live?</p>
+    <div class="radio-group">
+      <label><input type="radio" name="ord-pack-location" value="Two dedicated packs: packs/vard/ + packs/ord/"> <span>Two dedicated packs: <code>packs/vard/</code> + <code>packs/ord/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="One shared rapid pack: packs/rapid/ with vard-* and ord-* prefixes"> <span>One shared rapid pack: <code>packs/rapid/</code></span></label>
+      <label><input type="radio" name="ord-pack-location" value="Domain packs: VARD in packs/business-rapid/, ORD in packs/devtool/"> <span>Domain packs: VARD in business, ORD in devtool</span></label>
+      <label><input type="radio" name="ord-pack-location" value="Other / None of the above" data-special="other"> <span>Other / None of the above</span></label>
+    </div>
+    <textarea class="answer-notes" placeholder="Additional notes, replacement answer, or clarification request"></textarea>
+  </div>
 </section>
+
+<!-- Section 16: Compile YAML -->
+<section id="compile" class="compile-box">
+  <div class="section-head"><h2>Compile YAML</h2></div>
+  <div class="section-feedback" data-section="Compile YAML" id="feedback-compile">
+    <span>Section feedback</span>
+    <button type="button" data-feedback="emphasize">Emphasize</button>
+    <button type="button" data-feedback="down">Thumbs down</button>
+    <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+    <textarea class="feedback-notes" placeholder="Optional notes for this section"></textarea>
+    <div class="local-yaml-actions"><button type="button" class="compile-local-feedback">Compile Feedback YAML</button><button type="button" class="copy-local-feedback">Copy YAML</button><span class="copy-status"></span></div>
+    <textarea class="local-yaml" readonly></textarea>
+  </div>
+  <p>Use feedback YAML for emphasis requests, concerns, or clarification before answering all gates. Use final answers YAML only when every required gate is answered.</p>
+  <div class="compile-actions"><button type="button" id="compile-feedback">Compile Feedback YAML</button><button type="button" id="copy-feedback">Copy YAML</button><span id="feedback-status"></span></div>
+  <textarea id="compiled-feedback-yaml" readonly></textarea>
+  <div class="compile-actions"><button type="button" id="compile-answers" disabled>Compile Answers</button><button type="button" id="copy-answers">Copy YAML</button><span id="answer-status"></span></div>
+  <textarea id="compiled-yaml" readonly></textarea>
+</section>
+</main>
+
+<script>
+const alignmentPage = 'alignment/workflow-design-three-pipelines.html';
+const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
+function yamlEscape(value) { return String(value || '').replace(/\n/g, '\n    '); }
+function selectedFeedbackEntries() {
+  return [...document.querySelectorAll('.section-feedback.has-feedback')].map(box => ({
+    section: box.dataset.section,
+    feedback: box.dataset.feedback,
+    notes: box.querySelector('.feedback-notes').value.trim(),
+    requested_agent_action: actionFor[box.dataset.feedback]
+  }));
+}
+function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
+function feedbackYaml(entries) {
+  const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
+  let y = `alignment_page: ${alignmentPage}\nfeedback_status: revision-request\napproval_status: not-approved\nunanswered_required_questions:\n`;
+  y += unanswered.length ? unanswered.map(q => `  - ${q}`).join('\n') + '\n' : '  []\n';
+  y += 'section_feedback:\n';
+  y += entries.length ? entries.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+function answersYaml() {
+  const gates = [...document.querySelectorAll('.gate')];
+  let y = `alignment_page: ${alignmentPage}\napproval_status: ready-for-agent-review\ngate_answers:\n`;
+  for (const g of gates) {
+    const checked = g.querySelector('input[type="radio"]:checked');
+    const answer = checked ? checked.value : '';
+    const status = answer === 'Need clarification' ? 'needs-clarification' : (answer === 'Other / None of the above' ? 'other' : 'answered');
+    const notes = g.querySelector('.answer-notes').value.trim();
+    y += `  - section: ${yamlEscape(g.dataset.section)}\n    gate_type: ${yamlEscape(g.dataset.gateType)}\n    status: ${status}\n    answer: ${yamlEscape(answer)}\n`;
+    if (notes) y += `    notes: ${yamlEscape(notes)}\n`;
+    if (g.dataset.targetPath) y += `    target_path: ${yamlEscape(g.dataset.targetPath)}\n`;
+  }
+  const feedback = selectedFeedbackEntries();
+  y += 'section_feedback:\n';
+  y += feedback.length ? feedback.map(e => `  - section: ${yamlEscape(e.section)}\n    feedback: ${e.feedback}\n    requested_agent_action: ${e.requested_agent_action}\n    notes: ${yamlEscape(e.notes)}`).join('\n') + '\n' : '  []\n';
+  return y;
+}
+async function copyText(text, statusEl, textarea) {
+  try { await navigator.clipboard.writeText(text); statusEl.textContent = 'Copied'; }
+  catch { if (textarea) { textarea.focus(); textarea.select(); } statusEl.textContent = 'Select text to copy'; }
+}
+function updateAnswerState() {
+  const remaining = unansweredQuestions();
+  const btn = document.getElementById('compile-answers');
+  btn.disabled = remaining.length > 0;
+  document.getElementById('answer-status').textContent = remaining.length ? `${remaining.length} required questions remaining` : 'All required questions answered';
+}
+document.querySelectorAll('.section-feedback button[data-feedback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active'); box.classList.remove('has-feedback','has-yaml'); delete box.dataset.feedback;
+    } else {
+      box.querySelectorAll('button[data-feedback]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); box.dataset.feedback = btn.dataset.feedback; box.classList.add('has-feedback'); box.classList.remove('has-yaml');
+    }
+  });
+});
+document.querySelectorAll('.compile-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    const entry = { section: box.dataset.section, feedback: box.dataset.feedback, notes: box.querySelector('.feedback-notes').value.trim(), requested_agent_action: actionFor[box.dataset.feedback] };
+    const y = feedbackYaml([entry]);
+    const area = box.querySelector('.local-yaml'); area.value = y; box.classList.add('has-yaml');
+    copyText(y, box.querySelector('.copy-status'), area);
+  });
+});
+document.querySelectorAll('.copy-local-feedback').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = btn.closest('.section-feedback');
+    copyText(box.querySelector('.local-yaml').value, box.querySelector('.copy-status'), box.querySelector('.local-yaml'));
+  });
+});
+document.querySelectorAll('.gate input[type="radio"]').forEach(r => {
+  r.addEventListener('change', () => { r.closest('.gate').classList.add('has-answer'); updateAnswerState(); });
+});
+document.getElementById('compile-feedback').addEventListener('click', () => {
+  const y = feedbackYaml(selectedFeedbackEntries());
+  const area = document.getElementById('compiled-feedback-yaml'); area.value = y;
+  copyText(y, document.getElementById('feedback-status'), area);
+});
+document.getElementById('copy-feedback').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-feedback-yaml').value, document.getElementById('feedback-status'), document.getElementById('compiled-feedback-yaml'));
+});
+document.getElementById('compile-answers').addEventListener('click', () => {
+  const y = answersYaml();
+  const area = document.getElementById('compiled-yaml'); area.value = y;
+  copyText(y, document.getElementById('answer-status'), area);
+});
+document.getElementById('copy-answers').addEventListener('click', () => {
+  copyText(document.getElementById('compiled-yaml').value, document.getElementById('answer-status'), document.getElementById('compiled-yaml'));
+});
+updateAnswerState();
+</script>
 
 <script>
 /**
