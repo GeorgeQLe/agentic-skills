@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-22 - Session triage benchmark pack guard
+
+- Updated mirrored `session-triage` contracts in `packs/session-analytics/{codex,claude}/session-triage` from `v0.4` to `v0.5`.
+- Added a `Pack Availability Guard` so benchmark regression loop-closing checks `.agents/project.json` `enabled_packs` for `agentic-skills-bench` before recommending or relying on `$benchmark-test-skill <skill>` or `/benchmark-test-skill <skill>`.
+- Added missing-pack guidance for `npx skillpacks install agentic-skills-bench`, with Codex fresh-session guidance and Claude `/reload-skills`, `/clear`, or restart guidance.
+- Archived both prior `v0.4` contracts and updated both changelogs.
+- Verification passed: `scripts/skill-pack-routing-audit.sh`, `scripts/skill-install-routing-audit.sh --active`, `node scripts/skill-alignment-routing-audit.mjs`, `scripts/skill-deps.sh --broken`, targeted Layer 1 Vitest (6 files / 382 tests), and `git diff --check`.
+- Captured the visible `$ship-end` invocation in `prompts/ship-end/skill-prompt-20260622-221129-ship-end.md`.
+- Prompt-history cleanup: included previously untracked `analyze-sessions` and `session-triage` prompt logs from earlier 2026-06-22 invocations.
+
 ## 2026-06-22 - Rename consolidation skill and add AFPS graduation
 
 - Renamed the primary product-design consolidation skill to `consolidate-prototypes` in both Claude and Codex mirrors, archived `v0.15`, bumped active contracts to `v0.16`, and kept `consolidate-variations` as a deprecated compatibility alias.
