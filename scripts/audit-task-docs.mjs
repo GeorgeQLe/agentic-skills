@@ -38,6 +38,12 @@ function currentImplementationSections(text) {
   return h2Sections(text).filter((section) => section.title.startsWith("Current Implementation - "));
 }
 
+function activeTodoSections(text) {
+  return h2Sections(text).filter(
+    (section) => section.title.startsWith("Current Implementation - ") || /^Phase \d+: /.test(section.title),
+  );
+}
+
 function uncheckedItems(text) {
   return [...text.matchAll(/^- \[ \] .+$/gm)].map((match) => ({
     line: lineNumberAt(text, match.index ?? 0),
@@ -69,6 +75,7 @@ if (todoText == null) {
 } else {
   const todoSections = h2Sections(todoText);
   const todoCurrent = currentImplementationSections(todoText);
+  const todoActive = activeTodoSections(todoText);
   const implementationHeadings = todoSections.filter((section) =>
     /^(Current|Previous) Implementation - /.test(section.title),
   );
@@ -76,6 +83,12 @@ if (todoText == null) {
   if (todoCurrent.length > 1) {
     failures.push(
       `tasks/todo.md has ${todoCurrent.length} Current Implementation sections; keep only one active task.`,
+    );
+  }
+
+  if (todoActive.length > 1) {
+    failures.push(
+      `tasks/todo.md has ${todoActive.length} active task sections; keep only one Current Implementation or Phase section.`,
     );
   }
 
@@ -92,7 +105,8 @@ if (todoText == null) {
 
   for (const item of uncheckedItems(todoText)) {
     const section = sectionForIndex(todoSections, item.index);
-    const inCurrentTask = section?.title.startsWith("Current Implementation - ");
+    const inCurrentTask =
+      section?.title.startsWith("Current Implementation - ") || /^Phase \d+: /.test(section?.title ?? "");
     if (!inCurrentTask) {
       failures.push(
         `tasks/todo.md line ${item.line} has an unchecked item outside the current active task: ${item.text}`,
@@ -101,7 +115,11 @@ if (todoText == null) {
   }
 
   if (todoCurrent.length === 0) {
-    info.push("tasks/todo.md has no active Current Implementation section.");
+    if (todoActive.length === 0) {
+      info.push("tasks/todo.md has no active Current Implementation or Phase section.");
+    } else {
+      info.push(`tasks/todo.md active task: ${todoActive[0].title}`);
+    }
   } else {
     info.push(`tasks/todo.md active task: ${todoCurrent[0].title.replace("Current Implementation - ", "")}`);
   }

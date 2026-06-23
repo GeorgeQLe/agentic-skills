@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-23 - Plan design-tree branch prioritization phase
+
+- Ran the repo-local `plan-phase` contract from `packs/agent-work-admin/codex/plan-phase/SKILL.md` because `plan-phase` is provided by the uninstalled `agent-work-admin` pack and is not visible in the active Codex registry.
+- Captured the visible plan-phase invocation in `prompts/plan-phase/skill-prompt-20260623-123918-design-tree-decomposition.md`.
+- Promoted `Deferred Implementation - Design-Tree Branch Prioritization And UI Experiment Split` into `## Phase 1: Design-Tree Branch Prioritization And UI Experiment Split` in `tasks/roadmap.md`.
+- Replaced `tasks/todo.md` with a standalone current phase containing TDD strategy, serial execution profile, concrete tests-first, implementation, green, and shipping steps.
+- Updated `scripts/audit-task-docs.mjs` so a single active `## Phase N:` section in `tasks/todo.md` is treated as a valid current execution surface, matching the local `plan-phase` contract while still rejecting unchecked items outside the active phase.
+
 ## 2026-06-23 - Exec blocked by missing plan-phase skill
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-123103-exec.md`.
