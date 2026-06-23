@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-23 — Keep `tasks/todo.md` current-only after shipping
+
+- Stale next-work recommendations kept recurring because agents prepended completed `Current Implementation` sections to `tasks/todo.md` and left old unchecked terminal items there after shipping.
+- Treat `tasks/todo.md` as the active execution contract only. After shipping, replace it with the next active task, a no-active-task state, or explicitly promoted next work; do not use it as an append-only history log.
+- Preserve completed implementation evidence in `tasks/history.md`, ship manifests, reconciliation reports, and git history. Before recommending next work, scan only current active sections or first reconcile old unchecked boxes against commits/history.
+
 ## 2026-06-22 — Verify cleanup commands against observed targets
 
 - A legacy global-skill cleanup recommendation treated `npx skillpacks uninstall-global` as sufficient, but the user's run returned "Removed 0" while previously inspected `~/.codex/skills/idea-scope-brief` and `~/.claude/skills/idea-scope-brief` still had `.agentic-skills-managed` markers.

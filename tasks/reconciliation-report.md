@@ -1,5 +1,56 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-23 — `$reconcile-dev-docs fix tasks`
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **fixed for active execution** — `tasks/todo.md` is no longer a stack of historical completed implementation sections with stale unchecked boxes.
+- History coverage: **fixed for stale task decisions** — added factual history for the previously ambiguous product-design/Alignmeant routing repair and legacy global cleanup/publish sequence.
+- Phase archives: **not changed** — no numbered phase archive was clearly missing from the current active task state.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: choose whether to promote a recurring advisory item or start a new planned phase.
+
+### Errors (resolved)
+
+- **tasks/todo.md** — Active task state contained old completed implementation sections and stale unchecked terminal steps, causing already-shipped work to be recommended as next work. Evidence: `tasks/todo.md` had unchecked items for product-design routing and legacy uninstall-global cleanup, while git/npm evidence shows those lanes shipped.
+
+### Warnings (remaining)
+
+- **tasks/roadmap.md** — The roadmap is still overloaded as a reverse-chronological implementation log with many stale `Current Implementation` headings. This run did not rewrite the full roadmap because doing so safely requires a broader editorial/archive pass.
+- **tasks/manual-todo.md** — Four human-only Skills Showcase production setup tasks remain deferred, not active blockers.
+- **tasks/recurring-todo.md** — Two due recurring advisory items remain unpromoted (`Devtool docs audit refresh`, `Spec drift check`).
+
+### Info
+
+- **Alignmeant repo** — `/Users/georgele/projects/tools/dev/alignmeant` has newer dirty UI-interview work, but the old routing-repair task is backed by pushed commit `3c4b598`. The dirty files were not modified by this reconciliation.
+- **NPM release state** — `npm view skillpacks version --workspaces=false` and `npm view @glexcorp/gskp version --workspaces=false` both returned `0.1.11` on 2026-06-23.
+
+### Fixed
+
+- [x] `tasks/todo.md` - Replaced the historical stacked implementation log with a current-only task state and reconciliation review. Evidence: old stale unchecked tasks were already shipped or superseded.
+- [x] `tasks/roadmap.md` - Added a usage note that old `Current Implementation` headings are historical unless explicitly promoted into `tasks/todo.md`.
+- [x] `tasks/history.md` - Added entries for the product-design/Alignmeant routing repair, legacy global cleanup/reinstall-base migration, and this reconciliation.
+- [x] `tasks/lessons.md` - Added a durable rule explaining why stale task entries kept recurring and how to prevent it.
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260623-112056-fix-tasks-drift.md` - Captured the visible invocation and pasted skill context.
+
+### Deferred
+
+- [ ] `tasks/roadmap.md` - Broadly convert or archive old `Current Implementation` headings so roadmap is no longer an overloaded historical log. This is editorial cleanup, not an active execution blocker after the `tasks/todo.md` reset.
+- [ ] `tasks/recurring-todo.md` - Decide whether to promote the due Devtool docs audit or spec drift check into `tasks/todo.md`.
+
+### Root Cause
+
+The recurring failure is procedural, not code-related: agents treated `tasks/todo.md` as both an active execution contract and an append-only history log. The repo workflow requires current work in `tasks/todo.md`, but multiple shipped runs prepended new `Current Implementation` sections and left old completed sections in place. Final handoff logic then scanned unchecked boxes globally and routed stale terminal steps as if they were active work.
+
+### Validation
+
+- Evidence inspected: `git status --short`, `git log --oneline -50`, targeted `git show --stat` for relevant commits, `npm view` for both package names, Alignmeant `git status`/`git log`, `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases`, and prior reconciliation reports.
+- Verification passed: `rg -n '^- \\[ \\]' tasks/todo.md` returned no matches; `git diff --check`.
+
+---
+
 ## 2026-06-22 — `$reconcile-dev-docs fix tasks`
 
 - **Mode:** fix · **Scope:** tasks

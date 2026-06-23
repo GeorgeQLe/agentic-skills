@@ -1,3 +1,7 @@
+## Roadmap Usage Note - 2026-06-23
+
+`tasks/todo.md` is the current execution contract. This roadmap currently contains historical reverse-chronological implementation notes, including older `Current Implementation` headings retained from prior sessions. Do not treat an old roadmap heading as active work unless it is explicitly promoted into `tasks/todo.md`.
+
 ## Current Implementation - Add `uninstall-global --dry-run`
 
 ### Goal

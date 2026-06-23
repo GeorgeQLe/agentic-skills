@@ -1,5 +1,24 @@
 # Session History
 
+## 2026-06-23 - Development docs active-task reset
+
+- Reconciled `tasks/todo.md` after `$reconcile-dev-docs fix tasks` and collapsed it from a historical stack of completed implementation sections back to a current-only task state.
+- Root cause: agents were using `tasks/todo.md` as both active execution contract and append-only history, leaving old completed `Current Implementation` sections and stale unchecked terminal steps that later handoffs treated as active work.
+- Verified stale unchecked items were already shipped or superseded: product-design routing repair (`87ed1017` in agentic-skills and pushed Alignmeant commit `3c4b598`), legacy global cleanup/reinstall-base migration (`64db1892`, `59ced4a0`, `524a94df`), and published package state (`skillpacks` and `@glexcorp/gskp` both at `0.1.11`).
+- Added a prevention lesson in `tasks/lessons.md` and a detailed reconciliation report in `tasks/reconciliation-report.md`.
+
+## 2026-06-23 - Product-design routing repair completion evidence
+
+- Recorded missing task-history evidence for the previously stale `Fix Alignment-Page Review Routing` todo block.
+- Agentic-skills routing contract changes shipped in commit `87ed1017` with `ux-variations` and `prototype` contract updates.
+- Alignmeant repair work shipped in pushed commit `3c4b598 Repair alignment page review routing`; newer dirty Alignmeant UI-interview files observed on 2026-06-23 are later unrelated work and were not touched by this reconciliation.
+
+## 2026-06-23 - Legacy global cleanup and reinstall-base completion evidence
+
+- Recorded missing task-history evidence for the previously stale `Fix skillpacks uninstall-global Legacy Cleanup` and global reinstall-base todo blocks.
+- Legacy cleanup implementation shipped in `64db1892`; reinstall-base migration shipped in `59ced4a0`; task status was updated in `524a94df`.
+- Release-state evidence shipped in `87f16a5e` and tag `v0.1.11`; npm metadata on 2026-06-23 reports both `skillpacks` and `@glexcorp/gskp` at `0.1.11`.
+
 ## 2026-06-23 - `uninstall-global --dry-run`
 
 - Added `npx skillpacks uninstall-global --dry-run` and `npx skillpacks uninstall-global --reinstall-base --dry-run`.
