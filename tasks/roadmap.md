@@ -1,3 +1,29 @@
+## Current Implementation - Fix npm Publish Verification Lag
+
+### Goal
+
+Make `packages/skillpacks/scripts/verify-published-package.sh` tolerate bounded npm metadata propagation lag after a successful publish without weakening the requirement that both `skillpacks` and `@glexcorp/gskp` publish at the exact expected version.
+
+### Plan
+
+1. Record active task tracking and preserve the existing dirty post-publish `0.1.11` source-state files.
+2. Finalize the current `0.1.11` release state by committing only `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`, tagging with the established `v0.1.11` format, and pushing commit plus tag.
+3. Update `verify-published-package.sh` so npm metadata verification polls before failing, with defaults `SKILLPACKS_VERIFY_PUBLISHED_ATTEMPTS=12` and `SKILLPACKS_VERIFY_PUBLISHED_DELAY_SECONDS=5`.
+4. Use `npm view ... --prefer-online --workspaces=false` for metadata checks while retaining the existing npm cache path and npx install smoke-test cache behavior.
+5. Print concise retry diagnostics that include the package, expected version, attempt count, and current mismatch; only continue to temp-project/npx smoke tests after metadata reports the expected version, latest dist-tag, and versions list.
+6. Add shell-level regression coverage with mocked npm metadata that is stale for the first attempts and then catches up, plus a failure case that remains stale and exits nonzero with the underlying mismatch details.
+7. Run requested verification: `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `./publish.sh --dry-run patch`, and `git diff --check`.
+8. Record review results, then commit and push the retry fix and task documentation on `master`.
+
+### Acceptance Criteria
+
+- Published-package metadata verification retries bounded stale npm metadata before failing.
+- Retry defaults are configurable by environment and safe for normal publish runs.
+- Metadata checks use `--prefer-online` and still verify latest version, latest dist-tag, license, and versions-list inclusion before smoke tests begin.
+- Regression tests prove stale-then-current metadata succeeds and persistently stale metadata fails before invoking npx smoke tests.
+- The existing `0.1.11` post-publish source state is tagged separately from the unpublished retry-fix commit.
+- Requested verification commands pass or any unrelated/pre-existing failures are proven and documented.
+
 ## Current Implementation - Update Fork Idea Branch Additive Spawning
 
 ### Goal

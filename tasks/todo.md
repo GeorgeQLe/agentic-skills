@@ -1,3 +1,37 @@
+# Current Implementation - Fix npm Publish Verification Lag
+
+## Goal
+
+Make `verify-published-package.sh` wait through bounded npm metadata propagation lag after publish, while preserving strict same-version verification for `skillpacks` and `@glexcorp/gskp`.
+
+## Plan
+
+- [x] Inspect current publish verification, tests, git/tag state, and release-state files.
+- [x] Commit and tag the existing `0.1.11` post-publish source state separately.
+- [x] Add bounded metadata polling with configurable attempts/delay and `--prefer-online` npm metadata reads.
+- [x] Add mocked shell-level tests for stale-then-current metadata and persistently stale metadata.
+- [x] Run requested verification commands.
+- [x] Record review results and ship the retry fix.
+
+## Acceptance Criteria
+
+- Metadata verification polls before failing and emits useful retry diagnostics.
+- Smoke tests start only after metadata confirms expected version, latest dist-tag, license, and versions-list inclusion.
+- Tests cover both retry success and retry exhaustion.
+- `v0.1.11` tags the source-state commit that matches the already-published release.
+- Final work is committed and pushed with a clean tracked tree.
+
+## Review
+
+- Confirmed npm registry metadata before tagging: `npm view skillpacks version --workspaces=false` and `npm view @glexcorp/gskp version --workspaces=false` both returned `0.1.11`.
+- Committed the post-publish source-state version bump separately as `87f16a5e` and tagged that commit as `v0.1.11`.
+- Added bounded metadata polling to `packages/skillpacks/scripts/verify-published-package.sh` with defaults `SKILLPACKS_VERIFY_PUBLISHED_ATTEMPTS=12` and `SKILLPACKS_VERIFY_PUBLISHED_DELAY_SECONDS=5`.
+- Metadata polling now uses `npm view ... --prefer-online --cache "$NPM_CACHE" --workspaces=false`, preserves the existing npx smoke-test cache path, prints retry diagnostics, and only starts temp-project smoke tests after metadata passes.
+- Added `packages/skillpacks/test/verify-published-package.test.mjs` covering stale-then-current metadata success and persistent stale metadata failure before npx smoke tests.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` after the source fingerprint changed.
+- Verification passed: `node --test packages/skillpacks/test/verify-published-package.test.mjs`, `bash -n packages/skillpacks/scripts/verify-published-package.sh`, `npm --workspace packages/skillpacks run test:node`, `npm run skillpacks:verify`, `./publish.sh --dry-run patch`, and `git diff --check`.
+- The first `npm run skillpacks:verify` attempt correctly failed on stale generated manifest metadata; regenerating the manifest fixed it and the rerun passed.
+
 # Current Implementation - Update Fork Idea Branch Additive Spawning
 
 ## Goal

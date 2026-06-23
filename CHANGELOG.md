@@ -8,6 +8,10 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+### Fixed
+
+- Published-package verification now polls npm metadata with `--prefer-online` before failing, so `./publish.sh patch` can tolerate bounded registry propagation lag after a successful publish without weakening version, dist-tag, license, or versions-list checks.
+
 ## [0.1.11] - 2026-06-23
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.

@@ -12,6 +12,8 @@ NPM_SPEC=${SKILLPACKS_NPM_SPEC:-$PACKAGE_NAME@latest}
 NPM_CACHE=${SKILLPACKS_NPM_CACHE:-/tmp/skillpacks-npm-cache}
 TMP_ROOT=${SKILLPACKS_TMP_ROOT:-/tmp}
 KEEP_TMP=${SKILLPACKS_KEEP_TMP:-1}
+VERIFY_PUBLISHED_ATTEMPTS=${SKILLPACKS_VERIFY_PUBLISHED_ATTEMPTS:-12}
+VERIFY_PUBLISHED_DELAY_SECONDS=${SKILLPACKS_VERIFY_PUBLISHED_DELAY_SECONDS:-5}
 
 TMP_DIRS=()
 
@@ -22,6 +24,16 @@ log() {
 fail() {
   printf 'FAIL: %s\n' "$*" >&2
   exit 1
+}
+
+validate_retry_config() {
+  if [[ ! "$VERIFY_PUBLISHED_ATTEMPTS" =~ ^[0-9]+$ ]] || (( VERIFY_PUBLISHED_ATTEMPTS < 1 )); then
+    fail "SKILLPACKS_VERIFY_PUBLISHED_ATTEMPTS must be a positive integer."
+  fi
+
+  if [[ ! "$VERIFY_PUBLISHED_DELAY_SECONDS" =~ ^[0-9]+$ ]]; then
+    fail "SKILLPACKS_VERIFY_PUBLISHED_DELAY_SECONDS must be a non-negative integer."
+  fi
 }
 
 make_tmp() {
@@ -44,6 +56,7 @@ cleanup() {
 }
 
 trap cleanup EXIT
+validate_retry_config
 
 run_in() {
   local cwd=$1
@@ -99,6 +112,50 @@ if (versions.length === 1) {
   console.log(`ok metadata: ${packageName}@latest=${expectedVersion}, license=${expectedLicense}; published versions=${versions.join(",")}`);
 }
 NODE
+}
+
+verify_metadata_with_retries() {
+  local attempt
+  local metadata_output
+  local last_metadata_output=""
+  local metadata_ok=0
+  local mismatch
+  local metadata_json=""
+  local versions_json=""
+
+  for ((attempt = 1; attempt <= VERIFY_PUBLISHED_ATTEMPTS; attempt++)); do
+    metadata_json=""
+    versions_json=""
+
+    if metadata_json=$(npm view "$PACKAGE_NAME" version license dist-tags.latest --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1) &&
+      versions_json=$(npm view "$PACKAGE_NAME" versions --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+      if metadata_output=$(assert_metadata "$metadata_json" "$versions_json" 2>&1); then
+        printf '%s\n' "$metadata_output"
+        metadata_ok=1
+        break
+      fi
+      last_metadata_output=$metadata_output
+    else
+      last_metadata_output="npm view metadata check failed for $PACKAGE_NAME: ${metadata_json}${versions_json:+; $versions_json}"
+    fi
+
+    if (( attempt < VERIFY_PUBLISHED_ATTEMPTS )); then
+      mismatch=${last_metadata_output//$'\n'/; }
+      printf 'metadata mismatch for %s expected %s (attempt %s/%s): %s; retrying in %ss\n' \
+        "$PACKAGE_NAME" \
+        "$EXPECTED_VERSION" \
+        "$attempt" \
+        "$VERIFY_PUBLISHED_ATTEMPTS" \
+        "$mismatch" \
+        "$VERIFY_PUBLISHED_DELAY_SECONDS" >&2
+      sleep "$VERIFY_PUBLISHED_DELAY_SECONDS"
+    fi
+  done
+
+  if [[ "$metadata_ok" != "1" ]]; then
+    printf '%s\n' "$last_metadata_output" >&2
+    fail "npm metadata for $PACKAGE_NAME did not match expected version $EXPECTED_VERSION after $VERIFY_PUBLISHED_ATTEMPTS attempt(s)."
+  fi
 }
 
 assert_project() {
@@ -240,9 +297,7 @@ assert_command_fails() {
 }
 
 log "Checking npm metadata for $PACKAGE_NAME"
-metadata_json=$(npm view "$PACKAGE_NAME" version license dist-tags.latest --json --cache "$NPM_CACHE" --workspaces=false)
-versions_json=$(npm view "$PACKAGE_NAME" versions --json --cache "$NPM_CACHE" --workspaces=false)
-assert_metadata "$metadata_json" "$versions_json"
+verify_metadata_with_retries
 
 log "Creating isolated temp projects"
 pack_dir=$(make_tmp pack-install)
