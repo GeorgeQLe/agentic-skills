@@ -123,14 +123,19 @@ model problems.
 
 Mirror: `packs/product-design/codex/state-model/SKILL.md` (layer1 parity test enforces both).
 
-**Resolve the existing internal contradiction.** The skill currently asserts both:
+**The model_ref-vs-model_tree_ref contradiction is already resolved** (state-model **v0.8**,
+2026-06-24, COA 1): the Architecture section and the Constraints "flow-tree write" line now both
+state `branches[].model_ref` is the primary flow-tree write and the top-level `model_tree_ref` is
+optional back-compat — matching §4 and the design-tree-loop convention. The remaining promotion
+work below is the *route-position* change only (orthogonal-sibling → first-class route step),
+which v0.8 intentionally did **not** make.
 
-- *Orthogonal sibling* — `## Architecture — Orthogonal Sibling To The Flow Tree` (L28–35);
-  "never modify the flow-tree `route` array" / "The only flow-tree write is the optional
-  `model_tree_ref` pointer" (L265); "does **not** appear in or modify that array" (L32);
-  Constraints L204 ("Do **not** touch the flow-tree `route` array").
-- *Per-branch owner* — `branches[].model_ref` is the "**primary**" linkage; stage-4 attaches via
-  `branches[].model_ref` (L108, L114, L116, L203).
+The still-off-route framing the executor must flip:
+
+- `## Architecture — Orthogonal Sibling To The Flow Tree` heading and its first bullet
+  ("The flow-tree `route` array stays a locked six-step sequence… does **not** appear in or
+  modify that array. Ordering is enforced by next-step recommendations, not the route enum.");
+  Constraints "never modify the flow-tree `route` array."
 
 **Edit toward a first-class route step** that owns **app/flow/screen** model attachments:
 
@@ -144,8 +149,9 @@ Mirror: `packs/product-design/codex/state-model/SKILL.md` (layer1 parity test en
   is a content judgment (obvious CRUD shape → quick confirm), not a session-count judgment.
 - Add app-level and per-screen attachment to the `model-tree-{topic}.yaml` shape section
   (L225–234) and the Output section (L219–223).
-- Bump `version: v0.6 → v0.7` (frontmatter L5). Archive prior SKILL.md and update CHANGELOG
-  (see §3).
+- Bump the version one decimal from the then-current `state-model` version (as of 2026-06-24 the
+  source is **v0.8** at `packs/product-design/claude/state-model/SKILL.md`, so the promotion bump
+  is **v0.8 → v0.9**). Archive prior SKILL.md and update CHANGELOG (see §3).
 
 ### 2.4 `packs/product-design/claude/create-ui-experiment/SKILL.md` (+ codex mirror)
 
@@ -162,10 +168,15 @@ Mirror: `packs/product-design/codex/create-ui-experiment/SKILL.md`.
   bullets stay as decision-rule branches).
 - Bump `version: v0.1 → v0.2` (frontmatter L5). Archive + CHANGELOG.
 
-### 2.5 `.claude/skills/ui-interview/SKILL.md`
+### 2.5 `packs/product-design/claude/ui-interview/SKILL.md` (+ codex mirror)
 
-- Recommended-next-command lines L183, L195, L199 currently route to
-  `/user-flow-map --prototype-build-plan [topic]`. **Edit:** route to
+> Source-of-truth note: `ui-interview`, `ux-variations`, and `user-flow-map` are authored under
+> `packs/product-design/claude/` (and `…/codex/`) — that is what the skillpacks manifest bundles.
+> The `.claude/skills/<skill>/SKILL.md` copies are **gitignored generated install roots** and can
+> lag the source; do not edit them. Re-derive the line anchors below against the `packs/` source.
+
+- Recommended-next-command lines (route to `/user-flow-map --prototype-build-plan [topic]`).
+  **Edit:** route to
   `/create-ui-experiment [specific-ux-variation]` as the mandatory next step, with the build
   plan as the step after.
 - Reconcile the standing tension: the layer1 test asserts ui-interview must contain "Do not
@@ -175,13 +186,16 @@ Mirror: `packs/product-design/codex/create-ui-experiment/SKILL.md`.
   to `create-ui-experiment` becomes the default — so the "do not route default clickable
   buildout" assertion must be reworded (ui-interview still does not *build* the clickable
   prototype; it now *routes* to the skill that does).
-- Bump `version: v0.25 → v0.26` (frontmatter). Archive + CHANGELOG.
+- Bump one decimal from the current source version (as of 2026-06-24, `ui-interview` is **v0.27**
+  at `packs/product-design/claude/ui-interview/SKILL.md`, so **v0.27 → v0.28**) in both mirrors.
+  Archive + CHANGELOG.
 
-### 2.6 `.claude/skills/ux-variations/SKILL.md`
+### 2.6 `packs/product-design/claude/ux-variations/SKILL.md` (+ codex mirror)
 
-- Next-command stays `/ui-interview [specific-ux-variation]` (L218). Keep its `model_ref`-
-  confirmed prerequisite (L38) — now **upstream-guaranteed** by the mandatory `state-model`
-  step. Likely **no version bump** unless wording changes (it is currently v0.26, L5).
+- Next-command stays `/ui-interview [specific-ux-variation]`. Keep its `model_ref`-confirmed
+  prerequisite — now **upstream-guaranteed** by the mandatory `state-model` step. Likely **no
+  version bump** unless wording changes (source is **v0.28** as of 2026-06-24). `user-flow-map`
+  source is **v1.6**.
 
 ### 2.7 `design/flow-tree.schema.json`
 
@@ -231,8 +245,11 @@ Mirror: `packs/product-design/codex/create-ui-experiment/SKILL.md`.
 
 Per `CLAUDE.md` Skill Versioning:
 
-- [ ] `state-model` `v0.6 → v0.7`; `create-ui-experiment` `v0.1 → v0.2`; `ui-interview`
-      `v0.25 → v0.26`. (Decimal bump = non-refactor behavioral change.)
+- [ ] Bump each from its **current source** version (verify with `grep '^version:'` against the
+      `packs/product-design/{claude,codex}/<skill>/SKILL.md` source, not the gitignored
+      `.claude/skills` copies). As of 2026-06-24: `state-model` **v0.8 → v0.9**,
+      `create-ui-experiment` **v0.1 → v0.2**, `ui-interview` **v0.27 → v0.28`. (Decimal bump =
+      non-refactor behavioral change.)
 - [ ] Archive each prior SKILL.md via `scripts/skill-archive.sh <skill-dir>` **before** bumping,
       to `archive/<old-version>/SKILL.md`.
 - [ ] Update each skill's `CHANGELOG.md` with what changed for the new version.

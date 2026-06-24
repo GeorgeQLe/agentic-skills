@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.8
+version: v0.7
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -31,7 +31,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 - The flow-tree `route` array stays a locked six-step sequence (`user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview`). This skill does **not** appear in or modify that array. Ordering is enforced by next-step recommendations, not the route enum.
 - This skill owns its own `design/model-tree-{topic}.yaml` manifest, a domain-shaped sibling to `design/flow-tree-{topic}.yaml`.
-- On approval it attaches the model to its user-flow branch via `branches[].model_ref` (the **primary** flow-tree write) and additionally writes the **optional** top-level `model_tree_ref` pointer as backward-compatible discovery metadata. The top-level pointer is never required; the per-branch `model_ref` is authoritative. Neither write touches the `route` array.
+- On approval it writes an **optional** top-level `model_tree_ref` pointer into the flow-tree manifest so downstream skills can discover the model. The pointer is backward-compatible and never required.
 - **Flow bindings are authoritative in the model-tree only.** Every model element records `flow_bindings[]` pointing at flow-tree nodes. These bindings are never duplicated into the flow tree, to prevent drift.
 
 ## Prerequisites
@@ -264,7 +264,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - **Logical only.** Do not specify storage engines, databases, real endpoints/URLs, authentication/authorization mechanisms, migrations, indexes, deployment, or any physical architecture. When a physical concern arises, record it as an explicit deferral to `$spec-interview`, not as a decision. The model captures *what* the domain is, not *how* it is stored or served.
 - **Anchor to the flow, not to a UI.** The model is a property of the user flow. Do not encode any single UX variation or UI presentation. UX variations re-skin the same entities/actions/states.
-- **Bindings are authoritative in the model-tree only.** Never duplicate `flow_bindings` into the flow tree; never modify the flow-tree `route` array. The flow-tree writes are the per-branch `branches[].model_ref` attachment (primary) plus the optional top-level `model_tree_ref` back-compat pointer.
+- **Bindings are authoritative in the model-tree only.** Never duplicate `flow_bindings` into the flow tree; never modify the flow-tree `route` array. The only flow-tree write is the optional `model_tree_ref` pointer.
 - **One heavy phase per session.** Run setup, one framework, or synthesis per invocation; advance by re-invoking `$state-model`. Fold to a single session only for fewer-than-3-framework domains or `--no-chunk`. Do not queue framework work in `tasks/todo.md` or hand it to `$exec`.
 - **Synthesis requires at least one framework intermediate.** Do not synthesize from zero evidence.
 - The live cursor is per-framework intermediate existence; the model-tree is written only at synthesis as the post-approval manifest, never as a live run-manifest.

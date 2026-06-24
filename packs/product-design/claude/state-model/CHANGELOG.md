@@ -1,5 +1,9 @@
 # state-model changelog (claude)
 
+## v0.8 - 2026-06-24
+
+- Resolved an internal contradiction about flow-tree writes: the **Architecture** section and the **Constraints** "only flow-tree write" line said the skill writes only the optional top-level `model_tree_ref` pointer, contradicting §4 / the per-branch iteration contract, which attach the model via `branches[].model_ref`. Both now state the same thing the design-tree-loop convention does: `branches[].model_ref` is the **primary** flow-tree write and the top-level `model_tree_ref` is optional back-compat. No routing or behavior change; the skill remains off the `route` enum.
+
 ## v0.7 - 2026-06-24
 
 - Rewrote the Progress Handoff Block `Session guidance` field from a passive recommendation into an action directive: clear context (`/clear`) and run the exact next command in a fresh session, where the skill cold-starts and reads the durable cursor. Clarified that the `## Invoke With YAML` block is optional routing context, not consumed state.
