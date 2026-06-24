@@ -33,6 +33,10 @@ function pageHtml(overrides: {
   viewport?: boolean;
   tts?: string | null;
   openInput?: boolean;
+  openQuestion?: boolean;
+  recommended?: boolean;
+  confidence?: string | null;
+  clarifyCopy?: boolean;
   sidecar?: string | null;
   body?: string;
 } = {}): string {
@@ -44,6 +48,10 @@ function pageHtml(overrides: {
     viewport = true,
     tts = TTS_TAG,
     openInput = true,
+    openQuestion = true,
+    recommended = true,
+    confidence = "medium",
+    clarifyCopy = true,
     sidecar = "research/_working/interrogation-positioning-r1.yaml",
     body = "",
   } = overrides;
@@ -54,7 +62,16 @@ function pageHtml(overrides: {
     round === null ? "" : `data-interrogation-round="${round}"`,
     gate === null ? "" : `data-interrogation-gate="${gate}"`,
   ].filter(Boolean).join(" ");
-  const open = openInput ? '<textarea data-open-input placeholder="In your words"></textarea>' : "";
+  const input = openInput ? '<textarea data-open-input placeholder="In your words"></textarea>' : "";
+  const recommendedEl = recommended ? '<p data-recommended-answer>e.g. mid-market RevOps leads</p>' : "";
+  const confidenceEl = confidence === null
+    ? ""
+    : `<span data-agent-confidence="${confidence}">Agent confidence: ${confidence}</span>`;
+  const clarifyEl = clarifyCopy ? '<button data-clarify-copy>Need clarification</button>' : "";
+  const inner = `${recommendedEl}${confidenceEl}${input}${clarifyEl}`;
+  const open = openQuestion
+    ? `<div data-open-question>${inner}</div>`
+    : inner;
   const compile = sidecar === null
     ? '<section class="compile"><button>Compile Responses</button></section>'
     : `<section class="compile" data-answer-sidecar="${sidecar}"><button>Compile Responses</button></section>`;
@@ -110,6 +127,7 @@ describe("audit-interrogation-pages fixture trees", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Active pages: 2");
     expect(result.stdout).toContain("Open input: 2 pages, exact");
+    expect(result.stdout).toContain("Open question: 2 pages, exact");
     expect(result.stdout).toContain("Confidence gate: 2 pages, exact");
   });
 
@@ -162,6 +180,45 @@ describe("audit-interrogation-pages fixture trees", () => {
     expect(result.stderr).toContain("Open input drift:");
     expect(result.stderr).toContain("No open input in interrogation/positioning-r1-acme.html");
     expect(result.stdout).toContain("Open input: 1 pages, DRIFT");
+  });
+
+  it("fails when no open-question block is present", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ openQuestion: false }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("No open-question block in interrogation/positioning-r1-acme.html");
+    expect(result.stdout).toContain("Open question: 1 pages, DRIFT");
+  });
+
+  it("fails when an open question is missing its recommended answer", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ recommended: false }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Missing recommended answer in interrogation/positioning-r1-acme.html");
+  });
+
+  it("fails on a missing or invalid agent-confidence badge", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ confidence: null }));
+    writePage(root, "positioning-r2-acme.html", pageHtml({ round: "2", confidence: "certain" }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Missing agent-confidence badge in interrogation/positioning-r1-acme.html");
+    expect(result.stderr).toContain('Invalid data-agent-confidence "certain" in interrogation/positioning-r2-acme.html');
+  });
+
+  it("fails when an open question is missing its clarify-copy button", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ clarifyCopy: false }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Missing clarify-copy button in interrogation/positioning-r1-acme.html");
   });
 
   it("fails on a missing or invalid confidence gate", () => {

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-24 — Interrogation open-question markers (recommended answer + agent confidence + clarify-copy)
+
+- Made interrogation-page open questions self-explanatory: extended `docs/interrogation-page-convention.md` so every open-answer question (free-text and recommend-and-override) sits in a `data-open-question` block carrying a `data-recommended-answer` example, a `data-agent-confidence="high|medium|low"` badge, and a `data-clarify-copy` button alongside the existing `data-open-input`. Added a "Need clarification (copy)" paragraph specifying the fixed clipboard payload (`Question: "<text>"` + clarification line) using the alignment `copyText` Clipboard-API-with-textarea-fallback idiom; clipboard-only, not sidecar-captured. Sidecar `open_answers` entries now also record `recommended_answer` + `agent_confidence`.
+- Regenerated all 18 participating bundles (9 skills × claude/codex) via `scripts/upgrade-interrogation-page.mjs`; synced installed `.claude/.codex` copies for the three installed participating skills and the gitignored package build mirror. No skill version bumps (convention infrastructure; generator does not version bundles).
+- Added mechanical enforcement: new "Open question" check in `scripts/audit-interrogation-pages.mjs` (≥1 `data-open-question`, and recommended/confidence/clarify markers each ≥ block count, confidence value in `{high, medium, low}`) plus failing-case coverage in `tests/layer1/audit-interrogation-pages.test.ts`.
+- Verified: `upgrade-interrogation-page --check` exit 0; `audit-interrogation-pages` exact; layer1 audit + confidence-gate tests 33/33; `skill-archive-audit --strict`; `audit-task-docs`; `build:check`; showcase validate; `skillpacks:verify`; `git diff --check --cached`. Manifest/showcase data unchanged (bundles not in their fingerprints).
+- Manifest: `tasks/ship-manifest-2026-06-24-interrogation-open-question-markers.md`.
+
 ## 2026-06-24 - Skillpacks 0.1.12 publish-boundary reconciliation
 
 - Reconciled a concurrent `/ship-end` session's in-flight 0.1.12 publish-prep into a coherent, shippable state. The other session had staged an expanded `CHANGELOG.md` `[0.1.12]` section (Added/Changed/Fixed/Verification) and unstaged `tasks/roadmap.md` + `tasks/todo.md` planning edits, but stalled before creating the ship manifest its CHANGELOG referenced and before committing.

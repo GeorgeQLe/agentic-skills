@@ -32,6 +32,11 @@ const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*>
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const FILENAME_RE = /^[a-z0-9-]+-r(\d+)-[a-z0-9-]+\.html$/;
 const OPEN_INPUT_RE = /<(?:textarea|input)\b[^>]*\bdata-open-input\b/i;
+const OPEN_QUESTION_RE = /\bdata-open-question\b/gi;
+const RECOMMENDED_ANSWER_RE = /\bdata-recommended-answer\b/gi;
+const AGENT_CONFIDENCE_RE = /\bdata-agent-confidence="([^"]*)"/gi;
+const CLARIFY_COPY_RE = /<button\b[^>]*\bdata-clarify-copy\b/gi;
+const CONFIDENCE_VALUES = new Set(["high", "medium", "low"]);
 const SIDECAR_VALUE_RE = /interrogation-[a-z0-9-]+-r\d+\.yaml/;
 
 const pages = existsSync(interrogationDir)
@@ -43,6 +48,7 @@ const metadataDiagnostics = [];
 const viewportDiagnostics = [];
 const embedDiagnostics = [];
 const openInputDiagnostics = [];
+const openQuestionDiagnostics = [];
 const gateDiagnostics = [];
 const namingDiagnostics = [];
 const sidecarDiagnostics = [];
@@ -143,6 +149,42 @@ for (const file of pages) {
     );
   }
 
+  // Open-question block markers: each data-open-question block must carry a
+  // recommended answer, an agent-confidence badge, and a clarify-copy button.
+  // Count-based association keeps this robust without a DOM parser.
+  const openQuestionCount = (html.match(OPEN_QUESTION_RE) || []).length;
+  if (openQuestionCount < 1) {
+    openQuestionDiagnostics.push(
+      `No open-question block in ${rel} — each round must contain at least one well-formed data-open-question block wrapping an open input with a recommended answer, confidence badge, and clarify-copy button.`,
+    );
+  } else {
+    const recommendedCount = (html.match(RECOMMENDED_ANSWER_RE) || []).length;
+    const confidenceMatches = [...html.matchAll(AGENT_CONFIDENCE_RE)];
+    const clarifyCount = (html.match(CLARIFY_COPY_RE) || []).length;
+    if (recommendedCount < openQuestionCount) {
+      openQuestionDiagnostics.push(
+        `Missing recommended answer in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${recommendedCount} data-recommended-answer element(s); each open question needs a recommended/example answer.`,
+      );
+    }
+    if (confidenceMatches.length < openQuestionCount) {
+      openQuestionDiagnostics.push(
+        `Missing agent-confidence badge in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${confidenceMatches.length} data-agent-confidence badge(s); each open question needs a data-agent-confidence="high|medium|low" badge.`,
+      );
+    }
+    for (const match of confidenceMatches) {
+      if (!CONFIDENCE_VALUES.has(match[1])) {
+        openQuestionDiagnostics.push(
+          `Invalid data-agent-confidence "${match[1]}" in ${rel} — must be one of: ${[...CONFIDENCE_VALUES].join(", ")}.`,
+        );
+      }
+    }
+    if (clarifyCount < openQuestionCount) {
+      openQuestionDiagnostics.push(
+        `Missing clarify-copy button in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${clarifyCount} data-clarify-copy button(s); each open question needs a Need-clarification copy button.`,
+      );
+    }
+  }
+
   // Confidence/coverage exit gate.
   const gateMatch = html.match(/\bdata-interrogation-gate="([^"]*)"/);
   if (!gateMatch) {
@@ -174,6 +216,7 @@ console.log(`Page metadata: ${pages.length} pages, ${metadataDiagnostics.length 
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Open input: ${pages.length} pages, ${openInputDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Open question: ${pages.length} pages, ${openQuestionDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Confidence gate: ${pages.length} pages, ${gateDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Round naming: ${pages.length} pages, ${namingDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Answer sidecar: ${pages.length} pages, ${sidecarDiagnostics.length ? "DRIFT" : "exact"}`);
@@ -185,6 +228,7 @@ const groups = [
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],
   ["Open input drift:", openInputDiagnostics],
+  ["Open question drift:", openQuestionDiagnostics],
   ["Confidence gate drift:", gateDiagnostics],
   ["Round naming drift:", namingDiagnostics],
   ["Answer sidecar drift:", sidecarDiagnostics],
