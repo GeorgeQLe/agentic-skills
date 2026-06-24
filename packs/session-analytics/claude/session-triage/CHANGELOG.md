@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-24
+
+- Updated the Pack Availability Guard to check `enabled_skills`, enabled provider packs, and local/global skill files before recommending downstream skills, so individually installed skills are not treated as missing just because their pack is absent from `enabled_packs`.
+
 ## v0.5 - 2026-06-23
 
 - Added an explicit Pack Availability Guard for benchmark regression loop-closing: check `.agents/project.json` `enabled_packs` for `agentic-skills-bench` before recommending or relying on `/benchmark-test-skill <skill>`, recommend `npx skillpacks install agentic-skills-bench` when missing, and tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible after install.

@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.6
+version: v0.5
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -74,13 +74,7 @@ Use `$analyze-sessions` instead for informational history questions — single o
 
 ## Pack Availability Guard
 
-Before recommending another skill, verify the target skill itself is available before relying on pack availability:
-
-- Treat `.agents/project.json` `enabled_skills.<skill-name>` as direct availability, even when the provider pack is not listed in `enabled_packs`.
-- Treat `.agents/project.json` `enabled_packs` as availability only when the enabled pack provides the target skill; use `scripts/pack.sh which <skill-name>` when available to identify the provider.
-- Treat local or global skill files as direct availability evidence, including `.codex/skills/<skill-name>/SKILL.md`, `.claude/skills/<skill-name>/SKILL.md`, `~/.codex/skills/<skill-name>/SKILL.md`, and `~/.claude/skills/<skill-name>/SKILL.md`.
-
-If the target skill is unavailable, recommend `npx skillpacks install <pack-or-skill>` from the project shell before the skill invocation. Prefer the provider pack when it is known; otherwise recommend installing the target skill by name. Tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale after install.
+Before recommending a skill from another pack, verify the target pack is enabled via `.agents/project.json` `enabled_packs`. If it is not enabled, recommend `npx skillpacks install <pack>` from the project shell before the skill invocation.
 
 For benchmark regression loop-closing, treat `$benchmark-test-skill` as owned by `agentic-skills-bench`: check whether `.agents/project.json` `enabled_packs` includes `agentic-skills-bench` before recommending or relying on `$benchmark-test-skill <skill>`. If `agentic-skills-bench` is not enabled, recommend `npx skillpacks install agentic-skills-bench` from the project shell first, then tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale after install.
 
@@ -108,7 +102,7 @@ Produce a structured report with:
 - Do not create or suggest `$analyze-session`; use `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
-- When recommending another skill, apply the Pack Availability Guard: check `enabled_skills`, enabled provider packs, and local/global skill files before recommending the skill directly; if unavailable, prepend `npx skillpacks install <pack-or-skill>` to the recommendation.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Default Shipping Contract
 

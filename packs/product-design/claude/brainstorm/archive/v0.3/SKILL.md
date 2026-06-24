@@ -2,7 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /feature-interview
 type: planning
-version: v0.4
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "[optional: focus area]"
 context_intake: scoped
@@ -12,22 +12,6 @@ visual_tier: prototype
 # Brainstorm
 
 Evaluate the current codebase and generate actionable suggestions that the user can take into `/feature-interview` for human/agent alignment, planning-destination triage, and follow-up specification or roadmap work.
-
-## Follow-up Skill Availability Gate
-
-Before listing any `/feature-interview` prompts, verify that `feature-interview` is available through at least one of these signals:
-
-- `.agents/project.json` has `enabled_skills.feature-interview`.
-- `.agents/project.json` has an enabled pack that provides `feature-interview`; use `scripts/pack.sh which feature-interview` when available to identify the provider.
-- A local or global skill file exists, such as `.claude/skills/feature-interview/SKILL.md`, `.codex/skills/feature-interview/SKILL.md`, `~/.claude/skills/feature-interview/SKILL.md`, or `~/.codex/skills/feature-interview/SKILL.md`.
-
-If `feature-interview` is unavailable, the first line of the displayed output and the first line appended for this run in `tasks/ideas.md` must be:
-
-```bash
-npx skillpacks install feature-interview
-```
-
-Then tell Claude users to run `/reload-skills`, then `/clear` or restart if `/feature-interview` remains invisible after install. Put this prerequisite before any brainstorm suggestion or `/feature-interview <topic>` prompt.
 
 ## Process
 

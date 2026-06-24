@@ -2,6 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Brainstorm Feature-Interview Availability Gate
+
+### Goal
+
+Make `$brainstorm` and `/brainstorm` guard their downstream `feature-interview` prompts with an availability check so users are told to install `feature-interview` before copying unavailable follow-up commands. Update the related `session-triage` availability guard so it recognizes individually enabled skills as well as enabled packs.
+
+### Plan
+
+1. Capture the skill-update prompt and promote this focused implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+2. Archive and bump the canonical brainstorm skill sources, then add an output preflight contract that checks `.agents/project.json.enabled_skills.feature-interview`, enabled packs that provide `feature-interview`, and local/global installed skill files before listing follow-up prompts.
+3. Mirror the brainstorm availability rule into the active `.codex/.claude` installed skill copies so the current repo behavior is fixed immediately.
+4. Archive and bump canonical `session-triage` sources, then update the Pack Availability Guard to account for `.agents/project.json.enabled_skills` in addition to `enabled_packs`; sync the active installed mirrors without dropping newer source behavior.
+5. Update changelogs, correction lessons, and any managed-copy metadata affected by the mirror sync.
+6. Validate with the focused layer1 contract test, targeted `rg` checks, version/archive audits, task-doc audit, diff hygiene, and focused contract replay against the current project metadata.
+7. Document review results, ship manifest, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- Brainstorm output instructions require an availability preflight before any `feature-interview` prompts.
+- When `feature-interview` is unavailable, the displayed output and appended `tasks/ideas.md` run section begin with `npx skillpacks install feature-interview`.
+- Codex brainstorm guidance tells users to start a fresh Codex CLI session if `$feature-interview` remains unavailable after install.
+- Claude brainstorm guidance uses `/feature-interview` and tells users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible.
+- Session-triage pack/skill availability guidance checks `enabled_skills` and `enabled_packs`, not only packs.
+- Canonical pack sources and current installed mirrors are consistent for this behavior.
+
+### Results
+
+- Brainstorm mirrors now gate `feature-interview` prompts behind direct skill, provider-pack, or local/global skill-file availability.
+- Missing `feature-interview` now puts `npx skillpacks install feature-interview` before brainstorm suggestions in both displayed output and `tasks/ideas.md` guidance.
+- Session-triage mirrors now treat `enabled_skills.<skill-name>` as direct availability before checking enabled provider packs.
+- Verification passed; see `tasks/ship-manifest-2026-06-24-brainstorm-feature-interview-availability.md`.
+
 ## Historical Implementation - Clarify Alignment Review YAML Handoffs
 
 ### Goal

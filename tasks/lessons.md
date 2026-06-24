@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-24 — Downstream skill prompts need availability gates
+
+- A `$brainstorm` handoff produced `$feature-interview ...` copy-paste prompts even though `feature-interview` was not enabled in `.agents/project.json` and no local/global skill file was installed.
+- Before recommending or writing prompts for a downstream skill, verify direct availability through `.agents/project.json.enabled_skills`, an enabled provider pack, or local/global skill files.
+- If the downstream skill is missing, put the `npx skillpacks install <skill-or-pack>` prerequisite before the unavailable command in both user-facing output and durable artifacts, then include the agent-specific reload or fresh-session guidance.
+
 ## 2026-06-23 — Keep `tasks/todo.md` current-only after shipping
 
 - Stale next-work recommendations kept recurring because agents prepended completed `Current Implementation` sections to `tasks/todo.md` and left old unchecked terminal items there after shipping.

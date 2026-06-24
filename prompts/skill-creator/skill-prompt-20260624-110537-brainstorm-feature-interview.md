@@ -1,8 +1,84 @@
 ---
+skill: skill-creator
+agent: codex
+captured_at: 2026-06-24T11:05:37-04:00
+source: user-invocation
+prompt_scope: visible-user-invocation
+---
+
+Target
+  Current repo skill behavior for $brainstorm, using evidence from .agents/project.json, installed .codex/.claude skills, tasks/ideas.md, and the active conversation.
+
+  User-Identified Issue
+  $brainstorm produced $feature-interview ... prompts, but feature-interview was not available. The output should have started with:
+
+  npx skillpacks install feature-interview
+
+  to enable the brainstorm follow-up workflow.
+
+  Verification Verdict: Verified
+  Evidence:
+
+  - tasks/ideas.md contains many $feature-interview ... prompts and no install prerequisite.
+  - .agents/project.json has enabled_skills.brainstorm, but no feature-interview.
+  - Local and global .codex/.claude skill searches found no feature-interview skill.
+  - Active session behavior confirmed $feature-interview was unavailable.
+
+  Timeline
+
+  1. $brainstorm generated ideas in tasks/ideas.md.
+  2. Each idea routed to $feature-interview.
+  3. feature-interview was not installed or enabled.
+  4. The next copied command failed as an unavailable skill.
+  5. User corrected that the brainstorm workflow should have advertised the install prerequisite first.
+
+  Root Cause
+  brainstorm has a next-step routing contract but no availability gate. Both mirrored skills say to provide /feature-interview or $feature-interview prompts, but neither checks .agents/project.json
+  nor installed skill files before recommending that downstream skill.
+
+  There is also a secondary metadata nuance: session-triage says to check only enabled_packs, but skillpacks install session-triage records individual installs under enabled_skills. Availability
+  checks should account for both.
+
+  Responsible Contract Gap
+  Primary: .codex/skills/brainstorm/SKILL.md and .claude/skills/brainstorm/SKILL.md.
+
+  Secondary: session-triage Pack Availability Guard should mention enabled_skills as well as enabled_packs.
+
+  Recommended Fix
+  Patch both brainstorm skill variants with an output preflight rule:
+
+  Before listing `$feature-interview` prompts, verify `feature-interview` is enabled through `.agents/project.json` `enabled_skills.feature-interview` or an enabled pack that provides it, or by
+  finding the local/global skill file. If unavailable, put this prerequisite at the top of the displayed output and `tasks/ideas.md` entry:
+
+  `npx skillpacks install feature-interview`
+
+  Then tell Codex users to start a fresh Codex CLI session if `$feature-interview` remains unavailable after install.
+
+  Claude variant should use /feature-interview and mention /reload-skills, then /clear or restart if needed.
+
+  Validation Plan
+
+  - rg -n "feature-interview|skillpacks install feature-interview|enabled_skills|enabled_packs" .codex/skills/brainstorm .claude/skills/brainstorm
+  - Re-run $brainstorm in a repo without feature-interview.
+  - Confirm the displayed output and appended tasks/ideas.md section begin with the install prerequisite before any feature-interview prompt.
+
+  Recommended Next Skill
+  skill-dev is not enabled here, so first run:
+
+  npx skillpacks install skill-dev
+
+  Then use:
+
+  $targeted-skill-builder brainstorm
+
+<skill>
+<name>brainstorm</name>
+<path>/Users/georgele/projects/tools/agentic-skills/.codex/skills/brainstorm/SKILL.md</path>
+---
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with $feature-interview
 type: planning
-version: v0.4
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "[optional focus area]"
 context_intake: scoped
@@ -14,22 +90,6 @@ visual_tier: prototype
 Invoke as `$brainstorm`.
 
 Evaluate the current codebase and generate actionable suggestions that the user can take into `$feature-interview` for human/agent alignment, planning-destination triage, and follow-up specification or roadmap work.
-
-## Follow-up Skill Availability Gate
-
-Before listing any `$feature-interview` prompts, verify that `feature-interview` is available through at least one of these signals:
-
-- `.agents/project.json` has `enabled_skills.feature-interview`.
-- `.agents/project.json` has an enabled pack that provides `feature-interview`; use `scripts/pack.sh which feature-interview` when available to identify the provider.
-- A local or global skill file exists, such as `.codex/skills/feature-interview/SKILL.md`, `.claude/skills/feature-interview/SKILL.md`, `~/.codex/skills/feature-interview/SKILL.md`, or `~/.claude/skills/feature-interview/SKILL.md`.
-
-If `feature-interview` is unavailable, the first line of the displayed output and the first line appended for this run in `tasks/ideas.md` must be:
-
-```bash
-npx skillpacks install feature-interview
-```
-
-Then tell Codex users to start a fresh Codex CLI session if `$feature-interview` remains unavailable after install. Put this prerequisite before any brainstorm suggestion or `$feature-interview <topic>` prompt.
 
 ## Process
 
@@ -100,3 +160,5 @@ By default, this skill reports results inline and writes only its normal durable
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
+
+</skill>

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-24
+
+- Added a `feature-interview` availability preflight: check `enabled_skills`, enabled provider packs, or local/global skill files before listing `$feature-interview` prompts, and put `npx skillpacks install feature-interview` first when unavailable.
+
 ## v0.3 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

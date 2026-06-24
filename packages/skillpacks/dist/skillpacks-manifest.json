@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "befbbfd9acdac168b5fe8e06a2ebf06aff3c7048acd564c0118529648058a963",
+  "source_fingerprint": "856b5b3f9122fa169e495867a7a429a9a9c245322987509cd063f2b2a5fe0200",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7599,17 +7599,18 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/product-design/claude/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "d2647c02096bca86edaf07e7d09c71ca4499d9899001a9692fcbbf5c218e1bf7",
+      "content_sha256": "ff191b1dc8a406b506ff95ac116cec2707bcef8bb691782c50dbc69359bc0aec",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/brainstorm",
       "deck_memberships": []
@@ -7836,7 +7837,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.7",
+      "version": "v0.8",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7844,7 +7845,7 @@
       ],
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "d408df3a8a69e68a89aca01cded7b738ad50d72f71a3b86470b5b97ed58e4238",
+      "content_sha256": "decac7720985ee70479dd67eb0cb616f68121c40e5b9daa3df77b1394ba60ff9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7852,7 +7853,8 @@
         "v0.3",
         "v0.4",
         "v0.5",
-        "v0.6"
+        "v0.6",
+        "v0.7"
       ],
       "command": "/state-model",
       "deck_memberships": []
@@ -7995,17 +7997,18 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "packs/product-design/codex/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "42196e3b48e8b62ea820cf51448ba177b802fa558b4d087a84fdd225e0b3c140",
+      "content_sha256": "9c1128e6774ad0da24823df8f6fa6b1947febf9a3b0739cbefb22dad8d0dff06",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$brainstorm",
       "deck_memberships": []
@@ -8232,7 +8235,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.7",
+      "version": "v0.8",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8240,7 +8243,7 @@
       ],
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "1205af032df474f0469dc220ac1bdd3a8039de41ca27e770bec7a6dcb8ae1ca4",
+      "content_sha256": "35e651cd0458480757ec2d150923eb8ac360aba01fa6d3310321d5b27bae7a2c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8248,7 +8251,8 @@
         "v0.3",
         "v0.4",
         "v0.5",
-        "v0.6"
+        "v0.6",
+        "v0.7"
       ],
       "command": "$state-model",
       "deck_memberships": []
@@ -9099,17 +9103,18 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
       "required_conventions": [],
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "e2232adb8951657fe0f599c6e4cc8517b789ed93a76022ea850f376e78d31ea9",
+      "content_sha256": "67fb4af08288f8fdbd4603ecfe7e7ba6c07d87194499e7f908b643befe90f61b",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/session-triage",
       "deck_memberships": []
@@ -9165,17 +9170,18 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.5",
+      "version": "v0.6",
       "required_conventions": [],
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "810df8254944482797e410b91a93139e132db1140ca3503d889f8f57f803818c",
+      "content_sha256": "8f10954e302f387236c8ece3c533e418d397fd2c0a2c78f66df682e02fa53bce",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$session-triage",
       "deck_memberships": []

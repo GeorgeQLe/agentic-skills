@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-06-24 - Brainstorm feature-interview availability gate
+
+- Captured the visible skill-update invocation in `prompts/skill-creator/skill-prompt-20260624-110537-brainstorm-feature-interview.md`.
+- Archived and bumped mirrored `brainstorm` contracts from `v0.3` to `v0.4`.
+- Added a `feature-interview` availability gate so `$brainstorm` and `/brainstorm` check `enabled_skills`, enabled provider packs, and local/global skill files before listing follow-up prompts.
+- Required missing `feature-interview` output to put `npx skillpacks install feature-interview` first in both displayed output and the appended `tasks/ideas.md` run entry, with Codex fresh-session and Claude `/reload-skills` guidance.
+- Archived and bumped mirrored `session-triage` contracts from `v0.5` to `v0.6`.
+- Updated `session-triage` Pack Availability Guard to treat `.agents/project.json.enabled_skills` as direct availability before falling back to provider-pack checks.
+- Added focused layer1 coverage in `tests/layer1/brainstorm-feature-interview-availability.test.ts`, refreshed package and Skills Showcase generated metadata, and recorded the correction pattern in `tasks/lessons.md`.
+- Verification passed: focused layer1 contract test, targeted availability `rg` checks, current-project missing-skill replay, strict archive audit, task-doc audit, manifest check, Skills Showcase data validation, `npm run skillpacks:verify`, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-24-brainstorm-feature-interview-availability.md`.
+
 ## 2026-06-24 - Alignment review YAML handoffs
 
 - Captured the visible `$exec`-style plan handoff in `prompts/exec/skill-prompt-20260624-103955-alignment-yaml-handoffs.md`.
