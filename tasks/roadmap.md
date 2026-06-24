@@ -2,6 +2,37 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Clarify Alignment Review YAML Handoffs
+
+### Goal
+
+Clarify alignment-page routing contracts so, after an HTML alignment page is ready for review, agents explicitly tell the user to review the page, compile feedback or approval YAML, and continue in the producing skill context. Feedback/revision YAML must route back to amendment and renewed review, while final approval YAML authorizes canonical artifact confirmation.
+
+### Plan
+
+1. Capture prompt history and promote this implementation plan into task docs.
+2. Update `docs/alignment-page-convention.md` with explicit review/compile/paste handoff language, feedback-vs-approval routing, downstream blocking until confirmation, and the existing no-extra-clear rule for fresh YAML consumption.
+3. Archive and bump `base/codex/create-alignment-page/SKILL.md` and `base/claude/create-alignment-page/SKILL.md` from `v0.1` to `v0.2`, updating each `CHANGELOG.md` with the concrete handoff behavior.
+4. Regenerate generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+5. Extend enforcement tests for the generated handoff rule and create-alignment-page platform-specific handoff text.
+6. Run required alignment audits, focused Vitest coverage, and diff hygiene.
+7. Document review results, ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Alignment convention tells users to review the HTML page, compile local section-feedback YAML or bottom response YAML, then paste it into the producing skill/session route.
+- `approval_status: not-approved`, `feedback_status: revision-request`, and partial YAML route to feedback handling, investigation, amendment, and renewed review.
+- Downstream routing stays blocked until approved artifacts are written and the page is confirmed.
+- Fresh sessions already consuming pasted YAML are not told to clear context again.
+- Codex and Claude create-alignment-page skills include platform-specific producing-skill command phrasing and distinguish revision YAML from final approval YAML.
+- Generated bundles are in sync with the canonical convention.
+- Focused audits/tests pass, or any residual failure is documented with proof of unrelated provenance.
+
+### Results
+
+- Canonical convention, generated bundles, and create-alignment-page mirrors now carry the explicit review/compile/paste handoff and revision-vs-approval YAML distinction.
+- Verification passed; see `tasks/ship-manifest-2026-06-24-alignment-yaml-handoffs.md`.
+
 ## Historical Implementation - Product-Design Flow-Tree Contract Drift
 
 ### Goal

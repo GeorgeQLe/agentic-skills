@@ -2,7 +2,7 @@
 name: create-alignment-page
 description: Create or amend a portable HTML alignment review page in a target repo using bundled conventions and skillpacks alignment commands
 type: ops
-version: v0.1
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "<skill-or-topic> [target artifact or repo path]"
 ---
@@ -42,7 +42,10 @@ Use this skill when the user asks to create, refresh, or amend an `alignment/*.h
    - Treat browser-open status `blocked` as non-fatal when the page was written and audited successfully; report the absolute path.
 
 5. Handoff:
-   - If the page is in `review`, ask the user to review it and return section-feedback YAML or bottom compiled response YAML.
+   - If the page is in `review`, give a concrete handoff: ask the user to review `alignment/<skill-name>-<topic>.html`, use local `Compile Feedback YAML` under a section for targeted revision feedback or bottom `Compile Responses` for gate answers and final approval, then paste the YAML into the producing skill context, normally `$<producing-skill> ...` with the YAML included.
+   - Treat section-feedback YAML, `feedback_status: revision-request`, partial response YAML, and any `approval_status: not-approved` YAML as a review/revision request. The receiving producing skill investigates, answers or pushes back when needed, amends the page or artifacts when warranted, and returns the page for renewed review.
+   - Treat only final compiled response YAML with `approval_status: ready-for-agent-review` and no unresolved negative or clarification feedback as authorization to write or confirm approved canonical artifacts.
+   - If the user is already consuming pasted YAML in a fresh session, do not recommend another context clear; continue through the current YAML handling path.
    - Do not route to downstream implementation until final compiled response YAML is approved and any approved canonical artifacts are written.
 
 ## Output

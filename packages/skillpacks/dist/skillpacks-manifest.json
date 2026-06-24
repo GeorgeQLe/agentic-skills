@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "3a78166081f1842ad583895ffb38775dbb1ee92ce64851111eac0aa917cb62cb",
+  "source_fingerprint": "f19e48522862392cf4eb60be8ab21d17659280f592ca2da816f5c8644237cd87",
   "packs": [
     {
       "name": "agent-bridge",
@@ -889,15 +889,16 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "base/claude/create-alignment-page/SKILL.md",
       "installable": true,
-      "content_sha256": "d73f1919c814bc207ea2b9e52d4b8415a71d42c8628e634db3a38c83bc348779",
+      "content_sha256": "f84fdcc16be89cf8ce7b0d4c4dc8060945799d117db15eacd89cf42cdcaa697d",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/create-alignment-page",
       "deck_memberships": []
@@ -1146,15 +1147,16 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "base/codex/create-alignment-page/SKILL.md",
       "installable": true,
-      "content_sha256": "42b66fbc88a137d40ca8b9f55c6b1990f78306db761d5b9080f17b3b938b6dcb",
+      "content_sha256": "830edaacaec1938ff5706723f67c04cc3169ace500a181b4fb2a1acdda8afcec",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$create-alignment-page",
       "deck_memberships": []

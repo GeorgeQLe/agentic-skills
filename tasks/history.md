@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-24 - Alignment review YAML handoffs
+
+- Captured the visible `$exec`-style plan handoff in `prompts/exec/skill-prompt-20260624-103955-alignment-yaml-handoffs.md`.
+- Updated `docs/alignment-page-convention.md` so review pages explicitly hand users to review the HTML page, compile local section-feedback YAML or bottom response YAML, and paste that YAML into the producing skill continuation route/session.
+- Preserved Pattern A routing by naming the `## Invoke With YAML` parent-orchestrator exception and kept fresh-session YAML consumption from asking for another context clear.
+- Archived and bumped `base/claude/create-alignment-page` and `base/codex/create-alignment-page` from `v0.1` to `v0.2`, with platform-specific `/<producing-skill> ...` and `$<producing-skill> ...` handoff wording.
+- Regenerated all 306 owned `ALIGNMENT-PAGE.md` bundles, refreshed Skills Showcase generated assets, and regenerated `packages/skillpacks/dist/skillpacks-manifest.json` from the staged source boundary.
+- Added layer1 assertions covering generated review/compile/paste handoffs and create-alignment-page platform-specific YAML routing.
+- Verification passed: alignment bundle check, alignment routing audit, Pattern A handoff audit, focused Vitest, strict archive audit, task-doc audit, Skills Showcase data validation, `npm run skillpacks:verify`, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-24-alignment-yaml-handoffs.md`.
+
 ## 2026-06-23 - Product-design flow-tree contract drift
 
 - Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-225834-flow-tree-contract-drift.md`.

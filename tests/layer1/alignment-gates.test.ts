@@ -329,6 +329,38 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("hands off review pages through review/compile/paste YAML in the producing skill context", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} pre-approval handoff`).toContain("**Pre-approval stop.**");
+      expect(content, `${path} review page handoff`).toContain(
+        "ask the user to review the page, compile either local section-feedback YAML from the relevant section or bottom compiled response YAML",
+      );
+      expect(content, `${path} paste into producing route`).toContain(
+        "paste that YAML into the producing skill's continuation route/session",
+      );
+      expect(content, `${path} same producing skill`).toContain(
+        "The continuation route is the same skill that produced the page",
+      );
+      expect(content, `${path} pattern a exception`).toContain(
+        "for Pattern A pages that define `## Invoke With YAML`, use that parent-orchestrator route",
+      );
+      expect(content, `${path} feedback status revision`).toContain("`feedback_status: revision-request`");
+      expect(content, `${path} partial response routing`).toContain("compiled response YAML is partial");
+      expect(content, `${path} not-approved routing`).toContain("any YAML has `approval_status: not-approved`");
+      expect(content, `${path} renewed review`).toContain(
+        "ask again for review with the same review/compile/paste instruction",
+      );
+      expect(content, `${path} approval write blocker`).toContain(
+        "approved artifacts have been written or updated",
+      );
+      expect(content, `${path} no duplicate clear`).toContain(
+        "If the user already cleared context and pasted YAML into a fresh session, do not ask for another clear",
+      );
+    }
+  });
+
   it("requires confirmed pages to remove approval UI while preserving approval and evidence records", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {
@@ -907,6 +939,28 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} bottom compile in flow`).toContain(
         "Bottom compile controls must appear as ordinary content in a bottom compile section",
       );
+    }
+  });
+
+  it("gives create-alignment-page platform-specific YAML handoff instructions", () => {
+    const cases = [
+      ["base/codex/create-alignment-page/SKILL.md", "$<producing-skill> ..."],
+      ["base/claude/create-alignment-page/SKILL.md", "/<producing-skill> ..."],
+    ] as const;
+
+    for (const [path, command] of cases) {
+      const content = read(path);
+      expect(content, `${path} version bump`).toContain("version: v0.2");
+      expect(content, `${path} review page path`).toContain("review `alignment/<skill-name>-<topic>.html`");
+      expect(content, `${path} local feedback compile`).toContain("local `Compile Feedback YAML` under a section");
+      expect(content, `${path} bottom compile responses`).toContain("bottom `Compile Responses`");
+      expect(content, `${path} paste command`).toContain(command);
+      expect(content, `${path} feedback status`).toContain("`feedback_status: revision-request`");
+      expect(content, `${path} not-approved`).toContain("`approval_status: not-approved`");
+      expect(content, `${path} ready approval`).toContain("`approval_status: ready-for-agent-review`");
+      expect(content, `${path} revision request`).toContain("as a review/revision request");
+      expect(content, `${path} renewed review`).toContain("returns the page for renewed review");
+      expect(content, `${path} no duplicate clear`).toContain("do not recommend another context clear");
     }
   });
 
