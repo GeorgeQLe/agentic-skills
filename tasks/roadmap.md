@@ -28,7 +28,7 @@ Clarify the interrogation-page convention so open-answer claims are validated an
 - Founder-supplied buyer/user/customer phrasing without provenance is labeled as hunch language and converted into a research target.
 - Generated bundles, focused tests, task-doc audit, diff hygiene, and package verification pass or any residual failure is proven unrelated.
 
-## Phase 1: Design-Tree Branch Prioritization And UI Experiment Split
+## Phase 1: Design-Tree Branch Prioritization And UI Experiment Split ✓
 > Test strategy: tdd
 
 ### Goal
@@ -154,19 +154,19 @@ Make the product-design tree choose downstream branches in a journey-aware order
 
 ### Milestone: Design-Tree Branch Prioritization And UI Experiment Split
 **Acceptance Criteria:**
-- [ ] Branch routing is deterministic and explicitly tied to journey sequence or a recorded user override.
-- [ ] `ux-variations` and `ui-interview` no longer rely only on implicit "first pending" order when recommending child branches.
-- [ ] Clickable UI experiment buildout has a dedicated owner separate from default `ui-interview` behavior.
-- [ ] Review artifacts present complex interfaces progressively, with clear first-step and primary-path focus before dense secondary controls.
-- [ ] The flow-tree schema and skill language use matching branch names for UI experiment/review nodes.
-- [ ] Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] Branch routing is deterministic and explicitly tied to journey sequence or a recorded user override.
+- [x] `ux-variations` and `ui-interview` no longer rely only on implicit "first pending" order when recommending child branches.
+- [x] Clickable UI experiment buildout has a dedicated owner separate from default `ui-interview` behavior.
+- [x] Review artifacts present complex interfaces progressively, with clear first-step and primary-path focus before dense secondary controls.
+- [x] The flow-tree schema and skill language use matching branch names for UI experiment/review nodes.
+- [x] Verification commands pass, or any residual failures are documented as unrelated pre-existing issues.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion**
-- Deviations from plan: [fill when complete]
-- Tech debt / follow-ups: [fill when complete]
-- Ready for next phase: [yes/no]
+- Deviations from plan: Step 1.8 produced no tracked generated drift because Step 1.7 already refreshed the changed skill surfaces; Step 1.9 fixed stale GitHub proof fingerprints reported by the showcase validator.
+- Tech debt / follow-ups: Known unrelated `session-analytics/session-triage` mirror parity drift remains outside this product-design phase. Deferred Phase 38 newsletter production setup remains in `tasks/manual-todo.md`.
+- Ready for next phase: yes. No active implementation phase remains selected; next work should be discovered or the project should be parked intentionally.
 
 ## Historical Implementation - Interrogation Open-Answer Evidence Validation
 

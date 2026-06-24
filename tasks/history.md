@@ -14878,3 +14878,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Verified the focused product-design flow-tree contract test passes 14/14 assertions, design-tree and alignment generated bundles are fresh, archive audit passes across 400 skills, Skills Showcase generated data is fresh after regenerating GitHub proof fingerprints, package verification passes, task-doc audit passes, and diff whitespace hygiene passes.
 - Accepted residual: mirror parity still reports only the known unrelated `session-analytics/session-triage` `Pack Availability Guard` shared-section drift; no product-design mirror drift was introduced.
 - Next active work remains Step 1.10: document the final phase review, phase-level ship manifest, commit, and push.
+
+## 2026-06-23 — Product Design Phase 1 closeout
+
+- Completed Step 1.10 for Design-Tree Branch Prioritization And UI Experiment Split: created the phase-level manifest, archived the completed phase snapshot to `tasks/phases/phase-1.md`, marked the roadmap milestone accepted, and reset `tasks/todo.md` to no active implementation phase.
+- Phase source changes were already shipped in Steps 1.1-1.9: flow-tree schema/sample `v0.3`, deterministic design-tree routing convention, `user-flow-map v1.5`, `ux-variations v0.28`, `ui-interview v0.26`, and new mirrored `create-ui-experiment v0.0`.
+- Final closeout validation: `node scripts/audit-task-docs.mjs` and `git diff --check`. Deploy skipped by `tasks/deploy.md` because the closeout boundary touches only prompt/task/history/archive/manifest files.
+- Accepted residual remains the known unrelated `session-analytics/session-triage` mirror-parity drift. Next recommended route is `$brainstorm` to discover a candidate next phase or explicitly park the project.
+- Manifest: `tasks/ship-manifest-2026-06-23-design-tree-branch-prioritization.md`.
