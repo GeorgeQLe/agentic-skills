@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.29
+version: v0.28
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
@@ -87,12 +87,10 @@ Every chunked stop (setup, each variation spec session, and the assemble-ready h
 - `Current phase complete: <setup | variation thesis | assemble preparation> is complete.`
 - `Next phase: <plain-English variation thesis or assemble+approve work>.`
 - `Why repeat this command: the repeated command is intentional; $ux-variations cold-starts, reads the durable cursor, and advances the next pending variation or assembly.`
-- `Session guidance: continue in a fresh session — clear context (/clear), then run the Exact next command below; $ux-variations cold-starts and reads the durable cursor. Pasting the ## Invoke With YAML block alongside the command gives the fresh agent its routing context (optional — the command alone resolves state from the cursor). Staying in this session is allowed only if enough context remains.`
+- `Session guidance: fresh session recommended for heavy next work; continuing in this session is allowed only if enough context remains.`
 - `Exact next command: $ux-variations <literal topic-or-branch>.`
 
-Use the same `$ux-variations` command for setup → first variation, variation → next variation, and final variation → assemble+approve; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (clear context, re-run the command in a fresh session), not a passive recommendation.
-
-**Setup-stop one-time tradeoff note.** At the **setup** stop only (the concept-set checkpoint handoff in step 6), additionally state once that the user *can* run the whole loop in one continuous session (or pass `--no-chunk`), but later variation specs and assembly risk poorer quality and higher token cost from context bloat as the session fills, so a fresh session per phase is recommended. Do not repeat this note at the per-variation or assemble stops.
+Use the same `$ux-variations` command for setup → first variation, variation → next variation, and final variation → assemble+approve; explain that the repeated command is intentional because filesystem existence is the cursor.
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -233,7 +231,6 @@ Use the same `$ux-variations` command for setup → first variation, variation �
      - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
      - Record proposed branch IDs and artifact paths in the brief/intermediates only; do not initialize or update scoped flow-tree `ux_variations[]` entries before alignment approval.
      - STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
-     - Because this is the **setup** stop, also include the one-time single-session tradeoff note (the Setup-stop one-time tradeoff note under Required Progress Handoff Block): the user may run the whole loop in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat — fresh-per-phase is recommended.
      - In non-chunked mode, continue directly to step 7 in this same session.
 
 7. **Specify each approved variation enough to build**

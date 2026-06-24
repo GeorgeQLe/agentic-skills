@@ -335,7 +335,7 @@ the prose handoff. Use this structure:
 - Current phase complete: <setup | unit name | assemble prep> is complete.
 - Next phase: <plain-English description of the next unit or assemble+approve work>.
 - Why repeat this command: the repeated command is intentional; the skill cold-starts, reads the durable cursor, and advances the next pending unit.
-- Session guidance: fresh session recommended for heavy next work; continuing in this session is allowed only if enough context remains.
+- Session guidance: continue in a fresh session — clear context (`/clear`), then run the Exact next command below; the skill cold-starts and reads the durable cursor. Pasting the `## Invoke With YAML` block alongside the command gives the fresh agent its routing context (optional — the command alone resolves state from the durable cursor). Staying in this session is allowed only if enough context remains.
 - Exact next command: `<resolved command with literal topic/branch>`.
 ```
 
@@ -347,9 +347,22 @@ command` are required fields. The next phase must be in plain English, not only 
 brief path and intermediate directory were checked, because those filesystem facts are the
 only progress ledger.
 
+The `Session guidance` line is an **action directive**, not a passive recommendation: it tells
+the user the physical handoff — clear context (`/clear`) and run the `Exact next command` in a
+fresh session, where the skill cold-starts and resolves state from the durable cursor. The
+continuation mechanism in this loop is **re-running the command**; the `## Invoke With YAML`
+payload is *routing context* for a fresh agent (it helps a cold agent self-route), not consumed
+state like the research loop's compiled alignment YAML, so pasting it is optional.
+
+**Setup-stop one-time tradeoff note.** The **first** handoff — the setup / scope-checkpoint
+stop only — additionally states the single-session tradeoff once: you *can* run the whole loop
+in one continuous session (or pass `--no-chunk`), but later phases risk poorer quality and
+higher token cost from context bloat as the session fills, so a fresh session per phase is
+recommended. State this only at the setup stop; do not repeat it at every per-unit stop.
+
 Continue-vs-stop framing follows the routing rules: when the stop carries heavy build context,
 offer stop/clear-context-versus-continue; when already cold, default to continue-now with the
-exact next command. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff
+exact next command. Only the setup stop carries the one-time single-session tradeoff note above. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff
 only — they hand results back to the invoking parent and do **not** route downstream.
 
 ---

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.29 - 2026-06-24
+
+- Rewrote the Progress Handoff Block `Session guidance` field from a passive recommendation into an action directive: clear context (`/clear`) and run the exact next command in a fresh session, where the skill cold-starts and reads the durable cursor. Clarified that the `## Invoke With YAML` block is optional routing context, not consumed state.
+- Added a one-time single-session tradeoff note at the setup (concept-set checkpoint) stop only: the loop can run in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat.
+
 ## v0.28 - 2026-06-23
 
 - Replaced first-pending user-flow branch selection with deterministic branch routing: explicit user override, journey sequence, activation fit, first-value fit, evaluation priority, status, then stable array order.

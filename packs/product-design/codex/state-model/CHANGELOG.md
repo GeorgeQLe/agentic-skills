@@ -1,5 +1,10 @@
 # state-model changelog (codex)
 
+## v0.7 - 2026-06-24
+
+- Rewrote the Progress Handoff Block `Session guidance` field from a passive recommendation into an action directive: clear context (`/clear`) and run the exact next command in a fresh session, where the skill cold-starts and reads the durable cursor. Clarified that the `## Invoke With YAML` block is optional routing context, not consumed state.
+- Added a one-time single-session tradeoff note at the setup (Domain Modeling Scope Checkpoint) stop only: the loop can run in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat.
+
 ## v0.6 - 2026-06-22
 
 - Updated design-tree route references to use `$consolidate-prototypes` as the primary consolidation skill.
