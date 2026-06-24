@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-alignment-category="utility" data-visual-tier="visual">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype-Phase Skills & Design-Tree Flow — Investigation</title>
+<style>
+  :root{
+    --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --text-muted:#8b949e;
+    --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff;
+    --chart-1:#58a6ff; --chart-2:#3fb950; --chart-3:#d29922; --chart-4:#bc8cff;
+    --chart-5:#f85149; --chart-6:#79c0ff; --chart-7:#f0883e; --chart-8:#a5d6ff;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);margin:0;line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+  main{max-width:1100px;margin:0 auto;padding:28px 20px 80px;max-width:min(1100px,100%);overflow-wrap:break-word;}
+  h1{color:#fff;font-size:1.8rem;margin:0 0 6px}
+  h2{color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px;margin-top:42px}
+  h3{color:#fff;margin-top:28px}
+  a{color:var(--accent)}
+  code{background:#1c2333;padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}
+  .lede{color:var(--text-muted);font-size:1.05rem}
+  .toc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:24px 0}
+  .toc ol{margin:6px 0 0;padding-left:20px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.93rem}
+  th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--surface);color:#fff}
+  tr:nth-child(even) td{background:#11161d}
+  .scroll{overflow-x:auto}
+  .pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.78rem;font-weight:600;white-space:nowrap}
+  .p-orch{background:#1f2d3d;color:var(--accent);border:1px solid var(--accent)}
+  .p-pipe{background:#15281c;color:var(--green);border:1px solid var(--green)}
+  .p-sub{background:#2a2238;color:var(--purple);border:1px solid var(--purple)}
+  .p-dep{background:#2d1f1f;color:var(--red);border:1px solid var(--red)}
+  .good{color:var(--green)} .bad{color:var(--red)} .warn{color:var(--orange)} .mut{color:var(--text-muted)}
+  .gate{background:#1c2333;border:1px solid var(--purple);border-radius:8px;padding:16px 20px;margin:20px 0}
+  .gate h3{color:var(--purple);margin-top:0}
+  .opt{display:block;padding:10px 16px;margin:8px 0;background:#11161d;border:1px solid var(--border);border-radius:6px;min-height:44px}
+  .opt.rec{border-color:var(--green)}
+  .note{font-size:.85rem;color:var(--text-muted)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0 4px;font-size:.85rem}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:14px;height:14px;border-radius:3px;display:inline-block}
+  button.toggle{background:var(--surface);color:var(--accent);border:1px solid var(--accent);border-radius:6px;
+    padding:10px 16px;min-height:44px;cursor:pointer;font-size:.9rem;margin:8px 0}
+  svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  .treebox{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre;background:#11161d;
+    border:1px solid var(--border);border-radius:6px;padding:14px;overflow-x:auto;color:var(--text)}
+  @media (max-width:860px){ main{padding:20px 14px 60px} h1{font-size:1.5rem} }
+</style>
+</head>
+<body>
+<main>
+  <h1>Prototype-Phase Skills &amp; Design-Tree Flow</h1>
+  <p class="lede">Investigation + visual map of the design/prototype pipeline. Audits the prototype-phase skills, diagrams the canonical flow, compares four real design trees from active repos, and proposes fixes for the gaps found — including the routing defect that triggered this run.</p>
+  <p class="note"><strong>Status:</strong> review · <strong>Date:</strong> 2026-06-23 · <strong>Produced by:</strong> <code>/investigate</code> (no fixes implemented — proposals only)</p>
+
+  <div class="toc">
+    <strong>Table of Contents</strong>
+    <ol>
+      <li><a href="#trigger">The triggering defect — "stop after confirmation"</a></li>
+      <li><a href="#diagram">Flow diagram — the prototype-phase pipeline</a></li>
+      <li><a href="#audit">Skill audit — 11 prototype-phase skills</a></li>
+      <li><a href="#trees">What different design trees look like (4 real repos)</a></li>
+      <li><a href="#gaps">Gaps &amp; issues in the real trees (with fixes — not applied)</a></li>
+      <li><a href="#gate">Gate: the corrected post-approval route</a></li>
+      <li><a href="#compile">Compile responses</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. TRIGGER -->
+  <h2 id="trigger">1. The triggering defect — "stop after confirmation"</h2>
+  <p>The invocation flagged a Post-Approval Route gate whose recommended option was <em>"stop after confirmation"</em>, with the rationale that the design tree should not continue UI/prototype work until the repaired base flow is written and downstream branches are revalidated. The complaint: <strong>"stop after confirmation" is a useless option — after a canonical base-flow rewrite the route is <code>state-model</code>, not a terminal stop.</strong></p>
+
+  <div class="card">
+    <h3>Root cause</h3>
+    <ul>
+      <li><strong>Location:</strong> the alignment-page generator's gate vocabulary — <code>docs/alignment-page-convention.md:69</code> lists <code>post-approval route</code> only as a <em>gate-type label</em>. It carries no canonical question text and no answer options, so each generated page authors its own options ad hoc.</li>
+      <li><strong>What's wrong:</strong> with no canonical option set, a base-flow <em>revision</em> run rendered a degenerate "stop after confirmation" choice. That collapses the two distinct ideas the convention actually keeps separate — <em>shed heavy build context (clear/fresh session)</em> vs. <em>terminate the pipeline</em> — into one dead-end, dropping the real next step.</li>
+      <li><strong>What the route actually is:</strong> per <code>docs/design-tree-loop-convention.md §4</code> + <code>§6</code>, a base user-flow rewrite is a <strong>modify-back</strong> event. Re-opening the user-flow root marks the per-branch <code>model_ref</code> and all descendant UX/UI branches <em>stale for re-validation</em>. The correct next skill is <code>state-model</code> (revalidate the flow-anchored domain model) <em>before</em> any UX/UI/prototype work resumes.</li>
+      <li><strong>Introduced by:</strong> pre-existing convention gap (no canonical post-approval-route option set), surfaced by the recent <code>alignmeant</code> base-flow rewrite (2026-06-23).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Claim validated against evidence</h3>
+    <p>The user's correction is <span class="good"><strong>confirmed</strong></span> by the repo's own state. In <code>/Users/georgele/projects/tools/dev/alignmeant/design/alignmeant/flow-tree-alignment-page-review.yaml</code>, the same base-flow rewrite recorded:</p>
+    <div class="scroll"><table>
+      <tr><th>Field in the live flow tree</th><th>Recorded value</th></tr>
+      <tr><td><code>next_route.command</code></td><td><code>$state-model alignment-page-review</code></td></tr>
+      <tr><td><code>next_route.rationale</code></td><td>"The base user-flow map was repaired; revalidate the flow-anchored domain model before continuing UX/UI branch work."</td></tr>
+      <tr><td><code>decisions[].gate_answers</code> (post-approval route)</td><td>"continue state model revalidation"</td></tr>
+      <tr><td><code>model_tree_status</code> / <code>revalidation.model_tree.status</code></td><td><code>needs-revalidation</code> → <code>$state-model</code></td></tr>
+      <tr><td>5 downstream UX branches + 1 UI branch</td><td>all set to <code>needs-revalidation</code></td></tr>
+    </table></div>
+    <p class="note">So the human reviewer already answered the gate "continue state model revalidation" and the manifest already encodes <code>state-model</code> as the next route. The generated "stop after confirmation" option contradicted the artifact it was attached to.</p>
+  </div>
+
+  <!-- 2. DIAGRAM -->
+  <h2 id="diagram">2. Flow diagram — the prototype-phase pipeline</h2>
+  <p>The canonical 6-skill route (green), the per-branch <code>state-model</code> attachment (blue, orthogonal sibling — not a route position), inline sub-skills (purple), and the <strong>modify-back</strong> revalidation arc (red) that the triggering defect concerns. Boxes are sketch-styled; text is clean per the project Excalidraw convention.</p>
+
+  <div class="legend">
+    <span><span class="sw" style="background:#15281c;border:1px solid var(--green)"></span> route pipeline skill</span>
+    <span><span class="sw" style="background:#1f2d3d;border:1px solid var(--accent)"></span> orchestrator / per-branch attachment</span>
+    <span><span class="sw" style="background:#2a2238;border:1px solid var(--purple)"></span> inline sub-skill</span>
+    <span><span class="sw" style="background:#2d1f1f;border:1px solid var(--red)"></span> modify-back / revalidation</span>
+  </div>
+
+  <button class="toggle" id="diagToggle" aria-expanded="true" onclick="toggleDiag()">View as table</button>
+
+  <div id="diagWrap" class="scroll">
+  <svg id="flowsvg" viewBox="0 0 1080 560" width="100%" role="img"
+       aria-label="Flow diagram of the prototype-phase design pipeline: user-flow-map creates the design-tree root and one user-flow branch per flow; state-model attaches a per-branch domain model (model_ref); ux-variations grows up to five UX branches per modelled flow; ui-interview evaluates each UX branch and grows UI experiment branches, calling design-inspirations inline; create-ui-experiment optionally builds a clickable route experiment; user-flow-map --prototype-build-plan synthesises the build plan; prototype builds runnable artifacts and calls uat inline for variant evaluation; consolidate-prototypes converges to an MVP and writes AFPS graduation; research-roadmap --post-prototype runs cleanup; spec-interview writes the production spec. A red modify-back arc returns from prototype/uat up to state-model and user-flow-map, marking descendant branches needs-revalidation.">
+    <defs>
+      <filter id="sketch" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#8b949e"/>
+      </marker>
+      <marker id="arrRed" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#f85149"/>
+      </marker>
+    </defs>
+
+    <!-- main pipeline boxes -->
+    <g filter="url(#sketch)" stroke-width="1.5">
+      <rect x="20"  y="70"  width="150" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <rect x="20"  y="200" width="150" height="56" rx="7" fill="#1f2d3d" stroke="#58a6ff"/>
+      <rect x="220" y="70"  width="150" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <rect x="420" y="70"  width="150" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <rect x="420" y="200" width="150" height="50" rx="7" fill="#2a2238" stroke="#bc8cff"/>
+      <rect x="620" y="70"  width="160" height="56" rx="7" fill="#1f2d3d" stroke="#58a6ff"/>
+      <rect x="620" y="200" width="160" height="50" rx="7" fill="#2a2238" stroke="#bc8cff" opacity="0.85"/>
+      <rect x="830" y="70"  width="150" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <rect x="830" y="200" width="150" height="50" rx="7" fill="#2a2238" stroke="#bc8cff"/>
+      <rect x="620" y="330" width="160" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <rect x="420" y="330" width="150" height="56" rx="7" fill="#1f2d3d" stroke="#58a6ff" opacity="0.85"/>
+      <rect x="220" y="330" width="150" height="56" rx="7" fill="#15281c" stroke="#3fb950"/>
+      <!-- modify-back band -->
+      <rect x="120" y="450" width="760" height="44" rx="7" fill="#2d1f1f" stroke="#f85149"/>
+    </g>
+
+    <!-- text labels (no filter) -->
+    <g fill="#fff" font-size="13" text-anchor="middle">
+      <text x="95"  y="94">user-flow-map</text><text x="95" y="112" font-size="10.5" fill="#8b949e">root + flow branches</text>
+      <text x="95"  y="224">state-model</text><text x="95" y="242" font-size="10.5" fill="#a5d6ff">per-branch model_ref</text>
+      <text x="295" y="94">ux-variations</text><text x="295" y="112" font-size="10.5" fill="#8b949e">≤5 UX branches</text>
+      <text x="495" y="94">ui-interview</text><text x="495" y="112" font-size="10.5" fill="#8b949e">UI experiment branches</text>
+      <text x="495" y="221">design-inspirations</text><text x="495" y="237" font-size="10" fill="#bc8cff">inline research</text>
+      <text x="700" y="90">user-flow-map</text><text x="700" y="108" font-size="10" fill="#a5d6ff">--prototype-build-plan</text>
+      <text x="700" y="220">create-ui-experiment</text><text x="700" y="236" font-size="10" fill="#bc8cff">optional clickable</text>
+      <text x="905" y="94">prototype</text><text x="905" y="112" font-size="10.5" fill="#8b949e">runnable variants</text>
+      <text x="905" y="221">uat</text><text x="905" y="237" font-size="10" fill="#bc8cff">--variant-evaluation</text>
+      <text x="700" y="354">consolidate-</text><text x="700" y="370">prototypes → MVP</text>
+      <text x="495" y="350">research-roadmap</text><text x="495" y="366" font-size="10" fill="#a5d6ff">--post-prototype</text>
+      <text x="295" y="354">spec-interview</text><text x="295" y="370" font-size="10.5" fill="#8b949e">specs/{topic}.md</text>
+      <text x="500" y="477" fill="#f85149" font-size="12.5">modify-back: re-open upstream node → descendants marked needs-revalidation</text>
+    </g>
+
+    <!-- arrows -->
+    <g fill="none" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arr)">
+      <path d="M170,98 L218,98"/>                         <!-- ufm -> uxv -->
+      <path d="M370,98 L418,98"/>                         <!-- uxv -> uii -->
+      <path d="M570,98 L618,98"/>                         <!-- uii -> build-plan -->
+      <path d="M780,98 L828,98"/>                         <!-- build-plan -> prototype -->
+      <path d="M905,126 L905,198"/>                        <!-- prototype -> uat -->
+      <path d="M828,225 L782,360"/>                        <!-- uat -> consolidate -->
+      <path d="M618,358 L572,358"/>                        <!-- consolidate -> research-roadmap -->
+      <path d="M418,358 L372,358"/>                        <!-- research-roadmap -> spec -->
+      <path d="M495,126 L495,198"/>                        <!-- uii -> design-inspirations -->
+      <path d="M700,126 L700,198"/>                        <!-- build-plan area / create-ui-experiment -->
+    </g>
+    <!-- state-model attachment (dashed, orthogonal) -->
+    <g fill="none" stroke="#58a6ff" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arr)">
+      <path d="M95,126 L95,198"/>                          <!-- ufm -> state-model -->
+      <path d="M170,228 C200,250 200,150 218,108"/>        <!-- state-model -> ux-variations (model ready) -->
+    </g>
+    <!-- modify-back arcs (red) -->
+    <g fill="none" stroke="#f85149" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrRed)">
+      <path d="M880,472 C500,520 150,520 95,256"/>        <!-- back to state-model -->
+      <path d="M880,472 C470,540 60,540 40,126"/>         <!-- back to user-flow-map -->
+    </g>
+  </svg>
+  </div>
+
+  <div id="diagTable" hidden class="scroll">
+    <table>
+      <caption class="note" style="text-align:left;margin-bottom:6px">Text fallback for the flow diagram</caption>
+      <tr><th>Step</th><th>Skill (node)</th><th>Produces</th><th>Then →</th></tr>
+      <tr><td>1</td><td>user-flow-map <span class="pill p-orch">orchestrator</span></td><td>flow-tree root + one user-flow branch per flow</td><td>state-model (per branch)</td></tr>
+      <tr><td>1a</td><td>state-model <span class="pill p-orch">per-branch</span></td><td><code>model_ref</code> domain model attached to each user-flow branch</td><td>ux-variations</td></tr>
+      <tr><td>2</td><td>ux-variations <span class="pill p-pipe">pipeline</span></td><td>≤5 UX variation branches on a modelled flow</td><td>ui-interview</td></tr>
+      <tr><td>3</td><td>ui-interview <span class="pill p-pipe">pipeline</span></td><td>UI experiment branches (calls design-inspirations inline)</td><td>build-plan / create-ui-experiment</td></tr>
+      <tr><td>3a</td><td>create-ui-experiment <span class="pill p-sub">optional</span></td><td>clickable route experiment for one approved UI branch</td><td>build-plan</td></tr>
+      <tr><td>4</td><td>user-flow-map --prototype-build-plan <span class="pill p-orch">orchestrator</span></td><td>ordered prototype build plan</td><td>prototype</td></tr>
+      <tr><td>5</td><td>prototype <span class="pill p-pipe">pipeline</span></td><td>runnable variants + decisions[] (origin of modify-back)</td><td>uat</td></tr>
+      <tr><td>5a</td><td>uat --variant-evaluation <span class="pill p-sub">sub-skill</span></td><td>human evaluation evidence</td><td>consolidate-prototypes</td></tr>
+      <tr><td>6</td><td>consolidate-prototypes <span class="pill p-pipe">pipeline</span></td><td>consolidated MVP + AFPS graduation</td><td>research-roadmap --post-prototype</td></tr>
+      <tr><td>6a</td><td>research-roadmap --post-prototype</td><td>narrow pre-spec cleanup pass</td><td>spec-interview</td></tr>
+      <tr><td>7</td><td>spec-interview <span class="pill p-pipe">pipeline</span></td><td><code>specs/{topic}.md</code> production spec</td><td>roadmap (implementation)</td></tr>
+      <tr><td>↺</td><td>modify-back <span class="pill p-dep">loop</span></td><td><code>modify</code> decision with <code>targets[]</code> re-opens user-flow / model_ref node</td><td>descendants → needs-revalidation → state-model</td></tr>
+    </table>
+  </div>
+
+  <!-- 3. AUDIT -->
+  <h2 id="audit">3. Skill audit — 11 prototype-phase skills</h2>
+  <p>Every active skill in the design/prototype pipeline, its location, role, and stage-4 canonical deliverable. All run the same 5-stage session flow (interrogation → research → design → plan → implement-scoped) per <code>docs/design-tree-loop-convention.md §2</code>.</p>
+  <div class="scroll">
+  <table>
+    <tr><th>Skill</th><th>Ver</th><th>Role</th><th>Tree node grown</th><th>Stage-4 deliverable</th><th>Routes out →</th></tr>
+    <tr><td><code>user-flow-map</code><br><span class="pill p-orch">orchestrator</span><br><span class="note">.claude/skills</span></td><td>v1.4</td><td>Root orchestrator; one user-flow branch per flow; owns build-plan synthesis</td><td>root + user-flow branches + build plan</td><td><code>flow-tree-{t}.yaml</code>, <code>user-flow-{t}.md</code>, <code>prototype-build-plan-{t}.md</code></td><td><code>/state-model</code> → <code>/ux-variations</code></td></tr>
+    <tr><td><code>state-model</code><br><span class="pill p-orch">per-branch</span><br><span class="note">packs/product-design</span></td><td>v0.6</td><td>Orthogonal sibling; attaches one domain model per user-flow branch</td><td>model attachment (<code>model_ref</code>)</td><td><code>model-tree-{t}.yaml</code>, <code>domain-model-{t}.md</code></td><td><code>/ux-variations</code></td></tr>
+    <tr><td><code>ux-variations</code><br><span class="pill p-pipe">pipeline</span><br><span class="note">.claude/skills</span></td><td>v0.26</td><td>Grows ≤5 UX variation branches on a modelled flow</td><td><code>ux_variations[]</code> branches</td><td><code>ux-variations-{t}.md</code></td><td><code>/ui-interview</code></td></tr>
+    <tr><td><code>ui-interview</code><br><span class="pill p-pipe">pipeline</span><br><span class="note">.claude/skills</span></td><td>v0.25</td><td>Evaluates one UX branch; grows UI experiment branches; HTML mockup</td><td><code>ui_experiments[]</code> branches</td><td><code>ui-{t}.md</code>, <code>ui-requirements-{t}.md</code></td><td><code>/user-flow-map --prototype-build-plan</code></td></tr>
+    <tr><td><code>create-ui-experiment</code><br><span class="pill p-sub">experiment owner</span><br><span class="note">packs/product-design</span></td><td>v0.0</td><td>Clickable route experiment for one approved UI branch (fixture data)</td><td>UI-experiment evidence note</td><td><code>experiments/{t}/{id}/</code></td><td><code>/prototype</code> / <code>--prototype-build-plan</code></td></tr>
+    <tr><td><code>prototype</code><br><span class="pill p-pipe">validation</span><br><span class="note">packs/product-design</span></td><td>v0.19</td><td>Builds runnable prototypes; records decisions; <strong>origin of modify-back</strong></td><td>prototype + <code>decisions[]</code></td><td><code>prototypes/{t}/variation-N/</code></td><td><code>/uat --variant-evaluation</code></td></tr>
+    <tr><td><code>uat</code><br><span class="pill p-sub">sub-skill</span><br><span class="note">packs/product-testing</span></td><td>v0.14</td><td>Human variant-evaluation / acceptance plans + evidence</td><td>evaluation evidence</td><td><code>research/uat-variant-evaluation-{t}.md</code></td><td>→ parent (<code>/consolidate-prototypes</code>)</td></tr>
+    <tr><td><code>consolidate-prototypes</code><br><span class="pill p-pipe">pipeline</span><br><span class="note">packs/product-design</span></td><td>v0.17</td><td>Converges evaluated branches into one MVP; AFPS graduation</td><td>consolidated MVP node</td><td><code>prototypes/{t}/consolidated/</code>, <code>afps-graduation-{t}.md</code></td><td><code>/research-roadmap --post-prototype</code></td></tr>
+    <tr><td><code>spec-interview</code><br><span class="pill p-pipe">terminal</span><br><span class="note">packs/product-design</span></td><td>v0.17</td><td>Production deep-dive; owns Production Ready Approval</td><td>spec node</td><td><code>specs/{t}.md</code></td><td><code>/roadmap</code> (implementation)</td></tr>
+    <tr><td><code>design-inspirations</code><br><span class="pill p-sub">sub-skill</span><br><span class="note">packs/product-design</span></td><td>v0.3</td><td>Inline web-research feeder for ui-interview</td><td>(no node — feeds parent)</td><td><code>design-inspirations-{t}.md</code></td><td>→ parent (<code>/ui-interview</code>)</td></tr>
+    <tr><td><code>consolidate-variations</code><br><span class="pill p-dep">deprecated</span><br><span class="note">packs/product-design</span></td><td>v0.0</td><td>Compatibility alias → <code>consolidate-prototypes</code></td><td>none</td><td>none (delegates)</td><td><code>/consolidate-prototypes</code></td></tr>
+  </table>
+  </div>
+  <p class="note">Canonical route tuple (per <code>docs/skill-next-step-contracts.md §8</code>): <code>user-flow-map → ux-variations → ui-interview → prototype → consolidate-prototypes → spec-interview</code>, with <code>state-model</code> a recommended-but-skippable per-branch attachment and <code>research-roadmap --post-prototype</code> as the graduation-aware cleanup pass before spec.</p>
+
+  <!-- 4. TREES -->
+  <h2 id="trees">4. What different design trees look like (4 real repos)</h2>
+  <p>Four flow-tree manifests found across active repos show the schema at different maturities. They are the basis for the gap analysis in §5.</p>
+
+  <h3>A — Canonical reference · <code>agentic-skills/design/flow-tree-sample.yaml</code> <span class="note">(schema v0.3)</span></h3>
+  <p>The fully-formed shape: nested branches, per-branch <code>model_ref</code>, the deterministic <code>branch_order_override</code>, <code>decisions[]</code> with a <code>modify</code> that re-opens upstream nodes, and a populated <code>prototype_build_plan</code>.</p>
+  <div class="treebox">root: invoice-approval  (v0.3, flat)
+└── submit-and-approve            [ready-for-ui]  model_ref ✓  journey_sequence=1
+    ├── guided-wizard             [approved]      eval_priority=1
+    │   └── wizard-stepper (UI)   [approved]  → decision: approve  → built (variation-1)
+    └── single-page-dense         [retry-needed]  eval_priority=2
+        └── dense-table (UI)      [rejected]  → decision: MODIFY → targets:[model_ref, submit-and-approve]</div>
+
+  <h3>B — Mid-revision · <code>alignmeant/design/alignmeant/flow-tree-alignment-page-review.yaml</code> <span class="note">(schema v0.1, product-path)</span></h3>
+  <p>The exact scenario behind this investigation: the base user-flow map was rewritten; <code>next_route → $state-model</code>, the model and all 5 UX + 1 UI descendants set <code>needs-revalidation</code>. Note it uses the <em>legacy top-level</em> <code>model_tree_ref</code>, not per-branch <code>model_ref</code>.</p>
+  <div class="treebox">root: alignment-page-review  (v0.1, product-path: research/alignmeant)
+├── 9 user-flow branches          [all approved]  (Orient→Review→Respond→Preview→Handoff→Verify)
+│   model_tree_ref → model-tree-…yaml   [needs-revalidation]
+└── ux_variations (5)             [ALL needs-revalidation]
+    ├── trust-first-review-page
+    │   └── ui-exp trust-first    [needs-revalidation]  (was approved under prior flow)
+    ├── change-first-revision-workspace · guided-approval-wizard
+    └── operator-console · agent-handoff-lineage-flow
+next_route: $state-model alignment-page-review   ← the correct post-approval route</div>
+
+  <h3>C — Broad fan-out · <code>gblock-party-redux/design/flow-tree-personal-workstation.yaml</code> <span class="note">(schema v0.1, flat)</span></h3>
+  <p>Seven user-flow branches, only one with UX variations grown. Uses the older branch schema (<code>flow_paths</code>, <code>screens</code>, <code>ux_variations_status</code>, <code>decision</code>) and routes through the <strong>deprecated</strong> <code>consolidate-variations</code>. No <code>state-model</code> attachment at all.</p>
+  <div class="treebox">root: personal-workstation  (v0.1, flat)   route includes consolidate-variations ⚠ (deprecated)
+├── onboarding                    [not-started]
+├── monitoring-start              [in-progress]  ← 5 UX variations (proposed)
+│   ├── v1-operator-console  v2-card-mosaic(baseline)  v3-kanban-pipeline
+│   └── v4-command-first     v5-glanceable-stream      recommended_next: v2-card-mosaic
+├── approval · recovery · device-handoff · diff-review · settings   [all not-started]
+(no model_ref / model_tree_ref on any branch)  + 6 open_questions, proposed_flowmap_amendment pending</div>
+
+  <h3>D — Pre-v0.1 schema · <code>omega-war/design/unthinkable/flow-tree-tactical-battle.yaml</code> <span class="note">(no schema_version, product-path)</span></h3>
+  <p>An older structural shape: <code>root → parent_user_flow → ux_variations</code> (single flow, no <code>branches[]</code> array), <code>branch_routing</code> instead of the deterministic priority stack, and a build plan that references UX variations (<code>tactical-entry-demo</code>, <code>after-action-demo</code>) that do <strong>not</strong> exist in the <code>ux_variations</code> list.</p>
+  <div class="treebox">root: unthinkable → parent_user_flow: tactical-battle  (no schema_version)
+└── ux_variations (5)
+    ├── guided-battle-drill       [planned]   recommended_for_ui_interview ✓
+    ├── deployment-plan-first     [ui_approved] → UI review approved → built
+    └── commanders-… · map-first-… · resilient-skirmish-loop  [planned, deferred]
+prototype_build_plan: 3 built, 4 deferred
+   ⚠ items reference ux_variations 'tactical-entry-demo' & 'after-action-demo' — absent from ux_variations[]</div>
+
+  <!-- 5. GAPS -->
+  <h2 id="gaps">5. Gaps &amp; issues in the real trees (fixes proposed, not applied)</h2>
+  <p>Findings mapped to evidence and a suggested fix. <strong>No fixes were implemented</strong> — this section is the proposal record only.</p>
+  <div class="scroll">
+  <table>
+    <tr><th>#</th><th>Tree</th><th>Gap / issue</th><th>Evidence</th><th>Suggested fix (not applied)</th><th>Sev</th></tr>
+    <tr><td>G1</td><td>Convention</td><td>"stop after confirmation" rendered as a post-approval route option with no canonical next-step</td><td><code>alignment-page-convention.md:69</code> lists the gate type but no option set</td><td>Add a canonical post-approval-route option set to the convention: <em>(a) continue next route now, (b) clear context then run next route, (c) revalidation pause → state-model</em>. Forbid a bare "stop" with no route.</td><td class="bad">High</td></tr>
+    <tr><td>G2</td><td>B alignmeant</td><td>Uses legacy top-level <code>model_tree_ref</code>, not per-branch <code>model_ref</code> — convention marks the top-level pointer back-compat only</td><td>convention §1 "primary linkage is <code>branches[].model_ref</code>"; tree has <code>model_tree_ref</code> only</td><td>On the pending <code>state-model</code> revalidation, attach <code>model_ref</code> per user-flow branch; retain top-level pointer only as back-compat.</td><td class="warn">Med</td></tr>
+    <tr><td>G3</td><td>B alignmeant</td><td>9 user-flow branches still <code>approved</code> while the base flow was rewritten — descendants are stale but parents not re-marked</td><td>revision summary changes the base process; branches keep <code>status: approved</code></td><td>Confirm whether the 9 branches survived the rewrite verbatim; if the base process changed, mark affected user-flow branches for re-confirmation, not just UX/UI descendants.</td><td class="warn">Med</td></tr>
+    <tr><td>G4</td><td>C gblock</td><td>Route array contains deprecated <code>consolidate-variations</code> instead of <code>consolidate-prototypes</code></td><td><code>route:</code> list line; alias is <code>deprecated: true</code></td><td>Update the <code>route</code> tuple to <code>consolidate-prototypes</code> so the manifest matches the live skill.</td><td class="warn">Med</td></tr>
+    <tr><td>G5</td><td>C gblock</td><td>No domain model anywhere; <code>ux-variations</code> already <em>in-progress</em> though convention requires <code>model_ref</code> confirmed first</td><td>convention §6 "ux-variations requires the branch's model_ref confirmed"; no model node exists</td><td>Run <code>state-model personal-workstation</code> for at least the <code>monitoring-start</code> branch before its UX variations are approved; backfill <code>model_ref</code>.</td><td class="warn">Med</td></tr>
+    <tr><td>G6</td><td>C gblock</td><td><code>proposed_flowmap_amendment</code> (merge S5/S6) parked unresolved — UX variations built on a flow map the run itself flags as needing edit</td><td>tree note: "Pending flow-map owner acceptance — do not silently edit approved flow-map"</td><td>Resolve the amendment through <code>user-flow-map</code> (accept/reject the S5/S6 merge) before approving the 5 UX specs that depend on it.</td><td class="warn">Med</td></tr>
+    <tr><td>G7</td><td>D omega-war</td><td>Build-plan items cite UX variations absent from <code>ux_variations[]</code> (<code>tactical-entry-demo</code>, <code>after-action-demo</code>)</td><td><code>prototype_build_plan.items[].source_ux_variation</code> has no matching <code>ux_variations[].id</code></td><td>Either add the two demo variations as real <code>ux_variations</code> nodes, or relabel the build items as derived demo artifacts of <code>deployment-plan-first</code> so every build item traces to a real branch.</td><td class="bad">High</td></tr>
+    <tr><td>G8</td><td>D omega-war</td><td>Pre-<code>branches[]</code> shape (<code>root→parent_user_flow→ux_variations</code>) + <code>branch_routing</code> instead of deterministic priority stack; no <code>schema_version</code></td><td>convention §1 node types + §3 deterministic branch selection; manifest predates both</td><td>Migrate to the <code>branches[]</code> + <code>schema_version: v0.3</code> shape with <code>journey_sequence</code>/<code>evaluation_priority</code> so deterministic selection applies.</td><td class="warn">Med</td></tr>
+    <tr><td>G9</td><td>All real trees</td><td>Schema drift: three different schema versions in flight (v0.1 ×2, none, vs v0.3 sample)</td><td>headers across the four manifests</td><td>Provide a one-shot manifest migrator (sample v0.3 is the target) and run it per repo; out of scope for this investigation.</td><td class="mut">Low</td></tr>
+  </table>
+  </div>
+
+  <!-- 6. GATE -->
+  <h2 id="gate">6. Gate: the corrected post-approval route</h2>
+  <div class="gate">
+    <h3>Post-Approval Route (corrected) — required</h3>
+    <p>After a canonical base-flow rewrite and confirmed page update, what should happen? (Replaces the degenerate "stop after confirmation" option.)</p>
+    <label class="opt rec"><input type="radio" name="route" value="state-model-revalidation" checked> <strong>Revalidation pause → <code>state-model</code></strong> — run <code>/state-model {topic}</code> to revalidate the flow-anchored domain model; descendant UX/UI branches stay <code>needs-revalidation</code> until the model is re-confirmed. <span class="good">(Recommended — matches the live <code>next_route</code> in the manifest.)</span></label>
+    <label class="opt"><input type="radio" name="route" value="continue-now"> Continue now in this session with <code>/state-model {topic}</code> (only if little build context is held).</label>
+    <label class="opt"><input type="radio" name="route" value="clear-then-route"> Clear context, then run <code>/state-model {topic}</code> in a fresh session (default when heavy build context is held).</label>
+    <label class="opt"><input type="radio" name="route" value="hard-stop"> Hard stop — no further design work intended (terminal; not a routing answer). <span class="note">Only valid when the user is abandoning the pipeline, never as the recommended post-rewrite default.</span></label>
+    <p class="note">The defect was treating the third/fourth ideas as one "stop." Clearing context is a <em>session</em> choice; the <em>route</em> is still <code>state-model</code>. A true terminal stop is a separate, rarely-correct answer.</p>
+  </div>
+
+  <div class="gate">
+    <h3>Scope / fixes gate — required</h3>
+    <p>This page proposes fixes (§5) but applied none. Which should become tracked work?</p>
+    <label class="opt"><input type="checkbox"> G1 — add canonical post-approval-route option set to <code>alignment-page-convention.md</code></label>
+    <label class="opt"><input type="checkbox"> G7 — fix omega-war build-plan items that reference non-existent UX variations</label>
+    <label class="opt"><input type="checkbox"> G2–G6, G8 — per-repo manifest revalidation/migration (each in its own repo)</label>
+    <label class="opt"><input type="checkbox"> None yet — alignment page is the deliverable; defer fixes</label>
+  </div>
+
+  <!-- 7. COMPILE -->
+  <h2 id="compile">7. Compile responses</h2>
+  <div class="card">
+    <p>When you've answered the gates above, compile to YAML for the agent to consume.</p>
+    <button class="toggle" onclick="compile()">Compile Responses</button>
+    <pre id="out" class="treebox" style="margin-top:12px">Awaiting answers…</pre>
+  </div>
+
+  <p class="note">Evidence sources: <code>docs/design-tree-loop-convention.md</code>, <code>docs/skill-next-step-contracts.md</code>, <code>docs/alignment-page-convention.md</code>; flow-tree manifests in agentic-skills, alignmeant, gblock-party-redux, omega-war; SKILL.md audit of 11 prototype-phase skills.</p>
+</main>
+
+<script>
+function toggleDiag(){
+  var w=document.getElementById('diagWrap'),t=document.getElementById('diagTable'),b=document.getElementById('diagToggle');
+  var showTable=!t.hasAttribute('hidden')?false:true;
+  if(showTable){t.removeAttribute('hidden');w.setAttribute('hidden','');b.textContent='View as diagram';b.setAttribute('aria-expanded','false');}
+  else{t.setAttribute('hidden','');w.removeAttribute('hidden');b.textContent='View as table';b.setAttribute('aria-expanded','true');}
+}
+function compile(){
+  var route=(document.querySelector('input[name=route]:checked')||{}).value||'(unanswered)';
+  var fixes=[].slice.call(document.querySelectorAll('input[type=checkbox]:checked')).map(function(c){return c.parentNode.textContent.trim();});
+  var y="gate_responses:\n  post_approval_route: "+route+"\n  fixes_to_track:";
+  if(fixes.length){fixes.forEach(function(f){y+="\n    - \""+f+"\"";});}else{y+=" []";}
+  y+="\n  note: \"state-model is the route after a base-flow rewrite; clear-context is a session choice, not a stop.\"";
+  document.getElementById('out').textContent=y;
+}
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
