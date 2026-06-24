@@ -96,7 +96,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
 
 ### Green
 
-- [ ] Step 1.9: Run focused and repository contract validation
+- [x] Step 1.9: Run focused and repository contract validation
   - Files: no source changes expected unless validation exposes concrete drift.
   - Run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts`.
   - Run `node scripts/upgrade-design-tree-loop.mjs --check`.
@@ -165,10 +165,16 @@ Make the product-design tree choose downstream branches in a journey-aware order
 - `node scripts/upgrade-interrogation-page.mjs` was not run because Step 1.7 did not add `create-ui-experiment` to `INTERROGATION_SKILLS`; no `INTERROGATION-PAGE.md` bundle is expected.
 - Verification: `node scripts/upgrade-design-tree-loop.mjs --check` passed; `node scripts/upgrade-alignment-page.mjs --check` passed; `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed; `npm run skillpacks:verify` passed; `git diff --check` passed.
 
-### Next Step Plan - Step 1.9
+- Step 1.9 complete. Focused validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed 14/14 assertions.
+- Generator checks passed: `node scripts/upgrade-design-tree-loop.mjs --check` checked 20 skills with 0 reference updates and 0 bundle writes; `node scripts/upgrade-alignment-page.mjs --check` reported 0 updates and 0 bundled writes. `node scripts/upgrade-interrogation-page.mjs --check` was skipped because `create-ui-experiment` was not registered in `INTERROGATION_SKILLS`, so no interrogation bundle is expected for this phase.
+- Repository contract checks passed: `scripts/skill-archive-audit.sh --strict` checked 400 skills with 0 violations; `npm run skillpacks:verify` completed successfully; `node scripts/audit-task-docs.mjs` passed with informational advisory counts only; `git diff --check` passed.
+- Showcase generated-data validation initially found stale GitHub proof fingerprints, then passed after running `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and rerunning `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`. The only generated asset changes are matching `sourceFingerprint` updates in `docs/skills-showcase/assets/github-proof-data.js` and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Accepted residual: `scripts/skill-mirror-parity-audit.sh --verbose` still exits non-zero only for the known unrelated `session-analytics/session-triage` `Pack Availability Guard` shared-section drift. No product-design mirror drift was introduced or detected.
 
-- Treat Step 1.9 as the full focused/repository validation closeout for the design-tree branch-prioritization phase. No source changes are expected unless validation exposes concrete drift.
-- Run `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts`; expected result is all 14 focused assertions passing after Steps 1.2-1.7.
-- Run generator checks: `node scripts/upgrade-design-tree-loop.mjs --check` and `node scripts/upgrade-alignment-page.mjs --check`. Continue to skip `node scripts/upgrade-interrogation-page.mjs --check` unless `create-ui-experiment` has been registered in `INTERROGATION_SKILLS`.
-- Run repository contract checks: `scripts/skill-archive-audit.sh --strict`, `scripts/skill-mirror-parity-audit.sh --verbose`, `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`, `npm run skillpacks:verify`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
-- If `scripts/skill-mirror-parity-audit.sh --verbose` still reports only the known unrelated `session-analytics/session-triage` `Pack Availability Guard` drift, record it as an accepted residual and do not modify product-design files.
+### Next Step Plan - Step 1.10
+
+- Treat Step 1.10 as the final documentation and shipping closeout for Phase 1.
+- Update `tasks/todo.md` review and milestone state only after confirming Step 1.9 validation evidence is represented accurately.
+- Create `tasks/ship-manifest-2026-06-23-design-tree-branch-prioritization.md` with the complete phase shipping boundary: skill versions bumped, generated assets changed across Steps 1.1-1.9, validation commands, accepted residual mirror-parity risk, deploy classification, rollback note, and next command.
+- Update `tasks/history.md` with a concise phase-closeout record.
+- Run final diff hygiene (`git diff --check`) before committing and pushing the Step 1.10 task-doc/manifest closeout on `master`.
