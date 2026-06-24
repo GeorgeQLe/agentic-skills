@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.26
+version: v0.27
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -35,7 +35,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 - **Stage 3 — Plan**: the approved UI packet is the build-plan slice; the branch decision (approve/reject/retry) feeds the prototype build ledger.
 - **Stage 4 — Implement (scoped)**: write the UI packet, grow `ui_experiment` child branches under the UX variation, and pass the single binding alignment gate before any canonical write.
 
-**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first UX variation with no `ui_experiments`**, runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`.
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next UX variation in this order: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order. Run the staged flow scoped to that variation, grow the child branches on approval, and stop with the handoff in `## Next Work`.
 
 **Non-buildout boundary.** Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision. Do not write or route default clickable prototype buildout from `ui-interview`. Route approved clickable route experiment needs to /create-ui-experiment [approved-ui-experiment] so a dedicated experiment owner can build and evaluate the clickable route separately.
 
@@ -63,6 +63,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode reads and updates `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode reads and updates `design/flow-tree-{topic}.yaml`.
+- Resolve the next UX variation in this order: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order.
 - Write UI branch state to `ui_experiments[]`; add one entry under the selected UX variation branch for each proposed UI experiment. Each entry must include `id`, `status`, artifact references, and `decision_id` when a decision is recorded.
 - Record approve/reject/retry decisions in the manifest `decisions[]` list. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Do not mirror UI experiment review, approve/reject/retry, prototype build, or branch progress into `tasks/todo.md`.

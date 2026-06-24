@@ -1,5 +1,12 @@
 # user-flow-map changelog (claude)
 
+## v1.6 - 2026-06-23
+
+- Bumped the contract after archiving v1.5.
+- Replaced schema-invalid journey-stage wording with `discovery`/`activation` language.
+- Replaced vague branch-order override wording with schema-backed `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id`.
+- Renamed remaining prototype-build-plan source language from UI review to UI experiment and added explicit `ui_experiment_id` guidance.
+
 ## v1.5 - 2026-06-23
 
 - Required journey-ordered `branches[]` output, progressive review metadata on each user-flow branch, and explicit branch-order override persistence in the flow doc, interview log, and flow-tree manifest.

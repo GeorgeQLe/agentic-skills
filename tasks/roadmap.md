@@ -2,6 +2,31 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Product-Design Flow-Tree Contract Drift
+
+### Goal
+
+Make product-design flow-tree contracts agree across schema, sample, skill text, and tests. The canonical behavior change is to support clickable UI experiment evidence in `ui_experiments[]` with explicit optional fields while preserving canonical `artifacts[]` references.
+
+### Plan
+
+1. Add focused layer1 contract coverage for UI experiment evidence fields, sample key validity, exact skill field names, stale selector removal, UI experiment terminology, journey-stage wording, and branch-order override metadata wording.
+2. Update `design/flow-tree.schema.json` and `design/flow-tree-sample.yaml` so `ui_experiments[]` supports `experiment_path` and `review_evidence`, keeps `additionalProperties: false`, and uses only schema-valid keys.
+3. Archive and bump mirrored `create-ui-experiment`, `ui-interview`, and `user-flow-map` skills in both Codex and Claude pack roots.
+4. Update mirrored skill wording for exact UI experiment field names, deterministic UI variation selection, UI experiment terminology, prototype-build-plan source IDs, schema-valid journey stages, and schema-backed branch-order override metadata.
+5. Run focused verification: product-design flow-tree layer1 test, design-tree loop check, task-doc audit, and diff hygiene.
+6. Document results in task docs and ship manifest, then commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `ui_experiments[]` accepts optional `experiment_path` and `review_evidence` fields and still rejects unknown keys.
+- `design/flow-tree-sample.yaml` uses only schema-valid keys for every `ui_experiments[]` entry.
+- `create-ui-experiment` skill mirrors reference the exact schema fields for clickable experiment path and review evidence.
+- `ui-interview` skill mirrors no longer contain the stale first-UX-variation-with-no-`ui_experiments` selector.
+- `user-flow-map` skill mirrors no longer use stale `UI review` wording for manifest or build-plan fields.
+- Journey-stage guidance uses schema-valid stage language and does not mention schema-invalid `setup`.
+- Branch-order override guidance names schema-backed `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id`.
+
 ## Historical Implementation - Interrogation Intake Validation Clarification
 
 ### Goal

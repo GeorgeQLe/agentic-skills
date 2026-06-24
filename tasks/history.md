@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-06-23 - Product-design flow-tree contract drift
+
+- Captured the visible `$exec` invocation in `prompts/exec/skill-prompt-20260623-225834-flow-tree-contract-drift.md`.
+- Added focused layer1 assertions for `ui_experiments[]` clickable evidence fields, schema-valid sample keys, exact `create-ui-experiment` field names, deterministic `ui-interview` UX variation selection, `user-flow-map` UI experiment wording, schema-valid journey-stage wording, and branch-order override metadata fields.
+- Updated `design/flow-tree.schema.json` so `ui_experiment` accepts optional `experiment_path` and `review_evidence` while retaining `additionalProperties: false`, and updated `design/flow-tree-sample.yaml` to remove schema-invalid UI experiment labels and include clickable evidence.
+- Archived and bumped mirrored `create-ui-experiment` contracts from v0.0 to v0.1, `ui-interview` from v0.26 to v0.27, and `user-flow-map` from v1.5 to v1.6, with matching changelog entries.
+- Replaced vague or stale skill wording with exact schema field names, deterministic UX variation ordering, `UI experiment` prototype-build-plan source language, schema-backed override fields, and schema-valid journey-stage language.
+- Updated `docs/design-tree-loop-convention.md` to remove the generated stale first-branch selector and regenerated all 20 design-tree loop bundles.
+- Refreshed Skills Showcase generated data and `packages/skillpacks/dist/skillpacks-manifest.json` from the staged source boundary.
+- Verification passed: focused product-design flow-tree layer1 test, design-tree loop check, task-doc audit, diff hygiene, Skills Showcase data validation, strict skill archive audit, and `npm run skillpacks:verify`. Mirror parity still reports the known unrelated `session-analytics/session-triage` shared-section drift.
+- Manifest: `tasks/ship-manifest-2026-06-23-flow-tree-contract-drift.md`.
+
 ## 2026-06-23 - Prompt-history closeout before create-ui-experiment
 
 - Captured the visible `continue` invocation from the prior `$exec` handoff in `prompts/exec/skill-prompt-20260623-182433-continue.md`.

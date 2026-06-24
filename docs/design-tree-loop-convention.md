@@ -229,11 +229,12 @@ Each pipeline-skill session:
 
 1. **Cold start** — read the flow-tree manifest (and, where relevant, the per-branch
    `model_ref` and parent artifacts).
-2. **Resolve next pending branch** — the first branch whose status indicates this skill's work
-   is due (e.g. `state-model` picks the first user-flow branch with no confirmed `model_ref`;
-   `ux-variations` picks the first modelled branch with no `ux_variations`; `ui-interview` the
-   first UX variation with no `ui_experiments`; `prototype` the first `pending` /
-   `needs-revision` build item; etc.). Honor any explicit branch argument the user passed.
+2. **Resolve next pending branch** — the branch whose status indicates this skill's work
+   is due, selected through the deterministic branch-selection stack below (e.g. `state-model`
+   selects a user-flow branch with no confirmed `model_ref`; `ux-variations` selects a modelled
+   branch whose `ux_variations[]` work is due; `ui-interview` selects the UX variation whose
+   `ui_experiments[]` work is due; `prototype` selects a `pending` / `needs-revision` build item;
+   etc.). Honor any explicit branch argument the user passed.
 3. **Run the 5-stage flow** scoped to that branch (folding light stages).
 4. **Grow children** — write the scoped canonical artifact and the child nodes on final
    approval.
@@ -248,8 +249,9 @@ Pipeline skills must not depend on raw manifest array order as the default selec
 the next child branch with this stable priority stack:
 
 1. **Explicit user override** — if the user names a branch or the manifest records a
-   `branch_order_override` / override rationale for the relevant level, select that branch and
-   record the override in the owning artifact, interview log, and flow-tree manifest metadata.
+   `branch_order_override` for the relevant level, select that branch and record schema-backed
+   override metadata in the owning artifact, interview log, and flow-tree manifest:
+   `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id`.
 2. **Journey or evaluation order** — for `user-flow` branches, sort by ascending
    `journey_sequence`; for `ux_variation` branches, sort by ascending `evaluation_priority`.
 3. **First-value and activation fit** — prefer branches with stronger `first_value_fit` and

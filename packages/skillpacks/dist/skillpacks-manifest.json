@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "83014d6e543907ac0818cfb5e476561d74a5da7b52f40dbe7f583599fb6cb1b9",
+  "source_fingerprint": "3a78166081f1842ad583895ffb38775dbb1ee92ce64851111eac0aa917cb62cb",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7668,15 +7668,17 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
       ],
       "path": "packs/product-design/claude/create-ui-experiment/SKILL.md",
       "installable": true,
-      "content_sha256": "6720d364d23c6e934270529834901f2595a595435e6d7e68d9891b2684dd01fd",
-      "archive_versions": [],
+      "content_sha256": "04290c988a9046dc6896024831b35fca86cbf918c1150932648013895f17d28e",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/create-ui-experiment",
       "deck_memberships": []
     },
@@ -7856,7 +7858,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7864,7 +7866,7 @@
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "5933e08adc89e3b7a0d206b638e99a18b4a4dc1c4b906bf3856e86746003eadb",
+      "content_sha256": "d98f5615b6d90375b0c3d2c77a4fdbcb15e3e3bb9eadc1f3940a54938535ff61",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7885,6 +7887,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -7902,7 +7905,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v1.5",
+      "version": "v1.6",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7910,7 +7913,7 @@
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "1d7cd3ff033cef32f4abc762aa2d6d3c6e050d0491f04fe5d4fc8cdbe6411fb2",
+      "content_sha256": "8f7074cbadf8a89ecc1b873e2df6e339459903c663bffeee41dfe4da6e8c77fd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7926,7 +7929,8 @@
         "v1.1",
         "v1.2",
         "v1.3",
-        "v1.4"
+        "v1.4",
+        "v1.5"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -8058,15 +8062,17 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
       ],
       "path": "packs/product-design/codex/create-ui-experiment/SKILL.md",
       "installable": true,
-      "content_sha256": "aba72f2f9bfcd05184b5dedf04854820967d7979035ea61d01373bb1d6497c07",
-      "archive_versions": [],
+      "content_sha256": "1d745d1be8735d94cb7b86653c40478ce6209ac22bfa456f557ec6ab8565eaef",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$create-ui-experiment",
       "deck_memberships": []
     },
@@ -8246,7 +8252,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.26",
+      "version": "v0.27",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8254,7 +8260,7 @@
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "32e795ce8883ba9007756db87f16d98d8a617c9352f6805669871d873ca804f9",
+      "content_sha256": "0860e842b284bd4d74ad979d02db77278d2cd55211d59bf609cee6d2013574a1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8275,6 +8281,7 @@
         "v0.23",
         "v0.24",
         "v0.25",
+        "v0.26",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8292,7 +8299,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v1.5",
+      "version": "v1.6",
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8300,7 +8307,7 @@
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "0a6e4e68e96693ab27dc64dfb4f97c78d2d5a1725f1cc22247b663fa10380f1a",
+      "content_sha256": "3c53a432327b5e8e154ef0d810c3cb90c33fe93b87f5132a2ff001ecf9d7d9ee",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8316,7 +8323,8 @@
         "v1.1",
         "v1.2",
         "v1.3",
-        "v1.4"
+        "v1.4",
+        "v1.5"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []

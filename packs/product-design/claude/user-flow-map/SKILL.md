@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
 type: planning
-version: v1.5
+version: v1.6
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -63,11 +63,11 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
 - Initialize the manifest when writing the flow map. Set `schema_version: v0.3`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
-- Order `branches[]` by journey progression by default: activation or setup before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
+- Order `branches[]` by journey progression by default: discovery or activation before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
 - Each user-flow branch must include `journey_stage`, `journey_sequence`, `priority_rationale`, and `progressive_review` metadata. The progressive review entry must name the first value moment, primary task path, and progressive review sequence for reviewers before downstream UX/UI work begins.
-- If the user explicitly overrides the default branch order, keep the user-chosen order and explain the override in `priority_rationale`. Persist branch order override metadata in `design/**/flow-tree-*.yaml` with who/what changed and why.
-- In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references and one build item per approved UI review that should be prototyped.
-- Track user-flow, UX-variation, UI review, prototype build item, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
+- If the user explicitly overrides the default branch order, keep the user-chosen order and explain the override in `priority_rationale`. Persist branch order override metadata in `design/**/flow-tree-*.yaml` with schema-backed `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id` for UX-variation overrides.
+- In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references and one build item per approved UI experiment that should be prototyped.
+- Track user-flow, UX-variation, UI experiment, prototype build item, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Reference all pre-prototype design artifacts from the manifest using repo-relative paths.
 - Do not mirror user-flow, UX variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
 
@@ -153,8 +153,8 @@ In the next turn, ask whether any flow branch, state, or handoff is missing befo
 When invoked with `--prototype-build-plan`, "prototype build plan", "prototype todo", or equivalent wording, run this mode after the normal flow/UX/UI branch work exists:
 
 1. Read the scoped `design/**/flow-tree-*.yaml`, `design/user-flow-*.md`, `design/ux-variations-*.md`, and `design/ui-*.md` artifacts.
-2. Identify every user-flow branch, UX variation branch, and UI review branch with an approved or retryable decision.
-3. Create one prototype build item for each approved UI review that should be made tangible in `/prototype`.
+2. Identify every user-flow branch, UX variation branch, and UI experiment branch with an approved or retryable decision.
+3. Create one prototype build item for each approved UI experiment that should be made tangible in `/prototype`.
 4. Mark rejected branches as dropped and do not include them as buildable items unless the user explicitly overrides.
 5. Mark out-of-scope, expensive, or low-confidence branches as deferred when the user chooses not to prototype them now.
 6. Mark branches that need design or UI correction before prototyping as needs-revision.
@@ -166,7 +166,7 @@ Before writing the build plan, present a **Prototype Build Plan Checkpoint** as 
 - Build items to prototype now.
 - Items that need revision before prototyping.
 - Items deferred or dropped, with rationale.
-- Source user-flow branch, UX variation, and UI review IDs for each item.
+- Source user-flow branch, UX variation, and UI experiment IDs for each item, including the manifest `ui_experiment_id`.
 - Expected prototype path for each buildable item.
 - Any user overrides or research gaps carried into the plan.
 
@@ -215,7 +215,7 @@ The interview log must include:
 The prototype build plan must include:
 
 - Scope, source evidence, and user overrides.
-- Build item table with `id`, source user-flow branch, source UX variation, source UI review, status, expected prototype path, and rationale.
+- Build item table with `id`, source user-flow branch, source UX variation, source UI experiment, `ui_experiment_id`, status, expected prototype path, and rationale.
 - Status definitions: `pending`, `built`, `needs-revision`, `deferred`, and `dropped`.
 - Build sequence and chunking notes for `/prototype --variant N`.
 - Revision/defer/drop rationale for branches not ready to build.

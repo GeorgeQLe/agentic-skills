@@ -16,6 +16,40 @@ const expectContainsAll = (content: string, expected: string[]) => {
     expect(content).toContain(value);
   }
 };
+const collectUiExperimentKeys = (content: string) => {
+  const keys = new Set<string>();
+  const lines = content.split("\n");
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const markerMatch = lines[i].match(/^(\s*)ui_experiments:\s*$/);
+    if (!markerMatch) continue;
+
+    const markerIndent = markerMatch[1].length;
+    let propertyIndent: number | null = null;
+
+    for (let j = i + 1; j < lines.length; j += 1) {
+      const line = lines[j];
+      if (line.trim() === "" || line.trimStart().startsWith("#")) continue;
+
+      const indent = line.match(/^\s*/)?.[0].length ?? 0;
+      if (indent <= markerIndent) break;
+
+      const dashKey = line.match(/^(\s*)-\s+([A-Za-z_][A-Za-z0-9_]*):/);
+      if (dashKey) {
+        propertyIndent = dashKey[1].length + 2;
+        keys.add(dashKey[2]);
+        continue;
+      }
+
+      const propertyKey = line.match(/^(\s*)([A-Za-z_][A-Za-z0-9_]*):/);
+      if (propertyKey && propertyIndent !== null && propertyKey[1].length === propertyIndent) {
+        keys.add(propertyKey[2]);
+      }
+    }
+  }
+
+  return [...keys].sort();
+};
 
 const mirrors = ["codex", "claude"] as const;
 const command = {
@@ -50,6 +84,17 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(schema.$defs.ux_variation_branch.required).toContain("ui_experiments");
     expect(schema.$defs.ux_variation_branch.properties.ui_experiments.items.$ref).toBe("#/$defs/ui_experiment");
     expect(schema.$defs.ui_experiment).toBeDefined();
+    expect(schema.$defs.ui_experiment.additionalProperties).toBe(false);
+    expect(schema.$defs.ui_experiment.properties.experiment_path).toEqual({
+      type: "string",
+      minLength: 1,
+      description: "Repo-relative route or experiment directory path for a clickable UI experiment output.",
+    });
+    expect(schema.$defs.ui_experiment.properties.review_evidence).toEqual({
+      type: "string",
+      minLength: 1,
+      description: "Concise evidence note or repo-relative review artifact proving the clickable UI experiment was reviewed.",
+    });
     expect(schema.$defs.prototype_build_item.required).toContain("ui_experiment_id");
     expect(schema.properties.prototype_build_plan.$ref).toBe("#/$defs/prototype_build_plan");
     expect(schema.$defs.prototype_build_status.enum).toEqual([
@@ -135,6 +180,14 @@ describe("product-design flow tree artifact boundaries", () => {
     // renamed UI experiment nodes + build-plan linkage
     expect(sample).toContain("ui_experiments:");
     expect(sample).toContain("ui_experiment_id: wizard-stepper");
+    expect(sample).toContain("experiment_path: experiments/invoice-approval/wizard-stepper/");
+    expect(sample).toContain("review_evidence: alignment/create-ui-experiment-invoice-approval.html#wizard-stepper-review");
+    const schema = JSON.parse(read("design/flow-tree.schema.json"));
+    const uiExperimentKeys = collectUiExperimentKeys(sample);
+    for (const key of uiExperimentKeys) {
+      expect(Object.keys(schema.$defs.ui_experiment.properties)).toContain(key);
+    }
+    expect(uiExperimentKeys).not.toContain("label");
     // modify decision feeds back up to the model + user-flow branch
     expect(sample).toContain("decision: modify");
     expect(sample).toMatch(/targets:\s*\n\s*- design\/model-tree-invoice-approval-submit-and-approve\.yaml/);
@@ -153,10 +206,17 @@ describe("product-design flow tree artifact boundaries", () => {
         "Record explicit user branch-order overrides in `design/user-flow-[topic].md`",
         "Record explicit user branch-order overrides in `design/user-flow-[topic]-interview.md`",
         "Persist branch order override metadata in `design/**/flow-tree-*.yaml`",
+        "`ordered_branch_ids`",
+        "`override_rationale`",
+        "`recorded_at`",
+        "`parent_branch_id`",
         "first value moment",
         "primary task path",
         "progressive review sequence",
       ]);
+      expect(userFlow).toContain("discovery or activation before first-value");
+      expect(userFlow).not.toContain("activation or setup");
+      expect(userFlow).not.toContain("who/what changed and why");
     }
   });
 
@@ -180,10 +240,12 @@ describe("product-design flow tree artifact boundaries", () => {
 
       expectContainsAll(uiInterview, [
         "Write UI branch state to `ui_experiments[]`",
+        "Resolve the next UX variation in this order: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order.",
         "Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.",
         `Route approved clickable route experiment needs to ${sigil}create-ui-experiment [approved-ui-experiment]`,
         "Do not write or route default clickable prototype buildout from `ui-interview`.",
       ]);
+      expect(uiInterview).not.toContain("first UX variation with no `ui_experiments`");
       expect(uiInterview).not.toContain("ui_reviews[]");
     }
   });
@@ -198,11 +260,13 @@ describe("product-design flow tree artifact boundaries", () => {
 
       expectContainsAll(createUiExperiment, [
         "name: create-ui-experiment",
-        "version: v0.0",
+        "version: v0.1",
         "Own clickable UI experiment routes or project-native lightweight prototypes",
         "fake, fixture, local, or in-memory data",
         "first-value journey",
         "progressive reveal",
+        "`experiment_path`",
+        "`review_evidence`",
         `${sigil}prototype`,
         `${sigil}uat --variant-evaluation`,
         `${sigil}user-flow-map --prototype-build-plan`,
@@ -224,10 +288,16 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(userFlow).toContain("design/{slug}/flow-tree-[topic].yaml");
       expect(userFlow).toContain("design/user-flow-[topic].md");
       expect(userFlow).toContain("design/prototype-build-plan-[topic].md");
+      expect(userFlow).toContain("approved UI experiment");
+      expect(userFlow).toContain("source UI experiment");
+      expect(userFlow).toContain("ui_experiment_id");
       expect(userFlow).toContain(`${sigil}user-flow-map`);
       expect(userFlow).toContain(`${sigil}ux-variations [specific-user-flow]`);
       expect(userFlow).toContain(`${sigil}user-flow-map --prototype-build-plan [topic]`);
       expect(userFlow).not.toContain("`specs/user-flow-[topic].md`");
+      expect(userFlow).not.toContain("approved UI review");
+      expect(userFlow).not.toContain("UI review branch");
+      expect(userFlow).not.toContain("source UI review");
 
       expect(uxVariations).toContain("design/flow-tree.schema.json");
       expect(uxVariations).toContain("design/ux-variations-[topic].md");

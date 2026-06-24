@@ -53,10 +53,11 @@ branches:
           - design/ux-variations-invoice-approval.md
         ui_experiments:
           - id: wizard-stepper
-            label: Stepper-driven approval form
             status: approved
             artifacts:
               - design/ui-invoice-approval.md
+            experiment_path: experiments/invoice-approval/wizard-stepper/
+            review_evidence: alignment/create-ui-experiment-invoice-approval.html#wizard-stepper-review
             decision_id: approve-wizard-stepper
       - id: single-page-dense
         label: Single dense review page
@@ -76,7 +77,6 @@ branches:
           - design/ux-variations-invoice-approval.md
         ui_experiments:
           - id: dense-table
-            label: Dense table with inline approve
             status: rejected
             artifacts:
               - design/ui-invoice-approval.md

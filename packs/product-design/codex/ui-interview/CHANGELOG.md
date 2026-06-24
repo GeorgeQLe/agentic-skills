@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.27 - 2026-06-23
+
+- Bumped the contract after archiving v0.26.
+- Replaced the stale first-UX-variation selector with deterministic UX variation resolution: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order.
+
 ## v0.26 - 2026-06-23
 
 - Replaced active flow-tree child-state language from `ui_reviews[]` to `ui_experiments[]`.
