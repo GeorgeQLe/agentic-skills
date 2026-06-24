@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.8
+version: v0.9
 required_conventions: [alignment-page]
 argument-hint: "[optional project path, product path, or focus]"
 ---
@@ -67,7 +67,7 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
    - Concept exists and discovery is enabled, but no customer-discovery evidence: `$customer-discovery`
    - A self-advancing research loop is mid-run (a run manifest exists with frameworks still pending, or all intermediates exist but no synthesized canonical yet): re-invoke that same orchestrator to advance one phase — `$customer-discovery`, `$competitive-analysis`, or `$positioning` when `business-research` is installed, or `$journey-map` when `customer-lifecycle` is installed — and tell the user to start a fresh Codex session and re-run it. This continuation takes precedence over starting a new orchestrator; do not imply a single pass and do not route framework work to `$exec`.
    - Customer discovery exists but market/value evidence is missing: the most specific installed discovery command, usually `$competitive-analysis`, `$value-prop-canvas`, or `$positioning`; if `business-research` is not installed, recommend `npx skillpacks install business-research` first.
-   - Journey/lifecycle/growth questions are missing after discovery: recommend the relevant installed command, or install the required pack first, such as `npx skillpacks install customer-lifecycle` from the project shell, or `npx skillpacks install business-growth` from the project shell.
+   - Journey/lifecycle/growth questions are missing after discovery: route to the **`$journey-map` orchestrator first**, not directly to a child lifecycle skill. `journey-map` is the parent orchestrator that owns inline routing to `$onboarding-map`, `$conversion-map`, `$retention-map`, `$lifecycle-metrics`, and `$expansion-map` via its Optional Research Trigger Map. Recommend `$journey-map <product-path>` whenever the canonical journey map (`research/journey-map.md` or `research/{slug}/journey-map.md`) is missing, stale, or incomplete, or when any child lifecycle detour (onboarding/conversion/activation/retention/monetization/metrics/expansion) is being considered — let `journey-map` choose the child skill. Recommend a child lifecycle skill directly only when the canonical journey map already exists and is current and the user has explicitly scoped that single stage. If `customer-lifecycle` is not installed, recommend `npx skillpacks install customer-lifecycle` from the project shell; for habit/growth-loop questions specifically, `npx skillpacks install business-growth`.
    - Research/specs exist but task queue is stale or absent: `$roadmap`
    - Clear executable task exists: `$exec`
    - Implementation is done but unvalidated, dirty, uncommitted, unpushed, or otherwise unshipped: `$ship`
@@ -75,7 +75,8 @@ AFPS here means the product workflow from raw idea through concept scoping, cust
 8. Validate command availability before recommending pack-local routes:
    - Use `scripts/pack.sh list-packs` when present to detect enabled packs.
    - If the best command lives in an uninstalled pack, recommend the package install command instead of the unavailable command: `npx skillpacks install <pack>` from the project shell.
-   - If `scripts/pack.sh` is missing or pack lookup fails, do not assume base or pack skills are available. Recommend only commands visible in the active session; otherwise recommend `npx skillpacks init` for missing base skills or `npx skillpacks install <pack>` for missing pack skills, and mention the degraded lookup only if it changes confidence.
+   - If `scripts/pack.sh` is missing or pack lookup fails, do not assume base or pack skills are available. Fall back to `npx skillpacks which <skill>` (which pack provides a skill) and `npx skillpacks status` (installed/enabled state) to confirm provenance. Recommend only commands visible in the active session; otherwise recommend `npx skillpacks init` for missing base skills or `npx skillpacks install <pack>` for missing pack skills, and mention the degraded lookup only if it changes confidence.
+   - Installed-but-not-yet-visible guard: a pack being enabled (and `npx skillpacks which <skill>` resolving to it) does **not** prove the skill is invokable in the current session. If the target skill is not visible in the active session's `$` skill list or local skill roots even though its pack is installed, do not recommend invoking it directly. Recommend `npx skillpacks refresh` and starting a fresh Codex session (for Claude Code, `/reload-skills` then `/clear`, restarting if still invisible) before the skill invocation. This is the reload path, not a reinstall.
 
 ## Output
 

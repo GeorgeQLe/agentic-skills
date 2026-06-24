@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9 - 2026-06-23
+
+- Lifecycle-gap routing now prefers the `/journey-map` orchestrator over child lifecycle skills. The next-route rule for missing journey/lifecycle/growth evidence routes to `/journey-map <product-path>` first whenever the canonical journey map is missing/stale/incomplete or any child detour (onboarding/conversion/retention/lifecycle-metrics/expansion) is being considered, and lets `journey-map` own inline child routing via its Optional Research Trigger Map. Direct child-skill routes are reserved for the case where a current journey map already exists and a single stage is explicitly scoped. Fixes a stale recommendation that routed to `/onboarding-map` instead of the parent orchestrator.
+- Strengthened the step-8 availability gate with an installed-but-not-yet-visible guard: an enabled pack (and `npx skillpacks which` resolving the skill) does not prove session invokability. When a target skill is not visible in the active session/local roots despite its pack being installed, recommend the reload path (`npx skillpacks refresh` + `/reload-skills`/`/clear`/restart, or a fresh Codex session) rather than a reinstall. Added `npx skillpacks which` / `npx skillpacks status` as the fallback provenance lookup when `scripts/pack.sh` is missing.
+
 ## v0.8 - 2026-06-22
 
 - Updated AFPS route references to use `/consolidate-prototypes` as the primary post-UAT consolidation handoff.

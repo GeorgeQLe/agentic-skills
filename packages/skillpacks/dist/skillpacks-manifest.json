@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "21b5e15980422364ae101f309aef051ea66e3b5bc988212d9f574d75f3b63672",
+  "source_fingerprint": "83014d6e543907ac0818cfb5e476561d74a5da7b52f40dbe7f583599fb6cb1b9",
   "packs": [
     {
       "name": "agent-bridge",
@@ -786,13 +786,13 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "base/claude/afps-status/SKILL.md",
       "installable": true,
-      "content_sha256": "76ca4a5cb47dad4294773f7d4932ceb73830e0482bcacae3935c3d5e16a34823",
+      "content_sha256": "ae3b4f1714400274d4a3d8ca107aa60ce3a79bbd6907604ace926d3ef70e239e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -801,7 +801,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/afps-status",
       "deck_memberships": []
@@ -1072,13 +1073,13 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "required_conventions": [
         "alignment-page"
       ],
       "path": "base/codex/afps-status/SKILL.md",
       "installable": true,
-      "content_sha256": "c1568743b640074842d52a345ffdadeafc71363f893264013e1ec6d38d428997",
+      "content_sha256": "d601d2690cacb4f0fee8d2ba1fabb67ce318b9594e29ab83ebb626f29ff63adf",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1087,7 +1088,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$afps-status",
       "deck_memberships": []
