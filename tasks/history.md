@@ -14898,3 +14898,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Final closeout validation: `node scripts/audit-task-docs.mjs` and `git diff --check`. Deploy skipped by `tasks/deploy.md` because the closeout boundary touches only prompt/task/history/archive/manifest files.
 - Accepted residual remains the known unrelated `session-analytics/session-triage` mirror-parity drift. Next recommended route is `$brainstorm` to discover a candidate next phase or explicitly park the project.
 - Manifest: `tasks/ship-manifest-2026-06-23-design-tree-branch-prioritization.md`.
+
+## 2026-06-24 — State-model-first pipeline: diagram redraw + refactor proposal
+
+- Reworked `alignment/investigate-prototype-design-tree-flow.html` Section 2 to depict a **proposed** state-model-first route: added a divergence banner, redrew the `#flowsvg` as a single solid serpentine (`user-flow-map → state-model → ux-variations → ui-interview → create-ui-experiment → --prototype-build-plan → prototype ⇄ uat → consolidate-prototypes → research-roadmap → spec-interview`), promoted `state-model` to a first-class blue main-line node (`app · per-flow · per-screen`, fast-pass fold) and `create-ui-experiment` to a green main-line node (`mandatory · batchable`), kept the modify-back arc returning to both `state-model` and `user-flow-map`, and updated the table fallback + aria-label.
+- Reconciled Sections 1/3/6 (softened off-route framing without deleting evidence; audit-table roles + route-tuple note now show current-canon vs. proposed; gate note that state-model is a mandatory route step) and refreshed the `alignment/index.html` entry to 2026-06-24.
+- Wrote `docs/proposals/state-model-first-pipeline-refactor.md`: a self-contained executor plan with target sequence, rationale (modify/needs-revalidation loop makes data-first safe), blast-radius edits with verified file:line anchors across the convention, both SKILL.md files (+ codex mirrors), ui-interview/ux-variations, flow-tree/model-tree schemas, sample, and layer1 tests, plus versioning/mirrors checklist and three open design questions.
+- **No canon edited** (docs/skills/schema/tests untouched) — this session is page + proposal only.
+- Verified: `node scripts/audit-alignment-pages.mjs` exit 0 (54 active pages, index integrity exact). Deploy skipped by `tasks/deploy.md` path gating (commit touches only `alignment/**` and `docs/proposals/**`).
+- Commit: `555999c2`.
