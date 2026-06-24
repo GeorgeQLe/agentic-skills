@@ -47,6 +47,7 @@ Fix product-design flow-tree contract drift so the schema, sample manifest, skil
 - `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed: 14 tests.
 - `node scripts/upgrade-design-tree-loop.mjs --check` passed: 20 skills, 0 bundle writes.
 - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` passed.
+- `pnpm --dir apps/skills-showcase build` passed.
 - `scripts/skill-archive-audit.sh --strict` passed: 400 skills, 0 violations.
 - `npm run skillpacks:verify` passed, including manifest check and package staging boundary check.
 - `node scripts/audit-task-docs.mjs` passed after task-doc heading cleanup.
@@ -54,7 +55,7 @@ Fix product-design flow-tree contract drift so the schema, sample manifest, skil
 
 ## Skipped Tests
 
-- No app build or browser smoke was run because this change only touches schema contracts, skill text, generated metadata, and generated documentation bundles; the executable coverage is the focused layer1 contract test plus generator/package checks.
+- No browser smoke was run because this change only touches schema contracts, skill text, generated metadata, and generated documentation bundles; executable coverage is the focused layer1 contract test plus generator/package checks and the Skills Showcase production build for deploy-relevant public asset changes.
 
 ## Adversarial Review
 
