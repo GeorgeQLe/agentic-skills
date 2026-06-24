@@ -14907,3 +14907,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **No canon edited** (docs/skills/schema/tests untouched) — this session is page + proposal only.
 - Verified: `node scripts/audit-alignment-pages.mjs` exit 0 (54 active pages, index integrity exact). Deploy skipped by `tasks/deploy.md` path gating (commit touches only `alignment/**` and `docs/proposals/**`).
 - Commit: `555999c2`.
+
+## 2026-06-24 — skillpacks publish prep (→ 0.1.12)
+
+- Confirmed `skillpacks@0.1.11` is already published (registry `latest` = 0.1.11 for both `skillpacks` and `@glexcorp/gskp`); accumulated package-affecting work must ship as `0.1.12` (patch) since npm versions are immutable.
+- CHANGELOG cut: promoted `[Unreleased]` → `## [0.1.12] - 2026-06-24` with the release-state note that source `package.json` + `dist/skillpacks-manifest.json` intentionally remain at last-published `0.1.11` until `./publish.sh patch` bumps them; left a fresh empty `[Unreleased]` stub. Did not touch the historical `[0.1.11]` entry. Commit: `30b2f222`.
+- Readiness gates green: `build:check` (390 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 127/127, offline `pack:dry-run` exit 0. `./publish.sh --dry-run patch` ran the full pipeline to the npm auth preflight (E401 — environment not logged in as `glexcorp`); EXIT trap restored the tree.
+- Reverted a stray `0.1.12` bump found in the working tree on `package.json` + manifest (no real publish — registry still 0.1.11, no `v0.1.12` tag); left at 0.1.11 so `./publish.sh patch` bumps correctly to 0.1.12 rather than skipping to 0.1.13.
+- Handoff: user runs `./publish.sh patch` after `npm login` as `glexcorp`, then commits the bumped `package.json` + manifest at 0.1.12, tags `v0.1.12`, and pushes commit + tag.
