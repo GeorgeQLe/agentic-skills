@@ -12,10 +12,22 @@ const GENERATOR = resolve(REPO_ROOT, "scripts/upgrade-interrogation-page.mjs");
 const participatingSkillDirs = [
   "base/claude/idea-scope-brief",
   "base/codex/idea-scope-brief",
-  "packs/business-research/claude/positioning",
-  "packs/business-research/codex/positioning",
   "packs/business-research/claude/customer-discovery",
+  "packs/business-research/claude/positioning",
   "packs/business-research/codex/customer-discovery",
+  "packs/business-research/codex/positioning",
+  "packs/product-design/claude/consolidate-prototypes",
+  "packs/product-design/claude/spec-interview",
+  "packs/product-design/claude/state-model",
+  "packs/product-design/claude/ui-interview",
+  "packs/product-design/claude/user-flow-map",
+  "packs/product-design/claude/ux-variations",
+  "packs/product-design/codex/consolidate-prototypes",
+  "packs/product-design/codex/spec-interview",
+  "packs/product-design/codex/state-model",
+  "packs/product-design/codex/ui-interview",
+  "packs/product-design/codex/user-flow-map",
+  "packs/product-design/codex/ux-variations",
 ];
 
 describe("interrogation confidence-gate contract", () => {
@@ -46,6 +58,10 @@ describe("interrogation confidence-gate contract", () => {
       expect(text, `${dir} bundle research deferral`).toContain("defer deeper research as an explicit research question or source-plan item");
       expect(text, `${dir} bundle needs-research handling`).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
       expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
+      expect(text, `${dir} bundle root command`).toContain("top-level `command`");
+      expect(text, `${dir} bundle command yaml`).toContain('command: "<parent-skill-command>"');
+      expect(text, `${dir} bundle matching command metadata`).toContain("keep those two values identical");
+      expect(text, `${dir} bundle no separate command copy`).toContain("does not need a separate command clipboard item");
     });
   }
 

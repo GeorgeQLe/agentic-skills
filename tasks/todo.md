@@ -5,23 +5,42 @@
 Active implementation queue: none.
 
 Project: `agentic-skills`.
-Last completed task: Prepare `skillpacks` `0.1.12` publish boundary.
+Last completed task: Self-contained alignment YAML commands.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Prepare 0.1.12 Publish Boundary
+## Review - Self-Contained Alignment YAML Commands
 
-- Result: `CHANGELOG.md` `[0.1.12]` section reconciled (across a concurrent `/ship-end` session) to describe the actual `v0.1.11..HEAD` boundary with Added / Changed / Fixed / Verification subsections, plus the release-state note that source `package.json` + manifest stay at `0.1.11` until `./publish.sh patch` bumps them.
-- Result: all three `0.1.12` "Fixed" CLI items confirmed implemented and tested in source — published-package metadata retry (`6cb8d04c`), `refresh --all --dry-run` unsafe reasons (`198050e2`), and `uninstall-global` dry-run preview (`3034cbd2`).
-- Verification: clean-tree revalidation passed — `build:check` (390 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 127/127 (incl. published-package stale-metadata retry tests), offline `npm pack ./build --dry-run` (exit 0, 3615 files at `0.1.11`), and `git diff --check --cached`.
-- Manifest: `tasks/ship-manifest-2026-06-24-prepare-0-1-12.md`.
-- Handoff: user runs `./publish.sh patch` after `npm login` as `glexcorp`, then commits the bumped `package.json` + manifest at `0.1.12`, tags `v0.1.12`, and pushes commit + tag.
+### Goal
+
+Make HTML-generated review YAML self-contained by including the exact top-level continuation `command` the agent wants the user to run with that YAML. Scope covers alignment-page YAML across the board and the related interrogation self-routing YAML contract.
+
+### Checklist
+
+- [x] Inspect task docs and alignment/interrogation YAML contracts.
+- [x] Patch canonical alignment-page, alignment-routing, research-loop, and interrogation conventions.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` and `INTERROGATION-PAGE.md` bundles.
+- [x] Add focused layer1 assertions for top-level `command` in generated YAML contracts.
+- [x] Run generator checks, focused tests, audits, package verification, and diff hygiene.
+- [x] Document review results and ship intended changes.
+
+### Notes
+
+- The root `command` field is continuation metadata for the producing skill or parent orchestrator. It must not weaken the existing boundary that review pages block downstream routing until approval is consumed and approved artifacts are written.
+- Pattern A pages that already emit `agent_routing.command` should also emit root `command` with the same literal value.
+- Local section-feedback YAML and bottom response YAML should both carry the root command when the user is expected to paste YAML into a producing skill context.
+
+### Review
+
+- Passed: `node scripts/upgrade-alignment-page.mjs --check`.
+- Passed: `node scripts/upgrade-interrogation-page.mjs --check`.
+- Passed: `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/interrogation-confidence-gate.test.ts`.
+- Passed: `node scripts/audit-alignment-pages.mjs`.
+- Passed: `node scripts/audit-interrogation-pages.mjs`.
+- Passed: `node scripts/audit-task-docs.mjs`.
+- Passed: `npm run skillpacks:verify`.
+- Passed: `git diff --check`.
 
 ## No Active Implementation Phase
 
-Release-prep for `0.1.12` is complete and pushed; the real npm publish is a manual `./publish.sh patch` step gated on `glexcorp` auth. The next step is to discover candidate follow-up work or intentionally park the project.
-
-Deferred manual production setup items remain in `tasks/manual-todo.md`; they are not active implementation blockers unless promoted into a future phase.
-
-**Next work:** run `./publish.sh patch` to publish `0.1.12` (manual, auth-gated), or discover the next phase
-**Recommended next command:** `$brainstorm`
+The alignment/interrogation YAML command contract patch is complete and ready to ship. Deferred manual production setup items remain in `tasks/manual-todo.md`; they are not active implementation blockers unless promoted into a future phase.

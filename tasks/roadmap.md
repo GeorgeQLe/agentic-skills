@@ -2,6 +2,31 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Self-Contained Alignment YAML Commands
+
+### Goal
+
+Make HTML-generated review YAML self-contained by including the exact top-level continuation `command` the agent wants the user to run with the YAML. This applies across alignment-page YAML and interrogation-page YAML, while preserving the existing rule that command metadata is loop/review continuation data, not downstream routing before approval.
+
+### Plan
+
+1. Update the canonical alignment-page convention so local section-feedback YAML and bottom response YAML both include a top-level `command` field when the handoff expects the user to continue in a producing skill or parent orchestrator session.
+2. Update the alignment YAML routing contract and Pattern A research-session loop convention so `command` is required at the YAML root and matches `agent_routing.command` / `## Invoke With YAML` when those are present.
+3. Update the canonical interrogation-page convention so compiled interrogation answers include the same top-level `command` alongside `agent_routing`.
+4. Regenerate generated `ALIGNMENT-PAGE.md` and `INTERROGATION-PAGE.md` bundles from the canonical docs.
+5. Add focused layer1 assertions covering root-level command requirements in alignment and interrogation bundles.
+6. Run generator drift checks, focused tests, alignment/interrogation audits, package verification, and diff hygiene.
+7. Document review results, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Alignment section-feedback YAML includes `command: "<producing-skill-or-parent-route>"`.
+- Alignment bottom response YAML includes `command: "<producing-skill-or-parent-route>"`.
+- Pattern A review pages require root `command` to match `agent_routing.command` and the terminal `## Invoke With YAML` route.
+- Interrogation compiled YAML includes root `command` matching `agent_routing.command`.
+- Generated bundles are in sync with canonical conventions.
+- Tests and audits prove the top-level command contract and existing no-downstream-routing boundary still hold.
+
 ## Historical Implementation - Prepare 0.1.12 Publish Boundary
 
 ### Goal

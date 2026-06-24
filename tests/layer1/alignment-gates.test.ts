@@ -337,8 +337,11 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} review page handoff`).toContain(
         "ask the user to review the page, compile either local section-feedback YAML from the relevant section or bottom compiled response YAML",
       );
-      expect(content, `${path} paste into producing route`).toContain(
-        "paste that YAML into the producing skill's continuation route/session",
+      expect(content, `${path} paste self-contained YAML`).toContain(
+        "paste that YAML into a fresh or current agent session",
+      );
+      expect(content, `${path} yaml carries producing route`).toContain(
+        "the YAML itself must include the top-level `command` field for the producing skill's continuation route/session",
       );
       expect(content, `${path} same producing skill`).toContain(
         "The continuation route is the same skill that produced the page",
@@ -359,6 +362,22 @@ describe("alignment page gate contract", () => {
         "If the user already cleared context and pasted YAML into a fresh session, do not ask for another clear",
       );
     }
+  });
+
+  it("keeps self-routing YAML command metadata explicit without weakening approval boundaries", () => {
+    const routing = read("docs/alignment-yaml-routing-contract.md");
+    expect(routing).toContain("compiled YAML's top-level `command` field");
+    expect(routing).toContain("required continuation metadata for the producing skill or parent orchestrator");
+    expect(routing).toContain("not downstream routing");
+    expect(routing).toContain("root `command` and `agent_routing.command` must match exactly");
+    expect(routing).toContain("must name the parent orchestrator, never a child framework path command");
+
+    const loop = read("docs/research-session-loop-convention.md");
+    expect(loop).toContain("a top-level `command` plus `agent_routing.command` naming the same parent orchestrator");
+    expect(loop).toContain('command: "$competitive-analysis research/afps-tracker"');
+    expect(loop).toContain("The top-level `command`, `agent_routing.command`, and `## Invoke With YAML` command must be the same");
+    expect(loop).toContain("compiled YAML carrying top-level `command` plus `agent_routing`");
+    expect(loop).toContain("standalone execution authority");
   });
 
   it("requires confirmed pages to remove approval UI while preserving approval and evidence records", () => {
@@ -900,6 +919,15 @@ describe("alignment page gate contract", () => {
         "do not require every required gate question to be answered before compiling partial responses",
       );
       expect(content, `${path} response status`).toContain("`response_status` (`partial` or `complete`)");
+      expect(content, `${path} continuation command field`).toContain("**Continuation command YAML field.**");
+      expect(content, `${path} local feedback command field`).toContain('`command: "<producing-skill-or-parent-route>"`');
+      expect(content, `${path} response command field`).toContain('`command: "<producing-skill-or-parent-route>"`');
+      expect(content, `${path} command avoids separate copy`).toContain(
+        "so the user does not have to copy a separate command",
+      );
+      expect(content, `${path} command metadata boundary`).toContain(
+        "review-loop continuation metadata, not downstream routing or execution authority",
+      );
       expect(content, `${path} not approved`).toContain(
         "`approval_status` (`not-approved` or `ready-for-agent-review`)",
       );
@@ -1021,18 +1049,21 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("requires compiled YAML to identify the source alignment page", () => {
+  it("requires compiled YAML to identify the source alignment page and continuation command", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} feedback alignment_page`).toMatch(
-        /The local feedback compile generates YAML with `alignment_page: alignment\/[^`]+\.html`, `feedback_status: revision-request`/,
+        /The local feedback compile generates YAML with `alignment_page: alignment\/[^`]+\.html`, `command: "<producing-skill-or-parent-route>"`, `feedback_status: revision-request`/,
       );
       expect(content, `${path} response alignment_page`).toMatch(
-        /mixed response payload with `alignment_page: alignment\/[^`]+\.html`, `response_status`/,
+        /mixed response payload with `alignment_page: alignment\/[^`]+\.html`, `command: "<producing-skill-or-parent-route>"`, `response_status`/,
       );
       expect(content, `${path} repo-relative path source`).toMatch(
         /Populate `alignment_page` from the known repo-relative output path used to write the HTML page/,
+      );
+      expect(content, `${path} continuation command source`).toContain(
+        "Populate `command` from the exact continuation route the user should invoke with this YAML",
       );
     }
   });
