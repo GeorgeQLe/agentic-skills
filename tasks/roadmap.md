@@ -2,6 +2,28 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Prepare 0.1.12 Publish Boundary
+
+### Goal
+
+Make sure the `0.1.12` package release boundary is coherent, validated, and ready for the real `./publish.sh patch` publish path.
+
+### Plan
+
+1. Capture the visible release-prep invocation under `prompts/ship-end/`.
+2. Audit git state, release notes, package version metadata, publish script behavior, and current task state.
+3. Reconcile `CHANGELOG.md` so `0.1.12` describes the actual `v0.1.11..HEAD` package boundary and the intended patch publish path.
+4. Run package validation and release-prep checks, including the exact publish dry-run path when the tree is clean enough for `publish.sh`.
+5. Document review results, ship manifest, and history for this release-prep session.
+6. Commit and push the release-prep boundary on `master`.
+
+### Acceptance Criteria
+
+- `CHANGELOG.md` has a coherent `0.1.12` section for the pending npm publish.
+- Source package metadata remains in the expected pre-publish state or is explicitly bumped by the publish script path.
+- Package validation passes, or any blocker is documented without shipping.
+- The final repo state has no unintended tracked dirt and no unpushed release-prep commit.
+
 ## Historical Implementation - Brainstorm Feature-Interview Availability Gate
 
 ### Goal

@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-24 - Skillpacks 0.1.12 publish-boundary reconciliation
+
+- Reconciled a concurrent `/ship-end` session's in-flight 0.1.12 publish-prep into a coherent, shippable state. The other session had staged an expanded `CHANGELOG.md` `[0.1.12]` section (Added/Changed/Fixed/Verification) and unstaged `tasks/roadmap.md` + `tasks/todo.md` planning edits, but stalled before creating the ship manifest its CHANGELOG referenced and before committing.
+- Verified the staged `[0.1.12]` Added/Changed/Fixed entries accurately map to `v0.1.11..HEAD` commits (`6cb8d04c`, `198050e2`, `3034cbd2`, `47959e71`, `ba6b408a`, design-tree/routing commits). Confirmed all three "Fixed" CLI behaviors exist and are tested in source.
+- Resolved the dangling reference by creating `tasks/ship-manifest-2026-06-24-prepare-0-1-12.md` documenting the boundary, validation, and publish handoff.
+- Clean-tree revalidation green: `build:check` (390 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 127/127 (incl. published-package stale-metadata retry tests), offline `npm pack ./build --dry-run` exit 0 (3615 files at `0.1.11`), Skills Showcase data validation, and `git diff --check --cached`.
+- Left source `package.json` + `dist/skillpacks-manifest.json` at `0.1.11` so `./publish.sh patch` bumps to `0.1.12` from a clean tree. Closed the prepare-0.1.12 sections in `tasks/todo.md` (Review) and `tasks/roadmap.md` (demoted to Historical).
+- Handoff: user runs `./publish.sh patch` after `npm login` as `glexcorp`, then commits the bumped `package.json` + manifest at `0.1.12`, tags `v0.1.12`, and pushes commit + tag.
+
 ## 2026-06-24 - Brainstorm feature-interview availability gate
 
 - Captured the visible skill-update invocation in `prompts/skill-creator/skill-prompt-20260624-110537-brainstorm-feature-interview.md`.

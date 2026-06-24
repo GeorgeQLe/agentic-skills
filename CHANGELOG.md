@@ -14,11 +14,32 @@ Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
 
 Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.11`, so the real `./publish.sh patch` command can bump and publish `0.1.12` from a clean tree.
 
+### Added
+
+- Added the product-design `create-ui-experiment` skill for clickable UI experiment routes, with bundled alignment and design-tree guidance.
+- Added deterministic design-tree branch-order metadata, sample coverage, and flow-tree contract tests for user-flow and UX-variation branch selection.
+- Added published-package stale-metadata retry coverage so release verification proves bounded npm registry propagation handling.
+
+### Changed
+
+- Product-design bundled skills now route UI work through a clearer tree: `user-flow-map` orders branches by journey, `ux-variations` resolves child branches deterministically, `ui-interview` remains non-buildout by default, and clickable route experiments hand off to `create-ui-experiment`.
+- Design-tree loop bundles now make clear-and-continue session handoffs actionable and include a one-time single-session tradeoff note.
+- Alignment-page bundles now explicitly route review, section feedback YAML, and final approval YAML back to the producing skill context.
+- Interrogation-page bundles now clarify when open-answer claims are validated during compiled-answer consumption versus deferred to downstream research.
+- `afps-status`, `brainstorm`, `session-triage`, and exec-loop routing contracts now include the latest downstream-skill availability gates and product-design pack routing guards.
+
 ### Fixed
 
 - Published-package verification now polls npm metadata with `--prefer-online` before failing, so `./publish.sh patch` can tolerate bounded registry propagation lag after a successful publish without weakening version, dist-tag, license, or versions-list checks.
 - `skillpacks refresh --all --dry-run` now prints final unsafe reasons when its summary says `Safe to run: no`, including legacy user-home installs and dry-run planning failures.
 - `skillpacks uninstall-global --dry-run` now previews legacy global cleanup, and `skillpacks uninstall-global --reinstall-base --dry-run` previews project-local base-skill migration without mutating global skills or project files.
+- Product-design `state-model` contracts now use the correct `model_tree_ref` / `state_tree_path` references consistently.
+
+### Verification
+
+- Publish-prep verification passed in source from a clean tree: `build:check` (390 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 127/127 including the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3615 files staged at `0.1.11`).
+- Release-readiness revalidation for the final `v0.1.11..HEAD` boundary was run on 2026-06-24; see `tasks/ship-manifest-2026-06-24-prepare-0-1-12.md`.
+- The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
 
 ## [0.1.11] - 2026-06-23
 
