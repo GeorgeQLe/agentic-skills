@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-24
+
+- Gated the `$brainstorm` new-phase-discovery route behind a `product-design` pack-availability check: when the pack is not enabled, the route now prepends `npx skillpacks install product-design` (plus a fresh-Codex-session note) instead of emitting a bare `$brainstorm` that can't be invoked.
+
 ## v0.8 - 2026-06-23
 
 - Added task-doc audit gating and current-only next-work routing so historical roadmap/advisory unchecked items are not selected as executable work unless promoted into `tasks/todo.md`.

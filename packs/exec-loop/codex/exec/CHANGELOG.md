@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4 - 2026-06-24
+
+- Gated the `$brainstorm` new-phase-discovery route behind a `product-design` pack-availability check: when the pack is not enabled, the route now prepends `npx skillpacks install product-design` (plus a fresh-Codex-session note) instead of emitting a bare `$brainstorm` that can't be invoked.
+- Added the missing generic cross-pack catch-all rule (verify `enabled_packs`, prepend `npx skillpacks install <pack-name>` when absent) that the Codex `$exec` variant lacked entirely.
+
 ## v0.3 - 2026-06-09
 
 - Updated Skills Showcase refresh commands to use app-owned generator and validator paths after the workspace split.
