@@ -8,6 +8,12 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-06-24
+
+Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
+
+Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.11`, so the real `./publish.sh patch` command can bump and publish `0.1.12` from a clean tree.
+
 ### Fixed
 
 - Published-package verification now polls npm metadata with `--prefer-online` before failing, so `./publish.sh patch` can tolerate bounded registry propagation lag after a successful publish without weakening version, dist-tag, license, or versions-list checks.
