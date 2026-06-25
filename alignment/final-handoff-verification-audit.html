@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="review">
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="confirmed">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,9 +14,7 @@
   --text-muted: #8b949e;
   --accent: #58a6ff;
   --green: #3fb950;
-  --red: #f85149;
   --orange: #d29922;
-  --purple: #bc8cff;
 }
 * { box-sizing: border-box; }
 body {
@@ -28,7 +26,7 @@ body {
   letter-spacing: 0;
 }
 main {
-  width: min(1120px, calc(100vw - 40px));
+  width: min(1040px, calc(100vw - 40px));
   max-width: 100%;
   margin: 0 auto;
   padding: 40px 0 64px;
@@ -39,9 +37,9 @@ h1, h2, h3 {
   line-height: 1.2;
   letter-spacing: 0;
 }
-h1 { margin: 0 0 10px; font-size: 2.35rem; }
-h2 { margin: 0; color: var(--accent); font-size: 1.45rem; }
-h3 { margin: 24px 0 10px; font-size: 1.05rem; }
+h1 { margin: 0 0 10px; font-size: 2.25rem; }
+h2 { margin: 0 0 12px; color: var(--accent); font-size: 1.35rem; }
+h3 { margin: 18px 0 8px; font-size: 1.05rem; }
 p { margin: 10px 0; }
 a { color: var(--accent); }
 code {
@@ -63,73 +61,49 @@ header {
   display: inline-flex;
   align-items: center;
   min-height: 32px;
-  border: 1px solid var(--purple);
+  border: 1px solid var(--green);
   border-radius: 999px;
   padding: 4px 12px;
   color: #fff;
-  background: rgba(188, 140, 255, .12);
+  background: rgba(63, 185, 80, .12);
   font-weight: 700;
   font-size: .9rem;
 }
-.toc, section {
+section, .toc {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 8px;
   padding: 18px;
   margin: 18px 0;
 }
-.toc h2 { margin-bottom: 10px; }
 .toc ul { columns: 2; padding-left: 22px; margin: 10px 0 0; }
 .toc li { break-inside: avoid; margin: 5px 0; }
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-  margin-bottom: 14px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: 12px;
 }
-.feedback {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-button, .option {
-  min-height: 44px;
-  padding: 10px 16px;
-  border-radius: 7px;
+.tile {
   border: 1px solid var(--border);
+  border-radius: 8px;
   background: #0b1018;
-  color: var(--text);
-  font: inherit;
+  padding: 14px;
 }
-button { cursor: pointer; }
-button:hover, .option:hover { border-color: var(--accent); }
-.fb-btn[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
-.fb-btn[data-choice="down"].active { border-color: var(--red); color: var(--red); }
-.fb-btn[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
-.feedback-panel, .local-yaml, #compiled-yaml {
-  display: none;
-  margin-top: 10px;
+.tile strong { display: block; color: #fff; margin-bottom: 4px; }
+.callout {
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
 }
-.feedback-panel.visible, .local-yaml.visible, #compiled-yaml.visible { display: block; }
-textarea {
-  width: 100%;
-  min-height: 96px;
-  resize: vertical;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: #0b1018;
-  color: var(--text);
-  padding: 10px;
-  font: inherit;
+.callout.success {
+  border-color: var(--green);
+  background: rgba(63, 185, 80, .08);
 }
-.yaml-output {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  min-height: 150px;
+.callout.warning {
+  border-color: var(--orange);
+  background: rgba(210, 153, 34, .08);
 }
 .table-wrap {
   overflow-x: auto;
@@ -148,588 +122,123 @@ th, td {
   text-align: left;
   vertical-align: top;
 }
-th {
-  background: var(--surface);
-  color: #fff;
-}
+th { background: #0b1018; color: #fff; }
 tr:last-child td { border-bottom: 0; }
-.callout {
-  border: 1px solid var(--purple);
-  background: var(--surface-2);
-  border-radius: 8px;
-  padding: 14px;
-  margin: 12px 0;
-}
-.warning {
-  border-color: var(--orange);
-  background: rgba(210, 153, 34, .08);
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
-  gap: 12px;
-}
-.tile {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #0b1018;
-  padding: 14px;
-}
-.tile strong { display: block; color: #fff; margin-bottom: 4px; }
-.question {
-  border: 1px solid var(--purple);
-  background: var(--surface-2);
-  border-radius: 8px;
-  padding: 14px;
-  margin-top: 14px;
-}
-.question h3 {
-  color: var(--purple);
-  margin-top: 0;
-}
-.options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: 10px;
-}
-.option {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-}
-.option input { margin-top: 5px; }
-.notes {
-  display: none;
-  margin-top: 10px;
-}
-.notes.visible { display: block; }
-.compile-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin: 12px 0;
-}
-.copy-status { color: var(--text-muted); }
 @media (max-width: 860px) {
   .toc ul { columns: 1; }
 }
 @media (max-width: 560px) {
-  main { width: min(100vw - 24px, 1120px); padding-top: 24px; }
-  h1 { font-size: 1.9rem; }
+  main { width: min(100vw - 24px, 1040px); padding-top: 24px; }
+  h1 { font-size: 1.85rem; }
 }
 </style>
 </head>
 <body>
 <main>
   <header>
-    <p class="status">alignment_status: review</p>
+    <p class="status">alignment_status: confirmed</p>
     <h1>Final-Handoff Verification Audit</h1>
-    <p class="meta-line">Alignment date: 2026-06-25 | Category: QA &amp; Meta-Skill Improvement | Visual tier: document | Artifact: <code>alignment/final-handoff-verification-audit.html</code></p>
-    <p>This page is an approval surface for an audit plan. The audit would inspect shared conventions and benchmark or check surfaces that govern confirmed-artifact next-step routing in final handoffs. It does not approve any convention, benchmark, or skill-contract change by itself.</p>
-    <div class="callout warning">
-      <strong>Pre-approval stop:</strong> do not edit alignment conventions, benchmarks, checks, or skill files from this page alone. Implementation starts only after bottom compiled response YAML has <code>approval_status: ready-for-agent-review</code>.
+    <p class="meta-line">Alignment date: 2026-06-25 | Confirmed: 2026-06-25 | Category: QA &amp; Meta-Skill Improvement | Visual tier: document</p>
+    <p>This page records final approval and completion of the report-only audit for confirmed-artifact final handoff routing.</p>
+    <div class="callout success">
+      <strong>Confirmed artifact:</strong> <code>tasks/final-handoff-verification-audit.md</code> is the canonical audit report. This page is current for the completed alignment cycle and may be amended later only by archiving this confirmed page first.
     </div>
   </header>
 
   <section class="toc" id="toc">
-    <div class="section-head">
-      <h2>Table of Contents</h2>
-      <div class="feedback" data-section="Table of Contents"></div>
-    </div>
+    <h2>Table Of Contents</h2>
     <ul>
-      <li><a href="#goal">Audit Goal</a></li>
-      <li><a href="#evidence-surfaces">Evidence Surfaces</a></li>
-      <li><a href="#procedure">Proposed Audit Procedure</a></li>
-      <li><a href="#decision-framework">Decision Framework</a></li>
-      <li><a href="#validation">Validation Plan</a></li>
-      <li><a href="#approval-gates">Approval Gates</a></li>
-      <li><a href="#compile">Compile Responses</a></li>
+      <li><a href="#approval-record">Approval Record</a></li>
+      <li><a href="#report-summary">Report Summary</a></li>
+      <li><a href="#evidence">Evidence Summary</a></li>
+      <li><a href="#recommendation">Recommendation</a></li>
+      <li><a href="#validation">Validation Notes</a></li>
     </ul>
   </section>
 
-  <section id="goal">
-    <div class="section-head">
-      <h2>Audit Goal</h2>
-      <div class="feedback" data-section="Audit Goal"></div>
-    </div>
+  <section id="approval-record">
+    <h2>Approval Record</h2>
     <div class="grid">
       <div class="tile">
-        <strong>Primary question</strong>
-        <p>Do final handoffs after confirmed artifacts reliably tell the user the concrete next step, or do they leave the user with a completed artifact but no actionable continuation route?</p>
+        <strong>Gate 1: Audit Scope</strong>
+        <p>Audit confirmed-artifact final handoff routing only.</p>
       </div>
       <div class="tile">
-        <strong>Scope boundary</strong>
-        <p>The planned audit is report-only. It may inspect conventions, benchmark fixtures, check scripts, skill contracts, and recent examples, but it must not mutate those surfaces until a follow-up change is explicitly approved.</p>
+        <strong>Gate 2: Target Surfaces</strong>
+        <p>Inspect shared conventions, benchmark/check surfaces, session-triage routing, and a small recent example set.</p>
       </div>
       <div class="tile">
-        <strong>Preferred durable fix</strong>
-        <p>If evidence proves a gap, prefer a shared convention or benchmark/check guard over skill-local warnings unless the issue is narrow to one skill contract.</p>
+        <strong>Gate 3: Report Artifact Path</strong>
+        <p>Write the audit report to <code>tasks/final-handoff-verification-audit.md</code>.</p>
       </div>
       <div class="tile">
-        <strong>Output artifact</strong>
-        <p>The proposed report path is <code>tasks/final-handoff-verification-audit.md</code>. The report should separate verified evidence, inferred risk, responsible contract gap, and recommended follow-up route.</p>
+        <strong>Gate 4: Recommendation Authority</strong>
+        <p>The audit may recommend shared convention or benchmark/check changes, but may not implement them.</p>
       </div>
     </div>
   </section>
 
-  <section id="evidence-surfaces">
-    <div class="section-head">
-      <h2>Evidence Surfaces</h2>
-      <div class="feedback" data-section="Evidence Surfaces"></div>
+  <section id="report-summary">
+    <h2>Report Summary</h2>
+    <div class="callout warning">
+      <strong>Verdict:</strong> partially verified. One prior confirmed-artifact handoff omission is documented, and the current checks do not mechanically protect the final terminal handoff after approved artifacts are written.
     </div>
-    <p>The audit should start narrow, with the contracts most likely to own final-handoff routing. It should broaden only if those surfaces do not explain the behavior.</p>
-    <div class="table-wrap" data-tts-narrative="This table lists the evidence surfaces proposed for the final handoff verification audit. The main surfaces are shared alignment conventions, next-step routing docs, benchmark and check scripts, final handoff examples, and session triage routing rules.">
+    <p>The audit found that shared contracts already cover the broad route requirement and the pre-approval boundary. The gap is narrower: existing audits and benchmark helpers do not specifically replay the final confirmed-artifact completion path and assert that the terminal response renders a concrete next route.</p>
+    <p>Read the full report at <a href="../tasks/final-handoff-verification-audit.md"><code>tasks/final-handoff-verification-audit.md</code></a>.</p>
+  </section>
+
+  <section id="evidence">
+    <h2>Evidence Summary</h2>
+    <div class="table-wrap" data-tts-narrative="The audit evidence shows one verified prior final handoff omission, adequate high-level contracts, and missing focused validation for terminal completion responses after confirmed artifacts.">
       <table>
         <thead>
           <tr>
             <th>Surface</th>
-            <th>Reason to inspect</th>
-            <th>Expected evidence</th>
-            <th>Mutation allowed by this page</th>
+            <th>Finding</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Alignment lifecycle convention</td>
-            <td>Owns review, confirmation, fresh-session handoff, and post-confirmation expectations for alignment pages.</td>
-            <td>Rules that require, omit, or ambiguously describe final next-step routing after confirmed artifacts.</td>
-            <td>No</td>
+            <td><code>prompts/session-triage/skill-prompt-20260625-101843-calcllm-expansion-map.md</code></td>
+            <td>Documents a verified omission where a confirmed-artifact completion response lacked the next route until the user asked what was next.</td>
           </tr>
           <tr>
-            <td>Skill next-step routing docs</td>
-            <td>Records durable route expectations across skills and workflow families.</td>
-            <td>Whether confirmed artifact handoffs are explicitly covered or only pre-approval YAML handoffs are covered.</td>
-            <td>No</td>
+            <td><code>CLAUDE.md</code> shared shipping contract</td>
+            <td>Requires a final route shape: either <code>Recommended next skill</code> or <code>Next work</code> plus <code>Recommended next command</code>.</td>
           </tr>
           <tr>
-            <td>Benchmark and check surfaces</td>
-            <td>Can prevent regressions if final handoff routing is already contractually required but not tested.</td>
-            <td>Fixture, evaluator, or audit coverage for confirmed-page terminal handoffs and next-command clarity.</td>
-            <td>No</td>
+            <td><code>docs/alignment-yaml-routing-contract.md</code></td>
+            <td>Correctly blocks downstream routing while a page is in review and allows routing only after approved artifacts are written or updated.</td>
           </tr>
           <tr>
-            <td>Recent final handoff examples</td>
-            <td>Shows whether the issue reproduces in actual shipped work, not only in abstract contracts.</td>
-            <td>Completed alignment or research runs with final responses, task docs, or ship manifests that include or omit next steps.</td>
-            <td>No</td>
+            <td><code>scripts/skill-alignment-routing-audit.mjs</code></td>
+            <td>Checks active skill text for pre-approval route problems and non-exec direct exec handoffs, but not final terminal completion responses.</td>
           </tr>
           <tr>
-            <td><code>session-triage</code> contract</td>
-            <td>Provides the evidence-bound diagnosis format and routing guard for any recommended follow-up skill.</td>
-            <td>A report structure that separates user-identified issue, verified issue, root cause, responsible contract gap, and validation plan.</td>
-            <td>No</td>
+            <td><code>tests/layer4/setup-helpers/routing.ts</code></td>
+            <td>Already has route-label helpers that can be reused if the guard is implemented through benchmark fixtures.</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <section id="procedure">
-    <div class="section-head">
-      <h2>Proposed Audit Procedure</h2>
-      <div class="feedback" data-section="Proposed Audit Procedure"></div>
-    </div>
-    <div class="table-wrap" data-tts-narrative="This procedure keeps the audit evidence-bound. It starts with contract reading, checks examples, maps gaps, writes a report, and stops before changing shared conventions or benchmark files.">
-      <table>
-        <thead>
-          <tr>
-            <th>Step</th>
-            <th>Work</th>
-            <th>Stop condition</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1. Confirm scope</td>
-            <td>Consume approved YAML from this page and restate the target surfaces, report path, and mutation boundary.</td>
-            <td>Any unanswered required gate or unresolved negative feedback keeps the page in review.</td>
-          </tr>
-          <tr>
-            <td>2. Read owning contracts</td>
-            <td>Inspect shared alignment, interrogation, routing, shipping, benchmark, and session-triage contracts that mention final handoffs or next steps.</td>
-            <td>If a single contract already clearly owns the behavior, avoid broad repo-wide scanning.</td>
-          </tr>
-          <tr>
-            <td>3. Sample evidence</td>
-            <td>Review a small set of recent confirmed artifacts, terminal handoffs, task reviews, and benchmark checks for next-step routing presence or absence.</td>
-            <td>If evidence is inconclusive, report the gap rather than asserting a verified issue.</td>
-          </tr>
-          <tr>
-            <td>4. Classify cause</td>
-            <td>Decide whether the problem is agent noncompliance with an adequate contract, missing shared contract language, missing benchmark/check coverage, stale mirrored skill text, or no verified problem.</td>
-            <td>Do not recommend a skill change when evidence points only to one-off noncompliance.</td>
-          </tr>
-          <tr>
-            <td>5. Write report</td>
-            <td>Create or update <code>tasks/final-handoff-verification-audit.md</code> with target, issue, verdict, timeline, root cause, responsible gap, recommended fix, validation plan, confidence, and next skill.</td>
-            <td>The report is the only durable output from the audit unless a later approval authorizes remediation.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="decision-framework">
-    <div class="section-head">
-      <h2>Decision Framework</h2>
-      <div class="feedback" data-section="Decision Framework"></div>
-    </div>
-    <div class="grid">
-      <div class="tile">
-        <strong>Verified contract gap</strong>
-        <p>If shared conventions do not require confirmed-artifact next-step routing, recommend exact shared wording plus a focused validation check.</p>
-      </div>
-      <div class="tile">
-        <strong>Verified check gap</strong>
-        <p>If the contract is clear but no benchmark or audit protects it, recommend a check or fixture family that recognizes final handoff route quality.</p>
-      </div>
-      <div class="tile">
-        <strong>Skill-local gap</strong>
-        <p>If only one skill has stale or missing final output guidance, route a narrow skill update through the skill-development workflow and preserve versioning rules.</p>
-      </div>
-      <div class="tile">
-        <strong>Agent noncompliance</strong>
-        <p>If the existing contract is adequate and the agent ignored it, say so directly and avoid adding more warnings to already adequate docs.</p>
-      </div>
-    </div>
+  <section id="recommendation">
+    <h2>Recommendation</h2>
+    <p>Add one shared final-handoff self-check and one mechanical validation guard. Do not patch individual skill wording first unless the implementation pass finds a narrow skill-local owner.</p>
     <div class="callout">
-      <strong>Recommendation rule:</strong> the audit may recommend convention or benchmark changes only if the approved gates allow recommendations and the evidence identifies an actual contract or check gap. Recommendation is not implementation approval.
+      <strong>Recommended next skill:</strong> <code>$targeted-skill-builder confirmed-artifact final handoff routing check</code>.
     </div>
+    <p>Availability guard: <code>targeted-skill-builder</code> is provided by the <code>skill-dev</code> pack and is not currently enabled in <code>.agents/project.json</code>. The immediate project-local route is <code>scripts/pack.sh install skill-dev</code>; start a fresh Codex session if the skill list remains stale.</p>
   </section>
 
   <section id="validation">
-    <div class="section-head">
-      <h2>Validation Plan</h2>
-      <div class="feedback" data-section="Validation Plan"></div>
-    </div>
-    <p>The audit validation should prove the report is evidence-bound and that any recommended remediation has an executable check plan. Page-only verification for this approval surface is separate and runs before handoff.</p>
-    <div class="table-wrap" data-tts-narrative="The validation plan separates approval page checks from the later audit checks. This page should pass the alignment audit and diff hygiene. The later audit should include targeted ripgrep scans, contract comparisons, and concrete validation commands for any recommended fix.">
-      <table>
-        <thead>
-          <tr>
-            <th>Validation layer</th>
-            <th>Checks</th>
-            <th>Expected result</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>This review page</td>
-            <td><code>node scripts/audit-alignment-pages.mjs</code> and <code>git diff --check</code>.</td>
-            <td>The page has valid metadata, TTS include, index coverage, no prohibited embeds, and clean whitespace.</td>
-          </tr>
-          <tr>
-            <td>Audit evidence</td>
-            <td>Targeted searches for final handoff, confirmed page, next command, next work, continuation route, and benchmark coverage terms.</td>
-            <td>Every report claim cites a repo contract, example, check, or explicit evidence gap.</td>
-          </tr>
-          <tr>
-            <td>Recommended remediation</td>
-            <td>Proposed commands depend on the diagnosed owner: alignment audit tests for convention changes, benchmark setup tests for evaluator changes, or version/archive checks for skill edits.</td>
-            <td>The report names validation before any later agent mutates shared surfaces.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="approval-gates">
-    <div class="section-head">
-      <h2>Approval Gates</h2>
-      <div class="feedback" data-section="Approval Gates"></div>
-    </div>
-    <p>Answer these required gates with the bottom compile control before the audit starts. Partial responses are allowed and should be treated as review feedback, not audit approval.</p>
-
-    <div class="question" data-gate="audit-scope" data-gate-type="scope/non-goals" data-required="true">
-      <h3>Gate 1: Audit Scope</h3>
-      <p>What scope should the audit use?</p>
-      <div class="options">
-        <label class="option"><input type="radio" name="audit-scope" value="focused-final-handoff-routing" data-answer="Audit confirmed-artifact final handoff routing only."> Focused final-handoff routing (recommended)</label>
-        <label class="option"><input type="radio" name="audit-scope" value="broaden-to-all-alignment-handoffs" data-answer="Audit both pre-approval YAML handoffs and post-confirmation final handoffs."> Include all alignment handoffs</label>
-        <label class="option"><input type="radio" name="audit-scope" value="repo-wide-routing-audit" data-answer="Perform a broader repository routing audit across skill and task handoffs."> Repo-wide routing audit</label>
-        <label class="option"><input type="radio" name="audit-scope" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="audit-scope" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
-      </div>
-      <div class="notes"><textarea data-notes-for="audit-scope" placeholder="Optional notes or scope limits"></textarea></div>
-    </div>
-
-    <div class="question" data-gate="target-surfaces" data-gate-type="target surfaces" data-required="true">
-      <h3>Gate 2: Target Surfaces</h3>
-      <p>Which surfaces may the audit inspect?</p>
-      <div class="options">
-        <label class="option"><input type="radio" name="target-surfaces" value="shared-contracts-checks-and-examples" data-answer="Inspect shared conventions, benchmark/check surfaces, session-triage routing, and a small recent example set."> Shared contracts, checks, and examples (recommended)</label>
-        <label class="option"><input type="radio" name="target-surfaces" value="shared-contracts-only" data-answer="Inspect shared conventions and routing docs only."> Shared contracts only</label>
-        <label class="option"><input type="radio" name="target-surfaces" value="include-active-producing-skills" data-answer="Include active alignment-producing skill contracts if shared contracts do not explain the behavior."> Include active producing skills</label>
-        <label class="option"><input type="radio" name="target-surfaces" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="target-surfaces" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
-      </div>
-      <div class="notes"><textarea data-notes-for="target-surfaces" placeholder="Optional notes, exclusions, or exact surfaces"></textarea></div>
-    </div>
-
-    <div class="question" data-gate="report-artifact" data-gate-type="target artifact" data-required="true">
-      <h3>Gate 3: Report Artifact Path</h3>
-      <p>Where should the audit report be written if this plan is approved?</p>
-      <div class="options">
-        <label class="option"><input type="radio" name="report-artifact" value="tasks-final-handoff-verification-audit" data-answer="Write the audit report to tasks/final-handoff-verification-audit.md." data-target-path="tasks/final-handoff-verification-audit.md"> <code>tasks/final-handoff-verification-audit.md</code> (recommended)</label>
-        <label class="option"><input type="radio" name="report-artifact" value="tasks-review-section-only" data-answer="Record the audit only in tasks/todo.md review notes." data-target-path="tasks/todo.md"> Task review notes only</label>
-        <label class="option"><input type="radio" name="report-artifact" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="report-artifact" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
-      </div>
-      <div class="notes"><textarea data-notes-for="report-artifact" placeholder="Optional alternate path or artifact constraints"></textarea></div>
-    </div>
-
-    <div class="question" data-gate="recommendation-authority" data-gate-type="recommendation authority" data-required="true">
-      <h3>Gate 4: Recommendation Authority</h3>
-      <p>May the audit recommend shared convention or benchmark/check changes if evidence supports them?</p>
-      <div class="options">
-        <label class="option"><input type="radio" name="recommendation-authority" value="may-recommend-not-implement" data-answer="The audit may recommend shared convention or benchmark/check changes, but may not implement them."> May recommend, not implement (recommended)</label>
-        <label class="option"><input type="radio" name="recommendation-authority" value="report-only-no-remediation-recommendations" data-answer="The audit should report evidence and stop without remediation recommendations."> Report evidence only</label>
-        <label class="option"><input type="radio" name="recommendation-authority" value="skill-local-recommendations-only" data-answer="The audit may recommend only skill-local changes, not shared convention or benchmark changes."> Skill-local recommendations only</label>
-        <label class="option"><input type="radio" name="recommendation-authority" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="recommendation-authority" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
-      </div>
-      <div class="notes"><textarea data-notes-for="recommendation-authority" placeholder="Optional notes about recommendation limits"></textarea></div>
-    </div>
-  </section>
-
-  <section id="compile">
-    <div class="section-head">
-      <h2>Compile Responses</h2>
-      <div class="feedback" data-section="Compile Responses"></div>
-    </div>
-    <p>Use this section to compile gate answers and selected section feedback into YAML. Complete approval requires all four required gates answered and no unresolved negative or clarification feedback.</p>
-    <div class="compile-actions">
-      <button id="compile-btn" type="button">Compile Responses</button>
-      <button id="copy-compiled-btn" type="button">Copy YAML</button>
-      <span id="compile-status" class="copy-status">No responses compiled yet.</span>
-    </div>
-    <textarea id="compiled-yaml" class="yaml-output" readonly aria-label="Compiled response YAML"></textarea>
+    <h2>Validation Notes</h2>
+    <p>The audit report recommends validating any later remediation with focused routing-audit fixtures, layer1 tests, alignment-page audit, task-doc audit, and diff hygiene. No shared convention, benchmark, check, or skill-contract remediation was implemented by this audit.</p>
+    <p><strong>Next work:</strong> add the shared final-handoff self-check and focused validation guard described in the report.</p>
+    <p><strong>Recommended next command:</strong> <code>scripts/pack.sh install skill-dev</code></p>
   </section>
 </main>
-
-<script>
-const PAGE_PATH = 'alignment/final-handoff-verification-audit.html';
-const COMMAND = '$session-triage final-handoff verification audit';
-const REQUIRED_GATES = ['audit-scope', 'target-surfaces', 'report-artifact', 'recommendation-authority'];
-const feedbackContainers = [...document.querySelectorAll('.feedback[data-section]')];
-
-function yamlQuote(value) {
-  const text = String(value || '');
-  if (!text) return "''";
-  return JSON.stringify(text);
-}
-
-function slugify(value) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
-function makeFeedbackControls(container) {
-  const section = container.dataset.section;
-  const id = slugify(section);
-  container.innerHTML = `
-    <button type="button" class="fb-btn" data-choice="emphasize" aria-label="Emphasize ${section}">emphasize</button>
-    <button type="button" class="fb-btn" data-choice="down" aria-label="Reject or flag concern for ${section}">thumbs down</button>
-    <button type="button" class="fb-btn" data-choice="needs-clarification" aria-label="Request clarification for ${section}">clarification needed</button>
-    <div class="feedback-panel" data-feedback-panel="${id}">
-      <textarea data-feedback-notes="${id}" placeholder="Optional section feedback notes"></textarea>
-      <div class="compile-actions">
-        <button type="button" data-local-compile="${id}">Compile Feedback YAML</button>
-        <button type="button" data-local-copy="${id}">Copy YAML</button>
-        <span class="copy-status" data-local-status="${id}"></span>
-      </div>
-      <textarea class="yaml-output local-yaml" data-local-yaml="${id}" readonly aria-label="Local feedback YAML"></textarea>
-    </div>`;
-}
-
-feedbackContainers.forEach(makeFeedbackControls);
-
-function feedbackAction(choice) {
-  if (choice === 'emphasize') return 'add-weight-to-section';
-  if (choice === 'down') return 'investigate-and-revise';
-  return 'clarify-before-approval';
-}
-
-function selectedFeedbackEntries() {
-  return feedbackContainers.flatMap((container) => {
-    const active = container.querySelector('.fb-btn.active');
-    if (!active) return [];
-    const section = container.dataset.section;
-    const id = slugify(section);
-    const notes = container.querySelector(`[data-feedback-notes="${id}"]`).value.trim();
-    return [{
-      section,
-      feedback: active.dataset.choice,
-      notes,
-      requested_agent_action: feedbackAction(active.dataset.choice)
-    }];
-  });
-}
-
-function unansweredGates() {
-  return REQUIRED_GATES.filter((gate) => !document.querySelector(`input[name="${gate}"]:checked`));
-}
-
-function gateAnswers() {
-  return REQUIRED_GATES.flatMap((gate) => {
-    const input = document.querySelector(`input[name="${gate}"]:checked`);
-    if (!input) return [];
-    const question = input.closest('.question');
-    const notes = question.querySelector(`[data-notes-for="${gate}"]`).value.trim();
-    const status = input.value === 'other' ? 'other' : input.value === 'needs-clarification' ? 'needs-clarification' : 'answered';
-    const lines = [
-      '  - section: ' + yamlQuote(question.querySelector('h3').textContent.trim()),
-      '    gate_type: ' + yamlQuote(question.dataset.gateType),
-      '    status: ' + yamlQuote(status),
-      '    answer: ' + yamlQuote(input.dataset.answer || input.value)
-    ];
-    if (notes) lines.push('    notes: ' + yamlQuote(notes));
-    if (input.dataset.targetPath) lines.push('    target_path: ' + yamlQuote(input.dataset.targetPath));
-    return [lines.join('\n')];
-  });
-}
-
-function sectionFeedbackYaml(entries, indent = '  ') {
-  return entries.map((entry) => {
-    const lines = [
-      `${indent}- section: ${yamlQuote(entry.section)}`,
-      `${indent}  feedback: ${yamlQuote(entry.feedback)}`,
-      `${indent}  requested_agent_action: ${yamlQuote(entry.requested_agent_action)}`
-    ];
-    if (entry.notes) lines.splice(2, 0, `${indent}  notes: ${yamlQuote(entry.notes)}`);
-    return lines.join('\n');
-  }).join('\n');
-}
-
-function listOrEmpty(items) {
-  if (items.length === 0) return ['  []'];
-  return items.map((item) => '  - ' + yamlQuote(item));
-}
-
-function approvalStatus(unanswered, answers, feedbackEntries) {
-  const hasNegativeFeedback = feedbackEntries.some((entry) => entry.feedback === 'down' || entry.feedback === 'needs-clarification');
-  const hasClarificationGate = answers.some((answer) => answer.includes('status: "needs-clarification"'));
-  return unanswered.length === 0 && !hasNegativeFeedback && !hasClarificationGate
-    ? 'ready-for-agent-review'
-    : 'not-approved';
-}
-
-function compileYaml() {
-  const unanswered = unansweredGates();
-  const answers = gateAnswers();
-  const feedbackEntries = selectedFeedbackEntries();
-  const responseStatus = unanswered.length === 0 ? 'complete' : 'partial';
-  const lines = [
-    'alignment_page: ' + yamlQuote(PAGE_PATH),
-    'command: ' + yamlQuote(COMMAND),
-    'response_status: ' + yamlQuote(responseStatus),
-    'approval_status: ' + yamlQuote(approvalStatus(unanswered, answers, feedbackEntries)),
-    'required_gate_status: ' + yamlQuote(unanswered.length === 0 ? 'complete' : 'incomplete'),
-    'unanswered_required_questions:',
-    ...listOrEmpty(unanswered)
-  ];
-  if (answers.length > 0) {
-    lines.push('gate_answers:');
-    lines.push(answers.join('\n'));
-  }
-  if (feedbackEntries.length > 0) {
-    lines.push('section_feedback:');
-    lines.push(sectionFeedbackYaml(feedbackEntries));
-  }
-  return lines.join('\n') + '\n';
-}
-
-async function copyText(text, statusEl, outputEl) {
-  try {
-    await navigator.clipboard.writeText(text);
-    statusEl.textContent = 'Copied YAML to clipboard.';
-  } catch {
-    if (outputEl) {
-      outputEl.focus();
-      outputEl.select();
-    }
-    statusEl.textContent = 'Clipboard blocked; YAML is selected for copying.';
-  }
-}
-
-document.addEventListener('click', (event) => {
-  const fbButton = event.target.closest('.fb-btn');
-  if (fbButton) {
-    const container = fbButton.closest('.feedback');
-    const panel = container.querySelector('.feedback-panel');
-    const wasActive = fbButton.classList.contains('active');
-    container.querySelectorAll('.fb-btn').forEach((btn) => btn.classList.remove('active'));
-    if (wasActive) {
-      panel.classList.remove('visible');
-      container.dataset.feedback = '';
-    } else {
-      fbButton.classList.add('active');
-      panel.classList.add('visible');
-      container.dataset.feedback = fbButton.dataset.choice;
-    }
-  }
-
-  const localCompile = event.target.closest('[data-local-compile]');
-  if (localCompile) {
-    const id = localCompile.dataset.localCompile;
-    const container = localCompile.closest('.feedback');
-    const entry = selectedFeedbackEntries().find((candidate) => candidate.section === container.dataset.section);
-    const output = container.querySelector(`[data-local-yaml="${id}"]`);
-    const status = container.querySelector(`[data-local-status="${id}"]`);
-    if (!entry) {
-      status.textContent = 'Select section feedback first.';
-      return;
-    }
-    output.value = [
-      'alignment_page: ' + yamlQuote(PAGE_PATH),
-      'command: ' + yamlQuote(COMMAND),
-      'feedback_status: "revision-request"',
-      'approval_status: "not-approved"',
-      'unanswered_required_questions:',
-      ...listOrEmpty(unansweredGates()),
-      'section_feedback:',
-      sectionFeedbackYaml([entry])
-    ].join('\n') + '\n';
-    output.classList.add('visible');
-    copyText(output.value, status, output);
-  }
-
-  const localCopy = event.target.closest('[data-local-copy]');
-  if (localCopy) {
-    const id = localCopy.dataset.localCopy;
-    const container = localCopy.closest('.feedback');
-    const output = container.querySelector(`[data-local-yaml="${id}"]`);
-    const status = container.querySelector(`[data-local-status="${id}"]`);
-    if (output.value) copyText(output.value, status, output);
-  }
-});
-
-document.querySelectorAll('.question input[type="radio"]').forEach((input) => {
-  input.addEventListener('change', () => {
-    const question = input.closest('.question');
-    question.querySelector('.notes').classList.add('visible');
-  });
-});
-
-document.getElementById('compile-btn').addEventListener('click', () => {
-  const yaml = compileYaml();
-  const output = document.getElementById('compiled-yaml');
-  const status = document.getElementById('compile-status');
-  if (gateAnswers().length === 0 && selectedFeedbackEntries().length === 0) {
-    status.textContent = 'Answer a gate question or select section feedback first.';
-    return;
-  }
-  output.value = yaml;
-  output.classList.add('visible');
-  copyText(yaml, status, output);
-});
-
-document.getElementById('copy-compiled-btn').addEventListener('click', () => {
-  const output = document.getElementById('compiled-yaml');
-  const status = document.getElementById('compile-status');
-  if (output.value) copyText(output.value, status, output);
-});
-</script>
 <script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>
 </html>

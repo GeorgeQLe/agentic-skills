@@ -2,6 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Final-Handoff Verification Audit Report
+
+### Goal
+
+Audit confirmed-artifact final handoff routing only, using the approved `alignment/final-handoff-verification-audit.html` gate answers, and write the recommendation-only report to `tasks/final-handoff-verification-audit.md`.
+
+### Plan
+
+1. Capture the visible `$session-triage final-handoff verification audit` invocation under `prompts/session-triage/`.
+2. Read the local `session-triage` contract, governing repo instructions, relevant lessons, and the approved alignment page/gate answers.
+3. Inspect shared routing conventions, benchmark/check surfaces, the session-triage contract, and a small recent confirmed-artifact example set.
+4. Write the structured audit report without changing shared conventions, benchmarks, checks, or skill contracts.
+5. Validate the report with targeted scans, task-doc audit, and diff hygiene.
+6. Document results, commit, and push the intended prompt/report/task-doc changes on the primary branch.
+
+### Acceptance Criteria
+
+- The report separates user-identified scope from agent-verified findings.
+- Evidence covers shared conventions, verification/check surfaces, session-triage routing expectations, and recent confirmed-artifact examples.
+- Recommendations name exact files/sections and validation commands, but do not implement those changes.
+- The final handoff includes explicit next work and recommended next command.
+- Verification passes or any blocker is documented.
+
+### Results
+
+- Captured the visible `$session-triage final-handoff verification audit` invocation in `prompts/session-triage/`.
+- Wrote the scoped report to `tasks/final-handoff-verification-audit.md`.
+- Converted `alignment/final-handoff-verification-audit.html` to a confirmed read-only approval record after consuming the approved gate YAML.
+- Found a verified prior handoff omission plus a narrower validation/check gap: current contracts cover the route requirement, but existing audits do not mechanically replay the confirmed-artifact terminal handoff.
+- Recommended a shared final-handoff self-check and focused routing guard; did not implement shared convention, benchmark, check, or skill-contract remediation.
+- Verification passed: alignment-page audit, task-doc audit, active skill routing audit report mode, and diff hygiene.
+
 ## Historical Implementation - Split Social Channel Conventions
 
 ### Goal
