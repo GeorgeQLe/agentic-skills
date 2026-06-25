@@ -2,6 +2,37 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Final-Handoff Verification Audit Alignment Page
+
+### Goal
+
+Create a review-state HTML alignment page for the final-handoff verification audit plan so the user can approve or revise the audit scope before any convention, benchmark, or skill edits happen.
+
+### Plan
+
+1. Re-read the alignment-page convention, current index structure, existing review-page controls, and relevant task instructions.
+2. Add `alignment/final-handoff-verification-audit.html` as a document-tier `qa-meta` review page with the required metadata, TTS include, rendered audit-plan sections, section feedback controls, and bottom response YAML compiler.
+3. Add the page to `alignment/index.html` under `QA & Meta-Skill Improvement` with date `2026-06-25` and `[doc]` badge.
+4. Run `node scripts/audit-alignment-pages.mjs` and `git diff --check`.
+5. Document results, commit, and push the intended page/index/task-doc changes without touching unrelated worktree edits.
+
+### Acceptance Criteria
+
+- The new page is `review` status and does not implement the audit.
+- The page uses `data-alignment-category="qa-meta"` and `data-visual-tier="document"`.
+- The page contains audit goal, evidence surfaces, proposed audit procedure, decision framework, validation plan, and approval gates.
+- Required gates cover audit scope, target surfaces, report artifact path, and whether the audit may recommend shared convention or benchmark changes.
+- Compiled response YAML includes `command: "$session-triage final-handoff verification audit"` and routes to `alignment/final-handoff-verification-audit.html`.
+- The index links the new page exactly once.
+- Alignment audit and diff hygiene pass.
+
+### Results
+
+- Added `alignment/final-handoff-verification-audit.html` as a `qa-meta`, document-tier, review-state approval page.
+- Added the page to `alignment/index.html` under `QA & Meta-Skill Improvement` with date `2026-06-25` and `[doc]` badge.
+- Preserved the pre-approval boundary: the page proposes an audit only and does not change conventions, benchmarks, checks, or skill contracts.
+- Verification passed: alignment-page audit, task-doc audit, diff hygiene, targeted metadata/index scans, and page-script syntax check.
+
 ## Historical Implementation - Build-In-Public Alignment Mode
 
 ### Goal

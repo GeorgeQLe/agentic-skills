@@ -5,41 +5,34 @@
 Active implementation queue: none.
 
 Project: `agentic-skills`.
-Last completed task: Build-In-Public Alignment Mode.
+Last completed task: Final-Handoff Verification Audit Alignment Page.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Build-In-Public Alignment Mode
+## Review - Final-Handoff Verification Audit Alignment Page
 
 ### Goal
 
-Add a build-in-public alignment mode for alignment-producing skills. When enabled, Stage 2 produces a source-safe social-content review page before returning to the normal final artifact approval flow.
+Create a review-state HTML alignment page for the final-handoff verification audit plan so the user can approve or revise the audit scope before any convention, benchmark, or skill edits happen.
 
 ### Checklist
 
-- [x] Inspect dirty worktree state and relevant alignment/config files.
+- [x] Inspect dirty worktree state and relevant alignment conventions.
 - [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Patch the canonical alignment-page convention with the BIP contract.
-- [x] Add `scripts/pack.sh set-bip <on|off|unset>`.
-- [x] Add Node CLI `npx skillpacks set-bip <on|off|unset>` support.
-- [x] Add package tests for `set-bip on`, `off`, and `unset`, including sibling-field preservation.
-- [x] Update CLI/docs compatibility references for the new command.
-- [x] Regenerate bundled alignment convention files and package build artifacts.
-- [x] Run required verification and document results.
-- [x] Commit and push intended changes.
+- [x] Add `alignment/final-handoff-verification-audit.html`.
+- [x] Add the QA & Meta-Skill Improvement index entry.
+- [x] Run alignment audit and diff hygiene checks.
+- [x] Document review results, commit, and push intended changes.
 
 ### Review
 
-- Passed: `npm --workspace packages/skillpacks run test:node`.
-- Passed: `npm --workspace packages/skillpacks run build`.
-- Passed: `node scripts/upgrade-alignment-page.mjs --check`.
-- Passed: `node scripts/skill-convention-bundle-audit.mjs`.
-- Passed: `bash -n scripts/pack.sh`.
-- Passed: temp-project `scripts/pack.sh set-bip on/off/unset` smoke test.
-- Passed: `npm --workspace packages/skillpacks run build:check`.
+- Passed: `node scripts/audit-alignment-pages.mjs`.
 - Passed: `node scripts/audit-task-docs.mjs`.
 - Passed: `git diff --check`.
+- Passed: static metadata and routing scan for review status, `qa-meta` category, document tier, TTS include, command YAML field, and embed-tag absence.
+- Passed: index link scan confirmed the new page is linked exactly once from `alignment/index.html`.
+- Passed: page script syntax check with `new Function(...)`.
 
 ## No Active Implementation Phase
 
-The Build-In-Public alignment mode change is complete and ready to ship. Deferred manual production setup items remain in `tasks/manual-todo.md`; they are not active implementation blockers unless promoted into a future phase.
+The Final-Handoff Verification Audit Alignment Page change is complete and ready to ship. Deferred manual production setup items remain in `tasks/manual-todo.md`; they are not active implementation blockers unless promoted into a future phase.

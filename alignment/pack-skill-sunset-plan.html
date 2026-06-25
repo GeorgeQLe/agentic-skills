@@ -226,8 +226,8 @@ tr:last-child td { border-bottom: 0; }
   <header>
     <p class="status">alignment_status: review</p>
     <h1>Pack Skill Sunset Plan</h1>
-    <p class="meta-line">Alignment date: 2026-06-16 | Category: Utility &amp; Maintenance | Visual tier: document | Artifact: <code>alignment/pack-skill-sunset-plan.html</code></p>
-    <p>This page is a decision review for sunsetting the active <code>pack</code> skill. It records current dependency surfaces, a conservative replacement model, readiness blockers, phased implementation, and gates that must be approved before any implementation begins.</p>
+    <p class="meta-line">Alignment date: 2026-06-25 | Category: Utility &amp; Maintenance | Visual tier: document | Artifact: <code>alignment/pack-skill-sunset-plan.html</code></p>
+    <p>This page records the decision to <strong>fully remove</strong> the agent-facing <code>/pack</code> (Claude) and <code>$pack</code> (Codex) skills. Scope is <strong>skill-only</strong>: <code>scripts/pack.sh</code> stays as the backend (this checkout uses the shell script, not <code>npx skillpacks</code>), and the <code>packages/skillpacks</code> CLI is unaffected. It records the verified reference surface that must be repointed, the real removal blockers and phases, a guided-setup decision gate for the one capability genuinely lost by deletion, and the gates that must be approved before any removal begins.</p>
     <div class="callout warning">
       <strong>Pre-approval stop:</strong> no skill, launcher, CLI, documentation, or test surface should be removed, deprecated, or rewritten from this page alone. Implementation starts only after bottom compiled response YAML has <code>approval_status: ready-for-agent-review</code>.
     </div>
@@ -259,19 +259,19 @@ tr:last-child td { border-bottom: 0; }
     <div class="grid">
       <div class="tile">
         <strong>Default recommendation</strong>
-        <p>Do not fully sunset <code>pack</code> yet. Keep the active skill and shell launcher until Node CLI ownership covers the remaining shell-backed surfaces and package verification is green.</p>
+        <p>Remove both pack skill mirrors (<code>base/claude/pack/</code> and <code>base/codex/pack/</code>). Keep <code>scripts/pack.sh</code> as the backend — this checkout already invokes the shell script directly, so the skills are a redundant agent-facing entry point.</p>
       </div>
       <div class="tile">
-        <strong>Best near-term target</strong>
-        <p>Deprecate user guidance for <code>/pack</code> and <code>$pack</code> only after <code>npx skillpacks</code> / <code>gskp</code> owns the same workflows without relying on shell fallbacks.</p>
+        <strong>Scope boundary</strong>
+        <p>Skill-only. <code>scripts/pack.sh</code> and the <code>packages/skillpacks</code> CLI stay. The <code>CLAUDE.md</code>/<code>AGENTS.md</code> missing-skill fallback uses <code>scripts/pack.sh which</code> and never invokes <code>/pack</code> or <code>$pack</code>, so it is unaffected.</p>
       </div>
       <div class="tile">
-        <strong>Conservative end state</strong>
-        <p>Retain a thin compatibility shim for one release cycle after docs and root instructions route users to the npm CLI.</p>
+        <strong>One thing genuinely lost</strong>
+        <p>The skill's guided setup (repo inspection → pack classification → confirmation gate) and Pack Selection routing knowledge. None of this exists in <code>scripts/pack.sh</code>. Its destination is an explicit gate on this page.</p>
       </div>
       <div class="tile">
         <strong>Hard stop</strong>
-        <p>Do not remove the skill while root instructions still use <code>scripts/pack.sh which</code> as the missing-skill fallback.</p>
+        <p>Do not remove until active routing references (<code>init-agentic-skills</code> and the other callers below) are repointed off <code>/pack</code>/<code>$pack</code> and the guided-setup gate is resolved.</p>
       </div>
     </div>
   </section>
@@ -281,71 +281,77 @@ tr:last-child td { border-bottom: 0; }
       <h2>Current Dependency Evidence</h2>
       <div class="feedback" data-section="Current Dependency Evidence"></div>
     </div>
-    <p>The repository currently has multiple live entry points for pack behavior. The most important risk is that some user-facing and root-instruction paths still name the skill or shell launcher directly.</p>
-    <div class="table-wrap" data-tts-narrative="This table lists current pack dependency surfaces. The active skill mirrors and root instructions still depend on scripts/pack.sh, while the npm CLI owns several commands and delegates remaining commands to the shell script.">
+    <p>All paths below are verified against this checkout. What is removed is the two skill roots; everything that references <code>/pack</code> or <code>$pack</code> must be repointed (to <code>scripts/pack.sh</code> or to <code>init-agentic-skills</code>) before the roots can be deleted. The shell script and npm CLI are explicitly out of scope and stay in place.</p>
+    <div class="table-wrap" data-tts-narrative="This table lists the verified reference surface into the pack skill: the skill roots being removed, active routing references that must be repointed, docs, hard-coded required-file lists, failing tests, and generated artifacts to regenerate. The shell script and npm CLI are out of scope and stay.">
       <table>
         <thead>
           <tr>
             <th>Surface</th>
             <th>Repo path</th>
-            <th>Observed dependency type</th>
-            <th>Sunset impact</th>
+            <th>Reference type</th>
+            <th>Removal impact</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Codex <code>$pack</code> skill</td>
-            <td><code>base/codex/pack/SKILL.md</code></td>
-            <td>Active v0.10 skill. Explicit commands route to <code>scripts/pack.sh</code>; package consumers are told to use <code>npx skillpacks install</code> for installs.</td>
-            <td>Cannot remove until Codex missing-skill fallback and guided setup have a replacement route.</td>
+            <td>Skill roots removed</td>
+            <td><code>base/claude/pack/</code>, <code>base/codex/pack/</code></td>
+            <td>Each holds <code>SKILL.md</code> v0.10, <code>CHANGELOG.md</code>, a bundled <code>scripts/pack.sh</code>, and <code>archive/v0.0</code>–<code>v0.9</code>. No scripted base-skill retirement helper exists.</td>
+            <td>Removal is <code>git rm</code> of both directories plus reference cleanup plus generated-artifact regen.</td>
           </tr>
           <tr>
-            <td>Claude <code>/pack</code> skill</td>
-            <td><code>base/claude/pack/SKILL.md</code></td>
-            <td>Active v0.10 skill. Guided setup uses AskUserQuestion, then <code>scripts/pack.sh install</code> in source checkouts.</td>
-            <td>Cannot remove until Claude users have an equivalent guided flow or docs clearly route to npm CLI commands.</td>
+            <td>Primary routing dependency</td>
+            <td><code>base/{claude,codex}/init-agentic-skills/SKILL.md</code></td>
+            <td>Routes to <code>/pack</code> / <code>$pack</code> for guided setup and refresh (claude lines 11, 24, 25, 35; codex 13, 26, 27, 37).</td>
+            <td>Must be repointed before removal; this is the main caller and the natural home for the guided flow.</td>
           </tr>
           <tr>
-            <td>Shell pack manager</td>
-            <td><code>scripts/pack.sh</code></td>
-            <td>Implements broad command set including <code>recommend</code>, <code>which</code>, <code>install</code>, <code>refresh</code>, <code>pin</code>, <code>prune</code>, and lock handling.</td>
-            <td>Removal is larger than skill sunset. Treat it as a separate CLI backend migration.</td>
+            <td>Routing references (<code>recommend</code>)</td>
+            <td><code>base/{claude,codex}/idea-scope-brief/SKILL.md</code>; <code>packs/product-design/{claude,codex}/spec-interview/SKILL.md</code>; <code>packs/monorepo/{claude,codex}/scaffold/SKILL.md</code></td>
+            <td>Name <code>/pack recommend</code> / <code>$pack recommend</code> (idea-scope-brief 174/177; spec-interview 68/70; scaffold 22/19).</td>
+            <td>Repoint to <code>scripts/pack.sh recommend</code>.</td>
           </tr>
           <tr>
-            <td>Npm CLI command router</td>
-            <td><code>packages/skillpacks/src/cli/run-pack-script.mjs</code></td>
-            <td>Node owns <code>init</code>, <code>install</code>, <code>remove</code>, <code>refresh</code>, <code>doctor</code>, <code>prune</code>, <code>pin</code>, <code>unpin</code>, alignment commands, status, and mode commands. Remaining recognized pack commands fall through to <code>bash scripts/pack.sh</code>.</td>
-            <td>Primary replacement surface exists but is not complete enough to justify full shell or skill removal.</td>
+            <td>Routing references (bare invocation)</td>
+            <td><code>packs/skill-dev/{claude,codex}/skill-interview/SKILL.md</code>; <code>packs/project-fleet/codex/spin-off/SKILL.md:92</code></td>
+            <td>skill-interview names <code>/pack</code> (96) / <code>$pack</code> (98); spin-off has <code>Recommended next skill: $pack</code>.</td>
+            <td>Repoint to <code>scripts/pack.sh</code> or to <code>init-agentic-skills</code> per the guided-setup gate.</td>
           </tr>
           <tr>
-            <td>Node lifecycle implementation</td>
-            <td><code>packages/skillpacks/src/cli/lifecycle.mjs</code></td>
-            <td>Contains manifest-backed install, remove, refresh, doctor, pruning, skill pinning, managed root sync, and base-skill initialization.</td>
-            <td>Good foundation for replacement, but not a full parity proof for guided recommendation and lookup workflows.</td>
-          </tr>
-          <tr>
-            <td>Node project config and locking</td>
-            <td><code>packages/skillpacks/src/cli/project-config.mjs</code></td>
-            <td>Provides project config read/write, lock handling, status output, and project type inference without jq.</td>
-            <td>Supports moving more behavior out of shell, but root instructions must be migrated after parity is proven.</td>
-          </tr>
-          <tr>
-            <td>Compatibility contract tests</td>
-            <td><code>packages/skillpacks/test/compatibility.test.mjs</code></td>
-            <td>Explicitly classifies <code>recommend</code> as shell-backed, <code>which &lt;skill&gt;</code> as shell-backed, and <code>install-deck</code> as hybrid shell materialization requiring bash and jq.</td>
-            <td>These tests should change only after the implementation changes and docs move with it.</td>
-          </tr>
-          <tr>
-            <td>Root missing-skill fallback</td>
-            <td><code>AGENTS.md</code>, <code>CLAUDE.md</code></td>
-            <td>Both instruct agents to run <code>scripts/pack.sh which &lt;skill-name&gt;</code> when a command-like skill is missing.</td>
-            <td>This is a direct blocker for removing or hiding the shell-backed lookup route.</td>
+            <td>Routing references (exec-loop boundary)</td>
+            <td><code>packs/exec-loop/{claude,codex}/{ship,ship-end}/SKILL.md</code></td>
+            <td>"Pack install artifact boundary" passages name <code>/pack</code>/<code>$pack</code> alongside <code>scripts/pack.sh refresh</code>.</td>
+            <td>Repoint to the shell route only.</td>
           </tr>
           <tr>
             <td>Public docs</td>
-            <td><code>README.md</code>, <code>docs/skills-reference.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/decks.md</code></td>
-            <td>Docs already promote <code>npx skillpacks</code> and <code>gskp</code>, but still document <code>/pack</code>, <code>$pack</code>, source-checkout <code>scripts/pack.sh</code>, and shell-backed deck caveats.</td>
-            <td>Docs can be migrated after CLI ownership decisions, not before.</td>
+            <td><code>README.md:140</code>, <code>docs/QUICKSTART.md:91</code>, <code>docs/packs.md:101-102</code>, <code>docs/codex-workflow.md:65,67</code>, <code>docs/skills-reference.md:93</code>, <code>docs/operating-modes.md:197</code></td>
+            <td>Document the skill (skills-reference is the base-skill table row). <code>docs/skillpacks-install-routing-contract.md</code> already describes <code>/pack install</code> as the legacy route.</td>
+            <td>Remove or repoint skill mentions; keep shell/CLI guidance.</td>
+          </tr>
+          <tr>
+            <td>Hard-coded required-file lists</td>
+            <td><code>scripts/skill-install-routing-audit.sh:24,31</code>; <code>packages/skillpacks/scripts/build-package.mjs:77</code></td>
+            <td><code>P1_REQUIRED_FILES</code> includes both pack SKILL paths (exits 1 if missing); <code>requiredBuildFiles</code> includes <code>base/codex/pack/SKILL.md</code> (throws on missing).</td>
+            <td>Both must be edited or the audit/build will fail after removal.</td>
+          </tr>
+          <tr>
+            <td>Tests that will fail</td>
+            <td><code>packages/skillpacks/test/{package-boundary,manifest,lifecycle}.test.mjs</code></td>
+            <td>package-boundary:84 asserts pack path is published; manifest:66-70 asserts <code>skillByPath('base/codex/pack/SKILL.md')</code>; lifecycle:295,543,602,628,654,753 assert pack-root existence after init/install/refresh.</td>
+            <td>Must be updated to assert absence/removal before tests go green.</td>
+          </tr>
+          <tr>
+            <td>Generated artifacts</td>
+            <td><code>packages/skillpacks/dist/skillpacks-manifest.json</code> (+ <code>build/dist/</code> copy); <code>apps/skills-showcase/public/assets/skills-data.js</code> and <code>docs/skills-showcase/assets/skills-data.js</code></td>
+            <td>Manifest carries <code>base-claude-pack</code>/<code>base-codex-pack</code> entries; showcase data carries <code>/pack</code>/<code>$pack</code> entries. Index-based — stage source removal first per <code>CLAUDE.md</code>.</td>
+            <td>Regenerate after source removal is staged.</td>
+          </tr>
+          <tr>
+            <td>Out of scope (staying)</td>
+            <td><code>scripts/pack.sh</code>, <code>packages/skillpacks</code> CLI</td>
+            <td>The shell pack manager and npm CLI are independent of the skill directories.</td>
+            <td>Not removed, not modified by this work. Not affected: mirror-parity audit, base-skill version-parity audit, alignment audit, <code>.agents/project.json</code>.</td>
           </tr>
         </tbody>
       </table>
@@ -357,8 +363,8 @@ tr:last-child td { border-bottom: 0; }
       <h2>Sunset Definition</h2>
       <div class="feedback" data-section="Sunset Definition"></div>
     </div>
-    <p>"Fully sunset" can mean three different outcomes. The review decision should pick one target before implementation begins.</p>
-    <div class="table-wrap" data-tts-narrative="This table compares three sunset definitions: remove the skill, deprecate it while keeping compatibility, or keep it as an active facade. The conservative choice is deprecate and retain compatibility for one release cycle.">
+    <p>"Sunset" can mean three different outcomes. The decision recorded here is full removal; the other two are documented as non-recommended alternatives.</p>
+    <div class="table-wrap" data-tts-narrative="This table compares three sunset definitions: remove the skill, deprecate it while keeping a shim, or keep it as an active facade. The recommended choice is full removal of both pack skill roots, since the shell backend stays.">
       <table>
         <thead>
           <tr>
@@ -372,24 +378,24 @@ tr:last-child td { border-bottom: 0; }
         <tbody>
           <tr>
             <td>Remove <code>pack</code> skill</td>
-            <td>Delete active <code>base/claude/pack</code> and <code>base/codex/pack</code> skill roots after docs and installed mirrors are updated.</td>
-            <td>Eliminates duplicate agent entry points and forces a single CLI route.</td>
-            <td>Breaks users and agents trained to use <code>/pack</code> or <code>$pack</code>; risky while root instructions still mention shell fallback.</td>
-            <td>Not recommended as the first implementation step.</td>
+            <td><code>git rm</code> both <code>base/claude/pack/</code> and <code>base/codex/pack/</code> roots after routing references and docs are repointed and the guided-setup gate is resolved.</td>
+            <td>Eliminates a redundant agent-facing entry point; <code>scripts/pack.sh</code> already does the work directly. No CLI parity needed because the backend stays.</td>
+            <td>Loses the skill's guided setup unless its destination is decided (the guided-setup gate). Agents trained on <code>/pack</code>/<code>$pack</code> must learn the shell route.</td>
+            <td><strong>Recommended.</strong></td>
           </tr>
           <tr>
             <td>Deprecate and retain compatibility shim</td>
-            <td>Update skill text to say it is deprecated, route explicit work to <code>npx skillpacks</code> / <code>gskp</code>, and retain minimal fallback guidance for one release cycle.</td>
-            <td>Preserves existing workflows while shifting users to the replacement route.</td>
-            <td>Still carries a visible old entry point temporarily.</td>
-            <td>Recommended after CLI parity is complete and verified.</td>
+            <td>Mark the skill deprecated, route work to <code>scripts/pack.sh</code>, and keep a thin shim skill for one release cycle.</td>
+            <td>Preserves the existing entry point while nudging callers off it.</td>
+            <td>Keeps the redundant skill registry surface and the maintenance of a shim with no backend of its own.</td>
+            <td>Not recommended — adds surface without value when the backend already exists.</td>
           </tr>
           <tr>
             <td>Keep as active facade</td>
-            <td>Keep <code>pack</code> as the agent-facing UX and let it call npm or shell helpers internally.</td>
+            <td>Keep <code>pack</code> as the agent-facing UX and let it call <code>scripts/pack.sh</code> internally.</td>
             <td>Lowest disruption for agents.</td>
-            <td>Does not accomplish a true sunset; keeps skill registry clutter.</td>
-            <td>Acceptable only if the goal changes from sunset to stabilization.</td>
+            <td>Does not accomplish removal; keeps two parallel entry points indefinitely.</td>
+            <td>Not recommended — this is the status quo the decision rejects.</td>
           </tr>
         </tbody>
       </table>
@@ -401,23 +407,23 @@ tr:last-child td { border-bottom: 0; }
       <h2>Target Replacement Model</h2>
       <div class="feedback" data-section="Target Replacement Model"></div>
     </div>
-    <p>The target model should make the npm CLI the canonical route and reduce the skill to either no surface or a temporary compatibility notice.</p>
+    <p>After removal there is no <code>/pack</code>/<code>$pack</code> skill. The canonical route in this checkout becomes the shell script directly; the npm CLI remains the route for package consumers. The skill's guided UX is either migrated into <code>init-agentic-skills</code> or dropped, per the guided-setup gate.</p>
     <div class="grid">
       <div class="tile">
-        <strong>Canonical user command</strong>
-        <p><code>npx skillpacks &lt;command&gt;</code> and the <code>gskp</code> alias own pack lifecycle behavior for package consumers.</p>
+        <strong>Canonical route (this checkout)</strong>
+        <p><code>scripts/pack.sh &lt;command&gt;</code> — <code>recommend</code>, <code>which</code>, <code>install</code>, <code>install-deck</code>, <code>refresh</code>, <code>pin</code>, <code>prune</code>, lock handling. Unchanged by this work.</p>
       </div>
       <div class="tile">
-        <strong>Source checkout fallback</strong>
-        <p><code>scripts/pack.sh</code> remains documented only for maintainers or explicitly shell-backed commands until parity is complete.</p>
+        <strong>Package consumers</strong>
+        <p><code>npx skillpacks &lt;command&gt;</code> / <code>gskp</code> remain the route for installed-package users. Out of scope here.</p>
       </div>
       <div class="tile">
         <strong>Agent missing-skill lookup</strong>
-        <p>Root instructions should use <code>npx skillpacks which &lt;skill&gt;</code> or a Node-owned lookup before they stop mentioning <code>scripts/pack.sh which</code>.</p>
+        <p>Already uses <code>scripts/pack.sh which &lt;skill&gt;</code> in <code>CLAUDE.md</code>/<code>AGENTS.md</code> and never invoked the skill. No change needed.</p>
       </div>
       <div class="tile">
-        <strong>Guided setup</strong>
-        <p>Replace skill-mediated guided setup with either a Node-owned <code>recommend</code> flow or explicit docs that require user confirmation before installing packs.</p>
+        <strong>Guided setup (decided by gate)</strong>
+        <p>Either migrate the repo inspection → pack classification → confirmation flow and Pack Selection routing into <code>init-agentic-skills</code>, or drop it and route to raw <code>scripts/pack.sh recommend</code> + <code>install</code>.</p>
       </div>
     </div>
   </section>
@@ -427,52 +433,52 @@ tr:last-child td { border-bottom: 0; }
       <h2>Readiness Blockers</h2>
       <div class="feedback" data-section="Readiness Blockers"></div>
     </div>
-    <div class="table-wrap" data-tts-narrative="This blocker table identifies unresolved work before the pack skill can be sunset. The main blockers are Node ownership of recommend, which, and install-deck, root instruction migration, docs cleanup, and green package verification.">
+    <div class="table-wrap" data-tts-narrative="This blocker table lists the real removal blockers: repoint active routing references, clean up docs, edit hard-coded required-file lists, update failing tests, regenerate the manifest and showcase data, and resolve the guided-setup destination.">
       <table>
         <thead>
           <tr>
             <th>Blocker</th>
-            <th>Why it blocks sunset</th>
+            <th>Why it blocks removal</th>
             <th>Required proof</th>
             <th>Owner surface</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Node-owned <code>recommend</code></td>
-            <td>The guided skill flow currently starts from <code>scripts/pack.sh recommend</code>. Removing the skill without a replacement loses the recommendation checkpoint.</td>
-            <td><code>npx skillpacks recommend</code> works without shell fallback and has tests for repo-signal classification.</td>
-            <td><code>packages/skillpacks/src/cli/*</code>, package tests, docs.</td>
+            <td>Repoint active routing references</td>
+            <td>Skills route to <code>/pack</code>/<code>$pack</code> for guided setup, refresh, and <code>recommend</code>. Deleting the roots leaves dangling skill routes.</td>
+            <td>No active <code>SKILL.md</code> names <code>/pack</code> or <code>$pack</code>; each is repointed to <code>scripts/pack.sh</code> or <code>init-agentic-skills</code> per the guided-setup gate.</td>
+            <td><code>init-agentic-skills</code>, <code>idea-scope-brief</code>, <code>spec-interview</code>, <code>scaffold</code>, <code>skill-interview</code>, <code>spin-off</code>, exec-loop <code>ship</code>/<code>ship-end</code>.</td>
           </tr>
           <tr>
-            <td>Node-owned <code>which</code></td>
-            <td>Root instructions use <code>scripts/pack.sh which</code> for missing-skill fallback. This is the most direct removal blocker.</td>
-            <td><code>npx skillpacks which &lt;skill&gt;</code> resolves pack, install state, and hibernated pack cases without shell fallback.</td>
-            <td><code>run-pack-script.mjs</code>, manifest lookup helpers, root instructions.</td>
+            <td>Docs cleanup</td>
+            <td>Public docs document the skill as a live route.</td>
+            <td>Skill mentions removed or repointed to the shell/CLI route; base-skill table row dropped.</td>
+            <td><code>README.md</code>, <code>docs/QUICKSTART.md</code>, <code>docs/packs.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/skills-reference.md</code>, <code>docs/operating-modes.md</code>.</td>
           </tr>
           <tr>
-            <td><code>install-deck</code> ownership decision</td>
-            <td>Docs and tests state deck materialization still requires bash and jq through packaged shell backend.</td>
-            <td>Either port deck materialization to Node or explicitly classify it as a permanent shell compatibility surface.</td>
-            <td><code>docs/decks.md</code>, compatibility matrix, CLI tests.</td>
+            <td>Edit hard-coded required-file lists</td>
+            <td><code>P1_REQUIRED_FILES</code> and <code>requiredBuildFiles</code> include pack SKILL paths; both fail hard once the files are gone.</td>
+            <td>Pack paths removed from both lists; audit exits 0 and build does not throw.</td>
+            <td><code>scripts/skill-install-routing-audit.sh:24,31</code>, <code>packages/skillpacks/scripts/build-package.mjs:77</code>.</td>
           </tr>
           <tr>
-            <td>Root instruction migration</td>
-            <td><code>AGENTS.md</code> and <code>CLAUDE.md</code> currently name the shell lookup fallback.</td>
-            <td>Root docs route to npm CLI lookup and preserve reload guidance for Claude and Codex.</td>
-            <td>Provisioned instruction source plus generated root files.</td>
+            <td>Update failing tests</td>
+            <td>Tests assert the pack path is published and pack roots exist after lifecycle operations.</td>
+            <td>Assertions updated to expect absence; <code>test:node</code> passes.</td>
+            <td><code>package-boundary.test.mjs:84</code>, <code>manifest.test.mjs:66-70</code>, <code>lifecycle.test.mjs:295,543,602,628,654,753</code>.</td>
           </tr>
           <tr>
-            <td>Docs and tests cleanup</td>
-            <td>Public docs still teach <code>/pack</code>, <code>$pack</code>, and source checkout helper usage in places.</td>
-            <td>Docs consistently distinguish canonical npm route from maintainer-only shell fallback; compatibility tests match the new contract.</td>
-            <td><code>README.md</code>, <code>docs/*</code>, <code>packages/skillpacks/test/*</code>.</td>
+            <td>Regenerate generated artifacts</td>
+            <td>Manifest and showcase data carry pack entries; they are index-based, so removal must be staged before regen (per <code>CLAUDE.md</code>).</td>
+            <td>Manifest (+ build copy) and both <code>skills-data.js</code> files no longer carry pack entries; <code>build:check</code> passes.</td>
+            <td><code>dist/skillpacks-manifest.json</code> (+ <code>build/dist/</code>), <code>apps/skills-showcase/public/assets/skills-data.js</code>, <code>docs/skills-showcase/assets/skills-data.js</code>.</td>
           </tr>
           <tr>
-            <td>Package test health</td>
-            <td>Sunset changes affect install, refresh, docs, compatibility, and active skill registry behavior.</td>
-            <td>Package node tests, build check, alignment audit, skill mirror/version checks, and relevant layer1 routing tests pass.</td>
-            <td>Package test suite and repo-level verification scripts.</td>
+            <td>Resolve guided-setup destination</td>
+            <td>The skill's repo inspection → classification → confirmation flow and Pack Selection routing exist nowhere else. Removal silently loses them unless a destination is chosen.</td>
+            <td>Gate answered: either the flow is migrated into <code>init-agentic-skills</code> or explicitly dropped in favor of raw <code>scripts/pack.sh recommend</code> + <code>install</code>.</td>
+            <td>Guided-setup gate on this page; <code>init-agentic-skills/SKILL.md</code> if migration is chosen.</td>
           </tr>
         </tbody>
       </table>
@@ -484,7 +490,7 @@ tr:last-child td { border-bottom: 0; }
       <h2>Implementation Phases</h2>
       <div class="feedback" data-section="Implementation Phases"></div>
     </div>
-    <div class="table-wrap" data-tts-narrative="This roadmap proposes six phases: assessment, Node parity, agent instruction migration, docs and tests cleanup, deprecation or removal, and release verification.">
+    <div class="table-wrap" data-tts-narrative="This roadmap has six phases: confirm the reference map, resolve the guided-setup gate, repoint routing references and docs, edit required-file lists and update tests, git rm the pack dirs and regenerate generated artifacts staged-before-build, then verify and ship.">
       <table>
         <thead>
           <tr>
@@ -496,39 +502,39 @@ tr:last-child td { border-bottom: 0; }
         </thead>
         <tbody>
           <tr>
-            <td>1. Assessment</td>
-            <td>Inventory active skill, shell, npm, docs, tests, installed roots, generated package outputs, and root instruction references.</td>
-            <td>Evidence table is current and all shell-backed commands are classified.</td>
-            <td>Approve current dependency map.</td>
+            <td>1. Confirm reference map</td>
+            <td>Re-verify the reference surface in the evidence table against the live checkout (routing refs, docs, required-file lists, tests, generated artifacts).</td>
+            <td>Evidence table matches the checkout; no unlisted <code>/pack</code>/<code>$pack</code> reference remains.</td>
+            <td>Approve current reference map.</td>
           </tr>
           <tr>
-            <td>2. Node parity</td>
-            <td>Port or explicitly classify <code>recommend</code>, <code>which</code>, and <code>install-deck</code>. Add tests before changing docs.</td>
-            <td>CLI ownership matrix is green and no accidental shell fallback remains for commands claimed as Node-owned.</td>
-            <td>Approve CLI ownership decision.</td>
+            <td>2. Resolve guided-setup gate</td>
+            <td>Decide whether the guided flow + Pack Selection routing migrates into <code>init-agentic-skills</code> or is dropped in favor of raw <code>scripts/pack.sh</code>.</td>
+            <td>Guided-setup gate answered; destination chosen.</td>
+            <td>Approve guided-setup destination.</td>
           </tr>
           <tr>
-            <td>3. Agent instruction migration</td>
-            <td>Update root instruction source and generated root docs so missing-skill fallback uses the canonical CLI route.</td>
-            <td>Generated <code>AGENTS.md</code> and <code>CLAUDE.md</code> no longer require <code>scripts/pack.sh which</code> unless that is deliberately retained.</td>
-            <td>Approve user-facing route.</td>
+            <td>3. Repoint routing refs + docs</td>
+            <td>Repoint every active <code>SKILL.md</code> reference and every doc mention to <code>scripts/pack.sh</code> or <code>init-agentic-skills</code> per phase 2.</td>
+            <td>No active skill or doc names <code>/pack</code>/<code>$pack</code>; base-skill table row dropped.</td>
+            <td>Approve repointed routes.</td>
           </tr>
           <tr>
-            <td>4. Docs and tests cleanup</td>
-            <td>Update README, skills reference, Codex workflow, decks docs, compatibility matrix, and regression tests.</td>
-            <td>Docs consistently separate package consumer, source maintainer, and compatibility routes.</td>
-            <td>Approve docs/test contract.</td>
+            <td>4. Edit required-file lists + tests</td>
+            <td>Remove pack paths from <code>P1_REQUIRED_FILES</code> and <code>requiredBuildFiles</code>; update the failing package tests to expect absence.</td>
+            <td><code>skill-install-routing-audit.sh</code> exits 0; <code>test:node</code> passes against the edited lists.</td>
+            <td>Approve audit/test contract.</td>
           </tr>
           <tr>
-            <td>5. Deprecation or removal</td>
-            <td>Either rewrite <code>pack</code> as a deprecation shim or remove it from active base mirrors with archives/changelogs as required.</td>
-            <td>Skill versioning and archive rules are satisfied; installed roots/package builds are refreshed if behavior changes.</td>
-            <td>Approve selected sunset target.</td>
+            <td>5. Remove dirs + regenerate artifacts</td>
+            <td><code>git rm</code> both pack roots, <code>git add</code> the removal, then regenerate manifest (+ build copy) and both <code>skills-data.js</code> files (staged-before-build per <code>CLAUDE.md</code>).</td>
+            <td>Pack roots gone; generated artifacts carry no pack entries; source + regenerated artifacts staged together.</td>
+            <td>Approve removal + regen.</td>
           </tr>
           <tr>
-            <td>6. Release verification</td>
-            <td>Run package, skill, docs, alignment, and install-route verification; update ship manifest; commit and push.</td>
-            <td>All required checks pass or any pre-existing failure is proven against unmodified baseline.</td>
+            <td>6. Verification + ship</td>
+            <td>Run the release verification set; update ship manifest; commit and push.</td>
+            <td>All required checks pass or any pre-existing failure is proven against an unmodified baseline.</td>
             <td>Approve release readiness.</td>
           </tr>
         </tbody>
@@ -541,12 +547,12 @@ tr:last-child td { border-bottom: 0; }
       <h2>Release Verification</h2>
       <div class="feedback" data-section="Release Verification"></div>
     </div>
-    <p>The final implementation should use a wider verification set than this planning page because it would touch active skill contracts, generated package outputs, public docs, and CLI behavior.</p>
+    <p>This planning page is verified only by the alignment audit. The downstream removal implementation runs the wider set below because it touches the base-skill registry, generated package outputs, and public docs.</p>
     <div class="grid">
-      <div class="tile"><strong>Page-only checks</strong><p><code>node scripts/audit-alignment-pages.mjs</code>, TTS injection if missing, and <code>git diff --check</code>.</p></div>
-      <div class="tile"><strong>CLI checks</strong><p><code>npm --workspace packages/skillpacks run test:node</code> and <code>npm --workspace packages/skillpacks run build:check</code>.</p></div>
-      <div class="tile"><strong>Skill contract checks</strong><p><code>bash scripts/skill-archive-audit.sh --strict</code>, <code>bash scripts/skill-versions.sh --missing</code>, and mirror parity checks after skill edits.</p></div>
-      <div class="tile"><strong>Routing checks</strong><p>Focused layer1 tests for install routing, skill next-step routing, and root instruction generated-block integrity.</p></div>
+      <div class="tile"><strong>Page-only check</strong><p><code>node scripts/audit-alignment-pages.mjs</code> (run <code>node scripts/inject-tts.mjs</code> first if TTS-include diagnostics fire), plus <code>git diff --check</code>.</p></div>
+      <div class="tile"><strong>Install-routing audit</strong><p><code>bash scripts/skill-install-routing-audit.sh</code> — must exit 0 after pack paths are removed from <code>P1_REQUIRED_FILES</code>.</p></div>
+      <div class="tile"><strong>Package tests</strong><p><code>npm --workspace packages/skillpacks run test:node</code> — confirms the updated boundary/manifest/lifecycle assertions pass.</p></div>
+      <div class="tile"><strong>Build check</strong><p><code>npm --workspace packages/skillpacks run build:check</code> — validates the regenerated manifest against the git index.</p></div>
     </div>
   </section>
 
@@ -561,8 +567,8 @@ tr:last-child td { border-bottom: 0; }
       <h3>Gate 1: Sunset Target</h3>
       <p>What is the intended end state for the <code>pack</code> skill?</p>
       <div class="options">
-        <label class="option"><input type="radio" name="sunset-target" value="deprecate-and-retain-shim" data-answer="Deprecate pack and retain a thin compatibility shim for one release cycle."> Deprecate and retain shim (recommended)</label>
-        <label class="option"><input type="radio" name="sunset-target" value="remove-active-skill" data-answer="Remove active pack skill after all replacement routes are verified."> Remove active skill</label>
+        <label class="option"><input type="radio" name="sunset-target" value="remove-active-skill" data-answer="Remove both active pack skill mirrors after routing references are repointed and the guided-setup gate is resolved."> Remove active skill (recommended)</label>
+        <label class="option"><input type="radio" name="sunset-target" value="deprecate-and-retain-shim" data-answer="Deprecate pack and retain a thin compatibility shim for one release cycle."> Deprecate and retain shim</label>
         <label class="option"><input type="radio" name="sunset-target" value="keep-active-facade" data-answer="Keep pack as the active agent-facing facade."> Keep active facade</label>
         <label class="option"><input type="radio" name="sunset-target" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
         <label class="option"><input type="radio" name="sunset-target" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
@@ -570,30 +576,28 @@ tr:last-child td { border-bottom: 0; }
       <div class="notes"><textarea data-notes-for="sunset-target" placeholder="Optional notes or other target"></textarea></div>
     </div>
 
-    <div class="question" data-gate="cli-ownership" data-gate-type="coverage checkpoint" data-required="true">
-      <h3>Gate 2: CLI Ownership</h3>
-      <p>How should remaining shell-backed commands be handled?</p>
+    <div class="question" data-gate="backend-scope" data-gate-type="scope/non-goals" data-required="true">
+      <h3>Gate 2: Backend Scope</h3>
+      <p>What is the scope of the removal relative to the pack backend?</p>
       <div class="options">
-        <label class="option"><input type="radio" name="cli-ownership" value="port-before-sunset" data-answer="Port recommend, which, and install-deck materialization before deprecating pack."> Port before sunset (recommended)</label>
-        <label class="option"><input type="radio" name="cli-ownership" value="port-recommend-which-only" data-answer="Port recommend and which; document install-deck as a permanent compatibility surface."> Port recommend and which only</label>
-        <label class="option"><input type="radio" name="cli-ownership" value="document-shell-permanent" data-answer="Document remaining shell-backed commands as permanent compatibility surfaces."> Document shell compatibility</label>
-        <label class="option"><input type="radio" name="cli-ownership" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="cli-ownership" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+        <label class="option"><input type="radio" name="backend-scope" value="skill-only" data-answer="Skill only; keep scripts/pack.sh and the packages/skillpacks CLI as the backend."> Skill only; keep scripts/pack.sh (recommended)</label>
+        <label class="option"><input type="radio" name="backend-scope" value="skill-and-shell" data-answer="Remove the skill and also retire scripts/pack.sh in favor of the npm CLI."> Also retire scripts/pack.sh</label>
+        <label class="option"><input type="radio" name="backend-scope" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="backend-scope" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
       </div>
-      <div class="notes"><textarea data-notes-for="cli-ownership" placeholder="Optional notes or ownership constraint"></textarea></div>
+      <div class="notes"><textarea data-notes-for="backend-scope" placeholder="Optional notes or scope constraint"></textarea></div>
     </div>
 
-    <div class="question" data-gate="user-route" data-gate-type="post-approval route" data-required="true">
-      <h3>Gate 3: User-Facing Route</h3>
-      <p>What should docs and root instructions present as the standard route?</p>
+    <div class="question" data-gate="guided-setup-destination" data-gate-type="coverage checkpoint" data-required="true">
+      <h3>Gate 3: Guided-Setup Destination</h3>
+      <p>The skill's guided setup (repo inspection → pack classification → confirmation gate) and Pack Selection routing exist nowhere else. Where should that capability go when the skill is removed?</p>
       <div class="options">
-        <label class="option"><input type="radio" name="user-route" value="standardize-npm" data-answer="Standardize on npx skillpacks / gskp and remove pack guidance after compatibility is ready."> Standardize on npm CLI (recommended)</label>
-        <label class="option"><input type="radio" name="user-route" value="dual-route" data-answer="Keep pack and npm CLI as documented peer routes."> Keep dual route</label>
-        <label class="option"><input type="radio" name="user-route" value="source-first" data-answer="Keep source-checkout scripts/pack.sh guidance prominent for maintainers."> Source-checkout first</label>
-        <label class="option"><input type="radio" name="user-route" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
-        <label class="option"><input type="radio" name="user-route" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+        <label class="option"><input type="radio" name="guided-setup-destination" value="migrate-to-init" data-answer="Migrate the guided flow and Pack Selection routing into init-agentic-skills."> Migrate into init-agentic-skills (recommended)</label>
+        <label class="option"><input type="radio" name="guided-setup-destination" value="drop-route-to-shell" data-answer="Drop the guided flow and route to raw scripts/pack.sh recommend + install."> Drop it; route to raw scripts/pack.sh</label>
+        <label class="option"><input type="radio" name="guided-setup-destination" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="guided-setup-destination" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
       </div>
-      <div class="notes"><textarea data-notes-for="user-route" placeholder="Optional notes or route wording"></textarea></div>
+      <div class="notes"><textarea data-notes-for="guided-setup-destination" placeholder="Optional notes or destination constraint"></textarea></div>
     </div>
 
     <div class="question" data-gate="implementation-approval" data-gate-type="proposed file changes" data-required="true">
@@ -601,7 +605,7 @@ tr:last-child td { border-bottom: 0; }
       <p>May an agent proceed with implementation after this page is reviewed?</p>
       <div class="options">
         <label class="option"><input type="radio" name="implementation-approval" value="approve-planning-only" data-answer="Approve this planning artifact only; do not implement sunset changes yet."> Approve planning only (recommended)</label>
-        <label class="option"><input type="radio" name="implementation-approval" value="approve-implementation-after-parity" data-answer="Approve implementation only after Node parity work is planned and verified."> Approve after parity plan</label>
+        <label class="option"><input type="radio" name="implementation-approval" value="approve-implementation-after-gates" data-answer="Approve implementation only after the sunset-target, backend-scope, and guided-setup gates are answered."> Approve after gates resolved</label>
         <label class="option"><input type="radio" name="implementation-approval" value="approve-immediate-implementation" data-answer="Approve immediate implementation using the selected gates."> Approve immediate implementation</label>
         <label class="option"><input type="radio" name="implementation-approval" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
         <label class="option"><input type="radio" name="implementation-approval" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
@@ -627,7 +631,7 @@ tr:last-child td { border-bottom: 0; }
 
 <script>
 const PAGE_PATH = 'alignment/pack-skill-sunset-plan.html';
-const REQUIRED_GATES = ['sunset-target', 'cli-ownership', 'user-route', 'implementation-approval'];
+const REQUIRED_GATES = ['sunset-target', 'backend-scope', 'guided-setup-destination', 'implementation-approval'];
 const feedbackContainers = [...document.querySelectorAll('.feedback[data-section]')];
 
 function yamlQuote(value) {
