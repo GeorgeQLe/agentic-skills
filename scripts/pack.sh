@@ -28,6 +28,7 @@ Commands:
   doctor            Report skill-install drift vs canonical sources (read-only; non-zero if stale)
   prune [--dry-run]  Remove installed skills whose source no longer exists or whose pack is not enabled
   set-update-mode <mode>  Set .agents/project.json.skill_updates.mode to warn, auto, or unset
+  set-bip <mode>     Set .agents/project.json.alignment.build_in_public to on, off, or unset
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
@@ -310,12 +311,13 @@ read_enabled_packs() {
 write_project_file() {
   local project_type="$1"
   shift
-  local project_scopes notes pinned_versions enabled_skills skill_updates
+  local project_scopes notes pinned_versions enabled_skills skill_updates alignment
   project_scopes="$(project_json_value project_scopes)"
   notes="$(project_json_value notes)"
   pinned_versions="$(read_pinned_versions)"
   enabled_skills="$(read_enabled_skills_json)"
   skill_updates="$(project_json_value skill_updates)"
+  alignment="$(project_json_value alignment)"
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -349,6 +351,9 @@ write_project_file() {
     fi
     if [[ -n "$skill_updates" ]]; then
       printf ',\n  "skill_updates": %s' "$skill_updates"
+    fi
+    if [[ -n "$alignment" ]]; then
+      printf ',\n  "alignment": %s' "$alignment"
     fi
     if [[ -n "$project_scopes" ]]; then
       printf ',\n  "project_scopes": %s' "$project_scopes"
@@ -890,6 +895,31 @@ set_update_mode() {
   echo "Set skill_updates.mode to $mode"
 }
 
+set_bip() {
+  local mode="${1:-}"
+  local value tmp project_type
+  case "$mode" in
+    on) value=true ;;
+    off) value=false ;;
+    unset) ;;
+    *) die "set-bip requires a mode: on, off, or unset" ;;
+  esac
+  command -v jq >/dev/null 2>&1 || die "jq is required for set-bip"
+  if [[ ! -f "$PROJECT_FILE" ]]; then
+    project_type="$(infer_project_type)"
+    PROJECT_AGENT_MODE=""
+    write_project_file "$project_type"
+  fi
+  if [[ "$mode" == "unset" ]]; then
+    tmp="$(jq 'if (.alignment | type) == "object" then .alignment |= del(.build_in_public) | if (.alignment | length) == 0 then del(.alignment) else . end else del(.alignment) end' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  else
+    tmp="$(jq --argjson enabled "$value" '.alignment = ((if (.alignment | type) == "object" then .alignment else {} end) + {build_in_public: $enabled})' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  fi
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
+  echo "$tmp" > "$PROJECT_FILE"
+  echo "Set alignment.build_in_public to $mode"
+}
+
 # Read-only drift report for project-local managed skill installs.
 # Exits non-zero if any install is stale so callers (sync, hook) can branch.
 doctor() {
@@ -1158,6 +1188,12 @@ case "$cmd" in
     require_jq_write
     shift
     set_update_mode "${1:-}"
+    ;;
+  set-bip)
+    acquire_project_lock "$@"
+    require_jq_write
+    shift
+    set_bip "${1:-}"
     ;;
   pin)
     acquire_project_lock "$@"

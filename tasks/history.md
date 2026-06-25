@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-25 - Build-In-Public alignment mode
+
+- Added Build-In-Public mode to the canonical alignment-page convention. Skills now treat explicit `--bip` or `.agents/project.json.alignment.build_in_public: true` as a required Stage 2 halfway review for source-safe social content at `alignment/{skill-name}-{topic}-bip.html`.
+- Defined BIP page gates for angle selection, sample-post selection, tone, claim safety, and publish readiness, with YAML handoff back to the producing skill before normal final artifact approval resumes.
+- Added `scripts/pack.sh set-bip <on|off|unset>` and Node-owned `npx skillpacks set-bip <on|off|unset>` support, preserving sibling `alignment` fields and unrelated project config.
+- Regenerated 306 generated `ALIGNMENT-PAGE.md` bundles and refreshed package manifest/build verification.
+- Verification passed: package Node tests, alignment bundle check, convention bundle audit, Bash syntax and temp-project `set-bip` smoke test, package build check, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-25-build-in-public-alignment-mode.md`.
+
 ## 2026-06-24 — Interrogation open-question markers (recommended answer + agent confidence + clarify-copy)
 
 - Made interrogation-page open questions self-explanatory: extended `docs/interrogation-page-convention.md` so every open-answer question (free-text and recommend-and-override) sits in a `data-open-question` block carrying a `data-recommended-answer` example, a `data-agent-confidence="high|medium|low"` badge, and a `data-clarify-copy` button alongside the existing `data-open-input`. Added a "Need clarification (copy)" paragraph specifying the fixed clipboard payload (`Question: "<text>"` + clarification line) using the alignment `copyText` Clipboard-API-with-textarea-fallback idiom; clipboard-only, not sidecar-captured. Sidecar `open_answers` entries now also record `recommended_answer` + `agent_confidence`.

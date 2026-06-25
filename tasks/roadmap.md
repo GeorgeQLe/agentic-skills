@@ -2,6 +2,40 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Build-In-Public Alignment Mode
+
+### Goal
+
+Add a build-in-public alignment mode for alignment-producing skills. When enabled by an explicit `--bip` flag or `.agents/project.json.alignment.build_in_public: true`, Stage 2 review gains a required source-safe social-content approval page before the normal final artifact approval.
+
+### Plan
+
+1. Update the canonical alignment-page convention with the Build-In-Public contract: triggers, page path, timing, angle/post review model, source-safety requirements, approval gates, and YAML handoff back to the producing skill.
+2. Add supported project-default writers for `.agents/project.json.alignment.build_in_public`: `scripts/pack.sh set-bip <on|off|unset>` and `npx skillpacks set-bip <on|off|unset>`.
+3. Preserve existing `.agents/project.json` fields and sibling `alignment` fields when setting or unsetting the BIP default.
+4. Add package tests for `set-bip on`, `off`, and `unset`, including preservation of existing alignment fields.
+5. Update CLI help and compatibility documentation for the new Node-owned `set-bip` command.
+6. Regenerate alignment convention bundles and package build artifacts.
+7. Run required checks: alignment bundle check, convention bundle audit, package Node tests, package build check, task-doc/diff hygiene, then commit and push.
+
+### Acceptance Criteria
+
+- The shared alignment convention describes BIP mode as applying to every alignment-producing skill, including optional alignment-page skills when they create a page.
+- BIP mode creates `alignment/{skill-name}-{topic}-bip.html` after Stage 2 work/research and before final artifact approval.
+- The BIP page reviews selectable content angles, sample posts for each angle, tone, claim safety, and publish readiness.
+- Draft posts are explicitly source-safe: no unsupported claims, private context, secrets, or premature commitments.
+- Final BIP approval emits YAML to the producing skill; rejected or partial feedback keeps the BIP page in review before normal Stage 2 artifact approval resumes.
+- `scripts/pack.sh set-bip <on|off|unset>` and `npx skillpacks set-bip <on|off|unset>` write `.agents/project.json.alignment.build_in_public` without dropping unrelated fields.
+- Tests and generated bundle checks pass.
+
+### Results
+
+- Added the BIP mode contract to the canonical alignment-page convention and regenerated 306 generated bundles.
+- Added Bash and Node-owned project-config writers for `.agents/project.json.alignment.build_in_public`.
+- Added package tests for `set-bip on`, `off`, and `unset`, including sibling `alignment` preservation.
+- Updated package/CLI docs and verified package build, bundle checks, task docs, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-25-build-in-public-alignment-mode.md`.
+
 ## Historical Implementation - Self-Contained Alignment YAML Commands
 
 ### Goal

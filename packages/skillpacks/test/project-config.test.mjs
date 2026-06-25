@@ -191,6 +191,56 @@ describe('Node project config commands', () => {
       }
     });
   });
+
+  it('sets, clears, and unsets build-in-public mode while preserving sibling alignment fields', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      alignment: {
+        review_depth: 'full'
+      },
+      notes: ['keep me']
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-bip', 'on']), 'Set alignment.build_in_public to on\n');
+    let config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { review_depth: 'full', build_in_public: true });
+    assert.deepEqual(config.enabled_packs, ['devtool']);
+    assert.deepEqual(config.notes, ['keep me']);
+    assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+
+    assert.equal(await runSkillpacks(dir, ['set-bip', 'off']), 'Set alignment.build_in_public to off\n');
+    config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { review_depth: 'full', build_in_public: false });
+    assert.deepEqual(config.notes, ['keep me']);
+
+    assert.equal(await runSkillpacks(dir, ['set-bip', 'unset']), 'Set alignment.build_in_public to unset\n');
+    config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { review_depth: 'full' });
+    assert.deepEqual(config.notes, ['keep me']);
+  });
+
+  it('removes an empty alignment object when unsetting build-in-public mode', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      custom_field: 'preserved',
+      alignment: {
+        build_in_public: true
+      }
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-bip', 'unset']), 'Set alignment.build_in_public to unset\n');
+
+    const config = readProjectConfig(dir);
+    assert.deepEqual(config, {
+      custom_field: 'preserved',
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+  });
 });
 
 describe('discoverProjectRoots', () => {

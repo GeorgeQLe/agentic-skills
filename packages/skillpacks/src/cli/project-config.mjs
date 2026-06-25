@@ -15,6 +15,7 @@ const LOCK_MAX_ATTEMPTS = Number.parseInt(process.env.PACK_LOCK_MAX_ATTEMPTS || 
 const LOCK_SLEEP_SECONDS = Number.parseFloat(process.env.PACK_LOCK_SLEEP_SECONDS || '0.1');
 const VALID_AGENT_MODES = new Set(['claude-only', 'codex-only', 'hybrid']);
 const VALID_UPDATE_MODES = new Set(['warn', 'auto', 'unset']);
+const VALID_BIP_MODES = new Set(['on', 'off', 'unset']);
 
 export function projectFilePath(projectRoot = process.cwd()) {
   return join(projectRoot, '.agents', 'project.json');
@@ -356,6 +357,34 @@ export async function setUpdateMode(mode, projectRoot = process.cwd()) {
     }
     writeProjectConfig(projectRoot, config);
     console.log(`Set skill_updates.mode to ${mode}`);
+    return 0;
+  });
+}
+
+export async function setBuildInPublicMode(mode, projectRoot = process.cwd()) {
+  if (!VALID_BIP_MODES.has(mode || '')) {
+    throw new Error('set-bip requires a mode: on, off, or unset');
+  }
+
+  return withProjectLock(projectRoot, `set-bip ${mode}`, async () => {
+    const config = normalizedProjectConfig(projectRoot);
+    if (mode === 'unset') {
+      if (config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)) {
+        delete config.alignment.build_in_public;
+        if (Object.keys(config.alignment).length === 0) {
+          delete config.alignment;
+        }
+      } else {
+        delete config.alignment;
+      }
+    } else {
+      const existing = config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)
+        ? config.alignment
+        : {};
+      config.alignment = { ...existing, build_in_public: mode === 'on' };
+    }
+    writeProjectConfig(projectRoot, config);
+    console.log(`Set alignment.build_in_public to ${mode}`);
     return 0;
   });
 }

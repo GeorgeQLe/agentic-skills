@@ -6,6 +6,7 @@ import {
   printEnabledPacks,
   printProjectStatus,
   setAgentMode,
+  setBuildInPublicMode,
   setUpdateMode
 } from './project-config.mjs';
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
@@ -64,6 +65,7 @@ const PACK_COMMANDS = new Set([
   'doctor',
   'prune',
   'set-update-mode',
+  'set-bip',
   'pin',
   'unpin',
   'set-mode',
@@ -586,6 +588,7 @@ Commands:
   alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
+  set-bip <mode>               Set build-in-public alignment default: on, off, or unset
   pin <skill> <version>        Pin a skill to an archived version
   unpin <skill>                Revert a pinned skill to latest
   set-mode <mode>              Set project agent mode
@@ -644,6 +647,13 @@ export async function runSkillpacksCli(args) {
       throw new Error('set-update-mode requires exactly one mode: warn, auto, or unset');
     }
     return setUpdateMode(rest[0]);
+  }
+
+  if (command === 'set-bip') {
+    if (rest.length !== 1) {
+      throw new Error('set-bip requires exactly one mode: on, off, or unset');
+    }
+    return setBuildInPublicMode(rest[0]);
   }
 
   if (command === 'uninstall-global') {

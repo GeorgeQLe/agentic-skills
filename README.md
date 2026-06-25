@@ -184,11 +184,13 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
 }
 ```
 
-Git-checkout `scripts/pack.sh` commands preserve existing `project_scopes` and `notes` fields when `jq` is available. The npm `gskp` Node-owned commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`.
+Git-checkout `scripts/pack.sh` commands preserve existing `project_scopes`, `notes`, `skill_updates`, and `alignment` fields when `jq` is available. The npm `gskp` Node-owned commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, `alignment`, and `agent_mode` without requiring `jq`.
 
 Pack commands also write `.agents/.pack.lock` owner metadata and automatically remove stale locks whose recorded process is no longer running.
 
 `.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
+
+Alignment-producing skills can opt into Build-In-Public review by passing `--bip` or by setting the project default with `scripts/pack.sh set-bip <on|off|unset>` or `npx skillpacks set-bip <on|off|unset>`.
 
 If an assistant does not discover project-local skills, use the base `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
 

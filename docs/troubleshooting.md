@@ -46,7 +46,7 @@ When canonical skill sources in this repo are updated (e.g. after `git pull`), i
 
 ### jq Errors
 
-`jq` is required for all pack write operations (install, remove, refresh, set-mode).
+`jq` is required for source-checkout `scripts/pack.sh` write operations (install, remove, refresh, set-mode, set-update-mode, set-bip). Node-owned `npx skillpacks` project-config commands do not require `jq`, except `install-deck` still uses shell materialization.
 
 - **macOS:** `brew install jq`
 - **Debian/Ubuntu:** `sudo apt install jq`

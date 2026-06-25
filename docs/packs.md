@@ -78,6 +78,7 @@ npx skillpacks doctor
 npx skillpacks doctor --fix
 npx skillpacks doctor --fix --agent-docs --dry-run
 npx skillpacks set-update-mode <mode>
+npx skillpacks set-bip <mode>
 ```
 
 Source-checkout equivalents remain available from a local clone:
@@ -91,7 +92,7 @@ scripts/pack.sh status
 
 `npx skillpacks install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
 
-`doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below.
+`doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below. `set-bip <on|off|unset>` stores the optional Build-In-Public alignment default at `.agents/project.json.alignment.build_in_public`.
 
 The npm CLI can install canonical decks from manifest metadata: `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase, so it requires `bash` and `jq`.
 
@@ -235,7 +236,7 @@ Do not install `packs/*` as base skills as a fallback; that recreates the contex
 
 Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `npx skillpacks refresh` or, from a source checkout, `scripts/pack.sh refresh`.
 
-`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available. The npm `gskp` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
+`scripts/pack.sh install`, `remove`, `refresh`, `set-mode`, and `set-bip` preserve existing `project_scopes`, `notes`, `skill_updates`, and `alignment` fields when `jq` is available. The npm `gskp` Node-owned project commands preserve `project_scopes`, `notes`, `pinned_versions`, `enabled_skills`, `skill_updates`, `alignment`, and `agent_mode` without requiring `jq`; see `docs/skillpacks-npm-distribution.md` for the current command compatibility matrix.
 
 To migrate an existing project from a local checkout workflow to npm after publication, keep `.agents/project.json` committed and run `npx skillpacks refresh` from that project. The generated `.claude/skills` and `.codex/skills` roots will be recreated from the package snapshot. If the project pins a skill version, the installed package must include that skill's `archive/<version>/SKILL.md`.
 
