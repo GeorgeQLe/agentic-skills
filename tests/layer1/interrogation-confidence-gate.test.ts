@@ -16,6 +16,8 @@ const participatingSkillDirs = [
   "packs/business-research/claude/positioning",
   "packs/business-research/codex/customer-discovery",
   "packs/business-research/codex/positioning",
+  "packs/product-design/claude/brainstorm",
+  "packs/product-design/codex/brainstorm",
   "packs/product-design/claude/consolidate-prototypes",
   "packs/product-design/claude/spec-interview",
   "packs/product-design/claude/state-model",
@@ -75,6 +77,6 @@ describe("interrogation confidence-gate contract", () => {
     const result = spawnSync(process.execPath, [GENERATOR, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Generated bundles: 18 ownable, exact");
+    expect(result.stdout).toContain("Generated bundles: 20 ownable, exact");
   });
 });

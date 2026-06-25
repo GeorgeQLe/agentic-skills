@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "856b5b3f9122fa169e495867a7a429a9a9c245322987509cd063f2b2a5fe0200",
+  "source_fingerprint": "e6ea91b6d73494ba784c07811e6f53c739438e859baa18b59e2c58f554d1d75d",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7599,18 +7599,20 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/product-design/claude/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "ff191b1dc8a406b506ff95ac116cec2707bcef8bb691782c50dbc69359bc0aec",
+      "content_sha256": "457d4a0989ca1c526c76e73ad803beccb59c9e529105518f55be8bccb17c0e60",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/brainstorm",
       "deck_memberships": []
@@ -7997,18 +7999,20 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/product-design/codex/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "9c1128e6774ad0da24823df8f6fa6b1947febf9a3b0739cbefb22dad8d0dff06",
+      "content_sha256": "a673b115e241a08bed4389a332205e2f98ff4fff6a649dba53f876792b211293",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$brainstorm",
       "deck_memberships": []
