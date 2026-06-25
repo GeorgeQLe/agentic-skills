@@ -94,7 +94,7 @@ Claude route:
 
 ```bash
 /idea-scope-brief
-/pack
+/init-agentic-skills
 npx skillpacks install business-research         # when the research lane is missing
 /customer-discovery
 /competitive-analysis
@@ -128,7 +128,7 @@ Codex route:
 
 ```bash
 $idea-scope-brief
-$pack
+$init-agentic-skills
 npx skillpacks install business-research
 $customer-discovery
 $competitive-analysis

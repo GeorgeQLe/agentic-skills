@@ -98,8 +98,8 @@ The npm CLI can install canonical decks from manifest metadata: `npx skillpacks 
 
 Assistant-native usage also supports guided setup:
 
-- Claude: run `/pack` with no arguments.
-- Codex: run `$pack` with no arguments.
+- Claude: run `/init-agentic-skills` (guided pack setup).
+- Codex: run `$init-agentic-skills` (guided pack setup).
 
 If `.agents/project.json` already exists, bare `pack` refreshes local skill roots from the committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing. Claude uses AskUserQuestion for that checkpoint; Codex uses a text-based Pack Decision Checkpoint that waits for an explicit reply before writing `.agents/project.json`.
 

@@ -137,7 +137,7 @@ Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignm
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
-Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
+Claude users can run `/init-agentic-skills` (guided pack setup), and Codex users can run `$init-agentic-skills`. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
 `npx skillpacks which <skill>` shows which pack provides a skill and whether it is installed. `npx skillpacks refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
 

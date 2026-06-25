@@ -93,7 +93,6 @@ const requiredBuildFiles = [
   "assets/social/youtube-shorts-convention.md",
   "CHANGELOG.md",
   "LICENSE",
-  "base/codex/pack/SKILL.md",
   "packs/code-quality/PACK.md"
 ];
 

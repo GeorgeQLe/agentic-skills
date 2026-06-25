@@ -63,10 +63,8 @@ describe('skillpacks manifest deck metadata', () => {
   it('exposes required convention metadata for bundled skills', () => {
     const ideaScope = skillByPath('base/codex/idea-scope-brief/SKILL.md');
     const userFlowMap = skillByPath('packs/product-design/codex/user-flow-map/SKILL.md');
-    const packSkill = skillByPath('base/codex/pack/SKILL.md');
 
     assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'interrogation-page']);
     assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'design-tree-loop', 'interrogation-page']);
-    assert.deepEqual(packSkill.required_conventions, []);
   });
 });

@@ -19,7 +19,7 @@ For product/app workflows, `/scaffold` is normally downstream of research, proto
    - If not provided or unclear, ask the user.
 
 2. **Learn the project's conventions:**
-   - Read `.agents/project.json` when present. If it is missing, run or recommend `/pack recommend` and include the likely project type in the scaffold plan.
+   - Read `.agents/project.json` when present. If it is missing, run or recommend `scripts/pack.sh recommend` and include the likely project type in the scaffold plan.
    - If this scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` from this source checkout, or `npx skillpacks install <pack>` from the new project shell when using the published package, after the root exists.
    - Read `CLAUDE.md` and `AGENTS.md` for project structure and conventions.
    - Read the monorepo config (`turbo.json`, `pnpm-workspace.yaml`, or equivalent).

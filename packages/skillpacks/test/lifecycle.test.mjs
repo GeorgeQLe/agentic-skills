@@ -293,7 +293,6 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Updated \.agents\/project\.json \(base skills enabled\)/);
     assert.match(stdout, /Initialized project base skills to skillpacks@/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), true);
-    assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
     assert.equal(existsSync(skillPath(dir, 'claude', 'afps-status')), true);
     assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*base\/claude\/codebase-status/);
@@ -541,7 +540,6 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(unmanagedDir), true);
     assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
     assert.equal(existsSync(skillPath(projectA, 'claude', 'codebase-status')), true);
-    assert.equal(existsSync(skillPath(projectA, 'codex', 'pack')), true);
     assert.equal(existsSync(skillPath(projectB, 'claude', 'afps-status')), true);
     assert.equal(readProjectConfig(projectA).base_skills, true);
     assert.deepEqual(readProjectConfig(projectA).notes, ['preserve me']);
@@ -592,7 +590,6 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /=== nested\/project-b ===/);
     assert.match(stdout, /would update \.agents\/project\.json \(base skills enabled\)/);
     assert.match(stdout, /install\s+\.claude\/skills\/codebase-status/);
-    assert.match(stdout, /install\s+\.codex\/skills\/pack/);
     assert.match(stdout, /Summary \(uninstall-global --reinstall-base --dry-run\): 2 project\(s\) scanned/);
     assert.match(stdout, /Dry run\. No global skills or project files were changed/);
     assert.equal(existsSync(join(claudeRoot, 'codebase-status')), true);
@@ -600,7 +597,6 @@ describe('Node lifecycle commands', () => {
     assert.equal(readFileSync(projectConfigPath(projectA), 'utf8'), projectAText);
     assert.equal(readFileSync(projectConfigPath(projectB), 'utf8'), projectBText);
     assert.equal(existsSync(skillPath(projectA, 'claude', 'codebase-status')), false);
-    assert.equal(existsSync(skillPath(projectA, 'codex', 'pack')), false);
     assert.equal(existsSync(skillPath(projectB, 'claude', 'afps-status')), false);
     assert.equal(existsSync(lockDir(projectA)), false);
     assert.equal(existsSync(lockDir(projectB)), false);
@@ -626,7 +622,6 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Initialized project base skills to skillpacks@/);
     assert.equal(readProjectConfig(root).base_skills, true);
     assert.equal(existsSync(skillPath(root, 'claude', 'codebase-status')), true);
-    assert.equal(existsSync(skillPath(root, 'codex', 'pack')), true);
   });
 
   it('uninstall-global --reinstall-base --dry-run previews current-directory init without creating project config', async () => {
@@ -652,7 +647,6 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(join(home, '.claude/skills/codebase-status')), true);
     assert.equal(existsSync(projectConfigPath(root)), false);
     assert.equal(existsSync(skillPath(root, 'claude', 'codebase-status')), false);
-    assert.equal(existsSync(skillPath(root, 'codex', 'pack')), false);
   });
 
   it('installs active packs without bash or jq and writes managed markers', async () => {
@@ -751,7 +745,6 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'idea-scope-brief')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
-    assert.equal(existsSync(skillPath(dir, 'codex', 'pack')), false);
     assert.match(marker(dir, 'claude', 'idea-scope-brief'), /source=.*base\/claude\/idea-scope-brief/);
     assert.match(marker(dir, 'codex', 'idea-scope-brief'), /source=.*base\/codex\/idea-scope-brief/);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
@@ -1115,7 +1108,6 @@ describe('Node lifecycle commands', () => {
     const currentVersion = readFileSync(join(repoRoot, 'base/claude/codebase-status/SKILL.md'), 'utf8')
       .match(/^version:\s*(\S+)/m)[1];
     assert.match(stdout, new RegExp(`Updated \\.claude\\/skills\\/codebase-status v0\\.0 -> ${currentVersion}`));
-    assert.match(stdout, /Installed \.codex\/skills\/pack/);
     assert.match(stdout, /Refreshed project skills to skillpacks@/);
     assert.notEqual(
       readFileSync(join(skillPath(dir, 'claude', 'codebase-status'), 'SKILL.md'), 'utf8'),

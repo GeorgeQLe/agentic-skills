@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-25
+
+- Migrated the guided pack-setup capability in from the removed `pack`/`/pack` skill: added a `## Guided Pack Setup` section (repo inspection → pack classification → `AskUserQuestion` confirmation gate → install) plus the full 23-entry `## Pack Selection` routing table and `## Mixed Monorepos` scoped-config section. Rewrote pack-routing prose so it no longer names the deleted skill, routing instead to the now-internal guided setup, `scripts/pack.sh`, or `npx skillpacks`.
+
 ## v0.11 - 2026-06-17
 
 - Caught Claude up to the Codex mirror version after the project-local `npx skillpacks init` sunset of user-home/global base installs, preserving Claude `/pack` route syntax.

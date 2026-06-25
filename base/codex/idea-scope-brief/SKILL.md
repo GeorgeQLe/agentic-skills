@@ -174,7 +174,7 @@ The `## Next Steps` section must recommend exactly one primary command:
 - If no deck has high confidence and the concept appears to be a business app or user-facing product while the business research lane is not enabled: `npx skillpacks install business-research` from the project shell — this installs the research skills (customer discovery, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
 - If no deck has high confidence and `business-research` or the compatibility `business-app` alias is enabled: `$customer-discovery`.
 - If no deck has high confidence and the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `npx skillpacks install customer-lifecycle` from the project shell.
-- If no deck has high confidence and project type is unclear: `$pack recommend`.
+- If no deck has high confidence and project type is unclear: `scripts/pack.sh recommend`.
 
 When a deck primary command is available, downstream research, discovery, or first-workflow skill routing must appear only as secondary context, not as the primary command.
 

@@ -65,7 +65,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - For `business-app`, read `research/icp.md` when present and ground solution decisions against the ICP.
    - For `game`, read game research artifacts when present: `research/game-audience.md`, `research/game-fantasy.md`, `research/game-core-loop.md`.
    - For `devtool`, read devtool research artifacts when present: `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, `research/devtool-integration-map.md`.
-   - If project type is missing or mismatched, recommend `/pack recommend`, `npx skillpacks install <pack>` from the project shell before doing domain-specific planning.
+   - If project type is missing or mismatched, recommend `scripts/pack.sh recommend`, `npx skillpacks install <pack>` from the project shell before doing domain-specific planning.
    - If `research/idea-brief.md`, `research/icp.md`, or `research/journey-map.md` exists in a business-app project, treat them as source evidence: does this implementation fit the concept constraints, user and customer journey, path to aha, conversion path, retention loop, champion dynamics, technical sophistication, and provisioning/onboarding model?
    - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"

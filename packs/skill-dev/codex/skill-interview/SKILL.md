@@ -95,7 +95,7 @@ After writing the brief and interview log, recommend exactly one next command:
 - `$create-agentic-skill <skill-name>` for repo-managed base skills.
 - `$create-local-skill <skill-name>` for personal local-only skills.
 - `$targeted-skill-builder <existing-skill> <gap>` when the interview found that an existing skill should be updated instead of creating a new skill.
-- `$pack` or a pack-local creation route when the skill belongs inside a project-local pack rather than base skills.
+- `$init-agentic-skills` (guided pack setup) or a pack-local creation route when the skill belongs inside a project-local pack rather than base skills.
 
 Output exactly two lines beyond the normal report:
 

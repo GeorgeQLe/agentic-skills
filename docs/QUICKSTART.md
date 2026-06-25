@@ -88,7 +88,7 @@ npm:
 npx skillpacks status
 ```
 
-Or from within Claude Code: run `/pack` with no arguments. From Codex: run `$pack`.
+Or from within Claude Code: run `/init-agentic-skills` (guided pack setup). From Codex: run `$init-agentic-skills`.
 
 ## 5. Run Your First Skill
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-06-25
+
+- Migrated the guided pack-setup capability in from the removed `pack`/`$pack` skill: added a `## Guided Pack Setup` section (repo inspection → pack classification → plain-text Pack Decision Checkpoint confirmation gate → install), the `## Pack Decision Checkpoint` template, the full 23-entry `## Pack Selection` routing table, and `## Mixed Monorepos` scoped-config section. Rewrote pack-routing prose so it no longer names the deleted skill, routing instead to the now-internal guided setup, `scripts/pack.sh`, or `npx skillpacks`.
+
 ## v0.11 - 2026-06-13
 
 - Sunset the user-home (global) install path. Base skills now install **project-local** via `npx skillpacks init` only; there is no `init.sh`, `--global`, or `~/.codex/skills` base install. Rewrote the process around `npx skillpacks` (`init`/`refresh`/`status`/`doctor`) and added an `uninstall-global` mode that runs `npx skillpacks uninstall-global` to clean up legacy repo-managed installs left in `~/.claude/skills` and `~/.codex/skills`. Dropped the `update`/`latest` checkout-refresh flow and the first-run drift-preference prompts that depended on the retired launcher.

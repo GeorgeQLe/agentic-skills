@@ -102,7 +102,6 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/social-post-convention.md',
       'assets/social-video-content-convention.md',
       ...socialAssetPaths,
-      'base/codex/pack/SKILL.md',
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
       'base/codex/idea-scope-brief/INTERROGATION-PAGE.md',

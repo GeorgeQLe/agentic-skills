@@ -16,7 +16,7 @@ For product/app workflows, `$scaffold` is normally downstream of research, proto
 ## Process
 
 1. Parse the type (package/app) and name from arguments.
-2. Check `.agents/project.json`. If it is missing, run or recommend `$pack recommend` and include the likely project type in the scaffold plan.
+2. Check `.agents/project.json`. If it is missing, run or recommend `scripts/pack.sh recommend` and include the likely project type in the scaffold plan.
 3. If the scaffold creates a new project root, include `.agents/project.json` and install the matching local pack with `scripts/pack.sh install <pack>` from this source checkout, or `npx skillpacks install <pack>` from the new project shell when using the published package, after the root exists.
 4. Learn conventions from CLAUDE.md, AGENTS.md, `.agents/project.json`, and monorepo config.
 5. Find the most recently created package/app as a template.

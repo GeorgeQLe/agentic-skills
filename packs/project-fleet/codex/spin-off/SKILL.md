@@ -89,7 +89,7 @@ The workflow is one skill with a visibility gate, not separate closed-source and
 10. **Report the result.**
     - Summarize source boundary, target repo path, GitHub URL if created, visibility, files moved, host adapters left behind, verification commands, and unresolved publication gates.
     - Include next-step routing:
-      - `Recommended next skill: $pack` when the target repo needs project-local skill packs.
+      - `Recommended next skill: $init-agentic-skills` when the target repo needs project-local skill packs.
       - `Recommended next skill: $ship` when the target repo has local changes ready to ship.
       - `Recommended next skill: $roadmap` when the new repo needs a build plan.
 
