@@ -43,6 +43,8 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "docs/alignment-page-convention.md", to: "assets/alignment-page-convention.md" },
   { fromRoot: repoRoot, from: "docs/interrogation-page-convention.md", to: "assets/interrogation-page-convention.md" },
   { fromRoot: repoRoot, from: "docs/design-tree-loop-convention.md", to: "assets/design-tree-loop-convention.md" },
+  { fromRoot: repoRoot, from: "docs/social-post-convention.md", to: "assets/social-post-convention.md" },
+  { fromRoot: repoRoot, from: "docs/social-video-content-convention.md", to: "assets/social-video-content-convention.md" },
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
   { fromRoot: repoRoot, from: "CHANGELOG.md", to: "CHANGELOG.md" },
   { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" }
@@ -72,6 +74,8 @@ const requiredBuildFiles = [
   "assets/alignment-page-convention.md",
   "assets/interrogation-page-convention.md",
   "assets/design-tree-loop-convention.md",
+  "assets/social-post-convention.md",
+  "assets/social-video-content-convention.md",
   "CHANGELOG.md",
   "LICENSE",
   "base/codex/pack/SKILL.md",

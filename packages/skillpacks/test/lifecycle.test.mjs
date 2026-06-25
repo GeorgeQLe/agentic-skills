@@ -163,6 +163,7 @@ function assertDeclaredBundlesInstalled(projectRoot, tool, skill) {
   for (const id of required) {
     const convention = SKILL_CONVENTIONS[id];
     assert.ok(convention, `${tool}/${skill} declares known convention ${id}`);
+    if (!convention.bundleFile) continue;
     assert.equal(
       existsSync(join(skillPath(projectRoot, tool, skill), convention.bundleFile)),
       true,

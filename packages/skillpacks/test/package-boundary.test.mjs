@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const repoRoot = resolve(packageRoot, '../..');
 
 function run(command, args) {
   const result = spawnSync(command, args, {
@@ -81,6 +83,8 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/alignment-page-convention.md',
       'assets/interrogation-page-convention.md',
       'assets/design-tree-loop-convention.md',
+      'assets/social-post-convention.md',
+      'assets/social-video-content-convention.md',
       'base/codex/pack/SKILL.md',
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
@@ -93,8 +97,34 @@ describe('skillpacks npm publish target boundary', () => {
     }
 
     for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
-      assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
+      if (convention.generatorScript) {
+        assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
+      }
       assert.equal(paths.has(convention.packageAsset), true, `${id} package asset should be published`);
     }
+  });
+
+  it('registers social conventions as static package assets for BIP guidance', () => {
+    assert.deepEqual(
+      Object.keys(SKILL_CONVENTIONS).filter((id) => id.startsWith('social-')).sort(),
+      ['social-post', 'social-video-content']
+    );
+    assert.equal(SKILL_CONVENTIONS['social-post'].canonicalDoc, 'docs/social-post-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-post'].packageAsset, 'assets/social-post-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-post'].bundleFile, undefined);
+    assert.equal(SKILL_CONVENTIONS['social-post'].generatorScript, undefined);
+    assert.equal(SKILL_CONVENTIONS['social-video-content'].canonicalDoc, 'docs/social-video-content-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-video-content'].packageAsset, 'assets/social-video-content-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-video-content'].bundleFile, undefined);
+    assert.equal(SKILL_CONVENTIONS['social-video-content'].generatorScript, undefined);
+
+    const alignmentConvention = readFileSync(resolve(repoRoot, 'docs/alignment-page-convention.md'), 'utf8');
+    assert.match(alignmentConvention, /target channels/);
+    assert.match(alignmentConvention, /docs\/social-post-convention\.md/);
+    assert.match(alignmentConvention, /assets\/social-post-convention\.md/);
+    assert.match(alignmentConvention, /docs\/social-video-content-convention\.md/);
+    assert.match(alignmentConvention, /assets\/social-video-content-convention\.md/);
+    assert.match(alignmentConvention, /platform_aligned/);
+    assert.match(alignmentConvention, /creator_inspired/);
   });
 });

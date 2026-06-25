@@ -20,6 +20,14 @@ export const SKILL_CONVENTIONS = {
     generatorScript: "scripts/upgrade-design-tree-loop.mjs",
     checkCommand: ["node", "scripts/upgrade-design-tree-loop.mjs", "--check"],
   },
+  "social-post": {
+    canonicalDoc: "docs/social-post-convention.md",
+    packageAsset: "assets/social-post-convention.md",
+  },
+  "social-video-content": {
+    canonicalDoc: "docs/social-video-content-convention.md",
+    packageAsset: "assets/social-video-content-convention.md",
+  },
 };
 
 export function conventionIds() {

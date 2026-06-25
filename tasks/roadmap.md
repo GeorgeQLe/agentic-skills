@@ -2,6 +2,41 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Social Media Channel Conventions
+
+### Goal
+
+Create researched, reusable social-media channel conventions for build-in-public and alignment-producing agents, covering text/community posts and video content ideas with clear separation between platform rules and creator norms.
+
+### Plan
+
+1. Add `docs/social-post-convention.md` for text/community channels: LinkedIn, X, Bluesky, Threads, Mastodon, Reddit, Hacker News, and YouTube Community.
+2. Add `docs/social-video-content-convention.md` for video/content channels: YouTube long-form, YouTube Shorts, TikTok, Instagram Reels, LinkedIn video, and reusable founder/devtool video prompts.
+3. Update the BIP section of `docs/alignment-page-convention.md` so BIP pages ask for target channels, use the relevant social conventions, and expose channel, drafting-mode, angle, sample, tone, claim-safety, and publish-readiness gates.
+4. Register the new conventions as static package assets in `scripts/skill-convention-registry.mjs`, update package staging/publish lists, and teach bundle audits/tests that not every convention has a generated per-skill bundle.
+5. Add package tests that assert the new IDs/assets exist and BIP guidance references target-channel selection plus both social convention docs.
+6. Regenerate alignment bundles, run convention/package verification, update review results, then commit and push the intended change set on `master`.
+
+### Acceptance Criteria
+
+- Each new convention includes research date, source list, and explicit rules-vs-norms labeling.
+- Each channel has audience expectation, format patterns, length guidance, link/hashtag/media norms, tone, spam triggers, source-safety risks, and both `platform_aligned` and `creator_inspired` drafting modes.
+- Agents are forbidden from unsupported claims, private context, secrets, confidential details, unverifiable metrics, unapproved customer names, and premature product commitments.
+- BIP guidance asks for target channels and mode selection, loads the correct social convention by channel type, and presents channel-specific ideas with source basis, risk level, and selected drafting mode.
+- Static social convention assets are copied into the skillpacks package and published under `assets/`.
+- Existing generated convention bundle behavior remains exact.
+- Required checks pass: convention bundle audit, package Node tests, package build, package build check, alignment generator write/check, task-doc audit, and diff hygiene.
+
+### Results
+
+- Added `docs/social-post-convention.md` with researched channel guidance for LinkedIn, X, Bluesky, Threads, Mastodon, Reddit, Hacker News, and YouTube Community.
+- Added `docs/social-video-content-convention.md` with researched video guidance for YouTube long-form, YouTube Shorts, TikTok, Instagram Reels, LinkedIn video, and reusable founder/devtool prompts.
+- Updated BIP alignment guidance to require target-channel selection, drafting-mode selection, source basis, risk level, claim safety, and publish-readiness gates.
+- Registered both social conventions as static package assets and updated package staging, publish-boundary tests, and convention audits for non-generated convention assets.
+- Regenerated all 306 generated `ALIGNMENT-PAGE.md` bundles with the updated BIP guidance.
+- Verification passed: alignment generator check, convention bundle audit, package Node tests, package build, package build check, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-25-social-media-channel-conventions.md`.
+
 ## Historical Implementation - Final-Handoff Verification Audit Alignment Page
 
 ### Goal

@@ -78,23 +78,30 @@ for (const skillPath of skills) {
   }
 
   for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
-    const bundlePath = rel(skillDir(skillPath), convention.bundleFile);
-    const bundleExists = existsSync(path.join(repoRoot, bundlePath));
-    const bundleTracked = tracked.has(bundlePath);
     const declaredConvention = declared.has(id);
-    const referencesBundle = markdown.includes(convention.bundleFile);
     const referencesCanonicalDoc = markdown.includes(convention.canonicalDoc);
 
-    if (declaredConvention && !bundleExists) {
-      problems.push(`${skillPath} declares ${id} but is missing ${bundlePath}`);
+    if (convention.bundleFile) {
+      const bundlePath = rel(skillDir(skillPath), convention.bundleFile);
+      const bundleExists = existsSync(path.join(repoRoot, bundlePath));
+      const bundleTracked = tracked.has(bundlePath);
+      const referencesBundle = markdown.includes(convention.bundleFile);
+
+      if (declaredConvention && !bundleExists) {
+        problems.push(`${skillPath} declares ${id} but is missing ${bundlePath}`);
+      }
+      if (declaredConvention && !bundleTracked) {
+        problems.push(`${skillPath} declares ${id} but ${bundlePath} is not tracked by git`);
+      }
+      if (bundleExists && !declaredConvention) {
+        problems.push(`${bundlePath} exists but ${skillPath} does not declare ${id}`);
+      }
+      if (referencesBundle && bundleExists && !declaredConvention) {
+        problems.push(`${skillPath} references ${id} convention material without declaring it`);
+      }
     }
-    if (declaredConvention && !bundleTracked) {
-      problems.push(`${skillPath} declares ${id} but ${bundlePath} is not tracked by git`);
-    }
-    if (bundleExists && !declaredConvention) {
-      problems.push(`${bundlePath} exists but ${skillPath} does not declare ${id}`);
-    }
-    if (((referencesBundle && bundleExists) || referencesCanonicalDoc) && !declaredConvention) {
+
+    if (referencesCanonicalDoc && !declaredConvention) {
       problems.push(`${skillPath} references ${id} convention material without declaring it`);
     }
   }
@@ -105,18 +112,17 @@ for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
   if (!existsSync(path.join(repoRoot, convention.canonicalDoc))) {
     problems.push(`${id} canonical doc is missing: ${convention.canonicalDoc}`);
   }
-  if (!existsSync(path.join(repoRoot, convention.generatorScript))) {
+  if (convention.generatorScript && !existsSync(path.join(repoRoot, convention.generatorScript))) {
     problems.push(`${id} generator script is missing: ${convention.generatorScript}`);
   }
 
-  const scriptPackageEntry = convention.generatorScript;
-  if (!packageFiles.has(scriptPackageEntry)) {
-    problems.push(`packages/skillpacks/package.json does not publish ${scriptPackageEntry}`);
+  if (convention.generatorScript && !packageFiles.has(convention.generatorScript)) {
+    problems.push(`packages/skillpacks/package.json does not publish ${convention.generatorScript}`);
   }
   if (!packageFiles.has(convention.packageAsset)) {
     problems.push(`packages/skillpacks/package.json does not publish ${convention.packageAsset}`);
   }
-  if (!fileContains("packages/skillpacks/scripts/build-package.mjs", convention.generatorScript)) {
+  if (convention.generatorScript && !fileContains("packages/skillpacks/scripts/build-package.mjs", convention.generatorScript)) {
     problems.push(`package staging does not copy ${convention.generatorScript}`);
   }
   if (!fileContains("packages/skillpacks/scripts/build-package.mjs", convention.packageAsset)) {
@@ -125,6 +131,7 @@ for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
 }
 
 for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
+  if (!convention.checkCommand) continue;
   const [command, ...args] = convention.checkCommand;
   const resolvedCommand = command === "node" ? process.execPath : command;
   const result = spawnSync(resolvedCommand, args, {
