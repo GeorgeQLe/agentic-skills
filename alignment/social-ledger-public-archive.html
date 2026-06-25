@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="document" data-alignment-status="review">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Ledger and Public Archive Decisions</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c2333;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1120px, calc(100vw - 40px));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px 0 64px;
+  overflow-wrap: break-word;
+}
+h1, h2, h3 {
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+h1 { margin: 0 0 10px; font-size: 2.3rem; }
+h2 { margin: 0; color: var(--accent); font-size: 1.4rem; }
+h3 { margin: 20px 0 10px; font-size: 1.05rem; }
+p { margin: 10px 0; }
+a { color: var(--accent); }
+code {
+  color: #fff;
+  background: #0b1018;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .92em;
+}
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+}
+.meta-line, .muted, .copy-status { color: var(--muted); }
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid var(--purple);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: #fff;
+  background: rgba(188, 140, 255, .12);
+  font-weight: 700;
+  font-size: .9rem;
+}
+.toc, section {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.toc ul { columns: 2; padding-left: 22px; margin: 10px 0 0; }
+.toc li { break-inside: avoid; margin: 5px 0; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 12px;
+}
+.tile {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0b1018;
+  padding: 14px;
+}
+.tile strong { display: block; color: #fff; margin-bottom: 4px; }
+.callout {
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.callout.warning {
+  border-color: var(--orange);
+  background: rgba(210, 153, 34, .08);
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #0b1018; color: #fff; }
+tr:last-child td { border-bottom: 0; }
+.feedback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+button, .option {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: #0b1018;
+  color: var(--text);
+  font: inherit;
+}
+button { cursor: pointer; }
+button:hover, .option:hover { border-color: var(--accent); }
+.fb-btn[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
+.fb-btn[data-choice="down"].active { border-color: var(--red); color: var(--red); }
+.fb-btn[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+.feedback-panel, .local-yaml, #compiled-yaml, .notes { display: none; }
+.feedback-panel.visible, .local-yaml.visible, #compiled-yaml.visible, .notes.visible { display: block; }
+textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #0b1018;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+  margin-top: 10px;
+}
+.yaml-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  min-height: 170px;
+}
+.question {
+  border: 1px solid var(--purple);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.question h3 {
+  color: var(--purple);
+  margin-top: 0;
+}
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+  gap: 10px;
+}
+.option {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.option input { margin-top: 5px; }
+.compile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+@media (max-width: 860px) {
+  .toc ul { columns: 1; }
+}
+@media (max-width: 560px) {
+  main { width: min(100vw - 24px, 1120px); padding-top: 24px; }
+  h1 { font-size: 1.85rem; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="status">alignment_status: review</p>
+    <h1>Social Ledger and Public Archive Decisions</h1>
+    <p class="meta-line">Alignment date: 2026-06-25 | Category: Product Design &amp; Spec | Visual tier: document | Artifact: <code>alignment/social-ledger-public-archive.html</code></p>
+    <p>This page records the proposed decisions for building a cross-project social post system of record, public-safe gBrain alignment links, and channel-specific reply-chain patterns for build-in-public posts.</p>
+    <div class="callout warning">
+      <strong>Pre-approval stop:</strong> this page does not create ledgers, publish to X, update the <code>GeorgeQLe/me</code> repo, or change social conventions. Implementation starts only after compiled response YAML has <code>approval_status: ready-for-agent-review</code>.
+    </div>
+  </header>
+
+  <section class="toc" id="toc">
+    <div class="section-head">
+      <h2>Table Of Contents</h2>
+      <div class="feedback" data-section="Table Of Contents"></div>
+    </div>
+    <ul>
+      <li><a href="#context">Context Captured</a></li>
+      <li><a href="#proposed-model">Proposed Model</a></li>
+      <li><a href="#ledger-schema">Ledger Record Shape</a></li>
+      <li><a href="#posting-pattern">X Posting Pattern</a></li>
+      <li><a href="#public-safety">Public Safety Boundary</a></li>
+      <li><a href="#implementation">Implementation Scope</a></li>
+      <li><a href="#approval-gates">Approval Gates</a></li>
+      <li><a href="#compile">Compile Responses</a></li>
+    </ul>
+  </section>
+
+  <section id="context">
+    <div class="section-head">
+      <h2>Context Captured</h2>
+      <div class="feedback" data-section="Context Captured"></div>
+    </div>
+    <div class="grid">
+      <div class="tile">
+        <strong>Public archive target exists</strong>
+        <p><code>GeorgeQLe/me</code> already has a Next route at <code>/brain</code>, public HTML copies under <code>public/brain/&lt;section&gt;/</code>, and sync scripts for alignment archives.</p>
+      </div>
+      <div class="tile">
+        <strong>Agentic Skills is already configured</strong>
+        <p>The <code>agentic-skills</code> section in <code>scripts/alignment-archive.config.mjs</code> syncs source alignment HTML from this repo into gBrain.</p>
+      </div>
+      <div class="tile">
+        <strong>Posting identity may cross projects</strong>
+        <p>A single account can post about multiple projects, so duplicate detection and promo cadence must be account-scoped, not only repo-scoped.</p>
+      </div>
+      <div class="tile">
+        <strong>Some projects may own accounts</strong>
+        <p>When a project has its own account, its ledger can remain local to that project with no central account ledger required.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="proposed-model">
+    <div class="section-head">
+      <h2>Proposed Model</h2>
+      <div class="feedback" data-section="Proposed Model"></div>
+    </div>
+    <p>The system of record should resolve by posting identity first, then project. That lets shared personal or company accounts see prior posts across all projects while project-owned accounts remain local.</p>
+    <div class="table-wrap" data-tts-narrative="The proposed social ledger model uses local project ledgers for project-owned accounts, central account ledgers for shared accounts, and a public gBrain projection for sanitized alignment links only.">
+      <table>
+        <thead>
+          <tr>
+            <th>Scope</th>
+            <th>Use When</th>
+            <th>Canonical Path</th>
+            <th>Agent Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Project-local ledger</td>
+            <td>The project owns the posting account or posts do not need cross-project dedupe.</td>
+            <td><code>social/posts/*.yaml</code> in the project repo.</td>
+            <td>Read and write only local records for that project/account.</td>
+          </tr>
+          <tr>
+            <td>Central account ledger</td>
+            <td>One personal or brand account posts across many projects.</td>
+            <td><code>social-ledger/accounts/&lt;account-id&gt;/posts/*.yaml</code> in a configured private central repo, defaulting to <code>GeorgeQLe/me</code>.</td>
+            <td>Read account-wide history before drafting; write approved drafts and posted URLs to the central account ledger.</td>
+          </tr>
+          <tr>
+            <td>Both local and central</td>
+            <td>The project needs local provenance and the shared account needs account-wide dedupe.</td>
+            <td>Local mirror plus central canonical account record.</td>
+            <td>Prefer central for dedupe and status; keep local pointer or copy for project provenance.</td>
+          </tr>
+          <tr>
+            <td>Public gBrain projection</td>
+            <td>A public-safe alignment doc should provide context for a post.</td>
+            <td><code>https://6eorge.com/brain/&lt;project-id&gt;/&lt;doc&gt;.html</code>.</td>
+            <td>Link only approved public-safe docs; do not publish private ledger records by default.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ledger-schema">
+    <div class="section-head">
+      <h2>Ledger Record Shape</h2>
+      <div class="feedback" data-section="Ledger Record Shape"></div>
+    </div>
+    <p>Each record should be stable enough for later agents to answer what has already been drafted, approved, posted, linked, and promoted.</p>
+    <div class="callout">
+      <pre><code>id: 2026-06-25-social-ledger-public-archive
+account_id: george-x
+project_id: agentic-skills
+channel: x
+topic: Social ledger and public archive
+status: approved_draft
+source_alignment_page: alignment/social-ledger-public-archive.html
+public_alignment_url: https://6eorge.com/brain/agentic-skills/social-ledger-public-archive.html
+drafting_mode: creator_inspired
+post_mode: post_plus_replies
+main_post: "..."
+reply_chain:
+  - purpose: full_alignment_doc
+    text: "Full alignment doc for context: ..."
+    url: https://6eorge.com/brain/agentic-skills/social-ledger-public-archive.html
+  - purpose: skill_promo
+    text: "The workflow is powered by skillpacks: ..."
+    url: https://www.npmjs.com/package/skillpacks
+published_urls: []
+dedupe_fingerprint: "x:agentic-skills:social-ledger-public-archive"
+risk_notes: []</code></pre>
+    </div>
+    <p>Records should support draft, approved draft, posted, skipped, needs revision, and retired statuses. Published URLs can remain empty until a human posts manually.</p>
+  </section>
+
+  <section id="posting-pattern">
+    <div class="section-head">
+      <h2>X Posting Pattern</h2>
+      <div class="feedback" data-section="X Posting Pattern"></div>
+    </div>
+    <p>The preferred X pattern is a main insight post, a first reply with the public alignment context link, and an optional second reply with a relevant skill/package link.</p>
+    <div class="grid">
+      <div class="tile">
+        <strong>Main post</strong>
+        <p>Must stand alone as the insight, lesson, result, or decision. It should not depend on the link to be useful.</p>
+      </div>
+      <div class="tile">
+        <strong>First reply</strong>
+        <p>Use a public gBrain URL when the alignment doc is approved for public context.</p>
+      </div>
+      <div class="tile">
+        <strong>Optional skill reply</strong>
+        <p>Use only when the post is actually about Agentic Skills, the workflow, or a reusable skill. Rotate wording to avoid repetitive promo.</p>
+      </div>
+      <div class="tile">
+        <strong>Promo targets</strong>
+        <p>Default to the npm package when install/use is the point; use GitHub when source, docs, or contribution context matters.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="public-safety">
+    <div class="section-head">
+      <h2>Public Safety Boundary</h2>
+      <div class="feedback" data-section="Public Safety Boundary"></div>
+    </div>
+    <p>The canonical ledger should remain private by default. The public surface is the sanitized alignment archive link and any post metadata the user explicitly approves.</p>
+    <div class="callout warning">
+      <strong>Do not publish:</strong> secrets, credentials, private repo details, confidential customer names, private research inputs, unverifiable metrics, internal account tokens, or recurring reply templates that create spam risk.
+    </div>
+    <p>Before an agent proposes a public alignment URL, it should verify the source page is safe for public viewing and either already synced to gBrain or approved to sync.</p>
+  </section>
+
+  <section id="implementation">
+    <div class="section-head">
+      <h2>Implementation Scope</h2>
+      <div class="feedback" data-section="Implementation Scope"></div>
+    </div>
+    <p>If approved, the build should update the Agentic Skills conventions so future BIP agents can discover and use the ledger without re-asking from scratch every run.</p>
+    <div class="table-wrap" data-tts-narrative="The implementation scope proposes a small convention and configuration layer first, with optional script support for validation and central ledger syncing later.">
+      <table>
+        <thead>
+          <tr>
+            <th>Artifact</th>
+            <th>Purpose</th>
+            <th>Approval Needed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>docs/social-ledger-convention.md</code></td>
+            <td>Define ledger resolution, record schema, account scope, duplicate checks, and public archive link handling.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>docs/social-post-convention.md</code> and X child convention</td>
+            <td>Add post plus replies output shape and the gBrain context reply / skill promo reply pattern.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>docs/alignment-page-convention.md</code></td>
+            <td>Teach BIP pages to ask for ledger storage, account scope, and public alignment URL status.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Package assets and tests</td>
+            <td>Publish the ledger convention in skillpacks and assert package visibility.</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Optional scripts</td>
+            <td>Validate ledger YAML, summarize recent account history, or sync central records.</td>
+            <td>Separate approval unless selected below</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="approval-gates">
+    <div class="section-head">
+      <h2>Approval Gates</h2>
+      <div class="feedback" data-section="Approval Gates"></div>
+    </div>
+
+    <div class="question" data-gate="public-archive-target" data-gate-type="public archive target" data-required="true">
+      <h3>Gate 1: Public Archive Target</h3>
+      <p>Where should public-safe alignment context links resolve?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="public-archive-target" value="gbrain" data-answer="Use 6eorge.com gBrain as the public archive target via GeorgeQLe/me /brain."> Use <code>6eorge.com/brain</code> via <code>GeorgeQLe/me</code> (recommended)</label>
+        <label class="option"><input type="radio" name="public-archive-target" value="new-public-repo" data-answer="Create a separate public repository for alignment archive pages."> Separate public archive repo</label>
+        <label class="option"><input type="radio" name="public-archive-target" value="defer-public" data-answer="Do not publish alignment pages publicly yet; store only private ledger records."> Private ledger only for now</label>
+        <label class="option"><input type="radio" name="public-archive-target" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="public-archive-target" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="public-archive-target" placeholder="Optional archive target notes"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="ledger-scope" data-gate-type="ledger storage scope" data-required="true">
+      <h3>Gate 2: Ledger Storage Scope</h3>
+      <p>How should social post records be stored?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="ledger-scope" value="central-account" data-answer="Use a central account ledger for shared posting accounts and local project ledgers only for project-owned accounts."> Central account ledger for shared accounts (recommended)</label>
+        <label class="option"><input type="radio" name="ledger-scope" value="local-project" data-answer="Use only project-local ledgers."> Project-local only</label>
+        <label class="option"><input type="radio" name="ledger-scope" value="both" data-answer="Use central canonical account ledgers plus local project mirrors or pointers."> Central plus local pointer/mirror</label>
+        <label class="option"><input type="radio" name="ledger-scope" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="ledger-scope" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="ledger-scope" placeholder="Optional storage notes"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="account-resolution" data-gate-type="account resolution" data-required="true">
+      <h3>Gate 3: Account Resolution</h3>
+      <p>How should agents decide whether to read a local or cross-project ledger?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="account-resolution" value="config-first" data-answer="Use project config to resolve mode, account_id, central_repo, central_path, and local_path before drafting."> Resolve from project config first (recommended)</label>
+        <label class="option"><input type="radio" name="account-resolution" value="ask-each-run" data-answer="Ask the user for ledger/account scope on each BIP run until configured."> Ask every run until configured</label>
+        <label class="option"><input type="radio" name="account-resolution" value="default-local" data-answer="Default to local project ledger unless the user explicitly selects a central account ledger."> Default local unless central selected</label>
+        <label class="option"><input type="radio" name="account-resolution" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="account-resolution" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="account-resolution" placeholder="Optional account id or config notes, for example george-x"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="x-thread-pattern" data-gate-type="x post pattern" data-required="true">
+      <h3>Gate 4: X Reply-Chain Pattern</h3>
+      <p>Should BIP output support the main post plus replies pattern?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="x-thread-pattern" value="post-plus-replies" data-answer="Generate an X main post, first reply with public alignment doc context, and optional contextual skill promo reply."> Yes, main post plus context reply plus optional skill reply (recommended)</label>
+        <label class="option"><input type="radio" name="x-thread-pattern" value="context-reply-only" data-answer="Generate a main post plus public alignment context reply, but no skill promo reply."> Main post plus context reply only</label>
+        <label class="option"><input type="radio" name="x-thread-pattern" value="single-post" data-answer="Generate only a single post by default."> Single post only</label>
+        <label class="option"><input type="radio" name="x-thread-pattern" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="x-thread-pattern" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="x-thread-pattern" placeholder="Optional reply-chain wording or channel notes"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="promo-policy" data-gate-type="skill promo policy" data-required="true">
+      <h3>Gate 5: Skill Promo Policy</h3>
+      <p>How should recurring skill promotion links work?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="promo-policy" value="contextual-rotated" data-answer="Allow contextual skill promo replies using rotated wording, npm as install target, and GitHub as source/docs target."> Contextual rotated promo replies (recommended)</label>
+        <label class="option"><input type="radio" name="promo-policy" value="npm-only" data-answer="Use npm package links only when the post discusses installable skillpacks."> npm link only</label>
+        <label class="option"><input type="radio" name="promo-policy" value="github-only" data-answer="Use GitHub links only when the post discusses source, docs, or contribution context."> GitHub link only</label>
+        <label class="option"><input type="radio" name="promo-policy" value="no-promo" data-answer="Do not generate recurring skill promo replies."> No recurring promo replies</label>
+        <label class="option"><input type="radio" name="promo-policy" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="promo-policy" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="promo-policy" placeholder="Optional promo target or cadence notes"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="public-safety-boundary" data-gate-type="public safety boundary" data-required="true">
+      <h3>Gate 6: Public Safety Boundary</h3>
+      <p>What public/private split should agents enforce?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="public-safety-boundary" value="private-ledger-public-projection" data-answer="Keep canonical ledger records private and publish only public-safe alignment docs and approved post metadata."> Private canonical ledger, public-safe projection only (recommended)</label>
+        <label class="option"><input type="radio" name="public-safety-boundary" value="public-metadata" data-answer="Allow public metadata records when explicitly approved, but keep drafts and notes private."> Public metadata if approved</label>
+        <label class="option"><input type="radio" name="public-safety-boundary" value="private-only" data-answer="Keep both ledger records and alignment context private for now."> Private only</label>
+        <label class="option"><input type="radio" name="public-safety-boundary" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="public-safety-boundary" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="public-safety-boundary" placeholder="Optional public/private constraints"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="implementation-scope" data-gate-type="implementation scope" data-required="true">
+      <h3>Gate 7: Implementation Scope</h3>
+      <p>What should the first build include?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="implementation-scope" value="conventions-package-tests" data-answer="Build conventions, package assets, generated alignment guidance, and tests; defer automation scripts unless needed."> Conventions plus package/tests first (recommended)</label>
+        <label class="option"><input type="radio" name="implementation-scope" value="include-validation-script" data-answer="Build conventions plus a ledger YAML validation script and tests."> Include validation script</label>
+        <label class="option"><input type="radio" name="implementation-scope" value="include-sync-script" data-answer="Build conventions plus central ledger sync/read helpers if feasible."> Include sync/read helpers</label>
+        <label class="option"><input type="radio" name="implementation-scope" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="implementation-scope" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="implementation-scope" placeholder="Optional implementation boundaries"></textarea></div>
+    </div>
+
+    <div class="question" data-gate="artifact-paths" data-gate-type="artifact paths" data-required="true">
+      <h3>Gate 8: Artifact Paths</h3>
+      <p>Which canonical artifact paths should the build target?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="artifact-paths" value="recommended-paths" data-answer="Use docs/social-ledger-convention.md, update social/BIP conventions, package assets, and add focused tests." data-target-path="docs/social-ledger-convention.md"> Recommended convention paths</label>
+        <label class="option"><input type="radio" name="artifact-paths" value="docs-social-record" data-answer="Use a social record convention name chosen during implementation, preserving docs/*-convention.md layout."> Let implementation choose exact doc name</label>
+        <label class="option"><input type="radio" name="artifact-paths" value="other" data-answer="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="artifact-paths" value="needs-clarification" data-answer="Need clarification"> Need clarification</label>
+      </div>
+      <div class="notes"><textarea data-notes-for="artifact-paths" placeholder="Optional artifact names or paths"></textarea></div>
+    </div>
+  </section>
+
+  <section id="compile">
+    <div class="section-head">
+      <h2>Compile Responses</h2>
+      <div class="feedback" data-section="Compile Responses"></div>
+    </div>
+    <p>Use this section to compile gate answers and selected section feedback into YAML. Complete approval requires all eight required gates answered and no unresolved negative or clarification feedback.</p>
+    <div class="compile-actions">
+      <button id="compile-btn" type="button">Compile Responses</button>
+      <button id="copy-compiled-btn" type="button">Copy YAML</button>
+      <span id="compile-status" class="copy-status">No responses compiled yet.</span>
+    </div>
+    <textarea id="compiled-yaml" class="yaml-output" readonly aria-label="Compiled response YAML"></textarea>
+  </section>
+</main>
+
+<script>
+const PAGE_PATH = 'alignment/social-ledger-public-archive.html';
+const COMMAND = 'codex implement approved social ledger and public archive system';
+const REQUIRED_GATES = [
+  'public-archive-target',
+  'ledger-scope',
+  'account-resolution',
+  'x-thread-pattern',
+  'promo-policy',
+  'public-safety-boundary',
+  'implementation-scope',
+  'artifact-paths'
+];
+const feedbackContainers = [...document.querySelectorAll('.feedback[data-section]')];
+
+function yamlQuote(value) {
+  const text = String(value || '');
+  if (!text) return "''";
+  return JSON.stringify(text);
+}
+
+function slugify(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function makeFeedbackControls(container) {
+  const section = container.dataset.section;
+  const id = slugify(section);
+  container.innerHTML = `
+    <button type="button" class="fb-btn" data-choice="emphasize" aria-label="Emphasize ${section}">emphasize</button>
+    <button type="button" class="fb-btn" data-choice="down" aria-label="Reject or flag concern for ${section}">thumbs down</button>
+    <button type="button" class="fb-btn" data-choice="needs-clarification" aria-label="Request clarification for ${section}">clarification needed</button>
+    <div class="feedback-panel" data-feedback-panel="${id}">
+      <textarea data-feedback-notes="${id}" placeholder="Optional section feedback notes"></textarea>
+      <div class="compile-actions">
+        <button type="button" data-local-compile="${id}">Compile Feedback YAML</button>
+        <button type="button" data-local-copy="${id}">Copy YAML</button>
+        <span class="copy-status" data-local-status="${id}"></span>
+      </div>
+      <textarea class="yaml-output local-yaml" data-local-yaml="${id}" readonly aria-label="Local feedback YAML"></textarea>
+    </div>`;
+}
+
+feedbackContainers.forEach(makeFeedbackControls);
+
+function feedbackAction(choice) {
+  if (choice === 'emphasize') return 'add-weight-to-section';
+  if (choice === 'down') return 'investigate-and-revise';
+  return 'clarify-before-approval';
+}
+
+function selectedFeedbackEntries() {
+  return feedbackContainers.flatMap((container) => {
+    const active = container.querySelector('.fb-btn.active');
+    if (!active) return [];
+    const section = container.dataset.section;
+    const id = slugify(section);
+    const notes = container.querySelector(`[data-feedback-notes="${id}"]`).value.trim();
+    return [{
+      section,
+      feedback: active.dataset.choice,
+      notes,
+      requested_agent_action: feedbackAction(active.dataset.choice)
+    }];
+  });
+}
+
+function unansweredGates() {
+  return REQUIRED_GATES.filter((gate) => !document.querySelector(`input[name="${gate}"]:checked`));
+}
+
+function gateAnswers() {
+  return REQUIRED_GATES.flatMap((gate) => {
+    const input = document.querySelector(`input[name="${gate}"]:checked`);
+    if (!input) return [];
+    const question = input.closest('.question');
+    const notes = question.querySelector(`[data-notes-for="${gate}"]`).value.trim();
+    const status = input.value === 'other' ? 'other' : input.value === 'needs-clarification' ? 'needs-clarification' : 'answered';
+    const lines = [
+      '  - section: ' + yamlQuote(question.querySelector('h3').textContent.trim()),
+      '    gate_type: ' + yamlQuote(question.dataset.gateType),
+      '    status: ' + yamlQuote(status),
+      '    answer: ' + yamlQuote(input.dataset.answer || input.value)
+    ];
+    if (notes) lines.push('    notes: ' + yamlQuote(notes));
+    if (input.dataset.targetPath) lines.push('    target_path: ' + yamlQuote(input.dataset.targetPath));
+    return [lines.join('\n')];
+  });
+}
+
+function sectionFeedbackYaml(entries, indent = '  ') {
+  return entries.map((entry) => {
+    const lines = [
+      `${indent}- section: ${yamlQuote(entry.section)}`,
+      `${indent}  feedback: ${yamlQuote(entry.feedback)}`,
+      `${indent}  requested_agent_action: ${yamlQuote(entry.requested_agent_action)}`
+    ];
+    if (entry.notes) lines.splice(2, 0, `${indent}  notes: ${yamlQuote(entry.notes)}`);
+    return lines.join('\n');
+  }).join('\n');
+}
+
+function listOrEmpty(items) {
+  if (items.length === 0) return ['  []'];
+  return items.map((item) => '  - ' + yamlQuote(item));
+}
+
+function approvalStatus(unanswered, answers, feedbackEntries) {
+  const hasNegativeFeedback = feedbackEntries.some((entry) => entry.feedback === 'down' || entry.feedback === 'needs-clarification');
+  const hasClarificationGate = answers.some((answer) => answer.includes('status: "needs-clarification"'));
+  return unanswered.length === 0 && !hasNegativeFeedback && !hasClarificationGate
+    ? 'ready-for-agent-review'
+    : 'not-approved';
+}
+
+function compileYaml() {
+  const unanswered = unansweredGates();
+  const answers = gateAnswers();
+  const feedbackEntries = selectedFeedbackEntries();
+  const responseStatus = unanswered.length === 0 ? 'complete' : 'partial';
+  const lines = [
+    'alignment_page: ' + yamlQuote(PAGE_PATH),
+    'command: ' + yamlQuote(COMMAND),
+    'response_status: ' + yamlQuote(responseStatus),
+    'approval_status: ' + yamlQuote(approvalStatus(unanswered, answers, feedbackEntries)),
+    'required_gate_status: ' + yamlQuote(unanswered.length === 0 ? 'complete' : 'incomplete'),
+    'unanswered_required_questions:',
+    ...listOrEmpty(unanswered)
+  ];
+  if (answers.length > 0) {
+    lines.push('gate_answers:');
+    lines.push(answers.join('\n'));
+  }
+  if (feedbackEntries.length > 0) {
+    lines.push('section_feedback:');
+    lines.push(sectionFeedbackYaml(feedbackEntries));
+  }
+  return lines.join('\n') + '\n';
+}
+
+async function copyText(text, statusEl, outputEl) {
+  try {
+    await navigator.clipboard.writeText(text);
+    statusEl.textContent = 'Copied YAML to clipboard.';
+  } catch {
+    if (outputEl) {
+      outputEl.focus();
+      outputEl.select();
+    }
+    statusEl.textContent = 'Clipboard blocked; YAML is selected for copying.';
+  }
+}
+
+document.addEventListener('click', (event) => {
+  const fbButton = event.target.closest('.fb-btn');
+  if (fbButton) {
+    const container = fbButton.closest('.feedback');
+    const panel = container.querySelector('.feedback-panel');
+    const wasActive = fbButton.classList.contains('active');
+    container.querySelectorAll('.fb-btn').forEach((btn) => btn.classList.remove('active'));
+    if (wasActive) {
+      panel.classList.remove('visible');
+      container.dataset.feedback = '';
+    } else {
+      fbButton.classList.add('active');
+      panel.classList.add('visible');
+      container.dataset.feedback = fbButton.dataset.choice;
+    }
+  }
+
+  const localCompile = event.target.closest('[data-local-compile]');
+  if (localCompile) {
+    const id = localCompile.dataset.localCompile;
+    const container = localCompile.closest('.feedback');
+    const entry = selectedFeedbackEntries().find((candidate) => candidate.section === container.dataset.section);
+    const output = container.querySelector(`[data-local-yaml="${id}"]`);
+    const status = container.querySelector(`[data-local-status="${id}"]`);
+    if (!entry) {
+      status.textContent = 'Select section feedback first.';
+      return;
+    }
+    output.value = [
+      'alignment_page: ' + yamlQuote(PAGE_PATH),
+      'command: ' + yamlQuote(COMMAND),
+      'feedback_status: "revision-request"',
+      'approval_status: "not-approved"',
+      'unanswered_required_questions:',
+      ...listOrEmpty(unansweredGates()),
+      'section_feedback:',
+      sectionFeedbackYaml([entry])
+    ].join('\n') + '\n';
+    output.classList.add('visible');
+    copyText(output.value, status, output);
+  }
+
+  const localCopy = event.target.closest('[data-local-copy]');
+  if (localCopy) {
+    const id = localCopy.dataset.localCopy;
+    const container = localCopy.closest('.feedback');
+    const output = container.querySelector(`[data-local-yaml="${id}"]`);
+    const status = container.querySelector(`[data-local-status="${id}"]`);
+    if (output.value) copyText(output.value, status, output);
+  }
+});
+
+document.querySelectorAll('.question input[type="radio"]').forEach((input) => {
+  input.addEventListener('change', () => {
+    const question = input.closest('.question');
+    question.querySelector('.notes').classList.add('visible');
+  });
+});
+
+document.getElementById('compile-btn').addEventListener('click', () => {
+  const yaml = compileYaml();
+  const output = document.getElementById('compiled-yaml');
+  const status = document.getElementById('compile-status');
+  if (gateAnswers().length === 0 && selectedFeedbackEntries().length === 0) {
+    status.textContent = 'Answer a gate question or select section feedback first.';
+    return;
+  }
+  output.value = yaml;
+  output.classList.add('visible');
+  copyText(yaml, status, output);
+});
+
+document.getElementById('copy-compiled-btn').addEventListener('click', () => {
+  const output = document.getElementById('compiled-yaml');
+  const status = document.getElementById('compile-status');
+  if (output.value) copyText(output.value, status, output);
+});
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

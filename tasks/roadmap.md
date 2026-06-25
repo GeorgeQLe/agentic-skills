@@ -2,6 +2,36 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Social Ledger Public Archive Alignment Page
+
+### Goal
+
+Create a review-state alignment page that records the proposed decisions for a cross-project social ledger, public-safe gBrain alignment links, X reply-chain publishing, and recurring skill/package promotion policy before any implementation work begins.
+
+### Plan
+
+1. Re-read the alignment-page convention and current alignment index pattern.
+2. Preserve unrelated dirty worktree changes while adding a new review-only page.
+3. Add `alignment/social-ledger-public-archive.html` with context, proposed model, record schema, posting pattern, safety boundary, implementation scope, approval gates, and response YAML compilation.
+4. Add the page to `alignment/index.html` under Product Design & Spec.
+5. Run alignment-page audit, task-doc audit, and diff hygiene.
+6. Commit and push only the intended alignment page, index, and task-record changes.
+
+### Acceptance Criteria
+
+- The page is `review` status and does not create ledgers, publish posts, modify `GeorgeQLe/me`, or change social conventions.
+- The page captures local project ledgers, central account ledgers, optional local+central mode, and public gBrain projection.
+- The page includes approval gates for public archive target, ledger scope, account resolution, X reply-chain pattern, promo policy, public safety, implementation scope, and artifact paths.
+- The alignment index links the page exactly once with date `2026-06-25`.
+- Alignment audit, task-doc audit, and diff hygiene pass.
+
+### Results
+
+- Added `alignment/social-ledger-public-archive.html` as a review-state approval page with eight required gates and YAML compilation.
+- Added the page to `alignment/index.html` under Product Design & Spec.
+- Preserved the pre-build boundary: no ledger files, convention edits, posting actions, or `GeorgeQLe/me` changes were made.
+- Verification passed: alignment-page audit, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Final-Handoff Verification Audit Report
 
 ### Goal
