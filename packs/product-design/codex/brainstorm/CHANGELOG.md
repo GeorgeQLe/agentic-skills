@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6 - 2026-06-25
+
+- Added a `--quick` escape hatch that restores the legacy lightweight path: skip the stage-zero interrogation loop and the alignment page, run light terminal scoping (or skip when a focus area is supplied), output suggestions inline grouped by effort, and append directly to `tasks/ideas.md`. `--dump` is implied in quick mode.
+- Fixed the always-on alignment regression from v0.5: removed `brainstorm` from `OPTIONAL_ALIGNMENT_SKILLS` in `scripts/upgrade-alignment-page.mjs` so the generator now emits the full-depth alignment stub and bundle instead of force-wiping the always-on page back to the optional stub. The default flow is genuinely always-on again; the always-on hub spec now lives in the Process build-the-alignment-page step (idea cards, per-idea `$feature-interview` copy hub, review gates, artifact-destination gate, on-approval behavior).
+
 ## v0.5 - 2026-06-25
 
 - Made the HTML interrogation → alignment flow the default. brainstorm now runs the stage-zero interrogation loop (Ideation Frame Manifest in round 1, adaptive follow-ups, confidence-gate coverage checkpoint) before generating any ideas, then presents the idea set in an always-on alignment page that doubles as a per-idea `$feature-interview` copy hub.

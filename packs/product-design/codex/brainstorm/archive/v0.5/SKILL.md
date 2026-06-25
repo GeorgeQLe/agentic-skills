@@ -2,9 +2,9 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with $feature-interview
 type: planning
-version: v0.6
+version: v0.5
 required_conventions: [alignment-page, interrogation-page]
-argument-hint: "[optional focus area] [--dump] [--quick]"
+argument-hint: "[optional focus area] [--dump]"
 context_intake: scoped
 visual_tier: prototype
 ---
@@ -16,8 +16,6 @@ Invoke as `$brainstorm`.
 Evaluate the current codebase and generate actionable suggestions that the user can take into `$feature-interview` for human/agent alignment, planning-destination triage, and follow-up specification or roadmap work.
 
 This skill runs a three-stage flow by default: a **stage-zero HTML interrogation loop** elicits the ideation frame, then the agent generates the idea set, then an **always-on HTML alignment page** presents that idea set as a review/approval hub with a copyable `$feature-interview` handoff per idea. Writing the legacy `tasks/ideas.md` dump is opt-in (`--dump` flag plus the alignment page's artifact-destination gate).
-
-Pass `--quick` to skip the interrogation loop and the alignment page entirely and run the legacy lightweight path: light terminal scoping, inline suggestions grouped by effort, and a direct append to `tasks/ideas.md`. See `## Quick Mode (--quick)`.
 
 ## Follow-up Skill Availability Gate
 
@@ -56,7 +54,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### Stage-zero interrogation loop
 
-Unless `--quick` is set (see `## Quick Mode (--quick)`), run this loop. This skill **cannot generate the idea set until the confidence gate passes.** Before brainstorming, elicit the ideation frame in HTML interrogation rounds (see `## Interrogation Page` / `INTERROGATION-PAGE.md` in this skill's directory). Terminal questioning is the degraded fallback only when an HTML page cannot be opened.
+This skill **cannot generate the idea set until the confidence gate passes.** Before brainstorming, elicit the ideation frame in HTML interrogation rounds (see `## Interrogation Page` / `INTERROGATION-PAGE.md` in this skill's directory). Terminal questioning is the degraded fallback only when an HTML page cannot be opened.
 
 - **Round 1 — Ideation Frame Manifest.** Present what you think the project is and how you intend to brainstorm it, as confirm/correct/flag controls in `interrogation/brainstorm-r1-{branch}.html`, alongside the first genuinely open questions (each marked `data-open-input`) placed only where no assumption is derivable. Tag each assumption `[from prompt]`, `[from repo]`, `[from research]`, `[from codebase]`, or `[inferred]`. Cover: project identity and current state; the ideation focus and which dimensions are in or out of scope (strategic/product, improvement, hygiene, market-fit); effort and risk appetite and horizon constraints; areas explicitly off-limits and hard non-goals; what counts as a high-value idea for this project; the target audience or product-path scope; and the riskiest assumptions about where the opportunity lies. Set `data-interrogation-round="1"`, `data-interrogation-gate="continue"`, and the answer sidecar `research/_working/interrogation-brainstorm-r1.yaml` (or `research/{slug}/_working/interrogation-brainstorm-r1.yaml` in product-path mode), open the page, and stop for the compiled round YAML.
 - **Rounds 2..N — adaptive follow-ups.** Seed each round from the prior round's compiled answers: drill into corrections, resolve contradictions, and cover any frame area still open. Do not re-ask settled items.
@@ -90,16 +88,7 @@ Only after the confidence gate passes, analyse the codebase across these dimensi
    - Positioning plays — ideas that sharpen differentiation against the competitive landscape
 A focus area in `$ARGUMENTS` (anything other than the `--dump` flag and a product-path slug) narrows the dimensions to that area; otherwise cover all dimensions. The elicited frame from the interrogation loop always takes precedence over the raw argument.
 
-### Build the alignment page
-
-Unless `--quick` is set (see `## Quick Mode (--quick)`), this step is **always-on**: after the idea set is generated, present it in the alignment page at `alignment/brainstorm-{topic}.html`, following `ALIGNMENT-PAGE.md` in this skill's directory. The page is the durable hub; do not treat a chat dump as the primary surface.
-
-The page is structured as a review/approval hub:
-
-- **Idea cards grouped by effort** (hours / days / weeks). Each card carries a specific actionable title, a one-line description with the concrete codebase signal (file, pattern, or metric) that motivates it, and a copyable per-idea handoff: the `$feature-interview <topic>` prompt plus a separate copy button for the additional context to paste alongside it.
-- **Review gates** for the idea set: per-idea approve/reject/flag controls so the user can curate which ideas survive, plus a coverage checkpoint confirming the brainstorm covered the elicited frame.
-- **Artifact-destination gate.** Confirm whether the approved ideas are also appended to `tasks/ideas.md`. `--dump` in `$ARGUMENTS` pre-sets the intent; the gate is the final confirmation. Default is no dump.
-- **On approval (confirmed-page write step).** Persist the curated idea set into the page. Only when `--dump` is set and the destination gate approves (or the user selects the dump option at the gate) append the approved ideas to `tasks/ideas.md` — do not overwrite existing content. When product-path scope is active, prefix each suggestion with the app name. Keep the page open afterward as a working hub: the user copies each idea's `$feature-interview <topic>` prompt and its additional context into `$feature-interview` one at a time.
+After the idea set is generated, present it in the always-on alignment page (see `## Alignment Page`). The page is the durable hub; do not treat a chat dump as the primary surface.
 
 ## Output
 
@@ -129,18 +118,7 @@ Before producing research, run the stage-zero interrogation loop following `INTE
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/brainstorm-{topic}.html`.
-
-## Quick Mode (--quick)
-
-When `--quick` is present in `$ARGUMENTS`, skip the stage-zero interrogation loop and the alignment page entirely and run the legacy lightweight path:
-
-1. **Light scoping.** If a focus area is already supplied in `$ARGUMENTS`, skip straight to analysis. Otherwise optionally ask 1–3 light scoping questions with `request_user_input` (ideation focus, effort/risk appetite, off-limits areas) — no HTML, no confidence gate.
-2. **Analyse the same dimensions** as the idea-generation step above, scoped by the focus area or the light answers.
-3. **Output suggestions inline**, grouped by effort level (hours / days / weeks). Each suggestion carries its specific actionable title, the concrete codebase signal (file, pattern, or metric) that motivates it, and the `$feature-interview <topic>` prompt to copy.
-4. **Append directly to `tasks/ideas.md`** — do not overwrite existing content. When product-path scope is active, prefix each suggestion with the app name. There is no artifact-destination gate in quick mode; `--dump` is implied and redundant.
-
-Still honor the `## Follow-up Skill Availability Gate`: if `feature-interview` is unavailable, the install prerequisite leads both the inline output and the `tasks/ideas.md` append.
+By default, this skill reports results inline and writes only its normal durable artifacts (for example `tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create `alignment/brainstorm-{topic}.html` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow `ALIGNMENT-PAGE.md` in this skill's directory.
 
 ## Default Shipping Contract
 

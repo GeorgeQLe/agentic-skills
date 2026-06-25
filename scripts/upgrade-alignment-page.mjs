@@ -77,7 +77,6 @@ const OPTIONAL_ALIGNMENT_SKILLS = new Set([
   "roadmap",
   "research-roadmap",
   "plan-phase",
-  "brainstorm",
   "devtool-workflow",
   "game-workflow",
   "game-roadmap",

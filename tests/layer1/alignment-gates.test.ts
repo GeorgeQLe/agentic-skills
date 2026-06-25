@@ -51,8 +51,6 @@ const optionalAlignmentSkills = [
   "packs/game/codex/game-workflow/SKILL.md",
   "packs/monorepo/claude/mono-plan/SKILL.md",
   "packs/monorepo/codex/mono-plan/SKILL.md",
-  "packs/product-design/claude/brainstorm/SKILL.md",
-  "packs/product-design/codex/brainstorm/SKILL.md",
   "packs/project-fleet/claude/skill-inventory/SKILL.md",
   "packs/project-fleet/codex/skill-inventory/SKILL.md",
   "packs/release-ops/claude/branch-lifecycle/SKILL.md",

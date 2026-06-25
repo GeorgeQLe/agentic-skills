@@ -1,6 +1,6 @@
 # Alignment Page — brainstorm
 
-Alignment pages are optional for this operational skill. By default, report the outcome inline and write only the skill's normal durable artifacts (`tasks/*.md`, reports, queues, benchmark notes, status docs, or other skill-specific files). Build `alignment/brainstorm-{topic}.html` only when the user explicitly requests an alignment page or when the agent explicitly identifies a concrete clarification/review need that cannot be resolved cleanly in conversation or the normal artifacts. When an alignment page is created, use the full contract below and a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/brainstorm-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
 
 **Visual rendering tier.** Each alignment page declares a rendering tier:
 - `document` (default) — text, tables, approval gates. No charts or interactive elements.
