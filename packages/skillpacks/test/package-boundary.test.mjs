@@ -8,6 +8,22 @@ import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mj
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '../..');
+const socialAssetPaths = [
+  'assets/social/bluesky-convention.md',
+  'assets/social/founder-devtool-video-prompts-convention.md',
+  'assets/social/hacker-news-convention.md',
+  'assets/social/instagram-reels-convention.md',
+  'assets/social/linkedin-post-convention.md',
+  'assets/social/linkedin-video-convention.md',
+  'assets/social/mastodon-convention.md',
+  'assets/social/reddit-convention.md',
+  'assets/social/threads-convention.md',
+  'assets/social/tiktok-convention.md',
+  'assets/social/x-post-convention.md',
+  'assets/social/youtube-community-convention.md',
+  'assets/social/youtube-long-form-convention.md',
+  'assets/social/youtube-shorts-convention.md'
+];
 
 function run(command, args) {
   const result = spawnSync(command, args, {
@@ -85,6 +101,7 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/design-tree-loop-convention.md',
       'assets/social-post-convention.md',
       'assets/social-video-content-convention.md',
+      ...socialAssetPaths,
       'base/codex/pack/SKILL.md',
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
@@ -124,7 +141,30 @@ describe('skillpacks npm publish target boundary', () => {
     assert.match(alignmentConvention, /assets\/social-post-convention\.md/);
     assert.match(alignmentConvention, /docs\/social-video-content-convention\.md/);
     assert.match(alignmentConvention, /assets\/social-video-content-convention\.md/);
+    assert.match(alignmentConvention, /docs\/social\//);
+    assert.match(alignmentConvention, /assets\/social\//);
+    assert.match(alignmentConvention, /loaded convention paths/);
     assert.match(alignmentConvention, /platform_aligned/);
     assert.match(alignmentConvention, /creator_inspired/);
+
+    const socialPostConvention = readFileSync(resolve(repoRoot, 'docs/social-post-convention.md'), 'utf8');
+    assert.match(socialPostConvention, /docs\/social\/linkedin-post-convention\.md/);
+    assert.match(socialPostConvention, /assets\/social\/linkedin-post-convention\.md/);
+    assert.match(socialPostConvention, /loaded_channel_convention/);
+    assert.doesNotMatch(socialPostConvention, /^### LinkedIn$/m);
+
+    const socialVideoConvention = readFileSync(resolve(repoRoot, 'docs/social-video-content-convention.md'), 'utf8');
+    assert.match(socialVideoConvention, /docs\/social\/youtube-shorts-convention\.md/);
+    assert.match(socialVideoConvention, /assets\/social\/youtube-shorts-convention\.md/);
+    assert.match(socialVideoConvention, /loaded_channel_convention/);
+    assert.doesNotMatch(socialVideoConvention, /^### YouTube Long-Form$/m);
+
+    const linkedInPostConvention = readFileSync(resolve(repoRoot, 'docs/social/linkedin-post-convention.md'), 'utf8');
+    assert.match(linkedInPostConvention, /# LinkedIn Post Convention/);
+    assert.match(linkedInPostConvention, /## Drafting Modes/);
+
+    const youtubeShortsConvention = readFileSync(resolve(repoRoot, 'docs/social/youtube-shorts-convention.md'), 'utf8');
+    assert.match(youtubeShortsConvention, /# YouTube Shorts Convention/);
+    assert.match(youtubeShortsConvention, /## Drafting Modes/);
   });
 });

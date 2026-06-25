@@ -2,6 +2,40 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Split Social Channel Conventions
+
+### Goal
+
+Split the large social convention files into smaller per-channel documents under `docs/social/`, while keeping `docs/social-post-convention.md` and `docs/social-video-content-convention.md` as thin shared routers that are context-aware of the `/social` directory.
+
+### Plan
+
+1. Create `docs/social/` channel convention files for text/community channels and video/content channels.
+2. Replace `docs/social-post-convention.md` with a shared source-safety/output contract plus a routing table that tells agents to load only the selected `docs/social/*-convention.md` channel docs.
+3. Replace `docs/social-video-content-convention.md` with a video-specific shared contract plus a routing table for selected video channel docs and reusable founder/devtool prompts.
+4. Update BIP alignment guidance so agents load the top-level router first, then selected per-channel docs from `docs/social/` or packaged `assets/social/`.
+5. Package the `docs/social/` directory as `assets/social/` and extend tests/audits so the split assets are published and referenced.
+6. Regenerate alignment bundles, run package/convention/task/diff checks, document results, commit, and push.
+
+### Acceptance Criteria
+
+- The top-level social convention docs no longer contain every channel profile inline.
+- Each channel profile remains available as a focused `docs/social/*-convention.md` file with research date, source list, platform-vs-norm distinction, channel guidance, risk notes, and drafting modes.
+- BIP guidance is explicit that agents should load only selected channel docs after the router/shared contract.
+- Packaged installs include `assets/social/*-convention.md`.
+- Package boundary tests assert the social directory assets are published.
+- Required checks pass: alignment generator check, convention bundle audit, package Node tests, package build, package build check, task-doc audit, and diff hygiene.
+
+### Results
+
+- Split text/community channel guidance into focused files under `docs/social/`: LinkedIn, X, Bluesky, Threads, Mastodon, Reddit, Hacker News, and YouTube Community.
+- Split video/channel prompt guidance into focused files under `docs/social/`: YouTube long-form, YouTube Shorts, TikTok, Instagram Reels, LinkedIn video, and reusable founder/devtool video prompts.
+- Replaced the two top-level social convention docs with thin routers and shared contracts that tell agents to load selected child docs from `docs/social/` or packaged `assets/social/`.
+- Updated BIP alignment guidance and regenerated all 306 generated `ALIGNMENT-PAGE.md` bundles so BIP outputs include the loaded channel convention path.
+- Packaged `docs/social/` as `assets/social/` and extended package-boundary tests to assert child convention assets are published.
+- Verification passed: alignment generator check, convention bundle audit, package Node tests, package build, package build check, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-25-split-social-channel-conventions.md`.
+
 ## Historical Implementation - Social Media Channel Conventions
 
 ### Goal

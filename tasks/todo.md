@@ -2,40 +2,53 @@
 
 ## Status
 
-Active implementation queue: none.
+Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Social Media Channel Conventions.
+Last completed task: Split Social Channel Conventions.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Social Media Channel Conventions
+## Review - Split Social Channel Conventions
 
 ### Goal
 
-Create researched, reusable social-media channel conventions for build-in-public and alignment-producing agents, then wire them into BIP alignment guidance and the skillpacks package boundary.
+Split social channel conventions into focused `docs/social/` files and keep the top-level social convention docs as shared routers for context-efficient loading.
 
 ### Checklist
 
-- [x] Re-read current convention, package, and task-doc structure.
-- [x] Research current platform guidance and practitioner norms.
+- [x] Re-read current social convention and package wiring.
 - [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Add canonical social post and social video convention docs.
-- [x] Update BIP alignment-page convention guidance and generated bundles.
-- [x] Register/package the new static convention assets and update tests.
-- [x] Run required convention/package/alignment/task-doc/diff checks.
+- [x] Add per-channel docs under `docs/social/`.
+- [x] Replace top-level social convention docs with thin routers/shared contracts.
+- [x] Update BIP alignment guidance and generated bundles.
+- [x] Package `docs/social/` as `assets/social/` and update tests/audits.
+- [x] Run required verification.
 - [x] Document review results, commit, and push intended changes.
 
 ### Review
 
-- Passed: `node scripts/upgrade-alignment-page.mjs --check`.
-- Passed: `node scripts/skill-convention-bundle-audit.mjs`.
-- Passed: `npm --workspace packages/skillpacks run test:node` with 130 tests.
-- Passed: `npm --workspace packages/skillpacks run build`.
-- Passed: `npm --workspace packages/skillpacks run build:check`.
-- Passed: `node scripts/audit-task-docs.mjs`.
-- Passed: `git diff --check`.
+Implemented and verified.
+
+- Added 14 focused channel/prompt convention docs under `docs/social/`.
+- Replaced the two top-level social convention docs with thin routers/shared contracts.
+- Updated BIP alignment guidance to load routers first and selected channel docs second.
+- Packaged the child docs as `assets/social/` and added package-boundary assertions.
+- Regenerated 306 alignment bundles.
+
+Verification passed:
+
+- `node scripts/upgrade-alignment-page.mjs`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build`
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-25-split-social-channel-conventions.md`.
 
 ## No Active Implementation Phase
 
-The Social Media Channel Conventions change is complete and ready to ship. Deferred manual production setup items remain in `tasks/manual-todo.md`; they are not active implementation blockers unless promoted into a future phase.
+New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
