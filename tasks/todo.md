@@ -5,40 +5,67 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Social Ledger Public Archive Alignment Page.
+Last completed task: Final-Handoff Self-Check And Guard.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Social Ledger Public Archive Alignment Page
+## Review - Final-Handoff Self-Check And Guard
 
 ### Goal
 
-Create a review-state alignment page that records the proposed decisions for a cross-project social ledger, public-safe gBrain alignment links, X reply-chain publishing, and recurring skill/package promotion policy before any implementation work begins.
+Add a shared confirmed-artifact terminal handoff rule to the alignment-page convention and a focused fixture-backed audit for final completion responses.
 
 ### Checklist
 
-- [x] Re-read the alignment-page convention and current index pattern.
-- [x] Preserve unrelated dirty worktree changes.
-- [x] Add `alignment/social-ledger-public-archive.html` as a review-only approval artifact.
-- [x] Add the page to `alignment/index.html`.
-- [x] Run alignment-page audit, task-doc audit, and diff hygiene.
-- [x] Document results, commit, and push intended tracked changes.
+- [x] Inspect repo guidance, lessons, task docs, convention, audit script, and existing tests.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Update the canonical alignment-page convention with the confirmed-artifact terminal handoff rule.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Extend `scripts/skill-alignment-routing-audit.mjs` with final-handoff fixture mode.
+- [x] Add final-handoff routing fixtures.
+- [x] Extend layer1 coverage.
+- [x] Run focused and required verification.
+- [x] Document review results and create a ship manifest.
+- [x] Commit and push the intended changes on `master`.
 
 ### Review
 
 Implemented and verified.
 
-- Added the review page with eight required gates for public archive target, ledger scope, account resolution, X reply-chain pattern, promo policy, public safety, implementation scope, and artifact paths.
-- Captured the proposed local project ledger, central account ledger, local+central mode, and public gBrain projection model.
-- Preserved the pre-build boundary: no ledger files, convention edits, posting actions, or `GeorgeQLe/me` changes were made.
+- Added the confirmed-artifact terminal handoff rule to the canonical alignment-page convention.
+- Regenerated 306 generated `ALIGNMENT-PAGE.md` bundles.
+- Added expectation-aware Markdown fixture mode to `scripts/skill-alignment-routing-audit.mjs`.
+- Added seven final-handoff fixtures and layer1 coverage.
+- Verified the package manifest from a clean temp source containing this task's changes only; no manifest delta was needed.
 
 Verification passed:
 
-- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/skill-alignment-routing-audit.mjs --final-handoff-fixtures tests/fixtures/final-handoff-routing`
+- `node scripts/skill-alignment-routing-audit.mjs --report`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/skill-alignment-routing-audit.test.ts`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build`
+- `npm --workspace packages/skillpacks run build:check`
+- clean-temp `npm --workspace packages/skillpacks run build`
+- clean-temp `npm --workspace packages/skillpacks run build:check`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
 
-Ship manifest: `tasks/ship-manifest-2026-06-25-social-ledger-public-archive-alignment.md`.
+Intentional fixture result:
+
+- `node scripts/skill-alignment-routing-audit.mjs --fixtures tests/fixtures/skill-alignment-routing` exits 1 with the existing two expected invalid fixture findings.
+
+Known unrelated verification failure:
+
+- `pnpm --dir tests test:layer1 -- skill-alignment-routing-audit alignment-gates` ran the broad layer1 suite and failed on unrelated staged skill-inventory/benchmark contracts. The focused routing audit file passed.
+
+Ship manifest: `tasks/ship-manifest-2026-06-25-final-handoff-self-check-guard.md`.
+
+## No Active Implementation Phase
+
+New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
 
 ## Review - Final-Handoff Verification Audit Report
 

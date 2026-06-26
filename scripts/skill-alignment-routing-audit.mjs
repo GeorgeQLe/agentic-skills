@@ -10,6 +10,7 @@ function usage(exitCode = 1) {
   const out = [
     "Usage: node scripts/skill-alignment-routing-audit.mjs [--active|--report]",
     "       node scripts/skill-alignment-routing-audit.mjs --fixtures <dir>",
+    "       node scripts/skill-alignment-routing-audit.mjs --final-handoff-fixtures <dir>",
     "",
   ].join("\n");
   (exitCode === 0 ? process.stdout : process.stderr).write(out);
@@ -27,6 +28,21 @@ function walk(dir, out = []) {
       walk(full, out);
     }
     else if (entry.name === "SKILL.md") {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+function walkMarkdown(dir, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === "archive") continue;
+      walkMarkdown(full, out);
+    }
+    else if (entry.name.endsWith(".md")) {
       out.push(full);
     }
   }
@@ -180,6 +196,269 @@ function scanSkill(file, root = repoRoot) {
   return findings;
 }
 
+function collectTerminalRouteCandidates(text) {
+  const lines = text.split(/\r?\n/);
+  const nonEmptyLines = lines
+    .map((line, index) => ({ line, index }))
+    .filter(({ line }) => line.trim().length > 0);
+  const fallbackStart = nonEmptyLines.length > 0
+    ? nonEmptyLines[Math.max(0, nonEmptyLines.length - 12)].index
+    : 0;
+  const nextWorkEntries = [];
+  const routeEntries = [];
+  let currentHeading = "";
+  let terminalSection = false;
+  let artifactProseSection = false;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const heading = line.match(/^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$/);
+    if (heading) {
+      currentHeading = heading[1].replace(/\*\*/g, "").trim();
+      artifactProseSection = /\b(?:canonical artifact|artifact summary|artifact record|approved artifact|page content|alignment page|confirmed page)\b/i.test(currentHeading);
+      terminalSection = !artifactProseSection
+        && /\b(?:next|handoff|completion|done|final response|final handoff|next work)\b/i.test(currentHeading);
+    }
+
+    if (artifactProseSection) continue;
+    if (!terminalSection && index < fallbackStart) continue;
+
+    const nextWork = markdownLabelValue(line, "Next work");
+    if (nextWork !== null) {
+      nextWorkEntries.push({
+        line: index + 1,
+        text: cleanRouteText(nextWork),
+        heading: currentHeading,
+      });
+    }
+
+    const nextSkill = markdownLabelValue(line, "Recommended next skill");
+    if (nextSkill !== null) {
+      routeEntries.push({
+        line: index + 1,
+        label: "skill",
+        route: cleanRouteText(nextSkill),
+        heading: currentHeading,
+      });
+      continue;
+    }
+
+    const nextCommand = markdownLabelValue(line, "Recommended next command");
+    if (nextCommand !== null) {
+      routeEntries.push({
+        line: index + 1,
+        label: "command",
+        route: cleanRouteText(nextCommand),
+        heading: currentHeading,
+      });
+    }
+  }
+
+  const route = routeEntries.at(-1);
+  if (!route) return null;
+
+  const nextWork = nextWorkEntries
+    .filter((entry) => entry.line <= route.line || route.label === "command")
+    .at(-1);
+
+  return {
+    ...route,
+    hasNextWork: Boolean(nextWork),
+    nextWorkText: nextWork?.text || "",
+  };
+}
+
+function markdownLabelValue(line, label) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = line.match(new RegExp(`^\\s*(?:[-*+]\\s*)?(?:\\*\\*)?${escaped}\\s*:\\s*(?:\\*\\*)?\\s*(.+?)\\s*$`, "i"));
+  return match ? match[1] : null;
+}
+
+function cleanRouteText(raw) {
+  return raw
+    .replace(/<\/?code>/gi, "")
+    .trim()
+    .replace(/^`+|`+$/g, "")
+    .replace(/^["']|["']$/g, "")
+    .replace(/\s*[.;]\s*$/g, "")
+    .trim();
+}
+
+function scanFinalHandoffFixture(file, root = repoRoot) {
+  const text = fs.readFileSync(file, "utf8");
+  const fm = readFrontmatter(text);
+  const relPath = rel(file, root);
+  const scanText = stripFrontmatter(text);
+  const routeKind = (fm.route_kind || "").toLowerCase();
+  const agent = (fm.agent || "").toLowerCase();
+  const expectedRoute = cleanRouteText(fm.expected_route || "");
+  const findings = [];
+
+  for (const [field, allowed] of [
+    ["agent", ["codex", "claude"]],
+    ["route_kind", ["skill", "shell", "none"]],
+    ["expect", ["pass", "fail"]],
+  ]) {
+    const value = (fm[field] || "").toLowerCase();
+    if (!allowed.includes(value)) {
+      findings.push({
+        relPath,
+        line: 1,
+        code: "invalid-final-handoff-fixture-frontmatter",
+        message: `fixture frontmatter must include ${field}: ${allowed.join("|")}`,
+      });
+      return findings;
+    }
+  }
+
+  const route = collectTerminalRouteCandidates(scanText);
+  if (!route) {
+    findings.push({
+      relPath,
+      line: 1,
+      code: "missing-final-handoff-route",
+      message: "final completion responses must end with Recommended next skill or Next work plus Recommended next command",
+    });
+    return findings;
+  }
+
+  if (route.label === "command" && !route.hasNextWork) {
+    findings.push({
+      relPath,
+      line: route.line,
+      code: "missing-next-work-pair",
+      message: "Recommended next command must be paired with a terminal Next work line",
+    });
+    return findings;
+  }
+
+  if (/^none$/i.test(route.route) && expectedRoute && !/^none$/i.test(expectedRoute)) {
+    findings.push({
+      relPath,
+      line: route.line,
+      code: "final-handoff-none-despite-expected-route",
+      message: `handoff says none but fixture expected ${expectedRoute}`,
+    });
+    return findings;
+  }
+
+  if (routeKind === "none") {
+    if (!/^none$/i.test(route.route)) {
+      findings.push({
+        relPath,
+        line: route.line,
+        code: "final-handoff-route-kind-mismatch",
+        message: "route_kind none requires Recommended next command: none",
+      });
+      return findings;
+    }
+    if (!route.hasNextWork || !/\b(?:manual|decision|review|approve|approval|choose|user|external|no automated|none remaining)\b/i.test(route.nextWorkText)) {
+      findings.push({
+        relPath,
+        line: route.line,
+        code: "final-handoff-none-missing-manual-state",
+        message: "Recommended next command: none must name the manual or decision state in Next work",
+      });
+    }
+    return findings;
+  }
+
+  if (/^none$/i.test(route.route)) {
+    findings.push({
+      relPath,
+      line: route.line,
+      code: "final-handoff-route-kind-mismatch",
+      message: `${routeKind} fixtures require an executable route, not none`,
+    });
+    return findings;
+  }
+
+  if (routeKind === "skill") {
+    const firstToken = route.route.split(/\s+/)[0] || "";
+    const expectedPrefix = agent === "claude" ? "/" : "$";
+    const wrongPrefix = agent === "claude" ? "$" : "/";
+    if (!firstToken.startsWith(expectedPrefix) || firstToken.startsWith(wrongPrefix)) {
+      findings.push({
+        relPath,
+        line: route.line,
+        code: "wrong-skill-cli-syntax",
+        message: `${agent} skill handoffs must use ${expectedPrefix}skill syntax`,
+      });
+      return findings;
+    }
+  }
+
+  if (routeKind === "shell" && (route.label === "skill" || /^[/$][A-Za-z0-9_-]+/.test(route.route))) {
+    findings.push({
+      relPath,
+      line: route.line,
+      code: "final-handoff-route-kind-mismatch",
+      message: "route_kind shell requires a shell/project command, not a skill route",
+    });
+    return findings;
+  }
+
+  if (expectedRoute && !/^none$/i.test(expectedRoute) && route.route !== expectedRoute) {
+    findings.push({
+      relPath,
+      line: route.line,
+      code: "final-handoff-route-mismatch",
+      message: `expected ${expectedRoute} but found ${route.route}`,
+    });
+  }
+
+  return findings;
+}
+
+function collectFinalHandoffFixtures(dir) {
+  return walkMarkdown(path.resolve(repoRoot, dir)).sort();
+}
+
+function runFinalHandoffFixtures(files, rootForRel) {
+  const expectedFailureDiagnostics = [];
+  const unexpectedFindings = [];
+  let expectedPasses = 0;
+  let expectedFailures = 0;
+
+  for (const file of files) {
+    const text = fs.readFileSync(file, "utf8");
+    const fm = readFrontmatter(text);
+    const expected = (fm.expect || "").toLowerCase();
+    const findings = scanFinalHandoffFixture(file, rootForRel);
+
+    if (expected === "fail") {
+      expectedFailures += 1;
+      if (findings.length === 0) {
+        unexpectedFindings.push({
+          relPath: rel(file, rootForRel),
+          line: 1,
+          code: "final-handoff-fixture-unexpected-pass",
+          message: "fixture expected fail but no final-handoff diagnostics were found",
+        });
+      }
+      else {
+        expectedFailureDiagnostics.push(...findings);
+      }
+    }
+    else {
+      expectedPasses += 1;
+      unexpectedFindings.push(...findings);
+    }
+  }
+
+  console.log(`Final handoff Markdown fixtures scanned: ${files.length}`);
+  console.log(`Expected-pass fixtures: ${expectedPasses}`);
+  console.log(`Expected-fail fixtures: ${expectedFailures}`);
+  console.log(`Expected failure diagnostics: ${expectedFailureDiagnostics.length}`);
+  for (const finding of expectedFailureDiagnostics) {
+    console.log(`${finding.relPath}:${finding.line}: expected-fail: ${finding.code}: ${finding.message}`);
+  }
+  console.log(`Unexpected fixture results: ${unexpectedFindings.length}`);
+  printFindings(unexpectedFindings);
+
+  return unexpectedFindings;
+}
+
 function collectActive() {
   return [
     ...walk(path.join(repoRoot, "base")),
@@ -214,8 +493,22 @@ else if (args[0] === "--fixtures") {
   rootForRel = path.resolve(repoRoot, args[1]);
   files = collectFixtures(args[1]);
 }
+else if (args[0] === "--final-handoff-fixtures") {
+  if (!args[1]) usage();
+  mode = "--final-handoff-fixtures";
+  rootForRel = path.resolve(repoRoot, args[1]);
+  files = collectFinalHandoffFixtures(args[1]);
+}
 else {
   usage();
+}
+
+if (mode === "--final-handoff-fixtures") {
+  const unexpectedFindings = runFinalHandoffFixtures(files, rootForRel);
+  if (unexpectedFindings.length > 0) {
+    process.exit(1);
+  }
+  process.exit(0);
 }
 
 const findings = files.flatMap((file) => scanSkill(file, rootForRel));

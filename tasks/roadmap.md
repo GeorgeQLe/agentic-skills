@@ -2,6 +2,41 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Final-Handoff Self-Check And Guard
+
+### Goal
+
+Add a shared confirmed-artifact terminal handoff rule to the alignment-page convention and a focused fixture-backed audit for final completion responses.
+
+### Plan
+
+1. Update the canonical alignment-page convention with a confirmed-artifact terminal handoff rule after the confirmed-page contract.
+2. Regenerate generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+3. Extend `scripts/skill-alignment-routing-audit.mjs` with `--final-handoff-fixtures <dir>` for Markdown final-response fixtures.
+4. Add pass/fail fixtures for recommended next skill, recommended next command, shell command, explicit `none`, missing routes, prose-only routes, wrong CLI syntax, and invalid `none`.
+5. Extend the layer1 audit test to cover both the existing SKILL.md fixtures and the new final-handoff fixtures.
+6. Run the focused audit commands, generator checks, package checks, task-doc audit, and diff hygiene.
+7. Write review results and ship manifest, then commit and push the intended changes on `master`.
+
+### Acceptance Criteria
+
+- Confirmed artifact handoffs must end with either `Recommended next skill: <command>` or `Next work` plus `Recommended next command`.
+- If the artifact or skill contract names a route, the handoff must verify route availability before recommending it.
+- If no automated route remains, the handoff must say `Recommended next command: none` and name the manual or decision state.
+- Final-handoff fixtures enforce Codex `$skill` syntax and Claude `/skill` syntax for skill routes.
+- The fixture audit rejects missing terminal routes, prose-only artifact route mentions, wrong CLI syntax, and `none` when an expected route exists.
+- Required verification passes or any blocker is documented.
+
+### Results
+
+- Added a shared confirmed-artifact terminal handoff rule to `docs/alignment-page-convention.md`.
+- Regenerated all 306 generated `ALIGNMENT-PAGE.md` bundles.
+- Extended `scripts/skill-alignment-routing-audit.mjs` with `--final-handoff-fixtures <dir>`.
+- Added seven Markdown final-handoff fixtures covering valid Codex skill routing, shell-command routing, `none` with a manual state, missing routes, artifact-prose-only routes, wrong Codex skill syntax, and invalid `none`.
+- Extended layer1 coverage for the new fixture mode.
+- Verified the package manifest from a clean temp source containing only this task's convention and bundle changes; no package-manifest delta was needed.
+- Verification passed except for the broad layer1 invocation, which failed on unrelated staged skill-inventory contract changes; the focused routing audit test passed.
+
 ## Historical Implementation - Social Ledger Public Archive Alignment Page
 
 ### Goal
