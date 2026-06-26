@@ -15011,3 +15011,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Question: "have we pushed the update for the new skills showcase site?" Answer: yes — `master` is up to date with `origin/master`, zero unpushed commits; all skills-showcase work (incl. `cdf97b57b`, `e74ad9ddd` "Refresh skills showcase generated data", `c5550f225` showcase build verification) is on the remote.
 - Confirmed the only working-tree drift (`github-proof-data.js` ×2 + `benchmark-results-matrix.md`) is the same concurrent-session in-flight set the prior ship-end (`cdf97b57b`) explicitly left untouched. Verified by regenerating github showcase data against the current git index: deterministic fingerprint `4947211c` ≠ the drift's `fcef31003`, proving the drift was produced against a different (concurrent) index state. Left it for its owning session per the concurrent-session rule.
 - Shipped only this session's own artifact: the `/ship-end` prompt-history log.
+
+## 2026-06-26 — Clean up orphaned showcase generated-data drift
+
+- Resolved the long-standing concurrent-session drift (`github-proof-data.js` ×2, `benchmark-results-matrix.md`) confirmed by the user as orphaned (no active parallel session). Reset to HEAD and regenerated cleanly via both showcase generators.
+- Canonical result: `exec` Codex matrix row repointed `45d6dd34` → `b7ce8063` (generator's deterministic selection from working-tree run evidence; both reports exist, `b7ce8063` is the current blocked/incomplete pick); proof-data `sourceFingerprint` + `recentHistoryEntries` and `skills-data.js` fingerprint refreshed to match committed `tasks/history.md` and source.
+- Verified: `validate:data` ("website-owned generated data is fresh"), `tests/layer1/benchmark-results-matrix.test.ts` 7/7.
