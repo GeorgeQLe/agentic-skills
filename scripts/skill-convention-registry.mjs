@@ -28,6 +28,10 @@ export const SKILL_CONVENTIONS = {
     canonicalDoc: "docs/social-video-content-convention.md",
     packageAsset: "assets/social-video-content-convention.md",
   },
+  "social-ledger": {
+    canonicalDoc: "docs/social-ledger-convention.md",
+    packageAsset: "assets/social-ledger-convention.md",
+  },
 };
 
 export function conventionIds() {

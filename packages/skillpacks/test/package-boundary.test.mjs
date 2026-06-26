@@ -101,6 +101,7 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/design-tree-loop-convention.md',
       'assets/social-post-convention.md',
       'assets/social-video-content-convention.md',
+      'assets/social-ledger-convention.md',
       ...socialAssetPaths,
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
@@ -123,8 +124,12 @@ describe('skillpacks npm publish target boundary', () => {
   it('registers social conventions as static package assets for BIP guidance', () => {
     assert.deepEqual(
       Object.keys(SKILL_CONVENTIONS).filter((id) => id.startsWith('social-')).sort(),
-      ['social-post', 'social-video-content']
+      ['social-ledger', 'social-post', 'social-video-content']
     );
+    assert.equal(SKILL_CONVENTIONS['social-ledger'].canonicalDoc, 'docs/social-ledger-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-ledger'].packageAsset, 'assets/social-ledger-convention.md');
+    assert.equal(SKILL_CONVENTIONS['social-ledger'].bundleFile, undefined);
+    assert.equal(SKILL_CONVENTIONS['social-ledger'].generatorScript, undefined);
     assert.equal(SKILL_CONVENTIONS['social-post'].canonicalDoc, 'docs/social-post-convention.md');
     assert.equal(SKILL_CONVENTIONS['social-post'].packageAsset, 'assets/social-post-convention.md');
     assert.equal(SKILL_CONVENTIONS['social-post'].bundleFile, undefined);
@@ -165,5 +170,25 @@ describe('skillpacks npm publish target boundary', () => {
     const youtubeShortsConvention = readFileSync(resolve(repoRoot, 'docs/social/youtube-shorts-convention.md'), 'utf8');
     assert.match(youtubeShortsConvention, /# YouTube Shorts Convention/);
     assert.match(youtubeShortsConvention, /## Drafting Modes/);
+
+    const ledgerConvention = readFileSync(resolve(repoRoot, 'docs/social-ledger-convention.md'), 'utf8');
+    assert.match(ledgerConvention, /# Social Ledger Convention/);
+    assert.match(ledgerConvention, /assets\/social-ledger-convention\.md/);
+    assert.match(ledgerConvention, /dedupe_fingerprint/);
+    assert.match(ledgerConvention, /post_plus_replies/);
+    assert.match(ledgerConvention, /6eorge\.com\/brain/);
+
+    // Parent router and X channel doc point at the ledger contract and post-plus-replies shape.
+    assert.match(socialPostConvention, /docs\/social-ledger-convention\.md/);
+    assert.match(socialPostConvention, /post_plus_replies/);
+    const xPostConvention = readFileSync(resolve(repoRoot, 'docs/social/x-post-convention.md'), 'utf8');
+    assert.match(xPostConvention, /Post Plus Replies Pattern/);
+    assert.match(xPostConvention, /6eorge\.com\/brain/);
+
+    // Alignment BIP guidance teaches ledger scope, account, and public-URL gates.
+    assert.match(alignmentConvention, /docs\/social-ledger-convention\.md/);
+    assert.match(alignmentConvention, /assets\/social-ledger-convention\.md/);
+    assert.match(alignmentConvention, /ledger storage scope/);
+    assert.match(alignmentConvention, /public alignment URL status/);
   });
 });

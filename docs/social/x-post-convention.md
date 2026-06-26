@@ -31,6 +31,16 @@ Packaged asset: `assets/social/x-post-convention.md`.
 
 **`creator_inspired`:** Draft a short hook plus useful technical lesson, optionally with a thread outline that each carries one sourced claim.
 
+## Post Plus Replies Pattern
+
+The preferred X shape for build-in-public is `post_plus_replies`:
+
+1. **Main post** — a standalone insight, lesson, result, or decision under the standard 280-character limit. It must read fully on its own without the link.
+2. **First reply** — public alignment context via a gBrain URL (`https://6eorge.com/brain/<project-id>/<doc>.html`), used only when the alignment doc is approved for public viewing and synced or approved to sync.
+3. **Optional second reply** — a contextual skill/package link, used only when the post is genuinely about Agentic Skills, the workflow, or a reusable skill. Rotate wording; default to npm for install/use and GitHub for source/docs/contribution. Do not reuse identical promo wording across recent posts on the same account.
+
+Use a single post when there is no public-safe context link and no genuine skill relevance. Record `post_mode` and the `reply_chain` (each reply tagged with a `purpose`) per `docs/social-ledger-convention.md`.
+
 ## Publish Precheck
 
 - Verify the account supports any requested long-post format.

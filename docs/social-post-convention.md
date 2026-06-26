@@ -6,6 +6,8 @@ Channel docs directory: `docs/social/` in a source checkout, `assets/social/` in
 
 This is the thin router and shared contract for build-in-public and alignment-producing agents that draft source-safe text/community posts. Load this file first, then load only the selected channel docs from `docs/social/` or `assets/social/`.
 
+For cross-run memory of what has already been drafted, approved, posted, and promoted — and for public-safe alignment context links — also load the system-of-record contract `docs/social-ledger-convention.md` (`assets/social-ledger-convention.md` in a packaged install). It defines ledger resolution, the post record schema, account-scoped duplicate detection, the gBrain public archive link, and the public/private boundary.
+
 ## Routing Rule
 
 Do not load every social channel convention by default. After the user selects target channels, load only the matching channel files:
@@ -80,6 +82,16 @@ When useful, generate both modes side by side so the user can choose between con
 - Do not ask for votes, upvotes, artificial engagement, brigading, or coordinated amplification.
 - For cross-posting, rewrite natively for each channel. Do not paste the same copy across platforms without adapting length, tone, link behavior, and community expectations.
 
+## Post Plus Replies And Context Links
+
+Some channels support a `post_plus_replies` shape: a standalone main post, a first reply that adds a public-safe alignment context link, and an optional contextual skill-promo reply. Where the channel supports threading (for example X), prefer this shape over packing a link into the main post.
+
+- **Main post**: stands alone as the insight, lesson, result, or decision. Do not make it depend on the link.
+- **Context reply**: links a public-safe alignment doc (the gBrain projection, `https://6eorge.com/brain/<project-id>/<doc>.html`) only when that doc is approved for public viewing and synced or approved to sync. See `docs/social-ledger-convention.md`.
+- **Skill-promo reply** (optional): only when the post is genuinely about Agentic Skills, the workflow, or a reusable skill. Use rotated wording — npm (`https://www.npmjs.com/package/skillpacks`) when install/use is the point, GitHub when source/docs/contribution context matters. Never reuse identical promo wording across recent posts on the same account.
+
+Record the chosen `post_mode`, `main_post`, and `reply_chain` (each reply tagged with a `purpose`) in the ledger per `docs/social-ledger-convention.md`.
+
 ## BIP Page Output Shape
 
 When an alignment page uses this convention, render channel decisions in a table or cards with these fields:
@@ -95,6 +107,8 @@ When an alignment page uses this convention, render channel decisions in a table
 - `claim_safety_notes`
 - `platform_or_community_precheck`
 - `loaded_channel_convention`
+- `post_mode`: `single_post` or `post_plus_replies`
+- `reply_chain`: ordered replies, each with `purpose` (`full_alignment_doc`, `skill_promo`, or other), `text`, and optional `url` (for `post_plus_replies`)
 - `user_decision`: `approve`, `revise`, `reject`, or `not-now`
 
 Final YAML from the BIP page should preserve selected channels, loaded convention paths, user selections, rejected angles, requested edits, and any channel-specific pre-publish checks.
