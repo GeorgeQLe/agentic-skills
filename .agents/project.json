@@ -18,6 +18,7 @@
     "ui-interview": "product-design",
     "guide": "guided-walkthrough",
     "ux-variations": "product-design",
-    "reconcile-dev-docs": "docs-health"
+    "reconcile-dev-docs": "docs-health",
+    "roadmap": "agent-work-admin"
   }
 }
