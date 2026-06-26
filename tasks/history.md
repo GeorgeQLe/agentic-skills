@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-06-26 — Ship leftover index/benchmark catch-up edits
+
+- `/exec` found no active or pending phase (todo.md "Active implementation: none"; the only `## Phase` in roadmap is ✓; all other unchecked items live in Historical/Deferred sections). No new implementation work this session.
+- Wrapped up by shipping two complete-but-uncommitted catch-up edits already present at session start: (1) `alignment/index.html` — registered the already-tracked `ui-interview-flow-walk-refactor-architecture.html` card and bumped Product Design & Spec count 11→12; (2) `docs/benchmark-results-matrix.md` — updated the `exec` (Codex) blocked-run path from `exec-codex-a0630159` to the existing `exec-codex-51f95da4` run dir.
+- Verified before commit: `audit-alignment-pages.mjs` exit 0 (57 entries, index integrity exact); both referenced artifacts (tracked page + benchmark run dir) exist on disk.
+
 ## 2026-06-26 — De-specify interrogation stage-one label
 
 - The interrogation-page convention's fixed stage-one label "framework/scope alignment page" was a leaky generalization (accurate for only 2 of 10 participating skills). De-specified the authoring source (`docs/interrogation-page-convention.md` lines 5/16/18/23) to a generic "the skill's first post-interrogation stage" descriptor that names the per-skill variants (framework/scope, idea generation, research, design), and dropped the matching parenthetical from the generator stub (`scripts/upgrade-interrogation-page.mjs`). Kept the stage 0→1→2 ordinal model; only the artifact noun changed.
