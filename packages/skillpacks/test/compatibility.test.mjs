@@ -10,6 +10,8 @@ const repoRoot = resolve(packageRoot, '..', '..');
 const expectedMatrix = new Map([
   ['help / --help / --version', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['list --json', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['list --skills', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['list --tree', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['list-packs', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['status', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],

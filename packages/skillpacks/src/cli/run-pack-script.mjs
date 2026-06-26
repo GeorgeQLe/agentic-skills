@@ -506,6 +506,113 @@ function printManifestJson(args) {
   return 0;
 }
 
+function deprecationMarker(skill) {
+  return skill.deprecated ? ` — deprecated → ${skill.replaced_by ?? '(unspecified)'}` : '';
+}
+
+export function formatSkillsList(manifest) {
+  const byKey = new Map();
+  for (const skill of manifest.skills) {
+    if (skill.installable !== true) {
+      continue;
+    }
+    const groupKey = `${skill.scope}|${skill.pack ?? ''}|${skill.name}`;
+    const existing = byKey.get(groupKey);
+    if (existing) {
+      if (skill.platform && !existing.platforms.includes(skill.platform)) {
+        existing.platforms.push(skill.platform);
+      }
+      continue;
+    }
+    byKey.set(groupKey, {
+      name: skill.name,
+      scope: skill.scope,
+      pack: skill.pack,
+      platforms: skill.platform ? [skill.platform] : [],
+      deprecated: skill.deprecated,
+      replaced_by: skill.replaced_by
+    });
+  }
+
+  const rows = [...byKey.values()].sort((a, b) => {
+    const aGroup = a.scope === 'base' ? '￿' : a.pack ?? '';
+    const bGroup = b.scope === 'base' ? '￿' : b.pack ?? '';
+    if (aGroup !== bGroup) {
+      return aGroup < bGroup ? -1 : 1;
+    }
+    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  });
+
+  const lines = [`Installable skills (${rows.length}):`];
+  for (const row of rows) {
+    const group = row.scope === 'base' ? 'base' : row.pack;
+    const platforms = row.platforms.slice().sort().join(', ');
+    lines.push(`  ${row.name}  [${group}]  (${platforms})${deprecationMarker(row)}`);
+  }
+  return lines.join('\n');
+}
+
+export function formatPackHierarchy(manifest) {
+  const skillLookup = new Map();
+  for (const skill of manifest.skills) {
+    if (skill.installable !== true) {
+      continue;
+    }
+    const key = `${skill.scope}|${skill.pack ?? ''}|${skill.name}`;
+    const existing = skillLookup.get(key);
+    if (existing) {
+      if (skill.platform && !existing.platforms.includes(skill.platform)) {
+        existing.platforms.push(skill.platform);
+      }
+      continue;
+    }
+    skillLookup.set(key, {
+      platforms: skill.platform ? [skill.platform] : [],
+      deprecated: skill.deprecated,
+      replaced_by: skill.replaced_by
+    });
+  }
+
+  const baseRows = [...skillLookup.entries()].filter(([key]) => key.startsWith('base|'));
+  const totalSkills = manifest.packs.reduce((sum, pack) => sum + pack.skills.length, 0) + baseRows.length;
+
+  const lines = [`Packs (${manifest.packs.length}) and base, ${totalSkills} installable skills:`];
+  for (const pack of manifest.packs) {
+    lines.push(`${pack.name}  (${pack.skill_count} skills)`);
+    for (const skillName of pack.skills) {
+      const meta = skillLookup.get(`pack|${pack.name}|${skillName}`);
+      const platforms = (meta?.platforms ?? []).slice().sort().join(', ');
+      const marker = meta ? deprecationMarker(meta) : '';
+      lines.push(`  ${skillName}  (${platforms})${marker}`);
+    }
+  }
+
+  lines.push(`base  (${baseRows.length} skills)`);
+  const baseSorted = baseRows
+    .map(([key, meta]) => ({ name: key.slice('base||'.length), meta }))
+    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+  for (const { name, meta } of baseSorted) {
+    const platforms = meta.platforms.slice().sort().join(', ');
+    lines.push(`  ${name}  (${platforms})${deprecationMarker(meta)}`);
+  }
+  return lines.join('\n');
+}
+
+function printSkillListing(args) {
+  const wantsSkills = args.includes('--skills');
+  const wantsTree = args.includes('--tree');
+  if (wantsSkills && wantsTree) {
+    throw new Error('list --skills and list --tree cannot be combined');
+  }
+  const extras = args.filter((arg) => arg !== '--skills' && arg !== '--tree');
+  if (extras.length > 0 || args.length !== 1) {
+    throw new Error('list --skills/--tree does not accept additional arguments');
+  }
+  const manifest = readManifest();
+  console.log(wantsSkills ? formatSkillsList(manifest) : formatPackHierarchy(manifest));
+  return 0;
+}
+
 function availableDeckNames(manifest) {
   return (manifest.decks || []).map((deck) => deck.name).sort();
 }
@@ -557,6 +664,8 @@ Usage:
 Commands:
   list                         List available packs
   list --json                  Print the packaged skillpacks manifest as JSON
+  list --skills                List every installable skill (base + packs)
+  list --tree                  List packs with their skills nested
   list-packs                   List enabled packs from .agents/project.json
   status                       Show project designation and installed skills
   status --all                 Status for every project below the current directory
@@ -612,6 +721,10 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'list' && rest.includes('--json')) {
     return printManifestJson(rest);
+  }
+
+  if (command === 'list' && (rest.includes('--skills') || rest.includes('--tree'))) {
+    return printSkillListing(rest);
   }
 
   if (command === 'list-packs') {

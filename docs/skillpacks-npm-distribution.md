@@ -205,6 +205,8 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | --- | --- | --- | --- | --- | --- |
 | `help / --help / --version` | Node-owned | `packages/skillpacks/src/cli/run-pack-script.mjs` | No | No | CLI help and version output from package metadata. |
 | `list --json` | Node-owned | Packaged manifest reader | No | No | Prints `dist/skillpacks-manifest.json`. |
+| `list --skills` | Node-owned | Packaged manifest reader | No | No | Flat list of installable skills (base + packs) with platform and deprecation markers. |
+| `list --tree` | Node-owned | Packaged manifest reader | No | No | Packs with nested skills, plus a base group, from `dist/skillpacks-manifest.json`. |
 | `list-packs` | Node-owned | Project config reader | No | No | Reads `.agents/project.json` directly. |
 | `status` | Node-owned | Project config/status reader | No | No | Reports project designation and local roots. |
 | `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |

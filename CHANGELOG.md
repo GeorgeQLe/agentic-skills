@@ -24,6 +24,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 - Added the social-ledger / public-archive system and social channel conventions, bundled as new published `assets/`.
 - Added deterministic design-tree branch-order metadata, sample coverage, and flow-tree contract tests for user-flow and UX-variation branch selection.
 - Added published-package stale-metadata retry coverage so release verification proves bounded npm registry propagation handling.
+- Added `skillpacks list --skills` (flat installable-skill listing) and `skillpacks list --tree` (packs with nested skills, plus a base group), both manifest-backed and annotating deprecated aliases with their `replaced_by` target.
 
 ### Changed
 
@@ -45,7 +46,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Verification
 
-- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 131/131 including the new manifest deprecation-metadata test and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
+- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 137/137 including the new manifest deprecation-metadata test, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
 - This `[0.1.12]` section reconciles the full `v0.1.11..HEAD` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4) and the social-ledger / public-archive system.
 - The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
 
