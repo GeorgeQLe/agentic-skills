@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.28 - 2026-06-26
+
+- Flow-walk re-cut: routing of approved clickable route experiments now targets `/build-ui-screens` (then `/logic-wiring`) instead of the renamed `/create-ui-experiment`.
+- The branch packet now additionally authors a per-screen batch plan (one batch per flow step) that `build-ui-screens` walks. Role unchanged — `ui-interview` is not an orchestrator and still does not build.
+
 ## v0.27 - 2026-06-23
 
 - Bumped the contract after archiving v0.26.

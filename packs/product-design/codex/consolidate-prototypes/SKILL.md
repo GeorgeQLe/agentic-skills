@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.17
+version: v0.18
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -12,7 +12,9 @@ visual_tier: prototype
 
 Invoke as `$consolidate-prototypes`.
 
-Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `$ux-variations --layout-mode`, built via `$prototype`, and evaluated via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the source prototypes, interviews the user on what works and what does not in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
+Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `$ux-variations --layout-mode`, built via `$build-ui-screens` then `$logic-wiring`, and evaluated via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the source prototypes, interviews the user on what works and what does not in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
+
+**Two-stage consolidation.** Consolidation runs in two stages. **Stage 1 — stitch** assembles the approved canonical screens into coherent end-to-end flows: it reads each variation's built screens and walks the `ui_experiments[].build_ledger[]` entries, and **cherry-picks** screens flagged `cherry_pick_candidate` or left `parked` by `$build-ui-screens` (a strong partial screen worth carrying into the canonical flow even though its source variation was not the winner). **Stage 2 — converge** is the existing pass: interview keep/reject across the stitched flows, resolve conflicts, build the consolidated MVP, write the AFPS graduation document, and hand off to `$research-roadmap --post-prototype`.
 
 Users with manually built prototypes can also use this skill directly, but consolidation should not happen before the user has reviewed the prototypes and captured evidence.
 

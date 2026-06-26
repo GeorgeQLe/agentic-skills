@@ -22,10 +22,11 @@ scripts/pack.sh refresh
 - `feature-interview`: Conduct a structured interview to define feature requirements and constraints.
 - `design-inspirations`: Gather UI/UX inspiration once via web research — named patterns, conventions, component-library references, and annotated links — into a durable cited brief that feeds `ui-interview` and `ux-variations`.
 - `user-flow-map`: Map positioned product goals into the root of a wireframe tree with user-flow branches, decisions, states, handoffs, and low-fidelity wireframe notes.
+- `key-moments`: Rank the user-flow branches by proof priority (value × risk × frequency) after `user-flow-map`, ordering branches, gating variation breadth, and promoting or pruning flows so the tree grows in proof order. Writes existing flow-tree ordering fields only.
 - `ui-interview`: Investigate a specific UX variation branch, propose an HTML visual mockup, interview for alignment, and approve/reject/retry the branch before routing onward.
-- `create-ui-experiment`: Own clickable UI experiment routes or project-native lightweight prototypes for approved UI branches before prototype build-plan synthesis or UAT.
+- `build-ui-screens`: Build the visual UI screens for an approved UI branch as an ordered element-batch loop with a per-batch visual checkpoint and a minimum-UI stop, writing the per-screen build ledger before wiring.
 - `spec-interview`: Conduct a structured interview to produce a detailed product specification.
 - `ux-variations`: Expand a selected user flow into alternate progression branches users can compare before one branch moves into UI proposal work.
 - `consolidate-prototypes`: Converge evaluated prototype branches into an approved MVP, write AFPS graduation, and hand off to post-prototype cleanup.
-- `prototype`: Build a working prototype from a specification or design direction.
+- `logic-wiring`: Wire the visual screens from `build-ui-screens` into a clickable, state-backed prototype (plus runnable CLI/API/infra logic) so each variation's flow can be walked end-to-end before consolidation.
 - `design-system`: Define or extend a design system with tokens, components, and usage guidelines.

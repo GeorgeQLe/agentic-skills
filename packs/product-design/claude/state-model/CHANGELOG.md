@@ -1,5 +1,11 @@
 # state-model changelog (claude)
 
+## v0.9 - 2026-06-26
+
+- Flow-walk re-cut: framed state-model as just-in-time per **promoted** flow (attaches only to flows `key-moments` promotes, in proof order; later flows extend the core model; never models pruned flows). `branches[].model_ref` stays primary; state-model stays **off the route**.
+- Added the **fast-pass fold** for CRUD-trivial domains (quick data-shape confirm instead of one-framework-per-session), distinct from the framework-count (≥3) chunk fold.
+- Added awareness of the per-screen `model_ref` on the `ui_experiment` node (flow-tree v0.4) for screen-local sub-models.
+
 ## v0.8 - 2026-06-24
 
 - Resolved an internal contradiction about flow-tree writes: the **Architecture** section and the **Constraints** "only flow-tree write" line said the skill writes only the optional top-level `model_tree_ref` pointer, contradicting §4 / the per-branch iteration contract, which attach the model via `branches[].model_ref`. Both now state the same thing the design-tree-loop convention does: `branches[].model_ref` is the **primary** flow-tree write and the top-level `model_tree_ref` is optional back-compat. No routing or behavior change; the skill remains off the `route` enum.

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.18 - 2026-06-26
+
+- Flow-walk re-cut: made consolidation explicitly **two-stage** — stage 1 stitches the approved canonical screens into end-to-end flows and cherry-picks `cherry_pick_candidate`/`parked` screens from `build_ledger[]`; stage 2 is the existing converge → AFPS graduation → `/research-roadmap --post-prototype` pass.
+- Updated upstream build references to `/build-ui-screens` then `/logic-wiring`.
+
 ## v0.17 - 2026-06-22
 
 - Corrected the active consolidation contract to require the AFPS graduation document promised by v0.16.

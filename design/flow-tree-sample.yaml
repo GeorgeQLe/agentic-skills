@@ -1,11 +1,11 @@
-schema_version: v0.3
+schema_version: v0.4
 topic: invoice-approval
 mode: flat
 route:
   - user-flow-map
   - ux-variations
   - ui-interview
-  - prototype
+  - logic-wiring
   - consolidate-prototypes
   - spec-interview
 source_artifacts:
@@ -59,6 +59,25 @@ branches:
             experiment_path: experiments/invoice-approval/wizard-stepper/
             review_evidence: alignment/create-ui-experiment-invoice-approval.html#wizard-stepper-review
             decision_id: approve-wizard-stepper
+            # v0.4 flow-walk: per-screen JIT state-model attachment.
+            model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml
+            # v0.4 flow-walk: ordered per-screen build ledger (build-ui-screens writes, logic-wiring advances).
+            build_ledger:
+              - id: step-summary
+                flow_step: Review invoice summary
+                status: wired
+                elements_added:
+                  - invoice header
+                  - line-item summary table
+                  - approve action
+                notes: Minimum UI reached after the approve action; logic-wiring made the step clickable.
+              - id: step-policy
+                flow_step: Confirm policy checks
+                status: minimum-ui-reached
+                elements_added:
+                  - policy checklist
+                  - exception banner
+                notes: Visual stop rule fired; awaiting logic-wiring.
       - id: single-page-dense
         label: Single dense review page
         status: retry-needed
@@ -77,10 +96,19 @@ branches:
           - design/ux-variations-invoice-approval.md
         ui_experiments:
           - id: dense-table
-            status: rejected
+            status: parked
             artifacts:
               - design/ui-invoice-approval.md
             decision_id: modify-dense-table
+            # v0.4 flow-walk: parked screen flagged for consolidate-prototypes stage-1 cherry-pick.
+            cherry_pick_candidate: true
+            build_ledger:
+              - id: step-dense-scan
+                flow_step: Scan invoice table
+                status: parked
+                elements_added:
+                  - dense invoice table
+                notes: Parked out of this build pass; dense table worth stitching into the canonical flow later.
 decisions:
   - id: approve-wizard-stepper
     branch_ref: submit-and-approve/guided-wizard/wizard-stepper

@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.8
+version: v0.9
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -20,6 +20,12 @@ Invoke as `$state-model`.
 This is an **orchestrator skill** that authors the **logical** domain/state/logic model anchored to an approved user-flow map, running **one domain-modeling framework per session** and synthesizing their outputs into a proposed domain model plus a `model-tree` manifest for HTML alignment review. It writes the canonical domain model and manifest only after confirmed approval. It sits **after `$user-flow-map`, before `$ux-variations`** in the product-design prototype pipeline.
 
 The model it produces is a property of the *flow*, not of any one UI presentation: UX variations re-skin the same underlying entities, actions, and states, so authoring the logical model once gives `$ux-variations` and `$ui-interview` a real substrate to present, and turns `$spec-interview` into "harden this model to production" rather than "invent it."
+
+**Just-in-time per promoted flow.** `state-model` is **not a route position** — it is invoked from `$user-flow-map`'s handoff, after `$key-moments` ranks the flows. Attach a model **only to flows `key-moments` has promoted**, in proof-priority order; never model a pruned flow. Later flows **extend** the core model rather than restating it — the first promoted flow establishes the shared entities/states, and subsequent flows add only what they introduce. The per-user-flow-branch `branches[].model_ref` remains the **primary** linkage.
+
+**Fast-pass fold.** For a CRUD-trivial domain (the flow is straightforward create/read/update/delete over a small, obvious data shape), fold the full multi-framework session into a single **fast-pass**: a quick data-shape confirmation (entities, key fields, the handful of states) instead of running one framework per session. This is distinct from the existing framework-count (≥3) chunk fold — fast-pass applies when the *domain itself* is trivial, not merely when few frameworks were selected. Still produce the `model-tree` manifest and pass the one binding alignment gate.
+
+**Per-screen `model_ref`.** When a single approved UI experiment screen needs its own model slice (a screen-local sub-model distinct from the flow's), `state-model` may attach a per-screen `model_ref` on the `ui_experiment` node (flow-tree v0.4), as the screen-level counterpart to the user-flow branch's `model_ref`.
 
 **Logical only.** This skill owns entities, value objects, aggregates, state machines, events, commands, read models, policies, and logical command/query contracts (request/response/error *shapes*). It does **not** own physical concerns — storage engines, real endpoints/URLs, authentication, migrations, indexes, or deployment. Those stay owned by `$spec-interview` downstream. See Constraints.
 

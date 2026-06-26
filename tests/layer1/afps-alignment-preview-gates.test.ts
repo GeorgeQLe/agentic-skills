@@ -42,8 +42,8 @@ const localPlanningPreviewSkills: Array<[path: string, specificGates: string]> =
 ];
 
 const prototypeSkills = [
-  "packs/product-design/claude/prototype/SKILL.md",
-  "packs/product-design/codex/prototype/SKILL.md",
+  "packs/product-design/claude/logic-wiring/SKILL.md",
+  "packs/product-design/codex/logic-wiring/SKILL.md",
 ];
 
 const roadmapSkills = [

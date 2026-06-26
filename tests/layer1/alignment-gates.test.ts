@@ -14,8 +14,8 @@ const coreSkills = [
   "packs/product-design/codex/spec-interview/SKILL.md",
   "packs/product-design/claude/consolidate-prototypes/SKILL.md",
   "packs/product-design/codex/consolidate-prototypes/SKILL.md",
-  "packs/product-design/claude/prototype/SKILL.md",
-  "packs/product-design/codex/prototype/SKILL.md",
+  "packs/product-design/claude/logic-wiring/SKILL.md",
+  "packs/product-design/codex/logic-wiring/SKILL.md",
   "packs/product-testing/claude/uat/SKILL.md",
   "packs/product-testing/codex/uat/SKILL.md",
 ];

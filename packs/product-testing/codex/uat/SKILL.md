@@ -7,7 +7,7 @@ required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
 invocation: sub-skill
-parent: prototype
+parent: logic-wiring
 ---
 
 ## Pack Availability Guard
@@ -30,7 +30,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 ## Design-Tree Role
 
-`uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `prototype`, and it is also invoked inline by `consolidate-prototypes` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `$consolidate-prototypes`, `$customer-discovery`) are fallback suggestions, not design-tree branch routing.
+`uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `logic-wiring`, and it is also invoked inline by `consolidate-prototypes` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `$consolidate-prototypes`, `$customer-discovery`) are fallback suggestions, not design-tree branch routing.
 
 ## Process
 

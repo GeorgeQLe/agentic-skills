@@ -1,0 +1,173 @@
+---
+name: consolidate-prototypes
+description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
+type: planning
+version: v0.17
+required_conventions: [alignment-page, design-tree-loop, interrogation-page]
+argument-hint: "[optional: topic, page, or path to variation specs]"
+visual_tier: prototype
+---
+
+# Consolidate Prototypes
+
+Invoke as `/consolidate-prototypes`.
+
+Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `/ux-variations --layout-mode`, built via `/prototype`, and evaluated via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the source prototypes, interviews the user on what works and what doesn't in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
+
+Users with manually built prototypes can also use this skill directly, but consolidation should not happen before the user has reviewed the prototypes and captured evidence.
+
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
+
+## Design-Tree Flow
+
+This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, converging the validated tree into a cohesive **MVP**. The `## Process` steps below group by stage:
+
+- **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the prototype-selection checkpoint — confirm which evaluated prototype branches to consolidate and the UAT evidence backing each.
+- **Stage 1 — Research**: read the built prototypes, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/flow-tree-[topic].yaml`, and the `/uat --variant-evaluation` evidence.
+- **Stage 2 — Design**: interview keep/reject per prototype branch, resolve conflicts, and decide the consolidated MVP direction.
+- **Stage 3 — Plan**: the keep/reject/resolve matrix is the build-plan slice this run realizes.
+- **Stage 4 — Implement (scoped)**: **runnable** — build the consolidated MVP under `prototypes/{topic}/consolidated/`, mark the tree `consolidated`, record the consolidated MVP decisions, and pass the single binding alignment gate before any canonical write.
+
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the validated variation set ready to converge, runs the staged flow, writes the consolidated MVP on approval, and stops with the handoff in `## Next Work`.
+
+**Modify-back.** When consolidation surfaces a flaw in an upstream node, record a `modify` decision whose `targets[]` re-opens that `model_ref` or user-flow branch; convergence resumes once the re-opened node is re-approved.
+
+## Process
+
+### 0. Product-Path Scope Resolution
+
+Resolve research scope by product path before using code or app structure as a hint:
+
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
+
+When product path `{slug}` is active, read research under `research/{slug}/`, read pre-prototype design artifacts under `design/{slug}/`, write prototype output under `prototypes/{topic}/`, and treat top-level `research/*.md` and `design/*.md` files as flat-mode documents or cross-path summaries.
+
+1. **Resolve context**
+   - Read `.agents/project.json` if it exists.
+   - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, and design artifacts when present.
+   - Locate the prototype branch plan: `design/ui-layout-variations-[topic].md`, `design/ux-variations-[topic].md`, or equivalent prototype-branch plan.
+   - Locate the content requirements: `design/ui-requirements-[topic].md` or equivalent content contract.
+   - Locate the flow-tree manifest: `design/flow-tree-[topic].yaml` or `design/{slug}/flow-tree-{topic}.yaml` when present.
+   - Locate variant evaluation evidence: `research/uat-variant-evaluation-[topic].md`, product-path-scoped equivalents, `research/uat-plan.md` result logs, screenshots, notes, recordings, or explicit user-provided review notes.
+   - Locate built implementations: scan route files, component directories, and any prototype-specific directories or branches.
+   - If the prototype branch plan or implementations cannot be found, ask the user to point to them.
+
+2. **Evidence gate**
+   - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first).
+   - Do not infer a winner from specs alone. Built variants need hands-on review or explicit user readiness before consolidation.
+   - If some prototype branches are unreviewed, ask whether to exclude them, evaluate them first via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first), or include them as spec-only references.
+
+3. **Present prototype inventory**
+   - List each source prototype branch with a one-line summary of its approach.
+   - Note build status for each: built and reviewed, built but unreviewed, partially built, spec-only.
+   - Note evidence status for each: result log present, user notes present, no evidence.
+   - Use AskUserQuestion to confirm which prototype branches the user has reviewed and wants to evaluate. Skip unreviewed or unbuilt prototypes unless the user wants to include them from spec alone.
+
+4. **Interview per prototype branch**
+   - For each reviewed prototype branch, ask using AskUserQuestion (1–3 questions per turn):
+     - What works well in this prototype? Name specific elements, regions, or interactions.
+     - What doesn't work? What feels wrong, cluttered, sparse, or confusing?
+     - Any specific component, region, or interaction you want to keep in the final design?
+     - Anything to explicitly reject — never use this approach?
+   - Record responses as structured annotations per source prototype:
+     - **Keep**: elements the user wants in the final MVP (with source prototype)
+     - **Reject**: elements the user never wants (with source prototype)
+     - **Neutral**: elements the user has no strong opinion on
+
+5. **Cross-prototype synthesis**
+   - Present a **Consolidation Matrix** showing each design dimension and which prototype branch's approach the user preferred:
+
+   | Design Element | Prototype A | Prototype B | Prototype C | Winner |
+   |---|---|---|---|---|
+   | Container pattern | card grid | data table | list+detail | ? |
+   | Detail view | modal | sidebar | full-page | ? |
+   | Navigation | top-nav | side-nav | tabs | ? |
+   | ... | ... | ... | ... | ... |
+
+   - Fill in winners based on the interview. Mark conflicts where preferred choices from different dimensions are incompatible (e.g., user wants sidebar detail from Variation B but also wants the full-width card grid from Variation A — these compete for horizontal space).
+   - For each conflict:
+     - Present the tension clearly
+     - Offer 2–3 resolution options with tradeoffs
+     - State a recommendation
+     - Use AskUserQuestion to resolve
+   - Continue until every row in the matrix has a winner and all conflicts are resolved.
+
+6. **Build consolidated prototype**
+   - Merge the best elements from source prototypes into a single runnable artifact at `prototypes/{topic}/consolidated/`.
+   - Build only after UAT evidence and user consolidation decisions identify which elements to keep, reject, or resolve.
+   - The consolidated prototype must reflect:
+     - Layout skeleton (regions, proportions, scroll behavior)
+     - Primary content pattern (how items are displayed)
+     - Detail view pattern (how full item details are accessed)
+     - Navigation pattern and placement
+     - Action placement (create, edit, delete, bulk, contextual)
+     - Density and spacing approach
+     - Responsive behavior at mobile, tablet, and desktop breakpoints
+     - States rendering (empty, loading, error, partial, offline)
+   - Use AskUserQuestion to confirm the consolidated design before building the prototype.
+
+7. **Coverage checkpoint**
+   - Verify every content requirement from `design/ui-requirements-[topic].md` has a UI home in the consolidated prototype.
+   - Verify every user action has a placement (button, menu item, keyboard shortcut, or gesture).
+   - Verify all states (empty, loading, error, partial, full, offline, permission-denied) are accounted for.
+   - Flag any gaps and resolve via AskUserQuestion before writing.
+
+8. **Production-ready handoff boundary**
+   - Write the required AFPS graduation document at `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode.
+   - Record final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, stale-research cleanup needs, and production-spec readiness in the consolidation interview log, AFPS graduation document, and alignment page.
+   - The recommended next route must name `/research-roadmap --post-prototype`, then `/spec-interview`.
+   - The Production Ready Approval gate is owned by `/spec-interview` and follows `docs/production-ready-approval.md`.
+
+## Deliverables
+
+- Write the consolidated prototype to `prototypes/{topic}/consolidated/`.
+- Write the consolidation interview log to `design/consolidate-prototypes-[topic]-interview.md` in flat mode or `design/{slug}/consolidate-prototypes-[topic]-interview.md` in product-path mode.
+- Write the AFPS graduation document to `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode. Include the approved MVP scope, prototype evidence, keep/reject decisions, unresolved risks, stale-research cleanup status, and whether the project is ready for `/research-roadmap --post-prototype` and `/spec-interview`.
+- Update the scoped flow-tree manifest to mark consolidated branches as `consolidated` or `promoted-to-prototype` when applicable.
+
+### Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/consolidate-prototypes-{topic}.html`.
+
+## Next Work
+
+**Next work:** after the consolidated MVP and AFPS graduation document are approved, run the post-prototype research pass (`/research-roadmap --post-prototype`) and then formalize the MVP into a production spec with `/spec-interview`. The Production Ready Approval gate is owned by that spec handoff; do not create a separate production-readiness state file or lifecycle registry here.
+
+**Recommended next command:** `/research-roadmap --post-prototype`.
+
+## Invoke With YAML
+
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}` filled to literal values: `/research-roadmap --post-prototype`, then `/spec-interview`.
+
+## Constraints
+
+- Do not proceed without evaluation evidence unless the user explicitly says they have reviewed the variants and is ready to converge.
+- Do not pick winners without user input. Present the matrix and let the user decide.
+- Do not ignore conflicts. If two preferred choices are spatially or functionally incompatible, surface the tension and resolve it explicitly.
+- The consolidated prototype must preserve the approved UI branch detail from `/ui-interview` and be concrete enough for `/spec-interview` to extract production implementation requirements and own the Production Ready Approval described in `docs/production-ready-approval.md`.
+- Do not lose content requirements. Every data field, action, and state from the requirements spec must appear in the final design.
+- Do not bias toward the first or last variation reviewed. Present them neutrally and let the user's feedback and evaluation evidence drive the outcome.
+- Do not use `tasks/todo.md` for consolidation branch progress or human review. Human evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
+
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/design/spec document (`research/**/*.md`, `design/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+
+## Interrogation Page
+
+Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/consolidate-prototypes-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.

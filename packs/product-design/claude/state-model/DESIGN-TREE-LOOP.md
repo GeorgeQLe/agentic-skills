@@ -16,8 +16,8 @@ Generated from `docs/design-tree-loop-convention.md`. Edit the canonical docs fi
 
 ## Why this exists
 
-The design-phase skills — `user-flow-map`, `state-model`, `ux-variations`, `ui-interview`,
-`create-ui-experiment`, `prototype`, `consolidate-prototypes`, `spec-interview`, and their subskills
+The design-phase skills — `user-flow-map`, `key-moments`, `state-model`, `ux-variations`, `ui-interview`,
+`build-ui-screens`, `logic-wiring`, `consolidate-prototypes`, `spec-interview`, and their subskills
 `design-inspirations` and `uat` — were previously split across three loop conventions
 (Pattern A research substeps, the prototype session loop, and the implementation exec loop).
 They share one job: **grow a design tree from a product concept to a runnable, validated,
@@ -33,7 +33,7 @@ The state lives with the design artifacts, never in `tasks/todo.md`:
 - `design/**/flow-tree-*.yaml` — the design-tree manifest (branch + decision + model-attachment state).
 - `design/**/model-tree-*-{branch}.yaml` — the per-user-flow-branch domain/state/logic model.
 - `design/**/*.md` — canonical per-node design artifacts (user-flow doc, UX variation specs, UI experiment packets, build-plan slices).
-- `prototypes/{topic}/` — runnable prototype output (owned by `prototype` / `consolidate-prototypes`).
+- `prototypes/{topic}/` — runnable prototype output (owned by `logic-wiring` / `consolidate-prototypes`).
 - `research/**/uat-*.md` — UAT plans and human evidence logs.
 - `tasks/manual-todo.md` — human-only UAT / prototype evaluation tasks an agent must not mark complete.
 
@@ -57,7 +57,7 @@ stages vary by phase. The two concrete instances:
 
 | Phase loop | Stage sequence | `⟨transform⟩` | `⟨gate⟩` | `implement` deliverable |
 |---|---|---|---|---|
-| **Design / prototype** *(this doc)* | interrogation → research → **design** → **plan** → implement(scoped) | author the scoped design (flow, model, UX, UI, consolidation) | the build-plan slice the implement stage/`prototype` realizes | scoped canonical artifact + tree growth; **runnable** for `prototype` / `consolidate-prototypes` |
+| **Design / prototype** *(this doc)* | interrogation → research → **design** → **plan** → implement(scoped) | author the scoped design (flow, model, UX, UI, consolidation) | the build-plan slice the implement stage/`logic-wiring` realizes | scoped canonical artifact + tree growth; **runnable** for `logic-wiring` / `consolidate-prototypes` |
 | **Research** *(Pattern A — `docs/research-session-loop-convention.md`, normative there; referenced here, not redefined)* | interrogation → research → **plan** → **review** → implement(docs) | run the selected frameworks | framework multi-select = the plan; each framework's + synthesis alignment page = review | canonical research doc (`research/{orchestrator}.md`) |
 
 **Does the research mapping match reality?** Yes — it is the Research Session Loop's session
@@ -105,10 +105,12 @@ no `tasks/todo.md` ledger for branch progress.
 ```
 root (one per topic)
 └── user-flow branch            ← user-flow-map grows these (one per flow)
-    ├── model attachment        ← state-model attaches one per user-flow branch (model_ref)
+    │                             key-moments ranks/orders the branches by proof priority (trunk)
+    ├── model attachment        ← state-model attaches one per promoted user-flow branch (model_ref, JIT)
     └── ux-variation branch     ← ux-variations grows up to 5 per modelled flow
         └── ui-experiment branch ← ui-interview grows these per UX variation
-            └── prototype        ← prototype builds a narrow-scope runnable artifact per UI branch
+            └── build leaf       ← build-ui-screens builds the visual screens, then logic-wiring
+                                   wires them into a clickable, state-backed runnable artifact
 ```
 
 | Node | Manifest location | Grown by | Canonical artifact |
@@ -118,10 +120,23 @@ root (one per topic)
 | **model attachment** | `branches[].model_ref` → `model-tree-{topic}-{branch}.yaml` | `state-model` | per-branch model-tree manifest + canonical model doc |
 | **ux-variation branch** | `branches[].ux_variations[]` | `ux-variations` | `design/ux-variations-{topic}.md` |
 | **ui-experiment branch** | `branches[].ux_variations[].ui_experiments[]` | `ui-interview` | `design/ui-{topic}.md`, `design/ui-requirements-{topic}.md` |
-| **prototype** | `prototype_build_plan.items[]` | `prototype` | `prototypes/{topic}/variation-{N}/` |
+| **ui screens** | `ui_experiments[].build_ledger[]` | `build-ui-screens` | visual screens under `experiments/{topic}/{id}/` or a project-native route |
+| **prototype** | `prototype_build_plan.items[]` | `logic-wiring` | `prototypes/{topic}/variation-{N}/` |
 | **consolidated MVP** | manifest status `consolidated` | `consolidate-prototypes` | `prototypes/{topic}/consolidated/` |
 | **AFPS graduation** | downstream of MVP approval | `consolidate-prototypes` | `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` |
 | **spec** | downstream of MVP approval | `spec-interview` | `specs/{topic}.md` |
+
+### Key-moments proof ordering (trunk)
+
+`key-moments` runs **after `user-flow-map`** and **before `state-model`/`ux-variations`**. It is a
+**trunk** skill: it needs only the flow map and writes **existing** flow-tree fields
+(`journey_sequence`, `evaluation_priority`, `branch_order_override`, `priority_rationale`) — no
+schema change. It ranks the user-flow branches by **proof priority** (value × risk × frequency),
+orders the branches and gates variation breadth, and **promotes or prunes** flows. The point is
+that the rest of the tree grows in proof order: state-model attaches just-in-time only to
+**promoted** flows, and `ux-variations` spends its variation budget on the moments that most need
+proof. `key-moments` is **not a route position** — like `state-model`, it is invoked from
+`user-flow-map`'s handoff and does not occupy one of the six fixed route steps.
 
 ### Per-user-flow-branch model attachment
 
@@ -132,12 +147,21 @@ model per user-flow branch** via `branches[].model_ref` (a repo-relative path to
 linkage. The legacy top-level `model_tree_ref` is retained as **optional back-compat only**
 (single-model repos predating per-branch attachment); new work uses `model_ref`.
 
+`state-model` attaches **just-in-time per promoted flow**: it models only flows `key-moments`
+promotes (never pruned flows), and later flows **extend** the core model rather than restate it.
+For CRUD-trivial domains a **fast-pass fold** is allowed — a quick data-shape confirmation instead
+of a full multi-framework modelling session — distinct from the existing framework-count (≥3)
+chunk fold. A per-screen `model_ref` may also attach on the `ui_experiment` node when a single
+screen needs its own model slice.
+
 `ux-variations` will not grow UX branches on a user-flow branch until that branch's model is
 attached and confirmed.
 
-### Validation layer (`prototype`) and feedback loops
+### Validation layer (`logic-wiring`) and feedback loops
 
-`prototype` owns the literal runnable prototype. Each prototype is built narrow-scope so a
+`logic-wiring` owns the literal runnable prototype: it **consumes the visual screens built by
+`build-ui-screens`** and wires them into a clickable, state-backed artifact (plus runnable
+CLI/API/infra logic). Each prototype is built narrow-scope so a
 human can **validate / approve / reject / modify-back** it. Validation decisions are recorded
 as `decisions[]` in the manifest and **can flow back up the tree**: a `modify` decision names
 `targets[]` — the upstream node(s) (a `state-model` model attachment or a `user-flow` branch)
@@ -172,23 +196,24 @@ cheap (same near-empty-session judgment as `docs/research-session-loop-conventio
 | **0** | **Interrogation** | The stage-zero user↔agent alignment loop (`INTERROGATION-PAGE.md`): build one HTML round page per turn at `interrogation/{skill}-r{N}-{branch}.html`, loop until the **confidence gate** passes. Cannot advance until every interview area is covered or waived. | usually folds with stage 1 setup |
 | **1** | **Research** | Gather what the skill needs that is not derivable from the repo — references (`design-inspirations`), prior art, domain evidence, framework selection. Run **as needed**; skip when the repo already carries the context. | as needed |
 | **2** | **Design** | Author the scoped design — the per-node `_working` drafts: flow structure, the domain model, the UX variations, the UI experiment, the consolidation choices. | yes |
-| **3** | **Plan-to-implement** | Produce the **build-plan slice** the implement stage (or downstream `prototype`) will realize: ordered, scoped, with acceptance criteria. | folds with stage 2 for small scope |
+| **3** | **Plan-to-implement** | Produce the **build-plan slice** the implement stage (or downstream `logic-wiring`) will realize: ordered, scoped, with acceptance criteria. | folds with stage 2 for small scope |
 | **4** | **Implement (scoped)** | Produce the skill's scope-appropriate deliverable (see below), grow the tree's child nodes, and pass the **single binding alignment gate** (§4) before any canonical write. | yes |
 
 ### The "implement (scoped)" deliverable per skill
 
-**The literal runnable prototype is owned by `prototype`.** For the upstream design skills,
+**The literal runnable prototype is owned by `logic-wiring`.** For the upstream design skills,
 "implement" means the **scoped canonical design artifact + tree-branch growth + the build-plan
-slice `prototype` will later realize** — not runnable code.
+slice `logic-wiring` will later realize** — not runnable code.
 
 | Skill | Stage-4 "implement" deliverable |
 |---|---|
 | `user-flow-map` | Flow doc + flow-tree root + one user-flow branch per flow + the prototype build-plan scaffold |
-| `state-model` | Per-branch `model-tree` manifest + canonical model doc, attached via `branches[].model_ref` |
+| `key-moments` | Proof-priority ordering written to existing flow-tree fields (`journey_sequence`, `evaluation_priority`, `branch_order_override`, `priority_rationale`) — orders branches, gates variation breadth, promotes/prunes flows. No new artifact, no schema change. |
+| `state-model` | Per-branch `model-tree` manifest + canonical model doc, attached via `branches[].model_ref` (JIT per promoted flow; fast-pass fold for CRUD-trivial domains) |
 | `ux-variations` | UX variation specs + up to 5 `ux_variation` child branches on the modelled flow |
-| `ui-interview` | UI experiment packet(s) + `ui_experiment` child branches under the UX variation |
-| `create-ui-experiment` | Clickable UI experiment route or project-native lightweight prototype for one approved UI branch, using fake, fixture, local, or in-memory data |
-| `prototype` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` + build-plan + decision |
+| `ui-interview` | UI experiment packet(s) + `ui_experiment` child branches under the UX variation + the per-screen batch plan |
+| `build-ui-screens` | Visual UI screens for one approved UI branch, built as an ordered element-batch loop (one flow step per batch, per-batch visual checkpoint, minimum-UI stop) with `ui_experiments[].build_ledger[]` written, using fake, fixture, local, or in-memory data |
+| `logic-wiring` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` — wires the `build-ui-screens` screens clickable/state-backed + build-plan + decision |
 | `consolidate-prototypes` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` plus AFPS graduation under `design/` |
 | `spec-interview` | Production-ready specification under `specs/{topic}.md` |
 
@@ -205,6 +230,25 @@ existing-intermediates`. Fold for small N — do not spend a fresh-context round
 near-empty session. Archive the brief and intermediates at canonical write (final approval), so
 a rejected final page can still rebuild. This adds **no schema change** and **no new alignment
 gate**.
+
+### Ordered, dependent per-unit intermediates (batches)
+
+The chunking above covers **independent** per-unit artifacts. `build-ui-screens` is the
+**ordered, dependent** case: its units are **batches**, and **one batch = one flow step**. Batches
+are built in flow order, each layered on the screens the prior batches established, so they are
+not independent — a later batch reads the earlier screens as context. Each batch:
+
+- adds only the visual elements that one flow step needs;
+- pauses at a **per-batch visual checkpoint** before the next batch begins;
+- stops at the **minimum UI** that lets the flow step read as real (the **minimum-UI stop rule**);
+- records itself as one `ui_experiments[].build_ledger[]` entry (`flow_step`, `elements_added[]`,
+  status `minimum-ui-reached` / `parked`).
+
+The acceptance bar for the whole run is **moment-level end-to-end**: the flow's moments read as
+real screens before `logic-wiring` makes them clickable. The `build_ledger_status` lifecycle
+(`pending → in-progress → minimum-ui-reached → wired`, plus the `parked` off-ramp) is how the stop
+rule and park decision are machine-expressible; `logic-wiring` advances `minimum-ui-reached →
+wired`.
 
 ### HTML-first canonical write rule
 
@@ -224,8 +268,8 @@ the HTML page, not replacement of canonical design Markdown/YAML.
 | Role | Skills | Contract |
 |---|---|---|
 | **Root orchestrator** | `user-flow-map` | Creates the design-tree root and the `flow-tree-{topic}.yaml` manifest; grows one user-flow branch per flow. Owns the build-plan scaffold (`--prototype-build-plan`). `invocation: orchestrator`. |
-| **Pipeline** | `state-model`, `ux-variations`, `ui-interview`, `create-ui-experiment`, `prototype`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. |
-| **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `prototype`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
+| **Pipeline** | `key-moments`, `state-model`, `ux-variations`, `ui-interview`, `build-ui-screens`, `logic-wiring`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. `key-moments` and `state-model` are pipeline skills but **not route positions** — they are invoked from `user-flow-map`'s handoff, not from a fixed route step. |
+| **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `logic-wiring`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
 
 ### Per-branch iteration contract (pipeline skills)
 
@@ -237,7 +281,8 @@ Each pipeline-skill session:
    is due, selected through the deterministic branch-selection stack below (e.g. `state-model`
    selects a user-flow branch with no confirmed `model_ref`; `ux-variations` selects a modelled
    branch whose `ux_variations[]` work is due; `ui-interview` selects the UX variation whose
-   `ui_experiments[]` work is due; `prototype` selects a `pending` / `needs-revision` build item;
+   `ui_experiments[]` work is due; `build-ui-screens` selects an approved UI experiment with no
+   built screens; `logic-wiring` selects a `pending` / `needs-revision` build item;
    etc.). Honor any explicit branch argument the user passed.
 3. **Run the 5-stage flow** scoped to that branch (folding light stages).
 4. **Grow children** — write the scoped canonical artifact and the child nodes on final
@@ -277,9 +322,9 @@ to approve dense secondary controls. For each user-flow and UX-variation branch,
 `progressive_review` guidance that names the first-value step, the primary task path, staged
 disclosure notes, and the evidence required before moving deeper. Review surfaces should first
 show the first-value moment, then the primary path, then secondary controls and edge cases.
-Clickable UI experiment work belongs to `create-ui-experiment` after the UI branch is approved;
-default `ui-interview` runs stop at requirements, branch packet, bounded visual review, and
-branch decision capture.
+Visual UI screen work belongs to `build-ui-screens` after the UI branch is approved (then
+`logic-wiring` wires those screens clickable); default `ui-interview` runs stop at requirements,
+branch packet, bounded visual review, the per-screen batch plan, and branch decision capture.
 
 ---
 
@@ -374,24 +419,27 @@ only — they hand results back to the invoking parent and do **not** route down
   multiple UX variants, full UI experiment, prototype build, consolidation, spec.
 - Allow **continue-now** only for small adjacent work and only when the next skill still runs
   its own interrogation, design, approval, or evidence gates.
+- `user-flow-map` hands off to `key-moments` to rank/order the flows by proof priority before
+  `state-model`/`ux-variations` grow the promoted branches. `key-moments` writes only existing
+  flow-tree ordering fields and is **not a route position**.
 - `ux-variations` requires the branch's `model_ref` confirmed; do not grow UX branches first.
-- Do not route to `prototype` before the build-plan slice exists unless the user explicitly
+- Route an approved UI branch to `build-ui-screens` to build the visual screens, then to
+  `logic-wiring` to wire them clickable. `build-ui-screens` is a branch screen builder, not a
+  replacement top-level route position; the canonical route still reaches build sequencing
+  through `user-flow-map --prototype-build-plan` and `logic-wiring`.
+- Do not route to `logic-wiring` before the build-plan slice exists unless the user explicitly
   accepts an untracked ad hoc prototype run.
 - Do not route from built variants directly to `consolidate-prototypes`; route through
   `uat` (variant evaluation) unless the user explicitly says they already evaluated and are
   ready to converge.
-- Route approved clickable route experiment needs to `create-ui-experiment` before prototype
-  buildout. `create-ui-experiment` is a branch experiment owner, not a replacement top-level
-  route position; the canonical route still reaches build sequencing through
-  `user-flow-map --prototype-build-plan` and `prototype`.
 - Do not route design-tree branch progress through `/exec`, `$exec`, `tasks/roadmap.md`, or
   `tasks/todo.md`.
 - The top-level `route` tuple stays the **6-skill sequence** (`user-flow-map → ux-variations →
-  ui-interview → prototype → consolidate-prototypes → spec-interview`), with
+  ui-interview → logic-wiring → consolidate-prototypes → spec-interview`), with
   `research-roadmap --post-prototype` as the graduation-aware cleanup pass between
-  consolidation and specification. `state-model` is a
-  **per-branch attachment** (`model_ref`), not a route position — keeping the route stable
-  while the model rides each branch.
+  consolidation and specification. `state-model` and `key-moments` are
+  **invoked from `user-flow-map`'s handoff**, not route positions — keeping the route stable
+  while the model rides each branch and proof-ordering shapes branch growth.
 
 ---
 
@@ -428,3 +476,11 @@ only — they hand results back to the invoking parent and do **not** route down
   `scripts/upgrade-prototype-session-loop.mjs`).
 - `docs/research-session-loop-convention.md` (business-research Pattern A) is **unchanged** and
   out of scope.
+- **Flow-walk re-cut (flow-tree schema v0.4).** The build leaf split into two skills: `prototype`
+  was renamed to **`logic-wiring`** (route step 4 token `prototype` → `logic-wiring`) and
+  `create-ui-experiment` was renamed to **`build-ui-screens`** (the visual screen builder feeding
+  `logic-wiring`). Deprecated `prototype` and `create-ui-experiment` aliases still route to the
+  primaries. A new trunk skill **`key-moments`** ranks flows by proof priority after
+  `user-flow-map`. The word "prototype" is intentionally retained as artifact/phase vocabulary
+  (`prototype_build_plan`, `prototypes/`, prototype build-plan, runnable prototype); only the
+  skill/route token changed. The six-step route tuple and three-role model are unchanged.

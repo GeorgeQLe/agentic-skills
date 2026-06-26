@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.27
+version: v0.28
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -37,7 +37,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next UX variation in this order: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order. Run the staged flow scoped to that variation, grow the child branches on approval, and stop with the handoff in `## Next Work`.
 
-**Non-buildout boundary.** Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision. Do not write or route default clickable prototype buildout from `ui-interview`. Route approved clickable route experiment needs to $create-ui-experiment [approved-ui-experiment] so a dedicated experiment owner can build and evaluate the clickable route separately.
+**Non-buildout boundary.** Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision. The branch packet additionally carries a **per-screen batch plan** — the ordered list of flow-step batches (one batch per flow step) that `$build-ui-screens` will walk when it builds the visual screens. Do not write or route default clickable prototype buildout from `ui-interview`. Route approved clickable route experiment needs to $build-ui-screens [approved-ui-experiment] so a dedicated screen builder can build the screens, then `$logic-wiring` wires them clickable.
 
 **Modify-back.** A downstream `modify` decision can re-open an upstream `model_ref` or user-flow branch via `targets[]`; UI experiments below a re-opened node are marked stale and re-authored once that node is re-approved.
 
@@ -233,7 +233,7 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$create-ui-experiment [approved-ui-experiment]` when an approved branch needs a clickable route experiment, `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$prototype`, `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
+Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$build-ui-screens [approved-ui-experiment]` when an approved branch needs a clickable route experiment, `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$prototype`, `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
 
 ### Alignment Page
 
@@ -243,13 +243,13 @@ The page is built pre-approval in `review` state per step 9, before any canonica
 
 ## Next Work
 
-**Next work:** route based on the branch decision recorded in the prototype build ledger. When an approved UI branch needs a clickable route experiment, hand it to `$create-ui-experiment [approved-ui-experiment]`; when the variation's UI experiments are all approved and evaluated, synthesize the build plan with `$user-flow-map --prototype-build-plan [topic]`; when more UX variations remain to explore, route back to `$ux-variations [specific-user-flow]`.
+**Next work:** route based on the branch decision recorded in the prototype build ledger. When an approved UI branch needs a clickable route experiment, hand it to `$build-ui-screens [approved-ui-experiment]`; when the variation's UI experiments are all approved and evaluated, synthesize the build plan with `$user-flow-map --prototype-build-plan [topic]`; when more UX variations remain to explore, route back to `$ux-variations [specific-user-flow]`.
 
-**Recommended next command:** `$create-ui-experiment [approved-ui-experiment]`.
+**Recommended next command:** `$build-ui-screens [approved-ui-experiment]`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$create-ui-experiment [approved-ui-experiment]` when an approved UI branch needs a clickable route experiment, `$user-flow-map --prototype-build-plan [topic]` once the variation's UI experiments are decided and evaluated, or `$ux-variations [specific-user-flow]` for the next unexplored flow.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$build-ui-screens [approved-ui-experiment]` when an approved UI branch needs a clickable route experiment, `$user-flow-map --prototype-build-plan [topic]` once the variation's UI experiments are decided and evaluated, or `$ux-variations [specific-user-flow]` for the next unexplored flow.
 
 ## Constraints
 

@@ -27,6 +27,7 @@ const collectUiExperimentKeys = (content: string) => {
     if (!markerMatch) continue;
 
     const markerIndent = markerMatch[1].length;
+    let itemDashIndent: number | null = null;
     let propertyIndent: number | null = null;
 
     for (let j = i + 1; j < lines.length; j += 1) {
@@ -38,8 +39,14 @@ const collectUiExperimentKeys = (content: string) => {
 
       const dashKey = line.match(/^(\s*)-\s+([A-Za-z_][A-Za-z0-9_]*):/);
       if (dashKey) {
-        propertyIndent = dashKey[1].length + 2;
-        keys.add(dashKey[2]);
+        const dashIndent = dashKey[1].length;
+        if (itemDashIndent === null) itemDashIndent = dashIndent;
+        // Only top-level experiment items establish direct properties; deeper
+        // dashes (nested arrays of objects like build_ledger entries) are ignored.
+        if (dashIndent === itemDashIndent) {
+          propertyIndent = dashIndent + 2;
+          keys.add(dashKey[2]);
+        }
         continue;
       }
 
@@ -60,15 +67,15 @@ const command = {
 } as const;
 
 describe("product-design flow tree artifact boundaries", () => {
-  it("defines a machine-readable design flow-tree manifest schema (v0.3)", () => {
+  it("defines a machine-readable design flow-tree manifest schema (v0.4)", () => {
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
 
-    expect(schema.properties.schema_version.const).toBe("v0.3");
+    expect(schema.properties.schema_version.const).toBe("v0.4");
     expect(schema.properties.route.prefixItems.map((item: { const: string }) => item.const)).toEqual([
       "user-flow-map",
       "ux-variations",
       "ui-interview",
-      "prototype",
+      "logic-wiring",
       "consolidate-prototypes",
       "spec-interview",
     ]);
@@ -106,6 +113,29 @@ describe("product-design flow tree artifact boundaries", () => {
       "deferred",
       "dropped",
     ]);
+    // v0.4 flow-walk: parked off-ramp added to the shared status enum.
+    expect(schema.$defs.status.enum).toContain("parked");
+    // v0.4 flow-walk: per-screen build ledger with its own lifecycle enum.
+    expect(schema.$defs.build_ledger_status.enum).toEqual([
+      "pending",
+      "in-progress",
+      "minimum-ui-reached",
+      "wired",
+      "parked",
+    ]);
+    expect(schema.$defs.ui_experiment.properties.build_ledger.items.$ref).toBe("#/$defs/build_ledger_entry");
+    expect(schema.$defs.build_ledger_entry.additionalProperties).toBe(false);
+    expect(schema.$defs.build_ledger_entry.required).toEqual(
+      expect.arrayContaining(["id", "flow_step", "status"]),
+    );
+    expect(schema.$defs.build_ledger_entry.properties.status.$ref).toBe("#/$defs/build_ledger_status");
+    expect(schema.$defs.build_ledger_entry.properties.elements_added.type).toBe("array");
+    // v0.4 flow-walk: cherry-pick flag + per-screen JIT model attachment, all optional/additive.
+    expect(schema.$defs.ui_experiment.properties.cherry_pick_candidate.type).toBe("boolean");
+    expect(schema.$defs.ui_experiment.properties.model_ref.type).toBe("string");
+    expect(schema.$defs.ui_experiment.required).not.toContain("build_ledger");
+    expect(schema.$defs.ui_experiment.required).not.toContain("cherry_pick_candidate");
+    expect(schema.$defs.ui_experiment.required).not.toContain("model_ref");
   });
 
   it("requires deterministic branch-order metadata on flow-tree branches", () => {
@@ -160,9 +190,9 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(progressiveReview.properties.evidence_required.items.minLength).toBe(1);
   });
 
-  it("ships a v0.3 sample manifest exercising ordering metadata and modify-back decisions", () => {
+  it("ships a v0.4 sample manifest exercising ordering metadata and modify-back decisions", () => {
     const sample = read("design/flow-tree-sample.yaml");
-    expect(sample).toContain("schema_version: v0.3");
+    expect(sample).toContain("schema_version: v0.4");
     // per-branch model attachment round-trips
     expect(sample).toContain("model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml");
     expectContainsAll(sample, [
@@ -190,6 +220,19 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(Object.keys(schema.$defs.ui_experiment.properties)).toContain(key);
     }
     expect(uiExperimentKeys).not.toContain("label");
+    // v0.4 flow-walk fields round-trip on ui_experiment nodes.
+    expect(uiExperimentKeys).toEqual(
+      expect.arrayContaining(["build_ledger", "cherry_pick_candidate", "model_ref"]),
+    );
+    expectContainsAll(sample, [
+      "build_ledger:",
+      "flow_step: Review invoice summary",
+      "status: wired",
+      "status: minimum-ui-reached",
+      "elements_added:",
+      "cherry_pick_candidate: true",
+      "status: parked",
+    ]);
     // modify decision feeds back up to the model + user-flow branch
     expect(sample).toContain("decision: modify");
     expect(sample).toMatch(/targets:\s*\n\s*- design\/model-tree-invoice-approval-submit-and-approve\.yaml/);
@@ -244,35 +287,55 @@ describe("product-design flow tree artifact boundaries", () => {
         "Write UI branch state to `ui_experiments[]`",
         "Resolve the next UX variation in this order: explicit user override, `evaluation_priority`, first-value/activation fit, status, then stable array order.",
         "Default full UI mode stops at UI requirements, branch packet, static or bounded HTML mockup, and branch decision.",
-        `Route approved clickable route experiment needs to ${sigil}create-ui-experiment [approved-ui-experiment]`,
+        `Route approved clickable route experiment needs to ${sigil}build-ui-screens [approved-ui-experiment]`,
         "Do not write or route default clickable prototype buildout from `ui-interview`.",
+        // v0.28: ui-interview authors the per-screen batch plan that build-ui-screens walks.
+        "per-screen batch plan",
       ]);
       expect(uiInterview).not.toContain("first UX variation with no `ui_experiments`");
       expect(uiInterview).not.toContain("ui_reviews[]");
     }
   });
 
-  it("defines mirrored create-ui-experiment contracts as the clickable experiment owner", () => {
+  it("defines mirrored build-ui-screens contracts as the visual screen-batch builder", () => {
     const pack = read("packs/product-design/PACK.md");
-    expect(pack).toContain("`create-ui-experiment`: Own clickable UI experiment routes");
+    expect(pack).toContain("`build-ui-screens`: Build the visual UI screens");
 
     for (const mirror of mirrors) {
-      const createUiExperiment = read(`packs/product-design/${mirror}/create-ui-experiment/SKILL.md`);
+      const buildUiScreens = read(`packs/product-design/${mirror}/build-ui-screens/SKILL.md`);
       const sigil = command[mirror];
 
-      expectContainsAll(createUiExperiment, [
-        "name: create-ui-experiment",
-        "version: v0.1",
-        "Own clickable UI experiment routes or project-native lightweight prototypes",
+      expectContainsAll(buildUiScreens, [
+        "name: build-ui-screens",
+        "version: v0.2",
+        "Build the visual UI screens for one approved UI branch",
         "fake, fixture, local, or in-memory data",
         "first-value journey",
         "progressive reveal",
+        "minimum-UI stop",
+        "`build_ledger[]`",
         "`experiment_path`",
         "`review_evidence`",
-        `${sigil}prototype`,
+        `${sigil}logic-wiring`,
         `${sigil}uat --variant-evaluation`,
         `${sigil}user-flow-map --prototype-build-plan`,
       ]);
+      // build-ui-screens hands screens to logic-wiring as the default next step.
+      expect(buildUiScreens).toContain(`**Recommended next command:** \`${sigil}logic-wiring\``);
+    }
+
+    // Deprecated aliases still route to the renamed primaries.
+    for (const mirror of mirrors) {
+      const sigil = command[mirror];
+      const createUiAlias = read(`packs/product-design/${mirror}/create-ui-experiment/SKILL.md`);
+      expect(createUiAlias).toContain("deprecated: true");
+      expect(createUiAlias).toContain("replaced_by: build-ui-screens");
+      expect(createUiAlias).toContain(`${sigil}build-ui-screens`);
+
+      const prototypeAlias = read(`packs/product-design/${mirror}/prototype/SKILL.md`);
+      expect(prototypeAlias).toContain("deprecated: true");
+      expect(prototypeAlias).toContain("replaced_by: logic-wiring");
+      expect(prototypeAlias).toContain(`${sigil}logic-wiring`);
     }
   });
 
@@ -281,7 +344,7 @@ describe("product-design flow tree artifact boundaries", () => {
       const userFlow = read(`packs/product-design/${mirror}/user-flow-map/SKILL.md`);
       const uxVariations = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
       const uiInterview = read(`packs/product-design/${mirror}/ui-interview/SKILL.md`);
-      const prototype = read(`packs/product-design/${mirror}/prototype/SKILL.md`);
+      const logicWiring = read(`packs/product-design/${mirror}/logic-wiring/SKILL.md`);
       const consolidate = read(`packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`);
       const sigil = command[mirror];
 
@@ -317,18 +380,21 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(uiInterview).not.toContain("`specs/ui-[topic].md`");
       expect(uiInterview).not.toContain("`specs/ui-requirements-[topic].md`");
 
-      expect(prototype).toContain("design/ux-variations-[topic].md");
-      expect(prototype).toContain("design/ui-[topic].md");
-      expect(prototype).toContain("design/prototype-build-plan-[topic].md");
-      expect(prototype).toContain("design/**/flow-tree-*.yaml");
-      expect(prototype).toContain("pending");
-      expect(prototype).toContain("needs-revision");
-      expect(prototype).toContain("deferred");
-      expect(prototype).toContain("dropped");
-      expect(prototype).toContain("prototypes/{topic}/variation-{N}/");
-      expect(prototype).not.toContain("`specs/ux-variations-[topic].md`");
-      expect(prototype).not.toContain("`specs/user-flow-[topic].md`");
-      expect(prototype).not.toContain("`specs/ui-[topic].md`");
+      expect(logicWiring).toContain("design/ux-variations-[topic].md");
+      expect(logicWiring).toContain("design/ui-[topic].md");
+      expect(logicWiring).toContain("design/prototype-build-plan-[topic].md");
+      expect(logicWiring).toContain("design/**/flow-tree-*.yaml");
+      expect(logicWiring).toContain("pending");
+      expect(logicWiring).toContain("needs-revision");
+      expect(logicWiring).toContain("deferred");
+      expect(logicWiring).toContain("dropped");
+      expect(logicWiring).toContain("prototypes/{topic}/variation-{N}/");
+      // logic-wiring consumes build-ui-screens output and advances the build ledger.
+      expect(logicWiring).toContain("build_ledger");
+      expect(logicWiring).toContain("wired");
+      expect(logicWiring).not.toContain("`specs/ux-variations-[topic].md`");
+      expect(logicWiring).not.toContain("`specs/user-flow-[topic].md`");
+      expect(logicWiring).not.toContain("`specs/ui-[topic].md`");
 
       expect(consolidate).toContain("design/ux-variations-[topic].md");
       expect(consolidate).toContain("design/ui-requirements-[topic].md");
@@ -533,7 +599,7 @@ describe("product-design flow tree artifact boundaries", () => {
     const result = spawnSync(process.execPath, [DESIGN_TREE_LOOP_GENERATOR, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("design tree loop bundles checked: 20 skills");
+    expect(result.stdout).toContain("design tree loop bundles checked: 22 skills");
     expect(result.stdout).toContain("0 bundle write(s)");
   });
 });

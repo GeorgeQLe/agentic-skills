@@ -7,8 +7,8 @@ const ROOT = resolve(import.meta.dirname, "../..");
 const inspectedSkillPaths = [
   "packs/product-design/codex/brainstorm/SKILL.md",
   "packs/product-design/claude/brainstorm/SKILL.md",
-  "packs/product-design/codex/prototype/SKILL.md",
-  "packs/product-design/claude/prototype/SKILL.md",
+  "packs/product-design/codex/logic-wiring/SKILL.md",
+  "packs/product-design/claude/logic-wiring/SKILL.md",
   "packs/product-design/codex/spec-interview/SKILL.md",
   "packs/product-design/claude/spec-interview/SKILL.md",
   "packs/product-design/codex/consolidate-prototypes/SKILL.md",

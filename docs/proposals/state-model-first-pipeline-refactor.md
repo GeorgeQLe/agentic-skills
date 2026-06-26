@@ -1,6 +1,7 @@
 # Proposal: State-Model-First Prototype Pipeline
 
-> **Status:** proposed — no canon edited yet.
+> **Status:** SUPERSEDED (2026-06-26) by the flow-walk re-cut (`alignment/ui-interview-flow-walk-refactor-architecture.html`, flow-tree schema v0.4). The route-tuple expansion to 8 steps, mandatory state-model/create-ui-experiment route positions, cross-branch `--batch` deferred mode, and app-level `scope` field are dropped. Two ideas were cherry-picked into the executed change: the state-model **fast-pass fold** for CRUD-trivial domains and the per-screen **`model_ref`** on `ui_experiment`. §2's file:line map is retained for reference only.
+> **Status (historical):** proposed — no canon edited yet.
 > **Authored by:** companion to `alignment/investigate-prototype-design-tree-flow.html` (§2).
 > **Scope of this doc:** spell out every convention / skill / schema / sample / test edit an
 > executor would apply to promote `state-model` and `create-ui-experiment` from off-route

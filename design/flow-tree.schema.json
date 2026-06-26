@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agentic-skills.local/design/flow-tree.schema.json",
   "title": "Product Design Flow Tree Manifest",
-  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow. v0.3 adds deterministic branch-order metadata and progressive review guidance so branch selection is explicit instead of raw array-order dependent.",
+  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow. v0.3 adds deterministic branch-order metadata and progressive review guidance so branch selection is explicit instead of raw array-order dependent. v0.4 re-cuts the build leaf from `prototype` to `logic-wiring` (route position 4) and adds additive flow-walk fields on `ui_experiment`: a per-screen `build_ledger[]` (with its own `build_ledger_status` lifecycle) so the minimum-UI stop rule and park off-ramp are machine-expressible, a `cherry_pick_candidate` flag for consolidate-prototypes stage 1, and a per-screen `model_ref` so a screen can attach its state model. The route stays a fixed 6-step tuple; state-model remains off the route.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "v0.3"
+      "const": "v0.4"
     },
     "topic": {
       "type": "string",
@@ -38,7 +38,7 @@
           "user-flow-map",
           "ux-variations",
           "ui-interview",
-          "prototype",
+          "logic-wiring",
           "consolidate-prototypes",
           "spec-interview"
         ]
@@ -47,7 +47,7 @@
         { "const": "user-flow-map" },
         { "const": "ux-variations" },
         { "const": "ui-interview" },
-        { "const": "prototype" },
+        { "const": "logic-wiring" },
         { "const": "consolidate-prototypes" },
         { "const": "spec-interview" }
       ],
@@ -104,7 +104,8 @@
         "rejected",
         "retry-needed",
         "promoted-to-prototype",
-        "consolidated"
+        "consolidated",
+        "parked"
       ]
     },
     "prototype_build_status": {
@@ -116,6 +117,47 @@
         "deferred",
         "dropped"
       ]
+    },
+    "build_ledger_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in-progress",
+        "minimum-ui-reached",
+        "wired",
+        "parked"
+      ],
+      "description": "v0.4 flow-walk lifecycle for a single build-ledger entry. `build-ui-screens` advances a screen's batch through pending -> in-progress -> minimum-ui-reached (the visual stop rule fires); `logic-wiring` advances minimum-ui-reached -> wired once the flow step is clickable/state-backed. `parked` is the off-ramp for a screen deferred out of the current build pass."
+    },
+    "build_ledger_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "flow_step", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "flow_step": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The single flow step (one moment/screen-batch) this ledger entry tracks. One batch = one flow-step per the design-tree-loop ordered-intermediates rule."
+        },
+        "status": {
+          "$ref": "#/$defs/build_ledger_status"
+        },
+        "elements_added": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Visual wireframe elements added in this batch, in build order."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
     },
     "progressive_review_guidance": {
       "type": "object",
@@ -423,6 +465,22 @@
         "decision_id": {
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "build_ledger": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/build_ledger_entry"
+          },
+          "description": "v0.4 flow-walk: ordered per-screen build ledger written by `build-ui-screens` (one entry per flow-step batch) and advanced by `logic-wiring`. Makes the minimum-UI stop rule and park off-ramp machine-expressible. Optional/additive."
+        },
+        "cherry_pick_candidate": {
+          "type": "boolean",
+          "description": "v0.4 flow-walk: marks this screen/experiment as a candidate for `consolidate-prototypes` stage-1 cherry-pick (e.g. a parked or partial screen worth stitching into the canonical flow). Optional/additive."
+        },
+        "model_ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "v0.4 flow-walk (cherry-pick from Proposal A open-Q#1): repo-relative path to this screen's state-model manifest, attached just-in-time when state-model runs against a promoted flow. Per-screen counterpart to user_flow_branch.model_ref. Optional/additive."
         }
       }
     },

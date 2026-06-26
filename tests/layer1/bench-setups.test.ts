@@ -3122,7 +3122,7 @@ describe("benchmark coverage matrix", () => {
       "trace",
       "uat",
       "consolidate-prototypes",
-      "prototype",
+      "logic-wiring",
       "ui-interview",
       "ux-variations",
     ];
