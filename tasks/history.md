@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-26 — Typo-triage "Did you mean?" for skillpacks install/remove (0.1.12)
+
+- Added lightweight typo suggestions to the unknown pack/skill error in `packages/skillpacks/src/cli/pack-normalization.mjs`: new `editDistance` (no-dep two-row DP Levenshtein) + `suggestNames` (candidate universe = `activePackNames` ∪ `skillInstallSourceMap` keys; substring matches first, then ascending edit distance with max 1 for tokens ≤4 chars else 2, then alphabetical; top 3). Wired into `unknownNameError` so both `install` and `remove` paths gain `Did you mean: …?` in one place. Install stays suggest-only (throws, never auto-installs a guess); remove's single-match auto-resolve untouched. Aliases/titles excluded from suggestions.
+- Kept the suggestion on the same line as the trailing period rather than a new line, preserving the existing `. Available packs:` same-line test; nonsense tokens (`zzzzzzzz`) emit the unchanged message with no `Did you mean` line.
+- Added 5 `pack-normalization` tests (mistyped skill, mistyped pack, suggestions-plus-help-text, no-suggestion nonsense, mistyped remove). `test:node` 137→142. CHANGELOG `[0.1.12] ### Fixed` bullet added; verification count updated 137→142.
+- Verified: smoke (`logic-wirng`→`logic-wiring`, `code-quallity`→`code-quality`, `zzzzzzzz`→none, `code-quality` still installs; reverted that test install), `test:node` 142/142, `skillpacks:verify` exit 0 (build:check byte-in-sync + CLI smoke + npm pack dry-run), `tests/layer1` 2417 passed, `git diff --check` clean. Version stays pinned at `0.1.11` (owned by `./publish.sh patch`). Commit `bd42e1594`, scoped to my 3 paths only; pre-existing dirty showcase/benchmark files left untouched (concurrent session).
+
 ## 2026-06-26 — Ship leftover index/benchmark catch-up edits
 
 - `/exec` found no active or pending phase (todo.md "Active implementation: none"; the only `## Phase` in roadmap is ✓; all other unchecked items live in Historical/Deferred sections). No new implementation work this session.
