@@ -69,6 +69,12 @@
 | `compile-central-alignment` | primary | user | Alignment pages need central compilation |
 | `upgrade-alignment-pages` | primary | user | Alignment pages need convention upgrade |
 
+### Pack: interrogation-page-admin
+
+| Skill | Type | Typical invoker | Entry condition |
+|-------|------|-----------------|-----------------|
+| `upgrade-interrogation-pages` | primary | user | Interrogation pages need convention upgrade |
+
 ### Pack: business-discovery
 
 | Skill | Type | Typical invoker | Entry condition |

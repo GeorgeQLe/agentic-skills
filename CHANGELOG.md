@@ -25,6 +25,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 - Added deterministic design-tree branch-order metadata, sample coverage, and flow-tree contract tests for user-flow and UX-variation branch selection.
 - Added published-package stale-metadata retry coverage so release verification proves bounded npm registry propagation handling.
 - Added `skillpacks list --skills` (flat installable-skill listing) and `skillpacks list --tree` (packs with nested skills, plus a base group), both manifest-backed and annotating deprecated aliases with their `replaced_by` target.
+- Added the `/upgrade-interrogation-pages` batch admin skill (new `interrogation-page-admin` pack, claude + codex mirrors) — a sibling of `/upgrade-alignment-pages` that audits generated `interrogation/*.html` round pages against the current interrogation-page standard and, on explicit `--apply`, archives and rewrites stale pages while preserving page-specific content (authoring the now-required `data-recommended-answer` / `data-agent-confidence` helpers), with a `tasks/todo.md` batch handoff when more than two pages need upgrade.
 
 ### Changed
 
@@ -35,6 +36,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 - Design-tree loop bundles now make clear-and-continue session handoffs actionable and include a one-time single-session tradeoff note.
 - Alignment-page bundles now explicitly route review, section feedback YAML, and final approval YAML back to the producing skill context.
 - Interrogation-page bundles now clarify when open-answer claims are validated during compiled-answer consumption versus deferred to downstream research.
+- The interrogation-page convention gained a resume-time conformance upgrade clause: when a producing skill resumes at an existing unconsumed `review` round page that predates the open-question marker standard, it archives and rewrites that current-step page to the current standard in-flow (preserving page-specific content), and the Archiving rule now covers a convention/standard change. Regenerated all 20 participating `INTERROGATION-PAGE.md` bundles.
 - `afps-status`, `brainstorm`, `session-triage`, and exec-loop routing contracts now include the latest downstream-skill availability gates and product-design pack routing guards.
 
 ### Fixed
@@ -47,7 +49,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Verification
 
-- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 142/142 including the new manifest deprecation-metadata test, the install/remove `Did you mean` suggestion tests, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
+- Publish-prep verification passed in source from a clean tree: `build:check` (396 skills, 42 packs, manifest byte-in-sync, staging boundary OK), `test:node` 142/142 including the new manifest deprecation-metadata test, the install/remove `Did you mean` suggestion tests, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green (2430 tests across 65 files), including the new `upgrade-interrogation-pages` mirrored-contract test and the regenerated interrogation-bundle drift gate.
 - This `[0.1.12]` section reconciles the full `v0.1.11..HEAD` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4) and the social-ledger / public-archive system.
 - The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
 

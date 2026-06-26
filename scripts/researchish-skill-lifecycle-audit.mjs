@@ -40,6 +40,7 @@ const DIRECT_UTILITY_NAMES = new Set([
   "skills",
   "compile-central-alignment",
   "upgrade-alignment-pages",
+  "upgrade-interrogation-pages",
   "patch-exec-profile",
   "create-agentic-skill",
   "create-local-skill",

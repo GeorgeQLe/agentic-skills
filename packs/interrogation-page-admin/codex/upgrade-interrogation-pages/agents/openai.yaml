@@ -1,0 +1,7 @@
+interface:
+  display_name: "Upgrade Interrogation Pages"
+  short_description: "Audit and upgrade interrogation HTML pages"
+  default_prompt: "Use $upgrade-interrogation-pages to audit existing interrogation/*.html round pages for drift before applying any upgrades."
+
+policy:
+  allow_implicit_invocation: true

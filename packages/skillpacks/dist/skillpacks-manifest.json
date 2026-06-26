@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "7b52900a4357ed99061c9e015445541c488bf33500fb48592a610c911ba46849",
+  "source_fingerprint": "cf98640cf3f750b8c192409e6508246948e40f09b1332c3e2b85c542f259602e",
   "packs": [
     {
       "name": "agent-bridge",
@@ -451,6 +451,22 @@
         "uat-guide"
       ],
       "skill_count": 2
+    },
+    {
+      "name": "interrogation-page-admin",
+      "title": "Interrogation Page Admin Pack",
+      "description": null,
+      "path": "packs/interrogation-page-admin",
+      "metadata_path": "packs/interrogation-page-admin/PACK.md",
+      "status": "active",
+      "tools": [
+        "claude",
+        "codex"
+      ],
+      "skills": [
+        "upgrade-interrogation-pages"
+      ],
+      "skill_count": 1
     },
     {
       "name": "knowledge-check",
@@ -7604,6 +7620,40 @@
         "v0.4"
       ],
       "command": "$uat-guide",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-interrogation-page-admin-claude-upgrade-interrogation-pages",
+      "name": "upgrade-interrogation-pages",
+      "scope": "pack",
+      "pack": "interrogation-page-admin",
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/interrogation-page-admin/claude/upgrade-interrogation-pages/SKILL.md",
+      "installable": true,
+      "content_sha256": "ecdea3a76273cd0c58aa596ae325316c900b43ad325dc8dfc4b13fb4c754a812",
+      "archive_versions": [],
+      "command": "/upgrade-interrogation-pages",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-interrogation-page-admin-codex-upgrade-interrogation-pages",
+      "name": "upgrade-interrogation-pages",
+      "scope": "pack",
+      "pack": "interrogation-page-admin",
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/interrogation-page-admin/codex/upgrade-interrogation-pages/SKILL.md",
+      "installable": true,
+      "content_sha256": "fe15c360c5445796189f43c44c9e1559c066ed2e4059d3d614cd7dea237b6af1",
+      "archive_versions": [],
+      "command": "$upgrade-interrogation-pages",
       "deck_memberships": []
     },
     {
