@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "9ea3c4b66a7a735851fc8d03a1cacfaa15ca7d2298dc2ad276a9a42d279feef4",
+  "source_fingerprint": "66130210259849125da5b0001b89857666f8f9c2b4d3221f0ea33eb9a7c08f06",
   "packs": [
     {
       "name": "agent-bridge",
@@ -935,7 +935,7 @@
       ],
       "path": "base/claude/idea-scope-brief/SKILL.md",
       "installable": true,
-      "content_sha256": "f1b49d4f51c0eb4153fbdc178e482dccc7e99190311aba0c43fb0c32a77f3351",
+      "content_sha256": "e5ccefa3952ea5d45454308ccddc9807cc862646cdd8e36dc01c17b061c40884",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1149,7 +1149,7 @@
       ],
       "path": "base/codex/idea-scope-brief/SKILL.md",
       "installable": true,
-      "content_sha256": "7eb4c4126664751b18a4949711559fa59e32933e61055ba25f1b6a5bfd589221",
+      "content_sha256": "79e5c4392de4d203d5e15743013a0027173bbf288a8c80f3e1a1e2fab701c272",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3164,7 +3164,7 @@
       ],
       "path": "packs/business-research/claude/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "07335e590c1f75fe7f44d157f52c544f858a5b93c71839446b68a2ef89ca437f",
+      "content_sha256": "dc8f61230c30412ec0c2be0c5deda12a33e3059333badb0d04adb7f1ac947e18",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3465,7 +3465,7 @@
       ],
       "path": "packs/business-research/claude/positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "91da44717c2a16d42ca4e85cfc4f42f4bea5a3b7ba9d52502ec94133f631a939",
+      "content_sha256": "fc690a05954ac8583e8d0fb9f0e547a085e88f8793f2c97665ed098c98a9c2ca",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3880,7 +3880,7 @@
       ],
       "path": "packs/business-research/codex/customer-discovery/SKILL.md",
       "installable": true,
-      "content_sha256": "0c89cd15c61090fc437bd3ee60cc41c08569aa5086a19d9940ad9bb535764709",
+      "content_sha256": "0ca9013b67b3b18620b1acec19ab067f5e64ffe2a3c06eb9f917d3657e41bd7f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4181,7 +4181,7 @@
       ],
       "path": "packs/business-research/codex/positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "f41cd504e31481680e88af5136f62ae2a1ba6d61444caf065943b010f364965e",
+      "content_sha256": "54aad9b699b207b4c35f3897dc6a92d1bcbf6545f716b704d8d072b3ed967be9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7556,7 +7556,7 @@
       ],
       "path": "packs/product-design/claude/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "bc4b9c6c3689f67f8af91d39bcd4fecf62c8976397b14e08f7c38779e834e00e",
+      "content_sha256": "bdfcc069cbc0cda1534f7f49943d717df35baf5e34f38cff91352d083f0e951f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7583,7 +7583,7 @@
       ],
       "path": "packs/product-design/claude/consolidate-prototypes/SKILL.md",
       "installable": true,
-      "content_sha256": "c6f77f30e701d08c26512e0c1145834b1f91fff890067bcc6191585aedd994a5",
+      "content_sha256": "e29a0f2404c33d6ab4224dec79e64102e19d79f1fbffa9d6a7b4149e6e322791",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7762,7 +7762,7 @@
       ],
       "path": "packs/product-design/claude/spec-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "62f054a2f2e53a05aa5fb168432c4e490ab49dfaa7c6f41e66bac269612cad60",
+      "content_sha256": "1b22622b6e224146b296713642e1595239599a70e659bde22487e59788029e4f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7799,7 +7799,7 @@
       ],
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "decac7720985ee70479dd67eb0cb616f68121c40e5b9daa3df77b1394ba60ff9",
+      "content_sha256": "0ae085bd4a36058b81acc60c66a7cff099ebcba05d51eb9e88c0ab3cd9a51fe6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7827,7 +7827,7 @@
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "d98f5615b6d90375b0c3d2c77a4fdbcb15e3e3bb9eadc1f3940a54938535ff61",
+      "content_sha256": "ab5bd9b61a730f17a48f19184cc40cfa415cd2ecf2563ae6548cfedbe4edeba8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7874,7 +7874,7 @@
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "8f7074cbadf8a89ecc1b873e2df6e339459903c663bffeee41dfe4da6e8c77fd",
+      "content_sha256": "b9b39dd2b424daf960afb893fbe9f178d22b13c843e8766060153ac9ab1dc451",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7910,7 +7910,7 @@
       ],
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "2ebd095609d994a459b3b31f577d53214399f4ad88b79c03bcbb5f0080b1f76c",
+      "content_sha256": "4a0fa19804113623a05fcd871fc77ff7226914d3fab42a1b1f2e7a1c0507c942",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7959,7 +7959,7 @@
       ],
       "path": "packs/product-design/codex/brainstorm/SKILL.md",
       "installable": true,
-      "content_sha256": "c6f450781e3ffdb8b9fd9fb11bd6899f037da681d76c7646be52146ec4fea1bf",
+      "content_sha256": "0001ed7624b0a14aac10ea662862e2c45b6cb8c7e77a958008066a305d4f9e46",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7986,7 +7986,7 @@
       ],
       "path": "packs/product-design/codex/consolidate-prototypes/SKILL.md",
       "installable": true,
-      "content_sha256": "9a9bfa6d45c87309390247d630e2005e28d9305a13616483b436172f8dad6625",
+      "content_sha256": "5984df02da035d6499ada82a6d670e4830cee7d248aad6950840f58eae630288",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8165,7 +8165,7 @@
       ],
       "path": "packs/product-design/codex/spec-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "74970a3f641d8c6b8c599a0b97db600f004c50b490b350d82c90ef950b1a1dde",
+      "content_sha256": "3a68b7f035d9d68a4cd3001a7d7f4cd11b0fbb61fd5dfc3d86f060e2bacf1716",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8202,7 +8202,7 @@
       ],
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "35e651cd0458480757ec2d150923eb8ac360aba01fa6d3310321d5b27bae7a2c",
+      "content_sha256": "ed7daf0171b6c9d2633f3e475f2bfbab11cdb2c367e5fd949ba6065b3ba5916c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8230,7 +8230,7 @@
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "0860e842b284bd4d74ad979d02db77278d2cd55211d59bf609cee6d2013574a1",
+      "content_sha256": "17dfb155bf8d13e42c63da09a0d643cb3c59838e28e6d46609add2ccda18789f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8277,7 +8277,7 @@
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "3c53a432327b5e8e154ef0d810c3cb90c33fe93b87f5132a2ff001ecf9d7d9ee",
+      "content_sha256": "ea1c7342145ff99d8574d9996d120fd7cc6715a66698518a637a9b3e7b3e98c2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8313,7 +8313,7 @@
       ],
       "path": "packs/product-design/codex/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "9ebb7c5e9298e491a6209bfa59e14f98861bc2cecb2b39cb866ea59e5f27e767",
+      "content_sha256": "5536051014535adf69d044a750c197cf9edced7a37699af8de1e4ecbc73d3718",
       "archive_versions": [
         "v0.0",
         "v0.1",

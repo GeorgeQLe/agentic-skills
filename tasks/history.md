@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-26 — De-specify interrogation stage-one label
+
+- The interrogation-page convention's fixed stage-one label "framework/scope alignment page" was a leaky generalization (accurate for only 2 of 10 participating skills). De-specified the authoring source (`docs/interrogation-page-convention.md` lines 5/16/18/23) to a generic "the skill's first post-interrogation stage" descriptor that names the per-skill variants (framework/scope, idea generation, research, design), and dropped the matching parenthetical from the generator stub (`scripts/upgrade-interrogation-page.mjs`). Kept the stage 0→1→2 ordinal model; only the artifact noun changed.
+- Regenerated 20 SKILL.md `## Interrogation Page` stubs + 20 `INTERROGATION-PAGE.md` bundles **without** version bumps/archives/CHANGELOGs (Pattern A infrastructure regeneration, precedent `62a0aa7f`). Kept the hand-authored, accurate `positioning/SKILL.md` body line untouched.
+- Closed a cross-convention gap: added a layer1 drift-gate test for `scripts/upgrade-design-tree-loop.mjs --check` (`tests/layer1/product-design-flow-tree.test.ts`), which previously had no test enforcing convention↔bundle drift across its 10 skills / 20 bundles.
+- Regenerated index-aware derived assets (showcase `skills-data.js`/`github-proof-data.js` ×2, `skillpacks-manifest.json`). All gates green: both `--check` generators, the three audits, full layer1 suite (2399), skillpacks `build:check`/`test:node`, showcase `validate:data`/`test`.
+
 ## 2026-06-25 - Build-In-Public alignment mode
 
 - Added Build-In-Public mode to the canonical alignment-page convention. Skills now treat explicit `--bip` or `.agents/project.json.alignment.build_in_public: true` as a required Stage 2 halfway review for source-safe social content at `alignment/{skill-name}-{topic}-bip.html`.

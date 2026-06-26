@@ -161,7 +161,7 @@ const POINTER_PREFIX = "Follow the shared Interrogation Page convention";
 const STUB_PREFIX = "Before producing research, run the stage-zero interrogation loop";
 
 function stubParagraph(skillName) {
-  return `Before producing research, run the stage-zero interrogation loop following \`INTERROGATION-PAGE.md\` in this skill's directory. Build one HTML page per round at \`interrogation/${skillName}-r{N}-{branch}.html\`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (\`data-open-input\`).`;
+  return `Before producing research, run the stage-zero interrogation loop following \`INTERROGATION-PAGE.md\` in this skill's directory. Build one HTML page per round at \`interrogation/${skillName}-r{N}-{branch}.html\`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (\`data-open-input\`).`;
 }
 
 function isPointerOrStub(paragraph) {

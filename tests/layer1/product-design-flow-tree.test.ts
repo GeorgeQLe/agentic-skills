@@ -1,8 +1,10 @@
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const ROOT = resolve(import.meta.dirname, "../..");
+const DESIGN_TREE_LOOP_GENERATOR = resolve(ROOT, "scripts/upgrade-design-tree-loop.mjs");
 const read = (path: string) => readFileSync(resolve(ROOT, path), "utf8");
 const between = (content: string, start: string, end: string) => {
   const startIndex = content.indexOf(start);
@@ -525,5 +527,13 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(uiInterview).toContain("prototype build ledger");
       expect(uiInterview).not.toContain(`recommend ${sigil}roadmap`);
     }
+  });
+
+  it("passes the design-tree-loop generator --check drift gate", () => {
+    const result = spawnSync(process.execPath, [DESIGN_TREE_LOOP_GENERATOR, "--check"], { encoding: "utf8" });
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("design tree loop bundles checked: 20 skills");
+    expect(result.stdout).toContain("0 bundle write(s)");
   });
 });

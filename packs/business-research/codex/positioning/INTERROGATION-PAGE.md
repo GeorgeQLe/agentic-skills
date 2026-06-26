@@ -1,13 +1,13 @@
 # Interrogation Page — positioning
 
-When this skill needs to elicit user context before producing research or other durable output, run the **stage-zero interrogation loop** in HTML before building the stage-one framework/scope alignment page. Build one interrogation page per round at `interrogation/positioning-r{N}-{branch}.html`, where `{N}` is the 1-based round number and `{branch}` is the research fork or product-path slug (in the flat single-product case `{branch}` is the normalized topic slug, matching the alignment page's `{topic}`).
+When this skill needs to elicit user context before producing research or other durable output, run the **stage-zero interrogation loop** in HTML before advancing to stage one (the skill's first post-interrogation stage). Build one interrogation page per round at `interrogation/positioning-r{N}-{branch}.html`, where `{N}` is the 1-based round number and `{branch}` is the research fork or product-path slug (in the flat single-product case `{branch}` is the normalized topic slug, matching the alignment page's `{topic}`).
 
-**Stage model.** Interrogation is stage zero. It does not replace the framework/scope page (stage one) or the alignment review page (stage two); it precedes them, so that framework options and scope are informed by elicited answers rather than pre-authored blind.
+**Stage model.** Interrogation is stage zero. It does not replace stage one (the skill's first post-interrogation stage — framework/scope selection, idea generation, research, or design, depending on the skill) or the alignment review page (stage two); it precedes them, so that stage-one options and scope are informed by elicited answers rather than pre-authored blind.
 
 ```
 stage 0  →  interrogation/positioning-r1..rN.html   ELICITATION: open input drives research
             loop until the confidence gate passes
-stage 1  →  alignment framework/scope page            SELECTION: options informed by stage 0
+stage 1  →  skill's first post-interrogation stage    SELECTION: options informed by stage 0
             research runs
 stage 2  →  alignment/positioning-{topic}.html        REVIEW/APPROVAL of deliverables
 ```
