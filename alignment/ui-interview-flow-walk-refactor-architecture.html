@@ -57,7 +57,7 @@
   <header>
     <span class="status">Concept · review state</span>
     <h1>Flow-Walk UI Prototyping Refactor</h1>
-    <p class="meta-line">2026-06-26 · product-design pipeline · author: brainstorm session · locked decisions: compliant re-cut + extend design-tree-loop §2</p>
+    <p class="meta-line">2026-06-26 · product-design pipeline · author: brainstorm session · locked decisions: compliant re-cut + extend design-tree-loop §2 · naming: <code>prototype</code>→<code>logic-wiring</code>, <code>create-ui-experiment</code>→<code>build-ui-screens</code>, new <code>key-moments</code>, keep <code>consolidate-prototypes</code></p>
     <p class="intro">A flow-driven, minimum-UI build mechanic for the product-design tree: build each screen in element-batches ordered by user discovery, stop when the flow is satisfied, branch per UX variation, and park-or-prune. This page captures the <em>compliant re-cut</em> — the version verified against the real convention, schema, and tests — and shows what is new, extended, additive, and deliberately dropped.</p>
   </header>
 
@@ -356,7 +356,10 @@
       </div>
     </div>
     <div class="callout">
-      <strong>Status:</strong> concept only — no skills, schema, or code have been changed. Next step on approval is a <code>tasks/roadmap.md</code> entry sequencing the change set above.
+      <strong>Status:</strong> concept only — no skills, schema, or code have been changed. Naming convention is <strong>locked</strong>: <code>prototype</code> → <code>logic-wiring</code>, <code>create-ui-experiment</code> → <code>build-ui-screens</code>, new <code>key-moments</code>, keep <code>consolidate-prototypes</code>. Next step on approval is a <code>tasks/roadmap.md</code> entry sequencing the change set above.
+    </div>
+    <div class="callout">
+      <strong>Deferred (separate pass):</strong> standardizing on "experiment" as the single word for a contained build would mean a schema-wide rename — <code>prototype_build_plan</code>/<code>prototype_build_item</code>/<code>prototype_build_status</code>/<code>prototype_path</code> → <code>experiment_*</code> and node status <code>promoted-to-prototype</code> → <code>promoted-to-experiment</code> — with its own <code>schema_version</code> bump and test/handoff updates. Out of scope for this refactor to avoid a half-rename that splits "experiment" (skill name) from "prototype" (schema vocab).
     </div>
   </section>
 </main>
