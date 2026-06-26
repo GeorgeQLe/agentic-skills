@@ -15005,3 +15005,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Verification: `upgrade-interrogation-page.mjs --check`, `audit-interrogation-pages.mjs`, `build:check` (396 skills, 42 packs), `build:manifest:check`, `test:node` 142/142, `tests/layer1` 2430/2430, `git diff --check`.
 - Deploy: push-triggered Vercel build (commit changed `skills-data.js`, a deploy-relevant path); no manual `/deploy` (release-ops not installed; contract operating model is Vercel-on-push).
 - Commit: `cdf97b57b`.
+
+## 2026-06-26 — Showcase push-status check + ship-end
+
+- Question: "have we pushed the update for the new skills showcase site?" Answer: yes — `master` is up to date with `origin/master`, zero unpushed commits; all skills-showcase work (incl. `cdf97b57b`, `e74ad9ddd` "Refresh skills showcase generated data", `c5550f225` showcase build verification) is on the remote.
+- Confirmed the only working-tree drift (`github-proof-data.js` ×2 + `benchmark-results-matrix.md`) is the same concurrent-session in-flight set the prior ship-end (`cdf97b57b`) explicitly left untouched. Verified by regenerating github showcase data against the current git index: deterministic fingerprint `4947211c` ≠ the drift's `fcef31003`, proving the drift was produced against a different (concurrent) index state. Left it for its owning session per the concurrent-session rule.
+- Shipped only this session's own artifact: the `/ship-end` prompt-history log.
