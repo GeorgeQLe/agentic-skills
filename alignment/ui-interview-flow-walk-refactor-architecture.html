@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" data-alignment-category="product-design" data-visual-tier="visual">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow-Walk UI Prototyping Refactor — Architecture</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1b222c; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2b333d; --accent:#58a6ff; --new:#3fb950; --extend:#e3a008; --route:#8b949e;
+    --drop:#6e7681; --compare:#a371f7; --danger:#f85149;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+  main{max-width:1180px;margin:0 auto;padding:32px 22px 80px}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}
+  h1{font-size:1.7rem;margin:.2rem 0}
+  h2{font-size:1.22rem;margin:2.2rem 0 .6rem;padding-bottom:.3rem;border-bottom:1px solid var(--line)}
+  h3{font-size:1.02rem;margin:1.4rem 0 .4rem;color:var(--ink)}
+  header .status{display:inline-block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:2px 10px}
+  .meta-line{color:var(--muted);font-size:.85rem;margin:.4rem 0 0}
+  .intro{color:var(--muted);margin:.9rem 0 0;max-width:78ch}
+  .callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:12px 16px;margin:14px 0}
+  .callout.warn{border-left-color:var(--extend)}
+  section.toc{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 18px;margin:18px 0}
+  section.toc ol{margin:.3rem 0;padding-left:1.3rem;columns:2}
+  section.toc a{color:var(--accent);text-decoration:none}
+  figure{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  figcaption{color:var(--muted);font-size:.84rem;margin-top:8px}
+  svg{width:100%;height:auto;display:block}
+  svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  svg .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  rect, line, polygon, path.edge { filter:url(#sketchy); }
+  table{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.92rem}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:var(--ink)}
+  td .tag{font-size:.72rem;font-weight:600;padding:1px 7px;border-radius:6px;white-space:nowrap}
+  .t-new{color:#0d1117;background:var(--new)}
+  .t-ext{color:#0d1117;background:var(--extend)}
+  .t-keep{color:#0d1117;background:var(--route)}
+  .t-cmp{color:#0d1117;background:var(--compare)}
+  .t-drop{color:#0d1117;background:var(--drop)}
+  ul.tight{margin:.3rem 0;padding-left:1.2rem}
+  ul.tight li{margin:.25rem 0}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 2px;font-size:.8rem;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}section.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="status">Concept · review state</span>
+    <h1>Flow-Walk UI Prototyping Refactor</h1>
+    <p class="meta-line">2026-06-26 · product-design pipeline · author: brainstorm session · locked decisions: compliant re-cut + extend design-tree-loop §2</p>
+    <p class="intro">A flow-driven, minimum-UI build mechanic for the product-design tree: build each screen in element-batches ordered by user discovery, stop when the flow is satisfied, branch per UX variation, and park-or-prune. This page captures the <em>compliant re-cut</em> — the version verified against the real convention, schema, and tests — and shows what is new, extended, additive, and deliberately dropped.</p>
+  </header>
+
+  <section class="toc" id="toc">
+    <strong>Contents</strong>
+    <ol>
+      <li><a href="#decisions">Locked decisions</a></li>
+      <li><a href="#tree">The design tree</a></li>
+      <li><a href="#loop">Screen build loop</a></li>
+      <li><a href="#changeset">Change set</a></li>
+      <li><a href="#dropped">Dropped from literal vision</a></li>
+      <li><a href="#plumbing">Plumbing &amp; verification</a></li>
+    </ol>
+  </section>
+
+  <!-- shared sketch filter + markers (excalidraw convention) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="sketchy" x="-2%" y="-2%" width="104%" height="104%">
+        <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="3" seed="2" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8b949e"/></marker>
+      <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#58a6ff"/></marker>
+      <marker id="arrE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#e3a008"/></marker>
+      <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#a371f7"/></marker>
+      <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f85149"/></marker>
+    </defs>
+  </svg>
+
+  <section id="decisions">
+    <h2>1 · Locked decisions</h2>
+    <div class="callout">
+      <ul class="tight">
+        <li><strong>Shape:</strong> compliant re-cut — stay within the fixed 6-skill route tuple, node-type table, and three-role model. No route insertion, no role reclassification.</li>
+        <li><strong>Batch mechanic:</strong> extend <code>design-tree-loop-convention.md §2</code> to cover ordered/dependent per-unit intermediates. No standalone convention, no new generator/registry plumbing.</li>
+        <li><strong>Proof ordering:</strong> a new <code>key-moments</code> skill on the trunk, running <em>before</em> <code>state-model</code> and <code>ux-variations</code> — it needs only the flow map, ranks flows by proof priority (value × risk × frequency), orders the branches, and gates variation breadth.</li>
+        <li><strong>Data-first, just-in-time:</strong> <code>state-model</code> attaches per promoted flow only — modeled when key-moments promotes a flow to build, never for pruned flows. UX variations re-skin the data layer; later flows extend the core model rather than re-derive it.</li>
+        <li><strong>Progressive fidelity:</strong> split the builder into <code>build-ui-screens</code> (visual wireframe in element-batches) → <code>logic-wiring</code> (clickable, state-backed; keeps prototype's CLI/API/infra modes).</li>
+        <li><strong>Selection &amp; widen:</strong> <code>/uat --variant-evaluation</code> picks the canonical screen per flow, then two-stage <code>/consolidate-prototypes</code> stitches canonical screens → cohesive flows → full prototype. Off-ramp = additive <code>parked</code> / <code>cherry_pick_candidate</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tree">
+    <h2>2 · The design tree (the hourglass)</h2>
+    <div class="legend">
+      <span><i class="sw" style="background:#8b949e"></i>route node (unchanged)</span>
+      <span><i class="sw" style="background:#3fb950"></i>new skill</span>
+      <span><i class="sw" style="background:#e3a008"></i>renamed / extended</span>
+      <span><i class="sw" style="background:#58a6ff"></i>data substrate (state-model)</span>
+      <span><i class="sw" style="background:#a371f7"></i>consolidation (widen)</span>
+      <span><i class="sw" style="background:#f85149"></i>pruned / off-ramp</span>
+    </div>
+    <figure>
+      <svg viewBox="0 0 1140 960" role="img" aria-label="Design tree hourglass diagram">
+        <!-- ===== EDGES (drawn first, under nodes) ===== -->
+        <!-- trunk: root -> user-flow-map -> key-moments -> state-model -> ux-variations -->
+        <path class="edge" d="M560 58 L560 82" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+        <path class="edge" d="M560 134 L560 162" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+        <path class="edge" d="M560 218 L560 256" stroke="#58a6ff" stroke-width="1.9" fill="none" marker-end="url(#arrA)"/>
+        <path class="edge" d="M560 308 L560 338" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+        <!-- ux-variations -> 3 children (narrowing fan out) -->
+        <path class="edge" d="M490 388 C360 408, 270 408, 202 424" stroke="#8b949e" stroke-width="1.7" fill="none" marker-end="url(#arr)"/>
+        <path class="edge" d="M560 388 L560 424" stroke="#8b949e" stroke-width="1.9" fill="none" marker-end="url(#arr)"/>
+        <path class="edge" d="M630 388 C760 408, 870 408, 937 424" stroke="#8b949e" stroke-width="1.7" fill="none" marker-end="url(#arr)"/>
+        <!-- builder leaf chain under selected variation -->
+        <path class="edge" d="M560 482 L560 512" stroke="#e3a008" stroke-width="1.9" fill="none" marker-end="url(#arrE)"/>
+        <path class="edge" d="M560 562 L560 584" stroke="#e3a008" stroke-width="1.9" fill="none" marker-end="url(#arrE)"/>
+        <path class="edge" d="M560 638 L560 662" stroke="#e3a008" stroke-width="1.9" fill="none" marker-end="url(#arrE)"/>
+        <path class="edge" d="M560 716 L560 740" stroke="#3fb950" stroke-width="1.9" fill="none" marker-end="url(#arr)"/>
+        <!-- approved screen -> uat (pick canonical) -->
+        <path class="edge" d="M645 762 C685 766, 690 766, 700 767" stroke="#a371f7" stroke-width="1.8" fill="none" marker-end="url(#arrP)"/>
+        <!-- widen: uat -> consolidate stage1 -> stage2 -->
+        <path class="edge" d="M865 796 C865 812, 760 812, 700 822" stroke="#a371f7" stroke-width="1.8" fill="none" marker-end="url(#arrP)"/>
+        <path class="edge" d="M570 868 L570 886" stroke="#a371f7" stroke-width="1.9" fill="none" marker-end="url(#arrP)"/>
+        <!-- parked variation -> cherry-pick into consolidate (long dashed amber) -->
+        <path class="edge" d="M202 482 L202 822" stroke="#e3a008" stroke-width="1.4" stroke-dasharray="4 5" fill="none" marker-end="url(#arrE)" opacity=".8"/>
+
+        <!-- ===== NODES ===== -->
+        <g text-anchor="middle">
+          <!-- root -->
+          <rect x="470" y="16" width="180" height="42" rx="9" fill="#1b222c" stroke="#8b949e" stroke-width="1.6"/>
+          <text x="560" y="35" font-size="13" fill="#e6edf3">topic root</text>
+          <text x="560" y="50" font-size="10" fill="#9aa7b4">design tree</text>
+
+          <!-- user-flow-map -->
+          <rect x="460" y="82" width="200" height="52" rx="9" fill="#1b222c" stroke="#8b949e" stroke-width="1.8"/>
+          <text x="560" y="104" font-size="13" fill="#e6edf3" class="mono">user-flow-map</text>
+          <text x="560" y="122" font-size="10" fill="#9aa7b4">enumerate ALL flows — structure only</text>
+
+          <!-- key-moments (NEW, on trunk) -->
+          <rect x="455" y="162" width="210" height="56" rx="9" fill="#15211a" stroke="#3fb950" stroke-width="2.1"/>
+          <text x="560" y="184" font-size="13" fill="#e6edf3" class="mono">key-moments</text>
+          <text x="560" y="201" font-size="9.7" fill="#3fb950">NEW — rank flows by proof priority</text>
+          <text x="560" y="213" font-size="9.2" fill="#9aa7b4">orders branches · gates variation breadth</text>
+
+          <!-- JIT annotation -->
+          <text x="560" y="240" font-size="10" fill="#9aa7b4">for each promoted flow, in priority order — <tspan fill="#e3a008">just-in-time</tspan></text>
+
+          <!-- state-model gate (on trunk, data substrate) -->
+          <rect x="460" y="256" width="200" height="52" rx="9" fill="#11161d" stroke="#58a6ff" stroke-width="1.9"/>
+          <text x="560" y="278" font-size="13" fill="#e6edf3" class="mono">state-model gate</text>
+          <text x="560" y="296" font-size="9.5" fill="#58a6ff">attach data substrate for THIS flow (JIT)</text>
+
+          <!-- ux-variations -->
+          <rect x="460" y="338" width="200" height="50" rx="9" fill="#1b222c" stroke="#8b949e" stroke-width="1.8"/>
+          <text x="560" y="359" font-size="13" fill="#e6edf3" class="mono">ux-variations</text>
+          <text x="560" y="377" font-size="9.5" fill="#9aa7b4">fan out up to N — re-skin the model</text>
+
+          <!-- variation children -->
+          <!-- v1 parked -->
+          <rect x="110" y="424" width="185" height="58" rx="9" fill="#1b1207" stroke="#e3a008" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="202" y="447" font-size="12.5" fill="#e6edf3">variation · parked</text>
+          <text x="202" y="465" font-size="9.5" fill="#e3a008">soft-stop → cherry-pick</text>
+          <!-- v2 selected -->
+          <rect x="465" y="424" width="190" height="58" rx="9" fill="#1b222c" stroke="#e6edf3" stroke-width="2.2"/>
+          <text x="560" y="447" font-size="12.5" fill="#e6edf3">variation · selected</text>
+          <text x="560" y="465" font-size="9.5" fill="#cdd9e5">descends into builder chain</text>
+          <!-- v3 pruned -->
+          <rect x="845" y="424" width="185" height="58" rx="9" fill="#1a0f12" stroke="#f85149" stroke-width="1.5" opacity=".85"/>
+          <text x="937" y="447" font-size="12.5" fill="#e6edf3">variation · pruned</text>
+          <text x="937" y="465" font-size="9.5" fill="#f85149">dropped</text>
+
+          <!-- builder leaf chain -->
+          <rect x="465" y="512" width="190" height="50" rx="10" fill="#1b222c" stroke="#8b949e" stroke-width="1.8"/>
+          <text x="560" y="533" font-size="12.5" fill="#e6edf3" class="mono">ui-interview</text>
+          <text x="560" y="551" font-size="9.3" fill="#9aa7b4">screen packet + batch plan</text>
+
+          <rect x="460" y="584" width="200" height="54" rx="10" fill="#241d09" stroke="#e3a008" stroke-width="2.1"/>
+          <text x="560" y="606" font-size="12.5" fill="#e6edf3" class="mono">build-ui-screens</text>
+          <text x="560" y="624" font-size="9.3" fill="#e3a008">visual wireframe · element-batches</text>
+
+          <rect x="460" y="662" width="200" height="54" rx="10" fill="#241d09" stroke="#e3a008" stroke-width="2.1"/>
+          <text x="560" y="684" font-size="12.5" fill="#e6edf3" class="mono">logic-wiring</text>
+          <text x="560" y="702" font-size="9.3" fill="#e3a008">clickable · state-backed · CLI/API/infra</text>
+
+          <rect x="475" y="740" width="170" height="44" rx="9" fill="#15211a" stroke="#3fb950" stroke-width="1.8"/>
+          <text x="560" y="761" font-size="12" fill="#e6edf3">approved screen</text>
+          <text x="560" y="776" font-size="9.2" fill="#3fb950">canonical leaf</text>
+
+          <!-- uat: pick canonical -->
+          <rect x="700" y="738" width="330" height="58" rx="10" fill="#1d1630" stroke="#a371f7" stroke-width="1.8"/>
+          <text x="865" y="762" font-size="12.5" fill="#e6edf3" class="mono">uat --variant-evaluation</text>
+          <text x="865" y="781" font-size="9.7" fill="#a371f7">compare clickable variations → pick canonical / variation</text>
+
+          <!-- widen back up: consolidation two-stage -->
+          <text x="570" y="814" font-size="10" fill="#9aa7b4">widen back up — <tspan fill="#a371f7">consolidate-prototypes (two-stage)</tspan></text>
+          <rect x="180" y="822" width="780" height="46" rx="9" fill="#1d1630" stroke="#a371f7" stroke-width="1.7"/>
+          <text x="570" y="843" font-size="12" fill="#e6edf3">stage 1 · stitch approved canonical screens → cohesive user-flows</text>
+          <text x="570" y="860" font-size="9.3" fill="#9aa7b4">+ cherry-pick parked variations</text>
+
+          <rect x="110" y="886" width="920" height="48" rx="9" fill="#1d1630" stroke="#a371f7" stroke-width="2"/>
+          <text x="570" y="908" font-size="12.5" fill="#e6edf3">stage 2 · assemble flows → full cohesive prototype</text>
+          <text x="570" y="925" font-size="9.5" fill="#a371f7">→ AFPS graduation</text>
+        </g>
+      </svg>
+      <figcaption>Scope <strong>narrows</strong> descending the trunk, then <strong>widens</strong> back up through consolidation. <code>user-flow-map</code> enumerates every flow; <code>key-moments</code> (new, on the trunk) ranks them by proof priority and gates variation breadth; then, just-in-time per promoted flow, the <code>state-model</code> gate attaches the data substrate before <code>ux-variations</code> fans out branches that re-skin it. The selected variation descends the builder chain — <code>ui-interview</code> → <code>build-ui-screens</code> (visual wireframe) → <code>logic-wiring</code> (clickable, state-backed; keeps CLI/API/infra) → an approved canonical screen. <code>uat</code> picks the canonical screen per flow; parked variations stay available to cherry-pick. Consolidation then widens in two stages: stitch canonical screens into cohesive flows, then assemble flows into a full prototype for AFPS graduation. State-model and data are built just-in-time per promoted flow — pruned flows are never modeled.</figcaption>
+    </figure>
+  </section>
+
+  <section id="loop">
+    <h2>3 · Screen build loop — progressive-fidelity ladder</h2>
+    <figure>
+      <svg viewBox="0 0 1140 440" role="img" aria-label="Screen build loop diagram">
+        <!-- ===== EDGES ===== -->
+        <!-- inputs -> batch -->
+        <path class="edge" d="M220 80 L298 100" stroke="#58a6ff" stroke-width="1.7" fill="none" marker-end="url(#arrA)"/>
+        <path class="edge" d="M220 142 L298 116" stroke="#58a6ff" stroke-width="1.7" fill="none" marker-end="url(#arrA)"/>
+        <!-- batch -> visual checkpoint -> diamond -->
+        <path class="edge" d="M460 108 L498 108" stroke="#e3a008" stroke-width="1.8" fill="none" marker-end="url(#arrE)"/>
+        <path class="edge" d="M660 108 L706 108" stroke="#e3a008" stroke-width="1.8" fill="none" marker-end="url(#arrE)"/>
+        <!-- loop back: no -> next batch -->
+        <path class="edge" d="M765 72 L765 40 L380 40 L380 78" stroke="#e3a008" stroke-width="1.7" fill="none" marker-end="url(#arrE)"/>
+        <!-- off-ramp from checkpoint -->
+        <path class="edge" d="M540 138 L150 138 L150 296" stroke="#f85149" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrR)"/>
+        <!-- yes (minimum UI) -> wiring step (down) -->
+        <path class="edge" d="M765 144 L765 230 L470 230 L390 300" stroke="#3fb950" stroke-width="1.9" fill="none" marker-end="url(#arr)"/>
+        <!-- logic-wiring -> reachability -> binding gate -->
+        <path class="edge" d="M480 328 L518 328" stroke="#e3a008" stroke-width="1.8" fill="none" marker-end="url(#arrE)"/>
+        <path class="edge" d="M710 328 L756 328" stroke="#3fb950" stroke-width="1.9" fill="none" marker-end="url(#arr)"/>
+
+        <!-- ===== NODES ===== -->
+        <g text-anchor="middle">
+          <!-- band label: visual -->
+          <text x="20" y="34" font-size="11" fill="#e3a008" text-anchor="start" class="mono">build-ui-screens — visual batch loop</text>
+
+          <!-- inputs -->
+          <rect x="20" y="58" width="200" height="48" rx="9" fill="#1b222c" stroke="#58a6ff" stroke-width="1.6"/>
+          <text x="120" y="78" font-size="11.5" fill="#e6edf3">target = action/state matrix</text>
+          <text x="120" y="95" font-size="10" class="mono" fill="#9aa7b4">user-flow-map</text>
+          <rect x="20" y="118" width="200" height="48" rx="9" fill="#1b222c" stroke="#58a6ff" stroke-width="1.6"/>
+          <text x="120" y="138" font-size="11.5" fill="#e6edf3">order = discovery sequence</text>
+          <text x="120" y="155" font-size="10" class="mono" fill="#9aa7b4">progressive_review</text>
+
+          <!-- visual batch -->
+          <rect x="300" y="80" width="160" height="56" rx="10" fill="#241d09" stroke="#e3a008" stroke-width="2"/>
+          <text x="380" y="104" font-size="12.5" fill="#e6edf3">visual batch N</text>
+          <text x="380" y="122" font-size="9.7" fill="#9aa7b4">add UI for flow-step N</text>
+
+          <!-- visual checkpoint -->
+          <rect x="500" y="80" width="160" height="56" rx="10" fill="#161b22" stroke="#8b949e" stroke-width="1.7"/>
+          <text x="580" y="103" font-size="12" fill="#e6edf3">visual checkpoint</text>
+          <text x="580" y="121" font-size="9.5" fill="#9aa7b4">review vs matrix</text>
+
+          <!-- decision diamond -->
+          <polygon points="708,108 765,70 822,108 765,146" fill="#1b222c" stroke="#58a6ff" stroke-width="1.8"/>
+          <text x="765" y="104" font-size="10.5" fill="#e6edf3">minimum</text>
+          <text x="765" y="118" font-size="10.5" fill="#e6edf3">UI?</text>
+
+          <!-- edge labels -->
+          <text x="560" y="32" font-size="10.5" fill="#e3a008">no → next batch (add more elements)</text>
+          <text x="845" y="104" font-size="10" fill="#3fb950" text-anchor="start">yes</text>
+          <text x="300" y="155" font-size="9.5" fill="#f85149" text-anchor="start">"don't like where this goes"</text>
+
+          <!-- band label: wiring -->
+          <text x="20" y="278" font-size="11" fill="#e3a008" text-anchor="start" class="mono">logic-wiring — clickable, state-backed</text>
+
+          <!-- logic-wiring -->
+          <rect x="300" y="300" width="180" height="56" rx="10" fill="#241d09" stroke="#e3a008" stroke-width="2.1"/>
+          <text x="390" y="324" font-size="12.5" fill="#e6edf3">wire → state-model</text>
+          <text x="390" y="342" font-size="9.5" fill="#e3a008">wireframe → clickable</text>
+
+          <!-- flow reachability acceptance -->
+          <rect x="520" y="300" width="190" height="56" rx="10" fill="#161b22" stroke="#8b949e" stroke-width="1.7"/>
+          <text x="615" y="323" font-size="12" fill="#e6edf3">flow reachability</text>
+          <text x="615" y="341" font-size="9.5" fill="#9aa7b4">acceptance check</text>
+
+          <!-- binding gate -->
+          <rect x="758" y="300" width="170" height="56" rx="10" fill="#15211a" stroke="#3fb950" stroke-width="2"/>
+          <text x="843" y="323" font-size="12" fill="#e6edf3">binding gate</text>
+          <text x="843" y="341" font-size="9.7" fill="#3fb950">one per variation</text>
+
+          <!-- off-ramp -->
+          <rect x="40" y="298" width="220" height="58" rx="10" fill="#241016" stroke="#f85149" stroke-width="1.7"/>
+          <text x="150" y="320" font-size="11.5" fill="#e6edf3">off-ramp: park</text>
+          <text x="150" y="337" font-size="9" class="mono" fill="#9aa7b4">parked + cherry_pick_candidate</text>
+          <text x="150" y="349" font-size="8.7" fill="#9aa7b4">retained, not pruned</text>
+        </g>
+      </svg>
+      <figcaption>A progressive-fidelity ladder. <strong>Top band</strong> — <code>build-ui-screens</code> runs the visual batch loop: each batch adds only the elements needed to make the next flow-step reachable, a light visual checkpoint reviews it against the action/state matrix, and the loop halts at minimum UI. <strong>Bottom band</strong> — once visual is satisfied, <code>logic-wiring</code> upgrades the wireframe to a clickable, state-backed contained experiment wired to the flow's <code>state-model</code>, then a flow-reachability acceptance check feeds exactly one binding alignment gate per variation. The red off-ramp parks a stalled build (<code>parked</code> + <code>cherry_pick_candidate</code>) without pruning, so it stays available to cherry-pick.</figcaption>
+    </figure>
+  </section>
+
+  <section id="changeset">
+    <h2>4 · Change set</h2>
+    <table>
+      <thead><tr><th>Element</th><th>Kind</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td><code>key-moments</code> skill</td><td><span class="tag t-new">new</span></td><td>Trunk skill, runs before <code>state-model</code>/<code>ux-variations</code> (needs only the flow map). Ranks proof order (value × risk × frequency); writes existing <code>journey_sequence</code> / <code>evaluation_priority</code> / <code>branch_order_override</code> / <code>priority_rationale</code>. Orders branches and gates variation breadth. Both mirrors at <code>v0.0</code>.</td></tr>
+        <tr><td><code>state-model</code></td><td><span class="tag t-ext">extend</span></td><td>Data-first, just-in-time: attaches per promoted flow only (after key-moments promotes it), never for pruned flows. Later flows <em>extend</em> the core model rather than re-derive it.</td></tr>
+        <tr><td><code>prototype</code> → <code>logic-wiring</code></td><td><span class="tag t-ext">rename</span></td><td>Renamed and scoped to logic: upgrades the wireframe to a clickable, state-backed contained experiment, validates flow reachability. Keeps prototype's non-UI runnable modes (CLI / API / infra = "runnable logic"). Updates the route-tuple <code>const</code> + tests + handoff strings; schema_version <code>v0.3 → v0.4</code>.</td></tr>
+        <tr><td><code>create-ui-experiment</code> → <code>build-ui-screens</code></td><td><span class="tag t-ext">rename</span></td><td>Renamed and scoped to the visual wireframe builder: runs the element-batch loop with a visual checkpoint per batch and a minimum-UI stop rule. Feeds <code>logic-wiring</code>.</td></tr>
+        <tr><td><code>design-tree-loop §2</code></td><td><span class="tag t-ext">extend</span></td><td>Add ordered/dependent per-unit intermediates (batches). Defines batch = one flow-step, minimum-UI stop rule, moment-level end-to-end acceptance. Regenerate via existing <code>upgrade-design-tree-loop.mjs</code>.</td></tr>
+        <tr><td><code>ui-interview</code></td><td><span class="tag t-ext">extend</span></td><td>Additionally authors the batch plan in its packet. Role unchanged — not an orchestrator.</td></tr>
+        <tr><td><code>consolidate-prototypes</code> (two-stage)</td><td><span class="tag t-ext">extend</span></td><td>Add stage 1 (stitch approved canonical screens → cohesive user-flows) before the existing stage 2 (assemble flows → full prototype → AFPS graduation).</td></tr>
+        <tr><td><code>flow-tree.schema</code> → <code>v0.4</code></td><td><span class="tag t-new">additive</span></td><td>Optional fields only: <code>build_ledger[]</code> on <code>ui_experiment</code>; <code>parked</code> enum value + <code>cherry_pick_candidate</code> boolean. Plus route-tuple rename <code>prototype</code> → <code>logic-wiring</code>. Sample stays valid.</td></tr>
+        <tr><td>Comparison / selection</td><td><span class="tag t-cmp">reuse</span></td><td><code>/uat --variant-evaluation</code> picks canonical per flow → two-stage <code>/consolidate-prototypes</code>; parked branches feed cherry-pick.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dropped">
+    <h2>5 · Dropped from the literal vision</h2>
+    <p class="intro">These were verified to collide with load-bearing invariants (fixed route tuple, node-type table, three-role model, filesystem-existence cursor) and were cut to stay drop-in compliant.</p>
+    <table>
+      <tbody>
+        <tr><td><span class="tag t-drop">dropped</span></td><td><code>ui-interview</code> as orchestrator directing <code>build-ui-screens</code></td><td>Violates the three-role model. Replaced by: ui-interview authors the plan, executor builds.</td></tr>
+        <tr><td><span class="tag t-drop">dropped</span></td><td><code>screen-orchestrator</code> skill + <code>screen</code> node</td><td>No screen node exists; route insertion breaks the const tuple + tests. Deferred; add <code>screens[]</code>/<code>screen_id</code> as optional schema only if later proven necessary.</td></tr>
+        <tr><td><span class="tag t-drop">dropped</span></td><td>Variation-level comparison gate</td><td>Whole-unit review already covers a branch's variations; built comparison lives in UAT.</td></tr>
+        <tr><td><span class="tag t-drop">dropped</span></td><td>Four-level resume cursor</td><td>Violates "cursor = filesystem existence." Variation + batch map onto the two existing cursor levels.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="plumbing">
+    <h2>6 · Plumbing &amp; verification</h2>
+    <div class="grid2">
+      <div class="callout warn">
+        <h3 style="margin-top:0">Schema &amp; tests</h3>
+        <ul class="tight">
+          <li>Bump <code>schema_version</code> <code>v0.3 → v0.4</code>; update the <code>const</code> assertion in <code>tests/layer1/product-design-flow-tree.test.ts</code>.</li>
+          <li>Any extended enum is asserted as an exact array — update it.</li>
+          <li>Keep every new field optional so <code>flow-tree-sample.yaml</code> stays valid.</li>
+          <li>Expect SKILL.md prose assertions to shift with routing/wording edits.</li>
+        </ul>
+      </div>
+      <div class="callout warn">
+        <h3 style="margin-top:0">Skills, mirrors &amp; build</h3>
+        <ul class="tight">
+          <li>Behavioral edits → <code>skill-archive.sh</code> + version bump + CHANGELOG, in <strong>both</strong> claude + codex mirrors (parity-audited).</li>
+          <li><code>key-moments</code>: author both mirrors, PACK.md line, <code>required_conventions</code>, add to convention Sets, run generators, <code>git add</code> bundles.</li>
+          <li>Convention edit → rerun <code>upgrade-design-tree-loop.mjs</code>; commit regenerated <code>DESIGN-TREE-LOOP.md</code>.</li>
+          <li>Stage-before-build, then regenerate manifest + both showcase data files; run <code>build:check</code> + <code>validate:data</code>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Status:</strong> concept only — no skills, schema, or code have been changed. Next step on approval is a <code>tasks/roadmap.md</code> entry sequencing the change set above.
+    </div>
+  </section>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
