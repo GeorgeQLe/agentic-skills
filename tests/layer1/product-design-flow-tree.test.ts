@@ -225,7 +225,7 @@ describe("product-design flow tree artifact boundaries", () => {
       const uxVariations = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
 
       expect(uxVariations).toContain(
-        "Branch selection order: explicit user override, journey_sequence, activation_fit, first_value_fit, evaluation_priority, status, then stable array order.",
+        "Branch selection order: explicit user override, journey_sequence, status, then stable array order.",
       );
       expect(uxVariations).toContain("Do not use raw first-pending array order as the default branch selector.");
       expect(uxVariations).not.toContain("first modelled user-flow branch with no `ux_variations`");
@@ -337,6 +337,30 @@ describe("product-design flow tree artifact boundaries", () => {
     }
   });
 
+  it("orders ux-variations branch selection only by user_flow_branch schema fields", () => {
+    const schema = JSON.parse(read("design/flow-tree.schema.json"));
+    const userFlowBranchProps = new Set(Object.keys(schema.$defs.user_flow_branch.properties));
+
+    // ux-variations selects a user_flow_branch node, so every snake_case
+    // tiebreaker it names must be a property of $defs.user_flow_branch (which is
+    // additionalProperties:false). activation_fit / first_value_fit /
+    // evaluation_priority belong to ux_variation_branch (the children it grows),
+    // not the node it selects.
+    for (const mirror of mirrors) {
+      const content = read(`packs/product-design/${mirror}/ux-variations/SKILL.md`);
+      const match = content.match(/Branch selection order: ([^.]+)\./);
+      expect(match, `${mirror}/ux-variations should declare a branch selection order`).not.toBeNull();
+      const fieldTokens = (match![1].match(/[a-z][a-z0-9]*(?:_[a-z0-9]+)+/g) ?? []);
+      expect(fieldTokens.length, `${mirror}/ux-variations should name at least one schema field`).toBeGreaterThan(0);
+      for (const token of fieldTokens) {
+        expect(
+          userFlowBranchProps.has(token),
+          `${mirror}/ux-variations selection key "${token}" must be a $defs.user_flow_branch property`,
+        ).toBe(true);
+      }
+    }
+  });
+
   it("keeps research progress manifests out of ordinary UX branch state", () => {
     for (const mirror of mirrors) {
       for (const skill of ["user-flow-map", "ux-variations", "ui-interview"] as const) {
@@ -392,7 +416,7 @@ describe("product-design flow tree artifact boundaries", () => {
         expect(content).toContain("Current phase complete:");
         expect(content).toContain("Next phase:");
         expect(content).toContain("the repeated command is intentional");
-        expect(content).toContain("fresh session recommended");
+        expect(content).toContain("continue in a fresh session");
         expect(content).toContain("Exact next command:");
       }
     }

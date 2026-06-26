@@ -135,7 +135,7 @@ npx skillpacks alignment verify
 
 Use direct `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs` commands from a source checkout. Use `npx skillpacks alignment pages ...` from npm-installed target repos. One-off `npx skillpacks ...` works when the network is available or the npm cache is warm; target repos that need reliable repeat or offline alignment workflows should add `skillpacks` as a devDependency or run a pinned command such as `npx skillpacks@<version> alignment pages audit`.
 
-`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `packs/exec-loop/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/init-agentic-skills` (guided pack setup), and Codex users can run `$init-agentic-skills`. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 

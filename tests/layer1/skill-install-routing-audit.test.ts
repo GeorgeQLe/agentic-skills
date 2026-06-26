@@ -23,7 +23,7 @@ describe("skill install routing audit", () => {
   it("keeps the P1 base routing inventory in the active scan", () => {
     const output = runAudit(["--report"]);
 
-    expect(output).toContain("P1 required coverage files: 14/14");
+    expect(output).toContain("P1 required coverage files: 12/12");
     expect(output).toContain("Active SKILL.md files scanned:");
     expect(output).toContain("Install-routing findings:");
   });

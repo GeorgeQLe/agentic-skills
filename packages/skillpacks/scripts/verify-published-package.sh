@@ -127,16 +127,16 @@ verify_metadata_with_retries() {
     metadata_json=""
     versions_json=""
 
-    if metadata_json=$(npm view "$PACKAGE_NAME" version license dist-tags.latest --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1) &&
-      versions_json=$(npm view "$PACKAGE_NAME" versions --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
-      if metadata_output=$(assert_metadata "$metadata_json" "$versions_json" 2>&1); then
-        printf '%s\n' "$metadata_output"
-        metadata_ok=1
-        break
-      fi
-      last_metadata_output=$metadata_output
+    if ! metadata_json=$(npm view "$PACKAGE_NAME" version license dist-tags.latest --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+      last_metadata_output="npm view metadata check failed for $PACKAGE_NAME: ${metadata_json}"
+    elif ! versions_json=$(npm view "$PACKAGE_NAME" versions --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+      last_metadata_output="npm view versions check failed for $PACKAGE_NAME: ${versions_json}"
+    elif metadata_output=$(assert_metadata "$metadata_json" "$versions_json" 2>&1); then
+      printf '%s\n' "$metadata_output"
+      metadata_ok=1
+      break
     else
-      last_metadata_output="npm view metadata check failed for $PACKAGE_NAME: ${metadata_json}${versions_json:+; $versions_json}"
+      last_metadata_output=$metadata_output
     fi
 
     if (( attempt < VERIFY_PUBLISHED_ATTEMPTS )); then

@@ -67,6 +67,7 @@ const approvedFrontmatterDrift = new Map([
   ["context-transfer/handoff::argument-hint", "Pre-existing platform argument-hint drift."],
   ["exec-loop/exec::argument-hint", "Codex supports --execute-approved approval packets."],
   ["exec-loop/exec::version", "Intentional split: Claude can open plan mode, while Codex cannot and keeps a separate execution contract."],
+  ["exec-loop/ship::version", "Codex gates the $brainstorm route (v0.9); Claude ship has no brainstorm route and stays v0.8."],
   ["guided-walkthrough/guide::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/affected::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/mono-plan::argument-hint", "Pre-existing platform argument-hint drift."],
@@ -234,10 +235,13 @@ function normalizePlatformSyntax(text) {
     .replace(/\r\n/g, "\n")
     .replace(/After install, tell Claude users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
     .replace(/After install, tell Codex users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
+    .replace(/[Tt]ell Claude users to [^.]*\./g, "tell users to refresh the active skill registry after install.")
+    .replace(/[Tt]ell Codex users to [^.]*\./g, "tell users to refresh the active skill registry after install.")
     .replace(/\$pack install/g, "/pack install")
     .replace(/\$([a-z][a-z0-9-]+)/g, "/$1")
     .replace(/\bCodex\b/g, "Agent")
     .replace(/\bClaude\b/g, "Agent")
+    .replace(/\.(?:claude|codex)\/skills/g, ".agent/skills")
     .replace(/[ \t]+$/gm, "")
     .trim();
 }

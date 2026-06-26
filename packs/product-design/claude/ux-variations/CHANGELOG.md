@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.30 - 2026-06-26
+
+- Corrected the `user_flow_branch` selection order to drop `activation_fit`, `first_value_fit`, and `evaluation_priority` — those fields exist only on `ux_variation_branch` nodes (the children this skill grows), not on the `user_flow_branch` node it selects, and `$defs.user_flow_branch` is `additionalProperties: false`. Order is now `explicit user override, journey_sequence, status, then stable array order`.
+
 ## v0.29 - 2026-06-24
 
 - Rewrote the Progress Handoff Block `Session guidance` field from a passive recommendation into an action directive: clear context (`/clear`) and run the exact next command in a fresh session, where the skill cold-starts and reads the durable cursor. Clarified that the `## Invoke With YAML` block is optional routing context, not consumed state.

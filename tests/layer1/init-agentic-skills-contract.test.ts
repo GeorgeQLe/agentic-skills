@@ -11,13 +11,11 @@ describe("init-agentic-skills project-local contract", () => {
   const contracts = [
     {
       skillPath: "base/codex/init-agentic-skills/SKILL.md",
-      packCommand: "$pack",
-      version: "v0.11",
+      version: "v0.12",
     },
     {
       skillPath: "base/claude/init-agentic-skills/SKILL.md",
-      packCommand: "/pack",
-      version: "v0.11",
+      version: "v0.12",
     },
   ];
 
@@ -55,7 +53,9 @@ describe("init-agentic-skills project-local contract", () => {
       expect(content, `${contract.skillPath} should keep packs local`).toContain(
         "Do not install `packs/*` as base skills",
       );
-      expect(content, `${contract.skillPath} should route pack setup`).toContain(contract.packCommand);
+      expect(content, `${contract.skillPath} should route pack setup through skillpacks install`).toContain(
+        "npx skillpacks install <pack-or-skill>",
+      );
     }
   });
 

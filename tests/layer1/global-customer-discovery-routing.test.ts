@@ -13,8 +13,6 @@ const activeBaseSkillPaths = [
   "base/claude/codebase-status/SKILL.md",
   "base/codex/skills/SKILL.md",
   "base/claude/skills/SKILL.md",
-  "base/codex/pack/SKILL.md",
-  "base/claude/pack/SKILL.md",
 ];
 
 function read(path: string) {
@@ -43,18 +41,12 @@ describe("base customer-discovery routing", () => {
     expect(read("base/claude/afps-status/SKILL.md")).toContain("/customer-discovery");
   });
 
-  it("keeps base inventory and pack examples aligned to the renamed skill", () => {
+  it("keeps base inventory aligned to the renamed skill", () => {
     expect(read("base/codex/skills/SKILL.md")).toContain(
       "| Discovery & Market Fit | `customer-discovery`, `enterprise-icp` |",
     );
     expect(read("base/claude/skills/SKILL.md")).toContain(
       "| Discovery & Market Fit | `customer-discovery` (business-discovery), `enterprise-icp` (business-discovery) |",
-    );
-    expect(read("base/codex/pack/SKILL.md")).toContain(
-      '"enabled_skills": {"customer-discovery": "business-discovery"',
-    );
-    expect(read("base/claude/pack/SKILL.md")).toContain(
-      '"enabled_skills": {"customer-discovery": "business-discovery"',
     );
   });
 

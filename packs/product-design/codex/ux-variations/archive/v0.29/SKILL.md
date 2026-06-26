@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.30
+version: v0.29
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
@@ -35,7 +35,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 - **Stage 3 — Plan**: the approved variation set is the branch-selection input for `$ui-interview`; `$user-flow-map --prototype-build-plan` creates the later prototype ledger only after approved UI experiment branches exist.
 - **Stage 4 — Implement (scoped)**: assemble the complete proposed variation plan for the alignment page, then after confirmed approval write the canonical variation specs and grow up to five `ux_variation` child branches on the modelled flow.
 
-**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next eligible modelled user-flow branch lacking `ux_variations`, runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`. Branch selection order: explicit user override, journey_sequence, status, then stable array order. Do not use raw first-pending array order as the default branch selector. A branch will not grow UX branches until its `model_ref` is confirmed. When an explicit user override changes branch order or branch choice, record the override and rationale in the flow-tree manifest before authoring.
+**Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next eligible modelled user-flow branch lacking `ux_variations`, runs the staged flow scoped to it, grows the child branches on approval, and stops with the handoff in `## Next Work`. Branch selection order: explicit user override, journey_sequence, activation_fit, first_value_fit, evaluation_priority, status, then stable array order. Do not use raw first-pending array order as the default branch selector. A branch will not grow UX branches until its `model_ref` is confirmed. When an explicit user override changes branch order or branch choice, record the override and rationale in the flow-tree manifest before authoring.
 
 **Modify-back.** A downstream `modify` decision can re-open this branch's `model_ref` or its parent user-flow branch via `targets[]`; when an upstream node re-opens, these UX variations are marked stale and re-authored once the upstream node is re-approved.
 

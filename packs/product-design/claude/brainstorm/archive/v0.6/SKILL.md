@@ -2,7 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /feature-interview
 type: planning
-version: v0.7
+version: v0.6
 required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional: focus area] [--dump] [--quick]"
 context_intake: scoped
@@ -136,6 +136,10 @@ Each idea — rendered on the page and in any dump — is grouped by effort leve
 ## Interrogation Page
 
 Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/brainstorm-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one** (the framework/scope alignment page) **until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/brainstorm-{topic}.html`.
 
 ## Quick Mode (--quick)
 

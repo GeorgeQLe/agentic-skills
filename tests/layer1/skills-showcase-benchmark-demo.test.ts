@@ -76,14 +76,14 @@ describe("skills showcase benchmark demos", () => {
 
   it("publishes benchmark-backed prompt and output excerpts when raw run artifacts contain them", () => {
     const data = loadShowcaseData();
-    const packSkill = data.skills.find((skill) => skill.name === "pack" && skill.platform === "codex");
+    const shipSkill = data.skills.find((skill) => skill.name === "ship" && skill.platform === "codex");
 
-    // pack now has raw run artifacts, so the regenerated showcase carries its
+    // ship has raw run artifacts, so the regenerated showcase carries its
     // benchmark-backed prompt/output demo.
-    expect(packSkill?.benchmarkEvidence?.demo).toBeDefined();
-    expect(packSkill?.benchmarkEvidence?.demo?.prompt).toBeTruthy();
-    expect(packSkill?.benchmarkEvidence?.demo?.output).toBeTruthy();
-    expect(packSkill?.benchmarkEvidence?.demo?.runPath).toContain("pack-codex");
+    expect(shipSkill?.benchmarkEvidence?.demo).toBeDefined();
+    expect(shipSkill?.benchmarkEvidence?.demo?.prompt).toBeTruthy();
+    expect(shipSkill?.benchmarkEvidence?.demo?.output).toBeTruthy();
+    expect(shipSkill?.benchmarkEvidence?.demo?.runPath).toContain("ship-codex");
   });
 });
 

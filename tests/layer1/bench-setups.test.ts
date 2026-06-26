@@ -1450,27 +1450,22 @@ describe("benchmark setup registry", () => {
       {
         path: "packs/session-analytics/claude/analyze-sessions/SKILL.md",
         route: "/targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>",
-        example: "/targeted-skill-builder` (skill-dev pack) `run post-doc-edit validation and lessons capture gate",
-        runner: "Claude-native",
       },
       {
         path: "packs/session-analytics/codex/analyze-sessions/SKILL.md",
         route: "$targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>",
-        example: "$targeted-skill-builder` (skill-dev pack) `run post-doc-edit validation and lessons capture gate",
-        runner: "Codex-native",
       },
     ];
 
     for (const contract of contracts) {
       const content = readFileSync(resolve(TESTS_ROOT, "..", contract.path), "utf8");
 
-      expect(content, `${contract.path} remediation section`).toContain("## Remediation-Ready Handoffs");
+      // analyze-sessions was re-chartered (commit 7135de111, "trim creep"): the
+      // remediation guidance now lives inline in the next-skill routing line
+      // rather than a `## Remediation-Ready Handoffs` section.
       expect(content, `${contract.path} concrete route`).toContain(contract.route);
-      expect(content, `${contract.path} example`).toContain(contract.example);
-      expect(content, `${contract.path} runner-native final route`).toContain(contract.runner);
       expect(content, `${contract.path} owner surface`).toContain("likely owner surface");
       expect(content, `${contract.path} validation expectation`).toContain("validation expectation");
-      expect(content, `${contract.path} attribution guard`).toContain("Distinguish explicit evidence from inference");
     }
   });
 
@@ -1808,8 +1803,8 @@ describe("benchmark setup registry", () => {
     const codexSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/codex/spec-interview/SKILL.md"), "utf8");
     const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/claude/spec-interview/SKILL.md"), "utf8");
 
-    expect(codexSkill).toContain("If unchecked post-prototype items remain, halt and recommend completing those first.");
-    expect(claudeSkill).toContain("If unchecked post-prototype items remain, halt and recommend completing those first.");
+    expect(codexSkill).toContain("If unchecked blocking post-prototype items remain, halt and recommend completing those first.");
+    expect(claudeSkill).toContain("If unchecked blocking post-prototype items remain, halt and recommend completing those first.");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "spec-interview-route-"));
     mkdirSync(resolve(workDir, "specs"), { recursive: true });
@@ -3116,7 +3111,6 @@ describe("benchmark coverage matrix", () => {
       "hygiene",
       "migrate",
       "mono-plan",
-      "pack",
       "provision-agentic-config",
       "reconcile-dev-docs",
       "regression-check",

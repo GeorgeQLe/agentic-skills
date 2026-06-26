@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-26
+
+- Removed the leftover generic `## Alignment Page` conditional trigger ("When this skill produces durable deliverables…"), which contradicted the now always-on alignment-page Process step (`### 4. Build the alignment page`).
+
 ## v0.6 - 2026-06-25
 
 - Added a `--quick` escape hatch that restores the legacy lightweight path: skip the stage-zero interrogation loop and the alignment page, run light terminal scoping (or skip when a focus area is supplied), output suggestions inline grouped by effort, and append directly to `tasks/ideas.md`. `--dump` is implied in quick mode.

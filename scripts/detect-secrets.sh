@@ -5,7 +5,19 @@
 set -euo pipefail
 
 command -v jq >/dev/null 2>&1 || { echo "Error: jq is required but not found in PATH" >&2; exit 1; }
-echo "x" | grep -P 'x' >/dev/null 2>&1 || { echo "Error: grep with -P (PCRE) support is required but not available" >&2; exit 1; }
+
+# Select a PCRE matching engine. GNU grep -P is preferred; fall back to ripgrep
+# or perl so the gate runs on macOS/darwin where BSD grep lacks -P.
+if echo "x" | grep -P 'x' >/dev/null 2>&1; then
+  pcre_match() { printf '%s' "$2" | grep -qP "$1"; }
+elif command -v rg >/dev/null 2>&1; then
+  pcre_match() { printf '%s' "$2" | rg -q "$1"; }
+elif command -v perl >/dev/null 2>&1; then
+  pcre_match() { PCRE_PATTERN="$1" perl -e 'my $p=$ENV{PCRE_PATTERN}; while (my $l=<STDIN>) { exit 0 if $l=~/$p/ } exit 1' <<<"$2"; }
+else
+  echo "Error: a PCRE matcher (grep -P, ripgrep, or perl) is required but none is available" >&2
+  exit 1
+fi
 
 INPUT=$(cat)
 
@@ -36,30 +48,30 @@ block() {
 }
 
 # Anthropic API keys
-echo "$TEXT" | grep -qP 'sk-ant-[a-zA-Z0-9_-]{20,}' && block "Anthropic API key"
+pcre_match 'sk-ant-[a-zA-Z0-9_-]{20,}' "$TEXT" && block "Anthropic API key"
 
 # OpenAI API keys
-echo "$TEXT" | grep -qP 'sk-[a-zA-Z0-9]{20,}' && block "OpenAI API key"
+pcre_match 'sk-[a-zA-Z0-9]{20,}' "$TEXT" && block "OpenAI API key"
 
 # AWS access keys
-echo "$TEXT" | grep -qP 'AKIA[0-9A-Z]{16}' && block "AWS access key"
+pcre_match 'AKIA[0-9A-Z]{16}' "$TEXT" && block "AWS access key"
 
 # GitHub tokens
-echo "$TEXT" | grep -qP '(ghp_[a-zA-Z0-9]{36}|ghs_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9_]{22,})' && block "GitHub token"
+pcre_match '(ghp_[a-zA-Z0-9]{36}|ghs_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9_]{22,})' "$TEXT" && block "GitHub token"
 
 # Slack tokens
-echo "$TEXT" | grep -qP 'xox[bpoa]-[a-zA-Z0-9-]+' && block "Slack token"
+pcre_match 'xox[bpoa]-[a-zA-Z0-9-]+' "$TEXT" && block "Slack token"
 
 # Stripe keys
-echo "$TEXT" | grep -qP '[sr]k_(live|test)_[a-zA-Z0-9]{20,}' && block "Stripe key"
+pcre_match '[sr]k_(live|test)_[a-zA-Z0-9]{20,}' "$TEXT" && block "Stripe key"
 
 # Database connection strings with credentials (user:pass@host pattern)
-echo "$TEXT" | grep -qP '(postgres|mysql|mongodb|redis)://[^:]+:[^@]+@' && block "database connection string"
+pcre_match '(postgres|mysql|mongodb|redis)://[^:]+:[^@]+@' "$TEXT" && block "database connection string"
 
 # Private keys
-echo "$TEXT" | grep -qP '\-{5}BEGIN[[:space:]]+(RSA |EC |DSA |OPENSSH )?PRIVATE KEY\-{5}' && block "private key"
+pcre_match '\-{5}BEGIN[[:space:]]+(RSA |EC |DSA |OPENSSH )?PRIVATE KEY\-{5}' "$TEXT" && block "private key"
 
 # JWT tokens (three base64 segments separated by dots)
-echo "$TEXT" | grep -qP 'eyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]+' && block "JWT token"
+pcre_match 'eyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]+' "$TEXT" && block "JWT token"
 
 exit 0
