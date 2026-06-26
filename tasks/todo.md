@@ -5,7 +5,7 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Final-Handoff Self-Check And Guard.
+Last completed task: Interrogation page resume-time self-heal + `/upgrade-interrogation-pages` batch skill.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
