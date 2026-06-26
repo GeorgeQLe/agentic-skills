@@ -11,8 +11,10 @@ import {
   gitFiles,
   listSkills,
   packManifestPaths,
+  parseFrontmatter,
   parsePack,
   prefetchIndex,
+  readTextFromIndex,
   unique
 } from "../../../scripts/catalog/index.mjs";
 
@@ -201,6 +203,17 @@ function skillContentHash(skillPath) {
   return contentHash(repoRoot, skillPath, MANIFEST_SOURCE);
 }
 
+// Read deprecation metadata straight from the staged SKILL.md frontmatter so it
+// rides on the manifest without leaking into the shared parseSkill() output
+// (which the skills-showcase generator spreads verbatim).
+function skillDeprecation(skillPath) {
+  const fields = parseFrontmatter(readTextFromIndex(repoRoot, skillPath));
+  return {
+    deprecated: fields.deprecated === "true" || fields.deprecated === true,
+    replaced_by: fields.replaced_by || null
+  };
+}
+
 function packMetadataByName(files) {
   return new Map(
     packManifestPaths(files).map((packPath) => {
@@ -302,6 +315,7 @@ function buildSkills(skills, files) {
         pack: skill.pack,
         platform: skill.platform,
         version: skill.version,
+        ...skillDeprecation(skill.path),
         required_conventions: skill.requiredConventions,
         path: skill.path,
         installable: isInstallableSkill(skill),

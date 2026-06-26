@@ -8,7 +8,7 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
-## [0.1.12] - 2026-06-24
+## [0.1.12] - 2026-06-26
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
 
@@ -16,13 +16,21 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Added
 
-- Added the product-design `create-ui-experiment` skill for clickable UI experiment routes, with bundled alignment and design-tree guidance.
+- Added the product-design `key-moments` skill — a proof-priority ranking trunk that orders flows, gates variation breadth, and promotes/prunes branches by writing the existing flow-tree ordering fields.
+- Added the product-design `build-ui-screens` skill — a visual UI screen builder that runs an ordered element-batch loop with a per-batch visual checkpoint, honors a minimum-UI stop, and records each batch to `build_ledger[]`.
+- Added the product-design `logic-wiring` skill — wires the built screens to be clickable and state-backed.
+- Extended the flow-tree schema to v0.4: `build_ledger[]` (plus `build_ledger_status`), `cherry_pick_candidate`, per-screen `model_ref`, and the `parked` status.
+- Added deprecated compatibility aliases `prototype` → `logic-wiring` and `create-ui-experiment` → `build-ui-screens`. They remain installable for one transition period and are now marked in `dist/skillpacks-manifest.json` with `deprecated` / `replaced_by` metadata (every manifest skill entry now carries uniform `deprecated`/`replaced_by` fields, `false`/`null` for live skills).
+- Added the social-ledger / public-archive system and social channel conventions, bundled as new published `assets/`.
 - Added deterministic design-tree branch-order metadata, sample coverage, and flow-tree contract tests for user-flow and UX-variation branch selection.
 - Added published-package stale-metadata retry coverage so release verification proves bounded npm registry propagation handling.
 
 ### Changed
 
-- Product-design bundled skills now route UI work through a clearer tree: `user-flow-map` orders branches by journey, `ux-variations` resolves child branches deterministically, `ui-interview` remains non-buildout by default, and clickable route experiments hand off to `create-ui-experiment`.
+- Re-cut the product-design build leaf into `build-ui-screens` → `logic-wiring`, and routed the step-4 design-tree token `prototype` → `logic-wiring` while keeping the fixed 6-step tuple. ("prototype" is retained as artifact/phase vocabulary.) Related skill bumps: `state-model` v0.9 (JIT-per-promoted-flow model build plus fast-pass fold), `ui-interview` v0.28 (authors a per-screen batch plan), and `consolidate-prototypes` v0.18 (two-stage stitch and converge).
+- Reassigned the `roadmap` skill out of agent-work-admin, and removed the agent-facing `pack` skill.
+- `brainstorm` now defaults to an HTML interrogation→alignment idea-hub (with a `--quick` legacy path); interrogation pages gained recommended-answer and agent-confidence markers; added a build-in-public alignment mode.
+- Product-design bundled skills route UI work through a clearer tree: `user-flow-map` orders branches by journey, `ux-variations` resolves child branches deterministically, and `ui-interview` remains non-buildout by default.
 - Design-tree loop bundles now make clear-and-continue session handoffs actionable and include a one-time single-session tradeoff note.
 - Alignment-page bundles now explicitly route review, section feedback YAML, and final approval YAML back to the producing skill context.
 - Interrogation-page bundles now clarify when open-answer claims are validated during compiled-answer consumption versus deferred to downstream research.
@@ -37,8 +45,8 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Verification
 
-- Publish-prep verification passed in source from a clean tree: `build:check` (390 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 127/127 including the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3615 files staged at `0.1.11`).
-- Release-readiness revalidation for the final `v0.1.11..HEAD` boundary was run on 2026-06-24; see `tasks/ship-manifest-2026-06-24-prepare-0-1-12.md`.
+- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 131/131 including the new manifest deprecation-metadata test and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
+- This `[0.1.12]` section reconciles the full `v0.1.11..HEAD` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4) and the social-ledger / public-archive system.
 - The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
 
 ## [0.1.11] - 2026-06-23

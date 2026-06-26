@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.11"
   },
-  "source_fingerprint": "f0299df006d27d4f636269a08681f606f31ce170565a9900f233994403557220",
+  "source_fingerprint": "7b52900a4357ed99061c9e015445541c488bf33500fb48592a610c911ba46849",
   "packs": [
     {
       "name": "agent-bridge",
@@ -790,6 +790,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -817,6 +819,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -836,6 +840,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/claude/autoresearch-prep/SKILL.md",
       "installable": true,
@@ -851,6 +857,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/claude/autoresearch/SKILL.md",
       "installable": true,
@@ -866,6 +874,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/claude/codebase-status/SKILL.md",
       "installable": true,
@@ -893,6 +903,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -913,6 +925,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -932,6 +946,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -969,6 +985,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/claude/init-agentic-skills/SKILL.md",
       "installable": true,
@@ -997,6 +1015,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.13",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1028,6 +1048,8 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/claude/skills/SKILL.md",
       "installable": true,
@@ -1053,6 +1075,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1080,6 +1104,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1099,6 +1125,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/codex/codebase-status/SKILL.md",
       "installable": true,
@@ -1126,6 +1154,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1146,6 +1176,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -1183,6 +1215,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/codex/init-agentic-skills/SKILL.md",
       "installable": true,
@@ -1211,6 +1245,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.13",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1242,6 +1278,8 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "base/codex/skills/SKILL.md",
       "installable": true,
@@ -1267,6 +1305,8 @@
       "pack": "agent-bridge",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1286,6 +1326,8 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1309,6 +1351,8 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.13",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1340,6 +1384,8 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/agent-work-admin/claude/spec-drift/SKILL.md",
       "installable": true,
@@ -1359,6 +1405,8 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1382,6 +1430,8 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.13",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1413,6 +1463,8 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/agent-work-admin/codex/spec-drift/SKILL.md",
       "installable": true,
@@ -1432,6 +1484,8 @@
       "pack": "agentic-skills-bench",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1452,6 +1506,8 @@
       "pack": "agentic-skills-bench",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1473,6 +1529,8 @@
       "pack": "agentic-skills-bench",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1493,6 +1551,8 @@
       "pack": "agentic-skills-bench",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1514,6 +1574,8 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-loop/claude/destination-doc/SKILL.md",
       "installable": true,
@@ -1529,6 +1591,8 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-loop/claude/taste-calibration/SKILL.md",
       "installable": true,
@@ -1544,6 +1608,8 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1564,6 +1630,8 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-loop/codex/destination-doc/SKILL.md",
       "installable": true,
@@ -1579,6 +1647,8 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-loop/codex/taste-calibration/SKILL.md",
       "installable": true,
@@ -1594,6 +1664,8 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1614,6 +1686,8 @@
       "pack": "alignment-page-admin",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-page-admin/claude/compile-central-alignment/SKILL.md",
       "installable": true,
@@ -1633,6 +1707,8 @@
       "pack": "alignment-page-admin",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-page-admin/claude/upgrade-alignment-pages/SKILL.md",
       "installable": true,
@@ -1652,6 +1728,8 @@
       "pack": "alignment-page-admin",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-page-admin/codex/compile-central-alignment/SKILL.md",
       "installable": true,
@@ -1671,6 +1749,8 @@
       "pack": "alignment-page-admin",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/alignment-page-admin/codex/upgrade-alignment-pages/SKILL.md",
       "installable": true,
@@ -1690,6 +1770,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1717,6 +1799,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1746,6 +1830,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1778,6 +1864,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1807,6 +1895,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1836,6 +1926,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1861,6 +1953,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1893,6 +1987,8 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1923,6 +2019,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1950,6 +2048,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -1979,6 +2079,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2011,6 +2113,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2040,6 +2144,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2069,6 +2175,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2094,6 +2202,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2126,6 +2236,8 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2156,6 +2268,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2178,6 +2292,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2203,6 +2319,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2227,6 +2345,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2251,6 +2371,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2281,6 +2403,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2312,6 +2436,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2338,6 +2464,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2368,6 +2496,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2392,6 +2522,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2417,6 +2549,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2441,6 +2575,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2465,6 +2601,8 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2490,6 +2628,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2512,6 +2652,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2537,6 +2679,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2561,6 +2705,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2585,6 +2731,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2615,6 +2763,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2646,6 +2796,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2672,6 +2824,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2702,6 +2856,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2726,6 +2882,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2751,6 +2909,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2775,6 +2935,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2799,6 +2961,8 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2824,6 +2988,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2853,6 +3019,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2882,6 +3050,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2911,6 +3081,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2940,6 +3112,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.27",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -2987,6 +3161,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3016,6 +3192,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3045,6 +3223,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3074,6 +3254,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3103,6 +3285,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3132,6 +3316,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3161,6 +3347,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v1.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -3212,6 +3400,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3241,6 +3431,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3271,6 +3463,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3302,6 +3496,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3334,6 +3530,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3366,6 +3564,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3398,6 +3598,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3430,6 +3632,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3462,6 +3666,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.26",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -3509,6 +3715,8 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3540,6 +3748,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3569,6 +3779,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3598,6 +3810,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3627,6 +3841,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3656,6 +3872,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.27",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3703,6 +3921,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3732,6 +3952,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3761,6 +3983,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3790,6 +4014,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3819,6 +4045,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3848,6 +4076,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3877,6 +4107,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v1.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -3928,6 +4160,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3957,6 +4191,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -3987,6 +4223,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4018,6 +4256,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4050,6 +4290,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4082,6 +4324,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4114,6 +4358,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4146,6 +4392,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4178,6 +4426,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.26",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -4225,6 +4475,8 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4256,6 +4508,8 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/claude/debug/SKILL.md",
       "installable": true,
@@ -4275,6 +4529,8 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/claude/investigate/SKILL.md",
       "installable": true,
@@ -4293,6 +4549,8 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/claude/trace/SKILL.md",
       "installable": true,
@@ -4310,6 +4568,8 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/codex/debug/SKILL.md",
       "installable": true,
@@ -4329,6 +4589,8 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/codex/investigate/SKILL.md",
       "installable": true,
@@ -4347,6 +4609,8 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-debug/codex/trace/SKILL.md",
       "installable": true,
@@ -4364,6 +4628,8 @@
       "pack": "code-maintenance",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4383,6 +4649,8 @@
       "pack": "code-maintenance",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-maintenance/claude/update-packages/SKILL.md",
       "installable": true,
@@ -4400,6 +4668,8 @@
       "pack": "code-maintenance",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4419,6 +4689,8 @@
       "pack": "code-maintenance",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-maintenance/codex/update-packages/SKILL.md",
       "installable": true,
@@ -4436,6 +4708,8 @@
       "pack": "code-quality",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4455,6 +4729,8 @@
       "pack": "code-quality",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4474,6 +4750,8 @@
       "pack": "code-quality",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4493,6 +4771,8 @@
       "pack": "code-quality",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4512,6 +4792,8 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4531,6 +4813,8 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4550,6 +4834,8 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4569,6 +4855,8 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4588,6 +4876,8 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4607,6 +4897,8 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4626,6 +4918,8 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4645,6 +4939,8 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4664,6 +4960,8 @@
       "pack": "context-transfer",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4684,6 +4982,8 @@
       "pack": "context-transfer",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4704,6 +5004,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4727,6 +5029,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4752,6 +5056,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4777,6 +5083,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4802,6 +5110,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4827,6 +5137,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4850,6 +5162,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4873,6 +5187,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4892,6 +5208,8 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4912,6 +5230,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4935,6 +5255,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4960,6 +5282,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -4985,6 +5309,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5010,6 +5336,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5035,6 +5363,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5058,6 +5388,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5081,6 +5413,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5100,6 +5434,8 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5120,6 +5456,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5145,6 +5483,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5170,6 +5510,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5199,6 +5541,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5228,6 +5572,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5257,6 +5603,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5286,6 +5634,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5315,6 +5665,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.25",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5360,6 +5712,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5385,6 +5739,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5410,6 +5766,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5435,6 +5793,8 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5460,6 +5820,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5485,6 +5847,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5510,6 +5874,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5539,6 +5905,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5568,6 +5936,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5597,6 +5967,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5626,6 +5998,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5655,6 +6029,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.25",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5700,6 +6076,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5725,6 +6103,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5750,6 +6130,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5775,6 +6157,8 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5800,6 +6184,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5828,6 +6214,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5850,6 +6238,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5874,6 +6264,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5898,6 +6290,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5926,6 +6320,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5954,6 +6350,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -5982,6 +6380,8 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6005,6 +6405,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6033,6 +6435,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6055,6 +6459,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6079,6 +6485,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6103,6 +6511,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6131,6 +6541,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6159,6 +6571,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6187,6 +6601,8 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6210,6 +6626,8 @@
       "pack": "docs-health",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/docs-health/claude/hygiene/SKILL.md",
       "installable": true,
@@ -6225,6 +6643,8 @@
       "pack": "docs-health",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6246,6 +6666,8 @@
       "pack": "docs-health",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/docs-health/codex/hygiene/SKILL.md",
       "installable": true,
@@ -6261,6 +6683,8 @@
       "pack": "docs-health",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6282,6 +6706,8 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/exec/SKILL.md",
       "installable": true,
@@ -6303,6 +6729,8 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
       "installable": true,
@@ -6325,6 +6753,8 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.8",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship/SKILL.md",
       "installable": true,
@@ -6349,6 +6779,8 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/exec/SKILL.md",
       "installable": true,
@@ -6369,6 +6801,8 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/ship-end/SKILL.md",
       "installable": true,
@@ -6391,6 +6825,8 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/ship/SKILL.md",
       "installable": true,
@@ -6416,6 +6852,8 @@
       "pack": "exec-profile",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-profile/claude/patch-exec-profile/SKILL.md",
       "installable": true,
@@ -6431,6 +6869,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6456,6 +6896,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6481,6 +6923,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6503,6 +6947,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6528,6 +6974,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6553,6 +7001,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6578,6 +7028,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6600,6 +7052,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6622,6 +7076,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6646,6 +7102,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6671,6 +7129,8 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6694,6 +7154,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6719,6 +7181,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6744,6 +7208,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6766,6 +7232,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6791,6 +7259,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6816,6 +7286,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6841,6 +7313,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6863,6 +7337,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6885,6 +7361,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6909,6 +7387,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6934,6 +7414,8 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -6957,6 +7439,8 @@
       "pack": "gitops",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/claude/commit-and-push-by-feature/SKILL.md",
       "installable": true,
@@ -6974,6 +7458,8 @@
       "pack": "gitops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/claude/sync/SKILL.md",
       "installable": true,
@@ -6996,6 +7482,8 @@
       "pack": "gitops",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/codex/commit-and-push-by-feature/SKILL.md",
       "installable": true,
@@ -7013,6 +7501,8 @@
       "pack": "gitops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/codex/sync/SKILL.md",
       "installable": true,
@@ -7035,6 +7525,8 @@
       "pack": "guided-walkthrough",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/guided-walkthrough/claude/guide/SKILL.md",
       "installable": true,
@@ -7052,6 +7544,8 @@
       "pack": "guided-walkthrough",
       "platform": "claude",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7075,6 +7569,8 @@
       "pack": "guided-walkthrough",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/guided-walkthrough/codex/guide/SKILL.md",
       "installable": true,
@@ -7092,6 +7588,8 @@
       "pack": "guided-walkthrough",
       "platform": "codex",
       "version": "v0.5",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7115,6 +7613,8 @@
       "pack": "knowledge-check",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/knowledge-check/claude/quiz-me/SKILL.md",
       "installable": true,
@@ -7130,6 +7630,8 @@
       "pack": "knowledge-check",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/knowledge-check/codex/quiz-me/SKILL.md",
       "installable": true,
@@ -7145,6 +7647,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/affected/SKILL.md",
       "installable": true,
@@ -7162,6 +7666,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/mono-detect/SKILL.md",
       "installable": true,
@@ -7179,6 +7685,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/mono-exec/SKILL.md",
       "installable": true,
@@ -7196,6 +7704,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/mono-guard/SKILL.md",
       "installable": true,
@@ -7213,6 +7723,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7233,6 +7745,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/mono-ship/SKILL.md",
       "installable": true,
@@ -7248,6 +7762,8 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/claude/scaffold/SKILL.md",
       "installable": true,
@@ -7267,6 +7783,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/affected/SKILL.md",
       "installable": true,
@@ -7284,6 +7802,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/mono-detect/SKILL.md",
       "installable": true,
@@ -7301,6 +7821,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/mono-exec/SKILL.md",
       "installable": true,
@@ -7318,6 +7840,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/mono-guard/SKILL.md",
       "installable": true,
@@ -7335,6 +7859,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7355,6 +7881,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/mono-ship/SKILL.md",
       "installable": true,
@@ -7370,6 +7898,8 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/monorepo/codex/scaffold/SKILL.md",
       "installable": true,
@@ -7389,6 +7919,8 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7411,6 +7943,8 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7433,6 +7967,8 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/claude/ord-ship/SKILL.md",
       "installable": true,
@@ -7454,6 +7990,8 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/claude/ord-traction/SKILL.md",
       "installable": true,
@@ -7471,6 +8009,8 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7493,6 +8033,8 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7515,6 +8057,8 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/codex/ord-ship/SKILL.md",
       "installable": true,
@@ -7536,6 +8080,8 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/codex/ord-traction/SKILL.md",
       "installable": true,
@@ -7553,6 +8099,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -7579,6 +8127,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -7600,6 +8150,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7638,6 +8190,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "consolidate-prototypes",
       "required_conventions": [],
       "path": "packs/product-design/claude/consolidate-variations/SKILL.md",
       "installable": true,
@@ -7653,6 +8207,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "build-ui-screens",
       "required_conventions": [],
       "path": "packs/product-design/claude/create-ui-experiment/SKILL.md",
       "installable": true,
@@ -7668,6 +8224,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -7690,6 +8248,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7712,6 +8272,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -7737,6 +8299,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -7755,6 +8319,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.20",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -7794,6 +8360,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "logic-wiring",
       "required_conventions": [],
       "path": "packs/product-design/claude/prototype/SKILL.md",
       "installable": true,
@@ -7809,6 +8377,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.17",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7846,6 +8416,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7875,6 +8447,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.28",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7923,6 +8497,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v1.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -7959,6 +8535,8 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.30",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8009,6 +8587,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "interrogation-page"
@@ -8035,6 +8615,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8056,6 +8638,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.18",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8094,6 +8678,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "consolidate-prototypes",
       "required_conventions": [],
       "path": "packs/product-design/codex/consolidate-variations/SKILL.md",
       "installable": true,
@@ -8109,6 +8695,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "build-ui-screens",
       "required_conventions": [],
       "path": "packs/product-design/codex/create-ui-experiment/SKILL.md",
       "installable": true,
@@ -8124,6 +8712,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8146,6 +8736,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8168,6 +8760,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8193,6 +8787,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8211,6 +8807,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.20",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8250,6 +8848,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": true,
+      "replaced_by": "logic-wiring",
       "required_conventions": [],
       "path": "packs/product-design/codex/prototype/SKILL.md",
       "installable": true,
@@ -8265,6 +8865,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.17",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8302,6 +8904,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.9",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8331,6 +8935,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.28",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8379,6 +8985,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v1.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8415,6 +9023,8 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.30",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8465,6 +9075,8 @@
       "pack": "product-testing",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8487,6 +9099,8 @@
       "pack": "product-testing",
       "platform": "claude",
       "version": "v0.14",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8520,6 +9134,8 @@
       "pack": "product-testing",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8542,6 +9158,8 @@
       "pack": "product-testing",
       "platform": "codex",
       "version": "v0.14",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8575,6 +9193,8 @@
       "pack": "project-fleet",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8594,6 +9214,8 @@
       "pack": "project-fleet",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8613,6 +9235,8 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8632,6 +9256,8 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8651,6 +9277,8 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8670,6 +9298,8 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8689,6 +9319,8 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/project-fleet/codex/spinoff-idea/SKILL.md",
       "installable": true,
@@ -8704,6 +9336,8 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8724,6 +9358,8 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/release-ops/claude/deploy/SKILL.md",
       "installable": true,
@@ -8739,6 +9375,8 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8759,6 +9397,8 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8779,6 +9419,8 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/release-ops/codex/deploy/SKILL.md",
       "installable": true,
@@ -8794,6 +9436,8 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8814,6 +9458,8 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8834,6 +9480,8 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8854,6 +9502,8 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8878,6 +9528,8 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8898,6 +9550,8 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8918,6 +9572,8 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -8942,6 +9598,8 @@
       "pack": "repo-maintenance",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/repo-maintenance/claude/bootstrap-repo/SKILL.md",
       "installable": true,
@@ -8964,6 +9622,8 @@
       "pack": "repo-maintenance",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/repo-maintenance/claude/env-setup/SKILL.md",
       "installable": true,
@@ -8979,6 +9639,8 @@
       "pack": "repo-maintenance",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/repo-maintenance/codex/bootstrap-repo/SKILL.md",
       "installable": true,
@@ -9001,6 +9663,8 @@
       "pack": "repo-maintenance",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/repo-maintenance/codex/env-setup/SKILL.md",
       "installable": true,
@@ -9016,6 +9680,8 @@
       "pack": "report-gen",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9035,6 +9701,8 @@
       "pack": "report-gen",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9054,6 +9722,8 @@
       "pack": "research-admin",
       "platform": "claude",
       "version": "v0.19",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9091,6 +9761,8 @@
       "pack": "research-admin",
       "platform": "codex",
       "version": "v0.19",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9128,6 +9800,8 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9153,6 +9827,8 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9173,6 +9849,8 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
       "installable": true,
@@ -9195,6 +9873,8 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.7",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9220,6 +9900,8 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9240,6 +9922,8 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
@@ -9262,6 +9946,8 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/claude/create-agentic-skill/SKILL.md",
       "installable": true,
@@ -9281,6 +9967,8 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/claude/create-local-skill/SKILL.md",
       "installable": true,
@@ -9299,6 +9987,8 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9319,6 +10009,8 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9341,6 +10033,8 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/codex/create-agentic-skill/SKILL.md",
       "installable": true,
@@ -9360,6 +10054,8 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/codex/create-local-skill/SKILL.md",
       "installable": true,
@@ -9378,6 +10074,8 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9398,6 +10096,8 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9420,6 +10120,8 @@
       "pack": "teardown",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9439,6 +10141,8 @@
       "pack": "teardown",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9463,6 +10167,8 @@
       "pack": "teardown",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9482,6 +10188,8 @@
       "pack": "teardown",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9506,6 +10214,8 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-align/SKILL.md",
       "installable": true,
@@ -9523,6 +10233,8 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9545,6 +10257,8 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-ship/SKILL.md",
       "installable": true,
@@ -9562,6 +10276,8 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-traction/SKILL.md",
       "installable": true,
@@ -9579,6 +10295,8 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-align/SKILL.md",
       "installable": true,
@@ -9596,6 +10314,8 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.2",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9618,6 +10338,8 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-ship/SKILL.md",
       "installable": true,
@@ -9635,6 +10357,8 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-traction/SKILL.md",
       "installable": true,
@@ -9652,6 +10376,8 @@
       "pack": "website-polish",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9671,6 +10397,8 @@
       "pack": "website-polish",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9690,6 +10418,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9714,6 +10444,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9738,6 +10470,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9762,6 +10496,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9786,6 +10522,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9810,6 +10548,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9829,6 +10569,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9853,6 +10595,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9877,6 +10621,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9901,6 +10647,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9925,6 +10673,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9949,6 +10699,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9973,6 +10725,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -9997,6 +10751,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10018,6 +10774,8 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
       "installable": true,
@@ -10037,6 +10795,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10061,6 +10821,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10085,6 +10847,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10109,6 +10873,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10133,6 +10899,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10157,6 +10925,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10176,6 +10946,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10200,6 +10972,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10224,6 +10998,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10248,6 +11024,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10272,6 +11050,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10296,6 +11076,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10320,6 +11102,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10344,6 +11128,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [
         "alignment-page"
       ],
@@ -10365,6 +11151,8 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.3",
+      "deprecated": false,
+      "replaced_by": null,
       "required_conventions": [],
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
       "installable": true,

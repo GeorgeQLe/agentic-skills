@@ -60,6 +60,19 @@ describe('skillpacks manifest deck metadata', () => {
     );
   });
 
+  it('captures deprecation metadata for compatibility aliases', () => {
+    const prototype = skillByPath('packs/product-design/claude/prototype/SKILL.md');
+    const logicWiring = skillByPath('packs/product-design/claude/logic-wiring/SKILL.md');
+
+    assert.ok(prototype, 'prototype alias skill should exist');
+    assert.equal(prototype.deprecated, true);
+    assert.equal(prototype.replaced_by, 'logic-wiring');
+
+    assert.ok(logicWiring, 'logic-wiring primary skill should exist');
+    assert.equal(logicWiring.deprecated, false);
+    assert.equal(logicWiring.replaced_by, null);
+  });
+
   it('exposes required convention metadata for bundled skills', () => {
     const ideaScope = skillByPath('base/codex/idea-scope-brief/SKILL.md');
     const userFlowMap = skillByPath('packs/product-design/codex/user-flow-map/SKILL.md');
