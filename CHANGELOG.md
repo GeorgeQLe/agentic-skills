@@ -43,10 +43,11 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 - `skillpacks refresh --all --dry-run` now prints final unsafe reasons when its summary says `Safe to run: no`, including legacy user-home installs and dry-run planning failures.
 - `skillpacks uninstall-global --dry-run` now previews legacy global cleanup, and `skillpacks uninstall-global --reinstall-base --dry-run` previews project-local base-skill migration without mutating global skills or project files.
 - Product-design `state-model` contracts now use the correct `model_tree_ref` / `state_tree_path` references consistently.
+- `skillpacks install` / `remove` now append a `Did you mean: …?` suggestion to the unknown pack/skill error, ranking the closest pack and installable-skill names by substring match and a small edit-distance pass so single-character typos and transpositions are caught. Install stays suggest-only (never auto-installs a guess); remove keeps its existing single-match auto-resolve.
 
 ### Verification
 
-- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 137/137 including the new manifest deprecation-metadata test, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
+- Publish-prep verification passed in source from a clean tree: `build:check` (394 skills, 41 packs, manifest byte-in-sync, staging boundary OK), `test:node` 142/142 including the new manifest deprecation-metadata test, the install/remove `Did you mean` suggestion tests, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green.
 - This `[0.1.12]` section reconciles the full `v0.1.11..HEAD` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4) and the social-ledger / public-archive system.
 - The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
 

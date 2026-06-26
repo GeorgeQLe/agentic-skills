@@ -436,6 +436,61 @@ function fuzzyMatchError(token, matches) {
   return new Error(`Ambiguous skill name '${token}'. Did you mean:\n${lines}`);
 }
 
+function editDistance(a, b) {
+  if (a === b) return 0;
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  let curr = new Array(b.length + 1);
+
+  for (let i = 1; i <= a.length; i += 1) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+    }
+    [prev, curr] = [curr, prev];
+  }
+
+  return prev[b.length];
+}
+
+function suggestNames(token, manifest) {
+  const candidates = [
+    ...new Set([...activePackNames(manifest), ...skillInstallSourceMap(manifest).keys()])
+  ];
+
+  const maxDistance = token.length <= 4 ? 1 : 2;
+  const scored = [];
+
+  for (const candidate of candidates) {
+    if (candidate === token) continue;
+
+    let substring = false;
+    if (
+      candidate.endsWith(`-${token}`) ||
+      candidate.startsWith(`${token}-`) ||
+      candidate.includes(token)
+    ) {
+      substring = true;
+    }
+
+    const distance = editDistance(token, candidate);
+    if (!substring && distance > maxDistance) continue;
+
+    scored.push({ candidate, substring, distance });
+  }
+
+  scored.sort((a, b) => {
+    if (a.substring !== b.substring) return a.substring ? -1 : 1;
+    if (a.distance !== b.distance) return a.distance - b.distance;
+    return a.candidate.localeCompare(b.candidate);
+  });
+
+  return scored.slice(0, 3).map((entry) => entry.candidate);
+}
+
 function enabledSkillPackMap(projectRoot) {
   const config = readProjectConfig(projectRoot);
   if (!config?.enabled_skills || typeof config.enabled_skills !== 'object') {
@@ -449,7 +504,9 @@ function allPacksExist(packs, activePacks) {
 }
 
 function unknownNameError(token, manifest) {
-  return new Error(`Unknown pack or skill '${token}'. Available packs: ${availablePacksInline(manifest)}\nRun 'npx skillpacks list' to see all available skills.`);
+  const suggestions = suggestNames(token, manifest);
+  const didYouMean = suggestions.length ? `\nDid you mean: ${suggestions.join(', ')}?` : '';
+  return new Error(`Unknown pack or skill '${token}'.${didYouMean} Available packs: ${availablePacksInline(manifest)}\nRun 'npx skillpacks list' to see all available skills.`);
 }
 
 function hibernatedPackError(requested, pack) {

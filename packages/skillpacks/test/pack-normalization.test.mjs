@@ -186,6 +186,46 @@ describe('pack command argument resolution', () => {
     );
   });
 
+  it('suggests the closest skill name on a mistyped install token', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['logic-wirng'], { manifest }),
+      /Unknown pack or skill 'logic-wirng'\.[\s\S]*Did you mean: .*logic-wiring/
+    );
+  });
+
+  it('suggests the closest pack name on a mistyped install token', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['code-quallity'], { manifest }),
+      /Did you mean: .*code-quality/
+    );
+  });
+
+  it('keeps the available-packs list and list hint alongside suggestions', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['logic-wirng'], { manifest }),
+      /Did you mean: .*logic-wiring[\s\S]*Available packs:[\s\S]*npx skillpacks list/
+    );
+  });
+
+  it('omits the did-you-mean line when nothing is close enough', () => {
+    assert.throws(
+      () => resolvePackCommandArgs('install', ['zzzzzzzz'], { manifest }),
+      (error) => {
+        assert.match(error.message, /Unknown pack or skill 'zzzzzzzz'\./);
+        assert.doesNotMatch(error.message, /Did you mean/);
+        return true;
+      }
+    );
+  });
+
+  it('surfaces suggestions on a mistyped remove token too', () => {
+    const dir = makeTempProject();
+    assert.throws(
+      () => resolvePackCommandArgs('remove', ['logic-wirng'], { manifest, projectRoot: dir }),
+      /Did you mean: .*logic-wiring/
+    );
+  });
+
   it('blocks hibernated pack and skill installs with PoketoWork safety language', () => {
     assert.throws(
       () => resolvePackCommandArgs('install', ['dev-kanban'], { manifest }),
