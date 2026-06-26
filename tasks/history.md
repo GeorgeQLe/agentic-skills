@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-26 — Reconcile 0.1.12 CHANGELOG against HEAD
+
+- Reconciled the `## [0.1.12]` CHANGELOG section against the real `v0.1.11..HEAD` diff (60 commits). Fixed one factual inaccuracy and filled two coverage gaps; all edits confined to `CHANGELOG.md`.
+- **Inaccuracy fixed:** dropped the false "Reassigned the `roadmap` skill out of agent-work-admin" claim — `roadmap` SKILL.md lives in `packs/agent-work-admin/` at both `v0.1.11` and HEAD; commit `3be353e80` only added a repo-local `.agents/project.json` install designation (config, not package source). Kept the accurate companion clause (removed agent-facing `pack` skill, guided setup migrated into `init-agentic-skills`) as its own bullet.
+- **Gap 1 filled:** added a ### Changed bullet for the task-doc routing audit system — new `scripts/audit-task-docs.mjs` + `ship` v0.8 / `ship-end` v0.6 / `reconcile-dev-docs` v0.3 contract bumps (current-task-only next-work routing, pack-install artifact boundary, audit gate).
+- **Gap 2 filled:** added a ### Changed bullet for the final-handoff verification guard — `create-alignment-page` v0.2 ready-for-agent-review authorization + resume trigger, with new final-handoff fixture coverage in `scripts/skill-alignment-routing-audit.mjs`.
+- Appended both new themes to the closing reconciliation line so it is now truthful. Version stays pinned at `0.1.11` (owned by `./publish.sh patch`). Concurrent-session dirty files (`github-proof-data.js` ×2, `docs/benchmark-results-matrix.md`) left untouched.
+- Verification: roadmap phrase gone; both new bullets present; `git diff --check` clean; only `CHANGELOG.md` staged; pushed to master (`git log origin/master..HEAD` empty). Deploy: none — `CHANGELOG.md` is not a deploy-relevant path under `tasks/deploy.md`.
+- Commit: `7aaebf038`.
+
 ## 2026-06-26 — Typo-triage "Did you mean?" for skillpacks install/remove (0.1.12)
 
 - Added lightweight typo suggestions to the unknown pack/skill error in `packages/skillpacks/src/cli/pack-normalization.mjs`: new `editDistance` (no-dep two-row DP Levenshtein) + `suggestNames` (candidate universe = `activePackNames` ∪ `skillInstallSourceMap` keys; substring matches first, then ascending edit distance with max 1 for tokens ≤4 chars else 2, then alphabetical; top 3). Wired into `unknownNameError` so both `install` and `remove` paths gain `Did you mean: …?` in one place. Install stays suggest-only (throws, never auto-installs a guess); remove's single-match auto-resolve untouched. Aliases/titles excluded from suggestions.
