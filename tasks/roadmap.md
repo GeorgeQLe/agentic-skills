@@ -2,6 +2,41 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Interrogation Apply Recommended Controls
+
+### Goal
+
+Add a required `Apply recommended` control to every interrogation-page `data-open-question` block so users can copy the nearest `data-recommended-answer` into the nearest `data-open-input` without overwriting typed text unless they confirm replacement.
+
+### Plan
+
+1. Preserve the existing dirty worktree boundary and capture the visible skill invocation prompt.
+2. Update the canonical interrogation-page convention so open-question blocks require five markers: `data-open-input`, `data-recommended-answer`, `data-agent-confidence`, `data-clarify-copy`, and `data-apply-recommended`.
+3. Document the required vanilla JavaScript behavior: click resolves the closest open-question block, reads `data-recommended-answer` via `textContent.trim()`, fills the nearest textarea or text input, asks `window.confirm(...)` before replacing non-empty input, dispatches `input` and `change` events, and avoids clipboard APIs.
+4. Extend the active-page auditor to require one `data-apply-recommended` button per `data-open-question` and report clear open-question drift when missing.
+5. Update focused layer1 fixtures and tests for clean pages plus a missing-apply-button failure.
+6. Archive and bump the mirrored `upgrade-interrogation-pages` skills from `v0.0` to `v0.1`, then update their changelogs and behavior guidance to recognize the fifth marker and preserve apply-recommended controls/scripts.
+7. Regenerate generated `INTERROGATION-PAGE.md` bundles from the canonical convention and run any expected package/build mirror command if tracked outputs require it.
+8. Run required verification, document review results in `tasks/todo.md`, then commit and push only intended changes.
+
+### Acceptance Criteria
+
+- Every canonical/generated interrogation open-question contract names `data-apply-recommended` as required.
+- The apply control behavior preserves existing typed answers unless the user confirms replacement.
+- Active-page audit fails when any `data-open-question` block is missing `data-apply-recommended`.
+- Focused tests cover the clean fixture and missing-apply-button drift.
+- Mirrored `upgrade-interrogation-pages` skills are archived, version-bumped, changeloged, and tested.
+- Required verification passes or any blocker is documented.
+
+### Results
+
+- Updated the canonical interrogation-page convention so open-question blocks require `data-apply-recommended` alongside the existing open input, recommended answer, confidence, and clarify-copy markers.
+- Added the apply-recommended behavior contract and compact vanilla handler: fill from nearest recommended answer, confirm before replacing non-empty input, dispatch `input` and `change`, support textarea/text input, and avoid clipboard APIs.
+- Regenerated all 20 generated `INTERROGATION-PAGE.md` bundles and confirmed package build/check did not require tracked package artifact changes beyond source/manifest consistency.
+- Extended `scripts/audit-interrogation-pages.mjs` and layer1 fixtures/tests so missing apply buttons fail as `Open question drift`.
+- Archived and bumped both `upgrade-interrogation-pages` mirrors from `v0.0` to `v0.1`, with changelog entries and preservation/upgrade guidance for apply-recommended controls/scripts.
+- Verification passed: active-page audit, bundle check, focused layer1 suite, skillpacks build/check, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Base Mirror Parity Audit Coverage
 
 ### Goal

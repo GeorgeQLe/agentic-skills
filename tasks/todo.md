@@ -5,13 +5,75 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Base Mirror Parity Audit Coverage.
+Last completed task: Interrogation Apply Recommended Controls.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## No Active Implementation Phase
+## Review - Interrogation Apply Recommended Controls
 
-New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
+### Goal
+
+Add a required `Apply recommended` button to every interrogation `data-open-question` block. The button fills the nearest `data-open-input` from the nearest `data-recommended-answer`, while preserving user-entered text unless replacement is confirmed.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Scope: canonical interrogation convention, generated bundles, active-page auditor/tests, mirrored `upgrade-interrogation-pages` skill docs/version history, and task/prompt records
+- Notes: preserve unrelated dirty worktree changes; no live active `interrogation/*.html` migration is expected.
+
+### Checklist
+
+- [x] Capture the visible `skill-creator` invocation prompt and inspect repo/task guidance.
+- [x] Update canonical interrogation convention with the fifth open-question marker and apply behavior.
+- [x] Extend the active-page auditor and layer1 fixtures/tests for `data-apply-recommended`.
+- [x] Archive, bump, and update both mirrored `upgrade-interrogation-pages` skill docs and changelogs.
+- [x] Regenerate generated `INTERROGATION-PAGE.md` bundles and any expected tracked mirrors.
+- [x] Run required verification and fix in-scope regressions.
+- [x] Document review results, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- `data-apply-recommended` is mandatory in every `data-open-question` block.
+- The button label is `Apply recommended`.
+- Empty inputs fill immediately from `data-recommended-answer` text.
+- Non-empty inputs are replaced only after `window.confirm(...)` returns true.
+- Value changes dispatch both `input` and `change` events.
+- The action supports textarea and text input controls and does not use clipboard APIs.
+- Auditor diagnostics clearly report a missing apply-recommended button as `Open question drift`.
+- Generated bundles and mirrored upgrade skill docs are current.
+
+### Test Plan
+
+- `node scripts/audit-interrogation-pages.mjs`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `pnpm --dir tests test:layer1 -- audit-interrogation-pages interrogation-confidence-gate upgrade-interrogation-pages`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review
+
+Implemented and verified.
+
+- Updated `docs/interrogation-page-convention.md` so every `data-open-question` block must include `data-apply-recommended` with visible label `Apply recommended`.
+- Added the behavior contract and inline vanilla handler: read `data-recommended-answer` with `textContent.trim()`, fill textarea/text input values, confirm before replacing non-empty answers, dispatch bubbling `input` and `change` events, and avoid clipboard APIs.
+- Regenerated 20 generated `INTERROGATION-PAGE.md` bundles from the canonical convention.
+- Extended `scripts/audit-interrogation-pages.mjs` and layer1 fixtures/tests so a missing apply-recommended button fails under `Open question drift`.
+- Archived both mirrored `upgrade-interrogation-pages` `v0.0` skill files, bumped active mirrors to `v0.1`, and updated changelogs plus preservation/upgrade instructions.
+- Ran `npm --workspace packages/skillpacks run build`; `npm --workspace packages/skillpacks run build:check` passed and no tracked package build artifact changes were required.
+
+Verification passed:
+
+- `node scripts/audit-interrogation-pages.mjs`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/audit-interrogation-pages.test.ts layer1/interrogation-confidence-gate.test.ts layer1/upgrade-interrogation-pages.test.ts` (68/68)
+- `pnpm --dir tests test:layer1 -- audit-interrogation-pages interrogation-confidence-gate upgrade-interrogation-pages` (2443/2443) after rerunning serially
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Verification note:
+
+- An earlier parallel run of the broad layer1 command failed once because `npm --workspace packages/skillpacks run build:check` was rewriting `packages/skillpacks/build` at the same time. The same command passed when rerun serially after the package build completed.
 
 ## Review - Base Mirror Parity Audit Coverage
 

@@ -37,7 +37,7 @@ Preserve subjective preferences as preferences, but label claim-like factual, ev
 
 **Interview areas the confidence gate covers.** Before generating the idea set, cover: the project identity and current state as the agent understands it; the ideation focus and which dimensions are in or out of scope (strategic/product, improvement, hygiene, market-fit); the effort and risk appetite (quick wins vs. larger bets) and any horizon constraints; areas explicitly off-limits and hard non-goals; what counts as a high-value idea for this project (the user's success criteria for the brainstorm); the target audience or product-path scope the ideas should serve; and the riskiest assumptions about where the real opportunity lies. Open inputs must let the user reframe the focus, add or remove ideation dimensions, set the effort/risk appetite, and supply constraints and non-goals the agent cannot infer from the repository.
 
-**The ≥1-open-input rule (hard).** Each round page **must contain at least one genuinely open input** — a free-text `<textarea>` or text `<input>`, or a recommend-and-override control — that shapes downstream research, marked with the `data-open-input` attribute. A round that offers only approve/reject or pre-authored multiple-choice controls is invalid: it collapses the archetype back into the rubber-stamp problem it exists to fix. Each open input lives inside a **well-formed open-question block** marked with `data-open-question`, and the page must contain **at least one** such block. Every `data-open-question` block must carry all four markers: the `data-open-input` control, a `data-recommended-answer` element, a `data-agent-confidence="high|medium|low"` badge, and a `data-clarify-copy` button (defined under "Required inline questions" and "Need clarification (copy)" below). The audit enforces this mechanically.
+**The ≥1-open-input rule (hard).** Each round page **must contain at least one genuinely open input** — a free-text `<textarea>` or text `<input>`, or a recommend-and-override control — that shapes downstream research, marked with the `data-open-input` attribute. A round that offers only approve/reject or pre-authored multiple-choice controls is invalid: it collapses the archetype back into the rubber-stamp problem it exists to fix. Each open input lives inside a **well-formed open-question block** marked with `data-open-question`, and the page must contain **at least one** such block. Every `data-open-question` block must carry all five markers: the `data-open-input` control, a `data-recommended-answer` element, a `data-agent-confidence="high|medium|low"` badge, a `data-clarify-copy` button, and a `data-apply-recommended` button (defined under "Required inline questions", "Need clarification (copy)", and "Apply recommended" below). The audit enforces this mechanically.
 
 **Page metadata.** Set these attributes on the `<html>` element of every round page:
 - `data-visual-tier` — the rendering tier (`document`, `visual`, or `prototype`), same semantics as the alignment page.
@@ -75,8 +75,9 @@ Every open question — both the free-text and the recommend-and-override forms 
 - a **`data-recommended-answer`** element holding a recommended/example answer that illustrates what the question is actually asking and the shape of a good response. This is the agent's best inferred answer, written so the user understands the question even when the phrasing alone is unclear.
 - a **`data-agent-confidence="high|medium|low"`** badge rendered next to the question, signalling how much the agent trusts that recommended answer so the user knows how hard to scrutinize or override it. The visible label renders the value (e.g. "Agent confidence: medium"). Use `high` when the recommendation is well-grounded in repo/research evidence, `medium` when it is a reasonable inference, and `low` when it is a guess the user should correct.
 - a **`data-clarify-copy`** `<button>` (see "Need clarification (copy)" below) that copies a clarification-request payload to the clipboard.
+- a **`data-apply-recommended`** `<button>` with visible label `Apply recommended` (see "Apply recommended" below) that fills the nearest `data-open-input` from the nearest `data-recommended-answer`.
 
-The recommended answer and confidence badge make the question self-explanatory; the clarify-copy button is the escape hatch when it still is not. The active-page audit and a layer1 test enforce all four markers mechanically: every `data-open-question` block must carry `data-open-input`, `data-recommended-answer`, `data-agent-confidence` (with a value in `{high, medium, low}`), and `data-clarify-copy`.
+The recommended answer and confidence badge make the question self-explanatory; the apply-recommended button lets the user accept the agent's default without retyping; the clarify-copy button is the escape hatch when the question still is not clear. The active-page audit and a layer1 test enforce all five markers mechanically: every `data-open-question` block must carry `data-open-input`, `data-recommended-answer`, `data-agent-confidence` (with a value in `{high, medium, low}`), `data-clarify-copy`, and `data-apply-recommended`.
 
 **Need clarification (copy).** Each open question's `data-clarify-copy` button is the open-question clarification mechanism: a clipboard action, not a YAML flag. When clicked it copies a payload of exactly this form to the clipboard so the user can paste it straight back to the agent and get a clearer question in the next round (the same round-loop paste model the page already uses):
 
@@ -86,6 +87,31 @@ I need clarification on what this is asking before I can answer.
 ```
 
 Use the Clipboard API with a textarea-selection fallback when clipboard access is blocked — the same fallback idiom as the alignment page's "Copy YAML" control (canonical reference: `copyText` in `scripts/generate-skillmap-excalidraw.mjs`): `try { await navigator.clipboard.writeText(text); status = 'Copied' } catch { textarea.focus(); textarea.select(); status = 'Select text to copy' }`. Show a copy-status line beside the button so the result is visible. This is distinct from the radio "Need clarification" option (which records `needs-clarification` in the compiled YAML); the clarify-copy button is a clipboard-only escape hatch for open questions and is not captured in the sidecar.
+
+**Apply recommended.** Each open question's `data-apply-recommended` button is the recommended-answer acceptance mechanism: a field-fill action, not a clipboard action. When clicked, the button finds its closest `data-open-question` block, then finds that block's `data-recommended-answer` text and nearest `data-open-input` field (`<textarea>`, `<input type="text">`, or a text `<input>` with no explicit `type`). If the input is empty, set `input.value` to `recommendedAnswer.textContent.trim()` immediately. If the input already has text, call `window.confirm("Replace your current answer with the recommended answer?")` and replace only when confirmed. After setting the value, dispatch bubbling `input` and `change` events so compile/YAML code observes the update. Do not use clipboard APIs for this action. If the block includes a lightweight status element such as `[data-apply-recommended-status]`, update it after applying; otherwise the value change is sufficient.
+
+Page authors can inline this compact vanilla handler with the page's existing interrogation scripts:
+
+```html
+<script>
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-apply-recommended]");
+  if (!button) return;
+  const block = button.closest("[data-open-question]");
+  const recommended = block?.querySelector("[data-recommended-answer]")?.textContent.trim() ?? "";
+  const input = block?.querySelector(
+    'textarea[data-open-input], input[type="text"][data-open-input], input:not([type])[data-open-input]',
+  );
+  if (!input || !recommended) return;
+  if (input.value.trim() && !window.confirm("Replace your current answer with the recommended answer?")) return;
+  input.value = recommended;
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+  const status = block.querySelector("[data-apply-recommended-status]");
+  if (status) status.textContent = "Recommended answer applied.";
+});
+</script>
+```
 
 **Prototype tier rendering.** This skill's interrogation pages may use the `prototype` tier: in addition to charts, self-contained interactive components are permitted, each with a reset control and clear "preview" labeling and no external dependencies. Interactive previews never replace the open inputs that drive research.
 
@@ -105,4 +131,4 @@ Use the Clipboard API with a textarea-selection fallback when clipboard access i
 
 **Archiving.** Round pages are durable artifacts; do not overwrite a prior round. Each round gets its own `r{N}` file. If a round page must be rebuilt before its answers are consumed (e.g. the user asks for a different question set, or the page predates a convention/standard change and is being brought to the current standard), archive the prior copy to `docs/history/archive/YYYY-MM-DD/HHMMSS/interrogation/brainstorm-r{N}-{branch}.html` before replacing it.
 
-**Resume-time conformance upgrade.** When resuming the loop at a round whose page already exists on disk as `data-interrogation-status="review"` and whose answers have not yet been consumed (no compiled `interrogation-brainstorm-r{N}.yaml` sidecar), re-check that page against the current open-question marker standard before presenting it as the active surface. If it is missing any currently-required marker (`data-open-input`, `data-recommended-answer`, `data-agent-confidence`, `data-clarify-copy`) or current page-metadata attributes, archive the prior copy to `docs/history/archive/YYYY-MM-DD/HHMMSS/interrogation/brainstorm-r{N}-{branch}.html` and rewrite it to the current standard, **preserving all page-specific content** (assumptions, questions, prior context) and authoring the now-required helpers — recommended answers and confidence — from the skill's own elicitation context. If an upgrade would risk losing page-specific content, stop and surface what needs a human decision rather than rewriting.
+**Resume-time conformance upgrade.** When resuming the loop at a round whose page already exists on disk as `data-interrogation-status="review"` and whose answers have not yet been consumed (no compiled `interrogation-brainstorm-r{N}.yaml` sidecar), re-check that page against the current open-question marker standard before presenting it as the active surface. If it is missing any currently-required marker (`data-open-input`, `data-recommended-answer`, `data-agent-confidence`, `data-clarify-copy`, `data-apply-recommended`) or current page-metadata attributes, archive the prior copy to `docs/history/archive/YYYY-MM-DD/HHMMSS/interrogation/brainstorm-r{N}-{branch}.html` and rewrite it to the current standard, **preserving all page-specific content** (assumptions, questions, prior context) and authoring the now-required helpers — recommended answers, confidence, and apply-recommended controls/scripts — from the skill's own elicitation context. If an upgrade would risk losing page-specific content, stop and surface what needs a human decision rather than rewriting.

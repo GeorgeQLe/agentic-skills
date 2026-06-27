@@ -54,7 +54,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
     }
   });
 
-  it("audits against local standards and the four open-question markers", () => {
+  it("audits against local standards and the five open-question markers", () => {
     for (const contract of contracts) {
       const content = read(contract.path);
 
@@ -67,6 +67,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
         "data-recommended-answer",
         "data-agent-confidence",
         "data-clarify-copy",
+        "data-apply-recommended",
         "data-interrogation-status",
         "data-interrogation-round",
         "data-interrogation-gate",
@@ -83,7 +84,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
 
       expect(content, `${contract.path} read whole page`).toContain("Read the whole HTML file before judging it.");
       expect(content, `${contract.path} page substance`).toContain(
-        "assumptions manifest, open questions, recommended answers, confidence badges, gate controls",
+        "assumptions manifest, open questions, recommended answers, confidence badges, apply-recommended controls/scripts, gate controls",
       );
       expect(content, `${contract.path} risk status`).toContain("blocked-content-loss-risk");
       expect(content, `${contract.path} stop on risk`).toContain(

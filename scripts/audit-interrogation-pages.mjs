@@ -36,6 +36,7 @@ const OPEN_QUESTION_RE = /\bdata-open-question\b/gi;
 const RECOMMENDED_ANSWER_RE = /\bdata-recommended-answer\b/gi;
 const AGENT_CONFIDENCE_RE = /\bdata-agent-confidence="([^"]*)"/gi;
 const CLARIFY_COPY_RE = /<button\b[^>]*\bdata-clarify-copy\b/gi;
+const APPLY_RECOMMENDED_RE = /<button\b[^>]*\bdata-apply-recommended\b/gi;
 const CONFIDENCE_VALUES = new Set(["high", "medium", "low"]);
 const SIDECAR_VALUE_RE = /interrogation-[a-z0-9-]+-r\d+\.yaml/;
 
@@ -150,17 +151,19 @@ for (const file of pages) {
   }
 
   // Open-question block markers: each data-open-question block must carry a
-  // recommended answer, an agent-confidence badge, and a clarify-copy button.
+  // recommended answer, an agent-confidence badge, a clarify-copy button, and
+  // an apply-recommended button.
   // Count-based association keeps this robust without a DOM parser.
   const openQuestionCount = (html.match(OPEN_QUESTION_RE) || []).length;
   if (openQuestionCount < 1) {
     openQuestionDiagnostics.push(
-      `No open-question block in ${rel} — each round must contain at least one well-formed data-open-question block wrapping an open input with a recommended answer, confidence badge, and clarify-copy button.`,
+      `No open-question block in ${rel} — each round must contain at least one well-formed data-open-question block wrapping an open input with a recommended answer, confidence badge, clarify-copy button, and apply-recommended button.`,
     );
   } else {
     const recommendedCount = (html.match(RECOMMENDED_ANSWER_RE) || []).length;
     const confidenceMatches = [...html.matchAll(AGENT_CONFIDENCE_RE)];
     const clarifyCount = (html.match(CLARIFY_COPY_RE) || []).length;
+    const applyRecommendedCount = (html.match(APPLY_RECOMMENDED_RE) || []).length;
     if (recommendedCount < openQuestionCount) {
       openQuestionDiagnostics.push(
         `Missing recommended answer in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${recommendedCount} data-recommended-answer element(s); each open question needs a recommended/example answer.`,
@@ -181,6 +184,11 @@ for (const file of pages) {
     if (clarifyCount < openQuestionCount) {
       openQuestionDiagnostics.push(
         `Missing clarify-copy button in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${clarifyCount} data-clarify-copy button(s); each open question needs a Need-clarification copy button.`,
+      );
+    }
+    if (applyRecommendedCount < openQuestionCount) {
+      openQuestionDiagnostics.push(
+        `Missing apply-recommended button in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${applyRecommendedCount} data-apply-recommended button(s); each open question needs an Apply recommended button.`,
       );
     }
   }

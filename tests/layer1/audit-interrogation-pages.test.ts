@@ -37,6 +37,7 @@ function pageHtml(overrides: {
   recommended?: boolean;
   confidence?: string | null;
   clarifyCopy?: boolean;
+  applyRecommended?: boolean;
   sidecar?: string | null;
   body?: string;
 } = {}): string {
@@ -52,6 +53,7 @@ function pageHtml(overrides: {
     recommended = true,
     confidence = "medium",
     clarifyCopy = true,
+    applyRecommended = true,
     sidecar = "research/_working/interrogation-positioning-r1.yaml",
     body = "",
   } = overrides;
@@ -68,7 +70,8 @@ function pageHtml(overrides: {
     ? ""
     : `<span data-agent-confidence="${confidence}">Agent confidence: ${confidence}</span>`;
   const clarifyEl = clarifyCopy ? '<button data-clarify-copy>Need clarification</button>' : "";
-  const inner = `${recommendedEl}${confidenceEl}${input}${clarifyEl}`;
+  const applyEl = applyRecommended ? '<button data-apply-recommended>Apply recommended</button>' : "";
+  const inner = `${recommendedEl}${confidenceEl}${input}${clarifyEl}${applyEl}`;
   const open = openQuestion
     ? `<div data-open-question>${inner}</div>`
     : inner;
@@ -219,6 +222,15 @@ describe("audit-interrogation-pages fixture trees", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Open question drift:");
     expect(result.stderr).toContain("Missing clarify-copy button in interrogation/positioning-r1-acme.html");
+  });
+
+  it("fails when an open question is missing its apply-recommended button", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ applyRecommended: false }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Missing apply-recommended button in interrogation/positioning-r1-acme.html");
   });
 
   it("fails on a missing or invalid confidence gate", () => {
