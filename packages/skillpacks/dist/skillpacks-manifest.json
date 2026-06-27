@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "737df3df186126326c3a3604bf60b87c42aed2ae77a2ab0c64585690c61089db",
+  "source_fingerprint": "6ef4e2523e12451eeed4059bdb658e636b4d0cc6c78ecb414f3b064b024fc11b",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1137,6 +1137,40 @@
       "deck_memberships": []
     },
     {
+      "id": "base-codex-autoresearch-prep",
+      "name": "autoresearch-prep",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/autoresearch-prep/SKILL.md",
+      "installable": true,
+      "content_sha256": "5502faad835b1b0992a9b18b47d72f9cb16507fced80e26f9defe9c8e5ec8144",
+      "archive_versions": [],
+      "command": "$autoresearch-prep",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-autoresearch",
+      "name": "autoresearch",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/autoresearch/SKILL.md",
+      "installable": true,
+      "content_sha256": "bbd8f90f3cd7d420c4b1501ba62b96ac6542af1f658f8b8486564be2a92c8f14",
+      "archive_versions": [],
+      "command": "$autoresearch",
+      "deck_memberships": []
+    },
+    {
       "id": "base-codex-codebase-status",
       "name": "codebase-status",
       "scope": "base",
@@ -1185,6 +1219,25 @@
         "v0.1"
       ],
       "command": "$create-alignment-page",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-fork-idea-branch",
+      "name": "fork-idea-branch",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.1",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "base/codex/fork-idea-branch/SKILL.md",
+      "installable": true,
+      "content_sha256": "bbf72153d0021b92cdd0b0db0a117c10a73f0e5e2ed466b71ba0e66e135d0c58",
+      "archive_versions": [],
+      "command": "$fork-idea-branch",
       "deck_memberships": []
     },
     {
