@@ -2,6 +2,42 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Set BIP All And Dry Run
+
+### Goal
+
+Add multi-project support for `skillpacks set-bip <on|off|unset> --all`, plus `--all --dry-run` to preview parse/read/config issues and planned `.agents/project.json` changes before mutating project configs.
+
+### Plan
+
+1. Inspect existing `set-bip` parsing, project-config writers, project discovery, `runAcrossProjects` summary behavior, and package tests.
+2. Update `runSkillpacksCli` so `set-bip` accepts exactly one mode plus optional `--all` and `--dry-run`, rejects unknown/duplicate arguments, and rejects `--dry-run` without `--all`.
+3. Add a Node-owned batch apply path that discovers project roots from the current directory and runs `setBuildInPublicMode(mode, root)` for each project, continuing across failures with the existing multi-project summary style.
+4. Add a dry-run batch path that discovers project roots, reads and normalizes each project config without writing files or taking persistent mutation locks, reports per-project planned changes, marks parse/read/planning failures unsafe, prints `Safe to run: yes/no`, and prints the apply recommendation only when safe.
+5. Add regression tests for `set-bip on --all`, `set-bip unset --all`, `set-bip off --all --dry-run`, invalid JSON dry-run safety, and `set-bip on --dry-run` rejection, while preserving existing single-project behavior.
+6. Run `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff hygiene; fix any failures in scope.
+7. Document review results, create a ship manifest, commit, and push the intended changes on `master`.
+
+### Acceptance Criteria
+
+- `set-bip on`, `set-bip off`, and `set-bip unset` keep their existing single-project behavior.
+- `set-bip <mode> --all` updates every discovered project root using existing discovery semantics, including existing ignores for `node_modules` and dot directories.
+- `set-bip unset --all` preserves sibling `alignment` fields and removes empty `alignment` objects.
+- `set-bip <mode> --all --dry-run` prints per-project planned status, does not mutate project files, does not acquire persistent mutation locks, and exits nonzero when any project cannot be safely planned.
+- Invalid JSON/read failures in dry-run are reported as unsafe and do not prevent other projects from being planned.
+- `set-bip <mode> --dry-run` without `--all` fails clearly.
+- Usage text documents `set-bip <mode> [--all] [--dry-run]`.
+- Required verification passes or any blocker is documented.
+
+### Results
+
+- Added `set-bip <mode> --all` batch apply using existing project discovery and the established multi-project summary style.
+- Added `set-bip <mode> --all --dry-run` planning that reports per-project planned BIP changes, unsafe parse/read failures, `Safe to run: yes/no`, and an apply recommendation only when safe.
+- Reused the existing single-project writer so sibling `alignment` fields are preserved and empty `alignment` objects are removed on `unset`.
+- Updated CLI help, README, and the npm distribution compatibility matrix.
+- Added Node tests for batch apply, discovery ignores, unset cleanup, dry-run no mutation/no locks, invalid JSON unsafe dry-run, and invalid dry-run without `--all`.
+- Verification passed: package Node tests, package build check, task-doc audit, diff hygiene, and CLI help smoke.
+
 ## Historical Implementation - Final-Handoff Self-Check And Guard
 
 ### Goal

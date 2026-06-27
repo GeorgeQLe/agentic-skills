@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-27 — `set-bip --all` and dry-run
+
+- Added npm CLI fleet support for `skillpacks set-bip <on|off|unset> --all`, reusing existing project discovery and `runAcrossProjects` summary behavior while keeping single-project `set-bip on|off|unset` unchanged.
+- Added `skillpacks set-bip <mode> --all --dry-run` planning: per-project set/change/remove/already-match output, parse/read failures as unsafe, no writes or mutation locks, `Safe to run: yes/no`, and an apply recommendation only when safe.
+- Refactored the project-config BIP writer through a shared apply helper and added a no-write planner.
+- Updated CLI help, README fleet guidance, and the npm distribution compatibility matrix.
+- Added package Node coverage for batch apply, discovery ignores, unset cleanup, dry-run no mutation/no locks, invalid JSON unsafe dry-run, and rejecting `--dry-run` without `--all`.
+- Verification passed: `npm --workspace packages/skillpacks run test:node` (150/150), `npm --workspace packages/skillpacks run build:check`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and CLI help smoke.
+- Manifest: `tasks/ship-manifest-2026-06-27-set-bip-all-dry-run.md`.
+
 ## 2026-06-27 — Codex mirrors for 3 base-only skills + agent-mismatch report
 
 - Added Codex siblings for the three `base/claude/`-only skills that had no Codex variant, leaving Codex users unable to run them: `fork-idea-branch` (v0.1, alignment-page), `autoresearch` (v0.0), `autoresearch-prep` (v0.0). Each: hand-authored `SKILL.md` + `CHANGELOG.md` mirror; `fork-idea-branch` also got a generated `ALIGNMENT-PAGE.md` (byte-identical to claude).

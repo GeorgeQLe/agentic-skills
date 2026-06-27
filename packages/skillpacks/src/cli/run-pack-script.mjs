@@ -21,6 +21,7 @@ import {
   refreshAllProjects,
   refreshProject,
   removeResolved,
+  setBuildInPublicModeAll,
   statusAllProjects,
   uninstallGlobal,
   unpinSkill
@@ -699,7 +700,10 @@ Commands:
   alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
-  set-bip <mode>               Set build-in-public alignment default: on, off, or unset
+  set-bip <mode> [--all] [--dry-run]
+                               Set build-in-public alignment default: on, off, or unset
+  set-bip <mode> --all --dry-run
+                               Preview build-in-public changes across discovered projects
   set-bip-prompt <action>      Set build-in-public suggestion prompt state: dismiss or reset
   pin <skill> <version>        Pin a skill to an archived version
   unpin <skill>                Revert a pinned skill to latest
@@ -707,6 +711,45 @@ Commands:
   which <skill>                Show which pack provides a skill
 
 Project-local commands write to the current working directory.`);
+}
+
+function parseSetBipArgs(args) {
+  let mode = null;
+  let all = false;
+  let dryRun = false;
+
+  for (const arg of args) {
+    if (arg === '--all') {
+      if (all) {
+        throw new Error('set-bip: duplicate --all');
+      }
+      all = true;
+      continue;
+    }
+    if (arg === '--dry-run') {
+      if (dryRun) {
+        throw new Error('set-bip: duplicate --dry-run');
+      }
+      dryRun = true;
+      continue;
+    }
+    if (arg.startsWith('-')) {
+      throw new Error(`set-bip: unsupported flag '${arg}'`);
+    }
+    if (mode !== null) {
+      throw new Error('set-bip requires exactly one mode: on, off, or unset');
+    }
+    mode = arg;
+  }
+
+  if (mode === null) {
+    throw new Error('set-bip requires exactly one mode: on, off, or unset');
+  }
+  if (dryRun && !all) {
+    throw new Error('set-bip --dry-run requires --all');
+  }
+
+  return { mode, all, dryRun };
 }
 
 export async function runSkillpacksCli(args) {
@@ -766,10 +809,15 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'set-bip') {
-    if (rest.length !== 1) {
-      throw new Error('set-bip requires exactly one mode: on, off, or unset');
+    const options = parseSetBipArgs(rest);
+    if (options.all) {
+      return setBuildInPublicModeAll({
+        mode: options.mode,
+        rootDir: process.cwd(),
+        dryRun: options.dryRun
+      });
     }
-    return setBuildInPublicMode(rest[0]);
+    return setBuildInPublicMode(options.mode);
   }
 
   if (command === 'set-bip-prompt') {

@@ -27,11 +27,15 @@ function writeProjectConfig(projectRoot, config) {
   writeFileSync(filePath, `${JSON.stringify(config, null, 2)}\n`);
 }
 
-function readProjectConfig(projectRoot) {
-  return JSON.parse(readFileSync(join(projectRoot, '.agents/project.json'), 'utf8'));
+function projectConfigPath(projectRoot) {
+  return join(projectRoot, '.agents/project.json');
 }
 
-async function runSkillpacks(projectRoot, args) {
+function readProjectConfig(projectRoot) {
+  return JSON.parse(readFileSync(projectConfigPath(projectRoot), 'utf8'));
+}
+
+async function runSkillpacksRaw(projectRoot, args) {
   const originalCwd = process.cwd();
   const originalPath = process.env.PATH;
   const originalLog = console.log;
@@ -50,8 +54,7 @@ async function runSkillpacks(projectRoot, args) {
     process.chdir(projectRoot);
     process.env.PATH = '';
     const exitCode = await runSkillpacksCli(args);
-    assert.equal(exitCode, 0, stderr);
-    return stdout;
+    return { exitCode, stdout, stderr };
   } finally {
     process.chdir(originalCwd);
     if (originalPath === undefined) {
@@ -62,6 +65,12 @@ async function runSkillpacks(projectRoot, args) {
     console.log = originalLog;
     console.error = originalError;
   }
+}
+
+async function runSkillpacks(projectRoot, args) {
+  const result = await runSkillpacksRaw(projectRoot, args);
+  assert.equal(result.exitCode, 0, result.stderr || result.stdout);
+  return result.stdout;
 }
 
 afterEach(() => {
@@ -301,6 +310,147 @@ describe('Node project config commands', () => {
       enabled_packs: [],
       skill_pack_version: 1
     });
+  });
+
+  it('sets build-in-public mode across discovered projects only', async () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    const b = join(parent, 'b');
+    const ignoredNodeModules = join(parent, 'node_modules', 'ignored');
+    const ignoredDotDir = join(parent, '.cache', 'ignored');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1
+    });
+    writeProjectConfig(b, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: false
+      }
+    });
+    writeProjectConfig(ignoredNodeModules, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+    writeProjectConfig(ignoredDotDir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+
+    const output = await runSkillpacks(parent, ['set-bip', 'on', '--all']);
+
+    assert.match(output, /=== a ===/);
+    assert.match(output, /=== b ===/);
+    assert.doesNotMatch(output, /node_modules/);
+    assert.doesNotMatch(output, /\.cache/);
+    assert.match(output, /Summary \(set-bip on --all\): 2 ok, 0 flagged, 0 failed across 2 project\(s\)\./);
+    assert.equal(readProjectConfig(a).alignment.build_in_public, true);
+    assert.equal(readProjectConfig(b).alignment.build_in_public, true);
+    assert.equal(Object.hasOwn(readProjectConfig(ignoredNodeModules), 'alignment'), false);
+    assert.equal(Object.hasOwn(readProjectConfig(ignoredDotDir), 'alignment'), false);
+  });
+
+  it('unsets build-in-public mode across projects while preserving sibling alignment fields', async () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    const b = join(parent, 'b');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      alignment: {
+        review_depth: 'full',
+        build_in_public: true
+      }
+    });
+    writeProjectConfig(b, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: false
+      }
+    });
+
+    const output = await runSkillpacks(parent, ['set-bip', 'unset', '--all']);
+
+    assert.match(output, /Summary \(set-bip unset --all\): 2 ok, 0 flagged, 0 failed across 2 project\(s\)\./);
+    assert.deepEqual(readProjectConfig(a).alignment, { review_depth: 'full' });
+    assert.equal(Object.hasOwn(readProjectConfig(b), 'alignment'), false);
+  });
+
+  it('dry-runs build-in-public mode changes across projects without mutating files', async () => {
+    const parent = makeTempProject();
+    const a = join(parent, 'a');
+    const b = join(parent, 'b');
+    writeProjectConfig(a, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: true
+      }
+    });
+    writeProjectConfig(b, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+    const beforeA = readFileSync(projectConfigPath(a), 'utf8');
+    const beforeB = readFileSync(projectConfigPath(b), 'utf8');
+
+    const result = await runSkillpacksRaw(parent, ['set-bip', 'off', '--all', '--dry-run']);
+
+    assert.equal(result.exitCode, 0, result.stderr);
+    assert.match(result.stdout, /=== a ===\n  would change alignment\.build_in_public from on to off/);
+    assert.match(result.stdout, /=== b ===\n  would set alignment\.build_in_public to off/);
+    assert.match(result.stdout, /Summary \(set-bip off --all --dry-run\): 2 project\(s\) scanned\./);
+    assert.match(result.stdout, /Safe to run: yes/);
+    assert.match(result.stdout, /Recommended command: skillpacks set-bip off --all/);
+    assert.equal(readFileSync(projectConfigPath(a), 'utf8'), beforeA);
+    assert.equal(readFileSync(projectConfigPath(b), 'utf8'), beforeB);
+    assert.equal(existsSync(join(a, '.agents/.pack.lock')), false);
+    assert.equal(existsSync(join(b, '.agents/.pack.lock')), false);
+  });
+
+  it('reports invalid JSON as unsafe during build-in-public dry-run without mutating other projects', async () => {
+    const parent = makeTempProject();
+    const good = join(parent, 'good');
+    const bad = join(parent, 'bad');
+    writeProjectConfig(good, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1
+    });
+    mkdirSync(dirname(projectConfigPath(bad)), { recursive: true });
+    writeFileSync(projectConfigPath(bad), '{ invalid json\n');
+    const beforeGood = readFileSync(projectConfigPath(good), 'utf8');
+    const beforeBad = readFileSync(projectConfigPath(bad), 'utf8');
+
+    const result = await runSkillpacksRaw(parent, ['set-bip', 'off', '--all', '--dry-run']);
+
+    assert.equal(result.exitCode, 1);
+    assert.match(result.stdout, /=== good ===\n  would set alignment\.build_in_public to off/);
+    assert.match(result.stdout, /=== bad ===\n  failed: failed to parse /);
+    assert.match(result.stdout, /Failures:/);
+    assert.match(result.stdout, /bad: failed to parse /);
+    assert.match(result.stdout, /Safe to run: no/);
+    assert.doesNotMatch(result.stdout, /Recommended command:/);
+    assert.equal(readFileSync(projectConfigPath(good), 'utf8'), beforeGood);
+    assert.equal(readFileSync(projectConfigPath(bad), 'utf8'), beforeBad);
+  });
+
+  it('rejects build-in-public dry-run without all-project mode', async () => {
+    const dir = makeTempProject();
+    await assert.rejects(
+      () => runSkillpacks(dir, ['set-bip', 'on', '--dry-run']),
+      /set-bip --dry-run requires --all/
+    );
   });
 });
 

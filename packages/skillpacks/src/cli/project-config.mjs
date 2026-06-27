@@ -18,6 +18,10 @@ const VALID_UPDATE_MODES = new Set(['warn', 'auto', 'unset']);
 const VALID_BIP_MODES = new Set(['on', 'off', 'unset']);
 const VALID_BIP_PROMPT_ACTIONS = new Set(['dismiss', 'reset']);
 
+function isPlainObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value);
+}
+
 export function projectFilePath(projectRoot = process.cwd()) {
   return join(projectRoot, '.agents', 'project.json');
 }
@@ -249,6 +253,107 @@ function normalizedProjectConfig(projectRoot) {
   return config;
 }
 
+function cloneConfig(config) {
+  return JSON.parse(JSON.stringify(config));
+}
+
+function validateBuildInPublicMode(mode) {
+  if (!VALID_BIP_MODES.has(mode || '')) {
+    throw new Error('set-bip requires a mode: on, off, or unset');
+  }
+}
+
+function applyBuildInPublicMode(config, mode) {
+  if (mode === 'unset') {
+    if (isPlainObject(config.alignment)) {
+      delete config.alignment.build_in_public;
+      if (Object.keys(config.alignment).length === 0) {
+        delete config.alignment;
+      }
+    } else {
+      delete config.alignment;
+    }
+    return config;
+  }
+
+  const existing = isPlainObject(config.alignment) ? config.alignment : {};
+  config.alignment = { ...existing, build_in_public: mode === 'on' };
+  return config;
+}
+
+function existingBuildInPublicState(config) {
+  if (isPlainObject(config?.alignment)) {
+    if (Object.hasOwn(config.alignment, 'build_in_public')) {
+      return {
+        kind: 'present',
+        value: config.alignment.build_in_public,
+        siblingCount: Object.keys(config.alignment).filter((key) => key !== 'build_in_public').length
+      };
+    }
+    return { kind: 'missing' };
+  }
+
+  if (config && Object.hasOwn(config, 'alignment')) {
+    return { kind: 'non-object' };
+  }
+
+  return { kind: 'missing' };
+}
+
+function formatBuildInPublicValue(value) {
+  if (value === true) {
+    return 'on';
+  }
+  if (value === false) {
+    return 'off';
+  }
+  return JSON.stringify(value);
+}
+
+function describeBuildInPublicPlan(mode, config) {
+  const state = existingBuildInPublicState(config);
+
+  if (mode === 'unset') {
+    if (state.kind === 'present') {
+      return state.siblingCount === 0
+        ? 'would remove alignment.build_in_public and empty alignment object'
+        : 'would remove alignment.build_in_public';
+    }
+    if (state.kind === 'non-object') {
+      return 'would remove non-object alignment field';
+    }
+    return 'already unset';
+  }
+
+  if (state.kind === 'present') {
+    const desired = mode === 'on';
+    if (state.value === desired) {
+      return `already ${mode}`;
+    }
+    return `would change alignment.build_in_public from ${formatBuildInPublicValue(state.value)} to ${mode}`;
+  }
+
+  if (state.kind === 'non-object') {
+    return `would replace non-object alignment field and set alignment.build_in_public to ${mode}`;
+  }
+
+  return `would set alignment.build_in_public to ${mode}`;
+}
+
+export function planBuildInPublicMode(mode, projectRoot = process.cwd()) {
+  validateBuildInPublicMode(mode);
+
+  const originalConfig = readProjectConfig(projectRoot) || {};
+  const targetOnlyConfig = applyBuildInPublicMode(cloneConfig(originalConfig), mode);
+  const plannedConfig = applyBuildInPublicMode(normalizedProjectConfig(projectRoot), mode);
+
+  return {
+    mode,
+    action: describeBuildInPublicPlan(mode, originalConfig),
+    normalizationChanged: JSON.stringify(targetOnlyConfig) !== JSON.stringify(plannedConfig)
+  };
+}
+
 function enabledSkillsEntries(config) {
   if (!config?.enabled_skills || typeof config.enabled_skills !== 'object') {
     return [];
@@ -363,27 +468,11 @@ export async function setUpdateMode(mode, projectRoot = process.cwd()) {
 }
 
 export async function setBuildInPublicMode(mode, projectRoot = process.cwd()) {
-  if (!VALID_BIP_MODES.has(mode || '')) {
-    throw new Error('set-bip requires a mode: on, off, or unset');
-  }
+  validateBuildInPublicMode(mode);
 
   return withProjectLock(projectRoot, `set-bip ${mode}`, async () => {
     const config = normalizedProjectConfig(projectRoot);
-    if (mode === 'unset') {
-      if (config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)) {
-        delete config.alignment.build_in_public;
-        if (Object.keys(config.alignment).length === 0) {
-          delete config.alignment;
-        }
-      } else {
-        delete config.alignment;
-      }
-    } else {
-      const existing = config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)
-        ? config.alignment
-        : {};
-      config.alignment = { ...existing, build_in_public: mode === 'on' };
-    }
+    applyBuildInPublicMode(config, mode);
     writeProjectConfig(projectRoot, config);
     console.log(`Set alignment.build_in_public to ${mode}`);
     return 0;

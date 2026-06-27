@@ -5,9 +5,59 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: One-time BIP suggestion gate in `idea-scope-brief` + `ship-end` (new `set-bip-prompt` suppression-flag writer).
+Last completed task: `skillpacks set-bip <mode> --all` and `--all --dry-run`.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Set BIP All And Dry Run
+
+### Goal
+
+Add multi-project support for `skillpacks set-bip <on|off|unset> --all`, with `--all --dry-run` previewing planned config changes and unsafe parse/read issues before any `.agents/project.json` mutation.
+
+### Checklist
+
+- [x] Inspect existing `set-bip` CLI parsing, project-config helpers, project discovery, multi-project summary behavior, and tests.
+- [x] Update `set-bip` argument parsing and usage text for `set-bip <mode> [--all] [--dry-run]`.
+- [x] Implement `set-bip <mode> --all` apply behavior across discovered project roots.
+- [x] Implement `set-bip <mode> --all --dry-run` planning output with safe/unsafe summary and no file mutation.
+- [x] Add Node tests for batch apply, batch unset cleanup, dry-run no mutation, invalid JSON dry-run failure, and invalid dry-run without `--all`.
+- [x] Run package Node tests plus task-doc and diff checks.
+- [x] Document review results, create a ship manifest, commit, and push intended changes.
+
+### Implementation Notes
+
+- Keep single-project `set-bip on|off|unset` behavior unchanged.
+- Use existing `discoverProjectRoots` semantics for the `--all` root set.
+- Use existing `runAcrossProjects` summary style for apply mode so failures continue across projects and produce a nonzero exit.
+- Dry-run should report parse/read/planning failures as unsafe, print `Safe to run: yes/no`, and recommend `skillpacks set-bip <mode> --all` only when safe.
+- `--dry-run` is only valid with `--all`.
+
+### Review
+
+Implemented and verified.
+
+- Added `set-bip <mode> --all` batch apply using existing project discovery and `runAcrossProjects` summary behavior.
+- Added `set-bip <mode> --all --dry-run` planning that reads/normalizes each discovered project config, reports set/change/remove/already-match actions, reports parse/read failures as unsafe, avoids mutation locks/writes, and prints `Safe to run: yes/no`.
+- Kept single-project `set-bip on|off|unset` behavior unchanged.
+- Updated CLI help, npm distribution compatibility docs, and README fleet-update guidance.
+- Added Node regression coverage for batch apply, ignored discovery paths, unset cleanup, dry-run no mutation/no locks, invalid JSON unsafe dry-run, and rejecting `--dry-run` without `--all`.
+
+Verification passed:
+
+- `npm --workspace packages/skillpacks run test:node` (150/150)
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `node packages/skillpacks/bin/skillpacks.mjs --help`
+
+Deploy skipped: `tasks/deploy.md` classifies `packages/skillpacks/**`, `tasks/**`, and `prompts/**` changes as non-showcase, non-deploying evidence when no Skills Showcase runtime/generated public asset changed.
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-set-bip-all-dry-run.md`.
+
+## No Active Implementation Phase
+
+New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
 
 ## Review - Final-Handoff Self-Check And Guard
 
