@@ -15025,3 +15025,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Resolved the long-standing concurrent-session drift (`github-proof-data.js` ×2, `benchmark-results-matrix.md`) confirmed by the user as orphaned (no active parallel session). Reset to HEAD and regenerated cleanly via both showcase generators.
 - Canonical result: `exec` Codex matrix row repointed `45d6dd34` → `b7ce8063` (generator's deterministic selection from working-tree run evidence; both reports exist, `b7ce8063` is the current blocked/incomplete pick); proof-data `sourceFingerprint` + `recentHistoryEntries` and `skills-data.js` fingerprint refreshed to match committed `tasks/history.md` and source.
 - Verified: `validate:data` ("website-owned generated data is fresh"), `tests/layer1/benchmark-results-matrix.test.ts` 7/7.
+
+## 2026-06-26 — Add eval-ideas orchestrator (brainstorm → feature-interview → roadmap bridge)
+
+- Implemented the investigated `eval-ideas` skill: a thin Pattern A orchestrator that consumes an existing brainstorm idea set and loops one `/feature-interview` per fresh-context session over the user-selected ideas, then consolidates survivors into a prioritized `/roadmap` handoff. Closes three gaps in the manual copy-paste flow (context bloat, no progress tracking, no consolidation).
+- Reuses the Research Session Loop convention 1:1: state ladder 0/A–E (no F/G — `context_intake: scoped`), run manifest `tasks/_working/eval-ideas-run.yaml`, `pending = selected − written-interview-logs`, self-re-invocation routing + `agent_routing` payload. Added a warn-and-override entry maturity soft gate (spec exists / no open todos / evidence backing). Bridge only: no idea generation, no changes to `feature-interview`/`brainstorm`, no direct spec writes — routes through `feature-interview` (writer) and `roadmap` (phaser).
+- Authored claude + codex SKILL.md variants (v0.0) + CHANGELOG.md; generated ALIGNMENT-PAGE.md bundles; listed in `packs/product-design/PACK.md`; regenerated skillpacks manifest (398 skills) and `skills-data.js`.
+- Scoped the commit to own work: reverted pre-existing `github-proof-data.js` ×2 + `benchmark-results-matrix.md` drift (orphaned `tasks/history.md`/benchmark inputs, no eval-ideas content); committed only the `skills-data.js` pair that reflects the new skill.
+- Verification: `skill-alignment-routing-audit.mjs` (408 files, exit 0), `skill-research-loop-handoff-audit.sh` (exit 0), `upgrade-alignment-page.mjs --check` (no drift), skillpacks `build:check`, `pack.sh which eval-ideas` resolves.
+- Deploy: push-triggered Vercel build (commit changed `skills-data.js`, a deploy-relevant path); no manual `/deploy` (release-ops not installed; contract operating model is Vercel-on-push).
+- Commit: `0b9f9b50c`.
