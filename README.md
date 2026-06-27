@@ -459,7 +459,7 @@ See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioni
 pnpm --dir tests test
 ```
 
-`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `base/` and `packs/`; `skill-mirror-parity-audit.sh` checks mirrored pack skill pairs under `packs/`.
+`skill-deps.sh`, `skill-pack-routing-audit.sh`, `skill-versions.sh`, and `skill-mirror-parity-audit.sh` scan `base/` and `packs/`.
 
 Live agent behavior tests are opt-in because they invoke authenticated CLIs and may spend model budget:
 

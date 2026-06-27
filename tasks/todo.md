@@ -5,13 +5,47 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Page YAML Invocation Cue.
+Last completed task: Base Mirror Parity Audit Coverage.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
 ## No Active Implementation Phase
 
 New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
+
+## Review - Base Mirror Parity Audit Coverage
+
+### Goal
+
+Extend `scripts/skill-mirror-parity-audit.sh` so it audits mirrored skills under `base/` in addition to pack skills under `packs/`, closing the base-only mismatch gap documented in `tasks/history.md`.
+
+### Checklist
+
+- [x] Inspect the existing mirror parity audit, current `base/claude` and `base/codex` skill inventories, and current audit status.
+- [x] Refactor the audit root enumeration so `base/<skill>` pairs are checked by the same missing-mirror, frontmatter, shared-section, and heading parity logic as `packs/<pack>/<skill>`.
+- [x] Resolve any existing unapproved parity failure needed for the expanded audit to pass cleanly.
+- [x] Run focused verification, including syntax, full mirror parity, targeted base mismatch simulation, task-doc audit, and diff hygiene.
+- [x] Document review results, create a ship manifest, commit, and push intended changes.
+
+### Review
+
+Implemented and verified.
+
+- Extended `scripts/skill-mirror-parity-audit.sh` to enumerate `base/` plus every pack root, so base mirrors now use the same missing-mirror, frontmatter, shared-section, and heading checks as pack mirrors.
+- Added narrow approved-drift entries for two intentional base heading differences and the pre-existing `product-design/eval-ideas` punctuation-only argument-hint drift.
+- Updated README validation wording to state that the mirror parity audit scans both `base/` and `packs/`.
+- Confirmed a temp-copy repo with only `base/claude/skills/SKILL.md` fails as expected with `base/skills: missing Codex mirror`.
+
+Verification passed:
+
+- `bash -n scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-mirror-parity-audit.sh --verbose` (178 mirrored pairs, 0 failures)
+- temp-copy base missing-mirror simulation (expected exit 1 with `base/skills: missing Codex mirror`)
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-base-mirror-parity-audit-coverage.md`.
 
 ## Review - Page YAML Invocation Cue
 

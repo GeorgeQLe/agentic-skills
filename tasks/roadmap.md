@@ -2,6 +2,36 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Base Mirror Parity Audit Coverage
+
+### Goal
+
+Extend `scripts/skill-mirror-parity-audit.sh` so it audits mirrored skills under `base/` in addition to pack skills under `packs/`, closing the base-only mismatch gap documented in `tasks/history.md`.
+
+### Plan
+
+1. Inspect the existing mirror parity audit, current `base/claude` and `base/codex` skill inventories, and current audit status.
+2. Refactor the audit root enumeration so `base/<skill>` pairs are checked by the same missing-mirror, frontmatter, shared-section, and heading parity logic as `packs/<pack>/<skill>`.
+3. Resolve any existing unapproved parity failure needed for the expanded audit to pass cleanly.
+4. Run focused verification, including syntax, full mirror parity, targeted base mismatch simulation, task-doc audit, and diff hygiene.
+5. Document review results, create a ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `scripts/skill-mirror-parity-audit.sh` includes `base/claude/*/SKILL.md` and `base/codex/*/SKILL.md` in its parity surface.
+- Base-only missing mirrors fail with a path-shaped `base/<skill>` finding.
+- Existing pack parity behavior and approved drift handling remain unchanged.
+- The normal audit run exits 0 after current known/actual parity issues are resolved.
+- Required verification passes or any blocker is documented.
+
+### Results
+
+- Extended the mirror parity audit to enumerate `base/` before pack roots, so `base/<skill>` pairs now use the same missing-mirror, frontmatter, shared-section, and heading checks as `packs/<pack>/<skill>`.
+- Added narrow approved-drift entries for two existing platform-specific base heading structures and one pre-existing `eval-ideas` argument-hint punctuation drift.
+- Updated validation documentation to state that `skill-mirror-parity-audit.sh` scans both `base/` and `packs/`.
+- Verified a temp-copy base-only mismatch fails with `base/skills: missing Codex mirror`.
+- Verification passed: shell syntax, full expanded parity audit, package build check, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Page YAML Invocation Cue
 
 ### Goal

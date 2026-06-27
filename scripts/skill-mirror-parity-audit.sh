@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Audits mirrored Claude/Codex pack skill parity.
+# Audits mirrored Claude/Codex base and pack skill parity.
 # Usage: skill-mirror-parity-audit.sh [--verbose]
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -30,6 +30,7 @@ const path = require("path");
 
 const root = process.argv[2];
 const verbose = process.argv[3] === "true";
+const baseRoot = path.join(root, "base");
 const packsRoot = path.join(root, "packs");
 
 const frontmatterKeys = ["name", "type", "context_intake", "visual_tier", "version", "argument-hint"];
@@ -74,6 +75,7 @@ const approvedFrontmatterDrift = new Map([
   ["monorepo/scaffold::argument-hint", "Pre-existing platform argument-hint drift."],
   ["poketowork-kanban/poketo-kanban::argument-hint", "Pre-existing platform argument-hint drift."],
   ["product-design/brainstorm::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["product-design/eval-ideas::argument-hint", "Pre-existing punctuation-only argument-hint drift."],
   ["product-design/spec-interview::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/deploy::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/release::argument-hint", "Pre-existing platform argument-hint drift."],
@@ -84,6 +86,8 @@ const approvedFrontmatterDrift = new Map([
 ]);
 
 const approvedHeadingDrift = new Map([
+  ["base/init-agentic-skills", "Intentional platform-specific guided setup confirmation structure."],
+  ["base/provision-agentic-config", "Intentional platform-specific provision block structure."],
   ["agent-work-admin/roadmap", "Pre-existing heading shape drift outside this remediation."],
   ["agent-work-admin/spec-drift", "Pre-existing heading shape drift outside this remediation."],
   ["business-research/competitive-analysis", "Pre-existing heading shape drift outside this remediation."],
@@ -253,20 +257,31 @@ function headingFingerprint(text) {
     .map((line) => normalizePlatformSyntax(line));
 }
 
-const packs = fs.readdirSync(packsRoot)
-  .filter((entry) => fs.statSync(path.join(packsRoot, entry)).isDirectory())
-  .sort();
+const mirrorRoots = [
+  {
+    pairPrefix: "base",
+    claudeDir: path.join(baseRoot, "claude"),
+    codexDir: path.join(baseRoot, "codex"),
+  },
+  ...fs.readdirSync(packsRoot)
+    .filter((entry) => fs.statSync(path.join(packsRoot, entry)).isDirectory())
+    .sort()
+    .map((pack) => ({
+      pairPrefix: pack,
+      claudeDir: path.join(packsRoot, pack, "claude"),
+      codexDir: path.join(packsRoot, pack, "codex"),
+    })),
+];
 
-for (const pack of packs) {
-  const packDir = path.join(packsRoot, pack);
-  const claudeDir = path.join(packDir, "claude");
-  const codexDir = path.join(packDir, "codex");
+for (const mirrorRoot of mirrorRoots) {
+  const claudeDir = mirrorRoot.claudeDir;
+  const codexDir = mirrorRoot.codexDir;
   const claudeSkills = listSkillNames(claudeDir);
   const codexSkills = listSkillNames(codexDir);
   const allSkills = [...new Set([...claudeSkills, ...codexSkills])].sort();
 
   for (const skill of allSkills) {
-    const pair = `${pack}/${skill}`;
+    const pair = `${mirrorRoot.pairPrefix}/${skill}`;
     const hasClaude = claudeSkills.has(skill);
     const hasCodex = codexSkills.has(skill);
 
