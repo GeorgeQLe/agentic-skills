@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "85d36271538a48fd4a34765aa1171d4bee17cd66c22790cf490cd49c5bebf49d",
+  "source_fingerprint": "1d6fdf440d8d8e1c1c029bbb7ad068a334b105ed569e7a6ce8808ca9d56ab681",
   "packs": [
     {
       "name": "agent-bridge",
@@ -544,6 +544,7 @@
         "create-ui-experiment",
         "design-inspirations",
         "design-system",
+        "eval-ideas",
         "feature-interview",
         "key-moments",
         "logic-wiring",
@@ -554,7 +555,7 @@
         "user-flow-map",
         "ux-variations"
       ],
-      "skill_count": 16
+      "skill_count": 17
     },
     {
       "name": "product-testing",
@@ -8316,6 +8317,25 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-claude-eval-ideas",
+      "name": "eval-ideas",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/product-design/claude/eval-ideas/SKILL.md",
+      "installable": true,
+      "content_sha256": "9099e24bafc85011dd3254bec1dc4baca6cb6ba8779f7f05f42ebb9691b30f0c",
+      "archive_versions": [],
+      "command": "/eval-ideas",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-claude-feature-interview",
       "name": "feature-interview",
       "scope": "pack",
@@ -8801,6 +8821,25 @@
         "v0.3"
       ],
       "command": "$design-system",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-product-design-codex-eval-ideas",
+      "name": "eval-ideas",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/product-design/codex/eval-ideas/SKILL.md",
+      "installable": true,
+      "content_sha256": "88e226ecabfd6ff18835e54b06771ff7410cc542f44d66702405bd6d9ab8e1d8",
+      "archive_versions": [],
+      "command": "$eval-ideas",
       "deck_memberships": []
     },
     {
