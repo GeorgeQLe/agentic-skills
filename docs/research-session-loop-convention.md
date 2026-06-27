@@ -189,11 +189,12 @@ This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-r
 
 ### Self-routing continuation payload
 
-Pattern A review pages should make the bottom compiled YAML **self-routing data** by including both a top-level `command` field and an `agent_routing` mapping. The root `command` gives the user and fresh agent the exact parent invocation to run with the pasted YAML, while `agent_routing` gives enough context to route back to the parent orchestrator when the user pastes the YAML. The parent orchestrator still owns interpretation, state resolution, artifact writing, archiving, and inline framework loading.
+Pattern A review pages should make the bottom compiled YAML **self-routing data** by beginning with `# Invoke with: <parent-command>` followed by a top-level `command` field and an `agent_routing` mapping. The invocation comment gives the user and fresh LLM agent an immediate visual cue, the root `command` gives parsers the exact parent invocation to run with the pasted YAML, and `agent_routing` gives enough context to route back to the parent orchestrator when the user pastes the YAML. The parent orchestrator still owns interpretation, state resolution, artifact writing, archiving, and inline framework loading.
 
 Example for an inline framework findings gate:
 
 ```yaml
+# Invoke with: $competitive-analysis research/afps-tracker
 command: "$competitive-analysis research/afps-tracker"
 agent_routing:
   workflow: pattern-a-research-loop

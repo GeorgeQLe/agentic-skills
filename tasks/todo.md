@@ -5,9 +5,53 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: `skillpacks set-bip <mode> --all` and `--all --dry-run`.
+Last completed task: Page YAML Invocation Cue.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## No Active Implementation Phase
+
+New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
+
+## Review - Page YAML Invocation Cue
+
+### Goal
+
+Update alignment and interrogation page YAML conventions so copied YAML begins with a visible invocation cue while preserving valid, parseable YAML.
+
+### Checklist
+
+- [x] Inspect canonical alignment/interrogation conventions and YAML routing contract.
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Update canonical alignment YAML guidance.
+- [x] Update canonical interrogation YAML guidance.
+- [x] Update shared routing contract and hard-coded local YAML generators/references.
+- [x] Regenerate generated convention bundles.
+- [x] Run focused verification and diff hygiene.
+- [x] Document review results, create a ship manifest, commit, and push intended changes.
+
+### Review
+
+Implemented and verified.
+
+- Added a valid first-line YAML comment, `# Invoke with: <resolved command>`, to alignment review YAML, BIP approval YAML, section-feedback YAML, and interrogation round-answer YAML contracts.
+- Kept `command` as the first real YAML key and preserved parity with `agent_routing.command` when routing metadata exists.
+- Updated canonical conventions, the YAML routing contract, Pattern A research-loop guidance, the skillmap Excalidraw YAML generator, and the bespoke `brainstorm` alignment convention.
+- Regenerated generated `ALIGNMENT-PAGE.md` and `INTERROGATION-PAGE.md` bundles and synced installed Codex copies that mirror source bundles.
+- Added regression expectations and cached repeated bundle reads in the broad alignment gate test to keep the generated-convention suite fast.
+
+Verification passed:
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `node scripts/skill-alignment-routing-audit.mjs --report`
+- stale-shape `rg` scans for old `alignment_page`/`interrogation_page` first-key guidance
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/interrogation-confidence-gate.test.ts --reporter=dot` (80/80)
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-page-yaml-invocation-cue.md`.
 
 ## Review - Set BIP All And Dry Run
 
@@ -54,10 +98,6 @@ Verification passed:
 Deploy skipped: `tasks/deploy.md` classifies `packages/skillpacks/**`, `tasks/**`, and `prompts/**` changes as non-showcase, non-deploying evidence when no Skills Showcase runtime/generated public asset changed.
 
 Ship manifest: `tasks/ship-manifest-2026-06-27-set-bip-all-dry-run.md`.
-
-## No Active Implementation Phase
-
-New implementation work should be promoted from `tasks/roadmap.md` before edits begin.
 
 ## Review - Final-Handoff Self-Check And Guard
 

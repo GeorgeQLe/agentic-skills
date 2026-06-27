@@ -928,6 +928,7 @@ ${statsRows}
 
 <script>
 const alignmentPage = '${alignmentPage}';
+const continuationCommand = 'node scripts/generate-skillmap-excalidraw.mjs';
 const actionFor = { emphasize: 'add-weight-to-section', down: 'investigate-and-revise', 'needs-clarification': 'clarify-before-approval' };
 function yamlEscape(value) { return String(value || '').replace(/\\n/g, '\\n    '); }
 function selectedFeedbackEntries() {
@@ -941,7 +942,7 @@ function selectedFeedbackEntries() {
 function unansweredQuestions() { return [...document.querySelectorAll('.gate')].filter(g => !g.querySelector('input[type="radio"]:checked')); }
 function feedbackYaml(entries) {
   const unanswered = unansweredQuestions().map(g => g.dataset.questionId);
-  let y = \`alignment_page: \${alignmentPage}\\nfeedback_status: revision-request\\napproval_status: not-approved\\nunanswered_required_questions:\\n\`;
+  let y = \`# Invoke with: \${continuationCommand}\\ncommand: "\${continuationCommand}"\\nalignment_page: \${alignmentPage}\\nfeedback_status: revision-request\\napproval_status: not-approved\\nunanswered_required_questions:\\n\`;
   y += unanswered.length ? unanswered.map(q => \`  - \${q}\`).join('\\n') + '\\n' : '  []\\n';
   y += 'section_feedback:\\n';
   y += entries.length ? entries.map(e => \`  - section: \${yamlEscape(e.section)}\\n    feedback: \${e.feedback}\\n    requested_agent_action: \${e.requested_agent_action}\\n    notes: \${yamlEscape(e.notes)}\`).join('\\n') + '\\n' : '  []\\n';
@@ -949,7 +950,7 @@ function feedbackYaml(entries) {
 }
 function answersYaml() {
   const gates = [...document.querySelectorAll('.gate')];
-  let y = \`alignment_page: \${alignmentPage}\\napproval_status: ready-for-agent-review\\ngate_answers:\\n\`;
+  let y = \`# Invoke with: \${continuationCommand}\\ncommand: "\${continuationCommand}"\\nalignment_page: \${alignmentPage}\\napproval_status: ready-for-agent-review\\ngate_answers:\\n\`;
   for (const g of gates) {
     const checked = g.querySelector('input[type="radio"]:checked');
     const answer = checked ? checked.value : '';

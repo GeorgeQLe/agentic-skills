@@ -2,6 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Page YAML Invocation Cue
+
+### Goal
+
+Update alignment and interrogation page YAML conventions so copied YAML keeps a machine-readable first key while also making the exact invocation visually first for agent compliance.
+
+### Plan
+
+1. Update the canonical alignment-page convention and routing contract so every review-page YAML payload starts with an `# Invoke with: <command>` comment followed by `command: <same command>`.
+2. Update the canonical interrogation-page convention so round-answer YAML starts with the same invocation comment and first real `command` key, while preserving `agent_routing.command` parity.
+3. Update any local page/YAML generation references that hard-code alignment or interrogation YAML shapes.
+4. Regenerate generated `ALIGNMENT-PAGE.md` and `INTERROGATION-PAGE.md` bundles from the canonical docs.
+5. Run focused generator checks, routing/convention audits, task-doc audit, and diff hygiene.
+6. Document results, commit, and push only the intended tracked changes on `master`.
+
+### Acceptance Criteria
+
+- Review-page YAML remains valid YAML and parseable by strict consumers.
+- The first line of compiled/copied page YAML is a YAML comment of the form `# Invoke with: <resolved command>`.
+- The first real YAML key is `command`, and it matches `agent_routing.command` whenever that mapping exists.
+- Alignment response YAML, alignment section-feedback YAML, BIP approval YAML, and interrogation round-answer YAML all use the same invocation cue rule.
+- Generated per-skill convention bundles are in sync with the canonical docs.
+- Required verification passes or any blocker is documented.
+
+### Results
+
+- Updated the canonical alignment-page convention, interrogation-page convention, alignment YAML routing contract, and Pattern A research-loop convention so copied page YAML begins with `# Invoke with: <resolved command>` and then uses `command` as the first real YAML key.
+- Updated the skillmap Excalidraw YAML generator and the bespoke `brainstorm` alignment convention to emit the same invocation cue shape.
+- Regenerated 309 generated alignment-page bundles and 20 generated interrogation-page bundles, then synced installed Codex convention copies that mirror source bundles.
+- Added contract-test coverage for invocation comments and first real `command` keys, and cached repeated bundle reads in the alignment gate test to keep generated-convention verification fast.
+- Verification passed: generator checks, bundle audit, routing audit, stale-shape scans, focused layer1 tests, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Set BIP All And Dry Run
 
 ### Goal

@@ -61,8 +61,10 @@ describe("interrogation confidence-gate contract", () => {
       expect(text, `${dir} bundle needs-research handling`).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
       expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
       expect(text, `${dir} bundle root command`).toContain("top-level `command`");
+      expect(text, `${dir} bundle invocation comment`).toContain("# Invoke with: <parent-skill-command>");
       expect(text, `${dir} bundle command yaml`).toContain('command: "<parent-skill-command>"');
-      expect(text, `${dir} bundle matching command metadata`).toContain("keep those two values identical");
+      expect(text, `${dir} bundle first real command key`).toContain("first real YAML key");
+      expect(text, `${dir} bundle matching command metadata`).toContain("keep those values identical");
       expect(text, `${dir} bundle no separate command copy`).toContain("does not need a separate command clipboard item");
     });
   }

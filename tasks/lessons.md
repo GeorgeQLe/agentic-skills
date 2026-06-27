@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-27 — Page YAML needs both invocation cue and parser contract
+
+- A page-YAML routing discussion exposed that putting the skill invocation only in a YAML field can be easy for agents to miss, while putting it only in a prepended freeform line would weaken parser compliance.
+- For alignment and interrogation page YAML, make the invocation visually first as a valid YAML comment: `# Invoke with: <resolved command>`.
+- Keep `command` as the first real YAML key and match `agent_routing.command` when routing metadata exists; treat the comment as an attention cue and the field as the enforceable contract.
+
 ## 2026-06-24 — Downstream skill prompts need availability gates
 
 - A `$brainstorm` handoff produced `$feature-interview ...` copy-paste prompts even though `feature-interview` was not enabled in `.agents/project.json` and no local/global skill file was installed.
