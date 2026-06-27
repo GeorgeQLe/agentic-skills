@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-26 — Ship 0.1.12 version bump (publish blocked on npm 2FA)
+
+- Reviewed the working-tree drift (`package.json` + `skillpacks-manifest.json` at 0.1.12) the user surfaced via a failed `./publish.sh patch` (dirty-tree guard). Confirmed it was a stranded bump from a prior run, not concurrent-session work.
+- Determined publish.sh must own the bump from a clean 0.1.11 tree: `./publish.sh 0.1.12` errors (`npm version` "Version not changed") and `--current` refuses (recovery-only; neither package published). Reverted to 0.1.11 (user-approved) and re-ran `./publish.sh patch`.
+- Run bumped to 0.1.12, built, and passed all verification — then **failed at `npm publish` with `EOTP`**: npm 2FA is `auth-and-writes`, and publish.sh has no `--otp` passthrough (and does ~5 min of work before publishing, so an upfront OTP would expire). Neither `skillpacks@0.1.12` nor `@glexcorp/gskp@0.1.12` is on the registry. User elected to run the publish themselves.
+- Committed the 0.1.12 bump to clear the dirty tree: `package.json` + regenerated `skillpacks-manifest.json` (fingerprint `cf98640c`→`3a4f4093`, version-driven; `build:check` passes, 396 skills / 42 packs). **Did not tag `v0.1.12`** — left for after the user's publish lands, per publish.sh's post-publish contract.
+- Handoff: user runs the npm publish (2FA OTP), then tags `v0.1.12` and pushes the tag.
+
 ## 2026-06-26 — Reconcile 0.1.12 CHANGELOG against HEAD
 
 - Reconciled the `## [0.1.12]` CHANGELOG section against the real `v0.1.11..HEAD` diff (60 commits). Fixed one factual inaccuracy and filled two coverage gaps; all edits confined to `CHANGELOG.md`.
