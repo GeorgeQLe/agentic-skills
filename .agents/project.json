@@ -20,5 +20,8 @@
     "ux-variations": "product-design",
     "reconcile-dev-docs": "docs-health",
     "roadmap": "agent-work-admin"
+  },
+  "alignment": {
+    "build_in_public": true
   }
 }
