@@ -3,7 +3,7 @@ name: eval-ideas
 description: Loop feature-interviews over a brainstorm idea set and consolidate survivors into the roadmap
 type: planning
 invocation: orchestrator
-version: v0.1
+version: v0.0
 required_conventions: [alignment-page]
 argument-hint: "[optional brainstorm topic or tasks/ideas.md ref] [--override-gate]"
 context_intake: scoped
@@ -118,11 +118,11 @@ agent_routing:
 Resolve scope by product path before using code or app structure as a hint:
 
 1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name.
-2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
-3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` (or legacy `abandoned`), stop and warn that the path is archived.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths`; treat legacy `abandoned` as `archived`; exclude `archived`, `deferred`, `revisit_candidate`, `promoted`, and `research/_archive/` scopes from active target selection.
 4. If active product paths exist, use them. If multiple exist, ask which one to target.
 5. If no active manifest target exists, list non-archived product directories under `research/` (excluding `research/_archive/` and dot dirs). Auto-select only when exactly one exists; ask when multiple exist.
-6. If no product directories exist, use flat `research/` single-product mode.
+6. If no product directories exist, use flat single-product mode.
 7. Detect monorepo/app/package structure only as a secondary hint.
 
 When product path `{slug}` is active, scope the run manifest to `tasks/{slug}/_working/eval-ideas-run.yaml` and pass the `{slug}` argument through to each inline `$feature-interview`.

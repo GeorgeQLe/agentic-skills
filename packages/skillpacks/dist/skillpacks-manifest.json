@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "1d6fdf440d8d8e1c1c029bbb7ad068a334b105ed569e7a6ce8808ca9d56ab681",
+  "source_fingerprint": "ae84a498ad346115a81aa6237aab1ea86c9fc3c148da09b5559acf67885b3a47",
   "packs": [
     {
       "name": "agent-bridge",
@@ -8322,7 +8322,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8330,8 +8330,10 @@
       ],
       "path": "packs/product-design/claude/eval-ideas/SKILL.md",
       "installable": true,
-      "content_sha256": "9099e24bafc85011dd3254bec1dc4baca6cb6ba8779f7f05f42ebb9691b30f0c",
-      "archive_versions": [],
+      "content_sha256": "90487d00bf86fbce4dc6fada19c722c109bf72d1a488d85ed9aad8d9ca80f3e1",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/eval-ideas",
       "deck_memberships": []
     },
@@ -8829,7 +8831,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8837,8 +8839,10 @@
       ],
       "path": "packs/product-design/codex/eval-ideas/SKILL.md",
       "installable": true,
-      "content_sha256": "88e226ecabfd6ff18835e54b06771ff7410cc542f44d66702405bd6d9ab8e1d8",
-      "archive_versions": [],
+      "content_sha256": "581b20b760103439cb75973c0a181456247cae94951daa8c9974c3ccf6d6f9b4",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$eval-ideas",
       "deck_memberships": []
     },
