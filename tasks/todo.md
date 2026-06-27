@@ -5,9 +5,84 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Interrogation Apply Recommended Controls.
+Last completed task: Optional Human Review Summary Convention.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Optional Human Review Summary Convention
+
+### Goal
+
+Add an optional terminal-only human-review summary prompt to every design-tree intra-skill chunked stop, without introducing per-chunk approval artifacts or new HTML review gates.
+
+### Execution Profile
+
+- Parallel mode: serial for source edits and regeneration
+- Scope: canonical design-tree convention, generated `DESIGN-TREE-LOOP.md` bundles, generated installed copies if refresh requires them, and task records
+- Notes: do not edit active `SKILL.md` files or bump `user-flow-map` `version: v1.6`; no new alignment gate or per-section HTML review page
+
+### Checklist
+
+- [x] Record the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Update `docs/design-tree-loop-convention.md` with terminal-surface ownership and optional summary contract.
+- [x] Regenerate tracked design-tree loop bundles.
+- [x] Refresh generated local installs if needed after source bundles are correct.
+- [x] Run required verification and fix in-scope regressions.
+- [x] Confirm generated Claude and Codex `user-flow-map` bundles include the new rule.
+- [x] Confirm no active `SKILL.md` version changes.
+- [x] Document review results, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- `## 0a. Communication Surfaces` says Terminal text owns optional human-review recaps for chunked handoffs.
+- `## 5. Self-Routing Handoff Format` includes `### Optional Human Review Summary`.
+- Every intra-skill chunked stop appends this after `## Invoke With YAML`:
+
+```md
+**Optional Human Review**
+
+Do you want a summary of what was executed this step before continuing?
+```
+
+- If the user says yes, the summary is terminal-only, writes no files, makes no approval decision, creates no HTML page unless explicitly requested, and is derived from the just-written intermediate plus shared brief/durable cursor.
+- The summary includes what was produced, decisions/structures introduced, downstream importance, reviewer inspection points, file links, and what remains unapproved until final assemble+approve.
+- No active `SKILL.md` version changes are present.
+
+### Test Plan
+
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `rg "Optional Human Review|Do you want a summary of what was executed this step" docs packs .codex/skills .claude/skills`
+- `rg "per-section HTML review|non-approval and non-canonical|no file writes" docs packs .codex/skills .claude/skills`
+- Confirm generated bundles include the rule for both Claude and Codex `user-flow-map`.
+- Confirm no active `SKILL.md` version changes are present.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review
+
+Implemented and verified.
+
+- Updated `docs/design-tree-loop-convention.md` so Terminal text owns optional human-review recaps for chunked handoffs.
+- Added `### Optional Human Review Summary` to the self-routing handoff format.
+- Required every intra-skill chunked stop to append the exact optional prompt after `## Invoke With YAML`.
+- Defined yes-response summaries as terminal-only, non-approval and non-canonical, with no file writes and no HTML page unless explicitly requested.
+- Required summaries to draw from the just-written intermediate plus shared brief/durable cursor and include produced work, introduced decisions/structures, downstream importance, inspection points, file links, and what remains unapproved until final assemble+approve.
+- Regenerated 22 tracked `DESIGN-TREE-LOOP.md` bundles and refreshed generated project-local installs; no additional tracked install diff was produced.
+- Confirmed active `SKILL.md` files were unchanged.
+
+Verification passed:
+
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `rg "Optional Human Review|Do you want a summary of what was executed this step" docs packs .codex/skills .claude/skills`
+- `rg "per-section HTML review|non-approval and non-canonical|no file writes" docs packs .codex/skills .claude/skills`
+- targeted Claude/Codex `user-flow-map` bundle scan across `packs/` and local installs
+- `git diff --name-only -- '*SKILL.md'` (no output)
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-optional-human-review-summary.md`.
 
 ## Review - Interrogation Apply Recommended Controls
 

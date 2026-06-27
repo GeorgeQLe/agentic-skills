@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-27 — Optional human-review summary convention
+
+- Updated the design-tree loop convention so Terminal text owns optional human-review recaps for chunked handoffs.
+- Added a required `**Optional Human Review**` prompt after `## Invoke With YAML` for every intra-skill chunked stop.
+- Defined the yes-response summary as terminal-only, non-approval and non-canonical, no file writes, no approval decision, and no HTML page unless explicitly requested.
+- Required summaries to draw from the just-written intermediate plus shared brief/durable cursor and cover produced work, introduced decisions/structures, downstream importance, reviewer inspection points, file links, and what remains unapproved until final assemble+approve.
+- Regenerated 22 tracked `DESIGN-TREE-LOOP.md` bundles and refreshed generated project-local installs; no active `SKILL.md` versions changed.
+- Verification passed: design-tree generator check, skill convention bundle audit, targeted propagation scans, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-27-optional-human-review-summary.md`.
+
 ## 2026-06-27 — Fresh-session YAML routing benchmark scenario
 
 - Added `--scenario alignment-yaml-routing` support to the benchmark CLI through a separate scenario registry, keeping repository skill coverage and `--skill` targets distinct.

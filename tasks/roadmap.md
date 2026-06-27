@@ -2,6 +2,43 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Optional Human Review Summary Convention
+
+### Goal
+
+Add a lightweight optional human-review recap convention to the shared design-tree loop so every chunked intra-skill stop consistently offers a terminal-only, non-blocking summary before continuation.
+
+### Plan
+
+1. Update only `docs/design-tree-loop-convention.md` as the canonical behavior source.
+2. Expand `## 0a. Communication Surfaces` so Terminal text explicitly owns optional human-review recaps for chunked handoffs.
+3. In `## 5. Self-Routing Handoff Format`, add `### Optional Human Review Summary` after the chunked handoff/YAML contract.
+4. Require every intra-skill chunked stop to append the optional human-review prompt after `## Invoke With YAML`.
+5. Define the yes-response contract as terminal-only, no file writes, no approval decision, no HTML page unless explicitly requested, and derived from the just-written intermediate plus shared brief/durable cursor.
+6. Regenerate tracked `DESIGN-TREE-LOOP.md` bundles with `node scripts/upgrade-design-tree-loop.mjs`.
+7. Refresh generated local installs with `scripts/pack.sh refresh` only after source bundles are correct, if the tracked installed copies are stale.
+8. Run the required bundle checks, audit, targeted grep verification, task-doc audit, and diff hygiene.
+9. Confirm no active `SKILL.md` version changes, document results, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- The recap convention applies to all design-tree intra-skill chunking, not only `user-flow-map`.
+- Every chunked stop appends the exact optional human-review prompt after `## Invoke With YAML`.
+- A yes-response summary is informational only: terminal-only, no file writes, no approval decision, and no HTML page unless explicitly requested.
+- The summary is derived from the just-written intermediate plus shared brief/durable cursor.
+- The summary covers what was produced, decisions/structures introduced, downstream importance, reviewer inspection points, file links, and what remains unapproved until final assemble+approve.
+- Generated Claude and Codex `user-flow-map` design-tree bundles include the new rule.
+- Active `SKILL.md` versions remain unchanged.
+
+### Results
+
+- Updated `docs/design-tree-loop-convention.md` as the canonical behavior source for optional human-review recaps in chunked design-tree handoffs.
+- Added the required `**Optional Human Review**` prompt after `## Invoke With YAML` for every intra-skill chunked stop.
+- Defined the summary as terminal-only, non-approval and non-canonical, with no file writes and no HTML page unless explicitly requested.
+- Regenerated 22 tracked `DESIGN-TREE-LOOP.md` bundles under `packs/`.
+- Refreshed generated project-local skill installs after source regeneration; no additional tracked install diff was produced.
+- Verification passed; see `tasks/ship-manifest-2026-06-27-optional-human-review-summary.md`.
+
 ## Historical Implementation - Interrogation Apply Recommended Controls
 
 ### Goal

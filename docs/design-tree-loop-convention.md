@@ -80,7 +80,7 @@ store").
 |---|---|---|
 | **Interrogation page** (`interrogation/{skill}-r{N}-{branch}.html`) | Stage-0 elicitation — one looping HTML round per turn until the confidence gate passes. The primary surface for stage-0 alignment. | `docs/interrogation-page-convention.md`; `data-open-input` per round; coverage checkpoint exits the loop |
 | **Alignment page** (`alignment/{name}-{topic}.html`) | The **binding approval gate** — the single stage-4 whole-unit review per skill-run-on-a-branch. The primary surface where the user approves/rejects/modifies a scoped deliverable. | `docs/alignment-page-convention.md`; `review → confirmed → amended`; compiled Response YAML authorizes canonical writes |
-| **Terminal text** | **Interviewing** (`docs/interview-convention.md` — all interviewing happens in the terminal *before* the alignment page), **confirmation manifests/checklists** (render inline as turn-final message text per the Manifest Visibility Rule), self-routing handoffs (`## Next Work` / `## Invoke With YAML`). | turn-final message |
+| **Terminal text** | **Interviewing** (`docs/interview-convention.md` — all interviewing happens in the terminal *before* the alignment page), **confirmation manifests/checklists** (render inline as turn-final message text per the Manifest Visibility Rule), self-routing handoffs (`## Next Work` / `## Invoke With YAML`), and optional human-review recaps for chunked handoffs. | turn-final message |
 | **Manifests** (`design/**/*.yaml`, `_working/` briefs) | Machine state + pure-context briefs. Never HTML. | filesystem; never a rival page |
 
 So: **HTML alignment + interrogation pages are the primary surface for binding gates and
@@ -394,6 +394,31 @@ fresh session, where the skill cold-starts and resolves state from the durable c
 continuation mechanism in this loop is **re-running the command**; the `## Invoke With YAML`
 payload is *routing context* for a fresh agent (it helps a cold agent self-route), not consumed
 state like the research loop's compiled alignment YAML, so pasting it is optional.
+
+### Optional Human Review Summary
+
+Every intra-skill chunked stop — setup stop, per-unit stop, and assemble-ready handoff — must
+append this prompt after the `## Invoke With YAML` block:
+
+```markdown
+**Optional Human Review**
+
+Do you want a summary of what was executed this step before continuing?
+```
+
+If the user says yes, answer with a terminal-only summary. The summary is a non-approval and non-canonical review aid: it makes no approval decision, performs no file writes, and creates no
+HTML page unless the user explicitly requests one. It is not a per-section HTML review page, a
+new alignment gate, or a substitute for final assemble+approve.
+
+Derive the summary only from the just-written intermediate plus the shared context brief /
+durable cursor. Include:
+
+- what was produced in the just-completed chunk;
+- decisions, structures, or constraints introduced by that chunk;
+- why the chunk matters downstream;
+- reviewer inspection points for a human reading before continuation;
+- file links to the intermediate, brief, and relevant cursor paths;
+- what remains unapproved until final assemble+approve.
 
 **Setup-stop one-time tradeoff note.** The **first** handoff — the setup / scope-checkpoint
 stop only — additionally states the single-session tradeoff once: you *can* run the whole loop
