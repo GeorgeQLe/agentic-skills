@@ -84,9 +84,9 @@ kill_process_tree() {
 
 run_version_bump() {
   local timeout_seconds=${SKILLPACKS_PUBLISH_VERSION_TIMEOUT_SECONDS:-20}
-  printf '+ npm --workspace packages/skillpacks version %q --no-git-tag-version --ignore-scripts --no-commit-hooks\n' "$TARGET"
+  printf '+ npm --workspace packages/skillpacks version %q --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update\n' "$TARGET"
 
-  npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks &
+  npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update &
   local pid=$!
   local start
   start=$(date +%s)
