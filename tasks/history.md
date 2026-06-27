@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-27 — Fresh-session YAML routing benchmark scenario
+
+- Added `--scenario alignment-yaml-routing` support to the benchmark CLI through a separate scenario registry, keeping repository skill coverage and `--skill` targets distinct.
+- Added a fresh temp-repo scenario setup with eight alignment/interrogation YAML routing cases: happy path, no-comment route matrix, missing root command, stale comment/root mismatch, root/agent-routing mismatch, messy context, missing page/repo mismatch, and interrogation parent routing.
+- Required each run to write `routing-compliance-result.json` with per-case selected command/source/action/reason/noise/mutation fields, and added hard assertions for expected route decisions, no unrelated file mutation, no downstream exec leakage, and no extra context-clear request.
+- Added scenario quality scoring for route-source precedence, noisy-context resistance, malformed/mismatched YAML rejection, fresh-session behavior, no exec leakage, and interrogation parent/sidecar routing.
+- Added layer1 coverage for scenario listing/resolution, coverage-matrix separation, expected artifact acceptance, CLI skill/scenario mutual exclusion, and agent-runner `Connection closed mid-response` infrastructure classification.
+- Verification passed: focused layer1 runner/setup/coverage tests, Codex smoke benchmark, full Claude+Codex benchmark (latest run 3/3 for each), alignment routing audit, alignment/interrogation gate tests, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-27-alignment-yaml-routing-benchmark.md`.
+
 ## 2026-06-27 — `set-bip --all` and dry-run
 
 - Added npm CLI fleet support for `skillpacks set-bip <on|off|unset> --all`, reusing existing project discovery and `runAcrossProjects` summary behavior while keeping single-project `set-bip on|off|unset` unchanged.

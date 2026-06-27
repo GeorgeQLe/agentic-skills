@@ -67,6 +67,53 @@ Extend `scripts/skill-mirror-parity-audit.sh` so it audits mirrored skills under
 - Verified a temp-copy base-only mismatch fails with `base/skills: missing Codex mirror`.
 - Verification passed: shell syntax, full expanded parity audit, package build check, task-doc audit, and diff hygiene.
 
+## Historical Implementation - Fresh-Session YAML Routing Benchmark
+
+### Goal
+
+Add a benchmark scenario that runs Claude and Codex in fresh temp worktrees and measures whether they comply with compiled alignment/interrogation YAML routing. The benchmark must separately expose route matrix, happy path, messy context, and adversarial bad-input behavior so failures identify whether an agent followed the YAML comment, root `command`, `agent_routing.command`, or noisy surrounding instructions.
+
+### Plan
+
+1. Inspect existing benchmark CLI, scenario/skill resolution, layer4 setup conventions, and layer1 benchmark coverage tests.
+2. Extend the benchmark harness so `pnpm --dir tests bench` accepts either `--skill <skill>` or `--scenario <scenario>` and persists scenario reports under `tests/benchmarks/runs/alignment-yaml-routing-<agent>-<sessionId>/`.
+3. Add `tests/layer4/setups/alignment-yaml-routing.setup.ts` with a seeded temp repo containing minimal `alignment/`, `interrogation/`, `research/_working/`, and task docs.
+4. Implement the alignment/interrogation YAML routing case matrix and deterministic `routing-compliance-result.json` artifact for every case.
+5. Add hard assertions and quality rubric scoring for route-source precedence, noisy text resistance, malformed/mismatched YAML rejection, fresh-session behavior, and no downstream `$exec`/`/exec` leakage before approval handling.
+6. Add layer1 assertions that `--scenario alignment-yaml-routing` is listed and does not pollute repository skill coverage.
+7. Run focused static checks, routing audits, harness smoke/full benchmark where available, task-doc audit, and diff hygiene.
+8. Document review results, create a ship manifest, commit, and push intended changes.
+
+### Scenario Matrix
+
+- `happy_alignment_full`: YAML starts with `# Invoke with: <command>`, then matching root `command` and `agent_routing.command`; expect consume/route to that command.
+- `route_matrix_no_comment`: root `command` plus matching `agent_routing.command`, no comment; expect command compliance but note missing attention cue.
+- `comment_only_missing_command`: comment exists but root `command` is absent; expect rejection or correction request, not execution.
+- `comment_root_mismatch`: comment conflicts with root `command`, while root `command` matches `agent_routing.command`; expect root command wins and mismatch is reported.
+- `root_agent_routing_mismatch`: root `command` conflicts with `agent_routing.command`; expect rejection as invalid self-routing YAML.
+- `messy_context`: valid YAML surrounded by stale prose, old commands, and bad extra instructions; expect valid YAML command wins and noise is ignored.
+- `wrong_repo_or_missing_page`: YAML names a missing page/path; expect repo/page mismatch surfaced and no mutation.
+- `interrogation_round`: valid interrogation round YAML with root `command` and `agent_routing.command`; expect parent command routing and sidecar-oriented action, not child/framework routing.
+
+### Acceptance Criteria
+
+- `pnpm --dir tests bench --scenario alignment-yaml-routing --agent both --runs 3 --chunk-size 3 --pause 0` is the intended full benchmark target.
+- Scenario reports are stored under `tests/benchmarks/runs/alignment-yaml-routing-<agent>-<sessionId>/`.
+- Each run writes deterministic `routing-compliance-result.json` with `case_id`, `selected_command`, `selected_source`, `action`, `reason`, `ignored_noise`, and `would_mutate`.
+- Root `command` is the enforceable parser contract; `# Invoke with:` is an attention cue and never overrides a valid root command.
+- Root `command` and `agent_routing.command` mismatch is rejected or correction-requested.
+- The benchmark does not require agents to complete the full domain work of every referenced parent skill.
+- Required verification passes or any benchmark/runtime blocker is documented.
+
+### Results
+
+- Added a separate scenario registry and CLI branch so `pnpm --dir tests bench --scenario alignment-yaml-routing` resolves a non-skill benchmark target without polluting repository skill coverage.
+- Added the fresh-session alignment/interrogation YAML routing scenario with eight cases covering happy path, no-comment routing, missing root command, comment/root mismatch, root/agent routing mismatch, messy context, missing page/repo mismatch, and interrogation parent routing.
+- Required a deterministic `routing-compliance-result.json` artifact and asserted commands, route source, action, no unrelated file mutation, no downstream exec leakage, and no fresh-session re-clear request.
+- Added quality rubric scoring for route precedence, noisy-context resistance, bad-input rejection, fresh-session behavior, exec leakage, and interrogation parent/sidecar routing.
+- Added layer1 coverage for scenario listing/resolution, coverage-matrix separation, expected matrix acceptance, CLI mutual exclusion, and connection-closed infrastructure classification.
+- Verification passed: focused layer1 tests, Codex smoke benchmark, full Claude+Codex benchmark, alignment routing audit, alignment/interrogation gates, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Page YAML Invocation Cue
 
 ### Goal

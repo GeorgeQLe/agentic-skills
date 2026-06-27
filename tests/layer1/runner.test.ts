@@ -194,6 +194,65 @@ describe("benchmark runner", () => {
     }
   });
 
+  it("classifies mid-response API connection closures as infrastructure-blocked", async () => {
+    const workDir = "/tmp/skill-test-connection-closed";
+    const sessionDir = "benchmarks/runs/connection-closed-claude-conn";
+    rmSync(sessionDir, { recursive: true, force: true });
+    mkdirSync(sessionDir, { recursive: true });
+
+    try {
+      const result = await runChunk(
+        {
+          skill: "connection-closed",
+          prompt: "unused",
+          perRunBudgetUsd: 0.01,
+          timeoutMs: 1_000,
+          setupProject() {},
+          assertResult() {
+            return [{ description: "should be skipped for infrastructure blocks", pass: false }];
+          },
+        },
+        {
+          skill: "connection-closed",
+          sessionId: "conn",
+          createdAt: "2026-06-27T00:00:00.000Z",
+          updatedAt: "2026-06-27T00:00:00.000Z",
+          status: "running",
+          config: {
+            skill: "connection-closed",
+            agent: "claude",
+            runs: 1,
+            chunkSize: 1,
+            pauseSeconds: 0,
+            maxBudgetUsd: 0.01,
+            perRunBudgetUsd: 0.01,
+            timeoutMs: 1_000,
+          },
+          completedRuns: 0,
+          totalEstimatedCostUsd: 0,
+          chunks: [],
+        },
+        0,
+        1,
+        async () => ({
+          stdout: "API Error: Connection closed mid-response. The response above may be incomplete.",
+          stderr: "",
+          exitCode: 1,
+          workDir,
+          files: [],
+        }),
+        () => workDir,
+      );
+
+      expect(result.runs[0]?.infrastructureBlocked).toBe(true);
+      expect(result.runs[0]?.infrastructureReason).toBe("agent runner connection failure");
+      expect(result.runs[0]?.assertions).toEqual([]);
+      expect(result.runs[0]?.passed).toBe(false);
+    } finally {
+      rmSync(sessionDir, { recursive: true, force: true });
+    }
+  });
+
   it("classifies non-zero agent image-processing API errors as infrastructure-blocked", async () => {
     const workDir = "/tmp/skill-test-image-block";
     const sessionDir = "benchmarks/runs/image-block-claude-imageerr";

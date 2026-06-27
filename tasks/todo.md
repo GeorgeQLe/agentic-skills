@@ -81,6 +81,12 @@ Verification note:
 
 Extend `scripts/skill-mirror-parity-audit.sh` so it audits mirrored skills under `base/` in addition to pack skills under `packs/`, closing the base-only mismatch gap documented in `tasks/history.md`.
 
+### Execution Profile
+
+- Parallel mode: serial
+- Scope: parity audit script, any parity cleanup required for a green expanded audit, and task docs
+- Notes: no subagent or branch-isolated write lanes required; implementation should preserve existing pack audit semantics.
+
 ### Checklist
 
 - [x] Inspect the existing mirror parity audit, current `base/claude` and `base/codex` skill inventories, and current audit status.
@@ -88,6 +94,22 @@ Extend `scripts/skill-mirror-parity-audit.sh` so it audits mirrored skills under
 - [x] Resolve any existing unapproved parity failure needed for the expanded audit to pass cleanly.
 - [x] Run focused verification, including syntax, full mirror parity, targeted base mismatch simulation, task-doc audit, and diff hygiene.
 - [x] Document review results, create a ship manifest, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- `scripts/skill-mirror-parity-audit.sh` includes `base/claude/*/SKILL.md` and `base/codex/*/SKILL.md` in its parity surface.
+- Base-only missing mirrors fail with a path-shaped `base/<skill>` finding.
+- Existing pack parity behavior and approved drift handling remain unchanged.
+- The normal audit run exits 0 after current known/actual parity issues are resolved.
+- Required verification passes or any blocker is documented.
+
+### Test Plan
+
+- `bash -n scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-mirror-parity-audit.sh --verbose`
+- Targeted temp-copy base missing-mirror simulation
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
 
 ### Review
 
@@ -105,9 +127,46 @@ Verification passed:
 - temp-copy base missing-mirror simulation (expected exit 1 with `base/skills: missing Codex mirror`)
 - `npm --workspace packages/skillpacks run build:check`
 - `node scripts/audit-task-docs.mjs`
-- `git diff --check`
 
 Ship manifest: `tasks/ship-manifest-2026-06-27-base-mirror-parity-audit-coverage.md`.
+
+## Review - Fresh-Session YAML Routing Benchmark
+
+### Goal
+
+Add a benchmark scenario that runs Claude and Codex in fresh temp worktrees and measures whether they comply with compiled alignment/interrogation YAML routing.
+
+### Checklist
+
+- [x] Inspect existing benchmark CLI, scenario/skill resolution, layer4 setup conventions, and layer1 benchmark coverage tests.
+- [x] Extend the benchmark harness so `pnpm --dir tests bench` accepts either `--skill <skill>` or `--scenario <scenario>`.
+- [x] Add `tests/layer4/setups/alignment-yaml-routing.setup.ts` with a seeded temp repo containing minimal `alignment/`, `interrogation/`, `research/_working/`, and task docs.
+- [x] Implement the alignment/interrogation YAML routing case matrix and deterministic `routing-compliance-result.json` artifact for every case.
+- [x] Add hard assertions and quality rubric scoring for route-source precedence, noisy text resistance, malformed/mismatched YAML rejection, fresh-session behavior, and no downstream `$exec`/`/exec` leakage before approval handling.
+- [x] Add layer1 assertions that `--scenario alignment-yaml-routing` is listed and does not pollute repository skill coverage.
+- [x] Run focused static checks, routing audits, harness smoke/full benchmark, task-doc audit, and diff hygiene.
+- [x] Document review results and create a ship manifest.
+
+### Review
+
+Implemented and verified.
+
+- Added a separate benchmark scenario registry and CLI path for `--scenario alignment-yaml-routing`, while preserving repository skill coverage as skill-only.
+- Added `tests/layer4/setups/alignment-yaml-routing.setup.ts`, which seeds a fresh temp repo with minimal alignment, interrogation, research sidecars, task docs, and eight compiled-YAML routing cases.
+- Required every run to write one `routing-compliance-result.json` artifact containing per-case route decisions with `case_id`, `selected_command`, `selected_source`, `action`, `reason`, `ignored_noise`, and `would_mutate`.
+- Added hard assertions for expected selected commands/actions/sources, no unrelated file creation or mutation, no downstream `$exec`/`/exec` selection, and no fresh-session re-clear request.
+- Added quality scoring for route-source precedence, noisy-context resistance, bad-input rejection, fresh-session behavior, no downstream exec leakage, and interrogation parent/sidecar routing.
+- Added layer1 coverage for scenario listing, scenario zero-run resolution, skill/scenario mutual exclusion, no repository skill coverage pollution, expected artifact acceptance, and a runner infrastructure classifier for `Connection closed mid-response`.
+
+Verification passed:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts layer1/bench-coverage.test.ts layer1/runner.test.ts` (112/112)
+- `pnpm --dir tests bench --scenario alignment-yaml-routing --agent codex --runs 1 --chunk-size 1 --pause 0` (Codex 1/1, 100%)
+- `pnpm --dir tests bench --scenario alignment-yaml-routing --agent both --runs 3 --chunk-size 3 --pause 0` (latest full run: Claude 3/3, Codex 3/3, both 100%)
+- `node scripts/skill-alignment-routing-audit.mjs --report`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/interrogation-confidence-gate.test.ts --reporter=dot` (80/80)
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-alignment-yaml-routing-benchmark.md`.
 
 ## Review - Page YAML Invocation Cue
 

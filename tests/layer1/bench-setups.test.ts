@@ -12,8 +12,13 @@ import {
 } from "../harness/bench-coverage.js";
 import {
   CUSTOM_BENCH_SETUPS,
+  CUSTOM_BENCH_SCENARIOS,
+  resolveBenchScenarioSetup,
+  resolveBenchScenarioTarget,
   resolveBenchSetup,
   resolveBenchTarget,
+  supportedBenchScenarios,
+  supportedBenchScenarioRows,
   supportedBenchSkillRows,
   supportedBenchSkills,
 } from "../harness/bench-setups.js";
@@ -48,6 +53,148 @@ describe("benchmark setup registry", () => {
     expect(supportedBenchSkills()).toContain("exec");
   });
 
+  it("lists alignment YAML routing as a scenario without polluting repository skill coverage", () => {
+    expect(supportedBenchScenarios()).toContain("alignment-yaml-routing");
+    expect(supportedBenchSkills()).not.toContain("alignment-yaml-routing");
+    expect(benchmarkCoverageMatrix().map((row) => row.skill)).not.toContain("alignment-yaml-routing");
+    expect(supportedBenchScenarioRows()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          scenario: "alignment-yaml-routing",
+          setup_path: "tests/layer4/setups/alignment-yaml-routing.setup.ts",
+        }),
+      ]),
+    );
+    expect(resolveBenchScenarioSetup("alignment-yaml-routing")).toBe(CUSTOM_BENCH_SCENARIOS["alignment-yaml-routing"]);
+    expect(resolveBenchScenarioTarget("alignment-yaml-routing")).toMatchObject({
+      skill: "alignment-yaml-routing",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/alignment-yaml-routing.setup.ts",
+    });
+  });
+
+  it("accepts the expected alignment YAML routing compliance matrix artifact", () => {
+    const setup = resolveBenchScenarioSetup("alignment-yaml-routing");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "alignment-yaml-routing-expected-"));
+    setup!.setupProject(workDir);
+    writeFileSync(
+      resolve(workDir, "routing-compliance-result.json"),
+      JSON.stringify({
+        cases: [
+          {
+            case_id: "happy_alignment_full",
+            selected_command: "$brainstorm --consume-alignment-yaml",
+            selected_source: "root_command",
+            action: "consume-approval",
+            reason: "Root command is present and approved.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+          {
+            case_id: "route_matrix_no_comment",
+            selected_command: "$brainstorm --consume-alignment-yaml",
+            selected_source: "root_command",
+            action: "consume-approval",
+            reason: "Root command controls routing even without the attention cue.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+          {
+            case_id: "comment_only_missing_command",
+            selected_command: null,
+            selected_source: "rejected",
+            action: "request-correction",
+            reason: "Missing root command means the comment cannot authorize execution.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+          {
+            case_id: "comment_root_mismatch",
+            selected_command: "$brainstorm --consume-alignment-yaml",
+            selected_source: "root_command",
+            action: "consume-approval",
+            reason: "Comment mismatch is reported, but the root command matches agent routing.",
+            ignored_noise: true,
+            would_mutate: false,
+          },
+          {
+            case_id: "root_agent_routing_mismatch",
+            selected_command: null,
+            selected_source: "rejected",
+            action: "reject-invalid-yaml",
+            reason: "agent_routing.command mismatch makes the YAML invalid.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+          {
+            case_id: "messy_context",
+            selected_command: "$brainstorm --consume-alignment-yaml",
+            selected_source: "root_command",
+            action: "consume-approval",
+            reason: "Ignored noise from stale re-clear context, $exec, and /exec text around the YAML and used the root command.",
+            ignored_noise: true,
+            would_mutate: false,
+          },
+          {
+            case_id: "wrong_repo_or_missing_page",
+            selected_command: null,
+            selected_source: "rejected",
+            action: "repo-mismatch",
+            reason: "Missing page path in this repository.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+          {
+            case_id: "interrogation_round",
+            selected_command: "$user-flow-map --consume-interrogation-yaml",
+            selected_source: "root_command",
+            action: "route-parent",
+            reason: "Route parent command and preserve sidecar handling.",
+            ignored_noise: false,
+            would_mutate: false,
+          },
+        ],
+      }, null, 2),
+    );
+
+    const assertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: [
+        ...[
+          "AGENTS.md",
+          ".agents/project.json",
+          "alignment/yaml-routing-review.html",
+          "interrogation/yaml-routing-round.html",
+          "research/_working/alignment-yaml-routing/approved-decisions.md",
+          "research/_working/alignment-yaml-routing/interrogation-round-1.md",
+          "tasks/todo.md",
+          "tasks/roadmap.md",
+          "tasks/history.md",
+          "unrelated/do-not-touch.txt",
+          "routing-cases/happy_alignment_full.md",
+          "routing-cases/route_matrix_no_comment.md",
+          "routing-cases/comment_only_missing_command.md",
+          "routing-cases/comment_root_mismatch.md",
+          "routing-cases/root_agent_routing_mismatch.md",
+          "routing-cases/messy_context.md",
+          "routing-cases/wrong_repo_or_missing_page.md",
+          "routing-cases/interrogation_round.md",
+        ],
+        "routing-compliance-result.json",
+      ],
+    }, { agent: "codex" });
+
+    expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
+    expect(setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "routing-compliance-result.json"), "utf8"))).toMatchObject({
+      passed: true,
+    });
+  });
+
   it("uses custom setup for skills with domain-specific assertions", () => {
     expect(resolveBenchSetup("design-system")).toBe(CUSTOM_BENCH_SETUPS["design-system"]);
     expect(resolveBenchTarget("design-system")).toMatchObject({
@@ -78,6 +225,11 @@ describe("benchmark setup registry", () => {
         `${setupSkill} custom setup coverage`,
       ).toBe(true);
     }
+  });
+
+  it("does not treat scenario setup registrations as repository skill coverage rows", () => {
+    expect(Object.keys(CUSTOM_BENCH_SCENARIOS)).toEqual(["alignment-yaml-routing"]);
+    expect(benchmarkCoverageMatrix().some((row) => row.skill in CUSTOM_BENCH_SCENARIOS)).toBe(false);
   });
 
   it("uses custom setup for Tier 1 workflow skills", () => {

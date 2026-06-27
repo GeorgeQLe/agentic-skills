@@ -6,11 +6,19 @@ import {
   findResumeableSession,
   getSessionDir,
 } from "./harness/bench-persistence.js";
-import { resolveBenchTarget, supportedBenchSkillRows, supportedBenchSkills } from "./harness/bench-setups.js";
+import {
+  resolveBenchScenarioTarget,
+  resolveBenchTarget,
+  supportedBenchScenarioRows,
+  supportedBenchScenarios,
+  supportedBenchSkillRows,
+  supportedBenchSkills,
+} from "./harness/bench-setups.js";
 
 const { values } = parseArgs({
   options: {
-    skill: { type: "string", default: "design-system" },
+    skill: { type: "string" },
+    scenario: { type: "string" },
     runs: { type: "string", default: "100" },
     "chunk-size": { type: "string", default: "25" },
     pause: { type: "string", default: "1800" },
@@ -18,6 +26,7 @@ const { values } = parseArgs({
     resume: { type: "boolean", default: false },
     "report-only": { type: "boolean", default: false },
     "list-skills": { type: "boolean", default: false },
+    "list-scenarios": { type: "boolean", default: false },
   },
 });
 
@@ -29,21 +38,43 @@ if (values["list-skills"]) {
       : "";
     console.log(`${row.skill}\tcoverage=${row.coverage_status}${setup}${blocked}`);
   }
+  for (const row of supportedBenchScenarioRows()) {
+    console.log(`--scenario ${row.scenario}\tsetup=${row.setup_path}\tdescription=${row.description}`);
+  }
   process.exit(0);
 }
 
-const skill = values.skill!;
+if (values["list-scenarios"]) {
+  for (const row of supportedBenchScenarioRows()) {
+    console.log(`--scenario ${row.scenario}\tsetup=${row.setup_path}\tdescription=${row.description}`);
+  }
+  process.exit(0);
+}
+
+if (values.skill && values.scenario) {
+  console.error("Use either --skill <skill> or --scenario <scenario>, not both.");
+  process.exit(1);
+}
+
+const targetKind = values.scenario ? "scenario" : "skill";
+const skill = values.scenario ?? values.skill ?? "design-system";
 const runs = parseInt(values.runs!, 10);
 const chunkSize = parseInt(values["chunk-size"]!, 10);
 const pauseSeconds = parseInt(values.pause!, 10);
 const agents = resolveAgents(values.agent!);
 
-const target = resolveBenchTarget(skill);
+const target = targetKind === "scenario"
+  ? resolveBenchScenarioTarget(skill)
+  : resolveBenchTarget(skill);
 if (!target) {
-  console.error(`Unknown skill: ${skill}. Repository skills: ${supportedBenchSkills().join(", ")}`);
+  if (targetKind === "scenario") {
+    console.error(`Unknown scenario: ${skill}. Scenarios: ${supportedBenchScenarios().join(", ")}`);
+  } else {
+    console.error(`Unknown skill: ${skill}. Repository skills: ${supportedBenchSkills().join(", ")}`);
+  }
   process.exit(1);
 }
-if (target.coverageStatus === "blocked") {
+if (targetKind === "skill" && target.coverageStatus === "blocked") {
   console.error(`Benchmark coverage for ${skill}: blocked`);
   console.error(`Reason: ${target.blockedReason ?? "No reason recorded."}`);
   console.error(`Next command: ${target.nextCommand ?? "No next command recorded."}`);
@@ -51,7 +82,11 @@ if (target.coverageStatus === "blocked") {
 }
 
 const setup = target.setup!;
-console.log(`Benchmark coverage for ${skill}: ${target.coverageStatus}`);
+console.log(
+  targetKind === "scenario"
+    ? `Benchmark scenario for ${skill}: custom`
+    : `Benchmark coverage for ${skill}: ${target.coverageStatus}`,
+);
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -69,7 +104,7 @@ async function runForAgent(agent: BenchAgent) {
   if (values["report-only"]) {
     const existing = findResumeableSession(skill, agent);
     if (!existing) {
-      console.error(`No session found for skill: ${skill}, agent: ${agent}`);
+      console.error(`No session found for ${targetKind}: ${skill}, agent: ${agent}`);
       process.exit(1);
       return;
     }

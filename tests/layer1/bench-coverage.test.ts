@@ -294,6 +294,10 @@ describe("benchmark coverage contract", () => {
       cwd: TESTS_ROOT,
       encoding: "utf8",
     });
+    const scenarioOutput = execFileSync("pnpm", ["bench", "--list-scenarios"], {
+      cwd: TESTS_ROOT,
+      encoding: "utf8",
+    });
     const runOutput = execFileSync(
       "pnpm",
       ["bench", "--skill", "exec", "--agent", "codex", "--runs", "0", "--chunk-size", "1", "--pause", "0"],
@@ -305,7 +309,47 @@ describe("benchmark coverage contract", () => {
 
     expect(listOutput).toContain("exec\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
     expect(listOutput).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
+    expect(listOutput).toContain("--scenario alignment-yaml-routing\tsetup=tests/layer4/setups/alignment-yaml-routing.setup.ts");
+    expect(scenarioOutput).toContain("--scenario alignment-yaml-routing\tsetup=tests/layer4/setups/alignment-yaml-routing.setup.ts");
     expect(runOutput).toContain("Benchmark coverage for exec: custom");
+  });
+
+  it("keeps alignment YAML routing scenario out of repository skill coverage while allowing zero-run scenario resolution", () => {
+    expect(benchmarkCoverageMatrix().map((row) => row.skill)).not.toContain("alignment-yaml-routing");
+    expect(discoverRepositorySkills().has("alignment-yaml-routing")).toBe(false);
+
+    const runOutput = execFileSync(
+      "pnpm",
+      ["bench", "--scenario", "alignment-yaml-routing", "--agent", "codex", "--runs", "0", "--chunk-size", "1", "--pause", "0"],
+      {
+        cwd: TESTS_ROOT,
+        encoding: "utf8",
+      },
+    );
+
+    expect(runOutput).toContain("Benchmark scenario for alignment-yaml-routing: custom");
+  });
+
+  it("rejects ambiguous skill plus scenario benchmark invocation", () => {
+    expect(() => execFileSync(
+      "pnpm",
+      [
+        "bench",
+        "--skill",
+        "exec",
+        "--scenario",
+        "alignment-yaml-routing",
+        "--agent",
+        "codex",
+        "--runs",
+        "0",
+      ],
+      {
+        cwd: TESTS_ROOT,
+        encoding: "utf8",
+        stdio: "pipe",
+      },
+    )).toThrow(/Use either --skill <skill> or --scenario <scenario>, not both/);
   });
 
   it("stops blocked coverage before benchmark execution", () => {
