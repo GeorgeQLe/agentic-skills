@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.18
+version: v0.19
 required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
@@ -32,6 +32,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
+   - **BIP Suggestion Gate** (advisory; never blocks this skill's work). After reading `.agents/project.json`: if `alignment.build_in_public === true`, skip. Else if `alignment.bip_prompt_dismissed === true`, skip. Otherwise ask the user once, concisely — explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project. On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent), then continue — enabling flows into this skill's existing alignment-page BIP behavior, so do not offer a separate post mid-kickoff. On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent) and do not ask again.
    - Read canonical deck metadata from `docs/decks.md` when present and from skillpacks manifest `decks[]` metadata when available. Use deck fields such as `name`, `title`, `domain`, `tempo`, `default_packs`, and `full_packs` as routing evidence.
    - Read repo-saved deck candidates from `.agents/project.json` before canonical fallbacks. Recognize top-level `saved_decks` and `decks` fields when present; entries may be strings or objects with fields such as `name`, `slug`, `title`, `domain`, `tempo`, `packs`, `install`, `install_command`, `description`, or `notes`.
    - Read README, CLAUDE.md, AGENTS.md, existing `research/`, `specs/`, and task docs when present.

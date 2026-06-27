@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-26
+
+- Added the **BIP Suggestion Gate** as a new step after the session summary. At session wrap, if Build-In-Public is off and the user has not been asked before (`alignment.bip_prompt_dismissed` unset), the skill offers to enable BIP exactly once; on yes it runs `set-bip on` + `set-bip-prompt dismiss` and then offers to draft a Build-In-Public post about what just shipped (per `docs/social-ledger-convention.md`), on no it records `set-bip-prompt dismiss` so it never asks again. Advisory — never blocks wrap-up. See the BIP Suggestion Gate convention in CLAUDE.md.
+
 ## v0.6 - 2026-06-23
 
 - Added task-doc audit gating and current-only next-work routing so stale roadmap/advisory unchecked items are not recommended as executable session follow-up unless promoted into `tasks/todo.md`.

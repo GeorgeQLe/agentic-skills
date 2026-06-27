@@ -7,6 +7,7 @@ import {
   printProjectStatus,
   setAgentMode,
   setBuildInPublicMode,
+  setBipPromptDismissed,
   setUpdateMode
 } from './project-config.mjs';
 import { resolvePackCommandArgs } from './pack-normalization.mjs';
@@ -66,6 +67,7 @@ const PACK_COMMANDS = new Set([
   'prune',
   'set-update-mode',
   'set-bip',
+  'set-bip-prompt',
   'pin',
   'unpin',
   'set-mode',
@@ -698,6 +700,7 @@ Commands:
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
   set-bip <mode>               Set build-in-public alignment default: on, off, or unset
+  set-bip-prompt <action>      Set build-in-public suggestion prompt state: dismiss or reset
   pin <skill> <version>        Pin a skill to an archived version
   unpin <skill>                Revert a pinned skill to latest
   set-mode <mode>              Set project agent mode
@@ -767,6 +770,13 @@ export async function runSkillpacksCli(args) {
       throw new Error('set-bip requires exactly one mode: on, off, or unset');
     }
     return setBuildInPublicMode(rest[0]);
+  }
+
+  if (command === 'set-bip-prompt') {
+    if (rest.length !== 1) {
+      throw new Error('set-bip-prompt requires exactly one action: dismiss or reset');
+    }
+    return setBipPromptDismissed(rest[0]);
   }
 
   if (command === 'uninstall-global') {

@@ -29,6 +29,7 @@ Commands:
   prune [--dry-run]  Remove installed skills whose source no longer exists or whose pack is not enabled
   set-update-mode <mode>  Set .agents/project.json.skill_updates.mode to warn, auto, or unset
   set-bip <mode>     Set .agents/project.json.alignment.build_in_public to on, off, or unset
+  set-bip-prompt <action>  Set .agents/project.json.alignment.bip_prompt_dismissed: dismiss or reset
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
@@ -920,6 +921,30 @@ set_bip() {
   echo "Set alignment.build_in_public to $mode"
 }
 
+set_bip_prompt() {
+  local action="${1:-}"
+  local tmp project_type
+  case "$action" in
+    dismiss) ;;
+    reset) ;;
+    *) die "set-bip-prompt requires an action: dismiss or reset" ;;
+  esac
+  command -v jq >/dev/null 2>&1 || die "jq is required for set-bip-prompt"
+  if [[ ! -f "$PROJECT_FILE" ]]; then
+    project_type="$(infer_project_type)"
+    PROJECT_AGENT_MODE=""
+    write_project_file "$project_type"
+  fi
+  if [[ "$action" == "reset" ]]; then
+    tmp="$(jq 'if (.alignment | type) == "object" then .alignment |= del(.bip_prompt_dismissed) | if (.alignment | length) == 0 then del(.alignment) else . end else del(.alignment) end' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  else
+    tmp="$(jq '.alignment = ((if (.alignment | type) == "object" then .alignment else {} end) + {bip_prompt_dismissed: true})' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  fi
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
+  echo "$tmp" > "$PROJECT_FILE"
+  echo "Set alignment.bip_prompt_dismissed to $action"
+}
+
 # Read-only drift report for project-local managed skill installs.
 # Exits non-zero if any install is stale so callers (sync, hook) can branch.
 doctor() {
@@ -1194,6 +1219,12 @@ case "$cmd" in
     require_jq_write
     shift
     set_bip "${1:-}"
+    ;;
+  set-bip-prompt)
+    acquire_project_lock "$@"
+    require_jq_write
+    shift
+    set_bip_prompt "${1:-}"
     ;;
   pin)
     acquire_project_lock "$@"

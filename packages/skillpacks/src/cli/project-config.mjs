@@ -16,6 +16,7 @@ const LOCK_SLEEP_SECONDS = Number.parseFloat(process.env.PACK_LOCK_SLEEP_SECONDS
 const VALID_AGENT_MODES = new Set(['claude-only', 'codex-only', 'hybrid']);
 const VALID_UPDATE_MODES = new Set(['warn', 'auto', 'unset']);
 const VALID_BIP_MODES = new Set(['on', 'off', 'unset']);
+const VALID_BIP_PROMPT_ACTIONS = new Set(['dismiss', 'reset']);
 
 export function projectFilePath(projectRoot = process.cwd()) {
   return join(projectRoot, '.agents', 'project.json');
@@ -385,6 +386,34 @@ export async function setBuildInPublicMode(mode, projectRoot = process.cwd()) {
     }
     writeProjectConfig(projectRoot, config);
     console.log(`Set alignment.build_in_public to ${mode}`);
+    return 0;
+  });
+}
+
+export async function setBipPromptDismissed(action, projectRoot = process.cwd()) {
+  if (!VALID_BIP_PROMPT_ACTIONS.has(action || '')) {
+    throw new Error('set-bip-prompt requires an action: dismiss or reset');
+  }
+
+  return withProjectLock(projectRoot, `set-bip-prompt ${action}`, async () => {
+    const config = normalizedProjectConfig(projectRoot);
+    if (action === 'reset') {
+      if (config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)) {
+        delete config.alignment.bip_prompt_dismissed;
+        if (Object.keys(config.alignment).length === 0) {
+          delete config.alignment;
+        }
+      } else {
+        delete config.alignment;
+      }
+    } else {
+      const existing = config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)
+        ? config.alignment
+        : {};
+      config.alignment = { ...existing, bip_prompt_dismissed: true };
+    }
+    writeProjectConfig(projectRoot, config);
+    console.log(`Set alignment.bip_prompt_dismissed to ${action}`);
     return 0;
   });
 }

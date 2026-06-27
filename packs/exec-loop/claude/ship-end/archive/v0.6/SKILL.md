@@ -2,8 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.7
-required_conventions: [social-ledger]
+version: v0.6
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -50,12 +49,6 @@ Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` co
    - What's outstanding
    - Branch and commit list
    - Confirm working tree is clean
-
-7. **BIP Suggestion Gate** (advisory; never blocks wrap-up — run after the summary, even if shipping reported nothing):
-   - Read `.agents/project.json`. If `alignment.build_in_public === true`, skip. Else if `alignment.bip_prompt_dismissed === true`, skip.
-   - Otherwise ask the user once, concisely — explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project.
-   - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then offer to draft a Build-In-Public post about what just shipped this session, following `docs/social-ledger-convention.md`.
-   - On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
 
 ## Output
 

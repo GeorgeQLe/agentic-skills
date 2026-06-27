@@ -222,6 +222,67 @@ describe('Node project config commands', () => {
     assert.deepEqual(config.notes, ['keep me']);
   });
 
+  it('dismisses and resets the build-in-public suggestion prompt without clobbering siblings', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: false
+      },
+      notes: ['keep me']
+    });
+
+    assert.equal(
+      await runSkillpacks(dir, ['set-bip-prompt', 'dismiss']),
+      'Set alignment.bip_prompt_dismissed to dismiss\n'
+    );
+    let config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { build_in_public: false, bip_prompt_dismissed: true });
+    assert.deepEqual(config.enabled_packs, ['devtool']);
+    assert.deepEqual(config.notes, ['keep me']);
+    assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+
+    assert.equal(
+      await runSkillpacks(dir, ['set-bip-prompt', 'reset']),
+      'Set alignment.bip_prompt_dismissed to reset\n'
+    );
+    config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { build_in_public: false });
+    assert.deepEqual(config.notes, ['keep me']);
+  });
+
+  it('removes an empty alignment object when resetting the build-in-public prompt', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      custom_field: 'preserved',
+      alignment: {
+        bip_prompt_dismissed: true
+      }
+    });
+
+    assert.equal(
+      await runSkillpacks(dir, ['set-bip-prompt', 'reset']),
+      'Set alignment.bip_prompt_dismissed to reset\n'
+    );
+
+    const config = readProjectConfig(dir);
+    assert.deepEqual(config, {
+      custom_field: 'preserved',
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+  });
+
+  it('rejects an invalid build-in-public prompt action', async () => {
+    const dir = makeTempProject();
+    await assert.rejects(
+      () => runSkillpacks(dir, ['set-bip-prompt', 'bogus']),
+      /set-bip-prompt requires an action: dismiss or reset/
+    );
+  });
+
   it('removes an empty alignment object when unsetting build-in-public mode', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {

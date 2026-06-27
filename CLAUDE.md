@@ -175,3 +175,18 @@ Research-producing skills maintain a shared project glossary at `research/glossa
 ### Cross-Pack Routing
 
 When a skill recommends another skill from a different pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx skillpacks install <pack-name>` as the prerequisite in the recommendation.
+
+### BIP Suggestion Gate
+
+Build-In-Public (BIP) mode generates source-safe social posts from alignment pages and shipped work, but only turns on when a user already knows to enable it. The BIP Suggestion Gate proactively offers it **exactly once ever** per project, at natural discovery moments (project kickoff in `idea-scope-brief`, session wrap in `ship-end`). A skill adopts the gate by name; it is advisory and must never block the skill's primary work.
+
+The gate runs after the skill has read `.agents/project.json`:
+
+1. If `alignment.build_in_public === true` → BIP already on, **skip** (no prompt).
+2. Else if `alignment.bip_prompt_dismissed === true` → already asked, **skip**.
+3. Else ask once, concisely: explain that BIP generates source-safe social posts from alignment pages / shipped work, and ask whether to enable it for this project.
+   - **Yes:** run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent) so a later `set-bip off` won't re-trigger the prompt. In a wrap/ship context, then offer to draft a BIP post about what just shipped, following `docs/social-ledger-convention.md`. At kickoff, enabling simply flows into the skill's existing alignment-page BIP behavior — no separate post offer.
+   - **No:** run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
+4. Never block the skill's primary work on this gate.
+
+The suppression flag `alignment.bip_prompt_dismissed` is distinct from the on/off mode and is written by `set-bip-prompt dismiss|reset` (mirrors `set-bip`).

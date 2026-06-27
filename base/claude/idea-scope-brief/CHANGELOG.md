@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.19 - 2026-06-26
+
+- Added the **BIP Suggestion Gate** as a sub-step of step 1 "Resolve context" (after the `.agents/project.json` read). At kickoff, if Build-In-Public is off and the user has not been asked before (`alignment.bip_prompt_dismissed` unset), the skill offers to enable BIP exactly once; on yes it runs `set-bip on` + `set-bip-prompt dismiss` and flows into existing alignment-page BIP behavior, on no it records `set-bip-prompt dismiss` so it never asks again. Advisory — never blocks the skill's primary work. See the BIP Suggestion Gate convention in CLAUDE.md.
+
 ## v0.18 - 2026-06-18
 
 - Routed concept elicitation (steps 3–5) through the stage-zero **interrogation page** loop (`docs/interrogation-page-convention.md`): the Idea Assumptions Manifest is interrogation round 1, the interview becomes adaptive rounds 2..N, and the coverage checkpoint is the confidence-gate exit. The skill cannot advance to the alignment preview (step 6) until the confidence gate passes; each round page carries ≥1 open input. Terminal questioning is the degraded fallback. Added the `## Interrogation Page` bundle stub (`INTERROGATION-PAGE.md`). Primary dogfood vehicle for the archetype.

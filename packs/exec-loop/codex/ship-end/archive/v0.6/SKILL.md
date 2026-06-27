@@ -2,8 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.7
-required_conventions: [social-ledger]
+version: v0.6
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -59,11 +58,6 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
    - Final working-tree state
    - **Next work:** the next concrete project task, blocker, smoke test, or follow-up
    - **Recommended next command:** one command or route for that work
-10. **BIP Suggestion Gate** (advisory; never blocks wrap-up — run after the report, even if shipping reported nothing):
-    - Read `.agents/project.json`. If `alignment.build_in_public === true`, skip. Else if `alignment.bip_prompt_dismissed === true`, skip.
-    - Otherwise ask the user once, concisely — explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project.
-    - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then offer to draft a Build-In-Public post about what just shipped this session, following `docs/social-ledger-convention.md`.
-    - On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
 
 ## Next-Step Routing
 
