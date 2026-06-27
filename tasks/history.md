@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-26 — One-time BIP suggestion gate (idea-scope-brief + ship-end)
+
+- Added a one-time Build-In-Public suggestion gate that proactively offers BIP at project kickoff (`idea-scope-brief`) and session wrap (`ship-end`): skip when `alignment.build_in_public` is true or `alignment.bip_prompt_dismissed` is set; otherwise ask once, on yes enable + record dismissal (ship-end also offers to draft a post), on no record dismissal. Advisory — never blocks primary work.
+- New suppression-flag writer `set-bip-prompt dismiss|reset` mirroring `set-bip` across `project-config.mjs` (`setBipPromptDismissed` + `VALID_BIP_PROMPT_ACTIONS`), `run-pack-script.mjs`, and `scripts/pack.sh` (jq merge/prune, dispatch, usage). `reset` prunes an empty `alignment` object.
+- Skills: `idea-scope-brief` (claude+codex) `v0.18→v0.19`, `ship-end` (claude+codex) `v0.6→v0.7` (now declares the `social-ledger` required convention, since the draft-post branch references `docs/social-ledger-convention.md`). Prior versions archived; CHANGELOGs updated.
+- Docs: canonical "BIP Suggestion Gate" subsection in CLAUDE.md; `set-bip-prompt` documented in README. Tests: dismiss/reset/prune/invalid cases (full suite 145/145 green). Regenerated `skillpacks-manifest.json` + skills-showcase `skills-data.js` (index-staged); reverted unrelated pre-existing drift in `github-proof-data.js` + `benchmark-results-matrix.md` per concurrent-session scoping.
+- Verification: `npm run build:check` passed; both writer paths (`scripts/pack.sh` + `skillpacks` bin) e2e-tested; flags coexist without clobbering. Commit: `079ca74b7` (pushed to master).
+
 ## 2026-06-26 — Ship 0.1.12 version bump (publish blocked on npm 2FA)
 
 - Reviewed the working-tree drift (`package.json` + `skillpacks-manifest.json` at 0.1.12) the user surfaced via a failed `./publish.sh patch` (dirty-tree guard). Confirmed it was a stranded bump from a prior run, not concurrent-session work.
