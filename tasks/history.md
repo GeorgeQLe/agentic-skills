@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-27 — Codex mirrors for 3 base-only skills + agent-mismatch report
+
+- Added Codex siblings for the three `base/claude/`-only skills that had no Codex variant, leaving Codex users unable to run them: `fork-idea-branch` (v0.1, alignment-page), `autoresearch` (v0.0), `autoresearch-prep` (v0.0). Each: hand-authored `SKILL.md` + `CHANGELOG.md` mirror; `fork-idea-branch` also got a generated `ALIGNMENT-PAGE.md` (byte-identical to claude).
+- Applied the documented claude→codex platform transform: skill command tokens `/foo` → `$foo` and an `Invoke as $name.` line after each H1; frontmatter otherwise identical. Normalized mirror diff confirmed the only delta vs each claude source is the `Invoke as` line + trailing blank line.
+- Audit context (8 total agent mismatches): the 5 pack-level ones are deliberate and whitelisted in `approvedOneSided` (`scripts/skill-mirror-parity-audit.sh`); the 3 base ones went undetected because that audit only walks `packs/`, not `base/`. With these mirrors, `base/` is now clean. Follow-up (not done): extend the audit to cover `base/`.
+- Regenerated index-staged: `skillpacks-manifest.json` (401 skills, +3) and both `skills-data.js` copies. Reverted unrelated `benchmark-results-matrix.md` drift (date stamp + working-tree benchmark-run hash) per concurrent-session safety.
+- Verification: `build:check` (convention bundle + manifest + staging boundary), `node --test` 145/145, manifest/showcase diffs scoped to the 3 skills + fingerprints, alignment re-run no-op.
+- Commit: `4e9b65207`.
+
 ## 2026-06-26 — One-time BIP suggestion gate (idea-scope-brief + ship-end)
 
 - Added a one-time Build-In-Public suggestion gate that proactively offers BIP at project kickoff (`idea-scope-brief`) and session wrap (`ship-end`): skip when `alignment.build_in_public` is true or `alignment.bip_prompt_dismissed` is set; otherwise ask once, on yes enable + record dismissal (ship-end also offers to draft a post), on no record dismissal. Advisory — never blocks primary work.
