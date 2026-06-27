@@ -8,7 +8,7 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
-## [0.1.12] - 2026-06-26
+## [0.1.13] - 2026-06-26
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
 
