@@ -16,9 +16,13 @@ const packageVersion = JSON.parse(
 function makeMockBin() {
   const tempDir = mkdtempSync(path.join(tmpdir(), "skillpacks-publish-mock-"));
   const logPath = path.join(tempDir, "calls.log");
+  const publishCountPath = path.join(tempDir, "publish-count");
+  const registryPath = path.join(tempDir, "registry.txt");
   const cpPath = path.join(tempDir, "cp");
   const gitPath = path.join(tempDir, "git");
   const npmPath = path.join(tempDir, "npm");
+  writeFileSync(publishCountPath, "0\n");
+  writeFileSync(registryPath, "");
 
   writeFileSync(
     cpPath,
@@ -64,18 +68,20 @@ set -euo pipefail
 
 printf '%s\\n' "$*" >> "${logPath}"
 
-if [[ "$1" == "view" && "$2" == "skillpacks@${packageVersion}" && "$3" == "version" ]]; then
-  if [[ "\${NPM_MOCK_SKILLPACKS_EXISTS:-0}" == "1" ]]; then
-    printf '"${packageVersion}"\\n'
+if [[ "$1" == "view" && "$3" == "version" ]]; then
+  spec="$2"
+  version="\${spec##*@}"
+  package_name="\${spec%@*}"
+  if grep -Fxq "$spec" "${registryPath}"; then
+    printf '"%s"\\n' "$version"
     exit 0
   fi
-  printf 'npm error code E404\\n' >&2
-  exit 1
-fi
-
-if [[ "$1" == "view" && "$2" == "@glexcorp/gskp@${packageVersion}" && "$3" == "version" ]]; then
-  if [[ "\${NPM_MOCK_GSKP_EXISTS:-0}" == "1" ]]; then
-    printf '"${packageVersion}"\\n'
+  if [[ "$package_name" == "skillpacks" && "\${NPM_MOCK_SKILLPACKS_EXISTS:-0}" == "1" ]]; then
+    printf '"%s"\\n' "$version"
+    exit 0
+  fi
+  if [[ "$package_name" == "@glexcorp/gskp" && "\${NPM_MOCK_GSKP_EXISTS:-0}" == "1" ]]; then
+    printf '"%s"\\n' "$version"
     exit 0
   fi
   printf 'npm error code E404\\n' >&2
@@ -113,6 +119,28 @@ if [[ "$1" == "run" && "$2" == "skillpacks:verify" ]]; then
 fi
 
 if [[ "$1" == "publish" ]]; then
+  is_dry_run=0
+  for arg in "$@"; do
+    if [[ "$arg" == "--dry-run" ]]; then
+      is_dry_run=1
+    fi
+  done
+  if [[ "$is_dry_run" == "1" ]]; then
+    exit 0
+  fi
+
+  publish_count=$(cat "${publishCountPath}")
+  publish_count=$((publish_count + 1))
+  printf '%s\\n' "$publish_count" > "${publishCountPath}"
+
+  if [[ "$publish_count" == "1" && "\${NPM_MOCK_FIRST_PUBLISH_RC:-0}" != "0" ]]; then
+    printf 'npm notice Log in on https://www.npmjs.com/login?next=/v1/done\\n' >&2
+    printf 'npm error code E404\\n' >&2
+    printf 'npm error 404 Not Found - PUT https://registry.npmjs.org/-/v1/done\\n' >&2
+    exit "\${NPM_MOCK_FIRST_PUBLISH_RC}"
+  fi
+
+  node -e 'const fs = require("fs"); const path = require("path"); const [stage, registry] = process.argv.slice(1); const pkg = JSON.parse(fs.readFileSync(path.join(stage, "package.json"), "utf8")); fs.appendFileSync(registry, pkg.name + "@" + pkg.version + "\\n");' "$2" "${registryPath}"
   exit 0
 fi
 
@@ -124,7 +152,7 @@ exit 2
   chmodSync(cpPath, 0o755);
   chmodSync(gitPath, 0o755);
   chmodSync(npmPath, 0o755);
-  return { binDir: tempDir, logPath };
+  return { binDir: tempDir, logPath, registryPath };
 }
 
 function runPublishCurrent(extraEnv = {}) {
@@ -142,11 +170,14 @@ function runPublishCurrent(extraEnv = {}) {
   return {
     ...result,
     output: `${result.stdout}\n${result.stderr}`,
-    calls: readFileSync(mock.logPath, "utf8")
+    calls: readFileSync(mock.logPath, "utf8"),
+    registry: readFileSync(mock.registryPath, "utf8")
+      .split("\n")
+      .filter(Boolean)
   };
 }
 
-function runPublishPatchAuthFailure() {
+function runPublishPatch(extraEnv = {}) {
   const originalPackageJson = readFileSync(packageJsonPath, "utf8");
   const originalManifestJson = readFileSync(manifestJsonPath, "utf8");
   const mock = makeMockBin();
@@ -161,7 +192,7 @@ function runPublishPatchAuthFailure() {
       env: {
         ...process.env,
         PATH: `${mock.binDir}${path.delimiter}${process.env.PATH}`,
-        NPM_MOCK_WHOAMI_RC: "1"
+        ...extraEnv
       }
     });
     packageJsonAfter = readFileSync(packageJsonPath, "utf8");
@@ -178,16 +209,34 @@ function runPublishPatchAuthFailure() {
     originalPackageJson,
     originalManifestJson,
     packageJsonAfter,
-    manifestJsonAfter
+    manifestJsonAfter,
+    registry: readFileSync(mock.registryPath, "utf8")
+      .split("\n")
+      .filter(Boolean)
   };
 }
 
 test("real publish auth preflight failure restores source metadata before first publish", () => {
-  const result = runPublishPatchAuthFailure();
+  const result = runPublishPatch({ NPM_MOCK_WHOAMI_RC: "1" });
 
   assert.equal(result.status, 1);
   assert.match(result.output, /npm publish auth preflight failed/);
   assert.doesNotMatch(result.calls, /^publish /m);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("real first publish web auth failure restores source metadata", () => {
+  const result = runPublishPatch({ NPM_MOCK_FIRST_PUBLISH_RC: "1" });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /\/v1\/done/);
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(publishCalls.length, 1, result.calls);
+  assert.deepEqual(result.registry, []);
   assert.equal(result.packageJsonAfter, result.originalPackageJson);
   assert.equal(result.manifestJsonAfter, result.originalManifestJson);
 });

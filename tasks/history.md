@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-28 — Publish retry after web auth failure
+
+- Fixed the remaining retry gap in `publish.sh`: a failure inside the first `npm publish "$SKILLPACKS_STAGE"` now restores source package metadata because `PUBLISH_STARTED` is set only after that command exits successfully.
+- Preserved the existing partial-publish recovery contract: once `skillpacks@$VERSION` publishes successfully, later failures keep the bumped metadata for `./publish.sh --current`.
+- Added a regression test that mocks a real `patch` run where the first publish command emits npm web-auth `/v1/done` E404 output, asserts exactly one publish attempt, verifies the mock registry remains empty, and confirms both source metadata files are restored.
+- Restored the current stranded `0.1.14` metadata bump back to `0.1.13`; `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` no longer appear dirty.
+- Confirmed npm returns E404 for both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14`.
+- Verification passed: `node --test packages/skillpacks/test/publish-recovery.test.mjs`, `npm --workspace packages/skillpacks run test:node`, `node scripts/audit-task-docs.mjs`, `git diff --check`, and `git diff --cached --check`.
+- Manifest: `tasks/ship-manifest-2026-06-28-publish-retry-web-auth-failure.md`.
+
 ## 2026-06-28 — Publish auth failure rollback
 
 - Triaged the repeated `./publish.sh patch` failure where npm auth preflight returned E401 and left `packages/skillpacks/package.json` plus `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.14`, causing the next run to fail the clean-tree gate.

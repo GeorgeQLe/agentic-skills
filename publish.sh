@@ -411,7 +411,6 @@ EOF
 if [[ "$USE_CURRENT" == "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
 else
-  PUBLISH_STARTED=1
   run npm publish "$SKILLPACKS_STAGE"
 fi
 PUBLISH_STARTED=1

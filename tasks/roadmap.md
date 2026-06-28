@@ -2,6 +2,45 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Publish Retry After Web Auth Failure
+
+### Goal
+
+Fix `./publish.sh patch` so a failure inside the first `npm publish` command, including npm web-auth `/v1/done` E404 output, rolls back the source package metadata when no package was actually published.
+
+### Plan
+
+- [x] Change the publish rollback boundary from "first publish command invoked" to "first package publish completed successfully."
+- [x] Add focused coverage for a mocked real `patch` run where the first `npm publish` exits nonzero after web-auth style output.
+- [x] Restore the current stranded `0.1.14` package metadata back to `0.1.13`.
+- [x] Confirm `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14` are both absent from the npm registry.
+- [x] Run focused publish recovery tests, workspace node tests, task-doc audit, and diff hygiene checks.
+- [x] Document results, commit, and push the fix on `master`.
+
+### Acceptance Criteria
+
+- A failed first `npm publish "$SKILLPACKS_STAGE"` restores `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` to their pre-run contents.
+- The mocked registry records no published package when the first publish command fails.
+- If `skillpacks@$VERSION` publishes successfully and `@glexcorp/gskp@$VERSION` later fails, the bumped source metadata remains available for `./publish.sh --current`.
+- The current tracked tree no longer contains the stranded `0.1.14` metadata bump.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs`
+- `npm --workspace packages/skillpacks run test:node`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+
+### Results
+
+- Moved the rollback boundary so `PUBLISH_STARTED=1` is set only after `npm publish "$SKILLPACKS_STAGE"` exits successfully.
+- Added a mocked real `patch` publish regression where npm web auth fails inside the first publish command with `/v1/done` E404 output.
+- Verified the mock registry remains empty after the failed first publish and both source metadata files are restored to their pre-run contents.
+- Restored the stranded local `0.1.14` metadata bump back to `0.1.13`; the package metadata files no longer appear in `git status`.
+- Confirmed npm returns E404 for both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14`.
+- Verification passed; see `tasks/ship-manifest-2026-06-28-publish-retry-web-auth-failure.md`.
+
 ## Historical Implementation - Publish Auth Failure Rollback
 
 ### Goal

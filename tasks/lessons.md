@@ -3,8 +3,8 @@
 ## 2026-06-28 — Release bumps need a rollback boundary before publish
 
 - A real `./publish.sh patch` auth preflight failure left `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.14`, causing the next run to fail the clean-tree gate before it could retry auth.
-- Rule: when a release script mutates tracked source state before an external publish/auth step, create a restore snapshot and automatically roll it back for every failure before the first irreversible publish starts.
-- Preserve the bumped source state only after a real publish has started, because partial-publish recovery may need the source version for `--current` recovery.
+- Rule: when a release script mutates tracked source state before an external publish/auth step, create a restore snapshot and automatically roll it back for every failure before the first package publish completes successfully.
+- Preserve the bumped source state only after the first package publish exits successfully, because partial-publish recovery may need the source version for `--current` recovery.
 
 ## 2026-06-27 — Flow maps need surfaces, not UI-only screens
 
