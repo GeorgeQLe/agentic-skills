@@ -15109,3 +15109,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Verification: `skill-alignment-routing-audit.mjs` (408 files, exit 0), `skill-research-loop-handoff-audit.sh` (exit 0), `upgrade-alignment-page.mjs --check` (no drift), skillpacks `build:check`, `pack.sh which eval-ideas` resolves.
 - Deploy: push-triggered Vercel build (commit changed `skills-data.js`, a deploy-relevant path); no manual `/deploy` (release-ops not installed; contract operating model is Vercel-on-push).
 - Commit: `0b9f9b50c`.
+
+## 2026-06-28 — skillpacks publish prep audit (→ 0.1.14)
+
+- Confirmed npm registry readiness: `skillpacks` and `@glexcorp/gskp` both report latest `0.1.13`, and `0.1.14` is absent for both package names.
+- Compiled the package-level `CHANGELOG.md` `0.1.14` section from the post-`v0.1.13` commit range, keeping the real publish command as `./publish.sh patch` and leaving source package metadata at `0.1.13`.
+- Fixed a release-blocking `verify-published-package.sh` cleanup bug where macOS Bash treated empty array expansion as unbound under `set -u`.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, which caught stale active `user-flow-map` content hashes from the latest `logic-wiring` route-proof wording.
+- Verification so far: focused published-package verifier test 2/2, package Node suite 150/150, and `npm run skillpacks:verify` passed. Final task-doc/diff hygiene and clean-tree publish dry-run remain in this active audit.

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "a03f671a2cc1f763aa299f731a9f827892d773c4bbcd2d1721f32177180bde20",
+  "source_fingerprint": "b355b6770534718ab0b786746d7751705df16f9d589eb69c380cdd53d5c5deb2",
   "packs": [
     {
       "name": "agent-bridge",
@@ -8649,7 +8649,7 @@
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "a8412cf3a0e2990259b37b51a3990710496fd863a75b8f8d33bc3cc6f397b152",
+      "content_sha256": "a725585274194c3bd7221591b58764c48dfa0cb4754c61521b9f03ebec298a8e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9164,7 +9164,7 @@
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "b90c9d66084b0a933883474572ac2ec0fa70f0cb327b3f8b8fc7d81b42f21184",
+      "content_sha256": "33a48635ecb7574df1c52ed7cae00f0d9f86b7aacc72744290d5eac384604479",
       "archive_versions": [
         "v0.0",
         "v0.1",

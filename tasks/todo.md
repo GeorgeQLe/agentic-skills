@@ -2,7 +2,7 @@
 
 ## Status
 
-Active implementation: none.
+Active implementation: Publish 0.1.14 Readiness Audit.
 
 Project: `agentic-skills`.
 Last completed task: Fix Remaining Design-Tree Verification Gaps.
@@ -10,40 +10,66 @@ Last closeout: Fix remaining design-tree verification gaps.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Fix Remaining Design-Tree Verification Gaps
+## Current Implementation - Publish 0.1.14 Readiness Audit
 
 ### Goal
 
-Close the two verified post-ship gaps from commit `3d8f212f3`: stale Skills Showcase GitHub proof data and active `user-flow-map` build-plan route wording that still pointed at `prototype` instead of `logic-wiring`.
+Audit whether the repository is ready to publish `skillpacks` / `@glexcorp/gskp` `0.1.14`, compile the package-level changelog, and end with a clean tracked tree.
 
-### Results
+### Execution Profile
 
-- Updated active Claude `user-flow-map` build-plan route wording from `/prototype` to `/logic-wiring`.
-- Updated active Codex `user-flow-map` build-plan route wording from `$prototype` to `$logic-wiring`.
-- Preserved generic prototype terminology and `prototype_build_plan` artifact/file naming.
-- Kept `user-flow-map` at v1.8 with no archive or changelog churn because this corrects missed wording from the already-shipped route rename.
-- Refreshed Skills Showcase generated data after staging the intended source boundary: catalog fingerprints and GitHub proof assets.
+- Lane: serial release-audit/write lane.
+- Mutation scope: package changelog, package verifier cleanup, generated package manifest refresh, and task/prompt/ship evidence.
+- Publish scope: dry-run only; do not run a real npm publish or create a release tag without explicit user confirmation.
+
+### Checklist
+
+- [x] Capture the visible `ship` invocation prompt in `prompts/ship/`.
+- [x] Preserve starting git status: `master` matched `origin/master`; the only initial dirty path after prompt capture was the new prompt-history file.
+- [x] Inspect package version state, tags, npm registry state, release script, deploy contract, and post-`v0.1.13` git history.
+- [x] Compile `CHANGELOG.md` `0.1.14` release notes from `v0.1.13..HEAD`.
+- [x] Fix package verification blockers found during readiness checks.
+- [x] Run package/build/test/readiness checks.
+- [x] Run task-doc and diff hygiene checks.
+- [ ] Run dry-run publish preflight for patch `0.1.14`.
+- [x] Document review results and create a ship manifest.
+- [ ] Commit and push intended changes so the tracked tree is clean.
+
+### Acceptance Criteria
+
+- `CHANGELOG.md` has a prepared `0.1.14` section that accurately summarizes package-visible changes since `v0.1.13`.
+- Release metadata remains staged for a patch publish from `0.1.13` to `0.1.14`; no premature real publish/tag is created.
+- Required verification passes, or any blocker is documented with exact failing commands and readiness impact.
+- Final tracked tree is clean and `master` has no unpushed release-audit commit.
+
+### Verification Plan
+
+- `npm --workspace packages/skillpacks run test:node`
+- `npm run skillpacks:verify`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `./publish.sh --dry-run patch`
+
+## Review - Publish 0.1.14 Readiness Audit
+
+### Results So Far
+
+- Registry state is ready for a patch publish: both `skillpacks` and `@glexcorp/gskp` report latest `0.1.13`, and `0.1.14` is absent for both package names.
+- `CHANGELOG.md` now has a prepared `0.1.14` section covering package-visible changes since `v0.1.13`.
+- Fixed a release-blocking package test failure in `packages/skillpacks/scripts/verify-published-package.sh`: macOS Bash treats empty array expansion as unbound under `set -u`, so cleanup now returns before iterating an empty `TMP_DIRS` list.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json` after the staged package boundary revealed stale active `user-flow-map` content hashes from the latest `logic-wiring` route-proof wording.
 
 ### Verification
 
 Passed:
 
-- targeted exact-command stale-route scan over active `user-flow-map` mirrors
+- `node --test packages/skillpacks/test/verify-published-package.test.mjs` (2/2)
+- `npm --workspace packages/skillpacks run test:node` (150/150)
 - `npm run skillpacks:verify`
-- `node scripts/skill-alignment-routing-audit.mjs --active`
-- `scripts/skill-install-routing-audit.sh --active`
-- `npm run skills-showcase:test`
-- `npm run skills-showcase:validate-data`
-- `npm run skills-showcase:build`
-- `node scripts/audit-task-docs.mjs`
+- `node scripts/audit-task-docs.mjs` (0 failures, 0 warnings; advisory info only)
 - `git diff --check`
+- `git diff --cached --check`
 
-Skipped with rationale:
+Pending:
 
-- Manual production deploy was not run because this session has no explicit production deploy confirmation. `tasks/deploy.md` says changed `apps/skills-showcase/public/**` generated assets are deploy-relevant and Vercel path gating should build from `master` after push.
-
-## Next Work
-
-No active implementation task remains queued in `tasks/todo.md`.
-
-Recommended next command: `$brainstorm`
+- `./publish.sh --dry-run patch` after committing the candidate, because the publish script refuses tracked dirty trees by design.

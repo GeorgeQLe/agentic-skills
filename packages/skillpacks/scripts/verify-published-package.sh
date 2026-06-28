@@ -47,6 +47,9 @@ make_tmp() {
 cleanup() {
   if [[ "$KEEP_TMP" == "0" ]]; then
     local dir
+    if (( ${#TMP_DIRS[@]} == 0 )); then
+      return 0
+    fi
     for dir in "${TMP_DIRS[@]}"; do
       if [[ "$dir" == /tmp/skillpacks-* && -d "$dir" ]]; then
         rm -rf "$dir"

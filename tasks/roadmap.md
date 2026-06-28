@@ -2,6 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Publish 0.1.14 Readiness Audit
+
+### Goal
+
+Audit whether the repository is ready to publish `skillpacks` / `@glexcorp/gskp` `0.1.14`, compile the package-level changelog for the release, and end with no dirty tracked tree or unpushed release-audit work.
+
+### Plan
+
+- [x] Capture the visible `ship` invocation prompt and preserve the starting git status.
+- [x] Inspect package version state, tags, npm registry state for both package names, release scripts, deploy contract, and post-`v0.1.13` commit history.
+- [x] Compile `CHANGELOG.md` `0.1.14` release notes from the net `v0.1.13..HEAD` change set, keeping package-level notes distinct from individual skill changelogs.
+- [x] Fix package verification blockers found during readiness checks.
+- [x] Run the package/build/test/readiness checks required by `package.json`, `packages/skillpacks/package.json`, `publish.sh`, and current touched surfaces.
+- [ ] Run a dry-run publish preflight for the next patch version without leaving release-state mutations behind.
+- [x] Document results in `tasks/todo.md`, append a brief `tasks/history.md` record, create a ship manifest, and audit task docs.
+- [ ] Commit and push the intended changelog/task/prompt audit boundary on `master` so `git status` is clean.
+
+### Acceptance Criteria
+
+- `CHANGELOG.md` has a prepared `0.1.14` section that accurately summarizes package-visible changes since `v0.1.13`.
+- Release metadata remains staged for a patch publish from `0.1.13` to `0.1.14`; no premature real publish/tag is created.
+- Required verification passes, or any blocker is documented with exact failing commands and readiness impact.
+- Final tracked tree is clean and `master` has no unpushed release-audit commit.
+
+### Test Plan
+
+- `npm --workspace packages/skillpacks run test:node`
+- `npm run skillpacks:verify`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `./publish.sh --dry-run patch`
+
 ## Historical Implementation - Fix Remaining Design-Tree Verification Gaps
 
 ### Goal

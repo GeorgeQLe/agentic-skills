@@ -8,15 +8,48 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+## [0.1.14] - 2026-06-28
+
+Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
+
+Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.13`, so the real `./publish.sh patch` command can bump and publish `0.1.14` from a clean tree.
+
+### Added
+
+- Added the product-design `eval-ideas` orchestrator, bridging `brainstorm` output into ranked feature candidates and concrete `feature-interview` / `roadmap` handoffs.
+- Added Codex base-skill mirrors for `fork-idea-branch`, `autoresearch`, and `autoresearch-prep`, with package metadata and Skills Showcase data refreshed so Codex installs see the new base coverage.
+- Added fleet-mode Build-In-Public configuration commands: `skillpacks set-bip <on|off|unset> --all` plus `--all --dry-run` to preview planned `.agents/project.json` changes and unsafe project-config issues before mutation.
+- Added an alignment/interrogation YAML routing benchmark scenario for fresh-session handoffs, including scenario listing, run-context plumbing, hard assertions, and runner infrastructure classification.
+- Added required `Apply recommended` controls to interrogation open-question blocks and updated the interrogation-page admin skill/auditor to preserve and enforce the new marker.
+
+### Changed
+
+- Product-design flow contracts now use surface/channel terminology across the design tree: `user-flow-map` maps surfaces instead of UI-only screens/routes, `ui-interview` consumes those surfaces while owning only human-visible UI candidates, and downstream `logic-wiring` / `spec-interview` contracts consume route/screen realizations and non-visual channel behavior.
+- Flow-tree and product-design handoffs now route build work through `logic-wiring` consistently: active `user-flow-map` guidance initializes schema `v0.4`, keeps `prototype_build_plan` as artifact vocabulary, and no longer emits stale `/prototype` or `$prototype` build-plan commands.
+- Design-tree loop bundles now append an optional terminal-only human-review recap prompt after chunked `## Invoke With YAML` handoffs.
+- Alignment and interrogation YAML snippets now begin with `# Invoke with: <resolved command>` while preserving the root `command` key as the authoritative machine-readable route.
+- The mirror parity audit now covers base Claude/Codex skills in addition to pack skills, with narrow allowances for known intentional drift.
+- The one-time BIP suggestion gate now appears in `idea-scope-brief` and `ship-end`, with supporting `scripts/pack.sh set-bip-prompt` controls.
+
 ### Fixed
 
 - `skillpacks install <skill>` now treats already-current individual skill installs as a no-op: it prints `Skill already installed!`, skips reload/fresh-session guidance, and leaves project-local config and skill roots unchanged.
+- Published-package verification cleanup now handles an empty temp-directory list under `set -u`, fixing the stale-metadata retry smoke path on macOS Bash.
+- Refreshed the package manifest source fingerprint and active `user-flow-map` content hashes after the latest `logic-wiring` route-proof wording changes.
+- Corrected the package changelog's stale `0.1.13` heading/release-state/verification wording so the prior release matches the actually published npm version.
+
+### Verification
+
+- Registry readiness check confirmed `skillpacks` and `@glexcorp/gskp` both report latest `0.1.13`, and `0.1.14` is not present for either package name.
+- Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (150/150) after the verifier cleanup fix.
+- Package verification passed: `npm run skillpacks:verify` (401 active skills, 42 packs, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
+- Clean-tree publish dry-run pending until the release-audit boundary is committed, because `publish.sh` intentionally refuses tracked dirty trees.
 
 ## [0.1.13] - 2026-06-26
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
 
-Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.11`, so the real `./publish.sh patch` command can bump and publish `0.1.12` from a clean tree.
+Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remained at the last published version, `0.1.13`, after this release was published.
 
 ### Added
 
@@ -55,9 +88,9 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Verification
 
-- Publish-prep verification passed in source from a clean tree: `build:check` (396 skills, 42 packs, manifest byte-in-sync, staging boundary OK), `test:node` 142/142 including the new manifest deprecation-metadata test, the install/remove `Did you mean` suggestion tests, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests, and offline `npm pack ./build --dry-run` (exit 0, 3644 files staged at `0.1.11`). Full `tests/layer1` stays green (2430 tests across 65 files), including the new `upgrade-interrogation-pages` mirrored-contract test and the regenerated interrogation-bundle drift gate.
-- This `[0.1.12]` section reconciles the full `v0.1.11..HEAD` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4), the social-ledger / public-archive system, the task-doc routing audit system, and the final-handoff verification guard.
-- The intended real release command is `./publish.sh patch`, which will bump the package artifact from `0.1.11` to `0.1.12` before staging and publishing both npm package names.
+- Publish-prep verification passed in source from a clean tree: `build:check` (396 skills, 42 packs, manifest byte-in-sync, staging boundary OK), `test:node` 142/142 including the new manifest deprecation-metadata test, the install/remove `Did you mean` suggestion tests, the `list --skills`/`list --tree` formatter tests, and the published-package stale-metadata retry tests. Full `tests/layer1` stayed green (2430 tests across 65 files), including the new `upgrade-interrogation-pages` mirrored-contract test and the regenerated interrogation-bundle drift gate.
+- This `[0.1.13]` section reconciles the full post-`v0.1.11` net end-state, including the flow-walk UI refactor (`build-ui-screens` / `logic-wiring` / `key-moments`, flow-tree schema v0.4), the social-ledger / public-archive system, the task-doc routing audit system, and the final-handoff verification guard.
+- The release line skipped the blocked `0.1.12` publication and published `0.1.13` for both package names.
 
 ## [0.1.11] - 2026-06-23
 
