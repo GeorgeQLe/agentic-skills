@@ -675,9 +675,12 @@ function installPack(projectRoot, manifest, pack) {
   }
 
   const config = readProjectConfig(projectRoot);
+  let changed = false;
   for (const tool of TOOLS) {
     for (const skill of packSkillEntries(manifest, pack, tool)) {
-      linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config);
+      if (linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config)) {
+        changed = true;
+      }
     }
   }
 
@@ -685,7 +688,9 @@ function installPack(projectRoot, manifest, pack) {
     .filter((candidate, index, all) => all.indexOf(candidate) === index);
   if (writePackProjectConfig(projectRoot, pack, packs)) {
     console.log('Updated .agents/project.json');
+    changed = true;
   }
+  return changed;
 }
 
 function ensureProjectConfigForSkill(projectRoot) {
@@ -713,12 +718,15 @@ function installSingleSkill(projectRoot, manifest, skillName) {
   }
 
   const config = readProjectConfig(projectRoot);
+  let changed = false;
   for (const tool of TOOLS) {
     const skill = pack
       ? findSkillEntry(manifest, pack, tool, skillName)
       : findBaseSkillEntry(manifest, tool, skillName);
     if (skill) {
-      linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config);
+      if (linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config)) {
+        changed = true;
+      }
     }
   }
 
@@ -730,7 +738,9 @@ function installSingleSkill(projectRoot, manifest, skillName) {
   next.enabled_skills = enabledSkills;
   if (writeProjectConfigIfChanged(projectRoot, next)) {
     console.log(`Updated .agents/project.json (skill: ${skillName} from ${pack ? `pack: ${pack}` : 'base'})`);
+    changed = true;
   }
+  return changed;
 }
 
 function removeEnabledSkill(projectRoot, skillName) {
@@ -1354,6 +1364,18 @@ export function printSessionReloadNotice() {
   console.log('Codex: start a fresh Codex CLI session if the $ skill list does not show newly installed or removed project-local skills.');
 }
 
+function printInstallNoChanges({ packs, skills }) {
+  if (packs.length === 0 && skills.length === 1) {
+    console.log('Skill already installed!');
+    return;
+  }
+  if (packs.length === 1 && skills.length === 0) {
+    console.log('Pack already installed!');
+    return;
+  }
+  console.log('Requested packs and skills already installed!');
+}
+
 export async function initProject({ manifest, projectRoot = process.cwd() }) {
   return withProjectLock(projectRoot, 'init', async () => {
     installBaseSkills(projectRoot, manifest);
@@ -1522,13 +1544,22 @@ export async function uninstallGlobal({
 
 export async function installResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
   return withProjectLock(projectRoot, `install ${[...packs, ...skills].join(' ')}`.trim(), async () => {
+    let changed = false;
     for (const pack of packs) {
-      installPack(projectRoot, manifest, pack);
+      if (installPack(projectRoot, manifest, pack)) {
+        changed = true;
+      }
     }
     for (const skill of skills) {
-      installSingleSkill(projectRoot, manifest, skill);
+      if (installSingleSkill(projectRoot, manifest, skill)) {
+        changed = true;
+      }
     }
-    printSessionReloadNotice();
+    if (changed) {
+      printSessionReloadNotice();
+    } else {
+      printInstallNoChanges({ packs, skills });
+    }
     return 0;
   });
 }

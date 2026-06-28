@@ -8,6 +8,10 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+### Fixed
+
+- `skillpacks install <skill>` now treats already-current individual skill installs as a no-op: it prints `Skill already installed!`, skips reload/fresh-session guidance, and leaves project-local config and skill roots unchanged.
+
 ## [0.1.13] - 2026-06-26
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.

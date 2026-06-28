@@ -128,6 +128,31 @@ function skillPath(projectRoot, tool, skill) {
   return join(projectRoot, `.${tool}/skills/${skill}`);
 }
 
+function installStateSnapshot(projectRoot, skill) {
+  const relPaths = ['.agents/project.json'];
+  for (const tool of ['claude', 'codex']) {
+    const skillRoot = skillPath(projectRoot, tool, skill);
+    relPaths.push(relative(projectRoot, skillRoot));
+    for (const file of installedSkillFiles(projectRoot, tool, skill)) {
+      relPaths.push(relative(projectRoot, join(skillRoot, file)));
+    }
+  }
+
+  return Object.fromEntries(relPaths.sort().map((relPath) => {
+    const fullPath = join(projectRoot, relPath);
+    const stats = lstatSync(fullPath, { bigint: true });
+    return [relPath, {
+      mtimeNs: stats.mtimeNs.toString(),
+      content: stats.isFile() ? readFileSync(fullPath, 'utf8') : null,
+      link: stats.isSymbolicLink() ? readlinkSync(fullPath) : null
+    }];
+  }));
+}
+
+function waitForMtimeTick() {
+  return new Promise((resolveDelay) => setTimeout(resolveDelay, 20));
+}
+
 function installedSkillFiles(projectRoot, tool, skill) {
   const root = skillPath(projectRoot, tool, skill);
   const files = [];
@@ -879,14 +904,19 @@ describe('Node lifecycle commands', () => {
   it('keeps already-current managed installs quiet on reinstall', async () => {
     const dir = makeTempProject();
     await runSkillpacks(dir, ['install', 'quality-sweep']);
+    const before = installStateSnapshot(dir, 'quality-sweep');
+    await waitForMtimeTick();
 
     const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
 
+    assert.equal(stdout, 'Skill already installed!\n');
     assert.doesNotMatch(stdout, /Installed \.claude\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Installed \.codex\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Updated \.codex\/skills\/quality-sweep/);
     assert.doesNotMatch(stdout, /Updated \.agents\/project\.json \(skill: quality-sweep from pack: code-quality\)/);
+    assert.doesNotMatch(stdout, /Skill installs changed/);
+    assert.deepEqual(installStateSnapshot(dir, 'quality-sweep'), before);
   });
 
   it('keeps no-op refresh quiet except for the refresh summary', async () => {

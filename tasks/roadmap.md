@@ -2,6 +2,39 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Skillpacks Install Idempotency
+
+### Goal
+
+Make `npx skillpacks install <skill>` idempotent when the target skill is already installed: print a clear `Skill already installed!` message, make no file changes, and avoid reload guidance that implies a mutation happened.
+
+### Plan
+
+1. Capture the visible `investigate` invocation prompt and preserve current worktree context.
+2. Trace the npm CLI `install` path for pack installs versus individual skill installs, including project config writes and final reload messaging.
+3. Reproduce the current repeated-install behavior with a focused fixture or test.
+4. Implement the minimal no-op branch for already installed skills, preserving normal installs and pack behavior unless tests show the same unclear output applies there too.
+5. Add regression coverage that repeated skill install emits `Skill already installed!`, exits successfully, and leaves `.agents/project.json`, `.claude/skills`, and `.codex/skills` unchanged.
+6. Run focused package tests plus task-doc and diff hygiene checks.
+7. Document review results, create any required ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Reinstalling an already installed individual skill prints `Skill already installed!`.
+- The already-installed path performs no writes to project config or local skill roots.
+- The already-installed path does not print `Skill installs changed` or reload/fresh-session guidance.
+- New installs still write the expected project-local files and print the existing reload guidance.
+- Focused regression tests prove the behavior.
+
+### Results
+
+- Updated the Node `install` lifecycle path so pack and individual-skill installers report whether they actually changed skill roots or `.agents/project.json`.
+- Changed `installResolved` to print the reload/fresh-session notice only when at least one install target changed.
+- Added an explicit no-op message for repeated individual skill installs: `Skill already installed!`.
+- Strengthened lifecycle regression coverage so repeated `install quality-sweep` emits only the no-op message and leaves project config plus installed skill files unchanged.
+- Refreshed the generated npm manifest so package `build:check` passes after a pre-existing interrogation-page skill version/archive update.
+- Verification passed; see `tasks/ship-manifest-2026-06-27-skillpacks-install-idempotency.md`.
+
 ## Historical Implementation - Optional Human Review Summary Convention
 
 ### Goal

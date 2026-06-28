@@ -5,9 +5,65 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Optional Human Review Summary Convention.
+Last completed task: Skillpacks Install Idempotency.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Skillpacks Install Idempotency
+
+### Goal
+
+Make `npx skillpacks install <skill>` idempotent when the target skill is already installed: print `Skill already installed!`, make no file changes, and avoid mutation/reload messaging.
+
+### Execution Profile
+
+- Strategy: General investigation, CLI behavior
+- Scope: `packages/skillpacks` install path, focused tests, task/prompt records
+- Notes: preserve normal first-time installs and avoid unrelated pack/refactor changes
+
+### Checklist
+
+- [x] Capture the visible `investigate` invocation prompt and write the implementation plan.
+- [x] Trace install idempotency for individual skill installs.
+- [x] Add focused regression coverage for already-installed skill no-op behavior.
+- [x] Implement the minimal no-op branch.
+- [x] Run focused verification and fix in-scope regressions.
+- [x] Document review results, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- Reinstalling an already installed individual skill prints `Skill already installed!`.
+- The already-installed path exits successfully and performs no writes to `.agents/project.json`, `.claude/skills`, or `.codex/skills`.
+- The already-installed path does not print `Skill installs changed` or reload/fresh-session guidance.
+- New installs still write expected files and keep the existing reload guidance.
+
+### Test Plan
+
+- Focused package test covering repeated `install <skill>`.
+- Existing relevant package CLI tests for install behavior.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review
+
+Implemented and verified.
+
+- Updated `packages/skillpacks/src/cli/lifecycle.mjs` so pack and individual-skill install helpers return whether they changed skill roots or project config.
+- Changed `installResolved` to print reload/fresh-session guidance only after real install changes.
+- Added the repeated individual-skill no-op output: `Skill already installed!`.
+- Strengthened the lifecycle regression so a second `install quality-sweep` emits only that message and leaves `.agents/project.json`, `.claude/skills/quality-sweep`, and `.codex/skills/quality-sweep` unchanged.
+- Refreshed `packages/skillpacks/dist/skillpacks-manifest.json` for the pre-existing `upgrade-interrogation-pages` `v0.1` manifest drift so package `build:check` is green.
+
+Verification passed:
+
+- `node --test --test-name-pattern "keeps already-current managed installs quiet on reinstall" packages/skillpacks/test/lifecycle.test.mjs`
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build:check`
+- local `runSkillpacksCli(['install', 'fork-idea-branch'])` reinstall smoke
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-skillpacks-install-idempotency.md`.
 
 ## Review - Optional Human Review Summary Convention
 

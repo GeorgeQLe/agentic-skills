@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "6ef4e2523e12451eeed4059bdb658e636b4d0cc6c78ecb414f3b064b024fc11b",
+  "source_fingerprint": "7e602859d939395c713c08bb7924f923e0b97a939780915a92575f2651d08e81",
   "packs": [
     {
       "name": "agent-bridge",
@@ -7690,14 +7690,16 @@
       "scope": "pack",
       "pack": "interrogation-page-admin",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/interrogation-page-admin/claude/upgrade-interrogation-pages/SKILL.md",
       "installable": true,
-      "content_sha256": "ecdea3a76273cd0c58aa596ae325316c900b43ad325dc8dfc4b13fb4c754a812",
-      "archive_versions": [],
+      "content_sha256": "14ef8d4ace723c53047d967b8f37a9eb821da32d2af9593194d7f402095868e9",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/upgrade-interrogation-pages",
       "deck_memberships": []
     },
@@ -7707,14 +7709,16 @@
       "scope": "pack",
       "pack": "interrogation-page-admin",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/interrogation-page-admin/codex/upgrade-interrogation-pages/SKILL.md",
       "installable": true,
-      "content_sha256": "fe15c360c5445796189f43c44c9e1559c066ed2e4059d3d614cd7dea237b6af1",
-      "archive_versions": [],
+      "content_sha256": "a9a403ce325098cd732175b39d26837eb52177250cb0355fa2e542776bc6c47b",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$upgrade-interrogation-pages",
       "deck_memberships": []
     },
