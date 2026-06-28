@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="review">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skillpacks Command Language Upgrade Audit</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --surface: #181b20;
+  --panel: #11151b;
+  --panel-2: #1f242d;
+  --border: #343a46;
+  --text: #e3e7ee;
+  --muted: #a7afbd;
+  --accent: #6bb6ff;
+  --green: #56d364;
+  --orange: #f0b849;
+  --red: #ff7b72;
+  --code: #0b0f15;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1180px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+header { padding: 10px 0 12px; border-bottom: 1px solid var(--border); }
+h1, h2, h3 { color: #fff; line-height: 1.18; }
+h1 { margin: 0 0 10px; font-size: 2.25rem; }
+h2 { margin: 0 0 12px; font-size: 1.35rem; color: var(--accent); }
+h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+p { margin: 10px 0; }
+a { color: var(--accent); }
+code {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #f0f4fb;
+  padding: 1px 5px;
+}
+section, .toc, .status-grid {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+section, .toc { margin: 20px 0; padding: 20px; }
+.lead { max-width: 860px; color: #f3f6fb; font-size: 1.04rem; }
+.muted { color: var(--muted); }
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 10px;
+  padding: 14px;
+  margin: 18px 0 0;
+  background: var(--panel-2);
+}
+.status-grid div {
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.status-grid strong { color: #fff; }
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 10px;
+}
+.toc a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  text-decoration: none;
+}
+.toc a:hover { border-color: var(--accent); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(245px, 100%), 1fr));
+  gap: 12px;
+}
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 14px;
+}
+.panel strong { color: #fff; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: .86rem;
+  margin: 0 6px 6px 0;
+}
+.badge.ok { color: var(--green); border-color: rgba(86, 211, 100, .55); }
+.badge.warn { color: var(--orange); border-color: rgba(240, 184, 73, .65); }
+.priority-list li { margin: 8px 0; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 14px 0;
+}
+table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--panel); color: #fff; }
+tr:last-child td { border-bottom: 0; }
+.section-feedback, .question-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  padding: 14px;
+  margin: 14px 0;
+}
+.section-feedback h3, .question-block h3 { margin-top: 0; }
+.options {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+label.option {
+  min-height: 44px;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+}
+label.option:hover { border-color: var(--accent); }
+input[type="radio"] { margin-top: 3px; accent-color: var(--accent); }
+textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--code);
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+#compiledYaml { min-height: 230px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+button {
+  min-height: 44px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: #17324d;
+  color: #fff;
+  padding: 9px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+button.secondary { border-color: var(--border); background: var(--panel); color: var(--text); }
+button:hover { filter: brightness(1.08); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
+.status-line { color: var(--muted); min-height: 24px; }
+@media (max-width: 680px) {
+  main { width: min(100vw - 24px, 1180px); padding-top: 24px; }
+  h1 { font-size: 1.75rem; }
+  section, .toc { padding: 16px; }
+  table { min-width: 760px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Skillpacks Command Language Upgrade Audit</h1>
+    <p class="lead">Review page for the Markdown report that audited the public <code>npx skillpacks</code> command surface after the install no-op feedback change.</p>
+    <div>
+      <span class="badge ok">alignment_status: review</span>
+      <span class="badge">alignment_date: 2026-06-28</span>
+      <span class="badge">source_report_date: 2026-06-27</span>
+      <span class="badge ok">BIP enabled</span>
+    </div>
+    <div class="status-grid">
+      <div><strong>Source Markdown</strong><span>tasks/skillpacks-command-language-upgrades-2026-06-27.md</span></div>
+      <div><strong>Alignment Page</strong><span>alignment/skillpacks-command-language-upgrades.html</span></div>
+      <div><strong>Category</strong><span>QA &amp; Meta-Skill Improvement</span></div>
+      <div><strong>Visual Tier</strong><span>document</span></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Page sections">
+    <h2>Review Contents</h2>
+    <ul>
+      <li><a href="#goal">Goal</a></li>
+      <li><a href="#evidence">Evidence</a></li>
+      <li><a href="#standard">Reusable Language Standard</a></li>
+      <li><a href="#matrix">Command Matrix</a></li>
+      <li><a href="#priorities">Priority Recommendations</a></li>
+      <li><a href="#implementation">Implementation Shape</a></li>
+      <li><a href="#verification">Verification Notes</a></li>
+      <li><a href="#review-gates">Review Gates</a></li>
+    </ul>
+  </nav>
+
+  <section id="goal">
+    <h2>Goal</h2>
+    <p>Audit the public <code>npx skillpacks</code> command surface after the recent install no-op feedback change, recommend language upgrades across commands, and ensure this repository has Build-In-Public mode enabled.</p>
+    <div class="section-feedback" data-section="Goal">
+      <h3>Section Feedback</h3>
+      <div class="options">
+        <label class="option"><input type="radio" name="feedback_goal" value="up"> Looks good</label>
+        <label class="option"><input type="radio" name="feedback_goal" value="down"> Needs revision</label>
+        <label class="option"><input type="radio" name="feedback_goal" value="clarify"> Needs clarification</label>
+      </div>
+      <textarea name="feedback_goal_notes" placeholder="Optional feedback for the goal section"></textarea>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <h2>Evidence</h2>
+    <div class="grid">
+      <div class="panel"><strong>Install change confirmed</strong><p>Commit <code>c12ebf7ef fix(skillpacks): clarify already-installed skill installs</code> introduced the current no-change install messages.</p></div>
+      <div class="panel"><strong>No-change messages</strong><p><code>Skill already installed!</code>, <code>Pack already installed!</code>, and <code>Requested packs and skills already installed!</code>.</p></div>
+      <div class="panel"><strong>Behavioral intent</strong><p>The install no-op path does not print reload or fresh-session guidance when no files changed.</p></div>
+      <div class="panel"><strong>BIP state</strong><p><code>.agents/project.json</code> already had <code>alignment.build_in_public: true</code>. The supported command path completed with no JSON diff.</p></div>
+    </div>
+    <div class="section-feedback" data-section="Evidence">
+      <h3>Section Feedback</h3>
+      <div class="options">
+        <label class="option"><input type="radio" name="feedback_evidence" value="up"> Evidence is sufficient</label>
+        <label class="option"><input type="radio" name="feedback_evidence" value="down"> Evidence needs revision</label>
+        <label class="option"><input type="radio" name="feedback_evidence" value="clarify"> Evidence needs clarification</label>
+      </div>
+      <textarea name="feedback_evidence_notes" placeholder="Optional feedback for evidence"></textarea>
+    </div>
+  </section>
+
+  <section id="standard">
+    <h2>Reusable Language Standard</h2>
+    <ol>
+      <li>Say whether anything changed.</li>
+      <li>Do not print reload or fresh-session guidance when no files changed.</li>
+      <li>Use a short, action-shaped sentence for no-op states.</li>
+      <li>Reserve recommended next commands for cases where running them would actually change or fix something.</li>
+    </ol>
+    <div class="table-wrap" data-tts-narrative="The reusable language standard separates changed output, no-op output, dry-run no-op output, unsafe dry-run output, and copyable user action commands.">
+      <table>
+        <thead><tr><th>State</th><th>Recommended Copy</th></tr></thead>
+        <tbody>
+          <tr><td>Changed</td><td><code>Updated ...</code>, <code>Installed ...</code>, or <code>Removed ...</code>, followed by reload guidance only if skill roots changed.</td></tr>
+          <tr><td>No-op</td><td><code>&lt;thing&gt; already &lt;state&gt;. No files changed.</code>, for example <code>BIP already on. No files changed.</code></td></tr>
+          <tr><td>Dry-run no-op</td><td><code>No changes needed.</code></td></tr>
+          <tr><td>Unsafe dry-run</td><td><code>Safe to run: no</code>, with failure details and no recommended mutation command.</td></tr>
+          <tr><td>User action</td><td><code>Recommended command: npx skillpacks ...</code> for npm-facing help. Mention <code>scripts/pack.sh ...</code> only as a source-checkout alternative.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <h2>Command Matrix</h2>
+    <p>The table below renders the full Markdown command matrix as the reviewable artifact.</p>
+    <div class="table-wrap" data-tts-narrative="The command matrix reviews every public skillpacks command. The main upgrades are command-name normalization, no-op handling for mutating commands, conditional recommended commands, and clearer summaries.">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Current Behavior Observed</th><th>Recommended Language Upgrade</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>help</code>, <code>--help</code></td><td>Usage header says <code>gskp</code>, despite the npm path being <code>skillpacks</code>.</td><td>Make <code>skillpacks</code> primary: <code>Usage: skillpacks &lt;command&gt; [args...]</code>. Add <code>Alias: gskp</code> near the bottom.</td></tr>
+          <tr><td><code>--version</code></td><td>Prints version only.</td><td>Keep unchanged.</td></tr>
+          <tr><td><code>list</code></td><td>Prints pack names; update status goes to stderr and can appear before or after stdout in combined logs.</td><td>Add <code>Available packs:</code> for human mode. Keep <code>list --json</code> quiet and machine-stable.</td></tr>
+          <tr><td><code>list --json</code></td><td>Machine JSON.</td><td>Keep unchanged.</td></tr>
+          <tr><td><code>list --skills</code></td><td>Clear installable skill inventory.</td><td>Keep mostly unchanged; consider ending with <code>Install with: npx skillpacks install &lt;skill&gt;</code>.</td></tr>
+          <tr><td><code>list --tree</code></td><td>Clear pack hierarchy.</td><td>Keep mostly unchanged; consider ending with <code>Install a pack: npx skillpacks install &lt;pack&gt;</code>.</td></tr>
+          <tr><td><code>list-packs</code></td><td>Prints enabled pack names only; silent when none.</td><td>Add <code>Enabled packs:</code> header, and print <code>No packs enabled.</code> when empty.</td></tr>
+          <tr><td><code>status</code></td><td>Dumps raw <code>.agents/project.json</code>, absolute skill paths, and installed skills.</td><td>Add a concise summary first: project type, enabled packs count, individually installed skills count, BIP status, update mode. Move raw JSON and path dump behind <code>--verbose</code> later if compatibility allows.</td></tr>
+          <tr><td><code>status --all</code></td><td>Uses per-project sections and final summary.</td><td>Include per-project compact summary lines before verbose status blocks; keep failure summary.</td></tr>
+          <tr><td><code>recommend</code></td><td>For an already configured repo, prints <code>Project already declares: ...</code> and enabled packs.</td><td>Add an explicit outcome: <code>No recommendation needed; project is already configured as devtool.</code></td></tr>
+          <tr><td><code>install &lt;name...&gt;</code></td><td>Strongest current pattern. New no-op output is clear and reload guidance is gated by real changes.</td><td>Keep this as the baseline. Consider changing punctuation to period if standardizing all CLI sentences, but do not regress brevity.</td></tr>
+          <tr><td><code>install-deck &lt;deck&gt; [--full]</code></td><td>Resolves deck then delegates to pack install.</td><td>Before delegation, print <code>Installing deck '&lt;deck&gt;' (&lt;lane&gt;): &lt;packs&gt;</code>. On no-op, ensure pack-level no-op language still appears.</td></tr>
+          <tr><td><code>init</code></td><td>Always prints initialized, update, and reload language even if base skills were already current.</td><td>Add idempotency: <code>Base skills already initialized. No files changed.</code> Do not print reload guidance on no-op.</td></tr>
+          <tr><td><code>uninstall-global [--dry-run]</code></td><td>Clear removal count; says base skills now install project-local.</td><td>If removed count is 0, say <code>No legacy global skill installs found.</code> before the migration note.</td></tr>
+          <tr><td><code>uninstall-global --reinstall-base --dry-run</code></td><td>Good multi-project summary with failures repeated.</td><td>Keep. If totals are all zero, add <code>No project-local base skill changes needed.</code></td></tr>
+          <tr><td><code>remove &lt;name...&gt;</code></td><td>Always prints reload guidance after command, even when no skill root or config changed.</td><td>Mirror install: <code>Skill was not installed. No files changed.</code>, <code>Pack was not installed. No files changed.</code>, and suppress reload guidance on no-op.</td></tr>
+          <tr><td><code>refresh</code></td><td>Prints <code>Refreshed project skills...</code> even when nothing changed; reload guidance is correctly gated.</td><td>Use <code>Project skills already current at &lt;version&gt;. No files changed.</code> when sync and prune counts are zero.</td></tr>
+          <tr><td><code>refresh --all --dry-run</code></td><td>Excellent unsafe reasons and affected-skill summaries. If safe but no changes, still prints <code>Recommended command: skillpacks refresh --all</code>.</td><td>Only print a recommended mutation command when totals are nonzero. Prefix with <code>npx</code>: <code>Recommended command: npx skillpacks refresh --all</code>.</td></tr>
+          <tr><td><code>refresh --all</code></td><td>Good per-project sections and final success/failure summary.</td><td>Include changed/no-change counts in the final summary, not only ok, flagged, and failed.</td></tr>
+          <tr><td><code>doctor</code></td><td>Clear drift table and fix command. In source checkout it recommends the absolute <code>scripts/pack.sh refresh</code> path.</td><td>Add a final status line: <code>Drift found: 2 stale installs.</code> Prefer <code>Fix: npx skillpacks refresh</code> for npm context, with source-checkout alternative if detected.</td></tr>
+          <tr><td><code>doctor --all</code></td><td>Uses shared multi-project summary.</td><td>Add per-project drift counts where possible; keep failure summary.</td></tr>
+          <tr><td><code>doctor --fix</code></td><td>Clear cleanup header and changed item count.</td><td>If zero, current <code>No generated skill-root changes needed.</code> is good. Ensure reload guidance remains gated by real skill-root changes.</td></tr>
+          <tr><td><code>doctor --fix --agent-docs [--dry-run]</code></td><td>Agent-doc migration has clear refusal/diff language.</td><td>Add a final <code>Agent docs changed: no/yes</code> summary in dry-run and real modes.</td></tr>
+          <tr><td><code>alignment help</code></td><td>Header and usage say <code>gskp alignment</code>.</td><td>Same global fix: primary command should be <code>skillpacks alignment</code>; note <code>gskp</code> as alias.</td></tr>
+          <tr><td><code>alignment bundles [--dry-run] [--check]</code></td><td>Delegates to generator; parser errors are clear.</td><td>Standardize generated output endings: <code>Bundles already current. No files changed.</code> for no-op dry-run/check success.</td></tr>
+          <tr><td><code>alignment pages audit</code></td><td>Delegates to auditor.</td><td>Ensure failure output ends with <code>Fix diagnostics above, then rerun: npx skillpacks alignment pages audit</code>.</td></tr>
+          <tr><td><code>alignment pages open ...</code></td><td>Parser errors are clear and path-safe.</td><td>Keep. Help should show <code>npx skillpacks alignment pages open ...</code> examples.</td></tr>
+          <tr><td><code>alignment pages serve [--port]</code></td><td>Parser errors are clear.</td><td>Ensure runtime output prints the URL and stop instruction in one compact block.</td></tr>
+          <tr><td><code>alignment pages inject-tts [--force] [--dry-run]</code></td><td>Asset install message is clear.</td><td>Add no-op language when the TTS include is already present: <code>TTS already included. No files changed.</code></td></tr>
+          <tr><td><code>alignment verify</code></td><td>Clear missing-test error for non-source repos.</td><td>Add the source-checkout command fallback after the error when applicable.</td></tr>
+          <tr><td><code>prototype help</code></td><td>Header and usage say <code>gskp prototype</code>.</td><td>Same global command-name fix.</td></tr>
+          <tr><td><code>prototype bundles [--dry-run] [--check]</code></td><td>Delegates to generator; parser errors are clear.</td><td>Match alignment bundle no-op wording.</td></tr>
+          <tr><td><code>prune [--dry-run]</code></td><td><code>Nothing to prune.</code> is clear; found-orphans dry-run says <code>Run without --dry-run</code>.</td><td>Use a copyable command: <code>Recommended command: npx skillpacks prune</code>.</td></tr>
+          <tr><td><code>set-update-mode &lt;mode&gt;</code></td><td>Always prints <code>Set skill_updates.mode to &lt;mode&gt;</code>, including same-value writes.</td><td>Add idempotency: <code>Update mode already &lt;mode&gt;. No files changed.</code> For <code>unset</code>, say whether the field was removed or already absent.</td></tr>
+          <tr><td><code>set-bip &lt;mode&gt; [--all] [--dry-run]</code></td><td>Single-project command always prints <code>Set alignment.build_in_public to on</code>; all-project dry-run recommends running even when every project is already on.</td><td>Add idempotency: <code>BIP already on. No files changed.</code> In <code>--all --dry-run</code>, if all actions are <code>already on</code>, print <code>No changes needed.</code> and omit recommended command.</td></tr>
+          <tr><td><code>set-bip-prompt &lt;action&gt;</code></td><td>Prints <code>Set alignment.bip_prompt_dismissed to dismiss/reset</code>, even though reset removes the field.</td><td>Use domain language: <code>BIP suggestion prompt dismissed.</code> / <code>BIP suggestion prompt reset.</code> Add no-op variants.</td></tr>
+          <tr><td><code>pin &lt;skill&gt; &lt;version&gt;</code></td><td>Always prints <code>Pinned ...</code>, even when already pinned to same version.</td><td>Add no-op: <code>&lt;skill&gt; already pinned to &lt;version&gt;. No files changed.</code></td></tr>
+          <tr><td><code>unpin &lt;skill&gt;</code></td><td>Prints <code>Unpinned ...</code> even if no pin existed.</td><td>Add no-op: <code>&lt;skill&gt; is not pinned. No files changed.</code></td></tr>
+          <tr><td><code>set-mode &lt;mode&gt;</code></td><td>Always prints <code>Updated .agents/project.json</code>.</td><td>Print actual mode: <code>Set agent_mode to hybrid.</code> or <code>Removed agent_mode override.</code> Add no-op variants.</td></tr>
+          <tr><td><code>which &lt;skill&gt;</code></td><td>For not-installed skills, advice currently says <code>scripts/pack.sh install ...</code>.</td><td>For npm CLI, recommend <code>npx skillpacks install &lt;pack&gt;</code> and <code>npx skillpacks install &lt;skill&gt;</code>. If in source checkout, add <code>Source checkout alternative: scripts/pack.sh install ...</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="priorities">
+    <h2>Priority Recommendations</h2>
+    <ol class="priority-list">
+      <li><strong>Normalize command identity.</strong> Make <code>skillpacks</code> the primary command in help, examples, recommended commands, and <code>which</code> output. Keep <code>gskp</code> as an alias, not the headline.</li>
+      <li><strong>Apply install-style no-op handling to all mutating commands.</strong> Highest impact: <code>remove</code>, <code>set-bip</code>, <code>set-update-mode</code>, <code>set-mode</code>, <code>set-bip-prompt</code>, <code>pin</code>, <code>unpin</code>, <code>init</code>, and <code>refresh</code>.</li>
+      <li><strong>Gate recommended commands on actual work.</strong> <code>refresh --all --dry-run</code> and <code>set-bip --all --dry-run</code> should not recommend a mutation command when every project is already current.</li>
+      <li><strong>Make summaries scan-friendly.</strong> Add final counts for changed, no-change, and failure states to <code>doctor</code>, <code>refresh --all</code>, <code>status --all</code>, and agent-doc migration.</li>
+      <li><strong>Keep machine surfaces stable.</strong> Do not add human prose to <code>list --json</code>; keep update status on stderr.</li>
+    </ol>
+    <div class="section-feedback" data-section="Priority Recommendations">
+      <h3>Section Feedback</h3>
+      <div class="options">
+        <label class="option"><input type="radio" name="feedback_priorities" value="up"> Priority order looks right</label>
+        <label class="option"><input type="radio" name="feedback_priorities" value="down"> Reweight the priorities</label>
+        <label class="option"><input type="radio" name="feedback_priorities" value="clarify"> Needs clarification</label>
+      </div>
+      <textarea name="feedback_priorities_notes" placeholder="Optional feedback for priority recommendations"></textarea>
+    </div>
+  </section>
+
+  <section id="implementation">
+    <h2>Suggested Implementation Shape</h2>
+    <ul>
+      <li>Add a small shared helper for project-config setters that returns <code>{ changed, before, after }</code>.</li>
+      <li>Add a shared <code>printNoChange(message)</code> convention and tests asserting no reload guidance on no-op mutations.</li>
+      <li>Add a command-name formatter that prefers <code>npx skillpacks ...</code> in package-facing messages and can append source-checkout alternatives where useful.</li>
+      <li>Add regression tests for no-op paths: <code>set-bip on</code>, <code>set-update-mode warn</code>, <code>set-mode hybrid</code>, <code>remove &lt;skill&gt;</code>, <code>pin &lt;skill&gt; &lt;version&gt;</code>, <code>unpin &lt;skill&gt;</code>, and <code>refresh --all --dry-run</code> with zero planned changes.</li>
+    </ul>
+  </section>
+
+  <section id="verification">
+    <h2>Verification Notes</h2>
+    <p>The Markdown audit was built from direct command runs and code inspection. During conversion, the relevant source report remains the canonical Markdown artifact until this page is approved.</p>
+    <div class="grid">
+      <div class="panel"><strong>Command help inspected</strong><p><code>--help</code>, <code>alignment help</code>, and <code>prototype help</code>.</p></div>
+      <div class="panel"><strong>Current project state inspected</strong><p><code>status</code>, <code>list-packs</code>, <code>which investigate</code>, and <code>which logic-wiring</code>.</p></div>
+      <div class="panel"><strong>Dry-run output inspected</strong><p><code>set-bip on --all --dry-run</code>, <code>refresh --all --dry-run</code>, and <code>prune --dry-run</code>.</p></div>
+      <div class="panel"><strong>Drift note</strong><p><code>doctor</code> reported stale <code>user-flow-map</code> installs from unrelated in-progress design-tree work, and that remediation was intentionally left out of scope.</p></div>
+    </div>
+  </section>
+
+  <section id="review-gates">
+    <h2>Review Gates</h2>
+    <div class="question-block" data-section="Command Matrix" data-gate-type="artifact-coverage">
+      <h3>Command Matrix Coverage</h3>
+      <p>Does the rendered matrix cover the command surface well enough to use as the remediation guide?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate_matrix" value="Approve matrix coverage"> Approve matrix coverage</label>
+        <label class="option"><input type="radio" name="gate_matrix" value="Revise matrix coverage"> Revise matrix coverage</label>
+        <label class="option"><input type="radio" name="gate_matrix" value="Need clarification"> Need clarification</label>
+      </div>
+      <textarea name="gate_matrix_notes" placeholder="Optional notes for matrix coverage"></textarea>
+    </div>
+    <div class="question-block" data-section="Priority Recommendations" data-gate-type="priority-order">
+      <h3>Priority Order</h3>
+      <p>Which implementation order should follow from this audit?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate_priority" value="Implement priorities 1-3 first"> Implement priorities 1-3 first</label>
+        <label class="option"><input type="radio" name="gate_priority" value="Implement all recommendations in one pass"> Implement all recommendations in one pass</label>
+        <label class="option"><input type="radio" name="gate_priority" value="Hold as reference only"> Hold as reference only</label>
+        <label class="option"><input type="radio" name="gate_priority" value="Need clarification"> Need clarification</label>
+      </div>
+      <textarea name="gate_priority_notes" placeholder="Optional notes for priority order"></textarea>
+    </div>
+    <div class="question-block" data-section="BIP Status" data-gate-type="config-confirmation">
+      <h3>BIP Status</h3>
+      <p>The source report says BIP is enabled for this repo. How should that be treated?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate_bip" value="Confirm BIP enabled"> Confirm BIP enabled</label>
+        <label class="option"><input type="radio" name="gate_bip" value="Recheck BIP before implementation"> Recheck BIP before implementation</label>
+        <label class="option"><input type="radio" name="gate_bip" value="Need clarification"> Need clarification</label>
+      </div>
+      <textarea name="gate_bip_notes" placeholder="Optional notes for BIP status"></textarea>
+    </div>
+  </section>
+
+  <section id="compile">
+    <h2>Compile Responses</h2>
+    <p>Answer any gate or section feedback, then compile YAML for follow-up work on this alignment page.</p>
+    <div class="actions">
+      <button type="button" id="compileBtn">Compile Responses</button>
+      <button type="button" class="secondary" id="copyBtn">Copy YAML</button>
+      <span class="status-line" id="copyStatus"></span>
+    </div>
+    <textarea id="compiledYaml" readonly placeholder="Compiled YAML appears here"></textarea>
+  </section>
+</main>
+
+<script>
+const pagePath = "alignment/skillpacks-command-language-upgrades.html";
+const command = "$investigate";
+const gates = [
+  { name: "gate_matrix", section: "Command Matrix", gate_type: "artifact-coverage" },
+  { name: "gate_priority", section: "Priority Recommendations", gate_type: "priority-order" },
+  { name: "gate_bip", section: "BIP Status", gate_type: "config-confirmation" }
+];
+const feedbackBlocks = [
+  { name: "feedback_goal", section: "Goal" },
+  { name: "feedback_evidence", section: "Evidence" },
+  { name: "feedback_priorities", section: "Priority Recommendations" }
+];
+
+function yamlEscape(value) {
+  return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
+}
+
+function answerStatus(value) {
+  if (value === "Need clarification" || value === "clarify") return "needs-clarification";
+  if (value === "down") return "revision-request";
+  if (/^Revise|^Hold/.test(value)) return "other";
+  return "answered";
+}
+
+function compileResponses() {
+  const gateAnswers = [];
+  const unanswered = [];
+  for (const gate of gates) {
+    const checked = document.querySelector('input[name="' + gate.name + '"]:checked');
+    if (!checked) {
+      unanswered.push(gate.name);
+      continue;
+    }
+    const notes = document.querySelector('textarea[name="' + gate.name + '_notes"]').value.trim();
+    gateAnswers.push({
+      section: gate.section,
+      gate_type: gate.gate_type,
+      status: answerStatus(checked.value),
+      answer: checked.value,
+      notes
+    });
+  }
+
+  const sectionFeedback = [];
+  for (const feedback of feedbackBlocks) {
+    const checked = document.querySelector('input[name="' + feedback.name + '"]:checked');
+    if (!checked) continue;
+    const notes = document.querySelector('textarea[name="' + feedback.name + '_notes"]').value.trim();
+    sectionFeedback.push({
+      section: feedback.section,
+      feedback_status: checked.value,
+      notes
+    });
+  }
+
+  const hasNegative = gateAnswers.some((item) => item.status !== "answered") || sectionFeedback.some((item) => item.feedback_status !== "up");
+  const complete = unanswered.length === 0;
+  const lines = [
+    "# Invoke with: " + command,
+    'command: "' + yamlEscape(command) + '"',
+    "alignment_page: " + pagePath,
+    "response_status: " + (complete ? "complete" : "partial"),
+    "approval_status: " + (complete && !hasNegative ? "ready-for-agent-review" : "not-approved"),
+    "required_gate_status: " + (complete ? "complete" : "incomplete"),
+    "unanswered_required_questions:"
+  ];
+  if (unanswered.length === 0) {
+    lines.push("  []");
+  } else {
+    unanswered.forEach((name) => lines.push("  - " + name));
+  }
+
+  lines.push("gate_answers:");
+  if (gateAnswers.length === 0) {
+    lines.push("  []");
+  } else {
+    gateAnswers.forEach((item) => {
+      lines.push("  - section: \"" + yamlEscape(item.section) + "\"");
+      lines.push("    gate_type: \"" + yamlEscape(item.gate_type) + "\"");
+      lines.push("    status: \"" + yamlEscape(item.status) + "\"");
+      lines.push("    answer: \"" + yamlEscape(item.answer) + "\"");
+      lines.push("    notes: \"" + yamlEscape(item.notes) + "\"");
+    });
+  }
+
+  lines.push("section_feedback:");
+  if (sectionFeedback.length === 0) {
+    lines.push("  []");
+  } else {
+    sectionFeedback.forEach((item) => {
+      lines.push("  - section: \"" + yamlEscape(item.section) + "\"");
+      lines.push("    feedback_status: \"" + yamlEscape(item.feedback_status) + "\"");
+      lines.push("    notes: \"" + yamlEscape(item.notes) + "\"");
+    });
+  }
+
+  const yaml = lines.join("\n");
+  document.getElementById("compiledYaml").value = yaml;
+  copyYaml(yaml);
+}
+
+function copyYaml(value) {
+  const output = document.getElementById("compiledYaml");
+  const status = document.getElementById("copyStatus");
+  const yaml = value || output.value;
+  if (!yaml) {
+    status.textContent = "Compile responses first.";
+    return;
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(yaml).then(() => {
+      status.textContent = "YAML copied.";
+    }).catch(() => {
+      output.focus();
+      output.select();
+      status.textContent = "Clipboard blocked. YAML selected.";
+    });
+  } else {
+    output.focus();
+    output.select();
+    status.textContent = "Clipboard unavailable. YAML selected.";
+  }
+}
+
+document.getElementById("compileBtn").addEventListener("click", compileResponses);
+document.getElementById("copyBtn").addEventListener("click", () => copyYaml());
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
