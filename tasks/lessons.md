@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-06-27 — Flow maps need surfaces, not UI-only screens
+
+- A design-tree terminology review showed that `user-flow-map` used screen/route wording for flow points that may actually be MCP responses, CLI output, SDK/tool-call results, API responses, validation events, background state, or audit records.
+- Use `surface` as the umbrella term for any visible, actionable, or inspectable point in a flow.
+- Treat MCP, CLI, SDK/tool calls, and APIs as channels of the same surface by default; split them into distinct surfaces only when behavior materially differs.
+- Keep `ui-interview` page/screen focused: it consumes upstream surfaces and channels, then owns visual UI candidates such as screens, routes, regions, diagnostics views, and audit/recovery screens.
+
 ## 2026-06-27 — Page YAML needs both invocation cue and parser contract
 
 - A page-YAML routing discussion exposed that putting the skill invocation only in a YAML field can be easy for agents to miss, while putting it only in a prepended freeform line would weaken parser compliance.

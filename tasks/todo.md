@@ -5,9 +5,76 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Skillpacks Install Idempotency.
+Last completed task: Design-Tree Surface Terminology.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Design-Tree Surface Terminology
+
+### Goal
+
+Update `user-flow-map` and `ui-interview` contracts so agent/tool/API flow steps are modeled as surfaces and channels without forcing every flow point to become a visual screen.
+
+### Execution Profile
+
+- Strategy: Targeted skill contract update
+- Scope: product-design Claude/Codex source mirrors, local installed copies after refresh, prompt/task/lesson records
+- Notes: preserve the existing design-tree branch model; do not add new route steps or make `ui-interview` own non-UI channel behavior
+
+### Checklist
+
+- [x] Capture the visible `skill-creator` invocation prompt and write the implementation plan.
+- [x] Inspect active source and installed skill contracts.
+- [x] Archive and bump affected source skill mirrors.
+- [x] Update `user-flow-map` surface/channel terminology and deliverable contract.
+- [x] Update `ui-interview` upstream-source and scope terminology.
+- [x] Refresh local skill installs if stale.
+- [x] Resolve pre-existing `base/codex/fork-idea-branch` archive-audit blocker.
+- [x] Run focused verification and fix in-scope regressions.
+- [x] Document review results, create ship manifest, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- `user-flow-map` defines surface as any visible/actionable/inspectable point in the flow.
+- `user-flow-map` treats MCP, CLI, SDK/tool call, and API as channels by default, splitting surfaces only when behavior materially differs.
+- `user-flow-map` writes a Surface Inventory with `surface type`, `channels`, and `visual UI candidate`.
+- `user-flow-map` clarifies that only named user-flow branches become `branches[]`; surfaces remain supporting flow-map detail unless promoted later.
+- `ui-interview` consumes upstream surfaces/channels but owns human-visible UI candidates only.
+- Version archives, changelogs, local installed copies, and task/prompt records are consistent.
+
+### Test Plan
+
+- `scripts/skill-archive.sh` archive presence for affected mirrors.
+- `scripts/skill-mirror-parity-audit.sh --verbose`
+- `scripts/pack.sh doctor`
+- Targeted `rg` checks for stale UI-biased terminology and new surface/channel contract wording.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review
+
+Implemented and verified.
+
+- Updated `user-flow-map` Claude/Codex mirrors to v1.7 with a `Surface Terminology` contract, channel handling, Surface Inventory deliverables, and the manifest clarification that only named user-flow branches become `branches[]`.
+- Updated `ui-interview` Claude/Codex mirrors to v0.29 so it consumes upstream surfaces/channels but only owns human-visible UI candidates and diagnostics/recovery/history/audit UI.
+- Updated `user-flow-map` `agents/openai.yaml` metadata away from screen-only wording.
+- Archived prior `user-flow-map` v1.6 and `ui-interview` v0.28 source mirrors.
+- Refreshed local skill installs; no tracked install-copy diff was produced, and `scripts/pack.sh doctor` reports all installed skills current.
+- Fixed the pre-existing `base/codex/fork-idea-branch` archive-audit gap by adding the missing v0.0 archive.
+
+Verification passed:
+
+- targeted stale-term `rg` check on active source and metadata
+- targeted surface/channel contract `rg` check
+- archive path existence check for `user-flow-map` v1.6 and `ui-interview` v0.28
+- `scripts/pack.sh doctor`
+- `scripts/skill-mirror-parity-audit.sh --verbose`
+- `scripts/skill-archive-audit.sh`
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Ship manifest: `tasks/ship-manifest-2026-06-27-design-tree-surface-terminology.md`.
 
 ## Review - Skillpacks Install Idempotency
 

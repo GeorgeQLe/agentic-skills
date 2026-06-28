@@ -2,6 +2,45 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Design-Tree Surface Terminology
+
+### Goal
+
+Update the product-design skill contracts so `user-flow-map` uses `surface` as the umbrella for visible, actionable, or inspectable flow points across UI, MCP, CLI, API, SDK/tool responses, events, validation results, background state, and audit records, while preserving the existing design-tree branch model.
+
+### Plan
+
+1. Capture the visible `skill-creator` invocation prompt and write the active task plan.
+2. Inspect current `user-flow-map`, `ui-interview`, `state-model`, `logic-wiring`, design-tree convention bundles, and installed mirrors to identify the smallest contract change.
+3. Archive and bump the affected Claude/Codex skill mirrors before behavior changes.
+4. Update `user-flow-map` from screen/route inventory to surface inventory, including surface type, channels, visual UI candidate, channel-split rules, and the branches-vs-surfaces manifest clarification.
+5. Update `ui-interview` terminology so it consumes upstream surfaces/channels but owns only human-visible UI candidates: screens, routes, regions, diagnostics views, and audit/recovery screens.
+6. Update changelogs, lessons, and prompt/task records.
+7. Refresh generated local installs if canonical source changes make them stale.
+8. Run focused verification: archive/version checks, mirror parity, install drift, targeted terminology scans, task-doc audit, and diff hygiene.
+9. Document review results, create a ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `user-flow-map` defines `surface` as any visible/actionable/inspectable point in a flow.
+- `user-flow-map` distinguishes `channel` from `surface` and treats MCP, CLI, SDK/tool call, and API as channels of the same surface unless behavior materially differs.
+- The flow assumptions/checkpoints/deliverables use `surface inventory` and `action/state matrix by surface`, not a UI-only `screen/route inventory`.
+- The surface inventory requires `surface type`, `channels`, and `visual UI candidate`.
+- The design-tree manifest contract states only named user-flow branches become `branches[]`; surfaces are supporting flow-map detail unless promoted through UX/UI work.
+- `ui-interview` does not own full MCP/CLI/API channel splits and narrows its scope to visual UI candidates and human-visible diagnostics/audit screens.
+- Claude/Codex mirrors remain version/changelog/archive consistent.
+- Generated project-local `.claude/skills` and `.codex/skills` copies are refreshed or verified current.
+
+### Results
+
+- Updated Claude/Codex `user-flow-map` from v1.6 to v1.7 with a Surface Terminology contract, Surface Inventory deliverables, channel handling, visual UI candidate fields, and the branches-vs-surfaces manifest clarification.
+- Updated Claude/Codex `ui-interview` from v0.28 to v0.29 so it consumes upstream surfaces/channels but owns only human-visible UI screens, routes, regions, diagnostics, recovery, history, and audit views.
+- Updated `user-flow-map` `agents/openai.yaml` metadata away from screen-only wording.
+- Archived the previous `user-flow-map` v1.6 and `ui-interview` v0.28 skill files in both mirrors.
+- Refreshed local skill installs; `scripts/pack.sh doctor` reports the installed copies current.
+- Resolved a pre-existing archive-audit blocker by adding the missing `base/codex/fork-idea-branch/archive/v0.0/SKILL.md`.
+- Verification passed; see `tasks/ship-manifest-2026-06-27-design-tree-surface-terminology.md`.
+
 ## Historical Implementation - Skillpacks Install Idempotency
 
 ### Goal

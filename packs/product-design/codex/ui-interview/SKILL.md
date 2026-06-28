@@ -1,8 +1,8 @@
 ---
 name: ui-interview
-description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
+description: Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.28
+version: v0.29
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -13,9 +13,11 @@ visual_tier: prototype
 
 Invoke as `$ui-interview`.
 
-Use this skill when the user needs to turn a UX variation branch, rough product idea, feature, page, wireframe, screenshot, or existing app surface into a detailed implementation-ready UI specification. In the default product-design tree, this skill evaluates one proposed `$ux-variations` branch for one specific user flow, designs a proposed UI, renders an HTML visual mockup for alignment, and then records whether that branch is approved, rejected, or needs another mockup iteration before routing to the next UX variation or user flow.
+Use this skill when the user needs to turn a UX variation branch, rough product idea, feature, page, wireframe, screenshot, or existing human-visible app surface into a detailed implementation-ready UI specification. In the default product-design tree, this skill evaluates one proposed `$ux-variations` branch for one specific user flow, designs a proposed UI, renders an HTML visual mockup for alignment, and then records whether that branch is approved, rejected, or needs another mockup iteration before routing to the next UX variation or user flow.
 
-Use `$user-flow-map` before this skill when the product or feature has no credible screen/route inventory, task sequence, branch coverage, or state map. Prefer `design/user-flow-*.md` and the scoped flow-tree manifest as source material when they exist; they are the upstream wireframe-tree contract. Use `$ux-variations [specific-user-flow]` before this skill when a flow exists but no UX variation branch has been proposed yet.
+Use `$user-flow-map` before this skill when the product or feature has no credible surface inventory, visual UI candidates, task sequence, branch coverage, or state map. Prefer `design/user-flow-*.md` and the scoped flow-tree manifest as source material when they exist; they are the upstream flow-map contract for surfaces, channels, branches, decisions, states, failure paths, and visual UI candidates. Use `$ux-variations [specific-user-flow]` before this skill when a flow exists but no UX variation branch has been proposed yet.
+
+This skill does not own full MCP/CLI/API/SDK channel splits. Treat non-visual surfaces from `$user-flow-map` as upstream context unless they need a human-visible diagnostics, recovery, history, or audit UI. `state-model` owns commands/events, state transitions, channel parity, and logical contracts; `logic-wiring` owns runnable CLI/API/infra behavior when a prototype needs it.
 
 Use `$ux-variations` after this skill only when the current UI mockup exposes a missing or rejected variation axis that needs branch exploration before another UI proposal.
 
@@ -75,12 +77,12 @@ This skill already runs **one UX-variation branch per session**; this subsection
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, screenshots, and design artifacts when present.
-   - Prefer `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` for screen sequence, route inventory, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
+   - Prefer `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` for surface sequence, channels, visual UI candidates, route candidates, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
    - Prefer `design/ux-variations-*.md` (or product-path-scoped equivalents) for the selected UX variation branch, sibling variations, unresolved branch decisions, proposed progression paths, and branch-routing expectations.
    - Read `design/**/design-inspirations-{topic}.md` if present and treat it as the pre-gathered "apps you admire" / reference-pattern input for mockup and spec work — named UI/UX patterns, conventions, component-library references, and annotated links. When absent, behavior is unchanged.
    - If the request is for an existing UI, inspect the current implementation before interviewing.
    - If multiple apps or surfaces are plausible, ask the user which app, flow, or page to cover first.
-   - If the interface has no credible screen/flow structure from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
+   - If the interface has no credible surface/flow structure with visual UI candidates from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
    - If the interface has a credible flow but no specific UX variation branch or proposal to judge, stop and recommend `$ux-variations [specific-user-flow]`.
 
 2. **Treat inputs as draft material**
@@ -151,7 +153,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - This manifest confirmation is non-final: it only confirms the requirements draft is ready for the pre-approval lifecycle in step 9. Route all writes through that lifecycle — working packet at `research/_working/preliminary-ui-interview-research.md` (or `research/{slug}/_working/preliminary-ui-interview-research.md` when a product path is active), then a `review`-state `alignment/ui-interview-{topic}.html` page rendering the Content Requirements Manifest as the candidate/verdict gate, then final compiled YAML approval.
    - Only after final compiled YAML approval, write `design/ui-requirements-[topic].md` and `design/ui-requirements-[topic]-interview.md` in flat mode or product-path-scoped equivalents, update the scoped flow-tree manifest, archive the working packet, and convert the page to `confirmed` per step 9.
    - Only after the page is converted to `confirmed` and canonical files are written, recommend `$ui-interview` without the flag to evaluate a concrete UX variation branch, `$ux-variations --layout-mode` only when this requirements-only detour intentionally needs layout alternatives, or `$user-flow-map --prototype-build-plan [topic]` only when all target UI branch decisions already exist. Do not route requirements-only work to `$roadmap` or `agent-work-admin`.
-   - If requirements-only work exposes missing screen order, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
+   - If requirements-only work exposes missing surface order, visual UI candidate decisions, branch decisions, or state coverage, recommend `$user-flow-map [topic]` instead of inventing layout variants.
    - Stop. Do not continue to step 6 or beyond; the pre-approval lifecycle in step 9 and the requirements deliverables above are the only remaining work in this mode.
 
 6. **Full UI specification** (no `--content-only` flag):

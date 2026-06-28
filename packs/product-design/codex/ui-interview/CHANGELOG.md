@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.29 - 2026-06-27
+
+- Narrowed `ui-interview` to human-visible UI candidates while consuming upstream `user-flow-map` surfaces and channels as context.
+- Clarified that MCP/CLI/API/SDK channel splits belong to `user-flow-map`/`state-model`/`logic-wiring` unless a non-visual surface needs a diagnostics, recovery, history, or audit UI.
+- Updated upstream prerequisite and context wording from screen/route inventory to surface inventory, channels, visual UI candidates, branches, states, and failure paths.
+
 ## v0.28 - 2026-06-26
 
 - Flow-walk re-cut: routing of approved clickable route experiments now targets `$build-ui-screens` (then `$logic-wiring`) instead of the renamed `$create-ui-experiment`.

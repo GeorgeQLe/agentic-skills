@@ -1,5 +1,12 @@
 # user-flow-map changelog (codex)
 
+## v1.7 - 2026-06-27
+
+- Reframed the flow-map inventory from UI-only screens/routes to surfaces and channels, covering visual UI, MCP, CLI, SDK/tool-call, API, validation, event, background-state, and audit-record realizations.
+- Added the Surface Terminology contract: channels are delivery/access methods for the same surface by default, and split into separate surfaces only when behavior materially differs.
+- Changed flow checkpoints, chunked section naming, and deliverables to require a Surface Inventory with `surface type`, `channels`, and `visual UI candidate`.
+- Clarified that only named user-flow branches become `branches[]` in the design-tree manifest; surfaces remain supporting flow-map detail unless later promoted by UX/UI work.
+
 ## v1.6 - 2026-06-23
 
 - Bumped the contract after archiving v1.5.

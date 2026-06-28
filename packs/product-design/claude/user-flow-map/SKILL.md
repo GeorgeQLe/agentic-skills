@@ -1,8 +1,8 @@
 ---
 name: user-flow-map
-description: Turn a high-level product concept, positioned goal, or goal sequence into screen flow structure with entry points, decisions/actions/states, branches, failure paths, and low-fidelity wireframe guidance before UI/spec/prototype work
+description: Turn a high-level product concept, positioned goal, or goal sequence into flow and surface structure with entry points, decisions/actions/states, branches, channels, failure paths, and low-fidelity UI-candidate guidance before UX/UI/spec/prototype work
 type: planning
-version: v1.6
+version: v1.7
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -18,13 +18,21 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/user-flow-map`.
 
-Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, screens/routes, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity wireframe notes. Treat the output as the root of a wireframe tree: each mapped user flow can fan out into `/ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `/ui-interview`. After the flow map is approved, the recommended next step is `/state-model [topic]` — an orthogonal sibling that authors the flow-anchored logical domain model (entities, state machines, events, logical contracts) once, so `/ux-variations` and `/ui-interview` re-skin a real substrate rather than inventing the model per presentation. `/state-model` is optional and does not change the flow-tree route; route directly to `/ux-variations` when the domain is trivial.
+Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, surfaces, channels, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity notes for surfaces that may become UI. Treat the output as the root of a design tree: each mapped user flow can fan out into `/ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `/ui-interview`. After the flow map is approved, the recommended next step is `/state-model [topic]` — an orthogonal sibling that authors the flow-anchored logical domain model (entities, state machines, events, logical contracts) once, so `/ux-variations` and `/ui-interview` re-skin a real substrate rather than inventing the model per presentation. `/state-model` is optional and does not change the flow-tree route; route directly to `/ux-variations` when the domain is trivial.
 
 Use `/user-flow-map --prototype-build-plan [topic]` after `/ui-interview` branch decisions exist to synthesize the approved design tree into one prototype build ledger. This later synthesis mode does not remap the original flows; it reads the flow-tree manifest, branch decisions, UX variation plans, UI branch packets, and any user overrides, then writes `design/prototype-build-plan-[topic].md` as the todo contract for `/prototype`.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill owns the wireframe-tree root and later build-plan synthesis; it does not use Pattern A selected-framework manifests or `tasks/todo.md` for branch progress.
 
-This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes such as "summary panel beside task list" or "confirmation step before destructive action." Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
+This skill does not create polished UI, visual styling, production specs, or runnable prototypes. Keep layout and styling out of scope except for wireframe-level structural notes on visual UI candidate surfaces, such as "summary panel beside task list" or "confirmation step before destructive action." For non-visual surfaces, describe the response, event, validation, state, or audit shape at interface level instead of forcing it into a screen. Do not flatten the tree into a single UI requirements path; preserve named user flows as branch roots for downstream variation work.
+
+## Surface Terminology
+
+Use `surface` as the umbrella term for any place where the flow becomes visible, actionable, or inspectable to a human, agent, or system. A surface can be visual or non-visual.
+
+Use `channel` for the delivery or access method for a surface: web UI, MCP response, CLI output, API response, SDK/tool-call result, notification, background event, validation result, or audit record. Treat MCP, CLI, SDK/tool-call, and API variants as channels of the same surface by default. Split them into separate surfaces only when behavior materially differs, such as an interactive CLI repair flow versus a structured MCP error payload.
+
+Use `screen`, `route`, or `region` only for the visual UI realization of a surface. Use `tool response`, `event`, `validation result`, or `audit record` for non-visual realizations. `ui-interview` owns the visual UI candidates; `state-model` owns commands/events, state transitions, channel parity, and logical contracts; `logic-wiring` owns runnable CLI/API/infra behavior when a prototype needs it.
 
 ## Design-Tree Flow
 
@@ -32,7 +40,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the **Flow Assumptions Checkpoint** (step 2) — confirm persona, scope, and flow boundaries before mapping.
 - **Stage 1 — Research**: **Resolve Context** (step 1) — read idea/research/positioning/journey evidence and existing `design/` artifacts; Product-Path Scope Resolution and the Design Flow Tree Manifest (steps 0/0b) resolve where the tree lives.
-- **Stage 2 — Design**: **Map The Flow** (step 3) and the **Flow Coverage Checkpoint** (step 4) — author flow structure, screens, states, branches, and low-fidelity wireframe notes.
+- **Stage 2 — Design**: **Map The Flow** (step 3) and the **Flow Coverage Checkpoint** (step 4) — author flow structure, surfaces, channels, states, branches, and low-fidelity notes for visual UI candidates.
 - **Stage 3 — Plan**: **Prototype Build-Plan Synthesis Mode** (step 5) — synthesize the approved tree into the `design/prototype-build-plan-[topic].md` slice `/prototype` realizes.
 - **Stage 4 — Implement (scoped)**: write the flow doc, initialize the `flow-tree-[topic].yaml` root, grow one user-flow branch per flow, and pass the single binding alignment gate (`## Alignment Page`) before any canonical write.
 
@@ -63,6 +71,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
 - Initialize the manifest when writing the flow map. Set `schema_version: v0.3`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
+- Only named user-flow branches become `branches[]` entries in the design-tree manifest. Surfaces are supporting flow-map detail unless a downstream UX/UI skill promotes a surface into a UX variation, UI experiment, build item, or model attachment.
 - Order `branches[]` by journey progression by default: discovery or activation before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
 - Each user-flow branch must include `journey_stage`, `journey_sequence`, `priority_rationale`, and `progressive_review` metadata. The progressive review entry must name the first value moment, primary task path, and progressive review sequence for reviewers before downstream UX/UI work begins.
 - If the user explicitly overrides the default branch order, keep the user-chosen order and explain the override in `priority_rationale`. Persist branch order override metadata in `design/**/flow-tree-*.yaml` with schema-backed `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id` for UX-variation overrides.
@@ -73,7 +82,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 ### 0c. Session model — chunked per-section spec sessions vs. one continuous session
 
-For a **large** flow, the step-3 mapping fans out into several heavy per-section work products, and holding them all in one context is the dominant per-session cost. Estimate flow size from the Flow Assumptions Checkpoint's likely screen/route count (step 2): if the flow is large — **screen/route inventory ≥ ~6 screens** — and `--no-chunk` was not passed, enter **chunked mode**; otherwise run one continuous session exactly as a single pass through steps 1–4 (the common case). Chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `DESIGN-TREE-LOOP.md`: a setup session (steps 1–2 + step-3 sub-steps 1–5) writes a pure-context brief and stops; one spec session per step-3 heavy section (in order: `screen-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs`) authors a single section's intermediate; and a final assemble+approve session (step 4 + deliverables + the one alignment page) assembles the canonical flow map. The units here are more interdependent than `ux-variations` — later sections reference earlier ones — so the brief carries more shared context: persona, goal, happy path, entry points, and decision/branch rules. The progress cursor is intermediate-file existence — the brief carries no step list, and there is no schema change and no `tasks/todo.md` use. Chunking applies to default flow-mapping only; prototype-build-plan synthesis mode (step 5) never chunks. For small flows or when `--no-chunk` is passed, write no brief and no intermediates and behave exactly as v0.8 did.
+For a **large** flow, the step-3 mapping fans out into several heavy per-section work products, and holding them all in one context is the dominant per-session cost. Estimate flow size from the Flow Assumptions Checkpoint's likely surface count (step 2): if the flow is large — **surface inventory ≥ ~6 surfaces** — and `--no-chunk` was not passed, enter **chunked mode**; otherwise run one continuous session exactly as a single pass through steps 1–4 (the common case). Chunked mode follows the **Intra-Skill Substep Chunking + Shared Context Brief** mechanism in `DESIGN-TREE-LOOP.md`: a setup session (steps 1–2 + step-3 sub-steps 1–5) writes a pure-context brief and stops; one spec session per step-3 heavy section (in order: `surface-inventory` → `action-state-matrices` → `failure-recovery` → `handoffs`) authors a single section's intermediate; and a final assemble+approve session (step 4 + deliverables + the one alignment page) assembles the canonical flow map. The units here are more interdependent than `ux-variations` — later sections reference earlier ones — so the brief carries more shared context: persona, goal, happy path, entry points, and decision/branch rules. The progress cursor is intermediate-file existence — the brief carries no step list, and there is no schema change and no `tasks/todo.md` use. Chunking applies to default flow-mapping only; prototype-build-plan synthesis mode (step 5) never chunks. For small flows or when `--no-chunk` is passed, write no brief and no intermediates and behave exactly as v0.8 did.
 
 ### 1. Resolve Context
 
@@ -99,8 +108,8 @@ Cover:
 - Happy path sequence.
 - Alternate paths and branch points.
 - Decisions the user or system must make.
-- Screens/routes likely required.
-- Actions per screen.
+- Surfaces likely required, with surface type, channels, and visual UI candidate status.
+- Actions and states per surface.
 - States to represent: empty, loading, error, partial, success, permission-denied, offline, validation, and edge states.
 - Failure and recovery paths.
 - Cross-role, cross-device, external-system, or manual handoffs.
@@ -112,21 +121,21 @@ Do not proceed until the user has reviewed the checkpoint. If the user confirms 
 
 Build the flow map at workflow level, not visual-design level:
 
-**Chunked-mode sessions (step 0c).** When chunked mode is active (large flow, no `--no-chunk`): the setup session runs sub-steps 1–5 below (persona/goal/success, entry points, happy path, alternate paths, decision points), then writes the shared context brief to `design/{slug}/_working/user-flow-map-{topic}-brief.md` (flat mode: `design/_working/user-flow-map-{topic}-brief.md`) containing **pure context only** — persona/role/goal, success condition, entry points, happy path, alternate paths, and decision/branch rules — with **no step list and no status field**, and STOPs with the terminal handoff (below). Each spec session then reads the brief and scans which `{section-id}.md` files exist under `design/{slug}/user-flow-map-{topic}/`, fills the first missing section in order — `screen-inventory` (sub-step 6, with its per-screen low-fidelity wireframe notes from sub-step 10), `action-state-matrices` (sub-step 7), `failure-recovery` (sub-step 8), then `handoffs` (sub-step 9) — to its intermediate path, appends any cross-section facts to the brief, and STOPs with the terminal handoff. In non-chunked mode, run all sub-steps below in one continuous session as before.
+**Chunked-mode sessions (step 0c).** When chunked mode is active (large flow, no `--no-chunk`): the setup session runs sub-steps 1–5 below (persona/goal/success, entry points, happy path, alternate paths, decision points), then writes the shared context brief to `design/{slug}/_working/user-flow-map-{topic}-brief.md` (flat mode: `design/_working/user-flow-map-{topic}-brief.md`) containing **pure context only** — persona/role/goal, success condition, entry points, happy path, alternate paths, and decision/branch rules — with **no step list and no status field**, and STOPs with the terminal handoff (below). Each spec session then reads the brief and scans which `{section-id}.md` files exist under `design/{slug}/user-flow-map-{topic}/`, fills the first missing section in order — `surface-inventory` (sub-step 6, with visual UI candidate notes from sub-step 10), `action-state-matrices` (sub-step 7), `failure-recovery` (sub-step 8), then `handoffs` (sub-step 9) — to its intermediate path, appends any cross-section facts to the brief, and STOPs with the terminal handoff. In non-chunked mode, run all sub-steps below in one continuous session as before.
 
-Every chunked STOP (setup and each spec session) must emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`: state the intermediate just written, name the next missing section in **plain English** — never only the internal `{section-id}` (e.g. write "Next section: **action–state matrices** — the per-screen matrix of actions, navigation, validation, and visual state for each screen in the inventory," not "continue with `action-state-matrices`") — and give the **exact** resolved next command with `{slug}`/`{topic}` filled to literal values, e.g. `/user-flow-map alignment-page-review` writing into `design/alignmeant/user-flow-map-alignment-page-review/action-state-matrices.md`. The setup STOP names the first section (`screen-inventory`) and its command. When the section just written was the last one (`handoffs`), the handoff points to the assemble+approve session instead of another spec session. Continue-vs-stop framing follows that convention's Routing Rules — do not restate it.
+Every chunked STOP (setup and each spec session) must emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md`: state the intermediate just written, name the next missing section in **plain English** — never only the internal `{section-id}` (e.g. write "Next section: **action–state matrices** — the per-surface matrix of actions, navigation, validation, channel behavior, and state coverage for each surface in the inventory," not "continue with `action-state-matrices`") — and give the **exact** resolved next command with `{slug}`/`{topic}` filled to literal values, e.g. `/user-flow-map alignment-page-review` writing into `design/alignmeant/user-flow-map-alignment-page-review/action-state-matrices.md`. The setup STOP names the first section (`surface-inventory`) and its command. When the section just written was the last one (`handoffs`), the handoff points to the assemble+approve session instead of another spec session. Continue-vs-stop framing follows that convention's Routing Rules — do not restate it.
 
 1. Define the primary persona, goal, success condition, and triggering context.
 2. List every entry point and precondition.
-3. Write the happy path as ordered steps with the screen/route used by each step.
+3. Write the happy path as ordered steps with the surface and channel used by each step.
 4. List alternate paths, including optional setup, skip paths, backtracking, cancellation, save-for-later, review/edit, and escalation.
 5. List decision points and branch rules. Distinguish user decisions, system decisions, permissions decisions, and external/manual decisions.
 5a. Order `branches[]` by journey progression by default when turning named flows into manifest branches. Record any explicit user branch-order override before writing deliverables.
-6. Create a screen/route inventory with purpose, inputs, outputs, source evidence, and downstream destination.
-7. For each screen, list required actions, available navigation, disabled/blocked rules, validation rules, and state coverage.
+6. Create a Surface Inventory with purpose, surface type, channels, visual UI candidate, inputs, outputs, source evidence, and downstream destination.
+7. For each surface, list required actions, available navigation or channel affordances, disabled/blocked rules, validation rules, channel-specific behavior, state coverage, and audit/observability needs.
 8. Map failures and recovery: invalid input, no data, permissions, lost connection, backend failure, timeouts, interrupted work, and contradictory user choices.
 9. Map handoffs across roles, devices, systems, documents, notifications, approvals, payments, support, or manual operations.
-10. Add low-fidelity wireframe notes for each screen: rough regions, primary/secondary content, key controls, data groupings, progressive disclosure, and fixed/sticky elements only when structurally necessary.
+10. Add low-fidelity wireframe notes only for visual UI candidate surfaces: rough regions, primary/secondary content, key controls, data groupings, progressive disclosure, and fixed/sticky elements only when structurally necessary. For non-visual surfaces, capture response, event, validation, or audit-record shape instead.
 
 ### 4. Coverage Checkpoint
 
@@ -138,12 +147,12 @@ Before writing deliverables, present a **Flow Coverage Checkpoint** inline as th
 - Entry points covered.
 - Happy path covered.
 - Branches and decision points covered.
-- Screen/route inventory covered.
-- Actions per screen covered.
+- Surface inventory covered.
+- Actions, states, and channel behavior per surface covered.
 - Required states covered.
 - Failure/recovery paths covered.
 - Handoffs covered.
-- Wireframe-level notes covered.
+- Visual UI candidate notes or non-visual response/event/audit shapes covered.
 - Layout/styling non-goals preserved.
 
 In the next turn, ask whether any flow branch, state, or handoff is missing before writing.
@@ -193,11 +202,11 @@ The user-flow spec must include:
 - Happy path.
 - Alternate paths and branches.
 - Decision-point table.
-- Screen/route inventory.
-- Per-screen action/state matrix.
+- Surface Inventory with `surface type`, `channels`, and `visual UI candidate`.
+- Action/state matrix by surface.
 - Failure and recovery paths.
 - Handoffs and external/manual dependencies.
-- Low-fidelity wireframe notes per screen.
+- Low-fidelity wireframe notes for visual UI candidate surfaces, plus response/event/audit-shape notes for non-visual surfaces.
 - Open questions, risks, and explicit non-goals.
 - Downstream handoff choices for `/ux-variations [specific-user-flow]`.
 - Flow-tree manifest branch IDs and artifact references.
