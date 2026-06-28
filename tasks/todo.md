@@ -6,8 +6,33 @@ Active implementation: none.
 
 Project: `agentic-skills`.
 Last completed task: Close Design-Tree Surface Terminology Gaps.
+Last closeout: Ship-end prompt-history closeout.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Ship-End Prompt-History Closeout
+
+### Goal
+
+Wrap the current `$ship-end` invocation cleanly when no active implementation work is queued.
+
+### Results
+
+- Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260627-223120-ship-end.md`.
+- Left active implementation status as `none`; no source, package, runtime, deploy, or generated app surfaces changed.
+- Created a focused ship manifest for the prompt/task closeout boundary.
+
+### Verification
+
+Passed:
+
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `rg` secret-pattern scan over changed files
+
+Skipped with rationale:
+
+- Package, app, and skillpack executable suites were skipped because the boundary only changes `prompts/**` and `tasks/**` evidence files.
 
 ## Review - Close Design-Tree Surface Terminology Gaps
 

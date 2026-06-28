@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-27 - Ship-end prompt-history closeout
+
+- Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260627-223120-ship-end.md`.
+- Confirmed the repository started at `origin/master` with no unpushed commits before this closeout artifact was added.
+- Left the current task state unchanged: active implementation remains `none`.
+- Added a focused ship manifest for this evidence-only closeout boundary.
+- Verification passed: task-doc audit, diff hygiene, and changed-file secret scan.
+- Manifest: `tasks/ship-manifest-2026-06-27-ship-end-prompt-closeout.md`.
+
 ## 2026-06-27 — Close design-tree surface terminology gaps
 
 - Updated mirrored `user-flow-map` contracts to v1.8 so new flow-tree manifests initialize `schema_version: v0.4`, use `logic-wiring` as route step 4, and hand prototype-build-plan execution to `/logic-wiring` / `$logic-wiring` while retaining `prototype_build_plan` artifact terminology.
