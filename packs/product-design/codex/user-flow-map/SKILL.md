@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into flow and surface structure with entry points, decisions/actions/states, branches, channels, failure paths, and low-fidelity UI-candidate guidance before UX/UI/spec/prototype work
 type: planning
-version: v1.7
+version: v1.8
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -20,7 +20,7 @@ Invoke as `$user-flow-map`.
 
 Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, surfaces, channels, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity notes for surfaces that may become UI. Treat the output as the root of a design tree: each mapped user flow can fan out into `$ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `$ui-interview`. After the flow map is approved, the recommended next step is `$state-model [topic]` — an orthogonal sibling that authors the flow-anchored logical domain model (entities, state machines, events, logical contracts) once, so `$ux-variations` and `$ui-interview` re-skin a real substrate rather than inventing the model per presentation. `$state-model` is optional and does not change the flow-tree route; route directly to `$ux-variations` when the domain is trivial.
 
-Use `$user-flow-map --prototype-build-plan [topic]` after `$ui-interview` branch decisions exist to synthesize the approved design tree into one prototype build ledger. This later synthesis mode does not remap the original flows; it reads the flow-tree manifest, branch decisions, UX variation plans, UI branch packets, and any user overrides, then writes `design/prototype-build-plan-[topic].md` as the todo contract for `$prototype`.
+Use `$user-flow-map --prototype-build-plan [topic]` after `$ui-interview` branch decisions exist to synthesize the approved design tree into one prototype build ledger. This later synthesis mode does not remap the original flows; it reads the flow-tree manifest, branch decisions, UX variation plans, UI branch packets, and any user overrides, then writes `design/prototype-build-plan-[topic].md` as the todo contract for `$logic-wiring`.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill owns the wireframe-tree root and later build-plan synthesis; it does not use Pattern A selected-framework manifests or `tasks/todo.md` for branch progress.
 
@@ -41,7 +41,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the **Flow Assumptions Checkpoint** (step 2) — confirm persona, scope, and flow boundaries before mapping.
 - **Stage 1 — Research**: **Resolve Context** (step 1) — read idea/research/positioning/journey evidence and existing `design/` artifacts; Product-Path Scope Resolution and the Design Flow Tree Manifest (steps 0/0b) resolve where the tree lives.
 - **Stage 2 — Design**: **Map The Flow** (step 3) and the **Flow Coverage Checkpoint** (step 4) — author flow structure, surfaces, channels, states, branches, and low-fidelity notes for visual UI candidates.
-- **Stage 3 — Plan**: **Prototype Build-Plan Synthesis Mode** (step 5) — synthesize the approved tree into the `design/prototype-build-plan-[topic].md` slice `$prototype` realizes.
+- **Stage 3 — Plan**: **Prototype Build-Plan Synthesis Mode** (step 5) — synthesize the approved tree into the `design/prototype-build-plan-[topic].md` slice `$logic-wiring` realizes.
 - **Stage 4 — Implement (scoped)**: write the flow doc, initialize the `flow-tree-[topic].yaml` root, grow one user-flow branch per flow, and pass the single binding alignment gate (`## Alignment Page`) before any canonical write.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next pending unit (the next unmapped flow, or in build-plan mode the next branch needing a build item), runs the staged flow scoped to it, grows the child nodes on approval, and stops with the handoff in `## Next Work`.
@@ -70,7 +70,7 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
-- Initialize the manifest when writing the flow map. Set `schema_version: v0.3`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
+- Initialize the manifest when writing the flow map. Set `schema_version: v0.4`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, logic-wiring, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
 - Only named user-flow branches become `branches[]` entries in the design-tree manifest. Surfaces are supporting flow-map detail unless a downstream UX/UI skill promotes a surface into a UX variation, UI experiment, build item, or model attachment.
 - Order `branches[]` by journey progression by default: discovery or activation before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
 - Each user-flow branch must include `journey_stage`, `journey_sequence`, `priority_rationale`, and `progressive_review` metadata. The progressive review entry must name the first value moment, primary task path, and progressive review sequence for reviewers before downstream UX/UI work begins.
@@ -168,7 +168,7 @@ When invoked with `--prototype-build-plan`, "prototype build plan", "prototype t
 5. Mark out-of-scope, expensive, or low-confidence branches as deferred when the user chooses not to prototype them now.
 6. Mark branches that need design or UI correction before prototyping as needs-revision.
 7. Preserve user overrides, including building from a concept-only root when the user explicitly bypasses missing research.
-8. Produce a build sequence that keeps the work lightweight and independently reviewable; each item should be small enough for `$prototype --variant N` to build or rebuild.
+8. Produce a build sequence that keeps the work lightweight and independently reviewable; each item should be small enough for `$logic-wiring --variant N` to build or rebuild.
 
 Before writing the build plan, present a **Prototype Build Plan Checkpoint** as the final message text of its own turn. Include:
 
@@ -226,7 +226,7 @@ The prototype build plan must include:
 - Scope, source evidence, and user overrides.
 - Build item table with `id`, source user-flow branch, source UX variation, source UI experiment, `ui_experiment_id`, status, expected prototype path, and rationale.
 - Status definitions: `pending`, `built`, `needs-revision`, `deferred`, and `dropped`.
-- Build sequence and chunking notes for `$prototype --variant N`.
+- Build sequence and chunking notes for `$logic-wiring --variant N`.
 - Revision/defer/drop rationale for branches not ready to build.
 - Flow-tree manifest build item IDs and artifact references.
 
@@ -235,7 +235,7 @@ After approved files are written, hand off instead of auto-running or auto-invok
 - **Same session that built the page** (the page-building conversation is still in context): present a two-option choice — (1) Stop here so the user can clear context and run `$state-model [topic]` (recommended) or `$ux-variations [specific-user-flow]` in a fresh session, or (2) Continue immediately in this session with `$state-model [topic]` to author the logical domain model before variation work, or `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch when the domain is trivial.
 - **Already-fresh session** (the page-building conversation is not in context — e.g. the user cleared context and pasted the compiled approval YAML to start this session): there is no accumulated build context to shed, so do not present or recommend another context clear. Default to continue-now — invoke `$state-model [topic]` (recommended) to author the logical domain model before variation work, or `$ux-variations [specific-user-flow]` for the first unresolved user-flow branch when the domain is trivial, and immediately enter its first required interaction gate. The user may still choose to stop.
 
-After approved prototype-build-plan files are written, route to `$prototype [topic]` or `$prototype [topic] --variant N` for the first pending build item. Do not route to `$prototype` before the build plan exists unless the user explicitly accepts an untracked ad hoc prototype run.
+After approved prototype-build-plan files are written, route to `$logic-wiring [topic]` or `$logic-wiring [topic] --variant N` for the first pending build item. Do not route to `$logic-wiring` before the build plan exists unless the user explicitly accepts an untracked ad hoc prototype run.
 
 If the user chooses to continue immediately, the next skill must still execute its own required interaction gates. `user-flow-map` approval authorizes the wireframe-tree root and provides source evidence; it does not approve any UX variation branch, visual mockup, UI proposal, or implementation path, and it does not count as `ui-interview` interview completion.
 
@@ -245,7 +245,7 @@ Before producing research, run the stage-zero interrogation loop following `INTE
 
 ## Next Work
 
-**Next work:** after the flow map is approved, author the flow-anchored logical domain model with `$state-model [topic]` (optional sibling), or grow the first unresolved user-flow branch with `$ux-variations [specific-user-flow]` when the domain is trivial. In prototype-build-plan mode, the next work is the first pending build item via `$prototype [topic]`. Name the next pending branch in plain English in the handoff; never route by internal `{branch-id}`.
+**Next work:** after the flow map is approved, author the flow-anchored logical domain model with `$state-model [topic]` (optional sibling), or grow the first unresolved user-flow branch with `$ux-variations [specific-user-flow]` when the domain is trivial. In prototype-build-plan mode, the next work is the first pending build item via `$logic-wiring [topic]`. Name the next pending branch in plain English in the handoff; never route by internal `{branch-id}`.
 
 **Recommended next command:** `$state-model [topic]` (or `$ux-variations [specific-user-flow]`).
 
@@ -254,7 +254,7 @@ Before producing research, run the stage-zero interrogation loop following `INTE
 Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values:
 
 - Default: `$state-model [topic]`, then `$ux-variations [specific-user-flow]`.
-- Build-plan mode: `$user-flow-map --prototype-build-plan [topic]` → `$prototype [topic]`.
+- Build-plan mode: `$user-flow-map --prototype-build-plan [topic]` → `$logic-wiring [topic]`.
 
 ## Alignment Page
 

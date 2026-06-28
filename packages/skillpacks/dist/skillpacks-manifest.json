@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.13"
   },
-  "source_fingerprint": "7e602859d939395c713c08bb7924f923e0b97a939780915a92575f2651d08e81",
+  "source_fingerprint": "a03f671a2cc1f763aa299f731a9f827892d773c4bbcd2d1721f32177180bde20",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1236,7 +1236,9 @@
       "path": "base/codex/fork-idea-branch/SKILL.md",
       "installable": true,
       "content_sha256": "bbf72153d0021b92cdd0b0db0a117c10a73f0e5e2ed466b71ba0e66e135d0c58",
-      "archive_versions": [],
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$fork-idea-branch",
       "deck_memberships": []
     },
@@ -8455,7 +8457,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.20",
+      "version": "v0.21",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8464,7 +8466,7 @@
       ],
       "path": "packs/product-design/claude/logic-wiring/SKILL.md",
       "installable": true,
-      "content_sha256": "78cf6bd5bbc20861e349051675b7aae183d9ed36a71d6c5ec924a51f8815c3e1",
+      "content_sha256": "2aef18af373422fefead4903190d3cb96f9ea314529e59739f62827bd6899ea7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8479,6 +8481,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8513,7 +8516,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.17",
+      "version": "v0.18",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8523,7 +8526,7 @@
       ],
       "path": "packs/product-design/claude/spec-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "1b22622b6e224146b296713642e1595239599a70e659bde22487e59788029e4f",
+      "content_sha256": "53bc28f08e4a439781e73128a2d2659b3f48b06fb29e082d8ebe6a90c812bc93",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8534,6 +8537,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -8552,7 +8556,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v0.10",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8562,7 +8566,7 @@
       ],
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "789fc3ea40397aec628449b46b1781a3be10d072b310cb7bbd3d26d86a5e4d1b",
+      "content_sha256": "6168690d497f2439038a9c09090439d2488fb1cbb21e15d32105abaa628eb95a",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8572,7 +8576,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/state-model",
       "deck_memberships": []
@@ -8583,7 +8588,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.28",
+      "version": "v0.29",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8593,7 +8598,7 @@
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "4fd7eed4d94272a4c0fe3286efcebdb79e4667dfd5d5394afa6e4742fe0ea341",
+      "content_sha256": "5f31d3e7c8f2dc1905aece674f35c79354adb7c949b4cf2c3f3008ef0e655a2e",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8616,6 +8621,7 @@
         "v0.25",
         "v0.26",
         "v0.27",
+        "v0.28",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8633,7 +8639,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v1.6",
+      "version": "v1.8",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8643,7 +8649,7 @@
       ],
       "path": "packs/product-design/claude/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "b9b39dd2b424daf960afb893fbe9f178d22b13c843e8766060153ac9ab1dc451",
+      "content_sha256": "a8412cf3a0e2990259b37b51a3990710496fd863a75b8f8d33bc3cc6f397b152",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8660,7 +8666,9 @@
         "v1.2",
         "v1.3",
         "v1.4",
-        "v1.5"
+        "v1.5",
+        "v1.6",
+        "v1.7"
       ],
       "command": "/user-flow-map",
       "deck_memberships": []
@@ -8964,7 +8972,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.20",
+      "version": "v0.21",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8973,7 +8981,7 @@
       ],
       "path": "packs/product-design/codex/logic-wiring/SKILL.md",
       "installable": true,
-      "content_sha256": "5d3406291ef2556e9cef60594c4df7b84058a3ab7172f18d4b4d5c86b9c9f1b0",
+      "content_sha256": "d1a1bcfdcefbd520046c43e23c5550ebca7979d6e6464e49b3ea8255b32599ea",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8988,6 +8996,7 @@
         "v0.18",
         "v0.19",
         "v0.2",
+        "v0.20",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9022,7 +9031,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.17",
+      "version": "v0.18",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9032,7 +9041,7 @@
       ],
       "path": "packs/product-design/codex/spec-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "3a68b7f035d9d68a4cd3001a7d7f4cd11b0fbb61fd5dfc3d86f060e2bacf1716",
+      "content_sha256": "4b5c52a80725e1a229376f7784e2c1db37de75d13a4361076cb58b6e4b66221f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9043,6 +9052,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -9061,7 +9071,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v0.10",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9071,7 +9081,7 @@
       ],
       "path": "packs/product-design/codex/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "2d2b85e19d0f2e462967704ebd0b5d3cf5f612c4913fb71eb573428f7c645574",
+      "content_sha256": "bf3fa13ad55d9ed5e19a1cf5449b59d60cb9ef66fcdae9c3c8c2e1df298aade9",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9081,7 +9091,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$state-model",
       "deck_memberships": []
@@ -9092,7 +9103,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.28",
+      "version": "v0.29",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9102,7 +9113,7 @@
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "a69f1f916937d7bd43d70a18e81e77c0e5b0705c5f17f88bf1da71c0bea8c1be",
+      "content_sha256": "76d0014d982a0e1d676078092d0dfc342e97952a362e12bd3b373b68cd80e49d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9125,6 +9136,7 @@
         "v0.25",
         "v0.26",
         "v0.27",
+        "v0.28",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9142,7 +9154,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v1.6",
+      "version": "v1.8",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9152,7 +9164,7 @@
       ],
       "path": "packs/product-design/codex/user-flow-map/SKILL.md",
       "installable": true,
-      "content_sha256": "ea1c7342145ff99d8574d9996d120fd7cc6715a66698518a637a9b3e7b3e98c2",
+      "content_sha256": "b90c9d66084b0a933883474572ac2ec0fa70f0cb327b3f8b8fc7d81b42f21184",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9169,7 +9181,9 @@
         "v1.2",
         "v1.3",
         "v1.4",
-        "v1.5"
+        "v1.5",
+        "v1.6",
+        "v1.7"
       ],
       "command": "$user-flow-map",
       "deck_memberships": []

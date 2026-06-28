@@ -1,5 +1,9 @@
 # state-model changelog (codex)
 
+## v0.10 - 2026-06-27
+
+- Updated the documented locked flow-tree route tuple to use `logic-wiring` as step 4 while keeping `state-model` off the route enum.
+
 ## v0.9 - 2026-06-26
 
 - Flow-walk re-cut: framed state-model as just-in-time per **promoted** flow (attaches only to flows `key-moments` promotes, in proof order; later flows extend the core model; never models pruned flows). `branches[].model_ref` stays primary; state-model stays **off the route**.

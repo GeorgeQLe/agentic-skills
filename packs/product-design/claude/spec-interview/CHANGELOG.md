@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.18 - 2026-06-27
+
+- Updated post-prototype spec intake to consume upstream surface inventory, channels, visual UI candidates, and route/screen realizations as design evidence.
+- Reframed the prototype walkthrough and spec outline as surface-aware instead of screen-order-only.
+
 ## v0.17 - 2026-06-22
 
 - Corrected the active prototype gate to require an AFPS graduation document and explicit graduation readiness before production spec work.

@@ -2,6 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Close Design-Tree Surface Terminology Gaps
+
+### Goal
+
+Fix the remaining generated-artifact and downstream-contract gaps from commit `00503b7e0` so package metadata, flow-tree schema guidance, and downstream design-tree consumers agree with the new surface/channel terminology.
+
+### Plan
+
+1. Capture the visible `exec` invocation prompt and promote this follow-up into `tasks/roadmap.md` and `tasks/todo.md`.
+2. Inspect current product-design source mirrors, changelogs, archives, installed copies, generated design-tree bundles, and package manifest drift.
+3. Archive and bump only skills whose active `SKILL.md` behavior changes.
+4. Update Claude and Codex `user-flow-map` active contracts so new flow-tree manifests initialize `schema_version: v0.4` and build-plan handoffs route to `logic-wiring`.
+5. Preserve `prototype_build_plan` terminology where it names the artifact/schema, while making `logic-wiring` the runnable prototype owner in handoffs.
+6. Update Claude and Codex `state-model` route tuple wording if verification finds an active stale route token.
+7. Update Claude and Codex `logic-wiring` and `spec-interview` wording so downstream consumers read upstream surfaces/channels, visual UI candidates, route/screen realizations, and route/state constraints rather than screen order alone.
+8. Regenerate `packages/skillpacks/dist/skillpacks-manifest.json` after staging source edits so package metadata reflects current versions, hashes, and archives.
+9. Run the requested package, parity, archive, doctor, stale-term, task-doc, and diff-hygiene checks.
+10. Document review results, create a ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- `packages/skillpacks/dist/skillpacks-manifest.json` reports `user-flow-map` v1.7 and `ui-interview` v0.29 with current hashes and archive version lists.
+- Claude and Codex `user-flow-map` initialize `schema_version: v0.4`.
+- Claude and Codex `user-flow-map` route build-plan handoffs to `logic-wiring`, not deprecated `prototype`.
+- `prototype_build_plan` remains the artifact name where the manifest/build-plan schema requires it.
+- Claude and Codex `state-model` no longer document `prototype` as route step 4 in the active flow-tree tuple.
+- Claude and Codex `logic-wiring` consume upstream surfaces/channels, visual UI candidates, and route/screen realizations instead of treating screen order as the only flow shape.
+- Claude and Codex `spec-interview` consume route/screen realizations and surface/channel constraints from upstream design artifacts.
+- Changelog entries and archives exist only for skills whose active `SKILL.md` behavior changes.
+
+### Test Plan
+
+- `npm --workspace packages/skillpacks run build:check`
+- `scripts/skill-mirror-parity-audit.sh --verbose`
+- `scripts/skill-archive-audit.sh`
+- `scripts/pack.sh doctor`
+- targeted `rg` checks for `schema_version: v0.3`, `prototype, consolidate-prototypes`, and screen-only upstream-consumer wording in active contracts
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Updated Claude/Codex `user-flow-map` to v1.8 with `schema_version: v0.4`, `logic-wiring` route step 4, and build-plan handoffs to `logic-wiring`.
+- Updated Claude/Codex `state-model` to v0.10 after broad stale-route verification found an active tuple still naming `prototype`.
+- Updated Claude/Codex `logic-wiring` to v0.21 to consume surfaces/channels, visual UI candidates, route/screen realizations, and non-visual channel behavior.
+- Updated Claude/Codex `spec-interview` to v0.18 to use surface-aware route/screen evidence for post-prototype production specs.
+- Archived prior active versions, regenerated package/showcase metadata, refreshed project-local installs, and verified all requested gates.
+- Verification passed; see `tasks/ship-manifest-2026-06-27-close-design-tree-surface-terminology-gaps.md`.
+
 ## Historical Implementation - Design-Tree Surface Terminology
 
 ### Goal

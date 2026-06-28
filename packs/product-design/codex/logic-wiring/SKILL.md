@@ -1,8 +1,8 @@
 ---
 name: logic-wiring
-description: Wire approved UI screens into a clickable, state-backed prototype — make the visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's flow can be walked end-to-end before consolidation
+description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
-version: v0.20
+version: v0.21
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -12,9 +12,9 @@ visual_tier: prototype
 
 Invoke as `$logic-wiring`.
 
-Wire the approved UI screens into a clickable, state-backed prototype before production spec work begins. This is route step 4 of the product-design flow (the build leaf, renamed from `prototype` in v0.4). It **consumes the visual screens produced by `$build-ui-screens`** and makes them reachable and interactive: navigation, state transitions, and — for CLI/API/infra projects — the runnable logic that turns a static wireframe into something a human can actually walk through. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
+Wire the approved UI screens and non-visual channel behaviors into a clickable, state-backed prototype before production spec work begins. This is route step 4 of the product-design flow (the build leaf, renamed from `prototype` in v0.4). It **consumes the visual screens produced by `$build-ui-screens` plus the upstream surface/channel map** and makes the selected route/screen realizations reachable and interactive: navigation, state transitions, and — for CLI/API/infra projects — the runnable logic that turns a static wireframe or non-visual contract into something a human can actually walk through. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
 
-This step does not invent new screens. When a screen or batch is missing, route back to `$build-ui-screens` rather than drawing fresh UI here. The acceptance bar is **flow reachability**: every moment in the variation's flow can be reached and exited end-to-end, with one binding alignment gate per variation before downstream routing.
+This step does not invent new screens or new surface/channel semantics. When a required visual realization or batch is missing, route back to `$build-ui-screens` rather than drawing fresh UI here; when a channel behavior or state contract is unclear, route back to the owning upstream design step. The acceptance bar is **flow reachability**: every selected surface realization in the variation's flow can be reached and exited end-to-end, with one binding alignment gate per variation before downstream routing.
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
 
@@ -29,7 +29,7 @@ Before proceeding, verify the following files exist:
 - One `design/prototype-build-plan-*.md` file or product-path-scoped equivalent produced by `$user-flow-map --prototype-build-plan`.
 - Every buildable item in the prototype build plan must reference the source UI experiment/review branch, normally with `ui_experiment_id` matching `design/flow-tree.schema.json`. A build plan that only names `ux_variation_id` values and has no UI experiment/review linkage is not a valid prototype ledger.
 
-Also read `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` as upstream screen-ordering, task-sequencing, branch-state, build-item status, and approval-state signals.
+Also read `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` as upstream surface inventory, channel constraints, visual UI candidate mapping, route/screen realization, task-sequencing, branch-state, build-item status, and approval-state signals.
 
 If either is missing, halt with a clear message:
 
@@ -46,7 +46,7 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 - **Stage 0 — Interrogation**: folds — there is no blocking interrogation gate; scope comes from the approved build-plan slice (`design/prototype-build-plan-[topic].md`).
 - **Stage 1 — Research**: resolve context and research integration (steps 1–2) — read the build plan plus `design/ux-variations-[topic].md`, `design/ui-[topic].md`, and `design/**/flow-tree-*.yaml`.
-- **Stage 2 — Design**: project-type dispatch and scope rules (steps 3–4) decide what each narrow-scope build realizes.
+- **Stage 2 — Design**: project-type dispatch and scope rules (steps 3–4) decide which route/screen realizations and non-visual channel behaviors each narrow-scope build realizes.
 - **Stage 3 — Plan**: the build item resolved from the build ledger (`pending` / `needs-revision`) is the slice this run builds.
 - **Stage 4 — Implement (scoped)**: **runnable** — build each variation under `prototypes/{topic}/variation-{N}/` and the hub (steps 5–6), record a `decisions[]` entry, and pass the single binding alignment gate before downstream routing.
 
@@ -77,11 +77,11 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
   - `research/idea-brief.md` — assumptions to test, core value proposition, and hypothesis framing.
   - `research/icp.md` — ideal customer profile; informs copy density, terminology, and information hierarchy.
   - `research/competitive-analysis.md` — differentiation points the prototype should highlight.
-  - `research/journey-map.md` — screen flow ordering, entry points, and task sequencing.
+  - `research/journey-map.md` — task progression, entry points, channel expectations, and route/screen sequencing.
 - Read the prototype build plan: `design/prototype-build-plan-[topic].md` or product-path-scoped equivalent. Treat it as the authoritative list of build items and statuses.
 - Validate the prototype build plan before building: each `pending` or `needs-revision` item must include `ui_experiment_id` or an equivalent UI review reference and must point to a concrete `design/ui-*.md` UI branch packet. If items only contain UX variation IDs, stop; the missing route is `$ui-interview [specific-ux-variation]` followed by `$user-flow-map --prototype-build-plan [topic]`, unless an explicit user bypass is recorded.
 - Read variation plans: `design/ux-variations-[topic].md` or product-path-scoped equivalents for each relevant topic.
-- Read user-flow maps: `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml` for screen ordering, entry points, branches, decision points, required states, failure/recovery paths, handoffs, branch approval state, and low-fidelity wireframe notes when present.
+- Read user-flow maps: `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml` for surface inventory, channels, visual UI candidates, route/screen realizations, entry points, branches, decision points, required states, failure/recovery paths, handoffs, branch approval state, and low-fidelity wireframe notes when present.
 - Read per-variation UI branch packets: `design/ui-[topic].md`, `design/ui-layout-variations-[topic].md`, and `design/ui-requirements-[topic].md` when present.
 - If an argument is provided, use it as the topic filter. Otherwise, identify the topic from available design artifacts.
 - If the build plan has no `pending` or `needs-revision` items, stop and report that no prototype build items are currently ready.
@@ -91,8 +91,8 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 Before building, extract actionable signals from research:
 
 - **ICP** (`research/icp.md`): Determine copy density (expert vs. novice), terminology choices, information hierarchy, and default density (compact vs. spacious). The prototype should feel like it was built for the target user, not a generic audience.
-- **Journey map** (`research/journey-map.md`): Derive screen flow ordering. The prototype's navigation and page sequence should follow the user's natural task progression, not an arbitrary menu order.
-- **User-flow map** (`design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml`): Derive concrete screen order, route inventory, branches, required states, failure/recovery behavior, low-fidelity wireframe structure, and branch approval state. The prototype should preserve the approved task sequence unless a variation plan explicitly changes it.
+- **Journey map** (`research/journey-map.md`): Derive task progression, entry sequencing, channel expectations, and any route/screen realizations. The prototype's navigation, page sequence, CLI/API flow, or other channel walkthrough should follow the user's natural task progression, not an arbitrary menu order.
+- **User-flow map** (`design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml`): Derive the surface inventory, channels, visual UI candidates, concrete route/screen realizations, branches, required states, failure/recovery behavior, low-fidelity wireframe structure, and branch approval state. The prototype should preserve the approved task sequence and channel constraints unless a variation plan explicitly changes them.
 - **Competitive analysis** (`research/competitive-analysis.md`): Identify differentiation points the prototype must highlight. If the product's thesis is "faster than X" or "simpler than Y," the prototype should make that advantage viscerally obvious.
 - **Idea brief** (`research/idea-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one idea-brief assumption.
 
@@ -154,7 +154,7 @@ For each build item in `design/prototype-build-plan-[topic].md` with status `pen
 
 1. Read the build item ID, status, source user-flow branch, UX variation branch, UI experiment/review branch, expected prototype path, and notes from the build plan.
 2. Read the variation's thesis, target user, layout/flow model, and prototype scope from the referenced variation spec.
-3. Read the corresponding UI branch details from `design/ui-[topic].md` or `design/ui-layout-variations-[topic].md`, and the visual screens already produced by `$build-ui-screens` (recorded in the `ui_experiments[].build_ledger[]` entries on `design/**/flow-tree-*.yaml`). Wire those screens; do not invent new ones. If a flow step has no screen at `minimum-ui-reached` (or better), stop and route back to `$build-ui-screens` for that batch.
+3. Read the corresponding UI branch details from `design/ui-[topic].md` or `design/ui-layout-variations-[topic].md`, the upstream surface/channel constraints from `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml`, and the visual screens already produced by `$build-ui-screens` (recorded in the `ui_experiments[].build_ledger[]` entries on `design/**/flow-tree-*.yaml`). Wire those route/screen realizations and channel behaviors; do not invent new ones. If a flow step has no screen at `minimum-ui-reached` (or better), stop and route back to `$build-ui-screens` for that batch.
 4. Build the prototype artifact at the build plan's expected path, normally `prototypes/{topic}/variation-{N}/`, by making each screen reachable and interactive: clickable navigation, state transitions, and runnable CLI/API/infra logic where the project type calls for it.
 5. After each successful build, update the build plan item status to `built`, add the prototype path, advance the wired flow steps in `design/**/flow-tree-*.yaml` `ui_experiments[].build_ledger[]` from `minimum-ui-reached` to `wired`, and update `prototype_build_plan.items[]`. The acceptance bar is **flow reachability**: every moment in the variation's flow can be entered and exited end-to-end.
 6. If a build item cannot be completed because the design is unclear, mark it `needs-revision` with a short note instead of inventing missing design decisions.

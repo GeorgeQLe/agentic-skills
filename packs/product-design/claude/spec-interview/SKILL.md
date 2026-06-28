@@ -1,8 +1,8 @@
 ---
 name: spec-interview
-description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
+description: Post-prototype production deep dive — walks through consolidated route/screen realizations and channel behavior to extract production specifications
 type: planning
-version: v0.17
+version: v0.18
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional-topic-override] [--ideas]"
 context_intake: deep
@@ -32,9 +32,9 @@ Interview the user to validate, refine, and complete an implementation specifica
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **terminal spec writer**, formalizing the approved MVP into a production-ready v1 specification. The `## Process` steps below group by stage:
 
 - **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, AFPS graduation readiness, research frame, and that no unchecked blocking post-prototype items remain.
-- **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream evidence.
-- **Stage 2 — Design**: walk each screen/page to extract production behaviors, data, contracts, and acceptance criteria.
-- **Stage 3 — Plan**: the screen-by-screen spec outline is the slice the implementation phase realizes.
+- **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream surface/channel and route/screen realization evidence.
+- **Stage 2 — Design**: walk each consolidated route/screen realization and relevant non-visual channel behavior to extract production behaviors, data, contracts, and acceptance criteria.
+- **Stage 3 — Plan**: the surface-aware route/screen spec outline is the slice the implementation phase realizes.
 - **Stage 4 — Implement (scoped)**: write the production specification, keeping `specs/` as the canonical output directory, behind the single binding alignment gate. This same confirmed alignment record owns the Production Ready Approval: approval to move from concept/prototype/spec into a production product build, not proof that the product is already shipped.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the approved tree, resolves the consolidated MVP ready to specify, runs the staged flow, writes the spec on approval, and stops with the handoff in `## Next Work`.
@@ -70,7 +70,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
-   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for screen order, route inventory, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
+   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for surface inventory, channels, visual UI candidates, route/screen realizations, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
 
 2. **Surface a prototype-grounded assumptions checkpoint before probing:**
    - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
@@ -91,8 +91,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Deliver the checkpoint inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool call. In the next turn, use AskUserQuestion to ask the user to confirm or correct it and include the first 1 to 3 focused interview questions so momentum is kept. Option previews may mirror the checkpoint as a supplement but are never the sole channel. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 
-3. **Screen-by-screen prototype walkthrough:**
-   - Walk through each screen/page in the consolidated prototype. For each screen, use AskUserQuestion to probe:
+3. **Surface-aware prototype walkthrough:**
+   - Walk through each route/screen realization in the consolidated prototype and any non-visual channel behavior it exposes or depends on. For each realization or channel contract, use AskUserQuestion to probe:
      - **Data model?** What entities, relationships, persistence does this screen need?
      - **API calls?** What endpoints, payloads, error responses?
      - **Auth?** What permissions, roles, access control apply to this screen?
@@ -103,8 +103,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - **Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. When a decision point genuinely has multiple viable approaches, list each option with a clear rationale, pros/cons, and your recommendation with reasoning. For the recommended option, explain how the con can be mitigated if feasible. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge (internal constraints, personal preferences, strategic bets). Do not manufacture choices.
 
 4. **Iterative prototype updates:**
-   - When the interview reveals gaps in the prototype (missing screens, unclear flows, absent states), use AskUserQuestion: "Should I update the prototype to add [gap]? This may warrant re-running upstream steps."
-   - If the consolidated prototype exposes missing or unclear screen flow, branch coverage, state coverage, failure/recovery behavior, or handoff structure, recommend `/user-flow-map [topic]` as the upstream remediation before continuing production-spec work.
+   - When the interview reveals gaps in the prototype (missing route/screen realizations, unclear channel behavior, unclear flows, absent states), use AskUserQuestion: "Should I update the prototype to add [gap]? This may warrant re-running upstream steps."
+   - If the consolidated prototype exposes missing or unclear surface/channel coverage, route/screen flow, branch coverage, state coverage, failure/recovery behavior, or handoff structure, recommend `/user-flow-map [topic]` as the upstream remediation before continuing production-spec work.
    - The user decides per-update whether to update the prototype now or note it for production implementation only.
    - If the user approves a prototype update, make the change and note it in the interview log before continuing.
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.21 - 2026-06-27
+
+- Expanded upstream inputs from screen ordering to surface inventory, channel constraints, visual UI candidates, route/screen realizations, and branch state.
+- Clarified that `logic-wiring` wires selected route/screen realizations and non-visual channel behaviors without inventing new screens or surface semantics.
+
 ## v0.20 - 2026-06-26
 
 - Renamed the skill from `prototype` to `logic-wiring` (flow-walk re-cut; route step 4 token `prototype` → `logic-wiring`). A deprecated `prototype` alias still routes here.

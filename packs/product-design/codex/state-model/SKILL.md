@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.9
+version: v0.10
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -35,7 +35,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 `state-model` is an **orthogonal sibling** of the flow tree, not a stage inside it:
 
-- The flow-tree `route` array stays a locked six-step sequence (`user-flow-map, ux-variations, ui-interview, prototype, consolidate-prototypes, spec-interview`). This skill does **not** appear in or modify that array. Ordering is enforced by next-step recommendations, not the route enum.
+- The flow-tree `route` array stays a locked six-step sequence (`user-flow-map, ux-variations, ui-interview, logic-wiring, consolidate-prototypes, spec-interview`). This skill does **not** appear in or modify that array. Ordering is enforced by next-step recommendations, not the route enum.
 - This skill owns its own `design/model-tree-{topic}.yaml` manifest, a domain-shaped sibling to `design/flow-tree-{topic}.yaml`.
 - On approval it attaches the model to its user-flow branch via `branches[].model_ref` (the **primary** flow-tree write) and additionally writes the **optional** top-level `model_tree_ref` pointer as backward-compatible discovery metadata. The top-level pointer is never required; the per-branch `model_ref` is authoritative. Neither write touches the `route` array.
 - **Flow bindings are authoritative in the model-tree only.** Every model element records `flow_bindings[]` pointing at flow-tree nodes. These bindings are never duplicated into the flow tree, to prevent drift.

@@ -1,5 +1,10 @@
 # user-flow-map changelog (claude)
 
+## v1.8 - 2026-06-27
+
+- Updated new flow-tree manifest initialization to `schema_version: v0.4` with route step 4 set to `logic-wiring`.
+- Routed prototype-build-plan handoffs to `/logic-wiring` while retaining `prototype_build_plan` and prototype build-plan artifact terminology.
+
 ## v1.7 - 2026-06-27
 
 - Reframed the flow-map inventory from UI-only screens/routes to surfaces and channels, covering visual UI, MCP, CLI, SDK/tool-call, API, validation, event, background-state, and audit-record realizations.

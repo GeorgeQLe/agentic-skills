@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-27 — Close design-tree surface terminology gaps
+
+- Updated mirrored `user-flow-map` contracts to v1.8 so new flow-tree manifests initialize `schema_version: v0.4`, use `logic-wiring` as route step 4, and hand prototype-build-plan execution to `/logic-wiring` / `$logic-wiring` while retaining `prototype_build_plan` artifact terminology.
+- Updated mirrored `state-model` contracts to v0.10 after stale-route verification found the old tuple; the documented locked flow-tree route now uses `logic-wiring` and keeps `state-model` off-route.
+- Updated mirrored `logic-wiring` contracts to v0.21 so it consumes upstream surface inventory, channel constraints, visual UI candidates, route/screen realizations, and non-visual channel behavior.
+- Updated mirrored `spec-interview` contracts to v0.18 so production spec interviews consume surface/channel and route/screen realization evidence instead of screen order alone.
+- Archived prior active versions for the changed mirrors, regenerated `packages/skillpacks/dist/skillpacks-manifest.json`, refreshed Skills Showcase generated data, and verified local skill installs are current.
+- Verification passed: skillpacks build/check, mirror parity, archive audit, pack doctor, showcase data validation, Skills Showcase production build, targeted stale-term scans, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-27-close-design-tree-surface-terminology-gaps.md`.
+
 ## 2026-06-27 — Optional human-review summary convention
 
 - Updated the design-tree loop convention so Terminal text owns optional human-review recaps for chunked handoffs.
