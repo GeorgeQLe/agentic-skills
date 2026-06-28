@@ -118,10 +118,28 @@ async function runSkillpacksExpectError(projectRoot, args) {
 }
 
 function marker(projectRoot, tool, skill) {
-  return readFileSync(
-    join(projectRoot, `.${tool}/skills/${skill}/.agentic-skills-managed`),
-    'utf8'
-  );
+  return readFileSync(markerPath(projectRoot, tool, skill), 'utf8');
+}
+
+function markerPath(projectRoot, tool, skill) {
+  return join(projectRoot, `.${tool}/skills/${skill}/.agentic-skills-managed`);
+}
+
+function markerFieldText(text, field) {
+  const prefix = `${field}=`;
+  const line = text.split(/\r?\n/).find((candidate) => candidate.startsWith(prefix));
+  return line ? line.slice(prefix.length) : '';
+}
+
+function markerField(projectRoot, tool, skill, field) {
+  return markerFieldText(marker(projectRoot, tool, skill), field);
+}
+
+function rewriteMarkerSource(projectRoot, tool, skill, source) {
+  const filePath = markerPath(projectRoot, tool, skill);
+  const current = readFileSync(filePath, 'utf8');
+  assert.match(current, /^source=.*$/m);
+  writeFileSync(filePath, current.replace(/^source=.*$/m, `source=${source}`));
 }
 
 function skillPath(projectRoot, tool, skill) {
@@ -933,6 +951,40 @@ describe('Node lifecycle commands', () => {
     assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
   });
 
+  it('refresh rewrites source-path-only marker drift without reload guidance', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'quality-sweep']);
+    const expected = {};
+
+    for (const tool of ['claude', 'codex']) {
+      expected[tool] = {
+        source: markerField(dir, tool, 'quality-sweep', 'source'),
+        sourceVersion: markerField(dir, tool, 'quality-sweep', 'source_version'),
+        sourceSha: markerField(dir, tool, 'quality-sweep', 'source_sha')
+      };
+      rewriteMarkerSource(dir, tool, 'quality-sweep', join(dir, 'old-npx-cache', tool, 'quality-sweep'));
+      writeFileSync(join(skillPath(dir, tool, 'quality-sweep'), 'LOCAL_SENTINEL.txt'), 'keep\n');
+    }
+
+    const { stdout, exitCode } = await runSkillpacksRaw(dir, ['refresh']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Refreshed project skills to skillpacks@/);
+    assert.doesNotMatch(stdout, /Skill installs changed/);
+    assert.doesNotMatch(stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Updated \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Installed \.codex\/skills\/quality-sweep/);
+    assert.doesNotMatch(stdout, /Updated \.codex\/skills\/quality-sweep/);
+
+    for (const tool of ['claude', 'codex']) {
+      assert.equal(markerField(dir, tool, 'quality-sweep', 'source'), expected[tool].source);
+      assert.equal(markerField(dir, tool, 'quality-sweep', 'managed_by'), 'agentic-skills');
+      assert.equal(markerField(dir, tool, 'quality-sweep', 'source_version'), expected[tool].sourceVersion);
+      assert.equal(markerField(dir, tool, 'quality-sweep', 'source_sha'), expected[tool].sourceSha);
+      assert.equal(existsSync(join(skillPath(dir, tool, 'quality-sweep'), 'LOCAL_SENTINEL.txt')), true);
+    }
+  });
+
   it('removes active packs without deleting unmanaged local skill directories', async () => {
     const dir = makeTempProject();
     await runSkillpacks(dir, ['install', 'code-quality']);
@@ -1561,6 +1613,7 @@ describe('Node multi-repo --all commands', () => {
     const parent = makeParent();
     const a = join(parent, 'a');
     const b = join(parent, 'b');
+    const c = join(parent, 'c');
     writeProjectConfig(a, {
       project_type: 'devtool',
       enabled_packs: ['code-quality'],
@@ -1583,6 +1636,12 @@ describe('Node multi-repo --all commands', () => {
       enabled_packs: ['devtool'],
       skill_pack_version: 1
     });
+    mkdirSync(c, { recursive: true });
+    await runSkillpacks(c, ['install', 'quality-sweep']);
+    const cOldClaudeSource = join(parent, 'old-npx-cache/claude/quality-sweep');
+    const cOldCodexSource = join(parent, 'old-npx-cache/codex/quality-sweep');
+    rewriteMarkerSource(c, 'claude', 'quality-sweep', cOldClaudeSource);
+    rewriteMarkerSource(c, 'codex', 'quality-sweep', cOldCodexSource);
 
     const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run'], { home: makeParent() });
 
@@ -1593,11 +1652,15 @@ describe('Node multi-repo --all commands', () => {
     assert.match(stdout, /remove   \.codex\/skills\/orphan-skill \(pack not enabled\)/);
     assert.match(stdout, /=== b ===/);
     assert.match(stdout, /install  \.claude\/skills\/devtool-adoption/);
-    assert.match(stdout, /Summary \(refresh --all --dry-run\): 2 project\(s\) scanned\./);
+    assert.match(stdout, /=== c ===/);
+    assert.match(stdout, /No refresh changes proposed\./);
+    assert.match(stdout, /Summary \(refresh --all --dry-run\): 3 project\(s\) scanned\./);
     assert.match(stdout, /a: 3 install, 1 update, 1 remove/);
     assert.match(stdout, /b: [0-9]+ install, 0 update, 0 remove/);
+    assert.match(stdout, /c: 0 install, 0 update, 0 remove/);
     assert.match(stdout, /Affected skills:/);
     assert.match(stdout, /a: update quality-sweep \(\.claude\/skills\/quality-sweep\)/);
+    assert.doesNotMatch(stdout, /c: update quality-sweep/);
     assert.doesNotMatch(stdout, /Unsafe reasons:/);
     assert.match(stdout, /Safe to run: yes/);
     assert.match(stdout, /Recommended command: skillpacks refresh --all/);
@@ -1607,6 +1670,8 @@ describe('Node multi-repo --all commands', () => {
     );
     assert.equal(existsSync(skillPath(a, 'codex', 'orphan-skill')), true);
     assert.equal(existsSync(skillPath(b, 'claude', 'devtool-adoption')), false);
+    assert.equal(markerField(c, 'claude', 'quality-sweep', 'source'), cOldClaudeSource);
+    assert.equal(markerField(c, 'codex', 'quality-sweep', 'source'), cOldCodexSource);
     assert.equal(exitCode, 0);
   });
 

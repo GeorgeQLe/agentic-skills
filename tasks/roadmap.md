@@ -2,6 +2,50 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix No-Op Skillpacks Refresh Reload Notices
+
+### Goal
+
+Make `skillpacks refresh` treat marker-only managed-source path drift as internal metadata maintenance, not as a visible skill install change requiring session reload guidance.
+
+### Plan
+
+- [x] Capture the visible `exec` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect current `packages/skillpacks/src/cli/lifecycle.mjs`, package scripts, and lifecycle tests around refresh, dry-run, install updates, and reload notices.
+- [x] Update refresh/install lifecycle outcomes so content-visible changes are separated from marker-only metadata maintenance.
+- [x] Ensure same-version and same-hash installs whose only drift is marker `source=` rewrite the marker without deleting, copying, or logging installed/updated skill lines.
+- [x] Update refresh planning/dry-run behavior so source-path-only drift is not counted as a proposed update.
+- [x] Add focused regression coverage for marker-only source drift in normal refresh and `refresh --all --dry-run`.
+- [x] Run focused lifecycle verification, available build checks, task-doc audit, and diff hygiene checks.
+- [x] Document results, create a ship manifest, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- `skillpacks refresh` exits successfully and prints its ordinary refresh summary when only a managed marker's absolute `source=` path differs from the current canonical source.
+- Marker-only source-path drift updates `.agentic-skills-managed` with the current `source=`, `managed_by`, `source_version`, and `source_sha`.
+- Marker-only source-path drift does not recopy the skill directory, does not print `Installed` or `Updated` skill lines, and does not print `Skill installs changed`.
+- Real installed-skill changes still produce reload guidance for actual installs, removals, pinned-version changes, content updates, and pack/skill membership changes.
+- `refresh --all --dry-run` does not report source-path-only drift as a proposed update.
+- Focused tests and build/diff hygiene checks pass, with any blocker documented in `tasks/todo.md`.
+
+### Test Plan
+
+- `npm --workspace skillpacks test -- lifecycle`
+- `npm --workspace skillpacks run build:check` if available in the current package scripts.
+- Targeted dry-run/all-project regression test added or extended.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Split managed skill sync outcomes so marker-only metadata rewrites do not count as visible install changes.
+- Rewrote `.agentic-skills-managed` in-place when `source_version` and `source_sha` match but the stored absolute `source=` path differs from the current package source.
+- Kept reload notices for content changes, removals, config changes, pinned-version changes, and real install/update paths.
+- Updated `refresh --all --dry-run` planning so source-path-only drift is not counted as an update or removal.
+- Added normal refresh and all-project dry-run regressions for marker-only source path drift.
+- Regenerated stale package manifest metadata required by `build:check`.
+- Verification passed; see `tasks/todo.md` and `tasks/ship-manifest-2026-06-28-fix-refresh-reload-notices.md`.
+
 ## Historical Implementation - YouTube Prelaunch A/B Test And URL Ledger
 
 ### Goal

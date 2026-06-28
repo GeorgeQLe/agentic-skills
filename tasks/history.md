@@ -15163,3 +15163,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Confirmed live npm registry reads resolve both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14`; preserved the current source metadata bump to `0.1.14`.
 - Verification: focused verifier/recovery tests 9/9, package Node suite 154/154, shell syntax, task-doc audit, live npm version reads, real `./publish.sh --current`, and diff whitespace hygiene passed.
 - Manifest: `tasks/ship-manifest-2026-06-28-publish-final-verification-etarget.md`.
+
+## 2026-06-28 — skillpacks refresh marker-only reload notice fix
+
+- Fixed `skillpacks refresh` so same-version and same-hash managed installs whose only drift is the marker's absolute `source=` path rewrite `.agentic-skills-managed` in place without recopying skill content.
+- Kept `Skill installs changed` reload guidance tied to visible skill-root changes: real installs, removals, content updates, pinned-version switches, and project config changes.
+- Updated `refresh --all --dry-run` planning so source-path-only marker drift is not counted as a proposed update or removal.
+- Added lifecycle regressions for normal refresh marker-only drift and all-project dry-run source-path-only drift.
+- Regenerated stale package manifest metadata required by `build:check`.
+- Verification: focused lifecycle suite 57/57, package Node suite 155/155, package `build:check`, task-doc audit, and diff hygiene passed.
+- Manifest: `tasks/ship-manifest-2026-06-28-fix-refresh-reload-notices.md`.

@@ -476,29 +476,60 @@ function copyActiveSkillContent(source, target) {
   }
 }
 
+function writeManagedSkillMarker(target, { source, sourceVersion, sourceSha }) {
+  writeFileSync(
+    join(target, SKILL_LINK_MARKER),
+    [
+      `source=${source}`,
+      'managed_by=agentic-skills',
+      `source_version=${sourceVersion}`,
+      `source_sha=${sourceSha}`
+    ].join('\n') + '\n'
+  );
+}
+
 function syncSkillInstall(source, target) {
   const oldVersion = installedSkillVersion(target);
   const newVersion = skillSourceVersion(source);
 
   if (isArchiveSource(source)) {
+    const contentChanged = syncSkillLink(source, target);
     return {
-      changed: syncSkillLink(source, target),
+      changed: contentChanged,
+      contentChanged,
+      metadataChanged: false,
       oldVersion,
       newVersion
     };
   }
 
+  const currentSha = skillContentSha(source);
   if (existsSync(target)) {
     const stats = lstatSync(target);
     if (stats.isSymbolicLink()) {
       unlinkSync(target);
     } else if (isManagedSkillDir(target)) {
-      const currentSha = skillContentSha(source);
       const currentSource = managedMarkerField(target, 'source');
       const recordedSha = managedMarkerField(target, 'source_sha');
-      if (currentSource === source && oldVersion === newVersion && recordedSha === currentSha) {
+      if (oldVersion === newVersion && recordedSha === currentSha) {
+        if (currentSource !== source) {
+          writeManagedSkillMarker(target, {
+            source,
+            sourceVersion: newVersion,
+            sourceSha: currentSha
+          });
+          return {
+            changed: false,
+            contentChanged: false,
+            metadataChanged: true,
+            oldVersion,
+            newVersion
+          };
+        }
         return {
           changed: false,
+          contentChanged: false,
+          metadataChanged: false,
           oldVersion,
           newVersion
         };
@@ -508,6 +539,8 @@ function syncSkillInstall(source, target) {
       console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
       return {
         changed: false,
+        contentChanged: false,
+        metadataChanged: false,
         oldVersion,
         newVersion
       };
@@ -515,20 +548,18 @@ function syncSkillInstall(source, target) {
   }
 
   mkdirSync(target, { recursive: true });
-  writeFileSync(
-    join(target, SKILL_LINK_MARKER),
-    [
-      `source=${source}`,
-      'managed_by=agentic-skills',
-      `source_version=${skillSourceVersion(source)}`,
-      `source_sha=${skillContentSha(source)}`
-    ].join('\n') + '\n'
-  );
+  writeManagedSkillMarker(target, {
+    source,
+    sourceVersion: newVersion,
+    sourceSha: currentSha
+  });
 
   copyActiveSkillContent(source, target);
 
   return {
     changed: true,
+    contentChanged: true,
+    metadataChanged: false,
     oldVersion,
     newVersion
   };
@@ -1182,7 +1213,7 @@ function plannedExpectedSkillChange(entry) {
   const recordedSha = managedMarkerField(entry.target, 'source_sha');
   const fromVersion = managedMarkerField(entry.target, 'source_version');
 
-  if (currentSource === entry.source && fromVersion === entry.version && recordedSha === currentSha) {
+  if (fromVersion === entry.version && recordedSha === currentSha) {
     return null;
   }
 
@@ -1252,7 +1283,10 @@ function planRefreshProject({ manifest, projectRoot, config = null }) {
     skips: []
   };
 
-  for (const entry of expectedSkillInstallEntries(manifest, config, projectRoot)) {
+  const expectedEntries = expectedSkillInstallEntries(manifest, config, projectRoot);
+  const expectedTargets = new Set(expectedEntries.map((entry) => entry.rel));
+
+  for (const entry of expectedEntries) {
     const change = plannedExpectedSkillChange(entry);
     if (!change) {
       continue;
@@ -1283,6 +1317,9 @@ function planRefreshProject({ manifest, projectRoot, config = null }) {
 
     let reason = '';
     if (status.status === 'missing-source') {
+      if (expectedTargets.has(rel)) {
+        continue;
+      }
       reason = 'source no longer exists';
     } else if (!expected.has(skillName)) {
       reason = 'pack not enabled';

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.14"
   },
-  "source_fingerprint": "903b742fbdf279bdd41550a8509da452f3bdd67c89ce9f1c235d747a193f2134",
+  "source_fingerprint": "81d5fc0adac920fcbe0fdbd1b99ee64f9d12c4de8f50a4da8f85c17864fae36e",
   "packs": [
     {
       "name": "agent-bridge",
@@ -10922,7 +10922,7 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10930,11 +10930,12 @@
       ],
       "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "5122535c1bff68eb68495c19788e3e1df822cda4095ea97b9c6056e9427befb2",
+      "content_sha256": "72d1256f18a4665513bf1b8326a6626edf69af16c151fa1c00337a1b3502177f",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/youtube-video-prelaunch-audit",
       "deck_memberships": []
@@ -11299,7 +11300,7 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11307,11 +11308,12 @@
       ],
       "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "bd1c6cdd6ab00b5a5e0adbaa54c36c2dc1680a5a371a049242affcc03a6fd770",
+      "content_sha256": "ddafd85611fe1f97ec84fba55232b7eba74746f38a0ba8d76f9c0731253fbeb1",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$youtube-video-prelaunch-audit",
       "deck_memberships": []
