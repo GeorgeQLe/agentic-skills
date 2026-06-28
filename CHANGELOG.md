@@ -43,7 +43,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 - Registry readiness check confirmed `skillpacks` and `@glexcorp/gskp` both report latest `0.1.13`, and `0.1.14` is not present for either package name.
 - Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (150/150) after the verifier cleanup fix.
 - Package verification passed: `npm run skillpacks:verify` (401 active skills, 42 packs, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
-- Clean-tree publish dry-run pending until the release-audit boundary is committed, because `publish.sh` intentionally refuses tracked dirty trees.
+- Clean-tree `./publish.sh --dry-run patch` reached npm auth preflight after bumping/building/verifying/staging `0.1.14`, then stopped with npm E401 because this shell is not logged into npm as `glexcorp`; the dry-run cleanup restored source package metadata to `0.1.13`.
 
 ## [0.1.13] - 2026-06-26
 

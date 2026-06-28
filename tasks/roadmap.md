@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Publish 0.1.14 Readiness Audit
+## Historical Implementation - Publish 0.1.14 Readiness Audit
 
 ### Goal
 
@@ -15,9 +15,9 @@ Audit whether the repository is ready to publish `skillpacks` / `@glexcorp/gskp`
 - [x] Compile `CHANGELOG.md` `0.1.14` release notes from the net `v0.1.13..HEAD` change set, keeping package-level notes distinct from individual skill changelogs.
 - [x] Fix package verification blockers found during readiness checks.
 - [x] Run the package/build/test/readiness checks required by `package.json`, `packages/skillpacks/package.json`, `publish.sh`, and current touched surfaces.
-- [ ] Run a dry-run publish preflight for the next patch version without leaving release-state mutations behind.
+- [x] Run a dry-run publish preflight for the next patch version without leaving release-state mutations behind.
 - [x] Document results in `tasks/todo.md`, append a brief `tasks/history.md` record, create a ship manifest, and audit task docs.
-- [ ] Commit and push the intended changelog/task/prompt audit boundary on `master` so `git status` is clean.
+- [x] Commit and push the intended changelog/task/prompt audit boundary on `master` so `git status` is clean.
 
 ### Acceptance Criteria
 
@@ -32,7 +32,15 @@ Audit whether the repository is ready to publish `skillpacks` / `@glexcorp/gskp`
 - `npm run skillpacks:verify`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
-- `./publish.sh --dry-run patch`
+- `./publish.sh --dry-run patch` (expected to stop at npm auth if this shell is not logged into npm as `glexcorp`)
+
+### Results
+
+- Registry state is ready: both package names report latest `0.1.13`, and `0.1.14` is not published.
+- `CHANGELOG.md` now has a prepared `0.1.14` release section.
+- Fixed the package published-verifier cleanup path for empty arrays under `set -u`.
+- Refreshed the package manifest source fingerprint and stale active `user-flow-map` hashes.
+- `./publish.sh --dry-run patch` passed local bump/build/test/package staging and stopped only at npm auth preflight with E401 because the shell is not logged in as `glexcorp`.
 
 ## Historical Implementation - Fix Remaining Design-Tree Verification Gaps
 

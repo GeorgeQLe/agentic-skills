@@ -44,10 +44,7 @@ Audit whether the repository is ready to publish `skillpacks` / `@glexcorp/gskp`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
 - `git diff --cached --check`
-
-Pending before final closeout:
-
-- `./publish.sh --dry-run patch`
+- `./publish.sh --dry-run patch` (passed bump/build/test/package staging; blocked at npm auth preflight with E401)
 
 ## Skipped Tests
 
@@ -58,11 +55,12 @@ Pending before final closeout:
 
 - The initial package Node test run failed on `TMP_DIRS[@]: unbound variable`; the focused root cause was macOS Bash `set -u` behavior with empty arrays. The cleanup fix returns before iterating an empty temp-dir list and the existing retry test now passes.
 - `npm run skillpacks:verify` then failed because the package manifest was out of date. Regenerating from the staged release boundary showed stale active `user-flow-map` hashes, so the manifest refresh is included in this ship boundary.
+- The clean-tree publish dry-run proved local bump/build/test/package staging but stopped at npm auth preflight. The blocker is external authentication, not package source validation.
 
 ## Residual Risk
 
-- Clean-tree publish dry-run is pending until this candidate is committed, because `publish.sh` correctly refuses tracked dirty trees before version bump or publish staging.
 - The real publish may still require npm login/2FA as the expected publisher.
+- `./publish.sh patch` should not be run until `npm whoami --registry https://registry.npmjs.org/` succeeds as `glexcorp`.
 
 ## Rollback Note
 
@@ -70,4 +68,4 @@ Revert the release-audit commit(s) to restore the previous changelog, verifier s
 
 ## Next Command
 
-`$exec`
+`$guide`
