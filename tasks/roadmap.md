@@ -2,6 +2,44 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Publish Auth Failure Rollback
+
+### Goal
+
+Fix `./publish.sh patch` so a real-run failure before the first `npm publish` does not leave `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` bumped to the next release version, blocking a retry from a clean tree.
+
+### Plan
+
+- [x] Capture the visible `$session-triage` invocation prompt and verify the current dirty release-state files.
+- [x] Inspect `publish.sh`, the npm auth preflight script, the npm debug log, and the existing publish recovery tests.
+- [x] Make the source version bump transactional until the first real `npm publish` starts.
+- [x] Add focused coverage for an auth-preflight failure in a real `patch` run restoring source package metadata.
+- [x] Restore the current leftover failed-publish `0.1.14` source bump to the committed `0.1.13` state.
+- [x] Run focused publish-script tests, task-doc audit, and diff hygiene checks.
+- [x] Document the triage result, commit, and push the fix on `master`.
+
+### Acceptance Criteria
+
+- `./publish.sh patch` restores source package metadata when auth preflight fails before any publish command runs.
+- Failures after a real publish starts still preserve the bumped source version for `./publish.sh --current` partial-publish recovery.
+- The current tracked tree no longer has the failed auth-run `0.1.14` bump.
+- The final tree is clean and pushed.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+
+### Results
+
+- Verified the failure path: real `./publish.sh patch` bumped source metadata, npm auth preflight failed with `npm whoami` E401, and the script had no real-run restore path before the first publish.
+- Added source metadata snapshots for real non-`--current` runs and restored them on failures before `PUBLISH_STARTED`.
+- Preserved source metadata after a real publish begins so `./publish.sh --current` remains the recovery path for partial publishes.
+- Added focused regression coverage for auth-preflight failure rollback and restored the current failed-run source metadata to `0.1.13`.
+- Verification passed; see `tasks/ship-manifest-2026-06-28-publish-auth-failure-rollback.md`.
+
 ## Historical Implementation - Publish 0.1.14 Readiness Audit
 
 ### Goal

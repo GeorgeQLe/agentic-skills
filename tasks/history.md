@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-28 — Publish auth failure rollback
+
+- Triaged the repeated `./publish.sh patch` failure where npm auth preflight returned E401 and left `packages/skillpacks/package.json` plus `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.14`, causing the next run to fail the clean-tree gate.
+- Fixed `publish.sh` so non-`--current` runs snapshot source package metadata and restore it on any failure before the first real `npm publish` starts; once a real publish starts, the bumped version is preserved for `./publish.sh --current` partial-publish recovery.
+- Added a regression test that mocks a real patch run with `npm whoami` failing, asserts no publish command ran, and verifies both source metadata files were restored.
+- Restored the current leftover failed-publish version fields to `0.1.13`, leaving the release ready for a clean retry after npm auth is fixed.
+- Verification passed: `node --test packages/skillpacks/test/publish-recovery.test.mjs`, `npm --workspace packages/skillpacks run test:node`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+- Manifest: `tasks/ship-manifest-2026-06-28-publish-auth-failure-rollback.md`.
+
 ## 2026-06-27 — Fix remaining design-tree verification gaps
 
 - Updated the active Claude and Codex `user-flow-map` contracts so prototype-build-plan execution routes to `/logic-wiring` / `$logic-wiring` instead of the stale `/prototype` / `$prototype` command tokens.

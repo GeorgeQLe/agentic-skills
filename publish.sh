@@ -11,6 +11,7 @@ USE_CURRENT=0
 TARGET=""
 TMP_DIRS=()
 RESTORE_DIR=""
+PUBLISH_STARTED=0
 
 usage() {
   cat <<'USAGE'
@@ -167,6 +168,7 @@ atomic_restore_file() {
 }
 
 cleanup() {
+  local status=$?
   local dir
   for dir in "${TMP_DIRS[@]}"; do
     if [[ "$dir" == /tmp/skillpacks-publish-* && -d "$dir" ]]; then
@@ -174,10 +176,12 @@ cleanup() {
     fi
   done
 
-  if [[ "$DRY_RUN" == "1" && -n "$RESTORE_DIR" && -d "$RESTORE_DIR" ]]; then
-    atomic_restore_file "$RESTORE_DIR/package.json" "$PACKAGE_JSON"
-    if [[ -f "$RESTORE_DIR/skillpacks-manifest.json" ]]; then
-      atomic_restore_file "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON"
+  if [[ -n "$RESTORE_DIR" && -d "$RESTORE_DIR" ]]; then
+    if [[ "$DRY_RUN" == "1" || ( "$status" != "0" && "$PUBLISH_STARTED" != "1" ) ]]; then
+      atomic_restore_file "$RESTORE_DIR/package.json" "$PACKAGE_JSON"
+      if [[ -f "$RESTORE_DIR/skillpacks-manifest.json" ]]; then
+        atomic_restore_file "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON"
+      fi
     fi
     rm -rf "$RESTORE_DIR"
   fi
@@ -252,7 +256,7 @@ if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
   printf 'WARNING: untracked files are present and will not be included unless committed.\n' >&2
 fi
 
-if [[ "$DRY_RUN" == "1" ]]; then
+if [[ "$DRY_RUN" == "1" || "$USE_CURRENT" != "1" ]]; then
   RESTORE_DIR=$(mktemp -d /tmp/skillpacks-publish-restore-XXXXXX)
   cp "$PACKAGE_JSON" "$RESTORE_DIR/package.json"
   if [[ -f "$MANIFEST_JSON" ]]; then
@@ -407,8 +411,10 @@ EOF
 if [[ "$USE_CURRENT" == "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
 else
+  PUBLISH_STARTED=1
   run npm publish "$SKILLPACKS_STAGE"
 fi
+PUBLISH_STARTED=1
 run npm publish "$GSKP_STAGE" --access public
 
 log "Verifying published packages"

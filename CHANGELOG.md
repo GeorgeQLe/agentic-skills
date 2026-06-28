@@ -35,6 +35,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 - `skillpacks install <skill>` now treats already-current individual skill installs as a no-op: it prints `Skill already installed!`, skips reload/fresh-session guidance, and leaves project-local config and skill roots unchanged.
 - Published-package verification cleanup now handles an empty temp-directory list under `set -u`, fixing the stale-metadata retry smoke path on macOS Bash.
+- `publish.sh` now restores source package metadata when a real publish run fails before the first `npm publish` starts, so npm auth preflight failures no longer leave a retry-blocking `0.1.14` bump in the tracked tree.
 - Refreshed the package manifest source fingerprint and active `user-flow-map` content hashes after the latest `logic-wiring` route-proof wording changes.
 - Corrected the package changelog's stale `0.1.13` heading/release-state/verification wording so the prior release matches the actually published npm version.
 
@@ -42,6 +43,7 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 - Registry readiness check confirmed `skillpacks` and `@glexcorp/gskp` both report latest `0.1.13`, and `0.1.14` is not present for either package name.
 - Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (150/150) after the verifier cleanup fix.
+- Publish recovery regression passed: `node --test packages/skillpacks/test/publish-recovery.test.mjs` (4/4), including real-run auth preflight failure rollback before the first publish command.
 - Package verification passed: `npm run skillpacks:verify` (401 active skills, 42 packs, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
 - Clean-tree `./publish.sh --dry-run patch` reached npm auth preflight after bumping/building/verifying/staging `0.1.14`, then stopped with npm E401 because this shell is not logged into npm as `glexcorp`; the dry-run cleanup restored source package metadata to `0.1.13`.
 

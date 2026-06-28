@@ -5,10 +5,50 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Publish 0.1.14 Readiness Audit.
-Last closeout: Interrupted 0.1.14 publish attempt cleanup.
+Last completed task: Publish Auth Failure Rollback.
+Last closeout: Publish auth failure rollback.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+
+## Review - Publish Auth Failure Rollback
+
+### Goal
+
+Fix the release script so an npm auth preflight failure before any real publish restores the version bump and leaves the tracked tree runnable for another `./publish.sh patch`.
+
+### Triage Result
+
+- User-identified issue: after npm auth preflight E401, `./publish.sh patch` leaves package metadata dirty and the next run fails the clean-tree gate.
+- Verification verdict: verified. The current tree had only `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.14`; the npm log showed `npm whoami` E401; `publish.sh` only restored source files for `--dry-run`.
+- Root cause: the real publish path had no source-metadata rollback before the first irreversible publish step.
+
+### Checklist
+
+- [x] Capture the visible `$session-triage` invocation prompt in `prompts/session-triage/`.
+- [x] Verify the current failure state: package metadata and manifest are dirty at `0.1.14` after auth preflight E401.
+- [x] Inspect `publish.sh`, `packages/skillpacks/scripts/prepublish-auth-check.mjs`, npm debug output, and focused publish tests.
+- [x] Patch `publish.sh` to restore source metadata on failure before the first real publish starts.
+- [x] Add focused regression coverage for real-run auth preflight failure restoring source metadata.
+- [x] Restore the current leftover failed-publish bump back to `0.1.13`.
+- [x] Run focused verification and diff hygiene.
+- [x] Document results and ship the fix.
+
+### Results
+
+- `publish.sh` now snapshots source package metadata for real non-`--current` runs and restores it on nonzero exit while `PUBLISH_STARTED=0`.
+- `publish.sh` sets `PUBLISH_STARTED=1` before the first real `npm publish`, preserving the bumped source version for partial-publish recovery if a publish starts.
+- Added package test coverage that mocks a real patch publish, fails `npm whoami`, proves no `npm publish` call occurred, and verifies both source files match their pre-run contents.
+- Restored local package and manifest package versions to `0.1.13`.
+- Recorded the package-level release-process fix in `CHANGELOG.md` under prepared `0.1.14`.
+
+### Verification
+
+Passed:
+
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs` (4/4)
+- `npm --workspace packages/skillpacks run test:node` (151/151)
+- `node scripts/audit-task-docs.mjs` (0 failures, 0 warnings)
+- `git diff --check`
 
 ## Review - Publish 0.1.14 Readiness Audit
 

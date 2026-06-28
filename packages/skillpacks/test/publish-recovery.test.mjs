@@ -7,8 +7,10 @@ import { test } from "node:test";
 
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
 const publishScript = path.join(repoRoot, "publish.sh");
+const packageJsonPath = path.join(repoRoot, "packages/skillpacks/package.json");
+const manifestJsonPath = path.join(repoRoot, "packages/skillpacks/dist/skillpacks-manifest.json");
 const packageVersion = JSON.parse(
-  readFileSync(path.join(repoRoot, "packages/skillpacks/package.json"), "utf8")
+  readFileSync(packageJsonPath, "utf8")
 ).version;
 
 function makeMockBin() {
@@ -85,12 +87,24 @@ if [[ "$1" == "view" && "$3" == "maintainers" ]]; then
   exit 0
 fi
 
+if [[ "$1" == "--workspace" && "$2" == "packages/skillpacks" && "$3" == "version" ]]; then
+  node -e 'const fs = require("fs"); const [packagePath, target] = process.argv.slice(1); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split(".").map(Number); parts[2] += 1; next = parts.join("."); } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "${packageJsonPath}" "$4"
+  exit 0
+fi
+
 if [[ "$1" == "whoami" ]]; then
+  if [[ "\${NPM_MOCK_WHOAMI_RC:-0}" != "0" ]]; then
+    printf '%s\\n' "\${NPM_MOCK_WHOAMI_ERR:-npm error code E401}" >&2
+    exit "\${NPM_MOCK_WHOAMI_RC}"
+  fi
   printf 'glexcorp\\n'
   exit 0
 fi
 
 if [[ "$1" == "--workspace" && "$2" == "packages/skillpacks" && "$3" == "run" ]]; then
+  if [[ "$4" == "build:manifest" ]]; then
+    node -e 'const fs = require("fs"); const [packagePath, manifestPath] = process.argv.slice(1); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")); manifest.package = { ...(manifest.package || {}), version: pkg.version }; fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\\n");' "${packageJsonPath}" "${manifestJsonPath}"
+  fi
   exit 0
 fi
 
@@ -131,6 +145,52 @@ function runPublishCurrent(extraEnv = {}) {
     calls: readFileSync(mock.logPath, "utf8")
   };
 }
+
+function runPublishPatchAuthFailure() {
+  const originalPackageJson = readFileSync(packageJsonPath, "utf8");
+  const originalManifestJson = readFileSync(manifestJsonPath, "utf8");
+  const mock = makeMockBin();
+  let result;
+  let packageJsonAfter;
+  let manifestJsonAfter;
+
+  try {
+    result = spawnSync("bash", [publishScript, "patch"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PATH: `${mock.binDir}${path.delimiter}${process.env.PATH}`,
+        NPM_MOCK_WHOAMI_RC: "1"
+      }
+    });
+    packageJsonAfter = readFileSync(packageJsonPath, "utf8");
+    manifestJsonAfter = readFileSync(manifestJsonPath, "utf8");
+  } finally {
+    writeFileSync(packageJsonPath, originalPackageJson);
+    writeFileSync(manifestJsonPath, originalManifestJson);
+  }
+
+  return {
+    ...result,
+    output: `${result.stdout}\n${result.stderr}`,
+    calls: readFileSync(mock.logPath, "utf8"),
+    originalPackageJson,
+    originalManifestJson,
+    packageJsonAfter,
+    manifestJsonAfter
+  };
+}
+
+test("real publish auth preflight failure restores source metadata before first publish", () => {
+  const result = runPublishPatchAuthFailure();
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /npm publish auth preflight failed/);
+  assert.doesNotMatch(result.calls, /^publish /m);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
 
 test("--current recovery publishes only the scoped alias when skillpacks exists and alias is missing", () => {
   const result = runPublishCurrent({ NPM_MOCK_SKILLPACKS_EXISTS: "1" });
