@@ -163,7 +163,7 @@ When invoked with `--prototype-build-plan`, "prototype build plan", "prototype t
 
 1. Read the scoped `design/**/flow-tree-*.yaml`, `design/user-flow-*.md`, `design/ux-variations-*.md`, and `design/ui-*.md` artifacts.
 2. Identify every user-flow branch, UX variation branch, and UI experiment branch with an approved or retryable decision.
-3. Create one prototype build item for each approved UI experiment that should be made tangible in `$prototype`.
+3. Create one prototype build item for each approved UI experiment that should be made tangible in `$logic-wiring`.
 4. Mark rejected branches as dropped and do not include them as buildable items unless the user explicitly overrides.
 5. Mark out-of-scope, expensive, or low-confidence branches as deferred when the user chooses not to prototype them now.
 6. Mark branches that need design or UI correction before prototyping as needs-revision.
@@ -276,7 +276,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not route directly to `$ui-interview` from an approved flow map unless the user explicitly bypasses variation exploration for a named flow. The normal route is `$user-flow-map` -> `$state-model [topic]` (optional sibling) -> `$ux-variations [specific-user-flow]` -> `$ui-interview [specific-ux-variation]`. `$state-model` authors the flow-anchored logical domain model and writes only an optional `model_tree_ref` pointer into the flow tree; it never alters the flow-tree `route` array.
 - Do not write pre-prototype flow maps to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
 - Do not auto-run or auto-invoke downstream skills after approval. When consuming the approval YAML in the same session that built the page, present the stop/clear-context versus continue-now choice; when consuming it in an already-fresh session (no build context to shed), default to continue-now without prompting another context clear. Either way, preserve the next skill's required gates — continue-now means invoking the next skill and immediately entering its own interaction gates under user control, not running it unattended.
-- Do not treat `design/ux-variations-*.md` as the prototype todo list once branch decisions exist. Use prototype-build-plan mode to create the explicit ledger before `$prototype`.
+- Do not treat `design/ux-variations-*.md` as the prototype todo list once branch decisions exist. Use prototype-build-plan mode to create the explicit ledger before `$logic-wiring`.
 - Do not use `tasks/todo.md` for design/prototype branch progress. Human prototype evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 - When recommending a skill from another pack, verify pack availability through `.agents/project.json.enabled_packs`.
 

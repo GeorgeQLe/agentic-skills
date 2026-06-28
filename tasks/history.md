@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-27 — Fix remaining design-tree verification gaps
+
+- Updated the active Claude and Codex `user-flow-map` contracts so prototype-build-plan execution routes to `/logic-wiring` / `$logic-wiring` instead of the stale `/prototype` / `$prototype` command tokens.
+- Preserved generic prototype terminology and `prototype_build_plan` artifact/file naming; no `user-flow-map` version bump, archive, or changelog entry was added because this closes missed wording from the already-shipped v1.8 route rename.
+- Committed refreshed Skills Showcase generated data so the public catalog fingerprint reflects the active `SKILL.md` wording change and the GitHub proof assets include the current source fingerprint and recent history list.
+- Verification passed: targeted exact-command stale-route scan, `npm run skillpacks:verify`, `node scripts/skill-alignment-routing-audit.mjs --active`, `scripts/skill-install-routing-audit.sh --active`, `npm run skills-showcase:test`, `npm run skills-showcase:validate-data`, `npm run skills-showcase:build`, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-27-fix-design-tree-verification-gaps.md`.
+
 ## 2026-06-27 - Ship-end prompt-history closeout
 
 - Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260627-223120-ship-end.md`.

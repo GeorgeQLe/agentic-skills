@@ -2,6 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix Remaining Design-Tree Verification Gaps
+
+### Goal
+
+Close the two verified post-ship gaps from commit `3d8f212f3`: stale Skills Showcase GitHub proof data and stale active `user-flow-map` route wording that still points build-plan work at `prototype` instead of `logic-wiring`.
+
+### Plan
+
+1. Capture the visible `exec` invocation prompt and promote this follow-up into `tasks/roadmap.md` and `tasks/todo.md`.
+2. Inspect the current worktree, task docs, generated proof-data drift, and active Claude/Codex `user-flow-map` contracts.
+3. Update only the active `user-flow-map` build-plan route references that still recommend `/prototype` or `$prototype` as the downstream skill, changing them to `/logic-wiring` or `$logic-wiring`.
+4. Preserve generic `prototype` terminology where it names the artifact, phase, or build-plan concept rather than a runnable skill route.
+5. Keep `user-flow-map` versioning unchanged unless verification shows this is a new substantive behavior update rather than cleanup for the already-shipped v1.8 route rename.
+6. Regenerate or validate the Skills Showcase proof-data assets so the existing drift is current and committed.
+7. Run the requested stale-route scans, showcase validation, skillpack verification, routing audits, Skills Showcase tests, task-doc audit, and diff hygiene checks.
+8. Document review results, create a ship manifest, commit, and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Active Claude `user-flow-map` no longer recommends `/prototype` for prototype-build-plan execution.
+- Active Codex `user-flow-map` no longer recommends `$prototype` for prototype-build-plan execution.
+- Generic prototype/build-plan artifact terminology remains intact where it is not a skill route.
+- No `user-flow-map` version bump, archive, or changelog entry is added unless the implementation intentionally treats the wording change as new behavior.
+- The two Skills Showcase GitHub proof-data assets contain current generated source fingerprint/history data and validate cleanly.
+
+### Test Plan
+
+- Targeted stale-route scan over active Product Design skills, excluding archives and generated data.
+- `npm run skills-showcase:validate-data`
+- `npm run skillpacks:verify`
+- `node scripts/skill-alignment-routing-audit.mjs --active`
+- `scripts/skill-install-routing-audit.sh --active`
+- `npm run skills-showcase:test`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Updated the active Claude and Codex `user-flow-map` build-plan route references from `/prototype` / `$prototype` to `/logic-wiring` / `$logic-wiring`.
+- Preserved generic prototype/build-plan terminology and skipped version/archive/changelog churn because the change closes missed wording from the already-shipped v1.8 route rename.
+- Refreshed Skills Showcase generated proof data and verified the source/generator boundary.
+- Verification passed; see `tasks/ship-manifest-2026-06-27-fix-design-tree-verification-gaps.md`.
+
 ## Historical Implementation - Close Design-Tree Surface Terminology Gaps
 
 ### Goal

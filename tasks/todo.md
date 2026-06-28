@@ -5,66 +5,45 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Close Design-Tree Surface Terminology Gaps.
-Last closeout: Ship-end prompt-history closeout.
+Last completed task: Fix Remaining Design-Tree Verification Gaps.
+Last closeout: Fix remaining design-tree verification gaps.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
-## Review - Ship-End Prompt-History Closeout
+## Review - Fix Remaining Design-Tree Verification Gaps
 
 ### Goal
 
-Wrap the current `$ship-end` invocation cleanly when no active implementation work is queued.
+Close the two verified post-ship gaps from commit `3d8f212f3`: stale Skills Showcase GitHub proof data and active `user-flow-map` build-plan route wording that still pointed at `prototype` instead of `logic-wiring`.
 
 ### Results
 
-- Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260627-223120-ship-end.md`.
-- Left active implementation status as `none`; no source, package, runtime, deploy, or generated app surfaces changed.
-- Created a focused ship manifest for the prompt/task closeout boundary.
+- Updated active Claude `user-flow-map` build-plan route wording from `/prototype` to `/logic-wiring`.
+- Updated active Codex `user-flow-map` build-plan route wording from `$prototype` to `$logic-wiring`.
+- Preserved generic prototype terminology and `prototype_build_plan` artifact/file naming.
+- Kept `user-flow-map` at v1.8 with no archive or changelog churn because this corrects missed wording from the already-shipped route rename.
+- Refreshed Skills Showcase generated data after staging the intended source boundary: catalog fingerprints and GitHub proof assets.
 
 ### Verification
 
 Passed:
 
+- targeted exact-command stale-route scan over active `user-flow-map` mirrors
+- `npm run skillpacks:verify`
+- `node scripts/skill-alignment-routing-audit.mjs --active`
+- `scripts/skill-install-routing-audit.sh --active`
+- `npm run skills-showcase:test`
+- `npm run skills-showcase:validate-data`
+- `npm run skills-showcase:build`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
-- `rg` secret-pattern scan over changed files
 
 Skipped with rationale:
 
-- Package, app, and skillpack executable suites were skipped because the boundary only changes `prompts/**` and `tasks/**` evidence files.
+- Manual production deploy was not run because this session has no explicit production deploy confirmation. `tasks/deploy.md` says changed `apps/skills-showcase/public/**` generated assets are deploy-relevant and Vercel path gating should build from `master` after push.
 
-## Review - Close Design-Tree Surface Terminology Gaps
+## Next Work
 
-### Goal
+No active implementation task remains queued in `tasks/todo.md`.
 
-Close generated-artifact and downstream-contract gaps from commit `00503b7e0` so package metadata, flow-tree schema guidance, and downstream product-design consumers agree with surface/channel terminology and the `logic-wiring` route step.
-
-### Results
-
-- Updated mirrored `user-flow-map` contracts to v1.8 with `schema_version: v0.4`, `logic-wiring` route step 4, and build-plan handoffs to `logic-wiring`.
-- Updated mirrored `state-model` contracts to v0.10 so the documented locked route tuple uses `logic-wiring` while `state-model` remains off-route.
-- Updated mirrored `logic-wiring` contracts to v0.21 so it consumes upstream surfaces/channels, visual UI candidates, route/screen realizations, and non-visual channel behavior.
-- Updated mirrored `spec-interview` contracts to v0.18 so production specs consume surface/channel and route/screen evidence instead of screen order alone.
-- Archived prior active versions for all changed mirrors.
-- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and Skills Showcase generated data.
-- Refreshed project-local skill installs; no tracked install-copy diff remained.
-
-### Verification
-
-Passed:
-
-- `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
-- `npm --workspace packages/skillpacks run build:check`
-- `scripts/skill-mirror-parity-audit.sh --verbose`
-- `scripts/skill-archive-audit.sh`
-- `scripts/pack.sh doctor`
-- `pnpm --dir apps/skills-showcase build`
-- targeted stale active-route/schema scans
-- targeted screen-only upstream-consumer scan
-- manifest version/archive spot check
-- `node scripts/audit-task-docs.mjs`
-- `git diff --check`
-- `git diff --cached --check`
-
-Ship manifest: `tasks/ship-manifest-2026-06-27-close-design-tree-surface-terminology-gaps.md`.
+Recommended next command: `$brainstorm`
