@@ -15117,3 +15117,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Fixed a release-blocking `verify-published-package.sh` cleanup bug where macOS Bash treated empty array expansion as unbound under `set -u`.
 - Refreshed `packages/skillpacks/dist/skillpacks-manifest.json`, which caught stale active `user-flow-map` content hashes from the latest `logic-wiring` route-proof wording.
 - Verification: focused published-package verifier test 2/2, package Node suite 150/150, `npm run skillpacks:verify`, task-doc audit, and diff hygiene passed. Clean-tree `./publish.sh --dry-run patch` bumped/built/tested/verified/staged `0.1.14`, then stopped at npm auth preflight with E401 because this shell is not logged into npm as `glexcorp`; dry-run cleanup restored package metadata to `0.1.13`.
+
+## 2026-06-28 — ship-end after interrupted 0.1.14 publish attempt
+
+- User interrupted a real `./publish.sh patch` attempt and invoked `$ship-end`.
+- Verified no publish/npm process remained running, npm registry latest still reports `0.1.13` for both `skillpacks` and `@glexcorp/gskp`, and no `0.1.14` publish occurred.
+- Restored local package/manifest version fields from the interrupted `0.1.14` bump back to the committed `0.1.13` state so the next real publish can let `publish.sh` own the bump.
+- Captured the `$ship-end` prompt log and added a lesson to require explicit user intent before starting real npm publish.

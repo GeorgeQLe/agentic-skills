@@ -5,8 +5,8 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Fix Remaining Design-Tree Verification Gaps.
-Last closeout: Fix remaining design-tree verification gaps.
+Last completed task: Publish 0.1.14 Readiness Audit.
+Last closeout: Interrupted 0.1.14 publish attempt cleanup.
 
 Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
 
@@ -75,8 +75,25 @@ Skipped:
 
 - Real npm publish and release tag creation: not requested, and blocked until npm login/2FA is completed as `glexcorp`.
 
+## Review - Interrupted 0.1.14 Publish Attempt Cleanup
+
+### Results
+
+- Confirmed no `publish.sh` / `npm publish` process remained running after the user interrupted the real publish attempt.
+- Confirmed npm registry state still has both `skillpacks` and `@glexcorp/gskp` at latest `0.1.13`; `0.1.14` was not published.
+- Restored the local `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` version fields from the interrupted `0.1.14` bump back to the committed pre-publish `0.1.13` state.
+- Captured the visible `$ship-end` invocation prompt and recorded a lesson: do not initiate real npm publish from readiness/runbook context unless the user explicitly asks to publish.
+
+### Verification
+
+Passed:
+
+- Process scan for leftover publish/npm processes
+- npm registry version checks for both package names
+- package/manifest version sanity check: both source files read `0.1.13`
+
 ## Next Work
 
-Manual npm authentication and real `0.1.14` publish.
+Real `0.1.14` publish, only when explicitly requested.
 
 Recommended next command: `$guide`
