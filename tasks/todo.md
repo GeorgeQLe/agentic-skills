@@ -5,46 +5,63 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Publish Final Verification ETARGET Recovery.
-Last closeout: Publish final verification ETARGET recovery.
+Last completed task: YouTube Prelaunch A/B Test And URL Ledger.
+Last closeout: YouTube prelaunch Test and Compare launch set plus URL ledger.
 
-Completed implementation records live in `tasks/history.md`, `tasks/reconciliation-report.md`, commit history, and ship manifests.
+## Plan
 
-## Review - Publish Final Verification ETARGET Recovery
+- [x] Capture the visible skill-update invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect current Codex/Claude `youtube-video-prelaunch-audit` skill files, changelogs, archives, and relevant audit scripts.
+- [x] Archive current `v0.3` skill files with `scripts/skill-archive.sh`, bump both active mirrors to `v0.4`, and update matching changelogs.
+- [x] Require a `Test And Compare Launch Set` containing exactly three simultaneous title/thumbnail pairs, each with full title, thumbnail concept, packaging hypothesis, intended audience signal, and win implication.
+- [x] Add URL ledger behavior for per-video `research/youtube/data/<video-id>/prelaunch/video-url-record.json` records and aggregate `research/youtube/data/video-url-index.jsonl`.
+- [x] Update report template and final response requirements to include the URL record path and the three Test and Compare pairs.
+- [x] Run focused static audits, perform manual mirror/version behavior checks, document results, commit, and push on the primary branch.
 
-### Goal
+## Acceptance Criteria
 
-Fix the end-of-`./publish.sh patch` recovery path where both `0.1.14` npm packages are published but final smoke verification fails with npm `ETARGET` while `npx --package @glexcorp/gskp@0.1.14` resolves fresh registry metadata.
+- Both active skill mirrors are versioned `v0.4`, have archived `v0.3` copies, and have matching changelog entries.
+- The skill contract requires exactly three Test and Compare-ready title/thumbnail variants for simultaneous YouTube Studio upload.
+- The skill records or updates per-video and aggregate URL ledger artifacts before asking for already-captured context in future runs.
+- Report template and final response instructions mention the URL record and the three paired launch variants.
+- Focused audits and diff hygiene checks pass, with any blocker documented here.
+
+## Verification Plan
+
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-next-step-routing.sh --missing`
+- `git diff --check`
+- Manual read of both active skill files for mirror parity, `v0.4`, exact three-pair requirement, URL record/index behavior, and matching changelog/archive state.
+
+## Review - YouTube Prelaunch A/B Test And URL Ledger
 
 ### Results
 
-- `packages/skillpacks/scripts/verify-published-package.sh` now retries bounded npm propagation failures from published-package `npx --package "$NPM_SPEC"` smoke commands and uses `--prefer-online`.
-- The retry detector is limited to npm resolution-style failures: `ETARGET`, `notarget`, and package-specific "No matching version found" output.
-- Non-propagation CLI failures after package resolution still fail immediately; regression coverage proves they are not hidden by the retry loop.
-- `./publish.sh --current` now handles the both-package-already-published state by skipping auth/publish commands and rerunning final published-package verification plus source-state instructions.
-- Existing partial-publish recovery remains intact when `skillpacks@$VERSION` exists and `@glexcorp/gskp@$VERSION` is missing.
-- Live npm registry reads confirmed both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14` resolve; the current source metadata bump to `0.1.14` is preserved.
-- `CHANGELOG.md` now records this verifier/recovery fix under `[Unreleased]` because it postdates the already-published npm `0.1.14` artifacts.
+- Updated mirrored Codex and Claude `youtube-video-prelaunch-audit` skills to `v0.4`.
+- Archived both prior `v0.3` skill files under each skill's `archive/v0.3/SKILL.md`.
+- Added matching `v0.4` changelog entries for the URL ledger and Test and Compare launch-set behavior.
+- Added required URL ledger behavior for `research/youtube/data/<video-id>/prelaunch/video-url-record.json` and `research/youtube/data/video-url-index.jsonl`.
+- Replaced loose title/thumbnail recommendations with a required `## Test And Compare Launch Set` containing exactly three simultaneous title/thumbnail variants.
+- Updated the report template and approved-artifact handoff so final responses include the URL record path and the three Test and Compare pairs.
+- Refreshed Skills Showcase generated data/proof assets after validation detected stale source fingerprints.
+- Captured the visible skill-update prompt in `prompts/skill-creator/skill-prompt-20260628-185137-youtube-prelaunch-url-ledger.md`.
 
 ### Verification
 
 Passed:
 
-- `node --test packages/skillpacks/test/verify-published-package.test.mjs packages/skillpacks/test/publish-recovery.test.mjs` (9/9)
-- `npm --workspace packages/skillpacks run test:node` (154/154)
-- `bash -n publish.sh packages/skillpacks/scripts/verify-published-package.sh`
-- `npm view skillpacks@0.1.14 version --workspaces=false` (`0.1.14`)
-- `npm view @glexcorp/gskp@0.1.14 version --workspaces=false` (`0.1.14`)
-- `./publish.sh --current` (skipped auth/publish because both packages already exist; rebuilt, verified package tests, and passed published smoke verification for both package names)
-- `npm --workspace packages/skillpacks run build:manifest:check`
-- `node scripts/audit-task-docs.mjs` (0 failures, 0 warnings)
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-next-step-routing.sh --missing`
+- `npm run skillpacks:verify`
+- `npm run skills-showcase:validate-data` after regenerating stale showcase data
 - `git diff --check`
-- `git diff --cached --check`
+- Manual normalized diff of active Codex/Claude mirrors after `$youtube` to `/youtube` transform.
+- Manual normalized diff of archived `v0.3` Codex/Claude mirrors after `$youtube` to `/youtube` transform.
+- `cmp -s` on the mirrored changelogs.
+- `rg` readback confirming both active skills are `v0.4`, archives are `v0.3`, both require exactly three variants, both define URL record/index behavior, and old loose packaging language is absent.
 
-### Residual
-
-- No `v0.1.14` tag was created because this fix postdates the immutable npm `0.1.14` artifacts; tag target selection remains a release bookkeeping decision.
-
-## Next Work
-
-Decide the correct `v0.1.14` tag target if this repository maintains release tags for already-published npm artifacts.
+Final staged diff, commit, and push verification are part of closeout.

@@ -1,8 +1,8 @@
 ---
 name: youtube-video-prelaunch-audit
-description: Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, packaging, title, description, chapters, publish settings, launch timing, and social cross-sharing strategy
+description: Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, YouTube Test and Compare title/thumbnail launch sets, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy
 type: research
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page]
 argument-hint: "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]"
 context_intake: artifact_only
@@ -60,17 +60,45 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 ### 1. Resolve Target and Access
 
 1. Extract the video ID from a normal watch URL, Shorts URL, youtu.be URL, embed URL, or raw 11-character ID.
-2. Require `yt-dlp` for public or unlisted metadata:
+2. Derive known URL forms when possible: original URL, canonical watch URL, Shorts URL, embed URL, and youtu.be URL.
+3. Before asking for channel, status, working-title, report-history, or prior-artifact context, check `research/youtube/data/video-url-index.jsonl` and `research/youtube/data/<video-id>/prelaunch/video-url-record.json`. Use existing values unless they are missing, stale, or conflicting.
+4. Require `yt-dlp` for public or unlisted metadata:
 
    ```bash
    command -v yt-dlp
    ```
 
-3. Fetch metadata with `yt-dlp --dump-json "VIDEO_URL"` when accessible. If the video requires login, private account access, or YouTube Studio access, stop and ask for a public/unlisted link, local video file, transcript, or manually exported metadata instead.
-4. Check `availability`, `live_status`, upload date, scheduled time, and visibility cues. If the video is already public and the user asks why it performed a certain way, route to `/youtube-video-audit` instead.
-5. Do not treat views, likes, or comments on an unlisted pre-release video as performance evidence; internal review traffic can distort them.
+5. Fetch metadata with `yt-dlp --dump-json "VIDEO_URL"` when accessible. If the video requires login, private account access, or YouTube Studio access, stop and ask for a public/unlisted link, local video file, transcript, or manually exported metadata instead.
+6. Check `availability`, `live_status`, upload date, scheduled time, and visibility cues. If the video is already public and the user asks why it performed a certain way, route to `/youtube-video-audit` instead.
+7. Do not treat views, likes, or comments on an unlisted pre-release video as performance evidence; internal review traffic can distort them.
 
-### 2. Persist Raw Evidence
+### 2. Maintain Video URL Record
+
+Create or update these persistent URL ledger artifacts as soon as the video ID and original URL are known, then revise them after metadata, evidence, and report paths are known:
+
+```text
+research/youtube/data/<video-id>/prelaunch/video-url-record.json
+research/youtube/data/video-url-index.jsonl
+```
+
+The per-video record and aggregate index line must include:
+
+- `video_id`
+- `original_url`
+- `canonical_watch_url` using `https://www.youtube.com/watch?v=<video-id>`
+- `url_forms`: known or derivable `watch`, `shorts`, `embed`, and `youtu_be` forms
+- `channel`: known `id`, `url`, and `name`
+- `status`: visibility, availability, live status, scheduled/public state, and launch date when known
+- `working_title`
+- `selected_or_preferred_launch_title` when known
+- `report_path`
+- `evidence_paths`
+- `captured_at`
+- `source_skill`: `youtube-video-prelaunch-audit`
+
+Use `null` for unknown optional values instead of inventing them. Do not store credentials, cookies, private YouTube Studio-only fields, or unshared account details. For the JSONL index, update an existing line for the same `video_id` when practical; otherwise append a fresh valid JSON object for the capture. On future runs, read the index and per-video record before asking the user for context already captured, and ask only for missing or conflicting fields.
+
+### 3. Persist Raw Evidence
 
 Create:
 
@@ -88,7 +116,7 @@ Persist available evidence before analysis:
 
 Record evidence gaps explicitly. Missing transcript, thumbnail, frame review, audio review, current description, launch date, sponsor requirements, or target platforms are not failures, but they constrain confidence.
 
-### 3. Inspect Content and Polish
+### 4. Inspect Content and Polish
 
 Use the deepest available evidence:
 
@@ -104,12 +132,14 @@ Analyze:
 - **Production polish**: audio, visuals, captions, overlays, b-roll, continuity, end screen, cards, disclosure, and accessibility when evidence exists.
 - **Risk and trust**: unsupported claims, stale references, missing source links, sponsor/disclosure gaps, privacy/confidentiality concerns, or accidental internal-only material.
 
-### 4. Build the Launch Package
+### 5. Build the Launch Package
 
 Audit and draft practical launch assets:
 
-- Title: current title, risk, search/topic clarity, curiosity/promise balance, and 3-5 alternatives.
-- Thumbnail: focal clarity, text density, promise match, visual differentiation, and required human review when no image evidence is available.
+- Test And Compare Launch Set: exactly 3 simultaneous variants for YouTube Studio Test and Compare. Each variant must pair one upload-ready full title with one thumbnail concept or supplied-asset reference, plus a packaging hypothesis, intended audience signal, and what a win would imply. Frame them as a set to upload together, not as sequential manual swaps.
+- Title: keep each title inside YouTube Studio's current title limit, using 100 characters as the upload-ready ceiling unless Studio shows a different limit. Avoid unsupported claims, bait-and-switch promises, and vague curiosity; preserve search/topic clarity and expectation match.
+- Thumbnail: evaluate focal clarity, text density, promise match, visual differentiation, and required human review when no image evidence is available. If user-provided thumbnail assets exist, map them into the three variants; otherwise provide concrete thumbnail concepts or references only. Do not generate or claim final thumbnail files unless the user explicitly supplies or requests image assets.
+- Test setup guidance: explain how to get the three variants online in YouTube Studio on desktop via the video's Details / Test and Compare flow, keeping variant labels and title/thumbnail pairing aligned with the report. If the account or video is ineligible for title/thumbnail combination testing, state the fallback: apply the preferred title, test the three thumbnail concepts/assets where eligible, and preserve the other title variants for manual follow-up.
 - Description: first two lines, CTA hierarchy, link stack, credits, disclosures, hashtags, and pinned-comment fit.
 - Chapters: proposed timestamped chapters from transcript or current metadata; if exact timestamps are unavailable, provide section labels and note the timestamp gap.
 - Publish settings: scheduled time, premiere fit, playlist, cards, end screen, comments, captions, monetization, age/sponsor/disclosure checks, and whether to keep as unlisted for another review pass.
@@ -117,9 +147,9 @@ Audit and draft practical launch assets:
 
 Do not invent links, sponsors, timestamp precision, platform accounts, or channel policies. Use placeholders where user-owned assets are missing.
 
-### 5. Write Report
+### 6. Write Report
 
-Create `research/youtube/` and the raw evidence directory if they do not exist.
+Create `research/youtube/`, the raw evidence directory, and the URL ledger paths if they do not exist.
 
 Save the approved canonical artifact to:
 
@@ -138,9 +168,22 @@ Use this structure:
 > Visibility/status: unlisted / scheduled / unknown
 > Planned launch: YYYY-MM-DD or not provided
 > Date captured: YYYY-MM-DD
+> URL record: research/youtube/data/<video-id>/prelaunch/video-url-record.json
+> URL index: research/youtube/data/video-url-index.jsonl
 > Public/unlisted metadata: research/youtube/data/<video-id>/prelaunch/metadata-YYYY-MM-DD.json
 > Transcript: [path or unavailable reason]
 > Media inspection: [path/notes or unavailable reason]
+
+## Video URL Record
+
+| Field | Value |
+|---|---|
+| Record path | research/youtube/data/<video-id>/prelaunch/video-url-record.json |
+| Index path | research/youtube/data/video-url-index.jsonl |
+| Original URL | ... |
+| Canonical watch URL | https://www.youtube.com/watch?v=<video-id> |
+| Known alternate forms | Shorts: ... / embed: ... / youtu.be: ... |
+| Channel/status/title fields updated | ... |
 
 ## Evidence Coverage
 
@@ -169,21 +212,28 @@ Use this structure:
 - **Keep**: ...
 - **Change before launch**: ...
 
-## Packaging Recommendations
+## Test And Compare Launch Set
 
-### Title
+Provide exactly three simultaneous variants for YouTube Studio Test and Compare:
 
-[Current diagnosis plus 3-5 title options.]
+| Variant | Full title | Thumbnail concept or supplied-asset reference | Packaging hypothesis | Intended audience signal | If this wins, it implies |
+|---|---|---|---|---|---|
+| A | ... | ... | ... | ... | ... |
+| B | ... | ... | ... | ... | ... |
+| C | ... | ... | ... | ... | ... |
 
-### Thumbnail
+### Studio Setup Guidance
 
-[Diagnosis or evidence gap plus concrete changes.]
+- Upload or enter variants A, B, and C together in YouTube Studio Test and Compare where the video/account is eligible.
+- Keep title and thumbnail pair labels aligned with the table above.
+- If title/thumbnail combination testing is unavailable, use the preferred title, test the three thumbnail variants where eligible, and preserve the other titles as follow-up options.
+- Do not claim the variants have been uploaded unless the user confirms YouTube Studio setup.
 
-### Description And Pinned Comment
+## Description And Pinned Comment
 
 [Upload-ready description guidance, CTA hierarchy, links/disclosures, pinned comment.]
 
-### Chapters
+## Chapters
 
 [Timestamped chapters or section labels with timestamp gaps.]
 
@@ -207,8 +257,8 @@ Use this structure:
 ## Decision Checklist
 
 - [ ] Blocking edits resolved or accepted
-- [ ] Title selected
-- [ ] Thumbnail approved
+- [ ] Three Test and Compare variants ready for Studio setup
+- [ ] Preferred fallback title/thumbnail selected if Test and Compare is unavailable
 - [ ] Description/pinned comment ready
 - [ ] Chapters ready
 - [ ] Launch schedule selected
@@ -219,14 +269,16 @@ Use this structure:
 [Route only after artifact approval and handoff checks.]
 ```
 
-### 6. Summarize In Thread
+### 7. Summarize In Thread
 
-After saving an approved report, output the verdict, top blocking edit if any, highest-leverage metadata fix, launch timing recommendation, cross-sharing headline, evidence gaps, report path, and raw data paths.
+After saving an approved report, output the verdict, top blocking edit if any, highest-leverage metadata fix, the three Test and Compare title/thumbnail pairs, launch timing recommendation, cross-sharing headline, evidence gaps, report path, URL record path, URL index path, and raw data paths.
 
 ## Constraints
 
 - Do not bypass login walls, bot protections, access controls, or YouTube Studio UI restrictions.
 - Do not invent transcript quotes, timestamps, video visuals, audio quality, thumbnail details, links, sponsor/disclosure details, or social accounts.
+- Do not claim YouTube Studio or API automation; provide upload-ready setup guidance only unless the user separately authorizes and enables an automation path.
+- Do not generate, name, or claim final thumbnail image files unless user-provided assets exist or the user explicitly requests image generation.
 - Do not use unlisted pre-release view/like/comment counts as audience-performance evidence.
 - Separate current evidence, inference, and subjective polish judgment.
 - Keep launch recommendations practical for the creator's visible production capacity and available time before launch.
@@ -238,6 +290,7 @@ After saving an approved report, output the verdict, top blocking edit if any, h
 After an approved synthesized write, explicit write/update mode, or any direct artifact mutation:
 
 - List every created or updated synthesized artifact path in the final response.
+- Include the URL record path and the three Test and Compare title/thumbnail pairs in the final response after the approved artifact write.
 - State the verification performed, such as readback, schema/check command, or why no executable verification applies for a Markdown-only strategy artifact.
 - Check and report the relevant git status for intended artifacts when the project is a git repository. If intended artifacts are modified or untracked, make the next action shipping, committing, or an explicit dirty-artifact handoff before recommending downstream strategy work.
 - Do not imply the research workflow is complete while approved artifacts remain untracked or uncommitted unless the user explicitly asked not to ship.

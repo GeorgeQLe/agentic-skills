@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4 - 2026-06-28
+
+- Added persistent per-video URL ledger requirements under `research/youtube/data/`, including a per-video record and aggregate JSONL index for future YouTube skill context.
+- Replaced loose title/thumbnail guidance with a required Test And Compare launch set containing exactly three simultaneous title and thumbnail variants plus YouTube Studio setup guidance.
+- Updated the report and final response contract to include the URL record path and the three Test And Compare pairs after approved artifact writes.
+
 ## v0.3 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-28 — YouTube prelaunch A/B test and URL ledger
+
+- Updated mirrored Codex and Claude `youtube-video-prelaunch-audit` skills to `v0.4`.
+- Archived the prior `v0.3` skill files for both mirrors and added matching `v0.4` changelog entries.
+- Added persistent URL ledger behavior under `research/youtube/data/`, covering per-video `prelaunch/video-url-record.json` records plus aggregate `video-url-index.jsonl`.
+- Replaced loose title/thumbnail guidance with a required Test and Compare launch set: exactly three simultaneous title/thumbnail variants with hypothesis, audience signal, and win implication.
+- Updated the report template and approved-artifact handoff so future runs report the URL record path and three Test and Compare pairs.
+- Refreshed Skills Showcase generated data/proof assets after validation detected stale source fingerprints.
+- Verification passed: skill version audit, strict archive audit, mirror parity audit, next-step routing audit, package verification, showcase data validation, diff hygiene, and manual normalized mirror/readback checks.
+- Manifest: `tasks/ship-manifest-2026-06-28-youtube-prelaunch-ab-test-url-ledger.md`.
+
 ## 2026-06-28 — Publish retry after web auth failure
 
 - Fixed the remaining retry gap in `publish.sh`: a failure inside the first `npm publish "$SKILLPACKS_STAGE"` now restores source package metadata because `PUBLISH_STARTED` is set only after that command exits successfully.
