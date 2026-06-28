@@ -61,25 +61,61 @@ cleanup() {
 trap cleanup EXIT
 validate_retry_config
 
-run_in() {
+is_npm_propagation_error() {
+  local output=$1
+
+  [[ "$output" == *"ETARGET"* ]] && return 0
+  [[ "$output" == *"npm ERR! notarget"* ]] && return 0
+  [[ "$output" == *"npm error notarget"* ]] && return 0
+  [[ "$output" == *"No matching version found for $NPM_SPEC"* ]] && return 0
+  return 1
+}
+
+run_cli_with_retries() {
   local cwd=$1
   shift
-  printf '+ (cd %s &&' "$cwd"
-  printf ' %q' "$@"
-  printf ')\n'
-  (cd "$cwd" && "$@")
+  local attempt
+  local output
+  local summary
+
+  for ((attempt = 1; attempt <= VERIFY_PUBLISHED_ATTEMPTS; attempt++)); do
+    if output=$(cd "$cwd" && npx -y --prefer-online --package "$NPM_SPEC" --cache "$NPM_CACHE" -- skillpacks "$@" 2>&1); then
+      [[ -n "$output" ]] && printf '%s\n' "$output"
+      return 0
+    fi
+
+    if is_npm_propagation_error "$output" && (( attempt < VERIFY_PUBLISHED_ATTEMPTS )); then
+      summary=${output//$'\n'/; }
+      printf 'published package smoke command hit npm propagation error for %s (attempt %s/%s): %s; retrying in %ss\n' \
+        "$NPM_SPEC" \
+        "$attempt" \
+        "$VERIFY_PUBLISHED_ATTEMPTS" \
+        "$summary" \
+        "$VERIFY_PUBLISHED_DELAY_SECONDS" >&2
+      sleep "$VERIFY_PUBLISHED_DELAY_SECONDS"
+      continue
+    fi
+
+    [[ -n "$output" ]] && printf '%s\n' "$output" >&2
+    return 1
+  done
+
+  return 1
 }
 
 run_cli_in() {
   local cwd=$1
   shift
-  run_in "$cwd" npx -y --package "$NPM_SPEC" --cache "$NPM_CACHE" -- skillpacks "$@"
+  printf '+ (cd %s &&' "$cwd"
+  printf ' %q' npx -y --prefer-online --package "$NPM_SPEC" --cache "$NPM_CACHE" -- skillpacks "$@"
+  printf ')\n'
+  run_cli_with_retries "$cwd" "$@"
 }
 
 capture_cli_in() {
   local cwd=$1
   shift
-  (cd "$cwd" && npx -y --package "$NPM_SPEC" --cache "$NPM_CACHE" -- skillpacks "$@")
+  run_cli_with_retries "$cwd" "$@"
 }
 
 assert_metadata() {

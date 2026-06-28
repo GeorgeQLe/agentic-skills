@@ -15143,3 +15143,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Verified no publish/npm process remained running, npm registry latest still reports `0.1.13` for both `skillpacks` and `@glexcorp/gskp`, and no `0.1.14` publish occurred.
 - Restored local package/manifest version fields from the interrupted `0.1.14` bump back to the committed `0.1.13` state so the next real publish can let `publish.sh` own the bump.
 - Captured the `$ship-end` prompt log and added a lesson to require explicit user intent before starting real npm publish.
+
+## 2026-06-28 — Publish final verification ETARGET recovery
+
+- Fixed published-package smoke verification to retry bounded npm propagation failures from `npx --package <package>@<version>` (`ETARGET`, `notarget`, and package-specific "No matching version found") while failing immediately for real CLI/test failures after package resolution.
+- Updated `./publish.sh --current` so the state where both `skillpacks@$VERSION` and `@glexcorp/gskp@$VERSION` already exist now skips auth/publish commands and reruns final published-package verification plus source-state instructions.
+- Preserved partial-publish recovery where `skillpacks@$VERSION` exists and `@glexcorp/gskp@$VERSION` is missing.
+- Confirmed live npm registry reads resolve both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14`; preserved the current source metadata bump to `0.1.14`.
+- Verification: focused verifier/recovery tests 9/9, package Node suite 154/154, shell syntax, task-doc audit, live npm version reads, real `./publish.sh --current`, and diff whitespace hygiene passed.
+- Manifest: `tasks/ship-manifest-2026-06-28-publish-final-verification-etarget.md`.

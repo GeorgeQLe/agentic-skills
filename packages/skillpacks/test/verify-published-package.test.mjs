@@ -17,10 +17,14 @@ function makeMockBin() {
   const tempDir = mkdtempSync(path.join(tmpdir(), "skillpacks-verify-published-mock-"));
   const npmLog = path.join(tempDir, "npm.log");
   const npxLog = path.join(tempDir, "npx.log");
+  const npxArgsLog = path.join(tempDir, "npx-args.log");
   const countFile = path.join(tempDir, "metadata-count");
+  const npxCountFile = path.join(tempDir, "npx-count");
   writeFileSync(npmLog, "");
   writeFileSync(npxLog, "");
+  writeFileSync(npxArgsLog, "");
   writeFileSync(countFile, "0\n");
+  writeFileSync(npxCountFile, "0\n");
 
   writeExecutable(
     path.join(tempDir, "npm"),
@@ -81,6 +85,8 @@ exit 2
     `#!/usr/bin/env bash
 set -euo pipefail
 
+printf '%s\\n' "$*" >> "$NPX_MOCK_ARGS_LOG"
+
 cmd=()
 while [[ $# -gt 0 ]]; do
   if [[ "$1" == "--" ]]; then
@@ -95,6 +101,44 @@ while [[ $# -gt 0 ]]; do
 done
 
 printf '%s\\n' "\${cmd[*]:-}" >> "$NPX_MOCK_LOG"
+
+npx_count_file=\${NPX_MOCK_COUNT_FILE:?}
+npx_fail_command=\${NPX_MOCK_FAIL_COMMAND:-list}
+npx_propagation_failures=\${NPX_MOCK_PROPAGATION_FAILURES:-0}
+npx_cli_failures=\${NPX_MOCK_CLI_FAILURES:-0}
+
+read_npx_count() {
+  if [[ -f "$npx_count_file" ]]; then
+    cat "$npx_count_file"
+  else
+    printf '0\\n'
+  fi
+}
+
+maybe_trigger_mock_failure() {
+  local command=$1
+  if [[ "$command" != "$npx_fail_command" ]]; then
+    return 0
+  fi
+
+  local count
+  count=$(read_npx_count)
+  count=$((count + 1))
+  printf '%s\\n' "$count" > "$npx_count_file"
+
+  if (( count <= npx_propagation_failures )); then
+    printf 'npm ERR! code ETARGET\\n' >&2
+    printf 'npm ERR! notarget No matching version found for %s.\\n' "\${SKILLPACKS_NPM_SPEC:-skillpacks@9.9.9}" >&2
+    exit 1
+  fi
+
+  if (( count <= npx_cli_failures )); then
+    printf 'skillpacks CLI exploded after package resolution\\n' >&2
+    exit 7
+  fi
+}
+
+maybe_trigger_mock_failure "\${cmd[0]:-}"
 
 write_skill() {
   local root=$1
@@ -188,10 +232,16 @@ esac
 `
   );
 
-  return { binDir: tempDir, npmLog, npxLog, countFile };
+  return { binDir: tempDir, npmLog, npxLog, npxArgsLog, countFile, npxCountFile };
 }
 
-function runVerifier({ staleAttempts, attempts = "3" }) {
+function runVerifier({
+  staleAttempts = 0,
+  attempts = "3",
+  npxPropagationFailures = 0,
+  npxCliFailures = 0,
+  npxFailCommand = "list"
+}) {
   const mock = makeMockBin();
   const expectedVersion = "9.9.9";
   const staleVersion = "9.9.8";
@@ -213,7 +263,12 @@ function runVerifier({ staleAttempts, attempts = "3" }) {
       NPM_MOCK_EXPECTED_VERSION: expectedVersion,
       NPM_MOCK_STALE_VERSION: staleVersion,
       NPM_MOCK_STALE_ATTEMPTS: String(staleAttempts),
-      NPX_MOCK_LOG: mock.npxLog
+      NPX_MOCK_LOG: mock.npxLog,
+      NPX_MOCK_ARGS_LOG: mock.npxArgsLog,
+      NPX_MOCK_COUNT_FILE: mock.npxCountFile,
+      NPX_MOCK_PROPAGATION_FAILURES: String(npxPropagationFailures),
+      NPX_MOCK_CLI_FAILURES: String(npxCliFailures),
+      NPX_MOCK_FAIL_COMMAND: npxFailCommand
     }
   });
 
@@ -221,7 +276,8 @@ function runVerifier({ staleAttempts, attempts = "3" }) {
     ...result,
     output: `${result.stdout}\n${result.stderr}`,
     npmCalls: readFileSync(mock.npmLog, "utf8"),
-    npxCalls: readFileSync(mock.npxLog, "utf8")
+    npxCalls: readFileSync(mock.npxLog, "utf8"),
+    npxArgCalls: readFileSync(mock.npxArgsLog, "utf8")
   };
 }
 
@@ -234,6 +290,7 @@ test("published-package verification retries stale npm metadata before smoke tes
   assert.match(result.output, /ok metadata: skillpacks@latest=9\.9\.9, license=MIT/);
   assert.match(result.output, /Published package smoke verification passed/);
   assert.match(result.npmCalls, /--prefer-online/);
+  assert.match(result.npxArgCalls, /--prefer-online/);
   assert.equal(result.npxCalls.split("\n").filter(Boolean)[0], "list");
 });
 
@@ -247,4 +304,35 @@ test("published-package verification fails after bounded stale metadata retries"
   assert.match(result.output, /skillpacks versions does not include 9\.9\.9/);
   assert.match(result.output, /after 2 attempt\(s\)/);
   assert.equal(result.npxCalls, "");
+});
+
+test("published-package verification retries npx propagation failures during smoke tests", () => {
+  const result = runVerifier({
+    attempts: "3",
+    npxPropagationFailures: 1
+  });
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /published package smoke command hit npm propagation error for skillpacks@9\.9\.9 \(attempt 1\/3\)/);
+  assert.match(result.output, /ETARGET/);
+  assert.match(result.output, /Published package smoke verification passed/);
+  assert.match(result.npxArgCalls, /--prefer-online/);
+
+  const npxCalls = result.npxCalls.split("\n").filter(Boolean);
+  assert.equal(npxCalls[0], "list");
+  assert.equal(npxCalls[1], "list");
+});
+
+test("published-package verification does not retry non-propagation CLI failures", () => {
+  const result = runVerifier({
+    attempts: "3",
+    npxCliFailures: 1
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /skillpacks CLI exploded after package resolution/);
+  assert.doesNotMatch(result.output, /retrying in/);
+
+  const npxCalls = result.npxCalls.split("\n").filter(Boolean);
+  assert.deepEqual(npxCalls, ["list"]);
 });

@@ -2,6 +2,52 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix Publish Final Verification ETARGET
+
+### Goal
+
+Fix the end-of-`./publish.sh patch` recovery path where both `0.1.14` npm packages are published but final smoke verification fails with npm `ETARGET` while `npx --package @glexcorp/gskp@0.1.14` resolves fresh registry metadata.
+
+### Plan
+
+- [x] Capture the visible `exec` invocation prompt and promote this recovery fix into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Add bounded retry handling around published-package smoke commands in `packages/skillpacks/scripts/verify-published-package.sh`.
+- [x] Retry only npm propagation-style `npx --package "$NPM_SPEC"` failures such as `ETARGET`, `notarget`, or `No matching version found`; fail immediately for real CLI/test errors after package resolution.
+- [x] Add `--prefer-online` to the `npx` package execution path while retaining the isolated npm cache.
+- [x] Update `publish.sh --current` so both-package-already-published state skips publishing and reruns final published-package verification plus post-publish source-state instructions.
+- [x] Preserve existing partial-publish behavior when `skillpacks@$VERSION` exists and `@glexcorp/gskp@$VERSION` is missing.
+- [x] Add focused verifier and publish recovery regression tests.
+- [x] Run focused tests, workspace node tests, task-doc audit, and diff hygiene checks.
+- [x] Document results, create a ship manifest, commit, and push the intended changes on `master`.
+
+### Acceptance Criteria
+
+- Published package smoke commands retry bounded npm registry/install propagation failures without weakening actual CLI behavior checks.
+- Non-propagation smoke failures are not retried into false success.
+- `npx` smoke commands use `--prefer-online` with the existing isolated cache.
+- `./publish.sh --current` handles both packages already published by skipping publish commands and running final published-package verification.
+- `./publish.sh --current` still publishes only `@glexcorp/gskp` when `skillpacks@$VERSION` exists and the alias package is missing.
+- Verification passes for the requested focused tests, workspace node tests, task-doc audit, and diff hygiene checks.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/verify-published-package.test.mjs packages/skillpacks/test/publish-recovery.test.mjs`
+- `npm --workspace packages/skillpacks run test:node`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+
+### Results
+
+- Added bounded retry handling for npm propagation failures from published-package `npx --package "$NPM_SPEC"` smoke commands.
+- Added `--prefer-online` to the `npx` package execution path while preserving the isolated npm cache.
+- Preserved immediate failure for non-propagation CLI errors after package resolution.
+- Updated `./publish.sh --current` so both-package-already-published recovery skips auth/publish and reruns final verification.
+- Preserved the partial-publish alias recovery path.
+- Confirmed both `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14` resolve on npm.
+- Ran real `./publish.sh --current`; it skipped auth/publish because both packages already exist and passed final published-package verification for both package names.
+- Verification passed; see `tasks/ship-manifest-2026-06-28-publish-final-verification-etarget.md`.
+
 ## Historical Implementation - Publish Retry After Web Auth Failure
 
 ### Goal

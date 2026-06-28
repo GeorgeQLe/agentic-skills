@@ -12,6 +12,7 @@ TARGET=""
 TMP_DIRS=()
 RESTORE_DIR=""
 PUBLISH_STARTED=0
+RECOVERY_BOTH_PUBLISHED=0
 
 usage() {
   cat <<'USAGE'
@@ -284,7 +285,7 @@ if [[ "$USE_CURRENT" == "1" ]]; then
   fi
 
   if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "1" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
-    fail "Recovery already complete: skillpacks@$VERSION and @glexcorp/gskp@$VERSION are both published."
+    RECOVERY_BOTH_PUBLISHED=1
   fi
   if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "0" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
     fail "Inconsistent registry state: @glexcorp/gskp@$VERSION is published but skillpacks@$VERSION is missing."
@@ -293,7 +294,11 @@ if [[ "$USE_CURRENT" == "1" ]]; then
     fail "--current is only for partial-publish recovery. Neither skillpacks@$VERSION nor @glexcorp/gskp@$VERSION is published; use a version target instead."
   fi
 
-  log "Recovery state confirmed: skillpacks@$VERSION exists and @glexcorp/gskp@$VERSION is missing"
+  if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
+    log "Recovery state confirmed: skillpacks@$VERSION and @glexcorp/gskp@$VERSION are both published; rerunning final verification"
+  else
+    log "Recovery state confirmed: skillpacks@$VERSION exists and @glexcorp/gskp@$VERSION is missing"
+  fi
 else
   log "Bumping packages/skillpacks to $TARGET"
   run_version_bump
@@ -377,7 +382,9 @@ if (failures.length) {
 NODE
 
 log "Running npm auth preflight"
-if [[ "$USE_CURRENT" == "1" ]]; then
+if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
+  log "Recovery verification: skipping npm auth preflight because both packages are already published."
+elif [[ "$USE_CURRENT" == "1" ]]; then
   (cd "$SKILLPACKS_STAGE" && SKILLPACKS_NPM_ALLOW_PUBLISHED=true node scripts/prepublish-auth-check.mjs)
   (cd "$GSKP_STAGE" && node scripts/prepublish-auth-check.mjs)
 elif [[ "$DRY_RUN" == "1" ]]; then
@@ -390,31 +397,46 @@ fi
 
 log "Publishing staged packages"
 if [[ "$DRY_RUN" == "1" ]]; then
-  if [[ "$USE_CURRENT" == "1" ]]; then
+  if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
+    log "Recovery dry run: skipping skillpacks@$VERSION and @glexcorp/gskp@$VERSION because both are already published."
+  elif [[ "$USE_CURRENT" == "1" ]]; then
     log "Recovery dry run: skipping skillpacks@$VERSION because it is already published."
+    run npm publish "$GSKP_STAGE" --access public --dry-run
   else
     run npm publish "$SKILLPACKS_STAGE" --dry-run
+    run npm publish "$GSKP_STAGE" --access public --dry-run
   fi
-  run npm publish "$GSKP_STAGE" --access public --dry-run
   log "Dry run complete; skipped published-package verification."
   exit 0
 fi
 
-cat <<EOF
+if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
+  cat <<EOF
+Recovery prerequisite reminder:
+  - Both packages already exist at version: $VERSION
+  - Rerunning final published-package verification without publishing.
+EOF
+else
+  cat <<EOF
 Release prerequisite reminder:
   - Confirm npm login: npm whoami --registry https://registry.npmjs.org/
   - Expected publisher: ${SKILLPACKS_NPM_PUBLISHER:-glexcorp}
   - Publishing both packages at version: $VERSION
   - If skillpacks publishes but @glexcorp/gskp fails, fix npm auth/access and rerun: ./publish.sh --current
 EOF
+fi
 
-if [[ "$USE_CURRENT" == "1" ]]; then
+if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
+  log "Recovery publish: skipping skillpacks@$VERSION and @glexcorp/gskp@$VERSION because both are already published."
+elif [[ "$USE_CURRENT" == "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
+  PUBLISH_STARTED=1
+  run npm publish "$GSKP_STAGE" --access public
 else
   run npm publish "$SKILLPACKS_STAGE"
+  PUBLISH_STARTED=1
+  run npm publish "$GSKP_STAGE" --access public
 fi
-PUBLISH_STARTED=1
-run npm publish "$GSKP_STAGE" --access public
 
 log "Verifying published packages"
 run env SKILLPACKS_PACKAGE_NAME=skillpacks SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_NPM_SPEC="skillpacks@$VERSION" npm run skillpacks:verify-published

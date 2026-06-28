@@ -118,6 +118,10 @@ if [[ "$1" == "run" && "$2" == "skillpacks:verify" ]]; then
   exit 0
 fi
 
+if [[ "$1" == "run" && "$2" == "skillpacks:verify-published" ]]; then
+  exit 0
+fi
+
 if [[ "$1" == "publish" ]]; then
   is_dry_run=0
   for arg in "$@"; do
@@ -155,9 +159,10 @@ exit 2
   return { binDir: tempDir, logPath, registryPath };
 }
 
-function runPublishCurrent(extraEnv = {}) {
+function runPublishCurrent(extraEnv = {}, { dryRun = true } = {}) {
   const mock = makeMockBin();
-  const result = spawnSync("bash", [publishScript, "--dry-run", "--current"], {
+  const args = dryRun ? [publishScript, "--dry-run", "--current"] : [publishScript, "--current"];
+  const result = spawnSync("bash", args, {
     cwd: repoRoot,
     encoding: "utf8",
     env: {
@@ -254,15 +259,28 @@ test("--current recovery publishes only the scoped alias when skillpacks exists 
   assert.match(publishCalls[0], /--access public --dry-run/);
 });
 
-test("--current recovery fails clearly when both packages are already published", () => {
+test("--current recovery verifies when both packages are already published", () => {
   const result = runPublishCurrent({
     NPM_MOCK_SKILLPACKS_EXISTS: "1",
     NPM_MOCK_GSKP_EXISTS: "1"
+  }, {
+    dryRun: false
   });
 
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /Recovery already complete/);
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /both published; rerunning final verification/);
+  assert.match(result.output, /skipping npm auth preflight because both packages are already published/);
+  assert.match(result.output, /Verifying published packages/);
+  assert.match(result.output, /Post-publish source-state requirement/);
   assert.doesNotMatch(result.calls, /^publish /m);
+  assert.equal(
+    result.calls
+      .split("\n")
+      .filter((line) => line === "run skillpacks:verify-published")
+      .length,
+    2,
+    result.calls
+  );
 });
 
 test("--current recovery rejects alias-only registry state", () => {

@@ -8,11 +8,16 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+### Fixed
+
+- Published-package smoke verification now retries npm registry/install propagation failures from `npx --package <package>@<version>` such as `ETARGET` / `notarget` / "No matching version found", while still failing immediately for real CLI behavior failures after package resolution.
+- `./publish.sh --current` now recovers the already-published state where both `skillpacks@$VERSION` and `@glexcorp/gskp@$VERSION` exist by skipping publish commands and rerunning final published-package verification plus post-publish source-state instructions.
+
 ## [0.1.14] - 2026-06-28
 
 Prepared for publish for both `skillpacks` and `@glexcorp/gskp`.
 
-Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` intentionally remain at the last published version, `0.1.13`, so the real `./publish.sh patch` command can bump and publish `0.1.14` from a clean tree.
+Release-state note: `0.1.14` was published for both package names on 2026-06-28. Source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` are committed at `0.1.14`; release-process fixes made after npm publication are tracked in `[Unreleased]`.
 
 ### Added
 
@@ -41,7 +46,8 @@ Release-state note: source `packages/skillpacks/package.json` and `packages/skil
 
 ### Verification
 
-- Registry readiness check confirmed `skillpacks` and `@glexcorp/gskp` both report latest `0.1.13`, and `0.1.14` is not present for either package name.
+- Post-publish registry check confirmed `skillpacks@0.1.14` and `@glexcorp/gskp@0.1.14` both resolve on npm.
+- Pre-publish registry readiness check confirmed `skillpacks` and `@glexcorp/gskp` both reported latest `0.1.13`, and `0.1.14` was not present for either package name.
 - Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (150/150) after the verifier cleanup fix.
 - Publish recovery regression passed: `node --test packages/skillpacks/test/publish-recovery.test.mjs` (4/4), including real-run auth preflight failure rollback before the first publish command.
 - Package verification passed: `npm run skillpacks:verify` (401 active skills, 42 packs, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
