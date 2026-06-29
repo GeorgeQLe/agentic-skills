@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real-Repo Testbed — Phase 0 Decisions</title>
+  <style>
+    :root { --bg: #0d1117; --surface: #161b22; --surface-2: #1c2333; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; max-width: 100%; overflow-wrap: break-word; }
+    h1, h2, h3, h4 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 12px; }
+    h2 { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { margin-top: 24px; color: var(--accent); }
+    h4 { margin-top: 18px; color: var(--text); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code { background: #111722; border: 1px solid var(--border); border-radius: 6px; padding: 1px 5px; }
+    pre { background: #0b111b; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; }
+    pre code { background: none; border: 0; padding: 0; }
+    .lede { color: var(--text-muted); max-width: 940px; font-size: 1.05rem; }
+    .status { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; margin: 22px 0; }
+    .stat, .toc, .callout, .question, .feedback, .compile, .note { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .stat strong { display: block; color: #fff; font-size: 1.3rem; }
+    .stat span { color: var(--text-muted); }
+    .callout { border-left: 3px solid var(--accent); }
+    .toc ul { margin: 8px 0 0; padding-left: 20px; columns: 2; }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+    .feedback { margin: 14px 0 22px; }
+    .feedback .controls, .answers, .buttons { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button, .radio-card { min-height: 44px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: #111722; color: var(--text); cursor: pointer; }
+    button:hover, .radio-card:hover { border-color: var(--accent); }
+    button:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+    .feedback button[data-value="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea { width: 100%; min-height: 96px; margin-top: 10px; resize: vertical; border-radius: 8px; border: 1px solid var(--border); background: #0b111b; color: var(--text); padding: 12px; font: inherit; }
+    .feedback .local-yaml, .feedback .notes { display: none; }
+    .feedback[data-active="true"] .local-yaml { display: block; margin-top: 10px; }
+    .feedback[data-active="true"] .notes { display: block; }
+    .question { margin: 18px 0; background: var(--surface-2); border-color: #33415f; }
+    .question h3 { margin: 0 0 8px; color: var(--purple); }
+    .radio-card { display: inline-flex; gap: 8px; align-items: center; }
+    .radio-card input { transform: translateY(1px); }
+    .notes-for-answer { display: none; }
+    .question:has(input:checked) .notes-for-answer { display: block; }
+    .muted { color: var(--text-muted); }
+    .table-wrap { overflow-x: auto; margin: 14px 0 24px; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: left; }
+    th { background: var(--surface); color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+    blockquote { margin: 12px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: #101723; color: var(--text); }
+    .compile { margin-top: 28px; }
+    .copy-status { color: var(--text-muted); min-height: 24px; }
+    .flow { background: #0b111b; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin: 14px 0; }
+    @media (max-width: 860px) { main { width: min(100% - 24px, 1180px); padding-top: 24px; } .toc ul { columns: 1; } }
+    @media (max-width: 560px) { .status { grid-template-columns: 1fr; } button, .radio-card { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Real-Repo Testbed — Phase 0 Decisions</h1>
+  <p class="lede">Alignment status: <strong>review</strong>. Four human decision gates that must be answered before any Phase 0 build of the SWE-bench-style <em>real-repo testbed</em> mode for the skill benchmark harness. This page changes no harness code; it exists to collect formal answers and compile them to YAML you can paste back into the planning conversation. Source: <a href="../docs/real-repo-testbed-design.md">docs/real-repo-testbed-design.md</a> §6.</p>
+
+  <div class="status" aria-label="Key facts">
+    <div class="stat"><strong>self-contained</strong><span>today's harness seeds synthetic fixtures into a temp dir and grades with regex/substring — no clone, no real repo</span></div>
+    <div class="stat"><strong>committed</strong><span>design doc <code>docs/real-repo-testbed-design.md</code> (2026-06-26) is research-backed and scoped, no code yet</span></div>
+    <div class="stat"><strong>4 decisions</strong><span>open questions for the human gate Phase 0 cannot start without</span></div>
+    <div class="stat"><strong>deferred</strong><span>the <code>eval-ideas</code> benchmark run stays deferred until these answers land</span></div>
+  </div>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#context">Context Recap</a></li>
+      <li><a href="#q1">Q1 — Snapshot Sourcing &amp; Sanitization</a></li>
+      <li><a href="#q2">Q2 — LLM-Judge Budget</a></li>
+      <li><a href="#q3">Q3 — Scope Of v1</a></li>
+      <li><a href="#q4">Q4 — Task-Count Ambition</a></li>
+      <li><a href="#compile">Compile Responses</a></li>
+    </ul>
+  </section>
+
+  <section id="context" data-section="Context Recap">
+    <h2>Context Recap</h2>
+    <p>SWE-bench's <em>environment</em> transfers to this project but its <em>grading</em> does not. SWE-bench grades a code patch by running hidden unit tests (FAIL_TO_PASS + PASS_TO_PASS); our skills emit markdown artifacts, run manifests, and routing decisions — there is no test suite to flip green. So the borrow is narrow: drop the agent into a <strong>pinned, realistic repo snapshot</strong> (a new <code>repo-fixture</code> setup tier) for real context/discovery complexity, then grade with <strong>layered artifact grading</strong> instead of <code>pytest</code>:</p>
+    <pre class="flow"><code>(a) deterministic state assertions on produced files   [backbone — gates the run]
+(b) reference-set comparison (gold must-hit set, set-wise, paraphrase-tolerant)
+(c) rubric-checklist + jury LLM judge  [open-ended residue only]
+(d) pass^k reliability wrapper                           [wraps all of the above]</code></pre>
+    <p>The through-line across all four decisions below: <strong>defer the expensive/risky half, prove the cheap deterministic half first.</strong> Each gate marks a recommended option; the four standing options (<code>Other / None of the above</code> and <code>Need clarification</code>) carry a notes field so you can override or push back.</p>
+  </section>
+
+  <section id="q1" data-section="Q1 Snapshot Sourcing And Sanitization">
+    <h2>Q1 — Snapshot Sourcing &amp; Sanitization</h2>
+    <div class="feedback" data-section="Q1 Snapshot Sourcing And Sanitization">
+      <div class="controls" aria-label="Section feedback for Q1">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>The tension.</strong> Self-sourced snapshots (this repo, bismarck-v5) are the <em>true</em> distribution these skills run against — they actually exercise the planning surface (<code>tasks/</code>, <code>research/</code>, <code>alignment/</code>, the manifest conventions) that almost no public repo carries. But they need a sanitization pass for secrets and a provenance record (origin, commit SHA, capture date, license, canary string), and they would be vendored under <code>tests/benchmarks/repos/&lt;slug&gt;@&lt;shortsha&gt;/</code>. Synthesized/fake repos avoid the consent and secret-leak surface entirely but trade away ecological validity.</p>
+    <p><strong>My lean (A).</strong> Self-source from <em>this</em> repo first — it is the highest-realism snapshot, already in front of us, and a sanitization pass on a repo you own is low-risk. Add bismarck-v5 only if Phase 0 surfaces a need for a second domain. This keeps the consent/sanitization surface to one repo for the pilot.</p>
+    <div class="question gate-question" data-section="Q1 Snapshot Sourcing And Sanitization" data-gate-type="artifact source" data-required="true">
+      <h3>Q1 — Snapshot sourcing &amp; sanitization</h3>
+      <p>Where should Phase 0's repo snapshot come from, and is vendoring real-project snapshots under <code>tests/benchmarks/repos/</code> acceptable?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q1" value="Yes — self-source from this repo first; add bismarck-v5 only if Phase 0 needs a second domain">Self-source this repo first; bismarck-v5 only if needed (recommended)</label>
+        <label class="radio-card"><input type="radio" name="q1" value="Yes but synthesized/fake repos only — no real-project snapshots">Synthesized/fake repos only</label>
+        <label class="radio-card"><input type="radio" name="q1" value="Yes — vendor both this repo and bismarck-v5 snapshots now">Vendor both this repo and bismarck-v5 now</label>
+        <label class="radio-card"><input type="radio" name="q1" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q1" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="q2" data-section="Q2 LLM-Judge Budget">
+    <h2>Q2 — LLM-Judge Budget</h2>
+    <div class="feedback" data-section="Q2 LLM-Judge Budget">
+      <div class="controls" aria-label="Section feedback for Q2">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>The tension.</strong> Layer (c) — the rubric-checklist + disjoint-family jury LLM judge — is the only grader that can score the open-ended residue (is the plan coherent? does the research cover the asked dimensions?). But it adds per-run model cost and, done honestly, requires a human-labeled calibration set with reported judge κ before its numbers can be trusted. Layers (a) state assertions + (b) reference-set + (d) pass^k are deterministic, cheap, and un-gameable by eloquence.</p>
+    <p><strong>My lean (A).</strong> Defer it. Ship the deterministic backbone first; it carries the most weight and gates the run anyway. Add the rubric/jury judge in Phase 1 alongside the calibration harness that reports κ, so the judge arrives validated rather than trusted on faith. "Never" is too strong — the open-ended residue is real and deterministic graders cannot reach it forever.</p>
+    <div class="question gate-question" data-section="Q2 LLM-Judge Budget" data-gate-type="scope/non-goals" data-required="true">
+      <h3>Q2 — LLM-judge budget</h3>
+      <p>Should Phase 0 build the rubric + jury LLM judge now, or stay deterministic until later?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q2" value="Defer — ship deterministic (a) state-assertions + (b) reference-set + pass^k first; add rubric/jury judge in Phase 1 with a calibration set">Defer; deterministic first, judge in Phase 1 (recommended)</label>
+        <label class="radio-card"><input type="radio" name="q2" value="Build the rubric + jury judge now">Build the rubric + jury judge now</label>
+        <label class="radio-card"><input type="radio" name="q2" value="Never add an LLM judge — deterministic-only permanently">Deterministic-only, permanently</label>
+        <label class="radio-card"><input type="radio" name="q2" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q2" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="q3" data-section="Q3 Scope Of v1">
+    <h2>Q3 — Scope Of v1</h2>
+    <div class="feedback" data-section="Q3 Scope Of v1">
+      <div class="controls" aria-label="Section feedback for Q3">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>The tension.</strong> Designing the snapshot loader and grading layers for the whole product-design pack up front maximizes reuse but front-loads a lot of speculative generalization onto an unproven mode. Hardcoding everything for <code>eval-ideas</code> ships fastest but bakes in a rewrite the moment a second skill arrives.</p>
+    <p><strong>My lean (A).</strong> Pilot <code>eval-ideas</code> only — that is where the originally requested run belongs — but build the snapshot loader and graders as <em>reusable, generalization-aware</em> modules from day one. You get a real first data point without committing to pack-wide authoring, and the second skill is a config, not a rewrite. The middle path beats both extremes.</p>
+    <div class="question gate-question" data-section="Q3 Scope Of v1" data-gate-type="scope/non-goals" data-required="true">
+      <h3>Q3 — Scope of v1</h3>
+      <p>How wide should the first implementation be?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q3" value="Pilot eval-ideas only, but build the snapshot loader + graders as reusable, generalization-aware modules">Pilot eval-ideas, build reusable modules (recommended)</label>
+        <label class="radio-card"><input type="radio" name="q3" value="Pilot eval-ideas only, hardcode for it, generalize later">Pilot eval-ideas, hardcode now</label>
+        <label class="radio-card"><input type="radio" name="q3" value="Design for the whole product-design pack now">Design for the whole pack now</label>
+        <label class="radio-card"><input type="radio" name="q3" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q3" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="q4" data-section="Q4 Task-Count Ambition">
+    <h2>Q4 — Task-Count Ambition</h2>
+    <div class="feedback" data-section="Q4 Task-Count Ambition">
+      <div class="controls" aria-label="Section feedback for Q4">
+        <button type="button" data-value="emphasize">Emphasize</button>
+        <button type="button" data-value="down">Thumbs down</button>
+        <button type="button" data-value="needs-clarification">Clarification needed</button>
+      </div>
+      <textarea class="notes" placeholder="Optional notes for this section"></textarea>
+      <div class="local-yaml">
+        <div class="buttons"><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span></div>
+        <textarea class="yaml-output" readonly></textarea>
+      </div>
+    </div>
+    <p><strong>The tension.</strong> Statistical n is <em>tasks × runs</em>; ≥30–50 screened task instances per skill is the defensible target, below which Wilson CIs are ±30pt no matter how many reruns you do. But authoring 30–50 screened tasks is real, slow work — and gating Phase 0 on it risks never shipping the capability demo that proves the mode works at all.</p>
+    <p><strong>My lean (A).</strong> Ship Phase 0 small-n, <em>explicitly labeled</em> "capability demo, not statistically definitive," so the mode earns its keep before you invest in task count. The honest label is what makes a small-n run acceptable; the ≥30–50 investment then becomes a deliberate Phase 2 decision rather than a blocker.</p>
+    <div class="question gate-question" data-section="Q4 Task-Count Ambition" data-gate-type="assumptions/confidence" data-required="true">
+      <h3>Q4 — Task-count ambition</h3>
+      <p>How many tasks should Phase 0 ship with before publishing any number?</p>
+      <div class="answers">
+        <label class="radio-card"><input type="radio" name="q4" value="Ship Phase 0 small-n, explicitly labeled capability demo, not statistically definitive">Ship small-n, labeled capability demo (recommended)</label>
+        <label class="radio-card"><input type="radio" name="q4" value="Invest in 30-50 screened tasks before publishing any number">Invest in 30–50 screened tasks first</label>
+        <label class="radio-card"><input type="radio" name="q4" value="Middle ground — about 10 tasks first">Middle ground — ~10 tasks first</label>
+        <label class="radio-card"><input type="radio" name="q4" value="Other / None of the above">Other / None of the above</label>
+        <label class="radio-card"><input type="radio" name="q4" value="Need clarification">Need clarification</label>
+      </div>
+      <textarea class="notes-for-answer" placeholder="Optional notes or clarification request"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile" data-section="Compile Responses">
+    <h2>Compile Responses</h2>
+    <p class="muted">Answer the four gates above (and add per-section feedback if a framing needs to change), then compile. The YAML captures each gate's section, gate_type, status, answer, and optional notes. Paste the result back into the planning conversation to finalize Phase 0. Compile enables as soon as one gate is answered or one section feedback is selected.</p>
+    <div class="buttons">
+      <button type="button" id="compile-answers">Compile Responses</button>
+      <button type="button" id="copy-compiled">Copy YAML</button>
+      <span id="answer-count" class="copy-status"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+  const alignmentPage = "alignment/real-repo-testbed-phase0-decisions.html";
+  const feedbackBlocks = Array.from(document.querySelectorAll(".feedback"));
+  const gateQuestions = Array.from(document.querySelectorAll(".gate-question"));
+  const compiled = document.getElementById("compiled-yaml");
+  const answerCount = document.getElementById("answer-count");
+  const compileAnswers = document.getElementById("compile-answers");
+  function yamlString(value) { return JSON.stringify(String(value || "")); }
+  function actionFor(feedback) { return feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval"; }
+  function selectedFeedback(block) {
+    const active = block.querySelector("button.active");
+    if (!active) return null;
+    const feedback = active.dataset.value;
+    return { section: block.dataset.section, feedback, notes: block.querySelector(".notes").value.trim(), requested_agent_action: actionFor(feedback) };
+  }
+  // De-dup by section (top/bottom paired controls share a data-section).
+  function dedupFeedback() {
+    const seen = new Map();
+    feedbackBlocks.forEach(b => { const e = selectedFeedback(b); if (e) { const prev = seen.get(e.section); if (!prev || (!prev.notes && e.notes)) seen.set(e.section, e); } });
+    return Array.from(seen.values());
+  }
+  function unansweredRequired() { return gateQuestions.filter(q => !q.querySelector("input:checked")).map(q => q.dataset.section); }
+  function feedbackYaml(entries) {
+    const unanswered = unansweredRequired();
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "feedback_status: revision-request", "approval_status: not-approved", "unanswered_required_questions:"];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q))); else lines.push("  []");
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    return lines.join("\n");
+  }
+  function copyText(text, statusEl) {
+    const done = () => { if (statusEl) statusEl.textContent = "Copied"; };
+    const fallback = () => { compiled.focus(); compiled.select(); if (statusEl) statusEl.textContent = "Select and copy the YAML"; };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done).catch(fallback); else fallback();
+  }
+  function syncPair(section, feedback, notes) {
+    feedbackBlocks.filter(b => b.dataset.section === section).forEach(b => {
+      b.querySelectorAll("button[data-value]").forEach(x => x.classList.toggle("active", !!feedback && x.dataset.value === feedback));
+      b.dataset.active = feedback ? "true" : "false";
+      const ta = b.querySelector(".notes"); if (notes !== null && ta.value !== notes) ta.value = notes;
+    });
+  }
+  feedbackBlocks.forEach(block => {
+    block.querySelectorAll("button[data-value]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wasActive = btn.classList.contains("active");
+        const fb = wasActive ? null : btn.dataset.value;
+        syncPair(block.dataset.section, fb, null);
+        updateAnswerState();
+      });
+    });
+    block.querySelector(".notes").addEventListener("input", e => syncPair(block.dataset.section, block.querySelector("button.active") ? block.querySelector("button.active").dataset.value : null, e.target.value));
+    block.querySelector(".compile-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = feedbackYaml(entry ? [entry] : []);
+      block.querySelectorAll(".yaml-output").forEach(o => o.value = yaml);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+    block.querySelector(".copy-local").addEventListener("click", () => {
+      const entry = selectedFeedback(block);
+      const yaml = block.querySelector(".yaml-output").value || feedbackYaml(entry ? [entry] : []);
+      block.querySelector(".yaml-output").value = yaml;
+      copyText(yaml, block.querySelector(".copy-status"));
+    });
+  });
+  function updateAnswerState() {
+    const unanswered = unansweredRequired();
+    const anyFeedback = dedupFeedback().length > 0;
+    const anyAnswer = gateQuestions.some(q => q.querySelector("input:checked"));
+    compileAnswers.disabled = !(anyAnswer || anyFeedback);
+    answerCount.textContent = unanswered.length ? `${unanswered.length} required gate question(s) unanswered` : "All required gate questions answered";
+  }
+  gateQuestions.forEach(q => q.addEventListener("change", updateAnswerState));
+  updateAnswerState();
+  compileAnswers.addEventListener("click", () => {
+    const anyAnswer = gateQuestions.some(q => q.querySelector("input:checked"));
+    const entries = dedupFeedback();
+    if (!anyAnswer && !entries.length) { answerCount.textContent = "Answer a gate question or select section feedback first"; return; }
+    const unanswered = unansweredRequired();
+    const requiredComplete = unanswered.length === 0;
+    const negative = entries.some(e => e.feedback === "down" || e.feedback === "needs-clarification") || gateQuestions.some(q => { const s = q.querySelector("input:checked"); return s && (s.value === "Need clarification"); });
+    const approval = (requiredComplete && !negative) ? "ready-for-agent-review" : "not-approved";
+    const lines = ["alignment_page: " + yamlString(alignmentPage), "response_status: " + yamlString(requiredComplete ? "complete" : "partial"), "approval_status: " + yamlString(approval), "required_gate_status: " + yamlString(requiredComplete ? "complete" : "incomplete"), "unanswered_required_questions:"];
+    if (unanswered.length) unanswered.forEach(q => lines.push("  - " + yamlString(q))); else lines.push("  []");
+    lines.push("gate_answers:");
+    const answered = gateQuestions.filter(q => q.querySelector("input:checked"));
+    if (!answered.length) lines.push("  []");
+    answered.forEach(q => {
+      const selected = q.querySelector("input:checked");
+      const notes = q.querySelector(".notes-for-answer").value.trim();
+      const status = selected.value === "Need clarification" ? "needs-clarification" : selected.value.startsWith("Other / None") ? "other" : "answered";
+      lines.push("  - section: " + yamlString(q.dataset.section));
+      lines.push("    gate_type: " + yamlString(q.dataset.gateType));
+      lines.push("    status: " + yamlString(status));
+      lines.push("    answer: " + yamlString(selected.value));
+      if (notes) lines.push("    notes: " + yamlString(notes));
+    });
+    lines.push("section_feedback:");
+    if (!entries.length) lines.push("  []");
+    entries.forEach(entry => {
+      lines.push("  - section: " + yamlString(entry.section));
+      lines.push("    feedback: " + yamlString(entry.feedback));
+      lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
+      if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
+    });
+    const yaml = lines.join("\n");
+    compiled.value = yaml;
+    copyText(yaml, answerCount);
+  });
+  document.getElementById("copy-compiled").addEventListener("click", () => copyText(compiled.value, answerCount));
+</script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>
