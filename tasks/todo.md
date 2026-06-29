@@ -8,7 +8,7 @@ _Updated 2026-06-29 by `/roadmap`. The active implementation task below (Three-R
 
 Advisory next routes (not promoted as active work):
 
-- **Recommended:** `/reconcile-dev-docs fix tasks` (docs-health pack) — reconcile the 4 unchecked `tasks/manual-todo.md` items (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env, live `/follow` verification, all tagged Step 38.x). Evidence: these belong to the Skills Showcase, now the separate `agentic-skills-showcase` repo — they are orphaned here and should be moved there or explicitly deferred.
+- Done (2026-06-29): the 4 orphaned Phase 38 newsletter manual tasks were reconciled via `/reconcile-dev-docs fix tasks` — migrated to the `agentic-skills-showcase` repo (see `tasks/manual-todo.md` and `tasks/reconciliation-report.md`). No manual blockers remain in this repo.
 - Advisory: `tasks/recurring-todo.md` has 2 active cadence items ("Devtool docs audit refresh", "Spec drift check"); promote to `tasks/todo.md` only if either becomes concrete execution work.
 
 ## Current Implementation - Materialize Agentic Skills Three-Repo Split

@@ -15276,3 +15276,10 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Rewrote the `tasks/todo.md` and `tasks/roadmap.md` *Current reality* blocks, checked off all plan steps with reconciliation notes, reconciled acceptance criteria (rewrote the "local repos" criterion to the chosen outcome), and added `Status: COMPLETE (reconciled 2026-06-29)` markers.
 - No source changes — task-doc bookkeeping only.
 - Verification: `node scripts/audit-task-docs.mjs` exit 0 (0 failures, 0 warnings).
+
+## 2026-06-29 — Reconcile orphaned Showcase manual tasks
+
+- `/reconcile-dev-docs fix tasks`: resolved the orphaned manual-task warning surfaced by `/roadmap` after the three-repo split closeout.
+- Four deferred Phase 38 newsletter production-setup tasks (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env, live `/follow` + `/admin/newsletter` verification) target the Skills Showcase app, which split out to the separate `agentic-skills-showcase` repo (`apps/skills-showcase/` absent here; no Showcase app source tracked).
+- Migrated those tasks to `agentic-skills-showcase` ownership: rewrote the `tasks/manual-todo.md` section as a migration pointer (no active manual blockers remain here), updated the `tasks/todo.md` Priority Task Queue, and recorded details in `tasks/reconciliation-report.md`.
+- Verification: `node scripts/audit-task-docs.mjs` exit 0.

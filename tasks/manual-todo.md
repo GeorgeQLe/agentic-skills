@@ -2,16 +2,20 @@
 
 > No active phase manual tasks. All roadmap phases are complete.
 
-## Deferred from Phase 38 — First-Party Newsletter Capture And Admin
+## Migrated to `agentic-skills-showcase` repo — Phase 38 Newsletter Capture And Admin
 
-> Phase 38 code was shipped without production database or admin secret provisioning.
-> These tasks are deferred until the newsletter feature needs to go live in production.
-> Deferred on 2026-05-15 during dev-docs reconciliation.
-
-- [ ] Create a Neon project and database for the Skills Showcase, and provide the `DATABASE_URL` connection string for `.env.local`. _(was: blocks Step 38.2 runtime testing)_
-- [ ] Choose and set the `NEWSLETTER_ADMIN_SECRET` value for local dev in `.env.local`. _(was: blocks Step 38.6 admin auth testing)_
-- [ ] Set `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` environment variables in the Vercel project. _(was: after Step 38.7)_
-- [ ] Verify `/follow` submission and `/admin/newsletter` access on the live Vercel URL. _(was: after Step 38.9)_
+> Reconciled 2026-06-29 (`/reconcile-dev-docs fix tasks`). The Skills Showcase Next.js app
+> split out of this repo into the separate `GeorgeQLe/agentic-skills-showcase` repo during the
+> three-repo split. The four deferred Phase 38 newsletter production-setup tasks below were
+> orphaned here — they target the Showcase app/deployment, not `agentic-skills` — so ownership
+> moves with the code. Track and complete them in `agentic-skills-showcase` (e.g. its own
+> `tasks/manual-todo.md`); they are recorded here only as a migration pointer, not active work.
+>
+> Migrated items (now owned by `agentic-skills-showcase`):
+> - Create a Neon project/database for the Showcase; provide `DATABASE_URL` for `.env.local`.
+> - Choose and set `NEWSLETTER_ADMIN_SECRET` for local dev in `.env.local`.
+> - Set `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` env vars in the Vercel project.
+> - Verify `/follow` submission and `/admin/newsletter` on the live Vercel URL.
 
 ## Completed
 

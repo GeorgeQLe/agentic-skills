@@ -1,5 +1,37 @@
 # Development Docs Reconciliation Report
 
+## 2026-06-29 — Orphaned Showcase manual tasks migrated
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Triggered after closing the three-repo split task, to resolve orphaned manual tasks surfaced by `/roadmap`.
+- Roadmap/todo alignment: ok (active task complete; no undecomposed active phase).
+- Manual tasks: **fixed** — four orphaned Phase 38 Skills Showcase newsletter tasks migrated to the `agentic-skills-showcase` repo; no active manual blockers remain here.
+- `node scripts/audit-task-docs.mjs`: exit 0 after fixes.
+
+### Warning (resolved) — Orphaned manual tasks for split-out Showcase
+
+`tasks/manual-todo.md` carried four unchecked Phase 38 deferred items for the Skills Showcase newsletter feature (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env vars, live `/follow` + `/admin/newsletter` verification). Evidence they are orphaned in this repo:
+
+- `apps/skills-showcase/` is absent from the working tree; `git ls-files` shows no Showcase app source tracked here (only historical alignment/conversation/archive references remain).
+- The Showcase app split out to the separate `GeorgeQLe/agentic-skills-showcase` repo during the three-repo split (closed/reconciled this session; see `tasks/history.md` 2026-06-29 entries).
+
+The four tasks target the Showcase app and its Vercel deployment, not `agentic-skills`, so ownership moves with the code.
+
+### Fixed
+
+- [x] `tasks/manual-todo.md` — converted the "Deferred from Phase 38" section into a "Migrated to `agentic-skills-showcase` repo" pointer; the four tasks are recorded as migrated, removing them as active manual blockers here.
+- [x] `tasks/todo.md` — updated the Priority Task Queue advisory note to mark the reconciliation done.
+- [x] `tasks/history.md` — appended a reconciliation record.
+
+### Deferred / Remaining
+
+- [ ] The four migrated tasks must be tracked and completed in `agentic-skills-showcase` (e.g. its own `tasks/manual-todo.md`). Not actionable from this repo — no local Showcase clone, and this skill modifies only this repo's dev docs.
+
+---
+
 ## 2026-06-23 — Task-doc routing prevention fix
 
 - **Mode:** fix · **Scope:** tasks/workflow contracts
