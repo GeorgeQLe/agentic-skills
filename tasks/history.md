@@ -15241,3 +15241,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Regenerated stale package manifest metadata required by `build:check`.
 - Verification: focused lifecycle suite 57/57, package Node suite 155/155, package `build:check`, task-doc audit, and diff hygiene passed.
 - Manifest: `tasks/ship-manifest-2026-06-28-fix-refresh-reload-notices.md`.
+
+## 2026-06-29 — Refactor BIP to post-approval HTML output
+
+- Moved Build-In-Public alignment behavior from a pre-final Stage 2 checkpoint to a post-confirmation read-only page at `alignment/bip-{skill-name}.html`, generated after approved canonical artifacts are written and the alignment page is confirmed.
+- Updated social post/video routing so BIP mode loads every bundled channel convention and treats `alignment.bip_platforms` only as priority/ranking metadata.
+- Updated `idea-scope-brief` Codex/Claude instructions and `ship-end` BIP behavior; archived old skill versions and bumped active versions with changelog entries.
+- Reworked alignment-page audit and layer/package tests around post-confirmation BIP pages, stale checkpoint-metadata failures, exhaustive bundled-channel coverage, and no publish/social-ledger side effects without later approval.
+- Regenerated generated `ALIGNMENT-PAGE.md` bundles, skillpacks manifest, and public skills-catalog export.
+- Verification: alignment bundle check, active-page audit, package boundary/config tests, full package Node suite, focused layer1 tests, package `build:check`, catalog export validation, local `skillpacks alignment verify`, skill archive/version audits, task-doc audit, and diff hygiene passed. `npx skillpacks alignment verify` failed in this checkout with `sh: gskp: command not found`; local package entrypoint verification passed.
+- Manifest: `tasks/ship-manifest-2026-06-29-bip-post-approval-output.md`.

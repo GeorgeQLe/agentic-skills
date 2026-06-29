@@ -1,5 +1,10 @@
 # idea-scope-brief Changelog
 
+## v0.20 - 2026-06-29
+
+- Refactored enabled Build-In-Public behavior from a pre-final alignment checkpoint into a post-confirmation output: after approved `idea-brief.md` artifacts are written and the alignment page is confirmed, the skill generates and opens `alignment/bip-idea-scope-brief.html`.
+- Kept the one-time BIP Suggestion Gate; a yes-response still runs `set-bip on` and `set-bip-prompt dismiss`, but it now schedules post-confirmation BIP output instead of introducing a separate kickoff approval page.
+
 ## v0.19 - 2026-06-26
 
 - Added the **BIP Suggestion Gate** as a sub-step of step 1 "Resolve context" (after the `.agents/project.json` read). At kickoff, if Build-In-Public is off and the user has not been asked before (`alignment.bip_prompt_dismissed` unset), the skill offers to enable BIP exactly once; on yes it runs `set-bip on` + `set-bip-prompt dismiss` and flows into existing alignment-page BIP behavior, on no it records `set-bip-prompt dismiss` so it never asks again. Advisory — never blocks the skill's primary work. See the BIP Suggestion Gate convention in CLAUDE.md.

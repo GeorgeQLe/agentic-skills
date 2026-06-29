@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.17"
   },
-  "source_fingerprint": "802bbc58f8529f3ff7e725306ba5717e7efa0aaba080341819d491efc421ff08",
+  "source_fingerprint": "da88c4aae1a19c4f9099b28011d696341445a1d3f37711215093f3617605b987",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1047,7 +1047,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.19",
+      "version": "v0.20",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1056,7 +1056,7 @@
       ],
       "path": "base/claude/idea-scope-brief/SKILL.md",
       "installable": true,
-      "content_sha256": "39a4d30366e7eb4ca7933b976d9f69d6e24e77d6280ae5d2fc6da4d9c4a1d10b",
+      "content_sha256": "bba2f4f2177cb785d6707cc9eb31c6315668556010efe523971ce27caf396ca2",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1069,6 +1069,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1418,7 +1419,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.19",
+      "version": "v0.20",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1427,7 +1428,7 @@
       ],
       "path": "base/codex/idea-scope-brief/SKILL.md",
       "installable": true,
-      "content_sha256": "455eac66e76b11209e225b9cc999f03de40cd4c7aaede9454232f28c6ff1f3f6",
+      "content_sha256": "fa4cf90236843e7524fab0a33ed1d81a7829b6ad34c8432a3cb95c702af572ee",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1440,6 +1441,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -6977,7 +6979,7 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v0.10",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6985,7 +6987,7 @@
       ],
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "0cd10a312f149d3d568996e4882e21903c3985a577976573f157377f62045100",
+      "content_sha256": "261215bc787d46c47a048fc43e537ca885adde85b1b027934b07e5db3b3420e8",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6995,7 +6997,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/ship-end",
       "deck_memberships": []
@@ -7056,7 +7059,7 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v0.10",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7064,7 +7067,7 @@
       ],
       "path": "packs/exec-loop/codex/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "e475a4921ce088d090c718c08324c0cf9498d0ad2349356d9b4be459ebc081ab",
+      "content_sha256": "99812daded700eb988a6e6e92410c68a9bc15c4159082649662eb6c2106e1ff4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7074,7 +7077,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$ship-end",
       "deck_memberships": []

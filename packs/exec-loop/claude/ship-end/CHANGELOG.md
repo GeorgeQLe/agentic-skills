@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-06-29
+
+- Changed enabled Build-In-Public wrap-up suggestions to generate exhaustive source-safe candidates for every bundled text/community and video channel, using `alignment.bip_platforms` only as optional priority/ranking metadata. Removed the project-platform setup prompt from the enabled path and clarified that social-ledger writes still require later explicit approval.
+
 ## v0.9 - 2026-06-29
 
 - Changed enabled Build-In-Public wrap-up suggestions to use saved project platforms from `alignment.bip_platforms`, persist a one-time platform setup with `set-bip-platforms` when missing, infer `bip_phase`, and generate exhaustive phase-aware candidate batches per platform instead of only `2-4` suggestions.

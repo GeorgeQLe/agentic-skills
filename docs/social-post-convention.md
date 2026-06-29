@@ -4,13 +4,13 @@ Research date: 2026-06-25.
 Canonical package asset: `assets/social-post-convention.md`.
 Channel docs directory: `docs/social/` in a source checkout, `assets/social/` in a packaged install.
 
-This is the thin router and shared contract for build-in-public and alignment-producing agents that draft source-safe text/community posts. Load this file first, then load only the selected channel docs from `docs/social/` or `assets/social/`.
+This is the thin router and shared contract for build-in-public and alignment-producing agents that draft source-safe text/community posts. Load this file first. In ordinary channel-selected drafting, load only the selected channel docs from `docs/social/` or `assets/social/`. In Build-In-Public mode (`set-bip on`, explicit `--bip`, or `.agents/project.json alignment.build_in_public: true`), load every bundled text/community channel convention listed below so the BIP page can rank exhaustive candidates; use `alignment.bip_platforms` only as optional prioritization metadata, not as a filter.
 
 For cross-run memory of what has already been drafted, approved, posted, and promoted — and for public-safe alignment context links — also load the system-of-record contract `docs/social-ledger-convention.md` (`assets/social-ledger-convention.md` in a packaged install). It defines ledger resolution, the post record schema, account-scoped duplicate detection, the gBrain public archive link, and the public/private boundary.
 
 ## Routing Rule
 
-Do not load every social channel convention by default. After the user selects target channels, load only the matching channel files:
+Do not load every social channel convention by default for ordinary post drafting. After the user selects target channels, load only the matching channel files. When BIP mode is active, load every bundled channel file in this table, then label saved `alignment.bip_platforms` as priority channels while still generating candidates for the rest:
 
 | Target channel | Source checkout doc | Packaged asset |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ Do not load every social channel convention by default. After the user selects t
 | Hacker News submissions/comments | `docs/social/hacker-news-convention.md` | `assets/social/hacker-news-convention.md` |
 | YouTube Community posts | `docs/social/youtube-community-convention.md` | `assets/social/youtube-community-convention.md` |
 
-If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk.
+If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk. BIP mode should stay exhaustive across the bundled channel list and should not use unsupported channels unless the user explicitly asks for them.
 
 ## Rules Vs Norms
 

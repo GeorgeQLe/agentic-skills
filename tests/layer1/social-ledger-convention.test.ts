@@ -81,11 +81,12 @@ describe("social ledger cross-references", () => {
     expect(x).toContain("6eorge.com/brain");
   });
 
-  it("the alignment-page convention teaches BIP ledger, account, and public-URL gates", () => {
+  it("the alignment-page convention keeps BIP ledger writes behind later explicit approval", () => {
     const alignment = read("docs/alignment-page-convention.md");
     expect(alignment).toContain("docs/social-ledger-convention.md");
     expect(alignment).toContain("assets/social-ledger-convention.md");
     expect(alignment).toContain("ledger storage scope");
-    expect(alignment).toContain("public alignment URL status");
+    expect(alignment).toContain("account identity");
+    expect(alignment).toContain("Do not write social-ledger records from this page unless a later workflow receives explicit posting or ledger approval");
   });
 });

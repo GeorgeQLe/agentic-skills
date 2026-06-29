@@ -119,6 +119,44 @@ function bipPageBody(inner: string): string {
   ].join("\n");
 }
 
+function bundledBipChannelPaths(): string {
+  return [
+    "docs/social/linkedin-post-convention.md",
+    "docs/social/x-post-convention.md",
+    "docs/social/bluesky-convention.md",
+    "docs/social/threads-convention.md",
+    "docs/social/mastodon-convention.md",
+    "docs/social/reddit-convention.md",
+    "docs/social/hacker-news-convention.md",
+    "docs/social/youtube-community-convention.md",
+    "docs/social/youtube-long-form-convention.md",
+    "docs/social/youtube-shorts-convention.md",
+    "docs/social/tiktok-convention.md",
+    "docs/social/instagram-reels-convention.md",
+    "docs/social/linkedin-video-convention.md",
+    "docs/social/founder-devtool-video-prompts-convention.md",
+  ].map((path) => `<li><code>${path}</code></li>`).join("\n");
+}
+
+function postConfirmationBipBody(extra = ""): string {
+  return bipPageBody([
+    "<p>bip_page_status: post-confirmation</p>",
+    "<p>bip_phase: implementation</p>",
+    "<p>Priority metadata: alignment.bip_platforms may rank channels, but every bundled channel is included.</p>",
+    "<h3>Loaded conventions</h3>",
+    `<ul>${bundledBipChannelPaths()}</ul>`,
+    "<h3>Candidate fields</h3>",
+    "<p>recommendation_notes: strongest confirmed-source angle for the channel.</p>",
+    "<p>source_basis: confirmed canonical markdown and approval record.</p>",
+    "<p>claim_safety_notes: unsupported claims removed.</p>",
+    "<p>risk_level: low.</p>",
+    "<p>publish_precheck: verify account/community rules before posting.</p>",
+    "<p>loaded_convention_path: docs/social/linkedin-post-convention.md.</p>",
+    "<p>Statuses supported: recommended, not-now, rejected.</p>",
+    extra,
+  ].join("\n"));
+}
+
 function targetChannelGate(): string {
   return [
     '<article class="gate" data-gate="target-channels" data-gate-type="target channel selection" data-section="Target Channels" data-required="true">',
@@ -213,7 +251,7 @@ describe("audit-alignment-pages repo state", () => {
     expect(result.stdout).toMatch(/Viewport meta: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Embed prohibition: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Collapsing fill: \d+ pages, exact/);
-    expect(result.stdout).toMatch(/BIP handling: \d+ Stage 2 pages, exact/);
+    expect(result.stdout).toMatch(/BIP handling: \d+ post-confirmation pages, exact/);
     expect(result.stdout).toMatch(/Index integrity: \d+ entries, exact/);
   });
 });
@@ -435,7 +473,7 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stdout).toContain("Collapsing fill: 2 pages, exact");
   });
 
-  it("fails when BIP is enabled and a Stage 2 review page has no BIP checkpoint or sibling page", () => {
+  it("passes a Stage 2 page without a pre-final BIP checkpoint when BIP is enabled", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html", pageHtml({
@@ -446,114 +484,9 @@ describe("audit-alignment-pages fixture trees", () => {
     writeIndex(root, [{ href: "page-a.html" }]);
 
     const result = runScript(root);
-    expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("BIP handling drift:");
-    expect(result.stderr).toContain("Missing BIP checkpoint in alignment/page-a.html");
-    expect(result.stderr).toContain("alignment/page-a-bip.html");
-  });
-
-  it("fails when linked BIP handling coexists with an active final artifact approval gate", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
-    writePage(root, "page-a.html", pageHtml({
-      status: "review",
-      stage: "stage-2",
-      body: stage2Body([
-        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
-        '<a href="page-a-bip.html">BIP review</a>',
-        "<p>Open and review the BIP page at alignment/page-a-bip.html before final artifact approval.</p>",
-        "</aside>",
-      ].join("\n")),
-    }));
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
-    expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("BIP handling drift:");
-    expect(result.stderr).toContain("cannot expose active final artifact approval controls");
-    expect(result.stderr).toContain("final artifact approval");
-  });
-
-  it("passes when linked BIP handling has handoff text and read-only final approval preview only", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true, ["linkedin"]);
-    writePage(root, "page-a.html", pageHtml({
-      status: "review",
-      stage: "stage-2",
-      body: stage2ReadOnlyPreviewBody([
-        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
-        '<a href="page-a-bip.html">BIP review</a>',
-        "<p>Open and review the BIP page at alignment/page-a-bip.html before final artifact approval.</p>",
-        "</aside>",
-      ].join("\n")),
-    }));
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: bipPageBody([
-        "<p>bip_platforms: linkedin</p>",
-        "<p>bip_phase: implementation</p>",
-        bulkDownselectGate(),
-      ].join("\n")),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, exact");
-    expect(result.stdout).toContain("Index integrity: 2 entries, exact");
-  });
-
-  it("passes when approved BIP YAML precedes active final artifact approval controls", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
-    writePage(root, "page-a.html", pageHtml({
-      status: "review",
-      stage: "stage-2",
-      body: stage2Body([
-        '<aside data-bip-status="approved" data-bip-page="alignment/page-a-bip.html">',
-        "<p>Approved BIP record:</p>",
-        "<pre>bip_approval_status: ready-for-agent-review\nbip_page: alignment/page-a-bip.html</pre>",
-        "</aside>",
-      ].join("\n")),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }]);
-
-    const result = runScript(root);
-    expect(result.stderr).toBe("");
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, exact");
-    expect(result.stdout).toContain("Index integrity: 1 entries, exact");
-  });
-
-  it("passes a Stage 2 page without a BIP checkpoint when BIP is disabled", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, false);
-    writePage(root, "page-a.html", pageHtml({
-      status: "review",
-      stage: "stage-2",
-      body: stage2Body(),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }]);
-
-    const result = runScript(root);
-    expect(result.stderr).toBe("");
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: disabled, exact");
+    expect(result.stdout).toContain("BIP handling: 0 post-confirmation pages, exact");
   });
 
   it("does not false-fail a Stage 1 scope page when BIP is enabled", () => {
@@ -576,77 +509,53 @@ describe("audit-alignment-pages fixture trees", () => {
     const result = runScript(root);
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+    expect(result.stdout).toContain("BIP handling: 0 post-confirmation pages, exact");
   });
 
-  it("fails when a BIP page omits stable page metadata", () => {
+  it("passes a post-confirmation BIP page with exhaustive bundled channel coverage", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html");
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
+    writePage(root, "bip-page-a.html", pageHtml({
+      status: "confirmed",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-generation="post-confirmation"',
+        'data-bip-source-skill="page-a"',
+      ],
+      body: postConfirmationBipBody(),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, exact");
+    expect(result.stdout).toContain("Index integrity: 2 entries, exact");
+  });
+
+  it("fails when a post-confirmation BIP page omits stable page metadata and candidate shape", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "bip-page-a.html", pageHtml({
+      status: "confirmed",
       body: "<section><h2>BIP Review</h2></section>",
     }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
 
     const result = runScript(root);
     expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("Missing BIP page metadata in alignment/page-a-bip.html");
-    expect(result.stderr).toContain("Missing BIP gated-page metadata in alignment/page-a-bip.html");
+    expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, DRIFT");
+    expect(result.stderr).toContain("Missing BIP page metadata in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Missing BIP generation metadata in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Missing BIP source-skill metadata in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP channel coverage in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP candidate fields in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP recommendation statuses in alignment/bip-page-a.html");
   });
 
-  it("passes a BIP page with saved platforms and a required bulk downselect gate", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true, ["linkedin", "x"]);
-    writePage(root, "page-a.html");
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: bipPageBody([
-        "<p>bip_platforms: linkedin, x</p>",
-        "<p>bip_phase: implementation</p>",
-        "<p>Loaded Convention Path: docs/social/linkedin-post-convention.md.</p>",
-        bulkDownselectGate(),
-      ].join("\n")),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
-    expect(result.stderr).toBe("");
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
-  });
-
-  it("passes a first-run BIP page that includes platform setup and bulk downselect together", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
-    writePage(root, "page-a.html");
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: bipPageBody([
-        "<p>No saved bip_platforms exist yet; this page includes setup and draft review together.</p>",
-        "<p>bip_phase: research</p>",
-        platformSetupGate(),
-        bulkDownselectGate(),
-      ].join("\n")),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
-    expect(result.stderr).toBe("");
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
-  });
-
-  it("fails a BIP page that uses obsolete granular gates instead of bulk downselect", () => {
+  it("fails stale pre-final BIP checkpoint pages", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true, ["linkedin"]);
     writePage(root, "page-a.html");
@@ -655,81 +564,38 @@ describe("audit-alignment-pages fixture trees", () => {
       extraHtmlAttrs: [
         'data-alignment-page-kind="bip"',
         'data-bip-gates="alignment/page-a.html"',
+        'data-bip-status="linked"',
       ],
-      body: bipPageBody([
-        "<p>Old BIP state: selected-channel draft review.</p>",
-        targetChannelGate(),
-        draftingModeGate(),
-        '<article class="gate" data-gate="content-angles" data-gate-type="content angle selection" data-section="Content Angles" data-required="true"></article>',
-      ].join("\n")),
+      body: postConfirmationBipBody(),
     }));
     writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
 
     const result = runScript(root);
     expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("Missing BIP bulk downselect gate in alignment/page-a-bip.html");
-    expect(result.stderr).toContain("Obsolete BIP granular gates in alignment/page-a-bip.html");
-    expect(result.stderr).toContain("target-channels, drafting-mode, content-angles");
+    expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, DRIFT");
+    expect(result.stderr).toContain("Stale BIP page path in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("Obsolete BIP checkpoint metadata in alignment/page-a-bip.html");
   });
 
-  it("fails a selected-channel BIP draft page with the stale all-channels-not-now drafting option", () => {
+  it("fails post-confirmation BIP pages with active approval gates", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true, ["linkedin"]);
     writePage(root, "page-a.html");
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
+    writePage(root, "bip-page-a.html", pageHtml({
+      status: "confirmed",
       extraHtmlAttrs: [
         'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
+        'data-bip-generation="post-confirmation"',
+        'data-bip-source-skill="page-a"',
       ],
-      body: bipPageBody([
-        "<p>Current BIP state: selected-channel draft review.</p>",
-        "<p>Rendered selected-channel drafts are ready for review.</p>",
-        bulkDownselectGate(),
-        draftingModeGate(
-          '<label><input type="radio" name="gate-drafting-mode" value="no drafting mode needed until channels selected"> No drafting mode needed; all channels remain not-now</label>',
-        ),
-      ].join("\n")),
+      body: postConfirmationBipBody(platformSetupGate()),
     }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
 
     const result = runScript(root);
     expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("Stale BIP drafting-mode option in alignment/page-a-bip.html");
-    expect(result.stderr).toContain('No drafting mode needed; all channels remain not-now');
-  });
-
-  it("fails when linked BIP handling omits the handoff before final artifact approval", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
-    writePage(root, "page-a.html", pageHtml({
-      status: "review",
-      stage: "stage-2",
-      body: stage2Body([
-        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
-        '<a href="page-a-bip.html">BIP review</a>',
-        "<p>The BIP page exists for later reference.</p>",
-        "</aside>",
-      ].join("\n")),
-    }));
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
-    expect(result.status).toBe(1);
-    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain(
-      "must tell the reviewer to open/review alignment/page-a-bip.html before final artifact approval",
-    );
+    expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, DRIFT");
+    expect(result.stderr).toContain("Active BIP approval gates in alignment/bip-page-a.html");
   });
 
   it("fails when active pages exist but the central index is missing", () => {

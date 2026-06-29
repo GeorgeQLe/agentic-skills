@@ -82,23 +82,22 @@ const researchQualitySkills = [
   "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
-const bipPlatformSetupSnippets = [
+const bipPostConfirmationSnippets = [
   "alignment.bip_platforms",
   "set-bip-platforms <platform...>",
-  "one required project-platform setup gate",
-  "exhaustive draft list in the same artifact",
-  "do not re-ask for platforms on later BIP invocations",
-  "load only the platform documents",
+  "Do not treat `alignment.bip_platforms` as a channel filter",
+  "alignment/bip-{skill-name}.html",
+  "data-bip-generation=\"post-confirmation\"",
+  "data-bip-source-skill=\"{skill-name}\"",
+  "every bundled channel convention",
   "bip_phase",
   "`research`, `prototyping`, or `implementation`",
   "popular social-media angle patterns",
-  "long, exhaustive list of candidate posts or video/community outlines per selected platform",
-  "Rank the top options clearly for each platform",
-  "source basis, claim-safety notes, risk level, publish precheck, loaded convention path",
-  "one bulk downselect gate",
-  "Do not require separate `drafting-mode`, `content-angles`, `sample-drafts`, `tone`, `claim-safety`, or `publish-readiness` gates",
-  "ranked draft decisions per platform",
-  "rejected/not-now options",
+  "long, exhaustive list of candidate posts, community submissions, or video outlines for every bundled channel",
+  "Rank the top options clearly for each channel",
+  "recommendation status (`recommended`, `not-now`, or `rejected`)",
+  "recommendation notes, source basis, claim-safety notes, risk level, publish precheck, loaded convention path",
+  "does not publish posts, write social-ledger records, alter canonical artifacts, or require another approval",
 ];
 
 function read(path: string) {
@@ -289,42 +288,43 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("defines enforceable BIP checkpoints in the canonical convention", () => {
+  it("defines post-confirmation BIP output in the canonical convention", () => {
     const content = read("docs/alignment-page-convention.md");
 
     expect(content).toContain('data-alignment-page-kind="bip"');
-    expect(content).toContain('data-bip-gates="alignment/{skill-name}-{topic}.html"');
-    expect(content).toContain('data-bip-status="linked"');
-    expect(content).toContain('data-bip-status="approved"');
-    expect(content).toContain('data-bip-status="not-applicable"');
-    expect(content).toContain('data-bip-not-applicable-reason="..."');
-    expect(content).toContain("open/review the BIP page before final artifact approval");
-    expect(content).toContain("read-only final-approval preview content");
-    expect(content).toContain("must not render active final artifact approval controls");
-    expect(content).toContain("bip_approval_status: ready-for-agent-review");
+    expect(content).toContain('data-bip-generation="post-confirmation"');
+    expect(content).toContain('data-bip-source-skill="{skill-name}"');
+    expect(content).toContain("do not create a pre-final Stage 2 BIP checkpoint");
+    expect(content).toContain("Only after that confirmation sequence succeeds");
+    expect(content).toContain("write the read-only post-confirmation BIP page");
     expect(content).toContain("BIP handling");
-    for (const snippet of bipPlatformSetupSnippets) {
+    for (const snippet of bipPostConfirmationSnippets) {
       expect(content).toContain(snippet);
     }
+    expect(content).not.toContain('data-bip-gates="alignment/{skill-name}-{topic}.html"');
+    expect(content).not.toContain('data-bip-status="linked"');
+    expect(content).not.toContain("bip_approval_status: ready-for-agent-review");
     expect(content).not.toContain("bip_channel_selection_status: ready-for-agent-review");
   });
 
-  it("propagates enforceable BIP checkpoints to generated bundles", () => {
+  it("propagates post-confirmation BIP output to generated bundles", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {
       const content = conventionText(path);
+      const skillName = dirname(path).split("/").pop();
       expect(content, `${path} BIP page kind`).toContain('data-alignment-page-kind="bip"');
-      expect(content, `${path} BIP gated page`).toContain(`data-bip-gates="alignment/${dirname(path).split("/").pop()}-{topic}.html"`);
-      expect(content, `${path} linked checkpoint`).toContain('data-bip-status="linked"');
-      expect(content, `${path} approved checkpoint`).toContain('data-bip-status="approved"');
-      expect(content, `${path} not-applicable checkpoint`).toContain('data-bip-status="not-applicable"');
-      expect(content, `${path} final handoff route`).toContain("open/review the BIP page before final artifact approval");
-      expect(content, `${path} linked read-only preview`).toContain("read-only final-approval preview content");
-      expect(content, `${path} linked active gate block`).toContain("must not render active final artifact approval controls");
-      expect(content, `${path} approved BIP YAML`).toContain("bip_approval_status: ready-for-agent-review");
-      for (const snippet of bipPlatformSetupSnippets) {
-        expect(content, `${path} BIP platform setup: ${snippet}`).toContain(snippet);
+      expect(content, `${path} BIP generation`).toContain('data-bip-generation="post-confirmation"');
+      expect(content, `${path} BIP source skill`).toContain(`data-bip-source-skill="${skillName}"`);
+      expect(content, `${path} BIP page path`).toContain(`alignment/bip-${skillName}.html`);
+      expect(content, `${path} BIP no pre-final checkpoint`).toContain("do not create a pre-final Stage 2 BIP checkpoint");
+      expect(content, `${path} BIP post-confirmation sequence`).toContain("Only after that confirmation sequence succeeds");
+      for (const snippet of bipPostConfirmationSnippets) {
+        const expected = snippet.replaceAll("{skill-name}", skillName ?? "");
+        expect(content, `${path} BIP post-confirmation: ${expected}`).toContain(expected);
       }
+      expect(content, `${path} no old gated page`).not.toContain(`data-bip-gates="alignment/${skillName}-{topic}.html"`);
+      expect(content, `${path} no linked checkpoint`).not.toContain('data-bip-status="linked"');
+      expect(content, `${path} no approved BIP YAML`).not.toContain("bip_approval_status: ready-for-agent-review");
       expect(content, `${path} no old channel-selection YAML`).not.toContain("bip_channel_selection_status: ready-for-agent-review");
     }
   });
