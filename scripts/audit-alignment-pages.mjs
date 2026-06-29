@@ -139,6 +139,65 @@ function requiredBipGateKeys(html, gateKeys) {
   return gateKeys.filter((gateKey) => records.some((record) => requiredGateRecordMatches(record, gateKey)));
 }
 
+function normalizeGateMetadata(value) {
+  return value.toLowerCase().replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function isGateQuestionContainerTag(tag) {
+  const className = normalizeGateMetadata(htmlAttributeValue(tag, "class"));
+  return (
+    /\b(?:gate|question block)\b/.test(className) ||
+    Boolean(htmlAttributeValue(tag, "data-gate")) ||
+    Boolean(htmlAttributeValue(tag, "data-gate-type")) ||
+    Boolean(htmlAttributeValue(tag, "data-question-id"))
+  );
+}
+
+function hasFinalArtifactApprovalMetadata(tag) {
+  const primaryMetadata = normalizeGateMetadata(
+    [
+      htmlAttributeValue(tag, "data-gate"),
+      htmlAttributeValue(tag, "data-gate-type"),
+      htmlAttributeValue(tag, "data-question-id"),
+    ].join(" "),
+  );
+  const sectionMetadata = normalizeGateMetadata(
+    [
+      htmlAttributeValue(tag, "data-section"),
+      htmlAttributeValue(tag, "aria-label"),
+      htmlAttributeValue(tag, "title"),
+    ].join(" "),
+  );
+  const hasPrimaryFinalArtifact = /\b(?:final|canonical) artifacts?\b/.test(primaryMetadata);
+  const hasPrimaryDestinationOnly = /\b(?:destination|path|paths|file changes?|write|output)\b/.test(primaryMetadata);
+
+  return (
+    /\bartifact approval\b/.test(primaryMetadata) ||
+    (hasPrimaryFinalArtifact && !hasPrimaryDestinationOnly) ||
+    /\b(?:final|canonical) artifacts?\b.{0,40}\bapproval\b/.test(sectionMetadata) ||
+    /\bapproval\b.{0,40}\b(?:final|canonical) artifacts?\b/.test(sectionMetadata) ||
+    /\bartifact approval\b/.test(sectionMetadata)
+  );
+}
+
+function activeFinalArtifactApprovalGateRecords(html) {
+  const records = [];
+  for (const match of html.matchAll(/<(article|section|div|fieldset|form)\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (!isGateQuestionContainerTag(tag)) continue;
+    if (!hasFinalArtifactApprovalMetadata(tag)) continue;
+    const label = [
+      htmlAttributeValue(tag, "data-gate-type"),
+      htmlAttributeValue(tag, "data-gate"),
+      htmlAttributeValue(tag, "data-question-id"),
+      htmlAttributeValue(tag, "data-section"),
+      htmlAttributeValue(tag, "class"),
+    ].find(Boolean);
+    records.push(label ? normalizeGateMetadata(label) : match[1].toLowerCase());
+  }
+  return records;
+}
+
 function hasRequiredTargetChannelGate(html) {
   return requiredBipGateKeys(html, ["target-channels"]).length > 0;
 }
@@ -405,6 +464,12 @@ if (buildInPublicEnabled) {
       if (!hasBipHandoffText(html, expectedBipFile, expectedBipRel)) {
         bipDiagnostics.push(
           `Linked BIP checkpoint in ${rel} must tell the reviewer to open/review ${expectedBipRel} before final artifact approval.`,
+        );
+      }
+      const activeFinalArtifactGates = activeFinalArtifactApprovalGateRecords(html);
+      if (activeFinalArtifactGates.length) {
+        bipDiagnostics.push(
+          `Linked BIP checkpoint in ${rel} cannot expose active final artifact approval controls before ${expectedBipRel} is approved; render final approval as read-only preview text or wait for data-bip-status="approved" or a narrow data-bip-status="not-applicable". Found: ${[...new Set(activeFinalArtifactGates)].join(", ")}.`,
         );
       }
     }

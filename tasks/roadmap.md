@@ -2,6 +2,54 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Enforce Pending BIP Before Active Final Approval
+
+### Goal
+
+Prevent normal Stage 2 review pages with `data-bip-status="linked"` from exposing active final artifact approval controls before the linked Build-In-Public page has been approved, while still allowing read-only final-approval preview content and BIP handoff instructions.
+
+### Execution Profile
+
+- Parallel mode: serial edits, parallel reads/verifications where independent.
+- Rationale: the audit script, canonical convention, generated bundles, and regression fixtures share one approval-ordering contract and should land atomically.
+
+### Plan
+
+- [x] Capture the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect the current BIP checkpoint audit, alignment-page convention, generated bundle behavior, and layer1 fixtures.
+- [x] Add an audit helper that detects active final artifact approval gates from gate/question containers carrying final-artifact, canonical-artifact, or artifact-approval metadata without depending only on `data-required="true"`.
+- [x] In the linked-BIP branch, keep the existing reference and handoff checks and fail when linked BIP coexists with an active final artifact approval gate.
+- [x] Update the canonical alignment-page convention to allow linked-BIP handoff text and read-only final-approval preview content, while blocking active final artifact approval controls until BIP is approved or narrowly not-applicable.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- [x] Update layer1 fixtures for linked-BIP failure, linked-BIP read-only preview success, and approved-BIP active final approval success.
+- [x] Run the requested audit, generator, and focused layer1 verification; document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- A Stage 2 review page with `data-bip-status="linked"` and an active final artifact approval gate fails `scripts/audit-alignment-pages.mjs`.
+- Linked-BIP pages may still include a visible BIP handoff and read-only final artifact approval preview wording.
+- A Stage 2 review page with `data-bip-status="approved"` and `bip_approval_status: ready-for-agent-review` may expose active final artifact approval controls.
+- A Stage 2 review page with a narrow `data-bip-status="not-applicable"` reason may expose active final artifact approval controls.
+- Generated alignment-page convention bundles match `docs/alignment-page-convention.md`.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/audit-alignment-pages.mjs`
+- `pnpm --dir tests test:layer1 -- audit-alignment-pages`
+- `pnpm --dir tests test:layer1 -- ship-end-bip social-ledger-convention idea-scope-brief-approval-ordering audit-alignment-pages`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Added a final artifact approval gate detector in `scripts/audit-alignment-pages.mjs` that scans active gate/question containers for final-artifact, canonical-artifact, or artifact-approval metadata without depending on `data-required="true"`, while avoiding artifact destination/path-only metadata.
+- Kept the existing linked-BIP page reference and handoff checks, then added a linked-BIP diagnostic when active final artifact approval controls are still rendered.
+- Updated `docs/alignment-page-convention.md` so linked BIP checkpoints may show handoff instructions and read-only final-approval preview content, but active final artifact approval controls wait for BIP `approved` or narrowly `not-applicable`.
+- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Added layer1 fixtures for linked-BIP failure with an active final gate, linked-BIP success with read-only preview only, and approved-BIP success with active final approval controls.
+- Verification passed with the commands listed in the test plan.
+
 ## Historical Implementation - Fix BIP Drafting-Mode Gate Leakage
 
 ### Goal

@@ -5,8 +5,57 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Fix BIP Drafting-Mode Gate Leakage.
-Last closeout: BIP channel-selection pages now reject premature final BIP gates, selected-channel draft pages reject the stale all-channels-not-now drafting option, generated bundles are refreshed, and the active Alignmeant BIP handling audit is exact.
+Last completed task: Enforce Pending BIP Before Active Final Approval.
+Last closeout: Stage 2 pages with `data-bip-status="linked"` now fail the alignment-page audit if they expose active final artifact approval controls before linked Build-In-Public approval, while read-only final-approval preview content and BIP handoff text remain allowed.
+
+## Recent Completion - Enforce Pending BIP Before Active Final Approval
+
+### Plan
+
+- [x] Capture the implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect the current BIP checkpoint audit, alignment-page convention, generated bundle behavior, and layer1 fixtures.
+- [x] Add an audit helper that detects active final artifact approval gates from gate/question containers carrying final-artifact, canonical-artifact, or artifact-approval metadata without depending only on `data-required="true"`.
+- [x] In the linked-BIP branch, keep the existing reference and handoff checks and fail when linked BIP coexists with an active final artifact approval gate.
+- [x] Update the canonical alignment-page convention to allow linked-BIP handoff text and read-only final-approval preview content, while blocking active final artifact approval controls until BIP is approved or narrowly not-applicable.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- [x] Update layer1 fixtures for linked-BIP failure, linked-BIP read-only preview success, and approved-BIP active final approval success.
+- [x] Run the requested audit, generator, and focused layer1 verification; document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- A Stage 2 review page with `data-bip-status="linked"` and an active final artifact approval gate fails `scripts/audit-alignment-pages.mjs`.
+- Linked-BIP pages may still include a visible BIP handoff and read-only final artifact approval preview wording.
+- A Stage 2 review page with `data-bip-status="approved"` and `bip_approval_status: ready-for-agent-review` may expose active final artifact approval controls.
+- A Stage 2 review page with a narrow `data-bip-status="not-applicable"` reason may expose active final artifact approval controls.
+- Generated alignment-page convention bundles match `docs/alignment-page-convention.md`.
+
+### Verification Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/audit-alignment-pages.mjs`
+- `pnpm --dir tests test:layer1 -- audit-alignment-pages`
+- `pnpm --dir tests test:layer1 -- ship-end-bip social-ledger-convention idea-scope-brief-approval-ordering audit-alignment-pages`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review/results
+
+- Added a final artifact approval gate detector in `scripts/audit-alignment-pages.mjs` that scans active gate/question containers for final-artifact, canonical-artifact, or artifact-approval metadata without depending on `data-required="true"`, while avoiding artifact destination/path-only metadata.
+- Kept the existing linked-BIP page reference and handoff checks, then added a linked-BIP diagnostic when active final artifact approval controls are still rendered.
+- Updated `docs/alignment-page-convention.md` so linked BIP checkpoints may show handoff instructions and read-only final-approval preview content, but active final artifact approval controls wait for BIP `approved` or narrowly `not-applicable`.
+- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Added layer1 fixtures for linked-BIP failure with an active final gate, linked-BIP success with read-only preview only, and approved-BIP success with active final approval controls.
+
+### Verification
+
+Passed:
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/audit-alignment-pages.mjs`
+- `pnpm --dir tests test:layer1 -- audit-alignment-pages`
+- `pnpm --dir tests test:layer1 -- ship-end-bip social-ledger-convention idea-scope-brief-approval-ordering audit-alignment-pages`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
 
 ## Recent Completion - Fix BIP Drafting-Mode Gate Leakage
 

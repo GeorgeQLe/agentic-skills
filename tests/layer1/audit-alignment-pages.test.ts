@@ -93,6 +93,18 @@ function stage2Body(extra = ""): string {
   ].join("\n");
 }
 
+function stage2ReadOnlyPreviewBody(extra = ""): string {
+  return [
+    "<section>",
+    "<h2>Research Scope Approved</h2>",
+    "<p>The scope is approved and this page is now reviewing Stage 2 artifact output.</p>",
+    "<h2>Final Artifact Approval Preview</h2>",
+    "<p>Final artifact approval will become actionable only after BIP is approved or marked narrowly not-applicable.</p>",
+    extra,
+    "</section>",
+  ].join("\n");
+}
+
 function bipPageBody(inner: string): string {
   return [
     "<section>",
@@ -410,7 +422,7 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stderr).toContain("alignment/page-a-bip.html");
   });
 
-  it("passes when BIP is enabled and the Stage 2 page links a metadata-bearing BIP sibling", () => {
+  it("fails when linked BIP handling coexists with an active final artifact approval gate", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html", pageHtml({
@@ -434,10 +446,63 @@ describe("audit-alignment-pages fixture trees", () => {
     writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
 
     const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain("BIP handling drift:");
+    expect(result.stderr).toContain("cannot expose active final artifact approval controls");
+    expect(result.stderr).toContain("final artifact approval");
+  });
+
+  it("passes when linked BIP handling has handoff text and read-only final approval preview only", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2ReadOnlyPreviewBody([
+        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
+        '<a href="page-a-bip.html">BIP review</a>',
+        "<p>Open and review the BIP page at alignment/page-a-bip.html before final artifact approval.</p>",
+        "</aside>",
+      ].join("\n")),
+    }));
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, exact");
     expect(result.stdout).toContain("Index integrity: 2 entries, exact");
+  });
+
+  it("passes when approved BIP YAML precedes active final artifact approval controls", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2Body([
+        '<aside data-bip-status="approved" data-bip-page="alignment/page-a-bip.html">',
+        "<p>Approved BIP record:</p>",
+        "<pre>bip_approval_status: ready-for-agent-review\nbip_page: alignment/page-a-bip.html</pre>",
+        "</aside>",
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, exact");
+    expect(result.stdout).toContain("Index integrity: 1 entries, exact");
   });
 
   it("passes a Stage 2 page without a BIP checkpoint when BIP is disabled", () => {

@@ -295,6 +295,8 @@ describe("alignment page gate contract", () => {
     expect(content).toContain('data-bip-status="not-applicable"');
     expect(content).toContain('data-bip-not-applicable-reason="..."');
     expect(content).toContain("open/review the BIP page before final artifact approval");
+    expect(content).toContain("read-only final-approval preview content");
+    expect(content).toContain("must not render active final artifact approval controls");
     expect(content).toContain("bip_approval_status: ready-for-agent-review");
     expect(content).toContain("BIP handling");
     for (const snippet of bipChannelRecommendationSnippets) {
@@ -312,6 +314,8 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} approved checkpoint`).toContain('data-bip-status="approved"');
       expect(content, `${path} not-applicable checkpoint`).toContain('data-bip-status="not-applicable"');
       expect(content, `${path} final handoff route`).toContain("open/review the BIP page before final artifact approval");
+      expect(content, `${path} linked read-only preview`).toContain("read-only final-approval preview content");
+      expect(content, `${path} linked active gate block`).toContain("must not render active final artifact approval controls");
       expect(content, `${path} approved BIP YAML`).toContain("bip_approval_status: ready-for-agent-review");
       for (const snippet of bipChannelRecommendationSnippets) {
         expect(content, `${path} BIP channel recommendation: ${snippet}`).toContain(snippet);
