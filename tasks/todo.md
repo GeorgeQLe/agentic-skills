@@ -5,8 +5,52 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Harden Publish Against Web Auth Interrupts.
-Last closeout: publish now preflights auth before source mutation, rejects tokenless web auth non-interactively, and restores release files on interrupted first publish.
+Last completed task: Fix Ship-End BIP Post Suggestions.
+Last closeout: `ship-end` v0.8 now drafts source-safe BIP post suggestions when Build-In-Public is already enabled, instead of stopping at a skipped gate message.
+
+## Recent Completion - Fix Ship-End BIP Post Suggestions
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Validate the user's claim against the current `ship-end` skill contract, source pack mirrors, and recent history.
+- [x] Patch the `ship-end` BIP step so enabled BIP skips only the enablement prompt, then prompts the agent to draft supported post suggestions after the wrap-up report.
+- [x] Archive and bump affected `ship-end` skill mirrors if the contract changes behavior.
+- [x] Add focused regression coverage or static contract checks proving enabled BIP produces post-suggestion instructions.
+- [x] Run skill/version, archive, mirror, task-doc, and diff hygiene verification.
+- [x] Document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- `ship-end` still asks the one-time enablement question only when BIP is unset/off and the prompt has not been dismissed.
+- When BIP is already enabled, `ship-end` no longer treats that as terminal post handling; it must draft source-safe BIP suggestions or explain why the shipped boundary has no safe public angle.
+- Enabled-state output must not say only that the BIP gate was skipped.
+- Claude and Codex mirrors of the `ship-end` skill remain behaviorally aligned.
+- Skill versioning and archives are updated for the behavior change.
+- Focused verification proves the contract contains enabled-BIP post-suggestion behavior.
+
+### Verification
+
+Passed:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/ship-end-bip.test.ts`
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/skill-mirror-parity-audit.sh`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+
+### Review/results
+
+- Confirmed the user report: `ship-end` v0.7 skipped the full BIP suggestion gate when `alignment.build_in_public === true`, so enabled projects got no post suggestions.
+- Updated Claude and Codex `ship-end` mirrors to v0.8 so enabled BIP skips only the enablement question and then runs an enabled BIP post-suggestion path.
+- Updated the shared `CLAUDE.md` BIP Suggestion Gate convention so it no longer says already-enabled BIP is a terminal skip.
+- The enabled path now drafts 2-4 source-safe Build-In-Public post suggestions or states that no safe public angle exists; each suggestion must include target channel, angle, source basis, claim-safety notes, and draft text or outline.
+- Archived prior v0.7 contracts, updated changelogs, regenerated package manifest metadata, and added focused layer1 regression coverage.
+- Added a lesson: enabled feature gates must test the already-enabled branch, not just the opt-in prompt path.
+- Deploy skipped: changed paths are skill source, package internals, tests, prompts, and task evidence, which are outside the Skills Showcase deploy surface in `tasks/deploy.md`.
 
 ## Recent Completion - Harden Publish Against Web Auth Interrupts
 

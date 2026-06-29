@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-29
+
+- Changed the BIP wrap-up behavior so projects with `alignment.build_in_public: true` skip only the enablement question, then draft source-safe Build-In-Public post suggestions or explain why no safe public angle exists. The enabled path must not report only that the BIP gate was skipped.
+
 ## v0.7 - 2026-06-26
 
 - Added the **BIP Suggestion Gate** as a new step after the session report. At session wrap, if Build-In-Public is off and the user has not been asked before (`alignment.bip_prompt_dismissed` unset), the skill offers to enable BIP exactly once; on yes it runs `set-bip on` + `set-bip-prompt dismiss` and then offers to draft a Build-In-Public post about what just shipped (per `docs/social-ledger-convention.md`), on no it records `set-bip-prompt dismiss` so it never asks again. Advisory — never blocks wrap-up. See the BIP Suggestion Gate convention in CLAUDE.md.

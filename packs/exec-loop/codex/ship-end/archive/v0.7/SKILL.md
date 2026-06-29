@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.8
+version: v0.7
 required_conventions: [social-ledger]
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
@@ -59,14 +59,11 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
    - Final working-tree state
    - **Next work:** the next concrete project task, blocker, smoke test, or follow-up
    - **Recommended next command:** one command or route for that work
-10. **BIP post suggestions** (advisory; never blocks wrap-up — run after the report, even if shipping reported nothing):
-    - Read `.agents/project.json`.
-    - If `alignment.build_in_public === true`, skip only the enablement question, then run the enabled BIP post-suggestion path below. Do not report only that the BIP gate was skipped.
-    - Else if `alignment.bip_prompt_dismissed === true`, skip both enablement and post suggestions.
+10. **BIP Suggestion Gate** (advisory; never blocks wrap-up — run after the report, even if shipping reported nothing):
+    - Read `.agents/project.json`. If `alignment.build_in_public === true`, skip. Else if `alignment.bip_prompt_dismissed === true`, skip.
     - Otherwise ask the user once, concisely — explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project.
-    - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then run the enabled BIP post-suggestion path for this shipped session.
+    - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then offer to draft a Build-In-Public post about what just shipped this session, following `docs/social-ledger-convention.md`.
     - On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
-    - Enabled BIP post-suggestion path: inspect the shipped boundary from the session report, changed files, commits, task/history notes, and any alignment pages. Following `docs/social-ledger-convention.md`, draft 2-4 source-safe Build-In-Public post suggestions or state that there is no safe public angle for this wrap-up. For each suggestion, include target channel, angle, source basis, claim-safety notes, and draft post text or a concise video/community-post outline. Do not publish externally.
 
 ## Next-Step Routing
 

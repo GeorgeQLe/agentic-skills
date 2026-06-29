@@ -2,6 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix Ship-End BIP Post Suggestions
+
+### Goal
+
+Fix the `ship-end` Build-In-Public behavior so projects with `.agents/project.json` `alignment.build_in_public: true` do not stop at a skipped enablement gate, and instead surface source-safe BIP post suggestions or a clear no-content rationale after session wrap-up.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: the active installed skill mirror, source pack mirrors, version metadata, and regression checks are tightly coupled and should land in one controlled change.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Validate the user's claim against the current `ship-end` skill contract, source pack mirrors, and recent history.
+- [x] Patch the `ship-end` BIP step so enabled BIP skips only the enablement prompt, then prompts the agent to draft supported post suggestions after the wrap-up report.
+- [x] Archive and bump affected `ship-end` skill mirrors if the contract changes behavior.
+- [x] Add focused regression coverage or static contract checks proving enabled BIP produces post-suggestion instructions.
+- [x] Run skill/version, archive, mirror, task-doc, and diff hygiene verification.
+- [x] Document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- `ship-end` still asks the one-time enablement question only when BIP is unset/off and the prompt has not been dismissed.
+- When BIP is already enabled, `ship-end` no longer treats that as terminal post handling; it must draft source-safe BIP suggestions or explain why the shipped boundary has no safe public angle.
+- Enabled-state output must not say only that the BIP gate was skipped.
+- Claude and Codex mirrors of the `ship-end` skill remain behaviorally aligned.
+- Skill versioning and archives are updated for the behavior change.
+- Focused verification proves the contract contains enabled-BIP post-suggestion behavior.
+
+### Test Plan
+
+- Focused static/regression check for `ship-end` BIP enabled behavior.
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/skill-mirror-parity-audit.sh`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Confirmed the active v0.7 `ship-end` contract skipped the full BIP suggestion gate when `alignment.build_in_public` was already true.
+- Updated mirrored Claude and Codex `ship-end` skills to v0.8 so enabled BIP skips only the enablement question, then drafts 2-4 source-safe BIP post suggestions or states that no safe public angle exists.
+- Updated the shared `CLAUDE.md` BIP Suggestion Gate convention so it matches the enabled-mode behavior.
+- Archived the prior v0.7 contracts and added v0.8 changelog entries.
+- Added focused layer1 coverage for enabled, dismissed, and newly-enabled BIP branches plus the v0.7 archive.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` from the staged skill boundary so packaged metadata includes v0.8, new hashes, and v0.7 archives.
+- Verification passed; see `tasks/todo.md` and `tasks/ship-manifest-2026-06-29-fix-ship-end-bip-post-suggestions.md`.
+
 ## Historical Implementation - Harden Publish Against Web Auth Interrupts
 
 ### Goal

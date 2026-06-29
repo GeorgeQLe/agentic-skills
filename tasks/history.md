@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-06-29 — Fix ship-end BIP post suggestions
+
+- Confirmed the reported behavior in the `ship-end` contract: `alignment.build_in_public === true` skipped the BIP suggestion gate entirely, while draft-post behavior existed only after a fresh yes response to the enablement prompt.
+- Updated mirrored Claude and Codex `ship-end` skills to `v0.8` so already-enabled BIP skips only the enablement question, then drafts 2-4 source-safe Build-In-Public post suggestions or explains why no safe public angle exists.
+- Updated the shared `CLAUDE.md` BIP Suggestion Gate convention so it no longer defines already-enabled BIP as a terminal skip.
+- Archived prior `v0.7` skill files and added matching changelog entries.
+- Added a focused layer1 regression test proving enabled BIP is not a terminal skip and that the prior skip-only contract is archived.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` from the staged skill boundary so packaged metadata reports `ship-end` v0.8 and the v0.7 archives.
+- Captured the visible `investigate` prompt and added a lesson for enabled feature gates.
+- Verification passed: focused BIP layer1 test, skill version audit, strict archive audit, mirror parity audit, package build/check, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-29-fix-ship-end-bip-post-suggestions.md`.
+
 ## 2026-06-28 — Ship-end 0.1.15 release closeout
 
 - Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260628-215352-ship-end.md`.

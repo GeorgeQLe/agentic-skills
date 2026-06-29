@@ -182,10 +182,10 @@ Build-In-Public (BIP) mode generates source-safe social posts from alignment pag
 
 The gate runs after the skill has read `.agents/project.json`:
 
-1. If `alignment.build_in_public === true` → BIP already on, **skip** (no prompt).
-2. Else if `alignment.bip_prompt_dismissed === true` → already asked, **skip**.
+1. If `alignment.build_in_public === true` → BIP already on, skip only the enablement prompt and continue the skill's enabled-BIP behavior. In a wrap/ship context, draft source-safe BIP post suggestions or explain why no safe public angle exists; do not report only that the BIP gate was skipped. At kickoff, enabled BIP flows into the skill's existing alignment-page BIP behavior.
+2. Else if `alignment.bip_prompt_dismissed === true` → already asked, **skip** enablement and any optional post suggestion.
 3. Else ask once, concisely: explain that BIP generates source-safe social posts from alignment pages / shipped work, and ask whether to enable it for this project.
-   - **Yes:** run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent) so a later `set-bip off` won't re-trigger the prompt. In a wrap/ship context, then offer to draft a BIP post about what just shipped, following `docs/social-ledger-convention.md`. At kickoff, enabling simply flows into the skill's existing alignment-page BIP behavior — no separate post offer.
+   - **Yes:** run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent) so a later `set-bip off` won't re-trigger the prompt. Then run the same enabled-BIP behavior for the skill: in a wrap/ship context, draft source-safe BIP post suggestions about what just shipped, following `docs/social-ledger-convention.md`; at kickoff, enabling flows into the skill's existing alignment-page BIP behavior with no separate post offer.
    - **No:** run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
 4. Never block the skill's primary work on this gate.
 

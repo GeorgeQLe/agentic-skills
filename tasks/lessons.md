@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-29 — Enabled feature gates need enabled-state outputs
+
+- A `ship-end` BIP wrap-up printed that the BIP gate was skipped because `alignment.build_in_public` was already true, but then produced no Build-In-Public posts or suggestions.
+- Rule: when a workflow has an enablement gate plus an enabled-mode behavior, the already-enabled branch must skip only the enablement prompt and still run the enabled behavior.
+- Add regression checks for already-enabled, dismissed, and newly-enabled branches whenever gate wording changes, not only the opt-in prompt branch.
+
 ## 2026-06-28 — Interactive publish paths need signal rollback tests
 
 - A real `npm publish` path entered browser/web auth, was interrupted with Ctrl-C, and left release source files bumped to `0.1.15` even though neither package had published that version.
