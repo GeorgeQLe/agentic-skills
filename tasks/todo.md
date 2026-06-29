@@ -5,8 +5,35 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Separate Visible And Agent Recommended Answers.
-Last closeout: interrogation pages now keep visible recommendation guidance separate from hidden agent answer payloads used by Apply recommended and compiled YAML.
+Last completed task: Refresh Package Manifest For Interrogation Split.
+Last closeout: package manifest metadata now matches the interrogation-page split changes and release gates pass.
+
+## Recent Completion - Refresh Package Manifest For Interrogation Split
+
+### Plan
+
+- [x] Check local release posture, published versions, and current package metadata.
+- [x] Regenerate `packages/skillpacks/dist/skillpacks-manifest.json`.
+- [x] Rerun package build/check and focused package tests.
+- [x] Document results, commit, and push the manifest fix on `master`.
+
+### Verification
+
+Passed:
+
+- `npm --workspace skillpacks run build:check`
+- `npm --workspace skillpacks run test:node`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+
+### Review/results
+
+- `skillpacks` and `@glexcorp/gskp` are both published at `0.1.14`; next patch release would be `0.1.15`.
+- `npm --workspace skillpacks run build:check` initially failed because `packages/skillpacks/dist/skillpacks-manifest.json` is stale after regenerated interrogation bundles.
+- Regenerated the manifest; the diff updates the package source fingerprint, `upgrade-interrogation-pages` active versions to `v0.2`, content hashes, and `v0.1` archive listings.
+- Reran `npm --workspace skillpacks run build:check` in isolation after manifest regeneration and it passed.
+- `npm --workspace skillpacks run test:node` passed with 155 tests.
 
 ## Recent Completion - Separate Visible And Agent Recommended Answers
 

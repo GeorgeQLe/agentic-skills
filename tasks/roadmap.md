@@ -2,6 +2,32 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Refresh Package Manifest For Interrogation Split
+
+### Goal
+
+Restore release readiness after the interrogation-page bundle changes by regenerating the package manifest and rerunning release gates.
+
+### Plan
+
+- [x] Check local release posture, published versions, and current package metadata.
+- [x] Regenerate `packages/skillpacks/dist/skillpacks-manifest.json`.
+- [x] Rerun package build/check and focused package tests.
+- [x] Document results, commit, and push the manifest fix on `master`.
+
+### Acceptance Criteria
+
+- `npm --workspace skillpacks run build:check` passes.
+- `npm --workspace skillpacks run test:node` passes.
+- Task docs and diff hygiene checks pass.
+- Working tree is clean and pushed.
+
+### Results
+
+- Confirmed both published package names, `skillpacks` and `@glexcorp/gskp`, are currently at `0.1.14`; the next patch release is `0.1.15`.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` so the `upgrade-interrogation-pages` `v0.2` skill metadata, archive list, content hashes, and source fingerprint are current.
+- `npm --workspace skillpacks run build:check` and `npm --workspace skillpacks run test:node` passed after the manifest refresh.
+
 ## Historical Implementation - Separate Visible And Agent Recommended Answers
 
 ### Goal
