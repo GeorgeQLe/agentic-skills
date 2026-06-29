@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-29
+
+- Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.
+
 ## v0.4 - 2026-06-24
 
 - Gated the `$brainstorm` new-phase-discovery route behind a `product-design` pack-availability check: when the pack is not enabled, the route now prepends `npx skillpacks install product-design` (plus a fresh-Codex-session note) instead of emitting a bare `$brainstorm` that can't be invoked.

@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.8
+version: v0.9
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -47,14 +47,13 @@ d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party 
    - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
    - If the user corrected the agent during the work being shipped, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise.
 
-### 1d. Skills Showcase freshness
-If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before commit:
+### 1d. Public Skills Catalog Freshness
+If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the public skills catalog export before commit:
 
-- `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-- `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-- `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
 
-Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
+Include changed `exports/skills-catalog/v1/**` artifacts in the same shipping boundary. The Skills Showcase lives in the separate `agentic-skills-showcase` repository and imports this public export; do not run Showcase app generators, Next.js builds, or website asset refreshes during normal `agentic-skills` shipping. If a skill change needs curated website copy, record the follow-up for the Showcase repo instead of editing app files here.
 
 ### 1e. Ship manifest route convention
 When writing a ship manifest, summary, task review note, or final response with a `Next command` field, use Claude slash-command syntax. For a completed `/ship` run, the default executable handoff is `/exec` unless project state names a more specific next route. Do not leave `Next command` blank unless all planned work is genuinely complete, in which case use `none`.

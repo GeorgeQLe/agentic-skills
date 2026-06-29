@@ -2,7 +2,7 @@
 name: benchmark-test-skill
 description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
 type: execution
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page]
 argument-hint: "<skill name>"
 ---
@@ -11,9 +11,9 @@ argument-hint: "<skill name>"
 
 Invoke as `$benchmark-test-skill <skill>`.
 
-Use this skill when the user wants to benchmark-test a skill defined in this repository. The trailing argument is the skill under test, not a mode for that skill. For example, `$benchmark-test-skill design-system` tests the `design-system` skill with the harness; it does not run `design-system` against the current app or website.
+Use this skill when the user wants to benchmark-test a skill from the public `agentic-skills` catalog using the separate `agentic-skills-benchmarks` repository. The trailing argument is the skill under test, not a mode for that skill. For example, `$benchmark-test-skill design-system` tests the `design-system` skill with the benchmark harness; it does not run `design-system` against the current app or website.
 
-Run the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
+Run the benchmark repo verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
 
 Produce deterministic benchmark evidence only. It should hand off to `$benchmark-agent-review <skill>` as a separate step when the user needs subjective ergonomic judgment or remediation planning for the generated skill outputs.
 
@@ -26,7 +26,7 @@ Produce deterministic benchmark evidence only. It should hand off to `$benchmark
 
 ## Execution
 
-Run commands from `/Users/georgele/projects/tools/agentic-skills/tests`.
+Run commands from `/Users/georgele/projects/tools/agentic-skills-benchmarks` (or the local checkout of the public `agentic-skills-benchmarks` repo). If the checkout is missing, stop and ask for its path instead of running benchmark commands from `agentic-skills`.
 
 ### Step 0 - Command Resolution Guard
 
@@ -41,7 +41,8 @@ Confirm the active workflow is this `packs/agentic-skills-bench` skill. The requ
 Before running verify, check whether the requested skill is a repository skill known to the benchmark harness:
 
 ```bash
-pnpm bench --list-skills
+SKILLS_REPO_URL=/Users/georgele/projects/tools/agentic-skills SKILLS_REPO_REF=WORKTREE pnpm catalog:check
+pnpm bench -- --list-skills
 ```
 
 - If `<SKILL>` is not listed, stop immediately and report `unknown skill: <SKILL>`.
@@ -56,7 +57,7 @@ pnpm bench --list-skills
 ### Step 2 - Verify
 
 ```bash
-pnpm verify --skill <SKILL>
+SKILLS_REPO_URL=/Users/georgele/projects/tools/agentic-skills SKILLS_REPO_REF=WORKTREE pnpm verify -- --skill <SKILL>
 ```
 
 - Expect layer1 to pass and layer2 to pass when target-specific tests exist.
@@ -71,25 +72,25 @@ pnpm verify --skill <SKILL>
 Run only if verify passes:
 
 ```bash
-pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
+pnpm bench -- --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 ```
 
 - Use 3 iterations by default.
 - Use `--agent both` by default. Only use `--agent claude` or `--agent codex` when the user explicitly asks to isolate one runner.
 - The expected budget is about $1 per run for the current design-system variant; report actual cost from the benchmark output when available.
-- The bench system persists raw data to `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
+- The bench system persists raw data inside `agentic-skills-benchmarks` at `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
 - Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
 - If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `$targeted-skill-builder <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
 
 ### Step 3.5 - Regression Check
 
-Run only if the bench step produced an evaluated report (skip if every run was infrastructure-blocked). This closes the benchmark loop by comparing the fresh grade to the prior grade in `benchmark/grade-history.json`:
+Run only if the bench step produced an evaluated report (skip if every run was infrastructure-blocked). This closes the benchmark loop by comparing the fresh grade to the prior grade in `benchmark/grade-history.json` in the benchmark repo:
 
 ```bash
 node scripts/benchmark-regression-check.mjs <SKILL>
 ```
 
-- The script reads the newest `report.json` per agent, appends the new grade to `benchmark/grade-history.json` (tracked — `git add` it with this run's changes per the index-generated build discipline in CLAUDE.md), and prints an `improvement` / `stable` / `regression` verdict per agent.
+- The script reads the newest `report.json` per agent, appends the new grade to `benchmark/grade-history.json` in `agentic-skills-benchmarks`, and prints an `improvement` / `stable` / `regression` verdict per agent.
 - A `regression` verdict (passRate, Wilson lower bound, or output-quality drop >= 10pp, or a status-badge demotion) is distinct from an absolute benchmark failure: the skill may still pass its thresholds yet score materially worse than its last graded run. The script exits non-zero on regression.
 - On a `regression` verdict, carry the printed prior-vs-new delta block into the next step and route to `$session-triage <SKILL> benchmark regression` so a human decides whether it is a real behavioral regression or harness/rubric drift. Do not auto-fix.
 - On `improvement` or `stable`, continue to the report; note the verdict in the report.
@@ -97,7 +98,7 @@ node scripts/benchmark-regression-check.mjs <SKILL>
 
 ### Step 4 - Report
 
-Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` at the repository root. Use the current date.
+Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` in `agentic-skills-benchmarks`. Use the current date.
 
 Populate the report from `report.json` and verify the output includes:
 
@@ -166,4 +167,3 @@ If the skill passes, the report is written, and no subjective review is needed o
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

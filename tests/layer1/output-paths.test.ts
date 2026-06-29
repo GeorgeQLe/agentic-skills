@@ -51,10 +51,6 @@ describe("Output path conflicts", () => {
         // Skip shared task management paths — multiple skills updating
         // these is expected behavior
         if (/^tasks\/(todo|manual-todo|recurring-todo)\.md$/.test(out)) continue;
-        // Skip the shared benchmark coverage registry — skill-dev skills
-        // (create-agentic-skill, create-local-skill, targeted-skill-builder)
-        // all instruct updating this same file by design, not exclusive output.
-        if (out === "tests/harness/bench-coverage.ts") continue;
         // Skip shared user-local skill roots: some skill-dev output sections
         // mention them in reload notes, but they are not exclusive repo
         // output destinations owned by a single pack skill.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-06-29
+
+- Updated frontend target-selection guidance to avoid the removed in-repo Skills Showcase path and allow separate public report/showcase repositories.
+
 ## v0.0
 
 - Archived previous skill contract.

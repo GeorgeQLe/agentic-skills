@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-06-29
+
+- Updated benchmark-regression evidence paths for the split `agentic-skills-benchmarks` repository.
+
 ## v0.6 - 2026-06-24
 
 - Updated the Pack Availability Guard to check `enabled_skills`, enabled provider packs, and local/global skill files before recommending downstream skills, so individually installed skills are not treated as missing just because their pack is absent from `enabled_packs`.

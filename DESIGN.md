@@ -142,7 +142,7 @@ Public naming must keep the brand and product layout aligned:
 - Use "skill packs" language for information architecture: packs, routes, coordinates, workflow nodes, pack maps, catalog entries, and proof surfaces.
 - Use `agentic-skills` only for the underlying open-source repository/library, not as the public site brand.
 
-The canonical implementation source is `docs/skills-showcase/styles.css`; the motivating product and UI decisions live in `specs/skills-showcase-website.md` and `specs/ui-skills-showcase-website.md`.
+The canonical website implementation lives in the separate `agentic-skills-showcase` repository and imports this repo's public catalog exports from `exports/skills-catalog/v1/`. Historical product and UI decisions live in that showcase repository after the split.
 
 ## Colors
 

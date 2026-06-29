@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.17"
   },
-  "source_fingerprint": "d2fcda5b37532902da57bac8df1332eecfad533bbb04606608f5467ab41da92c",
+  "source_fingerprint": "802bbc58f8529f3ff7e725306ba5717e7efa0aaba080341819d491efc421ff08",
   "packs": [
     {
       "name": "agent-bridge",
@@ -830,6 +830,91 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-css-transitions",
+      "name": "css-transitions",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/claude/animation-design-planner/frameworks/css-transitions/SKILL.md",
+      "installable": true,
+      "content_sha256": "322d940d2efbc17d127199ce3fca6091072adbfa093f0d04becec7302afce2eb",
+      "archive_versions": [],
+      "command": "/css-transitions",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-gsap",
+      "name": "gsap",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/claude/animation-design-planner/frameworks/gsap/SKILL.md",
+      "installable": true,
+      "content_sha256": "d94379dd3cf7fcfa994773c3572207ab4ae46e9dffd11d7713f1c4bdc6582048",
+      "archive_versions": [],
+      "command": "/gsap",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-motion-framer",
+      "name": "motion-framer",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/claude/animation-design-planner/frameworks/motion-framer/SKILL.md",
+      "installable": true,
+      "content_sha256": "6191e012efcd442ed04bbb5d71d1badce20d057719f176984ca4575773260ddc",
+      "archive_versions": [],
+      "command": "/motion-framer",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-threejs",
+      "name": "threejs",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/claude/animation-design-planner/frameworks/threejs/SKILL.md",
+      "installable": true,
+      "content_sha256": "0f27c69039d706acefcb7d5ba3963068ccc54d4880a955775389232382282e29",
+      "archive_versions": [],
+      "command": "/threejs",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-web-animations-api",
+      "name": "web-animations-api",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/claude/animation-design-planner/frameworks/web-animations-api/SKILL.md",
+      "installable": true,
+      "content_sha256": "f7c38b505b4a1aad90b5d5bf920c401c6b5bd6c2115e02b68b3a2212a721db78",
+      "archive_versions": [],
+      "command": "/web-animations-api",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-animation-design-planner",
       "name": "animation-design-planner",
       "scope": "base",
@@ -1113,6 +1198,91 @@
         "v0.8"
       ],
       "command": "$afps-status",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-css-transitions",
+      "name": "css-transitions",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/animation-design-planner/frameworks/css-transitions/SKILL.md",
+      "installable": true,
+      "content_sha256": "c877f96212c1bffdc48aea36d37e8a146f883a56e01448580e1c80f2918281b2",
+      "archive_versions": [],
+      "command": "$css-transitions",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-gsap",
+      "name": "gsap",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/animation-design-planner/frameworks/gsap/SKILL.md",
+      "installable": true,
+      "content_sha256": "f03cf3a52a742360c3183eb9b441006f7b820a1aa168bc28abe07f45a0913688",
+      "archive_versions": [],
+      "command": "$gsap",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-motion-framer",
+      "name": "motion-framer",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/animation-design-planner/frameworks/motion-framer/SKILL.md",
+      "installable": true,
+      "content_sha256": "2102bc893087ba61053d8f5410920fdfb9357260e5fed3fd435d4b6cf234b2f4",
+      "archive_versions": [],
+      "command": "$motion-framer",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-threejs",
+      "name": "threejs",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/animation-design-planner/frameworks/threejs/SKILL.md",
+      "installable": true,
+      "content_sha256": "689c33ba559d0fcabc51cc411e6a796197f340d101dfd7747a677d88395bf83d",
+      "archive_versions": [],
+      "command": "$threejs",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-web-animations-api",
+      "name": "web-animations-api",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "base/codex/animation-design-planner/frameworks/web-animations-api/SKILL.md",
+      "installable": true,
+      "content_sha256": "4e6d903c0021479a82b92fa773ef17ecb6ddebed12dd87b37c8734fdba007445",
+      "archive_versions": [],
+      "command": "$web-animations-api",
       "deck_memberships": []
     },
     {
@@ -1557,7 +1727,7 @@
       "scope": "pack",
       "pack": "agentic-skills-bench",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1565,10 +1735,11 @@
       ],
       "path": "packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md",
       "installable": true,
-      "content_sha256": "0522f56749d30452592059e0d32165595a04c262ba6e64d3c2a5ee80a58e28a1",
+      "content_sha256": "5fd889c2ebd4d126799fb7b66c6e8bc61090e2c952f7b33285d865fc8aa1829f",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/benchmark-agent-review",
       "deck_memberships": []
@@ -1579,7 +1750,7 @@
       "scope": "pack",
       "pack": "agentic-skills-bench",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1587,11 +1758,12 @@
       ],
       "path": "packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "1de985e0350f0caa2a7edbff399fc534f7b5079fecd774737a4e208ad06fd8cc",
+      "content_sha256": "a8e7421053bbf18d0724b3ea5fc219534f45b64e009875081abdbbba2d44781e",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/benchmark-test-skill",
       "deck_memberships": []
@@ -1602,7 +1774,7 @@
       "scope": "pack",
       "pack": "agentic-skills-bench",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1610,10 +1782,11 @@
       ],
       "path": "packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md",
       "installable": true,
-      "content_sha256": "b8b7980fb6457c4ab6a1aea96402fba4714ec063320182b1c32620209d8eda4f",
+      "content_sha256": "2e171c205e862b4affa29f741c9fc5cbaae73fea753b3c545da5f5ef801d2c70",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$benchmark-agent-review",
       "deck_memberships": []
@@ -1624,7 +1797,7 @@
       "scope": "pack",
       "pack": "agentic-skills-bench",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1632,11 +1805,12 @@
       ],
       "path": "packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "1963806234597700e5a0600c52761ad1c7ab9833d80b9be771f35a51526b634c",
+      "content_sha256": "24b4aa6d131140ce46d323de9b29058a6176a8ebd5fbdd36df11add0c6d4ac35",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$benchmark-test-skill",
       "deck_memberships": []
@@ -6779,19 +6953,20 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/exec/SKILL.md",
       "installable": true,
-      "content_sha256": "8686e6d2716d88e78d6445900c3c2a28522b7038da89f744d19da4aa3c5bf593",
+      "content_sha256": "fb122658d2b68cb5b382a3d844664771bce325bbe1e4452fe730994702c4d7b2",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/exec",
       "deck_memberships": []
@@ -6831,13 +7006,13 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship/SKILL.md",
       "installable": true,
-      "content_sha256": "010a4c42a07b0e37e4a73017f02dc4fd0dc9e93ddd1f5082698917dfaeb78406",
+      "content_sha256": "6b2816bfb41b164070e7a368ab69085aea2c2bb2429ca0abc2b62119dccfddf1",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6846,7 +7021,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/ship",
       "deck_memberships": []
@@ -6857,18 +7033,19 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/exec/SKILL.md",
       "installable": true,
-      "content_sha256": "3d0017a1e3fda534e97e3284ead8c7f95b5ab33ae386081d4c6811e176e2d8eb",
+      "content_sha256": "1b91766adb8426850d668180c3188b91ca04dd974a77ae562707ca98fa1dfa8a",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$exec",
       "deck_memberships": []
@@ -6908,13 +7085,13 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v0.10",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/ship/SKILL.md",
       "installable": true,
-      "content_sha256": "c2baa21d2e3be40b13e7c3e7293ab729c46679bb604a0cbe84e1657dbb233348",
+      "content_sha256": "120202709df0b93963542023bc1c5c9d6f254087d334d8f13d4e05a065d8b637",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6924,7 +7101,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$ship",
       "deck_memberships": []
@@ -9857,7 +10035,7 @@
       "scope": "pack",
       "pack": "report-gen",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9865,9 +10043,10 @@
       ],
       "path": "packs/report-gen/claude/report-website/SKILL.md",
       "installable": true,
-      "content_sha256": "79c7a9c69c609df33bc7c5aff559b3bf80fe325d8c5df6f445bdcddf8c0d8d6a",
+      "content_sha256": "c196325bebb80afb23df3199781ce84417360e925a3e9b694d16a42b9f9f095d",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/report-website",
       "deck_memberships": []
@@ -9878,7 +10057,7 @@
       "scope": "pack",
       "pack": "report-gen",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9886,9 +10065,10 @@
       ],
       "path": "packs/report-gen/codex/report-website/SKILL.md",
       "installable": true,
-      "content_sha256": "5d5d917ec2bec7f3845f66bfd271598e42410b72f8734b214569a67f20f0daff",
+      "content_sha256": "de76044f8daa73d82baf750aa69ca832b10fee61268a246d5d8e3ccb15b9d91c",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$report-website",
       "deck_memberships": []
@@ -10026,20 +10206,21 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "67fb4af08288f8fdbd4603ecfe7e7ba6c07d87194499e7f908b643befe90f61b",
+      "content_sha256": "6c60d750ef26d73c06a8f6a89d9469cdc196356a921de34d9b0bc04d637aad0b",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/session-triage",
       "deck_memberships": []
@@ -10099,20 +10280,21 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.7",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "8f10954e302f387236c8ece3c533e418d397fd2c0a2c78f66df682e02fa53bce",
+      "content_sha256": "900c5357ff70955dec8d7b02f8c7dda51375dc97700338d9e076ec0d4e7b7227",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "$session-triage",
       "deck_memberships": []
@@ -10123,17 +10305,18 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/claude/create-agentic-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "3111b66695c8be8e2e8c597ffdf26a3e154b19029a6bbf796f68e9457baafe21",
+      "content_sha256": "96b8924ce03edb3ad030b9bdf816fdebf6c16c85cb6355d8725a73d501c8c4eb",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/create-agentic-skill",
       "deck_memberships": []
@@ -10144,16 +10327,17 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/claude/create-local-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "8d16db97d12db596683033cec39f69f540f28e4e8c25d32f4a72f817daeebfb0",
+      "content_sha256": "b8ae2f9efdb07d3dc2b7d747a56f37f68457e960e85cedf376e30db5e0c782e9",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/create-local-skill",
       "deck_memberships": []
@@ -10186,7 +10370,7 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10194,12 +10378,13 @@
       ],
       "path": "packs/skill-dev/claude/targeted-skill-builder/SKILL.md",
       "installable": true,
-      "content_sha256": "82ddcc9b4b0355d389177ab6930a9343eb66fd734ee28fe77fb0068fe7109651",
+      "content_sha256": "29cf05cdaa8fb61a7dd650306fd8926035b57a596a9a13010fbff37871dae5b4",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/targeted-skill-builder",
       "deck_memberships": []
@@ -10210,17 +10395,18 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/codex/create-agentic-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "043d64abb734c7663405921d58ce4e10a39fb8becda234b152f9a406dcc229e4",
+      "content_sha256": "58d8fbfe384d0e235af7bb501bf9e3fe1f51d9a2e81afa0824d461d1b4ee3a8e",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$create-agentic-skill",
       "deck_memberships": []
@@ -10231,16 +10417,17 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/skill-dev/codex/create-local-skill/SKILL.md",
       "installable": true,
-      "content_sha256": "c90acc39721483ae320b8553c842b631186839925e33d478d75558763109268e",
+      "content_sha256": "71469ae39a492d33b56133f1305714287a210f864452e6ca532f70c4b6f6ad2f",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$create-local-skill",
       "deck_memberships": []
@@ -10273,7 +10460,7 @@
       "scope": "pack",
       "pack": "skill-dev",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10281,12 +10468,13 @@
       ],
       "path": "packs/skill-dev/codex/targeted-skill-builder/SKILL.md",
       "installable": true,
-      "content_sha256": "62f903dbe061b7e2a8df90cb1a1d47496448e401de58f3b2cb20d78ac8a6972a",
+      "content_sha256": "9153971a3ef6477989ea4d2d1c826942efe60b06f5426d3f1d7b1bb983ff787e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$targeted-skill-builder",
       "deck_memberships": []

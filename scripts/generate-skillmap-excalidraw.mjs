@@ -7,7 +7,7 @@ const PACKS_DIR = join(ROOT, 'packs');
 const BASE_DIR = join(ROOT, 'base', 'claude');
 const OUT = join(ROOT, 'docs', 'skillmap.excalidraw');
 const OUT_HTML = join(ROOT, 'alignment', 'skillmap.html');
-const SHOWCASE_DATA_JS = join(ROOT, 'apps', 'skills-showcase', 'public', 'assets', 'skills-data.js');
+const SKILLS_CATALOG_JSON = join(ROOT, 'exports', 'skills-catalog', 'v1', 'catalog.json');
 
 // --- Data collection ---
 
@@ -46,13 +46,9 @@ function getShowcaseCounts() {
     basePlatformEntries: 0,
   };
 
-  if (!existsSync(SHOWCASE_DATA_JS)) return fallback;
+  if (!existsSync(SKILLS_CATALOG_JSON)) return fallback;
 
-  const source = readFileSync(SHOWCASE_DATA_JS, 'utf8');
-  const match = source.match(/window\.SKILLS_SHOWCASE_DATA\s*=\s*(\{[\s\S]*\});?\s*$/);
-  if (!match) return fallback;
-
-  const data = JSON.parse(match[1]);
+  const data = JSON.parse(readFileSync(SKILLS_CATALOG_JSON, 'utf8'));
   const skills = Array.isArray(data.skills) ? data.skills : [];
   const uniqueMirroredSkills = new Set();
   const uniquePackSkills = new Set();
@@ -789,7 +785,7 @@ textarea { width:100%; min-height:90px; background:#0d1117; color:var(--text); b
   <div><strong>${activePacks}</strong><span>Active packs</span></div>
   <div><strong>${skillBearingPacks}</strong><span>Skill-bearing packs</span></div>
 </div>
-<p>The counts above come from <code>apps/skills-showcase/public/assets/skills-data.js</code>. The SVG and pack index are a structural Claude-root map for the editable Excalidraw view; they list ${claudePackRoots} repo-managed Claude pack roots and ${baseSkills.length} base Claude roots rather than platform entries.</p>
+<p>The counts above come from <code>exports/skills-catalog/v1/catalog.json</code>. The SVG and pack index are a structural Claude-root map for the editable Excalidraw view; they list ${claudePackRoots} repo-managed Claude pack roots and ${baseSkills.length} base Claude roots rather than platform entries.</p>
 <h3>Domain Legend</h3>
 <div class="legend">
 ${legendDomains.map(d => `  <div class="legend-item"><div class="legend-swatch" style="background:${d.fill};border:1.5px solid ${d.border}"></div>${esc(d.label)}</div>`).join('\n')}

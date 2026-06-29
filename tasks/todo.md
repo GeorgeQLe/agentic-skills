@@ -1,62 +1,60 @@
 # Current Task State
 
-## Current Implementation - Simplify BIP Into Project Platform Setup + Exhaustive Phase Drafts
+## Current Implementation - Split Showcase And Benchmarking Into Public Repos
 
 Project: `agentic-skills`.
 
 ### Execution Profile
 
 - Parallel mode: serial edits, parallel read-only inspection where useful.
-- Reason: project-config CLI behavior, canonical alignment convention text, generated bundles, package assets, and ship-end skill behavior form one shared BIP contract and should land atomically.
-- Safety boundary: preserve pre-existing dirty package release metadata until package build/check steps intentionally refresh package artifacts.
+- Reason: repository boundary changes touch package manifests, generated export artifacts, shipping contracts, docs, and history-preserving split repos. Integration must stay linear on the primary branch.
+- Safety boundary: preserve all existing skill/package source history; do not create GitHub Actions; do not deploy production surfaces during the migration.
 
 ### Plan
 
-- [x] Capture the visible `exec` handoff prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Add `set-bip-platforms <platform...>` and `set-bip-platforms unset` support for `.agents/project.json.alignment.bip_platforms` in the Node CLI and source-checkout script.
-- [x] Add focused project-config tests for platform preservation, unset behavior, no-project-file normalization, invalid/empty input, and help text.
-- [x] Revise `docs/alignment-page-convention.md` so BIP uses saved project platforms, includes a first-run setup gate when needed, classifies the run phase, generates exhaustive ranked platform-specific draft candidates, and uses one bulk downselect gate.
-- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles and packaged convention assets from the canonical convention.
-- [x] Update `ship-end` BIP behavior to use saved platforms and generate exhaustive phase-aware post batches instead of only `2-4` suggestions; archive and bump skill versions.
-- [x] Update BIP convention, audit, package-boundary, compatibility, and ship-end tests for the new platform setup/downselect contract.
-- [x] Run focused verification plus package build/check gates, document results, commit, and push intended changes on the primary branch.
+- [x] Add a stable committed export contract under `exports/skills-catalog/v1/` with catalog, proof, manifest, generation, and validation commands.
+- [x] Remove the Skills Showcase app, static mirror assets, and benchmark-results matrix from the `agentic-skills` workspace and package boundary.
+- [x] Remove benchmark harness/runtime, benchmark reports, and benchmark-owned validation/report scripts from `agentic-skills`; keep only canonical skills/package source and export validation.
+- [x] Update shipping, skill-development, deploy, package-boundary, and reference docs so `SKILL.md` / `PACK.md` changes require export validation, not Showcase data regeneration or Next.js builds.
+- [x] Create `agentic-skills-showcase` with preserved history for the app/specs/docs and rewrite its import scripts to consume `agentic-skills` exports by `SKILLS_REPO_URL` and `SKILLS_REPO_REF`.
+- [x] Create `agentic-skills-benchmarks` with preserved history for benchmark harness/runtime/reports and rewrite its scripts to consume `agentic-skills` exports by `SKILLS_REPO_URL` and `SKILLS_REPO_REF`.
+- [x] Run focused root, showcase, and benchmark verification; document results, commit, and push intended changes.
 
 ### Acceptance Criteria
 
-- `.agents/project.json.alignment.bip_platforms` is written and cleared by supported CLI commands without clobbering sibling `alignment` fields.
-- BIP pages use saved platforms when present and do not re-ask for project platform selection on later invocations.
-- First BIP artifact can include both the platform setup gate and the exhaustive draft list when platforms are not saved.
-- BIP review surfaces use one bulk downselect gate instead of separate drafting-mode, content-angle, sample-post, tone, claim-safety, and publish-readiness gates.
-- Generated bundles and package assets match the canonical convention.
-- `ship-end` enabled BIP produces phase-aware, platform-specific candidate batches from saved platforms.
+- `agentic-skills` owns `exports/skills-catalog/v1/catalog.json`, `proof.json`, and `manifest.json` with `schema_version`, `source_commit`, `generated_at`, source fingerprint/provenance, skills, packs, and package manifest summary.
+- Normal skill/package shipping validates `exports/skills-catalog/v1/**` and no longer requires `apps/skills-showcase/**`, `docs/skills-showcase/**`, `docs/benchmark-results-matrix.md`, `tests/harness/**`, `tests/layer4/**`, or `tests/bench.ts`.
+- `agentic-skills-showcase` can import pinned exports from `SKILLS_REPO_URL` / `SKILLS_REPO_REF`, validate data, and build the Next app without reading the source checkout internals.
+- `agentic-skills-benchmarks` can import pinned exports from `SKILLS_REPO_URL` / `SKILLS_REPO_REF`, resolve benchmark targets from the exported catalog, run focused harness tests, and write reports inside the benchmark repo.
+- The two new repos preserve relevant git history and are pushed as public repositories when GitHub access allows it.
 
 ### Test Plan
 
-- `node --test packages/skillpacks/test/project-config.test.mjs`
-- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts layer1/ship-end-bip.test.ts`
-- `node scripts/upgrade-alignment-page.mjs --check`
-- `node scripts/skill-convention-bundle-audit.mjs`
-- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
+- `npm --workspace skillpacks run build:check`
+- `pnpm --dir tests test:layer1`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
-- `npm --workspace skillpacks run build:check`
+- In `agentic-skills-showcase`: import/sync command, data validation, `pnpm build`, unit tests, and current Playwright smoke tests as available.
+- In `agentic-skills-benchmarks`: import/sync command, focused benchmark harness tests, and a smoke report write confined to the benchmark repo as available.
 
 ### Results
 
-- Added `set-bip-platforms <platform...>` / `set-bip-platforms unset` to the Node CLI and source-checkout `scripts/pack.sh` writer, preserving sibling `alignment` fields and normalizing/deduping platform slugs.
-- Reworked the canonical BIP alignment convention around saved project platforms, first-run platform setup, per-invocation `bip_phase`, exhaustive ranked platform-specific candidate batches, source-safety fields, and one bulk downselect gate.
-- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles from the canonical convention and refreshed packaged skillpacks metadata.
-- Updated active alignment-page audit logic and layer1 fixtures so BIP pages require bulk downselect, require platform setup only when no saved platforms exist, and reject obsolete granular BIP gates.
-- Updated mirrored `ship-end` skills to `v0.9`, archived `v0.8`, and changed enabled BIP behavior to use saved platforms and generate exhaustive phase-aware source-safe batches.
-- Refreshed Skills Showcase generated data/proof assets because tracked `SKILL.md` metadata changed; curated showcase title, description, grouping, and workflow copy did not need manual edits because the public skill identity stayed stable.
-- Verification passed with the commands in the test plan plus the required Skills Showcase data validation, source-checkout `set-bip-platforms` smoke test, and app build.
-- Deploy not run manually: `tasks/deploy.md` marks the refreshed Skills Showcase public assets as deploy-relevant, but production deployment requires explicit user confirmation.
-- Manifest: `tasks/ship-manifest-2026-06-29-simplify-bip-platform-setup.md`.
+- Root `agentic-skills` now owns `exports/skills-catalog/v1/{catalog.json,proof.json,manifest.json}` with 411 active skill entries, 42 packs, source fingerprint metadata, package manifest summary, proof artifacts, and validation script metadata.
+- Removed the in-repo Skills Showcase app, generated docs mirror, benchmark matrix, benchmark harness/runtime/reports, benchmark-specific docs/specs, and Vercel ignore scripts from the root repo boundary.
+- Updated shipping, skill-dev, benchmark, session-triage, report-website, package-boundary, and reference docs so normal skill/package shipping runs export/package validation instead of Showcase generation or Next.js builds.
+- Split repos were prepared at `/private/tmp/agentic-skills-showcase` and `/private/tmp/agentic-skills-benchmarks` with preserved relevant history from git filtering, root-level app/harness layouts, and `SKILLS_REPO_URL` / `SKILLS_REPO_REF` import scripts.
+- Verification passed:
+  - Root: `scripts/validate-skills-catalog-export.sh`; `npm run skillpacks:verify`; `pnpm --dir tests test:layer1`; `pnpm --dir tests test:layer2`; `scripts/skill-archive-audit.sh --strict`; `scripts/skill-versions.sh --missing`; `node scripts/audit-task-docs.mjs`; active stale-path `rg`; `git diff --check`.
+  - Showcase: import from local `agentic-skills` WORKTREE, `scripts/validate-skills-showcase-data.sh`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm test:e2e`.
+  - Benchmarks: import from local `agentic-skills` WORKTREE, `scripts/validate-skills-catalog-import.sh`, `pnpm bench:list`, and `pnpm verify -- --skill design-system` with local export env. The first verify attempt hit sandbox `tsx` IPC permissions and passed when rerun outside the sandbox.
+- Live both-agent benchmark execution was not run during the split because it would execute real agents; the benchmark repo validation proves catalog resolution, coverage matrix, listing, and focused harness tests against the imported export.
 
 ## Next Work
 
-Decide whether to deploy the refreshed Skills Showcase generated public assets, then publish the current `skillpacks@0.1.17` source release if deploy is deferred or completed.
+Push the root migration and the two split public repositories.
 
 ## Recommended Next Command
 
-Reply with explicit Skills Showcase deploy approval, or run `./publish.sh --current` if deploy is intentionally deferred.
+`git push`

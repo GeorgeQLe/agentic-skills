@@ -2,7 +2,7 @@
 name: report-website
 description: Convert one Markdown report or a collection of documented Markdown outputs into clean JSX routes for a polished, readable frontend website
 type: execution
-version: v0.1
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "<report.md|directory|--all-output-docs> [base route]"
 ---
@@ -28,7 +28,7 @@ Use this skill when the user wants one report, a directory of reports, or all do
    - Identify the frontend stack from existing files before creating anything: framework, route conventions, component directories, styling system, icon library, image handling, deployment config, and test commands.
    - Decide the frontend target before writing code:
      - Integrate into an existing frontend app by default when exactly one obvious public/docs/showcase app exists, when an app already owns report-like content, or when an existing app has clear routing, styling, and deploy conventions for documentation pages.
-     - In a monorepo, prefer likely documentation/public surfaces by name and evidence: `apps/docs`, `apps/skills-showcase`, `apps/showcase`, `apps/web`, `apps/site`, or routes/components that already render docs, reports, changelogs, or benchmark evidence.
+     - In a monorepo, prefer likely documentation/public surfaces by name and evidence: `apps/docs`, `apps/showcase`, `apps/web`, `apps/site`, a separate public report/showcase repository, or routes/components that already render docs, reports, changelogs, or benchmark evidence.
      - Create a separate frontend subdirectory or standalone site only when no frontend app exists, when the user explicitly asks for a standalone site, when the report site needs a separate brand/domain/audience/access policy, or when existing apps cannot cleanly support static report routes.
      - Ask one narrow question before choosing only when multiple plausible frontend apps exist with no clear owner, integrating would change public navigation or deployment in a non-obvious way, the desired base route conflicts with existing routes, or the audience/access level cannot be inferred.
      - When asking, name the concrete candidates and default recommendation, for example: `I found apps/docs and apps/marketing. Should report routes live under apps/docs at /reports, or should I create a standalone report site?`

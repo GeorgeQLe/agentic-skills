@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-29
+
+- Replaced local benchmark-harness and Showcase-generation requirements with public catalog export refreshes plus optional coverage work in the separate `agentic-skills-benchmarks` repo.
+
 ## v0.3 - 2026-06-13
 
 - Repo-verification check no longer looks for the removed `init.sh`; it now checks for `base/claude/`, `base/codex/`, and `packages/skillpacks/`.

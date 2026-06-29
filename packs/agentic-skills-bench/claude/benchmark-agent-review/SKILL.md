@@ -2,7 +2,7 @@
 name: benchmark-agent-review
 description: Review persisted benchmark run outputs with one or more agent graders and report subjective ergonomic quality separately from deterministic benchmark scores
 type: analysis
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 ---
@@ -11,7 +11,7 @@ argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 
 Invoke as `/benchmark-agent-review <skill-or-run-path>`.
 
-Use this skill after `/benchmark-test-skill <skill>` when the deterministic benchmark passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next caller.
+Use this skill after `/benchmark-test-skill <skill>` when the deterministic benchmark in `agentic-skills-benchmarks` passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next caller.
 
 Act as a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
 
@@ -19,13 +19,14 @@ The primary object of review is the generated skill output, not the benchmark ha
 
 ## Input
 
-- Required: a benchmark target skill name such as `run`, or a raw run directory such as `tests/benchmarks/runs/run-codex-47e0dd54/`.
+- Required: a benchmark target skill name such as `run`, or a raw run directory in `agentic-skills-benchmarks`, such as `tests/benchmarks/runs/run-codex-47e0dd54/`.
 - Optional: `--reviewers codex,claude` to request named reviewer families when both outputs are available.
 - Optional: `--runs N` to request multiple independent review passes. Default to 3 when practical; use 1 when only one reviewer pass is available in the active environment.
 
 ## Process
 
 1. Resolve benchmark evidence:
+   - Work from `/Users/georgele/projects/tools/agentic-skills-benchmarks` (or the user's local benchmark repo checkout). Do not look for benchmark runs in the `agentic-skills` source repo.
    - If the input is a run directory, inspect that directory.
    - If the input is a skill name, find the newest matching directories under `tests/benchmarks/runs/<skill>-*/`.
    - Prefer the latest Claude and Codex run directories when both exist.
@@ -67,8 +68,8 @@ The primary object of review is the generated skill output, not the benchmark ha
    - Synthesize reviewer findings into a normalized score table.
 
 7. Write the report:
-   - Create `benchmark/review-<SKILL>-<YYYY-MM-DD>.md` when the input resolves to a skill.
-   - Create `benchmark/review-<RUN-DIR-NAME>-<YYYY-MM-DD>.md` when the input is one run directory.
+   - Create `benchmark/review-<SKILL>-<YYYY-MM-DD>.md` in `agentic-skills-benchmarks` when the input resolves to a skill.
+   - Create `benchmark/review-<RUN-DIR-NAME>-<YYYY-MM-DD>.md` in `agentic-skills-benchmarks` when the input is one run directory.
    - If the review is exploratory and the user asks for chat-only output, do not write a file.
 
 8. Build the remediation handoff:
@@ -116,4 +117,3 @@ By default, this skill reports results inline and writes only its normal durable
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

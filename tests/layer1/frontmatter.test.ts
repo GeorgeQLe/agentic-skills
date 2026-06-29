@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { globSync } from "glob";
 import { resolve } from "node:path";
-import { validFrontmatter, parseFrontmatter } from "../harness/judge.js";
+import { validFrontmatter, parseFrontmatter } from "../helpers/frontmatter.js";
 
 const PACKS_DIR = resolve(import.meta.dirname, "../../packs");
 const ROOT_DIR = resolve(import.meta.dirname, "../..");
@@ -13,6 +13,10 @@ const skillFiles = globSync("**/SKILL.md", {
 
 const activeSkillFiles = [
   ...globSync("base/{claude,codex}/*/SKILL.md", {
+    cwd: ROOT_DIR,
+    ignore: ["**/archive/**"],
+  }),
+  ...globSync("base/{claude,codex}/**/SKILL.md", {
     cwd: ROOT_DIR,
     ignore: ["**/archive/**"],
   }),

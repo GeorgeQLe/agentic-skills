@@ -6,15 +6,8 @@
     "test": "vitest run --project layer1",
     "test:layer1": "vitest run --project layer1",
     "test:layer2": "vitest run --project layer2",
-    "test:layer3": "vitest run --project layer3",
-    "test:live": "LIVE_AGENT_TESTS=1 vitest run --project layer3",
-    "test:live:claude": "LIVE_AGENT_TESTS=1 LIVE_AGENT_TARGETS=claude vitest run --project layer3",
-    "test:live:codex": "LIVE_AGENT_TESTS=1 LIVE_AGENT_TARGETS=codex vitest run --project layer3",
     "test:all": "vitest run",
-    "verify": "tsx verify.ts",
-    "bench": "tsx bench.ts",
-    "bench:coverage": "tsx harness/bench-coverage.ts",
-    "bench:quick": "BENCH_RUNS=5 vitest run --project layer4"
+    "verify": "tsx verify.ts"
   },
   "devDependencies": {
     "glob": "^13.0.6",

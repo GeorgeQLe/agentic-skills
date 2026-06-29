@@ -5,15 +5,10 @@ const { values } = parseArgs({
   options: {
     skill: { type: "string" },
     layers: { type: "string", default: "1,2" },
-    live: { type: "boolean", default: false },
-    bench: { type: "boolean", default: false },
-    "bench-runs": { type: "string", default: "1" },
   },
 });
 
 const layerSet = new Set(values.layers!.split(",").map((s) => parseInt(s, 10)));
-if (values.live) layerSet.add(3);
-if (values.bench) layerSet.add(4);
 
 const sortedLayers = [...layerSet].sort((a, b) => a - b);
 
@@ -25,16 +20,7 @@ function buildCommand(layer: number): { cmd: string; args: string[]; env: Record
   const env: Record<string, string> = {};
   const args = ["vitest", "run", "--project", `layer${layer}`];
 
-  if (layer === 3) {
-    env.LIVE_AGENT_TESTS = "1";
-  }
-
-  if (layer === 4) {
-    env.BENCH_RUNS = values["bench-runs"]!;
-    if (values.skill) env.BENCH_SKILL = values.skill;
-  }
-
-  if (values.skill && layer >= 2 && layer <= 4) {
+  if (values.skill && layer >= 2) {
     args.push(values.skill);
   }
 

@@ -109,12 +109,10 @@ const deniedBuildPaths = [
   "CLAUDE.md"
 ];
 
-const websiteOwnedGeneratedPaths = [
-  "apps/skills-showcase/public/assets/skills-data.js",
-  "apps/skills-showcase/public/assets/github-proof-data.js",
-  "docs/skills-showcase/assets/skills-data.js",
-  "docs/skills-showcase/assets/github-proof-data.js",
-  "docs/benchmark-results-matrix.md"
+const publicExportPaths = [
+  "exports/skills-catalog/v1/catalog.json",
+  "exports/skills-catalog/v1/proof.json",
+  "exports/skills-catalog/v1/manifest.json"
 ];
 
 function copyEntry({ fromRoot, from, to }) {
@@ -196,25 +194,25 @@ function assertBuildBoundary() {
   }
 }
 
-function assertWebsiteBoundary(beforeFingerprint) {
-  const afterFingerprint = fileFingerprint(repoRoot, websiteOwnedGeneratedPaths);
+function assertExportBoundary(beforeFingerprint) {
+  const afterFingerprint = fileFingerprint(repoRoot, publicExportPaths);
   if (beforeFingerprint !== afterFingerprint) {
     throw new Error(
-      "Package build changed website-owned generated assets. Run website generation separately."
+      "Package build changed public skills-catalog export artifacts. Run export generation separately."
     );
   }
 }
 
 function buildPackage() {
-  const websiteFingerprint = fileFingerprint(repoRoot, websiteOwnedGeneratedPaths);
+  const exportFingerprint = fileFingerprint(repoRoot, publicExportPaths);
   const files = gitFiles(repoRoot);
   const skills = listSkills(repoRoot, files);
   const packs = listPacks(repoRoot, files, skills);
   // Source fingerprint reads the git index (like the manifest generator) so it
   // is a pure function of staged content and unaffected by a concurrent
-  // session's unstaged edits on the shared working tree. The website-boundary
+  // session's unstaged edits on the shared working tree. The export-boundary
   // fingerprints below stay on the working tree on purpose: they exist to
-  // detect in-build mutation of website-owned generated assets, which is a
+  // detect in-build mutation of committed public export artifacts, which is a
   // working-tree concern.
   const sourceFingerprint = fileFingerprint(repoRoot, [
     ...activeSkillPaths(files),
@@ -240,7 +238,7 @@ function buildPackage() {
   );
 
   assertBuildBoundary();
-  assertWebsiteBoundary(websiteFingerprint);
+  assertExportBoundary(exportFingerprint);
 
   console.log(
     `Staged skillpacks package at ${path.relative(repoRoot, buildRoot)} with ${skills.length} skills, ${packs.length} packs, and source fingerprint ${sourceFingerprint}.`

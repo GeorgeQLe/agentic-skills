@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-06-29
+
+- Replaced local benchmark-harness and Showcase-generation requirements with public catalog export refreshes plus optional coverage work in the separate `agentic-skills-benchmarks` repo.
+
 ## v0.4 - 2026-06-13
 
 - Validation and reload steps use `npx skillpacks refresh` instead of the removed `./init.sh`.

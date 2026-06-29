@@ -45,36 +45,28 @@ For workflow ordering, lead-in recommendations, and overlay dependencies, see [`
 
 Recommended next steps are governed by `docs/skill-next-step-contracts.md`. A skill may recommend another skill only when the target skill exists in the active platform/pack context and the current end state satisfies that target's prerequisites. Multi-state skills must branch by end state, and a terminal "no useful follow-up" state should say `No follow-up skill recommended` rather than invent work.
 
-## Skills Showcase Freshness
+## Public Skills Catalog Export
 
-The Skills Showcase app owns its generator scripts under `apps/skills-showcase/scripts/`. They dual-write to `apps/skills-showcase/public/assets/` and the temporary static mirror at `docs/skills-showcase/assets/`. The benchmark matrix at `docs/benchmark-results-matrix.md` is also website-owned generated output. The Next.js app at `apps/skills-showcase/` is the sole showcase surface.
+`agentic-skills` owns the canonical skills/package source and publishes a committed export contract for public consumers:
 
-When a tracked `SKILL.md` or `PACK.md` is created, deleted, renamed, or changed in behavior or metadata, refresh and validate the showcase before shipping:
+- `exports/skills-catalog/v1/catalog.json`
+- `exports/skills-catalog/v1/proof.json`
+- `exports/skills-catalog/v1/manifest.json`
 
-```bash
-pnpm --dir apps/skills-showcase generate:data
-pnpm --dir apps/skills-showcase validate:data
-```
-
-The validator fingerprints all four generated JS assets plus `docs/benchmark-results-matrix.md`. Include changed generated assets in the same commit as the skill change. Also review curated website copy, catalog grouping, workflow animation text, and proof receipts when the skill change affects public-facing behavior. `docs/skills-showcase/assets/` is kept as a website-owned mirror; the static site HTML/CSS/JS files were removed in Step 37.6. This is a static-data contract only; it does not add a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics.
-
-## Benchmark Coverage Freshness
-
-Every repository skill under `base/` or `packs/` must be represented in `tests/harness/bench-coverage.ts`. When a shared skill is created or materially updated, the same shipping boundary must add or update its benchmark coverage row:
-
-- Use `coverage_status: "custom"` with a registered deterministic setup under `tests/layer4/setups/` when local fixtures can exercise the workflow safely.
-- For custom setups, add a deterministic output-quality rubric when practical. Prefer local fixture facts, concrete file or command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over subjective prose scoring.
-- If deterministic quality scoring is not reliable, record an explicit blocked/deferred quality note in the setup or coverage review so the gap is visible.
-- Use `coverage_status: "blocked"` with `blocked_reason` and `next_command` when custom coverage depends on credentials, external services, paid actions, production deploys, real devices, or unsafe account state.
-- Keep `coverage_status: "generic"` only as an explicit smoke fallback while custom coverage is still pending.
-
-Validate the matrix with:
+When a tracked `SKILL.md`, `PACK.md`, package manifest, or package-generated skillpacks manifest changes, refresh and validate the export before shipping:
 
 ```bash
-pnpm --dir tests bench:coverage
+node scripts/generate-skills-catalog-export.mjs
+scripts/validate-skills-catalog-export.sh
 ```
 
-If a skill only has generic smoke coverage and needs domain-quality assertions, route to `targeted-skill-builder <skill> benchmark coverage`.
+Consumers select source with `SKILLS_REPO_URL` and `SKILLS_REPO_REF`. Release and deploy consumers should pin `SKILLS_REPO_REF` to a tag or commit SHA rather than a moving branch. The Skills Showcase app lives in the separate `agentic-skills-showcase` repository and imports these exports; it no longer writes generated website assets back into this repo.
+
+## Benchmark Coverage
+
+Benchmark harnesses, raw runs, reports, matrices, and benchmark summary exports live in the separate `agentic-skills-benchmarks` repository. Normal `agentic-skills` skill/package shipping does not update benchmark reports or run a benchmark matrix generator.
+
+When a shared skill is created or materially updated and benchmark coverage is needed, update `agentic-skills-benchmarks` against a pinned `agentic-skills` export ref. Any public benchmark summary used by the Showcase is generated from the benchmark repo, not during normal skills/package shipping here.
 
 ## Base Skills
 

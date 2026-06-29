@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.6
+version: v0.7
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -19,7 +19,7 @@ Use `/analyze-sessions` instead for informational history questions — single o
 - Optional repository path or current working directory.
 - Optional skill name or `SKILL.md` path.
 - Optional user correction text, error output, test failure, log excerpt, file path, commit, or issue description.
-- Optional `benchmark regression` mode: invoked as `/session-triage <skill> benchmark regression` by `/benchmark-test-skill` when `scripts/benchmark-regression-check.mjs` reports a `regression` verdict. The prior-vs-new delta block (passRate, Wilson lower bound, output-quality, status badge, prior and new grade dates) is carried in as evidence; the appended grade rows live in `benchmark/grade-history.json`.
+- Optional `benchmark regression` mode: invoked as `/session-triage <skill> benchmark regression` by `/benchmark-test-skill` when `agentic-skills-benchmarks/scripts/benchmark-regression-check.mjs` reports a `regression` verdict. The prior-vs-new delta block (passRate, Wilson lower bound, output-quality, status badge, prior and new grade dates) is carried in as evidence; the appended grade rows live in `agentic-skills-benchmarks/benchmark/grade-history.json`.
 
 ## Process
 
@@ -53,8 +53,8 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Identify whether the cause is a missing trigger, ambiguous trigger, missing evidence gate, insufficient scope resolution, weak output contract, bad next-step routing, missing validation, missing safety constraint, stale mirrored contract, repo instruction conflict, or agent noncompliance with an adequate contract.
    - Compare Claude and Codex skill versions when both exist and flag mirrored drift.
    - Check `tasks/lessons.md` when working in `agentic-skills`; reuse existing lessons or recommend a new lesson when the pattern is novel.
-   - For benchmark failures, check recent same-skill `benchmark/triage-<skill>-*.md` reports and `tasks/lessons.md` before recommending a narrow tolerance patch. If two or more recent reports classify the same family of valid outputs as benchmark false negatives, stop patching individual phrasings and route to a generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix that covers the family.
-   - For a `benchmark regression` invocation, the absolute thresholds may still pass — the issue is a *drop relative to the prior grade*. Use the carried delta and `benchmark/grade-history.json` to confirm the regression is real (not a one-run sampling artifact: small evaluated-run counts and wide Wilson intervals can move >=10pp by chance — say so and recommend a confirming re-run when the sample is thin). Then classify the cause:
+   - For benchmark failures, check recent same-skill `agentic-skills-benchmarks/benchmark/triage-<skill>-*.md` reports and `tasks/lessons.md` before recommending a narrow tolerance patch. If two or more recent reports classify the same family of valid outputs as benchmark false negatives, stop patching individual phrasings and route to a generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix that covers the family.
+   - For a `benchmark regression` invocation, the absolute thresholds may still pass — the issue is a *drop relative to the prior grade*. Use the carried delta and `agentic-skills-benchmarks/benchmark/grade-history.json` to confirm the regression is real (not a one-run sampling artifact: small evaluated-run counts and wide Wilson intervals can move >=10pp by chance — say so and recommend a confirming re-run when the sample is thin). Then classify the cause:
      - **Real behavioral regression** — the skill contract or a dependency changed and the agent now produces worse output. Route the fix to `/targeted-skill-builder <skill> benchmark regression` naming the contract section that drifted, and confirm the loop closes by re-running `/benchmark-test-skill <skill>` to verify the grade recovers in `grade-history.json`.
      - **Harness / rubric drift** — the skill behavior is unchanged but a setup, fixture, evaluator, or pricing/threshold change moved the score. Reuse the false-negative-family logic above (steps 5-6): name the owning harness/setup file and the family-level behavior to recognize, rather than patching one phrasing.
 

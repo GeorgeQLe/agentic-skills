@@ -2,57 +2,56 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Simplify BIP Into Project Platform Setup + Exhaustive Phase Drafts
+## Current Implementation - Split Showcase And Benchmarking Into Public Repos
 
 ### Goal
 
-Change Build-In-Public from per-page target-channel/drafting approval gates to a project-level platform setup plus per-invocation phase-aware, exhaustive, source-safe draft batches reviewed through one bulk downselect gate.
+Move the Skills Showcase app and benchmark system out of `agentic-skills` into two public repositories with preserved history, while keeping `agentic-skills` as the canonical open-source skills/package repo that publishes committed versioned export artifacts.
 
 ### Execution Profile
 
 - Parallel mode: serial edits, parallel read-only inspection where useful.
-- Rationale: project-config CLI behavior, canonical alignment convention text, generated bundles, package assets, audit diagnostics, and ship-end source mirrors share one BIP contract and should land together.
-- Safety boundary: preserve pre-existing dirty package release metadata until package build/check steps intentionally refresh package artifacts.
+- Rationale: repository boundary changes touch package manifests, generated export artifacts, shipping contracts, docs, and history-preserving split repos. Integration must stay linear on the primary branch.
+- Safety boundary: preserve all existing skill/package source history; do not create GitHub Actions; do not deploy production surfaces during the migration.
 
 ### Plan
 
-- [x] Capture the visible `exec` handoff prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Add `set-bip-platforms <platform...>` and `set-bip-platforms unset` support for `.agents/project.json.alignment.bip_platforms` in the Node CLI and source-checkout script.
-- [x] Add focused project-config tests for platform preservation, unset behavior, no-project-file normalization, invalid/empty input, and help text.
-- [x] Revise `docs/alignment-page-convention.md` so BIP uses saved project platforms, includes a first-run setup gate when needed, classifies the run phase, generates exhaustive ranked platform-specific draft candidates, and uses one bulk downselect gate.
-- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles and packaged convention assets from the canonical convention.
-- [x] Update `ship-end` BIP behavior to use saved platforms and generate exhaustive phase-aware post batches instead of only `2-4` suggestions; archive and bump skill versions.
-- [x] Update BIP convention, audit, package-boundary, compatibility, and ship-end tests for the new platform setup/downselect contract.
-- [x] Run focused verification plus package build/check gates, document results, commit, and push intended changes on the primary branch.
+- [x] Add a stable committed export contract under `exports/skills-catalog/v1/` with catalog, proof, manifest, generation, and validation commands.
+- [x] Remove the Skills Showcase app, static mirror assets, and benchmark-results matrix from the `agentic-skills` workspace and package boundary.
+- [x] Remove benchmark harness/runtime, benchmark reports, and benchmark-owned validation/report scripts from `agentic-skills`; keep only canonical skills/package source and export validation.
+- [x] Update shipping, skill-development, deploy, package-boundary, and reference docs so `SKILL.md` / `PACK.md` changes require export validation, not Showcase data regeneration or Next.js builds.
+- [x] Create `agentic-skills-showcase` with preserved history for the app/specs/docs and rewrite its import scripts to consume `agentic-skills` exports by `SKILLS_REPO_URL` and `SKILLS_REPO_REF`.
+- [x] Create `agentic-skills-benchmarks` with preserved history for benchmark harness/runtime/reports and rewrite its scripts to consume `agentic-skills` exports by `SKILLS_REPO_URL` and `SKILLS_REPO_REF`.
+- [x] Run focused root, showcase, and benchmark verification; document results, commit, and push intended changes.
 
 ### Acceptance Criteria
 
-- `.agents/project.json.alignment.bip_platforms` is written and cleared by supported CLI commands without clobbering sibling `alignment` fields.
-- BIP pages use saved platforms when present and do not re-ask for project platform selection on later invocations.
-- First BIP artifact can include both the platform setup gate and the exhaustive draft list when platforms are not saved.
-- BIP review surfaces use one bulk downselect gate instead of separate drafting-mode, content-angle, sample-post, tone, claim-safety, and publish-readiness gates.
-- Generated bundles and package assets match the canonical convention.
-- `ship-end` enabled BIP produces phase-aware, platform-specific candidate batches from saved platforms.
+- `agentic-skills` owns `exports/skills-catalog/v1/catalog.json`, `proof.json`, and `manifest.json` with `schema_version`, `source_commit`, `generated_at`, source fingerprint/provenance, skills, packs, and package manifest summary.
+- Normal skill/package shipping validates `exports/skills-catalog/v1/**` and no longer requires `apps/skills-showcase/**`, `docs/skills-showcase/**`, `docs/benchmark-results-matrix.md`, `tests/harness/**`, `tests/layer4/**`, or `tests/bench.ts`.
+- `agentic-skills-showcase` can import pinned exports from `SKILLS_REPO_URL` / `SKILLS_REPO_REF`, validate data, and build the Next app without reading the source checkout internals.
+- `agentic-skills-benchmarks` can import pinned exports from `SKILLS_REPO_URL` / `SKILLS_REPO_REF`, resolve benchmark targets from the exported catalog, run focused harness tests, and write reports inside the benchmark repo.
+- The two new repos preserve relevant git history and are pushed as public repositories when GitHub access allows it.
 
 ### Test Plan
 
-- `node --test packages/skillpacks/test/project-config.test.mjs`
-- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts layer1/ship-end-bip.test.ts`
-- `node scripts/upgrade-alignment-page.mjs --check`
-- `node scripts/skill-convention-bundle-audit.mjs`
-- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
+- `npm --workspace skillpacks run build:check`
+- `pnpm --dir tests test:layer1`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
-- `npm --workspace skillpacks run build:check`
+- In `agentic-skills-showcase`: import/sync command, data validation, `pnpm build`, unit tests, and current Playwright smoke tests as available.
+- In `agentic-skills-benchmarks`: import/sync command, focused benchmark harness tests, and a smoke report write confined to the benchmark repo as available.
 
 ### Results
 
-- Added persistent project-level BIP platform selection through `alignment.bip_platforms` with Node CLI and source-checkout script writers.
-- Replaced granular per-page BIP approval gates with saved-platform setup, phase-aware exhaustive candidate batches, source-safety metadata, and one bulk downselect gate.
-- Updated `ship-end` BIP behavior to consume saved platforms and generate exhaustive phase-aware batches; mirrored skill versions are now `v0.9` with `v0.8` archived.
-- Regenerated alignment convention bundles, packaged metadata, and Skills Showcase generated assets.
-- Verification passed with focused project-config tests, focused BIP layer1 tests, package node tests, package build/check, alignment audits, task-doc audit, diff hygiene, Skills Showcase validation, source-checkout smoke coverage, and app build.
-- Deploy not run manually because production deployment needs explicit confirmation.
+- Root export contract is implemented under `exports/skills-catalog/v1/` and validated fresh against the staged package/source boundary.
+- Root workspace and package boundary no longer include the Skills Showcase app, docs mirror, benchmark matrix, benchmark harness/runtime, benchmark reports, benchmark-specific docs/specs, or Showcase deploy ignore scripts.
+- Shipping, skill-development, benchmark, session-triage, report-website, package-boundary, and reference docs now route normal skill/package shipping through export/package validation instead of Showcase generators or Next.js builds.
+- Split repos were prepared at `/private/tmp/agentic-skills-showcase` and `/private/tmp/agentic-skills-benchmarks` with preserved relevant history and import scripts that consume `SKILLS_REPO_URL` / `SKILLS_REPO_REF`.
+- Verification passed across root, Showcase, and benchmark repos; live agent benchmark execution was not run during the split because it would execute real agents.
+
+## Historical Implementation - Simplify BIP Into Project Platform Setup + Exhaustive Phase Drafts
 
 ## Historical Implementation - Investigate Publish 0.1.16 Release Metadata Dirty State
 
@@ -1636,11 +1635,11 @@ Make the product-design tree choose downstream branches in a journey-aware order
   - Require handoff into `$prototype`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan` only after the experiment has explicit review evidence.
 
 - Step 1.8: Regenerate bundles and public/package metadata for changed skill surfaces
-  - Files: generated `DESIGN-TREE-LOOP.md`, `ALIGNMENT-PAGE.md`, `INTERROGATION-PAGE.md` if applicable, `packages/skillpacks/dist/skillpacks-manifest.json`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and related generated proof data if the generators update it.
+  - Files: generated `DESIGN-TREE-LOOP.md`, `ALIGNMENT-PAGE.md`, `INTERROGATION-PAGE.md` if applicable, `packages/skillpacks/dist/skillpacks-manifest.json`, and `exports/skills-catalog/v1/{catalog.json,proof.json,manifest.json}` if the generators update them.
   - Run `node scripts/upgrade-design-tree-loop.mjs`.
   - Run `node scripts/upgrade-alignment-page.mjs` and `node scripts/upgrade-interrogation-page.mjs` if new or changed skills require those bundles.
-  - Stage source skill edits before regenerating package/showcase metadata so index-generated assets reflect the intended boundary.
-  - Run `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` when tracked skill metadata or pack membership changes.
+  - Stage source skill edits before regenerating package/export metadata so index-generated assets reflect the intended boundary.
+  - Run `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh` when tracked skill metadata or pack membership changes.
 
 ### Green
 
@@ -1651,7 +1650,7 @@ Make the product-design tree choose downstream branches in a journey-aware order
   - Run `node scripts/upgrade-alignment-page.mjs --check` and `node scripts/upgrade-interrogation-page.mjs --check` if those generators were used.
   - Run `scripts/skill-archive-audit.sh --strict`.
   - Run `scripts/skill-mirror-parity-audit.sh --verbose`; if it still reports only known unrelated `session-triage` drift, record that residual explicitly.
-  - Run `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` if showcase data changed.
+  - Run `scripts/validate-skills-catalog-export.sh` if skill export data changed.
   - Run `npm run skillpacks:verify`.
   - Run `node scripts/audit-task-docs.mjs`.
   - Run `git diff --check`.

@@ -146,7 +146,7 @@ Current package `package.json` shape:
 }
 ```
 
-The root `package.json` is private and declares workspaces for `apps/skills-showcase` and `packages/skillpacks`. The public package uses the repository root MIT license and npm metadata links back to `https://github.com/GeorgeQLe/agentic-skills`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
+The root `package.json` is private and declares the `packages/skillpacks` workspace. The public package uses the repository root MIT license and npm metadata links back to `https://github.com/GeorgeQLe/agentic-skills`. The first release can keep runtime dependencies at zero. If argument parsing grows, add one small dependency later instead of pulling in a framework immediately.
 
 Both published packages expose the same binaries:
 
@@ -333,7 +333,7 @@ Proposed shape:
 
 The manifest should be generated from repository files, not hand-maintained. Start with a package-owned script such as `packages/skillpacks/scripts/build-skillpacks-manifest.mjs`.
 
-The manifest is generated from the **git index**, not the working tree: discovery (`git ls-files`), per-skill `content_sha256`, `archive_versions`, and the global `source_fingerprint` all read staged blobs via a batched `git cat-file --batch`. This makes the committed manifest a pure function of what the committing session is staging, so a concurrent session's unstaged edits on a shared working tree never leak in. Stage your skill edits before running the build, then stage and commit the regenerated manifest alongside the source. `build:check` regenerates from the index and byte-compares against the committed manifest; on a clean checkout `index == HEAD`, so clean-checkout validation is unchanged. (`build-package.mjs` computes its source fingerprint from the index for the same reason; the website-boundary fingerprints intentionally stay on the working tree, since they guard against in-build mutation of generated assets.) The skills-showcase generators apply the same split: tracked catalog and proof source (skill/pack metadata, benchmark markdown, `tasks/history.md`, proof artifacts, and the embedded source fingerprints) is index-sourced, while the untracked/gitignored benchmark-run evidence under `tests/benchmarks/runs/**` remains working-tree.
+The manifest is generated from the **git index**, not the working tree: discovery (`git ls-files`), per-skill `content_sha256`, `archive_versions`, and the global `source_fingerprint` all read staged blobs via a batched `git cat-file --batch`. This makes the committed manifest a pure function of what the committing session is staging, so a concurrent session's unstaged edits on a shared working tree never leak in. Stage your skill edits before running the build, then stage and commit the regenerated manifest alongside the source. `build:check` regenerates from the index and byte-compares against the committed manifest; on a clean checkout `index == HEAD`, so clean-checkout validation is unchanged. (`build-package.mjs` computes its source fingerprint from the index for the same reason; its public-export fingerprint guard ensures package staging does not mutate `exports/skills-catalog/v1/**`.)
 
 Manifest consumers:
 
@@ -676,8 +676,7 @@ Existing repository checks:
 scripts/skill-versions.sh --missing
 scripts/skill-deps.sh --broken
 scripts/skill-pack-routing-audit.sh
-apps/skills-showcase/scripts/validate-skills-showcase-data.sh
-pnpm --dir tests bench:coverage
+scripts/validate-skills-catalog-export.sh
 ```
 
 CLI temp-repo checks:

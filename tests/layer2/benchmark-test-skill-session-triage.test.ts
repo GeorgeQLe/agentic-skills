@@ -27,7 +27,7 @@ function routeFromBenchmarkReport(report: string, skill: string): string {
 
 function triageRecommendation(report: string, skill: string): string {
   const sameFamilyReports = (report.match(/benchmark false negative/gi) ?? []).length;
-  const namesOwner = /tests\/layer4\/setups|tests\/harness/i.test(report);
+  const namesOwner = /agentic-skills-benchmarks|tests\/layer4\/setups|tests\/harness/i.test(report);
   if (sameFamilyReports >= 2 && namesOwner) {
     return `$targeted-skill-builder ${skill} benchmark repeated false-negative generalization`;
   }
@@ -70,18 +70,18 @@ describe("benchmark-test-skill layer2 fixture coverage", () => {
 
 describe("session-triage layer2 fixture coverage", () => {
   it("generalizes repeated same-family benchmark false negatives instead of one-off phrasing patches", () => {
-    const codexContract = readRepoFile("base/codex/session-triage/SKILL.md");
-    const claudeContract = readRepoFile("base/claude/session-triage/SKILL.md");
+    const codexContract = readRepoFile("packs/session-analytics/codex/session-triage/SKILL.md");
+    const claudeContract = readRepoFile("packs/session-analytics/claude/session-triage/SKILL.md");
 
-    expect(codexContract).toContain("check recent same-skill `benchmark/triage-<skill>-*.md` reports");
-    expect(claudeContract).toContain("check recent same-skill `benchmark/triage-<skill>-*.md` reports");
+    expect(codexContract).toContain("check recent same-skill `agentic-skills-benchmarks/benchmark/triage-<skill>-*.md` reports");
+    expect(claudeContract).toContain("check recent same-skill `agentic-skills-benchmarks/benchmark/triage-<skill>-*.md` reports");
 
     const triageEvidence = [
       "# Triage",
       "",
       "benchmark false negative: valid warning line rejected.",
       "benchmark false negative: valid parenthetical negation rejected.",
-      "Owner target: tests/layer4/setups/tier23-base-workflows.setup.ts.",
+      "Owner target: agentic-skills-benchmarks tests/layer4/setups/tier23-base-workflows.setup.ts.",
       "Recommended fix: add a family-level semantic evaluator with positive and negative fixture shapes.",
     ].join("\n");
 
@@ -95,7 +95,7 @@ describe("session-triage layer2 fixture coverage", () => {
       "# Triage",
       "",
       "benchmark false negative: one valid output shape was rejected.",
-      "Owner target: tests/layer4/setups/tier23-base-workflows.setup.ts.",
+      "Owner target: agentic-skills-benchmarks tests/layer4/setups/tier23-base-workflows.setup.ts.",
     ].join("\n");
 
     expect(triageRecommendation(triageEvidence, "ship-end")).toBe(

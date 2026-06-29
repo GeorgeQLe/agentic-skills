@@ -69,13 +69,13 @@ Compact command index for all scripts in this repository.
 | `pnpm --dir tests test:live:claude` | Run live tests (Claude only) |
 | `pnpm --dir tests test:live:codex` | Run live tests (Codex only) |
 
-## Showcase & Data Generation
+## Public Export Generation
 
 | Command | Description |
 | --- | --- |
-| `pnpm --dir apps/skills-showcase generate:data` | Generate Skills Showcase app data and the temporary docs mirror |
-| `pnpm --dir apps/skills-showcase validate:data` | Validate website-owned generated showcase data |
-| `apps/skills-showcase/scripts/validate-skills-showcase-data.sh` | Direct shell validator for generated showcase data freshness |
+| `node scripts/generate-skills-catalog-export.mjs` | Generate committed public skills-catalog exports |
+| `scripts/validate-skills-catalog-export.sh` | Validate committed public skills-catalog exports are fresh |
+| `npm run exports:check` | Package-script wrapper for the export validator |
 
 ## Alignment Page Management
 

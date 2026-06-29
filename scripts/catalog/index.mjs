@@ -204,7 +204,10 @@ export function compactText(value, maxLength = 700) {
 export function activeSkillPaths(files) {
   return files.filter((file) => {
     return (
-      /^base\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
+      (
+        /^base\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
+        !file.split("/").includes("archive")
+      ) ||
       (
         /^packs\/[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
         !file.split("/").includes("archive")

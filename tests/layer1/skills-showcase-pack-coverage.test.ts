@@ -5,33 +5,32 @@ import { describe, expect, it } from "vitest";
 
 const repoRoot = resolve(import.meta.dirname, "../..");
 
-interface ShowcaseSkill {
+interface CatalogSkill {
   name: string;
   pack: string | null;
   path: string;
 }
 
-interface ShowcasePack {
+interface CatalogPack {
   name: string;
   skillCount: number;
   path: string | null;
 }
 
-interface ShowcaseData {
-  skills: ShowcaseSkill[];
-  packs: ShowcasePack[];
+interface SkillsCatalog {
+  schema_version: string;
+  skills: CatalogSkill[];
+  packs: CatalogPack[];
 }
 
-function loadShowcaseData(): ShowcaseData {
-  const content = readFileSync(resolve(repoRoot, "docs/skills-showcase/assets/skills-data.js"), "utf8");
-  const json = content.match(/window\.SKILLS_SHOWCASE_DATA = ([\s\S]*);\n$/)?.[1];
-  if (!json) throw new Error("skills-data.js did not contain generated showcase data");
-  return JSON.parse(json);
+function loadCatalog(): SkillsCatalog {
+  return JSON.parse(readFileSync(resolve(repoRoot, "exports/skills-catalog/v1/catalog.json"), "utf8"));
 }
 
-describe("skills showcase pack coverage", () => {
-  it("represents every active PACK.md in generated pack data", () => {
-    const data = loadShowcaseData();
+describe("skills catalog export pack coverage", () => {
+  it("represents every active PACK.md in exported pack data", () => {
+    const data = loadCatalog();
+    expect(data.schema_version).toBe("skills-catalog.v1");
     const generatedPackPaths = new Set(data.packs.map((pack) => pack.path));
     const activePackPaths = globSync("packs/*/PACK.md", { cwd: repoRoot }).sort();
 
@@ -45,8 +44,8 @@ describe("skills showcase pack coverage", () => {
     expect(data.packs.map((pack) => pack.name)).toContain("game");
   });
 
-  it("includes active nested framework skills in generated skills and pack counts", () => {
-    const data = loadShowcaseData();
+  it("includes active nested framework skills in exported skills and pack counts", () => {
+    const data = loadCatalog();
     const activePackSkillPaths = globSync("packs/*/{claude,codex}/**/SKILL.md", {
       cwd: repoRoot,
       ignore: ["**/archive/**"],

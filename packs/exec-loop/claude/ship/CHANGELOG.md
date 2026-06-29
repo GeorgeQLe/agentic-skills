@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-29
+
+- Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.
+
 ## v0.8 - 2026-06-23
 
 - Added task-doc audit gating and current-only next-work routing so historical roadmap/advisory unchecked items are not selected as executable work unless promoted into `tasks/todo.md`.

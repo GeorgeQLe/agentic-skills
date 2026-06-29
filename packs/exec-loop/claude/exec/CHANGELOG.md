@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-06-29
+
+- Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.
+
 ## v0.5 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

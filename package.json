@@ -3,19 +3,17 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "apps/skills-showcase",
     "packages/skillpacks"
   ],
   "devDependencies": {
     "skillpacks": "workspace:*"
   },
   "scripts": {
+    "exports:generate": "node scripts/generate-skills-catalog-export.mjs",
+    "exports:check": "scripts/validate-skills-catalog-export.sh",
     "skillpacks:build": "npm --workspace packages/skillpacks run build",
     "skillpacks:list": "npm --workspace packages/skillpacks run skillpacks:list",
     "skillpacks:verify": "npm --workspace packages/skillpacks run verify:package",
-    "skillpacks:verify-published": "npm --workspace packages/skillpacks run verify:published",
-    "skills-showcase:build": "pnpm --dir apps/skills-showcase build",
-    "skills-showcase:test": "pnpm --dir apps/skills-showcase test",
-    "skills-showcase:validate-data": "pnpm --dir apps/skills-showcase validate:data"
+    "skillpacks:verify-published": "npm --workspace packages/skillpacks run verify:published"
   }
 }

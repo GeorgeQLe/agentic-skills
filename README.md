@@ -40,7 +40,7 @@ cd ~/my-project
 ~/agentic-skills/scripts/pack.sh status
 ```
 
-**Maintainer dev-setup note.** To run the local `npx skillpacks` / `npx gskp` CLI from *inside* this monorepo checkout, run `pnpm install` once at the repo root first (this is a pnpm workspace — do **not** use `npm install`, which fails on the pnpm-managed `apps/skills-showcase`). The root `package.json` declares `skillpacks` as a `workspace:*` devDependency, so `pnpm install` links both the `skillpacks` and `gskp` bins into `node_modules/.bin`, pointing at the local `packages/skillpacks/bin/skillpacks.mjs`. Without it, the root `node_modules/.bin/` has no shims and `npx skillpacks` reports `gskp: not found`. The pure-bash `scripts/pack.sh <cmd>` route bypasses Node/pnpm entirely and needs no install — use it as the no-install fallback. (End users never hit any of this; they run `npx skillpacks` from their own project against the published package.)
+**Maintainer dev-setup note.** To run the local `npx skillpacks` / `npx gskp` CLI from *inside* this checkout, run `pnpm install` once at the repo root first. The root `package.json` declares `skillpacks` as a `workspace:*` devDependency, so `pnpm install` links both the `skillpacks` and `gskp` bins into `node_modules/.bin`, pointing at the local `packages/skillpacks/bin/skillpacks.mjs`. Without it, the root `node_modules/.bin/` has no shims and `npx skillpacks` reports `gskp: not found`. The pure-bash `scripts/pack.sh <cmd>` route bypasses Node/pnpm entirely and needs no install — use it as the no-install fallback. (End users never hit any of this; they run `npx skillpacks` from their own project against the published package.)
 
 ### npm CLI
 
@@ -222,14 +222,14 @@ agentic-skills/
 │   ├── skill-mirror-parity-audit.sh
 │   ├── skill-pack-routing-audit.sh
 │   └── skill-versions.sh
-├── apps/
-│   └── skills-showcase/
+├── exports/
+│   └── skills-catalog/v1/
 ├── packages/
 │   └── skillpacks/
 └── docs/
 ```
 
-The repository root is private workspace metadata. The publishable `skillpacks` package source lives in `packages/skillpacks/`; `@glexcorp/gskp` is generated as a staged package variant during release. The public Skills Showcase app and its data generators live in `apps/skills-showcase/`.
+The repository root is private workspace metadata. The publishable `skillpacks` package source lives in `packages/skillpacks/`; `@glexcorp/gskp` is generated as a staged package variant during release. Public consumers read committed catalog artifacts from `exports/skills-catalog/v1/`. The Skills Showcase app lives in the separate `agentic-skills-showcase` repository, and benchmark runs/reports live in the separate `agentic-skills-benchmarks` repository.
 
 ## Base Core
 

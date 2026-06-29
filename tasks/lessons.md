@@ -512,7 +512,7 @@
 
 - A `$benchmark-agent-review icon-handler` run updated benchmark/review evidence but did not refresh the Skills Showcase frontend data, leaving `icon-handler` catalog benchmark evidence pointing at the older 2026-05-13 report.
 - The showcase freshness gate applies to public benchmark evidence as well as `SKILL.md` and `PACK.md` behavior/metadata changes.
-- After adding or updating curated benchmark reports, subjective review reports, or benchmark matrix inputs, run `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`.
+- After adding or updating benchmark reports, subjective review reports, or benchmark matrix inputs, do that work in `agentic-skills-benchmarks`; import the public `agentic-skills` export with `SKILLS_REPO_REF` pinned or `WORKTREE`, then run `pnpm catalog:check` and `pnpm bench:coverage`. Do not regenerate Showcase assets from `agentic-skills`.
 - Generator parsing must handle the current benchmark report table shape, including title-case agent labels and columns such as `Output Quality`.
 
 ## 2026-05-13 — Hygiene must check canonical root existence, not just contents

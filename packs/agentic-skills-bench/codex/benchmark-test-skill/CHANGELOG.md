@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-06-29
+
+- Updated benchmark execution to run from `agentic-skills-benchmarks`, import the public skills catalog export, and keep reports, run data, and regression history in that repo.
+
 ## v0.3 - 2026-06-20
 
 - Added Step 3.5 - Regression Check: after `pnpm bench`, run `node scripts/benchmark-regression-check.mjs <skill>` to compare the fresh grade against the prior grade in `benchmark/grade-history.json`. On a `regression` verdict (distinct from an absolute failure), route to `$session-triage <skill> benchmark regression` carrying the prior-vs-new delta. Closes the benchmark → triage → version-bump → re-benchmark loop documented in `docs/benchmark-improvement-loop.md`.

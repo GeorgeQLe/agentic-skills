@@ -2,7 +2,7 @@
 name: create-local-skill
 description: Scaffold a new user-local skill in ~/.claude/skills (and optionally ~/.codex/skills), then offer to promote it to a personal fork of agentic-skills
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: <skill-name> [description]
 ---
 
@@ -72,9 +72,10 @@ Write **real directories**, not managed roots back to the shared repo. `npx skil
    - Copy the scaffolded skill into:
      - `<fork>/base/claude/<name>/` (and `<fork>/base/codex/<name>/` if a Codex version was created), **or**
      - `<fork>/personal/claude/<name>/` if the user wants to keep personal skills segregated from upstream-syncable dirs. Ask which.
-   - If the skill is promoted into a fork's `base/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - If the skill is promoted into a current `agentic-skills` fork's `base/` or `packs/` tree, refresh that fork's public skills catalog export by running node scripts/generate-skills-catalog-export.mjs and scripts/validate-skills-catalog-export.sh.
+   - If the promoted skill needs benchmark coverage, update the separate `agentic-skills-benchmarks` fork/repo: import the fork's export, then add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
    - For promoted custom setups, include a deterministic quality rubric when practical, or record why quality scoring is blocked/deferred instead of adding a subjective rubric.
-   - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
+   - Recommend `pnpm catalog:check` and `pnpm bench:coverage` from the benchmark repo before benchmark coverage changes are committed.
    - Show the `git status` in the fork and suggest a commit message like `feat(skill): add <name>`. Do **not** commit or push automatically — leave that to the user.
 
 7. **Safety note to surface:** pushing to the upstream agentic-skills repo requires write access. A plain clone without write access will be rejected at the remote; a fork pushes to the user's own repo. There is no path by which this skill can push a user's experimental skill to the shared upstream.
@@ -88,4 +89,3 @@ Write **real directories**, not managed roots back to the shared repo. `npx skil
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-

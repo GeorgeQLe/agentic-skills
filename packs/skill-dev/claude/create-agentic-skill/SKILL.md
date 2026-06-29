@@ -2,7 +2,7 @@
 name: create-agentic-skill
 description: Create or update a repo-managed skill inside this agentic-skills checkout under base/claude and optionally base/codex, then validate, commit, and push it
 type: execution
-version: v0.3
+version: v0.4
 argument-hint: <skill-name> [description] [--claude-only|--codex-only|--mirror]
 ---
 
@@ -46,27 +46,27 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
    - Keep the lesson specific enough to prevent recurrence.
 
 6. **Handle benchmark coverage.**
-   - For every new shared skill or material behavior update, update `tests/harness/bench-coverage.ts` in the same shipping boundary.
-   - Add or register a deterministic custom setup under `tests/layer4/setups/` when local fixtures can exercise the skill without credentials, external services, paid actions, production deploys, or unsafe account state.
+   - Benchmark coverage is owned by the separate `agentic-skills-benchmarks` repository. Do not edit `tests/harness/**` or `tests/layer4/**` in this repo.
+   - For every new shared skill or material behavior update, decide whether the benchmark repo needs a matching coverage row, custom setup, blocked row, or smoke-only follow-up after the public export is refreshed.
+   - In `agentic-skills-benchmarks`, add or register a deterministic custom setup under `tests/layer4/setups/` when local fixtures can exercise the skill without credentials, external services, paid actions, production deploys, or unsafe account state.
    - When adding or materially updating a custom setup, include a deterministic quality rubric when practical. Score local fixture facts, concrete file/command references, expected next-route handoffs, specificity, and forbidden fabrications as appropriate for the skill.
    - If output quality cannot be scored reliably from local fixtures, record an explicit blocked/deferred quality note in the setup or coverage review instead of adding a weak subjective rubric.
    - If deterministic local coverage is not safe yet, record an explicit `blocked` row with `blocked_reason` and `next_command`.
-   - Use `/targeted-skill-builder <skill-name> benchmark coverage` when the coverage work needs a focused follow-up before the skill can ship.
-   - Run `pnpm --dir tests bench:coverage` after updating the matrix.
+   - Use `/targeted-skill-builder <skill-name> benchmark coverage` when the benchmark-repo coverage work needs a focused follow-up.
+   - Run the benchmark repo checks (`pnpm catalog:check`, `pnpm bench:coverage`, and focused tests) from `agentic-skills-benchmarks` after updating coverage there.
 
 7. **Validate.**
    - Read back the new or updated `SKILL.md` files.
    - Run search checks for old skill names, missing `version:`, missing Codex invocation lines in Codex skills, and accidental writes under `~/.claude/skills` or `~/.codex/skills`.
-   - Run `pnpm --dir tests bench:coverage` and any focused setup tests changed for the new benchmark row.
-   - If any tracked `SKILL.md` or `PACK.md` was created, deleted, renamed, or changed in behavior or metadata, refresh the Skills Showcase data before shipping:
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`
-     - `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`
-     - `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`
-   - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website. Update the relevant site files or explicitly record why no curated website copy changed.
+   - If any tracked `SKILL.md` or `PACK.md` was created, deleted, renamed, or changed in behavior or metadata, refresh the public skills catalog export before shipping:
+     - `node scripts/generate-skills-catalog-export.mjs`
+     - `scripts/validate-skills-catalog-export.sh`
+   - Include changed `exports/skills-catalog/v1/**` artifacts in the shipping boundary. The Skills Showcase lives in `agentic-skills-showcase`; if the skill change needs curated website copy, record the follow-up for that repo instead of editing app files here.
+   - When benchmark coverage was updated in `agentic-skills-benchmarks`, import this repo's export there using a pinned ref or local `SKILLS_REPO_REF=WORKTREE`, then run its coverage checks.
    - Confirm unrelated dirty files remain unstaged.
 
 8. **Commit and push.**
-   - Stage only intended repo-managed skill files, generated showcase assets, and directly related docs or lesson updates.
+   - Stage only intended repo-managed skill files, public export artifacts, and directly related docs or lesson updates.
    - Commit on the repository primary branch (`main` when present, otherwise `master`) with a concise conventional commit message.
    - Push the branch.
    - Do not stage unrelated user changes.

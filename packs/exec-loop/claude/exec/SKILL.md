@@ -2,7 +2,7 @@
 name: exec
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
 type: execution
-version: v0.5
+version: v0.6
 argument-hint: "[--phase]"
 invocation: orchestrator
 ---
@@ -84,7 +84,7 @@ When the profile is `agent-team`:
 
 ### Single Step Mode (default)
 
-- If the step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before handing off to `/ship`: run `node apps/skills-showcase/scripts/generate-skills-showcase-data.mjs`, `node apps/skills-showcase/scripts/generate-skills-showcase-github-data.mjs`, and `apps/skills-showcase/scripts/validate-skills-showcase-data.sh`; include changed generated assets in the dirty tree. Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
+- If the step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the public skills catalog export before handing off to `/ship`: run `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh`; include changed `exports/skills-catalog/v1/**` artifacts in the dirty tree. The Skills Showcase lives in the separate `agentic-skills-showcase` repository and imports this export; do not run Showcase app generators, Next.js builds, or website asset refreshes during normal `agentic-skills` work. If a skill change needs curated website copy, record the follow-up for the Showcase repo instead of editing app files here.
 - If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
 - If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
 - If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same execution by recording the no-op result instead of leaving it for a separate plan-mode handoff. Stop.
