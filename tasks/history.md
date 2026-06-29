@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-28 — Ship-end 0.1.15 release closeout
+
+- Captured the visible `$ship-end` invocation and pasted skill context in `prompts/ship-end/skill-prompt-20260628-215352-ship-end.md`.
+- Confirmed `skillpacks@0.1.15` and `@glexcorp/gskp@0.1.15` are both published on npm.
+- Completed the repository release-control side after detecting the bump was incomplete: regenerated `packages/skillpacks/dist/skillpacks-manifest.json` so the `0.1.15` manifest fingerprint matched the staged package source, committed the source bump, tagged `v0.1.15`, and pushed commit plus tag to `master`.
+- Final source state: `packages/skillpacks/package.json`, `packages/skillpacks/dist/skillpacks-manifest.json`, `packages/skillpacks/build/package.json`, and `packages/skillpacks/build/dist/skillpacks-manifest.json` all report `0.1.15`.
+- Verification passed: focused publish/auth tests, workspace package tests, package build/check, post-commit publish dry run, regenerated-manifest build/check, task-doc audit, and diff hygiene.
+- Deploy skipped: `tasks/deploy.md` says `prompts/**`, `tasks/**`, package internals, and release evidence do not deploy the Skills Showcase runtime.
+- Manifest: `tasks/ship-manifest-2026-06-28-ship-end-0-1-15-closeout.md`.
+
 ## 2026-06-28 — Tighten BIP agent compliance
 
 - Hardened Build-In-Public alignment compliance so enabled project BIP mode is no longer only convention prose.
