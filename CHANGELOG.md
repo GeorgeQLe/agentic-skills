@@ -8,6 +8,15 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+### Added
+
+- Added `skillpacks set-bip-platforms <platform...>` / `set-bip-platforms unset` to store project-level Build-In-Public target platforms at `.agents/project.json.alignment.bip_platforms` while preserving sibling alignment fields.
+
+### Changed
+
+- Build-In-Public alignment guidance now uses saved project platforms, phase labels (`research`, `prototyping`, `implementation`), exhaustive ranked candidate batches, and one bulk downselect gate instead of per-page target-channel, drafting-mode, angle, tone, and per-post approval gates.
+- `ship-end` Build-In-Public suggestions now use saved platforms, persist one-time platform setup when missing, infer `bip_phase`, and generate exhaustive phase-aware candidate batches per platform.
+
 ### Fixed
 
 - Published-package smoke verification now retries npm registry/install propagation failures from `npx --package <package>@<version>` such as `ETARGET` / `notarget` / "No matching version found", while still failing immediately for real CLI behavior failures after package resolution.

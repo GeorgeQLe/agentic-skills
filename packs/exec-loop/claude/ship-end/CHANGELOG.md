@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-06-29
+
+- Changed enabled Build-In-Public wrap-up suggestions to use saved project platforms from `alignment.bip_platforms`, persist a one-time platform setup with `set-bip-platforms` when missing, infer `bip_phase`, and generate exhaustive phase-aware candidate batches per platform instead of only `2-4` suggestions.
+
 ## v0.8 - 2026-06-29
 
 - Changed the BIP wrap-up behavior so projects with `alignment.build_in_public: true` skip only the enablement question, then draft source-safe Build-In-Public post suggestions or explain why no safe public angle exists. The enabled path must not report only that the BIP gate was skipped.

@@ -73,11 +73,16 @@ function writePage(root: string, name: string, html: string = pageHtml()): void 
   writeFileSync(join(root, "alignment", name), html);
 }
 
-function writeProjectConfig(root: string, buildInPublic: boolean): void {
+function writeProjectConfig(root: string, buildInPublic: boolean, bipPlatforms: string[] = []): void {
   mkdirSync(join(root, ".agents"), { recursive: true });
   writeFileSync(
     join(root, ".agents", "project.json"),
-    JSON.stringify({ alignment: { build_in_public: buildInPublic } }, null, 2),
+    JSON.stringify({
+      alignment: {
+        build_in_public: buildInPublic,
+        ...(bipPlatforms.length > 0 ? { bip_platforms: bipPlatforms } : {}),
+      },
+    }, null, 2),
   );
 }
 
@@ -122,6 +127,32 @@ function targetChannelGate(): string {
     "<p><strong>Required question:</strong> Which public channels, if any, are in scope for BIP content from this run?</p>",
     '<label><input type="radio" name="gate-target-channels" value="approve recommended channels"> Approve recommended channels</label>',
     '<label><input type="radio" name="gate-target-channels" value="needs-clarification"> Need clarification</label>',
+    "</div>",
+    "</article>",
+  ].join("\n");
+}
+
+function platformSetupGate(): string {
+  return [
+    '<article class="gate" data-gate="project-platform-setup" data-gate-type="project platform setup" data-section="BIP Platforms" data-required="true">',
+    "<h3>Project Platform Setup</h3>",
+    '<div class="question-block">',
+    "<p><strong>Required question:</strong> Which platforms should be saved for future BIP drafts?</p>",
+    '<label><input type="checkbox" name="gate-bip-platforms" value="linkedin"> LinkedIn</label>',
+    '<label><input type="checkbox" name="gate-bip-platforms" value="x"> X</label>',
+    "</div>",
+    "</article>",
+  ].join("\n");
+}
+
+function bulkDownselectGate(): string {
+  return [
+    '<article class="gate" data-gate="bulk-downselect" data-gate-type="bulk downselect" data-section="BIP Bulk Downselect" data-required="true">',
+    "<h3>Bulk Downselect</h3>",
+    '<div class="question-block">',
+    "<p><strong>Required question:</strong> Which ranked platform-specific draft options are approved, edited, rejected, or not-now?</p>",
+    '<label><input type="radio" name="gate-bulk-downselect" value="approve top-ranked"> Approve top-ranked options</label>',
+    '<label><input type="radio" name="gate-bulk-downselect" value="needs-edits"> Needs edits</label>',
     "</div>",
     "</article>",
   ].join("\n");
@@ -455,7 +486,7 @@ describe("audit-alignment-pages fixture trees", () => {
 
   it("passes when linked BIP handling has handoff text and read-only final approval preview only", () => {
     const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
+    writeProjectConfig(root, true, ["linkedin"]);
     writePage(root, "page-a.html", pageHtml({
       status: "review",
       stage: "stage-2",
@@ -472,7 +503,11 @@ describe("audit-alignment-pages fixture trees", () => {
         'data-alignment-page-kind="bip"',
         'data-bip-gates="alignment/page-a.html"',
       ],
-      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
+      body: bipPageBody([
+        "<p>bip_platforms: linkedin</p>",
+        "<p>bip_phase: implementation</p>",
+        bulkDownselectGate(),
+      ].join("\n")),
     }));
     writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
 
@@ -561,9 +596,9 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stderr).toContain("Missing BIP gated-page metadata in alignment/page-a-bip.html");
   });
 
-  it("passes an initial BIP channel-selection page with only the target-channel gate", () => {
+  it("passes a BIP page with saved platforms and a required bulk downselect gate", () => {
     const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
+    writeProjectConfig(root, true, ["linkedin", "x"]);
     writePage(root, "page-a.html");
     writePage(root, "page-a-bip.html", pageHtml({
       status: "review",
@@ -572,8 +607,10 @@ describe("audit-alignment-pages fixture trees", () => {
         'data-bip-gates="alignment/page-a.html"',
       ],
       body: bipPageBody([
-        "<p>Before drafting BIP content, approve target channels only.</p>",
-        targetChannelGate(),
+        "<p>bip_platforms: linkedin, x</p>",
+        "<p>bip_phase: implementation</p>",
+        "<p>Loaded Convention Path: docs/social/linkedin-post-convention.md.</p>",
+        bulkDownselectGate(),
       ].join("\n")),
     }));
     writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
@@ -584,7 +621,7 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
   });
 
-  it("fails an initial BIP page that requires drafting-mode or future-content gates before channel selection", () => {
+  it("passes a first-run BIP page that includes platform setup and bulk downselect together", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html");
@@ -595,15 +632,34 @@ describe("audit-alignment-pages fixture trees", () => {
         'data-bip-gates="alignment/page-a.html"',
       ],
       body: bipPageBody([
-        "<p>No channel-selection YAML has been approved yet.</p>",
+        "<p>No saved bip_platforms exist yet; this page includes setup and draft review together.</p>",
+        "<p>bip_phase: research</p>",
+        platformSetupGate(),
+        bulkDownselectGate(),
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+  });
+
+  it("fails a BIP page that uses obsolete granular gates instead of bulk downselect", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true, ["linkedin"]);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: bipPageBody([
+        "<p>Old BIP state: selected-channel draft review.</p>",
         targetChannelGate(),
-        '<article class="gate" data-gate="drafting-mode" data-gate-type="drafting mode" data-section="Drafting Mode" data-required="true">',
-        "<h3>Drafting Mode</h3>",
-        '<div class="question-block">',
-        "<p><strong>Required question:</strong> Which drafting mode should apply if channels are later selected?</p>",
-        '<label><input type="radio" name="gate-drafting-mode" value="platform_aligned"> platform_aligned</label>',
-        "</div>",
-        "</article>",
+        draftingModeGate(),
         '<article class="gate" data-gate="content-angles" data-gate-type="content angle selection" data-section="Content Angles" data-required="true"></article>',
       ].join("\n")),
     }));
@@ -612,39 +668,14 @@ describe("audit-alignment-pages fixture trees", () => {
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
-    expect(result.stderr).toContain("Stale BIP drafting-mode question in alignment/page-a-bip.html");
-    expect(result.stderr).toContain("Premature BIP final gates in alignment/page-a-bip.html");
-    expect(result.stderr).toContain("drafting-mode, content-angles");
-  });
-
-  it("passes a selected-channel BIP draft page with platform and creator drafting choices", () => {
-    const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
-    writePage(root, "page-a.html");
-    writePage(root, "page-a-bip.html", pageHtml({
-      status: "review",
-      extraHtmlAttrs: [
-        'data-alignment-page-kind="bip"',
-        'data-bip-gates="alignment/page-a.html"',
-      ],
-      body: bipPageBody([
-        "<p>Current BIP state: selected-channel draft review.</p>",
-        "<p>Loaded Convention Path: docs/social/linkedin-post-convention.md.</p>",
-        targetChannelGate(),
-        draftingModeGate(),
-      ].join("\n")),
-    }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
-
-    const result = runScript(root);
-    expect(result.stderr).toBe("");
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+    expect(result.stderr).toContain("Missing BIP bulk downselect gate in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("Obsolete BIP granular gates in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("target-channels, drafting-mode, content-angles");
   });
 
   it("fails a selected-channel BIP draft page with the stale all-channels-not-now drafting option", () => {
     const root = makeFixtureRoot();
-    writeProjectConfig(root, true);
+    writeProjectConfig(root, true, ["linkedin"]);
     writePage(root, "page-a.html");
     writePage(root, "page-a-bip.html", pageHtml({
       status: "review",
@@ -655,7 +686,7 @@ describe("audit-alignment-pages fixture trees", () => {
       body: bipPageBody([
         "<p>Current BIP state: selected-channel draft review.</p>",
         "<p>Rendered selected-channel drafts are ready for review.</p>",
-        targetChannelGate(),
+        bulkDownselectGate(),
         draftingModeGate(
           '<label><input type="radio" name="gate-drafting-mode" value="no drafting mode needed until channels selected"> No drafting mode needed; all channels remain not-now</label>',
         ),

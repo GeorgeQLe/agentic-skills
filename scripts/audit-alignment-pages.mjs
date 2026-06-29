@@ -30,7 +30,8 @@ const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*>
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const DATE_RE = /\b\d{4}-\d{2}-\d{2}\b/;
 const BIP_STATUS_VALUES = new Set(["linked", "approved", "not-applicable"]);
-const BIP_FINAL_GATE_KEYS = [
+const BIP_OBSOLETE_GATE_KEYS = [
+  "target-channels",
   "drafting-mode",
   "content-angles",
   "sample-drafts",
@@ -38,6 +39,8 @@ const BIP_FINAL_GATE_KEYS = [
   "claim-safety",
   "publish-readiness",
 ];
+const BIP_PLATFORM_SETUP_GATE_KEYS = ["platform-setup"];
+const BIP_BULK_DOWNSELECT_GATE_KEYS = ["bulk-downselect"];
 const STALE_BIP_FUTURE_DRAFTING_QUESTION_RE = /Which drafting mode should apply if channels are later selected/i;
 const STALE_BIP_NO_DRAFTING_OPTION_RE = /No drafting mode needed;\s*all channels remain not-now/i;
 
@@ -57,22 +60,32 @@ const indexDiagnostics = [];
 const collapsingFillDiag = [];
 const bipDiagnostics = [];
 
-function readProjectBuildInPublicMode() {
+function readProjectAlignmentConfig() {
   const projectConfigPath = `${repoRoot}/.agents/project.json`;
-  if (!existsSync(projectConfigPath)) return false;
+  if (!existsSync(projectConfigPath)) {
+    return { buildInPublic: false, bipPlatforms: [] };
+  }
   try {
     const config = JSON.parse(readFileSync(projectConfigPath, "utf8"));
-    return config?.alignment?.build_in_public === true;
+    const bipPlatforms = Array.isArray(config?.alignment?.bip_platforms)
+      ? config.alignment.bip_platforms.filter((platform) => typeof platform === "string" && platform.trim())
+      : [];
+    return {
+      buildInPublic: config?.alignment?.build_in_public === true,
+      bipPlatforms,
+    };
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
     bipDiagnostics.push(
       `Unreadable BIP config .agents/project.json — cannot evaluate alignment.build_in_public: ${detail}.`,
     );
-    return false;
+    return { buildInPublic: false, bipPlatforms: [] };
   }
 }
 
-const buildInPublicEnabled = readProjectBuildInPublicMode();
+const projectAlignmentConfig = readProjectAlignmentConfig();
+const buildInPublicEnabled = projectAlignmentConfig.buildInPublic;
+const configuredBipPlatforms = projectAlignmentConfig.bipPlatforms;
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
   const match = htmlTag.match(new RegExp(`\\b${attribute}="([^"]*)"`));
@@ -124,6 +137,8 @@ function requiredGateRecordMatches(record, gateKey) {
   const haystack = record.haystack;
   const checks = {
     "target-channels": /\btarget[- ]channels?\b/,
+    "platform-setup": /\b(?:project[- ]platform|platform[- ]setup|bip[- ]platforms?)\b/,
+    "bulk-downselect": /\b(?:bulk[- ]downselect|draft[- ]downselect|candidate[- ]downselect|post[- ]downselect)\b/,
     "drafting-mode": /\bdrafting[- ]mode\b/,
     "content-angles": /\bcontent[- ]angles?\b/,
     "sample-drafts": /\b(?:sample[- ]drafts?|sample[- ]posts?|video[- ]ideas?)\b/,
@@ -198,10 +213,6 @@ function activeFinalArtifactApprovalGateRecords(html) {
   return records;
 }
 
-function hasRequiredTargetChannelGate(html) {
-  return requiredBipGateKeys(html, ["target-channels"]).length > 0;
-}
-
 function hasSelectedChannelDraftSignals(html) {
   return (
     /\bselected-channel draft review\b/i.test(html) ||
@@ -215,22 +226,36 @@ function hasSelectedChannelDraftSignals(html) {
 
 function bipGateSequencingDiagnostics(rel, html) {
   const diagnostics = [];
-  if (STALE_BIP_FUTURE_DRAFTING_QUESTION_RE.test(html)) {
+  const hasSavedPlatforms = configuredBipPlatforms.length > 0;
+  const missingBulkDownselect = requiredBipGateKeys(html, BIP_BULK_DOWNSELECT_GATE_KEYS).length === 0;
+  if (missingBulkDownselect) {
     diagnostics.push(
-      `Stale BIP drafting-mode question in ${rel} — remove "Which drafting mode should apply if channels are later selected?" and defer drafting-mode approval until channel-selection YAML has been approved and consumed.`,
+      `Missing BIP bulk downselect gate in ${rel} — BIP pages must use one required bulk downselect gate for ranked platform-specific draft options.`,
     );
   }
 
-  const prematureFinalGates = requiredBipGateKeys(html, BIP_FINAL_GATE_KEYS);
-  if (hasRequiredTargetChannelGate(html) && !hasSelectedChannelDraftSignals(html) && prematureFinalGates.length) {
+  if (!hasSavedPlatforms && requiredBipGateKeys(html, BIP_PLATFORM_SETUP_GATE_KEYS).length === 0) {
     diagnostics.push(
-      `Premature BIP final gates in ${rel} — initial BIP channel-selection pages may require only target-channels until channel-selection YAML has been approved and consumed. Remove required gates: ${prematureFinalGates.join(", ")}.`,
+      `Missing BIP project-platform setup gate in ${rel} — when .agents/project.json alignment.bip_platforms is empty, the BIP page must include a required project-platform setup gate.`,
+    );
+  }
+
+  const obsoleteGates = requiredBipGateKeys(html, BIP_OBSOLETE_GATE_KEYS);
+  if (obsoleteGates.length) {
+    diagnostics.push(
+      `Obsolete BIP granular gates in ${rel} — use one bulk downselect gate instead of required target-channel, drafting-mode, content-angle, sample-post, tone, claim-safety, or publish-readiness gates. Remove required gates: ${obsoleteGates.join(", ")}.`,
+    );
+  }
+
+  if (STALE_BIP_FUTURE_DRAFTING_QUESTION_RE.test(html)) {
+    diagnostics.push(
+      `Stale BIP drafting-mode question in ${rel} — remove "Which drafting mode should apply if channels are later selected?" and use the bulk downselect gate for candidate decisions.`,
     );
   }
 
   if (hasSelectedChannelDraftSignals(html) && STALE_BIP_NO_DRAFTING_OPTION_RE.test(html)) {
     diagnostics.push(
-      `Stale BIP drafting-mode option in ${rel} — selected-channel draft pages must not offer "No drafting mode needed; all channels remain not-now."`,
+      `Stale BIP drafting-mode option in ${rel} — BIP pages must not offer "No drafting mode needed; all channels remain not-now." Use project-level platforms and bulk downselect decisions.`,
     );
   }
   return diagnostics;

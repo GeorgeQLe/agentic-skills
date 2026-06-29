@@ -140,7 +140,10 @@ describe('skillpacks npm publish target boundary', () => {
     assert.equal(SKILL_CONVENTIONS['social-video-content'].generatorScript, undefined);
 
     const alignmentConvention = readFileSync(resolve(repoRoot, 'docs/alignment-page-convention.md'), 'utf8');
-    assert.match(alignmentConvention, /target channels/);
+    assert.match(alignmentConvention, /target platforms/);
+    assert.match(alignmentConvention, /alignment\.bip_platforms/);
+    assert.match(alignmentConvention, /set-bip-platforms <platform\.\.\.>/);
+    assert.match(alignmentConvention, /bulk downselect gate/);
     assert.match(alignmentConvention, /docs\/social-post-convention\.md/);
     assert.match(alignmentConvention, /assets\/social-post-convention\.md/);
     assert.match(alignmentConvention, /docs\/social-video-content-convention\.md/);

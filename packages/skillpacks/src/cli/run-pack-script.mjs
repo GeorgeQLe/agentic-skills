@@ -7,6 +7,7 @@ import {
   printProjectStatus,
   setAgentMode,
   setBuildInPublicMode,
+  setBuildInPublicPlatforms,
   setBipPromptDismissed,
   setUpdateMode
 } from './project-config.mjs';
@@ -68,6 +69,7 @@ const PACK_COMMANDS = new Set([
   'prune',
   'set-update-mode',
   'set-bip',
+  'set-bip-platforms',
   'set-bip-prompt',
   'pin',
   'unpin',
@@ -704,6 +706,9 @@ Commands:
                                Set build-in-public alignment default: on, off, or unset
   set-bip <mode> --all --dry-run
                                Preview build-in-public changes across discovered projects
+  set-bip-platforms <platform...>
+                               Set project build-in-public target platforms
+  set-bip-platforms unset      Clear only alignment.bip_platforms
   set-bip-prompt <action>      Set build-in-public suggestion prompt state: dismiss or reset
   pin <skill> <version>        Pin a skill to an archived version
   unpin <skill>                Revert a pinned skill to latest
@@ -818,6 +823,10 @@ export async function runSkillpacksCli(args) {
       });
     }
     return setBuildInPublicMode(options.mode);
+  }
+
+  if (command === 'set-bip-platforms') {
+    return setBuildInPublicPlatforms(rest);
   }
 
   if (command === 'set-bip-prompt') {

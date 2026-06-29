@@ -82,19 +82,23 @@ const researchQualitySkills = [
   "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
-const bipChannelRecommendationSnippets = [
-  "agent-ranked target-channel selection gate",
-  "Rank candidate text/community/video channels by fit using evidence from the completed Stage 2 work",
-  "`recommended`, `optional`, or `not-now`",
-  "preselect `recommended` channels by default",
-  "approves only channel selection, not final BIP approval",
-  "initial BIP channel-selection page may require only the target-channel gate",
-  "must not require drafting mode, content angles, sample posts or video ideas, tone, claim safety, publish readiness",
-  "do not render required `drafting-mode`, `content-angles`, `sample-drafts`, `tone`, `claim-safety`, or `publish-readiness` gates",
-  "the selected-channel draft page requires drafting mode, content angles, sample posts or video ideas, tone, claim safety, and publish readiness",
-  "do not keep a no-drafting option that says all channels remain `not-now`",
-  "only after the selected/recommended channel set is approved",
-  "bip_channel_selection_status: ready-for-agent-review",
+const bipPlatformSetupSnippets = [
+  "alignment.bip_platforms",
+  "set-bip-platforms <platform...>",
+  "one required project-platform setup gate",
+  "exhaustive draft list in the same artifact",
+  "do not re-ask for platforms on later BIP invocations",
+  "load only the platform documents",
+  "bip_phase",
+  "`research`, `prototyping`, or `implementation`",
+  "popular social-media angle patterns",
+  "long, exhaustive list of candidate posts or video/community outlines per selected platform",
+  "Rank the top options clearly for each platform",
+  "source basis, claim-safety notes, risk level, publish precheck, loaded convention path",
+  "one bulk downselect gate",
+  "Do not require separate `drafting-mode`, `content-angles`, `sample-drafts`, `tone`, `claim-safety`, or `publish-readiness` gates",
+  "ranked draft decisions per platform",
+  "rejected/not-now options",
 ];
 
 function read(path: string) {
@@ -299,9 +303,10 @@ describe("alignment page gate contract", () => {
     expect(content).toContain("must not render active final artifact approval controls");
     expect(content).toContain("bip_approval_status: ready-for-agent-review");
     expect(content).toContain("BIP handling");
-    for (const snippet of bipChannelRecommendationSnippets) {
+    for (const snippet of bipPlatformSetupSnippets) {
       expect(content).toContain(snippet);
     }
+    expect(content).not.toContain("bip_channel_selection_status: ready-for-agent-review");
   });
 
   it("propagates enforceable BIP checkpoints to generated bundles", () => {
@@ -317,9 +322,10 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} linked read-only preview`).toContain("read-only final-approval preview content");
       expect(content, `${path} linked active gate block`).toContain("must not render active final artifact approval controls");
       expect(content, `${path} approved BIP YAML`).toContain("bip_approval_status: ready-for-agent-review");
-      for (const snippet of bipChannelRecommendationSnippets) {
-        expect(content, `${path} BIP channel recommendation: ${snippet}`).toContain(snippet);
+      for (const snippet of bipPlatformSetupSnippets) {
+        expect(content, `${path} BIP platform setup: ${snippet}`).toContain(snippet);
       }
+      expect(content, `${path} no old channel-selection YAML`).not.toContain("bip_channel_selection_status: ready-for-agent-review");
     }
   });
 

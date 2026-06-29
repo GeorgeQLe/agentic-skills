@@ -2,6 +2,58 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Simplify BIP Into Project Platform Setup + Exhaustive Phase Drafts
+
+### Goal
+
+Change Build-In-Public from per-page target-channel/drafting approval gates to a project-level platform setup plus per-invocation phase-aware, exhaustive, source-safe draft batches reviewed through one bulk downselect gate.
+
+### Execution Profile
+
+- Parallel mode: serial edits, parallel read-only inspection where useful.
+- Rationale: project-config CLI behavior, canonical alignment convention text, generated bundles, package assets, audit diagnostics, and ship-end source mirrors share one BIP contract and should land together.
+- Safety boundary: preserve pre-existing dirty package release metadata until package build/check steps intentionally refresh package artifacts.
+
+### Plan
+
+- [x] Capture the visible `exec` handoff prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Add `set-bip-platforms <platform...>` and `set-bip-platforms unset` support for `.agents/project.json.alignment.bip_platforms` in the Node CLI and source-checkout script.
+- [x] Add focused project-config tests for platform preservation, unset behavior, no-project-file normalization, invalid/empty input, and help text.
+- [x] Revise `docs/alignment-page-convention.md` so BIP uses saved project platforms, includes a first-run setup gate when needed, classifies the run phase, generates exhaustive ranked platform-specific draft candidates, and uses one bulk downselect gate.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles and packaged convention assets from the canonical convention.
+- [x] Update `ship-end` BIP behavior to use saved platforms and generate exhaustive phase-aware post batches instead of only `2-4` suggestions; archive and bump skill versions.
+- [x] Update BIP convention, audit, package-boundary, compatibility, and ship-end tests for the new platform setup/downselect contract.
+- [x] Run focused verification plus package build/check gates, document results, commit, and push intended changes on the primary branch.
+
+### Acceptance Criteria
+
+- `.agents/project.json.alignment.bip_platforms` is written and cleared by supported CLI commands without clobbering sibling `alignment` fields.
+- BIP pages use saved platforms when present and do not re-ask for project platform selection on later invocations.
+- First BIP artifact can include both the platform setup gate and the exhaustive draft list when platforms are not saved.
+- BIP review surfaces use one bulk downselect gate instead of separate drafting-mode, content-angle, sample-post, tone, claim-safety, and publish-readiness gates.
+- Generated bundles and package assets match the canonical convention.
+- `ship-end` enabled BIP produces phase-aware, platform-specific candidate batches from saved platforms.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/project-config.test.mjs`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts layer1/audit-alignment-pages.test.ts layer1/ship-end-bip.test.ts`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `npm --workspace skillpacks run build:check`
+
+### Results
+
+- Added persistent project-level BIP platform selection through `alignment.bip_platforms` with Node CLI and source-checkout script writers.
+- Replaced granular per-page BIP approval gates with saved-platform setup, phase-aware exhaustive candidate batches, source-safety metadata, and one bulk downselect gate.
+- Updated `ship-end` BIP behavior to consume saved platforms and generate exhaustive phase-aware batches; mirrored skill versions are now `v0.9` with `v0.8` archived.
+- Regenerated alignment convention bundles, packaged metadata, and Skills Showcase generated assets.
+- Verification passed with focused project-config tests, focused BIP layer1 tests, package node tests, package build/check, alignment audits, task-doc audit, diff hygiene, Skills Showcase validation, source-checkout smoke coverage, and app build.
+- Deploy not run manually because production deployment needs explicit confirmation.
+
 ## Historical Implementation - Investigate Publish 0.1.16 Release Metadata Dirty State
 
 ### Goal

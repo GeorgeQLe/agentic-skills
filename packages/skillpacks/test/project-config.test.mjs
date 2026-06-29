@@ -231,6 +231,99 @@ describe('Node project config commands', () => {
     assert.deepEqual(config.notes, ['keep me']);
   });
 
+  it('sets and unsets build-in-public platforms while preserving sibling alignment fields', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['devtool'],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: true,
+        review_depth: 'full'
+      },
+      notes: ['keep me']
+    });
+
+    assert.equal(
+      await runSkillpacks(dir, ['set-bip-platforms', 'LinkedIn', 'x', 'youtube_shorts', 'LinkedIn']),
+      'Set alignment.bip_platforms to linkedin, x, youtube-shorts\n'
+    );
+    let config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, {
+      build_in_public: true,
+      review_depth: 'full',
+      bip_platforms: ['linkedin', 'x', 'youtube-shorts']
+    });
+    assert.deepEqual(config.enabled_packs, ['devtool']);
+    assert.deepEqual(config.notes, ['keep me']);
+    assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
+
+    assert.equal(await runSkillpacks(dir, ['set-bip-platforms', 'unset']), 'Set alignment.bip_platforms to unset\n');
+    config = readProjectConfig(dir);
+    assert.deepEqual(config.alignment, { build_in_public: true, review_depth: 'full' });
+    assert.deepEqual(config.notes, ['keep me']);
+  });
+
+  it('creates normalized project config when setting build-in-public platforms without a project file', async () => {
+    const dir = makeTempProject();
+
+    assert.equal(
+      await runSkillpacks(dir, ['set-bip-platforms', 'bluesky', 'threads']),
+      'Set alignment.bip_platforms to bluesky, threads\n'
+    );
+
+    const config = readProjectConfig(dir);
+    assert.equal(config.project_type, 'business-app');
+    assert.deepEqual(config.enabled_packs, []);
+    assert.equal(config.skill_pack_version, 1);
+    assert.deepEqual(config.alignment, { bip_platforms: ['bluesky', 'threads'] });
+  });
+
+  it('removes an empty alignment object when unsetting build-in-public platforms', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      custom_field: 'preserved',
+      alignment: {
+        bip_platforms: ['linkedin']
+      }
+    });
+
+    assert.equal(await runSkillpacks(dir, ['set-bip-platforms', 'unset']), 'Set alignment.bip_platforms to unset\n');
+
+    const config = readProjectConfig(dir);
+    assert.deepEqual(config, {
+      custom_field: 'preserved',
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+  });
+
+  it('rejects invalid build-in-public platform input', async () => {
+    const dir = makeTempProject();
+    await assert.rejects(
+      () => runSkillpacks(dir, ['set-bip-platforms']),
+      /set-bip-platforms requires one or more platforms, or unset/
+    );
+    await assert.rejects(
+      () => runSkillpacks(dir, ['set-bip-platforms', 'unset', 'linkedin']),
+      /set-bip-platforms unset cannot be combined with platform names/
+    );
+    await assert.rejects(
+      () => runSkillpacks(dir, ['set-bip-platforms', '--all']),
+      /Invalid BIP platform '--all'/
+    );
+  });
+
+  it('documents build-in-public platform command in CLI help text', async () => {
+    const dir = makeTempProject();
+
+    const output = await runSkillpacks(dir, ['help']);
+
+    assert.match(output, /set-bip-platforms <platform\.\.\.>/);
+    assert.match(output, /set-bip-platforms unset\s+Clear only alignment\.bip_platforms/);
+  });
+
   it('dismisses and resets the build-in-public suggestion prompt without clobbering siblings', async () => {
     const dir = makeTempProject();
     writeProjectConfig(dir, {

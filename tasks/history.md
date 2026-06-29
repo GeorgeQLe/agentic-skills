@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-06-29 - Simplify BIP platform setup and exhaustive phase drafts
+
+- Added project-level Build-In-Public platform selection at `.agents/project.json` `alignment.bip_platforms`.
+- Added `set-bip-platforms <platform...>` and `set-bip-platforms unset` to the packaged Node CLI and checkout `scripts/pack.sh`, preserving sibling `alignment` fields and normalizing/deduping platform slugs.
+- Reworked the canonical alignment-page BIP convention around saved platforms, first-run platform setup in the same artifact, `bip_phase` classification, exhaustive ranked platform-specific candidate batches, source-safety metadata, and one bulk downselect gate.
+- Regenerated generated `ALIGNMENT-PAGE.md` bundles from the canonical convention and refreshed packaged skillpacks metadata.
+- Updated active alignment-page audit checks and layer1 fixtures for required bulk downselect, first-run project-platform setup, and obsolete granular BIP gate rejection.
+- Updated mirrored `ship-end` skills to `v0.9`, archived `v0.8`, and made enabled BIP use saved platforms for exhaustive phase-aware source-safe batches.
+- Refreshed Skills Showcase generated data/proof assets after the skill metadata change; curated showcase copy/grouping required no manual edit because the public skill identity stayed stable.
+- Verification passed: focused project-config tests, focused BIP layer1 tests, package node tests, package build/check, alignment bundle/audit checks, task-doc audit, diff hygiene, Skills Showcase validation, checkout script smoke test, and app build.
+- Deploy not run manually: refreshed Skills Showcase public assets are deploy-relevant under `tasks/deploy.md`, but production deployment requires explicit user confirmation.
+- Manifest: `tasks/ship-manifest-2026-06-29-simplify-bip-platform-setup.md`.
+
 ## 2026-06-29 - Publish current source release from 0.1.16 metadata
 
 - Confirmed the reported dirty release metadata state: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` were pre-bumped from `0.1.15` to `0.1.16`.

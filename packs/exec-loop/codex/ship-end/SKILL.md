@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.8
+version: v0.9
 required_conventions: [social-ledger]
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
@@ -66,7 +66,8 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
     - Otherwise ask the user once, concisely — explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project.
     - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then run the enabled BIP post-suggestion path for this shipped session.
     - On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
-    - Enabled BIP post-suggestion path: inspect the shipped boundary from the session report, changed files, commits, task/history notes, and any alignment pages. Following `docs/social-ledger-convention.md`, draft 2-4 source-safe Build-In-Public post suggestions or state that there is no safe public angle for this wrap-up. For each suggestion, include target channel, angle, source basis, claim-safety notes, and draft post text or a concise video/community-post outline. Do not publish externally.
+    - Enabled BIP post-suggestion path: inspect the shipped boundary from the session report, changed files, commits, task/history notes, and any alignment pages. Read `.agents/project.json.alignment.bip_platforms`; use only those saved platforms for suggestions. If no saved platforms exist, ask one project-platform setup question, persist the answer with `scripts/pack.sh set-bip-platforms <platform...>` (or `npx skillpacks set-bip-platforms <platform...>`), and then continue with the saved platform list. Do not fall back to ad hoc per-session channels.
+    - Infer `bip_phase` as exactly one of `research`, `prototyping`, or `implementation` from the shipped boundary. Following `docs/social-ledger-convention.md` plus the loaded platform conventions, draft an exhaustive phase-aware batch of source-safe Build-In-Public post candidates per saved platform, or state that there is no safe public angle for this wrap-up. Mark top-ranked options clearly and keep rejected/not-now options visible when useful for dedupe or future context. For each candidate, include target platform, `bip_phase`, angle, source basis, loaded convention path, risk level, claim-safety notes, publish precheck, and draft post text or a concise video/community-post outline. Do not publish externally.
 
 ## Next-Step Routing
 

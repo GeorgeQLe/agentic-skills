@@ -281,6 +281,66 @@ function applyBuildInPublicMode(config, mode) {
   return config;
 }
 
+function normalizeBipPlatform(platform) {
+  const normalized = String(platform || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-');
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(normalized)) {
+    throw new Error(
+      `Invalid BIP platform '${platform}'. Use platform slugs such as linkedin, x, bluesky, reddit, youtube-shorts, or instagram-reels`
+    );
+  }
+  if (normalized === 'unset') {
+    throw new Error('set-bip-platforms unset cannot be combined with platform names');
+  }
+  return normalized;
+}
+
+function normalizeBipPlatforms(platforms) {
+  if (!Array.isArray(platforms) || platforms.length === 0) {
+    throw new Error('set-bip-platforms requires one or more platforms, or unset');
+  }
+  if (platforms[0] === 'unset') {
+    if (platforms.length > 1) {
+      throw new Error('set-bip-platforms unset cannot be combined with platform names');
+    }
+    return { action: 'unset', platforms: [] };
+  }
+
+  const seen = new Set();
+  const normalized = [];
+  for (const platform of platforms) {
+    const value = normalizeBipPlatform(platform);
+    if (seen.has(value)) {
+      continue;
+    }
+    seen.add(value);
+    normalized.push(value);
+  }
+  return { action: 'set', platforms: normalized };
+}
+
+function applyBuildInPublicPlatforms(config, platformArgs) {
+  const { action, platforms } = normalizeBipPlatforms(platformArgs);
+  if (action === 'unset') {
+    if (isPlainObject(config.alignment)) {
+      delete config.alignment.bip_platforms;
+      if (Object.keys(config.alignment).length === 0) {
+        delete config.alignment;
+      }
+    } else {
+      delete config.alignment;
+    }
+    return { config, action, platforms };
+  }
+
+  const existing = isPlainObject(config.alignment) ? config.alignment : {};
+  config.alignment = { ...existing, bip_platforms: platforms };
+  return { config, action, platforms };
+}
+
 function existingBuildInPublicState(config) {
   if (isPlainObject(config?.alignment)) {
     if (Object.hasOwn(config.alignment, 'build_in_public')) {
@@ -503,6 +563,22 @@ export async function setBipPromptDismissed(action, projectRoot = process.cwd())
     }
     writeProjectConfig(projectRoot, config);
     console.log(`Set alignment.bip_prompt_dismissed to ${action}`);
+    return 0;
+  });
+}
+
+export async function setBuildInPublicPlatforms(platformArgs, projectRoot = process.cwd()) {
+  normalizeBipPlatforms(platformArgs);
+
+  return withProjectLock(projectRoot, `set-bip-platforms ${platformArgs.join(' ')}`, async () => {
+    const config = normalizedProjectConfig(projectRoot);
+    const result = applyBuildInPublicPlatforms(config, platformArgs);
+    writeProjectConfig(projectRoot, result.config);
+    if (result.action === 'unset') {
+      console.log('Set alignment.bip_platforms to unset');
+    } else {
+      console.log(`Set alignment.bip_platforms to ${result.platforms.join(', ')}`);
+    }
     return 0;
   });
 }

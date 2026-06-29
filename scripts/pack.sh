@@ -29,6 +29,8 @@ Commands:
   prune [--dry-run]  Remove installed skills whose source no longer exists or whose pack is not enabled
   set-update-mode <mode>  Set .agents/project.json.skill_updates.mode to warn, auto, or unset
   set-bip <mode>     Set .agents/project.json.alignment.build_in_public to on, off, or unset
+  set-bip-platforms <platform...|unset>
+                    Set or clear .agents/project.json.alignment.bip_platforms
   set-bip-prompt <action>  Set .agents/project.json.alignment.bip_prompt_dismissed: dismiss or reset
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
@@ -945,6 +947,44 @@ set_bip_prompt() {
   echo "Set alignment.bip_prompt_dismissed to $action"
 }
 
+set_bip_platforms() {
+  [[ "$#" -gt 0 ]] || die "set-bip-platforms requires one or more platforms, or unset"
+  command -v jq >/dev/null 2>&1 || die "jq is required for set-bip-platforms"
+  local tmp project_type platforms_json platform normalized joined seen
+  local platforms=()
+  seen=""
+  joined=""
+  if [[ ! -f "$PROJECT_FILE" ]]; then
+    project_type="$(infer_project_type)"
+    PROJECT_AGENT_MODE=""
+    write_project_file "$project_type"
+  fi
+  if [[ "${1:-}" == "unset" ]]; then
+    [[ "$#" -eq 1 ]] || die "set-bip-platforms unset cannot be combined with platform names"
+    tmp="$(jq 'if (.alignment | type) == "object" then .alignment |= del(.bip_platforms) | if (.alignment | length) == 0 then del(.alignment) else . end else del(.alignment) end' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+    [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
+    echo "$tmp" > "$PROJECT_FILE"
+    echo "Set alignment.bip_platforms to unset"
+    return
+  fi
+  for platform in "$@"; do
+    normalized="$(printf '%s' "$platform" | tr '[:upper:]' '[:lower:]' | sed -E 's/[[:space:]_]+/-/g; s/-+/-/g')" || die "failed to normalize BIP platform '$platform'"
+    [[ "$normalized" =~ ^[a-z0-9][a-z0-9-]*$ ]] || die "Invalid BIP platform '$platform'. Use platform slugs such as linkedin, x, bluesky, reddit, youtube-shorts, or instagram-reels"
+    [[ "$normalized" != "unset" ]] || die "set-bip-platforms unset cannot be combined with platform names"
+    case " $seen " in
+      *" $normalized "*) continue ;;
+    esac
+    seen="${seen:+$seen }$normalized"
+    platforms+=("$normalized")
+    joined="${joined:+$joined, }$normalized"
+  done
+  platforms_json="$(printf '%s\n' "${platforms[@]}" | jq -R . | jq -s .)" || die "jq failed to encode BIP platforms"
+  tmp="$(jq --argjson platforms "$platforms_json" '.alignment = ((if (.alignment | type) == "object" then .alignment else {} end) + {bip_platforms: $platforms})' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
+  echo "$tmp" > "$PROJECT_FILE"
+  echo "Set alignment.bip_platforms to $joined"
+}
+
 # Read-only drift report for project-local managed skill installs.
 # Exits non-zero if any install is stale so callers (sync, hook) can branch.
 doctor() {
@@ -1219,6 +1259,12 @@ case "$cmd" in
     require_jq_write
     shift
     set_bip "${1:-}"
+    ;;
+  set-bip-platforms)
+    acquire_project_lock "$@"
+    require_jq_write
+    shift
+    set_bip_platforms "$@"
     ;;
   set-bip-prompt)
     acquire_project_lock "$@"

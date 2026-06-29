@@ -17,6 +17,7 @@ const expectedMatrix = new Map([
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-bip <mode> [--all] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['set-bip-platforms <platform...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['uninstall-global [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],

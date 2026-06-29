@@ -212,6 +212,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `set-mode <mode>` | Node-owned | Project config writer | No | No | Preserves unrelated fields and uses the Node lock helper. |
 | `set-update-mode <mode>` | Node-owned | Project config writer | No | No | Preserves sibling `skill_updates` fields. |
 | `set-bip <mode> [--all] [--dry-run]` | Node-owned | Project config writer | No | No | Sets `alignment.build_in_public` to `true`, `false`, or removes it while preserving sibling `alignment` fields. `--all --dry-run` previews discovered-project changes and parse/read issues without writing. |
+| `set-bip-platforms <platform...>` | Node-owned | Project config writer | No | No | Sets `alignment.bip_platforms` to normalized platform slugs, or clears only that field with `unset`, while preserving sibling `alignment` fields. |
 | `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs base-scope manifest entries as project-local base skills and records `base_skills: true`. |
 | `uninstall-global [--reinstall-base] [--dry-run]` | Node-owned | Managed marker ownership reader plus project-local base refresh | No | No | Removes legacy skillpacks-owned base installs from `~/.claude/skills` and `~/.codex/skills`; leaves unmanaged directories untouched. With `--reinstall-base`, enables project-local base skills in discovered projects below the current directory, or initializes the current directory when none are found. With `--dry-run`, previews removals and migration actions without mutating global skills or project files. |
 | `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
@@ -431,7 +432,7 @@ npx skillpacks unpin quality-sweep
 
 If a pin fails because an archive version is unavailable, the installed npm package does not contain that archived skill snapshot. Upgrade to a package version that includes the archive, or use a source checkout at a commit that contains it.
 
-Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, `set-update-mode`, and `set-bip`) do not require `jq`. In the current `skillpacks@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
+Node-owned npm commands (`install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, `set-update-mode`, `set-bip`, and `set-bip-platforms`) do not require `jq`. In the current `skillpacks@0.1.0` release, `install-deck` still materializes through the packaged shell backend and therefore requires both `bash` and `jq`.
 
 ### Alignment Convention Commands
 
