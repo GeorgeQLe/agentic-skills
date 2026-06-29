@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-06-29 - Publish current source release from 0.1.16 metadata
+
+- Confirmed the reported dirty release metadata state: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` were pre-bumped from `0.1.15` to `0.1.16`.
+- Confirmed `0.1.16` was not a partial-publish recovery state: both `npm view skillpacks@0.1.16 version` and `npm view @glexcorp/gskp@0.1.16 version` returned 404.
+- Identified the release-script dead end: `--current` rejected the both-missing registry state and said to use a version target, while normal version targets were correctly blocked by dirty release metadata.
+- Updated `publish.sh` so explicit `--current` now supports current-source publishing when both package names are unpublished, while preserving the existing both-published verification path and alias-only partial recovery path.
+- Kept dirty-tree safety intact: `--current` still permits only release metadata tracked dirt, and `--allow-dirty-tree` still rejects package/release-impacting dirty paths.
+- Added focused publish recovery coverage for the pre-bumped current-version state: no `npm version` call, both publishes execute, and post-publish source-state guidance appears.
+- Included the existing `0.1.16` package metadata in the ship boundary so the next release command is `./publish.sh --current`.
+- Verification passed: shell syntax, focused publish recovery tests, package node tests, package build/check, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-29-publish-current-source-release.md`.
+
 ## 2026-06-29 — Add publish dirty-tree override
 
 - Added `./publish.sh --allow-dirty-tree` for normal release targets and dry runs, allowing only non-release tracked dirty paths to coexist with a release.

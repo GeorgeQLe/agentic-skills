@@ -14,6 +14,7 @@ TMP_DIRS=()
 RESTORE_DIR=""
 PUBLISH_STARTED=0
 RECOVERY_BOTH_PUBLISHED=0
+CURRENT_SOURCE_RELEASE=0
 CLEANUP_RUNNING=0
 
 usage() {
@@ -34,8 +35,8 @@ Publishes both npm packages from the same built artifact:
 
 By default, tracked working tree changes block publishing. Use
 --allow-dirty-tree only when every tracked dirty path is outside the package
-and release boundary. --current recovery keeps its narrower release-metadata
-exception.
+and release boundary. --current publishes or verifies the current
+packages/skillpacks version and keeps its narrower release-metadata exception.
 USAGE
 }
 
@@ -413,8 +414,8 @@ if [[ -n "$TRACKED_STATUS" ]]; then
   git status --short
   print_dirty_tree_summary
   if [[ "$USE_CURRENT" == "1" ]] && tracked_changes_allowed_for_current_recovery "$TRACKED_STATUS"; then
-    printf 'WARNING: --current recovery is continuing with only release-state tracked changes present.\n' >&2
-    printf 'WARNING: Commit/tag/push packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json after recovery succeeds.\n' >&2
+    printf 'WARNING: --current is continuing with only release-state tracked changes present.\n' >&2
+    printf 'WARNING: Commit/tag/push packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json after the current-version publish succeeds.\n' >&2
   elif [[ "$ALLOW_DIRTY_TREE" == "1" && "$USE_CURRENT" != "1" && "${#RELEASE_IMPACTING_DIRTY_PATHS[@]}" -eq 0 ]]; then
     printf 'WARNING: --allow-dirty-tree is continuing with non-release tracked changes present.\n' >&2
     printf 'WARNING: These dirty changes will not be included in the release; commit or remove them separately.\n' >&2
@@ -465,11 +466,13 @@ if [[ "$USE_CURRENT" == "1" ]]; then
     fail "Inconsistent registry state: @glexcorp/gskp@$VERSION is published but skillpacks@$VERSION is missing."
   fi
   if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "0" && "$GSKP_ALREADY_PUBLISHED" == "0" ]]; then
-    fail "--current is only for partial-publish recovery. Neither skillpacks@$VERSION nor @glexcorp/gskp@$VERSION is published; use a version target instead."
+    CURRENT_SOURCE_RELEASE=1
   fi
 
   if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
     log "Recovery state confirmed: skillpacks@$VERSION and @glexcorp/gskp@$VERSION are both published; rerunning final verification"
+  elif [[ "$CURRENT_SOURCE_RELEASE" == "1" ]]; then
+    log "Current source release confirmed: neither skillpacks@$VERSION nor @glexcorp/gskp@$VERSION is published; publishing both from current source metadata"
   else
     log "Recovery state confirmed: skillpacks@$VERSION exists and @glexcorp/gskp@$VERSION is missing"
   fi
@@ -563,7 +566,7 @@ NODE
 log "Running npm auth preflight"
 if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
   log "Recovery verification: skipping npm auth preflight because both packages are already published."
-elif [[ "$USE_CURRENT" == "1" ]]; then
+elif [[ "$USE_CURRENT" == "1" && "$CURRENT_SOURCE_RELEASE" != "1" ]]; then
   (cd "$SKILLPACKS_STAGE" && SKILLPACKS_NPM_ALLOW_PUBLISHED=true node scripts/prepublish-auth-check.mjs)
   (cd "$GSKP_STAGE" && node scripts/prepublish-auth-check.mjs)
 elif [[ "$DRY_RUN" == "1" ]]; then
@@ -578,7 +581,7 @@ log "Publishing staged packages"
 if [[ "$DRY_RUN" == "1" ]]; then
   if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
     log "Recovery dry run: skipping skillpacks@$VERSION and @glexcorp/gskp@$VERSION because both are already published."
-  elif [[ "$USE_CURRENT" == "1" ]]; then
+  elif [[ "$USE_CURRENT" == "1" && "$CURRENT_SOURCE_RELEASE" != "1" ]]; then
     log "Recovery dry run: skipping skillpacks@$VERSION because it is already published."
     run npm publish "$GSKP_STAGE" --access public --dry-run
   else
@@ -607,7 +610,7 @@ fi
 
 if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION and @glexcorp/gskp@$VERSION because both are already published."
-elif [[ "$USE_CURRENT" == "1" ]]; then
+elif [[ "$USE_CURRENT" == "1" && "$CURRENT_SOURCE_RELEASE" != "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
   PUBLISH_STARTED=1
   run npm publish "$GSKP_STAGE" --access public
@@ -624,6 +627,6 @@ run env SKILLPACKS_PACKAGE_NAME=@glexcorp/gskp SKILLPACKS_EXPECTED_VERSION="$VER
 log "Published skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
 cat <<EOF
 Post-publish source-state requirement:
-  1. Commit packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json at version $VERSION.
+  1. Ensure packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json are committed at version $VERSION.
   2. Tag the release, then push the commit and tag before starting another release.
 EOF

@@ -2,6 +2,56 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Investigate Publish 0.1.16 Release Metadata Dirty State
+
+### Goal
+
+Determine why the `0.1.16` release metadata dirty state is still blocking or confusing `publish.sh`, preserve the strict release safety boundary, and apply the smallest verified fix.
+
+### Execution Profile
+
+- Parallel mode: parallel reads/history scans where independent; serial edits and verification commands that mutate build outputs.
+- Investigation strategy: General. The symptom is release-script behavior and git dirty-state handling, not UI or data-rendering behavior.
+- Safety boundary: do not revert or discard the existing `0.1.16` metadata changes unless the investigation proves the current task owns that action.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this investigation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Validate the current dirty paths, exact release metadata diffs, and whether they are pre-existing `0.1.16` work.
+- [x] Inspect `publish.sh`, focused publish recovery tests, package metadata build behavior, and recent commits around dirty-tree handling.
+- [x] Reproduce or model the dirty-state failure path with the existing test harness or a safe dry-run path.
+- [x] Identify the root cause with file/line evidence and choose the minimal fix.
+- [x] Add or update focused tests that would catch the dirty metadata behavior.
+- [x] Run publish-script syntax checks, focused tests, package build/check commands as needed, task-doc audit, and diff hygiene checks.
+- [x] Document investigation results in `tasks/todo.md`, commit, and push intended changes if tracked files were intentionally modified.
+
+### Acceptance Criteria
+
+- The investigation classifies the user's dirty-state claim as confirmed, partially correct, or unsupported with git/status evidence.
+- Release metadata paths for `0.1.16` are either accepted only in a documented recovery path or blocked with diagnostics that explain the required next action.
+- `--allow-dirty-tree` does not accidentally permit package/release-impacting dirty metadata during normal release attempts.
+- Any script behavior change has focused regression coverage.
+- Verification proves both the intended publish path and the safety rejection path.
+
+### Test Plan
+
+- `bash -n publish.sh`
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs`
+- `npm --workspace skillpacks run test:node`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Confirmed the dirty release metadata claim: package source metadata was pre-bumped from `0.1.15` to `0.1.16`.
+- Confirmed `0.1.16` was not partially published: both public npm package names returned 404 for `0.1.16`.
+- Identified the root cause in `publish.sh`: `--current` rejected the both-missing registry state even though that is the only safe path for a pre-bumped current source version.
+- Updated `publish.sh` so `--current` can publish both packages from current source metadata when neither package name exists, while keeping existing partial recovery and both-published verification behavior.
+- Added focused publish recovery coverage for pre-bumped current-source publishing.
+- Included the existing `0.1.16` package metadata in the ship boundary; the next release command is `./publish.sh --current`.
+- Verification passed with the commands in the test plan.
+
 ## Historical Implementation - Add Publish Dirty Tree Override
 
 ### Goal

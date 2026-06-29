@@ -428,6 +428,33 @@ test("repeated interrupt during cleanup still restores source metadata", () => {
   assert.deepEqual(result.registry, []);
 });
 
+test("--current publishes pre-bumped current version when both packages are unpublished", () => {
+  const result = runPublishCurrent({
+    GIT_MOCK_TRACKED_STATUS: [
+      " M packages/skillpacks/package.json",
+      " M packages/skillpacks/dist/skillpacks-manifest.json",
+      ""
+    ].join("\n")
+  }, {
+    dryRun: false
+  });
+
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /--current is continuing with only release-state tracked changes present/);
+  assert.match(result.output, /Current source release confirmed: neither skillpacks@/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+  assert.equal(publishCalls.length, 2, result.calls);
+  assert.deepEqual(result.registry, [
+    `skillpacks@${packageVersion}`,
+    `@glexcorp/gskp@${packageVersion}`
+  ]);
+  assert.match(result.output, /Post-publish source-state requirement/);
+});
+
 test("--current recovery publishes only the scoped alias when skillpacks exists and alias is missing", () => {
   const result = runPublishCurrent({ NPM_MOCK_SKILLPACKS_EXISTS: "1" });
 
