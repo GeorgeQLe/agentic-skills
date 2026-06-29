@@ -2,13 +2,14 @@
 
 ## Priority Task Queue
 
-_Updated 2026-06-29 by `/roadmap`. The active implementation task below (Three-Repo Split) is COMPLETE, shipped, and recorded in `tasks/history.md`. No next implementation work is promoted into this todo._
+_Updated 2026-06-29 by `/roadmap`. The active implementation task below (Three-Repo Split) is COMPLETE, shipped (commit `4b5734cd5`), and recorded in `tasks/history.md`. Working tree clean, pushed to `master`. No next implementation work is promoted into this todo. The items below are advisory routes, not unchecked execution steps._
 
-- [x] Active task complete: "Materialize Agentic Skills Three-Repo Split" reconciled to COMPLETE and shipped (commit `4b5734cd5`); working tree clean, pushed to `master`.
-- [ ] `/reconcile-dev-docs fix tasks` (docs-health pack) — reconcile the 4 unchecked `tasks/manual-todo.md` items (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env, live `/follow` verification, all tagged Step 38.x). Evidence: these belong to the Skills Showcase, which is now the separate `agentic-skills-showcase` repo — they are orphaned in this repo and should be moved there or explicitly deferred.
-- [ ] Review `tasks/recurring-todo.md`: "Devtool docs audit refresh" and "Spec drift check" — advisory cadence items active; promote to `tasks/todo.md` only if either is now concrete execution work.
+**No blocking issues:** tree clean, no unpushed commits, no missing implementation steps in an active phase.
 
-No blocking issues: tree clean, no unpushed commits, no missing implementation steps in an active phase.
+Advisory next routes (not promoted as active work):
+
+- **Recommended:** `/reconcile-dev-docs fix tasks` (docs-health pack) — reconcile the 4 unchecked `tasks/manual-todo.md` items (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env, live `/follow` verification, all tagged Step 38.x). Evidence: these belong to the Skills Showcase, now the separate `agentic-skills-showcase` repo — they are orphaned here and should be moved there or explicitly deferred.
+- Advisory: `tasks/recurring-todo.md` has 2 active cadence items ("Devtool docs audit refresh", "Spec drift check"); promote to `tasks/todo.md` only if either becomes concrete execution work.
 
 ## Current Implementation - Materialize Agentic Skills Three-Repo Split
 
