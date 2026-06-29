@@ -786,3 +786,9 @@
 - After a `0.1.14` readiness audit, the user provided runbook/auth context and then interrupted an agent-started real `./publish.sh patch`, switching to `$ship-end`.
 - Rule: do not infer permission to run a real npm publish from successful auth, runbook output, readiness checks, or "next work" text. A real publish/tag operation needs explicit user wording like "publish it now" or a direct unambiguous command to run `./publish.sh patch`.
 - If a real publish command is interrupted, immediately check for leftover publish/npm processes, check npm registry state for both package names, and restore local package/manifest version bumps if nothing published.
+
+## 2026-06-29 — Alignment/interrogation page handoffs require browser-open status
+
+- A `/customer-discovery` W3 findings session wrote `alignment/w3-hypothesis-new-ship-city.html` and told the user to open it manually, even though the bundled alignment-page contract required running the browser-open helper and reporting one of the allowed statuses. The helper was available and later returned `opened`; the omission was agent noncompliance, not an environmental blocker.
+- Rule: after writing or amending any active `alignment/*.html` or `interrogation/*.html` page, immediately run the required browser-open helper from the relevant page convention before the terminal handoff. Report `Browser open: focused`, `Browser open: opened`, `Browser open: fallback-opened`, `Browser open: blocked`, or `Browser open: failed` in the handoff. If no helper status has been produced, the handoff is incomplete; do not substitute a manual "open this file" instruction.
+- For Pattern A framework stops, put the browser-open status before the required `## Next Work` / command sections so the final response still ends with the mandated routing block.
