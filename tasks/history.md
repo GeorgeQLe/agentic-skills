@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page
+
+- Fixed wrap/ship Build-In-Public output landing as inline terminal markdown: the `ship-end` BIP branch named no output surface, while alignment-producing skills already write BIP to `alignment/bip-{skill-name}.html`. Broadened the post-confirmation BIP page trigger to also fire after a clean session ship (skills with no preceding alignment page), reusing the existing audited page shape — no new format, audit, or generator.
+- `docs/alignment-page-convention.md`: post-confirmation BIP page written after alignment confirmation OR after a wrap/ship clean ship; shipped boundary is the source context (`ship-end` → `alignment/bip-ship-end.html`).
+- `CLAUDE.md` BIP Suggestion Gate (points 1 + 3): wrap/ship batch written to the single HTML BIP page, not inline; kept no-publish/no-ledger contract.
+- `ship-end` (claude+codex) `v0.10 → v0.11`: write the batch to `alignment/bip-ship-end.html` (post-confirmation shape, archive, index, TTS inject, open) and print a one-line terminal pointer; archived v0.10; changelogs.
+- Regenerated 309 `ALIGNMENT-PAGE.md` bundles, skillpacks manifest, catalog export. Updated `tests/layer1/ship-end-bip.test.ts`. Wrote `alignment/bip-ship-end.html` (catalog-pin determinism BIP batch, every bundled channel) and linked it in `alignment/index.html`.
+- Verification: alignment bundle regen (drift exact), `audit-alignment-pages.mjs` exit 0 (`BIP handling: 1 ... exact`), 4 focused layer1 suites 77/77, package `build:check`, catalog export fresh, skill version/archive/mirror audits clean, diff hygiene. Shipped as `bcfc41e10` and pushed to master.
+
 ## 2026-06-29 - Simplify BIP platform setup and exhaustive phase drafts
 
 - Added project-level Build-In-Public platform selection at `.agents/project.json` `alignment.bip_platforms`.
