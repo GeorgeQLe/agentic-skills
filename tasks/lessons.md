@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-29 — Release readiness expires when the tree changes
+
+- A `0.1.16` readiness answer was correct for the clean tree at the time, but the next publish attempt failed because a later alignment page/index change made the tracked tree dirty before publishing.
+- Rule: treat publish readiness as a point-in-time result. Immediately before telling the user to run a real publish, re-check `git status --short --branch` and call out that any new tracked or untracked files must be committed or intentionally removed first.
+- When the user reports the clean-tree gate failed, inspect the exact dirty paths and current commits before assuming the prior readiness check is still valid.
+
 ## 2026-06-29 — BIP channel gates should recommend before asking
 
 - A BIP target-channel gate defaulted every unapproved channel to `not-now`, which made active Build-In-Public mode too conservative even after Stage 2 work produced enough evidence to judge channel fit.
