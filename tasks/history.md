@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-06-29 — Add publish dirty-tree override
+
+- Added `./publish.sh --allow-dirty-tree` for normal release targets and dry runs, allowing only non-release tracked dirty paths to coexist with a release.
+- Preserved strict default behavior: without the flag, tracked dirty paths still print `git status --short` and fail before release mutation.
+- Preserved `--current` recovery’s narrow release-metadata exception; `--allow-dirty-tree` does not broaden recovery to unrelated dirty paths.
+- Added grouped dirty-tree diagnostics for release-impacting tracked paths, non-release tracked paths, and untracked paths, plus an explicit warning that allowed dirty changes are not included in the release.
+- Added focused publish recovery coverage for default dirty blocking, allowed non-release dirt with untracked files, rejected release-impacting dirt, flag ordering, `--current` isolation, and unknown flag rejection.
+- Verification passed: `bash -n publish.sh`, focused publish recovery tests, package node tests, package build/check, task-doc audit, and diff hygiene. A parallel validation attempt was discarded because `test:node` and `build:check` race on `packages/skillpacks/build`; serial reruns passed.
+- Pre-existing dirty release metadata (`packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` at `0.1.16`) was preserved but excluded from this ship boundary.
+- Manifest: `tasks/ship-manifest-2026-06-29-add-publish-dirty-tree-override.md`.
+
 ## 2026-06-29 — Fix ship-end BIP post suggestions
 
 - Confirmed the reported behavior in the `ship-end` contract: `alignment.build_in_public === true` skipped the BIP suggestion gate entirely, while draft-post behavior existed only after a fresh yes response to the enablement prompt.

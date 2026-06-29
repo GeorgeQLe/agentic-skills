@@ -21,6 +21,7 @@ function makeMockBin() {
   const cpPath = path.join(tempDir, "cp");
   const gitPath = path.join(tempDir, "git");
   const npmPath = path.join(tempDir, "npm");
+  writeFileSync(logPath, "");
   writeFileSync(publishCountPath, "0\n");
   writeFileSync(registryPath, "");
 
@@ -56,10 +57,29 @@ fi
 set -euo pipefail
 
 if [[ "$1" == "status" && "$*" == *"--porcelain"* ]]; then
+  untracked_mode=normal
+  for arg in "$@"; do
+    if [[ "$arg" == "--untracked-files=no" ]]; then
+      untracked_mode=no
+    fi
+  done
+
+  if [[ "$untracked_mode" == "no" ]]; then
+    printf '%b' "\${GIT_MOCK_TRACKED_STATUS:-}"
+    exit 0
+  fi
+  printf '%b' "\${GIT_MOCK_TRACKED_STATUS:-}"
+  printf '%b' "\${GIT_MOCK_UNTRACKED_STATUS:-}"
   exit 0
 fi
 
 if [[ "$1" == "status" ]]; then
+  if [[ -n "\${GIT_MOCK_SHORT_STATUS:-}" ]]; then
+    printf '%b' "\${GIT_MOCK_SHORT_STATUS}"
+    exit 0
+  fi
+  printf '%b' "\${GIT_MOCK_TRACKED_STATUS:-}"
+  printf '%b' "\${GIT_MOCK_UNTRACKED_STATUS:-}"
   exit 0
 fi
 
@@ -196,30 +216,7 @@ exit 2
   return { binDir: tempDir, logPath, registryPath };
 }
 
-function runPublishCurrent(extraEnv = {}, { dryRun = true } = {}) {
-  const mock = makeMockBin();
-  const args = dryRun ? [publishScript, "--dry-run", "--current"] : [publishScript, "--current"];
-  const result = spawnSync("bash", args, {
-    cwd: repoRoot,
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      PATH: `${mock.binDir}${path.delimiter}${process.env.PATH}`,
-      ...extraEnv
-    }
-  });
-
-  return {
-    ...result,
-    output: `${result.stdout}\n${result.stderr}`,
-    calls: readFileSync(mock.logPath, "utf8"),
-    registry: readFileSync(mock.registryPath, "utf8")
-      .split("\n")
-      .filter(Boolean)
-  };
-}
-
-function runPublishPatch(extraEnv = {}) {
+function runPublish(args, extraEnv = {}) {
   const originalPackageJson = readFileSync(packageJsonPath, "utf8");
   const originalManifestJson = readFileSync(manifestJsonPath, "utf8");
   const mock = makeMockBin();
@@ -228,7 +225,7 @@ function runPublishPatch(extraEnv = {}) {
   let manifestJsonAfter;
 
   try {
-    result = spawnSync("bash", [publishScript, "patch"], {
+    result = spawnSync("bash", [publishScript, ...args], {
       cwd: repoRoot,
       encoding: "utf8",
       env: {
@@ -257,6 +254,103 @@ function runPublishPatch(extraEnv = {}) {
       .filter(Boolean)
   };
 }
+
+function runPublishCurrent(extraEnv = {}, { dryRun = true } = {}) {
+  const args = dryRun ? ["--dry-run", "--current"] : ["--current"];
+  return runPublish(args, extraEnv);
+}
+
+function runPublishPatch(extraEnv = {}, args = ["patch"]) {
+  return runPublish(args, extraEnv);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+test("tracked dirty paths block publish by default", () => {
+  const result = runPublishPatch({
+    GIT_MOCK_TRACKED_STATUS: " M alignment/index.html\n"
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /non-release dirty paths/);
+  assert.match(result.output, /alignment\/index\.html/);
+  assert.match(result.output, /Tracked working tree changes must be committed before publishing/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+  assert.doesNotMatch(result.calls, /^publish /m);
+});
+
+test("--allow-dirty-tree allows non-release dirty tracked paths and reports untracked paths", () => {
+  const result = runPublishPatch({
+    GIT_MOCK_TRACKED_STATUS: " M alignment/index.html\n",
+    GIT_MOCK_UNTRACKED_STATUS: "?? alignment/draft-review.html\n"
+  }, ["--dry-run", "--allow-dirty-tree", "patch"]);
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /--allow-dirty-tree is continuing with non-release tracked changes present/);
+  assert.match(result.output, /non-release dirty paths/);
+  assert.match(result.output, /alignment\/index\.html/);
+  assert.match(result.output, /untracked paths \(not included in release\)/);
+  assert.match(result.output, /alignment\/draft-review\.html/);
+  assert.match(result.output, /untracked files are present and will not be included unless committed/);
+  assert.match(result.calls, /^publish .* --dry-run$/m);
+});
+
+test("--allow-dirty-tree works after the version target", () => {
+  const result = runPublishPatch({
+    GIT_MOCK_TRACKED_STATUS: " M tasks/todo.md\n"
+  }, ["patch", "--allow-dirty-tree"]);
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /--allow-dirty-tree is continuing with non-release tracked changes present/);
+  assert.match(result.calls, /^publish /m);
+});
+
+test("--allow-dirty-tree rejects release-impacting dirty paths", () => {
+  const releasePaths = [
+    "packs/code-quality/codex/example/SKILL.md",
+    "scripts/audit-alignment-pages.mjs",
+    "docs/alignment-page-convention.md",
+    "packages/skillpacks/package.json"
+  ];
+
+  for (const releasePath of releasePaths) {
+    const result = runPublishPatch({
+      GIT_MOCK_TRACKED_STATUS: ` M ${releasePath}\n`
+    }, ["--allow-dirty-tree", "patch"]);
+
+    assert.equal(result.status, 1, releasePath);
+    assert.match(result.output, /release-impacting dirty paths/);
+    assert.match(result.output, new RegExp(escapeRegExp(releasePath)));
+    assert.match(result.output, /Tracked working tree changes must be committed before publishing/);
+    assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+    assert.doesNotMatch(result.calls, /^publish /m);
+  }
+});
+
+test("--allow-dirty-tree does not broaden --current recovery dirty allowances", () => {
+  const result = runPublish(["--dry-run", "--allow-dirty-tree", "--current"], {
+    GIT_MOCK_TRACKED_STATUS: " M alignment/index.html\n",
+    NPM_MOCK_SKILLPACKS_EXISTS: "1"
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /non-release dirty paths/);
+  assert.match(result.output, /alignment\/index\.html/);
+  assert.match(result.output, /Tracked working tree changes must be committed before publishing/);
+  assert.doesNotMatch(result.output, /--allow-dirty-tree is continuing/);
+  assert.doesNotMatch(result.calls, /^publish /m);
+});
+
+test("unknown publish flags are rejected", () => {
+  const result = runPublish(["--dry-run", "--unknown-flag", "patch"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /Unknown option: --unknown-flag/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+  assert.doesNotMatch(result.calls, /^publish /m);
+});
 
 test("real publish auth preflight failure restores source metadata before first publish", () => {
   const result = runPublishPatch({ NPM_MOCK_WHOAMI_RC: "1" });

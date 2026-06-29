@@ -2,6 +2,52 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Add Publish Dirty Tree Override
+
+### Goal
+
+Keep `./publish.sh` strict by default while adding an explicit `--allow-dirty-tree` escape hatch that permits only non-release dirty tracked paths to coexist with a release or dry run.
+
+### Execution Profile
+
+- Parallel mode: serial edits, parallel reads/verifications where independent.
+- Rationale: `publish.sh` flag parsing, dirty-tree classification, diagnostics, and release recovery behavior share one safety boundary and should be updated atomically.
+
+### Plan
+
+- [x] Capture the visible `exec` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect `publish.sh`, existing publish recovery tests, package metadata, and current dirty release files without overwriting unrelated work.
+- [x] Add `--allow-dirty-tree` parsing, usage text, tracked/untracked dirty summary output, and release-impacting path classification.
+- [x] Preserve strict default behavior and preserve the narrow `--current` release-metadata recovery exception.
+- [x] Add focused tests for default tracked dirty blocking, allowed non-release dirty paths with untracked files, rejected release-impacting dirty paths, supported flag ordering, and unknown flag rejection.
+- [x] Run the requested dry-run/fixture verification, package tests, package build check, task-doc audit, and diff hygiene checks.
+- [x] Document review/results, produce a ship manifest, commit, and push intended changes on the primary branch if safe.
+
+### Acceptance Criteria
+
+- `./publish.sh patch` still fails on any tracked dirty path by default.
+- `./publish.sh --allow-dirty-tree patch` and dry-run variants continue only when every dirty tracked path is outside the package/release boundary.
+- Dirty package or release inputs under `packages/skillpacks/**`, `base/**`, `packs/**`, `scripts/**`, package-bundled docs/assets, `README.md`, `CHANGELOG.md`, or `LICENSE` still fail with the override.
+- `--current` recovery keeps its existing narrow release-metadata exception and is not broadened by `--allow-dirty-tree`.
+- Diagnostics group release-impacting paths, non-release paths, and untracked paths, and warn when allowed dirty changes are excluded from the release.
+
+### Test Plan
+
+- `./publish.sh --dry-run --allow-dirty-tree patch` from a controlled dirty non-package state or mocked fixture.
+- `npm --workspace skillpacks run test:node`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Added `--allow-dirty-tree` to `publish.sh` with usage documentation and flag ordering compatible with `--dry-run --allow-dirty-tree patch` and `patch --allow-dirty-tree`.
+- Kept the default tracked dirty-tree block intact and added grouped dirty-tree diagnostics for release-impacting tracked paths, non-release tracked paths, and untracked paths.
+- Added a conservative release-impacting classifier for package inputs, package-bundled convention/social docs, root release docs, package metadata, workspace metadata, npm auth files, and `publish.sh`.
+- Preserved the narrow `--current` recovery exception: `--allow-dirty-tree` does not permit unrelated dirty paths during recovery.
+- Extended the publish recovery test harness to mock tracked/untracked git status and added coverage for strict default blocking, allowed non-release dirt with untracked files, rejected release-impacting dirt, post-target flag ordering, `--current` isolation, and unknown flag rejection.
+- Verification passed with the commands listed in the test plan. A parallel validation attempt intentionally was not accepted because `test:node` and `build:check` both mutate `packages/skillpacks/build`; rerunning them serially passed.
+
 ## Historical Implementation - Enforce Pending BIP Before Active Final Approval
 
 ### Goal

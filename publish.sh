@@ -8,6 +8,7 @@ MANIFEST_JSON="$PACKAGE_DIR/dist/skillpacks-manifest.json"
 BUILD_DIR="$PACKAGE_DIR/build"
 DRY_RUN=0
 USE_CURRENT=0
+ALLOW_DIRTY_TREE=0
 TARGET=""
 TMP_DIRS=()
 RESTORE_DIR=""
@@ -23,11 +24,18 @@ Usage:
   ./publish.sh 0.1.2
   ./publish.sh --current
   ./publish.sh --dry-run patch
+  ./publish.sh --allow-dirty-tree patch
+  ./publish.sh --dry-run --allow-dirty-tree patch
   ./publish.sh --dry-run --current
 
 Publishes both npm packages from the same built artifact:
   - skillpacks
   - @glexcorp/gskp
+
+By default, tracked working tree changes block publishing. Use
+--allow-dirty-tree only when every tracked dirty path is outside the package
+and release boundary. --current recovery keeps its narrower release-metadata
+exception.
 USAGE
 }
 
@@ -63,6 +71,107 @@ tracked_changes_allowed_for_current_recovery() {
   done <<< "$status_output"
 
   return 0
+}
+
+porcelain_status_paths() {
+  local line=$1
+  local path
+
+  path=${line:3}
+  if [[ "$path" == *" -> "* ]]; then
+    printf '%s\n' "${path%% -> *}"
+    printf '%s\n' "${path##* -> }"
+    return
+  fi
+
+  printf '%s\n' "$path"
+}
+
+is_release_impacting_dirty_path() {
+  local path=$1
+
+  case "$path" in
+    packages/skillpacks|packages/skillpacks/*)
+      return 0
+      ;;
+    base|base/*|packs|packs/*|scripts|scripts/*)
+      return 0
+      ;;
+    docs/alignment-page-convention.md|docs/interrogation-page-convention.md|docs/design-tree-loop-convention.md)
+      return 0
+      ;;
+    docs/social-post-convention.md|docs/social-video-content-convention.md|docs/social-ledger-convention.md)
+      return 0
+      ;;
+    docs/social|docs/social/*)
+      return 0
+      ;;
+    README.md|CHANGELOG.md|LICENSE)
+      return 0
+      ;;
+    publish.sh|package.json|package-lock.json|pnpm-lock.yaml|pnpm-workspace.yaml|.npmrc|packages/skillpacks/.npmrc)
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
+RELEASE_IMPACTING_DIRTY_PATHS=()
+NON_RELEASE_DIRTY_PATHS=()
+UNTRACKED_DIRTY_PATHS=()
+
+classify_tracked_dirty_paths() {
+  local status_output=$1
+  local line path
+
+  RELEASE_IMPACTING_DIRTY_PATHS=()
+  NON_RELEASE_DIRTY_PATHS=()
+
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    while IFS= read -r path; do
+      [[ -n "$path" ]] || continue
+      if is_release_impacting_dirty_path "$path"; then
+        RELEASE_IMPACTING_DIRTY_PATHS+=("$path")
+      else
+        NON_RELEASE_DIRTY_PATHS+=("$path")
+      fi
+    done < <(porcelain_status_paths "$line")
+  done <<< "$status_output"
+}
+
+collect_untracked_paths() {
+  local status_output=$1
+  local line
+
+  UNTRACKED_DIRTY_PATHS=()
+
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    if [[ "${line:0:3}" == "?? " ]]; then
+      UNTRACKED_DIRTY_PATHS+=("${line:3}")
+    fi
+  done <<< "$status_output"
+}
+
+print_path_group() {
+  local title=$1
+  shift
+
+  [[ "$#" -gt 0 ]] || return 0
+
+  printf '%s:\n' "$title" >&2
+  local path
+  for path in "$@"; do
+    printf '  %s\n' "$path" >&2
+  done
+}
+
+print_dirty_tree_summary() {
+  print_path_group "release-impacting dirty paths" "${RELEASE_IMPACTING_DIRTY_PATHS[@]}"
+  print_path_group "non-release dirty paths" "${NON_RELEASE_DIRTY_PATHS[@]}"
+  print_path_group "untracked paths (not included in release)" "${UNTRACKED_DIRTY_PATHS[@]}"
 }
 
 run() {
@@ -250,6 +359,10 @@ while [[ $# -gt 0 ]]; do
       USE_CURRENT=1
       shift
       ;;
+    --allow-dirty-tree)
+      ALLOW_DIRTY_TREE=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -292,18 +405,29 @@ fi
 cd "$ROOT_DIR"
 
 TRACKED_STATUS=$(git status --porcelain --untracked-files=no)
+ALL_STATUS=$(git status --porcelain --untracked-files=normal)
+classify_tracked_dirty_paths "$TRACKED_STATUS"
+collect_untracked_paths "$ALL_STATUS"
+
 if [[ -n "$TRACKED_STATUS" ]]; then
   git status --short
+  print_dirty_tree_summary
   if [[ "$USE_CURRENT" == "1" ]] && tracked_changes_allowed_for_current_recovery "$TRACKED_STATUS"; then
     printf 'WARNING: --current recovery is continuing with only release-state tracked changes present.\n' >&2
     printf 'WARNING: Commit/tag/push packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json after recovery succeeds.\n' >&2
+  elif [[ "$ALLOW_DIRTY_TREE" == "1" && "$USE_CURRENT" != "1" && "${#RELEASE_IMPACTING_DIRTY_PATHS[@]}" -eq 0 ]]; then
+    printf 'WARNING: --allow-dirty-tree is continuing with non-release tracked changes present.\n' >&2
+    printf 'WARNING: These dirty changes will not be included in the release; commit or remove them separately.\n' >&2
   else
     fail "Tracked working tree changes must be committed before publishing."
   fi
 fi
 
-if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
+if [[ "${#UNTRACKED_DIRTY_PATHS[@]}" -gt 0 ]]; then
   git status --short --untracked-files=normal
+  if [[ -z "$TRACKED_STATUS" ]]; then
+    print_dirty_tree_summary
+  fi
   printf 'WARNING: untracked files are present and will not be included unless committed.\n' >&2
 fi
 

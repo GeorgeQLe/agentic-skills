@@ -5,8 +5,71 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Enforce Pending BIP Before Active Final Approval.
-Last closeout: Stage 2 pages with `data-bip-status="linked"` now fail the alignment-page audit if they expose active final artifact approval controls before linked Build-In-Public approval, while read-only final-approval preview content and BIP handoff text remain allowed.
+Last completed task: Add Publish Dirty Tree Override.
+Last closeout: `publish.sh` now supports an explicit `--allow-dirty-tree` override for non-release dirty tracked paths, while default publishing and `--current` recovery remain strict around package-impacting dirt.
+
+## Recent Completion - Add Publish Dirty Tree Override
+
+### Goal
+
+Keep `./publish.sh` strict by default while adding an explicit `--allow-dirty-tree` escape hatch that permits only non-release dirty tracked paths to coexist with a release or dry run.
+
+### Execution Profile
+
+- Parallel mode: serial edits, parallel reads/verifications where independent.
+- Rationale: `publish.sh` flag parsing, dirty-tree classification, diagnostics, and release recovery behavior share one safety boundary and should be updated atomically.
+
+### Plan
+
+- [x] Capture the visible `exec` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect `publish.sh`, existing publish recovery tests, package metadata, and current dirty release files without overwriting unrelated work.
+- [x] Add `--allow-dirty-tree` parsing, usage text, tracked/untracked dirty summary output, and release-impacting path classification.
+- [x] Preserve strict default behavior and preserve the narrow `--current` release-metadata recovery exception.
+- [x] Add focused tests for default tracked dirty blocking, allowed non-release dirty paths with untracked files, rejected release-impacting dirty paths, supported flag ordering, and unknown flag rejection.
+- [x] Run the requested dry-run/fixture verification, package tests, package build check, task-doc audit, and diff hygiene checks.
+- [x] Document review/results, produce a ship manifest, commit, and push intended changes on the primary branch if safe.
+
+### Acceptance Criteria
+
+- `./publish.sh patch` still fails on any tracked dirty path by default.
+- `./publish.sh --allow-dirty-tree patch` and dry-run variants continue only when every dirty tracked path is outside the package/release boundary.
+- Dirty package or release inputs under `packages/skillpacks/**`, `base/**`, `packs/**`, `scripts/**`, package-bundled docs/assets, `README.md`, `CHANGELOG.md`, or `LICENSE` still fail with the override.
+- `--current` recovery keeps its existing narrow release-metadata exception and is not broadened by `--allow-dirty-tree`.
+- Diagnostics group release-impacting paths, non-release paths, and untracked paths, and warn when allowed dirty changes are excluded from the release.
+
+### Verification Plan
+
+- `./publish.sh --dry-run --allow-dirty-tree patch` from a controlled dirty non-package state or mocked fixture.
+- `npm --workspace skillpacks run test:node`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Verification
+
+Passed:
+
+- `bash -n publish.sh`
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs`
+- `npm --workspace skillpacks run test:node`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+Validation note:
+
+- A parallel run of `npm --workspace skillpacks run test:node` and `npm --workspace skillpacks run build:check` failed because both commands mutate `packages/skillpacks/build`; rerunning the commands serially passed.
+- The direct root `./publish.sh --dry-run --allow-dirty-tree patch` path is covered by the mocked publish recovery fixture because the live tree still contains a pre-existing release-metadata bump at `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+
+### Review/results
+
+- Added `--allow-dirty-tree` to `publish.sh` with usage text and parsing that works before or after the version target.
+- Kept default tracked dirty-tree behavior strict: blocked runs still print `git status --short` and fail.
+- Added dirty-tree summaries grouping release-impacting tracked paths, non-release tracked paths, and untracked paths.
+- Classified package/release-impacting paths conservatively, including `packages/skillpacks/**`, `base/**`, `packs/**`, `scripts/**`, package-bundled convention/social docs, root release docs, package/workspace metadata, npm auth files, and `publish.sh`.
+- Allowed the override only for non-release tracked dirt on normal release targets; `--current` recovery still accepts only the existing release-metadata exception.
+- Extended publish recovery tests to cover default blocking, allowed non-release dirt plus untracked files, rejected package-impacting dirt, flag ordering, `--current` isolation, and unknown flags.
+- Preserved the pre-existing `0.1.16` package metadata bump as unrelated dirty work and excluded it from this ship boundary.
 
 ## Recent Completion - Enforce Pending BIP Before Active Final Approval
 
