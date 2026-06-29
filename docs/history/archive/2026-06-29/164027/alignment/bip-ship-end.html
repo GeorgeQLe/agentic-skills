@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BIP Suggestions — ship-end (Wrap/Ship BIP → Single HTML Page)</title>
+<title>BIP Suggestions — ship-end (Benchmarks Catalog Pin Determinism)</title>
 <style>
 :root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; }
 * { box-sizing:border-box; }
@@ -41,7 +41,7 @@ ul,ol { padding-left:22px; } li { margin:5px 0; }
     <h2>Build-In-Public Suggestions</h2>
     <span class="status">alignment_status: confirmed · bip_page_status: post-confirmation</span>
   </div>
-  <h1>ship-end BIP Candidates — Wrap/Ship BIP Output Moves to a Single HTML Page</h1>
+  <h1>ship-end BIP Candidates — Benchmarks Catalog Pin Determinism</h1>
   <p class="lead">Read-only Build-In-Public candidate batch generated after a clean session ship. This page is review/help content only — it does not publish posts, write social-ledger records, alter canonical artifacts, or require another approval. Selection and publishing are a later workflow under <code>docs/social-ledger-convention.md</code>.</p>
 
   <div class="meta-box">
@@ -52,13 +52,13 @@ ul,ol { padding-left:22px; } li { margin:5px 0; }
 
   <section>
     <h2>What Shipped (Source Basis)</h2>
-    <p>The shipped boundary is a workflow-contract change to the session wrap-up skill. Build-In-Public post suggestions generated at the end of a "ship" used to print as inline terminal markdown, while suggestions tied to a review/alignment page already wrote to a single reviewable HTML file. This session unified the two: the wrap/ship batch now writes to one HTML page instead of scrolling past in the terminal.</p>
+    <p>The shipped boundary is a cross-repo determinism fix surfaced by a three-repo split double-check. In the benchmarks repo, a clean-checkout verification run failed on its first pass and self-healed on the second because the catalog importer re-imported from a moving branch ref, letting the committed catalog snapshot drift stale as the source root advanced.</p>
     <ul>
-      <li>The post-confirmation BIP page trigger was broadened to also fire after a clean ship (for wrap-up skills with no preceding review page), reusing the existing audited page shape — no new file format, audit, or generator.</li>
-      <li>The wrap/ship skill now writes its exhaustive per-channel batch to a single confirmed, read-only HTML page, archives any prior version, links it in a central index, and prints a one-line pointer instead of dumping candidates inline.</li>
-      <li>This very page is the dogfooded output of that change.</li>
+      <li>The importer's default source ref was pinned to a fixed root commit via a named default-ref constant, making clean-checkout verification deterministic.</li>
+      <li>The committed catalog snapshot was re-imported against the pin, and the deliberate bump-pin → re-import → commit refresh procedure was documented.</li>
+      <li>The environment override and worktree override paths still work; the pin only changes the default.</li>
     </ul>
-    <p>All drafts below are source-safe: no secrets, credentials, private repo context, customer names, or unverifiable metrics. The work described is a general workflow/devtool pattern, not a product commitment.</p>
+    <p>All drafts below are source-safe: no secrets, credentials, private repo context, customer names, or unverifiable metrics. Numbers are limited to publicly recorded session facts.</p>
   </section>
 
   <section class="toc">
@@ -90,47 +90,51 @@ ul,ol { padding-left:22px; } li { margin:5px 0; }
 
   <section id="linkedin-post">
     <h2>1. LinkedIn posts</h2>
-    <p><span class="pill pill-rec">recommended</span> Top-ranked text/community angle: the reviewability lesson — ephemeral terminal output vs a durable page.</p>
-    <div class="draft">Your build tooling can draft "building in public" posts for you. But if it dumps them as terminal text, they scroll away the moment you ship the next thing.
+    <p><span class="pill pill-rec">recommended</span> Top-ranked text/community angle: the "moving target" determinism lesson framed for a practitioner audience.</p>
+    <div class="draft">A clean checkout should verify the same way every time. Ours didn't — once.
 
-Small change with a big quality-of-life payoff: route those auto-drafted social posts to a single reviewable HTML page instead of inline output. Now they're archived, indexed, and openable — something you can actually skim, edit, and keep.
+A benchmark catalog importer pulled its source from a moving branch ref. So a committed snapshot quietly drifted stale as the upstream root advanced: first verify run red, second run green. Flaky-by-design.
 
-The lesson generalizes: if an agent generates something you'll want to review later, give it a durable surface, not a scrollback.</div>
+Fix: pin the importer's default source ref to a fixed commit, re-import the snapshot against the pin, and document the bump-pin → re-import → commit refresh as a deliberate step. Determinism restored; the env and worktree overrides still work.
+
+Reproducibility isn't a property you have — it's one you pin.</div>
     <dl class="fields">
-      <dt>Recommendation notes</dt><dd>Strongest single angle; "durable surface, not scrollback" resonates with devtool/agent-tooling readers. Lead candidate.</dd>
-      <dt>Source basis</dt><dd>This session's wrap/ship BIP-to-HTML routing change and its history entry.</dd>
-      <dt>Claim-safety notes</dt><dd>Framed as a general workflow insight; no internal paths or unreleased commitments.</dd>
+      <dt>Recommendation notes</dt><dd>Strongest single angle; "pin, don't chase a moving ref" lands with senior/devtool readers. Lead candidate for this batch.</dd>
+      <dt>Source basis</dt><dd>Recorded session history entry and ship manifest for the catalog-pin determinism fix.</dd>
+      <dt>Claim-safety notes</dt><dd>No metrics beyond the public "first run failed, second passed" fact; no internal SHAs in the body.</dd>
       <dt>Risk level</dt><dd>low.</dd>
-      <dt>Publish precheck</dt><dd>Confirm account voice and that building-in-public tooling is already public for this project.</dd>
+      <dt>Publish precheck</dt><dd>Confirm account voice and that the determinism story is already public before posting.</dd>
       <dt>Loaded convention path</dt><dd><code>docs/social/linkedin-post-convention.md</code></dd>
     </dl>
   </section>
 
   <section id="x-post">
     <h2>2. X posts</h2>
-    <p><span class="pill pill-rec">recommended</span> Tight one-liner with a generalizable principle.</p>
-    <div class="draft">If an agent generates something you'll want to review, don't print it to the terminal — it scrolls away.
+    <p><span class="pill pill-rec">recommended</span> Tight thread-starter on the self-healing flake.</p>
+    <div class="draft">A test that fails on the first clean run and passes on the second isn't passing — it's lying.
 
-Moved our auto-drafted "build in public" posts from inline output to a single reviewable HTML page: archived, indexed, openable. Durable surface > scrollback.</div>
+Root cause: importer defaulted to a moving branch ref, so the committed snapshot drifted stale as upstream advanced.
+
+Fix: pin the default ref to a fixed commit, re-import, document the refresh. 🧵</div>
     <dl class="fields">
-      <dt>Recommendation notes</dt><dd>Punchy; works standalone or as a thread head paired with the LinkedIn long-form.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
-      <dt>Claim-safety notes</dt><dd>Generic phrasing; no private context.</dd>
+      <dt>Recommendation notes</dt><dd>Punchy hook; good as thread head or standalone. Pairs with the LinkedIn long-form.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
+      <dt>Claim-safety notes</dt><dd>Generic phrasing; no private context or credentials.</dd>
       <dt>Risk level</dt><dd>low.</dd>
-      <dt>Publish precheck</dt><dd>Confirm any thread continuation is drafted before posting the head.</dd>
+      <dt>Publish precheck</dt><dd>Confirm thread continuation is drafted before posting the head.</dd>
       <dt>Loaded convention path</dt><dd><code>docs/social/x-post-convention.md</code></dd>
     </dl>
   </section>
 
   <section id="bluesky">
     <h2>3. Bluesky posts</h2>
-    <p><span class="pill pill-rec">recommended</span> Builder-confessional framing fitting the network.</p>
-    <div class="draft">My wrap-up command drafts build-in-public posts at the end of a ship. Handy — but it printed them inline, so they vanished into scrollback.
+    <p><span class="pill pill-rec">recommended</span> Same determinism beat, slightly more conversational for the Bluesky norm.</p>
+    <div class="draft">Spent a session chasing a "flaky" verify that self-healed on a second run. Not flaky — the catalog importer pulled from a moving ref, so a committed snapshot drifted stale.
 
-Pointed that output at a single HTML page instead. Now it's reviewable and kept. Tiny ergonomics fix, surprisingly nice.</div>
+Pinned the default ref to a fixed commit + documented the re-import refresh. Determinism is a thing you pin, not hope for.</div>
     <dl class="fields">
-      <dt>Recommendation notes</dt><dd>Conversational tone matches the network.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Recommendation notes</dt><dd>Fits the builder-confessional tone of the network.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>No unsupported claims; no proprietary detail.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm length fits the channel limit.</dd>
@@ -140,11 +144,11 @@ Pointed that output at a single HTML page instead. Now it's reviewable and kept.
 
   <section id="threads">
     <h2>4. Threads posts</h2>
-    <p><span class="pill pill-not">not-now</span> Near-duplicate of the Bluesky/X beat; hold to avoid same-day cross-posting of the identical line.</p>
-    <div class="draft">Ergonomics rule for agent tooling: if you'll want to read it later, write it to a page, not the terminal. (Today's example: auto-drafted social posts → a single reviewable HTML file.)</div>
+    <p><span class="pill pill-not">not-now</span> Near-duplicate of the Bluesky/X beat; hold to avoid cross-posting the identical line same-day.</p>
+    <div class="draft">Reproducible builds 101: if your snapshot is imported from a moving branch, it isn't a snapshot — it's a guess. Pin the ref.</div>
     <dl class="fields">
-      <dt>Recommendation notes</dt><dd>Useful, but dedupe against Bluesky/X; schedule a day apart if used.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Recommendation notes</dt><dd>Useful, but dedupe against Bluesky/X first; schedule a day apart if used.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Aphorism only; no private context.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm it does not repeat an already-posted line verbatim.</dd>
@@ -155,12 +159,12 @@ Pointed that output at a single HTML page instead. Now it's reviewable and kept.
   <section id="mastodon">
     <h2>5. Mastodon posts</h2>
     <p><span class="pill pill-rec">recommended</span> Slightly more technical framing for an engineering-heavy audience.</p>
-    <div class="draft">Workflow-contract tweak: my session wrap-up skill generates source-safe "build in public" post drafts. Two output paths had diverged — review-page-driven drafts went to a durable HTML file, wrap/ship drafts went to inline terminal text.
+    <div class="draft">Determinism bug of the day: a catalog importer whose default source ref was a moving branch. Clean-checkout verify failed first run, passed second, because the committed snapshot drifted stale as the root advanced.
 
-Unified them on the durable page: confirmed, read-only, archived before replacement, indexed. Reused the existing audited page shape — no new format. #devtools #agents</div>
+Resolved by pinning the default ref to a fixed commit and re-importing the snapshot against the pin. Env/worktree overrides preserved. #devtools #reproducibility</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Add CW only if instance norms require; otherwise post as-is.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Technical but non-proprietary; no secrets.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm hashtag/CW conventions for the home instance.</dd>
@@ -170,14 +174,14 @@ Unified them on the durable page: confirmed, read-only, archived before replacem
 
   <section id="reddit">
     <h2>6. Reddit posts</h2>
-    <p><span class="pill pill-not">not-now</span> Strong as a discussion write-up, but needs a genuine question and a subreddit that allows self-referential tooling posts.</p>
-    <div class="draft">Title: Where should agent-generated "review later" output live — terminal or a file?
+    <p><span class="pill pill-not">not-now</span> Strong as a write-up, but needs a genuine discussion question and a subreddit that allows self-referential build posts.</p>
+    <div class="draft">Title: A "flaky" test that self-healed on the second run turned out to be a stale snapshot, not flakiness
 
-Body: My build wrap-up tool drafts social posts at ship time. Inline terminal output meant they scrolled away; I moved them to a single reviewable HTML page (archived + indexed). Curious how others handle agent output you intend to review/edit later — files, a TUI pane, a web view? What's worked and what got annoying?</div>
+Body: Short post-mortem — importer defaulted to a moving branch ref, committed catalog snapshot drifted stale, first clean-checkout verify failed and the second passed. Fix was to pin the default ref to a fixed commit, re-import, and document the refresh. Curious how others guard imported/generated snapshots against ref drift — pinned refs, checked-in hashes, CI regeneration diffs?</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Hold until a fitting subreddit and discussion prompt are confirmed; Reddit penalizes promo-shaped posts.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
-      <dt>Claim-safety notes</dt><dd>Question-first framing; no private context.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
+      <dt>Claim-safety notes</dt><dd>Frame as a question, not a product pitch; no private context.</dd>
       <dt>Risk level</dt><dd>medium — subreddit rules vary.</dd>
       <dt>Publish precheck</dt><dd>Confirm target subreddit allows self-posts and the framing is discussion-first.</dd>
       <dt>Loaded convention path</dt><dd><code>docs/social/reddit-convention.md</code></dd>
@@ -186,11 +190,11 @@ Body: My build wrap-up tool drafts social posts at ship time. Inline terminal ou
 
   <section id="hacker-news">
     <h2>7. Hacker News submissions/comments</h2>
-    <p><span class="pill pill-rej">rejected</span> No standalone submission this cycle — a single workflow ergonomics tweak is below the bar for an HN post and reads as self-promotion.</p>
-    <div class="draft">(Reserved) Better used later as a contextual comment on an agent-tooling or developer-ergonomics thread: "We found agent output you intend to review later should land in a durable file, not terminal scrollback — moved our auto-drafted posts to a reviewable HTML page and it stuck."</div>
+    <p><span class="pill pill-rej">rejected</span> No standalone submission this cycle — a single internal determinism fix is below the bar for a front-page-shaped HN post and reads as self-promotion.</p>
+    <div class="draft">(Reserved) Better used later as a contextual comment on an existing reproducible-builds or flaky-test thread: "We hit this when an importer defaulted to a moving branch ref; pinning the default ref to a fixed commit + re-importing fixed it."</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Rejected as a submission; keep the one-liner for an organic comment opportunity.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Comment form only; no link-bait or unverifiable claims.</dd>
       <dt>Risk level</dt><dd>high for a submission (flag/penalty risk), low for an organic comment.</dd>
       <dt>Publish precheck</dt><dd>Only use as a comment where it is directly on-topic.</dd>
@@ -200,11 +204,11 @@ Body: My build wrap-up tool drafts social posts at ship time. Inline terminal ou
 
   <section id="youtube-community">
     <h2>8. YouTube Community posts</h2>
-    <p><span class="pill pill-rec">recommended</span> Teaser for a future build-log video on the change.</p>
-    <div class="draft">Next build-log: stop printing agent output you want to keep. We moved our auto-drafted "build in public" posts from terminal scrollback to a single reviewable page. Small fix, big difference. Where does your tooling lose output you meant to review?</div>
+    <p><span class="pill pill-rec">recommended</span> Teaser for a future build-log video on the fix.</p>
+    <div class="draft">Next build-log: the "flaky" test that wasn't. A clean checkout verified red, then green — because a catalog snapshot was imported from a moving ref. Walking through how we pinned it. What's your worst self-healing-test story?</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Only post if a matching video is planned; community posts work best as teasers.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Question-led; no private context.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm a follow-up video is actually scheduled.</dd>
@@ -216,17 +220,17 @@ Body: My build wrap-up tool drafts social posts at ship time. Inline terminal ou
 
   <section id="youtube-long-form">
     <h2>9. YouTube long-form</h2>
-    <p><span class="pill pill-not">not-now</span> Good evergreen episode on agent-output ergonomics, but needs screen-recording assets before it is worth producing.</p>
-    <div class="draft">Working title: "Agent Output Belongs in a File, Not Your Terminal"
+    <p><span class="pill pill-not">not-now</span> Good evergreen episode, but needs screen-recording assets before it is worth producing.</p>
+    <div class="draft">Working title: "The Flaky Test That Was Actually a Stale Snapshot"
 Outline:
-1. Cold open — the wrap-up tool drafts social posts, then they scroll away.
-2. The problem — review-later output dumped into ephemeral scrollback.
-3. The fix — route the batch to a single confirmed, read-only HTML page; archive on replace; index it.
-4. The reuse — lean on an existing audited page shape instead of inventing a new format.
-5. Takeaway — give review-later agent output a durable, openable surface.</div>
+1. Cold open — verify fails, rerun passes. The self-healing trap.
+2. Diagnosis — importer defaults to a moving branch ref; snapshot drifts as root advances.
+3. The fix — pin the default ref to a fixed commit; re-import against the pin.
+4. The discipline — document bump-pin → re-import → commit so future updates are intentional.
+5. Takeaway — generated/imported artifacts need a pinned source, not a moving one.</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>High evergreen value; defer until capture assets exist.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change and history entry.</dd>
+      <dt>Source basis</dt><dd>Session history entry and ship manifest for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Keep on-screen repo content to already-public material.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm recordings contain no secrets or private paths.</dd>
@@ -236,13 +240,13 @@ Outline:
 
   <section id="youtube-shorts">
     <h2>10. YouTube Shorts</h2>
-    <p><span class="pill pill-rec">recommended</span> 30-second hook on the ephemeral-output trap.</p>
-    <div class="draft">Hook (0-3s): "Your tool generated something useful, then deleted it. Sort of."
-Beat (3-20s): Agent-drafted posts printed to the terminal scroll away the moment you ship again.
-Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
+    <p><span class="pill pill-rec">recommended</span> 30-second hook on the self-healing test.</p>
+    <div class="draft">Hook (0-3s): "Your test passed on the second try. That's a bug."
+Beat (3-20s): A snapshot imported from a moving ref drifts stale — red then green.
+Payoff (20-30s): Pin the source ref to a fixed commit. Determinism, not luck.</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Strongest short-form hook in the batch.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Conceptual; no on-screen private context.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm captions and aspect ratio match the channel.</dd>
@@ -253,10 +257,10 @@ Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
   <section id="tiktok">
     <h2>11. TikTok</h2>
     <p><span class="pill pill-not">not-now</span> Same short hook, but only worth it if the dev-audience experiment on TikTok is active.</p>
-    <div class="draft">"POV: your AI tool wrote you 14 social posts and then they scrolled off the screen forever." Cut to: route them to a page instead. Caption for a non-expert dev audience.</div>
+    <div class="draft">"POV: your CI passes on the retry and you call it green." Then cut to: it was a stale snapshot imported from a moving ref. Fix = pin the ref. Caption it for a non-expert dev audience.</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Reuse the Shorts cut; hold unless TikTok distribution is being tested.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>No private context; keep jargon accessible.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm the channel is targeting a dev audience before posting.</dd>
@@ -266,11 +270,11 @@ Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
 
   <section id="instagram-reels">
     <h2>12. Instagram Reels</h2>
-    <p><span class="pill pill-not">not-now</span> Visual-first network; the ephemeral-output idea needs a clearer visual metaphor before it works here.</p>
-    <div class="draft">Visual idea: text flying up a terminal and off-screen, then the same text snapping into a tidy page card with an "open" button. Caption: "Stop losing the output you meant to review."</div>
+    <p><span class="pill pill-not">not-now</span> Visual-first network; the snapshot-drift idea needs a clearer visual metaphor before it works here.</p>
+    <div class="draft">Visual idea: a "snapshot" photo slowly going blurry while a branch label scrolls past underneath, then snapping sharp when a pin icon drops on a fixed commit. Caption: "Imported from a moving ref = stale snapshot. Pin it."</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Hold until the visual metaphor is storyboarded.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>Metaphor only; no private context.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm asset is produced and on-brand.</dd>
@@ -280,11 +284,11 @@ Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
 
   <section id="linkedin-video">
     <h2>13. LinkedIn video</h2>
-    <p><span class="pill pill-rec">recommended</span> Short talking-head clip pairing with the LinkedIn text post.</p>
-    <div class="draft">60-90s talking head: "A workflow lesson worth stealing: if your agent generates something you'll want to review later, don't print it to the terminal. We had a wrap-up command drafting build-in-public posts inline — they scrolled away. We routed them to a single reviewable HTML page that gets archived and indexed. Durable surface beats scrollback every time."</div>
+    <p><span class="pill pill-rec">recommended</span> Short talking-head clip pairing well with the LinkedIn text post.</p>
+    <div class="draft">60-90s talking head: "Here's a determinism bug worth stealing the lesson from. A test that self-heals on a retry is hiding a stale input. Ours came from importing a snapshot off a moving branch ref. We pinned the default ref to a fixed commit and documented the refresh. If you generate or import artifacts, pin the source."</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Reinforces the LinkedIn text post; record once, caption for silent autoplay.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Source basis</dt><dd>Session history entry for the determinism fix.</dd>
       <dt>Claim-safety notes</dt><dd>No screen-share of private content; spoken summary only.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm captions are burned in for autoplay.</dd>
@@ -294,11 +298,11 @@ Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
 
   <section id="founder-video">
     <h2>14. Founder/devtool reusable video prompts</h2>
-    <p><span class="pill pill-rec">recommended</span> Reusable prompt template so this beat can be regenerated for any future workflow-ergonomics fix.</p>
-    <div class="draft">Reusable prompt: "Record a 45-60s founder build-log clip about a developer-ergonomics fix in agent tooling. Structure: (1) the small annoyance (useful output that disappears or is hard to review), (2) why it happened (wrong output surface), (3) the fix (give it a durable, reviewable surface; reuse an existing format), (4) the transferable rule. Keep all examples source-safe — no secrets, no private paths, no unverifiable metrics, no unreleased product commitments."</div>
+    <p><span class="pill pill-rec">recommended</span> Reusable prompt template so this beat can be regenerated for any future determinism fix.</p>
+    <div class="draft">Reusable prompt: "Record a 45-60s founder build-log clip about a determinism/reproducibility fix. Structure: (1) the surprising symptom (a check that self-heals on retry), (2) the real root cause (a moving/unpinned input), (3) the fix (pin the source, re-import, document the refresh), (4) the transferable rule. Keep all examples source-safe — no secrets, no private paths, no unverifiable metrics."</div>
     <dl class="fields">
       <dt>Recommendation notes</dt><dd>Save as a template; ranks high for reuse across future ship-end BIP runs.</dd>
-      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change as the worked example.</dd>
+      <dt>Source basis</dt><dd>This session's determinism fix as the worked example.</dd>
       <dt>Claim-safety notes</dt><dd>Template enforces source-safety in its own instructions.</dd>
       <dt>Risk level</dt><dd>low.</dd>
       <dt>Publish precheck</dt><dd>Confirm each generated instance is re-checked for source-safety before publishing.</dd>
