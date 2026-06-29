@@ -15268,3 +15268,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - This repo (`agentic-skills`) untouched by the fix — its canonical export already passes `exports:check`. Only artifact landing here is the investigate prompt-history file for the split double-check.
 - Verification (brand-new benchmarks clone): `git status` clean before/after first-run `pnpm verify --skill design-system` → exit 0; `catalog:check` fresh; `bench:coverage` 208 skills; `pnpm test` 3 passed.
 - Manifest: `tasks/ship-manifest-2026-06-29-benchmarks-catalog-pin-determinism.md`.
+
+## 2026-06-29 — Reconcile & close the Three-Repo Split task
+
+- Reconciled the stale *Materialize Agentic Skills Three-Repo Split* task to COMPLETE against verified GitHub reality (read-only `gh repo view` / `gh api .../contents`): all three repos exist and are populated on `master` (~30 commits each) — `GeorgeQLe/agentic-skills`, `agentic-skills-showcase` (Next.js app at root), `agentic-skills-benchmarks` (harness at root; got catalog-pin fix `dca929b`).
+- Recorded the local-layout decision: single `agentic-skills` checkout, no local sibling clones; showcase/benchmarks remote-only by choice. Materialization happened out-of-band from `b7c0775bc`.
+- Rewrote the `tasks/todo.md` and `tasks/roadmap.md` *Current reality* blocks, checked off all plan steps with reconciliation notes, reconciled acceptance criteria (rewrote the "local repos" criterion to the chosen outcome), and added `Status: COMPLETE (reconciled 2026-06-29)` markers.
+- No source changes — task-doc bookkeeping only.
+- Verification: `node scripts/audit-task-docs.mjs` exit 0 (0 failures, 0 warnings).
