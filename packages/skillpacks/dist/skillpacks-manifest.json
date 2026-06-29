@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.17"
   },
-  "source_fingerprint": "da88c4aae1a19c4f9099b28011d696341445a1d3f37711215093f3617605b987",
+  "source_fingerprint": "bbfe74e637313ecd1b4a552571852ef3220a25a8db33a0cf47bf032c4b9553a6",
   "packs": [
     {
       "name": "agent-bridge",
@@ -6979,7 +6979,7 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6987,10 +6987,11 @@
       ],
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "261215bc787d46c47a048fc43e537ca885adde85b1b027934b07e5db3b3420e8",
+      "content_sha256": "aea825aad1b274189654a6e486ee8a81bb21fb2ddcd62c549d01b44dcada9a12",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7059,7 +7060,7 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7067,10 +7068,11 @@
       ],
       "path": "packs/exec-loop/codex/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "99812daded700eb988a6e6e92410c68a9bc15c4159082649662eb6c2106e1ff4",
+      "content_sha256": "eb4c7dee9a44d447b12b72b91165f9796cd14ca21c7450507df260015c4801fc",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
