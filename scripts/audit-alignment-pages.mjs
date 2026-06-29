@@ -30,6 +30,16 @@ const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*>
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const DATE_RE = /\b\d{4}-\d{2}-\d{2}\b/;
 const BIP_STATUS_VALUES = new Set(["linked", "approved", "not-applicable"]);
+const BIP_FINAL_GATE_KEYS = [
+  "drafting-mode",
+  "content-angles",
+  "sample-drafts",
+  "tone",
+  "claim-safety",
+  "publish-readiness",
+];
+const STALE_BIP_FUTURE_DRAFTING_QUESTION_RE = /Which drafting mode should apply if channels are later selected/i;
+const STALE_BIP_NO_DRAFTING_OPTION_RE = /No drafting mode needed;\s*all channels remain not-now/i;
 
 const pages = existsSync(alignmentDir)
   ? readdirSync(alignmentDir).filter((f) => f.endsWith(".html")).sort()
@@ -87,6 +97,84 @@ function isReviewPage(html) {
 
 function isBipReviewPage(file, html) {
   return file.endsWith("-bip.html") || /\bdata-alignment-page-kind=["']bip["']/i.test(html);
+}
+
+function htmlAttributeValue(tag, attribute) {
+  const escaped = attribute.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = tag.match(new RegExp(`\\b${escaped}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"));
+  return match ? (match[1] ?? match[2] ?? match[3] ?? "").trim() : "";
+}
+
+function requiredGateRecords(html) {
+  const records = [];
+  for (const match of html.matchAll(/<[^!/][^>]*\bdata-required\s*=\s*(?:"true"|'true'|true)(?=\s|>|\/)[^>]*>/gi)) {
+    const tag = match[0];
+    const haystack = [
+      htmlAttributeValue(tag, "data-gate"),
+      htmlAttributeValue(tag, "data-gate-type"),
+      htmlAttributeValue(tag, "data-section"),
+      htmlAttributeValue(tag, "data-question-id"),
+    ].join(" ").toLowerCase().replace(/_/g, "-");
+    records.push({ tag, haystack });
+  }
+  return records;
+}
+
+function requiredGateRecordMatches(record, gateKey) {
+  const haystack = record.haystack;
+  const checks = {
+    "target-channels": /\btarget[- ]channels?\b/,
+    "drafting-mode": /\bdrafting[- ]mode\b/,
+    "content-angles": /\bcontent[- ]angles?\b/,
+    "sample-drafts": /\b(?:sample[- ]drafts?|sample[- ]posts?|video[- ]ideas?)\b/,
+    tone: /\btone\b/,
+    "claim-safety": /\bclaim[- ]safety\b/,
+    "publish-readiness": /\bpublish[- ]readiness\b/,
+  };
+  return checks[gateKey]?.test(haystack) ?? false;
+}
+
+function requiredBipGateKeys(html, gateKeys) {
+  const records = requiredGateRecords(html);
+  return gateKeys.filter((gateKey) => records.some((record) => requiredGateRecordMatches(record, gateKey)));
+}
+
+function hasRequiredTargetChannelGate(html) {
+  return requiredBipGateKeys(html, ["target-channels"]).length > 0;
+}
+
+function hasSelectedChannelDraftSignals(html) {
+  return (
+    /\bselected-channel draft review\b/i.test(html) ||
+    /\brendered selected-channel drafts?\b/i.test(html) ||
+    /\bselected-channel sample drafts?\b/i.test(html) ||
+    /\bdrafts rendered\b/i.test(html) ||
+    /\bLoaded Convention Path\b/i.test(html) ||
+    /\bselected text\/community channel set\b/i.test(html)
+  );
+}
+
+function bipGateSequencingDiagnostics(rel, html) {
+  const diagnostics = [];
+  if (STALE_BIP_FUTURE_DRAFTING_QUESTION_RE.test(html)) {
+    diagnostics.push(
+      `Stale BIP drafting-mode question in ${rel} — remove "Which drafting mode should apply if channels are later selected?" and defer drafting-mode approval until channel-selection YAML has been approved and consumed.`,
+    );
+  }
+
+  const prematureFinalGates = requiredBipGateKeys(html, BIP_FINAL_GATE_KEYS);
+  if (hasRequiredTargetChannelGate(html) && !hasSelectedChannelDraftSignals(html) && prematureFinalGates.length) {
+    diagnostics.push(
+      `Premature BIP final gates in ${rel} — initial BIP channel-selection pages may require only target-channels until channel-selection YAML has been approved and consumed. Remove required gates: ${prematureFinalGates.join(", ")}.`,
+    );
+  }
+
+  if (hasSelectedChannelDraftSignals(html) && STALE_BIP_NO_DRAFTING_OPTION_RE.test(html)) {
+    diagnostics.push(
+      `Stale BIP drafting-mode option in ${rel} — selected-channel draft pages must not offer "No drafting mode needed; all channels remain not-now."`,
+    );
+  }
+  return diagnostics;
 }
 
 function normalizeAlignmentPath(value) {
@@ -259,6 +347,7 @@ for (const file of pages) {
   }
 
   if (isBipReviewPage(file, html)) {
+    bipDiagnostics.push(...bipGateSequencingDiagnostics(rel, html));
     const relGatedPage = bipGatedPage(html);
     if (!/\bdata-alignment-page-kind=["']bip["']/i.test(html)) {
       bipDiagnostics.push(

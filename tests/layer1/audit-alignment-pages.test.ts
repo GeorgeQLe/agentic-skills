@@ -93,6 +93,42 @@ function stage2Body(extra = ""): string {
   ].join("\n");
 }
 
+function bipPageBody(inner: string): string {
+  return [
+    "<section>",
+    "<h2>BIP Review</h2>",
+    inner,
+    "</section>",
+  ].join("\n");
+}
+
+function targetChannelGate(): string {
+  return [
+    '<article class="gate" data-gate="target-channels" data-gate-type="target channel selection" data-section="Target Channels" data-required="true">',
+    "<h3>Target Channel Selection</h3>",
+    '<div class="question-block">',
+    "<p><strong>Required question:</strong> Which public channels, if any, are in scope for BIP content from this run?</p>",
+    '<label><input type="radio" name="gate-target-channels" value="approve recommended channels"> Approve recommended channels</label>',
+    '<label><input type="radio" name="gate-target-channels" value="needs-clarification"> Need clarification</label>',
+    "</div>",
+    "</article>",
+  ].join("\n");
+}
+
+function draftingModeGate(extraOptions = ""): string {
+  return [
+    '<article class="gate" data-gate="drafting-mode" data-gate-type="drafting mode" data-section="Drafting Mode" data-required="true">',
+    "<h3>Drafting Mode</h3>",
+    '<div class="question-block">',
+    "<p><strong>Required question:</strong> Is the selected drafting mode correct for these rendered drafts?</p>",
+    '<label><input type="radio" name="gate-drafting-mode" value="platform_aligned"> platform_aligned</label>',
+    '<label><input type="radio" name="gate-drafting-mode" value="creator_inspired"> creator_inspired</label>',
+    extraOptions,
+    "</div>",
+    "</article>",
+  ].filter(Boolean).join("\n");
+}
+
 function indexHtml(entries: Array<{ href: string; title?: string; date?: string | null }>): string {
   const items = entries.map(({ href, title = href, date = "2026-06-10" }) =>
     `<li><a href="${href}">${title}</a>${date ? ` <span class="meta">${date}</span>` : ""}</li>`,
@@ -458,6 +494,115 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
     expect(result.stderr).toContain("Missing BIP page metadata in alignment/page-a-bip.html");
     expect(result.stderr).toContain("Missing BIP gated-page metadata in alignment/page-a-bip.html");
+  });
+
+  it("passes an initial BIP channel-selection page with only the target-channel gate", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: bipPageBody([
+        "<p>Before drafting BIP content, approve target channels only.</p>",
+        targetChannelGate(),
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+  });
+
+  it("fails an initial BIP page that requires drafting-mode or future-content gates before channel selection", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: bipPageBody([
+        "<p>No channel-selection YAML has been approved yet.</p>",
+        targetChannelGate(),
+        '<article class="gate" data-gate="drafting-mode" data-gate-type="drafting mode" data-section="Drafting Mode" data-required="true">',
+        "<h3>Drafting Mode</h3>",
+        '<div class="question-block">',
+        "<p><strong>Required question:</strong> Which drafting mode should apply if channels are later selected?</p>",
+        '<label><input type="radio" name="gate-drafting-mode" value="platform_aligned"> platform_aligned</label>',
+        "</div>",
+        "</article>",
+        '<article class="gate" data-gate="content-angles" data-gate-type="content angle selection" data-section="Content Angles" data-required="true"></article>',
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain("Stale BIP drafting-mode question in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("Premature BIP final gates in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("drafting-mode, content-angles");
+  });
+
+  it("passes a selected-channel BIP draft page with platform and creator drafting choices", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: bipPageBody([
+        "<p>Current BIP state: selected-channel draft review.</p>",
+        "<p>Loaded Convention Path: docs/social/linkedin-post-convention.md.</p>",
+        targetChannelGate(),
+        draftingModeGate(),
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+  });
+
+  it("fails a selected-channel BIP draft page with the stale all-channels-not-now drafting option", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: bipPageBody([
+        "<p>Current BIP state: selected-channel draft review.</p>",
+        "<p>Rendered selected-channel drafts are ready for review.</p>",
+        targetChannelGate(),
+        draftingModeGate(
+          '<label><input type="radio" name="gate-drafting-mode" value="no drafting mode needed until channels selected"> No drafting mode needed; all channels remain not-now</label>',
+        ),
+      ].join("\n")),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain("Stale BIP drafting-mode option in alignment/page-a-bip.html");
+    expect(result.stderr).toContain('No drafting mode needed; all channels remain not-now');
   });
 
   it("fails when linked BIP handling omits the handoff before final artifact approval", () => {

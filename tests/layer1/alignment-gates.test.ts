@@ -88,7 +88,11 @@ const bipChannelRecommendationSnippets = [
   "`recommended`, `optional`, or `not-now`",
   "preselect `recommended` channels by default",
   "approves only channel selection, not final BIP approval",
-  "must not include draft posts, video ideas",
+  "initial BIP channel-selection page may require only the target-channel gate",
+  "must not require drafting mode, content angles, sample posts or video ideas, tone, claim safety, publish readiness",
+  "do not render required `drafting-mode`, `content-angles`, `sample-drafts`, `tone`, `claim-safety`, or `publish-readiness` gates",
+  "the selected-channel draft page requires drafting mode, content angles, sample posts or video ideas, tone, claim safety, and publish readiness",
+  "do not keep a no-drafting option that says all channels remain `not-now`",
   "only after the selected/recommended channel set is approved",
   "bip_channel_selection_status: ready-for-agent-review",
 ];

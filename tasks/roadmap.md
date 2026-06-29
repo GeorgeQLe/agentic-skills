@@ -2,6 +2,57 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix BIP Drafting-Mode Gate Leakage
+
+### Goal
+
+Prevent initial Build-In-Public channel-selection alignment pages from leaking drafting-mode or final content-approval gates before channel-selection YAML is approved, and remove the stale all-channels-not-now drafting option from selected-channel BIP draft pages.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: the canonical convention, generated bundles, audit diagnostics, fixtures, and Alignmeant page audit share one gate-sequencing contract and should be updated atomically.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect the canonical alignment-page convention, generated `ALIGNMENT-PAGE.md` bundles, audit script, layer1 tests, recent history, and active/archived Alignmeant BIP page state.
+- [x] Tighten `docs/alignment-page-convention.md` so the initial BIP channel-selection page requires only target-channel selection until approved channel-selection YAML is consumed.
+- [x] Extend `scripts/audit-alignment-pages.mjs` with BIP gate-sequencing diagnostics for premature final gates, stale future-channel drafting wording, and stale all-channels-not-now selected-channel drafting options.
+- [x] Add focused layer1 audit fixtures for passing/failing initial BIP channel-selection pages and selected-channel BIP draft pages.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- [x] Run the updated audit against Alignmeant and amend the active BIP page if it only contains the stale selected-channel drafting option.
+- [x] Run required verification, document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- Initial BIP channel-selection pages may require only the target-channel gate.
+- Drafting mode, content angles, sample drafts/video ideas, tone, claim safety, and publish readiness are required only after channel-selection YAML has been approved and consumed.
+- BIP pages containing the stale future-channel drafting question fail audit.
+- Selected-channel BIP draft pages fail audit if the drafting-mode gate still offers the stale all-channels-remain-not-now option.
+- The active Alignmeant page either passes the updated audit or is amended to remove only the stale selected-channel option.
+- Generated alignment-page convention bundles match the canonical convention.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/audit-alignment-pages.test.ts layer1/alignment-gates.test.ts`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-alignment-pages.mjs --root /Users/georgele/projects/tools/dev/alignmeant`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `npm --workspace skillpacks run build:check`
+
+### Results
+
+- Confirmed the archived Alignmeant BIP page required drafting mode, content angles, sample drafts, tone, claim safety, and publish readiness before channel-selection YAML was approved.
+- Tightened the canonical alignment-page convention so initial BIP channel-selection pages may require only target-channel selection until approved channel-selection YAML is consumed.
+- Added audit diagnostics for premature required final BIP gates, the stale future-channel drafting question, and the stale selected-channel all-channels-not-now drafting option.
+- Added focused layer1 fixtures for valid/invalid initial channel-selection pages and valid/invalid selected-channel BIP draft pages.
+- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles.
+- Amended the active Alignmeant BIP page to remove the stale selected-channel no-drafting option and amended its parent checkpoint so BIP review explicitly precedes final artifact approval.
+- Verification passed in the source repo. The external Alignmeant audit still exits 1 for unrelated pre-existing TTS, metadata, and confirmed-page-control drift, but now reports `BIP handling: 1 Stage 2 pages, exact`.
+
 ## Historical Implementation - BIP Channel Recommendations And Rankings
 
 ### Goal
