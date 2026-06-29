@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Harden Publish Against Web Auth Interrupts
+## Historical Implementation - Harden Publish Against Web Auth Interrupts
 
 ### Goal
 
@@ -22,8 +22,8 @@ Restore the failed `0.1.15` release bump residue, then harden `./publish.sh` so 
 - [x] Extend `prepublish-auth-check.mjs` with package/version overrides and non-interactive web-auth rejection when no publish token or legacy/token auth is detected.
 - [x] Add interrupt-safe rollback handling for `INT`, `TERM`, and `HUP`, preserving bumped files only after the first publish succeeds.
 - [x] Add focused regression coverage for web-auth preflight, publish interruption rollback, repeated interrupt during cleanup, token/legacy-auth pass-through, and existing recovery paths.
-- [ ] Run focused and workspace verification, task-doc audit, diff hygiene checks, and post-commit dry-run release verification.
-- [ ] Document results, commit, and push on `master`.
+- [x] Run focused and workspace verification, task-doc audit, diff hygiene checks, and post-commit dry-run release verification.
+- [x] Document results, commit, and push on `master`.
 
 ### Acceptance Criteria
 
@@ -45,6 +45,15 @@ Restore the failed `0.1.15` release bump residue, then harden `./publish.sh` so 
 - `git diff --check`
 - `git diff --cached --check`
 - After commit: `./publish.sh --dry-run patch`
+
+### Results
+
+- Restored `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` from the failed `0.1.15` bump back to the committed `0.1.14` state before code changes.
+- Added pre-bump target-version computation in a temporary package copy and preflighted both `skillpacks@<target>` and `@glexcorp/gskp@<target>` before source mutation.
+- Extended `prepublish-auth-check.mjs` with package/version overrides, token-aware `auth-type=web` rejection, and explicit non-interactive remediation.
+- Added `INT`, `TERM`, and `HUP` handling so cleanup ignores repeated interrupts while restoring source files.
+- Added focused regression coverage for web-auth/no-token preflight, token/protected-token pass-through, first-publish interruption rollback, repeated interrupt during cleanup, existing first-publish failure rollback, and `--current` recovery.
+- Post-commit `./publish.sh --dry-run patch` passed for `0.1.15` and cleanup restored package and manifest versions to `0.1.14`.
 
 ## Historical Implementation - Refresh Package Manifest For Interrogation Split
 

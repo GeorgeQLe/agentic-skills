@@ -2,13 +2,13 @@
 
 ## Status
 
-Active implementation: Harden Publish Against Web Auth Interrupts.
+Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Refresh Package Manifest For Interrogation Split.
-Last closeout: package manifest metadata now matches the interrogation-page split changes and release gates pass.
+Last completed task: Harden Publish Against Web Auth Interrupts.
+Last closeout: publish now preflights auth before source mutation, rejects tokenless web auth non-interactively, and restores release files on interrupted first publish.
 
-## Current Implementation - Harden Publish Against Web Auth Interrupts
+## Recent Completion - Harden Publish Against Web Auth Interrupts
 
 ### Plan
 
@@ -19,8 +19,8 @@ Last closeout: package manifest metadata now matches the interrogation-page spli
 - [x] Extend `prepublish-auth-check.mjs` with package/version overrides and non-interactive web-auth rejection when no publish token or legacy/token auth is detected.
 - [x] Add interrupt-safe rollback handling for `INT`, `TERM`, and `HUP`, preserving bumped files only after the first publish succeeds.
 - [x] Add focused regression coverage for web-auth preflight, publish interruption rollback, repeated interrupt during cleanup, token/legacy-auth pass-through, and existing recovery paths.
-- [ ] Run focused and workspace verification, task-doc audit, diff hygiene checks, and post-commit dry-run release verification.
-- [ ] Document results, commit, and push on `master`.
+- [x] Run focused and workspace verification, task-doc audit, diff hygiene checks, and post-commit dry-run release verification.
+- [x] Document results, commit, and push on `master`.
 
 ### Acceptance Criteria
 
@@ -43,10 +43,7 @@ Passed:
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
 - `git diff --cached --check`
-
-Pending:
-
-- After commit: `./publish.sh --dry-run patch`
+- `./publish.sh --dry-run patch`
 
 ### Review/results
 
@@ -55,6 +52,7 @@ Pending:
 - Extended `prepublish-auth-check.mjs` with package/version overrides and token-aware `auth-type=web` rejection before `npm whoami`.
 - Added `INT`, `TERM`, and `HUP` handling so cleanup ignores repeated interrupts while restoring release files.
 - Added regression coverage for web-auth/no-token preflight, token pass-through, first-publish interruption rollback, repeated interrupt during cleanup, existing first-publish failure rollback, and `--current` recovery paths.
+- Post-commit `./publish.sh --dry-run patch` passed for `0.1.15`; cleanup restored both package and manifest versions to `0.1.14`.
 
 ## Recent Completion - Refresh Package Manifest For Interrogation Split
 
