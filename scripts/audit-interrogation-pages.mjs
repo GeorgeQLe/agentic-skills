@@ -32,13 +32,15 @@ const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*>
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const FILENAME_RE = /^[a-z0-9-]+-r(\d+)-[a-z0-9-]+\.html$/;
 const OPEN_INPUT_RE = /<(?:textarea|input)\b[^>]*\bdata-open-input\b/i;
-const OPEN_QUESTION_RE = /\bdata-open-question\b/gi;
-const RECOMMENDED_ANSWER_RE = /\bdata-recommended-answer\b/gi;
+const OPEN_QUESTION_TAG_RE = /<[^>]*\bdata-open-question\b[^>]*>/gi;
+const RECOMMENDED_ANSWER_TAG_RE = /<[^>]*\bdata-recommended-answer\b[^>]*>/gi;
+const AGENT_RECOMMENDED_ANSWER_TAG_RE = /<[^>]*\bdata-agent-recommended-answer\b[^>]*>/gi;
 const AGENT_CONFIDENCE_RE = /\bdata-agent-confidence="([^"]*)"/gi;
 const CLARIFY_COPY_RE = /<button\b[^>]*\bdata-clarify-copy\b/gi;
 const APPLY_RECOMMENDED_RE = /<button\b[^>]*\bdata-apply-recommended\b/gi;
 const CONFIDENCE_VALUES = new Set(["high", "medium", "low"]);
 const SIDECAR_VALUE_RE = /interrogation-[a-z0-9-]+-r\d+\.yaml/;
+const HIDDEN_CLASS_VALUES = new Set(["hidden", "is-hidden", "u-hidden", "visually-hidden", "sr-only", "screen-reader-only"]);
 
 const pages = existsSync(interrogationDir)
   ? readdirSync(interrogationDir).filter((f) => f.endsWith(".html") && f !== "index.html").sort()
@@ -69,6 +71,28 @@ function checkAttribute(htmlTag, rel, attribute, allowed) {
     );
   }
   return match[1];
+}
+
+function attrValue(tag, attribute) {
+  const match = tag.match(new RegExp(`\\b${attribute}\\s*=\\s*("([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"));
+  return match ? (match[2] ?? match[3] ?? match[4] ?? "") : null;
+}
+
+function hasBooleanAttribute(tag, attribute) {
+  return new RegExp(`\\b${attribute}(?:\\s*=|\\s|/?>)`, "i").test(tag);
+}
+
+function isHiddenAgentRecommendedAnswer(tag) {
+  if (hasBooleanAttribute(tag, "hidden")) return true;
+  if (attrValue(tag, "type")?.toLowerCase() === "hidden") return true;
+  if (attrValue(tag, "aria-hidden")?.toLowerCase() === "true") return true;
+
+  const style = attrValue(tag, "style")?.toLowerCase() ?? "";
+  if (/(^|;)\s*display\s*:\s*none(?:\s*;|$)/.test(style)) return true;
+  if (/(^|;)\s*visibility\s*:\s*hidden(?:\s*;|$)/.test(style)) return true;
+
+  const classes = (attrValue(tag, "class") ?? "").toLowerCase().split(/\s+/).filter(Boolean);
+  return classes.some((className) => HIDDEN_CLASS_VALUES.has(className));
 }
 
 for (const file of pages) {
@@ -151,16 +175,17 @@ for (const file of pages) {
   }
 
   // Open-question block markers: each data-open-question block must carry a
-  // recommended answer, an agent-confidence badge, a clarify-copy button, and
-  // an apply-recommended button.
+  // visible recommendation, a hidden agent recommendation, an agent-confidence
+  // badge, a clarify-copy button, and an apply-recommended button.
   // Count-based association keeps this robust without a DOM parser.
-  const openQuestionCount = (html.match(OPEN_QUESTION_RE) || []).length;
+  const openQuestionCount = (html.match(OPEN_QUESTION_TAG_RE) || []).length;
   if (openQuestionCount < 1) {
     openQuestionDiagnostics.push(
-      `No open-question block in ${rel} — each round must contain at least one well-formed data-open-question block wrapping an open input with a recommended answer, confidence badge, clarify-copy button, and apply-recommended button.`,
+      `No open-question block in ${rel} — each round must contain at least one well-formed data-open-question block wrapping an open input with a visible recommended answer, hidden agent recommended answer, confidence badge, clarify-copy button, and apply-recommended button.`,
     );
   } else {
-    const recommendedCount = (html.match(RECOMMENDED_ANSWER_RE) || []).length;
+    const recommendedCount = (html.match(RECOMMENDED_ANSWER_TAG_RE) || []).length;
+    const agentRecommendedTags = [...html.matchAll(AGENT_RECOMMENDED_ANSWER_TAG_RE)].map((match) => match[0]);
     const confidenceMatches = [...html.matchAll(AGENT_CONFIDENCE_RE)];
     const clarifyCount = (html.match(CLARIFY_COPY_RE) || []).length;
     const applyRecommendedCount = (html.match(APPLY_RECOMMENDED_RE) || []).length;
@@ -168,6 +193,18 @@ for (const file of pages) {
       openQuestionDiagnostics.push(
         `Missing recommended answer in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${recommendedCount} data-recommended-answer element(s); each open question needs a recommended/example answer.`,
       );
+    }
+    if (agentRecommendedTags.length < openQuestionCount) {
+      openQuestionDiagnostics.push(
+        `Missing hidden agent recommended answer in ${rel} — found ${openQuestionCount} data-open-question block(s) but only ${agentRecommendedTags.length} data-agent-recommended-answer element(s); each open question needs a hidden agent-facing answer payload.`,
+      );
+    }
+    for (const tag of agentRecommendedTags) {
+      if (!isHiddenAgentRecommendedAnswer(tag)) {
+        openQuestionDiagnostics.push(
+          `Visible agent recommended answer in ${rel} — each data-agent-recommended-answer element must be hidden using hidden, type="hidden", aria-hidden="true", display:none/visibility:hidden style, or a recognized hidden class.`,
+        );
+      }
     }
     if (confidenceMatches.length < openQuestionCount) {
       openQuestionDiagnostics.push(

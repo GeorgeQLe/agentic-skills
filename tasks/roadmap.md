@@ -2,7 +2,56 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Tighten BIP Agent Compliance
+## Historical Implementation - Separate Visible And Agent Recommended Answers
+
+### Goal
+
+Fix interrogation pages so human-facing recommendation text is not copied into open-answer textareas or compiled YAML as the agent's answer payload.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: canonical convention, generated bundles, audit behavior, fixtures, and upgrade-skill versioning all share the same interrogation-page contract and should be changed in one lane.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect current interrogation convention, generated `INTERROGATION-PAGE.md` bundles, audit script, layer1 tests, and upgrade skill mirrors.
+- [x] Update the canonical convention so visible `data-recommended-answer` text is separate from hidden `data-agent-recommended-answer` payload text.
+- [x] Update canonical JavaScript/YAML guidance to apply and compile the hidden agent payload while retaining backward-compatible fallback behavior.
+- [x] Regenerate generated interrogation-page bundles from the canonical convention.
+- [x] Extend active-page audit behavior and layer1 fixtures/tests to require a hidden agent answer per open question.
+- [x] Archive and bump mirrored `upgrade-interrogation-pages` skills to `v0.2`, preserving/creating hidden agent payloads during upgrades.
+- [x] Run required validation, inspect generated text, document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- Every canonical `data-open-question` example includes visible `data-recommended-answer`, hidden `data-agent-recommended-answer`, existing confidence/clarify/apply/input attributes, and clear guidance for the two payload roles.
+- `Apply recommended` fills `data-open-input` from the nearest hidden `data-agent-recommended-answer`, falling back to `data-recommended-answer` only for transition compatibility.
+- Compiled YAML guidance records both `recommended_answer` and `agent_recommended_answer` for each `open_answers` entry.
+- Active interrogation-page audits fail when an open question lacks a hidden agent answer or the agent answer is not hidden by an accepted convention.
+- Generated `INTERROGATION-PAGE.md` bundles match the canonical convention.
+- Mirrored `upgrade-interrogation-pages` skills are archived from `v0.1`, bumped to `v0.2`, and describe preserving/creating the hidden agent payload.
+
+### Test Plan
+
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `node scripts/audit-interrogation-pages.mjs`
+- `pnpm exec vitest run tests/layer1/audit-interrogation-pages.test.ts tests/layer1/upgrade-interrogation-pages.test.ts`
+- Manual inspection of generated convention text for visible recommendation guidance and hidden agent answer-shaped payload guidance.
+
+### Results
+
+- Root cause confirmed: the interrogation-page convention used `data-recommended-answer` for both visible user guidance and the machine-applied answer payload.
+- Split the contract so `data-recommended-answer` is visible guidance and hidden `data-agent-recommended-answer` is the answer-shaped payload for Apply recommended and compiled YAML.
+- Updated the canonical Apply recommended handler to prefer hidden `data-agent-recommended-answer`, with `data-recommended-answer` fallback for transition compatibility.
+- Updated answer-capture guidance so `open_answers` records both `recommended_answer` and `agent_recommended_answer`.
+- Regenerated all 20 participating `INTERROGATION-PAGE.md` bundles from the canonical convention.
+- Extended the active-page audit and layer1 fixtures to require hidden agent payloads and avoid counting selector strings in scripts as open-question markers.
+- Archived mirrored `upgrade-interrogation-pages` `v0.1` skills, bumped active mirrors to `v0.2`, and updated changelogs.
+- Verification passed; see `tasks/todo.md` for command results.
+
+## Historical Implementation - Tighten BIP Agent Compliance
 
 ### Goal
 

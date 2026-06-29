@@ -35,6 +35,8 @@ function pageHtml(overrides: {
   openInput?: boolean;
   openQuestion?: boolean;
   recommended?: boolean;
+  agentRecommended?: boolean;
+  agentRecommendedAttrs?: string;
   confidence?: string | null;
   clarifyCopy?: boolean;
   applyRecommended?: boolean;
@@ -51,6 +53,8 @@ function pageHtml(overrides: {
     openInput = true,
     openQuestion = true,
     recommended = true,
+    agentRecommended = true,
+    agentRecommendedAttrs = "hidden",
     confidence = "medium",
     clarifyCopy = true,
     applyRecommended = true,
@@ -66,12 +70,15 @@ function pageHtml(overrides: {
   ].filter(Boolean).join(" ");
   const input = openInput ? '<textarea data-open-input placeholder="In your words"></textarea>' : "";
   const recommendedEl = recommended ? '<p data-recommended-answer>e.g. mid-market RevOps leads</p>' : "";
+  const agentRecommendedEl = agentRecommended
+    ? `<p data-agent-recommended-answer ${agentRecommendedAttrs}>mid-market RevOps leads</p>`
+    : "";
   const confidenceEl = confidence === null
     ? ""
     : `<span data-agent-confidence="${confidence}">Agent confidence: ${confidence}</span>`;
   const clarifyEl = clarifyCopy ? '<button data-clarify-copy>Need clarification</button>' : "";
   const applyEl = applyRecommended ? '<button data-apply-recommended>Apply recommended</button>' : "";
-  const inner = `${recommendedEl}${confidenceEl}${input}${clarifyEl}${applyEl}`;
+  const inner = `${recommendedEl}${agentRecommendedEl}${confidenceEl}${input}${clarifyEl}${applyEl}`;
   const open = openQuestion
     ? `<div data-open-question>${inner}</div>`
     : inner;
@@ -202,6 +209,48 @@ describe("audit-interrogation-pages fixture trees", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Open question drift:");
     expect(result.stderr).toContain("Missing recommended answer in interrogation/positioning-r1-acme.html");
+  });
+
+  it("fails when an open question is missing its hidden agent recommended answer", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ agentRecommended: false }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Missing hidden agent recommended answer in interrogation/positioning-r1-acme.html");
+  });
+
+  it("fails when the agent recommended answer is not hidden", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ agentRecommendedAttrs: "" }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Open question drift:");
+    expect(result.stderr).toContain("Visible agent recommended answer in interrogation/positioning-r1-acme.html");
+  });
+
+  it("accepts common hidden conventions for the agent recommended answer", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ agentRecommendedAttrs: 'aria-hidden="true"' }));
+    writePage(root, "positioning-r2-acme.html", pageHtml({ round: "2", agentRecommendedAttrs: 'class="visually-hidden"' }));
+    writePage(root, "positioning-r3-acme.html", pageHtml({ round: "3", agentRecommendedAttrs: 'style="display: none;"' }));
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Open question: 3 pages, exact");
+  });
+
+  it("does not count selector strings in scripts as open-question markers", () => {
+    const root = makeFixtureRoot();
+    const script = `<script>
+      document.querySelector("[data-open-question] [data-agent-recommended-answer]");
+      document.querySelector("[data-recommended-answer]");
+    </script>`;
+    writePage(root, "positioning-r1-acme.html", pageHtml({ body: script }));
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Open question: 1 pages, exact");
   });
 
   it("fails on a missing or invalid agent-confidence badge", () => {

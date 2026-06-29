@@ -54,7 +54,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
     }
   });
 
-  it("audits against local standards and the five open-question markers", () => {
+  it("audits against local standards and the six open-question markers", () => {
     for (const contract of contracts) {
       const content = read(contract.path);
 
@@ -65,6 +65,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
       for (const marker of [
         "data-open-input",
         "data-recommended-answer",
+        "data-agent-recommended-answer",
         "data-agent-confidence",
         "data-clarify-copy",
         "data-apply-recommended",
@@ -84,7 +85,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
 
       expect(content, `${contract.path} read whole page`).toContain("Read the whole HTML file before judging it.");
       expect(content, `${contract.path} page substance`).toContain(
-        "assumptions manifest, open questions, recommended answers, confidence badges, apply-recommended controls/scripts, gate controls",
+        "assumptions manifest, open questions, visible recommendations, hidden agent recommendations, confidence badges, apply-recommended controls/scripts, gate controls",
       );
       expect(content, `${contract.path} risk status`).toContain("blocked-content-loss-risk");
       expect(content, `${contract.path} stop on risk`).toContain(
@@ -110,6 +111,26 @@ describe("upgrade-interrogation-pages skill contract", () => {
         "Preserve the round filename, the `r{N}` round number, and the `data-answer-sidecar` path on rewrite.",
       );
       expect(content, `${contract.path} audit route`).toContain(auditCommand);
+    }
+  });
+
+  it("creates hidden agent payloads for apply-recommended behavior", () => {
+    for (const contract of contracts) {
+      const content = read(contract.path);
+
+      expect(content, `${contract.path} version`).toContain("version: v0.2");
+      expect(content, `${contract.path} author split helpers`).toContain(
+        "visible `data-recommended-answer`, hidden `data-agent-recommended-answer`, `data-agent-confidence`, and `data-apply-recommended`",
+      );
+      expect(content, `${contract.path} hidden payload`).toContain(
+        "hidden agent payload must be answer-shaped and free of user-facing instructions",
+      );
+      expect(content, `${contract.path} apply source`).toContain(
+        "fills the nearest `data-open-input` from the nearest hidden `data-agent-recommended-answer`",
+      );
+      expect(content, `${contract.path} fallback`).toContain(
+        "falling back to `data-recommended-answer` only for transition compatibility",
+      );
     }
   });
 
