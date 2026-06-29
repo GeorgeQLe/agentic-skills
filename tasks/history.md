@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-28 — Tighten BIP agent compliance
+
+- Hardened Build-In-Public alignment compliance so enabled project BIP mode is no longer only convention prose.
+- Updated the canonical alignment-page convention with Stage 2 BIP checkpoint states, stable BIP page metadata, normal-page handoff requirements before final artifact approval, and active BIP page index inclusion.
+- Regenerated generator-owned `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Extended the active alignment-page audit and packaged `skillpacks alignment pages audit` path to read `.agents/project.json`, enforce Stage 2 BIP handling when enabled, validate BIP page metadata, and avoid Stage 1/confirmed false positives.
+- Added layer1 fixtures for missing checkpoint failure, linked sibling pass, disabled BIP pass, Stage 1 no-fail behavior, BIP metadata failure, and linked-handoff-before-final-approval failure.
+- Verification passed: generated-bundle check, focused layer1 tests, package build/check, package node tests, source and packaged alignment-page audits, convention bundle audit, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-06-28-tighten-bip-agent-compliance.md`.
+
 ## 2026-06-28 — YouTube prelaunch A/B test and URL ledger
 
 - Updated mirrored Codex and Claude `youtube-video-prelaunch-audit` skills to `v0.4`.

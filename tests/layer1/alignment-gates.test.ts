@@ -270,6 +270,34 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("defines enforceable BIP checkpoints in the canonical convention", () => {
+    const content = read("docs/alignment-page-convention.md");
+
+    expect(content).toContain('data-alignment-page-kind="bip"');
+    expect(content).toContain('data-bip-gates="alignment/{skill-name}-{topic}.html"');
+    expect(content).toContain('data-bip-status="linked"');
+    expect(content).toContain('data-bip-status="approved"');
+    expect(content).toContain('data-bip-status="not-applicable"');
+    expect(content).toContain('data-bip-not-applicable-reason="..."');
+    expect(content).toContain("open/review the BIP page before final artifact approval");
+    expect(content).toContain("bip_approval_status: ready-for-agent-review");
+    expect(content).toContain("BIP handling");
+  });
+
+  it("propagates enforceable BIP checkpoints to generated bundles", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} BIP page kind`).toContain('data-alignment-page-kind="bip"');
+      expect(content, `${path} BIP gated page`).toContain(`data-bip-gates="alignment/${dirname(path).split("/").pop()}-{topic}.html"`);
+      expect(content, `${path} linked checkpoint`).toContain('data-bip-status="linked"');
+      expect(content, `${path} approved checkpoint`).toContain('data-bip-status="approved"');
+      expect(content, `${path} not-applicable checkpoint`).toContain('data-bip-status="not-applicable"');
+      expect(content, `${path} final handoff route`).toContain("open/review the BIP page before final artifact approval");
+      expect(content, `${path} approved BIP YAML`).toContain("bip_approval_status: ready-for-agent-review");
+    }
+  });
+
   it("defines review, confirmed, and amended lifecycle states in generated alignment-page conventions", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {

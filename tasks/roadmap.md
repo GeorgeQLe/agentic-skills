@@ -2,6 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Tighten BIP Agent Compliance
+
+### Goal
+
+Make enabled Build-In-Public mode enforceable in alignment-producing workflows through convention text, active-page audits, packaged audit behavior, regression fixtures, and bundle propagation.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: convention, audit, package, fixture, and generated bundle changes share tightly coupled files and should be integrated in one controlled lane.
+
+### Plan
+
+- [x] Capture the visible `exec` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect current BIP evidence, canonical alignment convention, generated `ALIGNMENT-PAGE.md` bundles, audit scripts, package command surface, and representative alignment-producing skills.
+- [x] Add an enforceable BIP checkpoint contract to the canonical alignment convention and regenerate generated bundles from that source.
+- [x] Extend active alignment-page audit behavior to read `.agents/project.json`, require BIP handling for active Stage 2 review pages when BIP is enabled, avoid false positives for Stage 1/confirmed pages, and include active BIP pages in `alignment/index.html`.
+- [x] Add focused regression fixtures/tests for BIP-enabled missing checkpoint failure, linked sibling BIP pass, BIP-disabled pass, Stage 1 no-fail, convention/bundle propagation, and final handoff routing.
+- [x] Run required validation, inspect warnings, document results, create a ship manifest, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- With `.agents/project.json` `alignment.build_in_public === true`, an active Stage 2 review page fails audit unless it has a BIP checkpoint, an approved BIP YAML record, an explicit narrow not-applicable reason, or a sibling BIP page.
+- Stage 1 scope pages and confirmed pages do not fail solely because BIP is enabled unless they claim pending Stage 2 artifact approval.
+- BIP review pages carry stable metadata identifying them as BIP pages and naming the normal alignment page they gate.
+- Normal Stage 2 handoff instructions require opening/reviewing the BIP page before final artifact approval when BIP is active.
+- `alignment/index.html` includes active BIP pages consistently with other review pages.
+- Canonical convention changes propagate to generated `ALIGNMENT-PAGE.md` bundles.
+- Focused fixtures prove BIP-enabled missing checkpoint failure, linked sibling pass, disabled pass, Stage 1 no-fail, and final handoff routing.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `node scripts/audit-alignment-pages.mjs --root <fixture-with-bip-enabled>`
+- Focused layer1 tests covering BIP convention/audit fixtures
+- Existing package tests for `set-bip`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Added enforceable BIP checkpoint requirements to the canonical alignment-page convention.
+- Added stable BIP page metadata requirements and normal Stage 2 handoff requirements before final artifact approval.
+- Regenerated generator-owned `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Extended the active-page audit and packaged `skillpacks alignment pages audit` path to read `.agents/project.json` and enforce BIP handling when enabled.
+- Added regression coverage for enabled/disabled BIP, Stage 1 false-positive avoidance, BIP metadata, linked sibling pass, missing checkpoint failure, and final-handoff routing.
+- Verification passed; see `tasks/todo.md` and `tasks/ship-manifest-2026-06-28-tighten-bip-agent-compliance.md`.
+
 ## Historical Implementation - Fix No-Op Skillpacks Refresh Reload Notices
 
 ### Goal

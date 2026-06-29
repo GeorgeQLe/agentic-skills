@@ -28,16 +28,29 @@ function pageHtml(overrides: {
   category?: string | null;
   tier?: string | null;
   status?: string | null;
+  stage?: string | null;
+  extraHtmlAttrs?: string[];
   viewport?: boolean;
   tts?: string | null;
   body?: string;
 } = {}): string {
-  const { category = "research", tier = "document", status = null, viewport = true, tts = TTS_TAG, body = "" } = overrides;
+  const {
+    category = "research",
+    tier = "document",
+    status = null,
+    stage = null,
+    extraHtmlAttrs = [],
+    viewport = true,
+    tts = TTS_TAG,
+    body = "",
+  } = overrides;
   const attrs = [
     'lang="en"',
     category === null ? "" : `data-alignment-category="${category}"`,
     tier === null ? "" : `data-visual-tier="${tier}"`,
     status === null ? "" : `data-alignment-status="${status}"`,
+    stage === null ? "" : `data-alignment-stage="${stage}"`,
+    ...extraHtmlAttrs,
   ].filter(Boolean).join(" ");
   return [
     "<!doctype html>",
@@ -58,6 +71,26 @@ function pageHtml(overrides: {
 
 function writePage(root: string, name: string, html: string = pageHtml()): void {
   writeFileSync(join(root, "alignment", name), html);
+}
+
+function writeProjectConfig(root: string, buildInPublic: boolean): void {
+  mkdirSync(join(root, ".agents"), { recursive: true });
+  writeFileSync(
+    join(root, ".agents", "project.json"),
+    JSON.stringify({ alignment: { build_in_public: buildInPublic } }, null, 2),
+  );
+}
+
+function stage2Body(extra = ""): string {
+  return [
+    "<section>",
+    "<h2>Research Scope Approved</h2>",
+    "<p>The scope is approved and this page is now reviewing Stage 2 artifact output.</p>",
+    "<h2>Final Artifact Approval</h2>",
+    '<div class="question-block" data-gate-type="final-artifact-approval"><p>Approve the final artifact?</p></div>',
+    extra,
+    "</section>",
+  ].join("\n");
 }
 
 function indexHtml(entries: Array<{ href: string; title?: string; date?: string | null }>): string {
@@ -101,6 +134,7 @@ describe("audit-alignment-pages repo state", () => {
     expect(result.stdout).toMatch(/Viewport meta: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Embed prohibition: \d+ pages, exact/);
     expect(result.stdout).toMatch(/Collapsing fill: \d+ pages, exact/);
+    expect(result.stdout).toMatch(/BIP handling: \d+ Stage 2 pages, exact/);
     expect(result.stdout).toMatch(/Index integrity: \d+ entries, exact/);
   });
 });
@@ -320,6 +354,141 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Collapsing fill: 2 pages, exact");
+  });
+
+  it("fails when BIP is enabled and a Stage 2 review page has no BIP checkpoint or sibling page", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2Body(),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain("BIP handling drift:");
+    expect(result.stderr).toContain("Missing BIP checkpoint in alignment/page-a.html");
+    expect(result.stderr).toContain("alignment/page-a-bip.html");
+  });
+
+  it("passes when BIP is enabled and the Stage 2 page links a metadata-bearing BIP sibling", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2Body([
+        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
+        '<a href="page-a-bip.html">BIP review</a>',
+        "<p>Open and review the BIP page at alignment/page-a-bip.html before final artifact approval.</p>",
+        "</aside>",
+      ].join("\n")),
+    }));
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, exact");
+    expect(result.stdout).toContain("Index integrity: 2 entries, exact");
+  });
+
+  it("passes a Stage 2 page without a BIP checkpoint when BIP is disabled", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, false);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2Body(),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: disabled, exact");
+  });
+
+  it("does not false-fail a Stage 1 scope page when BIP is enabled", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-1",
+      body: [
+        "<section>",
+        "<h2>Research Scope</h2>",
+        "<p>Scope-only review before synthesized research.</p>",
+        "<h2>Stage 2 Preview / Expected Review Format</h2>",
+        "<p>Later artifact review will include evidence, findings, and final artifact approval.</p>",
+        "</section>",
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, exact");
+  });
+
+  it("fails when a BIP page omits stable page metadata", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html");
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      body: "<section><h2>BIP Review</h2></section>",
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 0 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain("Missing BIP page metadata in alignment/page-a-bip.html");
+    expect(result.stderr).toContain("Missing BIP gated-page metadata in alignment/page-a-bip.html");
+  });
+
+  it("fails when linked BIP handling omits the handoff before final artifact approval", () => {
+    const root = makeFixtureRoot();
+    writeProjectConfig(root, true);
+    writePage(root, "page-a.html", pageHtml({
+      status: "review",
+      stage: "stage-2",
+      body: stage2Body([
+        '<aside data-bip-status="linked" data-bip-page="alignment/page-a-bip.html">',
+        '<a href="page-a-bip.html">BIP review</a>',
+        "<p>The BIP page exists for later reference.</p>",
+        "</aside>",
+      ].join("\n")),
+    }));
+    writePage(root, "page-a-bip.html", pageHtml({
+      status: "review",
+      extraHtmlAttrs: [
+        'data-alignment-page-kind="bip"',
+        'data-bip-gates="alignment/page-a.html"',
+      ],
+      body: "<section><h2>BIP Review</h2><p>Source-safe post options.</p></section>",
+    }));
+    writeIndex(root, [{ href: "page-a.html" }, { href: "page-a-bip.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("BIP handling: 1 Stage 2 pages, DRIFT");
+    expect(result.stderr).toContain(
+      "must tell the reviewer to open/review alignment/page-a-bip.html before final artifact approval",
+    );
   });
 
   it("fails when active pages exist but the central index is missing", () => {

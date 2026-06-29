@@ -29,6 +29,7 @@ const TIERS = new Set(["document", "visual", "prototype"]);
 const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*><\/script>/;
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const DATE_RE = /\b\d{4}-\d{2}-\d{2}\b/;
+const BIP_STATUS_VALUES = new Set(["linked", "approved", "not-applicable"]);
 
 const pages = existsSync(alignmentDir)
   ? readdirSync(alignmentDir).filter((f) => f.endsWith(".html")).sort()
@@ -44,6 +45,24 @@ const embedDiagnostics = [];
 const alignmentStatusDiagnostics = [];
 const indexDiagnostics = [];
 const collapsingFillDiag = [];
+const bipDiagnostics = [];
+
+function readProjectBuildInPublicMode() {
+  const projectConfigPath = `${repoRoot}/.agents/project.json`;
+  if (!existsSync(projectConfigPath)) return false;
+  try {
+    const config = JSON.parse(readFileSync(projectConfigPath, "utf8"));
+    return config?.alignment?.build_in_public === true;
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    bipDiagnostics.push(
+      `Unreadable BIP config .agents/project.json — cannot evaluate alignment.build_in_public: ${detail}.`,
+    );
+    return false;
+  }
+}
+
+const buildInPublicEnabled = readProjectBuildInPublicMode();
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
   const match = htmlTag.match(new RegExp(`\\b${attribute}="([^"]*)"`));
@@ -60,6 +79,99 @@ function checkAttribute(htmlTag, rel, attribute, allowed) {
 
 function isConfirmedPage(html) {
   return /\bdata-alignment-status=["']confirmed["']/i.test(html) || /\balignment_status:\s*confirmed\b/i.test(html);
+}
+
+function isReviewPage(html) {
+  return /\bdata-alignment-status=["']review["']/i.test(html) || /\balignment_status:\s*review\b/i.test(html);
+}
+
+function isBipReviewPage(file, html) {
+  return file.endsWith("-bip.html") || /\bdata-alignment-page-kind=["']bip["']/i.test(html);
+}
+
+function normalizeAlignmentPath(value) {
+  if (!value) return null;
+  const clean = value.trim().replace(/^\.?\//, "");
+  if (!clean.endsWith(".html")) return null;
+  if (clean.startsWith("alignment/")) return clean;
+  if (!clean.includes("/")) return `alignment/${clean}`;
+  return null;
+}
+
+function bipSiblingName(file) {
+  return file.replace(/\.html$/i, "-bip.html");
+}
+
+function normalPageNameForBip(file) {
+  return file.replace(/-bip\.html$/i, ".html");
+}
+
+function bipGatedPage(html) {
+  const attr = html.match(/\bdata-bip-gates=["']([^"']+)["']/i)?.[1];
+  if (attr) return normalizeAlignmentPath(attr);
+  const yaml = html.match(/\bbip_gates:\s*["']?(alignment\/[A-Za-z0-9._-]+\.html)["']?/i)?.[1];
+  return yaml ? normalizeAlignmentPath(yaml) : null;
+}
+
+function isStageOneScopePage(html) {
+  if (/\bdata-alignment-stage=["'](?:stage-1|stage-one|scope)["']/i.test(html)) return true;
+  const hasStage2Preview = /\bStage 2 Preview\s*\/\s*Expected Review Format\b/i.test(html);
+  const hasApprovedStage2Scope = /\b(?:Research|Validation) Scope Approved\b/i.test(html);
+  return hasStage2Preview && !hasApprovedStage2Scope;
+}
+
+function claimsStage2ArtifactApproval(html) {
+  if (/\bdata-alignment-stage=["'](?:stage-2|stage-two|artifact-review)["']/i.test(html)) return true;
+  if (/\bdata-(?:review-)?stage=["'](?:stage-2|stage-two|artifact-review)["']/i.test(html)) return true;
+  if (/\bdata-gate-type=["'](?:final-artifact-approval|artifact-approval|canonical-artifact-approval)["']/i.test(html)) {
+    return true;
+  }
+  const hasApprovedScope = /\b(?:Research|Validation) Scope Approved\b/i.test(html);
+  const hasStage2Marker = /\bStage 2\b|\bartifact review\b|\breview page\b/i.test(html);
+  const hasArtifactApproval = /\bFinal Artifact Approval\b|\bArtifact Approval\b|\bProposed (?:Canonical|Final) Artifacts?\b|\bStage 3\b/i.test(html);
+  return hasArtifactApproval && (hasApprovedScope || hasStage2Marker);
+}
+
+function requiresBipCheckpoint(file, html) {
+  if (!buildInPublicEnabled) return false;
+  if (isBipReviewPage(file, html)) return false;
+  if (isConfirmedPage(html)) return false;
+  if (!isReviewPage(html)) return false;
+  if (isStageOneScopePage(html)) return false;
+  return claimsStage2ArtifactApproval(html);
+}
+
+function bipStatusValues(html) {
+  return [...html.matchAll(/\bdata-bip-status=["']([^"']+)["']/gi)].map((match) => match[1]);
+}
+
+function hasBipApprovalYaml(html) {
+  return (
+    /\bbip_approval_status:\s*ready-for-agent-review\b/i.test(html) ||
+    /\bbip_review_status:\s*(?:approved|ready-for-agent-review)\b/i.test(html) ||
+    /\bbip_handling:\s*approved\b/i.test(html)
+  );
+}
+
+function hasBipNotApplicableReason(html) {
+  const attr = html.match(/\bdata-bip-not-applicable-reason=["']([^"']{12,})["']/i)?.[1];
+  if (attr) return true;
+  return /\bbip_not_applicable_reason:\s*["']?[^"'\n]{12,}/i.test(html);
+}
+
+function hasBipPageReference(html, expectedFile, expectedRel) {
+  const escapedFile = expectedFile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedRel = expectedRel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return (
+    new RegExp(`\\bhref=["'][^"']*${escapedFile}["']`, "i").test(html) ||
+    new RegExp(`\\bdata-bip-page=["'](?:${escapedFile}|${escapedRel})["']`, "i").test(html) ||
+    new RegExp(`\\bbip_page:\\s*["']?(?:${escapedFile}|${escapedRel})["']?`, "i").test(html)
+  );
+}
+
+function hasBipHandoffText(html, expectedFile, expectedRel) {
+  if (!hasBipPageReference(html, expectedFile, expectedRel)) return false;
+  return /\b(?:open|review)\b[\s\S]{0,160}\b(?:BIP|Build-In-Public)\b[\s\S]{0,220}\bbefore\b[\s\S]{0,120}\b(?:final artifact approval|normal artifact approval|Stage 3|confirming)/i.test(html);
 }
 
 function confirmedPageControlFindings(html) {
@@ -145,6 +257,81 @@ for (const file of pages) {
       );
     }
   }
+
+  if (isBipReviewPage(file, html)) {
+    const relGatedPage = bipGatedPage(html);
+    if (!/\bdata-alignment-page-kind=["']bip["']/i.test(html)) {
+      bipDiagnostics.push(
+        `Missing BIP page metadata in ${rel} — set data-alignment-page-kind="bip" on the HTML page.`,
+      );
+    }
+    if (!relGatedPage) {
+      bipDiagnostics.push(
+        `Missing BIP gated-page metadata in ${rel} — set data-bip-gates="alignment/${normalPageNameForBip(file)}".`,
+      );
+    } else if (!activePages.includes(relGatedPage.replace(/^alignment\//, ""))) {
+      bipDiagnostics.push(
+        `BIP gated page missing for ${rel} — data-bip-gates points to ${relGatedPage}, but that active page does not exist.`,
+      );
+    }
+  }
+}
+
+let stage2BipPageCount = 0;
+if (buildInPublicEnabled) {
+  const activePageSet = new Set(activePages);
+  for (const file of activePages) {
+    const rel = `alignment/${file}`;
+    const html = readFileSync(`${alignmentDir}/${file}`, "utf8");
+    if (!requiresBipCheckpoint(file, html)) continue;
+
+    stage2BipPageCount += 1;
+    const expectedBipFile = bipSiblingName(file);
+    const expectedBipRel = `alignment/${expectedBipFile}`;
+    const siblingExists = activePageSet.has(expectedBipFile);
+    const statuses = bipStatusValues(html);
+    const hasCheckpoint = statuses.length > 0 || hasBipApprovalYaml(html) || hasBipNotApplicableReason(html) || hasBipPageReference(html, expectedBipFile, expectedBipRel);
+
+    for (const status of statuses) {
+      if (!BIP_STATUS_VALUES.has(status)) {
+        bipDiagnostics.push(
+          `Invalid BIP checkpoint status "${status}" in ${rel} — use one of: ${[...BIP_STATUS_VALUES].join(", ")}.`,
+        );
+      }
+    }
+
+    if (!hasCheckpoint && !siblingExists) {
+      bipDiagnostics.push(
+        `Missing BIP checkpoint in ${rel} — BIP is enabled and this Stage 2 review page has no data-bip-status checkpoint, approved BIP YAML, not-applicable reason, linked ${expectedBipRel}, or sibling BIP page.`,
+      );
+      continue;
+    }
+
+    if (statuses.includes("linked")) {
+      if (!hasBipPageReference(html, expectedBipFile, expectedBipRel)) {
+        bipDiagnostics.push(
+          `Linked BIP checkpoint in ${rel} does not reference ${expectedBipRel}.`,
+        );
+      }
+      if (!hasBipHandoffText(html, expectedBipFile, expectedBipRel)) {
+        bipDiagnostics.push(
+          `Linked BIP checkpoint in ${rel} must tell the reviewer to open/review ${expectedBipRel} before final artifact approval.`,
+        );
+      }
+    }
+
+    if (statuses.includes("approved") && !hasBipApprovalYaml(html)) {
+      bipDiagnostics.push(
+        `Approved BIP checkpoint in ${rel} must record approved BIP YAML such as bip_approval_status: ready-for-agent-review.`,
+      );
+    }
+
+    if (statuses.includes("not-applicable") && !hasBipNotApplicableReason(html)) {
+      bipDiagnostics.push(
+        `BIP not-applicable checkpoint in ${rel} must include a narrow data-bip-not-applicable-reason or bip_not_applicable_reason.`,
+      );
+    }
+  }
 }
 
 // Index integrity: the central index must exist when active pages do, link
@@ -219,6 +406,11 @@ console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length 
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length ? "DRIFT" : "exact"}`);
 console.log(`Alignment status controls: ${activePages.length} pages, ${alignmentStatusDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(
+  buildInPublicEnabled
+    ? `BIP handling: ${stage2BipPageCount} Stage 2 pages, ${bipDiagnostics.length ? "DRIFT" : "exact"}`
+    : `BIP handling: disabled, ${bipDiagnostics.length ? "DRIFT" : "exact"}`,
+);
 console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length ? "DRIFT" : "exact"}`);
 
 const groups = [
@@ -228,6 +420,7 @@ const groups = [
   ["Embed prohibition drift:", embedDiagnostics],
   ["Collapsing fill drift:", collapsingFillDiag],
   ["Alignment status controls drift:", alignmentStatusDiagnostics],
+  ["BIP handling drift:", bipDiagnostics],
   ["Index integrity drift:", indexDiagnostics],
 ];
 let failed = false;
