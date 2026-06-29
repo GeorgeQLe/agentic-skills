@@ -39,6 +39,13 @@ if [[ "$1" == "-R" && "$2" == "${repoRoot}/packages/skillpacks/build" ]]; then
   exit 0
 fi
 
+if [[ "\${CP_MOCK_SIGNAL_DURING_RESTORE:-0}" == "1" && "$#" == "2" && "$2" == *.restore.* ]]; then
+  if [[ ! -f "${tempDir}/restore-signal-sent" ]]; then
+    touch "${tempDir}/restore-signal-sent"
+    kill -s INT "$PPID" 2>/dev/null || true
+  fi
+fi
+
 /bin/cp "$@"
 `
   );
@@ -68,6 +75,24 @@ set -euo pipefail
 
 printf '%s\\n' "$*" >> "${logPath}"
 
+if [[ "$1" == "config" && "$2" == "get" ]]; then
+  key="$3"
+  if [[ "$key" == "auth-type" ]]; then
+    printf '%s\\n' "\${NPM_MOCK_AUTH_TYPE:-legacy}"
+    exit 0
+  fi
+  if [[ "$key" == *":_authToken" ]]; then
+    if [[ -n "\${NPM_MOCK_REGISTRY_AUTH_TOKEN:-}" ]]; then
+      printf '%s\\n' "\${NPM_MOCK_REGISTRY_AUTH_TOKEN}"
+    else
+      printf 'undefined\\n'
+    fi
+    exit 0
+  fi
+  printf 'undefined\\n'
+  exit 0
+fi
+
 if [[ "$1" == "view" && "$3" == "version" ]]; then
   spec="$2"
   version="\${spec##*@}"
@@ -90,6 +115,11 @@ fi
 
 if [[ "$1" == "view" && "$3" == "maintainers" ]]; then
   printf '[{"name":"glexcorp","email":"george@leexperimental.com"}]\\n'
+  exit 0
+fi
+
+if [[ "$1" == "version" ]]; then
+  node -e 'const fs = require("fs"); const path = require("path"); const target = process.argv[1]; const packagePath = path.join(process.cwd(), "package.json"); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split(".").map(Number); parts[2] += 1; next = parts.join("."); } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "$2"
   exit 0
 fi
 
@@ -136,6 +166,13 @@ if [[ "$1" == "publish" ]]; then
   publish_count=$(cat "${publishCountPath}")
   publish_count=$((publish_count + 1))
   printf '%s\\n' "$publish_count" > "${publishCountPath}"
+
+  if [[ "$publish_count" == "1" && -n "\${NPM_MOCK_FIRST_PUBLISH_SIGNAL:-}" ]]; then
+    printf 'npm notice Log in on https://www.npmjs.com/login?next=/v1/done\\n' >&2
+    kill -s "\${NPM_MOCK_FIRST_PUBLISH_SIGNAL}" "$PPID" 2>/dev/null || true
+    sleep 0.1
+    exit 130
+  fi
 
   if [[ "$publish_count" == "1" && "\${NPM_MOCK_FIRST_PUBLISH_RC:-0}" != "0" ]]; then
     printf 'npm notice Log in on https://www.npmjs.com/login?next=/v1/done\\n' >&2
@@ -226,6 +263,18 @@ test("real publish auth preflight failure restores source metadata before first 
 
   assert.equal(result.status, 1);
   assert.match(result.output, /npm publish auth preflight failed/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+  assert.doesNotMatch(result.calls, /^publish /m);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("web auth without a token fails before source version bump and publish", () => {
+  const result = runPublishPatch({ NPM_MOCK_AUTH_TYPE: "web" });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /auth-type=web/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
   assert.doesNotMatch(result.calls, /^publish /m);
   assert.equal(result.packageJsonAfter, result.originalPackageJson);
   assert.equal(result.manifestJsonAfter, result.originalManifestJson);
@@ -244,6 +293,45 @@ test("real first publish web auth failure restores source metadata", () => {
   assert.deepEqual(result.registry, []);
   assert.equal(result.packageJsonAfter, result.originalPackageJson);
   assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("web auth with a token still reaches publish", () => {
+  const result = runPublishPatch({
+    NPM_MOCK_AUTH_TYPE: "web",
+    NODE_AUTH_TOKEN: "test-token",
+    NPM_MOCK_FIRST_PUBLISH_RC: "1"
+  });
+
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(result.status, 1);
+  assert.equal(publishCalls.length, 1, result.calls);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("SIGINT during first publish restores source metadata", () => {
+  const result = runPublishPatch({ NPM_MOCK_FIRST_PUBLISH_SIGNAL: "INT" });
+
+  assert.equal(result.status, 130, result.output);
+  assert.match(result.output, /Interrupted by SIGINT/);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+  assert.deepEqual(result.registry, []);
+});
+
+test("repeated interrupt during cleanup still restores source metadata", () => {
+  const result = runPublishPatch({
+    NPM_MOCK_FIRST_PUBLISH_SIGNAL: "INT",
+    CP_MOCK_SIGNAL_DURING_RESTORE: "1"
+  });
+
+  assert.equal(result.status, 130, result.output);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+  assert.deepEqual(result.registry, []);
 });
 
 test("--current recovery publishes only the scoped alias when skillpacks exists and alias is missing", () => {

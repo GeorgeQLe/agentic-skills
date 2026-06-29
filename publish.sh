@@ -13,6 +13,7 @@ TMP_DIRS=()
 RESTORE_DIR=""
 PUBLISH_STARTED=0
 RECOVERY_BOTH_PUBLISHED=0
+CLEANUP_RUNNING=0
 
 usage() {
   cat <<'USAGE'
@@ -125,6 +126,32 @@ run_version_bump() {
   fi
 }
 
+compute_target_version() {
+  local version_dir
+  version_dir=$(mktemp -d /tmp/skillpacks-version-XXXXXX)
+  TMP_DIRS+=("$version_dir")
+  cp "$PACKAGE_JSON" "$version_dir/package.json"
+
+  (
+    cd "$version_dir"
+    npm version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update >/dev/null
+  )
+
+  node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$version_dir/package.json"
+}
+
+run_pre_mutation_auth_preflight() {
+  local package_name=$1
+  local version=$2
+  local env_args=()
+
+  if [[ "$DRY_RUN" == "1" ]]; then
+    env_args+=(npm_config_dry_run=true)
+  fi
+
+  run env "${env_args[@]}" node "$PACKAGE_DIR/scripts/prepublish-auth-check.mjs" --package-name "$package_name" --package-version "$version"
+}
+
 verify_skillpacks_package() {
   if run npm run skillpacks:verify; then
     return 0
@@ -171,24 +198,47 @@ atomic_restore_file() {
 cleanup() {
   local status=$?
   local dir
+
+  if [[ "$CLEANUP_RUNNING" == "1" ]]; then
+    return "$status"
+  fi
+
+  CLEANUP_RUNNING=1
+  trap '' INT TERM HUP
+  set +e
+
   for dir in "${TMP_DIRS[@]}"; do
-    if [[ "$dir" == /tmp/skillpacks-publish-* && -d "$dir" ]]; then
-      rm -rf "$dir"
+    if [[ ( "$dir" == /tmp/skillpacks-publish-* || "$dir" == /tmp/skillpacks-version-* ) && -d "$dir" ]]; then
+      rm -rf "$dir" || true
     fi
   done
 
   if [[ -n "$RESTORE_DIR" && -d "$RESTORE_DIR" ]]; then
     if [[ "$DRY_RUN" == "1" || ( "$status" != "0" && "$PUBLISH_STARTED" != "1" ) ]]; then
-      atomic_restore_file "$RESTORE_DIR/package.json" "$PACKAGE_JSON"
+      atomic_restore_file "$RESTORE_DIR/package.json" "$PACKAGE_JSON" || status=1
       if [[ -f "$RESTORE_DIR/skillpacks-manifest.json" ]]; then
-        atomic_restore_file "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON"
+        atomic_restore_file "$RESTORE_DIR/skillpacks-manifest.json" "$MANIFEST_JSON" || status=1
       fi
     fi
-    rm -rf "$RESTORE_DIR"
+    rm -rf "$RESTORE_DIR" || true
   fi
+
+  return "$status"
+}
+
+handle_signal() {
+  local signal_name=$1
+  local exit_status=$2
+
+  trap '' INT TERM HUP
+  printf '\nInterrupted by SIG%s; restoring release source state when required.\n' "$signal_name" >&2
+  exit "$exit_status"
 }
 
 trap cleanup EXIT
+trap 'handle_signal INT 130' INT
+trap 'handle_signal TERM 143' TERM
+trap 'handle_signal HUP 129' HUP
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -300,6 +350,11 @@ if [[ "$USE_CURRENT" == "1" ]]; then
     log "Recovery state confirmed: skillpacks@$VERSION exists and @glexcorp/gskp@$VERSION is missing"
   fi
 else
+  VERSION=$(compute_target_version)
+  log "Running pre-bump npm auth preflight for skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
+  run_pre_mutation_auth_preflight skillpacks "$VERSION"
+  run_pre_mutation_auth_preflight @glexcorp/gskp "$VERSION"
+
   log "Bumping packages/skillpacks to $TARGET"
   run_version_bump
 

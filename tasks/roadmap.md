@@ -2,6 +2,50 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Harden Publish Against Web Auth Interrupts
+
+### Goal
+
+Restore the failed `0.1.15` release bump residue, then harden `./publish.sh` so interactive npm web-auth interruptions cannot leave tracked release files bumped before any package has published.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: release state restoration, auth preflight, signal cleanup, and package recovery tests share one mutation boundary and should land atomically.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Restore only `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` from the failed `0.1.15` bump back to `HEAD`.
+- [x] Inspect current publish, auth-check, and recovery test behavior.
+- [x] Move real-publish package/auth preflight ahead of source mutation by computing the target version in a temporary package copy.
+- [x] Extend `prepublish-auth-check.mjs` with package/version overrides and non-interactive web-auth rejection when no publish token or legacy/token auth is detected.
+- [x] Add interrupt-safe rollback handling for `INT`, `TERM`, and `HUP`, preserving bumped files only after the first publish succeeds.
+- [x] Add focused regression coverage for web-auth preflight, publish interruption rollback, repeated interrupt during cleanup, token/legacy-auth pass-through, and existing recovery paths.
+- [ ] Run focused and workspace verification, task-doc audit, diff hygiene checks, and post-commit dry-run release verification.
+- [ ] Document results, commit, and push on `master`.
+
+### Acceptance Criteria
+
+- Failed `0.1.15` bump files are restored before release script implementation changes.
+- Real publishes validate both `skillpacks@<target>` and `@glexcorp/gskp@<target>` before `run_version_bump` mutates tracked files.
+- `auth-type=web` without `NODE_AUTH_TOKEN`, `NPM_TOKEN`, or registry `_authToken` fails before source mutation with clear remediation.
+- Existing staged-package preflight remains as a second guard after package staging.
+- `SIGINT`, `SIGTERM`, and `SIGHUP` during the first package publish restore tracked release files to their pre-bump contents.
+- Repeated interrupt during cleanup cannot prevent rollback from restoring the source files.
+- Bumped files are kept only after the first `npm publish` succeeds, preserving partial-publish recovery behavior.
+- Focused, workspace, task-doc, diff hygiene, and dry-run release checks pass or any blocker is documented.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs packages/skillpacks/test/prepublish-auth-check.test.mjs`
+- `npm --workspace skillpacks run test:node`
+- `npm --workspace skillpacks run build:check`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git diff --cached --check`
+- After commit: `./publish.sh --dry-run patch`
+
 ## Historical Implementation - Refresh Package Manifest For Interrogation Split
 
 ### Goal

@@ -7,13 +7,42 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageJson = JSON.parse(readFileSync(path.join(packageRoot, "package.json"), "utf8"));
-const packageName = packageJson.name;
-const packageVersion = packageJson.version;
 const registry = process.env.npm_config_registry || "https://registry.npmjs.org/";
 const expectedPublisher = process.env.SKILLPACKS_NPM_PUBLISHER || "glexcorp";
 const isDryRun = String(process.env.npm_config_dry_run || "").toLowerCase() === "true";
 const allowPublished = String(process.env.SKILLPACKS_NPM_ALLOW_PUBLISHED || "").toLowerCase() === "true";
 const npmTimeoutMs = Number(process.env.SKILLPACKS_NPM_PREFLIGHT_TIMEOUT_MS || 15000);
+
+function parseArgs(argv) {
+  const options = {
+    packageName: process.env.SKILLPACKS_NPM_PACKAGE_NAME || packageJson.name,
+    packageVersion: process.env.SKILLPACKS_NPM_PACKAGE_VERSION || packageJson.version
+  };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === "--package-name") {
+      options.packageName = argv[index + 1];
+      index += 1;
+    } else if (arg === "--package-version") {
+      options.packageVersion = argv[index + 1];
+      index += 1;
+    } else {
+      fail(`Unknown prepublish auth check option: ${arg}`);
+    }
+  }
+
+  if (!options.packageName) {
+    fail("Missing package name for npm publish auth preflight.");
+  }
+  if (!options.packageVersion) {
+    fail("Missing package version for npm publish auth preflight.");
+  }
+
+  return options;
+}
+
+const { packageName, packageVersion } = parseArgs(process.argv.slice(2));
 
 function npm(args) {
   return spawnSync("npm", [...args, "--registry", registry], {
@@ -56,6 +85,62 @@ function parseMaintainerNames(value) {
     return [value.name];
   }
   return [];
+}
+
+function normalizedRegistryTokenKey(value) {
+  try {
+    const url = new URL(value);
+    const pathname = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
+    return `//${url.host}${pathname}:_authToken`;
+  } catch {
+    return "//registry.npmjs.org/:_authToken";
+  }
+}
+
+function hasTokenValue(value) {
+  const normalized = String(value || "").trim();
+  return normalized.length > 0 && !["undefined", "null"].includes(normalized.toLowerCase());
+}
+
+function npmConfigValue(key) {
+  const result = npm(["config", "get", key]);
+  if (result.status !== 0 || result.error) {
+    return "";
+  }
+  return result.stdout.trim();
+}
+
+function hasRegistryAuthToken() {
+  const result = npm(["config", "get", normalizedRegistryTokenKey(registry)]);
+  if (result.status === 0 && hasTokenValue(result.stdout)) {
+    return true;
+  }
+
+  const details = `${result.stdout || ""}\n${result.stderr || ""}\n${result.error?.message || ""}`;
+  return /_authToken/.test(details) && /protected/i.test(details);
+}
+
+function hasPublishToken() {
+  if (hasTokenValue(process.env.NODE_AUTH_TOKEN) || hasTokenValue(process.env.NPM_TOKEN)) {
+    return true;
+  }
+  return hasRegistryAuthToken();
+}
+
+const authType = npmConfigValue("auth-type").toLowerCase();
+if (authType === "web" && !hasPublishToken()) {
+  fail(
+    [
+      `npm publish auth preflight failed for ${packageName}@${packageVersion}.`,
+      `npm is configured with auth-type=web for ${registry}, but this release runs non-interactively and no publish token was detected.`,
+      "",
+      "Configure a publish-capable token via NODE_AUTH_TOKEN, NPM_TOKEN, or a registry-scoped _authToken before retrying.",
+      "Alternatively, run token-based npm auth and verify it before retrying:",
+      "",
+      `  npm login --auth-type=legacy --registry ${registry}`,
+      `  npm whoami --registry ${registry}`
+    ].join("\n")
+  );
 }
 
 const whoami = npm(["whoami"]);

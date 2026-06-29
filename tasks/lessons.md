@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-28 — Interactive publish paths need signal rollback tests
+
+- A real `npm publish` path entered browser/web auth, was interrupted with Ctrl-C, and left release source files bumped to `0.1.15` even though neither package had published that version.
+- Rule: release rollback coverage must include signal and interactive-auth interruptions, not only ordinary nonzero command exits.
+- For publish scripts, run auth/package-existence preflight before source mutation whenever the target version can be computed in a temporary package copy.
+
 ## 2026-06-28 — Release bumps need a rollback boundary before publish
 
 - A real `./publish.sh patch` auth preflight failure left `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` bumped to `0.1.14`, causing the next run to fail the clean-tree gate before it could retry auth.
