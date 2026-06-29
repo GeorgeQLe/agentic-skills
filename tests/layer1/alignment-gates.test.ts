@@ -82,6 +82,17 @@ const researchQualitySkills = [
   "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
+const bipChannelRecommendationSnippets = [
+  "agent-ranked target-channel selection gate",
+  "Rank candidate text/community/video channels by fit using evidence from the completed Stage 2 work",
+  "`recommended`, `optional`, or `not-now`",
+  "preselect `recommended` channels by default",
+  "approves only channel selection, not final BIP approval",
+  "must not include draft posts, video ideas",
+  "only after the selected/recommended channel set is approved",
+  "bip_channel_selection_status: ready-for-agent-review",
+];
+
 function read(path: string) {
   const abs = resolve(ROOT, path);
   const cached = fileCache.get(abs);
@@ -282,6 +293,9 @@ describe("alignment page gate contract", () => {
     expect(content).toContain("open/review the BIP page before final artifact approval");
     expect(content).toContain("bip_approval_status: ready-for-agent-review");
     expect(content).toContain("BIP handling");
+    for (const snippet of bipChannelRecommendationSnippets) {
+      expect(content).toContain(snippet);
+    }
   });
 
   it("propagates enforceable BIP checkpoints to generated bundles", () => {
@@ -295,6 +309,9 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} not-applicable checkpoint`).toContain('data-bip-status="not-applicable"');
       expect(content, `${path} final handoff route`).toContain("open/review the BIP page before final artifact approval");
       expect(content, `${path} approved BIP YAML`).toContain("bip_approval_status: ready-for-agent-review");
+      for (const snippet of bipChannelRecommendationSnippets) {
+        expect(content, `${path} BIP channel recommendation: ${snippet}`).toContain(snippet);
+      }
     }
   });
 

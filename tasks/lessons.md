@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-29 — BIP channel gates should recommend before asking
+
+- A BIP target-channel gate defaulted every unapproved channel to `not-now`, which made active Build-In-Public mode too conservative even after Stage 2 work produced enough evidence to judge channel fit.
+- Rule: when a workflow has completed evidence gathering and asks the user to approve output channels, the agent should rank viable channels, mark each as `recommended`, `optional`, or `not-now`, and preselect recommended channels for confirmation.
+- Keep channel-selection approval separate from final content approval: no draft posts, video ideas, channel-specific sample content, or channel convention loading until the user approves the channel set.
+
 ## 2026-06-29 — Enabled feature gates need enabled-state outputs
 
 - A `ship-end` BIP wrap-up printed that the BIP gate was skipped because `alignment.build_in_public` was already true, but then produced no Build-In-Public posts or suggestions.

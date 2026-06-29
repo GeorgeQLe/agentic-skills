@@ -5,8 +5,65 @@
 Active implementation: none.
 
 Project: `agentic-skills`.
-Last completed task: Fix Ship-End BIP Post Suggestions.
-Last closeout: `ship-end` v0.8 now drafts source-safe BIP post suggestions when Build-In-Public is already enabled, instead of stopping at a skipped gate message.
+Last completed task: BIP Channel Recommendations And Rankings.
+Last closeout: BIP target-channel gates now rank and preselect recommended channels for user confirmation while blocking channel-specific drafting until the channel-selection response is approved.
+
+## Recent Completion - BIP Channel Recommendations And Rankings
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Validate the current BIP target-channel language in the canonical convention, generated bundles, tests, and recent history.
+- [x] Update `docs/alignment-page-convention.md` so BIP pages rank target channels, assign `recommended` / `optional` / `not-now`, preselect recommended channels for user confirmation, and treat the submitted gate as channel-selection approval only.
+- [x] Preserve safety boundaries: no draft posts, video ideas, or channel-specific content before channel-selection approval; each recommendation needs source basis, fit rationale, claim risk, and non-recommended-channel rationale.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundle files with `node scripts/upgrade-alignment-page.mjs`.
+- [x] Update focused layer1 coverage for canonical and generated bundle text.
+- [x] Run required verification, update `tasks/lessons.md`, document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- BIP pages rank candidate target channels by fit using completed Stage 2 evidence.
+- Each target channel has one of `recommended`, `optional`, or `not-now`.
+- `recommended` channels are preselected by default but still require user confirmation and override controls.
+- A submitted target-channel gate approves only channel selection; it is not final BIP approval.
+- Social/channel convention files are loaded only after the selected/recommended channel set is approved.
+- Channel-specific drafting remains blocked until channel-selection approval.
+- Generated alignment-page convention bundles match the canonical convention.
+
+### Verification Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `npm run test -- tests/layer1/alignment-gates.test.ts`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `npm --workspace skillpacks run build:check`
+
+### Verification
+
+Passed:
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `npm --workspace skillpacks run build:check`
+
+Unavailable:
+
+- `npm run test -- tests/layer1/alignment-gates.test.ts` failed because the repo root has no `test` script; `tests/package.json` owns the focused Vitest command above.
+
+### Review/results
+
+- Confirmed the current BIP target-channel language defaulted unapproved channels to `not-now`.
+- Updated `docs/alignment-page-convention.md` so BIP pages rank candidate channels from completed Stage 2 evidence, assign `recommended` / `optional` / `not-now`, preselect recommended channels, and keep every channel overrideable.
+- Made channel selection an intermediate approval response only; final BIP approval still requires later drafting-mode, angle, sample post/video idea, tone, claim-safety, and publish-readiness gates.
+- Blocked draft posts, video ideas, channel-specific sample content, channel-specific convention-driven recommendations, and social convention loading until the selected/recommended channel set is approved.
+- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Added focused layer1 assertions for canonical and generated bundle text.
+- Added a lesson for evidence-backed BIP channel recommendations and the separation between channel-selection approval and final BIP approval.
 
 ## Recent Completion - Fix Ship-End BIP Post Suggestions
 

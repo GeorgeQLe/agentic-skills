@@ -2,6 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - BIP Channel Recommendations And Rankings
+
+### Goal
+
+Change the Build-In-Public target-channel gate from a conservative all-`not-now` default to agent-ranked channel recommendations where `recommended` channels are preselected for user confirmation, while preserving BIP as an approval checkpoint before any channel-specific drafting.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: the canonical alignment-page convention, generated bundle files, and regression tests share one contract and should be updated atomically.
+
+### Plan
+
+- [x] Capture the visible `investigate` invocation prompt and promote this implementation into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Validate the current BIP target-channel language in the canonical convention, generated bundles, tests, and recent history.
+- [x] Update `docs/alignment-page-convention.md` so BIP pages rank target channels, assign `recommended` / `optional` / `not-now`, preselect recommended channels for user confirmation, and treat the submitted gate as channel-selection approval only.
+- [x] Preserve safety boundaries: no draft posts, video ideas, or channel-specific content before channel-selection approval; each recommendation needs source basis, fit rationale, claim risk, and non-recommended-channel rationale.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundle files with `node scripts/upgrade-alignment-page.mjs`.
+- [x] Update focused layer1 coverage for canonical and generated bundle text.
+- [x] Run required verification, update `tasks/lessons.md`, document results, commit, and push on the primary branch.
+
+### Acceptance Criteria
+
+- BIP pages rank candidate target channels by fit using completed Stage 2 evidence.
+- Each target channel has one of `recommended`, `optional`, or `not-now`.
+- `recommended` channels are preselected by default but still require user confirmation and override controls.
+- A submitted target-channel gate approves only channel selection; it is not final BIP approval.
+- Social/channel convention files are loaded only after the selected/recommended channel set is approved.
+- Channel-specific drafting remains blocked until channel-selection approval.
+- Generated alignment-page convention bundles match the canonical convention.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `npm run test -- tests/layer1/alignment-gates.test.ts`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Results
+
+- Confirmed the user report: the canonical BIP channel gate used an all-`not-now` conservative default introduced by the BIP checkpoint enforcement change.
+- Updated the canonical alignment-page convention so BIP pages present agent-ranked target-channel recommendations from completed Stage 2 evidence, label channels as `recommended`, `optional`, or `not-now`, and preselect recommended channels for user confirmation with per-channel override controls.
+- Made target-channel approval an intermediate checkpoint only: it may return agent-continuation YAML with `bip_channel_selection_status: ready-for-agent-review`, but it must not set final `bip_approval_status: ready-for-agent-review`.
+- Preserved safety boundaries: no draft posts, video ideas, channel-specific sample content, channel-specific convention-driven recommendations, or social convention loading until channel-selection approval is consumed.
+- Regenerated 309 generated `ALIGNMENT-PAGE.md` bundles from `docs/alignment-page-convention.md`.
+- Added layer1 assertions covering canonical and generated bundle text for ranked recommendations, status values, preselected recommended channels, and non-final channel-selection approval.
+- Verification passed with the commands recorded in `tasks/todo.md`; the requested root `npm run test -- tests/layer1/alignment-gates.test.ts` command is unavailable because the repo root has no `test` script, so the equivalent tests package Vitest command was run and passed.
+
 ## Historical Implementation - Fix Ship-End BIP Post Suggestions
 
 ### Goal
