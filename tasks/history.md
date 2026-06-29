@@ -15251,3 +15251,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Regenerated generated `ALIGNMENT-PAGE.md` bundles, skillpacks manifest, and public skills-catalog export.
 - Verification: alignment bundle check, active-page audit, package boundary/config tests, full package Node suite, focused layer1 tests, package `build:check`, catalog export validation, local `skillpacks alignment verify`, skill archive/version audits, task-doc audit, and diff hygiene passed. `npx skillpacks alignment verify` failed in this checkout with `sh: gskp: command not found`; local package entrypoint verification passed.
 - Manifest: `tasks/ship-manifest-2026-06-29-bip-post-approval-output.md`.
+
+## 2026-06-29 — Benchmarks catalog pin determinism (cross-repo)
+
+- Fixed the one negative from the three-repo split double-check: clean-checkout `pnpm verify` in `agentic-skills-benchmarks` exited 1 on first run (self-healing on second) because `catalog:check` re-imported from the moving `master`, drifting the committed snapshot stale as root advanced.
+- Fix landed entirely in `agentic-skills-benchmarks` (commit `dca929b`, pushed to master): pinned the importer's default `SKILLS_REPO_REF` to root commit `8b71c638a` via a named `defaultRepoRef` const, re-imported the `data/skills-catalog/v1/*` snapshot against the pin, and documented the deliberate bump-pin → re-import → commit refresh procedure in `README.md`. `SKILLS_REPO_REF` env and the `WORKTREE` override still work.
+- This repo (`agentic-skills`) untouched by the fix — its canonical export already passes `exports:check`. Only artifact landing here is the investigate prompt-history file for the split double-check.
+- Verification (brand-new benchmarks clone): `git status` clean before/after first-run `pnpm verify --skill design-system` → exit 0; `catalog:check` fresh; `bench:coverage` 208 skills; `pnpm test` 3 passed.
+- Manifest: `tasks/ship-manifest-2026-06-29-benchmarks-catalog-pin-determinism.md`.
