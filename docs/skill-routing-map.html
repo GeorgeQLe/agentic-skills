@@ -265,7 +265,7 @@ body {
 <div class="legend">
   <h4>Pack Colors</h4>
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-afps)"></div> AFPS Chain</div>
-  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-discovery)"></div> business-discovery</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-discovery)"></div> business-research</div>
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-lifecycle)"></div> customer-lifecycle</div>
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-growth)"></div> business-growth</div>
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-ops)"></div> business-ops</div>
@@ -284,7 +284,7 @@ body {
 
 const PACKS = {
   afps:       { label: 'AFPS Chain',         color: 'var(--pack-afps)' },
-  discovery:  { label: 'business-discovery', color: 'var(--pack-discovery)' },
+  discovery:  { label: 'business-research', color: 'var(--pack-discovery)' },
   lifecycle:  { label: 'customer-lifecycle', color: 'var(--pack-lifecycle)' },
   growth:     { label: 'business-growth',    color: 'var(--pack-growth)' },
   ops:        { label: 'business-ops',       color: 'var(--pack-ops)' },
@@ -306,7 +306,7 @@ const NODES = [
   // AFPS chain
   ...AFPS_CHAIN.map(id => ({ id, pack: 'afps' })),
 
-  // business-discovery
+  // business-research
   { id: 'value-prop-canvas',    pack: 'discovery' },
   { id: 'lean-canvas',          pack: 'discovery' },
   { id: 'brainstorm',           pack: 'discovery' },

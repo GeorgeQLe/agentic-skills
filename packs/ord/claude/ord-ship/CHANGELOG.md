@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-01
+
+- Routed completed packages to the `ord-traction` monitoring gate before any Devtool AFPS graduation recommendation.
+
 ## v0.3 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

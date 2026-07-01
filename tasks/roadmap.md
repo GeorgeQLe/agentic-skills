@@ -2,7 +2,107 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Move YouTube Owner Analytics Work To New Repo
+## Current Implementation - Reconcile Rapid Deck Graduation
+
+**Status: IN PROGRESS (2026-07-01) - normalizing VARD/ORD graduation through traction gates into AFPS.**
+
+### Goal
+
+Make the rapid deck docs, pack docs, active VARD/ORD skill handoffs, Devtool AFPS pack metadata, generated catalog export, and focused tests agree on the canonical routes:
+
+- VARD: `vard-scan -> vard-align -> vard-ship -> vard-traction -> Business AFPS`
+- ORD: `ord-scan -> ord-align -> ord-ship -> ord-traction -> Devtool AFPS`
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial mutations for archived skill contracts and generated metadata.
+- Reason: this touches public workflow docs, pack contracts, mirrored active skill behavior, and routing tests.
+- Safety boundary: preserve unrelated YouTube pack work and existing rapid-deck lesson text; do not create GitHub Actions.
+
+### Plan
+
+- [x] Inspect current rapid deck docs, VARD/ORD skill mirrors, pack metadata, generated references, and task notes.
+- [x] Archive affected active `SKILL.md` files before behavior/output changes.
+- [x] Update VARD/ORD ship and traction skill handoffs in Claude and Codex mirrors, bump versions, and update changelogs.
+- [x] Update `docs/decks.md`, `packs/vard/PACK.md`, `packs/ord/PACK.md`, `packs/devtool/PACK.md`, `docs/operating-modes.md`, `docs/skills-reference.md`, and stale pack workflow references.
+- [x] Regenerate public skills catalog export metadata.
+- [x] Add focused layer1 deck graduation routing coverage.
+- [x] Run targeted verification and document results.
+- [x] Commit and push intended changes on the primary branch without staging unrelated YouTube work.
+
+### Acceptance Criteria
+
+- [x] `docs/decks.md` lists VARD and ORD chains with `*-traction`.
+- [x] `business-research` is the canonical Business AFPS pack name; `business-discovery` appears only as compatibility/alias history.
+- [x] VARD graduation routes to `npx skillpacks install business-research`, then `$idea-scope-brief` for raw/new framing or `$customer-discovery` for clear shipped concepts with traction evidence.
+- [x] ORD graduation routes to `npx skillpacks install devtool`, then `$devtool-workflow` by default or `$devtool-user-map` as the first concrete research step.
+- [x] `vard-ship` and `ord-ship` route to traction before AFPS.
+- [x] Devtool AFPS pack docs exist and identify ORD as a graduation source.
+
+### Test Plan
+
+- `git diff --check`
+- `npx tsx tests/layer1/deck-graduation-routing.test.ts`
+- `scripts/skill-install-routing-audit.sh --active`
+- `node scripts/generate-skills-catalog-export.mjs`
+- Manifest/package test that covers deck install metadata, if discoverable.
+- `git status --short --branch`
+
+## Paused Implementation - Create YouTube Meta Research Skill
+
+**Status: IN PROGRESS (2026-07-01) - implementing `youtube-meta-research` in `youtube-ops`.**
+
+### Goal
+
+Add a mirrored Codex/Claude `youtube-meta-research` research skill to `packs/youtube-ops`, route `$youtube --meta <channel>` to it, update pack documentation and generated alignment bundles, then verify, commit, and push the change on `master`.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial file mutations for mirrored skill/router updates and generated artifacts.
+- Reason: this touches skill contracts, router behavior, pack documentation, generated alignment bundles, and validation-sensitive catalog surfaces.
+- Safety boundary: preserve unrelated working-tree changes, especially the pre-existing `tasks/lessons.md` modification; do not create GitHub Actions; do not infer or encode private YouTube Studio metrics from public evidence.
+
+### Plan
+
+- [x] Capture the visible skill-creation invocation under `prompts/skill-creator/`.
+- [x] Promote this implementation plan into `tasks/roadmap.md` and `tasks/todo.md`.
+- [ ] Inspect nearest YouTube research skill patterns, router skill structure, pack docs, changelog format, archive conventions, and generated catalog expectations.
+- [ ] Scaffold `packs/youtube-ops/codex/youtube-meta-research/` and `packs/youtube-ops/claude/youtube-meta-research/` manually from the local pack pattern.
+- [ ] Write the Codex `SKILL.md` first, then mirror to Claude with command syntax adjusted while preserving shared workflow semantics.
+- [ ] Add `CHANGELOG.md` files for both new skill mirrors.
+- [ ] Archive current mirrored `$youtube` router skills with `scripts/skill-archive.sh`, bump router version to `v0.4`, add meta intent routing and Mode G, and update router changelogs.
+- [ ] Update `packs/youtube-ops/PACK.md` default flow and skill list from 14 to 15 standalone skills.
+- [ ] Run `node scripts/upgrade-alignment-page.mjs` and inspect expected generated alignment bundle updates.
+- [ ] Refresh generated catalog/package/showcase artifacts only if validation or existing generation scripts require it.
+- [ ] Add a review/results section to `tasks/todo.md`.
+- [ ] Run the full requested static checks and spot checks.
+- [ ] Commit and push intended tracked changes on `master`, leaving the final tracked tree clean.
+
+### Acceptance Criteria
+
+- [ ] New Codex and Claude `youtube-meta-research` mirrors exist with `version: v0.0`, `type: research`, `required_conventions: [alignment-page]`, the requested argument hint, `context_intake: artifact_only`, and `visual_tier: visual`.
+- [ ] The new skill enforces a report-first/staged research approval workflow and writes approved canonical output to `research/youtube/meta-research-<slug>-YYYY-MM-DD.md`.
+- [ ] The skill covers peer/search discovery, breakout/outlier detection, topic/packaging/format/cadence/discovery-mode patterns, and exploit/avoid/counter-position opportunity recommendations.
+- [ ] The skill explicitly prevents private metric inference and bypassing login walls/access controls, dates search observations, and warns against copying creators.
+- [ ] Mirrored `$youtube` router skills are archived, bumped to `v0.4`, and route `--meta <channel>` plus current-meta/opportunity prompts to `youtube-meta-research`.
+- [ ] `packs/youtube-ops/PACK.md`, changelogs, alignment bundles, and any required generated catalog surfaces include the new skill consistently.
+- [ ] Requested verification commands pass or any unavoidable failure is documented with evidence.
+
+### Test Plan
+
+- `git diff --check`
+- `scripts/skill-archive-audit.sh --strict`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `./scripts/skill-mirror-parity-audit.sh`
+- `node scripts/researchish-skill-lifecycle-audit.mjs`
+- `scripts/skill-install-routing-audit.sh --active`
+- `npm run skillpacks:verify`
+- `rg "youtube-meta-research" packs/youtube-ops docs packages`
+- `scripts/pack.sh which youtube-meta-research`
+- Read both new `SKILL.md` files for output paths, staged gates, evidence boundaries, and next-step routing consistency.
+- `git status --short --branch`
+
+## Historical Implementation - Move YouTube Owner Analytics Work To New Repo
 
 **Status: COMPLETE (2026-07-01) - new private repo seeded and active alignment page moved out.**
 

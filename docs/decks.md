@@ -44,21 +44,22 @@ npx skillpacks install-deck vard
 **Canonical chain:**
 
 ```text
-vard-scan -> vard-align -> vard-ship
+vard-scan -> vard-align -> vard-ship -> vard-traction
 ```
 
 **Skills:**
 - `vard-scan` — scan for viral app opportunities
 - `vard-align` — go/no-go feasibility check
 - `vard-ship` — deploy, landing page, analytics, ship log
+- `vard-traction` — post-launch traction gate that recommends iterate, graduate, or archive
 
 **Graduation:** When an experiment shows traction, graduate to Business AFPS:
 
 ```bash
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 ```
 
-Then start the deliberate pipeline with `/idea-scope-brief` or `/customer-discovery`.
+Then start the deliberate pipeline with `$idea-scope-brief` for raw/new product framing or `$customer-discovery` when the shipped app already has a clear concept and traction evidence. Carry the VARD scan, align, ship log, and traction log forward as evidence.
 
 ---
 
@@ -76,13 +77,14 @@ npx skillpacks install-deck ord
 **Canonical chain:**
 
 ```text
-ord-scan -> ord-align -> ord-ship
+ord-scan -> ord-align -> ord-ship -> ord-traction
 ```
 
 **Skills:**
 - `ord-scan` — scan for OSS tool opportunities
 - `ord-align` — validate feasibility, check npm namespace
 - `ord-ship` — publish to npm, README, repo setup, ship log
+- `ord-traction` — post-launch adoption gate that recommends iterate, graduate, or archive
 
 **Graduation:** When a package gains traction (stars, downloads, issues), graduate to Devtool AFPS:
 
@@ -90,7 +92,7 @@ ord-scan -> ord-align -> ord-ship
 npx skillpacks install devtool
 ```
 
-Then start the deliberate pipeline with `/devtool-adoption` or `/devtool-positioning`.
+Then start the deliberate pipeline with `$devtool-workflow` by default. Use `$devtool-user-map` as the direct first concrete research step when the user wants to begin with stakeholder/user mapping. Carry the ORD scan, align, ship log, and traction log forward as evidence.
 
 ---
 
@@ -116,7 +118,7 @@ npx skillpacks install business-ops         # for ongoing operations
 **Canonical chain:**
 
 ```text
-business-discovery -> customer-lifecycle -> business-growth -> business-ops
+business-research -> customer-lifecycle -> business-growth -> business-ops
 ```
 
 See `docs/pack-workflow-matrix.md` for the full default route with optional detours.

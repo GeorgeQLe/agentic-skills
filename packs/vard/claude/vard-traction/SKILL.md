@@ -2,7 +2,7 @@
 name: vard-traction
 description: Check post-launch traction for a shipped VARD app and recommend iterate, graduate, or archive
 type: ops
-version: v0.0
+version: v0.1
 context_intake: artifact_only
 ---
 
@@ -29,7 +29,7 @@ Post-launch traction check for shipped VARD experiments. Reads the ship log and 
    - Sustained engagement or sharing growth → iterate-and-grow signal
    - Flat or no traction after 1-2 weeks → archive signal
 5. **Recommend (semi-auto gate):** Produce exactly one recommendation with its rationale and the signals that drove it:
-   - **Graduate** → enter Business AFPS at `/idea-scope-brief`, linking the VARD scan, align, and ship-log entries as evidence.
+   - **Graduate** → install the Business AFPS entry pack with `npx skillpacks install business-research`, then enter at `/idea-scope-brief` for raw/new product framing or `/customer-discovery` when the shipped app already has a clear concept and traction evidence. Link the VARD scan, align, ship-log, and traction-log entries as evidence.
    - **Iterate** → keep it in VARD; run another build and distribution cycle.
    - **Archive** → record the outcome and move on to the next experiment.
    State explicitly that the user confirms before any graduation, archive, or further action happens.
@@ -48,7 +48,7 @@ End with:
 **Traction:** <concept name> — <one-line signal summary>
 **Recommendation:** iterate | graduate to Business AFPS | archive
 **Next work:** <the confirming action for the recommendation>
-**Recommended next command:** /idea-scope-brief (graduate) | /vard-scan (next experiment) | none (archived)
+**Recommended next command:** npx skillpacks install business-research, then /idea-scope-brief or /customer-discovery (graduate) | /vard-scan (next experiment) | none (archived)
 ```
 
 ## Constraints
@@ -58,6 +58,10 @@ End with:
 - Mark unavailable signals as `unknown`; do not fabricate metrics.
 - If no ship-log entry exists for the target, report that and stop.
 - Create `research/vard-ship-log.md` with a header only if it is missing and a shipped app clearly exists.
+
+## Cross-Pack Routing
+
+A graduation to Business AFPS requires the `business-research` pack. If it is not installed, include `npx skillpacks install business-research` as the prerequisite. Use `/idea-scope-brief` when the opportunity still needs raw or new product framing; use `/customer-discovery` when the shipped app has a clear concept and traction evidence ready for deliberate customer research.
 
 ## Default Shipping Contract
 

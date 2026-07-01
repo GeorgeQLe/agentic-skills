@@ -15,6 +15,27 @@ function skillByPath(skillPath) {
 }
 
 describe('skillpacks manifest deck metadata', () => {
+  it('models rapid deck traction phases for VARD and ORD', () => {
+    assert.deepEqual(
+      deckByName('vard').phases.map((phase) => [phase.key, phase.cards]),
+      [
+        ['scan', ['vard-scan']],
+        ['align', ['vard-align']],
+        ['ship', ['vard-ship']],
+        ['traction', ['vard-traction']]
+      ]
+    );
+    assert.deepEqual(
+      deckByName('ord').phases.map((phase) => [phase.key, phase.cards]),
+      [
+        ['scan', ['ord-scan']],
+        ['align', ['ord-align']],
+        ['ship', ['ord-ship']],
+        ['traction', ['ord-traction']]
+      ]
+    );
+  });
+
   it('models Game AFPS as a deliberate game deck backed by the game pack', () => {
     const deck = deckByName('game-afps');
 

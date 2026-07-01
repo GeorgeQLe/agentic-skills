@@ -101,7 +101,7 @@ All other formerly-base skills now live in domain packs — see [Moved Skills](#
 Install the narrow business lane needed for the current phase:
 
 ```bash
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install customer-lifecycle
 npx skillpacks install business-growth
 npx skillpacks install business-ops
@@ -303,7 +303,7 @@ YouTube ops:
 
 ```text
 youtube-audit, youtube-channel-audit, youtube-video-audit, youtube-video-prelaunch-audit,
-youtube-vid-research, youtube-competitive-research, youtube-derivative-cuts,
+youtube-vid-research, youtube-competitive-research, youtube-meta-research, youtube-derivative-cuts,
 youtube-title-thumbnail-audit, youtube-description-optimizer,
 youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis
@@ -431,12 +431,12 @@ npx skillpacks install alignment-page-admin  # compile-central-alignment
 
 ## Moved Skills
 
-Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
+Former base business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs; `business-discovery` remains a legacy alias for `business-research`.
 
 Prefer one of:
 
 ```bash
-npx skillpacks install business-discovery
+npx skillpacks install business-research
 npx skillpacks install customer-lifecycle
 npx skillpacks install business-growth
 npx skillpacks install business-ops

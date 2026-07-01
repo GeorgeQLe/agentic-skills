@@ -2,13 +2,13 @@
 name: ord-ship
 description: Publish to npm, create README, set up repo, and log the shipment
 type: ops
-version: v0.3
+version: v0.4
 context_intake: artifact_only
 ---
 
 # ORD Ship
 
-Invoke as `/ord-ship`.
+Invoke as `$ord-ship`.
 
 Rapid shipping for ORD packages. Publishes to npm, creates a developer-friendly README, sets up the GitHub repo, and appends to the running ship log.
 
@@ -50,8 +50,8 @@ End with:
 
 ```md
 **Shipped:** <package name> — <npm URL>
-**Next work:** monitor adoption for 1-2 weeks, then decide: iterate, graduate to Devtool AFPS, or move on
-**Recommended next command:** $ord-scan (next experiment) or npx skillpacks install devtool from the project shell, then $devtool-adoption (graduate)
+**Next work:** monitor adoption for 1-2 weeks, then run the ORD traction gate before any Devtool AFPS graduation decision
+**Recommended next command:** $ord-traction (after monitoring) or $ord-scan (next experiment)
 ```
 
 ## Constraints

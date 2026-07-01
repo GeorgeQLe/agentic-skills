@@ -1,77 +1,65 @@
 # Current Task State
 
-## Current Implementation - Move YouTube Owner Analytics Work To New Repo
+## Current Implementation - Reconcile Rapid Deck Graduation
 
-**Status:** Complete - new private repo seeded and active alignment page moved out.
+**Status:** In progress - normalizing VARD/ORD graduation through traction gates into AFPS.
 
-Project: `agentic-skills` plus new sibling repo `youtube-owner-analytics`.
+Project: `agentic-skills`.
 
 ### Goal
 
-Create a private GitHub repo `GeorgeQLe/youtube-owner-analytics`, seed `/Users/georgele/projects/tools/youtube-owner-analytics` with the approved YouTube owner analytics alignment context, and remove only the copied active alignment page from `agentic-skills` while retaining the historical research brief.
+Make the rapid deck docs, pack docs, active VARD/ORD skill handoffs, Devtool AFPS pack metadata, generated catalog export, and focused tests agree on the canonical routes:
+
+- VARD: `vard-scan -> vard-align -> vard-ship -> vard-traction -> Business AFPS`
+- ORD: `ord-scan -> ord-align -> ord-ship -> ord-traction -> Devtool AFPS`
 
 ### Execution Profile
 
-- Parallel mode: parallel read-only inspection where useful; serial repo mutation and commits.
-- Reason: this task creates a new repository boundary and mutates two independent git histories.
-- Safety boundary: do not touch the pre-existing dirty package metadata files; do not create GitHub Actions; keep the old research brief as historical context; keep new and old repo commits separate.
+- Parallel mode: parallel read-only inspection where useful; serial mutations for archived skill contracts and generated metadata.
+- Reason: this touches public workflow docs, pack contracts, mirrored active skill behavior, and routing tests.
+- Safety boundary: preserve unrelated YouTube pack work and existing rapid-deck lesson text; do not create GitHub Actions.
 
 ### Plan
 
-- [x] Read the `investigate` skill, current git state, source research brief, source alignment page, alignment index, and prior prompt history for the exact next-step YAML source.
-- [x] Capture this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Create or verify the private GitHub repo `GeorgeQLe/youtube-owner-analytics`.
-- [x] Initialize `/Users/georgele/projects/tools/youtube-owner-analytics` as an independent git repo on `master` with `origin=https://github.com/GeorgeQLe/youtube-owner-analytics.git`.
-- [x] Seed the new repo with `README.md`, `tasks/next-step.yaml`, `research/youtube-owner-analytics-platform.md`, and `alignment/investigate-youtube-owner-analytics-platform.html`.
-- [x] Delete only `alignment/investigate-youtube-owner-analytics-platform.html` from `agentic-skills`, remove its `alignment/index.html` card, and decrement page/category counts.
-- [x] Run the required verification for both repos.
-- [x] Commit and push the new repo seed, then commit and push the `agentic-skills` cleanup separately.
+- [x] Inspect current rapid deck docs, VARD/ORD skill mirrors, pack metadata, generated references, and task notes.
+- [x] Archive affected active `SKILL.md` files before behavior/output changes.
+- [x] Update VARD/ORD ship and traction skill handoffs in Claude and Codex mirrors, bump versions, and update changelogs.
+- [x] Update `docs/decks.md`, `packs/vard/PACK.md`, `packs/ord/PACK.md`, `packs/devtool/PACK.md`, `docs/operating-modes.md`, `docs/skills-reference.md`, and stale pack workflow references.
+- [x] Regenerate public skills catalog export metadata.
+- [x] Add focused layer1 deck graduation routing coverage.
+- [x] Run targeted verification and document results.
+- [x] Commit and push intended changes on the primary branch without staging unrelated YouTube work.
 
 ### Acceptance Criteria
 
-- [x] `GeorgeQLe/youtube-owner-analytics` exists as a private repo with no GitHub Actions added by this task.
-- [x] The local new repo exists at `/Users/georgele/projects/tools/youtube-owner-analytics`, uses `master`, and has the correct `origin`.
-- [x] The new repo includes the copied research brief and alignment page at the same relative paths.
-- [x] `tasks/next-step.yaml` contains the exact prior owner analytics investigation prompt content that the transfer plan identifies as the user-provided next-step YAML source.
-- [x] `README.md` states the repo owns the YouTube owner analytics wrapper work and points the next step at `$investigate` with `tasks/next-step.yaml`.
-- [x] `agentic-skills` no longer has the active copied alignment page or index card, but still keeps `research/youtube-owner-analytics-platform.md`.
-- [x] After the cleanup commit, the old repo dirty status contains only the unrelated package metadata edits that existed before this task.
+- [x] `docs/decks.md` lists VARD and ORD chains with `*-traction`.
+- [x] `business-research` is the canonical Business AFPS pack name; `business-discovery` appears only as compatibility/alias history.
+- [x] VARD graduation routes to `npx skillpacks install business-research`, then `$idea-scope-brief` for raw/new framing or `$customer-discovery` for clear shipped concepts with traction evidence.
+- [x] ORD graduation routes to `npx skillpacks install devtool`, then `$devtool-workflow` by default or `$devtool-user-map` as the first concrete research step.
+- [x] `vard-ship` and `ord-ship` route to traction before AFPS.
+- [x] Devtool AFPS pack docs exist and identify ORD as a graduation source.
 
 ### Test Plan
 
-- New repo:
-  - `git status --short --branch`
-  - `test -f alignment/investigate-youtube-owner-analytics-platform.html`
-  - `test -f research/youtube-owner-analytics-platform.md`
-  - `test -f tasks/next-step.yaml`
-  - `git remote -v`
-  - `git push -u origin master`
-- Old repo:
-  - `test ! -f alignment/investigate-youtube-owner-analytics-platform.html`
-  - `node scripts/audit-alignment-pages.mjs`
-  - `node scripts/audit-task-docs.mjs`
-  - `git diff --check`
-  - `git status --short --branch`
+- `git diff --check`
+- `npx tsx tests/layer1/deck-graduation-routing.test.ts`
+- `scripts/skill-install-routing-audit.sh --active`
+- `node scripts/generate-skills-catalog-export.mjs`
+- Manifest/package test that covers deck install metadata, if discoverable.
+- `git status --short --branch`
 
 ### Review
 
 Verified:
 
-- Created private GitHub repo `GeorgeQLe/youtube-owner-analytics` and set its default branch to `master`.
-- Seeded `/Users/georgele/projects/tools/youtube-owner-analytics` with `README.md`, `tasks/next-step.yaml`, `research/youtube-owner-analytics-platform.md`, and `alignment/investigate-youtube-owner-analytics-platform.html`.
-- Pushed new repo seed commit `aab3c80` to `origin/master`.
-- Removed `alignment/investigate-youtube-owner-analytics-platform.html` from `agentic-skills` and removed its `alignment/index.html` card, reducing the index from 62 to 61 pages and Utility & Maintenance from 12 to 11.
-- Left `research/youtube-owner-analytics-platform.md` in `agentic-skills` as historical source context.
-- `git -C /Users/georgele/projects/tools/youtube-owner-analytics status --short --branch` passed with a clean branch on `master...origin/master`.
-- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/alignment/investigate-youtube-owner-analytics-platform.html` passed.
-- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/research/youtube-owner-analytics-platform.md` passed.
-- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/tasks/next-step.yaml` passed.
-- `git -C /Users/georgele/projects/tools/youtube-owner-analytics remote -v` showed `origin=https://github.com/GeorgeQLe/youtube-owner-analytics.git`.
-- `ruby -e 'require "yaml"; ...' /Users/georgele/projects/tools/youtube-owner-analytics/tasks/next-step.yaml` passed.
-- `git -C /Users/georgele/projects/tools/youtube-owner-analytics push -u origin master` passed.
-- `find /Users/georgele/projects/tools/youtube-owner-analytics -path '*/.github/workflows/*' -type f -print` returned no files.
-- `gh api repos/GeorgeQLe/youtube-owner-analytics/contents/.github/workflows --silent` returned 404, confirming no workflow directory exists on GitHub.
-- `test ! -f alignment/investigate-youtube-owner-analytics-platform.html` passed.
-- `node scripts/audit-alignment-pages.mjs` passed with 61 active pages and exact index integrity.
-- `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings.
+- `npx vitest run tests/layer1/deck-graduation-routing.test.ts` passed.
+- `scripts/skill-install-routing-audit.sh --active` passed with 413 active skills scanned and 0 findings.
+- `node --test packages/skillpacks/test/manifest.test.mjs` passed with 6 tests.
+- `scripts/validate-skills-catalog-export.sh` passed and confirmed export freshness.
+- `scripts/skill-archive-audit.sh --strict` passed with 413 skills checked and 0 violations.
 - `git diff --check` passed.
+- `npm --workspace skillpacks run build:check` passed, including manifest check and package staging boundary check.
+
+## Paused Implementation - Create YouTube Meta Research Skill
+
+This section is preserved from the pre-existing dirty task state and is intentionally not part of the rapid deck reconciliation.

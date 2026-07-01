@@ -22,4 +22,4 @@ onboarding-map, conversion-map, transaction-map,
 retention-map, expansion-map, lifecycle-metrics
 ```
 
-Install `business-discovery` when ICP, positioning, value proposition, competitive analysis, or lean canvas evidence is missing. Install `business-growth` when lifecycle evidence is ready to become GTM, pricing, experiments, growth loops, or PMF work. Install `business-ops` for post-launch reviews and operating health.
+Install `business-research` when ICP, positioning, value proposition, competitive analysis, or lean canvas evidence is missing. Install `business-growth` when lifecycle evidence is ready to become GTM, pricing, experiments, growth loops, or PMF work. Install `business-ops` for post-launch reviews and operating health.

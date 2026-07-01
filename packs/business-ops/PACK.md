@@ -25,4 +25,4 @@ runway-model, investor-update, reconcile-research, repo-glossary,
 mvp-gap, scale-audit, platform-strategy, product-line
 ```
 
-Install `business-discovery` for upstream customer/market evidence. Install `business-growth` for GTM, metrics, experiments, and PMF work.
+Install `business-research` for upstream customer/market evidence. Install `business-growth` for GTM, metrics, experiments, and PMF work.

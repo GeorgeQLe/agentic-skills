@@ -175,7 +175,8 @@ const deckDefinitions = [
     phases: [
       { key: "scan", name: "Scan", cards: ["ord-scan"] },
       { key: "align", name: "Align", cards: ["ord-align"] },
-      { key: "ship", name: "Ship", cards: ["ord-ship"] }
+      { key: "ship", name: "Ship", cards: ["ord-ship"] },
+      { key: "traction", name: "Traction", cards: ["ord-traction"] }
     ]
   },
   {
@@ -190,7 +191,8 @@ const deckDefinitions = [
     phases: [
       { key: "scan", name: "Scan", cards: ["vard-scan"] },
       { key: "align", name: "Align", cards: ["vard-align"] },
-      { key: "ship", name: "Ship", cards: ["vard-ship"] }
+      { key: "ship", name: "Ship", cards: ["vard-ship"] },
+      { key: "traction", name: "Traction", cards: ["vard-traction"] }
     ]
   }
 ];

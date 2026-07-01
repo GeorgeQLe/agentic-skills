@@ -77,13 +77,13 @@ taste-calibration -> destination-doc -> vertical-slice-splitter -> implementatio
 VARD (rapid business):
 
 ```text
-vard-scan -> vard-align -> vard-ship
+vard-scan -> vard-align -> vard-ship -> vard-traction
 ```
 
 ORD (rapid OSS):
 
 ```text
-ord-scan -> ord-align -> ord-ship
+ord-scan -> ord-align -> ord-ship -> ord-traction
 ```
 
 Game AFPS:

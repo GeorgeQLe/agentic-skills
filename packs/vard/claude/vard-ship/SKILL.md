@@ -2,7 +2,7 @@
 name: vard-ship
 description: Deploy the app, create landing page, set up analytics, and log the shipment
 type: ops
-version: v0.0
+version: v0.1
 context_intake: artifact_only
 ---
 
@@ -46,8 +46,8 @@ End with:
 
 ```md
 **Shipped:** <concept name> — <live URL>
-**Next work:** monitor traction for 48-72h, then decide: iterate, graduate to AFPS, or move on
-**Recommended next command:** /vard-scan (next experiment) or /idea-scope-brief (graduate)
+**Next work:** monitor traction for 1-2 weeks, then run the VARD traction gate before any AFPS graduation decision
+**Recommended next command:** /vard-traction (after monitoring) or /vard-scan (next experiment)
 ```
 
 ## Constraints

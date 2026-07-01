@@ -2,13 +2,13 @@
 name: vard-align
 description: Quick feasibility and novelty check — go/no-go decision for this week's build
 type: analysis
-version: v0.0
+version: v0.1
 context_intake: scoped
 ---
 
 # VARD Align
 
-Invoke as `/vard-align`.
+Invoke as `$vard-align`.
 
 Rapid alignment check for a VARD candidate. Validates whether the concept is worth shipping this week and produces a 1-page go/no-go alignment doc.
 
@@ -42,7 +42,7 @@ Write alignment doc to `alignment/vard-<slug>.md` if GO. End with:
 ```md
 **Verdict:** GO / NO-GO
 **Next work:** <build the app / scan for another candidate>
-**Recommended next command:** /vard-ship / /vard-scan
+**Recommended next command:** $vard-ship / $vard-scan
 ```
 
 ## Constraints

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.18"
   },
-  "source_fingerprint": "720362eb1e3539ada32f01f9bdb7cd618d201f589d7bea4f97bbf8a44722487d",
+  "source_fingerprint": "2bd53d1400b8f06f77e799461857e4059d962731c16eb0e46a480aaeb644fe84",
   "packs": [
     {
       "name": "agent-bridge",
@@ -321,10 +321,10 @@
     },
     {
       "name": "devtool",
-      "title": null,
+      "title": "Devtool Pack",
       "description": null,
       "path": "packs/devtool",
-      "metadata_path": null,
+      "metadata_path": "packs/devtool/PACK.md",
       "status": "active",
       "tools": [
         "claude",
@@ -8275,17 +8275,18 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/claude/ord-ship/SKILL.md",
       "installable": true,
-      "content_sha256": "54d492fc23e455a085c998172370753bbe88f6d9eef146f46514aed70c0b1877",
+      "content_sha256": "7a5ee233772ea6476c7d0335580ca54df9bcb198258973c77845788bde1b5e73",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/ord-ship",
       "deck_memberships": [
@@ -8298,14 +8299,16 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/claude/ord-traction/SKILL.md",
       "installable": true,
-      "content_sha256": "d6fe6a64a933c1f1416e50c1f8da89c9dd0a99605a69e4baa0609521496118e3",
-      "archive_versions": [],
+      "content_sha256": "5ca244ac315a9d78d5bacdce6cfbcbb55a0534ab2206d365c86bcb6709f129c3",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/ord-traction",
       "deck_memberships": [
         "ord"
@@ -8365,17 +8368,18 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/codex/ord-ship/SKILL.md",
       "installable": true,
-      "content_sha256": "596f6436b2a4a5f841b7141f0823baf77b381f6d4235c79cab879b3ed21e23b2",
+      "content_sha256": "d35d91176b72484f3eba04f5d0991b383efc6a576d38200ad76e13be687e358d",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$ord-ship",
       "deck_memberships": [
@@ -8388,14 +8392,16 @@
       "scope": "pack",
       "pack": "ord",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/ord/codex/ord-traction/SKILL.md",
       "installable": true,
-      "content_sha256": "d6fe6a64a933c1f1416e50c1f8da89c9dd0a99605a69e4baa0609521496118e3",
-      "archive_versions": [],
+      "content_sha256": "6d094e2b3c534f7302da9f07e8982cdad99f6ed787402ba63a5d6b62909c7ac6",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$ord-traction",
       "deck_memberships": [
         "ord"
@@ -10631,14 +10637,16 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-ship/SKILL.md",
       "installable": true,
-      "content_sha256": "015b27305b931cb71d007e4af1cdc000a42b4f6e4e39dd699b2dd883c7cdffd9",
-      "archive_versions": [],
+      "content_sha256": "1af8dd53646ab43a51c86aff85a57b2636484f6bdca81389059699a6520f1bf7",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/vard-ship",
       "deck_memberships": [
         "vard"
@@ -10650,14 +10658,16 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-traction/SKILL.md",
       "installable": true,
-      "content_sha256": "43c1b0970f8325f43731f252b856880f7106fdf18fcd26a74d5bf9e4282f4cdd",
-      "archive_versions": [],
+      "content_sha256": "2ee935211368e41257cccecab7653448f86cce2c37e026e33add3ab4806d240d",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/vard-traction",
       "deck_memberships": [
         "vard"
@@ -10669,14 +10679,16 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-align/SKILL.md",
       "installable": true,
-      "content_sha256": "6dbfd8655f35cd1ff20441d71a982e0681fd59566da2fb51bbf3fc78e865ff0c",
-      "archive_versions": [],
+      "content_sha256": "d49ece0b9fa1ef933e2734be7e56c1ea533fbfef0a06d64c14e4e20ab83d6859",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$vard-align",
       "deck_memberships": [
         "vard"
@@ -10712,14 +10724,16 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-ship/SKILL.md",
       "installable": true,
-      "content_sha256": "015b27305b931cb71d007e4af1cdc000a42b4f6e4e39dd699b2dd883c7cdffd9",
-      "archive_versions": [],
+      "content_sha256": "b4149f2008591e1b6558bbdd05d6623cfed7665bc332af02334ddf9146179885",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$vard-ship",
       "deck_memberships": [
         "vard"
@@ -10731,14 +10745,16 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/codex/vard-traction/SKILL.md",
       "installable": true,
-      "content_sha256": "43c1b0970f8325f43731f252b856880f7106fdf18fcd26a74d5bf9e4282f4cdd",
-      "archive_versions": [],
+      "content_sha256": "79b8637694cf0d4401b8f00338bf8ce52709b2311199184ba163353faec0340f",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$vard-traction",
       "deck_memberships": [
         "vard"

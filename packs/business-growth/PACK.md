@@ -17,4 +17,4 @@ hook-model, growth-model, metrics, gtm, monetization,
 landing-copy, pmf-assessment, experiment
 ```
 
-Install `business-discovery` when ICP, positioning, or market evidence is missing. Install `customer-lifecycle` when journey, onboarding, conversion, transaction, retention, or expansion evidence is missing. Install `business-ops` for post-launch reviews, runway, risks, and stakeholder reporting.
+Install `business-research` when ICP, positioning, or market evidence is missing. Install `customer-lifecycle` when journey, onboarding, conversion, transaction, retention, or expansion evidence is missing. Install `business-ops` for post-launch reviews, runway, risks, and stakeholder reporting.

@@ -281,7 +281,7 @@ After execution, leave behind clean repo state:
 If you are used to this Claude Code rhythm:
 
 1. `$idea-scope-brief`
-2. `npx skillpacks install business-discovery` for business/product concepts
+2. `npx skillpacks install business-research` for business/product concepts
 3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`
@@ -307,7 +307,7 @@ Optional detours: `$value-prop-canvas` when solution-customer fit is weak, dispu
 The closest Codex translation is:
 
 1. `$idea-scope-brief`
-2. `npx skillpacks install business-discovery` for business/product concepts
+2. `npx skillpacks install business-research` for business/product concepts
 3. `$customer-discovery`
 4. `$competitive-analysis`
 5. `$journey-map`

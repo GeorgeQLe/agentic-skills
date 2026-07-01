@@ -75,7 +75,7 @@
 |-------|------|-----------------|-----------------|
 | `upgrade-interrogation-pages` | primary | user | Interrogation pages need convention upgrade |
 
-### Pack: business-discovery
+### Pack: business-research
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
@@ -376,7 +376,9 @@
 | `youtube-channel-audit` | primary | user | Full channel audit |
 | `youtube-competitive-research` | primary | user | Competitor channel research |
 | `youtube-concept-research` | primary | user | Video concept research |
+| `youtube-derivative-cuts` | primary | user | Derivative clip slate planning |
 | `youtube-description-optimizer` | chained | after video publish | Description optimization |
+| `youtube-meta-research` | primary | user | Current YouTube meta and opportunity research |
 | `youtube-peer-benchmark` | primary | user | Peer benchmarking |
 | `youtube-portfolio` | primary | user | Video portfolio analysis |
 | `youtube-search-positioning` | primary | user | Search positioning analysis |

@@ -165,7 +165,7 @@ Thin Workflow Routers are stateless "what's next" advisors. They read project st
 
 ### Reference Implementations
 
-- `packs/youtube-ops/claude/youtube/` — full intent router with 13-row classification table, 4 named plays, status mode, cross-pack routing
+- `packs/youtube-ops/claude/youtube/` — full intent router with current-meta routing, named plays, status mode, and cross-pack routing
 - `packs/devtool/claude/devtool-workflow/` — thin workflow router, project-type guard, implicit skill ordering
 - `packs/game/claude/game-workflow/` — thin workflow router, project-type guard, explicit three-phase skill ordering
 
@@ -226,13 +226,13 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 
 | Skill | Pack | Pattern | Key traits |
 |-------|------|---------|------------|
-| `customer-discovery` | business-discovery | A | 6 frameworks, pre-product/product-exists modes, synthesis |
-| `competitive-analysis` | business-discovery | A | 4 frameworks, market-structure/comparison modes, synthesis |
-| `positioning` | business-discovery | A | 5 frameworks, market/product modes, synthesis |
+| `customer-discovery` | business-research | A | 6 frameworks, pre-product/product-exists modes, synthesis |
+| `competitive-analysis` | business-research | A | 4 frameworks, market-structure/comparison modes, synthesis |
+| `positioning` | business-research | A | 5 frameworks, market/product modes, synthesis |
 | `journey-map` | customer-lifecycle | A | 5 frameworks, pre-product/product-exists modes, synthesis |
 
 > **Migration status.** The Research Session Loop is normative for Pattern A. The four Pattern A orchestrators above are migrating from the legacy `tasks/todo.md` + `/exec` execution model to the loop; until each skill's `SKILL.md` is updated it still implements the legacy model. The per-orchestrator rollout checklist is in `docs/research-session-loop-convention.md` § Migration status. Patterns B and C are unaffected.
-| `youtube` | youtube-ops | B | 13-intent classification, 4 named plays, status mode |
+| `youtube` | youtube-ops | B | current-meta route, named plays, status mode |
 | `devtool-workflow` | devtool | B (thin) | Project-type guard, implicit skill ordering |
 | `game-workflow` | game | B (thin) | Project-type guard, explicit three-phase ordering |
 | `animation-design-planner` | base | C | 5 framework subskills, codebase grep detection, inline guardrail injection |

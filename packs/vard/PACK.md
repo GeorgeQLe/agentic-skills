@@ -24,7 +24,7 @@ vard-scan -> vard-align -> vard-ship -> vard-traction
 
 ## Graduation
 
-After 1-2 weeks live, run `vard-traction` to compare the shipped app's signals against the VARD graduation thresholds. It recommends iterate, graduate, or archive — you confirm. When it recommends graduating, enter the full Business AFPS pipeline at `/idea-scope-brief` (`scripts/pack.sh install business-research`) with the VARD scan, align, and ship-log entries linked as evidence.
+After 1-2 weeks live, run `vard-traction` to compare the shipped app's signals against the VARD graduation thresholds. It recommends iterate, graduate, or archive — you confirm. When it recommends graduating, enter the full Business AFPS pipeline with `npx skillpacks install business-research`, then `$idea-scope-brief` for raw/new product framing or `$customer-discovery` when the shipped app already has a clear concept and traction evidence. Link the VARD scan, align, ship-log, and traction-log entries as evidence.
 
 ## Skills
 

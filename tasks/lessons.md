@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-01 - Rapid deployment means rapid deck taxonomy first
+
+- A user asked for "canonical rapid deployment workflows" and clarified they meant workflows like ORD, not deploy/release operations.
+- Rule: in this skill library, interpret "rapid deployment" or "rapid workflow" as the deck taxonomy first: VARD for business/consumer rapid app experiments and ORD for developer/OSS rapid package experiments. Only discuss `release-ops` deploy tooling when the user explicitly asks about deployment mechanics, releases, environments, or shipping infrastructure.
+- When the user references ORD, read `docs/decks.md` and the relevant rapid pack `PACK.md` files before answering.
+
 ## 2026-06-29 — Release readiness expires when the tree changes
 
 - A `0.1.16` readiness answer was correct for the clean tree at the time, but the next publish attempt failed because a later alignment page/index change made the tracked tree dirty before publishing.

@@ -2,7 +2,7 @@
 name: ord-traction
 description: Check post-launch adoption for a published ORD package and recommend iterate, graduate, or archive
 type: ops
-version: v0.0
+version: v0.1
 context_intake: artifact_only
 ---
 
@@ -31,7 +31,7 @@ Post-launch adoption check for published ORD packages. Reads the ship log and cu
    - Enterprise inquiry or revenue potential → cross-domain graduate to Business AFPS
    - Flat or no adoption after 1-2 weeks → archive signal
 5. **Recommend (semi-auto gate):** Produce exactly one recommendation with its rationale and the signals that drove it:
-   - **Graduate (Devtool AFPS)** → enter at `/devtool-user-map` (or the `/devtool-workflow` orchestrator), linking the ORD scan, align, and ship-log entries as evidence. Requires the `devtool` pack.
+   - **Graduate (Devtool AFPS)** → install the Devtool AFPS entry pack with `npx skillpacks install devtool`, then enter at `/devtool-workflow` by default or `/devtool-user-map` when the user wants the first concrete research step. Link the ORD scan, align, ship-log, and traction-log entries as evidence.
    - **Graduate (Business AFPS, cross-domain)** → rare; an OSS tool showing business or enterprise demand. Enter at `/idea-scope-brief`.
    - **Iterate** → keep it in ORD; ship another version or distribution push.
    - **Archive** → record the outcome and move on to the next experiment.
@@ -51,7 +51,7 @@ End with:
 **Traction:** <package name> — <one-line signal summary>
 **Recommendation:** iterate | graduate to Devtool AFPS | graduate to Business AFPS | archive
 **Next work:** <the confirming action for the recommendation>
-**Recommended next command:** npx skillpacks install devtool, then /devtool-user-map (graduate) | /idea-scope-brief (cross-domain) | /ord-scan (next experiment) | none (archived)
+**Recommended next command:** npx skillpacks install devtool, then /devtool-workflow or /devtool-user-map (graduate) | npx skillpacks install business-research, then /idea-scope-brief (cross-domain) | /ord-scan (next experiment) | none (archived)
 ```
 
 ## Constraints
@@ -64,7 +64,7 @@ End with:
 
 ## Cross-Pack Routing
 
-A graduation to Devtool AFPS requires the `devtool` pack. If it is not installed (check `.agents/project.json` `enabled_packs`), include `npx skillpacks install devtool` as the prerequisite in the recommendation.
+A graduation to Devtool AFPS requires the `devtool` pack. If it is not installed (check `.agents/project.json` `enabled_packs`), include `npx skillpacks install devtool` as the prerequisite in the recommendation. Use `/devtool-workflow` as the default orchestrator after install; offer `/devtool-user-map` as the direct first-step route when the user wants to begin concrete user research immediately.
 
 ## Default Shipping Contract
 
