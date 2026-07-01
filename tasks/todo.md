@@ -1,58 +1,77 @@
 # Current Task State
 
-## Current Implementation - YouTube Owner Analytics Alignment Page
+## Current Implementation - Move YouTube Owner Analytics Work To New Repo
 
-**Status:** Complete - alignment review page shipped.
+**Status:** Complete - new private repo seeded and active alignment page moved out.
 
-Project: `agentic-skills`.
+Project: `agentic-skills` plus new sibling repo `youtube-owner-analytics`.
 
 ### Goal
 
-Convert `research/youtube-owner-analytics-platform.md` into a convention-compliant HTML alignment review page at `alignment/investigate-youtube-owner-analytics-platform.html`, update the central alignment index, verify the page, and ship only the intended tracked changes.
+Create a private GitHub repo `GeorgeQLe/youtube-owner-analytics`, seed `/Users/georgele/projects/tools/youtube-owner-analytics` with the approved YouTube owner analytics alignment context, and remove only the copied active alignment page from `agentic-skills` while retaining the historical research brief.
 
 ### Execution Profile
 
-- Parallel mode: parallel read-only inspection where useful; serial edits to task docs, alignment page, and index.
-- Reason: this is a durable review artifact conversion with alignment-page convention requirements and repository index maintenance.
-- Safety boundary: do not create OAuth credentials, wrapper scripts, schedulers, skill contract edits, or private YouTube analytics data. Leave unrelated dirty package metadata untouched.
+- Parallel mode: parallel read-only inspection where useful; serial repo mutation and commits.
+- Reason: this task creates a new repository boundary and mutates two independent git histories.
+- Safety boundary: do not touch the pre-existing dirty package metadata files; do not create GitHub Actions; keep the old research brief as historical context; keep new and old repo commits separate.
 
 ### Plan
 
-- [x] Read project lessons, the alignment-page convention, source research brief, existing alignment examples, and current git status.
+- [x] Read the `investigate` skill, current git state, source research brief, source alignment page, alignment index, and prior prompt history for the exact next-step YAML source.
 - [x] Capture this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Create `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page with rendered sections, evidence tables, gates, section feedback, compile YAML, TTS, and question navigation.
-- [x] Update `alignment/index.html` with the new dated page entry in the Utility & Maintenance category.
-- [x] Run `node scripts/audit-alignment-pages.mjs`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
-- [x] Attempt to open the generated page with the repository helper.
-- [x] Document results, commit, and push intended changes while preserving unrelated local edits.
+- [x] Create or verify the private GitHub repo `GeorgeQLe/youtube-owner-analytics`.
+- [x] Initialize `/Users/georgele/projects/tools/youtube-owner-analytics` as an independent git repo on `master` with `origin=https://github.com/GeorgeQLe/youtube-owner-analytics.git`.
+- [x] Seed the new repo with `README.md`, `tasks/next-step.yaml`, `research/youtube-owner-analytics-platform.md`, and `alignment/investigate-youtube-owner-analytics-platform.html`.
+- [x] Delete only `alignment/investigate-youtube-owner-analytics-platform.html` from `agentic-skills`, remove its `alignment/index.html` card, and decrement page/category counts.
+- [x] Run the required verification for both repos.
+- [x] Commit and push the new repo seed, then commit and push the `agentic-skills` cleanup separately.
 
 ### Acceptance Criteria
 
-- [x] The HTML page preserves the research brief's executive recommendation, repo/skill needs, API capability matrix, OAuth/quota/delay findings, architecture, CLI/file contracts, normalized evidence contract, scheduling, security, failure handling, validation, open questions, and official source list as structured HTML.
-- [x] The page declares `data-alignment-category="utility"`, `data-visual-tier="document"`, and `data-alignment-status="review"` and includes the required TTS and question-nav script tags.
-- [x] Review gates cover final artifact approval, MVP scope, Reporting API timing, evidence privacy, and unresolved open questions.
-- [x] `alignment/index.html` links the new page exactly once with a `2026-07-01` date.
-- [x] Alignment and task-doc audits pass, and the diff contains no unrelated package metadata changes.
+- [x] `GeorgeQLe/youtube-owner-analytics` exists as a private repo with no GitHub Actions added by this task.
+- [x] The local new repo exists at `/Users/georgele/projects/tools/youtube-owner-analytics`, uses `master`, and has the correct `origin`.
+- [x] The new repo includes the copied research brief and alignment page at the same relative paths.
+- [x] `tasks/next-step.yaml` contains the exact prior owner analytics investigation prompt content that the transfer plan identifies as the user-provided next-step YAML source.
+- [x] `README.md` states the repo owns the YouTube owner analytics wrapper work and points the next step at `$investigate` with `tasks/next-step.yaml`.
+- [x] `agentic-skills` no longer has the active copied alignment page or index card, but still keeps `research/youtube-owner-analytics-platform.md`.
+- [x] After the cleanup commit, the old repo dirty status contains only the unrelated package metadata edits that existed before this task.
 
 ### Test Plan
 
-- `test -f alignment/investigate-youtube-owner-analytics-platform.html`
-- `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html`
-- `node scripts/audit-alignment-pages.mjs`
-- `node scripts/audit-task-docs.mjs`
-- `git diff --check`
+- New repo:
+  - `git status --short --branch`
+  - `test -f alignment/investigate-youtube-owner-analytics-platform.html`
+  - `test -f research/youtube-owner-analytics-platform.md`
+  - `test -f tasks/next-step.yaml`
+  - `git remote -v`
+  - `git push -u origin master`
+- Old repo:
+  - `test ! -f alignment/investigate-youtube-owner-analytics-platform.html`
+  - `node scripts/audit-alignment-pages.mjs`
+  - `node scripts/audit-task-docs.mjs`
+  - `git diff --check`
+  - `git status --short --branch`
 
 ### Review
 
 Verified:
 
-- Created `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page for `research/youtube-owner-analytics-platform.md`.
-- Rendered the source brief as structured sections, tables, code blocks, evidence rules, source links, section feedback controls, required review gates, and a bottom `Compile Responses` YAML compiler.
-- Updated `alignment/index.html` from 61 to 62 pages and linked the new page under Utility & Maintenance with date `2026-07-01`.
-- `test -f alignment/investigate-youtube-owner-analytics-platform.html` passed.
-- `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html` passed.
-- `node scripts/audit-alignment-pages.mjs` passed with all checks exact.
+- Created private GitHub repo `GeorgeQLe/youtube-owner-analytics` and set its default branch to `master`.
+- Seeded `/Users/georgele/projects/tools/youtube-owner-analytics` with `README.md`, `tasks/next-step.yaml`, `research/youtube-owner-analytics-platform.md`, and `alignment/investigate-youtube-owner-analytics-platform.html`.
+- Pushed new repo seed commit `aab3c80` to `origin/master`.
+- Removed `alignment/investigate-youtube-owner-analytics-platform.html` from `agentic-skills` and removed its `alignment/index.html` card, reducing the index from 62 to 61 pages and Utility & Maintenance from 12 to 11.
+- Left `research/youtube-owner-analytics-platform.md` in `agentic-skills` as historical source context.
+- `git -C /Users/georgele/projects/tools/youtube-owner-analytics status --short --branch` passed with a clean branch on `master...origin/master`.
+- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/alignment/investigate-youtube-owner-analytics-platform.html` passed.
+- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/research/youtube-owner-analytics-platform.md` passed.
+- `test -f /Users/georgele/projects/tools/youtube-owner-analytics/tasks/next-step.yaml` passed.
+- `git -C /Users/georgele/projects/tools/youtube-owner-analytics remote -v` showed `origin=https://github.com/GeorgeQLe/youtube-owner-analytics.git`.
+- `ruby -e 'require "yaml"; ...' /Users/georgele/projects/tools/youtube-owner-analytics/tasks/next-step.yaml` passed.
+- `git -C /Users/georgele/projects/tools/youtube-owner-analytics push -u origin master` passed.
+- `find /Users/georgele/projects/tools/youtube-owner-analytics -path '*/.github/workflows/*' -type f -print` returned no files.
+- `gh api repos/GeorgeQLe/youtube-owner-analytics/contents/.github/workflows --silent` returned 404, confirming no workflow directory exists on GitHub.
+- `test ! -f alignment/investigate-youtube-owner-analytics-platform.html` passed.
+- `node scripts/audit-alignment-pages.mjs` passed with 61 active pages and exact index integrity.
 - `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings.
 - `git diff --check` passed.
-- Open status: `opened` via `node scripts/open-html-page.mjs alignment/investigate-youtube-owner-analytics-platform.html --browser auto`.
-- Unrelated pre-existing edits in `packages/skillpacks/dist/skillpacks-manifest.json` and `packages/skillpacks/package.json` were left untouched.
