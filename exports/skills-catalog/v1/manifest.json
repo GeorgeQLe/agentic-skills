@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "7be4c8dd62f0db335619d05bcc3081eab0890571",
-  "generated_at": "2026-07-01T04:38:41.021Z",
-  "source_fingerprint": "935f3769b190a60491a40232f13a75010338bf965cb9cfd480340f223285442a",
+  "source_commit": "5dce6203cf408bf1f31bd9fa34132148f547d624",
+  "generated_at": "2026-07-01T14:21:06.083Z",
+  "source_fingerprint": "64f4762b945f0844d0887bd5c3bed0ed7bfd5828dcc62298d165fdde3aefe406",
   "source_count": 453,
   "exports": {
     "catalog": "exports/skills-catalog/v1/catalog.json",
@@ -11,7 +11,7 @@
   },
   "package": {
     "name": "skillpacks",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "license": "MIT",
     "repository": {
       "type": "git",
@@ -24,9 +24,9 @@
     "schema_version": 1,
     "package": {
       "name": "skillpacks",
-      "version": "0.1.17"
+      "version": "0.1.18"
     },
-    "source_fingerprint": "9c5de469f1b084d6048e5f4ad822abb9ea04d76711373efbc13f3ff90afcfdc2",
+    "source_fingerprint": "c8e0862372d779d5009aa491917c68b993bc46d2ff886d8f9d274d76451d6299",
     "skill_count": 411,
     "pack_count": 42,
     "deck_count": 5,
