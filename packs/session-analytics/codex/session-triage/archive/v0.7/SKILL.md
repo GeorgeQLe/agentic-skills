@@ -2,15 +2,17 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.8
+version: v0.7
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
 # Session Triage
 
+Invoke as `$session-triage`.
+
 Use this skill when the user wants a focused investigation of one immediate issue: a current conversation problem, one correction, one session, one repo incident, one failed run, or one suspected skill failure. This skill verifies what happened before recommending a durable fix.
 
-Use `/analyze-sessions` instead for informational history questions — single or trend — such as broad cross-session breakdowns, recurring frustration analysis, performance over time, repeated prompt patterns, automation opportunities, finding a past conversation, or checking one run's token spend. This skill owns live incidents that need a verified fix.
+Use `$analyze-sessions` instead for informational history questions — single or trend — such as broad cross-session breakdowns, recurring frustration analysis, performance over time, repeated prompt patterns, automation opportunities, finding a past conversation, or checking one run's token spend. This skill owns live incidents that need a verified fix.
 
 ## Inputs
 
@@ -19,7 +21,7 @@ Use `/analyze-sessions` instead for informational history questions — single o
 - Optional repository path or current working directory.
 - Optional skill name or `SKILL.md` path.
 - Optional user correction text, error output, test failure, log excerpt, file path, commit, or issue description.
-- Optional `benchmark regression` mode: invoked as `/session-triage <skill> benchmark regression` by `/benchmark-test-skill` when `agentic-skills-benchmarks/scripts/benchmark-regression-check.mjs` reports a `regression` verdict. The prior-vs-new delta block (passRate, Wilson lower bound, output-quality, status badge, prior and new grade dates) is carried in as evidence; the appended grade rows live in `agentic-skills-benchmarks/benchmark/grade-history.json`.
+- Optional `benchmark regression` mode: invoked as `$session-triage <skill> benchmark regression` by `$benchmark-test-skill` when `agentic-skills-benchmarks/scripts/benchmark-regression-check.mjs` reports a `regression` verdict. The prior-vs-new delta block (passRate, Wilson lower bound, output-quality, status badge, prior and new grade dates) is carried in as evidence; the appended grade rows live in `agentic-skills-benchmarks/benchmark/grade-history.json`.
 
 ## Process
 
@@ -27,14 +29,14 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Treat the current conversation and current working directory as the default scope.
    - Prefer user-provided session IDs, files, repo paths, skill names, exact correction phrases, errors, logs, and test failures over broad history searches.
    - Resolve named skills from `base/codex`, `base/claude`, `packs`, project-local `.agents`, `.codex`, `.claude`, and installed `~/.codex/skills` or `~/.claude/skills` as read-only fallback evidence.
-   - Do not create an `/analyze-session` alias or route; use this distinct command name to avoid singular/plural confusion.
+   - Do not create an `$analyze-session` alias or route; use this distinct command name to avoid singular/plural confusion.
 
 2. Gather narrow evidence first:
    - Read the target skill contract when a skill is named.
    - Read directly relevant project instructions such as `AGENTS.md`, `CLAUDE.md`, task docs, pack docs, logs, or test output.
    - Search only the scoped repo/session/history for the issue text, skill name, invocation command, relevant file paths, user correction, and nearby agent actions.
    - Include the active conversation as evidence when the correction is happening now.
-   - Broaden to `/analyze-sessions` only when recurrence, frequency, or trend evidence is needed.
+   - Broaden to `$analyze-sessions` only when recurrence, frequency, or trend evidence is needed.
 
 3. Verify the issue before diagnosing:
    - Separate the **user-identified issue** from the **agent-verified issue**.
@@ -55,7 +57,7 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Check `tasks/lessons.md` when working in `agentic-skills`; reuse existing lessons or recommend a new lesson when the pattern is novel.
    - For benchmark failures, check recent same-skill `agentic-skills-benchmarks/benchmark/triage-<skill>-*.md` reports and `tasks/lessons.md` before recommending a narrow tolerance patch. If two or more recent reports classify the same family of valid outputs as benchmark false negatives, stop patching individual phrasings and route to a generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix that covers the family.
    - For a `benchmark regression` invocation, the absolute thresholds may still pass — the issue is a *drop relative to the prior grade*. Use the carried delta and `agentic-skills-benchmarks/benchmark/grade-history.json` to confirm the regression is real (not a one-run sampling artifact: small evaluated-run counts and wide Wilson intervals can move >=10pp by chance — say so and recommend a confirming re-run when the sample is thin). Then classify the cause:
-     - **Real behavioral regression** — the skill contract or a dependency changed and the agent now produces worse output. Route the fix to `/targeted-skill-builder <skill> benchmark regression` naming the contract section that drifted. To confirm the loop closes, apply the Pack Availability Guard first; if `agentic-skills-bench` is unavailable, recommend `npx skillpacks install agentic-skills-bench` before re-running `/benchmark-test-skill <skill>` to verify the grade recovers in `grade-history.json`.
+     - **Real behavioral regression** — the skill contract or a dependency changed and the agent now produces worse output. Route the fix to `$targeted-skill-builder <skill> benchmark regression` naming the contract section that drifted, and confirm the loop closes by re-running `$benchmark-test-skill <skill>` to verify the grade recovers in `grade-history.json`.
      - **Harness / rubric drift** — the skill behavior is unchanged but a setup, fixture, evaluator, or pricing/threshold change moved the score. Reuse the false-negative-family logic above (steps 5-6): name the owning harness/setup file and the family-level behavior to recognize, rather than patching one phrasing.
 
 6. Recommend the smallest durable fix:
@@ -63,10 +65,10 @@ Use `/analyze-sessions` instead for informational history questions — single o
    - Provide concrete rule text or workflow-step wording when a skill-contract change is justified.
    - Include validation checks that prove the revised behavior prevents the issue, such as targeted `rg` checks, mirrored contract checks, version checks, replay of the decision path, or the failing test/log command.
    - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
-   - Route verified skill changes to `/targeted-skill-builder` (skill-dev pack) for a narrow update or `/create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
+   - Route verified skill changes to `$targeted-skill-builder` (skill-dev pack) for a narrow update or `$create-agentic-skill` (skill-dev pack) for a new repo-managed skill.
 
 7. Optionally enrich the persistent insights memory (secondary writer):
-   - When the triaged incident is a verified, generalizable pattern (not a pure one-off), append it to the machine-local `.session-insights/insights.md` store that `/analyze-sessions` accumulates, so live incidents and cross-session trends share one memory.
+   - When the triaged incident is a verified, generalizable pattern (not a pure one-off), append it to the machine-local `.session-insights/insights.md` store that `$analyze-sessions` accumulates, so live incidents and cross-session trends share one memory.
    - The store is gitignored and may not exist yet; create it with the standard keyed table header (`| Insight | Category | First Seen | Last Seen | Occurrences | Status |`) if absent. If a semantically matching row already exists, increment its Occurrences and advance Last Seen instead of adding a duplicate; otherwise add a row with Occurrences `1` and Status `confirmed` (triage incidents are verified).
    - This is additive memory only — `tasks/lessons.md` remains the authoritative correction log; do not move lessons content into the insights store.
 
@@ -76,11 +78,11 @@ Before recommending another skill, verify the target skill itself is available b
 
 - Treat `.agents/project.json` `enabled_skills.<skill-name>` as direct availability, even when the provider pack is not listed in `enabled_packs`.
 - Treat `.agents/project.json` `enabled_packs` as availability only when the enabled pack provides the target skill; use `scripts/pack.sh which <skill-name>` when available to identify the provider.
-- Treat local or global skill files as direct availability evidence, including `.claude/skills/<skill-name>/SKILL.md`, `.codex/skills/<skill-name>/SKILL.md`, `~/.claude/skills/<skill-name>/SKILL.md`, and `~/.codex/skills/<skill-name>/SKILL.md`.
+- Treat local or global skill files as direct availability evidence, including `.codex/skills/<skill-name>/SKILL.md`, `.claude/skills/<skill-name>/SKILL.md`, `~/.codex/skills/<skill-name>/SKILL.md`, and `~/.claude/skills/<skill-name>/SKILL.md`.
 
-If the target skill is unavailable, recommend `npx skillpacks install <pack-or-skill>` from the project shell before the skill invocation. Prefer the provider pack when it is known; otherwise recommend installing the target skill by name. Tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible after install.
+If the target skill is unavailable, recommend `npx skillpacks install <pack-or-skill>` from the project shell before the skill invocation. Prefer the provider pack when it is known; otherwise recommend installing the target skill by name. Tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale after install.
 
-For benchmark regression loop-closing, treat `/benchmark-test-skill` as owned by `agentic-skills-bench`: check whether `.agents/project.json` `enabled_packs` includes `agentic-skills-bench` before recommending or relying on `/benchmark-test-skill <skill>`. If `agentic-skills-bench` is not enabled, recommend `npx skillpacks install agentic-skills-bench` from the project shell first, then tell Claude users to run `/reload-skills`, then `/clear` or restart if the skill remains invisible after install.
+For benchmark regression loop-closing, treat `$benchmark-test-skill` as owned by `agentic-skills-bench`: check whether `.agents/project.json` `enabled_packs` includes `agentic-skills-bench` before recommending or relying on `$benchmark-test-skill <skill>`. If `agentic-skills-bench` is not enabled, recommend `npx skillpacks install agentic-skills-bench` from the project shell first, then tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale after install.
 
 ## Output
 
@@ -94,8 +96,8 @@ Produce a structured report with:
 - Responsible contract gap: skill, project instruction, task doc, or none.
 - Recommended fix: exact file(s), section(s), and proposed wording or behavior change.
 - Validation plan: commands or checks to prove the fix.
-- Confidence and evidence gaps: what is known, what could not be verified, and whether `/analyze-sessions` is needed for recurrence analysis.
-- Recommended next skill: `/targeted-skill-builder` (skill-dev pack), `/create-agentic-skill` (skill-dev pack), `/analyze-sessions`, or `none` when no follow-up is justified. For a confirmed real `benchmark regression`, recommend `/targeted-skill-builder <skill> benchmark regression` and, after applying the Pack Availability Guard for `agentic-skills-bench`, name `npx skillpacks install agentic-skills-bench` first when unavailable, then re-running `/benchmark-test-skill <skill>` as the loop-closing verification (see `docs/benchmark-improvement-loop.md`).
+- Confidence and evidence gaps: what is known, what could not be verified, and whether `$analyze-sessions` is needed for recurrence analysis.
+- Recommended next skill: `$targeted-skill-builder` (skill-dev pack), `$create-agentic-skill` (skill-dev pack), `$analyze-sessions`, or `none` when no follow-up is justified. For a confirmed real `benchmark regression`, recommend `$targeted-skill-builder <skill> benchmark regression` and, after applying the Pack Availability Guard for `agentic-skills-bench`, name re-running `$benchmark-test-skill <skill>` as the loop-closing verification (see `docs/benchmark-improvement-loop.md`).
 
 ## Constraints
 
@@ -103,7 +105,7 @@ Produce a structured report with:
 - Do not claim a user-identified issue is agent-verified without independent evidence.
 - Do not modify the target skill during analysis unless the user also asked for implementation and the active workflow permits edits.
 - Do not recommend a skill change when the evidence points only to one-off agent noncompliance and the contract is already clear.
-- Do not create or suggest `/analyze-session`; use `/session-triage`.
+- Do not create or suggest `$analyze-session`; use `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If a source is missing or unreadable, report that clearly and continue with available evidence instead of guessing.
 - When recommending another skill, apply the Pack Availability Guard: check `enabled_skills`, enabled provider packs, and local/global skill files before recommending the skill directly; if unavailable, prepend `npx skillpacks install <pack-or-skill>` to the recommendation.

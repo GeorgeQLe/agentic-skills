@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-06-30
+
+- Added the `agentic-skills-bench` install prerequisite directly to benchmark-regression loop-closing recommendations when `$benchmark-test-skill` is unavailable, matching the Pack Availability Guard.
+
 ## v0.7 - 2026-06-29
 
 - Updated benchmark-regression evidence paths for the split `agentic-skills-benchmarks` repository.

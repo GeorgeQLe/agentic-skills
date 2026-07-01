@@ -1,88 +1,68 @@
 # Current Task State
 
-## Priority Task Queue
+## Current Implementation - Publish Readiness Skill Audit
 
-_Updated 2026-06-29 by `/roadmap`. The active implementation task below (Three-Repo Split) is COMPLETE, shipped (commit `4b5734cd5`), and recorded in `tasks/history.md`. Working tree clean, pushed to `master`. No next implementation work is promoted into this todo. The items below are advisory routes, not unchecked execution steps._
-
-**No blocking issues:** tree clean, no unpushed commits, no missing implementation steps in an active phase.
-
-Advisory next routes (not promoted as active work):
-
-- Done (2026-06-29): the 4 orphaned Phase 38 newsletter manual tasks were reconciled via `/reconcile-dev-docs fix tasks` — migrated to the `agentic-skills-showcase` repo (see `tasks/manual-todo.md` and `tasks/reconciliation-report.md`). No manual blockers remain in this repo.
-- Advisory: `tasks/recurring-todo.md` has 2 active cadence items ("Devtool docs audit refresh", "Spec drift check"); promote to `tasks/todo.md` only if either becomes concrete execution work.
-
-## Current Implementation - Materialize Agentic Skills Three-Repo Split
-
-**Status: COMPLETE (reconciled 2026-06-29) — pending `/ship` to archive to `tasks/history.md`.**
+**Status:** Complete - publish is blocked on npm authentication.
 
 Project: `agentic-skills`.
 
+### Goal
+
+Audit the active skill library and package release surface so the next `skillpacks` / `@glexcorp/gskp` version can be published with confidence. This is a readiness audit, not a real publish or tag operation.
+
 ### Execution Profile
 
-- Parallel mode: serial repo mutation, parallel read-only inspection where useful.
-- Reason: this task moves repository boundaries and remotes; mutations must be staged, verified, and reversible.
-- Safety boundary: do not create or modify GitHub Actions; do not discard current `agentic-skills` history; do not overwrite existing sibling directories; ask before creating GitHub repositories or moving the current checkout path.
-
-### Proposed Local Layout
-
-Recommended final layout:
-
-```text
-/Users/georgele/projects/tools/agentic-skills/
-  skills/      -> https://github.com/GeorgeQLe/agentic-skills.git
-  showcase/    -> https://github.com/GeorgeQLe/agentic-skills-showcase.git
-  benchmarks/  -> https://github.com/GeorgeQLe/agentic-skills-benchmarks.git
-```
-
-Current reality (verified read-only 2026-06-29 via `gh repo view` / `gh api .../contents`):
-
-- All three GitHub repos exist and are populated (default branch `master`, ~30 commits each):
-  `GeorgeQLe/agentic-skills` (this checkout), `GeorgeQLe/agentic-skills-showcase` (created
-  2026-06-29 17:20), and `GeorgeQLe/agentic-skills-benchmarks` (created 2026-06-29 19:30; received the
-  catalog-pin determinism fix `dca929b` this session).
-- Remote roots are correctly normalized: showcase has a Next.js app at repo root
-  (`package.json`, `pnpm-lock.yaml`, `app/`, `src/`, `next.config.mjs`, …); benchmarks has the
-  harness at root (`benchmark/`, `data/`, `tests/`, `scripts/`, `specs/`, `package.json`).
-- The existing checkout `/Users/georgele/projects/tools/agentic-skills` points to
-  `https://github.com/GeorgeQLe/agentic-skills.git`. Materialization happened out-of-band
-  (parallel/prior session); `ef4151b65` removed the Showcase/benchmark trees from this repo and
-  they were recovered from parent commit `b7c0775bc` into the sibling remotes.
-- Local layout decision (this session): single `agentic-skills` checkout, **no** local sibling
-  `showcase/`/`benchmarks/` clones — showcase and benchmarks are remote-only by choice.
+- Parallel mode: parallel read-only inspection where useful; serial edits and release-boundary verification.
+- Reason: skill source, generated bundles, package manifests, catalog exports, and publish dry-runs share one release boundary and must stay synchronized.
+- Safety boundary: do not run a real `./publish.sh patch`, create npm tags, or publish packages without explicit user approval. Do not revert unrelated work if a concurrent session changes the tree.
 
 ### Plan
 
-- [x] Inspect current tree, docs, git status, and split commit history.
-- [x] Capture this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
-- [x] Confirm the desired local directory layout and whether missing GitHub repos should be created if they do not already exist.
-  - **Decision (2026-06-29):** all three GitHub repos already exist and are populated → none to create. Layout = single `agentic-skills` checkout, no local sibling clones; showcase/benchmarks remain remote-only by choice.
-- [x] Stage a temporary extraction from `b7c0775bc` for showcase + benchmarks.
-  - **Reconciliation note:** completed out-of-band on GitHub; the showcase/benchmark trees were materialized into their sibling remotes from `b7c0775bc`. Verified read-only (`gh repo view`, `gh api .../contents`); no local extraction needed.
-- [x] Create the local repo layout without overwriting existing work.
-  - **Reconciliation note:** chosen layout is the single-checkout option (no local sibling clones), so no local repo creation/move was required. The three independent remotes exist with `origin` configured authoritatively on GitHub.
-- [x] Normalize repo roots after extraction.
-  - **Reconciliation note:** verified remotely — showcase has the Next.js app at repo root (`package.json`, `pnpm-lock.yaml`, `app/`, `src/`, `next.config.mjs`); benchmarks has the harness at root (`benchmark/`, `data/`, `tests/`, `scripts/`, `specs/`, `package.json`).
-- [x] Verify each repo.
-  - **Reconciliation note:** verified read-only via `gh repo view` (default branch `master`, ~30 commits each) and `gh api .../contents` (root path classes as expected).
-- [x] Commit and push intended changes in each repo after verification, then update this repo's task docs with results.
-  - **Reconciliation note:** each remote is already populated and pushed (benchmarks received catalog-pin fix `dca929b` this session). This step is the task-doc reconciliation closing out the split.
+- [x] Capture the visible `$expert-review` invocation prompt and promote this audit into task tracking.
+- [x] Map active skill/package structure, release runbook gates, generated bundle expectations, and current git/registry version state.
+- [x] Run skill integrity and routing audits for active source skills.
+- [x] Run package build/check, catalog export validation, and package-boundary dry run.
+- [x] Fix narrow readiness blockers discovered by verification, if any, then rerun affected checks.
+- [x] Produce a durable audit report/alignment page and document results here.
+- [x] Commit intended changes, then run strict `./publish.sh --dry-run patch` from the clean post-commit tree.
+- [x] Record the npm-auth publish blocker and prepare the completed audit commit for push.
 
-### Acceptance Criteria (reconciled — all met)
+### Acceptance Criteria
 
-- [x] Three independent repos exist for skills, showcase, and benchmarks — GitHub is authoritative and all three are populated. Skills is worked from this single local checkout; showcase/benchmarks are remote-only by choice (no accidental nested local repos).
-- [x] The skills repo preserves the current `agentic-skills` history and remote.
-- [x] The Showcase repo contains the app at its repo root and points to `GeorgeQLe/agentic-skills-showcase`.
-- [x] The benchmark repo contains the benchmark harness/results at its repo root and points to `GeorgeQLe/agentic-skills-benchmarks`.
-- [x] No nested git repos are accidentally tracked by another repo (no local sibling clones created).
-- [x] No unrelated files are removed from the current checkout.
-- [x] Each repo is populated and pushed on `master`.
+- [x] Active `SKILL.md` files have required version metadata and generated convention bundles are current.
+- [x] Claude/Codex mirrors, skill dependencies, pack routing, archives, and catalog exports pass the repo's release gates.
+- [x] The actual npm publish target excludes denied repo-only paths and includes required runtime assets.
+- [x] Local package version and registry state identify the correct next publish path without partial-publish ambiguity.
+- [x] `./publish.sh --dry-run ...` completes for the resolved target, or any blocker is documented with an exact remediation.
+- [x] Final handoff is ready to be based on a fresh `git status --short --branch` and to state whether the repo is ready to publish now.
 
 ### Test Plan
 
-- `git -C <repo> status --short --branch`
-- `git -C <repo> remote -v`
-- `git -C <repo> fsck --no-reflogs` after initializing/copying history when practical.
-- `git -C <repo> ls-files | rg '<expected boundary checks>'`
-- Showcase: `pnpm install --frozen-lockfile` and existing `pnpm test` / `pnpm build` only if dependency install is already available or explicitly approved.
-- Benchmarks: package/harness focused tests after dependency state is established.
-- Skills: existing catalog/export validation is not expected to change unless task-doc metadata is committed here.
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/base-skill-version-parity-audit.sh`
+- `scripts/skill-deps.sh --broken`
+- `scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-pack-routing-audit.sh`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build:check`
+- `scripts/validate-skills-catalog-export.sh`
+- `npm pack ./packages/skillpacks/build --dry-run --json --silent`
+- `./publish.sh --dry-run patch` or `./publish.sh --dry-run --current`, depending on verified registry/source state.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+### Review
+
+Verified so far:
+
+- Registry state: `npm view skillpacks version`, `npm view @glexcorp/gskp version`, and exact `0.1.17` lookups all returned `0.1.17`; next normal publish target is patch `0.1.18`.
+- Fixed one readiness blocker: `scripts/skill-pack-routing-audit.sh` found four `session-triage` benchmark loop-closing recommendations that named `benchmark-test-skill` without the direct `agentic-skills-bench` install prerequisite nearby. Updated Claude and Codex mirrors, archived `v0.7`, bumped both to `v0.8`, and regenerated package/catalog metadata.
+- Passed source gates: `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/base-skill-version-parity-audit.sh`, `scripts/skill-deps.sh --broken`, `scripts/skill-mirror-parity-audit.sh`, `scripts/skill-pack-routing-audit.sh`, `node scripts/upgrade-alignment-page.mjs --check`, and `node scripts/upgrade-interrogation-page.mjs --check`.
+- Passed package/catalog gates: `scripts/validate-skills-catalog-export.sh`, `npm --workspace packages/skillpacks run test:node` (175 tests), `npm --workspace packages/skillpacks run build:check`, and `npm pack ./packages/skillpacks/build --dry-run --json --silent`.
+- Durable audit page: `alignment/expert-review-publish-readiness.html`; alignment audit passed with 61 active pages and 61 index entries.
+- Strict publish dry run: `./publish.sh --dry-run patch` was run from the clean post-commit tree and failed in pre-bump npm auth preflight for `0.1.18` with `E401 Unauthorized` from `npm whoami`. The script left no version bump or publish state behind.
+
+Publish blocker: log in to npm as the expected publisher (`glexcorp`) with `npm login --registry https://registry.npmjs.org/`, verify with `npm whoami --registry https://registry.npmjs.org/`, then rerun `./publish.sh --dry-run patch`.

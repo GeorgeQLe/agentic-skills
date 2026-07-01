@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="confirmed">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expert Review - Publish Readiness Audit</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c2333;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --orange: #d29922;
+  --red: #f85149;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1060px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 40px 0 64px;
+  overflow-wrap: break-word;
+}
+h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+h1 { margin: 0 0 10px; font-size: 2.2rem; }
+h2 { margin: 0 0 12px; color: var(--accent); font-size: 1.35rem; }
+h3 { margin: 16px 0 8px; font-size: 1.04rem; }
+p { margin: 10px 0; }
+a { color: var(--accent); }
+code {
+  color: #fff;
+  background: #0b1018;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .92em;
+}
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+}
+.meta-line, .muted { color: var(--muted); }
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid var(--green);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: #fff;
+  background: rgba(63, 185, 80, .12);
+  font-weight: 700;
+  font-size: .9rem;
+}
+section, .toc {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.toc ul { columns: 2; padding-left: 22px; margin: 10px 0 0; }
+.toc li { break-inside: avoid; margin: 5px 0; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: 12px;
+}
+.tile {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0b1018;
+  padding: 14px;
+}
+.tile strong { display: block; color: #fff; margin-bottom: 4px; }
+.callout {
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.callout.success { border-color: var(--green); background: rgba(63, 185, 80, .08); }
+.callout.warning { border-color: var(--orange); background: rgba(210, 153, 34, .08); }
+.callout.blocker { border-color: var(--red); background: rgba(248, 81, 73, .08); }
+.badge {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: #fff;
+  background: #0b1018;
+  font-size: .86rem;
+  font-weight: 700;
+}
+.badge.pass { border-color: var(--green); color: #d2ffd7; }
+.badge.fix { border-color: var(--orange); color: #ffe8ad; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #0b1018; color: #fff; }
+tr:last-child td { border-bottom: 0; }
+@media (max-width: 860px) {
+  .toc ul { columns: 1; }
+}
+@media (max-width: 560px) {
+  main { width: min(100vw - 24px, 1060px); padding-top: 24px; }
+  h1 { font-size: 1.82rem; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="status">alignment_status: confirmed</p>
+    <h1>Expert Review - Publish Readiness Audit</h1>
+    <p class="meta-line">Alignment date: 2026-07-01 | Confirmed: 2026-07-01 | Category: QA &amp; Meta-Skill Improvement | Visual tier: document</p>
+    <p>This page records the package and skill audit for the next `skillpacks` / `@glexcorp/gskp` release from the `agentic-skills` source checkout.</p>
+    <div class="callout blocker">
+      <strong>Final clean-tree gate:</strong> strict <code>./publish.sh --dry-run patch</code> reached npm auth preflight for <code>0.1.18</code> and failed with <code>E401 Unauthorized</code> from <code>npm whoami</code>. Source/package gates are ready, but real publishing is blocked until npm auth is restored for the expected publisher.
+    </div>
+  </header>
+
+  <section class="toc" id="toc">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#verdict">Verdict</a></li>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#finding">Finding Fixed</a></li>
+      <li><a href="#evidence">Verification Evidence</a></li>
+      <li><a href="#package">Package Boundary</a></li>
+      <li><a href="#publish">Publish Gate</a></li>
+      <li><a href="#next">Next Work</a></li>
+    </ul>
+  </section>
+
+  <section id="verdict">
+    <h2>Verdict</h2>
+    <div class="callout success">
+      <strong>Source/package audit status:</strong> ready after one routing fix. The active source checks, generated convention checks, package unit tests, build check, catalog export validation, and exact npm pack dry run passed. The only remaining release blocker is npm authentication.
+    </div>
+    <p>The only confirmed blocker was a cross-pack recommendation gap in `session-triage`: benchmark-regression output could name `benchmark-test-skill` without carrying the `agentic-skills-bench` install prerequisite into the direct recommendation text. The fix is in both Claude and Codex mirrors and bumped `session-triage` from `v0.7` to `v0.8` with archive snapshots.</p>
+  </section>
+
+  <section id="scope">
+    <h2>Scope</h2>
+    <div class="grid">
+      <div class="tile">
+        <strong>Release target</strong>
+        <p>`skillpacks` and `@glexcorp/gskp` npm packages from `packages/skillpacks/build`.</p>
+      </div>
+      <div class="tile">
+        <strong>Registry state</strong>
+        <p>`npm view skillpacks version` and `npm view @glexcorp/gskp version` both returned `0.1.17`; local source is `0.1.17`, so the next normal target is patch `0.1.18`.</p>
+      </div>
+      <div class="tile">
+        <strong>Skill surface</strong>
+        <p>411 packaged skills, 527 active `SKILL.md` files including nested framework skills, and 42 packs in the staged package build.</p>
+      </div>
+      <div class="tile">
+        <strong>Non-goal</strong>
+        <p>No real npm publish, npm tag, or git release tag was created by this audit.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="finding">
+    <h2>Finding Fixed</h2>
+    <div class="table-wrap" data-tts-narrative="The audit found one release-blocking routing issue in session-triage. Both agent mirrors now tell users to install the agentic-skills-bench pack before relying on benchmark-test-skill when that pack is unavailable.">
+      <table>
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Surface</th>
+            <th>Evidence</th>
+            <th>Resolution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge fix">fixed blocker</span></td>
+            <td>`packs/session-analytics/*/session-triage/SKILL.md`</td>
+            <td>`scripts/skill-pack-routing-audit.sh` reported four gaps where `benchmark-test-skill` required `agentic-skills-bench`.</td>
+            <td>Updated both mirrors so benchmark-regression loop-closing recommendations include `npx skillpacks install agentic-skills-bench` when unavailable; archived `v0.7`, bumped to `v0.8`, and updated changelogs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <h2>Verification Evidence</h2>
+    <div class="table-wrap" data-tts-narrative="All source integrity, generated bundle, catalog, unit test, and build boundary checks passed after the session-triage routing fix.">
+      <table>
+        <thead>
+          <tr>
+            <th>Gate</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>`scripts/skill-versions.sh --missing`</td><td><span class="badge pass">pass</span></td><td>All 527 skills have a version field.</td></tr>
+          <tr><td>`scripts/skill-archive-audit.sh --strict`</td><td><span class="badge pass">pass</span></td><td>411 skills checked; no archive violations.</td></tr>
+          <tr><td>`scripts/base-skill-version-parity-audit.sh`</td><td><span class="badge pass">pass</span></td><td>2 targeted base pairs checked; no failures.</td></tr>
+          <tr><td>`scripts/skill-deps.sh --broken`</td><td><span class="badge pass">pass</span></td><td>No broken references found.</td></tr>
+          <tr><td>`scripts/skill-mirror-parity-audit.sh`</td><td><span class="badge pass">pass</span></td><td>178 mirrored pairs checked; 116 approved drifts; no failures.</td></tr>
+          <tr><td>`scripts/skill-pack-routing-audit.sh`</td><td><span class="badge pass">pass</span></td><td>Passed after the `session-triage` routing fix.</td></tr>
+          <tr><td>`node scripts/upgrade-alignment-page.mjs --check`</td><td><span class="badge pass">pass</span></td><td>309 ownable generated bundles checked; no updates needed.</td></tr>
+          <tr><td>`node scripts/upgrade-interrogation-page.mjs --check`</td><td><span class="badge pass">pass</span></td><td>20 ownable generated bundles checked; no updates needed.</td></tr>
+          <tr><td>`scripts/validate-skills-catalog-export.sh`</td><td><span class="badge pass">pass</span></td><td>Catalog export artifacts are fresh after regenerating and staging them.</td></tr>
+          <tr><td>`npm --workspace packages/skillpacks run test:node`</td><td><span class="badge pass">pass</span></td><td>175 tests passed; 0 failed.</td></tr>
+          <tr><td>`npm --workspace packages/skillpacks run build:check`</td><td><span class="badge pass">pass</span></td><td>Convention bundle audit, manifest check, and package staging boundary passed for 411 active skills.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="package">
+    <h2>Package Boundary</h2>
+    <p>The exact publish target check `npm pack ./packages/skillpacks/build --dry-run --json --silent` passed. The dry-run package reported `skillpacks@0.1.17`, tarball size about 10.2 MB, unpacked size about 63.0 MB, `entryCount: 3718`, and no bundled dependency payload.</p>
+    <p>Package staging reported source fingerprint `d5aa5f7742233e50fbcc5bf418a1c869e60d073d9350ef7fdd3f52f95f54f984` for 411 skills and 42 packs.</p>
+  </section>
+
+  <section id="publish">
+    <h2>Publish Gate</h2>
+    <div class="callout blocker">
+      <strong>Blocked:</strong> <code>./publish.sh --dry-run patch</code> failed before source mutation during npm auth preflight for <code>skillpacks@0.1.18</code> and <code>@glexcorp/gskp@0.1.18</code>.
+    </div>
+    <p>Error evidence: <code>npm error code E401</code> and <code>401 Unauthorized - GET https://registry.npmjs.org/-/whoami</code>. The script instructed logging in to <code>https://registry.npmjs.org/</code> as <code>glexcorp</code> before a real publish.</p>
+    <p>No package version bump or publish was left behind; the failure happened in the pre-bump auth gate.</p>
+  </section>
+
+  <section id="next">
+    <h2>Next Work</h2>
+    <p><strong>Next work:</strong> restore npm auth for the expected publisher, then rerun the strict dry run from a clean tree. Publish only after explicit user approval.</p>
+    <p><strong>Recommended next command:</strong> <code>npm login --registry https://registry.npmjs.org/</code></p>
+  </section>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

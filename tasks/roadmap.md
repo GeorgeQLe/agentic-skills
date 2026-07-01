@@ -2,7 +2,59 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Materialize Agentic Skills Three-Repo Split
+## Current Implementation - Publish Readiness Skill Audit
+
+**Status: COMPLETE (2026-07-01) - publish blocked on npm authentication.**
+
+### Goal
+
+Audit the active skill library and package release surface so the next `skillpacks` / `@glexcorp/gskp` version can be published with confidence. This is a readiness audit, not a real publish or tag operation.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits and release-boundary verification.
+- Reason: skill source, generated bundles, package manifests, catalog exports, and publish dry-runs share one release boundary and must stay synchronized.
+- Safety boundary: do not run a real `./publish.sh patch`, create npm tags, or publish packages without explicit user approval. Do not revert unrelated work if a concurrent session changes the tree.
+
+### Plan
+
+- [x] Capture the visible `$expert-review` invocation prompt and promote this audit into `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Map active skill/package structure, release runbook gates, generated bundle expectations, and current git/registry version state.
+- [x] Run skill integrity and routing audits for active source skills.
+- [x] Run package build/check, catalog export validation, and package-boundary dry run.
+- [x] Fix narrow readiness blockers discovered by verification, if any, then rerun affected checks.
+- [x] Produce a durable audit report/alignment page and document results in `tasks/todo.md`.
+- [x] Commit intended changes, then run strict `./publish.sh --dry-run patch` from the clean post-commit tree.
+- [x] Record the npm-auth publish blocker and prepare the completed audit commit for push.
+
+### Acceptance Criteria
+
+- [x] Active `SKILL.md` files have required version metadata and generated convention bundles are current.
+- [x] Claude/Codex mirrors, skill dependencies, pack routing, archives, and catalog exports pass the repo's release gates.
+- [x] The actual npm publish target excludes denied repo-only paths and includes required runtime assets.
+- [x] Local package version and registry state identify the correct next publish path without partial-publish ambiguity.
+- [x] `./publish.sh --dry-run ...` completes for the resolved target, or any blocker is documented with an exact remediation.
+- [x] Final handoff is ready to be based on a fresh `git status --short --branch` and to state whether the repo is ready to publish now.
+
+### Test Plan
+
+- `scripts/skill-versions.sh --missing`
+- `scripts/skill-archive-audit.sh --strict`
+- `scripts/base-skill-version-parity-audit.sh`
+- `scripts/skill-deps.sh --broken`
+- `scripts/skill-mirror-parity-audit.sh`
+- `scripts/skill-pack-routing-audit.sh`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build:check`
+- `scripts/validate-skills-catalog-export.sh`
+- `npm pack ./packages/skillpacks/build --dry-run --json --silent`
+- `./publish.sh --dry-run patch` or `./publish.sh --dry-run --current`, depending on verified registry/source state.
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+## Historical Implementation - Materialize Agentic Skills Three-Repo Split
 
 **Status: COMPLETE (reconciled 2026-06-29) — pending `/ship` to archive to `tasks/history.md`.**
 
