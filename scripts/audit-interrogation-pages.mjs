@@ -29,6 +29,7 @@ const TIERS = new Set(["document", "visual", "prototype"]);
 const STATUSES = new Set(["review", "confirmed"]);
 const GATES = new Set(["continue", "coverage-checkpoint"]);
 const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*><\/script>/;
+const NAV_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-question-nav\.js"[^>]*><\/script>/;
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 const FILENAME_RE = /^[a-z0-9-]+-r(\d+)-[a-z0-9-]+\.html$/;
 const OPEN_INPUT_RE = /<(?:textarea|input)\b[^>]*\bdata-open-input\b/i;
@@ -47,6 +48,7 @@ const pages = existsSync(interrogationDir)
   : [];
 
 const ttsDiagnostics = [];
+const navDiagnostics = [];
 const metadataDiagnostics = [];
 const viewportDiagnostics = [];
 const embedDiagnostics = [];
@@ -135,6 +137,15 @@ for (const file of pages) {
   } else if (INLINE_TTS_RE.test(html)) {
     ttsDiagnostics.push(
       `Leftover inline TTS in ${rel} beside the src tag. Run node scripts/inject-tts.mjs --dir interrogation --force ${rel} to clean it up.`,
+    );
+  }
+
+  // Every round page is answerable, so the question-nav include is required
+  // unconditionally: it renders the prev/next-unanswered pager in each
+  // open-question block and the compile section.
+  if (!NAV_TAG_RE.test(html)) {
+    navDiagnostics.push(
+      `Missing question-nav include in ${rel} — every round page needs <script src="../scripts/alignment-question-nav.js"></script> before </body> so each open-question block and the compile section show the prev/next-unanswered pager. Run node scripts/inject-tts.mjs --dir interrogation ${rel} to add it.`,
     );
   }
 
@@ -257,6 +268,7 @@ for (const file of pages) {
 
 console.log(`Active pages: ${pages.length}`);
 console.log(`TTS include: ${pages.length} pages, ${ttsDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Question-nav include: ${pages.length} pages, ${navDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Page metadata: ${pages.length} pages, ${metadataDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
@@ -269,6 +281,7 @@ console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length
 
 const groups = [
   ["TTS include drift:", ttsDiagnostics],
+  ["Question-nav include drift:", navDiagnostics],
   ["Page metadata drift:", metadataDiagnostics],
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],

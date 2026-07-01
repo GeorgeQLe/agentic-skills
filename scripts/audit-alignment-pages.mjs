@@ -27,7 +27,13 @@ const alignmentDir = `${repoRoot}/alignment`;
 const CATEGORIES = new Set(["research", "product-design", "utility", "qa-meta", "ops-analysis"]);
 const TIERS = new Set(["document", "visual", "prototype"]);
 const KOKORO_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-tts-kokoro\.js"[^>]*><\/script>/;
+const NAV_TAG_RE = /<script\b[^>]*\bsrc="[^"]*alignment-question-nav\.js"[^>]*><\/script>/;
 const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
+// Review-answerable pages carry the unanswered questions the nav pager targets.
+// The definitive marker is the review "Compile Responses" control, which the
+// convention mandates on every review page and forbids on confirmed records;
+// stray radios (chart toggles, filters) are deliberately not a trigger.
+const ANSWERABLE_RE = /\bCompile Responses\b/;
 const DATE_RE = /\b\d{4}-\d{2}-\d{2}\b/;
 const BIP_CHANNEL_CONVENTIONS = [
   ["LinkedIn posts", /(?:docs|assets)\/social\/linkedin-post-convention\.md/i],
@@ -72,6 +78,7 @@ const pages = existsSync(alignmentDir)
 const activePages = pages.filter((f) => f !== "index.html");
 
 const ttsDiagnostics = [];
+const navDiagnostics = [];
 const metadataDiagnostics = [];
 const viewportDiagnostics = [];
 const embedDiagnostics = [];
@@ -271,6 +278,15 @@ for (const file of pages) {
     );
   }
 
+  // Review-answerable pages must carry the question-nav include so each gate
+  // and the compile section render the prev/next-unanswered pager. Confirmed
+  // read-only records have no answerable questions and are exempt.
+  if (!isConfirmedPage(html) && ANSWERABLE_RE.test(html) && !NAV_TAG_RE.test(html)) {
+    navDiagnostics.push(
+      `Missing question-nav include in ${rel} — review pages with answerable gates need <script src="../scripts/alignment-question-nav.js"></script> before </body> so each gate and the compile section show the prev/next-unanswered pager. Run node scripts/inject-tts.mjs ${rel} to add it.`,
+    );
+  }
+
   const htmlTag = html.match(/<html\b[^>]*>/);
   if (!htmlTag) {
     metadataDiagnostics.push(`Missing <html> element in ${rel} — cannot carry the required data attributes.`);
@@ -361,6 +377,7 @@ if (!existsSync(indexPath)) {
 
 console.log(`Active pages: ${activePages.length}`);
 console.log(`TTS include: ${activePages.length} pages, ${ttsDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Question-nav include: ${activePages.length} pages, ${navDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Page metadata: ${activePages.length} pages, ${metadataDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
@@ -371,6 +388,7 @@ console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length
 
 const groups = [
   ["TTS include drift:", ttsDiagnostics],
+  ["Question-nav include drift:", navDiagnostics],
   ["Page metadata drift:", metadataDiagnostics],
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],

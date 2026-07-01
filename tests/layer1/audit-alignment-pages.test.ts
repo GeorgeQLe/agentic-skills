@@ -23,6 +23,7 @@ function makeFixtureRoot(): string {
 }
 
 const TTS_TAG = '<script src="../scripts/alignment-tts-kokoro.js"></script>';
+const NAV_TAG = '<script src="../scripts/alignment-question-nav.js"></script>';
 
 function pageHtml(overrides: {
   category?: string | null;
@@ -32,6 +33,7 @@ function pageHtml(overrides: {
   extraHtmlAttrs?: string[];
   viewport?: boolean;
   tts?: string | null;
+  nav?: string | null;
   body?: string;
 } = {}): string {
   const {
@@ -42,6 +44,7 @@ function pageHtml(overrides: {
     extraHtmlAttrs = [],
     viewport = true,
     tts = TTS_TAG,
+    nav = null,
     body = "",
   } = overrides;
   const attrs = [
@@ -63,6 +66,7 @@ function pageHtml(overrides: {
     "<body>",
     `<main><h1>Fixture Page</h1>${body}</main>`,
     tts ?? "",
+    nav ?? "",
     "</body>",
     "</html>",
     "",
@@ -337,6 +341,7 @@ describe("audit-alignment-pages fixture trees", () => {
   it("allows review pages to keep active controls", () => {
     const root = makeFixtureRoot();
     writePage(root, "page-a.html", pageHtml({
+      nav: NAV_TAG,
       body: [
         '<div class="question-block"><input required name="gate"></div>',
         '<div class="section-feedback"><textarea></textarea></div>',
@@ -350,6 +355,59 @@ describe("audit-alignment-pages fixture trees", () => {
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Alignment status controls: 1 pages, exact");
+  });
+
+  it("fails a review page (Compile Responses) missing the question-nav include", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      body: [
+        '<section class="gate"><div class="question-block"><input required name="gate"></div></section>',
+        '<section class="compile" id="compile"><button>Compile Responses</button></section>',
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("Question-nav include: 1 pages, DRIFT");
+    expect(result.stderr).toContain("Question-nav include drift:");
+    expect(result.stderr).toContain("Missing question-nav include in alignment/page-a.html");
+    expect(result.stderr).toContain("node scripts/inject-tts.mjs alignment/page-a.html");
+  });
+
+  it("passes a review page that carries the question-nav include", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      nav: NAV_TAG,
+      body: [
+        '<section class="gate"><div class="question-block"><input required name="gate"></div></section>',
+        '<section class="compile" id="compile"><button>Compile Responses</button></section>',
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Question-nav include: 1 pages, exact");
+  });
+
+  it("does not require the question-nav include on confirmed read-only pages", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "page-a.html", pageHtml({
+      status: "confirmed",
+      body: [
+        '<section class="status"><p>alignment_status: confirmed</p></section>',
+        "<section class=\"approval-record\"><h2>Approval Record</h2>",
+        "<p><strong>Evidence coverage:</strong> Approved as sufficient.</p></section>",
+      ].join("\n"),
+    }));
+    writeIndex(root, [{ href: "page-a.html" }]);
+
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Question-nav include: 1 pages, exact");
   });
 
   it("passes on an empty alignment directory with no index", () => {

@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page",
     "2026-06-29 - Simplify BIP platform setup and exhaustive phase drafts",
     "2026-06-29 - Publish current source release from 0.1.16 metadata",
     "2026-06-29 — Add publish dirty-tree override",
     "2026-06-29 — Fix ship-end BIP post suggestions",
     "2026-06-28 — Ship-end 0.1.15 release closeout",
     "2026-06-28 — Tighten BIP agent compliance",
-    "2026-06-28 — YouTube prelaunch A/B test and URL ledger",
-    "2026-06-28 — Publish retry after web auth failure"
+    "2026-06-28 — YouTube prelaunch A/B test and URL ledger"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

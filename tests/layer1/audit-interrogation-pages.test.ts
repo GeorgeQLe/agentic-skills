@@ -24,6 +24,7 @@ function makeFixtureRoot(): string {
 }
 
 const TTS_TAG = '<script src="../scripts/alignment-tts-kokoro.js"></script>';
+const NAV_TAG = '<script src="../scripts/alignment-question-nav.js"></script>';
 
 function pageHtml(overrides: {
   tier?: string | null;
@@ -32,6 +33,7 @@ function pageHtml(overrides: {
   gate?: string | null;
   viewport?: boolean;
   tts?: string | null;
+  nav?: string | null;
   openInput?: boolean;
   openQuestion?: boolean;
   recommended?: boolean;
@@ -50,6 +52,7 @@ function pageHtml(overrides: {
     gate = "continue",
     viewport = true,
     tts = TTS_TAG,
+    nav = NAV_TAG,
     openInput = true,
     openQuestion = true,
     recommended = true,
@@ -96,6 +99,7 @@ function pageHtml(overrides: {
     "<body>",
     `<main><h1>Fixture Round</h1>${open}${compile}${body}</main>`,
     tts ?? "",
+    nav ?? "",
     "</body>",
     "</html>",
     "",
@@ -167,6 +171,26 @@ describe("audit-interrogation-pages fixture trees", () => {
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Module TTS tag in interrogation/positioning-r1-acme.html");
+  });
+
+  it("fails on a round page missing the question-nav include", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html", pageHtml({ nav: null }));
+    const result = runScript(root);
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain("Question-nav include: 1 pages, DRIFT");
+    expect(result.stderr).toContain("Question-nav include drift:");
+    expect(result.stderr).toContain("Missing question-nav include in interrogation/positioning-r1-acme.html");
+    expect(result.stderr).toContain("node scripts/inject-tts.mjs --dir interrogation");
+  });
+
+  it("passes a round page that carries the question-nav include", () => {
+    const root = makeFixtureRoot();
+    writePage(root, "positioning-r1-acme.html");
+    const result = runScript(root);
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Question-nav include: 1 pages, exact");
   });
 
   it("fails on missing and invalid metadata attributes", () => {
