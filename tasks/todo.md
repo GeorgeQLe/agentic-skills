@@ -1,68 +1,57 @@
 # Current Task State
 
-## Current Implementation - Publish Readiness Skill Audit
+## Current Implementation - YouTube Owner Analytics Platform Investigation
 
-**Status:** Complete - publish is blocked on npm authentication.
+**Status:** Complete - architecture brief shipped.
 
 Project: `agentic-skills`.
 
 ### Goal
 
-Audit the active skill library and package release surface so the next `skillpacks` / `@glexcorp/gskp` version can be published with confidence. This is a readiness audit, not a real publish or tag operation.
+Investigate a local-first YouTube owner analytics wrapper for one owned channel. Produce a decision-ready architecture brief at `research/youtube-owner-analytics-platform.md` covering current skill data needs, official API fit, local architecture, CLI/file contracts, scheduling, security, risks, and build/no-build recommendation.
 
 ### Execution Profile
 
-- Parallel mode: parallel read-only inspection where useful; serial edits and release-boundary verification.
-- Reason: skill source, generated bundles, package manifests, catalog exports, and publish dry-runs share one release boundary and must stay synchronized.
-- Safety boundary: do not run a real `./publish.sh patch`, create npm tags, or publish packages without explicit user approval. Do not revert unrelated work if a concurrent session changes the tree.
+- Parallel mode: parallel read-only repo inspection where useful; serial document edits.
+- Reason: this is a research/architecture deliverable with no implementation, credentials, scheduler setup, or skill contract changes.
+- Safety boundary: do not create OAuth credentials, write wrapper scripts, alter skills, set up schedulers, or place secrets in repo artifacts.
 
 ### Plan
 
-- [x] Capture the visible `$expert-review` invocation prompt and promote this audit into task tracking.
-- [x] Map active skill/package structure, release runbook gates, generated bundle expectations, and current git/registry version state.
-- [x] Run skill integrity and routing audits for active source skills.
-- [x] Run package build/check, catalog export validation, and package-boundary dry run.
-- [x] Fix narrow readiness blockers discovered by verification, if any, then rerun affected checks.
-- [x] Produce a durable audit report/alignment page and document results here.
-- [x] Commit intended changes, then run strict `./publish.sh --dry-run patch` from the clean post-commit tree.
-- [x] Record the npm-auth publish blocker and prepare the completed audit commit for push.
+- [x] Capture the visible `$investigate` invocation prompt and promote this investigation into task tracking.
+- [x] Audit active YouTube skill data needs, especially `--owner-analytics <path>`, `research/youtube/data/`, and report evidence expectations.
+- [x] Research official YouTube Data API v3, YouTube Analytics API, and YouTube Reporting API fit from primary documentation.
+- [x] Define the local-first architecture, CLI surface, normalized file layout, evidence contract, scheduling options, and security model.
+- [x] Validate the proposed outputs against current `youtube-video-audit` owner-analytics inputs and requested schedule/failure scenarios.
+- [x] Write and verify `research/youtube-owner-analytics-platform.md`.
+- [x] Commit and push intended tracked changes, without touching unrelated local edits.
 
 ### Acceptance Criteria
 
-- [x] Active `SKILL.md` files have required version metadata and generated convention bundles are current.
-- [x] Claude/Codex mirrors, skill dependencies, pack routing, archives, and catalog exports pass the repo's release gates.
-- [x] The actual npm publish target excludes denied repo-only paths and includes required runtime assets.
-- [x] Local package version and registry state identify the correct next publish path without partial-publish ambiguity.
-- [x] `./publish.sh --dry-run ...` completes for the resolved target, or any blocker is documented with an exact remediation.
-- [x] Final handoff is ready to be based on a fresh `git status --short --branch` and to state whether the repo is ready to publish now.
+- [x] Brief names the current repo/skill data needs and how normalized files satisfy them without changing `youtube-video-audit`.
+- [x] Brief includes an API capability matrix with sourced claims for OAuth, quotas, metrics, delays, retention, and Reporting API tradeoffs.
+- [x] Brief specifies raw and normalized evidence layout under `research/youtube/data/`, including metric provenance and explicit gaps.
+- [x] Brief covers manual, daily channel, and recent-upload refresh scenarios plus expected failure handling.
+- [x] Brief makes a build/no-build recommendation for a local-first CLI wrapper.
 
 ### Test Plan
 
-- `scripts/skill-versions.sh --missing`
-- `scripts/skill-archive-audit.sh --strict`
-- `scripts/base-skill-version-parity-audit.sh`
-- `scripts/skill-deps.sh --broken`
-- `scripts/skill-mirror-parity-audit.sh`
-- `scripts/skill-pack-routing-audit.sh`
-- `node scripts/upgrade-alignment-page.mjs --check`
-- `node scripts/upgrade-interrogation-page.mjs --check`
-- `npm --workspace packages/skillpacks run test:node`
-- `npm --workspace packages/skillpacks run build:check`
-- `scripts/validate-skills-catalog-export.sh`
-- `npm pack ./packages/skillpacks/build --dry-run --json --silent`
-- `./publish.sh --dry-run patch` or `./publish.sh --dry-run --current`, depending on verified registry/source state.
+- `rg -n "owner-analytics|research/youtube/data|audienceRetention|trafficSource|subscribersGained|impressions" packs/youtube-ops .codex/skills`
+- `test -f research/youtube-owner-analytics-platform.md`
+- `rg -n "Build recommendation|API Capability Matrix|Evidence Contract|youtube-video-audit|OAuth|Reporting API" research/youtube-owner-analytics-platform.md`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
 
 ### Review
 
-Verified so far:
+Verified:
 
-- Registry state: `npm view skillpacks version`, `npm view @glexcorp/gskp version`, and exact `0.1.17` lookups all returned `0.1.17`; next normal publish target is patch `0.1.18`.
-- Fixed one readiness blocker: `scripts/skill-pack-routing-audit.sh` found four `session-triage` benchmark loop-closing recommendations that named `benchmark-test-skill` without the direct `agentic-skills-bench` install prerequisite nearby. Updated Claude and Codex mirrors, archived `v0.7`, bumped both to `v0.8`, and regenerated package/catalog metadata.
-- Passed source gates: `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`, `scripts/base-skill-version-parity-audit.sh`, `scripts/skill-deps.sh --broken`, `scripts/skill-mirror-parity-audit.sh`, `scripts/skill-pack-routing-audit.sh`, `node scripts/upgrade-alignment-page.mjs --check`, and `node scripts/upgrade-interrogation-page.mjs --check`.
-- Passed package/catalog gates: `scripts/validate-skills-catalog-export.sh`, `npm --workspace packages/skillpacks run test:node` (175 tests), `npm --workspace packages/skillpacks run build:check`, and `npm pack ./packages/skillpacks/build --dry-run --json --silent`.
-- Durable audit page: `alignment/expert-review-publish-readiness.html`; alignment audit passed with 61 active pages and 61 index entries.
-- Strict publish dry run: `./publish.sh --dry-run patch` was run from the clean post-commit tree and failed in pre-bump npm auth preflight for `0.1.18` with `E401 Unauthorized` from `npm whoami`. The script left no version bump or publish state behind.
-
-Publish blocker: log in to npm as the expected publisher (`glexcorp`) with `npm login --registry https://registry.npmjs.org/`, verify with `npm whoami --registry https://registry.npmjs.org/`, then rerun `./publish.sh --dry-run patch`.
+- Created `research/youtube-owner-analytics-platform.md` as an architecture brief only; no OAuth credentials, scripts, scheduler setup, or skill edits were created.
+- Confirmed current YouTube owner-analytics needs from `packs/youtube-ops/codex/youtube-video-audit/SKILL.md`, `packs/youtube-ops/codex/youtube-audit/SKILL.md`, and `packs/creator-foundation/codex/creator-metrics-review/SKILL.md`.
+- Researched official YouTube/Google docs for OAuth, Data API public metadata/comments, Analytics API targeted owner reports, Reporting API bulk reports, quota behavior, data delay, privacy thresholds, report retention, and verification implications.
+- `rg -n "owner-analytics|research/youtube/data|audienceRetention|trafficSource|subscribersGained|impressions" packs/youtube-ops .codex/skills` passed and confirmed the active skill contract surface.
+- `test -f research/youtube-owner-analytics-platform.md` passed.
+- `rg -n "Build recommendation|Build / No-Build Recommendation|API Capability Matrix|Evidence Contract|youtube-video-audit|OAuth|Reporting API" research/youtube-owner-analytics-platform.md` passed.
+- `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings.
+- `git diff --check` passed.
+- Intended tracked changes were committed and pushed without staging the unrelated package metadata edits.
