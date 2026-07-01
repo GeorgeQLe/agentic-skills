@@ -127,7 +127,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `game` for Game AFPS: video games, prototypes, playable entertainment, loop validation, playtests, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
 - Use `creator-foundation` for creator-media evidence foundations, dossiers, positioning, programming, series, product-led media mapping, and metrics review.
-- Use `youtube-ops` for YouTube channel/video audits, unlisted prelaunch reviews, external-video context, competitive research, packaging, metadata, portfolio, benchmarking, search, and cadence.
+- Use `youtube-ops` for YouTube channel/video audits, unlisted prelaunch reviews, external-video context, competitive research, meta research, packaging, metadata, portfolio, benchmarking, search, and cadence.
 - Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
 - Use `remotion` for Remotion-oriented format research, scene-by-scene video scripting, and build/scaffold planning.
 - Use `project-fleet` for control repos that manage many downstream repos, clone/spec-store portfolios, spinoff idea prompts, or spin-offs.

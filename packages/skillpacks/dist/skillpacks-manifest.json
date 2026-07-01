@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.18"
   },
-  "source_fingerprint": "c8e0862372d779d5009aa491917c68b993bc46d2ff886d8f9d274d76451d6299",
+  "source_fingerprint": "720362eb1e3539ada32f01f9bdb7cd618d201f589d7bea4f97bbf8a44722487d",
   "packs": [
     {
       "name": "agent-bridge",
@@ -788,6 +788,7 @@
         "youtube-concept-research",
         "youtube-derivative-cuts",
         "youtube-description-optimizer",
+        "youtube-meta-research",
         "youtube-peer-benchmark",
         "youtube-portfolio",
         "youtube-search-positioning",
@@ -796,7 +797,7 @@
         "youtube-video-audit",
         "youtube-video-prelaunch-audit"
       ],
-      "skill_count": 15
+      "skill_count": 16
     }
   ],
   "skills": [
@@ -10963,6 +10964,25 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-youtube-ops-claude-youtube-meta-research",
+      "name": "youtube-meta-research",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/youtube-ops/claude/youtube-meta-research/SKILL.md",
+      "installable": true,
+      "content_sha256": "42e5c87b832b3f383c8e4adbed679648ac0833652159e6075bcecf03a8ffff0f",
+      "archive_versions": [],
+      "command": "/youtube-meta-research",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-youtube-ops-claude-youtube-peer-benchmark",
       "name": "youtube-peer-benchmark",
       "scope": "pack",
@@ -11148,17 +11168,18 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/youtube-ops/claude/youtube/SKILL.md",
       "installable": true,
-      "content_sha256": "a1d6b4e348278a30eb1bbff69239b357db89bacffa7b4d127db3b1afb4da84cc",
+      "content_sha256": "4859b35a24e9226aa4b59105c39e979afa459e5fc59e216c46f2e6956e742be5",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/youtube",
       "deck_memberships": []
@@ -11338,6 +11359,25 @@
         "v0.5"
       ],
       "command": "$youtube-description-optimizer",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-youtube-ops-codex-youtube-meta-research",
+      "name": "youtube-meta-research",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/youtube-ops/codex/youtube-meta-research/SKILL.md",
+      "installable": true,
+      "content_sha256": "597f6a365e4ea37a82bcab00bae00459dd90313dbf04a094af86b4e72f67a55c",
+      "archive_versions": [],
+      "command": "$youtube-meta-research",
       "deck_memberships": []
     },
     {
@@ -11526,17 +11566,18 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/youtube-ops/codex/youtube/SKILL.md",
       "installable": true,
-      "content_sha256": "5a7dea56d211c6a1c9c9e9d9dac61e74f0e5c21df3911c513845aee6dceac98a",
+      "content_sha256": "4039e54f6e43c3c43c88ac5ea26cd1be209e757889944b5b53ca25e3e5a7bb46",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$youtube",
       "deck_memberships": []
@@ -11827,6 +11868,13 @@
           "cards": [
             "ord-ship"
           ]
+        },
+        {
+          "key": "traction",
+          "name": "Traction",
+          "cards": [
+            "ord-traction"
+          ]
         }
       ],
       "package_list": {
@@ -11883,6 +11931,13 @@
           "name": "Ship",
           "cards": [
             "vard-ship"
+          ]
+        },
+        {
+          "key": "traction",
+          "name": "Traction",
+          "cards": [
+            "vard-traction"
           ]
         }
       ],

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4 - 2026-07-01
+
+- Added the `--meta <channel>` route and current-meta intent mapping to recommend or explicitly queue `/youtube-meta-research` workflows.
+- Updated the router inventory from 14 to 15 standalone youtube-ops skills.
+
 ## v0.3 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

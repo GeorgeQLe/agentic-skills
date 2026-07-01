@@ -2,8 +2,8 @@
 name: youtube
 description: Intent-based router and play composer for youtube-ops skills — classifies what the user needs and recommends a single skill or queues a multi-step play for /exec
 type: router
-version: v0.4
-argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --meta <channel> | --status"
+version: v0.3
+argument-hint: "[natural language] | --health <channel> | --concept \"<idea>\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status"
 ---
 
 ## Pack Availability Guard
@@ -16,13 +16,13 @@ Invoke as `/youtube`.
 
 Entry point for the `youtube-ops` pack. Classifies the user's intent and either recommends a single skill or composes a multi-step "play" written to `tasks/todo.md` for `/exec` to drive.
 
-This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 15 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
+This skill does not produce research artifacts or alignment pages. It is a routing and planning layer over the 14 standalone youtube-ops skills (plus `youtube-format-research` from the `remotion` pack when installed).
 
 ## Modes
 
 ### Mode A — Intent Router (default)
 
-When invoked with natural language and no flags, classify the user's intent against the table below. Recommend 1–3 skills inline with a one-sentence rationale per skill. Do not write files. If the intent maps cleanly to a play (Modes B–E) or the meta route (Mode G), suggest the corresponding flag instead.
+When invoked with natural language and no flags, classify the user's intent against the table below. Recommend 1–3 skills inline with a one-sentence rationale per skill. Do not write files. If the intent maps cleanly to a play (Modes B–E), suggest the corresponding flag instead.
 
 | Intent | Signal Words | Routes To |
 |--------|-------------|-----------|
@@ -38,7 +38,6 @@ When invoked with natural language and no flags, classify the user's intent agai
 | Search opportunity | "search", "keywords", "ranking" | `/youtube-search-positioning` |
 | Cadence | "cadence", "how often", "schedule" | `/youtube-cadence-diagnosis` |
 | Peer comparison | "compare", "benchmark", "peers" | `/youtube-peer-benchmark` |
-| Meta research | "current meta", "what is working now", "find opportunities for @channel", "breakout patterns", "exploit", "avoid", "counter-position" | `/youtube-meta-research` or suggest `--meta` |
 | Portfolio | "portfolio", "content mix" | `/youtube-portfolio` |
 | General audit | "full audit", "everything" | `/youtube-audit` |
 | Format/production | "format", "editing", "pacing" | `/youtube-format-research` (remotion pack) |
@@ -91,16 +90,6 @@ Read-only scan of `research/youtube/` artifacts. Report:
 
 Do not write files in this mode.
 
-### Mode G — Meta Research (`--meta <channel>`)
-
-Recommend `/youtube-meta-research <channel>` for current public YouTube meta analysis around the target channel. Use this when the user asks what is working now, what the channel should exploit or avoid, which breakout patterns matter, or how to counter-position against visible peer/search surfaces.
-
-If the user explicitly asks to queue a meta research play, use the Play Approval Gate before writing to `tasks/todo.md`:
-
-1. `/youtube-meta-research <channel>`
-2. `/youtube-search-positioning <channel>` (optional follow-up when the meta report identifies query-dependent opportunities)
-3. `/content-programming` (only if `creator-foundation` is enabled; otherwise note that `npx skillpacks install creator-foundation` is required first)
-
 ## Play Approval Gate
 
 Before writing a play to `tasks/todo.md`:
@@ -147,7 +136,7 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 
 When Mode A recommends skills without writing files, the recommended next step is the selected youtube-ops skill or pack installation command shown in the routing response.
 
-After Mode B-E or an explicitly queued Mode G play writes an approved play to `tasks/todo.md`, recommend `Recommended next route: approved task artifact` to begin execution. If play writing is blocked by existing unfinished tasks, the next step is the user's append, replace, or abort decision.
+After Mode B-E writes an approved play to `tasks/todo.md`, recommend `Recommended next route: approved task artifact` to begin execution. If play writing is blocked by existing unfinished tasks, the next step is the user's append, replace, or abort decision.
 
 ## Default Shipping Contract
 

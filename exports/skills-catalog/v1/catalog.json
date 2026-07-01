@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "5dce6203cf408bf1f31bd9fa34132148f547d624",
-  "generated_at": "2026-07-01T14:21:06.075Z",
-  "source_fingerprint": "64f4762b945f0844d0887bd5c3bed0ed7bfd5828dcc62298d165fdde3aefe406",
-  "source_count": 453,
-  "skill_count": 411,
+  "source_commit": "0b0563474ea017c7842c73977abbaf7388b439d0",
+  "generated_at": "2026-07-01T15:30:47.558Z",
+  "source_fingerprint": "fe3c9fe2bdda7b0d11366949509f92d954a4dda679270b71c17c89c3db655538",
+  "source_count": 455,
+  "skill_count": 413,
   "pack_count": 42,
   "deck_count": 5,
   "set_count": 3,
@@ -10660,6 +10660,34 @@
       ]
     },
     {
+      "id": "pack-youtube-ops-claude-youtube-meta-research",
+      "name": "youtube-meta-research",
+      "title": "Youtube Meta Research",
+      "description": "Research the current public YouTube meta around a channel handle or URL, including peer and adjacent surfaces, breakout/outlier videos, search observations, topic/packaging/format patterns, and differentiated exploit/avoid/counter-position recommendations. Use for prompts like current YouTube meta, what is working now, find opportunities for @channel, breakout patterns, or what this channel should exploit or avoid.",
+      "type": "research",
+      "contextIntake": "artifact_only",
+      "visualTier": "visual",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page"
+      ],
+      "argumentHint": "<channel URL or @handle> [--count N] [--peer-limit N] [--query-limit N] [--window 30|90|180|365]",
+      "platform": "claude",
+      "command": "/youtube-meta-research",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "path": "packs/youtube-ops/claude/youtube-meta-research/SKILL.md",
+      "mirrorKey": "youtube-meta-research",
+      "tags": [
+        "claude",
+        "meta",
+        "pack",
+        "research",
+        "youtube",
+        "youtube-ops"
+      ]
+    },
+    {
       "id": "pack-youtube-ops-claude-youtube-peer-benchmark",
       "name": "youtube-peer-benchmark",
       "title": "Youtube Peer Benchmark",
@@ -10870,9 +10898,9 @@
       "type": "router",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [],
-      "argumentHint": "[natural language] | --health <channel> | --concept \\\"<idea>\\\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status",
+      "argumentHint": "[natural language] | --health <channel> | --concept \\\"<idea>\\\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --meta <channel> | --status",
       "platform": "claude",
       "command": "/youtube",
       "scope": "pack",
@@ -11081,6 +11109,34 @@
         "codex",
         "description",
         "optimizer",
+        "pack",
+        "research",
+        "youtube",
+        "youtube-ops"
+      ]
+    },
+    {
+      "id": "pack-youtube-ops-codex-youtube-meta-research",
+      "name": "youtube-meta-research",
+      "title": "Youtube Meta Research",
+      "description": "Research the current public YouTube meta around a channel handle or URL, including peer and adjacent surfaces, breakout/outlier videos, search observations, topic/packaging/format patterns, and differentiated exploit/avoid/counter-position recommendations. Use for prompts like current YouTube meta, what is working now, find opportunities for @channel, breakout patterns, or what this channel should exploit or avoid.",
+      "type": "research",
+      "contextIntake": "artifact_only",
+      "visualTier": "visual",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page"
+      ],
+      "argumentHint": "<channel URL or @handle> [--count N] [--peer-limit N] [--query-limit N] [--window 30|90|180|365]",
+      "platform": "codex",
+      "command": "$youtube-meta-research",
+      "scope": "pack",
+      "pack": "youtube-ops",
+      "path": "packs/youtube-ops/codex/youtube-meta-research/SKILL.md",
+      "mirrorKey": "youtube-meta-research",
+      "tags": [
+        "codex",
+        "meta",
         "pack",
         "research",
         "youtube",
@@ -11298,9 +11354,9 @@
       "type": "router",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [],
-      "argumentHint": "[natural language] | --health <channel> | --concept \\\"<idea>\\\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --status",
+      "argumentHint": "[natural language] | --health <channel> | --concept \\\"<idea>\\\" [--channel <slug>] | --launch <unlisted-video-url> | --intel <video-urls...> | --meta <channel> | --status",
       "platform": "codex",
       "command": "$youtube",
       "scope": "pack",
@@ -11768,7 +11824,7 @@
         "claude",
         "codex"
       ],
-      "skillCount": 30,
+      "skillCount": 32,
       "path": "packs/youtube-ops/PACK.md"
     }
   ],
@@ -11949,6 +12005,13 @@
           "suggested_card_ids": [
             "pack-ord-claude-ord-ship"
           ]
+        },
+        {
+          "key": "traction",
+          "name": "Traction",
+          "suggested_card_ids": [
+            "pack-ord-claude-ord-traction"
+          ]
         }
       ]
     },
@@ -11977,6 +12040,13 @@
           "name": "Ship",
           "suggested_card_ids": [
             "pack-vard-claude-vard-ship"
+          ]
+        },
+        {
+          "key": "traction",
+          "name": "Traction",
+          "suggested_card_ids": [
+            "pack-vard-claude-vard-traction"
           ]
         }
       ]
