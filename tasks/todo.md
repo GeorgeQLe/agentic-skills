@@ -1,44 +1,44 @@
 # Current Task State
 
-## Current Implementation - YouTube Owner Analytics Platform Investigation
+## Current Implementation - YouTube Owner Analytics Alignment Page
 
-**Status:** Complete - architecture brief shipped.
+**Status:** Complete - alignment review page shipped.
 
 Project: `agentic-skills`.
 
 ### Goal
 
-Investigate a local-first YouTube owner analytics wrapper for one owned channel. Produce a decision-ready architecture brief at `research/youtube-owner-analytics-platform.md` covering current skill data needs, official API fit, local architecture, CLI/file contracts, scheduling, security, risks, and build/no-build recommendation.
+Convert `research/youtube-owner-analytics-platform.md` into a convention-compliant HTML alignment review page at `alignment/investigate-youtube-owner-analytics-platform.html`, update the central alignment index, verify the page, and ship only the intended tracked changes.
 
 ### Execution Profile
 
-- Parallel mode: parallel read-only repo inspection where useful; serial document edits.
-- Reason: this is a research/architecture deliverable with no implementation, credentials, scheduler setup, or skill contract changes.
-- Safety boundary: do not create OAuth credentials, write wrapper scripts, alter skills, set up schedulers, or place secrets in repo artifacts.
+- Parallel mode: parallel read-only inspection where useful; serial edits to task docs, alignment page, and index.
+- Reason: this is a durable review artifact conversion with alignment-page convention requirements and repository index maintenance.
+- Safety boundary: do not create OAuth credentials, wrapper scripts, schedulers, skill contract edits, or private YouTube analytics data. Leave unrelated dirty package metadata untouched.
 
 ### Plan
 
-- [x] Capture the visible `$investigate` invocation prompt and promote this investigation into task tracking.
-- [x] Audit active YouTube skill data needs, especially `--owner-analytics <path>`, `research/youtube/data/`, and report evidence expectations.
-- [x] Research official YouTube Data API v3, YouTube Analytics API, and YouTube Reporting API fit from primary documentation.
-- [x] Define the local-first architecture, CLI surface, normalized file layout, evidence contract, scheduling options, and security model.
-- [x] Validate the proposed outputs against current `youtube-video-audit` owner-analytics inputs and requested schedule/failure scenarios.
-- [x] Write and verify `research/youtube-owner-analytics-platform.md`.
-- [x] Commit and push intended tracked changes, without touching unrelated local edits.
+- [x] Read project lessons, the alignment-page convention, source research brief, existing alignment examples, and current git status.
+- [x] Capture this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Create `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page with rendered sections, evidence tables, gates, section feedback, compile YAML, TTS, and question navigation.
+- [x] Update `alignment/index.html` with the new dated page entry in the Utility & Maintenance category.
+- [x] Run `node scripts/audit-alignment-pages.mjs`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+- [x] Attempt to open the generated page with the repository helper.
+- [x] Document results, commit, and push intended changes while preserving unrelated local edits.
 
 ### Acceptance Criteria
 
-- [x] Brief names the current repo/skill data needs and how normalized files satisfy them without changing `youtube-video-audit`.
-- [x] Brief includes an API capability matrix with sourced claims for OAuth, quotas, metrics, delays, retention, and Reporting API tradeoffs.
-- [x] Brief specifies raw and normalized evidence layout under `research/youtube/data/`, including metric provenance and explicit gaps.
-- [x] Brief covers manual, daily channel, and recent-upload refresh scenarios plus expected failure handling.
-- [x] Brief makes a build/no-build recommendation for a local-first CLI wrapper.
+- [x] The HTML page preserves the research brief's executive recommendation, repo/skill needs, API capability matrix, OAuth/quota/delay findings, architecture, CLI/file contracts, normalized evidence contract, scheduling, security, failure handling, validation, open questions, and official source list as structured HTML.
+- [x] The page declares `data-alignment-category="utility"`, `data-visual-tier="document"`, and `data-alignment-status="review"` and includes the required TTS and question-nav script tags.
+- [x] Review gates cover final artifact approval, MVP scope, Reporting API timing, evidence privacy, and unresolved open questions.
+- [x] `alignment/index.html` links the new page exactly once with a `2026-07-01` date.
+- [x] Alignment and task-doc audits pass, and the diff contains no unrelated package metadata changes.
 
 ### Test Plan
 
-- `rg -n "owner-analytics|research/youtube/data|audienceRetention|trafficSource|subscribersGained|impressions" packs/youtube-ops .codex/skills`
-- `test -f research/youtube-owner-analytics-platform.md`
-- `rg -n "Build recommendation|API Capability Matrix|Evidence Contract|youtube-video-audit|OAuth|Reporting API" research/youtube-owner-analytics-platform.md`
+- `test -f alignment/investigate-youtube-owner-analytics-platform.html`
+- `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html`
+- `node scripts/audit-alignment-pages.mjs`
 - `node scripts/audit-task-docs.mjs`
 - `git diff --check`
 
@@ -46,12 +46,13 @@ Investigate a local-first YouTube owner analytics wrapper for one owned channel.
 
 Verified:
 
-- Created `research/youtube-owner-analytics-platform.md` as an architecture brief only; no OAuth credentials, scripts, scheduler setup, or skill edits were created.
-- Confirmed current YouTube owner-analytics needs from `packs/youtube-ops/codex/youtube-video-audit/SKILL.md`, `packs/youtube-ops/codex/youtube-audit/SKILL.md`, and `packs/creator-foundation/codex/creator-metrics-review/SKILL.md`.
-- Researched official YouTube/Google docs for OAuth, Data API public metadata/comments, Analytics API targeted owner reports, Reporting API bulk reports, quota behavior, data delay, privacy thresholds, report retention, and verification implications.
-- `rg -n "owner-analytics|research/youtube/data|audienceRetention|trafficSource|subscribersGained|impressions" packs/youtube-ops .codex/skills` passed and confirmed the active skill contract surface.
-- `test -f research/youtube-owner-analytics-platform.md` passed.
-- `rg -n "Build recommendation|Build / No-Build Recommendation|API Capability Matrix|Evidence Contract|youtube-video-audit|OAuth|Reporting API" research/youtube-owner-analytics-platform.md` passed.
+- Created `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page for `research/youtube-owner-analytics-platform.md`.
+- Rendered the source brief as structured sections, tables, code blocks, evidence rules, source links, section feedback controls, required review gates, and a bottom `Compile Responses` YAML compiler.
+- Updated `alignment/index.html` from 61 to 62 pages and linked the new page under Utility & Maintenance with date `2026-07-01`.
+- `test -f alignment/investigate-youtube-owner-analytics-platform.html` passed.
+- `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html` passed.
+- `node scripts/audit-alignment-pages.mjs` passed with all checks exact.
 - `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings.
 - `git diff --check` passed.
-- Intended tracked changes were committed and pushed without staging the unrelated package metadata edits.
+- Open status: `opened` via `node scripts/open-html-page.mjs alignment/investigate-youtube-owner-analytics-platform.html --browser auto`.
+- Unrelated pre-existing edits in `packages/skillpacks/dist/skillpacks-manifest.json` and `packages/skillpacks/package.json` were left untouched.

@@ -2,7 +2,60 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - YouTube Owner Analytics Platform Investigation
+## Current Implementation - YouTube Owner Analytics Alignment Page
+
+**Status: COMPLETE (2026-07-01) - alignment review page shipped.**
+
+### Goal
+
+Convert `research/youtube-owner-analytics-platform.md` into a convention-compliant HTML alignment review page at `alignment/investigate-youtube-owner-analytics-platform.html`, update the central alignment index, verify the page, and ship only the intended tracked changes.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits to task docs, alignment page, and index.
+- Reason: this is a durable review artifact conversion with alignment-page convention requirements and repository index maintenance.
+- Safety boundary: do not create OAuth credentials, wrapper scripts, schedulers, skill contract edits, or private YouTube analytics data. Leave unrelated dirty package metadata untouched.
+
+### Plan
+
+- [x] Read project lessons, the alignment-page convention, source research brief, existing alignment examples, and current git status.
+- [x] Capture this implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Create `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page with rendered sections, evidence tables, gates, section feedback, compile YAML, TTS, and question navigation.
+- [x] Update `alignment/index.html` with the new dated page entry in the Utility & Maintenance category.
+- [x] Run `node scripts/audit-alignment-pages.mjs`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+- [x] Attempt to open the generated page with the repository helper.
+- [x] Document results, commit, and push intended changes while preserving unrelated local edits.
+
+### Acceptance Criteria
+
+- [x] The HTML page preserves the research brief's executive recommendation, repo/skill needs, API capability matrix, OAuth/quota/delay findings, architecture, CLI/file contracts, normalized evidence contract, scheduling, security, failure handling, validation, open questions, and official source list as structured HTML.
+- [x] The page declares `data-alignment-category="utility"`, `data-visual-tier="document"`, and `data-alignment-status="review"` and includes the required TTS and question-nav script tags.
+- [x] Review gates cover final artifact approval, MVP scope, Reporting API timing, evidence privacy, and unresolved open questions.
+- [x] `alignment/index.html` links the new page exactly once with a `2026-07-01` date.
+- [x] Alignment and task-doc audits pass, and the diff contains no unrelated package metadata changes.
+
+### Results
+
+- Added `alignment/investigate-youtube-owner-analytics-platform.html` as a review-state document-tier alignment page for `research/youtube-owner-analytics-platform.md`.
+- Rendered the brief as structured HTML sections, tables, code blocks, evidence rules, source links, section feedback controls, required review gates, and a bottom `Compile Responses` YAML compiler.
+- Updated `alignment/index.html` from 61 to 62 pages and added the new page under Utility & Maintenance.
+- Verified:
+  - `test -f alignment/investigate-youtube-owner-analytics-platform.html`
+  - `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html`
+  - `node scripts/audit-alignment-pages.mjs`
+  - `node scripts/audit-task-docs.mjs`
+  - `git diff --check`
+- Open status: `opened` via `node scripts/open-html-page.mjs alignment/investigate-youtube-owner-analytics-platform.html --browser auto`.
+
+### Test Plan
+
+- `test -f alignment/investigate-youtube-owner-analytics-platform.html`
+- `rg -n "YouTube Owner Analytics Platform|Build the local wrapper|API Capability Matrix|Normalized Evidence Contract|Compile Responses" alignment/investigate-youtube-owner-analytics-platform.html`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+## Historical Implementation - YouTube Owner Analytics Platform Investigation
 
 **Status: COMPLETE (2026-07-01) - architecture brief shipped.**
 
