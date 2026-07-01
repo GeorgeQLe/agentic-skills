@@ -1,4 +1,4 @@
-schema_version: v0.4
+schema_version: v0.5
 topic: invoice-approval
 mode: flat
 route:
@@ -10,6 +10,59 @@ route:
   - spec-interview
 source_artifacts:
   - design/user-flow-invoice-approval.md
+platform_fit:
+  candidates:
+    - platform: web_app
+      fit: high
+      evidence_basis: Finance reviewers work from desktop browsers inside existing approval queues.
+      moment_of_need: Reviewer opens a pending invoice, checks policy status, and approves during an accounting review block.
+      job_shape: Dense review, exception inspection, and auditable approval actions fit a browser workspace.
+      adoption_friction: Low because users already authenticate into the finance portal.
+      permission_or_trust_burden: Moderate because invoice data and approval authority must be explicit and auditable.
+      distribution_fit: Strong fit for internal rollout through the existing finance web entry point.
+      monetization_fit: Strong fit for seat-based back-office workflow value.
+      technical_leverage: Reuses existing browser auth, policy checks, and audit logs.
+      fatal_risks: []
+      required_probe: Validate reviewer comprehension of policy exceptions in the web approval path.
+      status: selected
+    - platform: cli
+      fit: medium
+      evidence_basis: Finance operations may need batch approval diagnostics, but primary approvers are not command-line users.
+      moment_of_need: Operations lead audits blocked approvals or reruns policy validation outside the UI.
+      job_shape: Batch inspection and repair commands fit a CLI, but primary invoice approval does not.
+      adoption_friction: High for ordinary reviewers; acceptable for finance operations.
+      permission_or_trust_burden: High because shell access must never bypass approval authority.
+      distribution_fit: Narrow internal tool distribution.
+      monetization_fit: Companion efficiency value only.
+      technical_leverage: Can reuse policy validation logic and emit machine-readable audit output.
+      fatal_risks:
+        - CLI could be mistaken for an approval bypass if authority boundaries are unclear.
+      required_probe: Build a thin validation command that proves audit clarity without approving invoices.
+      status: probe
+    - platform: native_mobile
+      fit: low
+      evidence_basis: Current evidence shows approval happens during focused desk review rather than on-the-go triage.
+      moment_of_need: Occasional notification triage, not full approval review.
+      job_shape: Complex line-item and policy inspection is weak on small screens.
+      adoption_friction: Medium because app installation adds a rollout step.
+      permission_or_trust_burden: High due to sensitive finance data on personal devices.
+      distribution_fit: Weak until mobile approvals become frequent.
+      monetization_fit: Low incremental value for the current MVP.
+      technical_leverage: Limited reuse beyond notification hooks.
+      fatal_risks:
+        - Reviewers may approve without enough line-item context.
+      required_probe: Defer until UAT shows frequent mobile approval demand.
+      status: defer
+  recommendation:
+    primary: web_app
+    companion:
+      - cli
+    defer:
+      - native_mobile
+    reject:
+      - marketplace_multi_sided
+      - game_playable
+    decision_rationale: Build the web approval path as the primary product and probe a non-visual CLI validation companion only for finance operations audit risk.
 branch_order_override:
   scope: user-flow
   ordered_branch_ids:
@@ -137,4 +190,19 @@ prototype_build_plan:
       artifacts:
         - design/ui-invoice-approval.md
       prototype_path: prototypes/invoice-approval/variation-1/
+    - id: cli-policy-validation-probe
+      label: CLI policy validation probe
+      status: pending
+      user_flow_branch_id: submit-and-approve
+      ux_variation_id: guided-wizard
+      artifacts:
+        - design/prototype-build-plan-invoice-approval.md
+      prototype_path: prototypes/invoice-approval/platform-probes/cli-policy-validation/
+      platform_probe:
+        platform: cli
+        probe_type: cli_script
+        risk_tested: Whether finance operations can inspect policy failures without bypassing invoice approval authority.
+        evidence_target: Operations lead can run the command, read the audit output, and confirm it cannot approve or mutate invoices.
+        non_visual: true
+      notes: Thin platform probe only; keep approval workflow in the primary web app prototype.
 last_updated: "2026-06-21T00:00:00Z"

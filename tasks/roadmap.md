@@ -2,9 +2,53 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Reconcile Rapid Deck Graduation
+## Current Implementation - Platform Fit Workshop
 
-**Status: IN PROGRESS (2026-07-01) - normalizing VARD/ORD graduation through traction gates into AFPS.**
+**Status: IN PROGRESS (2026-07-01) - adding platform-fit ranking and probe routing to the product-design tree.**
+
+### Goal
+
+Add a first-class Platform Fit Workshop to the product-design design tree so `user-flow-map` ranks candidate platforms, records the decision in `flow-tree` manifests, creates thin platform probes when needed, and carries prototype evidence into final `spec-interview` platform lock.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial mutations for schema, generated docs, mirrored skill contracts, tests, and task docs.
+- Reason: this touches the product-design flow-tree contract, generated bundled convention files, mirrored skill behavior, and regression coverage.
+- Safety boundary: keep the fixed route tuple unchanged, avoid standalone platform skills, preserve unrelated paused YouTube task notes, and do not create GitHub Actions.
+
+### Plan
+
+- [x] Inspect current schema, sample manifest, design-tree convention, mirrored skills, tests, and active task docs.
+- [x] Update the task docs with the active implementation contract and review section.
+- [x] Update `design/flow-tree.schema.json` to `v0.5` with additive `platform_fit` and `prototype_build_item.platform_probe` support.
+- [x] Update `design/flow-tree-sample.yaml` with a realistic platform-fit matrix and one thin platform probe.
+- [x] Update canonical design-tree docs and regenerate bundled `DESIGN-TREE-LOOP.md` files.
+- [x] Archive, bump, and update changed mirrored skills and changelogs.
+- [x] Extend focused layer1 tests for schema, sample, route stability, platform-probe validation, and mirror contracts.
+- [x] Run focused verification, generator check, archive audit, and relevant layer1 tests.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [x] `flow-tree.schema.json` uses `schema_version: v0.5`, keeps the six-step route unchanged, and makes `platform_fit` optional/additive.
+- [x] `platform_fit.candidates[]` covers the broad platform set, fit/status values, evidence basis, platform-specific risk fields, required probe, and recommendation buckets.
+- [x] `prototype_build_item.platform_probe` allows explicitly non-visual platform probes without requiring `ui_experiment_id`, while ordinary UI build items still link to a UI experiment.
+- [x] Design-tree docs frame Platform Fit as a `user-flow-map` trunk concern and platform probes as thin risk tests, not full parallel products.
+- [x] Mirrored skills mention Platform Fit Workshop, broad candidate set, platform probes, and `spec-interview` final production platform lock where applicable.
+- [x] Changed `SKILL.md` files are archived and versioned with changelog entries.
+
+### Test Plan
+
+- `npm test -- tests/layer1/product-design-flow-tree.test.ts`
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `bash scripts/skill-archive-audit.sh --strict`
+- Relevant focused layer1 suite if the targeted tests pass.
+- `git diff --check`
+- `git status --short --branch`
+
+## Historical Implementation - Reconcile Rapid Deck Graduation
+
+**Status: COMPLETE (2026-07-01) - normalized VARD/ORD graduation through traction gates into AFPS.**
 
 ### Goal
 

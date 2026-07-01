@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.19 - 2026-07-01
+
+- Required AFPS graduation platform strategy when Platform Fit Workshop or platform-probe evidence exists.
+- Added final production platform decision coverage to the spec and Production Ready Approval.
+- Added `platform_fit` modify-back routing for unresolved platform-strategy gaps.
+
 ## v0.18 - 2026-06-27
 
 - Updated post-prototype spec intake to consume upstream surface inventory, channels, visual UI candidates, and route/screen realizations as design evidence.

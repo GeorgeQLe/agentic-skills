@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated route/screen realizations and channel behavior to extract production specifications
 type: planning
-version: v0.19
+version: v0.18
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[--ideas]"
 context_intake: deep
@@ -18,7 +18,7 @@ Before starting the interview process, verify:
 
 1. A consolidated prototype exists at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-prototypes` first.
 2. An AFPS graduation document exists at `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`. If missing, halt and recommend `$consolidate-prototypes` to produce the graduation document before spec work.
-3. The AFPS graduation document marks the consolidated MVP ready for post-prototype cleanup and production specification and includes the recommended platform strategy from Platform Fit Workshop / platform-probe evidence when those exist. If it lists unresolved consolidation decisions, platform risks, or blocking prototype risks, halt and recommend resolving those first.
+3. The AFPS graduation document marks the consolidated MVP ready for post-prototype cleanup and production specification. If it lists unresolved consolidation decisions or blocking prototype risks, halt and recommend resolving those first.
 4. All blocking research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research, contradicted research, stale research, or pre-spec blockers. If unchecked blocking post-prototype items remain, halt and recommend completing those first.
 
 If both gates pass, proceed with the interview.
@@ -33,15 +33,15 @@ Use this skill when the user has a consolidated prototype and research context t
 
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md` as the tree's **terminal spec writer**, formalizing the approved MVP into a production-ready v1 specification. The `## Process` steps below group by stage:
 
-- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, AFPS graduation readiness, platform strategy, research frame, and that no unchecked blocking post-prototype items remain.
-- **Stage 1 — Research**: read the consolidated prototype, research context, AFPS graduation platform strategy, and `design/**/flow-tree-*.yaml` as upstream surface/channel, platform-fit, and route/screen realization evidence.
+- **Stage 0 — Interrogation**: the `## Prototype Gate` plus the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` and the prototype-grounded assumptions checkpoint — confirm the consolidated prototype, AFPS graduation readiness, research frame, and that no unchecked blocking post-prototype items remain.
+- **Stage 1 — Research**: read the consolidated prototype, research context, and `design/**/flow-tree-*.yaml` as upstream surface/channel and route/screen realization evidence.
 - **Stage 2 — Design**: walk each consolidated route/screen realization and relevant non-visual channel behavior to extract production behaviors, data, contracts, and acceptance criteria.
 - **Stage 3 — Plan**: the surface-aware route/screen spec outline is the slice the implementation phase realizes.
 - **Stage 4 — Implement (scoped)**: write the production specification, keeping `specs/` as the canonical output directory, behind the single binding alignment gate. This same confirmed alignment record owns the Production Ready Approval: approval to move from concept/prototype/spec into a production product build, not proof that the product is already shipped.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the approved tree, resolves the consolidated MVP ready to specify, runs the staged flow, writes the spec on approval, and stops with the handoff in `## Next Work`.
 
-**Modify-back.** If specification reveals an unresolved design flaw or platform-strategy gap, record a `modify` decision whose `targets[]` re-opens the upstream `model_ref`, `platform_fit`, or user-flow branch rather than encoding the gap into the spec.
+**Modify-back.** If specification reveals an unresolved design flaw, record a `modify` decision whose `targets[]` re-opens the upstream `model_ref` or user-flow branch rather than encoding the gap into the spec.
 
 ## Process
 
@@ -62,7 +62,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 1. **Read consolidated prototype and research context:**
    - Read the consolidated prototype directory at `prototypes/{topic}/consolidated/` as the primary input. Walk through every screen, component, and interaction in the prototype to understand the current state.
    - Read `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` as the readiness signal from consolidation into post-prototype cleanup and production specification.
-   - Require the AFPS graduation platform strategy when `platform_fit` or `platform_probe` evidence exists. Treat it as the starting platform decision, not a loose suggestion.
    - Read the consolidation interview log and `alignment/consolidate-prototypes-{topic}.html` when present. Treat final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, and stale-research cleanup notes as upstream evidence, not as a separate production-readiness state store.
    - Check `.agents/project.json` first. If it exists, use `project_type` and `enabled_packs` to choose the right research frame:
      - `business-app` → use business research artifacts such as `research/icp.md`.
@@ -70,7 +69,7 @@ When product path `{slug}` is active, read and write research under `research/{s
      - `devtool` → use devtool artifacts such as `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-integration-map.md`.
    - If project type is missing or mismatched, recommend `scripts/pack.sh recommend`, `npx skillpacks install <pack>` from the project shell before doing domain-specific planning.
    - For business-app projects, check if `research/idea-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `npx skillpacks install customer-lifecycle` from the project shell, before `$journey-map`. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
-   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for surface inventory, channels, platform fit, platform probes, visual UI candidates, route/screen realizations, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
+   - Read `design/user-flow-*.md`, `design/ux-variations-*.md`, `design/ui-*.md`, and `design/**/flow-tree-*.yaml` when present as upstream pre-prototype design evidence for surface inventory, channels, visual UI candidates, route/screen realizations, branch decisions, state coverage, failure/recovery paths, handoffs, selected UX variation branches, UI approval state, and low-fidelity wireframe intent.
 
 2. **Surface a prototype-grounded assumptions checkpoint before probing:**
    - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
@@ -87,7 +86,6 @@ When product path `{slug}` is active, read and write research under `research/{s
      - What the prototype assumes about **auth** — none? mock? real?
      - What **fake data needs to become real** — hardcoded lists, mock APIs, placeholder content
      - What **missing infrastructure** is needed — database, auth, payments, analytics, deployment
-     - What the AFPS graduation **platform strategy** implies for production architecture, permissions, distribution, monetization, and companion surfaces
      - What **error/empty states** the prototype skips vs what production needs
    - Deliver the checkpoint inline as the final message text of its own turn — never only as mid-turn text in a turn that ends with a tool or command call. In the next turn, ask the user to confirm or correct it together with one focused interview question so momentum is kept. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
@@ -115,8 +113,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If the user approves a prototype update, make the change and note it in the interview log before continuing.
 
 5. **Cover all areas:**
-   - Continue until implementation goals, final production platform decision, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
-   - Resolve remaining platform risks explicitly. If a platform risk changes the primary platform, companion platform, permission/trust model, distribution path, monetization path, or technical leverage assumptions, route back to `$consolidate-prototypes` or `$user-flow-map` instead of burying the uncertainty in the spec.
+   - Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
    - **Coverage checkpoint** — Before concluding, present a structured summary inline as the final message text of its own turn: list each area covered with key decisions made and the evidence/reasoning that supported each. In the next turn, ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
@@ -133,7 +130,6 @@ When product path `{slug}` is active, read and write research under `research/{s
   - `## Acceptance Criteria`
   - `## Open Questions`
   - `## Assumptions & Risks` (the checkpoint output)
-  - `## Production Platform Decision`
   Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
 - Write an interview log to `[topic]-interview.md`
 
@@ -145,7 +141,7 @@ The interview log should include:
 - The user's responses and chosen direction
 - A closing summary of significant deviations from the initial draft and why they changed
 
-Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user. Include a **Production Platform Decision** section naming the final primary platform, companion platforms, deferred/rejected platforms, probe evidence, and production implications. Include a **Production Ready Approval** section in the spec or alignment page before implementation handoff. Follow `docs/production-ready-approval.md`: record the approved MVP scope, evidence basis, final production platform decision, remaining blockers, and whether the concept/prototype is approved to enter production build. Do not create a new state database, `research/.progress.yaml` schema, or competing lifecycle registry.
+Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user. Include a **Production Ready Approval** section in the spec or alignment page before implementation handoff. Follow `docs/production-ready-approval.md`: record the approved MVP scope, evidence basis, remaining blockers, and whether the concept/prototype is approved to enter production build. Do not create a new state database, `research/.progress.yaml` schema, or competing lifecycle registry.
 
 ### Alignment Page
 

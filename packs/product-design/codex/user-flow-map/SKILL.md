@@ -2,7 +2,7 @@
 name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into flow and surface structure with entry points, decisions/actions/states, branches, channels, failure paths, and low-fidelity UI-candidate guidance before UX/UI/spec/prototype work
 type: planning
-version: v1.8
+version: v1.9
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep
@@ -20,7 +20,9 @@ Invoke as `$user-flow-map`.
 
 Use this skill after positioning and before UX/UI/prototype work when a product, feature, or goal sequence needs concrete user-flow structure: entry points, surfaces, channels, actions, decisions, branches, states, failure paths, handoffs, and low-fidelity notes for surfaces that may become UI. Treat the output as the root of a design tree: each mapped user flow can fan out into `$ux-variations [flow]`, where the team explores alternate ways users can progress through that specific flow before any one variation is promoted into `$ui-interview`. After the flow map is approved, the recommended next step is `$state-model [topic]` — an orthogonal sibling that authors the flow-anchored logical domain model (entities, state machines, events, logical contracts) once, so `$ux-variations` and `$ui-interview` re-skin a real substrate rather than inventing the model per presentation. `$state-model` is optional and does not change the flow-tree route; route directly to `$ux-variations` when the domain is trivial.
 
-Use `$user-flow-map --prototype-build-plan [topic]` after `$ui-interview` branch decisions exist to synthesize the approved design tree into one prototype build ledger. This later synthesis mode does not remap the original flows; it reads the flow-tree manifest, branch decisions, UX variation plans, UI branch packets, and any user overrides, then writes `design/prototype-build-plan-[topic].md` as the todo contract for `$logic-wiring`.
+This skill also owns the **Platform Fit Workshop** after the surface/channel inventory is clear: rank candidate product platforms as hypotheses against user context, moment of need, adoption path, permissions/trust, distribution, monetization, and technical leverage. Record early platform hints from upstream evidence, but decide platform fit here, not in `idea-scope-brief`.
+
+Use `$user-flow-map --prototype-build-plan [topic]` after `$ui-interview` branch decisions exist to synthesize the approved design tree into one prototype build ledger. This later synthesis mode does not remap the original flows; it reads the flow-tree manifest, branch decisions, UX variation plans, UI branch packets, platform-fit recommendation, platform-probe needs, and any user overrides, then writes `design/prototype-build-plan-[topic].md` as the todo contract for `$logic-wiring`.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill owns the wireframe-tree root and later build-plan synthesis; it does not use Pattern A selected-framework manifests or `tasks/todo.md` for branch progress.
 
@@ -40,13 +42,13 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the **Flow Assumptions Checkpoint** (step 2) — confirm persona, scope, and flow boundaries before mapping.
 - **Stage 1 — Research**: **Resolve Context** (step 1) — read idea/research/positioning/journey evidence and existing `design/` artifacts; Product-Path Scope Resolution and the Design Flow Tree Manifest (steps 0/0b) resolve where the tree lives.
-- **Stage 2 — Design**: **Map The Flow** (step 3) and the **Flow Coverage Checkpoint** (step 4) — author flow structure, surfaces, channels, states, branches, and low-fidelity notes for visual UI candidates.
+- **Stage 2 — Design**: **Map The Flow** (step 3), the **Flow Coverage Checkpoint** (step 4), and the **Platform Fit Workshop** (step 4a) — author flow structure, surfaces, channels, states, branches, low-fidelity notes for visual UI candidates, and platform-fit ranking.
 - **Stage 3 — Plan**: **Prototype Build-Plan Synthesis Mode** (step 5) — synthesize the approved tree into the `design/prototype-build-plan-[topic].md` slice `$logic-wiring` realizes.
 - **Stage 4 — Implement (scoped)**: write the flow doc, initialize the `flow-tree-[topic].yaml` root, grow one user-flow branch per flow, and pass the single binding alignment gate (`## Alignment Page`) before any canonical write.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the next pending unit (the next unmapped flow, or in build-plan mode the next branch needing a build item), runs the staged flow scoped to it, grows the child nodes on approval, and stops with the handoff in `## Next Work`.
 
-**Modify-back.** Downstream validation can re-open this root's branches: a `modify` decision recorded in the flow-tree `decisions[]` names `targets[]` pointing at a user-flow branch to re-open, returning it to pending so this skill re-runs its flow on that branch and marks descendant branches stale.
+**Modify-back.** Downstream validation can re-open this root's branches: a `modify` decision recorded in the flow-tree `decisions[]` names `targets[]` pointing at a user-flow branch or `platform_fit` to re-open, returning it to pending so this skill re-runs its flow on that branch or workshop and marks descendant branches stale.
 
 ## Process
 
@@ -70,12 +72,12 @@ Use `design/flow-tree.schema.json` as the machine-readable contract for the pre-
 
 - Product-path mode writes one scoped manifest at `design/{slug}/flow-tree-{topic}.yaml`.
 - Flat mode writes one scoped manifest at `design/flow-tree-{topic}.yaml`.
-- Initialize the manifest when writing the flow map. Set `schema_version: v0.4`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, logic-wiring, consolidate-prototypes, spec-interview]`, `source_artifacts`, and one `branches[]` entry per named user-flow branch.
+- Initialize the manifest when writing the flow map. Set `schema_version: v0.5`, `mode`, `topic`, `product_path` when scoped, `route: [user-flow-map, ux-variations, ui-interview, logic-wiring, consolidate-prototypes, spec-interview]`, `source_artifacts`, optional `platform_fit`, and one `branches[]` entry per named user-flow branch. The route tuple is fixed; Platform Fit is trunk state, not a route step.
 - Only named user-flow branches become `branches[]` entries in the design-tree manifest. Surfaces are supporting flow-map detail unless a downstream UX/UI skill promotes a surface into a UX variation, UI experiment, build item, or model attachment.
 - Order `branches[]` by journey progression by default: discovery or activation before first-value, first-value before ongoing-use, recovery and handoff where they actually occur, and ascending `journey_sequence` inside each stage. Use raw authoring order only as a stable tiebreaker after journey sequence and explicit fit/rationale metadata.
 - Each user-flow branch must include `journey_stage`, `journey_sequence`, `priority_rationale`, and `progressive_review` metadata. The progressive review entry must name the first value moment, primary task path, and progressive review sequence for reviewers before downstream UX/UI work begins.
 - If the user explicitly overrides the default branch order, keep the user-chosen order and explain the override in `priority_rationale`. Persist branch order override metadata in `design/**/flow-tree-*.yaml` with schema-backed `ordered_branch_ids`, `override_rationale`, `recorded_at`, and optional `parent_branch_id` for UX-variation overrides.
-- In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references and one build item per approved UI experiment that should be prototyped.
+- In prototype-build-plan mode, add or update the manifest `prototype_build_plan` object with artifact references, one build item per approved UI experiment that should be prototyped, and one build item per approved `platform_probe` candidate when more than one serious platform remains.
 - Track user-flow, UX-variation, UI experiment, prototype build item, and approve/reject/retry decision state only in the design manifest. Do not write UX branch state to `research/.progress.yaml`; that file remains product-path/product-line tracking.
 - Reference all pre-prototype design artifacts from the manifest using repo-relative paths.
 - Do not mirror user-flow, UX variation, UI review, prototype build, or branch decision progress into `tasks/todo.md`.
@@ -157,6 +159,32 @@ Before writing deliverables, present a **Flow Coverage Checkpoint** inline as th
 
 In the next turn, ask whether any flow branch, state, or handoff is missing before writing.
 
+### 4a. Platform Fit Workshop
+
+Run this workshop after the Surface Inventory is complete and before prototype-build-plan synthesis. Do not filter candidates solely by deck or project type; use deck/project defaults only as starting hypotheses, and let user evidence override them.
+
+Rank the broad candidate set: `web_app`, `mobile_web_pwa`, `native_mobile`, `native_desktop`, `cli`, `api`, `sdk`, `browser_extension`, `marketplace_multi_sided`, `integration_automation`, `game_playable`, and `other`.
+
+For each plausible candidate, record a row with:
+
+- `platform`
+- `fit`: `high`, `medium`, `low`, or `rejected`
+- `evidence_basis`
+- `moment_of_need`
+- `job_shape`
+- `adoption_friction`
+- `permission_or_trust_burden`
+- `distribution_fit`
+- `monetization_fit`
+- `technical_leverage`
+- `fatal_risks[]`
+- `required_probe`
+- `status`: `recommended`, `probe`, `defer`, `reject`, or `selected`
+
+Then write `platform_fit.recommendation` with `primary`, optional `companion[]`, `defer[]`, `reject[]`, and `decision_rationale`.
+
+Only `high` or unresolved `medium` candidates should get platform probes. A platform probe is the smallest artifact that can test a platform-specific risk: web/mobile clickable HTML, CLI script, API mock + curl, SDK sample, browser-extension simulation, desktop/local shell, integration automation harness, or marketplace two-sided flow. Do not create full parallel products per platform.
+
 ### 5. Prototype Build-Plan Synthesis Mode
 
 When invoked with `--prototype-build-plan`, "prototype build plan", "prototype todo", or equivalent wording, run this mode after the normal flow/UX/UI branch work exists:
@@ -164,11 +192,12 @@ When invoked with `--prototype-build-plan`, "prototype build plan", "prototype t
 1. Read the scoped `design/**/flow-tree-*.yaml`, `design/user-flow-*.md`, `design/ux-variations-*.md`, and `design/ui-*.md` artifacts.
 2. Identify every user-flow branch, UX variation branch, and UI experiment branch with an approved or retryable decision.
 3. Create one prototype build item for each approved UI experiment that should be made tangible in `$logic-wiring`.
-4. Mark rejected branches as dropped and do not include them as buildable items unless the user explicitly overrides.
-5. Mark out-of-scope, expensive, or low-confidence branches as deferred when the user chooses not to prototype them now.
-6. Mark branches that need design or UI correction before prototyping as needs-revision.
-7. Preserve user overrides, including building from a concept-only root when the user explicitly bypasses missing research.
-8. Produce a build sequence that keeps the work lightweight and independently reviewable; each item should be small enough for `$logic-wiring --variant N` to build or rebuild.
+4. Read `platform_fit.candidates[]` and create `platform_probe` build items only for `high` or unresolved `medium` candidates with status `probe` or `recommended` when more than one serious platform remains. Low and rejected candidates stay documented with rationale and are not buildable by default.
+5. Mark rejected branches as dropped and do not include them as buildable items unless the user explicitly overrides.
+6. Mark out-of-scope, expensive, or low-confidence branches as deferred when the user chooses not to prototype them now.
+7. Mark branches that need design, UI, or platform-fit correction before prototyping as needs-revision.
+8. Preserve user overrides, including building from a concept-only root when the user explicitly bypasses missing research.
+9. Produce a build sequence that keeps the work lightweight and independently reviewable; each item should be small enough for `$logic-wiring --variant N` to build or rebuild. Platform probes are thin artifacts that test platform-specific risks, not full parallel products.
 
 Before writing the build plan, present a **Prototype Build Plan Checkpoint** as the final message text of its own turn. Include:
 
@@ -176,6 +205,7 @@ Before writing the build plan, present a **Prototype Build Plan Checkpoint** as 
 - Items that need revision before prototyping.
 - Items deferred or dropped, with rationale.
 - Source user-flow branch, UX variation, and UI experiment IDs for each item, including the manifest `ui_experiment_id`.
+- Platform-probe items, if any, including platform, probe type, risk tested, evidence target, whether the probe is non-visual, and why it is needed before platform lock.
 - Expected prototype path for each buildable item.
 - Any user overrides or research gaps carried into the plan.
 
@@ -212,6 +242,7 @@ The user-flow spec must include:
 - Flow-tree manifest branch IDs and artifact references.
 - Ordered branch table showing journey stage, journey sequence, priority rationale, first value moment, primary task path, and progressive review sequence for each `branches[]` entry.
 - Record explicit user branch-order overrides in `design/user-flow-[topic].md`, including the requested order, rationale, affected branch IDs, and whether the override changes first-value or activation review order.
+- Platform Fit Workshop ranked matrix covering the broad candidate set, fit/status, evidence basis, moment of need, job shape, adoption friction, permissions/trust burden, distribution fit, monetization fit, technical leverage, fatal risks, required probe, recommendation, and decision rationale.
 
 The interview log must include:
 
@@ -219,12 +250,13 @@ The interview log must include:
 - The Flow Assumptions Checkpoint and user corrections.
 - Questions asked, options presented, recommendations, and user responses.
 - Flow Coverage Checkpoint and remaining gaps.
+- Platform Fit Workshop inputs, ranking rationale, rejected/default-overridden candidates, and any probes approved for prototype-build-plan mode.
 - Record explicit user branch-order overrides in `design/user-flow-[topic]-interview.md`, including the question or checkpoint where the override was captured and any rejected default ordering.
 
 The prototype build plan must include:
 
 - Scope, source evidence, and user overrides.
-- Build item table with `id`, source user-flow branch, source UX variation, source UI experiment, `ui_experiment_id`, status, expected prototype path, and rationale.
+- Build item table with `id`, source user-flow branch, source UX variation, source UI experiment, `ui_experiment_id` for UI builds, optional `platform_probe` metadata for platform probes, status, expected prototype path, and rationale.
 - Status definitions: `pending`, `built`, `needs-revision`, `deferred`, and `dropped`.
 - Build sequence and chunking notes for `$logic-wiring --variant N`.
 - Revision/defer/drop rationale for branches not ready to build.

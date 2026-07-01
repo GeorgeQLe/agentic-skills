@@ -67,10 +67,10 @@ const command = {
 } as const;
 
 describe("product-design flow tree artifact boundaries", () => {
-  it("defines a machine-readable design flow-tree manifest schema (v0.4)", () => {
+  it("defines a machine-readable design flow-tree manifest schema (v0.5)", () => {
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
 
-    expect(schema.properties.schema_version.const).toBe("v0.4");
+    expect(schema.properties.schema_version.const).toBe("v0.5");
     expect(schema.properties.route.prefixItems.map((item: { const: string }) => item.const)).toEqual([
       "user-flow-map",
       "ux-variations",
@@ -104,7 +104,7 @@ describe("product-design flow tree artifact boundaries", () => {
       minLength: 1,
       description: "Concise evidence note or repo-relative review artifact proving the clickable UI experiment was reviewed.",
     });
-    expect(schema.$defs.prototype_build_item.required).toContain("ui_experiment_id");
+    expect(schema.$defs.prototype_build_item.required).not.toContain("ui_experiment_id");
     expect(schema.properties.prototype_build_plan.$ref).toBe("#/$defs/prototype_build_plan");
     expect(schema.$defs.prototype_build_status.enum).toEqual([
       "pending",
@@ -136,6 +136,82 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(schema.$defs.ui_experiment.required).not.toContain("build_ledger");
     expect(schema.$defs.ui_experiment.required).not.toContain("cherry_pick_candidate");
     expect(schema.$defs.ui_experiment.required).not.toContain("model_ref");
+  });
+
+  it("adds optional platform-fit state and non-visual platform-probe build items without changing the route", () => {
+    const schema = JSON.parse(read("design/flow-tree.schema.json"));
+
+    expect(schema.properties.platform_fit.$ref).toBe("#/$defs/platform_fit");
+    expect(schema.required).not.toContain("platform_fit");
+    expect(schema.properties.route.prefixItems.map((item: { const: string }) => item.const)).toEqual([
+      "user-flow-map",
+      "ux-variations",
+      "ui-interview",
+      "logic-wiring",
+      "consolidate-prototypes",
+      "spec-interview",
+    ]);
+
+    expect(schema.$defs.platform_kind.enum).toEqual([
+      "web_app",
+      "mobile_web_pwa",
+      "native_mobile",
+      "native_desktop",
+      "cli",
+      "api",
+      "sdk",
+      "browser_extension",
+      "marketplace_multi_sided",
+      "integration_automation",
+      "game_playable",
+      "other",
+    ]);
+    expect(schema.$defs.platform_fit_score.enum).toEqual(["high", "medium", "low", "rejected"]);
+    expect(schema.$defs.platform_fit_status.enum).toEqual(["recommended", "probe", "defer", "reject", "selected"]);
+    expect(schema.$defs.platform_fit.required).toEqual(["candidates", "recommendation"]);
+    expect(schema.$defs.platform_fit_candidate.required).toEqual(
+      expect.arrayContaining([
+        "platform",
+        "fit",
+        "evidence_basis",
+        "moment_of_need",
+        "job_shape",
+        "adoption_friction",
+        "permission_or_trust_burden",
+        "distribution_fit",
+        "monetization_fit",
+        "technical_leverage",
+        "fatal_risks",
+        "required_probe",
+        "status",
+      ]),
+    );
+    expect(schema.$defs.platform_fit_recommendation.required).toEqual(["primary", "decision_rationale"]);
+
+    const probe = schema.$defs.prototype_build_item.properties.platform_probe;
+    expect(probe.$ref).toBe("#/$defs/platform_probe");
+    expect(schema.$defs.platform_probe.required).toEqual([
+      "platform",
+      "probe_type",
+      "risk_tested",
+      "evidence_target",
+      "non_visual",
+    ]);
+    expect(schema.$defs.platform_probe.properties.probe_type.enum).toEqual([
+      "web_clickable",
+      "mobile_clickable",
+      "cli_script",
+      "api_mock_curl",
+      "sdk_sample",
+      "extension_simulation",
+      "desktop_local_shell",
+      "marketplace_two_sided_flow",
+      "other",
+    ]);
+    expect(schema.$defs.prototype_build_item.allOf?.[0]?.then?.required).toContain("ui_experiment_id");
+    expect(schema.$defs.prototype_build_item.allOf?.[0]?.if?.not?.properties?.platform_probe?.properties?.non_visual).toEqual({
+      const: true,
+    });
   });
 
   it("requires deterministic branch-order metadata on flow-tree branches", () => {
@@ -190,9 +266,9 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(progressiveReview.properties.evidence_required.items.minLength).toBe(1);
   });
 
-  it("ships a v0.4 sample manifest exercising ordering metadata and modify-back decisions", () => {
+  it("ships a v0.5 sample manifest exercising ordering metadata, platform fit, probes, and modify-back decisions", () => {
     const sample = read("design/flow-tree-sample.yaml");
-    expect(sample).toContain("schema_version: v0.4");
+    expect(sample).toContain("schema_version: v0.5");
     // per-branch model attachment round-trips
     expect(sample).toContain("model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml");
     expectContainsAll(sample, [
@@ -224,6 +300,26 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(uiExperimentKeys).toEqual(
       expect.arrayContaining(["build_ledger", "cherry_pick_candidate", "model_ref"]),
     );
+    expectContainsAll(sample, [
+      "platform_fit:",
+      "platform: web_app",
+      "platform: cli",
+      "platform: native_mobile",
+      "fit: high",
+      "fit: medium",
+      "fit: low",
+      "status: selected",
+      "status: probe",
+      "recommendation:",
+      "primary: web_app",
+      "platform_probe:",
+      "probe_type: cli_script",
+      "non_visual: true",
+      "risk_tested:",
+      "evidence_target:",
+    ]);
+    expect(sample).toContain("id: cli-policy-validation-probe");
+    expect(sample).not.toMatch(/id: cli-policy-validation-probe[\s\S]*?ui_experiment_id:/);
     expectContainsAll(sample, [
       "build_ledger:",
       "flow_step: Review invoice summary",
@@ -451,6 +547,51 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(specInterview).toContain("docs/production-ready-approval.md");
       expect(specInterview).toContain("Do not create a new state database");
       expect(specInterview).not.toContain("`design/[topic].md`");
+    }
+  });
+
+  it("keeps mirrored Platform Fit Workshop contracts aligned across product-design skills", () => {
+    for (const mirror of mirrors) {
+      const userFlow = read(`packs/product-design/${mirror}/user-flow-map/SKILL.md`);
+      const logicWiring = read(`packs/product-design/${mirror}/logic-wiring/SKILL.md`);
+      const consolidate = read(`packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`);
+      const specInterview = read(`packs/product-design/${mirror}/spec-interview/SKILL.md`);
+      const ideaScope = read(`base/${mirror}/idea-scope-brief/SKILL.md`);
+
+      expectContainsAll(userFlow, [
+        "Platform Fit Workshop",
+        "`web_app`, `mobile_web_pwa`, `native_mobile`, `native_desktop`, `cli`, `api`, `sdk`, `browser_extension`, `marketplace_multi_sided`, `integration_automation`, `game_playable`, and `other`",
+        "`platform_fit.recommendation`",
+        "`platform_probe`",
+        "Platform probes are thin artifacts",
+        "The route tuple is fixed; Platform Fit is trunk state, not a route step.",
+      ]);
+      expectContainsAll(logicWiring, [
+        "Platform Fit Workshop",
+        "`platform_probe.non_visual: true`",
+        "web/mobile clickable HTML, CLI script, API mock + curl, SDK sample",
+        "Do not build full products per platform.",
+        "`platform_fit`",
+      ]);
+      expectContainsAll(consolidate, [
+        "Platform Fit Workshop",
+        "`platform_fit.recommendation`",
+        "platform-probe evidence",
+        "recommended platform strategy",
+        "targeting `platform_fit`",
+      ]);
+      expectContainsAll(specInterview, [
+        "AFPS graduation platform strategy",
+        "final production platform decision",
+        "Production Platform Decision",
+        "final production platform decision",
+        "`platform_fit`",
+      ]);
+      expectContainsAll(ideaScope, [
+        "Platform Hint Handoff",
+        "early platform hints only as hypotheses",
+        "does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, decide platform fit",
+      ]);
     }
   });
 

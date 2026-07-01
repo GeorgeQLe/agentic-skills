@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.21
+version: v0.20
 required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
@@ -10,7 +10,7 @@ context_intake: deep
 
 # Idea Scope Brief
 
-Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-customer-discovery: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, decide platform fit, or write implementation specs.
+Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-customer-discovery: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select a validated target-customer segment, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
 ## Process
 
@@ -60,7 +60,6 @@ Steps 3–5 are the **stage-zero interrogation loop** (see `## Interrogation Pag
      - problem hypothesis
      - target beneficiary or user hypothesis
      - product/category guess
-     - early platform hints as hypotheses only, when the prompt clearly suggests web, mobile, CLI, API, SDK, extension, marketplace, integration, desktop, game, or other platform shape
      - value wedge
      - constraints
      - non-goals
@@ -76,10 +75,6 @@ During the Idea Assumptions Manifest, if the concept appears marketplace/platfor
 - Mark those sides and exchanges as hypotheses, not validated customer segments; do not decide which side is the customer, buyer, or primary target segment here.
 - Keep the source tag for each side as `[from prompt]`, `[from repo]`, or `[inferred]` unless the user provides a correction.
 - If the concept appears single-sided, omit the handoff or state that no marketplace/platform/B2B2C/multi-sided handoff is apparent.
-
-### Platform Hint Handoff
-
-During the Idea Assumptions Manifest, record early platform hints only as hypotheses. Name the apparent platform shape when the prompt or repo context clearly suggests it, but do not rank platforms, choose a primary platform, or reject alternatives here. The **Platform Fit Workshop** in `/user-flow-map` owns the broad candidate set, platform ranking, platform probes, and production-platform recommendation.
 
 ### Deck Fit Handoff
 

@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.19
+version: v0.18
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -14,7 +14,7 @@ Invoke as `/consolidate-prototypes`.
 
 Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `/ux-variations --layout-mode`, built via `/build-ui-screens` then `/logic-wiring`, and evaluated via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the source prototypes, interviews the user on what works and what doesn't in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
 
-**Two-stage consolidation.** Consolidation runs in two stages. **Stage 1 — stitch** assembles the approved canonical screens into coherent end-to-end flows: it reads each variation's built screens and walks the `ui_experiments[].build_ledger[]` entries, and **cherry-picks** screens flagged `cherry_pick_candidate` or left `parked` by `/build-ui-screens` (a strong partial screen worth carrying into the canonical flow even though its source variation was not the winner). It also compares any Platform Fit Workshop `platform_probe` evidence against `platform_fit.recommendation`. **Stage 2 — converge** is the existing pass: interview keep/reject across the stitched flows, resolve conflicts, build the consolidated MVP, write the AFPS graduation document with the recommended platform strategy, and hand off to `/research-roadmap --post-prototype`.
+**Two-stage consolidation.** Consolidation runs in two stages. **Stage 1 — stitch** assembles the approved canonical screens into coherent end-to-end flows: it reads each variation's built screens and walks the `ui_experiments[].build_ledger[]` entries, and **cherry-picks** screens flagged `cherry_pick_candidate` or left `parked` by `/build-ui-screens` (a strong partial screen worth carrying into the canonical flow even though its source variation was not the winner). **Stage 2 — converge** is the existing pass: interview keep/reject across the stitched flows, resolve conflicts, build the consolidated MVP, write the AFPS graduation document, and hand off to `/research-roadmap --post-prototype`.
 
 Users with manually built prototypes can also use this skill directly, but consolidation should not happen before the user has reviewed the prototypes and captured evidence.
 
@@ -25,14 +25,14 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, converging the validated tree into a cohesive **MVP**. The `## Process` steps below group by stage:
 
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the prototype-selection checkpoint — confirm which evaluated prototype branches to consolidate and the UAT evidence backing each.
-- **Stage 1 — Research**: read the built prototypes, platform probes, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/flow-tree-[topic].yaml`, and the `/uat --variant-evaluation` evidence.
+- **Stage 1 — Research**: read the built prototypes, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/flow-tree-[topic].yaml`, and the `/uat --variant-evaluation` evidence.
 - **Stage 2 — Design**: interview keep/reject per prototype branch, resolve conflicts, and decide the consolidated MVP direction.
 - **Stage 3 — Plan**: the keep/reject/resolve matrix is the build-plan slice this run realizes.
 - **Stage 4 — Implement (scoped)**: **runnable** — build the consolidated MVP under `prototypes/{topic}/consolidated/`, mark the tree `consolidated`, record the consolidated MVP decisions, and pass the single binding alignment gate before any canonical write.
 
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the validated variation set ready to converge, runs the staged flow, writes the consolidated MVP on approval, and stops with the handoff in `## Next Work`.
 
-**Modify-back.** When consolidation surfaces a flaw in an upstream node, record a `modify` decision whose `targets[]` re-opens that `model_ref`, `platform_fit`, or user-flow branch; convergence resumes once the re-opened node is re-approved.
+**Modify-back.** When consolidation surfaces a flaw in an upstream node, record a `modify` decision whose `targets[]` re-opens that `model_ref` or user-flow branch; convergence resumes once the re-opened node is re-approved.
 
 ## Process
 
@@ -56,7 +56,6 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
    - Locate the prototype branch plan: `design/ui-layout-variations-[topic].md`, `design/ux-variations-[topic].md`, or equivalent prototype-branch plan.
    - Locate the content requirements: `design/ui-requirements-[topic].md` or equivalent content contract.
    - Locate the flow-tree manifest: `design/flow-tree-[topic].yaml` or `design/{slug}/flow-tree-{topic}.yaml` when present.
-   - Read `platform_fit` and any `prototype_build_plan.items[].platform_probe` evidence from the flow-tree manifest and build plan.
    - Locate variant evaluation evidence: `research/uat-variant-evaluation-[topic].md`, product-path-scoped equivalents, `research/uat-plan.md` result logs, screenshots, notes, recordings, or explicit user-provided review notes.
    - Locate built implementations: scan route files, component directories, and any prototype-specific directories or branches.
    - If the prototype branch plan or implementations cannot be found, ask the user to point to them.
@@ -70,7 +69,6 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
    - List each source prototype branch with a one-line summary of its approach.
    - Note build status for each: built and reviewed, built but unreviewed, partially built, spec-only.
    - Note evidence status for each: result log present, user notes present, no evidence.
-   - Note platform-probe status for each serious platform candidate: built and evidenced, built but unevaluated, missing, deferred, rejected.
    - Use AskUserQuestion to confirm which prototype branches the user has reviewed and wants to evaluate. Skip unreviewed or unbuilt prototypes unless the user wants to include them from spec alone.
 
 4. **Interview per prototype branch**
@@ -102,12 +100,6 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
      - Use AskUserQuestion to resolve
    - Continue until every row in the matrix has a winner and all conflicts are resolved.
 
-5a. **Platform-probe synthesis**
-   - Compare Platform Fit Workshop candidates, `platform_fit.recommendation`, and any platform-probe evidence.
-   - Confirm the platform strategy as `primary`, optional `companion[]`, `defer[]`, and `reject[]`.
-   - If platform-probe evidence contradicts the current recommendation, either update the recommendation in the flow-tree manifest or record a `modify` decision targeting `platform_fit` and route back to `/user-flow-map`.
-   - Do not graduate with unresolved platform risks that materially affect production architecture, permissions, distribution, monetization, or adoption path.
-
 6. **Build consolidated prototype**
    - Merge the best elements from source prototypes into a single runnable artifact at `prototypes/{topic}/consolidated/`.
    - Build only after UAT evidence and user consolidation decisions identify which elements to keep, reject, or resolve.
@@ -130,7 +122,7 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 8. **Production-ready handoff boundary**
    - Write the required AFPS graduation document at `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode.
-   - Record final MVP decisions, rejected alternatives, UAT evidence, platform-probe evidence, recommended platform strategy, unresolved risks, stale-research cleanup needs, and production-spec readiness in the consolidation interview log, AFPS graduation document, and alignment page.
+   - Record final MVP decisions, rejected alternatives, UAT evidence, unresolved risks, stale-research cleanup needs, and production-spec readiness in the consolidation interview log, AFPS graduation document, and alignment page.
    - The recommended next route must name `/research-roadmap --post-prototype`, then `/spec-interview`.
    - The Production Ready Approval gate is owned by `/spec-interview` and follows `docs/production-ready-approval.md`.
 
@@ -138,7 +130,7 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 - Write the consolidated prototype to `prototypes/{topic}/consolidated/`.
 - Write the consolidation interview log to `design/consolidate-prototypes-[topic]-interview.md` in flat mode or `design/{slug}/consolidate-prototypes-[topic]-interview.md` in product-path mode.
-- Write the AFPS graduation document to `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode. Include the approved MVP scope, prototype evidence, platform-probe evidence, recommended platform strategy, keep/reject decisions, unresolved risks, stale-research cleanup status, and whether the project is ready for `/research-roadmap --post-prototype` and `/spec-interview`.
+- Write the AFPS graduation document to `design/afps-graduation-{topic}.md` in flat mode or `design/{slug}/afps-graduation-{topic}.md` in product-path mode. Include the approved MVP scope, prototype evidence, keep/reject decisions, unresolved risks, stale-research cleanup status, and whether the project is ready for `/research-roadmap --post-prototype` and `/spec-interview`.
 - Update the scoped flow-tree manifest to mark consolidated branches as `consolidated` or `promoted-to-prototype` when applicable.
 
 ### Alignment Page
@@ -160,7 +152,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 - Do not proceed without evaluation evidence unless the user explicitly says they have reviewed the variants and is ready to converge.
 - Do not pick winners without user input. Present the matrix and let the user decide.
 - Do not ignore conflicts. If two preferred choices are spatially or functionally incompatible, surface the tension and resolve it explicitly.
-- The consolidated prototype must preserve the approved UI branch detail from `/ui-interview`, carry the recommended platform strategy from AFPS graduation, and be concrete enough for `/spec-interview` to extract production implementation requirements and own the Production Ready Approval described in `docs/production-ready-approval.md`.
+- The consolidated prototype must preserve the approved UI branch detail from `/ui-interview` and be concrete enough for `/spec-interview` to extract production implementation requirements and own the Production Ready Approval described in `docs/production-ready-approval.md`.
 - Do not lose content requirements. Every data field, action, and state from the requirements spec must appear in the final design.
 - Do not bias toward the first or last variation reviewed. Present them neutrally and let the user's feedback and evaluation evidence drive the outcome.
 - Do not use `tasks/todo.md` for consolidation branch progress or human review. Human evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.

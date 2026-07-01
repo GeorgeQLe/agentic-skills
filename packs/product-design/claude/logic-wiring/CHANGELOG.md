@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.22 - 2026-07-01
+
+- Added Platform Fit Workshop `platform_probe` handling for thin web/mobile/CLI/API/SDK/extension/desktop/integration/marketplace/game risk probes.
+- Allowed schema-backed non-visual probes with `platform_probe.non_visual: true` to omit `ui_experiment_id` while preserving UI experiment linkage for ordinary UI builds.
+- Updated modify-back guidance to allow `platform_fit` remediation when probe evidence invalidates the platform recommendation.
+
 ## v0.21 - 2026-06-27
 
 - Expanded upstream inputs from screen ordering to surface inventory, channel constraints, visual UI candidates, route/screen realizations, and branch state.

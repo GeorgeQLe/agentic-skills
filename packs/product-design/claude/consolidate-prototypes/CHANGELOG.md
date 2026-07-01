@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.19 - 2026-07-01
+
+- Added platform-probe synthesis during consolidation by comparing `platform_fit.recommendation` against probe evidence.
+- Required AFPS graduation to carry the recommended platform strategy and unresolved platform risks for `spec-interview`.
+- Added `platform_fit` modify-back routing when platform evidence contradicts the recommendation.
+
 ## v0.18 - 2026-06-26
 
 - Flow-walk re-cut: made consolidation explicitly **two-stage** — stage 1 stitches the approved canonical screens into end-to-end flows and cherry-picks `cherry_pick_candidate`/`parked` screens from `build_ledger[]`; stage 2 is the existing converge → AFPS graduation → `/research-roadmap --post-prototype` pass.

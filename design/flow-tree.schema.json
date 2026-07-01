@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agentic-skills.local/design/flow-tree.schema.json",
   "title": "Product Design Flow Tree Manifest",
-  "description": "Tracks pre-prototype user-flow, UX-variation, and UI-approval branches for one active product design flow. v0.3 adds deterministic branch-order metadata and progressive review guidance so branch selection is explicit instead of raw array-order dependent. v0.4 re-cuts the build leaf from `prototype` to `logic-wiring` (route position 4) and adds additive flow-walk fields on `ui_experiment`: a per-screen `build_ledger[]` (with its own `build_ledger_status` lifecycle) so the minimum-UI stop rule and park off-ramp are machine-expressible, a `cherry_pick_candidate` flag for consolidate-prototypes stage 1, and a per-screen `model_ref` so a screen can attach its state model. The route stays a fixed 6-step tuple; state-model remains off the route.",
+  "description": "Tracks pre-prototype user-flow, UX-variation, UI-approval, platform-fit, and prototype-probe branches for one active product design flow. v0.3 adds deterministic branch-order metadata and progressive review guidance so branch selection is explicit instead of raw array-order dependent. v0.4 re-cuts the build leaf from `prototype` to `logic-wiring` (route position 4) and adds additive flow-walk fields on `ui_experiment`: a per-screen `build_ledger[]` (with its own `build_ledger_status` lifecycle) so the minimum-UI stop rule and park off-ramp are machine-expressible, a `cherry_pick_candidate` flag for consolidate-prototypes stage 1, and a per-screen `model_ref` so a screen can attach its state model. v0.5 adds optional `platform_fit` candidate/recommendation state and `prototype_build_item.platform_probe` metadata for thin platform-specific risk probes. The route stays a fixed 6-step tuple; state-model and Platform Fit remain off the route.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "v0.4"
+      "const": "v0.5"
     },
     "topic": {
       "type": "string",
@@ -77,6 +77,9 @@
     "prototype_build_plan": {
       "$ref": "#/$defs/prototype_build_plan"
     },
+    "platform_fit": {
+      "$ref": "#/$defs/platform_fit"
+    },
     "branch_order_override": {
       "$ref": "#/$defs/branch_order_override"
     },
@@ -117,6 +120,191 @@
         "deferred",
         "dropped"
       ]
+    },
+    "platform_kind": {
+      "type": "string",
+      "enum": [
+        "web_app",
+        "mobile_web_pwa",
+        "native_mobile",
+        "native_desktop",
+        "cli",
+        "api",
+        "sdk",
+        "browser_extension",
+        "marketplace_multi_sided",
+        "integration_automation",
+        "game_playable",
+        "other"
+      ]
+    },
+    "platform_fit_score": {
+      "type": "string",
+      "enum": ["high", "medium", "low", "rejected"]
+    },
+    "platform_fit_status": {
+      "type": "string",
+      "enum": ["recommended", "probe", "defer", "reject", "selected"]
+    },
+    "platform_fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidates", "recommendation"],
+      "properties": {
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/platform_fit_candidate"
+          }
+        },
+        "recommendation": {
+          "$ref": "#/$defs/platform_fit_recommendation"
+        }
+      },
+      "description": "v0.5 optional/additive Platform Fit Workshop output owned by `user-flow-map`: ranked platform candidates, thin probe decisions, and the recommended platform strategy."
+    },
+    "platform_fit_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "fit",
+        "evidence_basis",
+        "moment_of_need",
+        "job_shape",
+        "adoption_friction",
+        "permission_or_trust_burden",
+        "distribution_fit",
+        "monetization_fit",
+        "technical_leverage",
+        "fatal_risks",
+        "required_probe",
+        "status"
+      ],
+      "properties": {
+        "platform": {
+          "$ref": "#/$defs/platform_kind"
+        },
+        "fit": {
+          "$ref": "#/$defs/platform_fit_score"
+        },
+        "evidence_basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moment_of_need": {
+          "type": "string",
+          "minLength": 1
+        },
+        "job_shape": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adoption_friction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "permission_or_trust_burden": {
+          "type": "string",
+          "minLength": 1
+        },
+        "distribution_fit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "monetization_fit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "technical_leverage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fatal_risks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required_probe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/platform_fit_status"
+        }
+      }
+    },
+    "platform_fit_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "decision_rationale"],
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/platform_kind"
+        },
+        "companion": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/platform_kind"
+          }
+        },
+        "defer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/platform_kind"
+          }
+        },
+        "reject": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/platform_kind"
+          }
+        },
+        "decision_rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "platform_probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "probe_type", "risk_tested", "evidence_target", "non_visual"],
+      "properties": {
+        "platform": {
+          "$ref": "#/$defs/platform_kind"
+        },
+        "probe_type": {
+          "type": "string",
+          "enum": [
+            "web_clickable",
+            "mobile_clickable",
+            "cli_script",
+            "api_mock_curl",
+            "sdk_sample",
+            "extension_simulation",
+            "desktop_local_shell",
+            "marketplace_two_sided_flow",
+            "other"
+          ]
+        },
+        "risk_tested": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "non_visual": {
+          "type": "boolean",
+          "description": "When true, this build item is an explicitly non-visual platform probe and may omit `ui_experiment_id`."
+        }
+      },
+      "description": "v0.5 thin platform-probe metadata for build items that test platform-specific adoption, permission, distribution, monetization, or technical leverage risks without building full parallel products."
     },
     "build_ledger_status": {
       "type": "string",
@@ -260,7 +448,7 @@
     "prototype_build_item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "status", "user_flow_branch_id", "ux_variation_id", "ui_experiment_id", "artifacts"],
+      "required": ["id", "label", "status", "user_flow_branch_id", "ux_variation_id", "artifacts"],
       "properties": {
         "id": {
           "type": "string",
@@ -295,10 +483,33 @@
           "type": "string",
           "minLength": 1
         },
+        "platform_probe": {
+          "$ref": "#/$defs/platform_probe"
+        },
         "notes": {
           "type": "string"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "not": {
+              "required": ["platform_probe"],
+              "properties": {
+                "platform_probe": {
+                  "required": ["non_visual"],
+                  "properties": {
+                    "non_visual": { "const": true }
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["ui_experiment_id"]
+          }
+        }
+      ]
     },
     "user_flow_branch": {
       "type": "object",

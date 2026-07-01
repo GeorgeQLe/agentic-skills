@@ -30,7 +30,7 @@ Research and implementation — formerly split — become two stages of one flow
 
 The state lives with the design artifacts, never in `tasks/todo.md`:
 
-- `design/**/flow-tree-*.yaml` — the design-tree manifest (branch + decision + model-attachment state).
+- `design/**/flow-tree-*.yaml` — the design-tree manifest (branch + decision + model-attachment + platform-fit state).
 - `design/**/model-tree-*-{branch}.yaml` — the per-user-flow-branch domain/state/logic model.
 - `design/**/*.md` — canonical per-node design artifacts (user-flow doc, UX variation specs, UI experiment packets, build-plan slices).
 - `prototypes/{topic}/` — runnable prototype output (owned by `logic-wiring` / `consolidate-prototypes`).
@@ -106,22 +106,26 @@ no `tasks/todo.md` ledger for branch progress.
 root (one per topic)
 └── user-flow branch            ← user-flow-map grows these (one per flow)
     │                             key-moments ranks/orders the branches by proof priority (trunk)
+    │                             Platform Fit ranks candidate product platforms (trunk)
     ├── model attachment        ← state-model attaches one per promoted user-flow branch (model_ref, JIT)
     └── ux-variation branch     ← ux-variations grows up to 5 per modelled flow
         └── ui-experiment branch ← ui-interview grows these per UX variation
             └── build leaf       ← build-ui-screens builds the visual screens, then logic-wiring
                                    wires them into a clickable, state-backed runnable artifact
+                └── platform probe ← optional thin build item for platform-specific risk evidence
 ```
 
 | Node | Manifest location | Grown by | Canonical artifact |
 |---|---|---|---|
 | **root** | flow-tree manifest itself | `user-flow-map` | `design/**/flow-tree-{topic}.yaml` + `design/user-flow-{topic}.md` |
+| **platform fit** | `platform_fit` | `user-flow-map` | ranked matrix in `design/user-flow-{topic}.md` + manifest recommendation |
 | **user-flow branch** | `branches[]` | `user-flow-map` | flow doc section; `model_ref` filled by `state-model` |
 | **model attachment** | `branches[].model_ref` → `model-tree-{topic}-{branch}.yaml` | `state-model` | per-branch model-tree manifest + canonical model doc |
 | **ux-variation branch** | `branches[].ux_variations[]` | `ux-variations` | `design/ux-variations-{topic}.md` |
 | **ui-experiment branch** | `branches[].ux_variations[].ui_experiments[]` | `ui-interview` | `design/ui-{topic}.md`, `design/ui-requirements-{topic}.md` |
 | **ui screens** | `ui_experiments[].build_ledger[]` | `build-ui-screens` | visual screens under `experiments/{topic}/{id}/` or a project-native route |
 | **prototype** | `prototype_build_plan.items[]` | `logic-wiring` | `prototypes/{topic}/variation-{N}/` |
+| **platform probe** | `prototype_build_plan.items[].platform_probe` | `logic-wiring` | smallest runnable probe surface: web/mobile clickable HTML, CLI script, API mock + curl, SDK sample, extension simulation, desktop/local shell, or marketplace two-sided flow |
 | **consolidated MVP** | manifest status `consolidated` | `consolidate-prototypes` | `prototypes/{topic}/consolidated/` |
 | **AFPS graduation** | downstream of MVP approval | `consolidate-prototypes` | `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` |
 | **spec** | downstream of MVP approval | `spec-interview` | `specs/{topic}.md` |
@@ -137,6 +141,32 @@ that the rest of the tree grows in proof order: state-model attaches just-in-tim
 **promoted** flows, and `ux-variations` spends its variation budget on the moments that most need
 proof. `key-moments` is **not a route position** — like `state-model`, it is invoked from
 `user-flow-map`'s handoff and does not occupy one of the six fixed route steps.
+
+### Platform Fit Workshop (trunk)
+
+The **Platform Fit Workshop** is owned by `user-flow-map` and runs after the surface/channel
+inventory is clear and before prototype-build-plan synthesis. It is a **trunk concern**, not a
+new route position. It writes optional/additive `platform_fit` state into the flow-tree manifest
+and a ranked platform matrix into `design/user-flow-{topic}.md`.
+
+The candidate set starts broad: `web_app`, `mobile_web_pwa`, `native_mobile`, `native_desktop`,
+`cli`, `api`, `sdk`, `browser_extension`, `marketplace_multi_sided`,
+`integration_automation`, `game_playable`, and `other`. Deck/project type may set defaults, but
+must not filter candidates by itself. User evidence can override the default rank.
+
+Scoring uses evidence already gathered by AFPS/design work: user context, moment of need,
+surface/channel inventory, journey map, ICP/devtool audience, adoption path, permissions and
+trust burden, distribution, monetization, and technical leverage. Each candidate records
+`fit` (`high | medium | low | rejected`), a rationale across those dimensions, fatal risks,
+the required probe if any, and `status` (`recommended | probe | defer | reject | selected`).
+
+Platform probes are **thin artifacts that test platform-specific risks**, not full parallel
+products. Only `high` or unresolved `medium` candidates get probes; `low` and `rejected`
+candidates stay documented with rationale. When more than one serious platform remains,
+`user-flow-map --prototype-build-plan` creates explicit `prototype_build_plan.items[]` with
+`platform_probe` metadata. A probe may be non-visual and can omit `ui_experiment_id` only when
+`platform_probe.non_visual: true`; ordinary UI build items still link to an approved UI
+experiment.
 
 ### Per-user-flow-branch model attachment
 
@@ -161,22 +191,28 @@ attached and confirmed.
 
 `logic-wiring` owns the literal runnable prototype: it **consumes the visual screens built by
 `build-ui-screens`** and wires them into a clickable, state-backed artifact (plus runnable
-CLI/API/infra logic). Each prototype is built narrow-scope so a
+CLI/API/infra logic). For `platform_probe` build items, it dispatches to the smallest
+appropriate probe artifact: web/mobile clickable HTML, CLI script, API mock + curl, SDK sample,
+browser-extension simulation, desktop/local shell, integration automation harness, or
+marketplace two-sided flow. Each prototype or platform probe is built narrow-scope so a
 human can **validate / approve / reject / modify-back** it. Validation decisions are recorded
 as `decisions[]` in the manifest and **can flow back up the tree**: a `modify` decision names
-`targets[]` — the upstream node(s) (a `state-model` model attachment or a `user-flow` branch)
-to **re-open** — returning that node to a pending status so the owning skill re-runs its
-5-stage flow on it. See §4.
+`targets[]` — the upstream node(s) (a `state-model` model attachment, `platform_fit`, or a
+`user-flow` branch) to **re-open** — returning that node to a pending status so the owning skill
+re-runs its 5-stage flow on it. See §4.
 
 ### Consolidation and spec
 
 `consolidate-prototypes` converges the validated tree into a cohesive **MVP** at
-`prototypes/{topic}/consolidated/`. On MVP approval, it also writes the AFPS graduation
-document at `design/afps-graduation-{topic}.md` or
-`design/{slug}/afps-graduation-{topic}.md`. That graduation document is the durable marker
-that research/prototyping is complete. `research-roadmap --post-prototype` then runs the
-narrow cleanup pass before `spec-interview` formalizes the MVP into a **production-ready v1**
-specification at `specs/{topic}.md`.
+`prototypes/{topic}/consolidated/`. It compares any platform-probe evidence against
+`platform_fit.recommendation` and records the recommended platform strategy in AFPS graduation.
+On MVP approval, it also writes the AFPS graduation document at
+`design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`. That
+graduation document is the durable marker that research/prototyping is complete.
+`research-roadmap --post-prototype` then runs the narrow cleanup pass before `spec-interview`
+formalizes the MVP into a **production-ready v1** specification at `specs/{topic}.md`.
+`spec-interview` must require the AFPS graduation platform strategy, resolve any remaining
+platform risks, and lock the final production platform decision in the Production Ready Approval.
 
 ---
 
@@ -207,15 +243,15 @@ slice `logic-wiring` will later realize** — not runnable code.
 
 | Skill | Stage-4 "implement" deliverable |
 |---|---|
-| `user-flow-map` | Flow doc + flow-tree root + one user-flow branch per flow + the prototype build-plan scaffold |
+| `user-flow-map` | Flow doc + flow-tree root + one user-flow branch per flow + Platform Fit Workshop matrix/recommendation + the prototype build-plan scaffold |
 | `key-moments` | Proof-priority ordering written to existing flow-tree fields (`journey_sequence`, `evaluation_priority`, `branch_order_override`, `priority_rationale`) — orders branches, gates variation breadth, promotes/prunes flows. No new artifact, no schema change. |
 | `state-model` | Per-branch `model-tree` manifest + canonical model doc, attached via `branches[].model_ref` (JIT per promoted flow; fast-pass fold for CRUD-trivial domains) |
 | `ux-variations` | UX variation specs + up to 5 `ux_variation` child branches on the modelled flow |
 | `ui-interview` | UI experiment packet(s) + `ui_experiment` child branches under the UX variation + the per-screen batch plan |
 | `build-ui-screens` | Visual UI screens for one approved UI branch, built as an ordered element-batch loop (one flow step per batch, per-batch visual checkpoint, minimum-UI stop) with `ui_experiments[].build_ledger[]` written, using fake, fixture, local, or in-memory data |
-| `logic-wiring` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` — wires the `build-ui-screens` screens clickable/state-backed + build-plan + decision |
-| `consolidate-prototypes` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` plus AFPS graduation under `design/` |
-| `spec-interview` | Production-ready specification under `specs/{topic}.md` |
+| `logic-wiring` | **Runnable** narrow-scope prototype under `prototypes/{topic}/variation-{N}/` — wires the `build-ui-screens` screens clickable/state-backed + build-plan + decision; for platform probes, builds the smallest surface/channel artifact that tests the named platform risk |
+| `consolidate-prototypes` | **Runnable** consolidated MVP under `prototypes/{topic}/consolidated/` plus AFPS graduation under `design/`, including recommended platform strategy when probes exist |
+| `spec-interview` | Production-ready specification under `specs/{topic}.md`, including the final production platform decision |
 
 ### Intra-skill substep chunking (absorbed from the prototype loop)
 
@@ -509,3 +545,9 @@ only — they hand results back to the invoking parent and do **not** route down
   `user-flow-map`. The word "prototype" is intentionally retained as artifact/phase vocabulary
   (`prototype_build_plan`, `prototypes/`, prototype build-plan, runnable prototype); only the
   skill/route token changed. The six-step route tuple and three-role model are unchanged.
+- **Platform Fit Workshop (flow-tree schema v0.5).** `user-flow-map` owns additive
+  `platform_fit` state and broad platform ranking as a trunk concern after surface/channel
+  inventory. Platform probes are thin `prototype_build_plan.items[].platform_probe` artifacts
+  built by `logic-wiring`; `consolidate-prototypes` carries probe evidence into AFPS graduation,
+  and `spec-interview` locks the final production platform decision. The six-step route tuple is
+  unchanged.

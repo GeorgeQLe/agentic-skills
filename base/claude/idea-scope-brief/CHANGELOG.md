@@ -1,5 +1,10 @@
 # idea-scope-brief Changelog
 
+## v0.21 - 2026-07-01
+
+- Added a Platform Hint Handoff for early platform-shape hypotheses while keeping platform ranking, probes, and decisions owned by `user-flow-map` Platform Fit Workshop.
+- Clarified that `idea-scope-brief` does not decide platform fit.
+
 ## v0.20 - 2026-06-29
 
 - Refactored enabled Build-In-Public behavior from a pre-final alignment checkpoint into a post-confirmation output: after approved `idea-brief.md` artifacts are written and the alignment page is confirmed, the skill generates and opens `alignment/bip-idea-scope-brief.html`.

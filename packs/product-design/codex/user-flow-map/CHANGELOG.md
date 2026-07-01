@@ -1,5 +1,11 @@
 # user-flow-map changelog (codex)
 
+## v1.9 - 2026-07-01
+
+- Added the Platform Fit Workshop after surface/channel inventory and before prototype-build-plan synthesis.
+- Updated flow-tree initialization to schema `v0.5` with optional `platform_fit` state and broad platform candidate ranking.
+- Added platform-probe build-plan items for serious unresolved platform candidates, while keeping ordinary UI build items linked to `ui_experiment_id`.
+
 ## v1.8 - 2026-06-27
 
 - Updated new flow-tree manifest initialization to `schema_version: v0.4` with route step 4 set to `logic-wiring`.
