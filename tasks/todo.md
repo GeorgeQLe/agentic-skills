@@ -1,48 +1,44 @@
 # Current Task State
 
-## Current Implementation - Platform Fit Workshop
+## Current Implementation - State-Model Clean-Context Handoff Wording
 
-**Status:** In progress - adding platform-fit ranking and probe routing to the product-design tree.
+**Status:** In progress - tightening `Invoke With YAML` clean-context guidance for chunked state-model handoffs.
 
 Project: `agentic-skills`.
 
 ### Goal
 
-Add a first-class Platform Fit Workshop to the product-design design tree so `user-flow-map` ranks candidate platforms, records the decision in `flow-tree` manifests, creates thin platform probes when needed, and carries prototype evidence into final `spec-interview` platform lock.
+Make the design-tree-loop handoff convention and mirrored state-model contracts explicitly say that the optional `## Invoke With YAML` block belongs in a fresh/cleared agent context alongside the exact repeated command, not as extra material appended to an already crowded session.
 
 ### Execution Profile
 
-- Parallel mode: parallel read-only inspection where useful; serial mutations for schema, generated docs, mirrored skill contracts, tests, and task docs.
-- Reason: this touches the product-design flow-tree contract, generated bundled convention files, mirrored skill behavior, and regression coverage.
-- Safety boundary: keep the fixed route tuple unchanged, avoid standalone platform skills, preserve unrelated paused YouTube task notes, and do not create GitHub Actions.
+- Parallel mode: parallel read-only inspection where useful; serial edits for task docs, canonical convention text, regenerated bundles, and mirrored state-model contract wording.
+- Reason: this changes shared generated design-tree-loop bundles plus state-model-specific handoff requirements.
+- Safety boundary: preserve unrelated paused YouTube task state, do not alter GitHub Actions, and keep behavior scoped to clean-context handoff wording.
 
 ### Plan
 
-- [x] Inspect current schema, sample manifest, design-tree convention, mirrored skills, tests, and active task docs.
-- [x] Update the task docs with the active implementation contract and review section.
-- [x] Update `design/flow-tree.schema.json` to `v0.5` with additive `platform_fit` and `prototype_build_item.platform_probe` support.
-- [x] Update `design/flow-tree-sample.yaml` with a realistic platform-fit matrix and one thin platform probe.
-- [x] Update canonical design-tree docs and regenerate bundled `DESIGN-TREE-LOOP.md` files.
-- [x] Archive, bump, and update changed mirrored skills and changelogs.
-- [x] Extend focused layer1 tests for schema, sample, route stability, platform-probe validation, and mirror contracts.
-- [x] Run focused verification, generator check, archive audit, and relevant layer1 tests.
+- [x] Locate canonical design-tree-loop source and active state-model mirrors.
+- [x] Update active task docs with this implementation contract.
+- [x] Update canonical `docs/design-tree-loop-convention.md` handoff wording.
+- [x] Regenerate design-tree-loop bundles.
+- [x] Update mirrored state-model `SKILL.md` handoff wording if regeneration does not cover it.
+- [x] Run targeted verification and diff checks.
 - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- [x] `flow-tree.schema.json` uses `schema_version: v0.5`, keeps the six-step route unchanged, and makes `platform_fit` optional/additive.
-- [x] `platform_fit.candidates[]` covers the broad platform set, fit/status values, evidence basis, platform-specific risk fields, required probe, and recommendation buckets.
-- [x] `prototype_build_item.platform_probe` allows explicitly non-visual platform probes without requiring `ui_experiment_id`, while ordinary UI build items still link to a UI experiment.
-- [x] Design-tree docs frame Platform Fit as a `user-flow-map` trunk concern and platform probes as thin risk tests, not full parallel products.
-- [x] Mirrored skills mention Platform Fit Workshop, broad candidate set, platform probes, and `spec-interview` final production platform lock where applicable.
-- [x] Changed `SKILL.md` files are archived and versioned with changelog entries.
+- [x] `## Invoke With YAML` is described as optional clean-context routing metadata for the next invocation.
+- [x] Progress handoff session guidance says to paste the YAML only into the fresh/clean context alongside the exact command.
+- [x] `Staying in this session is allowed` is removed or made explicitly exceptional in generated design-tree-loop bundles.
+- [x] Codex and Claude state-model `SKILL.md` mirrors carry the same fresh/clean-context cue.
+- [x] Verification commands show the new wording and no generator drift.
 
 ### Test Plan
 
-- `npm test -- tests/layer1/product-design-flow-tree.test.ts`
+- `rg -n "Invoke With YAML.*fresh|clean context|not consumed state|durable cursor" packs/product-design docs`
+- `rg -n "Staying in this session is allowed" packs/product-design/*/state-model/DESIGN-TREE-LOOP.md`
 - `node scripts/upgrade-design-tree-loop.mjs --check`
-- `bash scripts/skill-archive-audit.sh --strict`
-- Relevant focused layer1 suite if the targeted tests pass.
 - `git diff --check`
 - `git status --short --branch`
 
@@ -50,13 +46,12 @@ Add a first-class Platform Fit Workshop to the product-design design tree so `us
 
 Verified:
 
-- `npm test -- tests/layer1/product-design-flow-tree.test.ts` failed because the repository has no root `test` script.
-- `npx vitest run tests/layer1/product-design-flow-tree.test.ts` passed with 18 tests.
+- `rg -n "Invoke With YAML.*fresh|clean context|not consumed state|durable cursor" packs/product-design docs` found the new clean-context, not-consumed-state, and durable-cursor wording in the canonical convention, generated bundles, and state-model mirrors.
+- `rg -n "Staying in this session is allowed" packs/product-design/*/state-model/DESIGN-TREE-LOOP.md packs/product-design/*/state-model/SKILL.md` returned no active state-model matches.
 - `node scripts/upgrade-design-tree-loop.mjs --check` passed with 22 skills checked and 0 bundle writes.
-- `bash scripts/skill-archive-audit.sh --strict` passed with 413 skills checked and 0 violations.
 - `git diff --check` passed.
-- `npx vitest run tests/layer1` was attempted after the focused test passed; it failed on pre-existing/out-of-scope `packs/youtube-ops/{claude,codex}/youtube-meta-research/SKILL.md` staged-research marker assertions, not on Platform Fit files.
+- `bash scripts/skill-archive-audit.sh --strict` passed with 413 skills checked and 0 violations.
 
 ## Paused Implementation - Create YouTube Meta Research Skill
 
-This section is preserved from the pre-existing task state and is intentionally not part of the Platform Fit Workshop implementation.
+This section is preserved from the pre-existing task state and is intentionally not part of the clean-context handoff wording implementation.

@@ -1,5 +1,10 @@
 # state-model changelog (codex)
 
+## v0.11 - 2026-07-01
+
+- Tightened chunked Progress Handoff Block wording so `## Invoke With YAML` is explicitly pasted only into a fresh/clean context alongside the repeated `$state-model` command; the command and durable filesystem cursor remain authoritative.
+- Made same-session continuation explicitly exceptional for small folded runs with clearly sufficient context.
+
 ## v0.10 - 2026-06-27
 
 - Updated the documented locked flow-tree route tuple to use `logic-wiring` as step 4 while keeping `state-model` off the route enum.

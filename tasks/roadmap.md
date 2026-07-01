@@ -2,9 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Platform Fit Workshop
+## Current Implementation - State-Model Clean-Context Handoff Wording
 
-**Status: IN PROGRESS (2026-07-01) - adding platform-fit ranking and probe routing to the product-design tree.**
+**Status: IN PROGRESS (2026-07-01) - tightening `Invoke With YAML` clean-context guidance for chunked state-model handoffs.**
+
+### Goal
+
+Make the design-tree-loop handoff convention and mirrored state-model contracts explicitly say that the optional `## Invoke With YAML` block belongs in a fresh/cleared agent context alongside the exact repeated command, not as extra material appended to an already crowded session.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for task docs, canonical convention text, regenerated bundles, and mirrored state-model contract wording.
+- Reason: this changes shared generated design-tree-loop bundles plus state-model-specific handoff requirements.
+- Safety boundary: preserve unrelated paused YouTube task state, do not alter GitHub Actions, and keep behavior scoped to clean-context handoff wording.
+
+### Plan
+
+- [x] Locate canonical design-tree-loop source and active state-model mirrors.
+- [x] Update active task docs with this implementation contract.
+- [x] Update canonical `docs/design-tree-loop-convention.md` handoff wording.
+- [x] Regenerate design-tree-loop bundles.
+- [x] Update mirrored state-model `SKILL.md` handoff wording if regeneration does not cover it.
+- [x] Run targeted verification and diff checks.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [x] `## Invoke With YAML` is described as optional clean-context routing metadata for the next invocation.
+- [x] Progress handoff session guidance says to paste the YAML only into the fresh/clean context alongside the exact command.
+- [x] `Staying in this session is allowed` is removed or made explicitly exceptional in generated design-tree-loop bundles.
+- [x] Codex and Claude state-model `SKILL.md` mirrors carry the same fresh/clean-context cue.
+- [x] Verification commands show the new wording and no generator drift.
+
+### Test Plan
+
+- `rg -n "Invoke With YAML.*fresh|clean context|not consumed state|durable cursor" packs/product-design docs`
+- `rg -n "Staying in this session is allowed" packs/product-design/*/state-model/DESIGN-TREE-LOOP.md`
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `git diff --check`
+- `git status --short --branch`
+
+## Historical Implementation - Platform Fit Workshop
+
+**Status: COMPLETE (2026-07-01) - added platform-fit ranking and probe routing to the product-design tree.**
 
 ### Goal
 

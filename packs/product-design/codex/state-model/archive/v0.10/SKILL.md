@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.11
+version: v0.10
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -102,7 +102,7 @@ Every chunked stop (setup, each framework, and the synthesis-ready handoff) must
 - `Current phase complete: <setup | framework name | synthesis preparation> is complete.`
 - `Next phase: <plain-English framework purpose or assemble+approve work>.`
 - `Why repeat this command: the repeated command is intentional; $state-model cold-starts, reads the durable cursor, and advances the next pending framework or synthesis.`
-- `Session guidance: continue in a fresh session — clear context (/clear), then run the Exact next command below. If using the ## Invoke With YAML block, paste it only into that fresh/clean context alongside the command; it gives the cold agent routing context, while the command and durable cursor remain authoritative. Staying in this session is exceptional and allowed only for small folded runs where context is still clearly sufficient.`
+- `Session guidance: continue in a fresh session — clear context (/clear), then run the Exact next command below; $state-model cold-starts and reads the durable cursor. Pasting the ## Invoke With YAML block alongside the command gives the fresh agent its routing context (optional — the command alone resolves state from the cursor). Staying in this session is allowed only if enough context remains.`
 - `Exact next command: $state-model <literal topic-or-branch>.`
 
 Use the same `$state-model` command for setup → first framework, framework → next framework, and final framework → synthesis; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (clear context, re-run the command in a fresh session), not a passive recommendation.
