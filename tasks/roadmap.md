@@ -4,7 +4,7 @@
 
 ## Current Implementation - BIP Page Location And Fresh-Audience Clarity
 
-**Status: IN PROGRESS (2026-07-02) - implementation and verification complete; commit/push pending.**
+**Status: COMPLETE (2026-07-02) - standardized BIP output location and fresh-audience requirements.**
 
 ### Goal
 
@@ -25,7 +25,7 @@ Improve Build-In-Public output so generated posts are understandable to a fresh 
 - [x] Update `scripts/audit-alignment-pages.mjs` and focused tests to enforce the new BIP path shape and clarity fields.
 - [x] Regenerate alignment convention bundles and packaged assets as needed.
 - [x] Run focused verification and record results.
-- [ ] Commit and push intended changes on `master` while preserving unrelated dirty work.
+- [x] Commit and push intended changes on `master` while preserving unrelated dirty work.
 
 ### Acceptance Criteria
 

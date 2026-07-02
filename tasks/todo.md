@@ -23,7 +23,7 @@ Improve Build-In-Public output so generated posts are understandable to a fresh 
 - [x] Update `scripts/audit-alignment-pages.mjs` and focused tests to enforce the new BIP path shape and clarity fields.
 - [x] Regenerate alignment convention bundles and packaged assets as needed.
 - [x] Run focused verification and record results.
-- [ ] Commit and push intended changes on `master` while preserving unrelated dirty work.
+- [x] Commit and push intended changes on `master` while preserving unrelated dirty work.
 
 ### Acceptance Criteria
 
@@ -51,6 +51,7 @@ Verified:
 - `npx vitest run tests/layer1/alignment-gates.test.ts tests/layer1/ship-end-bip.test.ts tests/layer1/audit-alignment-pages.test.ts` passed: 3 files, 75 tests.
 - `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
 - `git diff --check` passed.
+- BIP implementation committed and pushed on `master`: `2d6548b17 fix: standardize bip page output`.
 - Pre-existing dirty package files were preserved out of scope: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
 
 ## Paused Implementation - Create YouTube Meta Research Skill
