@@ -86,7 +86,7 @@ const bipPostConfirmationSnippets = [
   "alignment.bip_platforms",
   "set-bip-platforms <platform...>",
   "Do not treat `alignment.bip_platforms` as a channel filter",
-  "alignment/bip-{skill-name}.html",
+  "alignment/bip/{skill-name}.html",
   "data-bip-generation=\"post-confirmation\"",
   "data-bip-source-skill=\"{skill-name}\"",
   "every bundled channel convention",
@@ -96,7 +96,7 @@ const bipPostConfirmationSnippets = [
   "long, exhaustive list of candidate posts, community submissions, or video outlines for every bundled channel",
   "Rank the top options clearly for each channel",
   "recommendation status (`recommended`, `not-now`, or `rejected`)",
-  "recommendation notes, source basis, claim-safety notes, risk level, publish precheck, loaded convention path",
+  "recommendation notes, source basis, fresh-audience context, jargon expansion, public-facing significance, claim-safety notes, risk level, publish precheck, loaded convention path",
   "does not publish posts, write social-ledger records, alter canonical artifacts, or require another approval",
 ];
 
@@ -315,7 +315,7 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} BIP page kind`).toContain('data-alignment-page-kind="bip"');
       expect(content, `${path} BIP generation`).toContain('data-bip-generation="post-confirmation"');
       expect(content, `${path} BIP source skill`).toContain(`data-bip-source-skill="${skillName}"`);
-      expect(content, `${path} BIP page path`).toContain(`alignment/bip-${skillName}.html`);
+      expect(content, `${path} BIP page path`).toContain(`alignment/bip/${skillName}.html`);
       expect(content, `${path} BIP no pre-final checkpoint`).toContain("do not create a pre-final Stage 2 BIP checkpoint");
       expect(content, `${path} BIP post-confirmation sequence`).toContain("Only after that confirmation sequence succeeds");
       for (const snippet of bipPostConfirmationSnippets) {

@@ -44,6 +44,9 @@ Every video concept must include:
 - `target_channel`
 - `drafting_mode`: `platform_aligned` or `creator_inspired`
 - `source_basis`
+- `fresh_audience_context`: the plain-language project/work context a viewer needs before the idea makes sense.
+- `jargon_expansion`: acronyms, internal labels, and project-specific terms expanded or replaced with public wording.
+- `public_significance`: why the work matters to the target audience without relying on private project history.
 - `format`: long-form, short-form, native feed video, poll/post-adjacent video, or reusable prompt
 - `hook`
 - `outline_or_script`
@@ -71,6 +74,7 @@ Every video concept must include:
 ## Cross-Channel Defaults
 
 - Confirm the publish goal before scripting: teach, announce, demo, recruit feedback, summarize research, or invite discussion.
+- Assume viewers have no project history. Put the setup, term definitions, and stakes in the hook or first beat; reject ideas that only make sense to insiders.
 - Make one core claim per short video and one coherent arc per long-form video.
 - Write the claim before the hook. Hooks may be punchy, but they must remain true.
 - Include caption/subtitle notes whenever the platform supports or expects silent playback.
@@ -88,6 +92,9 @@ When an alignment page uses this convention, render video ideas with these field
 - `format`
 - `idea_title`
 - `source_basis`
+- `fresh_audience_context`
+- `jargon_expansion`
+- `public_significance`
 - `hook`
 - `outline_or_script`
 - `visual_plan`

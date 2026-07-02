@@ -51,6 +51,9 @@ Each post option must include:
 - `target_channel`: platform or community.
 - `drafting_mode`: `platform_aligned` or `creator_inspired`.
 - `source_basis`: the specific work artifact, finding, changelog item, commit, public source, or approved user statement supporting the post.
+- `fresh_audience_context`: the plain-language project/work context a reader needs before the post makes sense.
+- `jargon_expansion`: acronyms, internal labels, and project-specific terms expanded or replaced with public wording.
+- `public_significance`: why the work matters to the target audience without relying on private project history.
 - `risk_level`: `low`, `medium`, or `high`.
 - `claim_safety_notes`: what was omitted, softened, or needs human approval.
 - `publish_precheck`: account/community-specific checks before posting.
@@ -75,6 +78,7 @@ When useful, generate both modes side by side so the user can choose between con
 ## Cross-Channel Defaults
 
 - Start from the work, not the channel. Identify the approved artifact, evidence, or outcome first.
+- Write for a fresh audience by default. If a post depends on internal context, add a short setup clause, define the term, or reject the angle as not publicly legible.
 - Prefer one clear idea per post. For multi-part work, create a thread, carousel, separate posts, or community discussion prompt only when the platform supports it and the user approves.
 - Use links as evidence or next action, not as the whole post. Avoid link-only posts except where community norms explicitly favor source submission.
 - Avoid unrelated hashtags. Use zero to two where hashtags are useful and accepted; use more only if the platform/community norm clearly supports it.
@@ -101,6 +105,9 @@ When an alignment page uses this convention, render channel decisions in a table
 - `angle`
 - `source_basis`
 - `audience`
+- `fresh_audience_context`
+- `jargon_expansion`
+- `public_significance`
 - `format`
 - `draft`
 - `risk_level`

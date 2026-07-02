@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-02
+
+- Moved the enabled Build-In-Public wrap-up page to `alignment/bip/ship-end.html` and required fresh-audience context, jargon expansion, and public-facing significance fields for every candidate so posts are understandable without prior project context.
+
 ## v0.11 - 2026-06-29
 
 - Routed the enabled Build-In-Public wrap-up batch to the single HTML BIP page `alignment/bip-ship-end.html` (post-confirmation page shape: stable BIP metadata, every bundled channel, recommendation/source-basis/claim-safety/risk/publish-precheck/loaded-convention fields, TTS include, viewport, no embeds/gates) — archived before replacement, included in `alignment/index.html`, and opened after wrap-up — instead of dumping candidates inline. The terminal now prints a one-line pointer to the file.

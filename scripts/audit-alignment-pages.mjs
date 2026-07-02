@@ -57,6 +57,9 @@ const BIP_CHANNEL_CONVENTIONS = [
 const BIP_REQUIRED_FIELD_PATTERNS = [
   ["recommendation notes", /\brecommendation[-_ ]notes?\b/i],
   ["source basis", /\bsource[-_ ]basis\b/i],
+  ["fresh-audience context", /\bfresh[-_ ]audience[-_ ]context\b/i],
+  ["jargon expansion", /\bjargon[-_ ]expansion\b/i],
+  ["public-facing significance", /\bpublic[-_ ](?:facing[-_ ])?significance\b/i],
   ["claim-safety notes", /\bclaim[-_ ]safety[-_ ]notes?\b/i],
   ["risk level", /\brisk[-_ ]level\b|\brisk\b/i],
   ["publish precheck", /\bpublish[-_ ]precheck\b|\bplatform[-_ ]or[-_ ]community[-_ ]precheck\b/i],
@@ -70,9 +73,23 @@ const BIP_RECOMMENDATION_STATUS_PATTERNS = [
 const BIP_OBSOLETE_CHECKPOINT_RE =
   /\b(?:data-bip-status|data-bip-page|data-bip-gates|bip_gates|bip_approval_status)\b/i;
 
-const pages = existsSync(alignmentDir)
-  ? readdirSync(alignmentDir).filter((f) => f.endsWith(".html")).sort()
-  : [];
+function collectHtmlPages(dir, prefix = "") {
+  if (!existsSync(dir)) return [];
+  const entries = [];
+  for (const dirent of readdirSync(dir, { withFileTypes: true })) {
+    if (dirent.name.startsWith(".")) continue;
+    const rel = prefix ? `${prefix}/${dirent.name}` : dirent.name;
+    const full = `${dir}/${dirent.name}`;
+    if (dirent.isDirectory()) {
+      entries.push(...collectHtmlPages(full, rel));
+    } else if (dirent.isFile() && dirent.name.endsWith(".html")) {
+      entries.push(rel);
+    }
+  }
+  return entries.sort();
+}
+
+const pages = collectHtmlPages(alignmentDir);
 // index.html is the central index, not an alignment page: it is exempt from
 // the per-page TTS and metadata checks but still held to viewport/embed rules.
 const activePages = pages.filter((f) => f !== "index.html");
@@ -105,7 +122,7 @@ function isConfirmedPage(html) {
 }
 
 function isBipPage(file, html) {
-  return file.startsWith("bip-") || file.endsWith("-bip.html") || /\bdata-alignment-page-kind=["']bip["']/i.test(html);
+  return file.startsWith("bip/") || file.startsWith("bip-") || file.endsWith("-bip.html") || /\bdata-alignment-page-kind=["']bip["']/i.test(html);
 }
 
 function htmlAttributeValue(tag, attribute) {
@@ -132,9 +149,9 @@ function requiredGateRecords(html) {
 function bipPostConfirmationDiagnostics(rel, file, html) {
   const diagnostics = [];
 
-  if (!file.startsWith("bip-")) {
+  if (!file.startsWith("bip/")) {
     diagnostics.push(
-      `Stale BIP page path in ${rel} — post-confirmation BIP pages must use alignment/bip-{skill-name}.html, not the old *-bip.html checkpoint shape.`,
+      `Stale BIP page path in ${rel} — post-confirmation BIP pages must use alignment/bip/{skill-name}.html, not top-level bip-* or old *-bip.html checkpoint shapes.`,
     );
   }
 
@@ -155,9 +172,9 @@ function bipPostConfirmationDiagnostics(rel, file, html) {
     diagnostics.push(
       `Missing BIP source-skill metadata in ${rel} — set data-bip-source-skill="{skill-name}".`,
     );
-  } else if (file !== `bip-${sourceSkill}.html`) {
+  } else if (file !== `bip/${sourceSkill}.html`) {
     diagnostics.push(
-      `BIP page path/source mismatch in ${rel} — data-bip-source-skill="${sourceSkill}" requires alignment/bip-${sourceSkill}.html.`,
+      `BIP page path/source mismatch in ${rel} — data-bip-source-skill="${sourceSkill}" requires alignment/bip/${sourceSkill}.html.`,
     );
   }
 
@@ -329,7 +346,7 @@ if (!existsSync(indexPath)) {
   for (const match of html.matchAll(/<a\s[^>]*\bhref="([^"]+\.html)"[^>]*>/g)) {
     const href = match[1];
     if (/^[a-z][a-z0-9+.-]*:/i.test(href)) continue; // external links are not entries
-    const name = href.split("/").pop();
+    const name = href.replace(/^\.\//, "");
     if (name === "index.html") continue;
     entries.push({ name, pos: match.index });
   }

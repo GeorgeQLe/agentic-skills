@@ -74,6 +74,7 @@ function pageHtml(overrides: {
 }
 
 function writePage(root: string, name: string, html: string = pageHtml()): void {
+  mkdirSync(dirname(join(root, "alignment", name)), { recursive: true });
   writeFileSync(join(root, "alignment", name), html);
 }
 
@@ -152,6 +153,9 @@ function postConfirmationBipBody(extra = ""): string {
     "<h3>Candidate fields</h3>",
     "<p>recommendation_notes: strongest confirmed-source angle for the channel.</p>",
     "<p>source_basis: confirmed canonical markdown and approval record.</p>",
+    "<p>fresh_audience_context: plain-language setup for readers who have not seen the alignment page.</p>",
+    "<p>jargon_expansion: BIP means Build-In-Public; internal workflow labels are expanded before publication.</p>",
+    "<p>public_significance: why this work matters to builders outside the project.</p>",
     "<p>claim_safety_notes: unsupported claims removed.</p>",
     "<p>risk_level: low.</p>",
     "<p>publish_precheck: verify account/community rules before posting.</p>",
@@ -574,7 +578,7 @@ describe("audit-alignment-pages fixture trees", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html");
-    writePage(root, "bip-page-a.html", pageHtml({
+    writePage(root, "bip/page-a.html", pageHtml({
       status: "confirmed",
       extraHtmlAttrs: [
         'data-alignment-page-kind="bip"',
@@ -583,7 +587,7 @@ describe("audit-alignment-pages fixture trees", () => {
       ],
       body: postConfirmationBipBody(),
     }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip/page-a.html" }]);
 
     const result = runScript(root);
     expect(result.stderr).toBe("");
@@ -596,21 +600,21 @@ describe("audit-alignment-pages fixture trees", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true);
     writePage(root, "page-a.html");
-    writePage(root, "bip-page-a.html", pageHtml({
+    writePage(root, "bip/page-a.html", pageHtml({
       status: "confirmed",
       body: "<section><h2>BIP Review</h2></section>",
     }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip/page-a.html" }]);
 
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, DRIFT");
-    expect(result.stderr).toContain("Missing BIP page metadata in alignment/bip-page-a.html");
-    expect(result.stderr).toContain("Missing BIP generation metadata in alignment/bip-page-a.html");
-    expect(result.stderr).toContain("Missing BIP source-skill metadata in alignment/bip-page-a.html");
-    expect(result.stderr).toContain("Incomplete BIP channel coverage in alignment/bip-page-a.html");
-    expect(result.stderr).toContain("Incomplete BIP candidate fields in alignment/bip-page-a.html");
-    expect(result.stderr).toContain("Incomplete BIP recommendation statuses in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Missing BIP page metadata in alignment/bip/page-a.html");
+    expect(result.stderr).toContain("Missing BIP generation metadata in alignment/bip/page-a.html");
+    expect(result.stderr).toContain("Missing BIP source-skill metadata in alignment/bip/page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP channel coverage in alignment/bip/page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP candidate fields in alignment/bip/page-a.html");
+    expect(result.stderr).toContain("Incomplete BIP recommendation statuses in alignment/bip/page-a.html");
   });
 
   it("fails stale pre-final BIP checkpoint pages", () => {
@@ -639,7 +643,7 @@ describe("audit-alignment-pages fixture trees", () => {
     const root = makeFixtureRoot();
     writeProjectConfig(root, true, ["linkedin"]);
     writePage(root, "page-a.html");
-    writePage(root, "bip-page-a.html", pageHtml({
+    writePage(root, "bip/page-a.html", pageHtml({
       status: "confirmed",
       extraHtmlAttrs: [
         'data-alignment-page-kind="bip"',
@@ -648,12 +652,12 @@ describe("audit-alignment-pages fixture trees", () => {
       ],
       body: postConfirmationBipBody(platformSetupGate()),
     }));
-    writeIndex(root, [{ href: "page-a.html" }, { href: "bip-page-a.html" }]);
+    writeIndex(root, [{ href: "page-a.html" }, { href: "bip/page-a.html" }]);
 
     const result = runScript(root);
     expect(result.status).toBe(1);
     expect(result.stdout).toContain("BIP handling: 1 post-confirmation pages, DRIFT");
-    expect(result.stderr).toContain("Active BIP approval gates in alignment/bip-page-a.html");
+    expect(result.stderr).toContain("Active BIP approval gates in alignment/bip/page-a.html");
   });
 
   it("fails when active pages exist but the central index is missing", () => {
