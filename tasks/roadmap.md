@@ -2,6 +2,46 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Design-Tree Handoff Verification
+
+### Goal
+
+Add a mandatory pre-final handoff verification step to product-design/product-testing contracts so agents cannot route to `consolidate-prototypes` unless current design-tree artifacts prove consolidation readiness.
+
+### Plan
+
+- [x] Archive and version affected active `SKILL.md` files:
+  - `packs/product-testing/{codex,claude}/uat`
+  - `packs/product-design/{codex,claude}/logic-wiring`
+  - `packs/product-design/{codex,claude}/consolidate-prototypes`
+- [x] Add the shared handoff verification classifications and conservative fallback rule to `docs/design-tree-loop-convention.md`.
+- [x] Update Codex and Claude `uat`, `logic-wiring`, and `consolidate-prototypes` contracts to run handoff verification immediately before terminal handoff text or `agent_routing`.
+- [x] Keep `research/.progress.yaml` scoped to product-path/product-line state and out of UAT/prototype/consolidation readiness storage.
+- [x] Extend `tests/layer1/post-uat-consolidation-routing.test.ts` for the new verification contract.
+- [x] Run focused verification and record results.
+
+### Acceptance Criteria
+
+- Final handoffs include a compact `Handoff verification: <classification>; ...` readiness line.
+- The four classifications are documented and present in both Codex and Claude active contracts.
+- Contradictory artifacts conservatively route to manual UAT or the next unresolved approved UX/UI/user-flow branch, never consolidation.
+- Tests assert `research/.progress.yaml` is not named as the UAT/prototype/consolidation readiness store.
+
+### Verification Plan
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts` passed: 5 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills, 0 violations.
+- `git diff --check` passed.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+
 ## Historical Implementation - Post-UAT Consolidation Routing Fix
 
 ### Goal

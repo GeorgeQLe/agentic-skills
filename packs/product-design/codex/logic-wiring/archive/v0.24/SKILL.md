@@ -2,7 +2,7 @@
 name: logic-wiring
 description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
-version: v0.25
+version: v0.24
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -53,12 +53,6 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first build item with status `pending` or `needs-revision`** (honoring `--variant N`), builds it, records its decision, and stops with the handoff in `## Next Work`. Items the user defers are marked `deferred`; abandoned items `dropped`.
 
 **Modify-back originates here.** Human validation can `approve`, `reject`, `retry`, or `modify`. A `modify` decision **requires `targets[]`** naming the upstream node(s) to re-open — a `state-model` model attachment, `platform_fit`, or a `user-flow` branch — returning each to pending so its owning skill re-runs its flow; descendant branches below the re-opened node are marked stale.
-
-## Handoff Verification
-
-Immediately before final `## Next Work`, `## Recommended next command`, or `agent_routing` text, classify the current design-tree state from `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`, and `tasks/manual-todo.md` as exactly one of `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, or `ready-for-consolidation`. Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness; it remains product-path/product-line state only.
-
-After this skill builds a prototype and no UAT evidence has been recorded yet, the normal classification is `manual-uat-needed`; if approved branches remain unresolved, use `continue-design-branch`. If artifacts are contradictory, choose one of those conservative classifications and do not name `$consolidate-prototypes` as the next route.
 
 ## Process
 
@@ -245,8 +239,6 @@ Before handing off to `$uat --variant-evaluation`, check whether `uat` is direct
 
 ## Next Work
 
-Handoff verification: manual-uat-needed; `$consolidate-prototypes` is blocked until built variants have recorded UAT evidence and every approved sibling branch is evaluated, excluded, deferred, or marked spec-only by explicit user decision.
-
 **Next work:** after the prototype preview is approved, route the built variants only to `$uat --variant-evaluation` for hands-on evaluation evidence. Consolidation is a later decision owned by the UAT evidence plus the user's explicit scope/convergence choice, including explicit handling of any approved but unbuilt or deferred UX/UI branches. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell with `npx skillpacks install product-testing`, then run `$uat --variant-evaluation`. If `$uat` remains unavailable after install, start a fresh Codex CLI session and retry `$uat --variant-evaluation`. Do not route downstream until the prototype preview is approved.
 
 **Recommended next command:**
@@ -257,7 +249,7 @@ Handoff verification: manual-uat-needed; `$consolidate-prototypes` is blocked un
 
 ## Invoke With YAML
 
-Run Handoff Verification immediately before emitting this payload. Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `$uat --variant-evaluation` for the built variants. Do not include `$consolidate-prototypes` in the post-build `agent_routing`; consolidation is a later UAT-owned evidence and explicit MVP-scope decision. The human-facing `## Next Work` text must still include the plain install-then-run guidance above; `agent_routing` YAML cannot be the only UAT handoff.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `$uat --variant-evaluation` for the built variants. Do not include `$consolidate-prototypes` in the post-build `agent_routing`; consolidation is a later UAT-owned evidence and explicit MVP-scope decision. The human-facing `## Next Work` text must still include the plain install-then-run guidance above; `agent_routing` YAML cannot be the only UAT handoff.
 
 ## Constraints
 

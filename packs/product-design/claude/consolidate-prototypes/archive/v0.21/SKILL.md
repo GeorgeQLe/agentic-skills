@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.22
+version: v0.21
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -38,12 +38,6 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 
 **Modify-back.** When consolidation surfaces a flaw in an upstream node, record a `modify` decision whose `targets[]` re-opens that `model_ref`, `platform_fit`, or user-flow branch; convergence resumes once the re-opened node is re-approved.
 
-## Handoff Verification
-
-Immediately before any final `## Next Work`, `## Recommended next command`, or `agent_routing` payload, classify the current design-tree state from `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`, and `tasks/manual-todo.md` as exactly one of `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, or `ready-for-consolidation`. Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness; it remains product-path/product-line state only.
-
-Proceed with consolidation only after the classification is `ready-for-consolidation`. If artifacts are contradictory, choose the conservative route: `manual-uat-needed` for missing/`Not run` evidence, or `continue-design-branch` for the next unresolved approved UX/UI/user-flow branch. If there is exactly one built/evidenced variant and sibling approved branches are unbuilt or deferred without explicit user scope handling, classify `single-variant-convergence-needs-explicit-scope` and block `/consolidate-prototypes` until the user records the MVP scope decision.
-
 ## Process
 
 ### 0. Product-Path Scope Resolution
@@ -73,7 +67,6 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 2. **Evidence gate**
    - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend the Pack Availability Guard handoff: if `uat` is not directly available in the active skill list/session, run `npx skillpacks install product-testing` from the project shell, then run `/uat --variant-evaluation`.
-   - Run Handoff Verification before deciding whether this skill may continue. Only `ready-for-consolidation` allows consolidation; every other classification stops with the corresponding readiness line and route.
    - Stop if `research/uat-variant-evaluation-[topic].md` or a product-path equivalent says `not ready`, includes unchecked items in the "Ready for `/consolidate-prototypes` (product-design pack)?" checklist, or contains only `Not run`, skipped, deferred, or spec-only result logs with no captured evidence.
    - Stop while any built MVP-scope branch has `Status: Not run`; route back to manual UAT/evidence capture through `/uat --variant-evaluation`.
    - Do not infer a winner from specs alone. Built variants need hands-on review evidence before consolidation.
@@ -163,15 +156,13 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 ## Next Work
 
-Handoff verification: ready-for-consolidation; UAT evidence and explicit branch-scope decisions supported this consolidation, and post-prototype cleanup can proceed from the approved AFPS graduation artifact.
-
 **Next work:** after the consolidated MVP and AFPS graduation document are approved, run the post-prototype research pass (`/research-roadmap --post-prototype`) and then formalize the MVP into a production spec with `/spec-interview`. The Production Ready Approval gate is owned by that spec handoff; do not create a separate production-readiness state file or lifecycle registry here.
 
 **Recommended next command:** `/research-roadmap --post-prototype`.
 
 ## Invoke With YAML
 
-Run Handoff Verification immediately before emitting this payload; emit downstream routing only after `ready-for-consolidation` has been proven from the artifacts. Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}` filled to literal values: `/research-roadmap --post-prototype`, then `/spec-interview`.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}` filled to literal values: `/research-roadmap --post-prototype`, then `/spec-interview`.
 
 ## Constraints
 

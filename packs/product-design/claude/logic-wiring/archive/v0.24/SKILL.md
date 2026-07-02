@@ -2,7 +2,7 @@
 name: logic-wiring
 description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
-version: v0.25
+version: v0.24
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -10,11 +10,11 @@ visual_tier: prototype
 
 # Logic Wiring
 
-Invoke as `$logic-wiring`.
+Invoke as `/logic-wiring`.
 
-Wire the approved UI screens and non-visual channel behaviors into a clickable, state-backed prototype before production spec work begins. This is route step 4 of the product-design flow (the build leaf, renamed from `prototype` in v0.4). It **consumes the visual screens produced by `$build-ui-screens` plus the upstream surface/channel map** and makes the selected route/screen realizations reachable and interactive: navigation, state transitions, and — for CLI/API/infra projects — the runnable logic that turns a static wireframe or non-visual contract into something a human can actually walk through. For `platform_probe` build items from the Platform Fit Workshop, dispatch to the smallest appropriate probe artifact: web/mobile clickable HTML, CLI script, API mock + curl, SDK sample, browser-extension simulation, desktop/local shell, integration automation harness, or marketplace two-sided flow. Prototypes and platform probes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, curl, inspect, or simulate so they can form opinions before committing to a direction.
+Wire the approved UI screens and non-visual channel behaviors into a clickable, state-backed prototype before production spec work begins. This is route step 4 of the product-design flow (the build leaf, renamed from `prototype` in v0.4). It **consumes the visual screens produced by `/build-ui-screens` plus the upstream surface/channel map** and makes the selected route/screen realizations reachable and interactive: navigation, state transitions, and — for CLI/API/infra projects — the runnable logic that turns a static wireframe or non-visual contract into something a human can actually walk through. For `platform_probe` build items from the Platform Fit Workshop, dispatch to the smallest appropriate probe artifact: web/mobile clickable HTML, CLI script, API mock + curl, SDK sample, browser-extension simulation, desktop/local shell, integration automation harness, or marketplace two-sided flow. Prototypes and platform probes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, curl, inspect, or simulate so they can form opinions before committing to a direction.
 
-This step does not invent new screens or new surface/channel semantics. When a required visual realization or batch is missing, route back to `$build-ui-screens` rather than drawing fresh UI here; when a channel behavior or state contract is unclear, route back to the owning upstream design step. The acceptance bar is **flow reachability**: every selected surface realization in the variation's flow can be reached and exited end-to-end, with one binding alignment gate per variation before downstream routing.
+This step does not invent new screens or new surface/channel semantics. When a required visual realization or batch is missing, route back to `/build-ui-screens` rather than drawing fresh UI here; when a channel behavior or state contract is unclear, route back to the owning upstream design step. The acceptance bar is **flow reachability**: every selected surface realization in the variation's flow can be reached and exited end-to-end, with one binding alignment gate per variation before downstream routing.
 
 Use the prototype build plan from `design/prototype-build-plan-[topic].md` as the authoritative todo ledger. The UX variation plan describes possible branches; the build plan says which branches to build now, which need revision, and which are deferred or dropped.
 
@@ -26,7 +26,7 @@ Before proceeding, verify the following files exist:
 
 - At least one `design/ux-variations-*.md` file or product-path-scoped equivalent.
 - At least one `design/ui-*.md` file or product-path-scoped equivalent (e.g., `design/ui-[topic].md`, `design/ui-layout-variations-[topic].md`, or `design/ui-requirements-[topic].md`).
-- One `design/prototype-build-plan-*.md` file or product-path-scoped equivalent produced by `$user-flow-map --prototype-build-plan`.
+- One `design/prototype-build-plan-*.md` file or product-path-scoped equivalent produced by `/user-flow-map --prototype-build-plan`.
 - Every ordinary UI buildable item in the prototype build plan must reference the source UI experiment/review branch, normally with `ui_experiment_id` matching `design/flow-tree.schema.json`. A build plan that only names `ux_variation_id` values and has no UI experiment/review linkage is not a valid prototype ledger. Exception: a build item with `platform_probe.non_visual: true` may omit `ui_experiment_id` when it names the platform, probe type, risk tested, and evidence target.
 
 Also read `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` as upstream surface inventory, channel constraints, visual UI candidate mapping, route/screen realization, task-sequencing, branch-state, build-item status, and approval-state signals.
@@ -34,11 +34,11 @@ Also read `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` as upstream s
 If either is missing, halt with a clear message:
 
 > Prototyping requires UX variation planning and UI specification. Missing prerequisites:
-> - `design/ux-variations-*.md` — run `$ux-variations` to create variation concepts.
-> - `design/ui-*.md` — run `$ui-interview` to define the interface specification.
-> - `design/prototype-build-plan-*.md` — run `$user-flow-map --prototype-build-plan [topic]` to create the prototype todo ledger.
+> - `design/ux-variations-*.md` — run `/ux-variations` to create variation concepts.
+> - `design/ui-*.md` — run `/ui-interview` to define the interface specification.
+> - `design/prototype-build-plan-*.md` — run `/user-flow-map --prototype-build-plan [topic]` to create the prototype todo ledger.
 
-Do not proceed past this gate until all prerequisites exist. If a non-probe build item lacks UI experiment/review linkage, halt and route back to `$ui-interview [specific-ux-variation]` for the missing UI branch packet or to `$user-flow-map --prototype-build-plan [topic]` after UI approval exists. If a `platform_probe` item is malformed or tries to build a full parallel product instead of a thin risk probe, route back to `$user-flow-map --prototype-build-plan [topic]` to repair the ledger. Proceed without UI linkage only when `platform_probe.non_visual: true` is present or the current user instruction explicitly records an ad hoc bypass.
+Do not proceed past this gate until all prerequisites exist. If a non-probe build item lacks UI experiment/review linkage, halt and route back to `/ui-interview [specific-ux-variation]` for the missing UI branch packet or to `/user-flow-map --prototype-build-plan [topic]` after UI approval exists. If a `platform_probe` item is malformed or tries to build a full parallel product instead of a thin risk probe, route back to `/user-flow-map --prototype-build-plan [topic]` to repair the ledger. Proceed without UI linkage only when `platform_probe.non_visual: true` is present or the current user instruction explicitly records an ad hoc bypass.
 
 ## Design-Tree Flow
 
@@ -53,12 +53,6 @@ This skill runs the unified **5-stage design-tree flow** (`interrogation → res
 **Per-branch iteration contract.** Each session cold-starts, reads the flow-tree manifest, resolves the **first build item with status `pending` or `needs-revision`** (honoring `--variant N`), builds it, records its decision, and stops with the handoff in `## Next Work`. Items the user defers are marked `deferred`; abandoned items `dropped`.
 
 **Modify-back originates here.** Human validation can `approve`, `reject`, `retry`, or `modify`. A `modify` decision **requires `targets[]`** naming the upstream node(s) to re-open — a `state-model` model attachment, `platform_fit`, or a `user-flow` branch — returning each to pending so its owning skill re-runs its flow; descendant branches below the re-opened node are marked stale.
-
-## Handoff Verification
-
-Immediately before final `## Next Work`, `## Recommended next command`, or `agent_routing` text, classify the current design-tree state from `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`, and `tasks/manual-todo.md` as exactly one of `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, or `ready-for-consolidation`. Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness; it remains product-path/product-line state only.
-
-After this skill builds a prototype and no UAT evidence has been recorded yet, the normal classification is `manual-uat-needed`; if approved branches remain unresolved, use `continue-design-branch`. If artifacts are contradictory, choose one of those conservative classifications and do not name `$consolidate-prototypes` as the next route.
 
 ## Process
 
@@ -85,7 +79,7 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
   - `research/competitive-analysis.md` — differentiation points the prototype should highlight.
   - `research/journey-map.md` — task progression, entry points, channel expectations, and route/screen sequencing.
 - Read the prototype build plan: `design/prototype-build-plan-[topic].md` or product-path-scoped equivalent. Treat it as the authoritative list of build items and statuses.
-- Validate the prototype build plan before building: each `pending` or `needs-revision` UI item must include `ui_experiment_id` or an equivalent UI review reference and must point to a concrete `design/ui-*.md` UI branch packet. A `platform_probe.non_visual: true` item may omit UI linkage only when it names the platform, probe type, risk tested, and evidence target. If non-probe items only contain UX variation IDs, stop; the missing route is `$ui-interview [specific-ux-variation]` followed by `$user-flow-map --prototype-build-plan [topic]`, unless an explicit user bypass is recorded.
+- Validate the prototype build plan before building: each `pending` or `needs-revision` UI item must include `ui_experiment_id` or an equivalent UI review reference and must point to a concrete `design/ui-*.md` UI branch packet. A `platform_probe.non_visual: true` item may omit UI linkage only when it names the platform, probe type, risk tested, and evidence target. If non-probe items only contain UX variation IDs, stop; the missing route is `/ui-interview [specific-ux-variation]` followed by `/user-flow-map --prototype-build-plan [topic]`, unless an explicit user bypass is recorded.
 - Read variation plans: `design/ux-variations-[topic].md` or product-path-scoped equivalents for each relevant topic.
 - Read user-flow maps: `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml` for surface inventory, channels, visual UI candidates, route/screen realizations, entry points, branches, decision points, required states, failure/recovery paths, handoffs, branch approval state, and low-fidelity wireframe notes when present.
 - Read per-variation UI branch packets: `design/ui-[topic].md`, `design/ui-layout-variations-[topic].md`, and `design/ui-requirements-[topic].md` when present.
@@ -175,7 +169,7 @@ For each build item in `design/prototype-build-plan-[topic].md` with status `pen
 
 1. Read the build item ID, status, source user-flow branch, UX variation branch, UI experiment/review branch when present, `platform_probe` metadata when present, expected prototype path, and notes from the build plan.
 2. Read the variation's thesis, target user, layout/flow model, and prototype scope from the referenced variation spec.
-3. For ordinary UI items, read the corresponding UI branch details from `design/ui-[topic].md` or `design/ui-layout-variations-[topic].md`, the upstream surface/channel constraints from `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml`, and the visual screens already produced by `$build-ui-screens` (recorded in the `ui_experiments[].build_ledger[]` entries on `design/**/flow-tree-*.yaml`). Wire those route/screen realizations and channel behaviors; do not invent new ones. If a flow step has no screen at `minimum-ui-reached` (or better), stop and route back to `$build-ui-screens` for that batch. For `platform_probe` items, read `platform_fit` from the flow-tree manifest and build only the specified probe artifact and evidence path.
+3. For ordinary UI items, read the corresponding UI branch details from `design/ui-[topic].md` or `design/ui-layout-variations-[topic].md`, the upstream surface/channel constraints from `design/user-flow-[topic].md` and `design/**/flow-tree-*.yaml`, and the visual screens already produced by `/build-ui-screens` (recorded in the `ui_experiments[].build_ledger[]` entries on `design/**/flow-tree-*.yaml`). Wire those route/screen realizations and channel behaviors; do not invent new ones. If a flow step has no screen at `minimum-ui-reached` (or better), stop and route back to `/build-ui-screens` for that batch. For `platform_probe` items, read `platform_fit` from the flow-tree manifest and build only the specified probe artifact and evidence path.
 4. Build the prototype artifact at the build plan's expected path, normally `prototypes/{topic}/variation-{N}/`, by making each screen reachable and interactive: clickable navigation, state transitions, and runnable CLI/API/infra logic where the project type calls for it.
 5. After each successful build, update the build plan item status to `built`, add the prototype path, advance the wired flow steps in `design/**/flow-tree-*.yaml` `ui_experiments[].build_ledger[]` from `minimum-ui-reached` to `wired` for UI builds, and update `prototype_build_plan.items[]`. For platform probes, record the evidence target and result path in the build item notes. The acceptance bar is **flow reachability** for UI builds and **risk evidence** for platform probes.
 6. If a build item cannot be completed because the design is unclear, mark it `needs-revision` with a short note instead of inventing missing design decisions.
@@ -234,30 +228,26 @@ After prototypes are built, recommend:
 
 > Recommended next command:
 > 1. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell: `npx skillpacks install product-testing`.
-> 2. Run `$uat --variant-evaluation`.
-> 3. If `$uat` remains unavailable after install, start a fresh Codex CLI session and retry `$uat --variant-evaluation`.
+> 2. Run `/uat --variant-evaluation`.
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 
 ## Pack Availability Guard
 
-Before handing off to `$uat --variant-evaluation`, check whether `uat` is directly available in the active skill list/session. If it is unavailable, identify `uat` as provided by the `product-testing` pack and tell the user to run `npx skillpacks install product-testing`, then `$uat --variant-evaluation`. If `$uat` remains unavailable after install, tell the user to start a fresh Codex CLI session and retry `$uat --variant-evaluation`. Do not tell users to install the `uat` skill directly.
+Before handing off to `/uat --variant-evaluation`, check whether `uat` is directly available in the active skill list/session. If it is unavailable, identify `uat` as provided by the `product-testing` pack and tell the user to run `npx skillpacks install product-testing`, then `/uat --variant-evaluation`. Do not tell users to install the `uat` skill directly.
 
 ## Next Work
 
-Handoff verification: manual-uat-needed; `$consolidate-prototypes` is blocked until built variants have recorded UAT evidence and every approved sibling branch is evaluated, excluded, deferred, or marked spec-only by explicit user decision.
-
-**Next work:** after the prototype preview is approved, route the built variants only to `$uat --variant-evaluation` for hands-on evaluation evidence. Consolidation is a later decision owned by the UAT evidence plus the user's explicit scope/convergence choice, including explicit handling of any approved but unbuilt or deferred UX/UI branches. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell with `npx skillpacks install product-testing`, then run `$uat --variant-evaluation`. If `$uat` remains unavailable after install, start a fresh Codex CLI session and retry `$uat --variant-evaluation`. Do not route downstream until the prototype preview is approved.
+**Next work:** after the prototype preview is approved, route the built variants only to `/uat --variant-evaluation` for hands-on evaluation evidence. Consolidation is a later decision owned by the UAT evidence plus the user's explicit scope/convergence choice, including explicit handling of any approved but unbuilt or deferred UX/UI branches. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell with `npx skillpacks install product-testing`, then run `/uat --variant-evaluation`. Do not route downstream until the prototype preview is approved.
 
 **Recommended next command:**
 
 1. `npx skillpacks install product-testing` if `uat` is not directly available in the active skill list/session.
-2. `$uat --variant-evaluation`.
-3. Start a fresh Codex CLI session and retry `$uat --variant-evaluation` if `$uat` remains unavailable after install.
+2. `/uat --variant-evaluation`.
 
 ## Invoke With YAML
 
-Run Handoff Verification immediately before emitting this payload. Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `$uat --variant-evaluation` for the built variants. Do not include `$consolidate-prototypes` in the post-build `agent_routing`; consolidation is a later UAT-owned evidence and explicit MVP-scope decision. The human-facing `## Next Work` text must still include the plain install-then-run guidance above; `agent_routing` YAML cannot be the only UAT handoff.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants. Do not include `/consolidate-prototypes` in the post-build `agent_routing`; consolidation is a later UAT-owned evidence and explicit MVP-scope decision. The human-facing `## Next Work` text must still include the plain install-then-run guidance above; `agent_routing` YAML cannot be the only UAT handoff.
 
 ## Constraints
 
@@ -266,10 +256,11 @@ Run Handoff Verification immediately before emitting this payload. Emit the `age
 - Do not build production-quality code. Prototypes are disposable artifacts for evaluation, not starting points for implementation.
 - Do not skip buildable items. Build all `pending` or `needs-revision` items in the prototype build plan unless `--variant N` is provided.
 - Do not build `deferred` or `dropped` items unless the user explicitly reactivates them.
+- Do not build from a prototype build plan that lacks `ui_experiment_id` or equivalent UI review linkage on ordinary UI buildable items. A UX variation ID alone is not enough; route to `/ui-interview` and rebuild the ledger unless the user explicitly records an ad hoc bypass. `platform_probe.non_visual: true` is the only schema-backed non-visual exception.
 - Do not use `design/ux-variations-*.md` as the build todo list when a prototype build plan exists; it is source evidence, not the ledger.
-- Do not build from a prototype build plan that lacks `ui_experiment_id` or equivalent UI review linkage on ordinary UI buildable items. A UX variation ID alone is not enough; route to `$ui-interview` and rebuild the ledger unless the user explicitly records an ad hoc bypass. `platform_probe.non_visual: true` is the only schema-backed non-visual exception.
 - Do not choose a winning variation or recommend consolidation. That is the user's decision after UAT evaluation.
 - Do not modify specs, research documents, or task files. Only create files in the `prototypes/` directory and update the prototype build-plan/flow-tree status ledger.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell, before the target skill.
 
 ## Alignment Page
 

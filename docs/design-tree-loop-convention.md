@@ -414,6 +414,39 @@ remains unavailable after install, start a fresh Codex CLI session and retry. Do
 to install the `uat` skill directly. An `agent_routing` YAML payload may repeat the resolved UAT
 command, but it cannot be the only human-facing UAT command or install guidance.
 
+### Handoff Verification
+
+Immediately before any terminal `## Next Work`, `## Recommended next command`,
+`## Recommended Next Command`, or `agent_routing` payload that could advance beyond prototype
+evaluation, run a handoff verification pass against the current design-tree artifacts. The
+source of truth is `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`,
+and `tasks/manual-todo.md`. Do not use `research/.progress.yaml` for UX branch state, prototype
+readiness, UAT status, or consolidation readiness; it tracks active product paths/product lines
+only.
+
+Classify the current state as exactly one of:
+
+- `continue-design-branch`: unresolved approved UX/UI/user-flow branches remain and need the
+  next owning design skill before consolidation can be considered.
+- `manual-uat-needed`: a built prototype exists, but a UAT result log is `Not run`, missing
+  evidence, or blocked by an unchecked human evaluation item.
+- `single-variant-convergence-needs-explicit-scope`: exactly one built variant has evidence,
+  but sibling approved branches are unbuilt or deferred and the user has not explicitly chosen
+  single-variant MVP scope with an exclude/defer/spec-only decision for every sibling branch.
+- `ready-for-consolidation`: UAT evidence exists and every approved branch is evaluated,
+  excluded from MVP, deferred from MVP, or marked spec-only by explicit user decision.
+
+Every terminal handoff that names a downstream command must include a compact readiness line
+before the command, for example:
+
+```markdown
+Handoff verification: manual-uat-needed; `$consolidate-prototypes` is blocked until Trust-First evidence is recorded or single-variant MVP scope is explicit.
+```
+
+If artifacts are missing, stale, or contradictory, choose the conservative route: manual
+UAT/evidence capture or the next unresolved approved UX/UI/user-flow branch, never
+`consolidate-prototypes`.
+
 For any self-routing stop inside **intra-skill substep chunking** (setup stop, per-unit stop,
 or assemble handoff), `## Next Work` must begin with a visible **Progress Handoff Block** before
 the prose handoff. Use this structure:
@@ -503,7 +536,9 @@ only — they hand results back to the invoking parent and do **not** route down
   explicit handling of every approved branch: evaluated in MVP scope, explicitly excluded
   from MVP, deferred from MVP, or included only as a spec reference. A single-variant MVP is
   valid only when the user explicitly chooses that convergence scope and names how the
-  unbuilt/deferred approved branches are handled. UAT routing must use the Pack Availability Guard in `## Next Work`:
+  unbuilt/deferred approved branches are handled. Before any handoff recommends
+  `consolidate-prototypes`, it must pass Handoff Verification as `ready-for-consolidation`.
+  UAT routing must use the Pack Availability Guard in `## Next Work`:
   install `product-testing` with `npx skillpacks install product-testing` if `uat` is not
   directly available, then run the agent-native UAT command (`$uat --variant-evaluation` for
   Codex, `/uat --variant-evaluation` for Claude). Codex must include the fresh Codex CLI
@@ -539,7 +574,7 @@ only — they hand results back to the invoking parent and do **not** route down
 - UAT plans and result logs live in `research/`.
 - Finalized production specifications live in `specs/`.
 - `research/.progress.yaml` remains product-path/product-line tracking only — never ordinary
-  UX/UI/build branch progress.
+  UX/UI/build branch progress, prototype readiness, UAT status, or consolidation readiness.
 
 ---
 

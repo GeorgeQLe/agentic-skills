@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.25 - 2026-07-02
+
+- Added mandatory pre-final Handoff Verification before post-build `Next Work` and `agent_routing` output.
+- Required post-build routing to classify unevaluated prototypes as `manual-uat-needed` or unresolved branch work as `continue-design-branch`, keeping `.progress.yaml` out of readiness storage.
+
 ## v0.24 - 2026-07-02
 
 - Removed the post-build `agent_routing` shortcut that mentioned `$consolidate-prototypes` after UAT evidence.

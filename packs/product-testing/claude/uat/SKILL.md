@@ -2,7 +2,7 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.15
+version: v0.16
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
@@ -31,6 +31,12 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 ## Design-Tree Role
 
 `uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `logic-wiring`, and it is also invoked inline by `consolidate-prototypes` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `/consolidate-prototypes`, `/customer-discovery`) are fallback suggestions, not design-tree branch routing.
+
+## Handoff Verification
+
+Immediately before final handoff text in `--variant-evaluation` mode, classify readiness from `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`, and `tasks/manual-todo.md` as exactly one of `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, or `ready-for-consolidation`. Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness; it remains product-path/product-line state only.
+
+Use conservative routing when artifacts conflict: choose `manual-uat-needed` or `continue-design-branch`, never `/consolidate-prototypes`. The final response must include a compact readiness line before any `Next Work`, `Recommended next command`, or `agent_routing` text, for example: `Handoff verification: manual-uat-needed; /consolidate-prototypes is blocked until evidence is recorded for built variants and every approved sibling branch has an explicit MVP-scope decision.`
 
 ## Process
 
@@ -76,6 +82,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
    - While any built variant result log is `Not run`, recommend manual UAT/evidence capture rather than `/consolidate-prototypes`.
    - Mention `/consolidate-prototypes` only after result logs record evidence and either every MVP-scope approved variant is evaluated or the user explicitly chooses a single-variant MVP and excludes, defers, or marks all other approved unbuilt branches as spec-only references.
+   - Before any final handoff that mentions `/consolidate-prototypes`, emit `Handoff verification: ready-for-consolidation; ...` and only use that classification when UAT evidence exists and every approved branch is evaluated, excluded, deferred, or spec-only by explicit user decision.
    - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**

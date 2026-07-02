@@ -2,7 +2,7 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.16
+version: v0.15
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # UAT
 
-Invoke as `$uat`.
+Invoke as `/uat`.
 
 Create a user acceptance testing plan from the perspective of a potential or target user. Read the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys that validate whether the product satisfies user goals.
 
@@ -30,13 +30,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 ## Design-Tree Role
 
-`uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `logic-wiring`, and it is also invoked inline by `consolidate-prototypes` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `$consolidate-prototypes`, `$customer-discovery`) are fallback suggestions, not design-tree branch routing.
-
-## Handoff Verification
-
-Immediately before final handoff text in `--variant-evaluation` mode, classify readiness from `design/**/flow-tree-*.yaml`, `research/**/uat-variant-evaluation-*.md`, and `tasks/manual-todo.md` as exactly one of `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, or `ready-for-consolidation`. Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness; it remains product-path/product-line state only.
-
-Use conservative routing when artifacts conflict: choose `manual-uat-needed` or `continue-design-branch`, never `$consolidate-prototypes`. The final response must include a compact readiness line before any `Next Work`, `Recommended next command`, or `agent_routing` text, for example: `Handoff verification: manual-uat-needed; $consolidate-prototypes is blocked until evidence is recorded for built variants and every approved sibling branch has an explicit MVP-scope decision.`
+`uat` is a **sub-skill** in the design-tree loop (`DESIGN-TREE-LOOP.md`). Its `parent:` is `logic-wiring`, and it is also invoked inline by `consolidate-prototypes` (variant evaluation) and by the execution loop (release/journey UAT). It enters at its own **checklist/evaluation stage** — building hands-on journeys and capturing human evidence — and does **no pipeline routing of its own**: it returns evidence to the invoking parent, which owns the handoff. Its existing recommendations (e.g. `/consolidate-prototypes`, `/customer-discovery`) are fallback suggestions, not design-tree branch routing.
 
 ## Process
 
@@ -77,19 +71,18 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Treat legacy `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, and `specs/ui-requirements-[topic].md` as fallback evidence only when the corresponding `design/` artifact is missing.
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
    - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
-   - Include a side-by-side comparison matrix and a "Ready for `$consolidate-prototypes`?" checklist.
+   - Include a side-by-side comparison matrix and a "Ready for `/consolidate-prototypes` (product-design pack)?" checklist.
    - In the variant inventory and readiness output, distinguish these four statuses explicitly: `built + evaluated`, `built + not run`, `approved but unbuilt/deferred`, and `explicitly excluded from MVP`.
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
-   - While any built variant result log is `Not run`, recommend manual UAT/evidence capture rather than `$consolidate-prototypes`.
-   - Mention `$consolidate-prototypes` only after result logs record evidence and either every MVP-scope approved variant is evaluated or the user explicitly chooses a single-variant MVP and excludes, defers, or marks all other approved unbuilt branches as spec-only references.
-   - Before any final handoff that mentions `$consolidate-prototypes`, emit `Handoff verification: ready-for-consolidation; ...` and only use that classification when UAT evidence exists and every approved branch is evaluated, excluded, deferred, or spec-only by explicit user decision.
+   - While any built variant result log is `Not run`, recommend manual UAT/evidence capture rather than `/consolidate-prototypes`.
+   - Mention `/consolidate-prototypes` only after result logs record evidence and either every MVP-scope approved variant is evaluated or the user explicitly chooses a single-variant MVP and excludes, defers, or marks all other approved unbuilt branches as spec-only references.
    - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**
    - Identify 1-3 target user personas or roles from the evidence.
    - For each selected persona, define the job-to-be-done, context, goal, constraints, and acceptance threshold.
    - Prefer external target users, buyers, evaluators, administrators, developers, or players over the product owner unless the owner is also the target user.
-   - If the target user is unclear, stop and recommend `$customer-discovery`, `$journey-map`, or the relevant pack research skill. For `$customer-discovery`, `$journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `npx skillpacks install <pack>` before the skill.
+   - If the target user is unclear, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/customer-discovery`, `/journey-map`, and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `npx skillpacks install <pack>` before the skill.
 
 4. **Create UAT journeys**
    - Generate 3-7 journeys unless the user requested a narrower focus.
@@ -115,7 +108,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Implementation or documentation fixes discovered after a completed UAT run belong in `tasks/todo.md`, but do not invent fixes before the user journey has been attempted.
    - One-time evidence collection belongs in `tasks/record-todo.md`.
    - Recurring release acceptance checks belong in `tasks/recurring-todo.md` only when there is a clear release cadence.
-   - If a journey needs click-by-click help for a human-only external blocker, recommend `$guide`.
+   - If a journey needs step-by-step tester guidance, recommend `/uat-guide` (guided-walkthrough pack).
+   - If a journey step needs click-by-click help for a human-only external blocker (OAuth, DNS, service signup), recommend `/guide` (guided-walkthrough pack).
 
 6. **Present findings before writing when risk is high**
    - If source material is thin, contradictory, or missing target-user evidence, summarize the gap and ask whether to proceed with assumptions.
@@ -147,7 +141,7 @@ Use this journey format in `research/uat-plan.md`:
 - Non-acceptance signals: [confusion, delay, missing affordance, incorrect result, trust issue, or blocker]
 - Evidence to capture: [screenshots, recordings, notes, timestamps, records, command output, or artifacts]
 - Tester notes prompt: [question that captures whether the target user would accept this]
-- Follow-up routing: [manual note, $customer-discovery, $journey-map, $guide, or task promotion guidance]
+- Follow-up routing: [manual note, /customer-discovery (business-discovery pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
 
 #### UAT result log
 
@@ -204,7 +198,7 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 | Dimension | Variant A | Variant B | Variant C | Current preference | Evidence |
 |---|---|---|---|---|---|
 
-### Ready for `$consolidate-prototypes`?
+### Ready for `/consolidate-prototypes` (product-design pack)?
 
 - [ ] Every built MVP-scope variant has been tried and has evidence in its result log.
 - [ ] No built MVP-scope result log is still `Not run`.
@@ -237,12 +231,13 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not run or operate the product in this skill.
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark journeys complete; only a human tester can do that after performing them.
-- Do not recommend `$consolidate-prototypes` before variant evaluation evidence exists and no built MVP-scope result log is `Not run`.
-- Do not recommend `$consolidate-prototypes` while approved UX/UI branches remain unbuilt or deferred unless the user explicitly excludes or defers them from MVP scope, marks them spec-only, or explicitly chooses a single-variant MVP from the current built set.
+- Do not recommend `/consolidate-prototypes` (product-design pack) before variant evaluation evidence exists and no built MVP-scope result log is `Not run`.
+- Do not recommend `/consolidate-prototypes` (product-design pack) while approved UX/UI branches remain unbuilt or deferred unless the user explicitly excludes or defers them from MVP scope, marks them spec-only, or explicitly chooses a single-variant MVP from the current built set.
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
-- Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `$customer-discovery`, `$journey-map`, or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
+- Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/customer-discovery` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
+- When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `npx skillpacks install <pack-name>` to the recommendation.
 
 ## Alignment Page
 

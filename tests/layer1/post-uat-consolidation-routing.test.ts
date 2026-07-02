@@ -61,6 +61,14 @@ describe("post-UAT consolidation routing", () => {
     for (const mirror of mirrors) {
       const content = read(mirror.uat);
 
+      expect(content, mirror.name).toContain("## Handoff Verification");
+      expect(content, mirror.name).toContain("continue-design-branch");
+      expect(content, mirror.name).toContain("manual-uat-needed");
+      expect(content, mirror.name).toContain("single-variant-convergence-needs-explicit-scope");
+      expect(content, mirror.name).toContain("ready-for-consolidation");
+      expect(content, mirror.name).toContain("Use conservative routing when artifacts conflict");
+      expect(content, mirror.name).toContain("Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness");
+      expect(content, mirror.name).toContain("Handoff verification:");
       expect(content, mirror.name).toContain("built + evaluated");
       expect(content, mirror.name).toContain("built + not run");
       expect(content, mirror.name).toContain("approved but unbuilt/deferred");
@@ -77,6 +85,15 @@ describe("post-UAT consolidation routing", () => {
     for (const mirror of mirrors) {
       const content = read(mirror.consolidate);
 
+      expect(content, mirror.name).toContain("## Handoff Verification");
+      expect(content, mirror.name).toContain("continue-design-branch");
+      expect(content, mirror.name).toContain("manual-uat-needed");
+      expect(content, mirror.name).toContain("single-variant-convergence-needs-explicit-scope");
+      expect(content, mirror.name).toContain("ready-for-consolidation");
+      expect(content, mirror.name).toContain("Proceed with consolidation only after the classification is `ready-for-consolidation`");
+      expect(content, mirror.name).toContain("If artifacts are contradictory, choose the conservative route");
+      expect(content, mirror.name).toContain("Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness");
+      expect(content, mirror.name).toContain("Handoff verification: ready-for-consolidation");
       expect(content, mirror.name).toContain("Stop if `research/uat-variant-evaluation-[topic].md`");
       expect(content, mirror.name).toContain("says `not ready`");
       expect(content, mirror.name).toContain("includes unchecked items");
@@ -93,12 +110,43 @@ describe("post-UAT consolidation routing", () => {
     const designTree = read("docs/design-tree-loop-convention.md");
     const nextSteps = read("docs/skill-next-step-contracts.md");
 
+    expect(designTree).toContain("### Handoff Verification");
+    expect(designTree).toContain("continue-design-branch");
+    expect(designTree).toContain("manual-uat-needed");
+    expect(designTree).toContain("single-variant-convergence-needs-explicit-scope");
+    expect(designTree).toContain("ready-for-consolidation");
+    expect(designTree).toContain("If artifacts are missing, stale, or contradictory, choose the conservative route");
     expect(designTree).toContain("Consolidation readiness requires recorded UAT evidence");
     expect(designTree).toContain("explicit handling of every approved branch");
     expect(designTree).toContain("A single-variant MVP is");
     expect(designTree).toContain("valid only when the user explicitly chooses");
+    expect(designTree).toContain("Do not use `research/.progress.yaml` for UX branch state");
+    expect(designTree).toContain("prototype readiness, UAT status, or consolidation readiness");
+    expect(designTree).not.toContain("source of truth is `research/.progress.yaml`");
+    expect(designTree).not.toContain("store consolidation readiness in `research/.progress.yaml`");
 
+    expect(nextSteps).toContain("Before any terminal handoff names `consolidate-prototypes`, the producing skill must emit Handoff Verification");
     expect(nextSteps).toContain("readiness requires recorded UAT evidence plus explicit handling of unbuilt/deferred approved branches");
     expect(nextSteps).toContain("Single-variant MVP convergence requires the user's explicit scope choice");
+    expect(nextSteps).toContain("`research/.progress.yaml` must not be used for UAT/prototype/consolidation readiness");
+    expect(nextSteps).not.toContain("source of truth is `research/.progress.yaml`");
+    expect(nextSteps).not.toContain("store consolidation readiness in `research/.progress.yaml`");
+  });
+
+  it("keeps logic-wiring pre-final handoffs on conservative UAT routing", () => {
+    for (const mirror of mirrors) {
+      const content = read(mirror.logicWiring);
+      const nextWork = sectionFrom(content, "## Next Work");
+      const agentRouting = sectionFrom(content, "## Invoke With YAML");
+
+      expect(content, mirror.name).toContain("## Handoff Verification");
+      expect(content, mirror.name).toContain("continue-design-branch");
+      expect(content, mirror.name).toContain("manual-uat-needed");
+      expect(content, mirror.name).toContain("single-variant-convergence-needs-explicit-scope");
+      expect(content, mirror.name).toContain("ready-for-consolidation");
+      expect(content, mirror.name).toContain("Do not use `research/.progress.yaml` for UX branch state, prototype readiness, UAT status, or consolidation readiness");
+      expect(nextWork, mirror.name).toContain("Handoff verification: manual-uat-needed");
+      expect(agentRouting, mirror.name).toContain("Run Handoff Verification immediately before emitting this payload");
+    }
   });
 });

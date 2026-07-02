@@ -2,6 +2,45 @@
 
 No active implementation task is currently promoted.
 
+## Review - Design-Tree Handoff Verification 2026-07-02
+
+Project: `agentic-skills`.
+
+### Goal
+
+Add a mandatory pre-final handoff verification step to product-design/product-testing contracts so agents cannot route to `consolidate-prototypes` unless current design-tree artifacts prove consolidation readiness.
+
+### Plan
+
+- [x] Archive and version affected active `SKILL.md` files.
+- [x] Add shared handoff verification classifications and conservative fallback rule to `docs/design-tree-loop-convention.md`.
+- [x] Update Codex and Claude `uat`, `logic-wiring`, and `consolidate-prototypes` contracts.
+- [x] Extend focused layer-1 routing coverage.
+- [x] Run requested verification commands.
+- [x] Record review, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- Final handoffs include `Handoff verification: <classification>; ...` immediately before terminal routing.
+- The classifications are `continue-design-branch`, `manual-uat-needed`, `single-variant-convergence-needs-explicit-scope`, and `ready-for-consolidation`.
+- `research/.progress.yaml` is not used or named as the readiness storage surface for UAT/prototype/consolidation readiness.
+- Contradictory artifacts conservatively block consolidation.
+
+### Verification Plan
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts` passed: 5 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills, 0 violations.
+- `git diff --check` passed.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+
 ## Review - 0.1.20 Publish Readiness 2026-07-02
 
 Project: `agentic-skills`.

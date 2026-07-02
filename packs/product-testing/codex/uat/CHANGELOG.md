@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.16 - 2026-07-02
+
+- Added mandatory handoff verification before variant-evaluation final routing, using flow-tree, UAT evaluation, and manual task artifacts as readiness sources.
+- Required conservative `manual-uat-needed` or `continue-design-branch` routing when artifacts conflict, and kept `research/.progress.yaml` out of consolidation readiness storage.
+
 ## v0.15 - 2026-07-02
 
 - Added a post-UAT readiness guard that distinguishes built/evaluated, built/not-run, approved-unbuilt/deferred, and explicitly MVP-excluded variants.

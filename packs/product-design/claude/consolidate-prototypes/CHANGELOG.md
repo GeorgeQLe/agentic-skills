@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.22 - 2026-07-02
+
+- Added mandatory Handoff Verification before consolidation proceeds or emits downstream routing.
+- Required `ready-for-consolidation` from flow-tree, UAT evaluation, and manual task artifacts, with conservative fallback to UAT or unresolved approved branch routing.
+
 ## v0.21 - 2026-07-02
 
 - Hardened the evidence gate to stop when UAT says not ready, readiness items are unchecked, or result logs contain only `Not run`/deferred/spec-only entries.
