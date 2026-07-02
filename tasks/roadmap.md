@@ -2,7 +2,37 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - YAML-Only Routing Handoff Audit
+## Current Implementation - Research Amend Workflow Integration
+
+**Status: IN PROGRESS (2026-07-02) - inspection completed; routing guidance integration remains.**
+
+### Goal
+
+Document when research workflow handoffs should recommend the base `research-amend` skill instead of a full Pattern A rerun.
+
+### Scope
+
+- Preserve Pattern A approval gates: `review` pages continue to route only through compiled YAML and parent-orchestrator re-invocation.
+- Add post-canonical routing guidance for low/medium amendments after approved artifacts are written or from research-health/status contexts.
+- Keep high/systemic changes routed to affected framework/synthesis/full Pattern A reruns.
+- Keep Claude and Codex command examples platform-correct.
+
+### Plan
+
+- [x] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
+- [ ] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
+- [ ] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
+- [ ] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
+- [ ] Run targeted validation, record review/history, commit, and push.
+
+### Acceptance Criteria
+
+- Research-health or final-handoff guidance recommends `research-amend` for bounded low/medium post-canonical amendments such as one missed competitor or one corrected source fact.
+- High/systemic changes still route to affected framework/synthesis reruns or full Pattern A reruns.
+- Review-pending alignment pages continue to use approval YAML handling only; downstream `research-amend` recommendations appear only after approved artifacts are written or in research-health/status contexts.
+- Codex and Claude command text stays platform-correct.
+
+## Historical Implementation - YAML-Only Routing Handoff Audit
 
 **Status: VERIFIED (2026-07-02) - duplicate exact-command plus YAML routing removed from active chunked handoff surfaces and stale installed mirrors.**
 
@@ -23,7 +53,7 @@ Ensure active chunked skill handoffs use one continuation artifact. If `## Invok
 - [x] Patch stale canonical or installed mirrors that still require `Exact next command` alongside YAML.
 - [x] Confirm focused regression coverage blocks duplicate chunked continuation routing.
 - [x] Run generator, archive, focused test, diff, and status verification.
-- [ ] Commit and push intended YAML-only routing changes if the dirty tree can be staged safely.
+- [x] Reconciled as historical follow-up, not active executable work in this task file.
 
 ### Acceptance Criteria
 
@@ -102,7 +132,7 @@ Verified:
 - `git diff --check`
 - `git status --short --branch`
 
-## Current Implementation - Base Pack Nesting Migration
+## Historical Implementation - Base Pack Nesting Migration
 
 **Status: VERIFIED (2026-07-02) - `packs/base/{claude,codex}` is now the canonical base source layout; `research-amend` remains the next separately shippable change.**
 

@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-07-02 - Research Amend workflow routing inspection
+
+- `$exec integrate research-amend into research workflow handoff/research-health routing guidance`: completed the inspection step for the active research-amend integration task.
+- Confirmed `research-amend` is already authored under `packs/base/{claude,codex}/research-amend/` with focused coverage in `tests/layer1/research-amend-contract.test.ts`; remaining work is routing guidance integration.
+- Identified patch targets for the next step: `docs/research-session-loop-convention.md`, `docs/orchestrator-convention.md`, `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md`, `packs/business-ops/{claude,codex}/reconcile-research/SKILL.md`, and focused routing tests.
+- Preserved the review-boundary rule: no downstream `research-amend` routing while Pattern A or amendment pages remain in `review`; recommendations belong after approved canonical writes or in health/status routing contexts.
+
 ## 2026-07-02 - Research Amend base skill
 
 - Added mirrored base-pack `research-amend` skills under `packs/base/{claude,codex}/research-amend` with `version: v0.0`.

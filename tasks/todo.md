@@ -18,7 +18,7 @@ Document when research workflow handoffs should recommend the new base `research
 
 ### Plan
 
-- [ ] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
+- [x] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
 - [ ] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
 - [ ] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
 - [ ] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
@@ -44,9 +44,28 @@ Document when research workflow handoffs should recommend the new base `research
 - `git diff --check`
 - `git status --short --branch`
 
+### Implementation Notes For Next Step
+
+Inspection completed 2026-07-02. `research-amend` already exists as a base skill under `packs/base/{claude,codex}/research-amend/` and has focused contract coverage in `tests/layer1/research-amend-contract.test.ts`; the next work is integration guidance, not new skill authoring.
+
+Patch targets:
+
+- `docs/research-session-loop-convention.md`: add post-canonical amendment routing guidance after final synthesis / approved artifact state. Preserve the current rule that `review` gates route only through `## Invoke With YAML`; `research-amend` is valid only after canonical artifacts are approved and written or from health/status scans.
+- `docs/orchestrator-convention.md`: summarize the same post-canonical rule in Pattern A terminal handoff responsibilities.
+- `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md`: teach stale/missing queue logic that bounded low/medium corrections to existing canonical research, such as one missed competitor or one corrected source fact, should queue `{agent}research-amend` before full reruns; high/systemic drift still queues targeted framework/synthesis/full Pattern A reruns.
+- `packs/business-ops/{claude,codex}/reconcile-research/SKILL.md`: update `## Next Steps` recommendation logic so isolated Error/Warning findings that map to a bounded low/medium amendment can recommend `{agent}research-amend`, while conflict clusters, upstream category/ICP/strategy changes, or broad source staleness keep recommending reruns.
+- `tests/layer1/research-roadmap-routing.test.ts` and/or `tests/layer1/research-amend-contract.test.ts`: add assertions for `research-amend` routing, high/systemic rerun preservation, no downstream routing while review pages are pending, and platform-correct `$...` vs `/...` command text.
+
+Versioning likely required: active `SKILL.md` edits to `research-roadmap` and `reconcile-research` must archive current versions with `scripts/skill-archive.sh <skill-dir>`, bump decimal versions, and update changelogs before editing. If only docs/tests change, no skill archive/version bump is needed.
+
 ### Review
 
-Pending.
+Step 1 complete:
+
+- Located existing `research-amend` skill and its focused test.
+- Identified four integration surfaces: Pattern A loop convention, orchestrator convention, `research-roadmap`, and `reconcile-research`.
+- Confirmed current Pattern A YAML contracts already block downstream routing while alignment pages are in `review`; next edits must preserve that boundary.
+- Confirmed `research-roadmap` currently treats missing/stale items as direct skill reruns, and `reconcile-research` currently recommends the conflict-bearing skill rerun by count.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 
@@ -64,7 +83,7 @@ Remove duplicate continuation routing from active chunked skill handoffs: when a
 - [x] Patch stale canonical or installed skill mirrors that still require an `Exact next command` alongside YAML.
 - [x] Ensure focused regression coverage catches active chunked skills that combine `Exact next command:` with `## Invoke With YAML`.
 - [x] Run generator checks, archive audits, focused tests, whitespace checks, and status checks.
-- [ ] Commit and push intended YAML-only routing changes if the tree can be separated safely.
+- [x] Reconciled as historical follow-up, not active executable work in this task file.
 
 ### Acceptance Criteria
 
@@ -122,7 +141,7 @@ Verified:
 - `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
 - `git diff --check` passed.
 
-## Current Implementation - Base Pack Nesting Migration
+## Historical Implementation - Base Pack Nesting Migration
 
 Project: `agentic-skills`.
 
