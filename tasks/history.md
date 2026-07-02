@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-02 - Dev-docs task reconciliation
+
+- `$reconcile-dev-docs fix tasks`: reconciled task routing surfaces after recent completed work left a verified implementation under active `Current Implementation` headings.
+- Marked the completed "Remove Review-Pending Invoke With YAML Blocks" roadmap entry historical instead of active, preserving its verification notes.
+- Marked the shared convention document migration as verified in the roadmap using commit `cd5317cea` and `tasks/ship-manifest-2026-07-02-shared-convention-resolver.md` evidence.
+- Reset `tasks/todo.md` to an explicit no-active-task state with this reconciliation review, keeping recurring work advisory unless promoted.
+- Verification passed: `node scripts/audit-task-docs.mjs` and `git diff --check`.
+
 ## 2026-07-02 - Research Amend routing integration
 
 - Added concise post-canonical `research-amend` guidance to Pattern A loop/orchestrator conventions while preserving YAML-only routing for pending review pages.

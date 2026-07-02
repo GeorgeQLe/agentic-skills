@@ -1,5 +1,46 @@
 # Development Docs Reconciliation Report
 
+## 2026-07-02 — `$reconcile-dev-docs fix tasks`
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **fixed** — the verified "Remove Review-Pending Invoke With YAML Blocks" work is no longer advertised as active current work.
+- History coverage: **fixed** — appended this reconciliation entry and linked the shared convention resolver completion to commit/manifest evidence.
+- Phase archives: **not changed** — no numbered roadmap phase archive was implicated by the current task-doc drift.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: no executable task is promoted; explicitly promote advisory recurring work or a new implementation before running `$exec`.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md / tasks/todo.md** — A completed verified implementation remained under matching `Current Implementation` headings, causing `node scripts/audit-task-docs.mjs` to pass mechanically while still reporting stale active work. Evidence: both files named "Remove Review-Pending Invoke With YAML Blocks" as current despite all checklist items and verification notes being complete.
+
+### Warnings
+
+- **tasks/recurring-todo.md** — Two recurring advisory items remain unchecked and overdue (`Devtool docs audit refresh`, `Spec drift check`). They remain advisory because this invocation did not explicitly promote either into active execution.
+- **Working tree** — The repository contains a large pre-existing dirty worktree across generated convention stubs, skill files, archives, prompts, and tests. This reconciliation changed only task docs plus the required prompt-history artifact and did not attempt to classify or commit unrelated work.
+
+### Fixed
+
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260702-130057-fix-tasks.md` — captured the visible invocation and pasted skill context.
+- [x] `tasks/roadmap.md` — changed the completed YAML-block cleanup section from current to historical, and marked the shared convention migration verified with commit/manifest evidence.
+- [x] `tasks/todo.md` — replaced stale current implementation routing with an explicit no-active-task state and reconciliation review.
+- [x] `tasks/history.md` — appended this reconciliation record.
+- [x] `tasks/reconciliation-report.md` — recorded resolved, warning, fixed, and validation details for this run.
+
+### Deferred
+
+- [ ] `tasks/recurring-todo.md` — decide separately whether to promote recurring `Devtool docs audit refresh` or `Spec drift check`.
+- [ ] Dirty non-task worktree changes — intentionally left to their owning tasks/ship boundaries.
+
+### Validation
+
+- `node scripts/audit-task-docs.mjs` passed after fixes.
+- `git diff --check` passed.
+
+---
+
 ## 2026-06-29 — Orphaned Showcase manual tasks migrated
 
 - **Mode:** fix · **Scope:** tasks

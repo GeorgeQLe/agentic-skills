@@ -1,81 +1,32 @@
 # Current Task State
 
-## Current Implementation - Research Amend Workflow Integration
+No active implementation task is currently promoted.
+
+Recent completed work has been reconciled into `tasks/history.md`, `tasks/roadmap.md`, task ship manifests, and `tasks/reconciliation-report.md`. Advisory recurring work remains in `tasks/recurring-todo.md` until explicitly promoted.
+
+## Review - Development Docs Reconciliation 2026-07-02
 
 Project: `agentic-skills`.
 
 Status: VERIFIED (2026-07-02).
 
-### Goal
-
-Document when research workflow handoffs should recommend the new base `research-amend` skill instead of a full Pattern A rerun.
-
-### Execution Profile
-
-- Parallel mode: serial.
-- Reason: this touches research routing contracts and possibly mirrored skill/docs text that should remain coherent across Claude and Codex surfaces.
-- Safety boundary: preserve unrelated dirty work already present in the shared worktree; do not weaken Pattern A approval gates or route review-pending pages to downstream commands.
-
 ### Plan
 
-- [x] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
-- [x] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
-- [x] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
-- [x] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
-- [x] Run targeted validation, record review/history, commit, and push.
-
-### Acceptance Criteria
-
-- Research-health or final-handoff guidance recommends `research-amend` for bounded low/medium post-canonical amendments such as one missed competitor or one corrected source fact.
-- High/systemic changes still route to affected framework/synthesis reruns or full Pattern A reruns.
-- Review-pending alignment pages continue to use approval YAML handling only; downstream `research-amend` recommendations appear only after approved artifacts are written or in research-health/status contexts.
-- Codex and Claude command text stays platform-correct.
-
-### Verification Plan
-
-- Focused routing tests for changed research-health or Pattern A surfaces.
-- `bash scripts/skill-versions.sh --missing`
-- `bash scripts/skill-archive-audit.sh --strict`
-- `node scripts/skill-alignment-routing-audit.mjs`
-- `bash scripts/skill-install-routing-audit.sh --active`
-- `npm run skillpacks:build` if any active `SKILL.md` changes
-- `npm --workspace packages/skillpacks run build:check`
-- `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh` if any active `SKILL.md` changes
-- `git diff --check`
-- `git status --short --branch`
-
-### Implementation Notes For Next Step
-
-Inspection completed 2026-07-02. `research-amend` already exists as a base skill under `packs/base/{claude,codex}/research-amend/` and has focused contract coverage in `tests/layer1/research-amend-contract.test.ts`; the next work is integration guidance, not new skill authoring.
-
-Patch targets:
-
-- `docs/research-session-loop-convention.md`: add post-canonical amendment routing guidance after final synthesis / approved artifact state. Preserve the current rule that `review` gates route only through `## Invoke With YAML`; `research-amend` is valid only after canonical artifacts are approved and written or from health/status scans.
-- `docs/orchestrator-convention.md`: summarize the same post-canonical rule in Pattern A terminal handoff responsibilities.
-- `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md`: teach stale/missing queue logic that bounded low/medium corrections to existing canonical research, such as one missed competitor or one corrected source fact, should queue `{agent}research-amend` before full reruns; high/systemic drift still queues targeted framework/synthesis/full Pattern A reruns.
-- `packs/business-ops/{claude,codex}/reconcile-research/SKILL.md`: update `## Next Steps` recommendation logic so isolated Error/Warning findings that map to a bounded low/medium amendment can recommend `{agent}research-amend`, while conflict clusters, upstream category/ICP/strategy changes, or broad source staleness keep recommending reruns.
-- `tests/layer1/research-roadmap-routing.test.ts` and/or `tests/layer1/research-amend-contract.test.ts`: add assertions for `research-amend` routing, high/systemic rerun preservation, no downstream routing while review pages are pending, and platform-correct `$...` vs `/...` command text.
-
-Versioning likely required: active `SKILL.md` edits to `research-roadmap` and `reconcile-research` must archive current versions with `scripts/skill-archive.sh <skill-dir>`, bump decimal versions, and update changelogs before editing. If only docs/tests change, no skill archive/version bump is needed.
+- [x] Capture the `$reconcile-dev-docs fix tasks` invocation prompt.
+- [x] Audit `tasks/roadmap.md`, `tasks/todo.md`, advisory task files, recent git history, and the task-doc audit.
+- [x] Mark completed current-task headings as historical/no-active state.
+- [x] Add factual reconciliation evidence to history and reconciliation report.
+- [x] Run task-doc audit and diff checks.
 
 ### Review
 
-Step 1 complete:
+Verified:
 
-- Located existing `research-amend` skill and its focused test.
-- Identified four integration surfaces: Pattern A loop convention, orchestrator convention, `research-roadmap`, and `reconcile-research`.
-- Confirmed current Pattern A YAML contracts already block downstream routing while alignment pages are in `review`; next edits must preserve that boundary.
-- Confirmed `research-roadmap` currently treats missing/stale items as direct skill reruns, and `reconcile-research` currently recommends the conflict-bearing skill rerun by count.
-
-Step 2-5 complete:
-
-- Added post-canonical amendment routing to the Pattern A loop and orchestrator conventions.
-- Updated `research-roadmap` and `reconcile-research` Claude/Codex mirrors so bounded low/medium corrections can recommend `research-amend` and high/systemic drift keeps rerun routing.
-- Archived and bumped changed skill contracts: `research-roadmap` v0.19 -> v0.20 and `reconcile-research` v0.10 -> v0.11.
-- Added focused layer1 coverage for research-roadmap, reconcile-research, Pattern A docs, and existing research-amend contract behavior.
-- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and `exports/skills-catalog/v1/**`.
-- Verification passed: focused Vitest routing suite, version audit, strict archive audit, alignment routing audit, install routing audit, skillpacks build/check, catalog export validation, and diff hygiene.
-- Adversarial review: the new amendment route is limited to post-canonical/health contexts, review-pending Pattern A pages still route through YAML only, and high/systemic examples remain explicitly routed to framework/synthesis/full reruns.
+- `node scripts/audit-task-docs.mjs` passed after the current-task cleanup.
+- `git diff --check` passed for whitespace hygiene.
+- `tasks/roadmap.md` has no promoted `Current Implementation` heading after this reconciliation.
+- `tasks/todo.md` has no active implementation task and no stale unchecked executable items.
+- The two unchecked recurring items remain advisory in `tasks/recurring-todo.md`.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 

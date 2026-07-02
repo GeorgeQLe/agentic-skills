@@ -2,7 +2,104 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Research Amend Workflow Integration
+## Historical Implementation - Remove Review-Pending Invoke With YAML Blocks
+
+**Status: VERIFIED (2026-07-02) - separate review-pending command blocks removed from Pattern A/research-amend handoffs; compiled YAML is the copy/paste artifact.**
+
+### Goal
+
+Remove the separate terminal `## Invoke With YAML` command block from Pattern A review-pending handoffs. Since compiled alignment/interrogation YAML now includes `command` and `agent_routing.command`, users should review the page, clear context, and paste the compiled YAML into a fresh session without copying a separate parent command.
+
+### Plan
+
+- [x] Record the user correction in lessons and task state.
+- [x] Update active Pattern A docs, parent orchestrators, framework subskills, and audits to use YAML-only review-gate continuation.
+- [x] Preserve post-write `## Recommended Next Command` routing after approved artifacts are written.
+- [x] Run focused handoff audits and diff checks.
+- [x] Record review and ship intended changes without reverting unrelated dirty work.
+
+### Acceptance Criteria
+
+- Review-pending `## Next Work` text tells the user to paste compiled YAML into a fresh session after clearing context.
+- No active Pattern A skill requires a separate `## Invoke With YAML` section for review-pending approval gates.
+- Compiled YAML still carries `command` and `agent_routing.command` for parent-owned continuation.
+- Post-approval handoffs still use `## Recommended Next Command` after artifacts are written.
+
+### Verification Plan
+
+- `bash scripts/skill-research-loop-handoff-audit.sh`
+- `rg` audit for stale review-pending `## Invoke With YAML` wording in active Pattern A docs/skills.
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `bash scripts/skill-research-loop-handoff-audit.sh` passed.
+- `pnpm exec vitest run --project layer1 layer1/research-amend-contract.test.ts layer1/alignment-gates.test.ts` passed from `tests/`: 47 tests.
+- `node scripts/upgrade-alignment-page.mjs --legacy-bundles --check` passed: 0 updates.
+- `node scripts/upgrade-alignment-page.mjs --check` passed: 0 updates.
+- Stale-string audit passed for active Pattern A/base docs and skills after excluding archives and changelog history.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills, 0 violations.
+- `git diff --check` passed.
+
+Commit note:
+
+- Not committed in this pass because the worktree already contained a large unrelated shared-convention migration and overlapping dirty skill files before this task. Committing now would mix this fix with pre-existing migration work.
+
+## Historical Implementation - Shared Convention Document Migration
+
+**Status: VERIFIED (2026-07-02) - migrated alignment/interrogation skills from duplicated convention bundles to shared resolver-backed stubs.**
+
+### Goal
+
+Replace duplicated per-skill alignment/interrogation convention bundles with shared convention assets referenced by thin skill stubs, while preserving source-checkout, packaged-install, and legacy sibling-bundle compatibility.
+
+### Scope
+
+- Keep canonical convention sources in `docs/alignment-page-convention.md` and `docs/interrogation-page-convention.md`.
+- Keep packaged runtime assets in `assets/alignment-page-convention.md` and `assets/interrogation-page-convention.md`.
+- Stop default generator writes of full `ALIGNMENT-PAGE.md` / `INTERROGATION-PAGE.md` siblings.
+- Preserve legacy sibling bundle fallback during the transition.
+- Leave active generated HTML page behavior and audits unchanged.
+
+### Plan
+
+- [x] Inspect current generator, audit, package, and test surfaces.
+- [x] Add shared resolver/stub contract to the convention registry and bundle audit.
+- [x] Refactor alignment and interrogation generators to write/validate stubs and resolver metadata instead of generated sibling bundles.
+- [x] Update focused tests for source resolution, packaged asset resolution, stub validation, legacy fallback, and metadata interpretation.
+- [x] Run syntax, layer1, active-page audit, package/build boundary, and diff verification.
+- [x] Record review, commit, and push.
+
+### Acceptance Criteria
+
+- Active `SKILL.md` convention sections point to the shared convention resolver and include the expected output path.
+- Declared conventions validate through source `docs/*`, packaged `assets/*`, or legacy sibling bundles.
+- Per-skill variation remains available from frontmatter/registries.
+- Existing installed skills with sibling bundles continue to pass compatibility checks.
+- Package output includes the shared convention assets.
+
+### Review
+
+Verified by commit `cd5317cea` and `tasks/ship-manifest-2026-07-02-shared-convention-resolver.md`:
+
+- `node --check scripts/upgrade-alignment-page.mjs && node --check scripts/upgrade-interrogation-page.mjs`
+- Focused layer1 migration suites: 122 tests.
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/audit-alignment-pages.mjs`
+- `node scripts/audit-interrogation-pages.mjs`
+- `node --test packages/skillpacks/test/package-boundary.test.mjs`
+- `node --test packages/skillpacks/test/alignment.test.mjs`
+- `bash scripts/skill-versions.sh --missing`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+
+## Historical Implementation - Research Amend Workflow Integration
 
 **Status: VERIFIED (2026-07-02) - routing guidance integrated, tested, regenerated, and ready to ship.**
 
