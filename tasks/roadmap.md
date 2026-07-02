@@ -2,6 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Interrogation Agent-Owned Depth Convention
+
+**Status: VERIFIED (2026-07-02) - canonical interrogation convention now makes the agent responsible for depth and shallow-gate prevention.**
+
+### Goal
+
+Make the interrogation-page convention assign interrogation depth to the agent: the agent should recommend/initiate additional rounds when confidence is still shallow, ask permission before extra research, and ask the user directly for ambiguity, decisions, priorities, direction, preferences, and taste.
+
+### Plan
+
+- [x] Update `docs/interrogation-page-convention.md` inside the canonical `interrogation-convention` block.
+- [x] Regenerate legacy `INTERROGATION-PAGE.md` bundles from the canonical source with the generator.
+- [x] Update focused layer1 coverage for the new agent-owned-depth and unknown-routing contract.
+- [x] Run generator drift checks and focused Vitest.
+- [x] Record review notes, then commit and push only intended changes.
+
+### Acceptance Criteria
+
+- The convention states that the agent owns depth and should continue rounds when alignment remains too shallow for useful downstream work.
+- User agency is preserved when the user requests additional useful rounds.
+- Unknowns route correctly: infer from repo/context where possible, ask permission before new external research, and ask the user directly for choices, tradeoffs, goals, direction, preferences, and taste.
+- The confidence gate no longer treats covered-or-waived alone as enough when the agent judges alignment shallow.
+- Legacy generated bundles and focused tests reflect the same contract.
+
+### Verification Plan
+
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --dry-run`
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --check`
+- `node scripts/upgrade-interrogation-page.mjs --dry-run`
+- `node scripts/upgrade-interrogation-page.mjs --check`
+- `pnpm --dir tests vitest run --project layer1 tests/layer1/interrogation-confidence-gate.test.ts`
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --dry-run` passed with `Updated: 0`.
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --check` passed with exact bundles, paths, and resolver stubs.
+- `node scripts/upgrade-interrogation-page.mjs --check` passed with exact shared resolver stubs.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts` passed: 43 tests.
+- `npm run skillpacks:build` passed. Its manifest side effect was restored because the existing dirty tree would have folded unrelated changes into the package fingerprint.
+
 ## Historical Implementation - Remove Review-Pending Invoke With YAML Blocks
 
 **Status: VERIFIED (2026-07-02) - separate review-pending command blocks removed from Pattern A/research-amend handoffs; compiled YAML is the copy/paste artifact.**

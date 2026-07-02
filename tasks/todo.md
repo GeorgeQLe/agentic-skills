@@ -2,6 +2,34 @@
 
 No active implementation task is currently promoted.
 
+## Review - Interrogation Agent-Owned Depth Convention 2026-07-02
+
+Project: `agentic-skills`.
+
+Status: VERIFIED (2026-07-02).
+
+### Goal
+
+Update the interrogation-page convention so agents own interrogation depth, route unknowns correctly, and keep the confidence gate from passing on shallow "covered or waived" alignment.
+
+### Plan
+
+- [x] Update the canonical interrogation convention.
+- [x] Regenerate legacy `INTERROGATION-PAGE.md` bundles from the canonical convention.
+- [x] Update focused layer1 assertions for the new contract.
+- [x] Run generator and focused test verification.
+- [x] Record review notes and ship intended changes.
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --dry-run` passed with `Updated: 0`.
+- `node scripts/upgrade-interrogation-page.mjs --legacy-bundles --check` passed with exact bundles, paths, and resolver stubs.
+- `node scripts/upgrade-interrogation-page.mjs --check` passed with exact shared resolver stubs.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts` passed: 43 tests.
+- `npm run skillpacks:build` passed; the unrelated manifest fingerprint side effect was restored.
+
 Recent completed work has been reconciled into `tasks/history.md`, `tasks/roadmap.md`, task ship manifests, and `tasks/reconciliation-report.md`. Advisory recurring work remains in `tasks/recurring-todo.md` until explicitly promoted.
 
 ## Review - Development Docs Reconciliation 2026-07-02

@@ -41,6 +41,11 @@ describe("interrogation confidence-gate contract", () => {
     expect(text).toContain("defer deeper research as an explicit research question or source-plan item");
     expect(text).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
     expect(text).toContain("Founder-supplied phrasing without provenance is hunch language");
+    expect(text).toContain("Agent-owned depth and unknown routing");
+    expect(text).toContain("The agent owns interrogation depth");
+    expect(text).toContain("ask the user for permission before doing that research");
+    expect(text).toContain("ask the user directly; do not research around a decision that belongs to the user");
+    expect(text).toContain('"Covered or waived" is necessary but not sufficient');
   });
 
   for (const dir of participatingSkillDirs) {
@@ -59,6 +64,11 @@ describe("interrogation confidence-gate contract", () => {
       expect(text, `${dir} bundle validation timing`).toContain("Validation happens during compiled-answer consumption");
       expect(text, `${dir} bundle research deferral`).toContain("defer deeper research as an explicit research question or source-plan item");
       expect(text, `${dir} bundle needs-research handling`).toContain("`hunch/inferred` and `needs-research` claims may be carried forward as research questions");
+      expect(text, `${dir} bundle agent-owned depth`).toContain("The agent owns interrogation depth");
+      expect(text, `${dir} bundle user-requested rounds`).toContain("if the user says the interrogation feels light and asks for another round");
+      expect(text, `${dir} bundle research permission`).toContain("ask the user for permission before doing that research");
+      expect(text, `${dir} bundle user-owned decisions`).toContain("do not research around a decision that belongs to the user");
+      expect(text, `${dir} bundle shallow gate`).toContain('"Covered or waived" is necessary but not sufficient');
       expect(text, `${dir} bundle round file naming`).toContain("interrogation/" + dir.split("/").pop() + "-r{N}-{branch}.html");
       expect(text, `${dir} bundle root command`).toContain("top-level `command`");
       expect(text, `${dir} bundle invocation comment`).toContain("# Invoke with: <parent-skill-command>");
