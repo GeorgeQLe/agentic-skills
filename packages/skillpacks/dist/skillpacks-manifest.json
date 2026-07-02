@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "4c121cea1ea34be604f8064bc2d96e928ff423e9ccb770ea4a57e27861ab4762",
+  "source_fingerprint": "2dec9bdd65e5bd057daedb4174b5141e2269ad7ca59e07d8d831a7f3989ab795",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1618,6 +1618,25 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-research-amend",
+      "name": "research-amend",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/base/claude/research-amend/SKILL.md",
+      "installable": true,
+      "content_sha256": "1627fd0c8798b332044ca309e36be4aa6ec8ed595f9668354f2e0a6ec3a9f292",
+      "archive_versions": [],
+      "command": "/research-amend",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-skills",
       "name": "skills",
       "scope": "base",
@@ -1990,6 +2009,25 @@
         "v0.9"
       ],
       "command": "$provision-agentic-config",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-research-amend",
+      "name": "research-amend",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page"
+      ],
+      "path": "packs/base/codex/research-amend/SKILL.md",
+      "installable": true,
+      "content_sha256": "dd6fa94467fd20231f4ad6d205011d4bcdbf619a6ba9f5ad51a32edd609ecfd8",
+      "archive_versions": [],
+      "command": "$research-amend",
       "deck_memberships": []
     },
     {

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research Amend"
+  short_description: "Amend approved research artifacts through an alignment-gated workflow"
+  default_prompt: "Use $research-amend to classify a requested research correction, prepare a bounded amendment packet, and gate canonical research edits through an alignment page."
+
+policy:
+  allow_implicit_invocation: true

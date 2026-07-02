@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "93bc4e21965ee8c8f6d9584e5394f344d4d35da3",
-  "generated_at": "2026-07-02T15:22:51.928Z",
-  "source_fingerprint": "67e8ce62a85e4f5b933a456adcf7eff4f3a153498c96bb39942325a0de72f6da",
-  "source_count": 457,
-  "skill_count": 413,
+  "source_commit": "93b525b2ec5b353fb7d135feb74d1e9fb5c0101b",
+  "generated_at": "2026-07-02T16:08:07.622Z",
+  "source_fingerprint": "709a64b3b226df1ac5520c070b07bfcd0101942d4e758e2210bc559ec642e90c",
+  "source_count": 459,
+  "skill_count": 415,
   "pack_count": 42,
   "deck_count": 5,
   "set_count": 3,
@@ -977,6 +977,32 @@
       ]
     },
     {
+      "id": "base-claude-research-amend",
+      "name": "research-amend",
+      "title": "Research Amend",
+      "description": "Amend approved research artifacts through a bounded alignment-gated workflow",
+      "type": "research",
+      "contextIntake": null,
+      "visualTier": "document",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page"
+      ],
+      "argumentHint": "[research path or artifact] [amendment request]",
+      "platform": "claude",
+      "command": "/research-amend",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/claude/research-amend/SKILL.md",
+      "mirrorKey": "research-amend",
+      "tags": [
+        "amend",
+        "base",
+        "claude",
+        "research"
+      ]
+    },
+    {
       "id": "base-claude-skills",
       "name": "skills",
       "title": "Skills",
@@ -1390,6 +1416,32 @@
         "config",
         "ops",
         "provision"
+      ]
+    },
+    {
+      "id": "base-codex-research-amend",
+      "name": "research-amend",
+      "title": "Research Amend",
+      "description": "Amend approved research artifacts through a bounded alignment-gated workflow",
+      "type": "research",
+      "contextIntake": null,
+      "visualTier": "document",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page"
+      ],
+      "argumentHint": "[research path or artifact] [amendment request]",
+      "platform": "codex",
+      "command": "$research-amend",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/codex/research-amend/SKILL.md",
+      "mirrorKey": "research-amend",
+      "tags": [
+        "amend",
+        "base",
+        "codex",
+        "research"
       ]
     },
     {
@@ -8256,7 +8308,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8346,7 +8398,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.30",
+      "version": "v0.31",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8740,7 +8792,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.11",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8830,7 +8882,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.30",
+      "version": "v0.32",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",

@@ -1,9 +1,9 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "93bc4e21965ee8c8f6d9584e5394f344d4d35da3",
-  "generated_at": "2026-07-02T15:22:51.998Z",
-  "source_fingerprint": "67e8ce62a85e4f5b933a456adcf7eff4f3a153498c96bb39942325a0de72f6da",
-  "source_count": 457,
+  "source_commit": "93b525b2ec5b353fb7d135feb74d1e9fb5c0101b",
+  "generated_at": "2026-07-02T16:08:07.691Z",
+  "source_fingerprint": "709a64b3b226df1ac5520c070b07bfcd0101942d4e758e2210bc559ec642e90c",
+  "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-02 - Base pack nesting migration",
     "2026-07-02 - BIP prompt and blocker cleanup",
     "2026-07-02 - Release-prep metadata and changelog for 0.1.19",
     "2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page",
     "2026-06-29 - Simplify BIP platform setup and exhaustive phase drafts",
     "2026-06-29 - Publish current source release from 0.1.16 metadata",
     "2026-06-29 — Add publish dirty-tree override",
-    "2026-06-29 — Fix ship-end BIP post suggestions",
-    "2026-06-28 — Ship-end 0.1.15 release closeout"
+    "2026-06-29 — Fix ship-end BIP post suggestions"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

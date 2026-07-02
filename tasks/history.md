@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-07-02 - Research Amend base skill
+
+- Added mirrored base-pack `research-amend` skills under `packs/base/{claude,codex}/research-amend` with `version: v0.0`.
+- Defined an alignment-gated amendment workflow for approved research artifacts: impact ladder, bounded working packet, `review` page before canonical writes, archive-first approved writes, and high/systemic rerun escalation.
+- Added Codex implicit-invocation metadata and generated bundled `ALIGNMENT-PAGE.md` files.
+- Added focused layer1 coverage for mirrored skill existence, medium missed-competitor handling, approval gating, high/systemic escalation, and self-routed YAML continuation.
+- Regenerated the skillpacks manifest and public skills-catalog export artifacts so the new base skill is discoverable.
+- Verification passed: focused Vitest, version/archive/dependency audits, package build/check, catalog export validation, alignment routing audit, install routing audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-07-02-research-amend-base-skill.md`.
+
 ## 2026-07-02 - Base pack nesting migration
 
 - Moved canonical base skill sources from top-level `base/{claude,codex}` to `packs/base/{claude,codex}` and added `packs/base/PACK.md`.

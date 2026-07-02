@@ -1,40 +1,49 @@
 # Current Task State
 
-## Current Implementation - Centralized Skill Convention Docs
+## Current Implementation - Research Amend Base Skill
 
 Project: `agentic-skills`.
 
-Status: VERIFIED (2026-07-02).
+Status: IN PROGRESS (2026-07-02).
 
 ### Goal
 
-Install the convention and contract documents referenced by skills into a managed destination, `.agents/skillpacks/docs/**`, so installed skills can reliably load those docs without writing into user-owned project `docs/` or `assets/` paths.
+Add a mirrored base-pack `research-amend` skill under `packs/base/{claude,codex}` for bounded, alignment-gated amendments to already-canonical research artifacts without forcing a full Pattern A research rerun.
+
+### Execution Profile
+
+- Parallel mode: serial.
+- Reason: this creates mirrored base skill contracts, focused tests, and generated catalog/package artifacts that need one coherent shipping boundary.
+- Safety boundary: preserve unrelated dirty work already present in the shared worktree; do not change existing Pattern A orchestrator behavior beyond documenting `research-amend` as a separately invokable base skill in this step.
 
 ### Plan
 
-- [x] Add a shared convention-doc registry for tracked `docs/*convention*.md`, `docs/*contract*.md`, and `docs/social/*convention.md`.
-- [x] Include registry docs in the npm package build assets.
-- [x] Copy managed convention docs during Node CLI install, init, and refresh flows.
-- [x] Copy and doctor-check managed convention docs in the source checkout `scripts/pack.sh` flow.
-- [x] Add focused tests for package assets, install, refresh restore, and doctor stale/missing detection.
-- [x] Run targeted verification and record results.
+- [x] Create `packs/base/claude/research-amend/SKILL.md` and `packs/base/codex/research-amend/SKILL.md` with `version: v0.0`.
+- [x] Add `CHANGELOG.md` files and Codex `agents/openai.yaml` metadata.
+- [x] Encode the amendment workflow: product-path resolution, impact ladder, bounded amendment packet, `review` alignment page before canonical writes, archive-first approved writes, and high/systemic rerun routing.
+- [x] Add focused layer1 tests for mirrored existence and the amendment contract.
+- [x] Stage source before regenerating index-sourced package/catalog artifacts.
+- [x] Run targeted validation, record review/history, commit, and push.
 
 ### Acceptance Criteria
 
-- `npx skillpacks install <single-skill>` creates `.agents/skillpacks/docs/**`.
-- `npx skillpacks install <pack>` creates the same managed docs.
-- `npx skillpacks refresh` restores a deleted managed convention doc even when no skill files changed.
-- `doctor` reports missing or stale managed convention docs and recommends the existing refresh command.
-- Source checkout `scripts/pack.sh install` and `scripts/pack.sh refresh` create or restore `.agents/skillpacks/docs/**`.
-- Package build output includes every registry convention/contract doc.
+- `research-amend` exists as a base-pack skill under both `packs/base/claude/research-amend` and `packs/base/codex/research-amend`.
+- Both skill contracts include `version: v0.0`, `type: research`, and alignment-page requirements.
+- The skill can process a single missed competitor as a medium-impact amendment through a bounded working packet and alignment review page before canonical writes.
+- Low/medium amendments patch only affected canonical/intermediate/search-log artifacts after approval and archive superseded artifacts first.
+- High/systemic amendments route to targeted framework/synthesis reruns or a full Pattern A rerun instead of a small patch.
+- Public catalog/package artifacts include the new base skill.
 
 ### Verification Plan
 
-- `npm --workspace packages/skillpacks run test:node`
+- `pnpm exec vitest run --project layer1 layer1/research-amend-contract.test.ts` from `tests/`
+- `bash scripts/skill-versions.sh --missing`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `bash scripts/skill-deps.sh --broken`
+- `npm run skillpacks:build`
 - `npm --workspace packages/skillpacks run build:check`
-- `node scripts/skill-convention-bundle-audit.mjs`
-- `scripts/skill-install-routing-audit.sh`
-- `scripts/skill-pack-routing-audit.sh`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
 - `git diff --check`
 - `git status --short --branch`
 
@@ -42,17 +51,18 @@ Install the convention and contract documents referenced by skills into a manage
 
 Verified:
 
-- `npm --workspace packages/skillpacks run test:node` passed: 178 tests.
-- `npm --workspace packages/skillpacks run build:check` passed after regenerating the stale package manifest.
-- `node scripts/skill-convention-bundle-audit.mjs` passed: 413 active skills and 383 tracked bundles.
-- `scripts/skill-pack-routing-audit.sh` passed.
-- `scripts/skill-install-routing-audit.sh --active` passed: 413 active skills, P1 coverage 12/12, findings 0.
-- `git diff --check` passed.
+- `pnpm exec vitest run --project layer1 layer1/research-amend-contract.test.ts` passed: 8 tests.
+- `bash scripts/skill-versions.sh --missing` passed: all 365 skills have a version field.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills checked, 0 violations.
+- `bash scripts/skill-deps.sh --broken` passed.
+- `npm run skillpacks:build` passed and staged a package with 415 skills, 42 packs.
+- `npm --workspace packages/skillpacks run build:check` passed, including convention bundle audit for 415 active skills and 385 tracked bundles.
+- `node scripts/generate-skills-catalog-export.mjs` completed.
+- `scripts/validate-skills-catalog-export.sh` passed: skills catalog export artifacts are fresh.
+- `node scripts/skill-alignment-routing-audit.mjs` passed for all 415 active `SKILL.md` files.
+- `bash scripts/skill-install-routing-audit.sh --active` passed: P1 coverage 12/12, findings 0.
 
-Notes:
-
-- The planned bare `scripts/skill-install-routing-audit.sh` command prints usage in this repo; the active-source audit requires `--active`.
-- `packages/skillpacks/dist/skillpacks-manifest.json` was stale relative to already-current product-design source versions and was regenerated so `build:check` could pass.
+Ship manifest: `tasks/ship-manifest-2026-07-02-research-amend-base-skill.md`.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 
