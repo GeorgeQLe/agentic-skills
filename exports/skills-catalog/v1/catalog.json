@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "03f28daa35e37d788d06a2ec1cecefd57d192e4b",
-  "generated_at": "2026-07-02T16:25:14.346Z",
-  "source_fingerprint": "dd359606cd59897dd5da72ed2a6326886f1d2cb63e0681ba117b461529365529",
+  "source_commit": "846428d30078e3bdeac87261047b56456584cebb",
+  "generated_at": "2026-07-02T17:23:44.407Z",
+  "source_fingerprint": "a75b7337ec6b0e00499562a6b43821da4b8cb9a07bc7df7a58feac44ecbacf0b",
   "source_count": 459,
   "skill_count": 415,
   "pack_count": 42,
@@ -72,7 +72,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.13",
+      "version": "v0.14",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -125,7 +125,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -153,7 +153,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.13",
+      "version": "v0.14",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -984,7 +984,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": "document",
-      "version": "v0.0",
+      "version": "v0.1",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1426,7 +1426,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": "document",
-      "version": "v0.0",
+      "version": "v0.1",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2640,7 +2640,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2669,7 +2669,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2698,7 +2698,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2727,7 +2727,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2754,7 +2754,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.27",
+      "version": "v0.28",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2782,7 +2782,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2810,7 +2810,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2838,7 +2838,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2866,7 +2866,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2894,7 +2894,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2922,7 +2922,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2949,7 +2949,7 @@
       "type": "research",
       "contextIntake": "deep",
       "visualTier": "visual",
-      "version": "v1.18",
+      "version": "v1.19",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -3062,7 +3062,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3090,7 +3090,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3118,7 +3118,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3146,7 +3146,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3174,7 +3174,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3202,7 +3202,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.26",
+      "version": "v0.27",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -3259,7 +3259,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3288,7 +3288,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3317,7 +3317,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3346,7 +3346,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3373,7 +3373,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.27",
+      "version": "v0.28",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3401,7 +3401,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3429,7 +3429,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3457,7 +3457,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3485,7 +3485,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3513,7 +3513,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3541,7 +3541,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3568,7 +3568,7 @@
       "type": "research",
       "contextIntake": "deep",
       "visualTier": "visual",
-      "version": "v1.18",
+      "version": "v1.19",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -3681,7 +3681,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3709,7 +3709,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3737,7 +3737,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3765,7 +3765,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3793,7 +3793,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -3821,7 +3821,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.26",
+      "version": "v0.27",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -5100,7 +5100,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5129,7 +5129,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5157,7 +5157,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5185,7 +5185,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5213,7 +5213,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5242,7 +5242,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.25",
+      "version": "v0.26",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5438,7 +5438,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5467,7 +5467,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5495,7 +5495,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5523,7 +5523,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5551,7 +5551,7 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -5580,7 +5580,7 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.25",
+      "version": "v0.26",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -6158,7 +6158,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.0",
+      "version": "v0.1",
       "requiredConventions": [],
       "argumentHint": "[audit|fix] [skills|tasks|docs|codex|all]",
       "platform": "claude",
@@ -6344,7 +6344,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [],
       "argumentHint": "[--phase] [--execute-approved]",
       "platform": "codex",
@@ -6369,7 +6369,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.13",
+      "version": "v0.14",
       "requiredConventions": [
         "social-ledger"
       ],
@@ -6397,7 +6397,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -7656,7 +7656,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -8000,7 +8000,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.20",
+      "version": "v0.21",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8224,7 +8224,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.23",
+      "version": "v0.24",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8484,7 +8484,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.20",
+      "version": "v0.21",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8708,7 +8708,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.23",
+      "version": "v0.24",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8938,7 +8938,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8993,7 +8993,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"

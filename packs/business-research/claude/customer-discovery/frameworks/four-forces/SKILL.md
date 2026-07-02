@@ -2,7 +2,7 @@
 name: four-forces
 description: Moesta Four Forces of Progress — map Push, Pull, Anxiety, and Habit forces per ICP candidate to identify switching catalysts and barriers
 type: research
-version: v0.9
+version: v0.10
 required_conventions: [alignment-page]
 invocation: sub-skill
 parent: customer-discovery
@@ -26,11 +26,10 @@ When this framework is run inline and stops on its findings `review` page, the t
 
 ```markdown
 ## Next Work
-Review the framework findings page, compile YAML, and paste it into a session invoking the parent skill. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
-
-## Invoke With YAML
-/customer-discovery
+Review the framework findings page, compile YAML, clear context, and paste the compiled YAML into a fresh session. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
 ```
+
+The compiled YAML must carry the parent command (for example, `/customer-discovery`) in `command` and `agent_routing.command`.
 
 Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
 
@@ -50,7 +49,7 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Invoke With YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
+Omit `product_path` in flat mode, keep `command` identical to `agent_routing.command`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 
@@ -60,7 +59,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while scope or artifact approval is pending. While the framework findings page is in `review`, use only the parent-owned terminal handoff sections above. Parent-loop continuation is not downstream routing, but it must name only `/customer-discovery`. Downstream routing belongs to parent synthesis only after approved synthesis artifacts are written or updated.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while scope or artifact approval is pending. While the framework findings page is in `review`, use only the parent-owned `## Next Work` YAML-paste handoff above. Parent-loop continuation is not downstream routing, but compiled YAML must name only `/customer-discovery`. Downstream routing belongs to parent synthesis only after approved synthesis artifacts are written or updated.
 
 ## Staged Research Workflow
 

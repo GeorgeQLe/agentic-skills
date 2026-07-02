@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-02 - Compiled YAML should be the only review-gate routing artifact
+
+- The user clarified that Pattern A review-pending handoffs should not add a separate `## Invoke With YAML` command block now that compiled page YAML includes the continuation command.
+- Rule: for pending review/alignment gates, tell the user to review the page, clear context, and paste the compiled YAML into a fresh session; do not also print a standalone parent command section.
+- Keep `command` and `agent_routing.command` inside compiled YAML as the routing contract; terminal text should not duplicate it.
+
 ## 2026-07-02 - Chunked handoffs should not duplicate command and YAML routing
 
 - The user clarified that `ux-variations` chunked handoffs should not show both an "Exact next command" line and a separate `## Invoke With YAML` block; the YAML path has been working well and should be the single routing artifact.

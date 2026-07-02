@@ -15358,3 +15358,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Regenerated active alignment/interrogation skill stubs while leaving existing sibling bundles as legacy compatibility artifacts.
 - Verification: syntax checks, focused layer1 suite (122 tests), convention bundle audit, package `build:check`, active alignment/interrogation page audits, package boundary/alignment Node tests, skill version/archive audits, task-doc audit, and diff hygiene passed.
 - Manifest: `tasks/ship-manifest-2026-07-02-shared-convention-resolver.md`.
+
+## 2026-07-02 — skillpacks 0.1.20 publish readiness
+
+- Confirmed npm latest is `0.1.19` for both `skillpacks` and `@glexcorp/gskp`; local release prep therefore targets the next patch, `0.1.20`.
+- Added the package-level `CHANGELOG.md` `0.1.20` section covering post-`0.1.19` commits and the existing dirty-tree release boundary: base-skill nesting, shared convention resolver stubs, `research-amend`, Pattern A compiled-YAML-only review handoffs, Codex route normalization, interrogation-depth ownership, and post-UAT consolidation routing.
+- Captured the ship invocation prompt and created the release-readiness ship manifest.
+- Regenerated package/catalog artifacts from the staged index. First verification exposed stale design-tree loop bundles and stale catalog export metadata; regenerated both and reran the failed gates successfully.
+- Verification: package Node tests 178/178, package `skillpacks:verify`, catalog export check, skill archive audit, Pattern A handoff audit, task-doc audit, and diff hygiene passed.
+- Manifest: `tasks/ship-manifest-2026-07-02-0-1-20-publish-readiness.md`.

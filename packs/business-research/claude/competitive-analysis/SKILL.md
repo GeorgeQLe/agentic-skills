@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
 type: research
-version: v0.27
+version: v0.28
 required_conventions: [alignment-page]
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
@@ -37,7 +37,7 @@ Do not perform synthesized research, rank candidates, make recommendations, or w
 
 After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
 
-Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action, and the only terminal command section allowed before approval is `## Invoke With YAML`, which names the parent command to invoke with the compiled YAML, such as `/competitive-analysis` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing. Only emit downstream next-skill routing after the synthesized `competitive-analysis.md` artifact has been approved and written.
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language while a scope, framework findings, or synthesis approval is pending. The approval request itself is the next action: tell the user to review the page, compile responses, clear context, and paste the compiled YAML into a fresh session. The compiled YAML carries the parent command in `command` and `agent_routing.command`, such as `/competitive-analysis` plus the same product/research path argument when present. Parent-loop continuation is not downstream routing. Only emit downstream next-skill routing after the synthesized `competitive-analysis.md` artifact has been approved and written.
 
 ## Staged Research Workflow
 
@@ -77,7 +77,7 @@ When a framework is pending, the only user-facing continuation route is re-invok
 
 ### Terminal Handoff Contract
 
-Every terminal response for this Research Session Loop must end with `## Next Work` and one command section. Use `## Invoke With YAML` only while a `review` page is waiting for compiled YAML; it names the parent command to invoke with the compiled YAML. Use `## Recommended Next Command` only after approved YAML has been consumed and the approved artifact has been written or updated. Do not put any other section after the applicable command section.
+Every terminal response for this Research Session Loop must end with `## Next Work`. While a `review` page is waiting for compiled YAML, `## Next Work` is the final section and tells the user to review the page, compile responses, clear context, and paste the compiled YAML into a fresh session. Use `## Recommended Next Command` only after approved YAML has been consumed and the approved artifact has been written or updated. Do not put any other section after the applicable final section.
 
 ### Self-Routing Continuation Payload
 
@@ -97,9 +97,9 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-For framework selection, shortcut, and synthesis gates, omit `framework_slug` and `framework_mode`; `gate_type` must name the actual gate. The `command` field must be the same parent command shown under `## Invoke With YAML`. The parent consumes the YAML, writes or amends the artifact, archives consumed sources, derives progress from the run manifest plus canonical-intermediate files, and decides whether to load a framework subskill inline.
+For framework selection, shortcut, and synthesis gates, omit `framework_slug` and `framework_mode`; `gate_type` must name the actual gate. The `command` field must carry the parent command the user would otherwise have copied separately. The parent consumes the YAML, writes or amends the artifact, archives consumed sources, derives progress from the run manifest plus canonical-intermediate files, and decides whether to load a framework subskill inline.
 
-For review-pending framework, selection, shortcut, or synthesis pages, `## Next Work` tells the user to review the alignment page, compile YAML, and paste it into a session invoking `/competitive-analysis` with the same product/research path argument when present. For post-write pending-framework states, `## Next Work` reports progress as "k of N frameworks complete" and says the next run executes the next pending framework; `## Recommended Next Command` names `/competitive-analysis`.
+For review-pending framework, selection, shortcut, or synthesis pages, `## Next Work` tells the user to review the alignment page, compile YAML, clear context, and paste the compiled YAML into a fresh session. The compiled YAML carries the parent command, including `/competitive-analysis` with the same product/research path argument when present. For post-write pending-framework states, `## Next Work` reports progress as "k of N frameworks complete" and says the next run executes the next pending framework; `## Recommended Next Command` names `/competitive-analysis`.
 
 After every framework write, recalculate pending frameworks from the run manifest and canonical-intermediate files before writing this handoff. If no selected frameworks remain and canonical `competitive-analysis.md` is missing, `## Next Work` says the next run builds the unified synthesis review page, and `## Recommended Next Command` names `/competitive-analysis --synthesize` with the same product/research path argument when present. After approved synthesis writes canonical `competitive-analysis.md`, the final command section names only the first downstream command selected by the Next Steps decision tree.
 
@@ -215,7 +215,7 @@ Framework intermediate paths (`research/{slug}/` in product-path mode):
 - `research/competitive-analysis-strategic-group-map.md`
 - `research/competitive-analysis-feature-pricing-matrix.md`
 
-**Advance the loop by self-re-invocation.** When a framework findings page is in `review`, end the terminal message with `## Next Work` telling the user to review the page and compile YAML, followed by `## Invoke With YAML` naming `/competitive-analysis` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, recalculate pending frameworks from the manifest and filesystem before writing the handoff. If pending frameworks remain, end with `## Next Work` reporting progress as "k of N frameworks complete" and saying the next run executes the next pending framework, followed by `## Recommended Next Command` naming `/competitive-analysis`. If no pending frameworks remain and canonical `competitive-analysis.md` is missing, end with `## Next Work` saying the next run builds the unified synthesis review page, followed by `## Recommended Next Command` naming `/competitive-analysis --synthesize` with the same product/research path argument when present. Do not emit cross-skill routing here — that happens only after synthesis.
+**Advance the loop by self-re-invocation.** When a framework findings page is in `review`, end the terminal message with `## Next Work` telling the user to review the page, compile YAML, clear context, and paste the compiled YAML into a fresh session; do not add a separate command section. The compiled YAML names `/competitive-analysis` with the same product/research path argument when present. After a framework's compiled YAML is approved and its canonical intermediate is written, recalculate pending frameworks from the manifest and filesystem before writing the handoff. If pending frameworks remain, end with `## Next Work` reporting progress as "k of N frameworks complete" and saying the next run executes the next pending framework, followed by `## Recommended Next Command` naming `/competitive-analysis`. If no pending frameworks remain and canonical `competitive-analysis.md` is missing, end with `## Next Work` saying the next run builds the unified synthesis review page, followed by `## Recommended Next Command` naming `/competitive-analysis --synthesize` with the same product/research path argument when present. Do not emit cross-skill routing here — that happens only after synthesis.
 
 
 ### 4. State B — Synthesis (auto-detected; also `/competitive-analysis --synthesize`)

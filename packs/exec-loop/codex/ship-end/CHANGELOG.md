@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-07-02
+
+- Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent handoff is required.
+
 ## v0.13 - 2026-07-02
 
 - Tightened BIP wrap-up prompting so `$ship-end` asks only as terminal output after reporting, only when `alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed` is not true; explicit `alignment.build_in_public: false` now suppresses both prompting and BIP output, and BIP page review can never block shipping or next-work routing.

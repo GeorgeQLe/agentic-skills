@@ -2,7 +2,7 @@
 name: mono-plan
 description: Detect monorepo structure, identify shared chokepoints, and generate safe parallel lane specs aligned to package boundaries
 type: planning
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 ---
 
@@ -12,7 +12,7 @@ Invoke as `$mono-plan`.
 
 Use this skill when the user needs to plan safe parallel work across a monorepo. Generates lane specs aligned to package boundaries with lockfile and root config safety built in.
 
-Run after `/roadmap` sets `agent-team` or `implementation-safe` on a phase, before `/plan-phase` decomposes it.
+Run after `$roadmap` sets `agent-team` or `implementation-safe` on a phase, before `$plan-phase` decomposes it.
 
 ## Process
 

@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.5
+version: v0.6
 required_conventions: [alignment-page]
 invocation: sub-skill
 parent: exec
@@ -357,7 +357,7 @@ Rules:
 - Inference defaults:
   - Codex skill invocation (`$plan-phase`) → recommend the matching `$...` command; for executable planned work, emit the approved task artifact route rather than a direct execution-loop command.
   - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `npx skillpacks install agent-bridge` from the project shell, first; if `agent-bridge` is enabled, recommend a cross-agent handoff that consumes the approved task artifact.
-  - Claude slash invocation (`/plan-phase`, `/delegate`) or orchestration-heavy work → emit the approved task artifact route and let the active executor consume it.
+  - Imported Claude slash routes or orchestration-heavy work → normalize to the Codex approved task artifact route and let the active executor consume it.
   - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `npx skillpacks install guided-walkthrough` from the project shell, first; if `guided-walkthrough` is enabled, recommend `$guide` — or a Claude-guided manual step rather than an execution-loop command.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `npx skillpacks install docs-health` from the project shell, first; if `docs-health` is enabled, recommend `$reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx skillpacks install <pack-name>` from the project shell, as the install prerequisite before the recommendation.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-07-02
+
+- Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent or human-guided Claude route is required.
+
 ## v0.5 - 2026-06-29
 
 - Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.

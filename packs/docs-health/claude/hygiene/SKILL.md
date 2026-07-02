@@ -2,7 +2,7 @@
 name: hygiene
 description: Audit project structure for convention violations, missing files, template drift, and cross-platform sync gaps — optionally auto-fix
 type: analysis
-version: v0.0
+version: v0.1
 argument-hint: "[audit|fix] [skills|tasks|docs|codex|all]"
 ---
 
@@ -212,7 +212,7 @@ In `fix` mode, prepend each fixed item with a checkmark:
 
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
 - **No content generation.** Auto-fix only adds structural scaffolding, never writes substantive content.
-- **Structural docs only.** Template checks validate shape, parseability, and canonical placement; use `$reconcile-dev-docs`, `$reconcile-research`, `$research-roadmap`, or `$spec-drift` for truth, freshness, and contradictions.
+- **Structural docs only.** Template checks validate shape, parseability, and canonical placement; use `/reconcile-dev-docs`, `/reconcile-research`, `/research-roadmap`, or `/spec-drift` for truth, freshness, and contradictions.
 - **Show evidence.** Every finding must include the specific file path and what's wrong.
 - **No false positives.** If uncertain whether something is a violation, classify it as Info, not Error.
 - **Respect exceptions.** Check for `# codex-skip` and similar markers before flagging intentional gaps.

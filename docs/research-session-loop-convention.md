@@ -94,7 +94,7 @@ next session (state 0): write research/_working/interrogation-{orchestrator}-r{r
 
 A round's confidence gate is the loop exit: the orchestrator **cannot advance to state F/E until** at least one interrogation round is completed and every interview area is covered or explicitly waived at the coverage checkpoint. The round page carries `data-interrogation-gate="coverage-checkpoint"` on the exit round; flagging a gap raises the round number and continues the loop.
 
-**Loop continuation reuses the line-15 self-advancing exception** (`docs/alignment-yaml-routing-contract.md` line 15): each round ends the terminal message with `## Next Work` and `## Invoke With YAML`, and the round page's compiled YAML carries a top-level `command` plus `agent_routing.command` naming the same parent orchestrator (never a child framework path command) with `gate_type: interrogation-round`. Detection resolves purely from pasted-YAML + filesystem: the next session reads the pasted round YAML and the on-disk round sidecars to decide whether to emit the next round or write the completion handoff.
+**Loop continuation reuses the self-advancing exception** (`docs/alignment-yaml-routing-contract.md`): each round ends the terminal message with `## Next Work` only, telling the user to clear context and paste the compiled YAML into a fresh session. The round page's compiled YAML carries a top-level `command` plus `agent_routing.command` naming the same parent orchestrator (never a child framework path command) with `gate_type: interrogation-round`. Detection resolves purely from pasted-YAML + filesystem: the next session reads the pasted round YAML and the on-disk round sidecars to decide whether to emit the next round or write the completion handoff.
 
 ### Framework approval granularity
 
@@ -191,7 +191,7 @@ This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-r
 
 After final synthesis has been approved and the canonical research artifact has been written, bounded low/medium corrections may route to `research-amend` instead of restarting the whole Pattern A loop. Use this only for narrow amendments to existing canonical research, such as one missed competitor, one corrected source fact, or a small evidence update whose blast radius is known. High-impact or systemic drift still routes to the affected framework, synthesis, or full Pattern A rerun; examples include changed ICP/category strategy, a competitor set that changes positioning, broad source staleness, or conflicts spanning multiple frameworks.
 
-Do not recommend `research-amend` while any Pattern A alignment page is still in `review`. Review-pending pages continue to route only through `## Invoke With YAML`; downstream or amendment commands become valid only after approved artifacts are written, or from separate research-health/status scans.
+Do not recommend `research-amend` while any Pattern A alignment page is still in `review`. Review-pending pages continue only through compiled YAML pasted into a fresh session; downstream or amendment commands become valid only after approved artifacts are written, or from separate research-health/status scans.
 
 ### Self-routing continuation payload
 
@@ -215,19 +215,18 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-For non-framework gates, use the same mapping and set `gate_type` to the active gate (`framework-selection`, `shortcut-selection`, or `synthesis`); omit `framework_slug` and `framework_mode` when no framework is active. In flat mode, omit `product_path` or set it to an empty value. The top-level `command`, `agent_routing.command`, and `## Invoke With YAML` command must be the same parent-orchestrator command, including the same product/research path argument when present. It must never be a path-shaped child framework command.
+For non-framework gates, use the same mapping and set `gate_type` to the active gate (`framework-selection`, `shortcut-selection`, or `synthesis`); omit `framework_slug` and `framework_mode` when no framework is active. In flat mode, omit `product_path` or set it to an empty value. The top-level `command` and `agent_routing.command` must be the same parent-orchestrator command, including the same product/research path argument when present. It must never be a path-shaped child framework command.
 
 `agent_routing` is routing metadata, not execution authority. The receiving parent still validates `approval_status`, identifies which gate the YAML answers, derives progress from the run manifest plus canonical-intermediate file existence, writes or amends the appropriate artifact, archives consumed sources, and decides whether to load a framework subskill inline. Do not put framework-owned commands, downstream-skill commands, `$exec`, or `/exec` in this mapping.
 
 ### Terminal handoff format
 
-Every terminal message for a Pattern A loop stop ends with these sections, in this order:
+Every terminal message for a Pattern A loop stop ends with the applicable sections below:
 
-1. `## Next Work` — one or two sentences naming the immediate next work state: review the alignment page, run the next pending framework, build synthesis, or move to the first downstream skill after approved synthesis.
-2. `## Invoke With YAML` — use only while a `review` approval gate is pending. Name the same parent orchestrator command with the same product/research path argument when present. Keep review/compile/paste instructions in `## Next Work`; this section should contain only the invocation to use with compiled YAML, not the next phase's routing.
-3. `## Recommended Next Command` — use only after approved YAML has been consumed and the approved artifact has been written or updated. Name the same parent orchestrator command while frameworks or synthesis remain; after final synthesis, name the first downstream command selected by the orchestrator's routing tree.
+1. `## Next Work` — always present. For pending `review` approval gates, this is the final section and tells the user to review the page, compile responses, clear context, and paste the compiled YAML into a fresh session. For post-write handoffs, name the immediate next work state: run the next pending framework, build synthesis, or move to the first downstream skill after approved synthesis.
+2. `## Recommended Next Command` — use only after approved YAML has been consumed and the approved artifact has been written or updated. Name the same parent orchestrator command while frameworks or synthesis remain; after final synthesis, name the first downstream command selected by the orchestrator's routing tree.
 
-Do not place any other section after the applicable command section. If no command is appropriate after final synthesis, write `No follow-up command recommended` under `## Recommended Next Command`.
+Do not place any other section after the applicable final section. If no command is appropriate after final synthesis, write `No follow-up command recommended` under `## Recommended Next Command`.
 
 For the last framework write, recalculate pending frameworks from the run manifest plus canonical-intermediate existence before writing the handoff. If no frameworks remain and the synthesized canonical artifact is missing, `## Next Work` must say the next run builds the unified synthesis review page, and `## Recommended Next Command` must name the parent synthesis route, for example `/customer-discovery --synthesize` or `/customer-discovery --synthesize research/afps-tracker`.
 
@@ -237,7 +236,7 @@ Framework subskills do not own user-facing routing. When a framework is run inli
 
 Use two distinct labels so review pages do not hide the required continuation command:
 
-- `## Invoke With YAML` appears only while a `review` approval gate is pending. It names the same parent orchestrator command, with the same product/research path argument when present, as the invocation to use with compiled YAML. This is not downstream routing.
+- Pending `review` approval gates end after `## Next Work`; the compiled YAML itself carries the parent command in `command` and `agent_routing.command`.
 - `## Recommended Next Command` appears after the agent has consumed approved YAML, written or updated the approved artifact for the gate, and converted the page to `confirmed`. It names the same parent orchestrator command when the current Research Session Loop still has pending frameworks or synthesis.
 
 While any `review` approval gate is pending, do not route to downstream or cross-skill work. Framework subskills remain downstream-route-free in loop mode: they do not emit `Recommended next skill`, path-shaped child framework commands, `$exec`, `/exec`, or downstream commands. The parent orchestrator is the only user-facing continuation command during framework loops.
@@ -245,7 +244,7 @@ While any `review` approval gate is pending, do not route to downstream or cross
 ### Does the skill need to be re-invoked? Can the agent auto-call it?
 
 - **The skill is required to interpret the YAML.** The rules for what a compiled YAML means (which gate it answers, what to write, what to archive) live in the orchestrator's `SKILL.md`, not in the YAML. The YAML is data.
-- **Do not rely on auto-call.** A bare pasted YAML blob does not reliably trigger a skill; skills fire on explicit invocation or description match. The robust pattern is the **compiled YAML carrying top-level `command` plus `agent_routing`, with `## Invoke With YAML` naming the same literal parent command** (above). If a fresh agent can use `command` or `agent_routing` to select the parent skill, it should still let that parent resolve state from YAML and filesystem rather than treating the YAML as standalone execution authority.
+- **Use compiled YAML as the handoff artifact.** The robust pattern is the **compiled YAML carrying top-level `command` plus `agent_routing`**. The user should paste the compiled YAML into a fresh session after clearing context; the fresh agent uses `command` or `agent_routing` to select the parent skill, then lets that parent resolve state from YAML and filesystem rather than treating the YAML as standalone execution authority.
 - **Framework subskills are followed inline, not separately invoked.** When the orchestrator self-advances into a framework (step C), it loads and follows that framework subskill's `SKILL.md` instructions within its own session. The user does not invoke the framework skill; the user only ever invokes the orchestrator.
 
 ## Heavy vs. light phases

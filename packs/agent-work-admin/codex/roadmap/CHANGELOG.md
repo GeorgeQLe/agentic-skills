@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-07-02
+
+- Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent handoff is required.
+
 ## v0.13 - 2026-06-22
 
 - Updated actionable design-gate route examples to use `$consolidate-prototypes` as the primary post-UAT consolidation skill.

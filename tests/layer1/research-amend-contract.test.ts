@@ -28,7 +28,7 @@ describe("research-amend base skill contract", () => {
 
       expect(frontmatter.name).toBe("research-amend");
       expect(frontmatter.type).toBe("research");
-      expect(frontmatter.version).toBe("v0.0");
+      expect(frontmatter.version).toBe("v0.1");
       expect(frontmatter.required_conventions).toBe("[alignment-page]");
       expect(content).toContain(`Invoke as \`${variant.command}\`.`);
       expect(content).toContain("alignment/research-amend-{topic}.html");
@@ -63,7 +63,7 @@ describe("research-amend base skill contract", () => {
     it(`${variant.agent} routes approval YAML back to itself`, () => {
       const content = readFileSync(absolutePath, "utf8");
 
-      expect(content).toContain("## Invoke With YAML");
+      expect(content).toContain("clear context, and paste the compiled YAML into a fresh session");
       expect(content).toContain(`${variant.command} <same scope argument>`);
       expect(content).toContain("top-level `command` plus `agent_routing.command`");
       expect(content).not.toContain("$exec");

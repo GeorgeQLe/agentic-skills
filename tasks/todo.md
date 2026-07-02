@@ -2,6 +2,29 @@
 
 No active implementation task is currently promoted.
 
+## Review - 0.1.20 Publish Readiness 2026-07-02
+
+Project: `agentic-skills`.
+
+### Goal
+
+Prepare the repository for the next package publish after npm `0.1.19`: document the full changelog, package existing skill/doc changes, verify generated artifacts, and leave no dirty tracked tree.
+
+### Review
+
+Verified:
+
+- Npm latest is `0.1.19` for both `skillpacks` and `@glexcorp/gskp`; the next prepared release is `0.1.20`.
+- Package changelog and ship manifest document the full post-`0.1.19` release boundary.
+- Generated design-tree loop bundles were stale during the first package verification run; regenerated 22 bundles and reran package verification successfully.
+- Catalog export metadata was stale during the first export check; regenerated and reran export verification successfully.
+- Package Node tests passed: 178 tests.
+- Package verification passed: 415 active skills, 42 packs, 385 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`.
+- Skill archive audit passed: 415 skills, 0 violations.
+- Pattern A handoff audit passed.
+- Task-doc audit passed after converting review checklist items to evidence text.
+- Diff hygiene passed.
+
 ## Review - Post-UAT Consolidation Routing Fix 2026-07-02
 
 Project: `agentic-skills`.

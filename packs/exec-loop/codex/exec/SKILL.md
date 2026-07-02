@@ -2,7 +2,7 @@
 name: exec
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
-version: v0.5
+version: v0.6
 argument-hint: "[--phase] [--execute-approved]"
 invocation: orchestrator
 ---
@@ -140,7 +140,7 @@ Rules:
 - Normalize copied task routes to Codex syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Claude slash commands for base skills (for example `/exec`, `/ship`, `/roadmap`, `/guide`, `/reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Codex `$...` command unless the next action is explicitly a Claude-only handoff, `/delegate`, or a human-guided Claude workflow.
 - Inference defaults:
   - Codex skill invocation (`$exec`, `$ship`, `$ship-end`, or `$exec --execute-approved`) → recommend the matching `$...` command.
-  - Claude slash invocation (`/exec`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Imported Claude slash routes or orchestration-heavy work → normalize to the matching Codex `$...` command unless the next action is explicitly a cross-agent handoff or human-guided Claude workflow.
   - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `$guide` or a Claude-guided manual step rather than `$exec`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
   - Approved packet present → recommend `$exec --execute-approved` unless the resolved mode is explicitly `claude-only`.

@@ -60,7 +60,7 @@ packs/<pack>/claude/<orchestrator>/
 2. **Framework recommendation** — present available frameworks as a multi-select alignment page with mode-appropriate defaults pre-checked and optional frameworks available.
 3. **Self-advancing execution** — record the approved framework selection in a run manifest, then advance one phase per invocation: each re-invocation runs the next pending framework's subskill inline (following its staged research workflow) and stops. State is the run manifest plus canonical-intermediate file existence — no separate task queue. Progress is derived from which intermediates exist. See `docs/research-session-loop-convention.md`.
 4. **Synthesis** — once every selected framework intermediate exists (auto-detected; an explicit `--synthesize` may also be accepted), read all intermediates and synthesize into the canonical deliverable. Present via alignment page before writing, then archive the run manifest.
-5. **Terminal handoff** — every loop stop ends with `## Next Work` and either `## Invoke With YAML` for pending review gates (naming only the parent invocation to use with compiled YAML) or `## Recommended Next Command` after an approved artifact write. Pending review pages also include `agent_routing` in the compiled YAML so a fresh agent can route to the parent orchestrator. Cross-skill routing appears only after synthesis is approved and written. To continue the loop before then, route to the orchestrator's **own** re-invocation.
+5. **Terminal handoff** — pending review gates end with `## Next Work` only: tell the user to review the page, clear context, and paste the compiled YAML into a fresh session. The compiled YAML includes the parent command in `command` and `agent_routing.command`, so do not add a separate review-pending command section. After an approved artifact write, use `## Recommended Next Command`. Cross-skill routing appears only after synthesis is approved and written. To continue the loop before then, route to the orchestrator's **own** re-invocation.
 6. **Post-canonical amendment routing** — after synthesis is approved and canonical research exists, bounded low/medium corrections such as one missed competitor or one corrected source fact may route to `research-amend`. High-impact or systemic changes still route to affected framework/synthesis reruns or a full Pattern A rerun. Pending `review` pages never use amendment/downstream routing; they use only the approval YAML path.
 
 ### Subskill Responsibilities
@@ -69,7 +69,7 @@ packs/<pack>/claude/<orchestrator>/
 2. **Own framework-specific analysis** — each subskill applies one named framework or methodology.
 3. **Write to intermediate path** — `research/{orchestrator}-{framework-slug}.md` (or `research/{slug}/{orchestrator}-{framework-slug}.md` in product-path mode).
 4. **Follow staged research workflow** — working packet → alignment page → approved write.
-5. **Parent-owned handoff only** — subskills do not emit `Recommended next skill`, child framework commands, or downstream commands. When run inline, their final handoff uses the parent orchestrator's `## Next Work` and command sections; the orchestrator handles downstream routing after synthesis.
+5. **Parent-owned handoff only** — subskills do not emit `Recommended next skill`, child framework commands, or downstream commands. When run inline, their pending-review handoff uses the parent orchestrator's `## Next Work` YAML-paste instruction; the orchestrator handles downstream routing after synthesis.
 
 ### Deliverable Naming
 

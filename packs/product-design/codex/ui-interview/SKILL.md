@@ -239,7 +239,7 @@ Only after the page is converted to `confirmed` and canonical files are written,
 
 ### Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/ui-interview-{topic}.html`.
 
 The page is built pre-approval in `review` state per step 9, before any canonical spec write, and converts to `confirmed` only after final compiled YAML approval and canonical writes.
 

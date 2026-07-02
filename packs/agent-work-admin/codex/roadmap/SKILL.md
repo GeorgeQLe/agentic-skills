@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.13
+version: v0.14
 required_conventions: [alignment-page]
 argument-hint: "[--existing] [path-to-spec]"
 ---
@@ -371,7 +371,7 @@ Rules:
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Codex skill invocation (`$roadmap`, `$plan-phase`, `$exec`, `$research-roadmap`) → recommend the matching `$...` command.
-  - Claude slash invocation (`/roadmap`, `/plan-phase`, `/exec`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Imported Claude slash routes or orchestration-heavy work → normalize to the matching Codex `$...` command unless the next action is explicitly a cross-agent handoff.
   - External manual work or browser-gathered evidence with no reliable authenticated CLI/API path (DNS/OAuth/service dashboards, auth setup, production smoke checks that need real account/device or human sign-off) → recommend `$guide` or a Claude-guided manual step.
   - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `$guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.

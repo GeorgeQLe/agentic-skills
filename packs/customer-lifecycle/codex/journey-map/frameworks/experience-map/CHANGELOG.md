@@ -1,5 +1,9 @@
 # experience-map changelog (codex)
 
+## v0.10 - 2026-07-02
+
+- Removed the separate review-pending `## Invoke With YAML` command block; compiled YAML now carries continuation via `command` and `agent_routing.command`, so terminal handoffs tell users to clear context and paste the compiled YAML directly.
+
 ## v0.9 - 2026-06-20
 
 - Changed the review-pending Pattern A handoff to `## Invoke With YAML`; the section now only names the parent skill invocation to use with compiled YAML while `## Next Work` owns the review/compile/paste instructions.

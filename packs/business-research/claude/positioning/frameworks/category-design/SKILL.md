@@ -2,7 +2,7 @@
 name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
-version: v0.12
+version: v0.13
 required_conventions: [alignment-page]
 invocation: sub-skill
 parent: positioning
@@ -26,11 +26,10 @@ When this framework is run inline and stops on its findings `review` page, the t
 
 ```markdown
 ## Next Work
-Review the framework findings page, compile YAML, and paste it into a session invoking the parent skill. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
-
-## Invoke With YAML
-/positioning
+Review the framework findings page, compile YAML, clear context, and paste the compiled YAML into a fresh session. The parent will consume that YAML, write the approved intermediate, and recalculate whether another framework or synthesis is next.
 ```
+
+The compiled YAML must carry the parent command (for example, `/positioning`) in `command` and `agent_routing.command`.
 
 Use the same product/research path argument when present. Do not decide from inside the framework whether the next parent run executes another framework or synthesis; the parent orchestrator recalculates that from the run manifest and canonical-intermediate files after approval.
 
@@ -50,7 +49,7 @@ agent_routing:
   next_resolution: parent-resolves-from-yaml-and-filesystem
 ```
 
-Omit `product_path` in flat mode, keep `command` identical to the parent command shown under `## Invoke With YAML`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
+Omit `product_path` in flat mode, keep `command` identical to `agent_routing.command`, and never replace it with a child framework path command. The parent consumes this YAML, writes the approved intermediate, archives the working packet/page, and recalculates the next state.
 
 ## Report-First Approval Gate
 

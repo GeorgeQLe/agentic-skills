@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: v0.11
+version: v0.12
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -101,7 +101,7 @@ Rules:
 - Inference defaults:
   - Codex `$ship` invocation after shipping or packaging current work → recommend `$exec` for the next agent-executable project step, or the more specific next skill named by project state.
   - Other Codex skill invocations (`$exec`, `$ship-end`) → recommend the matching `$...` command.
-  - Claude slash invocation (`/exec`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Imported Claude slash routes or orchestration-heavy work → normalize to the matching Codex `$...` command unless the next action is explicitly a cross-agent handoff.
   - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `npx skillpacks install guided-walkthrough` from the project shell first; if `guided-walkthrough` is enabled, recommend `$guide` — or a Claude-guided manual step rather than `$exec`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `npx skillpacks install docs-health` from the project shell first; if `docs-health` is enabled, recommend `$reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx skillpacks install <pack-name>` from the project shell as the prerequisite.

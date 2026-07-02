@@ -8,6 +8,42 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+## [0.1.20] - 2026-07-02
+
+Prepared for the next publish attempt for both `skillpacks` and `@glexcorp/gskp`.
+
+Release-state note: npm currently reports both package names at `0.1.19`. Source `packages/skillpacks/package.json` remains at `0.1.19`; the intended real release command is a later `./publish.sh patch`, which will bump the package artifact to `0.1.20` before staging and publishing both npm package names.
+
+### Added
+
+- Added the `research-amend` base skill for bounded, alignment-gated amendments to approved canonical research artifacts.
+- Added managed shared convention resolver docs and generated short `ALIGNMENT-PAGE.md` resolver stubs across active skills so package installs resolve current conventions from bundled shared assets instead of carrying duplicated long-form convention text.
+- Added Pattern A research-loop self-routing coverage for compiled YAML handoffs where the YAML itself carries the parent command and `agent_routing.command`.
+
+### Changed
+
+- Moved canonical base skills under `packs/base/{claude,codex}` while preserving base-skill install/runtime semantics, base scope metadata, and legacy marker cleanup compatibility.
+- Updated Pattern A research orchestrators and framework subskills so pending review gates end with `## Next Work` only; users review the page, clear context, and paste the compiled YAML into a fresh session rather than copying a duplicate terminal command block.
+- Normalized Codex shipping/planning next-step routing so imported Claude slash routes resolve to Codex `$...` commands unless the next action is explicitly a cross-agent handoff.
+- Tightened interrogation-page depth ownership: agents own follow-up depth, route unknowns correctly, and cannot pass the confidence gate on shallow "covered or waived" alignment.
+- Hardened post-UAT product-design routing so one approved prototype no longer implies consolidation while approved variants remain unbuilt or UAT evidence is missing.
+
+### Fixed
+
+- Fixed YAML-only design handoffs so chunked design-tree progress uses compiled YAML as the single copy/paste routing artifact.
+- Fixed Build-In-Public guidance so prompting is non-blocking, post-approval output is standardized, and UAT pack availability is checked before recommending UAT routes.
+- Reconciled task routing docs and active task state after the shared-convention and research-amend work.
+
+### Verification
+
+- Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (178/178).
+- Package verification passed after regenerating stale design-tree loop bundles: `npm run skillpacks:verify` (415 active skills, 42 packs, 385 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
+- Skills catalog export verification passed after regenerating stale export metadata: `npm run exports:check`.
+- Pattern A handoff audit passed: `bash scripts/skill-research-loop-handoff-audit.sh`.
+- Skill archive audit passed: `bash scripts/skill-archive-audit.sh --strict` (415 skills checked, 0 violations).
+- Task-doc audit passed after converting publish-readiness checklist items to review evidence: `node scripts/audit-task-docs.mjs`.
+- Diff hygiene passed: `git diff --check`.
+
 ## [0.1.19] - 2026-07-02
 
 Prepared for the next publish attempt for both `skillpacks` and `@glexcorp/gskp`.

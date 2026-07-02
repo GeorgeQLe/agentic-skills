@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "03f28daa35e37d788d06a2ec1cecefd57d192e4b",
-  "generated_at": "2026-07-02T16:25:14.407Z",
-  "source_fingerprint": "dd359606cd59897dd5da72ed2a6326886f1d2cb63e0681ba117b461529365529",
+  "source_commit": "846428d30078e3bdeac87261047b56456584cebb",
+  "generated_at": "2026-07-02T17:23:44.504Z",
+  "source_fingerprint": "a75b7337ec6b0e00499562a6b43821da4b8cb9a07bc7df7a58feac44ecbacf0b",
   "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-02 - Dev-docs task reconciliation",
+    "2026-07-02 - Research Amend routing integration",
     "2026-07-02 - Research Amend workflow routing inspection",
     "2026-07-02 - Research Amend base skill",
     "2026-07-02 - Base pack nesting migration",
     "2026-07-02 - BIP prompt and blocker cleanup",
     "2026-07-02 - Release-prep metadata and changelog for 0.1.19",
-    "2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page",
-    "2026-06-29 - Simplify BIP platform setup and exhaustive phase drafts",
-    "2026-06-29 - Publish current source release from 0.1.16 metadata"
+    "2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

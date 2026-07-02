@@ -2,7 +2,7 @@
 name: research-amend
 description: Amend approved research artifacts through a bounded alignment-gated workflow
 type: research
-version: v0.0
+version: v0.1
 required_conventions: [alignment-page]
 argument-hint: "[research path or artifact] [amendment request]"
 visual_tier: document
@@ -87,13 +87,10 @@ End the terminal response with:
 
 ```text
 ## Next Work
-Review the amendment page, compile response YAML, and paste it back into a `/research-amend` session.
-
-## Invoke With YAML
-/research-amend <same scope argument>
+Review the amendment page, compile response YAML, clear context, and paste the compiled YAML into a fresh session.
 ```
 
-The compiled YAML in the page must begin with the invocation comment and include top-level `command` plus `agent_routing.command` set to the same `/research-amend` invocation.
+The compiled YAML in the page must begin with the invocation comment and include top-level `command` plus `agent_routing.command` set to the same `/research-amend <same scope argument>` invocation.
 
 ### 4. Apply Approved Amendment
 
