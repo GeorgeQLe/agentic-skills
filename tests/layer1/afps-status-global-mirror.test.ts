@@ -7,8 +7,8 @@ const read = (path: string) => readFileSync(resolve(REPO_ROOT, path), "utf8");
 
 describe("afps-status base mirror", () => {
   it("is available as both a Claude and Codex base skill", () => {
-    const claude = read("base/claude/afps-status/SKILL.md");
-    const codex = read("base/codex/afps-status/SKILL.md");
+    const claude = read("packs/base/claude/afps-status/SKILL.md");
+    const codex = read("packs/base/codex/afps-status/SKILL.md");
 
     expect(claude).toContain("name: afps-status");
     expect(claude).toContain("Invoke as `/afps-status`.");
@@ -21,8 +21,8 @@ describe("afps-status base mirror", () => {
   });
 
   it("is grouped in the base skills inventory for both runners", () => {
-    const claudeSkills = read("base/claude/skills/SKILL.md");
-    const codexSkills = read("base/codex/skills/SKILL.md");
+    const claudeSkills = read("packs/base/claude/skills/SKILL.md");
+    const codexSkills = read("packs/base/codex/skills/SKILL.md");
 
     expect(claudeSkills).toContain("| Context & Session | `afps-status`, `codebase-status`");
     expect(codexSkills).toContain("| Context & Session | `afps-status`, `codebase-status`");
@@ -30,8 +30,8 @@ describe("afps-status base mirror", () => {
 
   it("treats Production Ready Approval as an alignment artifact, not a lifecycle registry", () => {
     const contract = read("docs/production-ready-approval.md");
-    const claude = read("base/claude/afps-status/SKILL.md");
-    const codex = read("base/codex/afps-status/SKILL.md");
+    const claude = read("packs/base/claude/afps-status/SKILL.md");
+    const codex = read("packs/base/codex/afps-status/SKILL.md");
 
     expect(contract).toContain("artifact convention, not a lifecycle database");
     expect(contract).toContain("spec-interview` owns the Production Ready Approval");

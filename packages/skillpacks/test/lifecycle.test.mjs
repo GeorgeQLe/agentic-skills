@@ -338,7 +338,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(dir, 'claude', 'codebase-status')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'afps-status')), true);
     assert.equal(existsSync(skillPath(dir, 'claude', 'afps-status')), true);
-    assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*base\/claude\/codebase-status/);
+    assert.match(marker(dir, 'claude', 'codebase-status'), /source=.*packs\/base\/claude\/codebase-status/);
     assert.equal(readProjectConfig(dir).base_skills, true);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
   });
@@ -788,8 +788,8 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Updated \.agents\/project\.json \(skill: idea-scope-brief from base\)/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'idea-scope-brief')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
-    assert.match(marker(dir, 'claude', 'idea-scope-brief'), /source=.*base\/claude\/idea-scope-brief/);
-    assert.match(marker(dir, 'codex', 'idea-scope-brief'), /source=.*base\/codex\/idea-scope-brief/);
+    assert.match(marker(dir, 'claude', 'idea-scope-brief'), /source=.*packs\/base\/claude\/idea-scope-brief/);
+    assert.match(marker(dir, 'codex', 'idea-scope-brief'), /source=.*packs\/base\/codex\/idea-scope-brief/);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
     assert.equal(Object.hasOwn(readProjectConfig(dir), 'base_skills'), false);
@@ -1182,12 +1182,12 @@ describe('Node lifecycle commands', () => {
       dir,
       'claude',
       'codebase-status',
-      join(repoRoot, 'base/claude/codebase-status')
+      join(repoRoot, 'packs/base/claude/codebase-status')
     );
 
     const { stdout } = await runSkillpacks(dir, ['refresh']);
 
-    const currentVersion = readFileSync(join(repoRoot, 'base/claude/codebase-status/SKILL.md'), 'utf8')
+    const currentVersion = readFileSync(join(repoRoot, 'packs/base/claude/codebase-status/SKILL.md'), 'utf8')
       .match(/^version:\s*(\S+)/m)[1];
     assert.match(stdout, new RegExp(`Updated \\.claude\\/skills\\/codebase-status v0\\.0 -> ${currentVersion}`));
     assert.match(stdout, /Refreshed project skills to skillpacks@/);

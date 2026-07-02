@@ -25,8 +25,9 @@ function walk(dir, predicate, out = []) {
   return out;
 }
 
-const packSkillFiles = walk(path.join(root, "packs"), (file) => file.endsWith("/SKILL.md"));
-const baseSkillFiles = walk(path.join(root, "base"), (file) => file.endsWith("/SKILL.md"));
+const baseSkillFiles = walk(path.join(root, "packs", "base"), (file) => file.endsWith("/SKILL.md"));
+const packSkillFiles = walk(path.join(root, "packs"), (file) => file.endsWith("/SKILL.md"))
+  .filter((file) => !file.includes(`${path.sep}packs${path.sep}base${path.sep}`));
 
 const skillPacks = new Map();
 for (const file of packSkillFiles) {
@@ -40,7 +41,7 @@ for (const file of packSkillFiles) {
 const baseSkills = new Set();
 for (const file of baseSkillFiles) {
   const rel = path.relative(root, file).split(path.sep);
-  baseSkills.add(rel[2]);
+  baseSkills.add(rel[3]);
 }
 
 const refRe = /(?:^|[\s`"'(|>:,])([/$])([a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:\-*]|\])/g;
@@ -83,7 +84,7 @@ for (const file of [...baseSkillFiles, ...packSkillFiles]) {
   const text = fs.readFileSync(file, "utf8");
   const hasWholeFileGuard = guardRe.test(text);
   const parts = relPath.split(path.sep);
-  const sourcePack = parts[0] === "packs" ? parts[1] : null;
+  const sourcePack = parts[0] === "packs" && parts[1] !== "base" ? parts[1] : null;
   const lines = text.split(/\r?\n/);
 
   for (let index = 0; index < lines.length; index += 1) {

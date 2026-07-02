@@ -1,6 +1,153 @@
 # Current Task State
 
-## Current Implementation - UAT Pack Availability Guard Handoff
+## Historical Implementation - UX Variations YAML-Only Chunked Handoff
+
+Project: `agentic-skills`.
+
+### Goal
+
+Remove duplicate chunked-handoff routing in `ux-variations` so the resolved continuation command appears in `## Invoke With YAML` / `agent_routing.command` instead of both YAML and a separate "Exact next command" line.
+
+### Plan
+
+- [x] Record the user correction in `tasks/lessons.md`.
+- [x] Archive and version active `ux-variations` skill contracts before behavior edits.
+- [x] Update the design-tree convention and mirrored `ux-variations` handoff wording.
+- [x] Regenerate/check bundled design-tree convention files.
+- [x] Run focused tests and archive/diff verification.
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts -t "requires progress handoff blocks"` from `tests/` passed: 1 test, 18 skipped.
+- Full `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` still fails only on a pre-existing dirty-tree base-pack migration path: `base/codex/idea-scope-brief/SKILL.md` is missing because the tree has moved base skills under `packs/base/...`.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `git diff --check` passed.
+
+## Current Implementation - Base Pack Nesting Migration
+
+Project: `agentic-skills`.
+
+### Goal
+
+Move the canonical base skill source from top-level `base/{claude,codex}` to `packs/base/{claude,codex}` while preserving base-skill install/runtime semantics.
+
+### Execution Profile
+
+- Parallel mode: serial.
+- Reason: the change renames a source root and touches package discovery, generated manifests, tests, docs, and task records.
+- Safety boundary: preserve unrelated dirty work already present in the shared worktree; keep legacy `base/...` managed marker ownership valid for cleanup/refresh; do not add the base pack to `enabled_packs`; do not implement `research-amend` in this shipping boundary.
+
+### Plan
+
+- [x] Move tracked base skill sources and archives to `packs/base/{claude,codex}` and add `packs/base/PACK.md`.
+- [x] Update catalog, package, lifecycle, ownership, audit, generator, and docs code so `packs/base` remains `scope: "base"` with `pack: null`.
+- [x] Update focused manifest/lifecycle/package-boundary/layer1 tests for the new canonical paths and legacy marker compatibility.
+- [x] Regenerate package manifest/catalog exports from staged source and run focused verification.
+- [x] Record review, ship manifest, and history for this base migration before starting `research-amend`.
+
+### Acceptance Criteria
+
+- Base skills are sourced from `packs/base/{claude,codex}`.
+- Base skills still report `scope: "base"` and `pack: null` in install/runtime manifests.
+- `npx skillpacks init` still installs all base skills and records `base_skills: true`.
+- `npx skillpacks install idea-scope-brief` still records `enabled_skills["idea-scope-brief"] = "base"`.
+- Refresh/uninstall cleanup still recognizes existing managed markers pointing at old `base/...` paths.
+- `packs/base` is not treated as an `enabled_packs` domain pack.
+- `research-amend` remains the next separately shippable change.
+
+### Test Plan
+
+- `bash scripts/skill-versions.sh --missing`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `bash scripts/skill-deps.sh --broken`
+- `bash scripts/skill-mirror-parity-audit.sh`
+- `bash scripts/skill-install-routing-audit.sh`
+- `npm run skillpacks:build`
+- `npm run skillpacks:verify`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
+- Focused Node/Vitest tests for `packs/base` layout, init/refresh/install lifecycle behavior, package boundary, and routing/audit path updates
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- `npm run skillpacks:build` passed after staging the migrated base source.
+- `npm run skillpacks:verify` passed; `node bin/skillpacks.mjs list` no longer lists `base` as a normal pack.
+- Manifest semantic check passed: `packs/base/codex/skills/SKILL.md` is installable with `scope: "base"`, `pack: null`, and `packs[].name !== "base"`.
+- `npm --workspace packages/skillpacks run test:node` passed: 176 tests.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `scripts/validate-skills-catalog-export.sh` passed and confirmed export artifacts are fresh.
+- `bash scripts/skill-versions.sh --missing` passed: all 363 skills have a version field.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `bash scripts/skill-deps.sh --broken` passed.
+- `bash scripts/skill-install-routing-audit.sh --active` passed: 413 active `SKILL.md` files scanned, P1 coverage 12/12, findings 0.
+- `node scripts/upgrade-alignment-page.mjs --check`, `node scripts/upgrade-interrogation-page.mjs --check`, and `node scripts/upgrade-design-tree-loop.mjs --check` passed.
+- `bash scripts/base-skill-version-parity-audit.sh` and `bash scripts/skill-pack-routing-audit.sh` passed.
+- Focused layer1 suite passed from `tests/`: 7 files, 393 tests.
+
+Known residual outside this shipping boundary:
+
+- Broad mirror/layer1 validations in this dirty worktree still include unrelated pre-existing convention/version work in `packs/agent-work-admin`, `packs/exec-loop`, `packs/product-design`, `packs/docs-health`, `packs/monorepo`, and `youtube-meta-research`. These were not changed or corrected in the base nesting migration.
+- `bash scripts/skill-mirror-parity-audit.sh` still fails on 10 dirty-tree parity issues: `agent-work-admin/plan-phase`, `base/provision-agentic-config`, `docs-health/hygiene`, `exec-loop/ship-end`, `monorepo/mono-plan`, `product-design/consolidate-prototypes`, `product-design/logic-wiring`, `product-design/state-model`, `product-design/ux-variations`, and `vard/vard-align`.
+- A parallel package build/check attempt raced on `packages/skillpacks/build` and produced a transient `ENOENT`; the same commands passed when rerun serially.
+
+## Historical Implementation - Cross-Agent SKILL.md Convention Audit
+
+Project: `agentic-skills`.
+
+### Goal
+
+Audit active Codex and Claude `SKILL.md` files and fix platform-convention mismatches so Codex skill copies use Codex-facing invocation and tooling language, while Claude skill copies use Claude-facing invocation and tooling language.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for any active `SKILL.md`, tests, and task docs.
+- Reason: this is a broad documentation-contract audit across mirrored agent skill sources.
+- Safety boundary: exclude archived `SKILL.md` snapshots unless an active generated convention requires regeneration, preserve unrelated dirty package files and prompt logs, and do not introduce GitHub Actions.
+
+### Plan
+
+- [x] Inventory active Codex and Claude `SKILL.md` files and define mismatch patterns.
+- [x] Patch clear platform-convention mismatches with minimal edits.
+- [x] Run active-skill audits, archive/version checks, diff checks, and status checks.
+- Commit and push intended changes on the primary branch while preserving unrelated dirty work. This was left as prior-session follow-up, not active executable work in this task file.
+
+### Acceptance Criteria
+
+- [x] Active Codex `SKILL.md` files do not contain user-facing slash invocation commands where a `$skill` command is intended.
+- [x] Active Claude `SKILL.md` files do not contain user-facing dollar invocation commands where a `/skill` command is intended.
+- [x] Agent-specific reload/session guidance points at Codex for Codex skills and Claude Code for Claude skills.
+- [x] Any changed active `SKILL.md` files follow archive/version/changelog requirements.
+
+### Test Plan
+
+- Targeted active-source grep/audit checks for Codex slash invocations and Claude dollar invocations.
+- Targeted grep checks for cross-agent tool/reload wording.
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- Targeted active-source grep checks removed the known bad patterns: Codex `/sync`, Codex `/roadmap`/`/plan-phase`, Codex `/clear` chunk guidance, Claude `$reconcile-dev-docs`, and final-route fallback text that recommended the wrong runner syntax.
+- Remaining raw command grep hits were reviewed as intentional target-block text, explicit Claude↔Codex bridge contracts, filesystem/URL route examples, or same-runner command examples.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `node scripts/audit-task-docs.mjs` passed: failures 0, warnings 0.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes after regeneration.
+- `npm run skillpacks:build` passed.
+- `npm run skillpacks:verify` passed after regenerating stale design-tree-loop bundles.
+- `git diff --check` passed.
+
+Commit/push not performed from this session because a large overlapping base-pack migration appeared in the working tree while verification was running (`base/**` deleted, `packs/base/**` added, package/catalog scripts changed, and prompt logs added). The audit edits are present in the current tree, including the migrated `packs/base/codex/provision-agentic-config` copy, but staging them safely requires separating that concurrent migration boundary first.
+
+## Historical Implementation - UAT Pack Availability Guard Handoff
 
 Project: `agentic-skills`.
 
@@ -23,7 +170,7 @@ Update product-design UAT handoffs so routes to `$uat --variant-evaluation` or `
 - [x] Update canonical design-tree loop convention and regenerate generated bundles.
 - [x] Add focused product-design flow-tree regression assertions.
 - [x] Run targeted tests, generator checks, grep audits, diff checks, and status checks.
-- [ ] Commit and push intended changes on the primary branch while preserving unrelated dirty work.
+- Commit and push intended changes on the primary branch while preserving unrelated dirty work. This was left as prior-session follow-up, not active executable work in this task file.
 
 ### Acceptance Criteria
 

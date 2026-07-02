@@ -217,7 +217,7 @@ function walk(dir, out = []) {
   return out;
 }
 
-const files = [...walk(`${repoRoot}/base`), ...walk(`${repoRoot}/packs`)]
+const files = [...walk(`${repoRoot}/packs`)]
   .filter((file) => /(^|\/)(codex|claude)\//.test(file))
   .filter((file) => INTERROGATION_SKILLS.has(skillNameFor(file)))
   .sort();

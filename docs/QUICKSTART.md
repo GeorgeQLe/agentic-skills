@@ -129,7 +129,7 @@ npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 ```
 
-Source/package maintenance commands such as `npx skillpacks alignment bundles --check` and `npx skillpacks alignment verify` require a checkout with this repository's `docs/`, `base/`, `packs/`, and focused test files. From a source checkout, the direct script paths remain available fallbacks: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs`.
+Source/package maintenance commands such as `npx skillpacks alignment bundles --check` and `npx skillpacks alignment verify` require a checkout with this repository's `docs/`, `packs/`, and focused test files. From a source checkout, the direct script paths remain available fallbacks: `node scripts/upgrade-alignment-page.mjs`, `node scripts/audit-alignment-pages.mjs`, `node scripts/serve-alignment.mjs`, `node scripts/open-html-page.mjs`, and `node scripts/inject-tts.mjs`.
 
 One-off `npx skillpacks ...` works when the network is available or the npm cache is warm. For repeat or offline alignment workflows, add `skillpacks` as a devDependency in the target repo or use a pinned npm spec such as `npx skillpacks@<version> alignment pages audit`.
 

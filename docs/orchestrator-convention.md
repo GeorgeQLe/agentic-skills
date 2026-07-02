@@ -182,7 +182,7 @@ Same as Pattern A: `invocation: orchestrator`. The parent skill uses `type: plan
 Same as Pattern A — the parent owns a `frameworks/` directory with child subskills.
 
 ```
-base/claude/<orchestrator>/
+packs/base/claude/<orchestrator>/
   SKILL.md                          # orchestrator — domain workflow + framework detection
   CHANGELOG.md
   ALIGNMENT-PAGE.md
@@ -218,7 +218,7 @@ Unlike Pattern A, there is no `--synthesize` mode. The parent skill produces a u
 
 ### Reference Implementation
 
-- `base/claude/animation-design-planner/` — 7-step animation planning workflow, detects motion framework via codebase grep, injects framework-specific guardrails from one of 5 subskills (`motion-framer`, `css-transitions`, `gsap`, `web-animations-api`, `threejs`), produces structured plan with motion contract + storyboard + guardrails + proof gate
+- `packs/base/claude/animation-design-planner/` — 7-step animation planning workflow, detects motion framework via codebase grep, injects framework-specific guardrails from one of 5 subskills (`motion-framer`, `css-transitions`, `gsap`, `web-animations-api`, `threejs`), produces structured plan with motion contract + storyboard + guardrails + proof gate
 
 ---
 

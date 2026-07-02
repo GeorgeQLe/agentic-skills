@@ -27,7 +27,7 @@ function extractSkillReferences(content: string): string[] {
 
 const packDirs = globSync("*/", { cwd: PACKS_DIR }).map((d) =>
   resolve(PACKS_DIR, d),
-);
+).filter((dir) => !dir.endsWith("/base"));
 
 const allPackSkills = globSync("**/SKILL.md", { cwd: PACKS_DIR });
 const allPackSkillNames = new Set(
@@ -37,9 +37,8 @@ const allPackSkillNames = new Set(
   }),
 );
 
-// Also check user-local skills (these are base skills installed
-// outside of packs, referenced via slash commands)
-const BASE_DIR = resolve(PACKS_DIR, "../base");
+// Also check base skills, which are installed outside enabled packs.
+const BASE_DIR = resolve(PACKS_DIR, "base");
 const baseCoreSkills = globSync("**/SKILL.md", { cwd: BASE_DIR });
 const baseCoreNames = new Set(
   baseCoreSkills.map((s) => {

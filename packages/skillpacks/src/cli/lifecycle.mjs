@@ -304,6 +304,8 @@ function managedMarkerField(target, field) {
 
 function sourceOwnedBySkillpacks(source) {
   const ownedPrefixes = [
+    join(packageRoot, 'packs', 'base', 'claude'),
+    join(packageRoot, 'packs', 'base', 'codex'),
     join(packageRoot, 'base', 'claude'),
     join(packageRoot, 'base', 'codex'),
     join(packageRoot, 'packs'),
@@ -311,6 +313,8 @@ function sourceOwnedBySkillpacks(source) {
     join(packageRoot, 'global', 'codex'),
     join(packageRoot, 'global', 'packs'),
     join(packageRoot, 'global'),
+    join(checkoutRoot, 'packs', 'base', 'claude'),
+    join(checkoutRoot, 'packs', 'base', 'codex'),
     join(checkoutRoot, 'base', 'claude'),
     join(checkoutRoot, 'base', 'codex'),
     join(checkoutRoot, 'packs'),
@@ -1686,7 +1690,7 @@ function pruneOrphanedSkillRoots({ manifest, projectRoot, dryRun = false }) {
 }
 
 function provisionerSkillText() {
-  const sourcePath = resolvePackagedPath('base/codex/provision-agentic-config/SKILL.md');
+  const sourcePath = resolvePackagedPath('packs/base/codex/provision-agentic-config/SKILL.md');
   if (!existsSync(sourcePath)) {
     throw new Error(`Cannot find canonical provision-agentic-config skill at ${sourcePath}`);
   }

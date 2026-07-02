@@ -39,8 +39,8 @@ describe("skill availability reload language", () => {
     const surfaces = [
       { path: "CLAUDE.md", command: "/pack", skills: "/skills" },
       { path: "AGENTS.md", command: "$pack", skills: "$skills" },
-      { path: "base/claude/provision-agentic-config/SKILL.md", command: "/pack", skills: "/skills" },
-      { path: "base/codex/provision-agentic-config/SKILL.md", command: "$pack", skills: "$skills" },
+      { path: "packs/base/claude/provision-agentic-config/SKILL.md", command: "/pack", skills: "/skills" },
+      { path: "packs/base/codex/provision-agentic-config/SKILL.md", command: "$pack", skills: "$skills" },
     ];
 
     for (const surface of surfaces) {
@@ -59,8 +59,8 @@ describe("skill availability reload language", () => {
     }
 
     for (const path of [
-      "base/claude/provision-agentic-config/SKILL.md",
-      "base/codex/provision-agentic-config/SKILL.md",
+      "packs/base/claude/provision-agentic-config/SKILL.md",
+      "packs/base/codex/provision-agentic-config/SKILL.md",
     ]) {
       expect(read(path), `${path} skill version`).toMatch(/^version: v\d+\.\d+$/m);
     }

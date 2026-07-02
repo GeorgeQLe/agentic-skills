@@ -65,7 +65,7 @@ function isOwnable(body: string | null): boolean {
 // repo state rather than the script's own output.
 function repoBespokeClassification(): Map<string, { bespokeFiles: string[]; ownableFiles: string[] }> {
   const skipped = parseListFile(repoPath("scripts/alignment-skip-list.txt"));
-  const files = [...walkSkillFiles(repoPath("base")), ...walkSkillFiles(repoPath("packs"))]
+  const files = [...walkSkillFiles(repoPath("packs"))]
     .filter((file) => /(^|\/)(codex|claude)\//.test(file))
     .sort();
   const classification = new Map<string, { bespokeFiles: string[]; ownableFiles: string[] }>();
@@ -115,7 +115,7 @@ const OUTPUT_PATH_RE = /alignment\/([A-Za-z0-9_-]+)-\{topic\}\.html/g;
 
 describe("alignment bundle output paths match the owning skill", () => {
   it("every active ALIGNMENT-PAGE.md references only its own alignment/{skill-name}-{topic}.html path", () => {
-    const bundles = [...walkBundleFiles(repoPath("base")), ...walkBundleFiles(repoPath("packs"))]
+    const bundles = [...walkBundleFiles(repoPath("packs"))]
       .filter((file) => /(^|\/)(codex|claude)\//.test(file));
     expect(bundles.length, "active bundles found").toBeGreaterThan(0);
 

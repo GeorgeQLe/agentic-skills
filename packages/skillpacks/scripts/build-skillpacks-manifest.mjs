@@ -299,7 +299,8 @@ function buildPacks(files, skills) {
 
 function isInstallableSkill(skill) {
   if (skill.scope === "base") {
-    return true;
+    return /^packs\/base\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path)
+      || /^base\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path);
   }
   if (skill.scope !== "pack") {
     return false;

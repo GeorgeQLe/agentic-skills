@@ -2,7 +2,195 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - UAT Pack Availability Guard Handoff
+## Historical Implementation - UX Variations YAML-Only Chunked Handoff
+
+**Status: VERIFIED (2026-07-02) - duplicate exact-command plus YAML routing removed from chunked `ux-variations` and sibling `state-model` handoffs.**
+
+### Goal
+
+Make chunked design-tree handoffs use one routing artifact: `## Invoke With YAML` with the resolved continuation command in `agent_routing.command`. Do not also emit a separate freeform "Exact next command" line for the same handoff.
+
+### Scope
+
+- Update the shared design-tree-loop convention.
+- Update mirrored `ux-variations` and `state-model` skill contracts and changelogs with archive snapshots.
+- Update focused regression coverage so future handoffs preserve the YAML-only routing contract.
+- Preserve unrelated dirty work already present in the repository.
+
+### Plan
+
+- [x] Record the user correction in lessons and prompt history.
+- [x] Archive active `ux-variations` skill contracts before behavior changes.
+- [x] Patch convention and mirrored skill handoff wording.
+- [x] Regenerate/check bundled `DESIGN-TREE-LOOP.md` files.
+- [x] Run focused regression and archive/diff checks.
+
+### Acceptance Criteria
+
+- [x] Chunked `ux-variations` Progress Handoff Blocks no longer require or emit `Exact next command:`.
+- [x] The continuation command is still available in `## Invoke With YAML` / `agent_routing.command`.
+- [x] Shared design-tree-loop convention matches the skill contract.
+- [x] Focused product-design test coverage enforces the new behavior.
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts -t "requires progress handoff blocks"` from `tests/` passed.
+- Full `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` still fails only on unrelated dirty-tree base migration state: `base/codex/idea-scope-brief/SKILL.md` is missing after base skills were moved under `packs/base/...`.
+- `bash scripts/skill-archive-audit.sh --strict` passed.
+- `git diff --check` passed.
+
+### Verification Plan
+
+- `node scripts/upgrade-design-tree-loop.mjs`
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` from `tests/`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+## Current Implementation - Base Pack Nesting Migration
+
+**Status: VERIFIED (2026-07-02) - `packs/base/{claude,codex}` is now the canonical base source layout; `research-amend` remains the next separately shippable change.**
+
+### Goal
+
+Add a base-pack `research-amend` skill that performs bounded post-canonical research adjustments without forcing a full Pattern A research rerun. At the same time, make the base pack live under `packs/base/{claude,codex}` like other packs, while preserving compatibility for existing tooling that still reads `base/{claude,codex}` until migration is complete.
+
+### Scope
+
+- Create mirrored `research-amend` skills for Claude and Codex as a base-pack capability.
+- Introduce or migrate the base pack source layout to `packs/base/{claude,codex}`.
+- Update package/install/discovery scripts so base skills can be resolved from `packs/base` without breaking existing project-local installs, drift detection, or package builds.
+- Keep existing Pattern A research orchestrators intact; `research-amend` complements them instead of replacing first-run research loops.
+
+### Proposed Skill Contract
+
+`research-amend` should handle post-canonical changes such as a missed competitor, corrected pricing/source facts, new customer evidence, or a downstream-impacting correction. The skill should:
+
+- Resolve product path using existing research product-path conventions.
+- Locate target canonical research artifacts and related framework intermediates/search logs.
+- Classify the requested change as `low`, `medium`, `high`, or `systemic` impact.
+- Build a bounded amendment working packet and review alignment page before canonical writes.
+- On approval, archive superseded artifacts, patch only affected canonical/intermediate/search-log files, and record an amendment note.
+- Route high/systemic impact changes to targeted framework/synthesis reruns or a full Pattern A rerun instead of pretending a small patch is sufficient.
+
+### Impact Ladder
+
+- **Low:** factual correction, source update, typo, one profile detail. Patch canonical artifact and search/evidence log.
+- **Medium:** one missed competitor or one new evidence item changes a matrix row, gap, or limited recommendation. Patch affected intermediate(s), canonical synthesis sections, and evidence log.
+- **High:** change affects category, strategic map, top recommendations, positioning assumptions, or downstream route. Run affected framework(s), then synthesis.
+- **Systemic:** new ICP/category, many missed competitors, stale source base, or invalid original scope. Recommend full Pattern A rerun.
+
+### Implementation Phases
+
+1. **Base-pack layout decision and compatibility**
+   - [x] Add `packs/base/PACK.md` and establish `packs/base/{claude,codex}` as the canonical base-pack shape.
+   - [x] Move `base/` immediately while preserving legacy managed-marker cleanup for old `base/...` source paths.
+   - [x] Update ownership checks, install markers, manifest generation, package build staging, docs, and tests to recognize `packs/base`.
+
+2. **Skill authoring**
+   - Create `packs/base/claude/research-amend/SKILL.md` and `packs/base/codex/research-amend/SKILL.md` with `version: v0.0`.
+   - Add `CHANGELOG.md` files and `agents/openai.yaml` for Codex metadata if the repo pattern requires it for base-pack skills.
+   - Keep the skill concise; put reusable impact-classification details in a one-level reference only if the body grows too large.
+
+3. **Research workflow integration**
+   - Document when Pattern A final handoffs, `research-roadmap`, and stale-research queues should recommend `research-amend` instead of a full rerun.
+   - Add next-step validity guidance so a single missed competitor defaults to amendment, not full rerun, unless impact classification escalates.
+   - Ensure `research-amend` respects staged research approval: working packet and rendered review page before canonical writes.
+
+4. **Packaging and discovery**
+   - Update `scripts/pack.sh`, `scripts/skill-links.sh`, package CLI code, manifest/catalog generation, and package staging to install base skills from `packs/base`.
+   - Update `npx skillpacks init`, refresh, doctor, which/list, pin/unpin, and drift detection behavior for `packs/base`.
+   - Preserve or migrate existing `.agentic-skills-managed` marker handling for installs sourced from legacy `base/`.
+
+5. **Docs and tests**
+   - Update `docs/packs.md`, `docs/skills-reference.md`, `docs/skill-invocation-types.md`, and any source-layout docs from top-level `base/` to `packs/base`.
+   - Add tests for base-pack discovery, install/init behavior, build-package boundary, manifest/catalog export, route recommendations, archive/version audits, and research-amend impact routing.
+   - Update grep/audit scripts that currently scan `base/**/SKILL.md` directly.
+
+### Acceptance Criteria
+
+- `research-amend` exists as a base-pack skill under `packs/base/{claude,codex}/research-amend`.
+- `npx skillpacks init` or the source-checkout equivalent installs base skills from `packs/base` into `.claude/skills` and `.codex/skills`.
+- `research-amend` can process a single missed competitor as a medium-impact amendment without rerunning every competitive-analysis framework.
+- High/systemic amendments explicitly route to affected framework/synthesis/full rerun paths.
+- Existing base skills remain discoverable and refreshable after the `packs/base` layout change.
+- Public catalog and package manifests include the base pack and the new skill.
+
+### Verification Plan
+
+- `bash scripts/skill-versions.sh --missing`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `bash scripts/skill-deps.sh --broken`
+- `bash scripts/skill-mirror-parity-audit.sh`
+- `bash scripts/skill-install-routing-audit.sh`
+- `npm run skillpacks:build`
+- `npm run skillpacks:verify`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
+- Focused Vitest coverage for base-pack layout, init/refresh/doctor/which behavior, and `research-amend` routing language
+- `git diff --check`
+
+### Open Decisions Before Implementation
+
+- Existing `base/` skills were physically moved to `packs/base/` in the base migration. Legacy managed markers pointing at old `base/...` paths remain recognized for cleanup/refresh.
+- Whether `research-amend` should be available in both Claude and Codex immediately, or Codex-first with Claude parity in the same shipping boundary.
+- Whether amendment notes should live inline in each canonical research file, in `research/amendments.md`, or under `research/{slug}/_working/` plus archive history.
+
+## Historical Implementation - Cross-Agent SKILL.md Convention Audit
+
+**Status: VERIFIED, NOT COMMITTED (2026-07-02) - active skill convention fixes are present, but commit/push is blocked by overlapping base-pack migration changes in the working tree.**
+
+### Goal
+
+Audit active Codex and Claude `SKILL.md` files and fix platform-convention mismatches so Codex skill copies use Codex-facing invocation and tooling language, while Claude skill copies use Claude-facing invocation and tooling language.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for any active `SKILL.md`, tests, and task docs.
+- Reason: this is a broad documentation-contract audit across mirrored agent skill sources.
+- Safety boundary: exclude archived `SKILL.md` snapshots unless an active generated convention requires regeneration, preserve unrelated dirty package files and prompt logs, and do not introduce GitHub Actions.
+
+### Plan
+
+- [x] Inventory active Codex and Claude `SKILL.md` files and define mismatch patterns.
+- [x] Patch clear platform-convention mismatches with minimal edits.
+- [x] Run active-skill audits, archive/version checks, diff checks, and status checks.
+- [ ] Commit and push intended changes on the primary branch while preserving unrelated dirty work.
+
+### Acceptance Criteria
+
+- [x] Active Codex `SKILL.md` files do not contain user-facing slash invocation commands where a `$skill` command is intended.
+- [x] Active Claude `SKILL.md` files do not contain user-facing dollar invocation commands where a `/skill` command is intended.
+- [x] Agent-specific reload/session guidance points at Codex for Codex skills and Claude Code for Claude skills.
+- [x] Any changed active `SKILL.md` files follow archive/version/changelog requirements.
+
+### Test Plan
+
+- Targeted active-source grep/audit checks for Codex slash invocations and Claude dollar invocations.
+- Targeted grep checks for cross-agent tool/reload wording.
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- Targeted active-source grep checks removed the known bad patterns: Codex `/sync`, Codex `/roadmap`/`/plan-phase`, Codex `/clear` chunk guidance, Claude `$reconcile-dev-docs`, and final-route fallback text that recommended the wrong runner syntax.
+- Remaining raw command grep hits were reviewed as intentional target-block text, explicit Claude↔Codex bridge contracts, filesystem/URL route examples, or same-runner command examples.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `node scripts/audit-task-docs.mjs` passed: failures 0, warnings 0.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes after regeneration.
+- `npm run skillpacks:build` passed.
+- `npm run skillpacks:verify` passed after regenerating stale design-tree-loop bundles.
+- `git diff --check` passed.
+
+Commit/push not performed from this session because a large overlapping base-pack migration appeared in the working tree while verification was running (`base/**` deleted, `packs/base/**` added, package/catalog scripts changed, and prompt logs added). The audit edits are present in the current tree, including the migrated `packs/base/codex/provision-agentic-config` copy, but staging them safely requires separating that concurrent migration boundary first.
+
+## Historical Implementation - UAT Pack Availability Guard Handoff
 
 **Status: IN PROGRESS (2026-07-02) - adding plain product-testing install guidance to product-design UAT handoffs.**
 

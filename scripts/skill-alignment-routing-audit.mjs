@@ -461,7 +461,6 @@ function runFinalHandoffFixtures(files, rootForRel) {
 
 function collectActive() {
   return [
-    ...walk(path.join(repoRoot, "base")),
     ...walk(path.join(repoRoot, "packs")),
   ].sort();
 }

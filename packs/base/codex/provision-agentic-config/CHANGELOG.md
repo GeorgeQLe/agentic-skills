@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.14 - 2026-07-02
+
+- Corrected the Codex skill process text to refer to `$sync` when describing stale provisioning detection.
+
 ## v0.13 - 2026-06-14
 
 - Added `Revision Hygiene` to the provisioned Workflow Orchestration blocks so feedback-driven edits converge on the requested final artifact instead of repeating rejected framing. Bumped block comment to v0.13.

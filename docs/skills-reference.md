@@ -10,8 +10,8 @@ npx skillpacks init
 
 Installs only:
 
-- `base/claude/*`
-- `base/codex/*`
+- `packs/base/claude/*`
+- `packs/base/codex/*`
 
 It does not install domain packs as base skills.
 
@@ -35,7 +35,7 @@ Project designation is stored in `.agents/project.json`.
 
 The scoped alias package `@glexcorp/gskp` is published from the same release artifact and version. `npx @glexcorp/gskp install <pack-or-skill>` is equivalent to `npx skillpacks install <pack-or-skill>`.
 
-`npx skillpacks list-packs` is an internal subcommand used by Codex `$exec` routing (see `base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+`npx skillpacks list-packs` is an internal subcommand used by Codex `$exec` routing (see `packs/base/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
 `refresh` recreates project-local skill roots from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
@@ -70,7 +70,7 @@ When a shared skill is created or materially updated and benchmark coverage is n
 
 ## Base Skills
 
-Base skills are domain-neutral and installed project-local via `npx skillpacks init` for every project. The base surface is intentionally small — 11 skills under `base/claude/`, 8 of them mirrored under `base/codex/`:
+Base skills are domain-neutral and installed project-local via `npx skillpacks init` for every project. The base surface is intentionally small — 11 skills under `packs/base/claude/`, 8 of them mirrored under `packs/base/codex/`:
 
 | Skill | Purpose |
 | --- | --- |
@@ -86,7 +86,7 @@ Base skills are domain-neutral and installed project-local via `npx skillpacks i
 | `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
 | `skills` | Browse base and enabled project-local skills |
 
-> Three base skills are **Claude-only** (no `base/codex/` mirror): `autoresearch`, `autoresearch-prep`, and `fork-idea-branch`.
+> Three base skills are **Claude-only** (no `packs/base/codex/` mirror): `autoresearch`, `autoresearch-prep`, and `fork-idea-branch`.
 
 All other formerly-base skills now live in domain packs — see [Moved Skills](#moved-skills) and the per-pack sections below.
 

@@ -64,11 +64,13 @@ describe('skillpacks manifest deck metadata', () => {
   it('keeps nested framework skills in inventory but marks them non-installable', () => {
     const parent = skillByPath('packs/business-research/codex/customer-discovery/SKILL.md');
     const framework = skillByPath('packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md');
-    const baseSkill = skillByPath('base/codex/skills/SKILL.md');
+    const baseSkill = skillByPath('packs/base/codex/skills/SKILL.md');
 
     assert.ok(parent, 'customer-discovery parent skill should exist');
     assert.ok(framework, 'nested pmf-engine framework skill should remain in the manifest');
     assert.ok(baseSkill, 'base skill should exist');
+    assert.equal(baseSkill.scope, 'base');
+    assert.equal(baseSkill.pack, null);
     assert.equal(parent.installable, true);
     assert.equal(framework.installable, false);
     assert.equal(baseSkill.installable, true);
@@ -95,7 +97,7 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('exposes required convention metadata for bundled skills', () => {
-    const ideaScope = skillByPath('base/codex/idea-scope-brief/SKILL.md');
+    const ideaScope = skillByPath('packs/base/codex/idea-scope-brief/SKILL.md');
     const userFlowMap = skillByPath('packs/product-design/codex/user-flow-map/SKILL.md');
 
     assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'interrogation-page']);

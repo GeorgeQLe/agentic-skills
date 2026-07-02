@@ -73,8 +73,8 @@ npx skillpacks init
 
 `npx skillpacks init` initializes base skills **project-local** for the current repository:
 
-- `base/claude/*` -> `<project>/.claude/skills/*`
-- `base/codex/*` -> `<project>/.codex/skills/*`
+- `packs/base/claude/*` -> `<project>/.claude/skills/*`
+- `packs/base/codex/*` -> `<project>/.codex/skills/*`
 
 It records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. It does **not** install `packs/*` — domain packs are never installed as base skills.
 
@@ -126,7 +126,7 @@ npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 ```
 
-Source/package maintenance commands require a checkout with `docs/`, `base/`, and `packs/`:
+Source/package maintenance commands require a checkout with `docs/` and `packs/`:
 
 ```bash
 npx skillpacks alignment bundles --check
@@ -200,10 +200,8 @@ For workflow ordering, lead-in recommendations, and overlay dependencies, see [`
 
 ```text
 agentic-skills/
-├── base/
-│   ├── claude/<name>/SKILL.md
-│   └── codex/<name>/SKILL.md
 ├── packs/
+│   ├── base/{claude,codex}/<name>/SKILL.md
 │   ├── business-{discovery,growth,ops}/{claude,codex}/<name>/SKILL.md
 │   ├── code-quality/{claude,codex}/<name>/SKILL.md
 │   ├── game/{claude,codex}/<name>/SKILL.md
@@ -233,7 +231,7 @@ The repository root is private workspace metadata. The publishable `skillpacks` 
 
 ## Base Core
 
-The base surface is intentionally small and domain-neutral. `npx skillpacks init` installs 11 skills under `base/claude/`, 8 of which are mirrored under `base/codex/`:
+The base surface is intentionally small and domain-neutral. `npx skillpacks init` installs 11 skills under `packs/base/claude/`, 8 of which are mirrored under `packs/base/codex/`:
 
 ```text
 afps-status, animation-design-planner, autoresearch, autoresearch-prep,
@@ -243,7 +241,7 @@ pack, provision-agentic-config, skills
 
 ### Claude-only base skills
 
-Three base skills ship only under `base/claude/` (no `base/codex/` mirror):
+Three base skills ship only under `packs/base/claude/` (no `packs/base/codex/` mirror):
 
 ```text
 autoresearch, autoresearch-prep, fork-idea-branch
@@ -432,7 +430,7 @@ Skills can be pinned to an archived version. When a skill's version is bumped, t
 
 ```bash
 # Archive current version before bumping
-bash scripts/skill-archive.sh base/claude/codebase-status
+bash scripts/skill-archive.sh packs/base/claude/codebase-status
 
 # Pin a pack skill to an archived version
 scripts/pack.sh pin devtool-adoption v0.0
@@ -459,7 +457,7 @@ See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioni
 pnpm --dir tests test
 ```
 
-`skill-deps.sh`, `skill-pack-routing-audit.sh`, `skill-versions.sh`, and `skill-mirror-parity-audit.sh` scan `base/` and `packs/`.
+`skill-deps.sh`, `skill-pack-routing-audit.sh`, `skill-versions.sh`, and `skill-mirror-parity-audit.sh` scan `packs/`, including `packs/base`.
 
 Live agent behavior tests are opt-in because they invoke authenticated CLIs and may spend model budget:
 

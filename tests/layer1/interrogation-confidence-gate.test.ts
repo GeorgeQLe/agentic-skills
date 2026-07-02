@@ -10,8 +10,8 @@ const GENERATOR = resolve(REPO_ROOT, "scripts/upgrade-interrogation-page.mjs");
 
 // Participating skills (both mirrors) — must match INTERROGATION_SKILLS in the generator.
 const participatingSkillDirs = [
-  "base/claude/idea-scope-brief",
-  "base/codex/idea-scope-brief",
+  "packs/base/claude/idea-scope-brief",
+  "packs/base/codex/idea-scope-brief",
   "packs/business-research/claude/customer-discovery",
   "packs/business-research/claude/positioning",
   "packs/business-research/codex/customer-discovery",

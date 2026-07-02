@@ -4,7 +4,7 @@ import { join, resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const PACKS_DIR = join(ROOT, 'packs');
-const BASE_DIR = join(ROOT, 'base', 'claude');
+const BASE_DIR = join(ROOT, 'packs', 'base', 'claude');
 const OUT = join(ROOT, 'docs', 'skillmap.excalidraw');
 const OUT_HTML = join(ROOT, 'alignment', 'skillmap.html');
 const SKILLS_CATALOG_JSON = join(ROOT, 'exports', 'skills-catalog', 'v1', 'catalog.json');
@@ -22,6 +22,7 @@ function getSkills(dir) {
 function getAllPacks() {
   const packs = {};
   for (const d of readdirSync(PACKS_DIR, { withFileTypes: true })) {
+    if (d.name === 'base') continue;
     if (!d.isDirectory()) continue;
     const claudeDir = join(PACKS_DIR, d.name, 'claude');
     packs[d.name] = getSkills(claudeDir);
@@ -447,7 +448,7 @@ allElements.push(makeRect('pack-header-base', startX, curY + 10, baseW, HEADER_H
   backgroundColor: '#f8f9fa',
   groupIds: [baseGroupId],
 }));
-allElements.push(makeText('pack-title-base', startX + 10, curY + 18, 'base/claude', {
+allElements.push(makeText('pack-title-base', startX + 10, curY + 18, 'packs/base/claude', {
   fontSize: 16,
   fontFamily: 2,
   strokeColor: '#1971c2',
@@ -640,7 +641,7 @@ function generateAlignmentHTML() {
   svgContent += `<rect x="${sx}" y="${y + 14}" width="${gW}" height="${gH}" rx="6" fill="#161b22" stroke="#1971c2" stroke-width="1.5"/>`;
   svgContent += `<rect x="${sx}" y="${y + 14}" width="${gW}" height="${HEADER_H}" rx="6" fill="#1c2333" stroke="#1971c2" stroke-width="1.5"/>`;
   svgContent += `<rect x="${sx}" y="${y + 14 + HEADER_H - 6}" width="${gW}" height="6" fill="#1c2333"/>`;
-  svgContent += `<text x="${sx + 10}" y="${y + 37}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#58a6ff">base/claude</text>`;
+  svgContent += `<text x="${sx + 10}" y="${y + 37}" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#58a6ff">packs/base/claude</text>`;
   baseSkills.forEach((skill, i) => {
     svgContent += `<text x="${sx + 10}" y="${y + 14 + HEADER_H + PACK_PAD + 13 + i * SKILL_LINE_H}" font-family="ui-monospace,SFMono-Regular,monospace" font-size="12" fill="#c9d1d9">${esc(skill)}</text>`;
   });

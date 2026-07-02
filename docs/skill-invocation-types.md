@@ -15,7 +15,7 @@
 
 ## Classification by Location
 
-### Base Skills (`base/claude/`)
+### Base Skills (`packs/base/claude/`)
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|

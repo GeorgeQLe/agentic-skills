@@ -209,7 +209,11 @@ export function activeSkillPaths(files) {
         !file.split("/").includes("archive")
       ) ||
       (
-        /^packs\/[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
+        /^packs\/base\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
+        !file.split("/").includes("archive")
+      ) ||
+      (
+        /^packs\/(?!base\/)[^/]+\/(?:claude|codex)\/.+\/SKILL\.md$/.test(file) &&
         !file.split("/").includes("archive")
       )
     );
@@ -217,7 +221,7 @@ export function activeSkillPaths(files) {
 }
 
 export function packManifestPaths(files) {
-  return files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
+  return files.filter((file) => /^packs\/(?!base\/)[^/]+\/PACK\.md$/.test(file));
 }
 
 export function skillTags({ name, type, scope, pack, platform }) {
@@ -235,8 +239,10 @@ export function parseSkill(repoRoot, relativePath, { source = "worktree" } = {})
   const text = readContent(repoRoot, relativePath, source);
   const fields = parseFrontmatter(text);
   const segments = relativePath.split("/");
-  const scope = segments[0] === "base" ? "base" : "pack";
-  const platform = scope === "base" ? segments[1] : segments[2];
+  const legacyBase = segments[0] === "base";
+  const nestedBase = segments[0] === "packs" && segments[1] === "base";
+  const scope = legacyBase || nestedBase ? "base" : "pack";
+  const platform = legacyBase ? segments[1] : segments[2];
   const pack = scope === "base" ? null : segments[1];
   const fallbackName = segments[segments.length - 2];
   const name = fields.name || fallbackName;

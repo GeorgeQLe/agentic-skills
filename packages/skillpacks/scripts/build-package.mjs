@@ -227,7 +227,7 @@ function buildPackage() {
   for (const entry of packageOwnedEntries) {
     copyEntry(entry);
   }
-  copyTrackedPrefixes(files, ["base", "packs"]);
+  copyTrackedPrefixes(files, ["packs"]);
   for (const entry of repoOwnedEntries) {
     copyEntry(entry);
   }

@@ -21,8 +21,8 @@ describe("pack install artifact shipping boundary", () => {
   ];
 
   const packSkillPaths = [
-    "base/claude/init-agentic-skills/SKILL.md",
-    "base/codex/init-agentic-skills/SKILL.md",
+    "packs/base/claude/init-agentic-skills/SKILL.md",
+    "packs/base/codex/init-agentic-skills/SKILL.md",
   ];
 
   it("requires ship and ship-end to include project designation but exclude generated local skill roots", () => {

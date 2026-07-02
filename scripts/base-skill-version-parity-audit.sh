@@ -27,8 +27,8 @@ function readVersion(file) {
 const failures = [];
 
 for (const skill of pairs) {
-  const claudeFile = path.join(root, "base", "claude", skill, "SKILL.md");
-  const codexFile = path.join(root, "base", "codex", skill, "SKILL.md");
+  const claudeFile = path.join(root, "packs", "base", "claude", skill, "SKILL.md");
+  const codexFile = path.join(root, "packs", "base", "codex", skill, "SKILL.md");
 
   if (!fs.existsSync(claudeFile)) failures.push(`${skill}: missing Claude SKILL.md`);
   if (!fs.existsSync(codexFile)) failures.push(`${skill}: missing Codex SKILL.md`);

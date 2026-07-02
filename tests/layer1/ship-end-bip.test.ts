@@ -15,8 +15,8 @@ const shipMirrors = [
 ];
 
 const ideaScopeMirrors = [
-  "base/claude/idea-scope-brief/SKILL.md",
-  "base/codex/idea-scope-brief/SKILL.md",
+  "packs/base/claude/idea-scope-brief/SKILL.md",
+  "packs/base/codex/idea-scope-brief/SKILL.md",
 ];
 
 function read(path: string) {

@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-07-02 - Base pack nesting migration
+
+- Moved canonical base skill sources from top-level `base/{claude,codex}` to `packs/base/{claude,codex}` and added `packs/base/PACK.md`.
+- Preserved base semantics in generated/package manifests: base skills remain `scope: "base"`, `pack: null`, and `packs/base` is not listed as a normal enabled pack.
+- Updated catalog discovery, package staging, lifecycle install/refresh ownership checks, shell pack listing, audits, generators, docs, and focused tests for the new source layout.
+- Kept compatibility for existing managed markers that still point at legacy `base/...` source paths so refresh/uninstall cleanup can replace old installs cleanly.
+- Refreshed the skillpacks manifest and public skills-catalog export artifacts.
+- Verification passed: package build/verify, package Node tests, manifest semantic check, catalog export validation, version/archive/dependency/routing audits, convention bundle checks, base parity/pack routing checks, and focused layer1 tests.
+- Known unrelated dirty-tree validation failures remain outside this ship boundary in pre-existing convention/version work for agent-work-admin, exec-loop, product-design, docs-health, monorepo, and youtube-meta-research.
+- Manifest: `tasks/ship-manifest-2026-07-02-base-pack-nesting.md`.
+
 ## 2026-07-02 - BIP prompt and blocker cleanup
 
 - Made `idea-scope-brief` the only skill allowed to ask the Build-In-Public kickoff gate question.

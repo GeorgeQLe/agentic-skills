@@ -29,7 +29,7 @@ When bumping a version, archive the current `SKILL.md` before overwriting it:
 Use the convenience script to automate the archive step:
 
 ```bash
-bash scripts/skill-archive.sh base/claude/ship
+bash scripts/skill-archive.sh packs/base/claude/ship
 ```
 
 This reads the current version, creates `archive/<version>/SKILL.md`, and prints confirmation. Then bump the version and update the changelog manually.
@@ -39,7 +39,7 @@ This reads the current version, creates `archive/<version>/SKILL.md`, and prints
 Each skill directory can contain an `archive/` subdirectory with snapshots of prior versions:
 
 ```text
-base/claude/ship/
+packs/base/claude/ship/
   SKILL.md              # current version (e.g., v0.1)
   CHANGELOG.md          # reverse-chronological changes
   archive/

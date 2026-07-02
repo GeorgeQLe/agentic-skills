@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Regenerates the data sections of alignment/skills-inventory.html from the
-// repo's SKILL.md files (base/claude/* and packs/*/claude/*). Page chrome
+// repo's SKILL.md files (packs/base/claude/* and packs/*/claude/*). Page chrome
 // (CSS, JS behavior, layout) is preserved; only the subtitle date, stats bar,
 // TOC, list-view pack sections, and packCategoryMap are rewritten.
 //
@@ -67,9 +67,10 @@ function readSkillDirs(parent) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const baseSkills = readSkillDirs(join(repoRoot, 'base', 'claude'));
+const baseSkills = readSkillDirs(join(repoRoot, 'packs', 'base', 'claude'));
 const packs = readdirSync(join(repoRoot, 'packs'), { withFileTypes: true })
   .filter((e) => e.isDirectory())
+  .filter((e) => e.name !== 'base')
   .map((e) => ({ name: e.name, skills: readSkillDirs(join(repoRoot, 'packs', e.name, 'claude')) }))
   .filter((p) => p.skills.length > 0)
   .sort((a, b) => a.name.localeCompare(b.name));

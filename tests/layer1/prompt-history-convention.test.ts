@@ -11,8 +11,8 @@ describe("prompt history convention", () => {
   const surfaces = [
     { path: "CLAUDE.md", minOccurrences: 1 },
     { path: "AGENTS.md", minOccurrences: 1 },
-    { path: "base/claude/provision-agentic-config/SKILL.md", minOccurrences: 2 },
-    { path: "base/codex/provision-agentic-config/SKILL.md", minOccurrences: 2 },
+    { path: "packs/base/claude/provision-agentic-config/SKILL.md", minOccurrences: 2 },
+    { path: "packs/base/codex/provision-agentic-config/SKILL.md", minOccurrences: 2 },
   ];
 
   it("requires visible skill invocation prompts to be persisted before skill work", () => {
@@ -58,7 +58,7 @@ describe("prompt history convention", () => {
   it("keeps provisioned config versions in sync with bumped provisioner skills", () => {
     // Derive the expected version from the source of truth (the provisioner skill
     // frontmatter) so this assertion self-heals on the next version bump.
-    const skillSource = read("base/claude/provision-agentic-config/SKILL.md");
+    const skillSource = read("packs/base/claude/provision-agentic-config/SKILL.md");
     const versionMatch = skillSource.match(/^version:\s*(v\d+\.\d+)/m);
     expect(versionMatch, "provision-agentic-config SKILL.md version frontmatter").not.toBeNull();
     const version = versionMatch![1];
@@ -66,8 +66,8 @@ describe("prompt history convention", () => {
     for (const path of [
       "CLAUDE.md",
       "AGENTS.md",
-      "base/claude/provision-agentic-config/SKILL.md",
-      "base/codex/provision-agentic-config/SKILL.md",
+      "packs/base/claude/provision-agentic-config/SKILL.md",
+      "packs/base/codex/provision-agentic-config/SKILL.md",
     ]) {
       const content = read(path);
 
@@ -77,8 +77,8 @@ describe("prompt history convention", () => {
     }
 
     for (const path of [
-      "base/claude/provision-agentic-config/SKILL.md",
-      "base/codex/provision-agentic-config/SKILL.md",
+      "packs/base/claude/provision-agentic-config/SKILL.md",
+      "packs/base/codex/provision-agentic-config/SKILL.md",
     ]) {
       expect(read(path), `${path} skill version`).toContain(`version: ${version}`);
     }

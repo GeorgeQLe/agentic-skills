@@ -123,11 +123,12 @@ acquire_project_lock() {
 }
 
 pack_exists() {
+  [[ "$1" != "base" ]] || return 1
   [[ -d "$PACKS_DIR/$1" ]]
 }
 
 list_packs() {
-  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort
+  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed '/^base$/d' | sort
 }
 
 available_packs_inline() {
@@ -301,12 +302,13 @@ read_enabled_packs() {
     return 0
   fi
   if command -v jq >/dev/null 2>&1; then
-    jq -r '.enabled_packs // [] | .[]' "$PROJECT_FILE" 2>/dev/null || true
+    jq -r '.enabled_packs // [] | .[] | select(. != "base")' "$PROJECT_FILE" 2>/dev/null || true
   else
     grep -o '"enabled_packs"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$PROJECT_FILE" \
       | sed 's/.*\[//; s/\].*//' \
       | tr ',' '\n' \
       | sed 's/[ "	]//g' \
+      | sed '/^base$/d' \
       | sed '/^$/d' || true
   fi
 }

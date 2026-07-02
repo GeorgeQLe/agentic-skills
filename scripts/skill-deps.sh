@@ -11,7 +11,7 @@ MODE="${1:-default}"
 # 1. Discover valid skill names from base skills and pack skills.
 declare -A VALID_SKILLS
 mapfile -t SKILL_DIRS < <(
-  find "$REPO_ROOT/base" "$REPO_ROOT/packs" \
+  find "$REPO_ROOT/packs" \
     -mindepth 2 -type f -name SKILL.md 2>/dev/null \
     -not -path '*/archive/*' \
     | sed 's#/SKILL.md$##' \

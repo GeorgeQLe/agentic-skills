@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MODE="${1:---missing}"
 
 mapfile -t SKILL_FILES < <(
-  find "$REPO_ROOT/base" "$REPO_ROOT/packs" \
+  find "$REPO_ROOT/packs" \
     -mindepth 2 -maxdepth 5 -type f -name SKILL.md \
     ! -path '*/archive/*' 2>/dev/null \
     | sort

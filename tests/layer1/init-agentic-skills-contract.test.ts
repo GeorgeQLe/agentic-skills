@@ -10,11 +10,11 @@ const read = (path: string) => readFileSync(repoPath(path), "utf8");
 describe("init-agentic-skills project-local contract", () => {
   const contracts = [
     {
-      skillPath: "base/codex/init-agentic-skills/SKILL.md",
+      skillPath: "packs/base/codex/init-agentic-skills/SKILL.md",
       version: "v0.12",
     },
     {
-      skillPath: "base/claude/init-agentic-skills/SKILL.md",
+      skillPath: "packs/base/claude/init-agentic-skills/SKILL.md",
       version: "v0.12",
     },
   ];
@@ -71,11 +71,11 @@ describe("init-agentic-skills project-local contract", () => {
     }
 
     expect(
-      existsSync(repoPath("base/claude/init-agentic-skills/scripts/init-agentic-skills.sh")),
+      existsSync(repoPath("packs/base/claude/init-agentic-skills/scripts/init-agentic-skills.sh")),
       "claude launcher should be removed",
     ).toBe(false);
     expect(
-      existsSync(repoPath("base/codex/init-agentic-skills/scripts/init-agentic-skills.sh")),
+      existsSync(repoPath("packs/base/codex/init-agentic-skills/scripts/init-agentic-skills.sh")),
       "codex launcher should be removed",
     ).toBe(false);
     expect(existsSync(repoPath("init.sh")), "root init.sh should be removed").toBe(false);

@@ -8,6 +8,7 @@ skill_source_owned_by_repo() {
   local base_root="${SCRIPT_DIR:-$repo_root}"
   [[ -n "$repo_root" ]] || return 1
   case "$source" in
+    "$base_root/packs/base/claude/"*|"$base_root/packs/base/codex/"*|"$repo_root/packs/base/claude/"*|"$repo_root/packs/base/codex/"*|\
     "$base_root/base/claude/"*|"$base_root/base/codex/"*|"$repo_root/packs/"*)
       return 0
       ;;

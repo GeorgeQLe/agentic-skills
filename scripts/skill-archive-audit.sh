@@ -153,7 +153,7 @@ check_skill() {
 
 while IFS= read -r skill_dir; do
   check_skill "$skill_dir"
-done < <(find "$REPO_ROOT/base" "$REPO_ROOT/packs" -name SKILL.md -not -path '*/archive/*' -exec dirname {} \; 2>/dev/null | sort -u)
+done < <(find "$REPO_ROOT/packs" -name SKILL.md -not -path '*/archive/*' -exec dirname {} \; 2>/dev/null | sort -u)
 
 if [[ "$MODE" == "json" ]]; then
   echo "{"

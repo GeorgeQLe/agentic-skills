@@ -145,7 +145,7 @@ describe('skillpacks Phase 4 release-readiness docs', () => {
     assert.match(decks, /npx skillpacks install-deck vard/, 'decks doc should document npm deck installs');
     assert.match(decks, /npx skillpacks install-deck business-afps/, 'decks doc should use install-deck for canonical decks');
     assert.doesNotMatch(decks, /npx skillpacks install <deck>/, 'decks doc must not model decks as generic pack installs');
-    assert.match(readme, /Source\/package maintenance commands require a checkout with `docs\/`, `base\/`, and `packs\/`/, 'README should classify bundle checks as source/package maintenance');
+    assert.match(readme, /Source\/package maintenance commands require a checkout with `docs\/` and `packs\/`/, 'README should classify bundle checks as source/package maintenance');
     assert.match(quickstart, /npx skillpacks alignment pages audit/, 'quickstart should document npm alignment page audits');
     assert.match(quickstart, /add `skillpacks` as a devDependency/, 'quickstart should document repeat/offline npx guidance');
   });

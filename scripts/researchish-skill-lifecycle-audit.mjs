@@ -193,7 +193,6 @@ function normalizeRel(file) {
 
 function collectActiveSkillFiles() {
   return [
-    ...walk(resolve(repoRoot, "base"), (file) => file.endsWith("/SKILL.md")),
     ...walk(resolve(repoRoot, "packs"), (file) => file.endsWith("/SKILL.md")),
   ].map(normalizeRel).sort();
 }

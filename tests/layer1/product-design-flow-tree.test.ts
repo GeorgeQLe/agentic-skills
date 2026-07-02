@@ -667,7 +667,8 @@ describe("product-design flow tree artifact boundaries", () => {
         expect(content).toContain("Next phase:");
         expect(content).toContain("the repeated command is intentional");
         expect(content).toContain("continue in a fresh session");
-        expect(content).toContain("Exact next command:");
+        expect(content).toContain("agent_routing.command");
+        expect(content).toContain("Do not also emit a separate freeform \"Exact next command\" line");
       }
     }
 

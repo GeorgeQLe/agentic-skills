@@ -32,8 +32,8 @@ Pull the latest changes from the remote repository and report status.
    - Read the canonical `provision-agentic-config` skill from the first existing path in this order (base skills install project-local, so the project roots come first):
      1. `.codex/skills/provision-agentic-config/SKILL.md`
      2. `.claude/skills/provision-agentic-config/SKILL.md`
-     3. `base/codex/provision-agentic-config/SKILL.md` in the current repo, when present
-     4. `base/claude/provision-agentic-config/SKILL.md` in the current repo, when present
+      3. `packs/base/codex/provision-agentic-config/SKILL.md` in the current repo, when present
+      4. `packs/base/claude/provision-agentic-config/SKILL.md` in the current repo, when present
    - Extract the `version:` field from the canonical skill's YAML frontmatter.
    - Extract the canonical provisioned blocks from the same skill:
      - `CLAUDE.md`: the fenced block under `Required Claude Block` or the section that says "The Claude block to insert into `./CLAUDE.md`".

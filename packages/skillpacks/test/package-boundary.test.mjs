@@ -105,7 +105,7 @@ describe('skillpacks npm publish target boundary', () => {
       ...socialAssetPaths,
       'packs/release-ops/codex/release/SKILL.md',
       'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
-      'base/codex/idea-scope-brief/INTERROGATION-PAGE.md',
+      'packs/base/codex/idea-scope-brief/INTERROGATION-PAGE.md',
       'packs/product-design/codex/user-flow-map/DESIGN-TREE-LOOP.md',
       'packs/product-testing/codex/uat/DESIGN-TREE-LOOP.md',
       'packs/code-quality/PACK.md'
@@ -140,7 +140,7 @@ describe('skillpacks npm publish target boundary', () => {
     assert.equal(SKILL_CONVENTIONS['social-video-content'].generatorScript, undefined);
 
     const alignmentConvention = readFileSync(resolve(repoRoot, 'docs/alignment-page-convention.md'), 'utf8');
-    assert.match(alignmentConvention, /alignment\/bip-\{skill-name\}\.html/);
+    assert.match(alignmentConvention, /alignment\/bip\/\{skill-name\}\.html/);
     assert.match(alignmentConvention, /post-confirmation/);
     assert.match(alignmentConvention, /prioritization metadata/);
     assert.match(alignmentConvention, /alignment\.bip_platforms/);

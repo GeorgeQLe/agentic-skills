@@ -87,7 +87,7 @@ npx @glexcorp/gskp install business-research
 ## Design Principles
 
 1. Preserve `SKILL.md` as the source format.
-2. Preserve `base/{claude,codex}` and `packs/<pack>/{claude,codex}` as the authoring layout.
+2. Preserve `packs/base/{claude,codex}` and `packs/<pack>/{claude,codex}` as the authoring layout.
 3. Preserve `.agents/project.json` as the project designation file.
 4. Preserve `scripts/pack.sh` while the npm CLI reaches parity.
 5. Keep the first npm release as one package.
@@ -126,7 +126,6 @@ Current package `package.json` shape:
     "bin/",
     "src/",
     "dist/",
-    "base/",
     "packs/",
     "scripts/pack.sh",
     "scripts/skill-links.sh",
@@ -176,7 +175,7 @@ The wrapper must run `scripts/pack.sh` with the user's current working directory
 
 The npm tarball must include:
 
-- `base/**` active core skills and their local archives.
+- `packs/base/**` active core skills and their local archives.
 - `packs/**` active pack skills and their local archives.
 - `scripts/pack.sh` and script helpers it sources, especially `scripts/skill-links.sh`.
 - deck and pack docs used for help output.
@@ -194,7 +193,7 @@ The tarball should exclude:
 - generated local roots under `.claude/skills` and `.codex/skills`
 - unrelated benchmark output and session artifacts
 
-Skill-level archives inside `base/**/archive/` and `packs/**/archive/` must remain included because pinning depends on them.
+Skill-level archives inside `packs/base/**/archive/` and `packs/**/archive/` must remain included because pinning depends on them.
 
 ## CLI Surface
 
@@ -221,7 +220,7 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `doctor` | Node-owned | Managed marker drift reader | No | No | Read-only drift report; exits non-zero for stale installs. |
 | `doctor --fix` | Node-owned | Manifest plus lifecycle helpers | No | No | Cleans generated skill roots only: removes orphaned managed installs, converts unpinned legacy symlinks to managed package copies, preserves pinned symlinks, and preserves unmanaged local directories. |
 | `doctor --fix --agent-docs [--dry-run]` | Node-owned | Marker-bounded agent-doc migrator | No | No | Replaces only recognized generated blocks in `AGENTS.md` and `CLAUDE.md`; dry-run prints a diff without writing, and non-dry-run writes timestamped backups under `.agents/backups/`. |
-| `alignment bundles [--dry-run] [--check]` | Node-owned wrapper | Packaged `scripts/upgrade-alignment-page.mjs` | No | No | Source/package maintenance command. Runs generated per-skill `ALIGNMENT-PAGE.md` bundle generation/checking with `--root <cwd>` when the target contains `docs/`, `base/`, and `packs/`. |
+| `alignment bundles [--dry-run] [--check]` | Node-owned wrapper | Packaged `scripts/upgrade-alignment-page.mjs` | No | No | Source/package maintenance command. Runs generated per-skill `ALIGNMENT-PAGE.md` bundle generation/checking with `--root <cwd>` when the target contains `docs/` and `packs/`. |
 | `prototype bundles [--dry-run] [--check]` | Node-owned wrapper | Packaged `scripts/upgrade-prototype-session-loop.mjs` | No | No | Source/package maintenance command. Runs generated per-skill `PROTOTYPE-SESSION-LOOP.md` bundle generation/checking with `--root <cwd>` while keeping top-level `docs/` outside runtime installs. |
 | `alignment pages audit` | Node-owned wrapper | Packaged `scripts/audit-alignment-pages.mjs` | No | No | Audits active rendered `alignment/*.html` pages with `--root <cwd>`. |
 | `alignment pages open <alignment/page.html> [--browser <browser>]` | Node-owned wrapper | Packaged `scripts/open-html-page.mjs` | No | No | Opens or focuses an active rendered alignment page with best-effort platform handling. Browser values: `auto`, `brave`, `chrome`, `safari`, `edge`, or `default`. |
@@ -455,7 +454,7 @@ npx skillpacks alignment pages open alignment/example.html --browser auto
 npx skillpacks alignment pages inject-tts --force alignment/example.html
 ```
 
-Source/package maintenance commands require a checkout with this repository's `docs/`, `base/`, `packs/`, and focused test files:
+Source/package maintenance commands require a checkout with this repository's `docs/`, `packs/`, and focused test files:
 
 ```bash
 npx skillpacks alignment bundles --check

@@ -4,7 +4,7 @@ Project-local packs keep domain-specific workflows out of base assistant context
 
 ## Design
 
-- Base skills live in `base/{claude,codex}`.
+- Base skills live in `packs/base/{claude,codex}`.
 - Domain packs live in `packs/<pack>/{claude,codex}`.
 - Project designation lives in `.agents/project.json`.
 - Mixed monorepos can declare scoped domain routing in `.agents/project.json.project_scopes`.
@@ -263,7 +263,7 @@ scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers 
 
 **Session-start hook (opt-in, off by default).** An optional `SessionStart` hook (`scripts/skill-drift-hook.sh`) warns about stale project skill installs at session start, or auto-refreshes when `skill_updates.mode == auto` (or machine-wide `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`) is set. Enable it by registering a `SessionStart` entry in `~/.claude/settings.json` that runs `bash <checkout>/scripts/skill-drift-hook.sh` (Claude Code's `/update-config` can write this for you) and setting `skills.session_start_hook: true` in `~/.agentic-skills/preferences.json`. The hook is gated on that preference, so an unset or `false` value makes it a silent no-op. Remove the `SessionStart` entry (or set the preference to `false`) to disable it.
 
-Base skill installs follow the same model: `npx skillpacks doctor` reports project base drift against `base/<tool>/<skill>`, and `npx skillpacks refresh` recreates them from the package snapshot (the base "refresh").
+Base skill installs follow the same model: `npx skillpacks doctor` reports project base drift against `packs/base/<tool>/<skill>`, and `npx skillpacks refresh` recreates them from the package snapshot (the base "refresh").
 
 ## Team Setup Checklist
 

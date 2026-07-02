@@ -30,7 +30,7 @@ const path = require("path");
 
 const root = process.argv[2];
 const verbose = process.argv[3] === "true";
-const baseRoot = path.join(root, "base");
+const baseRoot = path.join(root, "packs", "base");
 const packsRoot = path.join(root, "packs");
 
 const frontmatterKeys = ["name", "type", "context_intake", "visual_tier", "version", "argument-hint"];
@@ -265,6 +265,7 @@ const mirrorRoots = [
   },
   ...fs.readdirSync(packsRoot)
     .filter((entry) => fs.statSync(path.join(packsRoot, entry)).isDirectory())
+    .filter((entry) => entry !== "base")
     .sort()
     .map((pack) => ({
       pairPrefix: pack,
