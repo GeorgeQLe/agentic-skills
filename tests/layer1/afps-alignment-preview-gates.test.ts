@@ -24,10 +24,9 @@ const explicitReportFirstSkills = [
   "packs/business-research/codex/positioning/SKILL.md",
 ];
 
-// Converted from bespoke alignment sections to the generated stub + bundled
-// ALIGNMENT-PAGE.md (Drift Plan Phase 2 Step 5): SKILL.md carries the stub,
-// the sibling bundle carries the gate contract plus the skill-specific gates
-// from the generator gate map.
+// Converted from bespoke alignment sections to the shared resolver stub.
+// Existing legacy ALIGNMENT-PAGE.md files still carry the gate contract plus
+// the skill-specific gates from the generator gate map.
 const localPlanningPreviewSkills: Array<[path: string, specificGates: string]> = [
   ["packs/product-design/claude/ux-variations/SKILL.md", "**Variation-specific gates.**"],
   ["packs/product-design/codex/ux-variations/SKILL.md", "**Variation-specific gates.**"],
@@ -88,7 +87,7 @@ describe("AFPS alignment preview gates", () => {
     for (const [path, specificGates] of localPlanningPreviewSkills) {
       const content = read(path);
       expect(content, `${path} alignment output`).toMatch(/alignment\/[a-z-]+-\{topic\}\.html/);
-      expect(content, `${path} generated stub`).toContain("build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md`");
+      expect(content, `${path} generated stub`).toContain("Follow the shared alignment-page convention via the packaged convention resolver");
 
       const bundle = readBundle(path);
       expect(bundle, `${path} bundled alignment gates`).toContain("**Alignment gates.**");
@@ -108,7 +107,7 @@ describe("AFPS alignment preview gates", () => {
       // The prototype-first timing rule is retained as bespoke prose in
       // SKILL.md beside the generated stub (hybrid section).
       const content = read(path);
-      expect(content, `${path} generated stub`).toContain("build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md`");
+      expect(content, `${path} generated stub`).toContain("Follow the shared alignment-page convention via the packaged convention resolver");
       expect(content, `${path} mode-specific timing`).toContain("Prototype files may be created before the alignment page");
       expect(content, `${path} post-build preview`).toContain("After building or updating prototype files, build and attempt to open");
       expect(content, `${path} downstream block`).toContain("before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes");
@@ -125,9 +124,9 @@ describe("AFPS alignment preview gates", () => {
       const content = read(path);
       expect(content, `${path} alignment heading`).toMatch(/^## Alignment Page$/m);
       expect(content, `${path} output`).toContain("alignment/roadmap-{topic}.html");
-      expect(content, `${path} inline default`).toContain("By default, this skill reports results inline");
-      expect(content, `${path} no automatic page`).toContain("Do not build an alignment page automatically");
-      expect(content, `${path} conditional page`).toContain("only when the user explicitly requests an alignment page");
+      expect(content, `${path} inline default`).toContain("By default, report results inline");
+      expect(content, `${path} resolver stub`).toContain("Follow the shared alignment-page convention via the packaged convention resolver");
+      expect(content, `${path} conditional page`).toContain("only when explicitly requested");
       expect(content, `${path} review need`).toContain("concrete clarification/review need");
       expect(content, `${path} no before roadmap writes`).not.toContain(
         "before writing or replacing `tasks/roadmap.md`, `tasks/todo.md`",
@@ -138,7 +137,8 @@ describe("AFPS alignment preview gates", () => {
   it("keeps optional planning pages fully gated when the page is explicitly created", () => {
     for (const path of optionalPlanningSkills) {
       const content = read(path);
-      expect(content, `${path} generated stub`).toContain("Do not build an alignment page automatically");
+      expect(content, `${path} generated stub`).toContain("Follow the shared alignment-page convention via the packaged convention resolver");
+      expect(content, `${path} conditional page`).toContain("only when explicitly requested");
 
       const bundle = readBundle(path);
       expect(bundle, `${path} optional intro`).toContain("Alignment pages are optional for this operational skill");

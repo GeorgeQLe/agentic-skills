@@ -44,7 +44,7 @@ describe('skillpacks alignment command parsing', () => {
 
     assert.equal(exitCode, 0);
     assert.match(stdout, /gskp alignment/);
-    assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\]/);
+    assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\] \[--legacy-bundles\]/);
     assert.match(stdout, /alignment pages audit/);
     assert.match(stdout, /alignment pages open <alignment\/page.html>/);
     assert.match(stdout, /alignment pages serve \[--port <port>\]/);
@@ -55,11 +55,11 @@ describe('skillpacks alignment command parsing', () => {
   it('wraps bundle generation with --root set to the target project', () => {
     const projectRoot = makeTempProject();
 
-    const command = resolveAlignmentCommand(['bundles', '--check'], { projectRoot });
+    const command = resolveAlignmentCommand(['bundles', '--check', '--legacy-bundles'], { projectRoot });
 
     assert.equal(command.kind, 'run');
     assert.equal(command.command, process.execPath);
-    assert.deepEqual(command.args.slice(1), ['--root', projectRoot, '--check']);
+    assert.deepEqual(command.args.slice(1), ['--root', projectRoot, '--check', '--legacy-bundles']);
     assert.equal(command.args[0].endsWith('scripts/upgrade-alignment-page.mjs'), true);
   });
 

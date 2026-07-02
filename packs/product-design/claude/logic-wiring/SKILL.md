@@ -264,7 +264,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/logic-wiring-{topic}.html`.
 
 Prototype files may be created before the alignment page because the review needs runnable artifacts. After building or updating prototype files, build and attempt to open `alignment/logic-wiring-{topic}.html` before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes.
 

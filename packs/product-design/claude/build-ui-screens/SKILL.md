@@ -81,7 +81,7 @@ Do not route to production planning, roadmap work, or durable infrastructure unt
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/build-ui-screens-{topic}.html`.
 
 The page must show the per-batch screens, first-value journey, primary task path, build ledger, fake-data boundary, deferred infrastructure, review evidence, and the exact downstream handoff gate.
 

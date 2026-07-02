@@ -95,7 +95,7 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/creator-metrics-review-{topic}.html`.
 
 ## Constraints
 

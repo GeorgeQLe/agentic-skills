@@ -644,11 +644,11 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Interrogation Page
 
-Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/customer-discovery-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/customer-discovery-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/customer-discovery-{topic}.html`.
 
 ## Default Shipping Contract
 

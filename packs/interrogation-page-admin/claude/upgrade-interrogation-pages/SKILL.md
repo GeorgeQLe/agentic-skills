@@ -33,7 +33,7 @@ Use this skill when a repository already has generated `interrogation/*.html` ro
    - If the user provided page paths, include only those paths after confirming they are inside the project-root `interrogation/` directory.
 
 2. Load local standards:
-   - Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, and active bundled `INTERROGATION-PAGE.md` files found under `base/`, `packs/`, `.claude/skills/`, and `.codex/skills/`.
+   - Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, source `docs/interrogation-page-convention.md`, packaged `assets/interrogation-page-convention.md`, and legacy sibling `INTERROGATION-PAGE.md` files found under `base/`, `packs/`, `.claude/skills/`, and `.codex/skills/`.
    - Treat those local files as read-only standards. Do not fetch external standards.
    - Extract the current required HTML behaviors: the six open-question markers (`data-open-input`, visible `data-recommended-answer`, hidden `data-agent-recommended-answer`, `data-agent-confidence` with a value in `{high, medium, low}`, a `data-clarify-copy` button, and a `data-apply-recommended` button on every `data-open-question` block), the ≥1 open input per round rule, the page-metadata attributes (`data-visual-tier`, `data-interrogation-status`, `data-interrogation-round`, `data-interrogation-gate`), round-file naming (`{skill}-r{N}-{branch}.html`), the `data-answer-sidecar` reference, the Brief Me TTS include, dark-mode styling, responsive layout, the embed prohibition, and archive-before-replace behavior.
 

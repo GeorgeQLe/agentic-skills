@@ -4,17 +4,19 @@ import path from "node:path";
 export const SKILL_CONVENTIONS = {
   "alignment-page": {
     canonicalDoc: "docs/alignment-page-convention.md",
-    bundleFile: "ALIGNMENT-PAGE.md",
+    legacyBundleFile: "ALIGNMENT-PAGE.md",
     packageAsset: "assets/alignment-page-convention.md",
     generatorScript: "scripts/upgrade-alignment-page.mjs",
     checkCommand: ["node", "scripts/upgrade-alignment-page.mjs", "--check"],
+    resolver: "shared-doc-or-asset",
   },
   "interrogation-page": {
     canonicalDoc: "docs/interrogation-page-convention.md",
-    bundleFile: "INTERROGATION-PAGE.md",
+    legacyBundleFile: "INTERROGATION-PAGE.md",
     packageAsset: "assets/interrogation-page-convention.md",
     generatorScript: "scripts/upgrade-interrogation-page.mjs",
     checkCommand: ["node", "scripts/upgrade-interrogation-page.mjs", "--check"],
+    resolver: "shared-doc-or-asset",
   },
   "design-tree-loop": {
     canonicalDoc: "docs/design-tree-loop-convention.md",

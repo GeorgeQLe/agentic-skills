@@ -207,7 +207,7 @@ Present the blueprint and gap analysis. Ask for corrections, missing stages, and
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/service-blueprint-{topic}.html`.
 
 ## Default Shipping Contract
 

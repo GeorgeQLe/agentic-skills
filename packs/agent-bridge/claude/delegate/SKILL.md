@@ -76,7 +76,7 @@ Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is 
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/delegate-{topic}.html`.
 
 ## Default Shipping Contract
 

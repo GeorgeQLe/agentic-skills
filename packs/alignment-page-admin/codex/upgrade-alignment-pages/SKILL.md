@@ -33,7 +33,7 @@ Use this skill when a repository already has generated `alignment/*.html` review
    - If the user provided page paths, include only those paths after confirming they are inside the project-root `alignment/` directory.
 
 2. Load local standards:
-   - Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, and active bundled `ALIGNMENT-PAGE.md` files found under `base/`, `packs/`, `.claude/skills/`, and `.codex/skills/`.
+   - Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, source `docs/alignment-page-convention.md`, packaged `assets/alignment-page-convention.md`, and legacy sibling `ALIGNMENT-PAGE.md` files found under `base/`, `packs/`, `.claude/skills/`, and `.codex/skills/`.
    - Treat those local files as read-only standards. Do not fetch external standards.
    - Extract the current required HTML behaviors: dark-mode styling, inline approval gates, section feedback controls, local section feedback YAML, unified response YAML, copy fallback behavior, unanswered-question handling, archive-before-replace behavior, and diff/change highlighting for updates.
 

@@ -157,7 +157,7 @@ function alignmentHelp() {
   console.log(`gskp alignment
 
 Usage:
-  gskp alignment bundles [--dry-run] [--check]
+  gskp alignment bundles [--dry-run] [--check] [--legacy-bundles]
   gskp alignment pages audit
   gskp alignment pages open <alignment/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
   gskp alignment pages serve [--port <port>]
@@ -165,9 +165,10 @@ Usage:
   gskp alignment verify
 
 Commands:
-  bundles                    Generate per-skill ALIGNMENT-PAGE.md bundles
-  bundles --dry-run          Preview generated bundle changes
-  bundles --check            Fail on generated-bundle drift without writing
+  bundles                    Validate shared alignment resolver stubs
+  bundles --dry-run          Preview resolver-stub changes
+  bundles --check            Fail on resolver-stub drift without writing
+  bundles --legacy-bundles   Regenerate legacy sibling ALIGNMENT-PAGE.md files
   pages audit                Audit active rendered alignment/*.html pages
   pages open                 Open or focus an alignment HTML page
   pages serve                Serve alignment pages from the current repo over localhost
@@ -340,7 +341,7 @@ export function resolveAlignmentCommand(args, options = {}) {
 
   if (scope === 'bundles') {
     validateArgs('alignment bundles', rest, {
-      allowedFlags: new Set(['--dry-run', '--check'])
+      allowedFlags: new Set(['--dry-run', '--check', '--legacy-bundles'])
     });
     if (rest.includes('--dry-run') && rest.includes('--check')) {
       throw new Error('alignment bundles accepts either --dry-run or --check, not both');
@@ -688,8 +689,8 @@ Commands:
   doctor --fix                 Clean generated skill-root drift
   doctor --fix --agent-docs [--dry-run]
                                Also migrate generated AGENTS.md/CLAUDE.md blocks
-  alignment bundles [--dry-run] [--check]
-                               Generate/check per-skill ALIGNMENT-PAGE.md bundles
+  alignment bundles [--dry-run] [--check] [--legacy-bundles]
+                               Generate/check shared resolver stubs; optionally legacy ALIGNMENT-PAGE.md bundles
   prototype bundles [--dry-run] [--check]
                                Generate/check per-skill DESIGN-TREE-LOOP.md bundles
   alignment pages audit        Audit active rendered alignment/*.html pages

@@ -225,9 +225,9 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
 
 
    ### Alignment Page Convention
-   - The alignment-page convention is **bundled per-skill** as `ALIGNMENT-PAGE.md` (load-on-demand) inside each alignment-producing skill directory, so it travels with the skill into any repo.
-   - It is authored canonically in `docs/alignment-page-convention.md` (between the `alignment-convention` markers) and propagated by `scripts/upgrade-alignment-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated `ALIGNMENT-PAGE.md`.
-   - A skill's `## Alignment Page` section is a short stub that points at the sibling `ALIGNMENT-PAGE.md`; codex bundled files use the same content as claude.
+   - The alignment-page convention is shared through the packaged convention resolver: source checkouts load `docs/alignment-page-convention.md`, packaged installs load `assets/alignment-page-convention.md`, and older installed skills may fall back to a sibling `ALIGNMENT-PAGE.md` if present.
+   - It is authored canonically in `docs/alignment-page-convention.md` (between the `alignment-convention` markers) and validated by `scripts/upgrade-alignment-page.mjs`. Edit the convention there and re-run the generator; legacy sibling bundles are regenerated only with `--legacy-bundles`.
+   - A skill's `## Alignment Page` section is a short stub that names the shared resolver and output path; codex bundled files use the same content as claude.
    - Direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
 
 
@@ -328,7 +328,7 @@ Installed workflow orchestration into ./CLAUDE.md and ./AGENTS.md
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for optional alignment-page behavior and output path. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/provision-agentic-config-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
 
 ## Default Shipping Contract
 

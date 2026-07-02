@@ -221,7 +221,7 @@ Present the canvas and ask for corrections, missing stages, touchpoints, or oppo
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/customer-journey-canvas-{topic}.html`.
 
 ## Default Shipping Contract
 

@@ -31,7 +31,7 @@ function shortcutSection(content: string) {
 }
 
 describe("positioning alignment contracts", () => {
-  it("bundles sibling alignment-page conventions for positioning framework subskills", () => {
+  it("uses shared resolver stubs and retains legacy alignment-page fallback for positioning framework subskills", () => {
     for (const agent of agents) {
       for (const framework of frameworkNames) {
         const skillPath = `packs/business-research/${agent}/positioning/frameworks/${framework}/SKILL.md`;
@@ -39,9 +39,9 @@ describe("positioning alignment contracts", () => {
         const skill = read(skillPath);
         const bundle = readFileSync(bundlePath, "utf8");
 
-        expect(existsSync(bundlePath), `${skillPath} sibling bundle`).toBe(true);
+        expect(existsSync(bundlePath), `${skillPath} legacy sibling bundle`).toBe(true);
         expect(skill, `${skillPath} local stub`).toContain(
-          "Follow `ALIGNMENT-PAGE.md` in this skill's directory",
+          "Follow the shared alignment-page convention via the packaged convention resolver",
         );
         expect(skill, `${skillPath} no parent-relative alignment pointer`).not.toContain(
           "../ALIGNMENT-PAGE.md",

@@ -59,7 +59,7 @@ describe("upgrade-interrogation-pages skill contract", () => {
       const content = read(contract.path);
 
       expect(content, `${contract.path} standards sources`).toContain(
-        "Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, and active bundled `INTERROGATION-PAGE.md` files",
+        "Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, source `docs/interrogation-page-convention.md`, packaged `assets/interrogation-page-convention.md`, and legacy sibling `INTERROGATION-PAGE.md` files",
       );
       expect(content, `${contract.path} no external standards`).toContain("Do not fetch external standards.");
       for (const marker of [

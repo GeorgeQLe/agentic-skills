@@ -110,7 +110,7 @@ Stage 3 output is the approved canonical inspiration brief at `design/design-ins
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/design-inspirations-{topic}.html`.
 
 ## Default Shipping Contract
 

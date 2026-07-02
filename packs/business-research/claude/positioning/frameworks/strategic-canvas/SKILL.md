@@ -253,7 +253,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/strategic-canvas-{topic}.html`.
 
 ## Default Shipping Contract
 

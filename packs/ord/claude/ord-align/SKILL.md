@@ -97,7 +97,7 @@ Stage 3 output for approved NO-GO outcomes is only the confirmed HTML page. End 
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/ord-align-{topic}.html`.
 
 ## Default Shipping Contract
 

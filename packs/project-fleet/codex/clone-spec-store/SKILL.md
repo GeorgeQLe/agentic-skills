@@ -252,7 +252,7 @@ If accessible, read those files for the exact wording and reuse structure with d
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/clone-spec-store-{topic}.html`.
 
 ## Default Shipping Contract
 

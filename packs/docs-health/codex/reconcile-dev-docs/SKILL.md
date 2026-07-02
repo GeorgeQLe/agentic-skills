@@ -153,7 +153,7 @@ Report the same sections plus:
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for optional alignment-page behavior and output path. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/reconcile-dev-docs-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
 
 ## Default Shipping Contract
 

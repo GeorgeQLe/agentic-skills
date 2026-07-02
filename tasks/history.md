@@ -15341,3 +15341,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Four deferred Phase 38 newsletter production-setup tasks (Neon `DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`, Vercel env, live `/follow` + `/admin/newsletter` verification) target the Skills Showcase app, which split out to the separate `agentic-skills-showcase` repo (`apps/skills-showcase/` absent here; no Showcase app source tracked).
 - Migrated those tasks to `agentic-skills-showcase` ownership: rewrote the `tasks/manual-todo.md` section as a migration pointer (no active manual blockers remain here), updated the `tasks/todo.md` Priority Task Queue, and recorded details in `tasks/reconciliation-report.md`.
 - Verification: `node scripts/audit-task-docs.mjs` exit 0.
+
+## 2026-07-02 — Shared convention resolver migration
+
+- Replaced duplicated generated alignment/interrogation convention sections with short resolver stubs that point to shared convention assets and preserve skill-specific output paths.
+- Refactored `upgrade-alignment-page.mjs` and `upgrade-interrogation-page.mjs` to write stubs by default, with `--legacy-bundles` retained for transitional sibling bundle generation.
+- Updated the convention registry, bundle audit, package CLI flag surface, documentation, admin skills, provisioned config wording, and focused tests around source `docs/*`, packaged `assets/*`, and legacy sibling fallback resolution.
+- Regenerated active alignment/interrogation skill stubs while leaving existing sibling bundles as legacy compatibility artifacts.
+- Verification: syntax checks, focused layer1 suite (122 tests), convention bundle audit, package `build:check`, active alignment/interrogation page audits, package boundary/alignment Node tests, skill version/archive audits, task-doc audit, and diff hygiene passed.
+- Manifest: `tasks/ship-manifest-2026-07-02-shared-convention-resolver.md`.

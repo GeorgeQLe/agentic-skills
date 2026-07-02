@@ -40,7 +40,7 @@ If the verdict is "Issues found", write **new** actionable failures (not pre-exi
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/regression-check-{topic}.html`.
 
 ## Default Shipping Contract
 

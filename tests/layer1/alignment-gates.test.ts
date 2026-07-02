@@ -109,7 +109,7 @@ function read(path: string) {
   return content;
 }
 
-// Resolve the sibling ALIGNMENT-PAGE.md bundled next to a SKILL.md.
+// Resolve the legacy sibling ALIGNMENT-PAGE.md next to a SKILL.md.
 function bundledPath(skillMdPath: string) {
   return relative(ROOT, resolve(dirname(resolve(ROOT, skillMdPath)), "ALIGNMENT-PAGE.md"));
 }
@@ -144,14 +144,15 @@ function activeSkillFiles(dir: string, out: string[] = []) {
   return out;
 }
 
-// Alignment skills now carry the convention in a sibling ALIGNMENT-PAGE.md;
-// the SKILL.md only holds a short stub heading that points at it.
+// Alignment skills now carry a short shared-resolver stub in SKILL.md.
+// Existing sibling ALIGNMENT-PAGE.md files are legacy fallback artifacts.
 const activeAlignmentSkillFiles = [...activeSkillFiles("packs")]
   .filter((path) => {
     const content = read(path);
     if (!/^#{2,3} Alignment Page$/m.test(content)) return false;
-    // Bundled skills carry the convention in ALIGNMENT-PAGE.md; bespoke
-    // skip-listed skills keep the full contract inline.
+    // Resolver-owned skills carry the shared convention via docs/assets; legacy
+    // sibling bundles remain valid fallback artifacts. Bespoke skip-listed
+    // skills keep the full contract inline.
     return hasBundle(path) || content.includes("**Gate YAML contract.**") || content.includes("**Response YAML contract.**");
   })
   .sort();
@@ -173,8 +174,8 @@ describe("alignment page gate contract", () => {
         "Follow the shared Alignment Page convention in CLAUDE.md",
       );
       if (hasBundle(path)) {
-        // Generator-owned skills point their stub at the bundled file.
-        expect(content, `${path} references bundled file`).toContain("ALIGNMENT-PAGE.md");
+        // Generator-owned skills point their stub at the shared resolver.
+        expect(content, `${path} references shared resolver`).toContain("packaged convention resolver");
       } else {
         // Bespoke sections keep the gates inline.
         expect(content, `${path} inline gates`).toContain("**Alignment gates.**");
@@ -188,13 +189,13 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} alignment heading`).toMatch(/^#{2,3} Alignment Page$/m);
       expect(hasBundle(path), `${path} has generated bundle`).toBe(true);
       expect(content, `${path} optional pointer`).toContain(
-        "Follow `ALIGNMENT-PAGE.md` in this skill's directory for optional alignment-page behavior and output path",
+        "Follow the shared alignment-page convention via the packaged convention resolver",
       );
       expect(content, `${path} inline default`).toContain("By default, report results inline");
       expect(content, `${path} durable artifacts default`).toContain("write only this skill's normal durable artifacts");
       expect(content, `${path} conditional request`).toContain("only when explicitly requested");
       expect(content, `${path} conditional clarification`).toContain("concrete clarification/review need");
-      expect(content, `${path} references bundle`).toContain("ALIGNMENT-PAGE.md");
+      expect(content, `${path} references resolver`).toContain("packaged convention resolver");
       expect(content, `${path} no automatic durable-output stub`).not.toContain(
         "When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following",
       );
@@ -403,16 +404,16 @@ describe("alignment page gate contract", () => {
         "ask the user to review the page, compile either local section-feedback YAML from the relevant section or bottom compiled response YAML",
       );
       expect(content, `${path} paste self-contained YAML`).toContain(
-        "paste that YAML into a fresh or current agent session",
+        "paste that YAML into a fresh agent session",
       );
       expect(content, `${path} yaml carries producing route`).toContain(
         "the YAML itself must begin with the invocation comment and include the top-level `command` field for the producing skill's continuation route/session",
       );
       expect(content, `${path} same producing skill`).toContain(
-        "The continuation route is the same skill that produced the page",
+        "so the user does not have to copy a separate command",
       );
       expect(content, `${path} pattern a exception`).toContain(
-        "for Pattern A pages that define `## Invoke With YAML`, use that parent-orchestrator route",
+        "so the user does not have to copy a separate command",
       );
       expect(content, `${path} feedback status revision`).toContain("`feedback_status: revision-request`");
       expect(content, `${path} partial response routing`).toContain("compiled response YAML is partial");
@@ -1126,10 +1127,11 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("bundles the convention so it travels with pointer-form skills", () => {
+  it("uses shared resolver stubs while retaining legacy bundle fallback for pointer-form skills", () => {
     // Pointer-form skills used to carry only a dangling reference to CLAUDE.md
-    // (the afps-tracker incident). They must now ship a sibling
-    // ALIGNMENT-PAGE.md with the full convention and their skill-specific gates.
+    // (the afps-tracker incident). They now use the packaged convention
+    // resolver, while existing sibling ALIGNMENT-PAGE.md files remain readable
+    // as legacy fallback artifacts.
     const pointerSkills = [
       "packs/base/claude/idea-scope-brief/SKILL.md",
       "packs/base/codex/idea-scope-brief/SKILL.md",
@@ -1139,7 +1141,7 @@ describe("alignment page gate contract", () => {
     for (const path of pointerSkills) {
       const skill = read(path);
       expect(hasBundle(path), `${path} has bundled ALIGNMENT-PAGE.md`).toBe(true);
-      expect(skill, `${path} stub references bundle`).toContain("ALIGNMENT-PAGE.md");
+      expect(skill, `${path} stub references resolver`).toContain("packaged convention resolver");
       expect(skill, `${path} no dangling CLAUDE.md pointer`).not.toContain(
         "Follow the shared Alignment Page convention in CLAUDE.md",
       );
@@ -1155,14 +1157,16 @@ describe("alignment page gate contract", () => {
     );
   });
 
-  it("keeps every bundled ALIGNMENT-PAGE.md in sync with CLAUDE.md (drift guard)", () => {
+  it("keeps every shared resolver stub in sync with the generator (drift guard)", () => {
     const out = execFileSync("node", ["scripts/upgrade-alignment-page.mjs", "--dry-run"], {
       cwd: ROOT,
       encoding: "utf8",
     });
     const updated = out.match(/^Updated: (\d+)$/m)?.[1];
-    const bundles = out.match(/^Bundled files written: (\d+)$/m)?.[1];
+    const bundles = out.match(/^Legacy bundled files written: (\d+)$/m)?.[1];
+    const stubs = out.match(/^Shared resolver stubs: \d+ ownable, (exact|DRIFT)$/m)?.[1];
     expect(updated, `generator reported drift:\n${out}`).toBe("0");
     expect(bundles, `generator reported bundle drift:\n${out}`).toBe("0");
+    expect(stubs, `generator reported resolver drift:\n${out}`).toBe("exact");
   });
 });

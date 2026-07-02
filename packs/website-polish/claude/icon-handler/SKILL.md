@@ -145,7 +145,7 @@ In fix mode, include the same report plus changed files, validation, and next co
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/icon-handler-{topic}.html`.
 
 ## Default Shipping Contract
 

@@ -151,7 +151,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/design-system-{topic}.html`.
 
 ## Default Shipping Contract
 

@@ -13,6 +13,8 @@ const SCRIPT = repoPath("scripts/upgrade-alignment-page.mjs");
 const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md";
 const STUB_PREFIX = "When this skill produces durable deliverables";
 const OPTIONAL_STUB_PREFIX = "By default, this skill reports results inline";
+const COMPACT_STUB_PREFIX = "Follow `ALIGNMENT-PAGE.md` in this skill's directory";
+const SHARED_RESOLVER_STUB_PREFIX = "Follow the shared alignment-page convention via the packaged convention resolver";
 
 function parseListFile(path: string): Set<string> {
   const names = new Set<string>();
@@ -57,7 +59,7 @@ function isOwnable(body: string | null): boolean {
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .some((p) => p.startsWith(POINTER_PREFIX) || p.startsWith(STUB_PREFIX) || p.startsWith(OPTIONAL_STUB_PREFIX));
+    .some((p) => p.startsWith(POINTER_PREFIX) || p.startsWith(STUB_PREFIX) || p.startsWith(OPTIONAL_STUB_PREFIX) || p.startsWith(COMPACT_STUB_PREFIX) || p.startsWith(SHARED_RESOLVER_STUB_PREFIX));
 }
 
 // Re-derive the bespoke classification straight from active SKILL.md files,
@@ -179,7 +181,7 @@ function writeBundle(root: string, tool: "claude" | "codex", skillName: string, 
 }
 
 const stubBody = (skillName: string) =>
-  `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
+  `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`alignment/${skillName}-{topic}.html\`.`;
 
 const BESPOKE_BODY = "Hand-authored alignment rules for this skill. No generated stub here.";
 
@@ -293,38 +295,40 @@ describe("upgrade-alignment-page output path diagnostics", () => {
     expect(result.stderr).toContain("alignment/stolen-skill-{topic}.html");
   });
 
-  it("passes on a clean tree after write-mode generation", () => {
+  it("passes on a clean tree after write-mode stub generation", () => {
     const root = makeFixtureRoot();
     writeSkill(root, "claude", "clean-skill", stubBody("clean-skill"));
     writeSkill(root, "codex", "clean-skill", stubBody("clean-skill"));
 
-    // Validation runs after the write loop, so it sees the bundles written
-    // by this same invocation.
+    // Default validation no longer writes sibling bundles; it validates resolver
+    // stubs and path-checks only legacy bundles that already exist.
     const writeResult = runScript(root, "--write");
     expect(writeResult.stderr).toBe("");
     expect(writeResult.status).toBe(0);
-    expect(writeResult.stdout).toContain("Output paths: 2 bundles, exact");
+    expect(writeResult.stdout).toContain("Output paths: 0 bundles, exact");
+    expect(writeResult.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
 
     const dryResult = runScript(root);
     expect(dryResult.stderr).toBe("");
     expect(dryResult.status).toBe(0);
-    expect(dryResult.stdout).toContain("Output paths: 2 bundles, exact");
+    expect(dryResult.stdout).toContain("Output paths: 0 bundles, exact");
+    expect(dryResult.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
   });
 });
 
-describe("upgrade-alignment-page generated-bundle drift check", () => {
+describe("upgrade-alignment-page shared resolver drift check", () => {
   it("exits 0 in --check mode on the current repo state", () => {
     const result = spawnSync(process.execPath, [SCRIPT, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toMatch(/Generated bundles: \d+ ownable, exact/);
+    expect(result.stdout).toMatch(/Shared resolver stubs: \d+ ownable, exact/);
   });
 
-  it("fails in --check mode on a hand-edited generated bundle", () => {
+  it("ignores a hand-edited legacy bundle in default --check mode while path validation still applies", () => {
     const root = makeFixtureRoot();
     writeSkill(root, "claude", "drift-skill", stubBody("drift-skill"));
     writeSkill(root, "codex", "drift-skill", stubBody("drift-skill"));
-    const bundlePath = writeBundle(
+    writeBundle(
       root,
       "claude",
       "drift-skill",
@@ -338,23 +342,20 @@ describe("upgrade-alignment-page generated-bundle drift check", () => {
     );
 
     const result = runScript(root, "--check");
-    expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Generated bundle drift:");
-    expect(result.stderr).toContain(`Stale generated bundle ${bundlePath} for "drift-skill"`);
-    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
   });
 
-  it("fails in --check mode on a missing bundle for an ownable skill", () => {
+  it("passes in --check mode when an ownable skill has no legacy bundle", () => {
     const root = makeFixtureRoot();
     writeSkill(root, "claude", "bare-skill", stubBody("bare-skill"));
     writeSkill(root, "codex", "bare-skill", stubBody("bare-skill"));
 
     const result = runScript(root, "--check");
-    expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Generated bundle drift:");
-    expect(result.stderr).toContain('Missing generated bundle packs/fixture-pack/claude/bare-skill/ALIGNMENT-PAGE.md for "bare-skill"');
-    expect(result.stderr).toContain('Missing generated bundle packs/fixture-pack/codex/bare-skill/ALIGNMENT-PAGE.md for "bare-skill"');
-    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
   });
 
   it("fails in --check mode on a stale SKILL.md pointer paragraph", () => {
@@ -381,8 +382,8 @@ describe("upgrade-alignment-page generated-bundle drift check", () => {
 
     const result = runScript(root, "--check");
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Generated bundle drift:");
-    expect(result.stderr).toContain(`Stale SKILL.md stub in ${claudePath} for "pointer-skill"`);
+    expect(result.stderr).toContain("Shared resolver stub drift:");
+    expect(result.stderr).toContain(`Stale SKILL.md resolver stub in ${claudePath} for "pointer-skill"`);
   });
 
   it("passes in --check mode on a clean generated tree and exempts bespoke skills", () => {
@@ -397,10 +398,10 @@ describe("upgrade-alignment-page generated-bundle drift check", () => {
     const result = runScript(root, "--check");
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Generated bundles: 2 ownable, exact");
+    expect(result.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
   });
 
-  it("keeps plain --dry-run at exit 0 on a stale fixture bundle", () => {
+  it("keeps plain --dry-run at exit 0 on a stale legacy fixture bundle", () => {
     const root = makeFixtureRoot();
     writeSkill(root, "claude", "drift-skill", stubBody("drift-skill"));
     writeSkill(root, "codex", "drift-skill", stubBody("drift-skill"));
@@ -420,7 +421,31 @@ describe("upgrade-alignment-page generated-bundle drift check", () => {
     const result = runScript(root, "--dry-run");
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("[dry-run] write packs/fixture-pack/claude/drift-skill/ALIGNMENT-PAGE.md");
-    expect(result.stdout).toContain("Generated bundles: 2 ownable, DRIFT");
+    expect(result.stdout).not.toContain("[dry-run] write packs/fixture-pack/claude/drift-skill/ALIGNMENT-PAGE.md");
+    expect(result.stdout).toContain("Shared resolver stubs: 2 ownable, exact");
+  });
+
+  it("retains explicit --legacy-bundles mode for installed-skill fallback regeneration", () => {
+    const root = makeFixtureRoot();
+    writeSkill(root, "claude", "drift-skill", stubBody("drift-skill"));
+    writeSkill(root, "codex", "drift-skill", stubBody("drift-skill"));
+    const bundlePath = writeBundle(
+      root,
+      "claude",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n\nHand-edited extra paragraph.\n",
+    );
+    writeBundle(
+      root,
+      "codex",
+      "drift-skill",
+      "# Alignment Page — drift-skill\n\nConvention body for drift-skill. Output: `alignment/drift-skill-{topic}.html`.\n",
+    );
+
+    const result = spawnSync(process.execPath, [SCRIPT, "--check", "--legacy-bundles", "--root", root], { encoding: "utf8" });
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Legacy generated bundle drift:");
+    expect(result.stderr).toContain(`Stale legacy generated bundle ${bundlePath} for "drift-skill"`);
+    expect(result.stdout).toContain("Shared resolver stubs: 2 ownable, DRIFT");
   });
 });

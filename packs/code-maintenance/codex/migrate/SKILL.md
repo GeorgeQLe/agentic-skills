@@ -36,7 +36,7 @@ Use this skill when the user needs to perform a large-scale codebase reorganizat
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/migrate-{topic}.html`.
 
 ## Default Shipping Contract
 

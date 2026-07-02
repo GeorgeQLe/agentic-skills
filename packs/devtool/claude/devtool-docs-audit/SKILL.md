@@ -17,7 +17,7 @@ Write or update `research/devtool-docs-audit.md` with a findings-first docs audi
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/devtool-docs-audit-{topic}.html`.
 
 ## Default Shipping Contract
 

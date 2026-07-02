@@ -60,7 +60,7 @@ describe("upgrade-alignment-pages skill contract", () => {
       const content = read(contract.path);
 
       expect(content, `${contract.path} standards sources`).toContain(
-        "Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, and active bundled `ALIGNMENT-PAGE.md` files",
+        "Read applicable local convention sources from `AGENTS.md`, `CLAUDE.md`, source `docs/alignment-page-convention.md`, packaged `assets/alignment-page-convention.md`, and legacy sibling `ALIGNMENT-PAGE.md` files",
       );
       expect(content, `${contract.path} no external standards`).toContain("Do not fetch external standards.");
       for (const feature of [

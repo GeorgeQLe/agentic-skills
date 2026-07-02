@@ -46,6 +46,10 @@ function skillDir(skillPath) {
   return path.dirname(skillPath);
 }
 
+function skillName(skillPath) {
+  return path.basename(path.dirname(skillPath));
+}
+
 function rel(...parts) {
   return path.join(...parts).replaceAll(path.sep, "/");
 }
@@ -80,6 +84,30 @@ for (const skillPath of skills) {
   for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
     const declaredConvention = declared.has(id);
     const referencesCanonicalDoc = markdown.includes(convention.canonicalDoc);
+
+    if (convention.resolver === "shared-doc-or-asset") {
+      const legacyBundleFile = convention.legacyBundleFile;
+      const legacyBundlePath = legacyBundleFile ? rel(skillDir(skillPath), legacyBundleFile) : null;
+      const legacyBundleExists = legacyBundlePath ? existsSync(path.join(repoRoot, legacyBundlePath)) : false;
+      const referencesLegacyBundle = legacyBundleFile ? markdown.includes(legacyBundleFile) : false;
+      const referencesSharedResolver = markdown.includes(`shared ${id} convention via the packaged convention resolver`);
+      const referencesPackageAsset = markdown.includes(convention.packageAsset);
+      const standardsReader = skillName(skillPath) === "upgrade-alignment-pages" || skillName(skillPath) === "upgrade-interrogation-pages";
+
+      if (declaredConvention && !referencesSharedResolver && !referencesCanonicalDoc && !referencesPackageAsset && !referencesLegacyBundle) {
+        problems.push(`${skillPath} declares ${id} but does not reference the shared resolver, canonical doc, package asset, or legacy ${legacyBundleFile}`);
+      }
+      if (legacyBundleExists && !declaredConvention) {
+        problems.push(`${legacyBundlePath} exists but ${skillPath} does not declare ${id}`);
+      }
+      if (referencesLegacyBundle && !declaredConvention && !standardsReader) {
+        problems.push(`${skillPath} references legacy ${id} convention material without declaring it`);
+      }
+      if ((referencesCanonicalDoc || referencesPackageAsset || referencesSharedResolver) && !declaredConvention && !standardsReader) {
+        problems.push(`${skillPath} references ${id} convention material without declaring it`);
+      }
+      continue;
+    }
 
     if (convention.bundleFile) {
       const bundlePath = rel(skillDir(skillPath), convention.bundleFile);

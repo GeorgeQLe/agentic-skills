@@ -52,7 +52,7 @@ Use this skill when the user wants to identify opportunities to reduce lines of 
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/slim-audit-{topic}.html`.
 
 ## Default Shipping Contract
 

@@ -212,7 +212,7 @@ Present the experience map and emotional arc. Ask for corrections, missing phase
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/experience-map-{topic}.html`.
 
 ## Default Shipping Contract
 

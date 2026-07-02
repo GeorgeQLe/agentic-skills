@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="document" data-alignment-status="confirmed" data-alignment-page-kind="bip" data-bip-generation="post-confirmation" data-bip-source-skill="ship-end">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIP Suggestions - ship-end (Release-Prep Metadata)</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --orange:#d29922; --red:#f85149; --purple:#bc8cff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.55; letter-spacing:0; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2rem; line-height:1.15; }
+h2 { color:var(--accent); margin:0 0 12px; font-size:1.3rem; }
+h3 { color:#fff; margin:0 0 8px; font-size:1.05rem; }
+p { margin:10px 0; }
+a { color:var(--accent); }
+code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; font-size:.88em; }
+section, .meta-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.status { display:inline-flex; min-height:40px; align-items:center; padding:9px 14px; border:1px solid var(--purple); color:#fff; background:#1c2333; border-radius:6px; }
+.lead { color:#fff; font-size:1.05rem; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; }
+.card { border:1px solid var(--border); border-radius:8px; padding:14px; background:#0f1623; }
+.draft { border:1px solid var(--border); background:#0b1320; border-radius:8px; padding:12px 14px; margin:10px 0; white-space:pre-wrap; }
+.pill { display:inline-block; padding:2px 8px; border-radius:4px; font-size:.8rem; font-weight:600; margin-right:6px; }
+.pill-rec { background:rgba(63,185,80,.15); color:var(--green); }
+.pill-not { background:rgba(210,153,34,.15); color:var(--orange); }
+.pill-rej { background:rgba(248,81,73,.15); color:var(--red); }
+.fields { font-size:.92rem; }
+.fields dt { color:var(--accent); font-weight:700; margin-top:8px; }
+.fields dd { margin:2px 0 0; color:var(--text); }
+ul { padding-left:22px; }
+li { margin:5px 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="section-head">
+    <h2>Build-In-Public Suggestions</h2>
+    <span class="status">alignment_status: confirmed | bip_page_status: post-confirmation</span>
+  </div>
+  <h1>ship-end BIP Candidates - Release-Prep Metadata And Changelog</h1>
+  <p class="lead">Read-only Build-In-Public candidate batch generated after shipping release-prep metadata. This page does not publish posts, write social-ledger records, or create approval gates.</p>
+
+  <div class="meta-box">
+    <p><strong>bip_phase:</strong> implementation</p>
+    <p><strong>Source skill:</strong> <code>ship-end</code> | <strong>Generation:</strong> post-confirmation | <strong>Page kind:</strong> bip</p>
+    <p><strong>Priority metadata:</strong> no saved <code>alignment.bip_platforms</code> list was present. Every bundled text/community and video channel is included.</p>
+  </div>
+
+  <section>
+    <h2>What Shipped</h2>
+    <p>The shipped boundary prepared the repository for the next <code>skillpacks</code> and <code>@glexcorp/gskp</code> publish attempt without publishing, tagging, or changing npm auth state.</p>
+    <ul>
+      <li>Regenerated the package manifest and public skills-catalog export against the current source tree.</li>
+      <li>Added a <code>0.1.19</code> release-prep section to the package changelog while leaving the source package version at <code>0.1.18</code>.</li>
+      <li>Recorded verification results for package tests, package verification, catalog export freshness, design-tree bundle drift, archive audit, and diff hygiene.</li>
+      <li>Committed task docs, prompt history, the ship manifest, and this BIP page as session wrap-up artifacts.</li>
+    </ul>
+    <p>Source-safety boundary: drafts avoid npm account status, private auth state, secrets, unpublished metrics, customer references, and claims that the package is already published as <code>0.1.19</code>.</p>
+  </section>
+
+  <section>
+    <h2>Fresh-Audience Brief</h2>
+    <dl class="fields">
+      <dt>fresh_audience_context</dt><dd><code>skillpacks</code> is a CLI-packaged library of reusable agent skills. The work here is release preparation: making package metadata, public catalog exports, changelog notes, and verification evidence ready before a later publish command touches registry state.</dd>
+      <dt>jargon_expansion</dt><dd>BIP means Build-In-Public. "Manifest" means the package's machine-readable skill inventory. "Catalog export" means public metadata generated from the repo. "Source version" means the version stored in package files before the publish script performs the release bump.</dd>
+      <dt>public_significance</dt><dd>The useful public lesson is release boundary design: separating reviewable prep from credentialed publish steps makes package releases easier to inspect and safer to retry.</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Text And Community Channels</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>LinkedIn posts</h3>
+        <p><span class="pill pill-rec">recommended</span> Professional release-engineering lesson.</p>
+        <div class="draft">Release prep is not just "bump the version and publish."
+
+This pass separated source readiness from npm publication: regenerated package metadata, refreshed the public skills catalog, wrote the next changelog section, and ran the release gates while keeping the source package at the last published version.
+
+The useful pattern: make the publish command the only thing that mutates the release version. Everything else should be reviewable before credentials or registry state enter the path.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep diff and verification notes.</dd>
+          <dt>Claim-safety notes</dt><dd>Does not claim publication; frames readiness only.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Confirm the project is comfortable discussing release process publicly.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/linkedin-post-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>X posts</h3>
+        <p><span class="pill pill-rec">recommended</span> Concise release-safety pattern.</p>
+        <div class="draft">Release-prep rule I like: keep source at the last published version until the publish script runs.
+
+Prep can regenerate manifests, catalog exports, changelog notes, and verification evidence. The actual version bump belongs to the publish command.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd><code>0.1.19</code> release-prep task and changelog note.</dd>
+          <dt>Claim-safety notes</dt><dd>No registry or auth claims; no "published" wording.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Keep under standard length or split into a short thread.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/x-post-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Bluesky posts</h3>
+        <p><span class="pill pill-rec">recommended</span> Builder note with low hype.</p>
+        <div class="draft">Small release-process cleanup today: regenerated package/catalog metadata and wrote the next changelog section, but left the package source version unchanged.
+
+The publish script gets to do the version bump later. Cleaner review boundary.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Generated manifest/catalog and changelog release-prep changes.</dd>
+          <dt>Claim-safety notes</dt><dd>Plain build note; omits private auth state.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Verify character count in the target client.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/bluesky-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Threads posts</h3>
+        <p><span class="pill pill-not">not-now</span> Similar to Bluesky; keep for later dedupe.</p>
+        <div class="draft">Release prep feels safer when the version bump is a publish-time act, not a prep-time side effect. Today: fresh manifests, fresh catalog export, fresh changelog, source still at the last published version.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep change set.</dd>
+          <dt>Claim-safety notes</dt><dd>No unsupported claims, but overlaps heavily with the Bluesky option.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Use only if not cross-posting the same angle elsewhere.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/threads-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Mastodon posts</h3>
+        <p><span class="pill pill-rec">recommended</span> Technical, community-safe variant.</p>
+        <div class="draft">Release-prep pattern for CLI/package repos:
+
+- regenerate package metadata from current source
+- regenerate public catalog/export artifacts
+- write the next changelog section
+- run gates
+- leave source version at the last published version
+
+Then the publish script owns the actual version bump and registry interaction. #devtools</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep task checklist and verification results.</dd>
+          <dt>Claim-safety notes</dt><dd>General process; no private package or npm account details.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Check target instance rules and hashtag norms.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/mastodon-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Reddit posts</h3>
+        <p><span class="pill pill-rej">rejected</span> Too self-promotional without a named subreddit and broader write-up.</p>
+        <div class="draft">Rejected draft direction: "How we prep dual npm packages for release without bumping source versions early."</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep workflow.</dd>
+          <dt>Claim-safety notes</dt><dd>Could be useful as a full technical post, but not ready for Reddit without subreddit rules and a public write-up.</dd>
+          <dt>Risk level</dt><dd>medium.</dd>
+          <dt>Publish precheck</dt><dd>Name and inspect a specific subreddit first; disclose affiliation.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/reddit-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Hacker News submissions/comments</h3>
+        <p><span class="pill pill-rej">rejected</span> No public original source suitable for HN submission yet.</p>
+        <div class="draft">Human-author notes only: if this becomes a public release-engineering post, emphasize the immutable-registry failure mode and the value of separating preparation from publish-time mutation.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Internal release-prep session.</dd>
+          <dt>Claim-safety notes</dt><dd>HN convention blocks generated comments and needs an original public source URL.</dd>
+          <dt>Risk level</dt><dd>high.</dd>
+          <dt>Publish precheck</dt><dd>Only submit a public canonical article or Show HN artifact; human writes comments.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/hacker-news-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>YouTube Community posts</h3>
+        <p><span class="pill pill-not">not-now</span> Useful only if paired with a release-process video.</p>
+        <div class="draft">Poll idea: Which release-process topic would be most useful?
+
+- Version bump timing
+- Dual-package npm publish checks
+- Generated manifest/catalog verification
+- Publish recovery after auth failure</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep and publish runbook context.</dd>
+          <dt>Claim-safety notes</dt><dd>Does not promise a video; poll only.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Confirm the channel has Community posts and that this fits the channel audience.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/youtube-community-convention.md</code></dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Video Channels And Prompt Families</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>YouTube long-form</h3>
+        <p><span class="pill pill-not">not-now</span> Good educational topic, but needs a public-safe script and screen plan.</p>
+        <div class="draft">Idea title: Preparing a dual npm-package release without touching publish credentials
+
+Hook: "The safest release prep I did today was not publishing."
+Outline: explain immutable npm versions, generated metadata refresh, changelog prep, verification gates, dry-run/auth boundary, and the final publish command.
+Visual plan: sanitized diagrams and public files only; no npm account screens.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep task and runbook command output.</dd>
+          <dt>Claim-safety notes</dt><dd>Must avoid account/auth screens and not imply <code>0.1.19</code> is published.</dd>
+          <dt>Risk level</dt><dd>medium.</dd>
+          <dt>Publish precheck</dt><dd>Redaction review for any terminal or package registry captures.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/youtube-long-form-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>YouTube Shorts</h3>
+        <p><span class="pill pill-rec">recommended</span> Short lesson can stand alone without private screens.</p>
+        <div class="draft">Hook: "Do not bump the package version during release prep."
+Outline: 1) show checklist: manifest, catalog, changelog, tests; 2) show "source version stays last published"; 3) end with "publish script owns the bump."
+Visual plan: text cards or sanitized editor snippets only.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep checklist and package version check.</dd>
+          <dt>Claim-safety notes</dt><dd>Instructional pattern; no private data.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Confirm no terminal output exposes paths or account state.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/youtube-shorts-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>TikTok</h3>
+        <p><span class="pill pill-not">not-now</span> Could work as a devtool tip but has weaker audience fit.</p>
+        <div class="draft">Hook: "Release prep is where accidental package versions happen."
+Outline: quick checklist animation: regenerate, verify, write changelog, leave version alone, publish later.
+Visual plan: captions and mock terminal cards; no live npm UI.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep session.</dd>
+          <dt>Claim-safety notes</dt><dd>No real credentials or registry UI; use recreated demo cards.</dd>
+          <dt>Risk level</dt><dd>medium.</dd>
+          <dt>Publish precheck</dt><dd>Rights-cleared audio and AI/synthetic disclosure check if applicable.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/tiktok-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Instagram Reels</h3>
+        <p><span class="pill pill-not">not-now</span> Save for a broader release-process series.</p>
+        <div class="draft">Idea: "The release checklist that stops accidental npm version drift."
+Visual plan: three cards: stale generated metadata, fresh release-prep artifacts, publish-time version bump.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep verification and generated metadata refresh.</dd>
+          <dt>Claim-safety notes</dt><dd>Needs recreated visuals; avoid live repo or registry screens unless redacted.</dd>
+          <dt>Risk level</dt><dd>medium.</dd>
+          <dt>Publish precheck</dt><dd>Verify current Reels limits, audio rights, cover text, and captions.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/instagram-reels-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>LinkedIn video</h3>
+        <p><span class="pill pill-rec">recommended</span> Strong fit for a professional devtool lesson.</p>
+        <div class="draft">Hook: "I prepared the next package release by not bumping the version."
+Outline: immutable registries make version timing matter; source stays at 0.1.18; release prep refreshes generated metadata and evidence; publish script later bumps to 0.1.19.
+Visual plan: founder-camera plus sanitized checklist slide.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Changelog release-state note and verification results.</dd>
+          <dt>Claim-safety notes</dt><dd>Professional lesson; no customer, revenue, auth, or registry state.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Caption, aspect ratio, and redaction review.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/linkedin-video-convention.md</code></dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <h3>Founder/devtool reusable video prompts</h3>
+        <p><span class="pill pill-rec">recommended</span> Reusable changelog-demo prompt family.</p>
+        <div class="draft">Prompt family: Changelog Demo
+Hook: "Tiny release-process detail, big safety payoff."
+Structure: before - generated metadata was stale after several post-release commits; change - regenerate metadata and changelog without source version bump; result - publish command has a clean, verified boundary; lesson - separate readiness from registry mutation.
+Visual plan: sanitized changelog and checklist snippets.</div>
+        <dl class="fields">
+          <dt>Recommendation notes</dt><dd>See candidate status and channel framing above.</dd>
+          <dt>Source basis</dt><dd>Release-prep boundary and changelog verification section.</dd>
+          <dt>Claim-safety notes</dt><dd>Does not show private repo details beyond public-safe file categories.</dd>
+          <dt>Risk level</dt><dd>low.</dd>
+          <dt>Publish precheck</dt><dd>Specialize to the selected channel and perform screen redaction review.</dd>
+          <dt>Loaded convention path</dt><dd><code>docs/social/founder-devtool-video-prompts-convention.md</code></dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+</main>
+<script src="../../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

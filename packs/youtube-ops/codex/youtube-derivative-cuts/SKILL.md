@@ -294,7 +294,7 @@ After writing the approved artifact and completing artifact handoff checks, reco
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/youtube-derivative-cuts-{topic}.html`.
 
 ## Default Shipping Contract
 

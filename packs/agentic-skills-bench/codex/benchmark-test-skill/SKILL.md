@@ -133,7 +133,7 @@ The Markdown report and the final assistant response must both include a literal
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for optional alignment-page behavior and output path. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/benchmark-test-skill-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.
 
 ## Constraints
 

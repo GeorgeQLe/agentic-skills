@@ -74,7 +74,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/transaction-map-{topic}.html`.
 
 ## Constraints
 

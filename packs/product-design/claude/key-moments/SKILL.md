@@ -73,7 +73,7 @@ After the ranking is approved, route to the promoted flows in proof order:
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/key-moments-{topic}.html`.
 
 The page must show the proof-priority ranking, the value/risk/frequency factors per flow, the resulting branch order, the per-flow variation-breadth gate, and the promote/prune decisions, as review gates before the ordering is written to the flow-tree manifest.
 

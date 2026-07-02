@@ -120,7 +120,7 @@ Do not expand the patch opportunistically. If approval reveals a broader impact 
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/research-amend-{topic}.html`.
 
 ## Default Shipping Contract
 

@@ -35,6 +35,10 @@ const dryRun = flags.has("--dry-run");
 const checkMode = flags.has("--check");
 const noWrites = dryRun || checkMode;
 const previewPrefix = checkMode ? "[check] " : dryRun ? "[dry-run] " : "";
+// --legacy-bundles retains the old transition behavior and writes full sibling
+// INTERROGATION-PAGE.md files. Default mode validates shared resolver stubs and
+// accepts existing sibling bundles only as legacy fallback artifacts.
+const legacyBundles = flags.has("--legacy-bundles");
 
 // --- Participating-skill registry. Rollout is additive: add a name here. ---
 const INTERROGATION_SKILLS = new Set([
@@ -141,7 +145,9 @@ function interrogationAreas(skillName) {
   );
 }
 
-// Full convention text bundled into each skill's INTERROGATION-PAGE.md.
+// Full convention text that older installed skills may carry in a sibling
+// INTERROGATION-PAGE.md. Default generator mode no longer writes this; it is
+// kept for legacy fallback validation and explicit --legacy-bundles mode.
 function bundledContentFor(skillName, skillPath) {
   const tier = skillVisualTier(skillPath);
   const tierText = visualTierGuidance(tier);
@@ -159,13 +165,14 @@ function bundledContentFor(skillName, skillPath) {
 // confidence-gate blocking language the contract test asserts.
 const POINTER_PREFIX = "Follow the shared Interrogation Page convention";
 const STUB_PREFIX = "Before producing research, run the stage-zero interrogation loop";
+const SHARED_RESOLVER_STUB_PREFIX = "Follow the shared interrogation-page convention via the packaged convention resolver";
 
 function stubParagraph(skillName) {
-  return `Before producing research, run the stage-zero interrogation loop following \`INTERROGATION-PAGE.md\` in this skill's directory. Build one HTML page per round at \`interrogation/${skillName}-r{N}-{branch}.html\`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (\`data-open-input\`).`;
+  return `Follow the shared interrogation-page convention via the packaged convention resolver; output path is \`interrogation/${skillName}-r{N}-{branch}.html\`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (\`data-open-input\`).`;
 }
 
 function isPointerOrStub(paragraph) {
-  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX);
+  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(SHARED_RESOLVER_STUB_PREFIX);
 }
 
 function replaceOrInsert(content, skillName) {
@@ -277,11 +284,13 @@ for (const file of files) {
   }
   recordClassification(skillName, file, "ownableFiles");
 
-  // 1. Bundled, load-on-demand convention file beside the skill.
+  // 1. Legacy bundled convention file beside the skill. Default mode no longer
+  // writes this file; --legacy-bundles keeps the previous behavior available
+  // for installed skills that still need a sibling fallback regenerated.
   const bundlePath = join(dirname(abs), "INTERROGATION-PAGE.md");
   const bundleContent = bundledContentFor(skillName, file);
   const bundleBefore = existsSync(bundlePath) ? readFileSync(bundlePath, "utf8") : "";
-  const bundleChanged = bundleBefore !== bundleContent;
+  const bundleChanged = legacyBundles && bundleBefore !== bundleContent;
 
   // 2. Short stub inside SKILL.md pointing at the bundled file.
   const after = replaceOrInsert(before, skillName);
@@ -302,7 +311,11 @@ for (const file of files) {
   }
 }
 
-// Generated-bundle drift validation (escalates to a failing exit in --check).
+// Shared-resolver validation (escalates to a failing exit in --check).
+// Existing sibling INTERROGATION-PAGE.md files are accepted as legacy fallback
+// artifacts and path-checked below, but are no longer required or byte-equal
+// checked by default. The old byte-equal check is available with
+// --legacy-bundles.
 const bundleDiagnostics = [];
 let ownableChecked = 0;
 for (const [name, { ownableFiles, bespokeFiles }] of classification) {
@@ -312,20 +325,22 @@ for (const [name, { ownableFiles, bespokeFiles }] of classification) {
     const abs = `${repoRoot}/${file}`;
     const bundlePath = join(dirname(abs), "INTERROGATION-PAGE.md");
     const relBundle = relative(repoRoot, bundlePath);
-    const expected = bundledContentFor(name, file);
-    if (!existsSync(bundlePath)) {
-      bundleDiagnostics.push(
-        `Missing generated bundle ${relBundle} for "${name}". Run node scripts/upgrade-interrogation-page.mjs to generate it.`,
-      );
-    } else if (readFileSync(bundlePath, "utf8") !== expected) {
-      bundleDiagnostics.push(
-        `Stale generated bundle ${relBundle} for "${name}" — differs from expected renderer output. Never hand-edit a generated bundle; re-run node scripts/upgrade-interrogation-page.mjs to regenerate it.`,
-      );
+    if (legacyBundles) {
+      const expected = bundledContentFor(name, file);
+      if (!existsSync(bundlePath)) {
+        bundleDiagnostics.push(
+          `Missing legacy generated bundle ${relBundle} for "${name}". Run node scripts/upgrade-interrogation-page.mjs --legacy-bundles to generate it.`,
+        );
+      } else if (readFileSync(bundlePath, "utf8") !== expected) {
+        bundleDiagnostics.push(
+          `Stale legacy generated bundle ${relBundle} for "${name}" — differs from expected renderer output. Re-run node scripts/upgrade-interrogation-page.mjs --legacy-bundles to regenerate it.`,
+        );
+      }
     }
     const content = readFileSync(abs, "utf8");
     if (replaceOrInsert(content, name) !== content) {
       bundleDiagnostics.push(
-        `Stale SKILL.md stub in ${file} for "${name}" — the interrogation section's stub paragraph needs replacing. Run node scripts/upgrade-interrogation-page.mjs to update it.`,
+        `Stale SKILL.md resolver stub in ${file} for "${name}" — the interrogation section's stub paragraph needs replacing. Run node scripts/upgrade-interrogation-page.mjs to update it.`,
       );
     }
   }
@@ -376,13 +391,13 @@ for (const name of bespokeAllowlist) {
 
 console.log("");
 console.log(`Updated: ${updated}`);
-console.log(`Bundled files written: ${bundlesWritten}`);
+console.log(`Legacy bundled files written: ${bundlesWritten}`);
 console.log(`Skipped by ${relative(repoRoot, skipPath)}: ${skipList}`);
 console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Participating skills: ${INTERROGATION_SKILLS.size}`);
 console.log(`Bespoke allowlist: ${bespokeAllowlist.size} skills, ${diagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Output paths: ${bundlesChecked} bundles, ${pathDiagnostics.length ? "DRIFT" : "exact"}`);
-console.log(`Generated bundles: ${ownableChecked} ownable, ${bundleDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Shared resolver stubs: ${ownableChecked} ownable, ${bundleDiagnostics.length ? "DRIFT" : "exact"}`);
 
 if (diagnostics.length) {
   console.error("");
@@ -396,7 +411,7 @@ if (pathDiagnostics.length) {
 }
 if (checkMode && bundleDiagnostics.length) {
   console.error("");
-  console.error("Generated bundle drift:");
+  console.error(legacyBundles ? "Legacy generated bundle drift:" : "Shared resolver stub drift:");
   for (const diagnostic of bundleDiagnostics) console.error(`  - ${diagnostic}`);
 }
 if (diagnostics.length || pathDiagnostics.length || (checkMode && bundleDiagnostics.length)) process.exit(1);

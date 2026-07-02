@@ -110,7 +110,7 @@ From /Users/georgele/projects/tools/agentic-skills, run targeted-skill-builder f
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/targeted-skill-builder-{topic}.html`.
 
 ## Default Shipping Contract
 

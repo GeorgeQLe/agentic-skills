@@ -226,7 +226,7 @@ Present W3 definitions, disproval evidence, and confidence scores. Ask for corre
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/w3-hypothesis-{topic}.html`.
 
 ## Default Shipping Contract
 

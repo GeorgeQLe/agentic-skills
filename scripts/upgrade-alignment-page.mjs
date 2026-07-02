@@ -29,6 +29,10 @@ const checkMode = flags.has("--check");
 const noWrites = dryRun || checkMode;
 const previewPrefix = checkMode ? "[check] " : dryRun ? "[dry-run] " : "";
 // --all is retained as a no-op alias: all alignment-producing skills are covered by default.
+// --legacy-bundles retains the old transition behavior and writes full sibling
+// ALIGNMENT-PAGE.md files. Default mode validates the shared resolver stubs and
+// accepts existing sibling bundles only as legacy fallback artifacts.
+const legacyBundles = flags.has("--legacy-bundles");
 
 const skipPath = `${repoRoot}/scripts/alignment-skip-list.txt`;
 const skippedNames = new Set();
@@ -143,7 +147,9 @@ function lightweightResearchConventionTemplate(skillName, skillPath) {
   return template;
 }
 
-// Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
+// Full convention text that older installed skills may carry in a sibling
+// ALIGNMENT-PAGE.md. Default generator mode no longer writes this; it is kept
+// for legacy fallback validation and the explicit --legacy-bundles mode.
 function bundledContentFor(skillName, skillPath) {
   const specific = skillSpecificGates(skillName, skillPath);
   const tier = skillVisualTier(skillName, skillPath);
@@ -173,16 +179,17 @@ const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md
 const STUB_PREFIX = "When this skill produces durable deliverables";
 const OPTIONAL_STUB_PREFIX = "By default, this skill reports results inline";
 const COMPACT_STUB_PREFIX = "Follow `ALIGNMENT-PAGE.md` in this skill's directory";
+const SHARED_RESOLVER_STUB_PREFIX = "Follow the shared alignment-page convention via the packaged convention resolver";
 
 function stubParagraph(skillName) {
   if (isOptionalAlignmentSkill(skillName)) {
-    return `Follow \`ALIGNMENT-PAGE.md\` in this skill's directory for optional alignment-page behavior and output path. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.`;
+    return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`alignment/${skillName}-{topic}.html\`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.`;
   }
-  return `Follow \`ALIGNMENT-PAGE.md\` in this skill's directory for alignment-page requirements and output path.`;
+  return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`alignment/${skillName}-{topic}.html\`.`;
 }
 
 function isPointerOrStub(paragraph) {
-  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(OPTIONAL_STUB_PREFIX) || paragraph.startsWith(COMPACT_STUB_PREFIX);
+  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(OPTIONAL_STUB_PREFIX) || paragraph.startsWith(COMPACT_STUB_PREFIX) || paragraph.startsWith(SHARED_RESOLVER_STUB_PREFIX);
 }
 
 // --- Visual Tier ---
@@ -597,11 +604,13 @@ for (const file of files) {
     recordClassification(skillName, file, "ownableFiles");
   }
 
-  // 1. Bundled, load-on-demand convention file beside the skill.
+  // 1. Legacy bundled convention file beside the skill. Default mode no longer
+  // writes this file; --legacy-bundles keeps the previous behavior available
+  // for installed skills that still need a sibling fallback regenerated.
   const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
   const bundleContent = bundledContentFor(skillName, file);
   const bundleBefore = existsSync(bundlePath) ? readFileSync(bundlePath, "utf8") : "";
-  const bundleChanged = bundleBefore !== bundleContent;
+  const bundleChanged = legacyBundles && bundleBefore !== bundleContent;
 
   // 2. Short stub inside SKILL.md pointing at the bundled file.
   const after = replaceOrInsert(before, skillName, { replaceSection: body !== null && !isOwnable(body) && isOptionalAlignmentSkill(skillName) });
@@ -622,13 +631,11 @@ for (const file of files) {
   }
 }
 
-// Generated-bundle drift validation: every generator-owned (ownable) skill's
-// on-disk ALIGNMENT-PAGE.md must byte-equal the renderer's expected output,
-// and its SKILL.md stub paragraph must be current. Runs after the write loop
-// so write mode validates final on-disk state. Bespoke (allowlisted) and
-// skip-listed bundles have no expected render and are exempt — their path
-// consistency is still validated below. Drift here fails only in --check
-// mode; in --dry-run it is the legitimate pending-update preview.
+// Shared-resolver validation: every generator-owned (ownable) skill's SKILL.md
+// stub paragraph must point at the packaged convention resolver. Existing
+// sibling ALIGNMENT-PAGE.md files are accepted as legacy fallback artifacts and
+// are path-checked below, but are no longer required or byte-equal checked by
+// default. The old byte-equal check is available only with --legacy-bundles.
 const bundleDiagnostics = [];
 let ownableChecked = 0;
 for (const [name, { ownableFiles, bespokeFiles }] of classification) {
@@ -639,20 +646,22 @@ for (const [name, { ownableFiles, bespokeFiles }] of classification) {
     const abs = `${repoRoot}/${file}`;
     const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
     const relBundle = relative(repoRoot, bundlePath);
-    const expected = bundledContentFor(name, file);
-    if (!existsSync(bundlePath)) {
-      bundleDiagnostics.push(
-        `Missing generated bundle ${relBundle} for "${name}". Run node scripts/upgrade-alignment-page.mjs to generate it.`,
-      );
-    } else if (readFileSync(bundlePath, "utf8") !== expected) {
-      bundleDiagnostics.push(
-        `Stale generated bundle ${relBundle} for "${name}" — differs from expected renderer output. Never hand-edit a generated bundle; re-run node scripts/upgrade-alignment-page.mjs to regenerate it.`,
-      );
+    if (legacyBundles) {
+      const expected = bundledContentFor(name, file);
+      if (!existsSync(bundlePath)) {
+        bundleDiagnostics.push(
+          `Missing legacy generated bundle ${relBundle} for "${name}". Run node scripts/upgrade-alignment-page.mjs --legacy-bundles to generate it.`,
+        );
+      } else if (readFileSync(bundlePath, "utf8") !== expected) {
+        bundleDiagnostics.push(
+          `Stale legacy generated bundle ${relBundle} for "${name}" — differs from expected renderer output. Re-run node scripts/upgrade-alignment-page.mjs --legacy-bundles to regenerate it.`,
+        );
+      }
     }
     const content = readFileSync(abs, "utf8");
     if (replaceOrInsert(content, name) !== content) {
       bundleDiagnostics.push(
-        `Stale SKILL.md stub in ${file} for "${name}" — the alignment section's pointer/stub paragraph needs replacing. Run node scripts/upgrade-alignment-page.mjs to update it.`,
+        `Stale SKILL.md resolver stub in ${file} for "${name}" — the alignment section's pointer/stub paragraph needs replacing. Run node scripts/upgrade-alignment-page.mjs to update it.`,
       );
     }
   }
@@ -708,13 +717,13 @@ for (const name of bespokeAllowlist) {
 
 console.log("");
 console.log(`Updated: ${updated}`);
-console.log(`Bundled files written: ${bundlesWritten}`);
+console.log(`Legacy bundled files written: ${bundlesWritten}`);
 console.log(`Skipped by ${relative(repoRoot, skipPath)}: ${skipList}`);
 console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Out of scope: ${outOfScope}`);
 console.log(`Bespoke allowlist: ${bespokeAllowlist.size} skills, ${diagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Output paths: ${bundlesChecked} bundles, ${pathDiagnostics.length ? "DRIFT" : "exact"}`);
-console.log(`Generated bundles: ${ownableChecked} ownable, ${bundleDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Shared resolver stubs: ${ownableChecked} ownable, ${bundleDiagnostics.length ? "DRIFT" : "exact"}`);
 
 if (diagnostics.length) {
   console.error("");
@@ -728,7 +737,7 @@ if (pathDiagnostics.length) {
 }
 if (checkMode && bundleDiagnostics.length) {
   console.error("");
-  console.error("Generated bundle drift:");
+  console.error(legacyBundles ? "Legacy generated bundle drift:" : "Shared resolver stub drift:");
   for (const diagnostic of bundleDiagnostics) console.error(`  - ${diagnostic}`);
 }
 if (diagnostics.length || pathDiagnostics.length || (checkMode && bundleDiagnostics.length)) process.exit(1);

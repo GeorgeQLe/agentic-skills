@@ -161,7 +161,7 @@ Recommend sequential execution unless the user explicitly wants parallel researc
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/fork-idea-branch-{topic}.html`.
 
 ## Default Shipping Contract
 

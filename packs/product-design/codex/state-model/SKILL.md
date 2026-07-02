@@ -242,7 +242,7 @@ Same envelope as `design/flow-tree.schema.json` (`schema_version`, `topic`, `mod
 
 ## Interrogation Page
 
-Before producing research, run the stage-zero interrogation loop following `INTERROGATION-PAGE.md` in this skill's directory. Build one HTML page per round at `interrogation/state-model-r{N}-{branch}.html`, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/state-model-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Next Work
 
@@ -256,7 +256,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 
 ## Alignment Page
 
-Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/state-model-{topic}.html`.
 
 ## Archive-First Replacement Policy
 
