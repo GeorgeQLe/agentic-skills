@@ -1,68 +1,52 @@
 # Current Task State
 
-## Current Implementation - Research Amend Base Skill
+## Current Implementation - Research Amend Workflow Integration
 
 Project: `agentic-skills`.
 
-Status: IN PROGRESS (2026-07-02).
+Status: READY (2026-07-02).
 
 ### Goal
 
-Add a mirrored base-pack `research-amend` skill under `packs/base/{claude,codex}` for bounded, alignment-gated amendments to already-canonical research artifacts without forcing a full Pattern A research rerun.
+Document when research workflow handoffs should recommend the new base `research-amend` skill instead of a full Pattern A rerun.
 
 ### Execution Profile
 
 - Parallel mode: serial.
-- Reason: this creates mirrored base skill contracts, focused tests, and generated catalog/package artifacts that need one coherent shipping boundary.
-- Safety boundary: preserve unrelated dirty work already present in the shared worktree; do not change existing Pattern A orchestrator behavior beyond documenting `research-amend` as a separately invokable base skill in this step.
+- Reason: this touches research routing contracts and possibly mirrored skill/docs text that should remain coherent across Claude and Codex surfaces.
+- Safety boundary: preserve unrelated dirty work already present in the shared worktree; do not weaken Pattern A approval gates or route review-pending pages to downstream commands.
 
 ### Plan
 
-- [x] Create `packs/base/claude/research-amend/SKILL.md` and `packs/base/codex/research-amend/SKILL.md` with `version: v0.0`.
-- [x] Add `CHANGELOG.md` files and Codex `agents/openai.yaml` metadata.
-- [x] Encode the amendment workflow: product-path resolution, impact ladder, bounded amendment packet, `review` alignment page before canonical writes, archive-first approved writes, and high/systemic rerun routing.
-- [x] Add focused layer1 tests for mirrored existence and the amendment contract.
-- [x] Stage source before regenerating index-sourced package/catalog artifacts.
-- [x] Run targeted validation, record review/history, commit, and push.
+- [ ] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
+- [ ] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
+- [ ] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
+- [ ] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
+- [ ] Run targeted validation, record review/history, commit, and push.
 
 ### Acceptance Criteria
 
-- `research-amend` exists as a base-pack skill under both `packs/base/claude/research-amend` and `packs/base/codex/research-amend`.
-- Both skill contracts include `version: v0.0`, `type: research`, and alignment-page requirements.
-- The skill can process a single missed competitor as a medium-impact amendment through a bounded working packet and alignment review page before canonical writes.
-- Low/medium amendments patch only affected canonical/intermediate/search-log artifacts after approval and archive superseded artifacts first.
-- High/systemic amendments route to targeted framework/synthesis reruns or a full Pattern A rerun instead of a small patch.
-- Public catalog/package artifacts include the new base skill.
+- Research-health or final-handoff guidance recommends `research-amend` for bounded low/medium post-canonical amendments such as one missed competitor or one corrected source fact.
+- High/systemic changes still route to affected framework/synthesis reruns or full Pattern A reruns.
+- Review-pending alignment pages continue to use approval YAML handling only; downstream `research-amend` recommendations appear only after approved artifacts are written or in research-health/status contexts.
+- Codex and Claude command text stays platform-correct.
 
 ### Verification Plan
 
-- `pnpm exec vitest run --project layer1 layer1/research-amend-contract.test.ts` from `tests/`
+- Focused routing tests for changed research-health or Pattern A surfaces.
 - `bash scripts/skill-versions.sh --missing`
 - `bash scripts/skill-archive-audit.sh --strict`
-- `bash scripts/skill-deps.sh --broken`
-- `npm run skillpacks:build`
+- `node scripts/skill-alignment-routing-audit.mjs`
+- `bash scripts/skill-install-routing-audit.sh --active`
+- `npm run skillpacks:build` if any active `SKILL.md` changes
 - `npm --workspace packages/skillpacks run build:check`
-- `node scripts/generate-skills-catalog-export.mjs`
-- `scripts/validate-skills-catalog-export.sh`
+- `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh` if any active `SKILL.md` changes
 - `git diff --check`
 - `git status --short --branch`
 
 ### Review
 
-Verified:
-
-- `pnpm exec vitest run --project layer1 layer1/research-amend-contract.test.ts` passed: 8 tests.
-- `bash scripts/skill-versions.sh --missing` passed: all 365 skills have a version field.
-- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills checked, 0 violations.
-- `bash scripts/skill-deps.sh --broken` passed.
-- `npm run skillpacks:build` passed and staged a package with 415 skills, 42 packs.
-- `npm --workspace packages/skillpacks run build:check` passed, including convention bundle audit for 415 active skills and 385 tracked bundles.
-- `node scripts/generate-skills-catalog-export.mjs` completed.
-- `scripts/validate-skills-catalog-export.sh` passed: skills catalog export artifacts are fresh.
-- `node scripts/skill-alignment-routing-audit.mjs` passed for all 415 active `SKILL.md` files.
-- `bash scripts/skill-install-routing-audit.sh --active` passed: P1 coverage 12/12, findings 0.
-
-Ship manifest: `tasks/ship-manifest-2026-07-02-research-amend-base-skill.md`.
+Pending.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 
