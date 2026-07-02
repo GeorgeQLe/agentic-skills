@@ -4,7 +4,10 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
-import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
+import {
+  SKILL_CONVENTIONS,
+  managedConventionDocEntries
+} from '../../../scripts/skill-convention-registry.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '../..');
@@ -118,6 +121,10 @@ describe('skillpacks npm publish target boundary', () => {
         assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
       }
       assert.equal(paths.has(convention.packageAsset), true, `${id} package asset should be published`);
+    }
+
+    for (const entry of managedConventionDocEntries(repoRoot)) {
+      assert.equal(paths.has(entry.packageAsset), true, `${entry.packageAsset} should be published`);
     }
   });
 

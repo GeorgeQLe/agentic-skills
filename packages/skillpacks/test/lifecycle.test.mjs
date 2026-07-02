@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import {
   existsSync,
   lstatSync,
@@ -19,7 +20,10 @@ import { afterEach, describe, it } from 'node:test';
 import { withProjectLock } from '../src/cli/project-config.mjs';
 import { installResolved, refreshAllProjects, uninstallGlobal } from '../src/cli/lifecycle.mjs';
 import { runSkillpacksCli } from '../src/cli/run-pack-script.mjs';
-import { SKILL_CONVENTIONS } from '../../../scripts/skill-convention-registry.mjs';
+import {
+  SKILL_CONVENTIONS,
+  managedConventionDocEntries
+} from '../../../scripts/skill-convention-registry.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '..', '..');
@@ -115,6 +119,15 @@ async function runSkillpacksExpectError(projectRoot, args) {
       process.env.PATH = originalPath;
     }
   }
+}
+
+function runPackSh(projectRoot, args) {
+  return execFileSync('bash', [join(repoRoot, 'scripts/pack.sh'), ...args], {
+    cwd: projectRoot,
+    env: process.env,
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024
+  });
 }
 
 function marker(projectRoot, tool, skill) {
@@ -213,6 +226,28 @@ function assertDeclaredBundlesInstalled(projectRoot, tool, skill) {
       `${tool}/${skill} should install ${convention.bundleFile}`
     );
   }
+}
+
+function managedConventionDocPath(projectRoot, installPath) {
+  return join(projectRoot, '.agents/skillpacks/docs', installPath);
+}
+
+function assertManagedConventionDocsInstalled(projectRoot) {
+  for (const entry of managedConventionDocEntries(repoRoot)) {
+    const target = managedConventionDocPath(projectRoot, entry.installPath);
+    assert.equal(existsSync(target), true, `${entry.installPath} should be installed`);
+    assert.equal(
+      readFileSync(target, 'utf8'),
+      readFileSync(join(repoRoot, entry.canonicalDoc), 'utf8'),
+      `${entry.installPath} should match canonical doc`
+    );
+  }
+  const metadata = JSON.parse(readFileSync(join(projectRoot, '.agents/skillpacks/docs/.skillpacks-managed.json'), 'utf8'));
+  assert.equal(metadata.managed_by, 'agentic-skills');
+  assert.deepEqual(
+    metadata.docs.map((entry) => entry.path).sort(),
+    managedConventionDocEntries(repoRoot).map((entry) => entry.installPath).sort()
+  );
 }
 
 function writeManagedInstall(projectRoot, tool, skill, source, options = {}) {
@@ -707,6 +742,7 @@ describe('Node lifecycle commands', () => {
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^managed_by=agentic-skills$/m);
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_sha=[a-f0-9]{64}$/m);
+    assertManagedConventionDocsInstalled(dir);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
     assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
   });
@@ -790,6 +826,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(dir, 'codex', 'idea-scope-brief')), true);
     assert.match(marker(dir, 'claude', 'idea-scope-brief'), /source=.*packs\/base\/claude\/idea-scope-brief/);
     assert.match(marker(dir, 'codex', 'idea-scope-brief'), /source=.*packs\/base\/codex\/idea-scope-brief/);
+    assertManagedConventionDocsInstalled(dir);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'idea-scope-brief': 'base' });
     assert.equal(Object.hasOwn(readProjectConfig(dir), 'base_skills'), false);
@@ -805,6 +842,35 @@ describe('Node lifecycle commands', () => {
       assertDeclaredBundlesInstalled(dir, tool, 'idea-scope-brief');
       assertDeclaredBundlesInstalled(dir, tool, 'user-flow-map');
     }
+  });
+
+  it('refresh restores deleted managed convention docs', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'quality-sweep']);
+
+    const deletedDoc = managedConventionDocPath(dir, 'quality-gate-contract.md');
+    rmSync(deletedDoc);
+    assert.equal(existsSync(deletedDoc), false);
+
+    const { stdout } = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(stdout, /Refreshed managed convention docs/);
+    assertManagedConventionDocsInstalled(dir);
+  });
+
+  it('scripts/pack.sh install and refresh manage convention docs in source checkouts', () => {
+    const dir = makeTempProject();
+
+    const installOutput = runPackSh(dir, ['install', 'code-quality']);
+    assert.match(installOutput, /Updated \.agents\/project\.json/);
+    assertManagedConventionDocsInstalled(dir);
+
+    const deletedDoc = managedConventionDocPath(dir, 'skillpacks-install-routing-contract.md');
+    rmSync(deletedDoc);
+    assert.equal(existsSync(deletedDoc), false);
+
+    runPackSh(dir, ['refresh']);
+    assertManagedConventionDocsInstalled(dir);
   });
 
   it('refreshes individually enabled base skills', async () => {
@@ -1308,6 +1374,8 @@ describe('Node lifecycle commands', () => {
       skillPath(dir, 'codex', 'pinned-skill'),
       'dir'
     );
+    rmSync(managedConventionDocPath(dir, 'quality-gate-contract.md'));
+    writeFileSync(managedConventionDocPath(dir, 'skillpacks-install-routing-contract.md'), 'stale\n');
 
     const { exitCode, stdout } = await runSkillpacksRaw(dir, ['doctor']);
 
@@ -1318,6 +1386,9 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /unknown  \.codex\/skills\/unknown-skill — run `[^`]*refresh` to enable drift tracking/);
     assert.match(stdout, /missing  \.claude\/skills\/missing-skill — canonical source no longer exists/);
     assert.match(stdout, /STALE    \.claude\/skills\/stale-skill \(v0\.0 -> v9\.0\)/);
+    assert.match(stdout, /Convention doc drift \(\.agents\/skillpacks\/docs\):/);
+    assert.match(stdout, /missing  \.agents\/skillpacks\/docs\/quality-gate-contract\.md/);
+    assert.match(stdout, /STALE    \.agents\/skillpacks\/docs\/skillpacks-install-routing-contract\.md/);
     assert.match(stdout, /Fix: [^\n]*refresh/);
   });
 

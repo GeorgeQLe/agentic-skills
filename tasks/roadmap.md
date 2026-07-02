@@ -6971,3 +6971,35 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Apply the smallest source fix that prevents repeated active skill discovery without deleting legitimate historical archives.
 5. Add focused regression coverage for duplicate/case-normalized skill discovery or install cleanup behavior.
 6. Run focused verification, document findings, then commit and push intended changes.
+# Current Roadmap - Centralized Skill Convention Docs
+
+## Goal
+
+Patch skillpacks so installed skills can load every convention or contract document they reference from `.agents/skillpacks/docs/**`, while keeping the destination managed and isolated from app-owned project documentation.
+
+## Plan
+
+- [x] Build one convention-doc registry/helper from tracked canonical docs:
+  - `docs/*convention*.md`
+  - `docs/*contract*.md`
+  - `docs/social/*convention.md`
+- [x] Use that registry in package staging so npm installs contain the same canonical docs.
+- [x] Use that registry in Node lifecycle install/init/refresh flows to overwrite only `.agents/skillpacks/docs/**`.
+- [x] Add managed metadata/hash comparison so doctor can report stale or missing convention docs.
+- [x] Add equivalent source-checkout `scripts/pack.sh` install/refresh/doctor behavior.
+- [x] Add focused tests for package assets, single-skill install, pack install, refresh restore, doctor stale/missing reports, and shell install/refresh restore.
+- [x] Run targeted verification and update the task review.
+
+## Constraints
+
+- Preserve unrelated dirty work already present in the shared tree.
+- Do not write canonical docs into destination project `docs/` or `assets/`.
+- Generated convention bundles such as `ALIGNMENT-PAGE.md`, `INTERROGATION-PAGE.md`, and `DESIGN-TREE-LOOP.md` remain duplicated snapshots unless their generators are intentionally updated.
+- Treat `SKILL.md` cleanup as optional follow-up unless needed for this install support patch.
+
+## Acceptance Criteria
+
+- Install and refresh create `.agents/skillpacks/docs/**` for both package and source-checkout flows.
+- Refresh restores deleted convention docs even when skill files are already current.
+- Doctor reports missing or stale convention docs and recommends the existing refresh command.
+- Package build output includes all registry convention/contract docs.

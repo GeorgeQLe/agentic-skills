@@ -7,11 +7,75 @@ HIBERNATED_KANBAN_DIR="$REPO_ROOT/archive/hibernated-packs/2026-06-poketowork-re
 PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
 PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
+MANAGED_CONVENTION_DOC_ROOT="$PROJECT_ROOT/.agents/skillpacks/docs"
+MANAGED_CONVENTION_DOC_METADATA="$MANAGED_CONVENTION_DOC_ROOT/.skillpacks-managed.json"
 PROJECT_LOCK_MAX_ATTEMPTS="${PACK_LOCK_MAX_ATTEMPTS:-300}"
 PROJECT_LOCK_SLEEP_SECONDS="${PACK_LOCK_SLEEP_SECONDS:-0.1}"
 PROJECT_LOCKED=false
 PROJECT_AGENT_MODE=""
 source "$REPO_ROOT/scripts/skill-links.sh"
+
+convention_doc_sources() {
+  find "$REPO_ROOT/docs" -maxdepth 1 -type f \( -name '*convention*.md' -o -name '*contract*.md' \) -print 2>/dev/null
+  find "$REPO_ROOT/docs/social" -maxdepth 1 -type f -name '*convention.md' -print 2>/dev/null
+}
+
+sync_managed_convention_docs() {
+  [[ -d "$REPO_ROOT/docs" ]] || return 0
+
+  rm -rf "$MANAGED_CONVENTION_DOC_ROOT"
+  mkdir -p "$MANAGED_CONVENTION_DOC_ROOT"
+
+  local source rel target hash first=true
+  local metadata_docs=""
+  while IFS= read -r source; do
+    [[ -n "$source" ]] || continue
+    rel="${source#"$REPO_ROOT/docs/"}"
+    target="$MANAGED_CONVENTION_DOC_ROOT/$rel"
+    mkdir -p "$(dirname "$target")"
+    cp -p "$source" "$target"
+    hash="$(_sha256 < "$source" | awk '{print $1}')"
+    if [[ "$first" == true ]]; then
+      first=false
+    else
+      metadata_docs+=","
+    fi
+    metadata_docs+=$'\n'"    { \"path\": \"$rel\", \"source_sha\": \"$hash\" }"
+  done < <(convention_doc_sources | sort)
+
+  {
+    printf '{\n'
+    printf '  "managed_by": "agentic-skills",\n'
+    printf '  "source_package": "source-checkout",\n'
+    printf '  "docs": ['
+    printf '%s' "$metadata_docs"
+    if [[ "$first" == false ]]; then
+      printf '\n'
+    fi
+    printf '  ]\n'
+    printf '}\n'
+  } > "$MANAGED_CONVENTION_DOC_METADATA"
+}
+
+managed_convention_doc_statuses() {
+  local source rel target expected actual
+  while IFS= read -r source; do
+    [[ -n "$source" ]] || continue
+    rel="${source#"$REPO_ROOT/docs/"}"
+    target="$MANAGED_CONVENTION_DOC_ROOT/$rel"
+    expected="$(_sha256 < "$source" | awk '{print $1}')"
+    if [[ ! -f "$target" ]]; then
+      printf 'missing\t%s\n' "$rel"
+      continue
+    fi
+    actual="$(_sha256 < "$target" | awk '{print $1}')"
+    if [[ "$actual" == "$expected" ]]; then
+      printf 'ok\t%s\n' "$rel"
+    else
+      printf 'stale\t%s\n' "$rel"
+    fi
+  done < <(convention_doc_sources | sort)
+}
 
 usage() {
   cat <<'EOF'
@@ -1024,6 +1088,23 @@ doctor() {
     echo "  (no managed skill installs found)"
   fi
 
+  if [[ "$found" == true || -f "$PROJECT_FILE" || -d "$MANAGED_CONVENTION_DOC_ROOT" ]]; then
+    echo "Convention doc drift (.agents/skillpacks/docs):"
+    local doc_found=false doc_status doc_rel
+    while IFS=$'\t' read -r doc_status doc_rel; do
+      [[ -n "$doc_status" ]] || continue
+      doc_found=true
+      case "$doc_status" in
+        ok)      printf '  ok       .agents/skillpacks/docs/%s\n' "$doc_rel" ;;
+        missing) printf '  missing  .agents/skillpacks/docs/%s\n' "$doc_rel"; any_stale=true ;;
+        stale)   printf '  STALE    .agents/skillpacks/docs/%s\n' "$doc_rel"; any_stale=true ;;
+      esac
+    done < <(managed_convention_doc_statuses)
+    if [[ "$doc_found" != true ]]; then
+      echo "  (no convention docs found)"
+    fi
+  fi
+
   if [[ "$any_stale" == true ]]; then
     echo ""
     echo "Fix: $refresh_cmd"
@@ -1171,6 +1252,7 @@ case "$cmd" in
         install_single_skill "$skill"
       done
     fi
+    sync_managed_convention_docs
     print_session_reload_notice
     ;;
   remove)
@@ -1237,6 +1319,7 @@ case "$cmd" in
     acquire_project_lock "$@"
     require_jq_write
     refresh
+    sync_managed_convention_docs
     print_session_reload_notice
     ;;
   doctor)

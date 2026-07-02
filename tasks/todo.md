@@ -1,6 +1,60 @@
 # Current Task State
 
-## Current Implementation - YAML-Only Routing Handoff Audit
+## Current Implementation - Centralized Skill Convention Docs
+
+Project: `agentic-skills`.
+
+Status: VERIFIED (2026-07-02).
+
+### Goal
+
+Install the convention and contract documents referenced by skills into a managed destination, `.agents/skillpacks/docs/**`, so installed skills can reliably load those docs without writing into user-owned project `docs/` or `assets/` paths.
+
+### Plan
+
+- [x] Add a shared convention-doc registry for tracked `docs/*convention*.md`, `docs/*contract*.md`, and `docs/social/*convention.md`.
+- [x] Include registry docs in the npm package build assets.
+- [x] Copy managed convention docs during Node CLI install, init, and refresh flows.
+- [x] Copy and doctor-check managed convention docs in the source checkout `scripts/pack.sh` flow.
+- [x] Add focused tests for package assets, install, refresh restore, and doctor stale/missing detection.
+- [x] Run targeted verification and record results.
+
+### Acceptance Criteria
+
+- `npx skillpacks install <single-skill>` creates `.agents/skillpacks/docs/**`.
+- `npx skillpacks install <pack>` creates the same managed docs.
+- `npx skillpacks refresh` restores a deleted managed convention doc even when no skill files changed.
+- `doctor` reports missing or stale managed convention docs and recommends the existing refresh command.
+- Source checkout `scripts/pack.sh install` and `scripts/pack.sh refresh` create or restore `.agents/skillpacks/docs/**`.
+- Package build output includes every registry convention/contract doc.
+
+### Verification Plan
+
+- `npm --workspace packages/skillpacks run test:node`
+- `npm --workspace packages/skillpacks run build:check`
+- `node scripts/skill-convention-bundle-audit.mjs`
+- `scripts/skill-install-routing-audit.sh`
+- `scripts/skill-pack-routing-audit.sh`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `npm --workspace packages/skillpacks run test:node` passed: 178 tests.
+- `npm --workspace packages/skillpacks run build:check` passed after regenerating the stale package manifest.
+- `node scripts/skill-convention-bundle-audit.mjs` passed: 413 active skills and 383 tracked bundles.
+- `scripts/skill-pack-routing-audit.sh` passed.
+- `scripts/skill-install-routing-audit.sh --active` passed: 413 active skills, P1 coverage 12/12, findings 0.
+- `git diff --check` passed.
+
+Notes:
+
+- The planned bare `scripts/skill-install-routing-audit.sh` command prints usage in this repo; the active-source audit requires `--active`.
+- `packages/skillpacks/dist/skillpacks-manifest.json` was stale relative to already-current product-design source versions and was regenerated so `build:check` could pass.
+
+## Historical Implementation - YAML-Only Routing Handoff Audit
 
 Project: `agentic-skills`.
 

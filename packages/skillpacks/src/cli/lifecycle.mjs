@@ -33,6 +33,8 @@ import {
 } from './project-config.mjs';
 
 const SKILL_LINK_MARKER = '.agentic-skills-managed';
+const MANAGED_CONVENTION_DOC_ROOT = '.agents/skillpacks/docs';
+const MANAGED_CONVENTION_DOC_METADATA = '.skillpacks-managed.json';
 const HIBERNATED_ARCHIVE_RELATIVE_PATH = 'archive/hibernated-packs/2026-06-poketowork-rebuild';
 const HIBERNATED_REACTIVATION_TEXT =
   'Reactivation requires a stable service/API, a known auth contract, and updated smoke tests.';
@@ -221,6 +223,123 @@ function targetPath(projectRoot, tool, skillName) {
 
 function sha256(buffer) {
   return createHash('sha256').update(buffer).digest('hex');
+}
+
+function toPosixPath(value) {
+  return value.split('/').join('/').replaceAll('\\', '/');
+}
+
+function conventionDocName(relativePath) {
+  const name = basename(relativePath);
+  if (relativePath.startsWith('social/')) {
+    return /convention\.md$/.test(name);
+  }
+  if (relativePath.includes('/')) {
+    return false;
+  }
+  return /convention.*\.md$/.test(name) || /contract.*\.md$/.test(name);
+}
+
+function conventionDocSourceRoot() {
+  const checkoutDocs = join(checkoutRoot, 'docs');
+  if (existsSync(checkoutDocs)) {
+    return { root: checkoutDocs, mode: 'checkout' };
+  }
+
+  const packagedDocs = join(packageRoot, 'assets', 'skillpacks-docs');
+  if (existsSync(packagedDocs)) {
+    return { root: packagedDocs, mode: 'package' };
+  }
+
+  return { root: packagedDocs, mode: 'package' };
+}
+
+function managedConventionDocEntries() {
+  const { root, mode } = conventionDocSourceRoot();
+  if (!existsSync(root)) {
+    return [];
+  }
+
+  const entries = [];
+  function visit(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        visit(fullPath);
+      } else if (entry.isFile()) {
+        const relPath = toPosixPath(relative(root, fullPath));
+        if (mode === 'package' || conventionDocName(relPath)) {
+          entries.push({
+            source: fullPath,
+            installPath: relPath,
+            sourceSha: sha256(readFileSync(fullPath))
+          });
+        }
+      }
+    }
+  }
+
+  visit(root);
+  return entries.sort((a, b) => comparePathStrings(a.installPath, b.installPath));
+}
+
+function managedConventionDocsDir(projectRoot) {
+  return join(projectRoot, MANAGED_CONVENTION_DOC_ROOT);
+}
+
+function conventionDocMetadata(entries, manifest) {
+  return `${JSON.stringify({
+    managed_by: 'agentic-skills',
+    source_package: manifestPackageLabel(manifest),
+    docs: entries.map((entry) => ({
+      path: entry.installPath,
+      source_sha: entry.sourceSha
+    }))
+  }, null, 2)}\n`;
+}
+
+function conventionDocStatuses(projectRoot) {
+  return managedConventionDocEntries().map((entry) => {
+    const target = join(managedConventionDocsDir(projectRoot), entry.installPath);
+    if (!existsSync(target)) {
+      return { ...entry, status: 'missing', target };
+    }
+    const currentSha = sha256(readFileSync(target));
+    return {
+      ...entry,
+      status: currentSha === entry.sourceSha ? 'ok' : 'stale',
+      target
+    };
+  });
+}
+
+function syncManagedConventionDocs(projectRoot, manifest) {
+  const entries = managedConventionDocEntries();
+  if (entries.length === 0) {
+    return false;
+  }
+
+  const root = managedConventionDocsDir(projectRoot);
+  const metadataPath = join(root, MANAGED_CONVENTION_DOC_METADATA);
+  const metadata = conventionDocMetadata(entries, manifest);
+  const statuses = conventionDocStatuses(projectRoot);
+  const metadataCurrent = existsSync(metadataPath) ? readFileSync(metadataPath, 'utf8') : '';
+  if (statuses.every((entry) => entry.status === 'ok') && metadataCurrent === metadata) {
+    return false;
+  }
+
+  rmSync(root, { recursive: true, force: true });
+  mkdirSync(root, { recursive: true });
+  for (const entry of entries) {
+    const target = join(root, entry.installPath);
+    mkdirSync(dirname(target), { recursive: true });
+    cpSync(entry.source, target, {
+      preserveTimestamps: true,
+      dereference: false
+    });
+  }
+  writeFileSync(metadataPath, metadata);
+  return true;
 }
 
 function listSkillContentFiles(sourceDir) {
@@ -1420,6 +1539,7 @@ function printInstallNoChanges({ packs, skills }) {
 export async function initProject({ manifest, projectRoot = process.cwd() }) {
   return withProjectLock(projectRoot, 'init', async () => {
     installBaseSkills(projectRoot, manifest);
+    syncManagedConventionDocs(projectRoot, manifest);
     writeBaseProjectConfig(projectRoot);
     console.log('Updated .agents/project.json (base skills enabled)');
     console.log(`Initialized project base skills to ${manifestPackageLabel(manifest)}.`);
@@ -1438,8 +1558,12 @@ function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'unin
 
     reconcileProjectConfig(projectRoot, manifest);
     const synced = syncExpectedSkillRoots(projectRoot, manifest);
+    const docsChanged = syncManagedConventionDocs(projectRoot, manifest);
     const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
     console.log(`Refreshed project base skills to ${manifestPackageLabel(manifest)}.`);
+    if (docsChanged) {
+      console.log('Refreshed managed convention docs.');
+    }
     if (synced > 0 || removed > 0) {
       printSessionReloadNotice();
     }
@@ -1596,6 +1720,7 @@ export async function installResolved({ manifest, projectRoot = process.cwd(), p
         changed = true;
       }
     }
+    syncManagedConventionDocs(projectRoot, manifest);
     if (changed) {
       printSessionReloadNotice();
     } else {
@@ -1886,11 +2011,12 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
       console.log('Doctor fix: generated skill-root cleanup');
       reconcileProjectConfig(projectRoot, manifest);
       const synced = syncExpectedSkillRoots(projectRoot, manifest);
+      const docsChanged = syncManagedConventionDocs(projectRoot, manifest);
       const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
-      if (synced === 0 && removed === 0) {
+      if (synced === 0 && removed === 0 && !docsChanged) {
         console.log('No generated skill-root changes needed.');
       } else {
-        console.log(`Generated skill-root cleanup changed ${synced + removed} item(s).`);
+        console.log(`Generated skill-root cleanup changed ${synced + removed + (docsChanged ? 1 : 0)} item(s).`);
       }
 
       if (options.agentDocs) {
@@ -1949,6 +2075,29 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
 
   if (!found) {
     console.log('  (no managed skill installs found)');
+  }
+
+  const shouldCheckConventionDocs = found
+    || Boolean(readProjectConfig(projectRoot))
+    || existsSync(managedConventionDocsDir(projectRoot));
+  if (shouldCheckConventionDocs) {
+    console.log('Convention doc drift (.agents/skillpacks/docs):');
+    const docStatuses = conventionDocStatuses(projectRoot);
+    if (docStatuses.length === 0) {
+      console.log('  (no packaged convention docs found)');
+    }
+    for (const doc of docStatuses) {
+      const rel = `${MANAGED_CONVENTION_DOC_ROOT}/${doc.installPath}`;
+      if (doc.status === 'ok') {
+        console.log(`  ok       ${rel}`);
+      } else if (doc.status === 'missing') {
+        console.log(`  missing  ${rel}`);
+        anyStale = true;
+      } else if (doc.status === 'stale') {
+        console.log(`  STALE    ${rel}`);
+        anyStale = true;
+      }
+    }
   }
 
   if (anyStale) {
@@ -2057,8 +2206,12 @@ export async function refreshProject({ manifest, projectRoot = process.cwd() }) 
     }
 
     const synced = syncExpectedSkillRoots(projectRoot, manifest);
+    const docsChanged = syncManagedConventionDocs(projectRoot, manifest);
     const removed = pruneOrphanedSkillRoots({ manifest, projectRoot });
     console.log(`Refreshed project skills to ${manifestPackageLabel(manifest)}.`);
+    if (docsChanged) {
+      console.log('Refreshed managed convention docs.');
+    }
     if (synced > 0 || removed > 0) {
       printSessionReloadNotice();
     }

@@ -11,6 +11,10 @@ import {
   listSkills,
   packManifestPaths
 } from "../../../scripts/catalog/index.mjs";
+import {
+  MANAGED_CONVENTION_DOC_PACKAGE_ROOT,
+  managedConventionDocEntries
+} from "../../../scripts/skill-convention-registry.mjs";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(packageRoot, "../..");
@@ -52,6 +56,12 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" }
 ];
 
+const managedConventionDocEntriesForBuild = managedConventionDocEntries(repoRoot).map((entry) => ({
+  fromRoot: repoRoot,
+  from: entry.canonicalDoc,
+  to: entry.packageAsset
+}));
+
 const requiredBuildFiles = [
   "package.json",
   "bin/skillpacks.mjs",
@@ -79,6 +89,11 @@ const requiredBuildFiles = [
   "assets/social-post-convention.md",
   "assets/social-video-content-convention.md",
   "assets/social-ledger-convention.md",
+  `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/alignment-page-convention.md`,
+  `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/alignment-yaml-routing-contract.md`,
+  `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/quality-gate-contract.md`,
+  `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/skillpacks-install-routing-contract.md`,
+  `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/social/linkedin-post-convention.md`,
   "assets/social/bluesky-convention.md",
   "assets/social/founder-devtool-video-prompts-convention.md",
   "assets/social/hacker-news-convention.md",
@@ -229,6 +244,9 @@ function buildPackage() {
   }
   copyTrackedPrefixes(files, ["packs"]);
   for (const entry of repoOwnedEntries) {
+    copyEntry(entry);
+  }
+  for (const entry of managedConventionDocEntriesForBuild) {
     copyEntry(entry);
   }
 
