@@ -2,7 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - BIP Page Location And Fresh-Audience Clarity
+## Current Implementation - SKILL.md Language Deduplication Review
+
+**Status: COMPLETE (2026-07-02) - removed generated skill/reference language duplication while preserving skill behavior.**
+
+### Goal
+
+Review active `SKILL.md` files for duplicated language within the same document and repeated language between a `SKILL.md` and the Markdown documents it directly references. Remove or consolidate redundant prose without changing skill behavior.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for skill/reference/task docs.
+- Reason: this is a broad documentation-quality pass across active skill contracts and directly referenced companion docs.
+- Safety boundary: exclude archived `SKILL.md` snapshots unless directly referenced by an active skill, preserve unrelated dirty package files, and avoid GitHub Actions.
+
+### Plan
+
+- [x] Inspect repo guidance, lessons, current task state, and active `SKILL.md` inventory.
+- [x] Build or run an audit for repeated normalized paragraphs within active skills and against direct Markdown references.
+- [x] Review high-signal duplicate findings and classify each as intentional mirror, generated convention copy, or redundant local prose.
+- [x] Patch only clear same-document or skill/reference duplication with minimal wording changes.
+- [x] Run targeted duplicate audit, archive/version audit if skills change, diff checks, and status checks.
+- [x] Commit and push intended changes on the primary branch while preserving unrelated dirty work.
+
+### Acceptance Criteria
+
+- [x] No clear duplicated paragraphs remain within an edited active `SKILL.md`.
+- [x] No edited active `SKILL.md` repeats substantial prose from its direct Markdown references when a pointer or shorter instruction is sufficient.
+- [x] Behaviorally important instructions remain present in either the skill or the referenced document.
+- [x] Verification output is recorded in the Review section.
+
+### Test Plan
+
+- Duplicate audit script/check used for this task.
+- `bash scripts/skill-archive-audit.sh --strict` if active `SKILL.md` files change.
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- Normalized duplicate audit over 413 active source `SKILL.md` files found `ref_exact_count: 0` and `ref_overlap_count: 0` after edits. The remaining intra-file matches are the intentional generated target policy blocks inside `base/claude/provision-agentic-config/SKILL.md`.
+- `node scripts/upgrade-alignment-page.mjs --check` passed: 313 output paths exact, 311 generated bundles exact.
+- `npx vitest run tests/layer1/alignment-gates.test.ts tests/layer1/positioning-alignment-contract.test.ts` passed: 2 files, 42 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `git diff --check` passed.
+- Pre-existing dirty package files were preserved out of scope: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+
+## Historical Implementation - BIP Page Location And Fresh-Audience Clarity
 
 **Status: COMPLETE (2026-07-02) - standardized BIP output location and fresh-audience requirements.**
 

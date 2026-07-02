@@ -19,7 +19,7 @@ The point is sequencing. Not every flow deserves equal modelling and variation b
 
 Follow `DESIGN-TREE-LOOP.md` for design-tree routing, state storage, branch decisions, approval boundaries, and task classification. Branch ordering state belongs in `design/**/flow-tree-*.yaml`, not `tasks/todo.md`.
 
-`key-moments` is **not a route position** — like `state-model`, it is invoked from `user-flow-map`'s handoff and does not occupy one of the six fixed route steps.
+`key-moments` runs only from the `user-flow-map` handoff; see `DESIGN-TREE-LOOP.md` for route-position rules.
 
 ## Gate
 
@@ -73,7 +73,7 @@ After the ranking is approved, route to the promoted flows in proof order:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/key-moments-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 The page must show the proof-priority ranking, the value/risk/frequency factors per flow, the resulting branch order, the per-flow variation-breadth gate, and the promote/prune decisions, as review gates before the ordering is written to the flow-tree manifest.
 

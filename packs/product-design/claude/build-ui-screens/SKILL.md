@@ -81,7 +81,7 @@ Do not route to production planning, roadmap work, or durable infrastructure unt
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/build-ui-screens-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 The page must show the per-batch screens, first-value journey, primary task path, build ledger, fake-data boundary, deferred infrastructure, review evidence, and the exact downstream handoff gate.
 

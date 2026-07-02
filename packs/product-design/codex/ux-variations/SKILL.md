@@ -326,7 +326,7 @@ On approval (compiled YAML with no unresolved negative feedback):
 
 ### Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/ux-variations-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 ## Next Work
 

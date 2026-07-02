@@ -255,7 +255,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/logic-wiring-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 Prototype files may be created before the alignment page because the review needs runnable artifacts. After building or updating prototype files, build and attempt to open `alignment/logic-wiring-{topic}.html` before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes.
 

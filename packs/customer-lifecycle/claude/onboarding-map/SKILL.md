@@ -74,7 +74,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/onboarding-map-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 ## Constraints
 

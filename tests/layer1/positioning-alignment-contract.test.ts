@@ -41,7 +41,7 @@ describe("positioning alignment contracts", () => {
 
         expect(existsSync(bundlePath), `${skillPath} sibling bundle`).toBe(true);
         expect(skill, `${skillPath} local stub`).toContain(
-          "following `ALIGNMENT-PAGE.md` in this skill's directory",
+          "Follow `ALIGNMENT-PAGE.md` in this skill's directory",
         );
         expect(skill, `${skillPath} no parent-relative alignment pointer`).not.toContain(
           "../ALIGNMENT-PAGE.md",

@@ -332,7 +332,7 @@ One findings page per selected framework; the canonical intermediate is written 
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/journey-map-{topic}.html`.
+Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirements and output path.
 
 **Journey research translation.** Render the lifecycle overview as approval-ready research, not a chat-only summary. The alignment page must include the proposed `research/journey-map.md` content, proposed file changes, evidence coverage by journey stage, assumptions/confidence register, critical-moment evidence matrix, and approval gates before canonical research files are created or updated.
 

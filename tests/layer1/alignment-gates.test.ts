@@ -187,10 +187,12 @@ describe("alignment page gate contract", () => {
       const content = read(path);
       expect(content, `${path} alignment heading`).toMatch(/^#{2,3} Alignment Page$/m);
       expect(hasBundle(path), `${path} has generated bundle`).toBe(true);
-      expect(content, `${path} inline default`).toContain("By default, this skill reports results inline");
-      expect(content, `${path} durable artifacts default`).toContain("writes only its normal durable artifacts");
-      expect(content, `${path} no automatic page`).toContain("Do not build an alignment page automatically");
-      expect(content, `${path} conditional request`).toContain("only when the user explicitly requests an alignment page");
+      expect(content, `${path} optional pointer`).toContain(
+        "Follow `ALIGNMENT-PAGE.md` in this skill's directory for optional alignment-page behavior and output path",
+      );
+      expect(content, `${path} inline default`).toContain("By default, report results inline");
+      expect(content, `${path} durable artifacts default`).toContain("write only this skill's normal durable artifacts");
+      expect(content, `${path} conditional request`).toContain("only when explicitly requested");
       expect(content, `${path} conditional clarification`).toContain("concrete clarification/review need");
       expect(content, `${path} references bundle`).toContain("ALIGNMENT-PAGE.md");
       expect(content, `${path} no automatic durable-output stub`).not.toContain(
@@ -575,51 +577,33 @@ describe("alignment page gate contract", () => {
     for (const path of heavyGeneratedAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} staged research section`).toContain("**Staged research workflow.**");
-      expect(content, `${path} scope-first workflow`).toContain("scope-first three-stage approval workflow");
-      expect(content, `${path} stage 1 minimal discovery`).toContain("Stage 1 is minimal scope discovery only");
-      expect(content, `${path} review page before synthesis`).toContain(
-        "Build the `review` alignment page before synthesized research",
+      expect(content, `${path} producing skill source`).toContain(
+        'When the producing `SKILL.md` defines a `## Staged Research Workflow`, treat that section as the operational source of truth',
       );
-      expect(content, `${path} stage 1 previews stage 2`).toContain(
-        "`Stage 2 Preview / Expected Review Format` section that shows the future Stage 2 review shape before research starts",
+      expect(content, `${path} delegated stage details`).toContain(
+        "Stage 1, Stage 2, Stage 3, working-packet paths, approval boundaries, archive timing, and canonical writes",
       );
-      expect(content, `${path} scope yaml approval`).toContain(
-        "Stop for final compiled response YAML approval of the research scope",
+      expect(content, `${path} stage rendering`).toContain(
+        "The alignment page must render the current stage, proposed or approved scope",
       );
-      expect(content, `${path} no stage 1 synthesis`).toContain(
-        "Do not synthesize findings, rank candidates, recommend a path, or create working packets",
+      expect(content, `${path} output paths`).toContain(
+        "working-packet and canonical output paths",
+      );
+      expect(content, `${path} review gates`).toContain(
+        "review gates, user format preferences, final artifact approval, and the approval record",
+      );
+      expect(content, `${path} no duplicated stage 1 operational prose`).not.toContain(
+        "Stage 1 is minimal scope discovery only",
+      );
+      expect(content, `${path} no duplicated working packet paths`).not.toContain(
+        "Flat mode uses `research/_working/preliminary-",
+      );
+      expect(content, `${path} no primary packet dump`).not.toContain(
+        "Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI",
       );
       expect(content, `${path} old stage 1 research wording removed`).not.toContain(
         "Stage 1 performs research and clarification",
       );
-      expect(content, `${path} flat working packet`).toMatch(
-        /`research\/_working\/preliminary-[^`]+-research\.md`/,
-      );
-      expect(content, `${path} product-path working packet`).toMatch(
-        /`research\/\{slug\}\/_working\/preliminary-[^`]+-research\.md`/,
-      );
-      expect(content, `${path} stage 2 waits for scope approval`).toContain(
-        "Stage 2 starts only after final compiled response YAML approves the research scope",
-      );
-      expect(content, `${path} stage 2 research`).toContain("Perform the synthesized research");
-      expect(content, `${path} structured packet rendering`).toContain(
-        "renders the complete working-packet substance as structured HTML review UI",
-      );
-      expect(content, `${path} no primary packet dump`).toContain(
-        "Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI",
-      );
-      expect(content, `${path} old packet wording removed`).not.toContain("renders the full preliminary packet");
-      expect(content, `${path} feedback remains stage 2`).toContain(
-        "Partial compiled responses revise the working packet and review page, then remain in Stage 2",
-      );
-      expect(content, `${path} final yaml gating`).toContain(
-        "Stage 3 consumes final compiled response YAML for artifact approval only when it has `approval_status: ready-for-agent-review`",
-      );
-      expect(content, `${path} archive working packet`).toContain(
-        "archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`",
-      );
-      expect(content, `${path} remove working packet`).toContain("remove the active working packet");
-      expect(content, `${path} confirmed page`).toContain("convert the page to `confirmed`");
     }
   });
 

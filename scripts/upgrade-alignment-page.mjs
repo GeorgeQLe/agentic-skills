@@ -172,16 +172,17 @@ function bundledContentFor(skillName, skillPath) {
 const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md";
 const STUB_PREFIX = "When this skill produces durable deliverables";
 const OPTIONAL_STUB_PREFIX = "By default, this skill reports results inline";
+const COMPACT_STUB_PREFIX = "Follow `ALIGNMENT-PAGE.md` in this skill's directory";
 
 function stubParagraph(skillName) {
   if (isOptionalAlignmentSkill(skillName)) {
-    return `By default, this skill reports results inline and writes only its normal durable artifacts (for example \`tasks/*.md\`, reports, queues, benchmark notes, status docs, or other skill-specific files). Do not build an alignment page automatically. Create \`alignment/${skillName}-{topic}.html\` only when the user explicitly requests an alignment page or when you explicitly identify a concrete clarification/review need that cannot be handled cleanly inline; when you create one, follow \`ALIGNMENT-PAGE.md\` in this skill's directory.`;
+    return `Follow \`ALIGNMENT-PAGE.md\` in this skill's directory for optional alignment-page behavior and output path. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.`;
   }
-  return `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
+  return `Follow \`ALIGNMENT-PAGE.md\` in this skill's directory for alignment-page requirements and output path.`;
 }
 
 function isPointerOrStub(paragraph) {
-  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(OPTIONAL_STUB_PREFIX);
+  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX) || paragraph.startsWith(OPTIONAL_STUB_PREFIX) || paragraph.startsWith(COMPACT_STUB_PREFIX);
 }
 
 // --- Visual Tier ---
