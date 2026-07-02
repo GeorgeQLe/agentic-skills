@@ -187,6 +187,12 @@ Start a fresh context and let the parent run the next pending framework. Progres
 
 This is the defined mechanism for advancing the loop, and `docs/alignment-yaml-routing-contract.md` § Approved Artifact State recognizes a skill's own re-invocation as a valid post-approval route. The cross-skill downstream route is emitted only after final synthesis.
 
+### Post-canonical amendment routing
+
+After final synthesis has been approved and the canonical research artifact has been written, bounded low/medium corrections may route to `research-amend` instead of restarting the whole Pattern A loop. Use this only for narrow amendments to existing canonical research, such as one missed competitor, one corrected source fact, or a small evidence update whose blast radius is known. High-impact or systemic drift still routes to the affected framework, synthesis, or full Pattern A rerun; examples include changed ICP/category strategy, a competitor set that changes positioning, broad source staleness, or conflicts spanning multiple frameworks.
+
+Do not recommend `research-amend` while any Pattern A alignment page is still in `review`. Review-pending pages continue to route only through `## Invoke With YAML`; downstream or amendment commands become valid only after approved artifacts are written, or from separate research-health/status scans.
+
 ### Self-routing continuation payload
 
 Pattern A review pages should make the bottom compiled YAML **self-routing data** by beginning with `# Invoke with: <parent-command>` followed by a top-level `command` field and an `agent_routing` mapping. The invocation comment gives the user and fresh LLM agent an immediate visual cue, the root `command` gives parsers the exact parent invocation to run with the pasted YAML, and `agent_routing` gives enough context to route back to the parent orchestrator when the user pastes the YAML. The parent orchestrator still owns interpretation, state resolution, artifact writing, archiving, and inline framework loading.

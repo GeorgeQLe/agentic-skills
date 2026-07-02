@@ -2,7 +2,7 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.10
+version: v0.11
 required_conventions: [alignment-page]
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 context_intake: artifact_only
@@ -261,6 +261,8 @@ Other options:
 - check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `/spec-drift` — check whether code/spec drift remains after research reconciliation
 - check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `/roadmap` — resequence implementation if reconciliation changed priorities
 ```
+
+**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. If isolated Error/Warning findings map to a bounded low/medium amendment to approved canonical research, recommend `/research-amend` for the affected artifact instead of a full rerun; examples include one missed competitor, one corrected source fact, or a small evidence update with a known affected section. Preserve rerun recommendations for conflict clusters, upstream category/ICP/strategy changes, broad source staleness, changed competitor sets that affect positioning, multi-framework conflicts, or anything requiring re-synthesis.
 
 ## Output
 

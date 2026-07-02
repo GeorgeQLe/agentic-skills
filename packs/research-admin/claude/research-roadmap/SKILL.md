@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.19
+version: v0.20
 required_conventions: [alignment-page]
 invocation: orchestrator
 ---
@@ -18,6 +18,8 @@ Use this skill to make the project documentation contract complete before build 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
 Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `/customer-discovery`, `/journey-map`, or `/devtool-user-map`. Do not prepend `/exec`, `/exec /customer-discovery`, `/exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
+
+When an existing canonical research artifact needs only a bounded low/medium post-canonical amendment, queue `/research-amend` instead of a full rerun. This applies to narrow corrections such as one missed competitor, one corrected source fact, or a small evidence update with a known affected section. Preserve full rerun routing for high-impact or systemic changes: changed ICP/category strategy, competitor-set changes that alter positioning, broad source staleness, conflicts spanning multiple frameworks, or anything that requires re-synthesis. Do not route review-pending Pattern A alignment pages to `/research-amend`; those pages continue through their approval YAML until the approved artifact has been written.
 
 ## Process
 
@@ -203,6 +205,8 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 | `research/runway-model.md` | `tasks/roadmap.md` |
 
 Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
+
+Before queueing a full research rerun for stale existing canonical research, classify the change impact. If the scan finds a bounded low/medium correction to an already-approved artifact, queue `/research-amend` with the affected path and reason. If the change is high/systemic or its blast radius is unclear, keep the targeted skill rerun or synthesis/full Pattern A rerun.
 
 Do not queue a missing `/idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no idea brief or downstream research/spec artifact exists.
 

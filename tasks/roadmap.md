@@ -4,7 +4,7 @@
 
 ## Current Implementation - Research Amend Workflow Integration
 
-**Status: IN PROGRESS (2026-07-02) - inspection completed; routing guidance integration remains.**
+**Status: VERIFIED (2026-07-02) - routing guidance integrated, tested, regenerated, and ready to ship.**
 
 ### Goal
 
@@ -20,10 +20,10 @@ Document when research workflow handoffs should recommend the base `research-ame
 ### Plan
 
 - [x] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
-- [ ] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
-- [ ] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
-- [ ] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
-- [ ] Run targeted validation, record review/history, commit, and push.
+- [x] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
+- [x] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
+- [x] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
+- [x] Run targeted validation, record review/history, commit, and push.
 
 ### Acceptance Criteria
 
@@ -31,6 +31,16 @@ Document when research workflow handoffs should recommend the base `research-ame
 - High/systemic changes still route to affected framework/synthesis reruns or full Pattern A reruns.
 - Review-pending alignment pages continue to use approval YAML handling only; downstream `research-amend` recommendations appear only after approved artifacts are written or in research-health/status contexts.
 - Codex and Claude command text stays platform-correct.
+
+### Review
+
+Verified:
+
+- Pattern A conventions now state that `research-amend` is post-canonical only and forbidden while a `review` page is pending.
+- `research-roadmap` queues `$research-amend`/`/research-amend` for bounded low/medium corrections and preserves full rerun routing for changed ICP/category strategy, broad source staleness, multi-framework conflicts, and re-synthesis needs.
+- `reconcile-research` recommends `$research-amend`/`/research-amend` only for isolated low/medium Error/Warning findings; conflict clusters and systemic drift keep rerun routing.
+- Focused tests cover platform-correct Codex/Claude command text and high/systemic rerun preservation.
+- Generated skillpacks manifest and public catalog exports are refreshed.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 

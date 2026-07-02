@@ -2,15 +2,13 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.11
+version: v0.10
 required_conventions: [alignment-page]
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 context_intake: artifact_only
 ---
 
 # Reconcile Research — Cross-Document Consistency Audit
-
-Invoke as `$reconcile-research`.
 
 ## Report-First Approval Gate
 
@@ -199,7 +197,7 @@ Collect all findings from the cross-reference subagents. Classify each by severi
 
 ### 6. Walk Through Findings Interactively
 
-Present findings **one at a time** using `request_user_input` (in Plan mode) or a plain-text question (otherwise), ordered by severity (Errors first, then Warnings, then Info). For each finding, present:
+Present findings **one at a time** using the `AskUserQuestion` tool, ordered by severity (Errors first, then Warnings, then Info). For each finding, use `AskUserQuestion` with the following format:
 
 ```
 ### [Scope] — [Check Name]
@@ -253,17 +251,31 @@ After walking through all findings:
 
 After presenting findings (audit mode) or applying resolutions (fix mode), display a `## Next Steps` section with a **Recommended** item and **Other options**. Use this format:
 
+```markdown
 ## Next Steps
 
 **Recommended:** [skill with most conflicts] — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
 
 Other options:
-- `$skill` — [N] conflicts in [scope] (re-run to fix)
-- check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `npx skillpacks install research-admin` from the project shell, first; if `research-admin` is enabled, recommend `$research-roadmap` — rebuild the ordered documentation queue after reconciliation
-- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$spec-drift` — check whether code/spec drift remains after research reconciliation
-- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `$roadmap` — resequence implementation if reconciliation changed priorities
+- check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `npx skillpacks install research-admin` from the project shell, first; if `research-admin` is enabled, recommend `/research-roadmap` — rebuild the ordered documentation queue after reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `/spec-drift` — check whether code/spec drift remains after research reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `npx skillpacks install agent-work-admin` from the project shell, first; if `agent-work-admin` is enabled, recommend `/roadmap` — resequence implementation if reconciliation changed priorities
+```
 
-**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. If isolated Error/Warning findings map to a bounded low/medium amendment to approved canonical research, recommend `$research-amend` for the affected artifact instead of a full rerun; examples include one missed competitor, one corrected source fact, or a small evidence update with a known affected section. Preserve rerun recommendations for conflict clusters, upstream category/ICP/strategy changes, broad source staleness, changed competitor sets that affect positioning, multi-framework conflicts, or anything requiring re-synthesis. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items, or fix mode resolved every actionable conflict, check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `npx skillpacks install research-admin` from the project shell, first; if `research-admin` is enabled, recommend `$research-roadmap` — check overall project status. If no conflicts, deferred items, or follow-up work remain, explicitly state "No follow-up skill recommended" instead of inventing work.
+## Output
+
+Findings are presented **interactively one at a time** via `AskUserQuestion`, not as a batch report. After all findings have been walked through, display a final summary:
+
+```
+## Research Reconciliation — [scope] — Summary
+
+- Documents scanned: 6
+- Checks run: 28
+- Findings: 2 Errors, 3 Warnings, 1 Info
+- Resolved: 4, Deferred: 2
+```
+
+**Fix mode**: Same interactive walkthrough, followed by applying approved changes and writing `research/reconciliation-report.md` as audit trail.
 
 ## Task Classification
 
@@ -278,11 +290,11 @@ When this skill produces follow-up work, file it by execution semantics:
 ## Constraints
 
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
-- **Never auto-resolve contradictions.** Errors always require user input on which side is correct. Use `request_user_input` (or plain-text question) for each finding individually.
+- **Never auto-resolve contradictions.** Errors always require user input on which side is correct. Use `AskUserQuestion` for each finding individually.
 - **Show evidence.** Every finding must include direct quotes from both documents.
 - **Respect dependency direction.** Upstream documents are presumed authoritative over downstream, except customer feedback which is ground truth.
 - **No false positives.** If uncertain whether something is a real contradiction, classify it as Info, not Error.
-- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `$research-roadmap`'s job.
+- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `/research-roadmap`'s job.
 - **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 

@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.20
+version: v0.19
 required_conventions: [alignment-page]
 invocation: orchestrator
 ---
@@ -13,15 +13,11 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Research Roadmap - Documentation Queue Manager
 
-Invoke as `$research-roadmap`.
-
 Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` with immediately actionable documentation work and uses `tasks/record-todo.md` or `tasks/recurring-todo.md` for non-blocking future documentation records.
 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
-Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `$customer-discovery`, `$journey-map`, or `$devtool-user-map`. Do not prepend `$exec`, `$exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
-
-When an existing canonical research artifact needs only a bounded low/medium post-canonical amendment, queue `$research-amend` instead of a full rerun. This applies to narrow corrections such as one missed competitor, one corrected source fact, or a small evidence update with a known affected section. Preserve full rerun routing for high-impact or systemic changes: changed ICP/category strategy, competitor-set changes that alter positioning, broad source staleness, conflicts spanning multiple frameworks, or anything that requires re-synthesis. Do not route review-pending Pattern A alignment pages to `$research-amend`; those pages continue through their approval YAML until the approved artifact has been written.
+Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `/customer-discovery`, `/journey-map`, or `/devtool-user-map`. Do not prepend `/exec`, `/exec /customer-discovery`, `/exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
 
 ## Process
 
@@ -82,7 +78,7 @@ Build the research queue from enabled project packs. Include every enabled resea
 
 Prefer dynamic discovery when skill files are available:
 
-1. Inspect enabled pack skill files under `.codex/skills/*/SKILL.md` or `packs/<pack>/codex/*/SKILL.md`.
+1. Inspect enabled pack skill files under `.claude/skills/*/SKILL.md` or `packs/<pack>/claude/*/SKILL.md`.
 2. Include skills with `type: research`.
 3. Also include skills whose `## Output` section writes `research/*.md`, `research/{slug}/*.md`, `research/experiments/*.md`, or dated research files.
 
@@ -92,69 +88,69 @@ Business-app research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$customer-discovery` | `research/icp.md` |
-| `$competitive-analysis` | `research/competitive-analysis.md` |
-| `$journey-map` | `research/journey-map.md` |
-| `$positioning` | `research/positioning.md` |
-| `$metrics` | `research/metrics.md` |
-| `$gtm` | `research/gtm.md` |
-| `$monetization` | `research/monetization.md` |
-| `$landing-copy` | `research/landing-copy.md` |
-| `$customer-feedback` | `research/customer-feedback.md` |
-| `$assumption-tracker` | `research/assumption-tracker.md` |
-| `$experiment` | `research/experiments/<experiment>.md` |
-| `$enterprise-icp` | `research/enterprise-icp.md` |
-| `$risk-register` | `research/risk-register.md` |
-| `$burn-rate` | `research/burn-rate.md` |
-| `$runway-model` | `research/runway-model.md` |
-| `$cohort-review` | `research/cohort-review-YYYY-MM-DD.md` |
-| `$retro` | `research/retro-YYYY-MM-DD.md` |
-| `$investor-update` | `research/investor-update-YYYY-MM.md` |
-| `$platform-strategy` | `research/platform-strategy.md` |
-| `$product-line review` | `research/.progress.yaml` |
-| `$mvp-gap` | `research/mvp-gap.md` |
+| `/customer-discovery` | `research/icp.md` |
+| `/competitive-analysis` | `research/competitive-analysis.md` |
+| `/journey-map` | `research/journey-map.md` |
+| `/positioning` | `research/positioning.md` |
+| `/metrics` | `research/metrics.md` |
+| `/gtm` | `research/gtm.md` |
+| `/monetization` | `research/monetization.md` |
+| `/landing-copy` | `research/landing-copy.md` |
+| `/customer-feedback` | `research/customer-feedback.md` |
+| `/assumption-tracker` | `research/assumption-tracker.md` |
+| `/experiment` | `research/experiments/<experiment>.md` |
+| `/enterprise-icp` | `research/enterprise-icp.md` |
+| `/risk-register` | `research/risk-register.md` |
+| `/burn-rate` | `research/burn-rate.md` |
+| `/runway-model` | `research/runway-model.md` |
+| `/cohort-review` | `research/cohort-review-YYYY-MM-DD.md` |
+| `/retro` | `research/retro-YYYY-MM-DD.md` |
+| `/investor-update` | `research/investor-update-YYYY-MM.md` |
+| `/platform-strategy` | `research/platform-strategy.md` |
+| `/product-line review` | `research/.progress.yaml` |
+| `/mvp-gap` | `research/mvp-gap.md` |
 
 Game research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$game-audience` | `research/game-audience.md` |
-| `$game-fantasy` | `research/game-fantasy.md` |
-| `$game-genre-map` | `research/game-genre-map.md` |
-| `$game-comparables` | `research/game-comparables.md` |
-| `$game-core-loop` | `research/game-core-loop.md` |
-| `$game-prototype-test` | `research/game-prototype-test.md` |
-| `$game-playtest-metrics` | `research/game-playtest-metrics.md` |
-| `$game-store-page-test` | `research/game-store-page-test.md` |
-| `$game-launch` | `research/game-launch.md` |
+| `/game-audience` | `research/game-audience.md` |
+| `/game-fantasy` | `research/game-fantasy.md` |
+| `/game-genre-map` | `research/game-genre-map.md` |
+| `/game-comparables` | `research/game-comparables.md` |
+| `/game-core-loop` | `research/game-core-loop.md` |
+| `/game-prototype-test` | `research/game-prototype-test.md` |
+| `/game-playtest-metrics` | `research/game-playtest-metrics.md` |
+| `/game-store-page-test` | `research/game-store-page-test.md` |
+| `/game-launch` | `research/game-launch.md` |
 
 Devtool research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$devtool-user-map` | `research/devtool-user-map.md` |
-| `$devtool-integration-map` | `research/devtool-integration-map.md` |
-| `$devtool-dx-journey` | `research/devtool-dx-journey.md` |
-| `$devtool-adoption` | `research/devtool-adoption.md` |
-| `$devtool-positioning` | `research/devtool-positioning.md` |
-| `$devtool-monetization` | `research/devtool-monetization.md` |
-| `$devtool-docs-audit` | `research/devtool-docs-audit.md` |
+| `/devtool-user-map` | `research/devtool-user-map.md` |
+| `/devtool-integration-map` | `research/devtool-integration-map.md` |
+| `/devtool-dx-journey` | `research/devtool-dx-journey.md` |
+| `/devtool-adoption` | `research/devtool-adoption.md` |
+| `/devtool-positioning` | `research/devtool-positioning.md` |
+| `/devtool-monetization` | `research/devtool-monetization.md` |
+| `/devtool-docs-audit` | `research/devtool-docs-audit.md` |
 
 Also include documentation-producing non-research skills when their outputs are missing or stale:
 
 | Skill | Output |
 | --- | --- |
-| `$idea-scope-brief` | `research/idea-brief.md` or `research/{slug}/idea-brief.md` |
-| `$user-flow-map` | `specs/user-flow-*.md` or `specs/{slug}/user-flow-*.md` |
-| `$spec-interview` | `specs/*.md` |
-| `$ux-variations` | `specs/ux-variations-*.md` |
-| `$ui-interview` | `specs/ui-*.md` |
-| `$scale-audit` | `specs/scale-audit.md` |
-| `$roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
-| `$game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
-| `$reconcile-research fix all` | `research/reconciliation-report.md` |
-| `$reconcile-dev-docs fix all` | reconciled `tasks/`, `specs/`, and phase archives |
-| `$youtube-audit` | `research/youtube-audit-YYYY-MM-DD.md` |
+| `/idea-scope-brief` | `research/idea-brief.md` or `research/{slug}/idea-brief.md` |
+| `/user-flow-map` | `specs/user-flow-*.md` or `specs/{slug}/user-flow-*.md` |
+| `/spec-interview` | `specs/*.md` |
+| `/ux-variations` | `specs/ux-variations-*.md` |
+| `/ui-interview` | `specs/ui-*.md` |
+| `/scale-audit` | `specs/scale-audit.md` |
+| `/roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
+| `/game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
+| `/reconcile-research fix all` | `research/reconciliation-report.md` |
+| `/reconcile-dev-docs fix all` | reconciled `tasks/`, `specs/`, and phase archives |
+| `/youtube-audit` | `research/youtube-audit-YYYY-MM-DD.md` |
 
 ### 4. Scan Documentation State
 
@@ -176,7 +172,7 @@ Record existence and last-modified timestamps for:
 - `tasks/record-todo.md`
 - `tasks/recurring-todo.md`
 
-When `research/` contains product-path subdirectories, treat it as product-path mode. Build a separate documentation queue per product path and include product-path arguments in commands, such as `$customer-discovery web`.
+When `research/` contains product-path subdirectories, treat it as product-path mode. Build a separate documentation queue per product path and include product-path arguments in commands, such as `/customer-discovery web`.
 
 ### 5. Classify Missing And Stale Items
 
@@ -206,11 +202,9 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 | `specs/ui-*.md` | `tasks/roadmap.md` |
 | `research/runway-model.md` | `tasks/roadmap.md` |
 
-Also flag potentially stale specs when source code has commits newer than the spec files. Add `$spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
+Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
 
-Before queueing a full research rerun for stale existing canonical research, classify the change impact. If the scan finds a bounded low/medium correction to an already-approved artifact, queue `$research-amend` with the affected path and reason. If the change is high/systemic or its blast radius is unclear, keep the targeted skill rerun or synthesis/full Pattern A rerun.
-
-Do not queue a missing `$idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no idea brief or downstream research/spec artifact exists.
+Do not queue a missing `/idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no idea brief or downstream research/spec artifact exists.
 
 ### 6. Order The Priority Queue
 
@@ -228,50 +222,50 @@ Order immediately actionable todo items so the user can complete documentation w
 
 Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `npx skillpacks install <pack>` before the skill:
 
-When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent activation, add `$product-line review` as a priority queue item to prompt portfolio review.
+When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent activation, add `/product-line review` as a priority queue item to prompt portfolio review.
 
 ```
-$idea-scope-brief
-  -> $customer-discovery
-  -> $competitive-analysis
-  -> $journey-map
-  -> $positioning
-    -> $user-flow-map
-      -> $ui-interview --requirements-only
-        -> $ux-variations --layout-mode
-          -> $prototype
-          -> $uat --variant-evaluation
-            -> $consolidate-prototypes
-              -> $research-roadmap --post-prototype
-                -> $spec-interview
-                  -> $roadmap
-    -> $metrics
-  -> $gtm
-  -> $monetization
-  -> $landing-copy
-3+ research docs -> $assumption-tracker -> $experiment -> $customer-feedback
-$enterprise-icp -> $scale-audit
-$metrics + launch data -> $cohort-review
-$monetization -> $burn-rate -> $runway-model
-quarterly/outcome data -> $retro
-stakeholder reporting -> $investor-update
-multi-product expansion -> $platform-strategy
-3+ deferred product paths -> $product-line review
+/idea-scope-brief
+  -> /customer-discovery
+  -> /competitive-analysis
+  -> /journey-map
+  -> /positioning
+    -> /user-flow-map
+      -> /ui-interview --requirements-only
+        -> /ux-variations --layout-mode
+          -> /prototype
+          -> /uat --variant-evaluation
+            -> /consolidate-prototypes
+              -> /research-roadmap --post-prototype
+                -> /spec-interview
+                  -> /roadmap
+    -> /metrics
+  -> /gtm
+  -> /monetization
+  -> /landing-copy
+3+ research docs -> /assumption-tracker -> /experiment -> /customer-feedback
+/enterprise-icp -> /scale-audit
+/metrics + launch data -> /cohort-review
+/monetization -> /burn-rate -> /runway-model
+quarterly/outcome data -> /retro
+stakeholder reporting -> /investor-update
+multi-product expansion -> /platform-strategy
+3+ deferred product paths -> /product-line review
 ```
 
-For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `$devtool-docs-audit` and `$game-roadmap` only when their documented output is missing from the documentation contract.
+For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `/devtool-docs-audit` and `/game-roadmap` only when their documented output is missing from the documentation contract.
 
 Default devtool order:
 
 ```
-$devtool-user-map
-  -> $devtool-integration-map
-    -> $devtool-dx-journey
-      -> $devtool-adoption
-        -> $devtool-positioning
-          -> $devtool-monetization
-            -> $devtool-docs-audit
-              -> $research-roadmap
+/devtool-user-map
+  -> /devtool-integration-map
+    -> /devtool-dx-journey
+      -> /devtool-adoption
+        -> /devtool-positioning
+          -> /devtool-monetization
+            -> /devtool-docs-audit
+              -> /research-roadmap
 ```
 
 ### 6b. Classify Advisory Documentation Work
@@ -306,15 +300,13 @@ Rules:
 Todo item format:
 
 ```md
-- [ ] `$skill [optional-app-or-argument]` - create/update `path/to/output.md` because [missing/stale reason with evidence].
+- [ ] `/skill [optional-app-or-argument]` - create/update `path/to/output.md` because [missing/stale reason with evidence].
 ```
-
-The command must be the direct named skill route, for example `$customer-discovery`, not `$exec $customer-discovery`, `$exec --phase`, or another execution-loop wrapper.
 
 If prerequisites are missing:
 
 ```md
-- [ ] `$metrics` - create/update `research/metrics.md` after `$journey-map`; currently blocked because `research/journey-map.md` is missing.
+- [ ] `/metrics` - create/update `research/metrics.md` after `/journey-map`; currently blocked because `research/journey-map.md` is missing.
 ```
 
 Do not write unavailable-data or cadence-gated items here. Write those to `tasks/record-todo.md` or `tasks/recurring-todo.md` instead.
@@ -347,12 +339,12 @@ Use this item format:
 ```md
 - [ ] [recurring task]
   - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
-  - Owner/agent: [$skill or responsible role]
+  - Owner/agent: [/skill or responsible role]
   - Scope: [project/app/area]
   - Trigger: [time, release, data threshold, user request]
   - Last run: [date or never]
   - Next due: [date or rule]
-  - Command/skill: [$skill args]
+  - Command/skill: [/skill args]
   - Evidence/output path: [research/report path]
   - Escalation conditions: [when this becomes executable or blocking]
 ```
@@ -378,35 +370,18 @@ After editing, summarize:
 - Record items: N
 - Recurring items: N
 
-Next: start at the first unchecked item in `tasks/todo.md`; review advisory task files separately. If there are no unchecked priority documentation items and no promotable advisory items, route to `$brainstorm` for candidate next-phase discovery unless the latest user request explicitly asks to pause, park, archive, or wait.
+Next: start at the first unchecked item in `tasks/todo.md`; review advisory task files separately.
 ```
 
 If fallback discovery was used, include a short note naming the inferred roots.
-
-## Next-Step Routing
-
-Before handing back, identify the next concrete documentation, planning, or discovery route from project state.
-
-Output exactly two lines beyond the normal report:
-
-- **Next work:** <specific documentation task, promotable advisory review, discovery task, or explicit parked state>
-- **Recommended next command:** <one command or route>
-
-Rules:
-
-- Recommend the first unchecked `## Priority Documentation Todo` item when one exists.
-- If a record or recurring item appears promotable to concrete execution work, recommend reviewing or promoting that item rather than discovery.
-- Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait.
-- If documentation is current and no advisory item is promotable, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
-- Use `$feature-interview` instead of `$brainstorm` when the project already has a concrete unspecced idea selected but still needs planning-destination triage. Use `$spec-interview` only when full-spec creation is already confirmed.
 
 ## Post-Prototype Process (`--post-prototype`)
 
 ### Gate
 
-A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-prototypes` first.
+A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `/consolidate-prototypes` first.
 
-When an AFPS graduation document exists at `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`, read it before scanning research. Treat it as the durable marker that research/prototyping is complete and production planning can begin after cleanup and `$spec-interview`.
+When an AFPS graduation document exists at `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md`, read it before scanning research. Treat it as the durable marker that research/prototyping is complete and production planning can begin after cleanup and `/spec-interview`.
 
 ### Scan
 
@@ -420,14 +395,14 @@ When an AFPS graduation document exists at `design/afps-graduation-{topic}.md` o
    - **Density and copy**: Does the prototype's information density and copy tone match ICP communication preferences?
    - **Interactions**: Do the prototype's interaction patterns match journey-map touchpoints and competitive differentiation?
    - **Differentiation**: Does the prototype demonstrate the competitive advantages identified in competitive analysis?
-5. Queue only research that is contradicted, made stale by prototype/graduation decisions, or required before `$spec-interview`. Do not reload broad research packs or recommend broad discovery skills merely because they are normally upstream.
-6. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag it only when the graduation document or consolidated prototype contains customer-facing product evidence that contradicts or materially sharpens the existing positioning. Use: "Positioning was hypothesized pre-product. Prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
+5. Queue only research that is contradicted, made stale by prototype/graduation decisions, or required before `/spec-interview`. Do not reload broad research packs or recommend broad discovery skills merely because they are normally upstream.
+6. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag it only when the graduation document or consolidated prototype contains customer-facing product evidence that contradicts or materially sharpens the existing positioning. Use: "Positioning was hypothesized pre-product. Prototype evidence may support re-running `/positioning product` for customer-grounded product positioning."
 
 ### Output
 
 Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running, using the same format as the standard process. Each item must explain what the prototype revealed that contradicts or supersedes the current research document.
 
-If the graduation document is present and no contradictions, stale assumptions, or blocking pre-spec research gaps are found, write the checked status item: `- [x] Post-prototype research cleanup is current; AFPS graduation reviewed and no blocking research refresh is required before $spec-interview.`
+If the graduation document is present and no contradictions, stale assumptions, or blocking pre-spec research gaps are found, write the checked status item: `- [x] Post-prototype research cleanup is current; AFPS graduation reviewed and no blocking research refresh is required before /spec-interview.`
 
 **Next step:** first unchecked queued item in `tasks/todo.md`, using the direct skill command written in that item.
 
@@ -435,7 +410,7 @@ If the graduation document is present and no contradictions, stale assumptions, 
 
 ### Gate
 
-A production spec must exist at `specs/{topic}.md`. If missing, halt and recommend `$spec-interview` first.
+A production spec must exist at `specs/{topic}.md`. If missing, halt and recommend `/spec-interview` first.
 
 ### Scan
 
@@ -447,7 +422,7 @@ A production spec must exist at `specs/{topic}.md`. If missing, halt and recomme
    - **Performance**: Does the research assume performance characteristics that the spec's architecture contradicts?
    - **Deployment**: Does the research assume a deployment model that the spec changed?
 4. Flag research documents that are invalidated by spec constraints.
-5. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag as: "Positioning was hypothesized pre-product. Spec constraints and prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
+5. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag as: "Positioning was hypothesized pre-product. Spec constraints and prototype evidence may support re-running `/positioning product` for customer-grounded product positioning."
 
 ### Output
 

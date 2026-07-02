@@ -1,5 +1,9 @@
 # research-roadmap changelog (claude)
 
+## v0.20 - 2026-07-02
+
+- Added research-amend routing for bounded low/medium post-canonical research corrections while preserving high/systemic rerun routing.
+
 ## v0.19 - 2026-06-22
 
 - Made `--post-prototype` graduation-aware: read `design/afps-graduation-{topic}.md` or `design/{slug}/afps-graduation-{topic}.md` when present, then queue only contradicted, stale, or pre-spec-blocking research.

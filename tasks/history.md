@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-02 - Research Amend routing integration
+
+- Added concise post-canonical `research-amend` guidance to Pattern A loop/orchestrator conventions while preserving YAML-only routing for pending review pages.
+- Updated mirrored `research-roadmap` skills to v0.20 so research-health queues bounded low/medium amendments through `research-amend` and keeps high/systemic drift on framework/synthesis/full reruns.
+- Updated mirrored `reconcile-research` skills to v0.11 so isolated reconciliation findings can route to `research-amend`, while conflict clusters and upstream strategic changes still recommend reruns.
+- Added focused layer1 routing coverage and regenerated skillpacks manifest plus public skills-catalog export artifacts.
+- Verification passed: focused Vitest routing suite, skill version audit, strict archive audit, alignment routing audit, install routing audit, skillpacks build/check, catalog export validation, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-07-02-research-amend-routing.md`.
+
 ## 2026-07-02 - Research Amend workflow routing inspection
 
 - `$exec integrate research-amend into research workflow handoff/research-health routing guidance`: completed the inspection step for the active research-amend integration task.

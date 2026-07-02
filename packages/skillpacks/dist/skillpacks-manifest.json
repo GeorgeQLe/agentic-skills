@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "2dec9bdd65e5bd057daedb4174b5141e2269ad7ca59e07d8d831a7f3989ab795",
+  "source_fingerprint": "cfe9bb37496f226280cd0c36fdf265e4902249025b055ff86c5111ee842421bc",
   "packs": [
     {
       "name": "agent-bridge",
@@ -2757,7 +2757,7 @@
       "scope": "pack",
       "pack": "business-ops",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2765,10 +2765,11 @@
       ],
       "path": "packs/business-ops/claude/reconcile-research/SKILL.md",
       "installable": true,
-      "content_sha256": "644c594b1da2a6d9fd3e1680844b545f3307e656db3d505ff78038bde4ef7789",
+      "content_sha256": "220796539ff111b1121168e5935b239892f32b5a72c251ba56e212eb821c019c",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3117,7 +3118,7 @@
       "scope": "pack",
       "pack": "business-ops",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3125,10 +3126,11 @@
       ],
       "path": "packs/business-ops/codex/reconcile-research/SKILL.md",
       "installable": true,
-      "content_sha256": "2930ef9bfc40d03afa59ebcde97c2154b4104843a66526dce44a9baf2b80b707",
+      "content_sha256": "41f6e038c2f8e642a3ce45339a7b795fec5cc02be7acc246c1413d44a636b33a",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -10161,7 +10163,7 @@
       "scope": "pack",
       "pack": "research-admin",
       "platform": "claude",
-      "version": "v0.19",
+      "version": "v0.20",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10169,7 +10171,7 @@
       ],
       "path": "packs/research-admin/claude/research-roadmap/SKILL.md",
       "installable": true,
-      "content_sha256": "264ff92ca8cedfc836daec3b2092317d9601293d57c11bb780411393ea2c5f51",
+      "content_sha256": "133e636fbaaad0cb7ebc186ca09db9c6f15f8ab1dca8f763a61dba4fc33358d0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -10182,6 +10184,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -10200,7 +10203,7 @@
       "scope": "pack",
       "pack": "research-admin",
       "platform": "codex",
-      "version": "v0.19",
+      "version": "v0.20",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10208,7 +10211,7 @@
       ],
       "path": "packs/research-admin/codex/research-roadmap/SKILL.md",
       "installable": true,
-      "content_sha256": "edc7729613db9ca7d44af1c471151a39670f0dcc17506591d33a1c5c2ae9b66f",
+      "content_sha256": "85193b38e996542f0ae5c309325f76e088cb29cfc8c9993694d4b58b8bb1427f",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -10221,6 +10224,7 @@
         "v0.16",
         "v0.17",
         "v0.18",
+        "v0.19",
         "v0.2",
         "v0.3",
         "v0.4",

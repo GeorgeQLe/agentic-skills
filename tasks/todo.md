@@ -4,7 +4,7 @@
 
 Project: `agentic-skills`.
 
-Status: READY (2026-07-02).
+Status: VERIFIED (2026-07-02).
 
 ### Goal
 
@@ -19,10 +19,10 @@ Document when research workflow handoffs should recommend the new base `research
 ### Plan
 
 - [x] Inspect Pattern A final handoff and research-health routing surfaces for places that currently default to full reruns after small post-canonical corrections.
-- [ ] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
-- [ ] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
-- [ ] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
-- [ ] Run targeted validation, record review/history, commit, and push.
+- [x] Add concise guidance that low/medium post-canonical corrections can route to `research-amend`, while high/systemic changes still route to targeted framework/synthesis/full reruns.
+- [x] Update focused tests or audits that cover research-roadmap/reconcile-research/Pattern A next-step routing language.
+- [x] Regenerate package/catalog artifacts if any tracked `SKILL.md` or `PACK.md` metadata/content changes.
+- [x] Run targeted validation, record review/history, commit, and push.
 
 ### Acceptance Criteria
 
@@ -66,6 +66,16 @@ Step 1 complete:
 - Identified four integration surfaces: Pattern A loop convention, orchestrator convention, `research-roadmap`, and `reconcile-research`.
 - Confirmed current Pattern A YAML contracts already block downstream routing while alignment pages are in `review`; next edits must preserve that boundary.
 - Confirmed `research-roadmap` currently treats missing/stale items as direct skill reruns, and `reconcile-research` currently recommends the conflict-bearing skill rerun by count.
+
+Step 2-5 complete:
+
+- Added post-canonical amendment routing to the Pattern A loop and orchestrator conventions.
+- Updated `research-roadmap` and `reconcile-research` Claude/Codex mirrors so bounded low/medium corrections can recommend `research-amend` and high/systemic drift keeps rerun routing.
+- Archived and bumped changed skill contracts: `research-roadmap` v0.19 -> v0.20 and `reconcile-research` v0.10 -> v0.11.
+- Added focused layer1 coverage for research-roadmap, reconcile-research, Pattern A docs, and existing research-amend contract behavior.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and `exports/skills-catalog/v1/**`.
+- Verification passed: focused Vitest routing suite, version audit, strict archive audit, alignment routing audit, install routing audit, skillpacks build/check, catalog export validation, and diff hygiene.
+- Adversarial review: the new amendment route is limited to post-canonical/health contexts, review-pending Pattern A pages still route through YAML only, and high/systemic examples remain explicitly routed to framework/synthesis/full reruns.
 
 ## Historical Implementation - YAML-Only Routing Handoff Audit
 
