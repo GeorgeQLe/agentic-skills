@@ -1,5 +1,17 @@
 # Lessons
 
+## 2026-07-02 - Chunked handoffs should not duplicate command and YAML routing
+
+- The user clarified that `ux-variations` chunked handoffs should not show both an "Exact next command" line and a separate `## Invoke With YAML` block; the YAML path has been working well and should be the single routing artifact.
+- Rule: for chunked design-tree handoffs, put the resolved continuation command in `agent_routing.command` inside `## Invoke With YAML`, and do not also emit a standalone freeform exact-command line for the same handoff.
+- Keep the durable filesystem cursor as the progress ledger; YAML routes the fresh agent, while the brief/intermediate files determine what phase runs next.
+
+## 2026-07-02 - Base pack work should target `packs/base`
+
+- The user clarified that the base pack should be nested under `packs/` like other packs, not treated only as the legacy top-level `base/` source root.
+- Rule: when planning or implementing base-pack changes, account for both the desired `packs/base/{claude,codex}` shape and every legacy `base/{claude,codex}` assumption in scripts, package builds, docs, tests, and install markers.
+- Do not add new base skills only to `base/` without a migration or compatibility plan for `packs/base`.
+
 ## 2026-07-01 - Rapid deployment means rapid deck taxonomy first
 
 - A user asked for "canonical rapid deployment workflows" and clarified they meant workflows like ORD, not deploy/release operations.

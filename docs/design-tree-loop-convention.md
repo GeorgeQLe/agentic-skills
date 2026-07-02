@@ -397,12 +397,13 @@ can advance without knowing internal IDs. Reuse the existing payload shape:
 - **`## Next Work`** — what was just written (canonical artifact / intermediate path), the next
   pending branch **in plain English** (name it and describe it — never only an internal
   `{branch-id}`), and whether to continue-now or clear-context-first.
-- **`## Invoke With YAML`** — optional clean-context routing metadata for the next invocation:
-  the exact resolved next-invocation command with `{slug}` / `{topic}` / branch filled to
-  literal values (claude `/skill ...`, codex `$skill ...`). Paste it into a fresh/cleared
-  agent context alongside the Exact next command when you want the next agent to inherit
-  routing hints. It is not consumed state and is not a substitute for the durable filesystem
-  cursor.
+- **`## Invoke With YAML`** — the clean-context routing artifact for the next invocation:
+  include the exact resolved next-invocation command with `{slug}` / `{topic}` / branch filled
+  to literal values (claude `/skill ...`, codex `$skill ...`) in `agent_routing.command`.
+  Paste the YAML into a fresh/cleared agent context when you want the next agent to inherit
+  routing hints. Do not also provide a separate freeform "exact next command" line for the same
+  handoff; the YAML is the single copy/paste artifact, while the durable filesystem cursor
+  remains the progress ledger.
 
 When the next invocation is UAT variant evaluation, `## Next Work` must include the UAT Pack
 Availability Guard in plain human-facing text: first check whether `uat` is directly available
@@ -424,25 +425,23 @@ the prose handoff. Use this structure:
 - Current phase complete: <setup | unit name | assemble prep> is complete.
 - Next phase: <plain-English description of the next unit or assemble+approve work>.
 - Why repeat this command: the repeated command is intentional; the skill cold-starts, reads the durable cursor, and advances the next pending unit.
-- Session guidance: continue in a fresh session — clear context (`/clear`), then run the Exact next command below. If using the `## Invoke With YAML` block, paste it only into that fresh/clean context alongside the command; it gives the cold agent routing context, while the command and durable cursor remain authoritative. Staying in this session is exceptional and allowed only for small folded runs where context is still clearly sufficient.
-- Exact next command: `<resolved command with literal topic/branch>`.
+- Session guidance: continue in a fresh session — clear context (`/clear`), then paste the `## Invoke With YAML` block below. It gives the cold agent the resolved command and routing context, while the durable cursor remains authoritative. Staying in this session is exceptional and allowed only for small folded runs where context is still clearly sufficient.
 ```
 
 The block is required even when the next command is the same as the command that produced the
 handoff. The first line is the progress label; `Completed`, `Durable cursor`, `Current phase
-complete`, `Next phase`, `Why repeat this command`, `Session guidance`, and `Exact next
-command` are required fields. The next phase must be in plain English, not only an internal
+complete`, `Next phase`, `Why repeat this command`, and `Session guidance` are required fields.
+The next phase must be in plain English, not only an internal
 `{unit-id}` / `{framework}` / `{variation-id}`. The durable cursor line must state that the
 brief path and intermediate directory were checked, because those filesystem facts are the
 only progress ledger.
 
 The `Session guidance` line is an **action directive**, not a passive recommendation: it tells
-the user the physical handoff — clear context (`/clear`) and run the `Exact next command` in a
-fresh session, where the skill cold-starts and resolves state from the durable cursor. The
-continuation mechanism in this loop is **re-running the command**; the `## Invoke With YAML`
-payload is optional clean-context routing metadata for a fresh agent (it helps a cold agent
-self-route), not consumed state like the research loop's compiled alignment YAML, so paste it
-only into the fresh/clean context alongside the command.
+the user the physical handoff — clear context (`/clear`) and paste the `## Invoke With YAML`
+block in a fresh session, where the skill cold-starts and resolves state from the durable
+cursor. The continuation mechanism in this loop is **re-running the command named in YAML**;
+the `## Invoke With YAML` payload is clean-context routing metadata for a fresh agent (it helps
+a cold agent self-route), not consumed state like the research loop's compiled alignment YAML.
 
 ### Optional Human Review Summary
 
@@ -477,7 +476,7 @@ recommended. State this only at the setup stop; do not repeat it at every per-un
 
 Continue-vs-stop framing follows the routing rules: when the stop carries heavy build context,
 offer stop/clear-context-versus-continue; when already cold, default to continue-now with the
-exact next command. Only the setup stop carries the one-time single-session tradeoff note above. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff
+resolved command in `## Invoke With YAML`. Only the setup stop carries the one-time single-session tradeoff note above. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff
 only — they hand results back to the invoking parent and do **not** route downstream.
 
 ---

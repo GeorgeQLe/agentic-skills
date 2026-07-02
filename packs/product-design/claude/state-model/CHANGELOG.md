@@ -1,5 +1,9 @@
 # state-model changelog (claude)
 
+## v0.12 - 2026-07-02
+
+- Made chunked Progress Handoff routing YAML-only: the resolved repeated `/state-model` command now belongs in `agent_routing.command`, and handoffs must not also emit a separate freeform "Exact next command" line.
+
 ## v0.11 - 2026-07-01
 
 - Tightened chunked Progress Handoff Block wording so `## Invoke With YAML` is explicitly pasted only into a fresh/clean context alongside the repeated `/state-model` command; the command and durable filesystem cursor remain authoritative.

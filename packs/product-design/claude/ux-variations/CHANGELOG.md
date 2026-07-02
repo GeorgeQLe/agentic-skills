@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.31 - 2026-07-02
+
+- Made chunked Progress Handoff routing YAML-only: the resolved repeated `/ux-variations` command now belongs in `agent_routing.command`, and handoffs must not also emit a separate freeform "Exact next command" line.
+
 ## v0.30 - 2026-06-26
 
 - Corrected the `user_flow_branch` selection order to drop `activation_fit`, `first_value_fit`, and `evaluation_priority` — those fields exist only on `ux_variation_branch` nodes (the children this skill grows), not on the `user_flow_branch` node it selects, and `$defs.user_flow_branch` is `additionalProperties: false`. Order is now `explicit user override, journey_sequence, status, then stable array order`.

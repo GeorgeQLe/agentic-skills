@@ -1,5 +1,53 @@
 # Current Task State
 
+## Current Implementation - YAML-Only Routing Handoff Audit
+
+Project: `agentic-skills`.
+
+Status: VERIFIED (2026-07-02).
+
+### Goal
+
+Remove duplicate continuation routing from active chunked skill handoffs: when a handoff includes `## Invoke With YAML`, the resolved continuation command lives in YAML (`command` / `agent_routing.command`) and the YAML is the single copy/paste artifact.
+
+### Plan
+
+- [x] Inspect existing dirty work and routing handoff hits without reverting unrelated changes.
+- [x] Patch stale canonical or installed skill mirrors that still require an `Exact next command` alongside YAML.
+- [x] Ensure focused regression coverage catches active chunked skills that combine `Exact next command:` with `## Invoke With YAML`.
+- [x] Run generator checks, archive audits, focused tests, whitespace checks, and status checks.
+- [ ] Commit and push intended YAML-only routing changes if the tree can be separated safely.
+
+### Acceptance Criteria
+
+- Active generated design-tree loop bundles do not tell users to copy both an exact command line and `## Invoke With YAML` for the same chunked continuation.
+- Chunked skill instructions route repeated commands through `agent_routing.command`.
+- Local installed `.codex/skills` and `.claude/skills` mirrors that users may invoke directly no longer repeat the stale duplicate-command wording.
+- Historical archives, changelogs, alignment-page YAML contracts, Pattern A review-loop command YAML, and post-write `Recommended Next Command` sections remain unchanged unless directly implicated.
+
+### Verification Plan
+
+- `rg` audit for `Exact next command`, `run the Exact next command`, `alongside the command`, and `give the exact resolved next`.
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `bash scripts/skill-archive-audit.sh --strict`
+- Focused Vitest for product-design routing handoffs.
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts -t "YAML as the single copy-paste artifact"` passed from `tests/`.
+- Stale phrase audit passed with no hits for duplicate exact-command handoff wording in active scanned surfaces.
+- `git diff --check` passed.
+
+Known unrelated residual:
+
+- Full `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` still fails on the existing base-pack migration path because `base/codex/idea-scope-brief/SKILL.md` is missing after base skills moved under `packs/base/...`.
+
 ## Historical Implementation - UX Variations YAML-Only Chunked Handoff
 
 Project: `agentic-skills`.

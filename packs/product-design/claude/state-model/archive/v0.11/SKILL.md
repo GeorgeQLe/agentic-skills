@@ -2,7 +2,7 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.13
+version: v0.11
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
@@ -15,19 +15,19 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # State Model — Orchestrator
 
-Invoke as `$state-model`.
+Invoke as `/state-model`.
 
-This is an **orchestrator skill** that authors the **logical** domain/state/logic model anchored to an approved user-flow map, running **one domain-modeling framework per session** and synthesizing their outputs into a proposed domain model plus a `model-tree` manifest for HTML alignment review. It writes the canonical domain model and manifest only after confirmed approval. It sits **after `$user-flow-map`, before `$ux-variations`** in the product-design prototype pipeline.
+This is an **orchestrator skill** that authors the **logical** domain/state/logic model anchored to an approved user-flow map, running **one domain-modeling framework per session** and synthesizing their outputs into a proposed domain model plus a `model-tree` manifest for HTML alignment review. It writes the canonical domain model and manifest only after confirmed approval. It sits **after `/user-flow-map`, before `/ux-variations`** in the product-design prototype pipeline.
 
-The model it produces is a property of the *flow*, not of any one UI presentation: UX variations re-skin the same underlying entities, actions, and states, so authoring the logical model once gives `$ux-variations` and `$ui-interview` a real substrate to present, and turns `$spec-interview` into "harden this model to production" rather than "invent it."
+The model it produces is a property of the *flow*, not of any one UI presentation: UX variations re-skin the same underlying entities, actions, and states, so authoring the logical model once gives `/ux-variations` and `/ui-interview` a real substrate to present, and turns `/spec-interview` into "harden this model to production" rather than "invent it."
 
-**Just-in-time per promoted flow.** `state-model` is **not a route position** — it is invoked from `$user-flow-map`'s handoff, after `$key-moments` ranks the flows. Attach a model **only to flows `key-moments` has promoted**, in proof-priority order; never model a pruned flow. Later flows **extend** the core model rather than restating it — the first promoted flow establishes the shared entities/states, and subsequent flows add only what they introduce. The per-user-flow-branch `branches[].model_ref` remains the **primary** linkage.
+**Just-in-time per promoted flow.** `state-model` is **not a route position** — it is invoked from `/user-flow-map`'s handoff, after `/key-moments` ranks the flows. Attach a model **only to flows `key-moments` has promoted**, in proof-priority order; never model a pruned flow. Later flows **extend** the core model rather than restating it — the first promoted flow establishes the shared entities/states, and subsequent flows add only what they introduce. The per-user-flow-branch `branches[].model_ref` remains the **primary** linkage.
 
 **Fast-pass fold.** For a CRUD-trivial domain (the flow is straightforward create/read/update/delete over a small, obvious data shape), fold the full multi-framework session into a single **fast-pass**: a quick data-shape confirmation (entities, key fields, the handful of states) instead of running one framework per session. This is distinct from the existing framework-count (≥3) chunk fold — fast-pass applies when the *domain itself* is trivial, not merely when few frameworks were selected. Still produce the `model-tree` manifest and pass the one binding alignment gate.
 
 **Per-screen `model_ref`.** When a single approved UI experiment screen needs its own model slice (a screen-local sub-model distinct from the flow's), `state-model` may attach a per-screen `model_ref` on the `ui_experiment` node (flow-tree v0.4), as the screen-level counterpart to the user-flow branch's `model_ref`.
 
-**Logical only.** This skill owns entities, value objects, aggregates, state machines, events, commands, read models, policies, and logical command/query contracts (request/response/error *shapes*). It does **not** own physical concerns — storage engines, real endpoints/URLs, authentication, migrations, indexes, or deployment. Those stay owned by `$spec-interview` downstream. See Constraints.
+**Logical only.** This skill owns entities, value objects, aggregates, state machines, events, commands, read models, policies, and logical command/query contracts (request/response/error *shapes*). It does **not** own physical concerns — storage engines, real endpoints/URLs, authentication, migrations, indexes, or deployment. Those stay owned by `/spec-interview` downstream. See Constraints.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. This skill is a prototype-phase orchestrator: its live loop cursor is **filesystem existence of per-framework intermediates**, not a Pattern A selected-framework run manifest. It does not use `tasks/todo.md` for framework progress.
 
@@ -42,7 +42,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 ## Prerequisites
 
-- **Hard**: an approved `design/flow-tree-{topic}.yaml` (or `design/{slug}/flow-tree-{topic}.yaml`) and its companion `design/user-flow-{topic}.md` user-flow doc must exist. If they do not, stop and recommend `$user-flow-map [topic]` first — the logical model anchors to named flow nodes, so there must be a flow to anchor to.
+- **Hard**: an approved `design/flow-tree-{topic}.yaml` (or `design/{slug}/flow-tree-{topic}.yaml`) and its companion `design/user-flow-{topic}.md` user-flow doc must exist. If they do not, stop and recommend `/user-flow-map [topic]` first — the logical model anchors to named flow nodes, so there must be a flow to anchor to.
 - **Soft**: read these if they exist:
   - `research/positioning.md`, `research/journey-map.md`, `research/icp.md` — domain language and lifecycle context.
   - Existing `design/ux-variations-*.md`, `design/ui-requirements-*.md` — only as supplementary domain evidence; the model must not encode any single UI presentation.
@@ -50,7 +50,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 
 ## Execution Model — Prototype Session Loop (intra-skill substep chunking)
 
-This orchestrator runs as a **prototype-phase intra-skill substep loop** per `DESIGN-TREE-LOOP.md` (Intra-Skill Substep Chunking + Shared Context Brief). Each invocation starts cold, resolves its state from the filesystem, runs **one heavy phase**, and stops. The user advances the loop by clearing context and re-invoking `$state-model` with the same topic argument.
+This orchestrator runs as a **prototype-phase intra-skill substep loop** per `DESIGN-TREE-LOOP.md` (Intra-Skill Substep Chunking + Shared Context Brief). Each invocation starts cold, resolves its state from the filesystem, runs **one heavy phase**, and stops. The user advances the loop by clearing context and re-invoking `/state-model` with the same topic argument.
 
 Three-tier state, exactly as the convention defines it:
 
@@ -101,10 +101,11 @@ Every chunked stop (setup, each framework, and the synthesis-ready handoff) must
 - `Durable cursor: checked design/{slug}/_working/state-model-{topic}-brief.md and design/{slug}/state-model-{topic}/.`
 - `Current phase complete: <setup | framework name | synthesis preparation> is complete.`
 - `Next phase: <plain-English framework purpose or assemble+approve work>.`
-- `Why repeat this command: the repeated command is intentional; $state-model cold-starts, reads the durable cursor, and advances the next pending framework or synthesis.`
-- `Session guidance: continue in a fresh Codex session, then paste the ## Invoke With YAML block below; it gives the fresh agent the resolved $state-model command and routing context while the durable cursor remains authoritative. Staying in this session is exceptional and allowed only for small folded runs where context is still clearly sufficient.`
+- `Why repeat this command: the repeated command is intentional; /state-model cold-starts, reads the durable cursor, and advances the next pending framework or synthesis.`
+- `Session guidance: continue in a fresh session — clear context (/clear), then run the Exact next command below. If using the ## Invoke With YAML block, paste it only into that fresh/clean context alongside the command; it gives the cold agent routing context, while the command and durable cursor remain authoritative. Staying in this session is exceptional and allowed only for small folded runs where context is still clearly sufficient.`
+- `Exact next command: /state-model <literal topic-or-branch>.`
 
-Use the same `$state-model` command in `agent_routing.command` for setup → first framework, framework → next framework, and final framework → synthesis; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (start a fresh Codex session and paste the YAML in that session), not a passive recommendation. Do not also emit a separate freeform "Exact next command" line for chunked stops; the YAML is the single copy/paste routing artifact.
+Use the same `/state-model` command for setup → first framework, framework → next framework, and final framework → synthesis; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (clear context, re-run the command in a fresh session), not a passive recommendation.
 
 **Setup-stop one-time tradeoff note.** At the **setup** stop only (the Domain Modeling Scope Checkpoint handoff), additionally state once that the user *can* run the whole loop in one continuous session (or pass `--no-chunk`), but later frameworks/synthesis risk poorer quality and higher token cost from context bloat as the session fills, so a fresh session per phase is recommended. Do not repeat this note at the per-framework or synthesis stops.
 
@@ -177,7 +178,7 @@ Present a **Domain Modeling Scope Checkpoint** inline as the final message text 
 - Confirmed assumptions about domain boundaries and explicit non-goals (especially the logical-only boundary — no storage/endpoints/auth/migrations).
 - Candidate ubiquitous-language seeds.
 
-Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working/state-model-{topic}-brief.md` (flat: `design/_working/state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), explain why the same `$state-model` command is repeated, and include the resolved command with `{topic}` filled in inside the `## Invoke With YAML` payload, e.g. `$state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). Because this is the **setup** stop, also include the one-time single-session tradeoff note (the Setup-stop one-time tradeoff note under Required Progress Handoff Block): the user may run the whole loop in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat — fresh-per-phase is recommended. (Unless folding per the Execution Model, in which case continue directly to §3.)
+Ask the user to confirm, correct, or adjust the framework set/order in the next turn. This checkpoint is a confirmation, not a final approval. On confirmation, write the **shared context brief** to `design/{slug}/_working/state-model-{topic}-brief.md` (flat: `design/_working/state-model-{topic}-brief.md`) containing **pure context only** — confirmed scope/assumptions, the flow nodes in play, the planned framework set + order with each framework's thesis, ubiquitous-language seeds, and carried decisions — with **no step list and no status field**. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** pending framework to run in **plain English** (what that framework models, never only its internal `{framework-slug}`), explain why the same `/state-model` command is repeated, and give the **exact** resolved next command with `{topic}` filled in, e.g. `/state-model alignment-page-review`, so the first framework runs in its own cold spec session (§3). Because this is the **setup** stop, also include the one-time single-session tradeoff note (the Setup-stop one-time tradeoff note under Required Progress Handoff Block): the user may run the whole loop in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat — fresh-per-phase is recommended. (Unless folding per the Execution Model, in which case continue directly to §3.)
 
 ### 3. Run Next Pending Framework (framework session)
 
@@ -189,17 +190,17 @@ Run that one framework inline against the flow context in the brief, producing *
 - Record each element's `flow_bindings` — which flow node(s) it reads, writes, triggers, displays, or transitions — using flow-tree node references.
 - Map state-machine states to UI states (`maps_to_ui_state`) where a flow state exists, so UX variations can present them.
 - Flag any term that belongs in the ubiquitous-language glossary.
-- Keep strictly to logical concerns; defer every physical concern to `$spec-interview` with an explicit note rather than inventing storage/endpoint/auth detail.
+- Keep strictly to logical concerns; defer every physical concern to `/spec-interview` with an explicit note rather than inventing storage/endpoint/auth detail.
 
-Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), explains why the same `$state-model` command is repeated, and puts the resolved next command with `{topic}` filled in inside the `## Invoke With YAML` payload, e.g. `$state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and puts that command in the YAML payload, e.g. `$state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
+Append any cross-framework facts (renamed entities, merged aggregates, newly discovered events) to the brief so later frameworks inherit them. Then STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block. After writing, recalculate `pending`: if frameworks remain, the handoff states the intermediate just written, names the next pending framework in **plain English** (what it models, never only its internal `{framework-slug}`), explains why the same `/state-model` command is repeated, and gives the **exact** resolved next command with `{topic}` filled in, e.g. `/state-model alignment-page-review`; if none remain, the handoff points to the synthesis session (§4) and gives its exact command, e.g. `/state-model alignment-page-review`. Continue-vs-stop framing follows that convention's Routing Rules.
 
 ### 4. Synthesis + Assemble & Approve (assemble session)
 
-Enter when the brief exists, **all** planned framework intermediates exist, and no canonical domain model exists yet (also forced by `$state-model --synthesize [topic]`).
+Enter when the brief exists, **all** planned framework intermediates exist, and no canonical domain model exists yet (also forced by `/state-model --synthesize [topic]`).
 
 Assemble the per-framework intermediates plus the brief into proposed review content for the alignment page:
 
-1. **Proposed domain model doc content** for `design/domain-model-{topic}.md` (flat) or `design/{slug}/domain-model-{topic}.md`, with sections: ubiquitous-language glossary, entities (with kind, attributes, relationships), state machines (states, transitions, `maps_to_ui_state`), events, commands, read models, policies, logical contracts, an evidence/flow-binding matrix, assumptions/confidence, and explicit physical-concern deferrals to `$spec-interview`.
+1. **Proposed domain model doc content** for `design/domain-model-{topic}.md` (flat) or `design/{slug}/domain-model-{topic}.md`, with sections: ubiquitous-language glossary, entities (with kind, attributes, relationships), state machines (states, transitions, `maps_to_ui_state`), events, commands, read models, policies, logical contracts, an evidence/flow-binding matrix, assumptions/confidence, and explicit physical-concern deferrals to `/spec-interview`.
 2. **Proposed synthesized manifest content** for `design/model-tree-{topic}.yaml` (flat) or `design/{slug}/model-tree-{topic}.yaml`, per the `design/model-tree.schema.json` contract and the shape below.
 
 Build the **one** alignment page (`alignment/state-model-{topic}.html`) rendering the full proposed domain model, the flow-binding matrix, the state-machine/ERD diagrams (visual tier), assumptions/confidence, the proposed file changes, the glossary-additions gate, and the approval gate. Stop for compiled YAML.
@@ -217,11 +218,11 @@ On approval (compiled YAML with no unresolved negative feedback):
 
 After the canonical domain model and model-tree are written, recommend the **first** match:
 
-1. **Default** → check `.agents/project.json.enabled_packs` for `product-design`; if enabled, recommend `$ux-variations [specific-user-flow]` — the variation work now has a real logical substrate to present. Name the specific user flow from the flow tree.
+1. **Default** → check `.agents/project.json.enabled_packs` for `product-design`; if enabled, recommend `/ux-variations [specific-user-flow]` — the variation work now has a real logical substrate to present. Name the specific user flow from the flow tree.
 2. If `product-design` is not enabled, recommend `npx skillpacks install product-design` from the project shell first.
-3. **Never** recommend `$spec-interview` here — it is many steps downstream and owns the physical-model hardening pass.
+3. **Never** recommend `/spec-interview` here — it is many steps downstream and owns the physical-model hardening pass.
 
-Do not emit cross-skill routing before synthesis is approved and written. While a framework or the synthesis page is pending, the only continuation route is re-invoking `$state-model` with the same topic argument.
+Do not emit cross-skill routing before synthesis is approved and written. While a framework or the synthesis page is pending, the only continuation route is re-invoking `/state-model` with the same topic argument.
 
 ## Output
 
@@ -246,13 +247,13 @@ Before producing research, run the stage-zero interrogation loop following `INTE
 
 ## Next Work
 
-**Next work:** after the domain model is approved and attached, grow the first unresolved user-flow branch's variations with `$ux-variations [specific-user-flow]` — the variation work now has a real logical substrate to present. If user-flow branches remain without a model, the next work is re-invoking `$state-model [topic]` for the next branch.
+**Next work:** after the domain model is approved and attached, grow the first unresolved user-flow branch's variations with `/ux-variations [specific-user-flow]` — the variation work now has a real logical substrate to present. If user-flow branches remain without a model, the next work is re-invoking `/state-model [topic]` for the next branch.
 
-**Recommended next command:** `$ux-variations [specific-user-flow]`.
+**Recommended next command:** `/ux-variations [specific-user-flow]`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$ux-variations [specific-user-flow]` once every user-flow branch carries a confirmed model; otherwise `$state-model [topic]` for the next unmodelled branch.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `/ux-variations [specific-user-flow]` once every user-flow branch carries a confirmed model; otherwise `/state-model [topic]` for the next unmodelled branch.
 
 ## Alignment Page
 
@@ -267,10 +268,10 @@ Follow `ALIGNMENT-PAGE.md` in this skill's directory for alignment-page requirem
 
 ## Constraints
 
-- **Logical only.** Do not specify storage engines, databases, real endpoints/URLs, authentication/authorization mechanisms, migrations, indexes, deployment, or any physical architecture. When a physical concern arises, record it as an explicit deferral to `$spec-interview`, not as a decision. The model captures *what* the domain is, not *how* it is stored or served.
+- **Logical only.** Do not specify storage engines, databases, real endpoints/URLs, authentication/authorization mechanisms, migrations, indexes, deployment, or any physical architecture. When a physical concern arises, record it as an explicit deferral to `/spec-interview`, not as a decision. The model captures *what* the domain is, not *how* it is stored or served.
 - **Anchor to the flow, not to a UI.** The model is a property of the user flow. Do not encode any single UX variation or UI presentation. UX variations re-skin the same entities/actions/states.
 - **Bindings are authoritative in the model-tree only.** Never duplicate `flow_bindings` into the flow tree; never modify the flow-tree `route` array. The flow-tree writes are the per-branch `branches[].model_ref` attachment (primary) plus the optional top-level `model_tree_ref` back-compat pointer.
-- **One heavy phase per session.** Run setup, one framework, or synthesis per invocation; advance by re-invoking `$state-model`. Fold to a single session only for fewer-than-3-framework domains or `--no-chunk`. Do not queue framework work in `tasks/todo.md` or hand it to `$exec`.
+- **One heavy phase per session.** Run setup, one framework, or synthesis per invocation; advance by re-invoking `/state-model`. Fold to a single session only for fewer-than-3-framework domains or `--no-chunk`. Do not queue framework work in `tasks/todo.md` or hand it to `/exec`.
 - **Synthesis requires at least one framework intermediate.** Do not synthesize from zero evidence.
 - The live cursor is per-framework intermediate existence; the model-tree is written only at synthesis as the post-approval manifest, never as a live run-manifest.
 - Present the model before writing canonical artifacts; exactly one binding alignment gate, at synthesis.

@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.32
+version: v0.31
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
@@ -87,9 +87,10 @@ Every chunked stop (setup, each variation spec session, and the assemble-ready h
 - `Current phase complete: <setup | variation thesis | assemble preparation> is complete.`
 - `Next phase: <plain-English variation thesis or assemble+approve work>.`
 - `Why repeat this command: the repeated command is intentional; $ux-variations cold-starts, reads the durable cursor, and advances the next pending variation or assembly.`
-- `Session guidance: continue in a fresh Codex session, then paste the ## Invoke With YAML block below; it gives the fresh agent the resolved $ux-variations command and routing context while the durable cursor remains authoritative. Staying in this session is allowed only if enough context remains.`
+- `Session guidance: continue in a fresh Codex session, then run the Exact next command below; $ux-variations cold-starts and reads the durable cursor. Pasting the ## Invoke With YAML block alongside the command gives the fresh agent its routing context (optional — the command alone resolves state from the cursor). Staying in this session is allowed only if enough context remains.`
+- `Exact next command: $ux-variations <literal topic-or-branch>.`
 
-Use the same `$ux-variations` command in `agent_routing.command` for setup → first variation, variation → next variation, and final variation → assemble+approve; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (start a fresh Codex session and paste the YAML in that session), not a passive recommendation. Do not also emit a separate freeform "Exact next command" line for chunked stops; the YAML is the single copy/paste routing artifact.
+Use the same `$ux-variations` command for setup → first variation, variation → next variation, and final variation → assemble+approve; explain that the repeated command is intentional because filesystem existence is the cursor. The `Session guidance` line is an action directive (clear context, re-run the command in a fresh session), not a passive recommendation.
 
 **Setup-stop one-time tradeoff note.** At the **setup** stop only (the concept-set checkpoint handoff in step 6), additionally state once that the user *can* run the whole loop in one continuous session (or pass `--no-chunk`), but later variation specs and assembly risk poorer quality and higher token cost from context bloat as the session fills, so a fresh session per phase is recommended. Do not repeat this note at the per-variation or assemble stops.
 
@@ -231,7 +232,7 @@ Use the same `$ux-variations` command in `agent_routing.command` for setup → f
      - Write the shared context brief to `design/{slug}/_working/ux-variations-{topic}-brief.md` (flat mode: `design/_working/ux-variations-{topic}-brief.md`).
      - The brief holds **pure context only** — decision surface, confirmed assumptions, locked shared constraints (technical stack and design system), the N concept theses, evaluation criteria, and carried decisions — with **no step list and no status field**.
      - Record proposed branch IDs and artifact paths in the brief/intermediates only; do not initialize or update scoped flow-tree `ux_variations[]` entries before alignment approval.
-     - STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and include the resolved command with `{slug}`/`{topic}` filled in inside the `## Invoke With YAML` payload, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
+     - STOP and emit the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the brief was written, name the **first** variation to spec in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and give the **exact** resolved next tool or command call with `{slug}`/`{topic}` filled in, e.g. `$ux-variations alignment-page-review` writing into `design/alignmeant/ux-variations-alignment-page-review/{variation-id}.md`, so each variation gets its own cold spec session (step 7).
      - Because this is the **setup** stop, also include the one-time single-session tradeoff note (the Setup-stop one-time tradeoff note under Required Progress Handoff Block): the user may run the whole loop in one session or with `--no-chunk`, but later phases risk poorer quality and higher token cost from context bloat — fresh-per-phase is recommended.
      - In non-chunked mode, continue directly to step 7 in this same session.
 
@@ -239,7 +240,7 @@ Use the same `$ux-variations` command in `agent_routing.command` for setup → f
    - **Chunked-mode spec session (one variation per session)**: When chunked mode is active, each spec session:
      - Reads the brief at `design/{slug}/_working/ux-variations-{topic}-brief.md` and scans which `{variation-id}.md` files already exist under `design/{slug}/ux-variations-{topic}/`.
      - Picks the first variation whose intermediate file does **not** yet exist and writes its full build spec (the attribute list below, plus the layout-mode additions when applicable) to `design/{slug}/ux-variations-{topic}/{variation-id}.md`.
-     - Appends any cross-variation facts to the brief, then STOPs and emits the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the intermediate just written, name the next missing variation in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and put the resolved next command, e.g. `$ux-variations alignment-page-review`, in the `## Invoke With YAML` payload. When the variation just written was the last one, the handoff points to the assemble+approve session instead of another spec session; continue-vs-stop framing follows that convention's Routing Rules. Context per session is the brief plus one spec.
+     - Appends any cross-variation facts to the brief, then STOPs and emits the **Terminal handoff format** from `DESIGN-TREE-LOOP.md` plus the required Progress Handoff Block: state the intermediate just written, name the next missing variation in **plain English** (its concept thesis, never only the internal `{variation-id}`), explain why the same `$ux-variations` command is repeated, and give the **exact** resolved next tool or command call, e.g. `$ux-variations alignment-page-review`. When the variation just written was the last one, the handoff points to the assemble+approve session instead of another spec session; continue-vs-stop framing follows that convention's Routing Rules. Context per session is the brief plus one spec.
      - In non-chunked mode, specify all approved variations in this same session as before. The spec content below is identical in both modes — chunking changes only how many variations one session writes.
    - For each variation, define:
      - Name and design thesis

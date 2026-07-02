@@ -1,11 +1,34 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const DESIGN_TREE_LOOP_GENERATOR = resolve(ROOT, "scripts/upgrade-design-tree-loop.mjs");
 const read = (path: string) => readFileSync(resolve(ROOT, path), "utf8");
+const collectNamedFiles = (dir: string, fileName: string): string[] => {
+  const root = resolve(ROOT, dir);
+  const results: string[] = [];
+  const visit = (absoluteDir: string, relativeDir: string) => {
+    for (const entry of readdirSync(absoluteDir, { withFileTypes: true })) {
+      const relativePath = relativeDir ? `${relativeDir}/${entry.name}` : entry.name;
+      if (relativePath.includes("/archive/")) continue;
+      const absolutePath = resolve(absoluteDir, entry.name);
+
+      if (entry.isDirectory()) {
+        visit(absolutePath, relativePath);
+        continue;
+      }
+
+      if (entry.isFile() && entry.name === fileName) {
+        results.push(relativePath);
+      }
+    }
+  };
+
+  visit(root, dir);
+  return results.sort();
+};
 const between = (content: string, start: string, end: string) => {
   const startIndex = content.indexOf(start);
   expect(startIndex, `missing start marker: ${start}`).toBeGreaterThanOrEqual(0);
@@ -666,7 +689,7 @@ describe("product-design flow tree artifact boundaries", () => {
         expect(content).toContain("Current phase complete:");
         expect(content).toContain("Next phase:");
         expect(content).toContain("the repeated command is intentional");
-        expect(content).toContain("continue in a fresh session");
+        expect(content).toMatch(/continue in a fresh(?: Codex)? session/);
         expect(content).toContain("agent_routing.command");
         expect(content).toContain("Do not also emit a separate freeform \"Exact next command\" line");
       }
@@ -676,6 +699,37 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(convention).toContain("Progress Handoff Block");
     expect(convention).toContain("The block is required even when the next command is the same");
     expect(convention).toContain("Durable cursor");
+  });
+
+  it("keeps YAML as the single copy-paste artifact for chunked continuation handoffs", () => {
+    const generatedLoopFiles = [
+      "docs/design-tree-loop-convention.md",
+      ...collectNamedFiles("packs", "DESIGN-TREE-LOOP.md"),
+      ...collectNamedFiles(".codex/skills", "DESIGN-TREE-LOOP.md"),
+      ...collectNamedFiles(".claude/skills", "DESIGN-TREE-LOOP.md"),
+    ];
+    const chunkedSkillFiles = [
+      ...mirrors.flatMap((mirror) => [
+        `packs/product-design/${mirror}/state-model/SKILL.md`,
+        `packs/product-design/${mirror}/ux-variations/SKILL.md`,
+      ]),
+      ".codex/skills/ux-variations/SKILL.md",
+      ".claude/skills/ux-variations/SKILL.md",
+    ];
+    const forbiddenDuplicateCommand = new RegExp(
+      [
+        String.raw`(^|\n)- ${["Exact", "next", "command:"].join(" ")}`,
+        ["run", "the", "Exact", "next", "command"].join(" "),
+        ["alongside", "the", "command"].join(" "),
+      ].join("|"),
+    );
+
+    for (const file of [...generatedLoopFiles, ...chunkedSkillFiles]) {
+      const content = read(file);
+      expect(content, file).toContain("## Invoke With YAML");
+      expect(content, file).toContain("agent_routing.command");
+      expect(content, file).not.toMatch(forbiddenDuplicateCommand);
+    }
   });
 
   it("requires HTML-first canonical writes for chunked design deliverables", () => {

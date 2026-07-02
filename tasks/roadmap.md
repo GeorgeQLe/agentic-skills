@@ -2,6 +2,58 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - YAML-Only Routing Handoff Audit
+
+**Status: VERIFIED (2026-07-02) - duplicate exact-command plus YAML routing removed from active chunked handoff surfaces and stale installed mirrors.**
+
+### Goal
+
+Ensure active chunked skill handoffs use one continuation artifact. If `## Invoke With YAML` is present, the resolved command lives in `command` / `agent_routing.command`, and the YAML is the single copy/paste artifact.
+
+### Scope
+
+- Audit active, non-archived skill sources and generated design-tree loop bundles.
+- Patch stale installed `.codex/skills/**` and `.claude/skills/**` mirrors that users may invoke directly.
+- Keep allowed historical/archive/changelog text and alignment YAML contracts intact.
+- Preserve unrelated dirty work already present in the repository.
+
+### Plan
+
+- [x] Inspect existing dirty work and routing handoff hits.
+- [x] Patch stale canonical or installed mirrors that still require `Exact next command` alongside YAML.
+- [x] Confirm focused regression coverage blocks duplicate chunked continuation routing.
+- [x] Run generator, archive, focused test, diff, and status verification.
+- [ ] Commit and push intended YAML-only routing changes if the dirty tree can be staged safely.
+
+### Acceptance Criteria
+
+- Active generated design-tree loop bundles do not instruct users to copy both a standalone exact command and `## Invoke With YAML`.
+- Repeated chunked continuation commands are present in `agent_routing.command`.
+- Installed local mirrors under `.codex/skills` and `.claude/skills` match the YAML-only handoff rule for directly invokable skills.
+
+### Verification Plan
+
+- `rg` audit for stale exact-command handoff phrases.
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `bash scripts/skill-archive-audit.sh --strict`
+- Focused product-design flow-tree Vitest.
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts -t "YAML as the single copy-paste artifact"` passed from `tests/`.
+- Stale phrase audit passed with no hits for duplicate exact-command handoff wording in active scanned surfaces.
+- `git diff --check` passed.
+
+Known unrelated residual:
+
+- Full `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` still fails on the existing base-pack migration path because `base/codex/idea-scope-brief/SKILL.md` is missing after base skills moved under `packs/base/...`.
+
 ## Historical Implementation - UX Variations YAML-Only Chunked Handoff
 
 **Status: VERIFIED (2026-07-02) - duplicate exact-command plus YAML routing removed from chunked `ux-variations` and sibling `state-model` handoffs.**
