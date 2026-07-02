@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-07-02
+
+- Tightened BIP wrap-up prompting so `/ship-end` asks only as terminal output after reporting, only when `alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed` is not true; explicit `alignment.build_in_public: false` now suppresses both prompting and BIP output, and BIP page review can never block shipping or next-work routing.
+
 ## v0.12 - 2026-07-02
 
 - Moved the enabled Build-In-Public wrap-up page to `alignment/bip/ship-end.html` and required fresh-audience context, jargon expansion, and public-facing significance fields for every candidate so posts are understandable without prior project context.

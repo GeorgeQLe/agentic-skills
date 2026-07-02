@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "94d17e8dfaf718283c87ead4a29ba86bd229a8e2",
-  "generated_at": "2026-07-02T03:33:12.971Z",
-  "source_fingerprint": "503e6c70d87f64d01262e7f14966d8638295d3f326583151930c9fc591700081",
+  "source_commit": "90d5e5b36bc5270f734e1afcdf5373b16a91eea8",
+  "generated_at": "2026-07-02T14:11:59.908Z",
+  "source_fingerprint": "9547da376459cf8331682eaa62908844a71c23d6e90865c73aa056eb0ec30c26",
   "source_count": 456,
   "skill_count": 413,
   "pack_count": 42,
@@ -326,7 +326,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.21",
+      "version": "v0.22",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -742,7 +742,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.21",
+      "version": "v0.22",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -6239,7 +6239,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.13",
       "requiredConventions": [
         "social-ledger"
       ],
@@ -6267,7 +6267,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6317,7 +6317,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.13",
       "requiredConventions": [
         "social-ledger"
       ],
@@ -6345,7 +6345,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",

@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.22 - 2026-07-02
+
+- Updated the allowed BIP Suggestion Gate to treat `alignment.build_in_public: false` as an explicit project opt-out and to generate the post-confirmation BIP page at `alignment/bip/idea-scope-brief.html`.
+
 ## v0.21 - 2026-07-01
 
 - Added a Platform Hint Handoff for early platform-shape hypotheses while keeping platform ranking, probes, and decisions owned by `user-flow-map` Platform Fit Workshop.

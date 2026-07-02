@@ -2,7 +2,66 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - SKILL.md Language Deduplication Review
+## Current Implementation - BIP Prompt And Blocker Cleanup
+
+**Status: COMPLETE (2026-07-02) - tightened BIP prompting and blocker language across shared conventions and shipping skills.**
+
+### Goal
+
+Make `idea-scope-brief` the only skill that may ask a Build-In-Public (BIP) gate question. Everywhere else, BIP is non-blocking read-only output behavior. `ship` and `ship-end` may ask about BIP only as a terminal-only prompt after reporting, and only when `.agents/project.json.alignment.build_in_public` is absent.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for canonical conventions, shipping skills, tests, generated bundles, catalog exports, and task docs.
+- Reason: the change touches shared workflow policy, generated alignment bundles, mirrored `ship`/`ship-end` skill contracts, versioned skill archives, and catalog metadata.
+- Safety boundary: do not edit generated `.claude/skills/**` or `.codex/skills/**` local roots; do not run npm publish, deploy, or GitHub Actions; preserve unrelated pre-existing package/export dirty state unless regeneration for this task intentionally updates it.
+
+### Plan
+
+- [x] Inspect BIP language in `CLAUDE.md`, generated alignment convention bundles, `ship`/`ship-end` skills, tests, and repo status.
+- [x] Archive and version the four active source shipping skills before behavior changes.
+- [x] Update shared BIP policy so `idea-scope-brief` is the only BIP gate-question owner and all other BIP output is read-only/non-blocking.
+- [x] Update `ship` and `ship-end` contracts for terminal-only absent-setting prompting, explicit-false suppression, and no BIP blockers/review gates.
+- [x] Regenerate bundled alignment-page conventions from `docs/alignment-page-convention.md`.
+- [x] Refresh skills catalog exports required by skill changes while preserving unrelated package metadata.
+- [x] Run focused tests, archive/generator audits, task-doc audit, and diff hygiene checks.
+- [x] Commit and push the intended BIP cleanup boundary on the primary branch while preserving unrelated dirty work.
+
+### Acceptance Criteria
+
+- [x] `CLAUDE.md` states BIP is never a blocker, required approval gate, required review step, or downstream-routing prerequisite outside `idea-scope-brief`.
+- [x] `ship`/`ship-end` treat `alignment.build_in_public: false` as "do not ask and do not generate BIP."
+- [x] `ship`/`ship-end` prompt only in terminal output when `alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed !== true`.
+- [x] BIP output remains generated only when enabled or explicitly invoked, and it is read-only help/review content.
+- [x] Active non-archived skill/convention text has no BIP blocker language except the allowed `idea-scope-brief` gate and normal non-BIP alignment approval gates.
+- [x] Changed `SKILL.md` files are archived, versioned, and have changelog entries.
+- [x] Generated catalog exports validate.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `npx vitest run tests/layer1/ship-end-bip.test.ts tests/layer1/alignment-gates.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `node scripts/generate-skills-catalog-export.mjs`
+- `scripts/validate-skills-catalog-export.sh`
+- `node scripts/audit-task-docs.mjs`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `node scripts/upgrade-alignment-page.mjs --check` passed: 313 output paths exact, 311 generated bundles exact.
+- `npx vitest run tests/layer1/ship-end-bip.test.ts tests/layer1/alignment-gates.test.ts` passed: 2 files, 49 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `scripts/validate-skills-catalog-export.sh` passed after regenerating and staging `exports/skills-catalog/v1/`.
+- `node scripts/audit-task-docs.mjs` passed: failures 0, warnings 0.
+- `git diff --check` passed.
+- Focused BIP prompt grep confirmed only `idea-scope-brief` owns the kickoff gate question; `ship` and `ship-end` are terminal-only and absence-gated.
+- Pre-existing unrelated package files were preserved out of scope: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+
+## Historical Implementation - SKILL.md Language Deduplication Review
 
 **Status: COMPLETE (2026-07-02) - removed generated skill/reference language duplication while preserving skill behavior.**
 

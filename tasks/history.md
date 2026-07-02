@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-07-02 - BIP prompt and blocker cleanup
+
+- Made `idea-scope-brief` the only skill allowed to ask the Build-In-Public kickoff gate question.
+- Updated shared BIP policy so all other BIP behavior is read-only, non-blocking output and cannot become a required approval gate, required review step, or downstream-routing prerequisite.
+- Updated mirrored Claude and Codex `ship` / `ship-end` skills so any future BIP enablement prompt is terminal-only, after reporting, and only when `.agents/project.json.alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed !== true`.
+- Treated explicit `alignment.build_in_public: false` as an opt-out across `idea-scope-brief`, `ship`, and `ship-end`.
+- Archived and versioned changed `SKILL.md` files, regenerated alignment convention bundles, and refreshed public catalog exports.
+- Verification passed: alignment bundle check, focused BIP/alignment Vitest suites, strict skill archive audit, skills-catalog export validation, task-doc audit, and diff hygiene.
+- Pre-existing unrelated package files were preserved out of scope: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+
 ## 2026-07-02 - Release-prep metadata and changelog for 0.1.19
 
 - Prepared the repository for the next `skillpacks` / `@glexcorp/gskp` publish attempt without running publish commands, changing npm auth state, tagging, or bumping source package version.

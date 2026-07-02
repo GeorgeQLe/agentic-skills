@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-07-02
+
+- Added an explicit BIP output boundary: `$ship` must never create BIP blockers, approval/review gates, or routing prerequisites, and any future BIP prompt must be terminal-only after shipping when `alignment.build_in_public` is absent and the prompt has not been dismissed.
+
 ## v0.10 - 2026-06-29
 
 - Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.

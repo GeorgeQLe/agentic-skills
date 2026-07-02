@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.9
+version: v0.10
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -44,6 +44,7 @@ d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party 
    - For non-trivial source changes, run a targeted `quality-sweep audit`, `/code-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
    - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
    - If the tree contains unrelated pre-existing changes, the manifest must separate included files from untouched files and explain why the ship boundary is safe. If that cannot be proven, stop instead of shipping.
+   - **BIP output boundary:** `/ship` must not create BIP blockers, BIP approval gates, BIP review gates, or BIP downstream-routing prerequisites. If `/ship` ever performs a BIP enablement prompt, ask only as terminal output after shipping/reporting, only when `.agents/project.json.alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed !== true`. Treat `alignment.build_in_public === false` as an explicit opt-out: do not ask and do not generate BIP. BIP page generation/review must never block shipping, wrap-up, commit/push, deploy reporting, or next-work routing.
    - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
    - If the user corrected the agent during the work being shipped, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise.
 

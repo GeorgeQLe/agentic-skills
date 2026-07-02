@@ -97,7 +97,7 @@ const bipPostConfirmationSnippets = [
   "Rank the top options clearly for each channel",
   "recommendation status (`recommended`, `not-now`, or `rejected`)",
   "recommendation notes, source basis, fresh-audience context, jargon expansion, public-facing significance, claim-safety notes, risk level, publish precheck, loaded convention path",
-  "does not publish posts, write social-ledger records, alter canonical artifacts, or require another approval",
+  "does not publish posts, write social-ledger records, alter canonical artifacts, require another approval before the skill can finish, or become a downstream-routing prerequisite",
 ];
 
 function read(path: string) {
