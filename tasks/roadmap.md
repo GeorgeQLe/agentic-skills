@@ -2,9 +2,50 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - State-Model Clean-Context Handoff Wording
+## Current Implementation - Release-Prep Metadata And Changelog
 
-**Status: IN PROGRESS (2026-07-01) - tightening `Invoke With YAML` clean-context guidance for chunked state-model handoffs.**
+**Status: COMPLETE (2026-07-02) - prepared package/catalog metadata and changelog for the next publish attempt.**
+
+### Goal
+
+Prepare the repo for the next publish attempt without running npm publish or changing npm auth state. Keep package source version at `0.1.18`; a later `./publish.sh patch` can bump to `0.1.19`.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial writes for task docs, generated release metadata, and changelog updates.
+- Reason: this is release-prep work touching generated package/catalog metadata plus package-level release notes.
+- Safety boundary: do not bump package source version, run npm publish, tag, push, or change npm auth state.
+
+### Plan
+
+- [x] Inspect current repo state, package version, changelog, and post-`0.1.18` commits.
+- [x] Regenerate `packages/skillpacks/dist/skillpacks-manifest.json` from the current git index.
+- [x] Regenerate `exports/skills-catalog/v1/` public export artifacts.
+- [x] Add a `0.1.19` release-prep section to `CHANGELOG.md` while leaving package source version at `0.1.18`.
+- [x] Run the requested verification commands.
+- [x] Record verification results and final repo status.
+
+### Acceptance Criteria
+
+- [x] `packages/skillpacks/package.json` remains at `0.1.18`.
+- [x] Package manifest and skills-catalog export artifacts are regenerated from current source.
+- [x] `CHANGELOG.md` has an empty `[Unreleased]` placeholder and a `## [0.1.19] - 2026-07-02` release-prep section.
+- [x] The `0.1.19` section summarizes YouTube meta research, rapid deck graduation reconciliation, Platform Fit Workshop, clean-context design-tree handoff wording, and refreshed package/catalog metadata.
+- [x] Verification results are captured in `CHANGELOG.md` and `tasks/todo.md`.
+
+### Test Plan
+
+- `npm --workspace packages/skillpacks run test:node`
+- `npm run skillpacks:verify`
+- `npm run exports:check`
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+## Historical Implementation - State-Model Clean-Context Handoff Wording
+
+**Status: COMPLETE (2026-07-01) - tightened `Invoke With YAML` clean-context guidance for chunked state-model handoffs.**
 
 ### Goal
 

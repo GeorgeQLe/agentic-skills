@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-07-02 - Release-prep metadata and changelog for 0.1.19
+
+- Prepared the repository for the next `skillpacks` / `@glexcorp/gskp` publish attempt without running publish commands, changing npm auth state, tagging, or bumping source package version.
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` against current source, refreshing source fingerprint, post-`0.1.18` skill versions, content hashes, and archive-version lists.
+- Regenerated public skills-catalog export artifacts in `exports/skills-catalog/v1/` so source commit, source fingerprint, skill versions, and proof metadata match the current repository state.
+- Added `CHANGELOG.md` release-prep section `0.1.19 - 2026-07-02`, left `[Unreleased]` empty, and recorded that `./publish.sh patch` will perform the later `0.1.19` version bump.
+- Updated `tasks/todo.md` and `tasks/roadmap.md` with release-prep acceptance criteria and verification results, captured the `$ship-end` invocation in `prompts/ship-end/`, and generated the required Build-In-Public wrap-up page at `alignment/bip-ship-end.html` after archiving the previous page.
+- Verification passed: package Node tests 176/176, `npm run skillpacks:verify`, `npm run exports:check`, design-tree bundle check, strict skill archive audit, alignment page audit, and diff hygiene.
+- Deploy skipped: no `deploy.md` or `tasks/deploy.md` manual deploy contract exists in this repository.
+- Manifest: `tasks/ship-manifest-2026-07-02-release-prep-metadata-changelog.md`.
+
 ## 2026-06-29 — Route wrap/ship BIP suggestions to a single HTML page
 
 - Fixed wrap/ship Build-In-Public output landing as inline terminal markdown: the `ship-end` BIP branch named no output surface, while alignment-producing skills already write BIP to `alignment/bip-{skill-name}.html`. Broadened the post-confirmation BIP page trigger to also fire after a clean session ship (skills with no preceding alignment page), reusing the existing audited page shape — no new format, audit, or generator.

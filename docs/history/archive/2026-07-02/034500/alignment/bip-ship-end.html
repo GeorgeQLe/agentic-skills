@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="document" data-alignment-status="confirmed" data-alignment-page-kind="bip" data-bip-generation="post-confirmation" data-bip-source-skill="ship-end">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIP Suggestions — ship-end (Wrap/Ship BIP → Single HTML Page)</title>
+<style>
+:root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --text:#c9d1d9; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149; --orange:#d29922; --purple:#bc8cff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.55; }
+main { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:32px 0 56px; max-width:100%; overflow-wrap:break-word; }
+h1 { color:#fff; margin:0 0 8px; font-size:2rem; }
+h2 { color:var(--accent); margin:0; font-size:1.4rem; }
+h3 { color:#fff; margin:22px 0 8px; font-size:1.05rem; }
+p { margin:12px 0; } a { color:var(--accent); }
+code { color:#fff; background:#0b1320; border:1px solid var(--border); padding:1px 5px; border-radius:4px; font-size:0.88em; }
+.status { display:inline-flex; min-height:44px; align-items:center; padding:10px 16px; border:1px solid var(--purple); color:#fff; background:#1c2333; margin:16px 0; border-radius:6px; }
+.lead { color:#fff; font-size:1.05rem; }
+.toc, section, .meta-box { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:18px; margin:18px 0; }
+.toc ol { margin:8px 0 0; columns:2; }
+.toc a { color:var(--accent); text-decoration:none; } .toc a:hover { text-decoration:underline; }
+.section-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center; }
+.table-wrap { overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:8px; }
+table { border-collapse:collapse; width:100%; min-width:640px; }
+th,td { border-bottom:1px solid var(--border); padding:9px 12px; vertical-align:top; text-align:left; } th { background:#0f1623; color:#fff; } tr:last-child td { border-bottom:0; }
+ul,ol { padding-left:22px; } li { margin:5px 0; }
+.draft { border:1px solid var(--border); background:#0b1320; border-radius:8px; padding:12px 14px; margin:10px 0; white-space:pre-wrap; }
+.pill { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; margin-right:6px; }
+.pill-rec { background:rgba(63,185,80,0.15); color:var(--green); }
+.pill-not { background:rgba(210,153,34,0.15); color:var(--orange); }
+.pill-rej { background:rgba(248,81,73,0.15); color:var(--red); }
+.callout { border:1px solid var(--purple); background:#1c2333; padding:14px; border-radius:8px; margin:16px 0; }
+.fields { font-size:0.92rem; }
+.fields dt { color:var(--accent); font-weight:600; margin-top:8px; }
+.fields dd { margin:2px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="section-head">
+    <h2>Build-In-Public Suggestions</h2>
+    <span class="status">alignment_status: confirmed · bip_page_status: post-confirmation</span>
+  </div>
+  <h1>ship-end BIP Candidates — Wrap/Ship BIP Output Moves to a Single HTML Page</h1>
+  <p class="lead">Read-only Build-In-Public candidate batch generated after a clean session ship. This page is review/help content only — it does not publish posts, write social-ledger records, alter canonical artifacts, or require another approval. Selection and publishing are a later workflow under <code>docs/social-ledger-convention.md</code>.</p>
+
+  <div class="meta-box">
+    <p><strong>bip_phase:</strong> implementation</p>
+    <p><strong>Source skill:</strong> <code>ship-end</code> · <strong>Generation:</strong> post-confirmation · <strong>Page kind:</strong> bip</p>
+    <p><strong>Priority metadata:</strong> saved <code>alignment.bip_platforms</code> may rank channels, but every bundled text/community and video channel below is included. Saved platforms are not a channel filter.</p>
+  </div>
+
+  <section>
+    <h2>What Shipped (Source Basis)</h2>
+    <p>The shipped boundary is a workflow-contract change to the session wrap-up skill. Build-In-Public post suggestions generated at the end of a "ship" used to print as inline terminal markdown, while suggestions tied to a review/alignment page already wrote to a single reviewable HTML file. This session unified the two: the wrap/ship batch now writes to one HTML page instead of scrolling past in the terminal.</p>
+    <ul>
+      <li>The post-confirmation BIP page trigger was broadened to also fire after a clean ship (for wrap-up skills with no preceding review page), reusing the existing audited page shape — no new file format, audit, or generator.</li>
+      <li>The wrap/ship skill now writes its exhaustive per-channel batch to a single confirmed, read-only HTML page, archives any prior version, links it in a central index, and prints a one-line pointer instead of dumping candidates inline.</li>
+      <li>This very page is the dogfooded output of that change.</li>
+    </ul>
+    <p>All drafts below are source-safe: no secrets, credentials, private repo context, customer names, or unverifiable metrics. The work described is a general workflow/devtool pattern, not a product commitment.</p>
+  </section>
+
+  <section class="toc">
+    <h2>Channels</h2>
+    <ol>
+      <li><a href="#linkedin-post">LinkedIn posts</a></li>
+      <li><a href="#x-post">X posts</a></li>
+      <li><a href="#bluesky">Bluesky posts</a></li>
+      <li><a href="#threads">Threads posts</a></li>
+      <li><a href="#mastodon">Mastodon posts</a></li>
+      <li><a href="#reddit">Reddit posts</a></li>
+      <li><a href="#hacker-news">Hacker News submissions/comments</a></li>
+      <li><a href="#youtube-community">YouTube Community posts</a></li>
+      <li><a href="#youtube-long-form">YouTube long-form</a></li>
+      <li><a href="#youtube-shorts">YouTube Shorts</a></li>
+      <li><a href="#tiktok">TikTok</a></li>
+      <li><a href="#instagram-reels">Instagram Reels</a></li>
+      <li><a href="#linkedin-video">LinkedIn video</a></li>
+      <li><a href="#founder-video">Founder/devtool reusable video prompts</a></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Candidate Field Legend</h2>
+    <p>Every candidate below carries the same fields: target channel, recommendation status, recommendation notes, source basis, claim-safety notes, risk level, publish precheck, and loaded convention path. Recommendation status is one of <span class="pill pill-rec">recommended</span> <span class="pill pill-not">not-now</span> <span class="pill pill-rej">rejected</span>.</p>
+  </section>
+
+  <!-- ===================== TEXT / COMMUNITY CHANNELS ===================== -->
+
+  <section id="linkedin-post">
+    <h2>1. LinkedIn posts</h2>
+    <p><span class="pill pill-rec">recommended</span> Top-ranked text/community angle: the reviewability lesson — ephemeral terminal output vs a durable page.</p>
+    <div class="draft">Your build tooling can draft "building in public" posts for you. But if it dumps them as terminal text, they scroll away the moment you ship the next thing.
+
+Small change with a big quality-of-life payoff: route those auto-drafted social posts to a single reviewable HTML page instead of inline output. Now they're archived, indexed, and openable — something you can actually skim, edit, and keep.
+
+The lesson generalizes: if an agent generates something you'll want to review later, give it a durable surface, not a scrollback.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Strongest single angle; "durable surface, not scrollback" resonates with devtool/agent-tooling readers. Lead candidate.</dd>
+      <dt>Source basis</dt><dd>This session's wrap/ship BIP-to-HTML routing change and its history entry.</dd>
+      <dt>Claim-safety notes</dt><dd>Framed as a general workflow insight; no internal paths or unreleased commitments.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm account voice and that building-in-public tooling is already public for this project.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/linkedin-post-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="x-post">
+    <h2>2. X posts</h2>
+    <p><span class="pill pill-rec">recommended</span> Tight one-liner with a generalizable principle.</p>
+    <div class="draft">If an agent generates something you'll want to review, don't print it to the terminal — it scrolls away.
+
+Moved our auto-drafted "build in public" posts from inline output to a single reviewable HTML page: archived, indexed, openable. Durable surface > scrollback.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Punchy; works standalone or as a thread head paired with the LinkedIn long-form.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Generic phrasing; no private context.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm any thread continuation is drafted before posting the head.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/x-post-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="bluesky">
+    <h2>3. Bluesky posts</h2>
+    <p><span class="pill pill-rec">recommended</span> Builder-confessional framing fitting the network.</p>
+    <div class="draft">My wrap-up command drafts build-in-public posts at the end of a ship. Handy — but it printed them inline, so they vanished into scrollback.
+
+Pointed that output at a single HTML page instead. Now it's reviewable and kept. Tiny ergonomics fix, surprisingly nice.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Conversational tone matches the network.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>No unsupported claims; no proprietary detail.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm length fits the channel limit.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/bluesky-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="threads">
+    <h2>4. Threads posts</h2>
+    <p><span class="pill pill-not">not-now</span> Near-duplicate of the Bluesky/X beat; hold to avoid same-day cross-posting of the identical line.</p>
+    <div class="draft">Ergonomics rule for agent tooling: if you'll want to read it later, write it to a page, not the terminal. (Today's example: auto-drafted social posts → a single reviewable HTML file.)</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Useful, but dedupe against Bluesky/X; schedule a day apart if used.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Aphorism only; no private context.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm it does not repeat an already-posted line verbatim.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/threads-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="mastodon">
+    <h2>5. Mastodon posts</h2>
+    <p><span class="pill pill-rec">recommended</span> Slightly more technical framing for an engineering-heavy audience.</p>
+    <div class="draft">Workflow-contract tweak: my session wrap-up skill generates source-safe "build in public" post drafts. Two output paths had diverged — review-page-driven drafts went to a durable HTML file, wrap/ship drafts went to inline terminal text.
+
+Unified them on the durable page: confirmed, read-only, archived before replacement, indexed. Reused the existing audited page shape — no new format. #devtools #agents</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Add CW only if instance norms require; otherwise post as-is.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Technical but non-proprietary; no secrets.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm hashtag/CW conventions for the home instance.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/mastodon-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="reddit">
+    <h2>6. Reddit posts</h2>
+    <p><span class="pill pill-not">not-now</span> Strong as a discussion write-up, but needs a genuine question and a subreddit that allows self-referential tooling posts.</p>
+    <div class="draft">Title: Where should agent-generated "review later" output live — terminal or a file?
+
+Body: My build wrap-up tool drafts social posts at ship time. Inline terminal output meant they scrolled away; I moved them to a single reviewable HTML page (archived + indexed). Curious how others handle agent output you intend to review/edit later — files, a TUI pane, a web view? What's worked and what got annoying?</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Hold until a fitting subreddit and discussion prompt are confirmed; Reddit penalizes promo-shaped posts.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Question-first framing; no private context.</dd>
+      <dt>Risk level</dt><dd>medium — subreddit rules vary.</dd>
+      <dt>Publish precheck</dt><dd>Confirm target subreddit allows self-posts and the framing is discussion-first.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/reddit-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="hacker-news">
+    <h2>7. Hacker News submissions/comments</h2>
+    <p><span class="pill pill-rej">rejected</span> No standalone submission this cycle — a single workflow ergonomics tweak is below the bar for an HN post and reads as self-promotion.</p>
+    <div class="draft">(Reserved) Better used later as a contextual comment on an agent-tooling or developer-ergonomics thread: "We found agent output you intend to review later should land in a durable file, not terminal scrollback — moved our auto-drafted posts to a reviewable HTML page and it stuck."</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Rejected as a submission; keep the one-liner for an organic comment opportunity.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Comment form only; no link-bait or unverifiable claims.</dd>
+      <dt>Risk level</dt><dd>high for a submission (flag/penalty risk), low for an organic comment.</dd>
+      <dt>Publish precheck</dt><dd>Only use as a comment where it is directly on-topic.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/hacker-news-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="youtube-community">
+    <h2>8. YouTube Community posts</h2>
+    <p><span class="pill pill-rec">recommended</span> Teaser for a future build-log video on the change.</p>
+    <div class="draft">Next build-log: stop printing agent output you want to keep. We moved our auto-drafted "build in public" posts from terminal scrollback to a single reviewable page. Small fix, big difference. Where does your tooling lose output you meant to review?</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Only post if a matching video is planned; community posts work best as teasers.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Question-led; no private context.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm a follow-up video is actually scheduled.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/youtube-community-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <!-- ===================== VIDEO / CONTENT CHANNELS ===================== -->
+
+  <section id="youtube-long-form">
+    <h2>9. YouTube long-form</h2>
+    <p><span class="pill pill-not">not-now</span> Good evergreen episode on agent-output ergonomics, but needs screen-recording assets before it is worth producing.</p>
+    <div class="draft">Working title: "Agent Output Belongs in a File, Not Your Terminal"
+Outline:
+1. Cold open — the wrap-up tool drafts social posts, then they scroll away.
+2. The problem — review-later output dumped into ephemeral scrollback.
+3. The fix — route the batch to a single confirmed, read-only HTML page; archive on replace; index it.
+4. The reuse — lean on an existing audited page shape instead of inventing a new format.
+5. Takeaway — give review-later agent output a durable, openable surface.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>High evergreen value; defer until capture assets exist.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change and history entry.</dd>
+      <dt>Claim-safety notes</dt><dd>Keep on-screen repo content to already-public material.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm recordings contain no secrets or private paths.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/youtube-long-form-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="youtube-shorts">
+    <h2>10. YouTube Shorts</h2>
+    <p><span class="pill pill-rec">recommended</span> 30-second hook on the ephemeral-output trap.</p>
+    <div class="draft">Hook (0-3s): "Your tool generated something useful, then deleted it. Sort of."
+Beat (3-20s): Agent-drafted posts printed to the terminal scroll away the moment you ship again.
+Payoff (20-30s): Send them to a page instead. Durable, reviewable, kept.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Strongest short-form hook in the batch.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Conceptual; no on-screen private context.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm captions and aspect ratio match the channel.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/youtube-shorts-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="tiktok">
+    <h2>11. TikTok</h2>
+    <p><span class="pill pill-not">not-now</span> Same short hook, but only worth it if the dev-audience experiment on TikTok is active.</p>
+    <div class="draft">"POV: your AI tool wrote you 14 social posts and then they scrolled off the screen forever." Cut to: route them to a page instead. Caption for a non-expert dev audience.</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Reuse the Shorts cut; hold unless TikTok distribution is being tested.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>No private context; keep jargon accessible.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm the channel is targeting a dev audience before posting.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/tiktok-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="instagram-reels">
+    <h2>12. Instagram Reels</h2>
+    <p><span class="pill pill-not">not-now</span> Visual-first network; the ephemeral-output idea needs a clearer visual metaphor before it works here.</p>
+    <div class="draft">Visual idea: text flying up a terminal and off-screen, then the same text snapping into a tidy page card with an "open" button. Caption: "Stop losing the output you meant to review."</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Hold until the visual metaphor is storyboarded.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>Metaphor only; no private context.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm asset is produced and on-brand.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/instagram-reels-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="linkedin-video">
+    <h2>13. LinkedIn video</h2>
+    <p><span class="pill pill-rec">recommended</span> Short talking-head clip pairing with the LinkedIn text post.</p>
+    <div class="draft">60-90s talking head: "A workflow lesson worth stealing: if your agent generates something you'll want to review later, don't print it to the terminal. We had a wrap-up command drafting build-in-public posts inline — they scrolled away. We routed them to a single reviewable HTML page that gets archived and indexed. Durable surface beats scrollback every time."</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Reinforces the LinkedIn text post; record once, caption for silent autoplay.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change.</dd>
+      <dt>Claim-safety notes</dt><dd>No screen-share of private content; spoken summary only.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm captions are burned in for autoplay.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/linkedin-video-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section id="founder-video">
+    <h2>14. Founder/devtool reusable video prompts</h2>
+    <p><span class="pill pill-rec">recommended</span> Reusable prompt template so this beat can be regenerated for any future workflow-ergonomics fix.</p>
+    <div class="draft">Reusable prompt: "Record a 45-60s founder build-log clip about a developer-ergonomics fix in agent tooling. Structure: (1) the small annoyance (useful output that disappears or is hard to review), (2) why it happened (wrong output surface), (3) the fix (give it a durable, reviewable surface; reuse an existing format), (4) the transferable rule. Keep all examples source-safe — no secrets, no private paths, no unverifiable metrics, no unreleased product commitments."</div>
+    <dl class="fields">
+      <dt>Recommendation notes</dt><dd>Save as a template; ranks high for reuse across future ship-end BIP runs.</dd>
+      <dt>Source basis</dt><dd>This session's BIP-to-HTML routing change as the worked example.</dd>
+      <dt>Claim-safety notes</dt><dd>Template enforces source-safety in its own instructions.</dd>
+      <dt>Risk level</dt><dd>low.</dd>
+      <dt>Publish precheck</dt><dd>Confirm each generated instance is re-checked for source-safety before publishing.</dd>
+      <dt>Loaded convention path</dt><dd><code>docs/social/founder-devtool-video-prompts-convention.md</code></dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Ranking Summary</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Channel</th><th>Status</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>LinkedIn posts</td><td>recommended</td><td>1 — lead angle</td></tr>
+        <tr><td>X posts</td><td>recommended</td><td>2 — thread head</td></tr>
+        <tr><td>YouTube Shorts</td><td>recommended</td><td>3 — short hook</td></tr>
+        <tr><td>LinkedIn video</td><td>recommended</td><td>4 — pairs with #1</td></tr>
+        <tr><td>Mastodon / Bluesky posts</td><td>recommended</td><td>5 — engineering audience</td></tr>
+        <tr><td>YouTube Community</td><td>recommended</td><td>6 — teaser if video planned</td></tr>
+        <tr><td>Founder/devtool video prompts</td><td>recommended</td><td>7 — reusable template</td></tr>
+        <tr><td>Threads / Reddit / YouTube long-form / TikTok / Instagram Reels</td><td>not-now</td><td>hold — dedupe or assets needed</td></tr>
+        <tr><td>Hacker News</td><td>rejected</td><td>no submission; comment only</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout">
+      <p><strong>Next actions (later workflow, not an approval gate):</strong> review and select candidates, then run a social-ledger/publishing workflow under <code>docs/social-ledger-convention.md</code> when posting is explicitly approved. This page writes no ledger records and publishes nothing on its own.</p>
+    </div>
+  </section>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

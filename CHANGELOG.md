@@ -8,19 +8,36 @@ Keep this file updated before every npm package publish.
 
 ## [Unreleased]
 
+## [0.1.19] - 2026-07-02
+
+Prepared for the next publish attempt for both `skillpacks` and `@glexcorp/gskp`.
+
+Release-state note: source `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` remain at `0.1.18`; the intended real release command is a later `./publish.sh patch`, which will bump the package artifact to `0.1.19` before staging and publishing both npm package names.
+
 ### Added
 
-- Added `skillpacks set-bip-platforms <platform...>` / `set-bip-platforms unset` to store project-level Build-In-Public target platforms at `.agents/project.json.alignment.bip_platforms` while preserving sibling alignment fields.
+- Added mirrored `youtube-meta-research` skills for Claude and Codex, plus `$youtube --meta <channel>` routing for current public YouTube meta, breakout, and opportunity research.
 
 ### Changed
 
-- Build-In-Public alignment guidance now uses saved project platforms, phase labels (`research`, `prototyping`, `implementation`), exhaustive ranked candidate batches, and one bulk downselect gate instead of per-page target-channel, drafting-mode, angle, tone, and per-post approval gates.
-- `ship-end` Build-In-Public suggestions now use saved platforms, persist one-time platform setup when missing, infer `bip_phase`, and generate exhaustive phase-aware candidate batches per platform.
+- Reconciled rapid deck graduation routes so VARD and ORD ship through their traction phases before graduating into Business AFPS or Devtool AFPS.
+- Added the product-design Platform Fit Workshop and flow-tree schema support for platform ranking plus thin platform probes before production platform lock.
+- Tightened design-tree clean-context handoff wording so optional `## Invoke With YAML` blocks are pasted only into a fresh/clean context alongside the repeated command.
+- Refreshed generated package manifest and public skills-catalog export metadata against the current source tree.
 
 ### Fixed
 
-- Published-package smoke verification now retries npm registry/install propagation failures from `npx --package <package>@<version>` such as `ETARGET` / `notarget` / "No matching version found", while still failing immediately for real CLI behavior failures after package resolution.
-- `./publish.sh --current` now recovers the already-published state where both `skillpacks@$VERSION` and `@glexcorp/gskp@$VERSION` exist by skipping publish commands and rerunning final published-package verification plus post-publish source-state instructions.
+- Updated package/catalog fingerprints, generated source commit metadata, skill versions, content hashes, and archive-version lists after the post-`0.1.18` skill changes.
+
+### Verification
+
+- Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (176/176).
+- Package verification passed: `npm run skillpacks:verify` (413 active skills, 42 packs, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
+- Skills catalog export verification passed: `npm run exports:check`.
+- Design-tree bundle check passed: `node scripts/upgrade-design-tree-loop.mjs --check` (22 skills checked, 0 writes).
+- Skill archive audit passed: `bash scripts/skill-archive-audit.sh --strict` (413 skills checked, 0 violations).
+- Diff hygiene passed: `git diff --check`.
+- Source package version remained `0.1.18`; `./publish.sh --dry-run patch` was not run in this release-prep pass because npm auth and publish-state checks are intentionally out of scope.
 
 ## [0.1.14] - 2026-06-28
 
