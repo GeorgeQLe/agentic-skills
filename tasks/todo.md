@@ -2,6 +2,47 @@
 
 No active implementation task is currently promoted.
 
+## Review - Post-UAT Consolidation Routing Fix 2026-07-02
+
+Project: `agentic-skills`.
+
+### Goal
+
+Prevent product-design handoffs from implying `$consolidate-prototypes` or `/consolidate-prototypes` is next after only one built prototype when other approved UX variants remain unbuilt or UAT evidence is not recorded.
+
+### Plan
+
+- [x] Archive and version the active Codex/Claude `uat`, `logic-wiring`, and `consolidate-prototypes` skill contracts.
+- [x] Tighten UAT variant-evaluation readiness language to distinguish built/evaluated, built/not-run, approved-unbuilt/deferred, and explicitly MVP-excluded variants.
+- [x] Tighten `logic-wiring` routing so prototype approval routes only to UAT; consolidation remains a later evidence/scope decision.
+- [x] Harden `consolidate-prototypes` evidence gates for not-ready UAT files, unchecked readiness items, all-`Not run` logs, and unbuilt approved branches.
+- [x] Update shared reusable routing docs for UAT-evidence plus explicit unbuilt/deferred-branch handling.
+- [x] Add focused layer-1 contract coverage and run the requested tests/audits.
+
+### Acceptance Criteria
+
+- Active Codex and Claude skill mirrors do not route directly from one built prototype to consolidation.
+- Consolidation readiness requires UAT evidence and explicit handling of unbuilt/deferred approved branches.
+- Single-variant MVP convergence is allowed only when the user explicitly chooses that scope.
+- Conservative fallback routes back to the next approved unbuilt UX/UI branch instead of consolidating by default.
+
+### Verification Plan
+
+- `pnpm exec vitest tests/layer1/post-uat-consolidation-routing.test.ts`
+- `pnpm exec vitest tests/layer1/product-design-customer-discovery-routing.test.ts tests/layer1/product-testing-customer-discovery-routing.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- Root-level `pnpm exec vitest tests/layer1/post-uat-consolidation-routing.test.ts` failed because `vitest` is not installed at the repository root.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts` passed: 4 tests.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-customer-discovery-routing.test.ts layer1/product-testing-customer-discovery-routing.test.ts` passed: 3 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills, 0 violations.
+- `git diff --check` passed.
+
 ## Review - Interrogation Agent-Owned Depth Convention 2026-07-02
 
 Project: `agentic-skills`.

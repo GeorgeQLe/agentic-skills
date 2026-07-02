@@ -2,6 +2,48 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Post-UAT Consolidation Routing Fix
+
+### Goal
+
+Fix the product-design/product-testing routing ambiguity that allowed a handoff to imply consolidation was next after only one built prototype. Consolidation should be available only after UAT evidence exists and all approved branches are either evaluated or explicitly excluded/deferred from MVP scope by the user.
+
+### Plan
+
+- [x] Archive and version affected `SKILL.md` files:
+  - `packs/product-testing/{codex,claude}/uat`
+  - `packs/product-design/{codex,claude}/logic-wiring`
+  - `packs/product-design/{codex,claude}/consolidate-prototypes`
+- [x] Add UAT post-readiness guard language for result-log categories, manual-evidence capture while any built result is `Not run`, and single-variant MVP override only after explicit user scope choice.
+- [x] Remove direct or compressed `logic-wiring` route from prototype approval to consolidation; route only to UAT evidence capture.
+- [x] Harden `consolidate-prototypes` against not-ready UAT files, unchecked readiness items, all-`Not run`/deferred evidence, and unbuilt approved branches without explicit user handling.
+- [x] Update shared routing docs where they define reusable readiness rules.
+- [x] Add regression coverage for Codex and Claude skill contracts, then run focused tests and archive/diff checks.
+
+### Acceptance Criteria
+
+- `logic-wiring` handoffs name UAT as the next step after prototype approval and state consolidation is a later decision owned by evidence plus explicit scope/convergence.
+- `uat --variant-evaluation` output categories distinguish built/evaluated, built/not-run, approved-unbuilt/deferred, and explicitly excluded from MVP.
+- `consolidate-prototypes` stops when evidence is absent, not-ready, unchecked, all `Not run`, or approved branches are unhandled.
+- Shared docs define consolidation readiness as UAT evidence plus explicit handling of unbuilt/deferred approved branches.
+
+### Verification Plan
+
+- `pnpm exec vitest tests/layer1/post-uat-consolidation-routing.test.ts`
+- `pnpm exec vitest tests/layer1/product-design-customer-discovery-routing.test.ts tests/layer1/product-testing-customer-discovery-routing.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+
+### Review
+
+Verified:
+
+- Root-level `pnpm exec vitest tests/layer1/post-uat-consolidation-routing.test.ts` failed because `vitest` is not installed at the repository root.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/post-uat-consolidation-routing.test.ts` passed: 4 tests.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-customer-discovery-routing.test.ts layer1/product-testing-customer-discovery-routing.test.ts` passed: 3 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills, 0 violations.
+- `git diff --check` passed.
+
 ## Historical Implementation - Interrogation Agent-Owned Depth Convention
 
 **Status: VERIFIED (2026-07-02) - canonical interrogation convention now makes the agent responsible for depth and shallow-gate prevention.**

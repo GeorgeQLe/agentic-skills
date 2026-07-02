@@ -499,8 +499,11 @@ only — they hand results back to the invoking parent and do **not** route down
 - Do not route to `logic-wiring` before the build-plan slice exists unless the user explicitly
   accepts an untracked ad hoc prototype run.
 - Do not route from built variants directly to `consolidate-prototypes`; route through
-  `uat` (variant evaluation) unless the user explicitly says they already evaluated and are
-  ready to converge. UAT routing must use the Pack Availability Guard in `## Next Work`:
+  `uat` (variant evaluation). Consolidation readiness requires recorded UAT evidence plus
+  explicit handling of every approved branch: evaluated in MVP scope, explicitly excluded
+  from MVP, deferred from MVP, or included only as a spec reference. A single-variant MVP is
+  valid only when the user explicitly chooses that convergence scope and names how the
+  unbuilt/deferred approved branches are handled. UAT routing must use the Pack Availability Guard in `## Next Work`:
   install `product-testing` with `npx skillpacks install product-testing` if `uat` is not
   directly available, then run the agent-native UAT command (`$uat --variant-evaluation` for
   Codex, `/uat --variant-evaluation` for Claude). Codex must include the fresh Codex CLI

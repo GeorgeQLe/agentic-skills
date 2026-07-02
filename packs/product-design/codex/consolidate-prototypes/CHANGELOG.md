@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.21 - 2026-07-02
+
+- Hardened the evidence gate to stop when UAT says not ready, readiness items are unchecked, or result logs contain only `Not run`/deferred/spec-only entries.
+- Required explicit user handling for approved unbuilt/deferred branches before consolidation.
+- Added the single-variant MVP override contract and conservative fallback back to the next approved unbuilt UI branch.
+
 ## v0.20 - 2026-07-02
 
 - Added an explicit UAT Pack Availability Guard that identifies `uat` as provided by `product-testing`.

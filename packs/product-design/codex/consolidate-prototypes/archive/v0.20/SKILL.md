@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.21
+version: v0.20
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -12,13 +12,13 @@ visual_tier: prototype
 
 Invoke as `$consolidate-prototypes`.
 
-Use this skill after the user has built and evaluated prototype branches (typically generated via `$ux-variations --layout-mode`, built via `$build-ui-screens` then `$logic-wiring`, and evaluated via `$uat --variant-evaluation`; if `uat` is not directly available in the active skill list/session, install the providing pack with `npx skillpacks install product-testing`, then run `$uat --variant-evaluation`). This skill compares the source prototypes, interviews the user on what works and what does not in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification. A single-variant MVP is allowed only when UAT evidence exists and the user explicitly chooses that convergence scope while excluding, deferring, or marking all other approved branches as spec-only references.
+Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `$ux-variations --layout-mode`, built via `$build-ui-screens` then `$logic-wiring`, and evaluated via `$uat --variant-evaluation`; if `uat` is not directly available in the active skill list/session, install the providing pack with `npx skillpacks install product-testing`, then run `$uat --variant-evaluation`). This skill compares the source prototypes, interviews the user on what works and what does not in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
 
 **Two-stage consolidation.** Consolidation runs in two stages. **Stage 1 — stitch** assembles the approved canonical screens into coherent end-to-end flows: it reads each variation's built screens and walks the `ui_experiments[].build_ledger[]` entries, and **cherry-picks** screens flagged `cherry_pick_candidate` or left `parked` by `$build-ui-screens` (a strong partial screen worth carrying into the canonical flow even though its source variation was not the winner). It also compares any Platform Fit Workshop `platform_probe` evidence against `platform_fit.recommendation`. **Stage 2 — converge** is the existing pass: interview keep/reject across the stitched flows, resolve conflicts, build the consolidated MVP, write the AFPS graduation document with the recommended platform strategy, and hand off to `$research-roadmap --post-prototype`.
 
 Users with manually built prototypes can also use this skill directly, but consolidation should not happen before the user has reviewed the prototypes and captured evidence.
 
-Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`; explicit user readiness cannot bypass a `Not run` result log or unhandled approved but unbuilt/deferred branch.
+Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
 
 ## Pack Availability Guard
 
@@ -67,18 +67,13 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
 
 2. **Evidence gate**
    - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend the Pack Availability Guard handoff: if `uat` is not directly available in the active skill list/session, run `npx skillpacks install product-testing` from the project shell, then run `$uat --variant-evaluation`; if `$uat` remains unavailable after install, start a fresh Codex CLI session and retry `$uat --variant-evaluation`.
-   - Stop if `research/uat-variant-evaluation-[topic].md` or a product-path equivalent says `not ready`, includes unchecked items in the "Ready for `$consolidate-prototypes`?" checklist, or contains only `Not run`, skipped, deferred, or spec-only result logs with no captured evidence.
-   - Stop while any built MVP-scope branch has `Status: Not run`; route back to manual UAT/evidence capture through `$uat --variant-evaluation`.
-   - Do not infer a winner from specs alone. Built variants need hands-on review evidence before consolidation.
-   - If approved UX/UI variants are unbuilt or deferred, require an explicit user decision before consolidation: exclude/defer them from MVP scope, build/evaluate them first, or include them only as spec references.
-   - If no explicit decision exists for approved unbuilt/deferred branches, use the conservative default: stop and route back to the next approved unbuilt UX branch, for example `$ui-interview uxv-alignment-page-review-change-first-revision-workspace`, or to the specific next branch named by the flow-tree manifest.
+   - Do not infer a winner from specs alone. Built variants need hands-on review or explicit user readiness before consolidation.
    - If some prototype branches are unreviewed, ask whether to exclude them, evaluate them first via the Pack Availability Guard handoff (`npx skillpacks install product-testing` if `uat` is not directly available, then `$uat --variant-evaluation`; fresh Codex CLI session and retry if `$uat` remains unavailable), or include them as spec-only references.
 
 3. **Present prototype inventory**
    - List each source prototype branch with a one-line summary of its approach.
    - Note build status for each: built and reviewed, built but unreviewed, partially built, spec-only.
    - Note evidence status for each: result log present, user notes present, no evidence.
-   - Note scope handling for every approved branch: evaluated in MVP scope, explicitly excluded from MVP, deferred from MVP, spec-only reference, or build/evaluate first.
    - Note platform-probe status for each serious platform candidate: built and evidenced, built but unevaluated, missing, deferred, rejected.
    - Confirm which prototype branches the user wants to consolidate.
 
@@ -162,9 +157,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 
 ## Constraints
 
-- Do not proceed without UAT evidence, and do not treat explicit readiness as sufficient when the UAT file says not ready, has unchecked readiness items, or contains only `Not run`/deferred/spec-only logs.
-- Do not proceed while approved UX/UI variants remain unbuilt or deferred unless the user explicitly excludes or defers them from MVP scope, chooses to build/evaluate them first, or includes them only as spec references.
-- Do not proceed with a single-variant MVP unless the user explicitly chooses single-variant convergence from the current built set and records how every other approved branch is excluded, deferred, or treated as spec-only.
+- Do not proceed without evaluation evidence unless the user explicitly says they have reviewed the variants and is ready to converge.
 - Do not pick winners without user input. Present the matrix and let the user decide.
 - Do not ignore conflicts. If two preferred choices are spatially or functionally incompatible, surface the tension and resolve it explicitly.
 - The consolidated prototype must preserve the approved UI branch detail from `$ui-interview`, carry the recommended platform strategy from AFPS graduation, and be concrete enough for `$spec-interview` to extract production implementation requirements and own the Production Ready Approval described in `docs/production-ready-approval.md`.

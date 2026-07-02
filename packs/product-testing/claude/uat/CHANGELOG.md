@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.15 - 2026-07-02
+
+- Added a post-UAT readiness guard that distinguishes built/evaluated, built/not-run, approved-unbuilt/deferred, and explicitly MVP-excluded variants.
+- Blocked consolidation recommendations while built MVP-scope result logs remain `Not run` or approved unbuilt/deferred branches lack an explicit MVP-scope decision.
+- Added single-variant MVP override wording requiring an explicit user convergence choice and explicit handling of other approved branches.
+
 ## v0.14 - 2026-06-22
 
 - Updated variant-evaluation readiness and post-evaluation recommendations to hand off to `/consolidate-prototypes`.

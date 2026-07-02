@@ -2,7 +2,7 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.14
+version: v0.15
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
@@ -24,7 +24,7 @@ UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into
 
 This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
 
-When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$consolidate-prototypes`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
+When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before any consolidation decision. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 
@@ -72,8 +72,10 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
    - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
    - Include a side-by-side comparison matrix and a "Ready for `$consolidate-prototypes`?" checklist.
+   - In the variant inventory and readiness output, distinguish these four statuses explicitly: `built + evaluated`, `built + not run`, `approved but unbuilt/deferred`, and `explicitly excluded from MVP`.
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
-   - After writing files, recommend `$consolidate-prototypes` only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
+   - While any built variant result log is `Not run`, recommend manual UAT/evidence capture rather than `$consolidate-prototypes`.
+   - Mention `$consolidate-prototypes` only after result logs record evidence and either every MVP-scope approved variant is evaluated or the user explicitly chooses a single-variant MVP and excludes, defers, or marks all other approved unbuilt branches as spec-only references.
    - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**
@@ -158,6 +160,15 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 | Variant | Implementation location | Thesis | Primary task |
 |---|---|---|---|
 
+### Variant Readiness Inventory
+
+| Variant | Branch status | UAT status | MVP scope decision | Notes |
+|---|---|---|---|---|
+| [Variant name] | built + evaluated | Pass | in MVP scope | [evidence link] |
+| [Variant name] | built + not run | Not run | undecided | manual UAT required before consolidation |
+| [Variant name] | approved but unbuilt/deferred | Not run | undecided | build/evaluate, explicitly exclude/defer, or include as spec-only reference before consolidation |
+| [Variant name] | explicitly excluded from MVP | Skipped | excluded | explicit user decision required |
+
 ### Shared Evaluation Script
 
 - Target user:
@@ -188,7 +199,10 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 
 ### Ready for `$consolidate-prototypes`?
 
-- [ ] Every built variant has been tried or explicitly skipped.
+- [ ] Every built MVP-scope variant has been tried and has evidence in its result log.
+- [ ] No built MVP-scope result log is still `Not run`.
+- [ ] Every approved but unbuilt/deferred branch is explicitly excluded from MVP, deferred from MVP, or marked spec-only by the user.
+- [ ] If converging from one built variant, the user explicitly chose a single-variant MVP and named how all other approved branches are handled.
 - [ ] Evidence exists for each kept/rejected design element.
 - [ ] Open blockers are documented.
 - [ ] The user has enough confidence to converge.
@@ -216,7 +230,8 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not run or operate the product in this skill.
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark journeys complete; only a human tester can do that after performing them.
-- Do not recommend `$consolidate-prototypes` before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
+- Do not recommend `$consolidate-prototypes` before variant evaluation evidence exists and no built MVP-scope result log is `Not run`.
+- Do not recommend `$consolidate-prototypes` while approved UX/UI branches remain unbuilt or deferred unless the user explicitly excludes or defers them from MVP scope, marks them spec-only, or explicitly chooses a single-variant MVP from the current built set.
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
 - Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.

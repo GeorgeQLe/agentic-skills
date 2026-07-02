@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.24 - 2026-07-02
+
+- Removed the post-build `agent_routing` shortcut that mentioned `$consolidate-prototypes` after UAT evidence.
+- Clarified that approved prototype previews route only to `$uat --variant-evaluation`, with consolidation deferred to later UAT evidence plus explicit MVP-scope/convergence decisions.
+
 ## v0.23 - 2026-07-02
 
 - Added an explicit UAT Pack Availability Guard that routes unavailable `uat` skills through `npx skillpacks install product-testing`.
