@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.23 - 2026-07-02
+
+- Added an explicit UAT Pack Availability Guard that routes unavailable `uat` skills through `npx skillpacks install product-testing`.
+- Replaced bare `/uat --variant-evaluation` handoffs with plain install-then-run guidance.
+- Clarified that `agent_routing` YAML cannot be the only human-facing UAT handoff.
+
 ## v0.22 - 2026-07-01
 
 - Added Platform Fit Workshop `platform_probe` handling for thin web/mobile/CLI/API/SDK/extension/desktop/integration/marketplace/game risk probes.

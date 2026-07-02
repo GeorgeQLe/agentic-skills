@@ -1,6 +1,63 @@
 # Current Task State
 
-## Current Implementation - BIP Prompt And Blocker Cleanup
+## Current Implementation - UAT Pack Availability Guard Handoff
+
+Project: `agentic-skills`.
+
+### Goal
+
+Update product-design UAT handoffs so routes to `$uat --variant-evaluation` or `/uat --variant-evaluation` give plain install-then-run instructions when `uat` may be unavailable. The guidance must install the providing `product-testing` pack, never the `uat` skill directly, and Codex must mention the fresh-session fallback.
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for versioned skills, canonical convention, generated bundles, tests, and task docs.
+- Reason: the change touches mirrored product-design skills, generated design-tree-loop bundles, and regression tests.
+- Safety boundary: preserve unrelated dirty package files, do not edit generated local skill roots under `.claude/skills` or `.codex/skills`, and do not introduce GitHub Actions.
+
+### Plan
+
+- [x] Record task plan and prompt history for the UAT pack availability guard work.
+- [x] Archive and version the four active product-design skills before behavior changes.
+- [x] Update `logic-wiring` mirrors with explicit Pack Availability Guard wording and non-bare UAT handoffs.
+- [x] Update `consolidate-prototypes` mirrors so missing UAT evidence routes with plain install-then-run guidance.
+- [x] Update canonical design-tree loop convention and regenerate generated bundles.
+- [x] Add focused product-design flow-tree regression assertions.
+- [x] Run targeted tests, generator checks, grep audits, diff checks, and status checks.
+- [ ] Commit and push intended changes on the primary branch while preserving unrelated dirty work.
+
+### Acceptance Criteria
+
+- [x] `logic-wiring` and `consolidate-prototypes` both identify `uat` as provided by `product-testing` when unavailable.
+- [x] Codex handoffs include `npx skillpacks install product-testing`, then `$uat --variant-evaluation`, and mention a fresh Codex CLI session fallback.
+- [x] Claude handoffs include `npx skillpacks install product-testing`, then `/uat --variant-evaluation`.
+- [x] No active updated handoff recommends installing the `uat` skill directly.
+- [x] `agent_routing` YAML is not the only human-facing UAT command.
+- [x] Changed `SKILL.md` files are archived, versioned, and have changelog entries.
+
+### Test Plan
+
+- `pnpm test -- tests/layer1/product-design-flow-tree.test.ts`
+- `pnpm test -- tests/layer1/skill-install-routing-audit.test.ts`
+- `node scripts/upgrade-design-tree-loop.mjs --check`
+- Targeted `rg` checks for `install it`, `install product-testing if unavailable`, the direct `uat` install command, and bare UAT-only handoff blocks.
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+- `git status --short --branch`
+
+### Review
+
+Verified:
+
+- `pnpm test -- tests/layer1/product-design-flow-tree.test.ts` and `pnpm test -- tests/layer1/skill-install-routing-audit.test.ts` from the repo root failed immediately because the repo has no root `test` script and the shell reported `test: --: unexpected operator`.
+- `pnpm exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` from `tests/` passed: 1 file, 19 tests.
+- `pnpm exec vitest run --project layer1 layer1/skill-install-routing-audit.test.ts` from `tests/` passed: 1 file, 2 tests.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 22 skills checked, 0 bundle writes.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `git diff --check` passed.
+- Scoped active-source grep audits found no vague `install it`, no `install product-testing if unavailable`, no direct `uat` install command, and no bare UAT-only recommended command blocks in the updated UAT handoff surfaces.
+- Pre-existing unrelated dirty files were preserved out of scope: `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json`.
+
+## Historical Implementation - BIP Prompt And Blocker Cleanup
 
 Project: `agentic-skills`.
 

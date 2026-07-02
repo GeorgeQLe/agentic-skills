@@ -408,6 +408,15 @@ can advance without knowing internal IDs. Reuse the existing payload shape:
   routing hints. It is not consumed state and is not a substitute for the durable filesystem
   cursor.
 
+When the next invocation is UAT variant evaluation, `## Next Work` must include the UAT Pack
+Availability Guard in plain human-facing text: first check whether `uat` is directly available
+in the active skill list/session; if not, identify it as provided by `product-testing`; tell
+the user to run `npx skillpacks install product-testing`, then `$uat --variant-evaluation` for
+Codex or `/uat --variant-evaluation` for Claude. Codex handoffs must also say that if `$uat`
+remains unavailable after install, start a fresh Codex CLI session and retry. Do not tell users
+to install the `uat` skill directly. An `agent_routing` YAML payload may repeat the resolved UAT
+command, but it cannot be the only human-facing UAT command or install guidance.
+
 For any self-routing stop inside **intra-skill substep chunking** (setup stop, per-unit stop,
 or assemble handoff), `## Next Work` must begin with a visible **Progress Handoff Block** before
 the prose handoff. Use this structure:
@@ -496,7 +505,11 @@ only — they hand results back to the invoking parent and do **not** route down
   accepts an untracked ad hoc prototype run.
 - Do not route from built variants directly to `consolidate-prototypes`; route through
   `uat` (variant evaluation) unless the user explicitly says they already evaluated and are
-  ready to converge.
+  ready to converge. UAT routing must use the Pack Availability Guard in `## Next Work`:
+  install `product-testing` with `npx skillpacks install product-testing` if `uat` is not
+  directly available, then run the agent-native UAT command (`$uat --variant-evaluation` for
+  Codex, `/uat --variant-evaluation` for Claude). Codex must include the fresh Codex CLI
+  session retry fallback.
 - Do not route design-tree branch progress through `/exec`, `$exec`, `tasks/roadmap.md`, or
   `tasks/todo.md`.
 - The top-level `route` tuple stays the **6-skill sequence** (`user-flow-map → ux-variations →

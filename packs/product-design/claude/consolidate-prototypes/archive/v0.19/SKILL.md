@@ -2,7 +2,7 @@
 name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
-version: v0.20
+version: v0.19
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype
@@ -12,17 +12,13 @@ visual_tier: prototype
 
 Invoke as `/consolidate-prototypes`.
 
-Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `/ux-variations --layout-mode`, built via `/build-ui-screens` then `/logic-wiring`, and evaluated via `/uat --variant-evaluation`; if `uat` is not directly available in the active skill list/session, install the providing pack with `npx skillpacks install product-testing`, then run `/uat --variant-evaluation`). This skill compares the source prototypes, interviews the user on what works and what doesn't in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
+Use this skill after the user has built and evaluated multiple prototype branches (typically generated via `/ux-variations --layout-mode`, built via `/build-ui-screens` then `/logic-wiring`, and evaluated via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)). This skill compares the source prototypes, interviews the user on what works and what doesn't in each one, resolves incompatible UAT findings and design choices, and produces a single user-approved consolidated MVP for post-prototype production specification.
 
 **Two-stage consolidation.** Consolidation runs in two stages. **Stage 1 — stitch** assembles the approved canonical screens into coherent end-to-end flows: it reads each variation's built screens and walks the `ui_experiments[].build_ledger[]` entries, and **cherry-picks** screens flagged `cherry_pick_candidate` or left `parked` by `/build-ui-screens` (a strong partial screen worth carrying into the canonical flow even though its source variation was not the winner). It also compares any Platform Fit Workshop `platform_probe` evidence against `platform_fit.recommendation`. **Stage 2 — converge** is the existing pass: interview keep/reject across the stitched flows, resolve conflicts, build the consolidated MVP, write the AFPS graduation document with the recommended platform strategy, and hand off to `/research-roadmap --post-prototype`.
 
 Users with manually built prototypes can also use this skill directly, but consolidation should not happen before the user has reviewed the prototypes and captured evidence.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Consolidation requires UAT evidence or explicit user readiness plus explicit consolidation decisions before writing `prototypes/{topic}/consolidated/`.
-
-## Pack Availability Guard
-
-Before routing missing or unreviewed evaluation evidence to `/uat --variant-evaluation`, check whether `uat` is directly available in the active skill list/session. If it is unavailable, identify `uat` as provided by the `product-testing` pack and tell the user to run `npx skillpacks install product-testing`, then `/uat --variant-evaluation`. Do not tell users to install the `uat` skill directly.
 
 ## Design-Tree Flow
 
@@ -66,9 +62,9 @@ When product path `{slug}` is active, read research under `research/{slug}/`, re
    - If the prototype branch plan or implementations cannot be found, ask the user to point to them.
 
 2. **Evidence gate**
-   - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend the Pack Availability Guard handoff: if `uat` is not directly available in the active skill list/session, run `npx skillpacks install product-testing` from the project shell, then run `/uat --variant-evaluation`.
+   - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first).
    - Do not infer a winner from specs alone. Built variants need hands-on review or explicit user readiness before consolidation.
-   - If some prototype branches are unreviewed, ask whether to exclude them, evaluate them first via the Pack Availability Guard handoff (`npx skillpacks install product-testing` if `uat` is not directly available, then `/uat --variant-evaluation`), or include them as spec-only references.
+   - If some prototype branches are unreviewed, ask whether to exclude them, evaluate them first via `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first), or include them as spec-only references.
 
 3. **Present prototype inventory**
    - List each source prototype branch with a one-line summary of its approach.

@@ -2,7 +2,7 @@
 name: logic-wiring
 description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
-version: v0.22
+version: v0.23
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
@@ -226,19 +226,28 @@ design/flow-tree-{topic}.yaml
 
 After prototypes are built, recommend:
 
-> Recommended next command: `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first)
+> Recommended next command:
+> 1. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell: `npx skillpacks install product-testing`.
+> 2. Run `/uat --variant-evaluation`.
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 
+## Pack Availability Guard
+
+Before handing off to `/uat --variant-evaluation`, check whether `uat` is directly available in the active skill list/session. If it is unavailable, identify `uat` as provided by the `product-testing` pack and tell the user to run `npx skillpacks install product-testing`, then `/uat --variant-evaluation`. Do not tell users to install the `uat` skill directly.
+
 ## Next Work
 
-**Next work:** after the prototype preview is approved, route the built variants to `/uat --variant-evaluation` for hands-on evaluation evidence before `/consolidate-prototypes`. Do not route downstream until the prototype preview is approved.
+**Next work:** after the prototype preview is approved, route the built variants to `/uat --variant-evaluation` for hands-on evaluation evidence before `/consolidate-prototypes`. If `uat` is not directly available in the active skill list/session, install the providing pack from the project shell with `npx skillpacks install product-testing`, then run `/uat --variant-evaluation`. Do not route downstream until the prototype preview is approved.
 
-**Recommended next command:** `/uat --variant-evaluation`.
+**Recommended next command:**
+
+1. `npx skillpacks install product-testing` if `uat` is not directly available in the active skill list/session.
+2. `/uat --variant-evaluation`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants, then `/consolidate-prototypes` once evaluation evidence exists.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/variant filled to literal values: `/uat --variant-evaluation` for the built variants, then `/consolidate-prototypes` once evaluation evidence exists. The human-facing `## Next Work` text must still include the plain install-then-run guidance above; `agent_routing` YAML cannot be the only UAT handoff.
 
 ## Constraints
 

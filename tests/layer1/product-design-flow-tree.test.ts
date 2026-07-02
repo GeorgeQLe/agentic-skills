@@ -13,6 +13,12 @@ const between = (content: string, start: string, end: string) => {
   expect(endIndex, `missing end marker: ${end}`).toBeGreaterThan(startIndex);
   return content.slice(startIndex, endIndex);
 };
+const sectionFrom = (content: string, start: string) => {
+  const startIndex = content.indexOf(start);
+  expect(startIndex, `missing section marker: ${start}`).toBeGreaterThanOrEqual(0);
+  const nextHeadingIndex = content.indexOf("\n## ", startIndex + start.length);
+  return content.slice(startIndex, nextHeadingIndex === -1 ? undefined : nextHeadingIndex);
+};
 const expectContainsAll = (content: string, expected: string[]) => {
   for (const value of expected) {
     expect(content).toContain(value);
@@ -498,6 +504,41 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(consolidate).toContain("prototypes/{topic}/consolidated/");
       expect(consolidate).not.toContain("`specs/ux-variations-[topic].md`");
       expect(consolidate).not.toContain("`specs/ui-requirements-[topic].md`");
+    }
+  });
+
+  it("gives plain product-testing install guidance for UAT variant-evaluation handoffs", () => {
+    for (const mirror of mirrors) {
+      const logicWiring = read(`packs/product-design/${mirror}/logic-wiring/SKILL.md`);
+      const consolidate = read(`packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`);
+      const sigil = command[mirror];
+      const uatCommand = `${sigil}uat --variant-evaluation`;
+      const badInstall = "npx skillpacks install " + "uat";
+
+      expect(logicWiring).toContain("## Pack Availability Guard");
+      expect(logicWiring).toContain("npx skillpacks install product-testing");
+      expect(logicWiring).toContain(uatCommand);
+      expect(logicWiring).not.toContain(badInstall);
+
+      const nextWork = sectionFrom(logicWiring, "\n## Next Work\n");
+      expect(nextWork).toContain("npx skillpacks install product-testing");
+      expect(nextWork).toContain(`then run \`${uatCommand}\``);
+      expect(logicWiring).toContain("agent_routing` YAML cannot be the only UAT handoff");
+
+      expect(consolidate).toContain("## Pack Availability Guard");
+      expect(consolidate).toContain("npx skillpacks install product-testing");
+      expect(consolidate).toContain(uatCommand);
+      expect(consolidate).not.toContain(badInstall);
+
+      const evidenceGate = between(consolidate, "2. **Evidence gate**", "3. **Present prototype inventory**");
+      expect(evidenceGate).toContain("Pack Availability Guard handoff");
+      expect(evidenceGate).toContain("npx skillpacks install product-testing");
+      expect(evidenceGate).toContain(`then run \`${uatCommand}\``);
+
+      if (mirror === "codex") {
+        expect(logicWiring).toContain("fresh Codex CLI session");
+        expect(consolidate).toContain("fresh Codex CLI session");
+      }
     }
   });
 

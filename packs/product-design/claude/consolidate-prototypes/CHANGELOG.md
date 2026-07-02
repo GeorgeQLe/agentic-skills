@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.20 - 2026-07-02
+
+- Added an explicit UAT Pack Availability Guard that identifies `uat` as provided by `product-testing`.
+- Strengthened missing-evidence and unreviewed-branch stops to give plain `npx skillpacks install product-testing`, then `/uat --variant-evaluation` guidance.
+
 ## v0.19 - 2026-07-01
 
 - Added platform-probe synthesis during consolidation by comparing `platform_fit.recommendation` against probe evidence.
