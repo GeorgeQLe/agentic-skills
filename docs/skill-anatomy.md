@@ -10,7 +10,7 @@ Keep this structure. It supports agent-specific command syntax, pack installatio
 
 ## First Time?
 
-If you are creating your first skill, use `/skill-interview` (Claude) or `$skill-interview` (Codex) for a guided flow. For bulk creation from a workflow gap, use `/create-agentic-skill` or `/targeted-skill-builder`.
+If you are creating your first skill, use `/skill-interview` (Claude) or `$skill-interview` (Codex) for a guided flow. For a project-local skill use `/create-local-skill`; for a repo-managed skill, implement it directly in the `agentic-skills` repo following this doc and CLAUDE.md skill-versioning. To fix an existing shared skill, convention page, or workflow route, use `/session-triage`, which emits a managing-layer handoff payload.
 
 ### Minimal SKILL.md Template
 

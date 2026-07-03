@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10 - 2026-07-03
+
+- Reworked step 6 into a **two-branch handoff**: a **managing-layer defect** (shared skill, convention page, or workflow routing/process) emits a self-contained **YAML handoff payload** for an agent running in the agentic-skills directory to implement + publish + refresh; an **invoking-directory defect** (rare) emits a plain in-place patch report for the current directory with no managing-repo route.
+- Removed all routing to `targeted-skill-builder` and `create-agentic-skill` (both archived), including the benchmark-regression route, which now emits the managing-layer payload. Updated Output, Constraints, and the Recommended-next-skill line accordingly. Extended the canonical-target rule to cover convention pages / `CLAUDE.md`. Payload schema authored in `docs/session-triage-handoff-contract.md`.
+
 ## v0.9 - 2026-07-03
 
 - Added a mandatory **Canonical Fix Target** rule to step 6: a skill fix must target the canonical `packs/<pack>/{claude,codex}/<skill>/SKILL.md` source (both variants), resolved with `scripts/pack.sh which <skill>`, and must never land on a managed mirror or installed copy (`.claude/skills`, `~/.claude/skills`, `~/.npm/**/skillpacks`, etc.) — those are read-only evidence and do not propagate. Added a cross-directory rule routing fixes back to the managing repo when cwd is a consuming repo.

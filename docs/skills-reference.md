@@ -231,7 +231,7 @@ benchmark-test-skill, benchmark-agent-review
 Default flow:
 
 ```text
-benchmark-test-skill <skill> -> benchmark-agent-review <skill> when subjective artifact quality needs review / targeted-skill-builder on generic or blocked coverage / session-triage on failure / ship on pass
+benchmark-test-skill <skill> -> benchmark-agent-review <skill> when subjective artifact quality needs review / session-triage on generic or blocked coverage or on failure / ship on pass
 ```
 
 ## Monorepo Pack
@@ -421,8 +421,7 @@ npx skillpacks install knowledge-check      # quiz-me
 ```bash
 npx skillpacks install research-admin        # research-roadmap
 npx skillpacks install session-analytics     # analyze-sessions, session-triage
-npx skillpacks install skill-dev             # create-agentic-skill, create-local-skill,
-                                              #   skill-interview, targeted-skill-builder
+npx skillpacks install skill-dev             # skill-interview, create-local-skill
 npx skillpacks install context-transfer      # handoff
 npx skillpacks install teardown              # decommission, desk-flip
 npx skillpacks install report-gen            # report-website

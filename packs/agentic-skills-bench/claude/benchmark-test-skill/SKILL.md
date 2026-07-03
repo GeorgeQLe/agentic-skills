@@ -2,7 +2,7 @@
 name: benchmark-test-skill
 description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
 type: execution
-version: v0.4
+version: v0.5
 required_conventions: [alignment-page]
 argument-hint: "<skill name>"
 ---
@@ -52,7 +52,7 @@ pnpm bench -- --list-skills
 - Skills with custom layer4 setups use skill-specific fixtures and hard assertions. Some setups also include deterministic output-quality rubrics.
 - Skills without custom layer4 setups use the harness generic smoke benchmark. Treat that as invocation/compliance evidence, not deep domain-quality evidence.
 - If the row is `blocked`, stop before verify and bench. Report the blocked reason and next command from the list output.
-- If the row is `generic`, continue only as generic smoke evidence and route missing custom coverage to `/targeted-skill-builder <SKILL> benchmark coverage`.
+- If the row is `generic`, continue only as generic smoke evidence and route missing custom coverage to `/session-triage <SKILL> benchmark coverage`.
 
 ### Step 2 - Verify
 
@@ -62,7 +62,7 @@ SKILLS_REPO_URL=/Users/georgele/projects/tools/agentic-skills SKILLS_REPO_REF=WO
 
 - Expect layer1 to pass and layer2 to pass when target-specific tests exist.
 - Treat layer1 as the static harness-contract gate, including basic benchmark setup alignment checks such as expected next-route handoffs, runner command conventions, output file expectations, and quality-rubric facts against the current skill contract.
-- If layer1 fails because a benchmark setup is misaligned with the skill contract, classify it as a harness/benchmark coverage defect and route to `/targeted-skill-builder <SKILL> benchmark failure`; do not spend agent budget on `pnpm bench`.
+- If layer1 fails because a benchmark setup is misaligned with the skill contract, classify it as a harness/benchmark coverage defect and route to `/session-triage <SKILL> benchmark failure`; do not spend agent budget on `pnpm bench`.
 - If layer2 reports no tests matched `<SKILL>`, treat that layer as skipped and continue to the benchmark step. Record the skip clearly because generic benchmark coverage is weaker than target-specific layer2 verification.
 - Record pass/fail and wall time per layer.
 - If verify fails, stop and report the failure. Do not run the benchmark step.
@@ -80,7 +80,7 @@ pnpm bench -- --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 - The expected budget is about $1 per run for the current design-system variant; report actual cost from the benchmark output when available.
 - The bench system persists raw data inside `agentic-skills-benchmarks` at `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
 - Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
-- If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `/targeted-skill-builder <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
+- If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `/session-triage <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
 
 ### Step 3.5 - Regression Check
 
@@ -146,11 +146,11 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 ## Next-Step Routing
 
-If the skill is unknown to the repository, recommend checking the skill name or creating the skill first with `/create-agentic-skill`.
+If the skill is unknown to the repository, recommend checking the skill name or creating the skill first — scaffold a project-local skill with `/create-local-skill`, or implement a repo-managed skill directly in the `agentic-skills` repo following `docs/skill-anatomy.md`.
 
 If the skill has blocked benchmark coverage, recommend the row's `next_command`.
 
-If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `/targeted-skill-builder <skill> benchmark coverage`.
+If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `/session-triage <skill> benchmark coverage`.
 
 If the skill fails verification, hard benchmark assertions, or configured quality thresholds, recommend `/session-triage <skill> benchmark failure`.
 
@@ -158,7 +158,7 @@ If `scripts/benchmark-regression-check.mjs` reports a `regression` verdict (the 
 
 If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
 
-If the failure pattern has already been triaged as a repeated same-family benchmark false negative, recommend `/targeted-skill-builder <skill> benchmark repeated false-negative generalization` instead of another `/benchmark-test-skill <skill>` rerun.
+If the failure pattern has already been triaged as a repeated same-family benchmark false negative, recommend `/session-triage <skill> benchmark repeated false-negative generalization` instead of another `/benchmark-test-skill <skill>` rerun.
 
 If evaluated benchmark runs completed and subjective output-quality review or remediation planning has not yet been performed, recommend `/benchmark-agent-review <skill>` as the next separate step.
 

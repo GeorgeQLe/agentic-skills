@@ -1,7 +1,0 @@
-interface:
-  display_name: "Targeted Skill Builder"
-  short_description: "Create or update one focused skill from a concrete workflow gap"
-  default_prompt: "Use $targeted-skill-builder to turn this concrete workflow gap or correction into the smallest durable skill, skill update, or reusable prompt."
-
-policy:
-  allow_implicit_invocation: true

@@ -2,7 +2,7 @@
 name: prompt-history-backfill
 description: Scan Claude and Codex conversation history for skill invocation prompts missing from repo prompt history and report or backfill them safely
 type: analysis
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "[--repo <path>] [--skill <slug>] [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--apply] [history/export paths...]"
 ---
@@ -37,7 +37,7 @@ Use this skill when the user wants to audit or backfill `prompts/<skill-slug>/` 
    - Maintain a hardcoded legacy skill map for slugs that no longer exist as active skills:
      - `run` — renamed → `exec`
      - `review` — renamed → `expert-review`
-     - `skill-creator` — split/renamed → `create-agentic-skill` + `create-local-skill`
+     - `skill-creator` — split/renamed → `create-local-skill` (former `create-agentic-skill` now archived)
      - `verify` — never a skill (native tool)
      - `simplify` — never a skill (native tool)
      - `schedule` — never a skill (native tool)

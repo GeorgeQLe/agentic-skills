@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.9
+version: v0.10
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -53,7 +53,7 @@ Discover and search skills visible in the current project plus source-available 
    | Monorepo | `affected` (monorepo), `mono-plan` (monorepo), `mono-guard` (monorepo) |
    | Release & Deploy | `release` (release-ops), `deploy` (release-ops), `branch-lifecycle` (release-ops) |
    | Context & Session | `afps-status`, `codebase-status`, `analyze-sessions` (session-analytics), `handoff` (context-transfer), `sync` (gitops), `investor-update` (business-ops) |
-   | Skill Development | `targeted-skill-builder` (skill-dev), `skill-interview` (skill-dev), `create-agentic-skill` (skill-dev), `create-local-skill` (skill-dev) |
+   | Skill Development | `skill-interview` (skill-dev), `create-local-skill` (skill-dev) |
    | Testing | `uat` (product-testing), `uat-guide` (guided-walkthrough), `quiz-me` (knowledge-check) |
    | Utility | `commit-and-push-by-feature` (gitops), `init-agentic-skills`, `provision-agentic-config`, `skills`, `bootstrap-repo` (repo-maintenance), `desk-flip` (teardown), `compile-central-alignment` (alignment-page-admin), `patch-exec-profile` (exec-profile), `delegate` (agent-bridge), `report-website` (report-gen), `icon-handler` (website-polish), `design-system` (product-design), `prototype` (product-design), `spec-drift` (agent-work-admin), `hygiene` (docs-health), `update-packages` (code-maintenance) |
 

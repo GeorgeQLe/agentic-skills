@@ -14,7 +14,7 @@ function routeFromBenchmarkReport(report: string, skill: string): string {
   const repeatedFalseNegative = /repeated same-family benchmark false negatives/i.test(report)
     || /same family of valid outputs/i.test(report);
   if (repeatedFalseNegative) {
-    return `$targeted-skill-builder ${skill} benchmark repeated false-negative generalization`;
+    return `$session-triage ${skill} benchmark repeated false-negative generalization`;
   }
   if (/hard assertions failed|quality threshold failed|failed assertions/i.test(report)) {
     return `$session-triage ${skill} benchmark failure`;
@@ -29,9 +29,9 @@ function triageRecommendation(report: string, skill: string): string {
   const sameFamilyReports = (report.match(/benchmark false negative/gi) ?? []).length;
   const namesOwner = /agentic-skills-benchmarks|tests\/layer4\/setups|tests\/harness/i.test(report);
   if (sameFamilyReports >= 2 && namesOwner) {
-    return `$targeted-skill-builder ${skill} benchmark repeated false-negative generalization`;
+    return `$session-triage ${skill} benchmark repeated false-negative generalization`;
   }
-  return `$targeted-skill-builder ${skill} benchmark failure`;
+  return `$session-triage ${skill} benchmark failure`;
 }
 
 describe("benchmark-test-skill layer2 fixture coverage", () => {
@@ -51,7 +51,7 @@ describe("benchmark-test-skill layer2 fixture coverage", () => {
     ].join("\n");
 
     expect(routeFromBenchmarkReport(report, "update-packages")).toBe(
-      "$targeted-skill-builder update-packages benchmark repeated false-negative generalization",
+      "$session-triage update-packages benchmark repeated false-negative generalization",
     );
   });
 
@@ -86,7 +86,7 @@ describe("session-triage layer2 fixture coverage", () => {
     ].join("\n");
 
     expect(triageRecommendation(triageEvidence, "update-packages")).toBe(
-      "$targeted-skill-builder update-packages benchmark repeated false-negative generalization",
+      "$session-triage update-packages benchmark repeated false-negative generalization",
     );
   });
 
@@ -99,7 +99,7 @@ describe("session-triage layer2 fixture coverage", () => {
     ].join("\n");
 
     expect(triageRecommendation(triageEvidence, "ship-end")).toBe(
-      "$targeted-skill-builder ship-end benchmark failure",
+      "$session-triage ship-end benchmark failure",
     );
   });
 });

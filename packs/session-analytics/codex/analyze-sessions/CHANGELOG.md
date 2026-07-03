@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-07-03
+
+- Repointed the workflow-gap next route from the archived `targeted-skill-builder` to `session-triage`, which now owns verified fixes and emits a managing-layer handoff payload.
+
 ## v0.7 - 2026-06-20
 
 - Added a Persistent Insights Memory: a machine-local, gitignored `.session-insights/insights.md` keyed table plus `.session-insights/watermark.json`. A Recall step reads the store and parses only history newer than the watermark layered on recalled insights; a Write step merges findings (dedup/increment Occurrences, advance Last Seen, append new rows) and advances the watermark. Makes the skill accumulate across runs instead of recomputing from raw history every time.

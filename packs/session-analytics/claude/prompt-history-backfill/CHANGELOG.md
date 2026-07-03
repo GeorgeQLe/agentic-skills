@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-03
+
+- Updated the legacy `skill-creator` slug mapping since `create-agentic-skill` is archived (now maps to `create-local-skill`).
+
 ## v0.2 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

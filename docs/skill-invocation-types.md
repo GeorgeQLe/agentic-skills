@@ -348,10 +348,8 @@
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
-| `create-agentic-skill` | primary | user | Create repo-managed skill |
 | `create-local-skill` | primary | user | Create user-local skill |
 | `skill-interview` | primary | user | Skill requirements interview |
-| `targeted-skill-builder` | primary | user | Build skill from specific target |
 
 ### Pack: teardown
 

@@ -2,7 +2,7 @@
 name: skill-interview
 description: Interview the user to define the characteristics of a skill they want created
 type: planning
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "[skill-name-or-topic]"
 context_intake: deep
@@ -12,15 +12,15 @@ context_intake: deep
 
 Invoke as `$skill-interview`.
 
-Use this skill when the user wants to create or substantially redesign a skill but the desired behavior, scope, triggers, outputs, validation, or agent compatibility is not yet clear. This skill interrogates the user and turns the answers into a creation-ready skill brief. It does not create the skill itself; route to `$create-agentic-skill`, `$create-local-skill`, or `$targeted-skill-builder` after the brief is complete.
+Use this skill when the user wants to create or substantially redesign a skill but the desired behavior, scope, triggers, outputs, validation, or agent compatibility is not yet clear. This skill interrogates the user and turns the answers into a creation-ready skill brief. It does not create the skill itself. After the brief is complete: for a personal project-local skill route to `$create-local-skill`; for a repo-managed skill in the `agentic-skills` repo, hand the brief to an agent working in that repo to implement following the skill conventions (`docs/skill-anatomy.md`, CLAUDE.md skill-versioning); for a change to an existing shared skill route to `$session-triage`, which emits a managing-layer handoff payload for the fix.
 
 ## Process
 
 1. **Identify the target skill idea.**
    - Treat the user's initial request as a draft, not a complete requirement.
    - Resolve the likely skill name in kebab-case when possible.
-   - If the request is a correction to an existing workflow gap, consider whether `$targeted-skill-builder` is a better next route after the interview.
-   - If the user wants an experimental personal skill under `~/.codex/skills`, plan for `$create-local-skill`; otherwise default to repo-managed `$create-agentic-skill`.
+   - If the request is a correction to an existing shared skill or workflow gap, route to `$session-triage` after the interview instead of scaffolding a new skill.
+   - If the user wants an experimental personal skill under `~/.codex/skills`, plan for `$create-local-skill`; otherwise default to a repo-managed skill implemented directly in the `agentic-skills` repo.
 
 2. **Gather local evidence before probing.**
    - Search for overlapping skills in the active skill list and repository paths such as `base/codex/`, `base/claude/`, and `packs/*/{codex,claude}/`.
@@ -92,9 +92,9 @@ Use this skill when the user wants to create or substantially redesign a skill b
 
 After writing the brief and interview log, recommend exactly one next command:
 
-- `$create-agentic-skill <skill-name>` for repo-managed base skills.
+- Implement a repo-managed skill directly in the `agentic-skills` repo, following `docs/skill-anatomy.md` and CLAUDE.md skill-versioning, using the brief as the spec.
 - `$create-local-skill <skill-name>` for personal local-only skills.
-- `$targeted-skill-builder <existing-skill> <gap>` when the interview found that an existing skill should be updated instead of creating a new skill.
+- `$session-triage <existing-skill> <gap>` when the interview found that an existing shared skill should be updated instead of creating a new skill — it emits a managing-layer handoff payload for the fix.
 - `$init-agentic-skills` (guided pack setup) or a pack-local creation route when the skill belongs inside a project-local pack rather than base skills.
 
 Output exactly two lines beyond the normal report:
@@ -112,7 +112,7 @@ Follow the shared alignment-page convention via the packaged convention resolver
 - Do not assume a new skill is needed when an existing skill update would satisfy the workflow gap.
 - Do not batch unrelated interview questions.
 - Do not invent benchmark coverage; if deterministic local coverage is unsafe or impractical, mark the coverage plan as blocked with a reason and next command.
-- Keep the final brief implementation-ready enough that `$create-agentic-skill` or `$create-local-skill` can execute without re-interviewing the same decisions.
+- Keep the final brief implementation-ready enough that an agent implementing in the `agentic-skills` repo, or `$create-local-skill`, can execute without re-interviewing the same decisions.
 
 ## Default Shipping Contract
 

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="visual" data-alignment-status="review">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill Usage Rates — Full-History Session Audit</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+  --chart-1: #58a6ff; --chart-2: #3fb950; --chart-3: #d29922; --chart-4: #bc8cff;
+  --chart-5: #f85149; --chart-6: #79c0ff; --chart-7: #f0883e; --chart-8: #a5d6ff;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; overflow-wrap: break-word; }
+h1 { color: #fff; font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.4rem; margin-top: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+h3 { color: #fff; font-size: 1.1rem; margin-top: 1.5rem; }
+a { color: var(--accent); }
+.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; background: #1c2333; color: var(--purple); border: 1px solid var(--purple); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 1rem; margin: 1rem 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card .value { font-size: 1.7rem; font-weight: 700; color: #fff; }
+.stat-card .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; }
+.stat-card.green .value { color: var(--green); }
+.stat-card.orange .value { color: var(--orange); }
+.stat-card.accent .value { color: var(--accent); }
+.stat-card.purple .value { color: var(--purple); }
+.stat-card.red .value { color: var(--red); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.6rem 0.8rem; border-bottom: 2px solid var(--border); }
+td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: rgba(88,166,255,0.05); }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+.chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+.chart-container canvas { max-width: 100%; height: auto; }
+.chart-toggle { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; min-height: 40px; cursor: pointer; font-size: 0.82rem; margin-bottom: 0.6rem; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem 0; }
+.toc ul { margin: 0.3rem 0; padding-left: 1.5rem; }
+.toc li { margin: 0.3rem 0; }
+.caveat { background: #1c2333; border-left: 3px solid var(--orange); padding: 0.8rem 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.9rem; }
+.example { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 0.5rem 0.8rem; margin: 0.4rem 0; font-size: 0.88rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0; }
+.question-block h4 { color: var(--purple); margin: 0 0 0.8rem; }
+.question-block label { padding: 0.5rem 0.8rem; margin: 0.3rem 0; border-radius: 4px; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 0.5rem; }
+.question-block label:hover { background: rgba(188,140,255,0.08); }
+.question-block textarea { width: 100%; box-sizing: border-box; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; font-size: 0.9rem; display: none; }
+.sec-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.fb-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+.fb-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 10px 16px; min-height: 44px; cursor: pointer; font-size: 0.82rem; }
+.fb-btn.active-emph { color: var(--green); border-color: var(--green); }
+.fb-btn.active-down { color: var(--red); border-color: var(--red); }
+.fb-btn.active-clar { color: var(--orange); border-color: var(--orange); }
+.fb-area { display: none; margin: 0.5rem 0 1rem; }
+.fb-area textarea { width: 100%; box-sizing: border-box; min-height: 60px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; font-family: inherit; font-size: 0.9rem; }
+.fb-yaml { display: none; margin-top: 0.5rem; }
+.fb-yaml textarea { min-height: 110px; font-family: ui-monospace, Menlo, monospace; font-size: 0.8rem; }
+button.action { background: var(--accent); color: #0d1117; border: none; border-radius: 6px; padding: 10px 16px; min-height: 44px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+button.action:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+button.secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 10px 16px; min-height: 44px; cursor: pointer; font-size: 0.9rem; }
+.compile-out { width: 100%; box-sizing: border-box; min-height: 180px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.6rem; font-family: ui-monospace, Menlo, monospace; font-size: 0.8rem; margin-top: 0.7rem; display: none; }
+.copy-status { font-size: 0.85rem; color: var(--text-muted); margin-left: 0.6rem; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.78rem; border: 1px solid var(--border); color: var(--text-muted); }
+.tag.green { color: var(--green); border-color: var(--green); }
+.tag.red { color: var(--red); border-color: var(--red); }
+.tag.orange { color: var(--orange); border-color: var(--orange); }
+@media (max-width: 860px) { main { padding: 1.5rem 1rem; } }
+@media (max-width: 560px) { h1 { font-size: 1.4rem; } .stat-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Skill Usage Rates — Full-History Session Audit</h1>
+<p><span class="status-badge">alignment_status: review</span></p>
+<p>Full-history read of Claude Code and Codex prompt history (<strong>20,783 user prompts</strong>, Dec 10 2025 – Jul 3 2026) answering: <strong>with ~182 skills in this repo, at what rates do we actually use them — and where am I hand-typing prompts that an existing skill already covers?</strong> Headline: usage is extremely head-heavy (<code>/ship</code> alone is 13.7% of every Claude prompt; the top 3 commands are ~78% of all Claude skill invocations), <strong>95 of 182 repo skills were never invoked as a command</strong>, and the largest adoption gap is habit, not coverage — <strong>~550 hand-typed "why is…" prompts</strong> shadow <code>/investigate</code>, which was only invoked 166 times.</p>
+
+<div class="toc">
+<strong>Table of Contents</strong>
+<ul>
+<li><a href="#overview">1. Overview Stats</a></li>
+<li><a href="#topskills">2. Top Skills by Invocation (chart)</a></li>
+<li><a href="#concentration">3. Usage Concentration — Head vs. Dead Tail</a></li>
+<li><a href="#shadow">4. Manual Prompts That Shadow Existing Skills (chart)</a></li>
+<li><a href="#tools">5. Claude vs. Codex Personality Split</a></li>
+<li><a href="#tokens">6. Token &amp; Cost Check</a></li>
+<li><a href="#recs">7. Ranked Recommendations</a></li>
+<li><a href="#impact">8. Highest-Impact View</a></li>
+<li><a href="#evidence">9. Evidence Matrix</a></li>
+<li><a href="#confidence">10. Confidence &amp; Assumption Register</a></li>
+<li><a href="#glossary">11. Glossary Additions Gate</a></li>
+<li><a href="#artifacts">12. Artifact Destination &amp; Proposed File Changes</a></li>
+<li><a href="#route">13. Post-Approval Route</a></li>
+<li><a href="#compile">14. Compile (bottom)</a></li>
+</ul>
+</div>
+
+<h2 id="overview"><span class="sec-head"><span>1. Overview Stats</span><span class="fb-controls" data-fb-section="overview-stats"></span></span></h2>
+<div class="fb-area" id="fb-overview-stats"></div>
+<div class="stat-grid">
+<div class="stat-card"><div class="value">20,783</div><div class="label">total user prompts (11,616 Claude / 9,167 Codex)</div></div>
+<div class="stat-card accent"><div class="value">2,698</div><div class="label">Claude repo-skill invocations (23% of Claude prompts)</div></div>
+<div class="stat-card purple"><div class="value">87 / 182</div><div class="label">repo skills ever invoked as a command</div></div>
+<div class="stat-card red"><div class="value">95</div><div class="label">repo skills never invoked (27 more used once)</div></div>
+<div class="stat-card orange"><div class="value">13.7%</div><div class="label">of every Claude prompt is <code>/ship</code></div></div>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Claude</th><th>Codex</th></tr>
+<tr><td>Date range</td><td>2025-12-10 → 2026-07-03</td><td>2026-01-20 → 2026-07-03</td></tr>
+<tr><td>User prompts</td><td>11,616</td><td>9,167</td></tr>
+<tr><td>Slash/command prompts</td><td>4,726 (incl. built-ins)</td><td>699</td></tr>
+<tr><td>Repo-skill invocations</td><td>2,698</td><td>699 (nearly all repo skills / <code>$run</code>)</td></tr>
+<tr><td>Built-in harness cmds (<code>/clear</code>, <code>/usage</code>…)</td><td>1,502</td><td>—</td></tr>
+<tr><td>Manual (non-command) prompts</td><td>6,881</td><td>8,468</td></tr>
+</table></div>
+<p class="caveat"><strong>Method:</strong> a skill invocation is counted as a leading <code>/command</code> (Claude <code>history.jsonl</code> <code>display</code> field) or leading <code>/</code>/<code>$command</code> (Codex <code>history.jsonl</code> <code>text</code> field), matched against the 182 skill directories under <code>packs/*/claude/*/SKILL.md</code>. Built-in harness commands (<code>/clear</code>, <code>/usage</code>, <code>/resume</code>, <code>/model</code>, <code>/pack</code>…) are separated out and not counted as repo-skill usage.</p>
+
+<h2 id="topskills"><span class="sec-head"><span>2. Top Skills by Invocation (all-time, Claude + Codex)</span><span class="fb-controls" data-fb-section="top-skills"></span></span></h2>
+<div class="fb-area" id="fb-top-skills"></div>
+<div class="chart-container" id="chart-top-skills" data-tts-narrative="Horizontal bar chart of the most-invoked repo skills across both tools. ship dominates at 1595 invocations, followed by ship-end at 372 and investigate at 166; every other skill is under 105.">
+<button class="chart-toggle" type="button">View as table</button>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Command</th><th>Uses</th><th>% of Claude prompts</th><th>Command</th><th>Uses</th></tr>
+<tr><td>/ship</td><td>1,595</td><td>13.7%</td><td>/roadmap</td><td>73</td></tr>
+<tr><td>/ship-end</td><td>372</td><td>3.1%</td><td>/spec-interview</td><td>52</td></tr>
+<tr><td>/investigate</td><td>166</td><td>1.3%</td><td>/exec</td><td>47</td></tr>
+<tr><td>/sync</td><td>103</td><td>0.9%</td><td>/analyze-sessions</td><td>44</td></tr>
+<tr><td>/targeted-skill-builder</td><td>100</td><td>Codex-heavy</td><td>/plan-phase</td><td>40</td></tr>
+<tr><td>/benchmark-test-skill</td><td>84</td><td>Codex-heavy</td><td>/benchmark-agent-review</td><td>33</td></tr>
+<tr><td>/session-triage</td><td>77</td><td>Codex-heavy</td><td>/customer-discovery</td><td>33</td></tr>
+</table></div>
+
+<h2 id="concentration"><span class="sec-head"><span>3. Usage Concentration — Head vs. Dead Tail</span><span class="fb-controls" data-fb-section="concentration"></span></span></h2>
+<div class="fb-area" id="fb-concentration"></div>
+<p>The distribution is not just skewed — it is a spike plus a long dead tail. Of the 2,698 Claude repo-skill invocations, the top 3 (<code>ship</code>, <code>ship-end</code>, <code>investigate</code>) account for <strong>2,106 (78%)</strong>.</p>
+<div class="chart-container" id="chart-concentration" data-tts-narrative="Bar chart of the 182 repo skills bucketed by lifetime invocation count. 95 skills were never invoked, 27 were invoked exactly once, 24 were invoked two to five times, and only 36 skills cleared five invocations.">
+<button class="chart-toggle" type="button">View as table</button>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Invocation tier</th><th>Repo skills</th><th>Share of 182</th></tr>
+<tr><td>Never invoked as a command</td><td>95</td><td>52%</td></tr>
+<tr><td>Invoked exactly once</td><td>27</td><td>15%</td></tr>
+<tr><td>Invoked 2–5 times</td><td>24</td><td>13%</td></tr>
+<tr><td>Invoked more than 5 times</td><td>36</td><td>20%</td></tr>
+</table></div>
+<p class="caveat"><strong>Caveat — "unused" ≠ "dead":</strong> invocation rate alone can't tell a genuinely dead skill from a new or library skill. The whole <code>game-*</code>, <code>devtool-*</code>, <code>creator-*</code>, most <code>youtube-*</code>, and the research-framework sub-skills sit at 0–2 lifetime invocations. Some may be recently built, built for other repos/users, or invoked indirectly (framework sub-skills are called by a parent skill, not typed). Separating dead from new/library is exactly what a <code>skill-inventory</code> pass would resolve (Rec 2).</p>
+<div class="question-block" data-qid="q3" data-section="Usage Concentration" data-gate="candidate/verdict decisions">
+<h4>Q3 (required) — Do you confirm the concentration reading (spike + dead tail)?</h4>
+<label><input type="radio" name="q3" value="Confirmed" data-approval-effect="approve"> Confirmed — head-heavy with a large unused tail</label>
+<label><input type="radio" name="q3" value="Confirmed but tail is mostly new/library" data-approval-effect="approve"> Confirmed, but treat the tail as new/library, not dead (notes)</label>
+<label><input type="radio" name="q3" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q3" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="shadow"><span class="sec-head"><span>4. Manual Prompts That Shadow Existing Skills</span><span class="fb-controls" data-fb-section="shadow"></span></span></h2>
+<div class="fb-area" id="fb-shadow"></div>
+<p>Your follow-up question: <em>cases where I'm manually typing prompts that skills already cover.</em> I scanned all <strong>15,349 manual (non-command) prompts</strong> for intents that map to a shipped skill. The finding: the gap is <strong>discovery/habit, not missing skills</strong> — the skill exists, and the request is still hand-typed. Counts are exact pattern matches (with real examples pulled from history).</p>
+<div class="chart-container" id="chart-shadow" data-tts-narrative="Grouped comparison of hand-typed prompts versus the matching skill's actual invocation count. Investigate-style 'why is' prompts were typed roughly 550 times against 166 slash-investigate uses; commit-and-push was typed about 211 times, update-docs-and-push about 258 times, update-roadmap about 47 times, and run-the-app about 61 times.">
+<button class="chart-toggle" type="button">View as table</button>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Manual intent</th><th>Manual prompts</th><th>Skill that covers it</th><th>Skill's actual uses</th></tr>
+<tr><td>"why is / investigate X"</td><td class="tag red">~550</td><td><code>/investigate</code></td><td>166</td></tr>
+<tr><td>"update docs and push"</td><td class="tag orange">~258</td><td><code>/ship-end</code>, <code>/reconcile-dev-docs</code></td><td>372 / 31</td></tr>
+<tr><td>"commit &amp; push to github"</td><td class="tag orange">~211</td><td><code>/ship</code>, <code>/ship-end</code></td><td>1,595 / 372</td></tr>
+<tr><td>"run/start the app / dev server"</td><td class="tag">~61</td><td><code>/run</code></td><td>121 (in harness)</td></tr>
+<tr><td>"update TODO.md / roadmap"</td><td class="tag">~47</td><td><code>/roadmap</code></td><td>73</td></tr>
+</table></div>
+<h3>4.1 <code>/investigate</code> — the standout gap (~3:1 manual-to-skill)</h3>
+<p>Every bare "why is X" skips the skill's claim-validation → root-cause → git-history-trace and just gets an ad-hoc answer. This is the largest single shadowed intent <em>and</em> the one where skipping the skill costs the most.</p>
+<div class="example">why is onCategoryHover possibly undefined?</div>
+<div class="example">why are there version conflicts? Are you referring to between the drizzle orm version used in the pokeapps vs …</div>
+<div class="example">investigate, confirm, commit, and then push</div>
+<h3>4.2 Git / docs / roadmap shipping asks typed as sentences</h3>
+<div class="example">ok can you push the changes to github with the appropriate commit message?</div>
+<div class="example">can you update the documentation and push to github?</div>
+<div class="example">update TODO.md</div>
+<div class="example">can you pull from master now?  <span class="tag">(typed 2× → /sync)</span></div>
+<p class="caveat"><strong>Why this is a habit gap, not a skill gap:</strong> <code>/ship</code> is muscle memory (1,595 uses) because it's the natural end-of-turn action. The shadowed skills fire from a <em>mid-work realization</em> ("wait, why is this…") where you're already typing a sentence, so the slash prefix never happens. Bare "why is X" also doesn't feel like it needs a skill — but that's exactly <code>/investigate</code>'s job.</p>
+<p class="caveat"><strong>Count precision:</strong> "commit &amp; push" is the tightened count (requires git/github/commit-message/branch context, excludes database/seed pushes). A looser "commit OR push" match returns ~696 but folds in DB-push false positives, so the tightened 211 is the conservative figure. Buckets use first-match keyword classification and are not mutually exhaustive.</p>
+
+<h2 id="tools"><span class="sec-head"><span>5. Claude vs. Codex Personality Split</span><span class="fb-controls" data-fb-section="tools-split"></span></span></h2>
+<div class="fb-area" id="fb-tools-split"></div>
+<p>The two tools are used for different jobs — usage rates reflect that clearly:</p>
+<ul>
+<li><strong>Claude = the shipping surface.</strong> Dominated by <code>ship</code> / <code>ship-end</code> / <code>investigate</code> / <code>sync</code> — day-to-day dev flow.</li>
+<li><strong>Codex = the skill-development bench.</strong> Its top commands are <code>targeted-skill-builder</code> (93), <code>benchmark-test-skill</code> (82), <code>session-triage</code> (65), and <code>benchmark-agent-review</code> (32) — authoring and testing skills, not shipping product.</li>
+<li>Only 699 of 9,167 Codex prompts (7.6%) are commands vs 23% repo-skill on Claude — Codex work leans on longer freeform plan-implement prompts.</li>
+</ul>
+
+<h2 id="tokens"><span class="sec-head"><span>6. Token &amp; Cost Check</span><span class="fb-controls" data-fb-section="token-cost"></span></span></h2>
+<div class="fb-area" id="fb-token-cost"></div>
+<div class="caveat">
+<strong>Not parsed this run — and honestly labeled as such.</strong> This question was about invocation <em>rates</em>, which come from prompt-command parsing, not token metadata. So:
+<ul>
+<li><strong>Claude:</strong> <code>~/.claude/history.jsonl</code> carries no token/usage fields — a permanent coverage gap for this source regardless of parse depth.</li>
+<li><strong>Codex:</strong> the compact <code>history.jsonl</code> used for these counts has no token fields; the rich <code>~/.codex/sessions/**</code> rollups (which do carry <code>token_count</code> events) were <em>not</em> re-parsed this run.</li>
+<li><strong>Cost: unavailable.</strong> No cost fields in either log, no pricing table provided, no provider pricing verified this run. Per skill constraints, no dollar estimate is made.</li>
+</ul>
+Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-sessions-token-spend-value.html">analyze-sessions-token-spend-value.html</a>, <a href="analyze-sessions-skill-gaps-manual-asks.html">analyze-sessions-skill-gaps-manual-asks.html</a>). Q2 lets you require a token re-parse before acting on any recommendation.
+</div>
+
+<h2 id="recs"><span class="sec-head"><span>7. Ranked Recommendations</span><span class="fb-controls" data-fb-section="recommendations"></span></span></h2>
+<div class="fb-area" id="fb-recommendations"></div>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Pattern</th><th>Frequency</th><th>Type</th><th>Suggested action</th><th>Owner surface</th><th>Validation</th></tr>
+<tr><td>1</td><td>"why is…" typed raw instead of <code>/investigate</code></td><td>~550 manual vs 166 skill</td><td><strong>Standing instruction (hook)</strong></td><td><code>UserPromptSubmit</code> hook: detect a bare <code>why (is|does|isn't|won't)…</code> opener and suggest routing through <code>/investigate</code></td><td>settings.json hook (via <code>update-config</code>)</td><td>fire the hook on a sample "why is X" prompt; confirm suggestion, no false-trigger on <code>/investigate</code></td></tr>
+<tr><td>2</td><td>95 never-invoked skills (dead vs new/library unknown)</td><td>52% of 182</td><td>Inventory audit</td><td>Run <code>/skill-inventory</code> to classify the tail; prune/archive genuinely dead skills to shrink the registry and improve recall</td><td>skill-dev pack (installed ✓)</td><td>inventory output separates dead / new / library / indirect</td></tr>
+<tr><td>3</td><td>commit-push / update-docs typed as sentences</td><td>~470 combined</td><td>Standing convention nudge</td><td>Lightweight CLAUDE.md nudge (+ optional hook) so end-of-turn "push/update docs" reaches for <code>/ship-end</code></td><td>CLAUDE.md shared conventions</td><td>spot-check the nudge text; measure recurrence next audit</td></tr>
+</table></div>
+<div class="question-block" data-qid="q4" data-section="Recommendation 1: /investigate prompt-nudge hook" data-gate="candidate/verdict decisions">
+<h4>Q4 (required) — Recommendation 1: add the <code>/investigate</code> prompt-nudge hook?</h4>
+<label><input type="radio" name="q4" value="Approve — build the hook" data-approval-effect="approve"> Approve — wire the hook via <code>update-config</code></label>
+<label><input type="radio" name="q4" value="Approve with changes (notes)" data-approval-effect="approve"> Approve with changes (describe trigger/scope in notes)</label>
+<label><input type="radio" name="q4" value="Reject — too intrusive" data-approval-effect="block"> Reject — a prompt hook would be too intrusive</label>
+<label><input type="radio" name="q4" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q4" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q5" data-section="Recommendations 2-3: inventory + nudge" data-gate="candidate/verdict decisions">
+<h4>Q5 (required) — Recommendations 2–3 (skill-inventory audit of the dead tail; CLAUDE.md ship-end nudge)?</h4>
+<label><input type="radio" name="q5" value="Approve both" data-approval-effect="approve"> Approve both</label>
+<label><input type="radio" name="q5" value="Approve inventory only" data-approval-effect="approve"> Approve the skill-inventory audit only</label>
+<label><input type="radio" name="q5" value="Approve nudge only" data-approval-effect="approve"> Approve the CLAUDE.md nudge only</label>
+<label><input type="radio" name="q5" value="Reject both" data-approval-effect="block"> Reject both</label>
+<label><input type="radio" name="q5" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q5" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="impact"><span class="sec-head"><span>8. Highest-Impact View (avoided manual prompts)</span><span class="fb-controls" data-fb-section="impact"></span></span></h2>
+<div class="fb-area" id="fb-impact"></div>
+<ol>
+<li><strong><code>/investigate</code> prompt-nudge hook</strong> — ~550 historical hits, the largest single shadowed intent, and the highest-value one (it restores claim-validation before an answer).</li>
+<li><strong>skill-inventory audit</strong> — resolves the 95-never-invoked ambiguity in one pass; a smaller registry improves skill recall for every future session.</li>
+<li><strong>ship-end / docs nudge</strong> — ~470 combined commit-push/update-docs sentences; pure convention change, zero new code.</li>
+<li><strong>Already-won baseline:</strong> <code>/ship</code> at 1,595 uses is the single largest automation in the dataset — proof the head of the distribution is healthy; the opportunity is entirely in the tail and the shadowed mid-work intents.</li>
+</ol>
+
+<h2 id="evidence"><span class="sec-head"><span>9. Evidence Matrix</span><span class="fb-controls" data-fb-section="evidence-matrix"></span></span></h2>
+<div class="fb-area" id="fb-evidence-matrix"></div>
+<div class="table-wrap"><table>
+<tr><th>Claim</th><th>Evidence (source · observation · date)</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr>
+<tr><td><code>/ship</code> is 13.7% of all Claude prompts</td><td>history.jsonl · 1,591 leading <code>/ship</code> of 11,616 prompts · Dec 2025–Jul 2026</td><td>Shipping is fully automated and habitual</td><td>High</td><td>No action on git-flow head</td></tr>
+<tr><td>Top 3 = 78% of Claude skill invocations</td><td>history.jsonl · ship 1,591 + ship-end 364 + investigate 151 = 2,106 / 2,698 · same window</td><td>Usage is a spike, not a spread</td><td>High</td><td>Frames the whole audit (Q3)</td></tr>
+<tr><td>95 of 182 repo skills never invoked as a command</td><td>packs/*/claude/*/SKILL.md inventory (182) ∩ command counts (87 seen) · Jul 2026</td><td>Over half the surface is unexercised or invoked only indirectly</td><td>High for the count; Medium for "dead" (indirect/library not separated)</td><td>Approve/reject skill-inventory audit (Q5)</td></tr>
+<tr><td>"why is…" is hand-typed ~550× vs 166 <code>/investigate</code></td><td>history.jsonl+codex · 550 regex matches over 15,349 manual prompts; 166 <code>/investigate</code> invocations · full window</td><td>Largest shadowed intent; ~3:1 manual-to-skill</td><td>Medium-High (keyword classification, not exhaustive)</td><td>Approve/reject the nudge hook (Q4)</td></tr>
+<tr><td>Commit-push typed ~211× despite <code>/ship</code></td><td>history.jsonl+codex · tightened match (git context, excl. DB) · full window</td><td>End-of-turn intent occasionally bypasses the skill</td><td>Medium (looser match = ~696 with false positives)</td><td>Approve/reject the CLAUDE.md nudge (Q5)</td></tr>
+<tr><td>Codex is the skill-dev bench, Claude the shipping surface</td><td>codex history · top cmds targeted-skill-builder 93, benchmark-test-skill 82, session-triage 65 vs Claude ship/investigate/sync · full window</td><td>Tool roles are specialized</td><td>High</td><td>Context only; no action</td></tr>
+</table></div>
+<div class="question-block" data-qid="q1" data-section="Evidence Matrix" data-gate="evidence coverage">
+<h4>Q1 (required) — Is the evidence base sufficient for these recommendations?</h4>
+<label><input type="radio" name="q1" value="Yes — sufficient" data-approval-effect="approve"> Yes — sufficient for all three recommendations</label>
+<label><input type="radio" name="q1" value="Sufficient for the hook only" data-approval-effect="approve"> Sufficient for the <code>/investigate</code> hook; inventory needs the audit itself to firm up</label>
+<label><input type="radio" name="q1" value="No — deeper parsing needed" data-approval-effect="block"> No — need deeper parsing (Claude transcripts, indirect skill calls) before acting</label>
+<label><input type="radio" name="q1" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q1" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q2" data-section="Research completeness" data-gate="research completeness">
+<h4>Q2 (required) — Could missing context change the recommendations? (Indirect/framework skill calls, Claude transcript sub-agent skill use, and Codex rollup token data were not parsed.)</h4>
+<label><input type="radio" name="q2" value="No — accept gaps as noted" data-approval-effect="approve"> No — accept the coverage gaps as noted</label>
+<label><input type="radio" name="q2" value="Yes — count indirect skill calls first" data-approval-effect="block"> Yes — measure indirect/parent-invoked skill calls before calling the tail "unused"</label>
+<label><input type="radio" name="q2" value="Yes — re-parse token data first" data-approval-effect="block"> Yes — re-parse Codex rollup token usage before confirming</label>
+<label><input type="radio" name="q2" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q2" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="confidence"><span class="sec-head"><span>10. Confidence &amp; Assumption Register</span><span class="fb-controls" data-fb-section="confidence-register"></span></span></h2>
+<div class="fb-area" id="fb-confidence-register"></div>
+<div class="table-wrap"><table>
+<tr><th>Conclusion</th><th>Status</th><th>What would change it</th></tr>
+<tr><td>Usage is head-heavy; top 3 = 78%</td><td>Evidence-backed (exact command counts)</td><td>Nothing plausible — direct count</td></tr>
+<tr><td>95 skills are "unused"</td><td>Provisional — measured as <em>never typed as a command</em>; framework sub-skills and parent-invoked skills run without a typed command</td><td>Counting indirect invocations (parent skills, sub-agent calls) in the rich transcripts</td></tr>
+<tr><td><code>/investigate</code> is the top shadowed intent</td><td>Evidence-backed (~550 vs 166), keyword-classified</td><td>A stricter classifier that excludes rhetorical "why" questions could lower the 550</td></tr>
+<tr><td>Commit-push shadowing volume</td><td>Provisional — 211 tightened vs 696 loose; DB false positives in the loose count</td><td>Manual review of the ~485 delta prompts</td></tr>
+<tr><td>Codex = skill-dev bench</td><td>Evidence-backed (command mix)</td><td>—</td></tr>
+</table></div>
+<h3>Alternatives considered</h3>
+<ul>
+<li><strong>Do nothing — the head is healthy.</strong> Rejected as a full answer: true for shipping, but it leaves the ~550 shadowed <code>/investigate</code> asks (the highest-value gap) on the table.</li>
+<li><strong>Auto-run <code>/investigate</code> on any "why" prompt.</strong> Rejected — too aggressive; a suggestion nudge preserves user control and avoids false triggers on rhetorical questions.</li>
+<li><strong>Delete all 95 unused skills now.</strong> Rejected — can't distinguish dead from new/library/indirect without the inventory audit first (Rec 2).</li>
+</ul>
+<h3>Source coverage gaps</h3>
+<ul>
+<li>Claude <code>history.jsonl</code> has no token/cost metadata; all dollar costs unavailable.</li>
+<li>Indirect skill invocations (framework sub-skills, parent-invoked skills, sub-agent skill calls) are not counted — only typed leading commands.</li>
+<li>Rich Claude transcripts (<code>~/.claude/projects/**</code>) and Codex rollups (<code>~/.codex/sessions/**</code>) were not parsed this run — compact prompt history only.</li>
+<li>Intent buckets use first-match keyword classification and are not mutually exhaustive.</li>
+</ul>
+<h3>Downstream implications</h3>
+<ul>
+<li>Approving Rec 1 routes to <code>update-config</code> (a settings.json hook edit — local, reversible).</li>
+<li>Approving Rec 2 routes to <code>/skill-inventory</code> (skill-dev pack, installed ✓ per <code>.agents/project.json</code>).</li>
+<li>Approving Rec 3 edits CLAUDE.md shared conventions, which propagates to future sessions repo-wide.</li>
+</ul>
+
+<h2 id="glossary"><span class="sec-head"><span>11. Glossary Additions Gate</span><span class="fb-controls" data-fb-section="glossary-gate"></span></span></h2>
+<div class="fb-area" id="fb-glossary-gate"></div>
+<p>Proposed for <code>research/glossary.md</code> (flat repo — single parent glossary). Only approved terms are appended during the confirmed-page write step. Note: "manual ask" / "steering prompt" may already exist from a prior analyze-sessions run — if so, these Approve actions are no-ops.</p>
+<div class="table-wrap"><table>
+<tr><th>Term</th><th>Definition</th><th>Source</th><th>Category</th></tr>
+<tr><td>skill shadowing</td><td>Hand-typing a freeform prompt whose intent an existing skill already covers end-to-end (e.g. typing "why is X" instead of invoking <code>/investigate</code>); an adoption/habit gap rather than a coverage gap</td><td>analyze-sessions skill-usage-rates</td><td>workflow</td></tr>
+<tr><td>dead tail</td><td>The set of repo skills that are never (or almost never) invoked, distinct from genuinely dead skills because it can include new, library, or indirectly-invoked skills that no user types as a command</td><td>analyze-sessions skill-usage-rates</td><td>workflow</td></tr>
+</table></div>
+<div class="question-block" data-qid="q6" data-section="Glossary: skill shadowing" data-gate="glossary additions">
+<h4>Q6 (required) — Term: "skill shadowing"</h4>
+<label><input type="radio" name="q6" value="Approve" data-approval-effect="approve"> Approve</label>
+<label><input type="radio" name="q6" value="Edit (notes)" data-approval-effect="approve"> Edit (provide wording in notes)</label>
+<label><input type="radio" name="q6" value="Reject" data-approval-effect="block"> Reject</label>
+<label><input type="radio" name="q6" value="Flag for /repo-glossary review" data-approval-effect="clarify"> Flag for /repo-glossary review</label>
+<label><input type="radio" name="q6" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q6" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+<div class="question-block" data-qid="q7" data-section="Glossary: dead tail" data-gate="glossary additions">
+<h4>Q7 (required) — Term: "dead tail"</h4>
+<label><input type="radio" name="q7" value="Approve" data-approval-effect="approve"> Approve</label>
+<label><input type="radio" name="q7" value="Edit (notes)" data-approval-effect="approve"> Edit (provide wording in notes)</label>
+<label><input type="radio" name="q7" value="Reject" data-approval-effect="block"> Reject</label>
+<label><input type="radio" name="q7" value="Flag for /repo-glossary review" data-approval-effect="clarify"> Flag for /repo-glossary review</label>
+<label><input type="radio" name="q7" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q7" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="artifacts"><span class="sec-head"><span>12. Artifact Destination &amp; Proposed File Changes</span><span class="fb-controls" data-fb-section="artifact-destination"></span></span></h2>
+<div class="fb-area" id="fb-artifact-destination"></div>
+<p>Already written this run (review-stage): this alignment page; the machine-local insights store update (<code>.session-insights/insights.md</code> + watermark — gitignored, not committed); and the prompt-history log under <code>prompts/analyze-sessions/</code>.</p>
+<p>On approval (Stage 3), the proposed canonical writes are:</p>
+<ul>
+<li>Write the approved report to <code>research/analyze-sessions-skill-usage-rates.md</code> (flat research path, matching existing layout).</li>
+<li>Append approved glossary terms to <code>research/glossary.md</code> (create with standard header if missing).</li>
+<li>Convert this page to <code>confirmed</code> and update <code>alignment/index.html</code>.</li>
+<li>Commit + push the page, report, glossary, and index (the insights store stays local/gitignored).</li>
+</ul>
+<div class="question-block" data-qid="q8" data-section="Artifact Destination &amp; Proposed File Changes" data-gate="artifact destination" data-target="research/analyze-sessions-skill-usage-rates.md">
+<h4>Q8 (required) — Approve the canonical artifact destination and file-change scope above?</h4>
+<label><input type="radio" name="q8" value="Approve as proposed" data-approval-effect="approve"> Approve as proposed (page + markdown report + glossary + index)</label>
+<label><input type="radio" name="q8" value="Page-only — no canonical markdown" data-approval-effect="approve"> Page-only — keep the alignment page + index, skip the markdown report</label>
+<label><input type="radio" name="q8" value="Different path (notes)" data-approval-effect="approve"> Different canonical path (specify in notes)</label>
+<label><input type="radio" name="q8" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q8" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="route"><span class="sec-head"><span>13. Post-Approval Route</span><span class="fb-controls" data-fb-section="post-approval-route"></span></span></h2>
+<div class="fb-area" id="fb-post-approval-route"></div>
+<p>If Rec 1 is approved, the natural follow-up is <code>update-config</code> to wire the <code>/investigate</code> prompt-nudge hook. If Rec 2 is approved, route to <code>/skill-inventory</code> (skill-dev pack, installed ✓). Both are available in the active session.</p>
+<div class="question-block" data-qid="q9" data-section="Post-Approval Route" data-gate="post-approval route">
+<h4>Q9 (required) — Route after this page is confirmed?</h4>
+<label><input type="radio" name="q9" value="update-config for the /investigate hook" data-approval-effect="approve"> Route to <code>update-config</code> to build the <code>/investigate</code> nudge hook</label>
+<label><input type="radio" name="q9" value="skill-inventory first" data-approval-effect="approve"> Route to <code>/skill-inventory</code> to triage the dead tail first</label>
+<label><input type="radio" name="q9" value="No follow-up" data-approval-effect="approve"> No follow-up — reporting only</label>
+<label><input type="radio" name="q9" value="__other__" data-approval-effect="other"> Other / None of the above</label>
+<label><input type="radio" name="q9" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
+<textarea data-role="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<h2 id="compile">14. Compile</h2>
+<div class="card">
+<p><strong>Feedback-only path:</strong> select emphasize / 👎 / clarify on any section above, add notes, then compile feedback YAML here (or locally under that section) — available even with gate questions unanswered.</p>
+<p style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+<button class="secondary" id="btn-fb-compile" disabled>Compile Feedback YAML</button>
+<span class="copy-status" id="fb-copy-status"></span>
+</p>
+<textarea class="compile-out" id="fb-yaml-out" readonly></textarea>
+<p style="margin-top:0.4rem;"><button class="secondary" id="btn-fb-copy" style="display:none;">Copy YAML</button></p>
+</div>
+<div class="card">
+<p><strong>Final approval path:</strong> answer all 9 required questions, then compile answers.</p>
+<p style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+<button class="action" id="btn-compile" disabled>Compile Answers</button>
+<span class="copy-status" id="remaining-status"></span>
+<span class="copy-status" id="copy-status"></span>
+</p>
+<textarea class="compile-out" id="yaml-out" readonly></textarea>
+<p style="margin-top:0.4rem;"><button class="secondary" id="btn-copy" style="display:none;">Copy YAML</button></p>
+</div>
+
+<script>
+// --- self-contained horizontal bar chart (inline, no external deps) ---
+(function(){
+  function cssVar(n, fb){ var v = getComputedStyle(document.documentElement).getPropertyValue(n).trim(); return v || fb; }
+  function palette(i){ return cssVar('--chart-' + ((i % 8) + 1), '#58a6ff'); }
+  function drawBars(container, data, opts){
+    opts = opts || {};
+    var title = opts.title || 'Chart';
+    var w = 640, rowH = 34, pad = {top: 34, right: 60, left: opts.left || 180, bottom: 12};
+    var h = pad.top + data.length * rowH + pad.bottom;
+    var max = Math.max.apply(null, data.map(function(d){ return d.value; })) * 1.15;
+    var c = document.createElement('canvas');
+    var dpr = window.devicePixelRatio || 1;
+    c.width = w * dpr; c.height = h * dpr; c.style.width = '100%'; c.style.maxWidth = w + 'px'; c.style.height = 'auto';
+    c.setAttribute('role','img');
+    c.setAttribute('aria-label', title + ': horizontal bar chart, ' + data.length + ' items, highest ' + data[0].label + ' at ' + data[0].value + '.');
+    var ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    var text = cssVar('--text', '#c9d1d9'), muted = cssVar('--text-muted', '#8b949e');
+    ctx.fillStyle = text; ctx.font = 'bold 14px system-ui, sans-serif'; ctx.fillText(title, pad.left, 20);
+    var cw = w - pad.left - pad.right;
+    data.forEach(function(d, i){
+      var y = pad.top + i * rowH + 4;
+      var bw = Math.max(2, (d.value / max) * cw);
+      ctx.fillStyle = palette(i); ctx.fillRect(pad.left, y, bw, rowH - 12);
+      ctx.fillStyle = muted; ctx.font = '12px system-ui, sans-serif'; ctx.textAlign = 'right';
+      ctx.fillText(d.label, pad.left - 8, y + (rowH - 12) / 2 + 4);
+      ctx.textAlign = 'left'; ctx.fillStyle = text;
+      ctx.fillText(String(d.value) + (d.suffix || ''), pad.left + bw + 6, y + (rowH - 12) / 2 + 4);
+      ctx.textAlign = 'left';
+    });
+    container.insertBefore(c, container.firstChild.nextSibling);
+    return c;
+  }
+  function buildTable(container, headers, rows){
+    var wrap = document.createElement('div'); wrap.className = 'table-wrap'; wrap.hidden = true;
+    var t = document.createElement('table');
+    var thead = '<tr>' + headers.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>';
+    var body = rows.map(function(r){ return '<tr>' + r.map(function(x){ return '<td>' + x + '</td>'; }).join('') + '</tr>'; }).join('');
+    t.innerHTML = thead + body; wrap.appendChild(t); container.appendChild(wrap);
+    return wrap;
+  }
+  function wire(id, data, opts, headers, rows){
+    var container = document.getElementById(id);
+    if (!container) return;
+    var canvas = drawBars(container, data, opts);
+    var table = buildTable(container, headers, rows);
+    var btn = container.querySelector('.chart-toggle');
+    btn.addEventListener('click', function(){
+      var showTable = table.hidden;
+      table.hidden = !showTable; canvas.style.display = showTable ? 'none' : '';
+      btn.textContent = showTable ? 'View as chart' : 'View as table';
+    });
+  }
+
+  wire('chart-top-skills',
+    [{label:'/ship',value:1595},{label:'/ship-end',value:372},{label:'/investigate',value:166},
+     {label:'/sync',value:103},{label:'/targeted-skill-builder',value:100},{label:'/benchmark-test-skill',value:84},
+     {label:'/session-triage',value:77},{label:'/roadmap',value:73},{label:'/spec-interview',value:52},
+     {label:'/exec',value:47},{label:'/analyze-sessions',value:44},{label:'/plan-phase',value:40}],
+    {title:'Top 12 skills by invocation (Claude + Codex)'},
+    ['Skill','Invocations'],
+    [['/ship','1,595'],['/ship-end','372'],['/investigate','166'],['/sync','103'],['/targeted-skill-builder','100'],
+     ['/benchmark-test-skill','84'],['/session-triage','77'],['/roadmap','73'],['/spec-interview','52'],
+     ['/exec','47'],['/analyze-sessions','44'],['/plan-phase','40']]);
+
+  wire('chart-concentration',
+    [{label:'Never invoked',value:95},{label:'Invoked once',value:27},{label:'Invoked 2–5×',value:24},{label:'Invoked >5×',value:36}],
+    {title:'182 repo skills by lifetime invocation tier', left:150},
+    ['Invocation tier','Repo skills'],
+    [['Never invoked','95'],['Invoked once','27'],['Invoked 2–5×','24'],['Invoked >5×','36']]);
+
+  wire('chart-shadow',
+    [{label:'"why is…" (investigate)',value:550},{label:'update docs + push',value:258},
+     {label:'commit + push (git)',value:211},{label:'run/start app',value:61},{label:'update roadmap/todo',value:47}],
+    {title:'Manual prompts that shadow an existing skill', left:200},
+    ['Manual intent','Manual prompts','Covering skill (its uses)'],
+    [['"why is…"','~550','/investigate (166)'],['update docs + push','~258','/ship-end (372) · /reconcile-dev-docs (31)'],
+     ['commit + push','~211','/ship (1,595) · /ship-end (372)'],['run/start app','~61','/run (121)'],
+     ['update roadmap/todo','~47','/roadmap (73)']]);
+})();
+</script>
+
+<script>
+(function(){
+var PAGE = 'alignment/analyze-sessions-skill-usage-rates.html';
+var COMMAND = 'analyze-sessions';
+var QIDS = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'];
+var fbState = {};
+
+document.querySelectorAll('.question-block').forEach(function(qb){
+  var notes = qb.querySelector('textarea[data-role="notes"]');
+  qb.querySelectorAll('input[type="radio"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      if (notes) {
+        notes.style.display = 'block';
+        if (r.value === '__other__') notes.placeholder = 'Describe your answer (free-form)';
+        else if (r.value === '__clarify__') notes.placeholder = 'What is unclear? (optional)';
+        else notes.placeholder = 'Additional notes (optional)';
+      }
+      updateRemaining();
+    });
+  });
+});
+
+function answered(){ return QIDS.filter(function(q){ return document.querySelector('input[name="'+q+'"]:checked'); }); }
+function updateRemaining(){
+  var rem = QIDS.length - answered().length;
+  var btn = document.getElementById('btn-compile');
+  var st = document.getElementById('remaining-status');
+  btn.disabled = rem > 0;
+  st.textContent = rem > 0 ? rem + ' required question(s) remaining' : 'All required questions answered';
+}
+document.getElementById('btn-compile').addEventListener('click', function(){
+  if (answered().length < QIDS.length) { scrollToFirstUnanswered(); return; }
+  var y = compileFinalYaml();
+  showYaml('yaml-out', 'btn-copy', 'copy-status', y);
+});
+function scrollToFirstUnanswered(){
+  for (var i=0;i<QIDS.length;i++){
+    if (!document.querySelector('input[name="'+QIDS[i]+'"]:checked')){
+      var el = document.querySelector('.question-block[data-qid="'+QIDS[i]+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth'});
+      return;
+    }
+  }
+}
+
+function yamlEscape(s){ return '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n') + '"'; }
+
+function approvalStatus(){
+  // compute strictly from data-approval-effect metadata + unresolved section feedback — never from label text
+  var allAnswered = answered().length === QIDS.length;
+  if (!allAnswered) return 'not-approved';
+  var blocking = false;
+  QIDS.forEach(function(q){
+    var sel = document.querySelector('input[name="'+q+'"]:checked');
+    if (!sel) { blocking = true; return; }
+    var eff = sel.getAttribute('data-approval-effect');
+    if (eff === 'block' || eff === 'clarify') blocking = true;
+    if (eff === 'other') {
+      var qb = document.querySelector('.question-block[data-qid="'+q+'"]');
+      var notes = qb.querySelector('textarea[data-role="notes"]');
+      if (!notes || !notes.value.trim()) blocking = true; // unaccepted other
+    }
+  });
+  var fbBlocks = collectFb().some(function(e){ return e.type === 'down' || e.type === 'needs-clarification'; });
+  return (blocking || fbBlocks) ? 'not-approved' : 'ready-for-agent-review';
+}
+
+function sectionFeedbackYaml(entries){
+  var lines = [];
+  entries.forEach(function(e){
+    lines.push('  - section: ' + yamlEscape(e.section));
+    lines.push('    feedback: ' + e.type);
+    if (e.notes) lines.push('    notes: ' + yamlEscape(e.notes));
+    lines.push('    requested_agent_action: ' + (e.type === 'emphasize' ? 'add-weight-to-section' : e.type === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'));
+  });
+  return lines;
+}
+function collectFb(){
+  var out = [];
+  Object.keys(fbState).forEach(function(sec){
+    var s = fbState[sec];
+    if (!s || !s.type) return;
+    var ta = document.querySelector('#fb-' + sec + ' textarea.fb-notes');
+    out.push({section: sec, type: s.type, notes: ta ? ta.value.trim() : ''});
+  });
+  return out;
+}
+
+function feedbackYaml(entries){
+  var rem = QIDS.length - answered().length;
+  var y = [];
+  y.push('# Invoke with: ' + COMMAND);
+  y.push('command: ' + yamlEscape(COMMAND));
+  y.push('alignment_page: ' + PAGE);
+  y.push('feedback_status: revision-request');
+  y.push('approval_status: not-approved');
+  y.push('unanswered_required_questions: ' + rem);
+  y.push('section_feedback:');
+  y = y.concat(sectionFeedbackYaml(entries));
+  y.push('# emphasize = revision request: add more weight/prominence/evidence/detail to the named section or point — not approval as-is.');
+  y.push('# down / needs-clarification = evaluate the feedback, investigate further when needed, amend the HTML alignment page, then ask again for final approval.');
+  return y.join('\n');
+}
+function compileFinalYaml(){
+  var status = approvalStatus();
+  var rem = QIDS.length - answered().length;
+  var y = [];
+  y.push('# Invoke with: ' + COMMAND);
+  y.push('command: ' + yamlEscape(COMMAND));
+  y.push('alignment_page: ' + PAGE);
+  y.push('response_status: ' + (rem === 0 ? 'complete' : 'partial'));
+  y.push('approval_status: ' + status);
+  y.push('required_gate_status: ' + (rem === 0 ? 'complete' : 'incomplete'));
+  y.push('unanswered_required_questions: ' + rem);
+  y.push('gate_answers:');
+  QIDS.forEach(function(q){
+    var qb = document.querySelector('.question-block[data-qid="'+q+'"]');
+    var sel = document.querySelector('input[name="'+q+'"]:checked');
+    if (!sel) return;
+    var notes = qb.querySelector('textarea[data-role="notes"]');
+    var st = sel.value === '__other__' ? 'other' : sel.value === '__clarify__' ? 'needs-clarification' : 'answered';
+    var ans = sel.value === '__other__' ? 'other' : sel.value === '__clarify__' ? 'needs-clarification' : sel.value;
+    y.push('  - section: ' + yamlEscape(qb.getAttribute('data-section')));
+    y.push('    gate_type: ' + yamlEscape(qb.getAttribute('data-gate')));
+    y.push('    status: ' + st);
+    y.push('    answer: ' + yamlEscape(ans));
+    if (notes && notes.value.trim()) y.push('    notes: ' + yamlEscape(notes.value.trim()));
+    var tgt = qb.getAttribute('data-target');
+    if (tgt) y.push('    target_path: ' + yamlEscape(tgt));
+  });
+  var fb = collectFb();
+  if (fb.length) { y.push('section_feedback:'); y = y.concat(sectionFeedbackYaml(fb)); }
+  return y.join('\n');
+}
+function showYaml(outId, copyBtnId, statusId, text){
+  var out = document.getElementById(outId);
+  out.style.display = 'block'; out.value = text;
+  var cb = document.getElementById(copyBtnId); cb.style.display = 'inline-block';
+  tryCopy(text, statusId);
+  cb.onclick = function(){ tryCopy(text, statusId, out); };
+}
+function tryCopy(text, statusId, fallbackEl){
+  var st = document.getElementById(statusId);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){ st.textContent = 'Copied to clipboard'; },
+      function(){ fallbackSelect(fallbackEl, st); });
+  } else fallbackSelect(fallbackEl, st);
+}
+function fallbackSelect(el, st){
+  if (el) { el.focus(); el.select(); st.textContent = 'Clipboard blocked — YAML selected, press Ctrl+C'; }
+  else st.textContent = 'Clipboard unavailable — copy from the text box';
+}
+
+document.querySelectorAll('.fb-controls').forEach(function(host){
+  var sec = host.getAttribute('data-fb-section');
+  var defs = [['emphasize','emphasize','active-emph'],['down','👎','active-down'],['needs-clarification','clarify','active-clar']];
+  defs.forEach(function(d){
+    var b = document.createElement('button');
+    b.className = 'fb-btn'; b.textContent = d[1]; b.type = 'button';
+    b.addEventListener('click', function(){
+      var area = document.getElementById('fb-' + sec);
+      var cur = fbState[sec] && fbState[sec].type;
+      host.querySelectorAll('.fb-btn').forEach(function(x){ x.classList.remove('active-emph','active-down','active-clar'); });
+      if (cur === d[0]) { fbState[sec] = null; area.style.display = 'none'; area.innerHTML = ''; }
+      else {
+        fbState[sec] = {type: d[0]};
+        b.classList.add(d[2]);
+        area.style.display = 'block';
+        area.innerHTML = '<textarea class="fb-notes" placeholder="Section feedback notes ('+d[0]+')"></textarea>' +
+          '<div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
+          '<button type="button" class="secondary fb-local-compile">Compile Feedback YAML</button>' +
+          '<button type="button" class="secondary fb-local-copy" style="display:none;">Copy YAML</button>' +
+          '<span class="copy-status fb-local-status"></span></div>' +
+          '<div class="fb-yaml"><textarea readonly></textarea></div>';
+        area.querySelector('.fb-local-compile').addEventListener('click', function(){
+          var entry = {section: sec, type: fbState[sec].type, notes: area.querySelector('.fb-notes').value.trim()};
+          var y = feedbackYaml([entry]);
+          var wrap = area.querySelector('.fb-yaml'); wrap.style.display = 'block';
+          var ta = wrap.querySelector('textarea'); ta.value = y;
+          var cp = area.querySelector('.fb-local-copy'); cp.style.display = 'inline-block';
+          var stEl = area.querySelector('.fb-local-status'); stEl.id = 'fb-st-' + sec;
+          tryCopy(y, stEl.id, ta);
+          cp.onclick = function(){ tryCopy(y, stEl.id, ta); };
+        });
+      }
+      updateFbButtons();
+    });
+    host.appendChild(b);
+  });
+});
+function updateFbButtons(){
+  var any = collectFb().length > 0 || Object.keys(fbState).some(function(k){ return fbState[k] && fbState[k].type; });
+  document.getElementById('btn-fb-compile').disabled = !any;
+}
+document.getElementById('btn-fb-compile').addEventListener('click', function(){
+  var y = feedbackYaml(collectFb());
+  showYaml('fb-yaml-out', 'btn-fb-copy', 'fb-copy-status', y);
+});
+updateRemaining();
+})();
+</script>
+</main>
+
+<script src="../scripts/alignment-question-nav.js"></script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-03
+
+- Repointed benchmark coverage/failure/false-negative and unknown-skill routing off the archived `targeted-skill-builder`/`create-agentic-skill` to `session-triage` and `create-local-skill`/direct implementation.
+
 ## v0.4 - 2026-06-29
 
 - Updated benchmark execution to run from `agentic-skills-benchmarks`, import the public skills catalog export, and keep reports, run data, and regression history in that repo.

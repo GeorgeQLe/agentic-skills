@@ -2,7 +2,7 @@
 name: benchmark-agent-review
 description: Review persisted benchmark run outputs with one or more agent graders and report subjective ergonomic quality separately from deterministic benchmark scores
 type: analysis
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page]
 argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 ---
@@ -97,7 +97,7 @@ Report:
 - Remediation rows must be implementation-ready: each material finding needs a concrete owner target, a proposed behavior change, and a validation check or command. Broad rows like "tighten the rubric" or "update the skill" are incomplete unless they also name the owning file/surface, exact behavior, and proof.
 - Optional deterministic-rubric notes only when the retained output-quality findings show the deterministic rubric failed to surface a meaningful issue or produced misleading context.
 - **Next work:** the one definitive remediation selected from the remediation table, or no follow-up when all evaluated outputs are excellent and no meaningful issue remains.
-- **Recommended next command:** one command derived from that remediation, usually `$targeted-skill-builder <skill> <specific output-quality gap>`, `$targeted-skill-builder <benchmark setup or reviewed skill> <specific rubric gap>`, `$session-triage <skill> benchmark review`, or `$ship` only when no remediation is needed.
+- **Recommended next command:** one command derived from that remediation, usually `$session-triage <skill> <specific output-quality gap>`, `$session-triage <benchmark setup or reviewed skill> <specific rubric gap>`, `$session-triage <skill> benchmark review`, or `$ship` only when no remediation is needed.
 
 ## Alignment Page
 

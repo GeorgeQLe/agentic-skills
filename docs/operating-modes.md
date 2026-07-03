@@ -201,7 +201,6 @@ This section tags every base skill and every pack with a **primary CLI role** â€
 | `pack` | Both | Manages pack state; orchestrates which skills live per project |
 | `feature-interview` | Claude-orchestration | Evidence-backed feature intake, documentation destination, and priority decision |
 | `spec-interview` | Claude-orchestration | Implementation spec completion via interview |
-| `targeted-skill-builder` | Both | Skill-design framing plus repository mutation for focused skill additions or updates |
 | `plan-phase` | Claude-orchestration | Decompose roadmap phase into steps |
 | `reconcile-dev-docs` | Codex-execution | Rewrites task docs to match reality |
 | `regression-check` | Codex-execution | Monorepo health check after changes |

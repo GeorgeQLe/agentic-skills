@@ -19,8 +19,6 @@ const reloadExpectations = [
 describe("skill availability reload language", () => {
   it("tightens targeted skill-dev reload notes in both mirrors", () => {
     const targets = [
-      { path: "packs/skill-dev/claude/targeted-skill-builder/SKILL.md" },
-      { path: "packs/skill-dev/codex/targeted-skill-builder/SKILL.md" },
       { path: "packs/skill-dev/claude/create-local-skill/SKILL.md" },
       { path: "packs/skill-dev/codex/create-local-skill/SKILL.md" },
     ];

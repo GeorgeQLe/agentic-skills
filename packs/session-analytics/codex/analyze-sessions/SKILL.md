@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: v0.7
+version: v0.8
 required_conventions: [alignment-page]
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 context_intake: artifact_only
@@ -125,7 +125,7 @@ Produce a structured report with:
 - Skill performance trends when requested or visible in the scoped data.
 - Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description.
 - Highest-impact section: top 5 automations by avoided manual prompts.
-- Recommended next skill: `$session-triage` for any concrete incident that needs verification, `$targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>` for a broad verified workflow gap, or `none` when no follow-up is justified. When recommending `$targeted-skill-builder` (skill-dev pack), include the likely owner surface and validation expectation in the report.
+- Recommended next skill: `$session-triage` for any concrete incident or broad verified workflow gap that needs a verified fix, or `none` when no follow-up is justified. When routing a workflow gap to `$session-triage`, include the likely owner surface and validation expectation in the report so its fix handoff can target the canonical source.
 
 ## Constraints
 

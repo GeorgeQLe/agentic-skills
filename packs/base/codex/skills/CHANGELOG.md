@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-07-03
+
+- Dropped the archived `targeted-skill-builder` and `create-agentic-skill` from the skill-catalog grouping.
+
 ## v0.9 - 2026-06-22
 
 - Updated the Planning catalog to list `consolidate-prototypes` as the primary product-design consolidation skill.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-03
+
+- Repointed the remediation next-command routing from the archived `targeted-skill-builder` to `session-triage`.
+
 ## v0.3 - 2026-06-29
 
 - Updated review evidence lookup and report output paths for the separate `agentic-skills-benchmarks` repository.

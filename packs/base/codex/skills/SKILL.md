@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.9
+version: v0.10
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -54,7 +54,7 @@ Discover and search skills visible in the current project plus source-available 
    | Release & Deploy | `release`, `deploy` |
    | Context & Session | `afps-status`, `codebase-status`, `analyze-sessions`, `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `init-agentic-skills`, `targeted-skill-builder`, `provision-agentic-config`, `skills`, `risk-register` |
+   | Utility | `commit-and-push-by-feature`, `init-agentic-skills`, `provision-agentic-config`, `skills`, `risk-register` |
 
    Skills not found in the mapping go into an **Other** group at the end.
 
