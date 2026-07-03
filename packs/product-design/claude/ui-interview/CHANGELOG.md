@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.30 - 2026-07-03
+
+- Required UI review gates with wording around missing coverage, rejected branches, retry, or revision to use explicit `data-approval-effect` metadata for every radio option.
+- Added an all-approve compile-path verification before handoff so approving labels such as `No decision-critical coverage is missing.` cannot be misclassified by substring or regex checks.
+
 ## v0.29 - 2026-06-27
 
 - Narrowed `ui-interview` to human-visible UI candidates while consuming upstream `user-flow-map` surfaces and channels as context.

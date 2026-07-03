@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.29
+version: v0.30
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -189,6 +189,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - Include **Interview provenance** in the page and working packet with exactly one of these values: `live-ui-interview` when this run completed the required manifest confirmations with the user; `evidence-synthesis-with-explicit-skip` when the current invocation explicitly asked to skip live questions or synthesize from evidence; `invalid-missing-ui-interview` when neither condition is true. `invalid-missing-ui-interview` pages must route unresolved decisions to a resumed `$ui-interview` and must not imply interview completion or readiness for canonical writes.
    - At the top of the page, include a plain-language **Interview stage** explainer naming the invocation, whether the run is requirements-only, full UI mode, or branch-review mode, what user/agent interview work has already happened or was inferred from approved upstream evidence, and what the reviewer should do next. If requirements were synthesized primarily from approved specs or code evidence rather than live Q&A, say so directly and route missing answers through section feedback or a resumed interview instead of implying the interview is complete.
    - Render the working packet as structured HTML, not as a raw Markdown preview: headings become sections, lists stay readable lists, and every Markdown table becomes an HTML `<table>` inside a `.table-wrap` container with a concise `data-tts-narrative`. A raw Markdown `<pre><code>` dump may appear only as a supplemental source view after the rendered packet, never as the primary review surface.
+   - When UI review gates use visible wording about missing coverage, rejected branches, retry, revision, or similar negative terms, assign explicit outcome metadata to every radio option (`data-approval-effect="approve"`, `"block"`, `"clarify"`, or `"other"`) and compile readiness only from that metadata plus unresolved section feedback. Before handoff, verify the all-approve path compiles to `response_status: complete`, `required_gate_status: complete`, `unanswered_required_questions: []`, and `approval_status: ready-for-agent-review`; approving labels such as `No decision-critical coverage is missing.` must not be downgraded by substring or regex checks.
    - Attempt to open the page in the browser and point the user at the repo-relative path.
 - Treat every checkpoint confirmation in steps 3–8 as non-final; each only confirms the draft is ready for review. Only final compiled YAML from the alignment page authorizes canonical writes.
    - When feedback-only YAML is provided, revise the working packet and the alignment page, then ask again; the work stays pre-approval.

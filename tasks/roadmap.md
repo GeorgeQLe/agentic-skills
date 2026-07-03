@@ -7235,6 +7235,39 @@ icp -> competitive-analysis -> journey-map -> positioning
 6. Run focused verification, document findings, then commit and push intended changes.
 # Current Roadmap - Centralized Skill Convention Docs
 
+## Current Plan - Explicit Alignment Gate Outcome Metadata
+
+### Goal
+
+Update the canonical alignment-page convention and `ui-interview` skill mirrors so review-page readiness is computed from explicit gate outcome metadata, never by matching words in visible answer text.
+
+### Plan
+
+- [x] Capture prompt history and task tracking for the invoked skill work.
+- [x] Update `docs/alignment-page-convention.md` with explicit `data-approval-effect` requirements and compile-path validation fixtures.
+- [x] Add focused layer-1 regression coverage for metadata-based approval status and the positive `No decision-critical coverage is missing.` fixture.
+- [x] Archive `ui-interview` v0.29, bump Codex and Claude mirrors to v0.30, and update changelogs.
+- [x] Regenerate alignment-page bundles with `--legacy-bundles` and verify generated resolver stubs remain in sync.
+- [x] Refresh the managed `gblock-party-redux` installed `ui-interview` copy from the updated source pack.
+- [x] Remediate the active `gblock-party-redux` incident review page found during spot-check.
+- [ ] Run the requested verification commands, review diffs, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- [x] Required radio options carry explicit `data-approval-effect="approve" | "block" | "clarify" | "other"` semantics.
+- [x] Compilers derive `approval_status` from outcome metadata plus unresolved section feedback, not labels, values, prose, regexes, or substrings.
+- [x] All-approve compiles to complete gate and response statuses with `approval_status: ready-for-agent-review`.
+- [x] Blocking, clarification, and unresolved negative section-feedback paths compile to `approval_status: not-approved`.
+- [x] `ui-interview` review pages explicitly warn that words like missing/reject/retry/revision in approving copy must not affect readiness without blocking metadata.
+
+### Test Plan
+
+- `node scripts/upgrade-alignment-page.mjs --legacy-bundles --check`
+- `node scripts/upgrade-alignment-page.mjs --check`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`
+- `bash scripts/skill-archive-audit.sh --strict`
+- `git diff --check`
+
 ## Goal
 
 Patch skillpacks so installed skills can load every convention or contract document they reference from `.agents/skillpacks/docs/**`, while keeping the destination managed and isolated from app-owned project documentation.

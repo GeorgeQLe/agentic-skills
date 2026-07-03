@@ -419,6 +419,35 @@ Project: `agentic-skills`.
 
 Make `idea-scope-brief` the only skill that may ask a Build-In-Public (BIP) gate question. Everywhere else, BIP is non-blocking read-only output behavior. `ship` and `ship-end` may ask about BIP only as a terminal-only prompt after reporting, and only when `.agents/project.json.alignment.build_in_public` is absent.
 
+## Current Plan - Explicit Alignment Gate Outcome Metadata
+
+### Goal
+
+Update alignment-page review readiness so it is driven by machine-readable gate outcome metadata, and propagate the focused `ui-interview` behavior update through versioned source mirrors and generated bundles.
+
+### Current Phase
+
+- [x] Write prompt-history records for the `skill-creator` and `ui-interview` invocations.
+- [x] Patch the canonical alignment-page convention and focused layer-1 tests.
+- [x] Archive and bump both active `ui-interview` skill mirrors to `v0.30`.
+- [x] Regenerate generated alignment-page artifacts.
+- [x] Refresh the managed `gblock-party-redux` installed skill copy from source.
+- [x] Remediate the active `gblock-party-redux` review page still carrying the incident pattern.
+- [ ] Run verification and record review results.
+
+### Review
+
+Verified so far:
+
+- `node scripts/upgrade-alignment-page.mjs --legacy-bundles --check` passed: 315 output paths exact, 313 resolver stubs exact.
+- `node scripts/upgrade-alignment-page.mjs --check` passed: 315 output paths exact, 313 resolver stubs exact.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts` passed: 40 tests.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 415 skills checked, 0 violations.
+- `git diff --check` passed after task-doc updates.
+- `git -C /Users/georgele/projects/web/dev/gblock-party-redux diff --check` passed after active-page remediation.
+- `gblock-party-redux` managed `.codex/skills/ui-interview` now reports `source_version=v0.30` from the source checkout.
+- `gblock-party-redux/alignment/ui-interview-v1-operator-console.html` static fixture check passed: all-approve ready, one blocking option not-approved, and `No decision-critical coverage is missing.` remains an approving path through `data-approval-effect="approve"`.
+
 ### Execution Profile
 
 - Parallel mode: parallel read-only inspection where useful; serial edits for canonical conventions, shipping skills, tests, generated bundles, catalog exports, and task docs.

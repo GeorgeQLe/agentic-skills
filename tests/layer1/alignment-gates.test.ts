@@ -1004,6 +1004,40 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("requires explicit gate outcome metadata instead of visible-text approval heuristics", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} explicit approval effect metadata`).toContain(
+        'data-approval-effect="approve"',
+      );
+      expect(content, `${path} explicit block metadata`).toContain('data-approval-effect="block"');
+      expect(content, `${path} explicit clarify metadata`).toContain('data-approval-effect="clarify"');
+      expect(content, `${path} explicit other metadata`).toContain('data-approval-effect="other"');
+      expect(content, `${path} metadata-derived approval`).toContain(
+        "Compute `approval_status` from the selected options' explicit `data-approval-effect` metadata plus unresolved section feedback only",
+      );
+      expect(content, `${path} no regex text classification`).toContain(
+        "never classify readiness by regex, substring, label text, input value text, prose, or visible answer copy",
+      );
+      expect(content, `${path} positive missing fixture`).toContain(
+        "No decision-critical coverage is missing.",
+      );
+      expect(content, `${path} negated risk words allowed`).toContain(
+        "Positive copy may contain words such as `missing`, `reject`, `retry`, or `revision` when negated or contextualized",
+      );
+      expect(content, `${path} all approve complete path`).toContain(
+        "The all-approve path must compile to `response_status: complete`, `required_gate_status: complete`, `unanswered_required_questions: []`, and `approval_status: ready-for-agent-review`",
+      );
+      expect(content, `${path} blocking fixture not approved`).toContain(
+        'A path with one `data-approval-effect="block"` option selected must compile to `approval_status: not-approved`',
+      );
+      expect(content, `${path} clarification fixture not approved`).toContain(
+        'A path with one `data-approval-effect="clarify"` option selected, one unresolved `needs-clarification` section feedback entry, or one unresolved `down` section feedback entry must compile to `approval_status: not-approved`',
+      );
+    }
+  });
+
   it("uses top in-flow navigation and forbids generated sidebars or sticky compile banners", () => {
     expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
     for (const path of activeAlignmentSkillFiles) {
