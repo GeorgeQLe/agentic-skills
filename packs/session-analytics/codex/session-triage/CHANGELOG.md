@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11 - 2026-07-03
+
+- **Locatable evidence paths (Output):** every file/evidence reference in the report — Target, verification evidence, fix targets, and validation citations — must be emitted in a locatable form (absolute path, or a repo-qualified path with repo root when it differs from the triage cwd) so an agent in any directory can open it. Bare cwd-relative paths that only resolve from the originating project are prohibited as the sole reference, especially when evidence lives outside the managing repo.
+- **Cross-directory file resolution (Process step 2):** a cited file absent from the current cwd is not evidence the artifact is broken or missing — it may live in a different repository. Search likely sibling project dirs (e.g. under `~/projects`) to resolve its real location, record the resolved absolute path, and require a `verified` file-defect verdict to name the absolute path actually inspected. Fixes a false-positive class where a follow-up agent in a different repo treated "not found here" as confirmation of a phantom bug.
+
 ## v0.10 - 2026-07-03
 
 - Reworked step 6 into a **two-branch handoff**: a **managing-layer defect** (shared skill, convention page, or workflow routing/process) emits a self-contained **YAML handoff payload** for an agent running in the agentic-skills directory to implement + publish + refresh; an **invoking-directory defect** (rare) emits a plain in-place patch report for the current directory with no managing-repo route.

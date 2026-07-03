@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: v0.11
+version: v0.10
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 
@@ -35,7 +35,6 @@ Use `$analyze-sessions` instead for informational history questions — single o
    - Read the target skill contract when a skill is named.
    - Read directly relevant project instructions such as `AGENTS.md`, `CLAUDE.md`, task docs, pack docs, logs, or test output.
    - Search only the scoped repo/session/history for the issue text, skill name, invocation command, relevant file paths, user correction, and nearby agent actions.
-   - **Resolve cited file locations before drawing conclusions.** When a cited target file is not found under the current cwd, a file absent from the current directory is **not** evidence that the artifact is broken or missing — the file may live in a different repository than the one you are running in. Search likely sibling project directories (e.g. under `~/projects`) to resolve its real location, and record the resolved absolute path. A `verified` verdict on a file defect requires the report to name the resolved absolute path that was actually inspected; never confirm a file defect against a path that could not be opened.
    - Include the active conversation as evidence when the correction is happening now.
    - Broaden to `$analyze-sessions` only when recurrence, frequency, or trend evidence is needed.
 
@@ -120,7 +119,7 @@ For benchmark regression loop-closing, treat `$benchmark-test-skill` as owned by
 
 Produce a structured report with:
 
-- Target: session/repo/skill scope and evidence sources. Emit every file and evidence reference — Target, verification evidence, fix targets, and validation citations — in a **locatable** form so an agent running in any directory can find and open it: an absolute path, or a reference qualified by its repository / working directory (which repo + repo-relative path) plus the repo root when it differs from the triage cwd. A bare cwd-relative path that only resolves from the originating project is prohibited as the sole reference, especially when the evidence lives outside the managing repo.
+- Target: session/repo/skill scope and evidence sources.
 - User-identified issue: the user's claim in concise terms.
 - Verification verdict: `verified`, `partially verified`, `not verified`, or `inconclusive`, with supporting evidence.
 - Timeline: short sequence from trigger to correction or impact.
