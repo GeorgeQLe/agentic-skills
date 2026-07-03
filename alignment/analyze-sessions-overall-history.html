@@ -438,7 +438,7 @@
       lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
       if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
     });
-    return lines.join("\\n");
+    return lines.join("\n");
   }
   function updateAnswerState() {
     const unanswered = gateQuestions.filter(q => !q.querySelector("input:checked"));
@@ -504,7 +504,7 @@
       lines.push("    requested_agent_action: " + yamlString(entry.requested_agent_action));
       if (entry.notes) lines.push("    notes: " + yamlString(entry.notes));
     });
-    const yaml = lines.join("\\n");
+    const yaml = lines.join("\n");
     compiled.value = yaml;
     copyText(yaml, answerCount);
   });

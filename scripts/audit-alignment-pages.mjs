@@ -72,6 +72,13 @@ const BIP_RECOMMENDATION_STATUS_PATTERNS = [
 ];
 const BIP_OBSOLETE_CHECKPOINT_RE =
   /\b(?:data-bip-status|data-bip-page|data-bip-gates|bip_gates|bip_approval_status)\b/i;
+// Compiled-response YAML must join its line array with a real newline ("\n").
+// A double-escaped separator (.join("\\n") in source) glues every YAML line
+// onto one physical line separated by the literal characters \n, so the
+// textarea renders the whole document on a single line. This catches that
+// specific defect; value-escaping like .replace(/\n/g, "\\n") is unaffected
+// because it is not a .join() separator.
+const YAML_JOIN_NEWLINE_RE = /\.join\(\s*(["'])\\\\n\1\s*\)/;
 
 function collectHtmlPages(dir, prefix = "") {
   if (!existsSync(dir)) return [];
@@ -103,6 +110,7 @@ const alignmentStatusDiagnostics = [];
 const indexDiagnostics = [];
 const collapsingFillDiag = [];
 const bipDiagnostics = [];
+const yamlJoinDiagnostics = [];
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
   const match = htmlTag.match(new RegExp(`\\b${attribute}="([^"]*)"`));
@@ -272,6 +280,12 @@ for (const file of pages) {
 
   collapsingFillDiag.push(...collapsingFillDiagnostics(html, rel));
 
+  if (YAML_JOIN_NEWLINE_RE.test(html)) {
+    yamlJoinDiagnostics.push(
+      `Double-escaped YAML newline join in ${rel} — the compiled-response YAML uses .join("\\\\n") (literal backslash-n), so the whole document renders on one line in the textarea. Change the separator to a real newline .join("\\n").`,
+    );
+  }
+
   if (file === "index.html") continue;
 
   const kokoroTag = html.match(KOKORO_TAG_RE);
@@ -399,6 +413,7 @@ console.log(`Page metadata: ${activePages.length} pages, ${metadataDiagnostics.l
 console.log(`Viewport meta: ${pages.length} pages, ${viewportDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length ? "DRIFT" : "exact"}`);
+console.log(`Compiled-YAML newline join: ${pages.length} pages, ${yamlJoinDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Alignment status controls: ${activePages.length} pages, ${alignmentStatusDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`BIP handling: ${bipPageCount} post-confirmation pages, ${bipDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length ? "DRIFT" : "exact"}`);
@@ -410,6 +425,7 @@ const groups = [
   ["Viewport drift:", viewportDiagnostics],
   ["Embed prohibition drift:", embedDiagnostics],
   ["Collapsing fill drift:", collapsingFillDiag],
+  ["Compiled-YAML newline join drift:", yamlJoinDiagnostics],
   ["Alignment status controls drift:", alignmentStatusDiagnostics],
   ["BIP handling drift:", bipDiagnostics],
   ["Index integrity drift:", indexDiagnostics],
