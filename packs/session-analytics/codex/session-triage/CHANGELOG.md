@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9 - 2026-07-03
+
+- Added a mandatory **Canonical Fix Target** rule to step 6: a skill fix must target the canonical `packs/<pack>/{claude,codex}/<skill>/SKILL.md` source (both variants), resolved with `scripts/pack.sh which <skill>`, and must never land on a managed mirror or installed copy (`.codex/skills`, `~/.codex/skills`, `~/.npm/**/skillpacks`, etc.) — those are read-only evidence and do not propagate. Added a cross-directory rule routing fixes back to the managing repo when cwd is a consuming repo.
+- Added the **publish + refresh loop** (archive/version bump → update both variants + CHANGELOG → `git add` → `npm run skillpacks:build` → commit source+manifest together → `scripts/pack.sh refresh` / consumer `npx skillpacks refresh` + fresh Codex CLI session) to the step 6 fix, Output, and Validation plan, and required the `$targeted-skill-builder` handoff to carry the canonical target path + publish/refresh loop. Added a matching Constraint.
+
 ## v0.8 - 2026-06-30
 
 - Added the `agentic-skills-bench` install prerequisite directly to benchmark-regression loop-closing recommendations when `$benchmark-test-skill` is unavailable, matching the Pack Availability Guard.

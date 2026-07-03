@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "ed44b517386d499f2250d11a8d7add332ea5fa8acc293f166f59a3a781fc35a0",
+  "source_fingerprint": "ead1d5ef52c60a97f56bcff4a2b50c165161a0d2334532adeea51727281719a7",
   "packs": [
     {
       "name": "agent-bridge",
@@ -8576,7 +8576,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.21",
+      "version": "v0.22",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8586,7 +8586,7 @@
       ],
       "path": "packs/product-design/claude/consolidate-prototypes/SKILL.md",
       "installable": true,
-      "content_sha256": "190b6c331d28197253f88dabbf4e826bb76da6569ebba6c29e7912d86d90799c",
+      "content_sha256": "3360c914e42b917181697cb0e30cbbea0d880fe43079849090d8a150a1efd25c",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8602,6 +8602,7 @@
         "v0.19",
         "v0.2",
         "v0.20",
+        "v0.21",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8769,7 +8770,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.24",
+      "version": "v0.25",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8778,7 +8779,7 @@
       ],
       "path": "packs/product-design/claude/logic-wiring/SKILL.md",
       "installable": true,
-      "content_sha256": "58a7a5211af8c0be39bdc87f581b5c074d85b40ebb372d68a6f2d2c48f992bad",
+      "content_sha256": "de201954ad9cf4c8b2e031f3fea583b57d3771283f64b30640e586166fe6a6fb",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8797,6 +8798,7 @@
         "v0.21",
         "v0.22",
         "v0.23",
+        "v0.24",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -8906,7 +8908,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.29",
+      "version": "v0.30",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8916,7 +8918,7 @@
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "2709bca843a13042257ff429fc3b6f60d261909d765ef911d211f6916bf41c64",
+      "content_sha256": "e618729341a78259ce04fd3b0f20748d72820f366c63ecc62f8aaed959b0b52b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8940,6 +8942,7 @@
         "v0.26",
         "v0.27",
         "v0.28",
+        "v0.29",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9102,7 +9105,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.21",
+      "version": "v0.22",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9112,7 +9115,7 @@
       ],
       "path": "packs/product-design/codex/consolidate-prototypes/SKILL.md",
       "installable": true,
-      "content_sha256": "e210bd165b56029da976735dc4c729c3059f244147f2a62a24d07b7a4ce9ad10",
+      "content_sha256": "88ebbac4f7c0fd59f8890bc49ed7de871ddf944c0ad8ef13f85807933b5cf515",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9128,6 +9131,7 @@
         "v0.19",
         "v0.2",
         "v0.20",
+        "v0.21",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9295,7 +9299,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.24",
+      "version": "v0.25",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9304,7 +9308,7 @@
       ],
       "path": "packs/product-design/codex/logic-wiring/SKILL.md",
       "installable": true,
-      "content_sha256": "0fb02d9d6d00a04657281b5c544478c479f6c1f560bcb9ca754f74402e4be4e2",
+      "content_sha256": "6fded60f482db5419e84de1986c091a1d2deb74cbe3d6397a6c6328253eb8140",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9323,6 +9327,7 @@
         "v0.21",
         "v0.22",
         "v0.23",
+        "v0.24",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9433,7 +9438,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.29",
+      "version": "v0.30",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9443,7 +9448,7 @@
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "5826289c879c2fd7829ad0c9938acd140ecfb290d027b2c2a9e726b2295a508b",
+      "content_sha256": "fa07cd542e78004cf1fc635d636ec2a23126eff050076b456089979b4ceef53d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9467,6 +9472,7 @@
         "v0.26",
         "v0.27",
         "v0.28",
+        "v0.29",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -9603,7 +9609,7 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "claude",
-      "version": "v0.15",
+      "version": "v0.16",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9612,7 +9618,7 @@
       ],
       "path": "packs/product-testing/claude/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "f9b321f756f411be4208716eaba52e5536dbac74c76a30a25ae9161fc0579286",
+      "content_sha256": "d5675fe2341b48b78040bd372101183d2e8d8b4ed5b047db2af3bd26ac638869",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9621,6 +9627,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -9663,7 +9670,7 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "codex",
-      "version": "v0.15",
+      "version": "v0.16",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9672,7 +9679,7 @@
       ],
       "path": "packs/product-testing/codex/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "f6525489d831059311b1497633197006a35f1d32cd08718ff84e97e15f8fbc79",
+      "content_sha256": "f71397b10fe00342e0d2f49f7a766a0e4797e734c1e30f6a4654d6eb913d9d03",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9681,6 +9688,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -10359,13 +10367,13 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/claude/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "9d4650036416c8c7f630d3bbdefef7360d61852794ff9892c8205e2f8d041f74",
+      "content_sha256": "4ec62baf51abeb6374849f5be8a59b02b7095010afc8dbbf240fefafb70297f3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -10374,7 +10382,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/session-triage",
       "deck_memberships": []
@@ -10434,13 +10443,13 @@
       "scope": "pack",
       "pack": "session-analytics",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/session-analytics/codex/session-triage/SKILL.md",
       "installable": true,
-      "content_sha256": "c5a29102dae2d184dd372caa890f06270fd49f7df57d239fe3914449a429b07c",
+      "content_sha256": "38f848ed4d3bb978d817f64a9ac94a7daa5a6c466fdb9149bac24c530d8050a0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -10449,7 +10458,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$session-triage",
       "deck_memberships": []
