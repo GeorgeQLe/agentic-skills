@@ -72,7 +72,7 @@ describe("skill availability reload language", () => {
       /new session is needed/,
       /Codex desktop sessions may list newly created skills only after the active skill registry refreshes/,
     ];
-    const roots = ["base", "packs", "scripts", "README.md", "CLAUDE.md", "AGENTS.md"];
+    const roots = ["packs", "scripts", "README.md", "CLAUDE.md", "AGENTS.md"];
     const files: string[] = [];
 
     const collect = (absolutePath: string) => {

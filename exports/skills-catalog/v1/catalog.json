@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "846428d30078e3bdeac87261047b56456584cebb",
-  "generated_at": "2026-07-02T17:23:44.407Z",
-  "source_fingerprint": "a75b7337ec6b0e00499562a6b43821da4b8cb9a07bc7df7a58feac44ecbacf0b",
-  "source_count": 459,
-  "skill_count": 415,
+  "source_commit": "5b08e21a34fec788a56dd32fca315731193bdbbf",
+  "generated_at": "2026-07-03T21:32:02.435Z",
+  "source_fingerprint": "f5da859ed7730772e8611ac2eb5dabc624874b57431aaf5b8dcd48f6f15dc3e5",
+  "source_count": 455,
+  "skill_count": 411,
   "pack_count": 42,
   "deck_count": 5,
   "set_count": 3,
@@ -206,7 +206,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -235,7 +235,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -264,7 +264,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -293,7 +293,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1010,7 +1010,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [],
       "argumentHint": "[list | types | search <keyword>]",
       "platform": "claude",
@@ -1452,7 +1452,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [],
       "argumentHint": "[list | types | search <keyword>]",
       "platform": "codex",
@@ -8000,7 +8000,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.21",
+      "version": "v0.22",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8224,7 +8224,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.24",
+      "version": "v0.25",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8338,7 +8338,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.29",
+      "version": "v0.30",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8484,7 +8484,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.21",
+      "version": "v0.22",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8708,7 +8708,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.24",
+      "version": "v0.25",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8822,7 +8822,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.29",
+      "version": "v0.30",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8938,7 +8938,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.15",
+      "version": "v0.16",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8993,7 +8993,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.15",
+      "version": "v0.16",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -9761,7 +9761,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9789,7 +9789,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9818,7 +9818,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.8",
+      "version": "v0.10",
       "requiredConventions": [],
       "argumentHint": "[session id/file, repo path, skill name/path, correction text, or issue description]",
       "platform": "claude",
@@ -9844,7 +9844,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9872,7 +9872,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9901,7 +9901,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.8",
+      "version": "v0.10",
       "requiredConventions": [],
       "argumentHint": "[session id/file, repo path, skill name/path, correction text, or issue description]",
       "platform": "codex",
@@ -9917,33 +9917,6 @@
         "session",
         "session-analytics",
         "triage"
-      ]
-    },
-    {
-      "id": "pack-skill-dev-claude-create-agentic-skill",
-      "name": "create-agentic-skill",
-      "title": "Create Agentic Skill",
-      "description": "Create or update a repo-managed skill inside this agentic-skills checkout under base/claude and optionally base/codex, then validate, commit, and push it",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.4",
-      "requiredConventions": [],
-      "argumentHint": "<skill-name> [description] [--claude-only|--codex-only|--mirror]",
-      "platform": "claude",
-      "command": "/create-agentic-skill",
-      "scope": "pack",
-      "pack": "skill-dev",
-      "path": "packs/skill-dev/claude/create-agentic-skill/SKILL.md",
-      "mirrorKey": "create-agentic-skill",
-      "tags": [
-        "agentic",
-        "claude",
-        "create",
-        "execution",
-        "pack",
-        "skill",
-        "skill-dev"
       ]
     },
     {
@@ -9981,7 +9954,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9997,62 +9970,6 @@
         "interview",
         "pack",
         "planning",
-        "skill",
-        "skill-dev"
-      ]
-    },
-    {
-      "id": "pack-skill-dev-claude-targeted-skill-builder",
-      "name": "targeted-skill-builder",
-      "title": "Targeted Skill Builder",
-      "description": "Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.5",
-      "requiredConventions": [
-        "alignment-page"
-      ],
-      "argumentHint": "[workflow gap, correction, skill name, or capability request]",
-      "platform": "claude",
-      "command": "/targeted-skill-builder",
-      "scope": "pack",
-      "pack": "skill-dev",
-      "path": "packs/skill-dev/claude/targeted-skill-builder/SKILL.md",
-      "mirrorKey": "targeted-skill-builder",
-      "tags": [
-        "builder",
-        "claude",
-        "execution",
-        "pack",
-        "skill",
-        "skill-dev",
-        "targeted"
-      ]
-    },
-    {
-      "id": "pack-skill-dev-codex-create-agentic-skill",
-      "name": "create-agentic-skill",
-      "title": "Create Agentic Skill",
-      "description": "Create or update a repo-managed skill inside this agentic-skills checkout under base/codex and optionally base/claude, then validate, commit, and push it",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.4",
-      "requiredConventions": [],
-      "argumentHint": "<skill-name> [description] [--codex-only|--claude-only|--mirror]",
-      "platform": "codex",
-      "command": "$create-agentic-skill",
-      "scope": "pack",
-      "pack": "skill-dev",
-      "path": "packs/skill-dev/codex/create-agentic-skill/SKILL.md",
-      "mirrorKey": "create-agentic-skill",
-      "tags": [
-        "agentic",
-        "codex",
-        "create",
-        "execution",
-        "pack",
         "skill",
         "skill-dev"
       ]
@@ -10092,7 +10009,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -10110,35 +10027,6 @@
         "planning",
         "skill",
         "skill-dev"
-      ]
-    },
-    {
-      "id": "pack-skill-dev-codex-targeted-skill-builder",
-      "name": "targeted-skill-builder",
-      "title": "Targeted Skill Builder",
-      "description": "Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.5",
-      "requiredConventions": [
-        "alignment-page"
-      ],
-      "argumentHint": "[workflow gap, correction, skill name, or capability request]",
-      "platform": "codex",
-      "command": "$targeted-skill-builder",
-      "scope": "pack",
-      "pack": "skill-dev",
-      "path": "packs/skill-dev/codex/targeted-skill-builder/SKILL.md",
-      "mirrorKey": "targeted-skill-builder",
-      "tags": [
-        "builder",
-        "codex",
-        "execution",
-        "pack",
-        "skill",
-        "skill-dev",
-        "targeted"
       ]
     },
     {
@@ -11832,7 +11720,7 @@
         "claude",
         "codex"
       ],
-      "skillCount": 8,
+      "skillCount": 4,
       "path": "packs/skill-dev/PACK.md"
     },
     {

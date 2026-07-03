@@ -1,9 +1,9 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "846428d30078e3bdeac87261047b56456584cebb",
-  "generated_at": "2026-07-02T17:23:44.504Z",
-  "source_fingerprint": "a75b7337ec6b0e00499562a6b43821da4b8cb9a07bc7df7a58feac44ecbacf0b",
-  "source_count": 459,
+  "source_commit": "5b08e21a34fec788a56dd32fca315731193bdbbf",
+  "generated_at": "2026-07-03T21:32:02.508Z",
+  "source_fingerprint": "f5da859ed7730772e8611ac2eb5dabc624874b57431aaf5b8dcd48f6f15dc3e5",
+  "source_count": 455,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",

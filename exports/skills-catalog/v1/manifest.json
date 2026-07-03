@@ -1,9 +1,9 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "846428d30078e3bdeac87261047b56456584cebb",
-  "generated_at": "2026-07-02T17:23:44.427Z",
-  "source_fingerprint": "a75b7337ec6b0e00499562a6b43821da4b8cb9a07bc7df7a58feac44ecbacf0b",
-  "source_count": 459,
+  "source_commit": "5b08e21a34fec788a56dd32fca315731193bdbbf",
+  "generated_at": "2026-07-03T21:32:02.447Z",
+  "source_fingerprint": "f5da859ed7730772e8611ac2eb5dabc624874b57431aaf5b8dcd48f6f15dc3e5",
+  "source_count": 455,
   "exports": {
     "catalog": "exports/skills-catalog/v1/catalog.json",
     "proof": "exports/skills-catalog/v1/proof.json",
@@ -26,8 +26,8 @@
       "name": "skillpacks",
       "version": "0.1.19"
     },
-    "source_fingerprint": "ed44b517386d499f2250d11a8d7add332ea5fa8acc293f166f59a3a781fc35a0",
-    "skill_count": 415,
+    "source_fingerprint": "1be1a5553da494b3f9751ae7e4419fb9bd72a2e2b307486025bf1d236c3aa741",
+    "skill_count": 411,
     "pack_count": 42,
     "deck_count": 5,
     "deck_names": [

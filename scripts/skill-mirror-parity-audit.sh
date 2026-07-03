@@ -79,7 +79,6 @@ const approvedFrontmatterDrift = new Map([
   ["product-design/spec-interview::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/deploy::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/release::argument-hint", "Pre-existing platform argument-hint drift."],
-  ["skill-dev/create-agentic-skill::argument-hint", "Pre-existing platform argument-hint drift."],
   ["skill-dev/create-local-skill::argument-hint", "Pre-existing platform argument-hint drift."],
   ["teardown/decommission::argument-hint", "Pre-existing platform argument-hint drift."],
   ["youtube-ops/youtube-peer-benchmark::argument-hint", "Pre-existing platform argument-hint drift."],
