@@ -25,6 +25,7 @@
     "scripts/skill-links.sh",
     "scripts/skill-convention-bundle-audit.mjs",
     "scripts/skill-convention-registry.mjs",
+    "scripts/lib/",
     "scripts/upgrade-alignment-page.mjs",
     "scripts/upgrade-interrogation-page.mjs",
     "scripts/upgrade-design-tree-loop.mjs",

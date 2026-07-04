@@ -93,6 +93,7 @@ describe('skillpacks npm publish target boundary', () => {
       'scripts/skill-links.sh',
       'scripts/skill-convention-bundle-audit.mjs',
       'scripts/skill-convention-registry.mjs',
+      'scripts/lib/collapsing-fill-audit.mjs',
       'scripts/upgrade-alignment-page.mjs',
       'scripts/upgrade-interrogation-page.mjs',
       'scripts/upgrade-design-tree-loop.mjs',

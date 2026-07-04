@@ -2,6 +2,41 @@
 
 No active implementation task is currently promoted.
 
+## Review - Patch Packaged Alignment Audit Missing Shared Lib 2026-07-04
+
+Project: `agentic-skills`.
+
+### Goal
+
+Fix the packaged `skillpacks alignment pages audit` failure by packaging the shared collapsing-fill audit helper and covering the package boundary.
+
+### Plan
+
+- [x] Add `scripts/lib/` to package build staging.
+- [x] Add `scripts/lib/` to package publish files.
+- [x] Add staged/tarball regression assertions for `scripts/lib/collapsing-fill-audit.mjs`.
+- [x] Rebuild `packages/skillpacks/build`.
+- [x] Verify source audit, packaged audit, focused package tests, dry-run package contents, task docs, and diff hygiene.
+
+### Acceptance Criteria
+
+- Packaged alignment audit passes from `packages/skillpacks/build`.
+- Packed npm dry-run contains `scripts/lib/collapsing-fill-audit.mjs`.
+- Patch does not modify alignment page artifacts or audit behavior.
+
+### Review
+
+Verified:
+
+- `node packages/skillpacks/scripts/build-package.mjs` passed.
+- `node scripts/audit-alignment-pages.mjs` passed.
+- `node packages/skillpacks/build/bin/skillpacks.mjs alignment pages audit` passed.
+- `node --test packages/skillpacks/test/alignment.test.mjs` passed: 14 tests.
+- `node --test packages/skillpacks/test/package-boundary.test.mjs` passed: 2 tests.
+- `npm --workspace packages/skillpacks run pack:dry-run` passed and included `scripts/lib/collapsing-fill-audit.mjs`.
+- `node scripts/audit-task-docs.mjs` passed: 0 failures, 0 warnings.
+- `git diff --check` passed.
+
 ## Review - Refresh Stale Skillpacks Generated Artifacts 2026-07-04
 
 Project: `agentic-skills`.

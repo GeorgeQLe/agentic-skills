@@ -2,6 +2,39 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Patch Packaged Alignment Audit Missing Shared Lib
+
+### Goal
+
+Fix the packaged `skillpacks alignment pages audit` failure by including the shared collapsing-fill audit helper in the staged npm package and adding package-boundary regression coverage.
+
+### Plan
+
+- [x] Add `scripts/lib/` to the skillpacks package build copy boundary.
+- [x] Add `scripts/lib/` to the npm `files` allowlist.
+- [x] Assert `scripts/lib/collapsing-fill-audit.mjs` exists in staged package output and packed tarball coverage.
+- [x] Rebuild the staged package output after source edits.
+- [x] Run alignment audit, packaged alignment audit, focused package tests, dry-run packaging, task-doc audit, and diff hygiene.
+
+### Acceptance Criteria
+
+- `node packages/skillpacks/build/bin/skillpacks.mjs alignment pages audit` no longer fails with `ERR_MODULE_NOT_FOUND`.
+- The staged build and npm dry-run include `scripts/lib/collapsing-fill-audit.mjs`.
+- No alignment page content or audit logic changes are introduced.
+
+### Review
+
+Verified:
+
+- `node packages/skillpacks/scripts/build-package.mjs` staged `scripts/lib/collapsing-fill-audit.mjs`.
+- `node scripts/audit-alignment-pages.mjs` passed.
+- `node packages/skillpacks/build/bin/skillpacks.mjs alignment pages audit` passed from the built package.
+- `node --test packages/skillpacks/test/alignment.test.mjs` passed: 14 tests.
+- `node --test packages/skillpacks/test/package-boundary.test.mjs` passed: 2 tests.
+- `npm --workspace packages/skillpacks run pack:dry-run` passed and listed `scripts/lib/collapsing-fill-audit.mjs`.
+- `node scripts/audit-task-docs.mjs` passed: 0 failures, 0 warnings.
+- `git diff --check` passed.
+
 ## Historical Implementation - Refresh Stale Skillpacks Generated Artifacts
 
 ### Goal
