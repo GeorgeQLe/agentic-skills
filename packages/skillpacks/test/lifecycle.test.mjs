@@ -497,28 +497,119 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(join(codexRoot, 'foreign-managed')), true);
   });
 
-  it('rejects arguments to uninstall-global', async () => {
-    const dir = makeTempProject();
+  it('cleanup removes Build-In-Public config from discovered projects while preserving siblings', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const projectA = join(root, 'project-a');
+    const projectB = join(root, 'nested/project-b');
+    const projectC = join(root, 'project-c');
+    writeProjectConfig(projectA, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: true,
+        bip_platforms: ['linkedin'],
+        bip_prompt_dismissed: true,
+        review_depth: 'full'
+      },
+      notes: ['keep me']
+    });
+    writeProjectConfig(projectB, {
+      project_type: 'business-app',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: false
+      }
+    });
+    writeProjectConfig(projectC, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        review_depth: 'light'
+      }
+    });
 
-    const error = await runSkillpacksExpectError(dir, ['uninstall-global', 'extra']);
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup'], { home });
 
-    assert.match(error.message, /uninstall-global: unexpected argument 'extra'/);
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Done\. Removed 0 repo-managed base skill install\(s\)/);
+    assert.match(stdout, /Removed alignment\.build_in_public, alignment\.bip_platforms, alignment\.bip_prompt_dismissed from project-a\/\.agents\/project\.json/);
+    assert.match(stdout, /Removed alignment\.build_in_public from nested\/project-b\/\.agents\/project\.json/);
+    assert.match(stdout, /Removed Build-In-Public config from 2 project\(s\)/);
+    assert.deepEqual(readProjectConfig(projectA).alignment, { review_depth: 'full' });
+    assert.deepEqual(readProjectConfig(projectA).notes, ['keep me']);
+    assert.equal(Object.hasOwn(readProjectConfig(projectB), 'alignment'), false);
+    assert.deepEqual(readProjectConfig(projectC).alignment, { review_depth: 'light' });
   });
 
-  it('rejects unsupported uninstall-global flags', async () => {
-    const dir = makeTempProject();
+  it('cleanup --dry-run previews Build-In-Public config removal without mutating projects', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const project = join(root, 'project-a');
+    writeProjectConfig(project, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: true,
+        bip_prompt_dismissed: true
+      }
+    });
+    const before = readFileSync(projectConfigPath(project), 'utf8');
 
-    const error = await runSkillpacksExpectError(dir, ['uninstall-global', '--bad']);
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup', '--dry-run'], { home });
 
-    assert.match(error.message, /uninstall-global: unsupported flag '--bad'/);
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove alignment\.build_in_public, alignment\.bip_prompt_dismissed from project-a\/\.agents\/project\.json/);
+    assert.match(stdout, /Dry run\. Would remove Build-In-Public config from 1 project\(s\)/);
+    assert.equal(readFileSync(projectConfigPath(project), 'utf8'), before);
+    assert.equal(existsSync(join(project, '.agents/.pack.lock')), false);
   });
 
-  it('accepts uninstall-global dry-run flags in either order', async () => {
+  it('keeps uninstall-global as a compatibility alias for cleanup', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    writeProjectConfig(root, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: {
+        build_in_public: true
+      }
+    });
+
+    const { stdout, exitCode } = await runSkillpacks(root, ['uninstall-global'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed alignment\.build_in_public from \.\/\.agents\/project\.json/);
+    assert.equal(Object.hasOwn(readProjectConfig(root), 'alignment'), false);
+  });
+
+  it('rejects arguments to cleanup', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['cleanup', 'extra']);
+
+    assert.match(error.message, /cleanup: unexpected argument 'extra'/);
+  });
+
+  it('rejects unsupported cleanup flags', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['cleanup', '--bad']);
+
+    assert.match(error.message, /cleanup: unsupported flag '--bad'/);
+  });
+
+  it('accepts cleanup dry-run flags in either order', async () => {
     const first = makeTempProject();
     const second = makeTempProject();
 
-    const firstResult = await runSkillpacksRaw(first, ['uninstall-global', '--dry-run', '--reinstall-base']);
-    const secondResult = await runSkillpacksRaw(second, ['uninstall-global', '--reinstall-base', '--dry-run']);
+    const firstResult = await runSkillpacksRaw(first, ['cleanup', '--dry-run', '--reinstall-base']);
+    const secondResult = await runSkillpacksRaw(second, ['cleanup', '--reinstall-base', '--dry-run']);
 
     assert.equal(firstResult.exitCode, 0, firstResult.stderr);
     assert.equal(secondResult.exitCode, 0, secondResult.stderr);
@@ -553,7 +644,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(exitCode, 1);
     assert.match(stdout, /WARNING: Found 1 legacy user-home skillpacks install\(s\)/);
     assert.match(stdout, /\.claude\/skills\/codebase-status/);
-    assert.match(stdout, /Recommended cleanup: npx skillpacks uninstall-global/);
+    assert.match(stdout, /Recommended cleanup: npx skillpacks cleanup/);
     assert.match(stdout, /=== project-a ===/);
     assert.match(stdout, /Refreshed project skills to skillpacks@/);
     assert.match(stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 0 failed across 1 project\(s\)\./);
@@ -588,7 +679,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
     assert.match(stdout, /Unsafe reasons:/);
     assert.match(stdout, /Found 1 legacy user-home skillpacks install\(s\) under /);
-    assert.match(stdout, /Cleanup: npx skillpacks uninstall-global/);
+    assert.match(stdout, /Cleanup: npx skillpacks cleanup/);
     assert.match(stdout, /Safe to run: no/);
     assert.equal(existsSync(skillPath(project, 'claude', 'codebase-status')), false);
     assert.equal(existsSync(skillPath(project, 'codex', 'afps-status')), false);
@@ -693,7 +784,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /=== nested\/project-b ===/);
     assert.match(stdout, /would update \.agents\/project\.json \(base skills enabled\)/);
     assert.match(stdout, /install\s+\.claude\/skills\/codebase-status/);
-    assert.match(stdout, /Summary \(uninstall-global --reinstall-base --dry-run\): 2 project\(s\) scanned/);
+    assert.match(stdout, /Summary \(cleanup --reinstall-base --dry-run\): 2 project\(s\) scanned/);
     assert.match(stdout, /Dry run\. No global skills or project files were changed/);
     assert.equal(existsSync(join(claudeRoot, 'codebase-status')), true);
     assert.equal(existsSync(join(codexRoot, 'legacy-codex')), true);

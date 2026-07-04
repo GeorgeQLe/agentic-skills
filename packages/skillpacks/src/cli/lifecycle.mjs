@@ -40,6 +40,7 @@ const HIBERNATED_REACTIVATION_TEXT =
   'Reactivation requires a stable service/API, a known auth contract, and updated smoke tests.';
 const TOOLS = ['claude', 'codex'];
 const AGENT_DOCS = ['AGENTS.md', 'CLAUDE.md'];
+const BIP_CONFIG_KEYS = ['build_in_public', 'bip_platforms', 'bip_prompt_dismissed'];
 const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7', 'v0.8', 'v0.9', 'v0.10', 'v0.11']);
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -579,8 +580,8 @@ function printGlobalRepoSkillWarning(installs, homeRoot = homedir()) {
   for (const install of installs) {
     console.log(`  ${install.rel}`);
   }
-  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks uninstall-global');
-  console.log('To clean up and enable project-local base skills below the current directory: npx skillpacks uninstall-global --reinstall-base');
+  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks cleanup');
+  console.log('To clean up and enable project-local base skills below the current directory: npx skillpacks cleanup --reinstall-base');
 }
 
 function comparePathStrings(left, right) {
@@ -1597,7 +1598,7 @@ export async function initProject({ manifest, projectRoot = process.cwd() }) {
   });
 }
 
-function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'uninstall-global --reinstall-base') {
+function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'cleanup --reinstall-base') {
   return withProjectLock(projectRoot, lockCommand, async () => {
     const next = nextBaseSkillsProjectConfig(projectRoot);
 
@@ -1620,6 +1621,84 @@ function enableProjectLocalBaseSkills(projectRoot, manifest, lockCommand = 'unin
   });
 }
 
+function cloneProjectConfig(config) {
+  return JSON.parse(JSON.stringify(config));
+}
+
+function removeBuildInPublicConfig(config) {
+  if (!config?.alignment || typeof config.alignment !== 'object' || Array.isArray(config.alignment)) {
+    return { config, removed: [] };
+  }
+
+  const next = cloneProjectConfig(config);
+  const removed = [];
+  for (const key of BIP_CONFIG_KEYS) {
+    if (Object.hasOwn(next.alignment, key)) {
+      delete next.alignment[key];
+      removed.push(`alignment.${key}`);
+    }
+  }
+
+  if (Object.keys(next.alignment).length === 0) {
+    delete next.alignment;
+  }
+
+  return { config: next, removed };
+}
+
+async function cleanupBuildInPublicConfigs({ rootDir, dryRun, commandLabel }) {
+  const roots = discoverProjectRoots(rootDir);
+  const changes = [];
+
+  for (const root of roots) {
+    const config = readProjectConfig(root);
+    const result = removeBuildInPublicConfig(config);
+    if (result.removed.length === 0) {
+      continue;
+    }
+
+    changes.push({
+      root,
+      rel: relative(rootDir, root) || '.',
+      removed: result.removed,
+      config: result.config
+    });
+  }
+
+  if (dryRun) {
+    if (changes.length === 0) {
+      console.log(`Dry run. No Build-In-Public project config found under ${rootDir}.`);
+      return changes;
+    }
+    for (const change of changes) {
+      console.log(`Would remove ${change.removed.join(', ')} from ${change.rel}/.agents/project.json`);
+    }
+    console.log(`Dry run. Would remove Build-In-Public config from ${changes.length} project(s) under ${rootDir}.`);
+    return changes;
+  }
+
+  if (changes.length === 0) {
+    console.log(`No Build-In-Public project config found under ${rootDir}.`);
+    return changes;
+  }
+
+  for (const change of changes) {
+    await withProjectLock(change.root, commandLabel, async () => {
+      const current = readProjectConfig(change.root);
+      const result = removeBuildInPublicConfig(current);
+      if (result.removed.length === 0) {
+        return 0;
+      }
+      writeProjectConfig(change.root, result.config);
+      console.log(`Removed ${result.removed.join(', ')} from ${change.rel}/.agents/project.json`);
+      return 0;
+    });
+  }
+
+  console.log(`Removed Build-In-Public config from ${changes.length} project(s) under ${rootDir}.`);
+  return changes;
+}
+
 export async function uninstallGlobal({
   homeRoot = homedir(),
   manifest = null,
@@ -1627,6 +1706,7 @@ export async function uninstallGlobal({
   rootDir = process.cwd(),
   dryRun = false
 } = {}) {
+  const commandLabel = reinstallBase ? 'cleanup --reinstall-base' : 'cleanup';
   const installs = globalRepoSkillInstalls(homeRoot);
   let removed = installs.length;
 
@@ -1656,12 +1736,14 @@ export async function uninstallGlobal({
     console.log('Base skills now install project-local via `npx skillpacks init`.');
   }
 
+  await cleanupBuildInPublicConfigs({ rootDir, dryRun, commandLabel });
+
   if (!reinstallBase) {
     return 0;
   }
 
   if (!manifest) {
-    throw new Error('uninstall-global --reinstall-base requires a packaged manifest');
+    throw new Error('cleanup --reinstall-base requires a packaged manifest');
   }
 
   const roots = discoverProjectRoots(rootDir);
@@ -1712,7 +1794,7 @@ export async function uninstallGlobal({
     );
 
     console.log('');
-    console.log(`Summary (uninstall-global --reinstall-base --dry-run): ${roots.length} project(s) scanned.`);
+    console.log(`Summary (${commandLabel} --dry-run): ${roots.length} project(s) scanned.`);
     for (const project of projectPlans) {
       console.log(
         `  ${project.rel}: ${project.configChanged ? 1 : 0} config, ${project.plan.installs.length} install, ${project.plan.updates.length} update, ${project.plan.removals.length} remove`
@@ -1749,7 +1831,7 @@ export async function uninstallGlobal({
   }
 
   console.log('');
-  console.log(`Summary (uninstall-global --reinstall-base): ${roots.length - failed} ok, ${failed} failed across ${roots.length} project(s).`);
+  console.log(`Summary (${commandLabel}): ${roots.length - failed} ok, ${failed} failed across ${roots.length} project(s).`);
   if (failures.length > 0) {
     console.log('Failures:');
     for (const failure of failures) {
@@ -2476,7 +2558,7 @@ export async function refreshAllProjects({
         console.log(
           `    - Found ${globalInstalls.length} legacy user-home skillpacks install(s) under ${homeRoot}.`
         );
-        console.log('      Cleanup: npx skillpacks uninstall-global');
+        console.log('      Cleanup: npx skillpacks cleanup');
       }
       if (failures.length > 0) {
         console.log(`    - ${failures.length} project(s) failed dry-run planning; see Failures above.`);

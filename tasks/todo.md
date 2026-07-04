@@ -876,3 +876,27 @@ Verified:
 - `npm --workspace skillpacks run pack:dry-run` passed and the dry-run tarball listed `assets/templates/alignment-page.html`, `assets/templates/interrogation-page.html`, and `src/cli/page-scaffold.mjs`.
 - `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
 - `git diff --check` passed.
+
+## Current Implementation - Cleanup Command and BIP Removal
+
+### Plan
+
+- [x] Inspect `uninstall-global`, BIP config storage, docs, and tests.
+- [x] Implement `cleanup` as the primary command with `uninstall-global` preserved as a compatibility alias.
+- [x] Add BIP config cleanup for discovered projects, including dry-run reporting.
+- [x] Update README/help/changelog with cleanup wording and canary-only experimental-feature guidance.
+- [x] Add focused tests and run verification.
+
+### Review
+
+Verified:
+
+- `node --test packages/skillpacks/test/lifecycle.test.mjs` passed: 63 tests.
+- `node --test packages/skillpacks/test/project-config.test.mjs` passed: 25 tests.
+- `node --test packages/skillpacks/test/compatibility.test.mjs` passed: 5 tests.
+- `npm view skillpacks dist-tags --json` returned only `latest: 0.1.19`.
+- `npm view @glexcorp/gskp dist-tags --json` returned only `latest: 0.1.19`.
+- Initial `npm --workspace packages/skillpacks run test:node` exposed package test-file concurrency around `process.chdir`; changed `test:node` to `node --test --test-concurrency=1 test/*.test.mjs`.
+- `npm --workspace packages/skillpacks run test:node` passed after serialization: 187 tests.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `git diff --check` passed.

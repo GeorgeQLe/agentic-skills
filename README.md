@@ -78,13 +78,13 @@ npx skillpacks init
 
 It records `base_skills: true` in `.agents/project.json`, so later `npx skillpacks refresh` updates them from the package version being run. It does **not** install `packs/*` — domain packs are never installed as base skills.
 
-There is no user-home (global) base install. To clean up legacy repo-managed base installs left in `~/.claude/skills` and `~/.codex/skills` by the retired init path:
+There is no user-home (global) base install. To clean up deprecated skillpacks state, including legacy repo-managed base installs left in `~/.claude/skills` / `~/.codex/skills` by the retired init path and stale Build-In-Public project config:
 
 ```bash
-npx skillpacks uninstall-global
+npx skillpacks cleanup
 ```
 
-Add `--dry-run` to preview legacy global cleanup without removing anything.
+Add `--dry-run` to preview cleanup without removing anything. `npx skillpacks uninstall-global` remains as a deprecated compatibility alias.
 
 ## Project Packs
 
@@ -190,7 +190,9 @@ Pack commands also write `.agents/.pack.lock` owner metadata and automatically r
 
 `.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
 
-Alignment-producing skills can opt into Build-In-Public review by passing `--bip` or by setting the project default with `scripts/pack.sh set-bip <on|off|unset>` or `npx skillpacks set-bip <on|off|unset>`. Project-level BIP priority platforms live in `.agents/project.json` as `alignment.bip_platforms` and are written with `scripts/pack.sh set-bip-platforms <platform...>` or `npx skillpacks set-bip-platforms <platform...>`; use `set-bip-platforms unset` to clear only the platform list. Enabled BIP output still covers every bundled channel; saved platforms are ranking/prioritization hints, not filters. For npm CLI fleet updates, `npx skillpacks set-bip <on|off|unset> --all --dry-run` previews discovered-project changes before `npx skillpacks set-bip <on|off|unset> --all` applies them. Skills that proactively suggest enabling Build-In-Public (the BIP Suggestion Gate in `idea-scope-brief` and `ship-end`) record whether the user has been asked via `scripts/pack.sh set-bip-prompt <dismiss|reset>` or `npx skillpacks set-bip-prompt <dismiss|reset>`: `dismiss` sets `alignment.bip_prompt_dismissed: true` so the gate never asks again (distinct from the on/off mode), and `reset` clears the flag so the gate can ask once more.
+Alignment-producing skills can opt into Build-In-Public review by passing `--bip` or by setting the project default with `scripts/pack.sh set-bip <on|off|unset>` or `npx skillpacks set-bip <on|off|unset>`. Project-level BIP priority platforms live in `.agents/project.json` as `alignment.bip_platforms` and are written with `scripts/pack.sh set-bip-platforms <platform...>` or `npx skillpacks set-bip-platforms <platform...>`; use `set-bip-platforms unset` to clear only the platform list. Enabled BIP output still covers every bundled channel; saved platforms are ranking/prioritization hints, not filters. For npm CLI fleet updates, `npx skillpacks set-bip <on|off|unset> --all --dry-run` previews discovered-project changes before `npx skillpacks set-bip <on|off|unset> --all` applies them. Skills that proactively suggest enabling Build-In-Public (the BIP Suggestion Gate in `idea-scope-brief` and `ship-end`) record whether the user has been asked via `scripts/pack.sh set-bip-prompt <dismiss|reset>` or `npx skillpacks set-bip-prompt <dismiss|reset>`: `dismiss` sets `alignment.bip_prompt_dismissed: true` so the gate never asks again (distinct from the on/off mode), and `reset` clears the flag so the gate can ask once more. `npx skillpacks cleanup` removes the BIP project config keys (`alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed`) from discovered projects when backing out deprecated BIP state.
+
+Experimental package behavior should not ship first on the npm `latest` channel. Future experimental features need a canary/pre-release package lane before broad release; until that lane exists in `publish.sh`, hold experiments out of `latest`.
 
 If an assistant does not discover project-local skills, use the base `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
 

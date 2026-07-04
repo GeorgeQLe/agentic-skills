@@ -320,6 +320,9 @@ describe('Node project config commands', () => {
 
     const output = await runSkillpacks(dir, ['help']);
 
+    assert.match(output, /cleanup \[--reinstall-base\] \[--dry-run\]/);
+    assert.match(output, /uninstall-global \[--reinstall-base\] \[--dry-run\]/);
+    assert.match(output, /Deprecated alias for cleanup/);
     assert.match(output, /set-bip-platforms <platform\.\.\.>/);
     assert.match(output, /set-bip-platforms unset\s+Clear only alignment\.bip_platforms/);
   });

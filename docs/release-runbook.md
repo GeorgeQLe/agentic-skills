@@ -49,6 +49,7 @@ Hard gates:
 - Do not publish if the staged `skillpacks` and `@glexcorp/gskp` versions differ.
 - Do not publish unless the npm account can publish both packages. The dry run performs read-only `npm whoami`, maintainer/scope, and target-version checks for both staged package names.
 - Do not publish unless the dry run completes for both staged packages.
+- Do not ship experimental behavior on the `latest` npm channel first. The current `publish.sh` path is latest-oriented; if a feature needs field testing, add a canary/pre-release publishing lane and verify both `skillpacks` and `@glexcorp/gskp` publish under a non-`latest` dist-tag before exposing it broadly.
 
 ## Publish
 

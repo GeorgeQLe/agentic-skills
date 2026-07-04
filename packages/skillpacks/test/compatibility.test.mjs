@@ -19,7 +19,8 @@ const expectedMatrix = new Map([
   ['set-bip <mode> [--all] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-bip-platforms <platform...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
-  ['uninstall-global [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['cleanup [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['uninstall-global [--reinstall-base] [--dry-run]', { owner: 'Node-owned compatibility alias', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -117,8 +118,8 @@ describe('skillpacks compatibility matrix', () => {
     );
     assert.match(
       cliSource,
-      /if \(command === 'uninstall-global'\) \{[\s\S]*--reinstall-base[\s\S]*--dry-run[\s\S]*return uninstallGlobal\(\{/,
-      'uninstall-global should be a Node-owned command that cleans legacy user-home installs and supports reinstall-base dry runs'
+      /if \(command === 'cleanup' \|\| command === 'uninstall-global'\) \{[\s\S]*--reinstall-base[\s\S]*--dry-run[\s\S]*return uninstallGlobal\(\{/,
+      'cleanup should be a Node-owned command that cleans deprecated state and supports reinstall-base dry runs'
     );
     assert.doesNotMatch(
       cliSource,

@@ -760,8 +760,10 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
+  cleanup [--reinstall-base] [--dry-run]
+                               Remove deprecated skillpacks state: legacy globals and BIP config
   uninstall-global [--reinstall-base] [--dry-run]
-                               Remove legacy repo-managed base skills from ~/.claude and ~/.codex
+                               Deprecated alias for cleanup
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   refresh --all [--dry-run]    Refresh every project under the current directory
@@ -922,7 +924,8 @@ export async function runSkillpacksCli(args) {
     return setBipPromptDismissed(rest[0]);
   }
 
-  if (command === 'uninstall-global') {
+  if (command === 'cleanup' || command === 'uninstall-global') {
+    const commandName = command;
     let reinstallBase = false;
     let dryRun = false;
     for (const arg of rest) {
@@ -935,9 +938,9 @@ export async function runSkillpacksCli(args) {
         continue;
       }
       if (arg.startsWith('-')) {
-        throw new Error(`uninstall-global: unsupported flag '${arg}'`);
+        throw new Error(`${commandName}: unsupported flag '${arg}'`);
       }
-      throw new Error(`uninstall-global: unexpected argument '${arg}'`);
+      throw new Error(`${commandName}: unexpected argument '${arg}'`);
     }
     return uninstallGlobal({
       manifest: reinstallBase ? readManifest() : null,

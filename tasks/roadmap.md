@@ -7500,3 +7500,25 @@ Add packaged starter HTML scaffolds for alignment and interrogation pages so ins
 - `npm --workspace skillpacks run build:check`
 - `npm --workspace skillpacks run pack:dry-run`
 - `git diff --check`
+
+## Current Plan - Cleanup Command and BIP Removal
+
+### Goal
+
+Broaden the legacy `uninstall-global` cleanup path into a clearer `cleanup` command that removes deprecated skillpacks artifacts, including legacy user-home skill installs and Build-In-Public project state.
+
+### Plan
+
+- [x] Inspect existing `uninstall-global`, BIP config helpers, docs, and focused tests.
+- [x] Add `cleanup` as the primary CLI command while preserving `uninstall-global` as a compatibility alias.
+- [x] Remove BIP project config keys during cleanup across discovered projects, with dry-run reporting and no unrelated config loss.
+- [x] Update docs/help to describe cleanup and the experimental release policy for future canary-only features.
+- [x] Add focused tests for cleanup aliasing, BIP removal, dry-run behavior, and command help.
+- [x] Run focused verification and record the result in `tasks/todo.md`.
+
+### Acceptance Criteria
+
+- [x] `npx skillpacks cleanup` removes legacy managed globals and BIP config from discovered projects.
+- [x] `npx skillpacks uninstall-global` still works as a deprecated alias.
+- [x] Dry-run mode reports intended global and BIP cleanup without changing files.
+- [x] Docs describe cleanup as the path for deprecated artifacts and reserve experimental features for canary/pre-release packages.

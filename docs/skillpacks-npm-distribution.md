@@ -50,22 +50,22 @@ npx skillpacks refresh
 If a machine still has legacy user-home base installs from the retired init path, clean them up with:
 
 ```bash
-npx skillpacks uninstall-global
+npx skillpacks cleanup
 ```
 
-This removes only skillpacks-owned installs under `~/.claude/skills` and `~/.codex/skills` and leaves unmanaged directories untouched. Domain packs remain project-local only.
-Use `npx skillpacks uninstall-global --dry-run` to preview the exact repo-managed installs that would be removed without deleting anything.
+This removes only skillpacks-owned installs under `~/.claude/skills` and `~/.codex/skills`, leaves unmanaged directories untouched, and removes deprecated Build-In-Public config keys (`alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed`) from discovered projects. Domain packs remain project-local only.
+Use `npx skillpacks cleanup --dry-run` to preview the exact repo-managed installs and BIP config that would be removed without deleting anything.
 
 Use the migration form when you want the same cleanup plus project-local base skills restored below the current directory:
 
 ```bash
-npx skillpacks uninstall-global --reinstall-base
+npx skillpacks cleanup --reinstall-base
 ```
 
 It removes the legacy user-home installs, discovers existing `.agents/project.json` roots under the current directory, sets `base_skills: true` while preserving other project config fields, and refreshes `.claude/skills` / `.codex/skills` in each project. If no project root is discovered, it initializes the current directory with base skills.
 Add `--dry-run` to preview both the global cleanup and the project-local migration plan without removing global skills, writing `.agents/project.json`, installing skill roots, pruning roots, or initializing a project.
 
-`npx skillpacks refresh --all` and `npx skillpacks refresh --all --dry-run` flag any remaining skillpacks-owned user-home installs, continue scanning project roots, suggest `npx skillpacks uninstall-global`, and exit nonzero until the legacy globals are cleaned up.
+`npx skillpacks refresh --all` and `npx skillpacks refresh --all --dry-run` flag any remaining skillpacks-owned user-home installs, continue scanning project roots, suggest `npx skillpacks cleanup`, and exit nonzero until the legacy globals are cleaned up. `npx skillpacks uninstall-global` remains as a deprecated compatibility alias for existing automation.
 
 Source-checkout users install base skills project-local the same way and keep using `scripts/pack.sh` for packs:
 
@@ -213,7 +213,8 @@ Phase 3 compatibility decision: keep `scripts/pack.sh` as the canonical git-chec
 | `set-bip <mode> [--all] [--dry-run]` | Node-owned | Project config writer | No | No | Sets `alignment.build_in_public` to `true`, `false`, or removes it while preserving sibling `alignment` fields. `--all --dry-run` previews discovered-project changes and parse/read issues without writing. |
 | `set-bip-platforms <platform...>` | Node-owned | Project config writer | No | No | Sets `alignment.bip_platforms` to normalized priority platform slugs, or clears only that field with `unset`, while preserving sibling `alignment` fields. Enabled BIP output still covers every bundled channel. |
 | `init` | Node-owned | Manifest plus lifecycle helpers | No | No | Installs base-scope manifest entries as project-local base skills and records `base_skills: true`. |
-| `uninstall-global [--reinstall-base] [--dry-run]` | Node-owned | Managed marker ownership reader plus project-local base refresh | No | No | Removes legacy skillpacks-owned base installs from `~/.claude/skills` and `~/.codex/skills`; leaves unmanaged directories untouched. With `--reinstall-base`, enables project-local base skills in discovered projects below the current directory, or initializes the current directory when none are found. With `--dry-run`, previews removals and migration actions without mutating global skills or project files. |
+| `cleanup [--reinstall-base] [--dry-run]` | Node-owned | Managed marker ownership reader plus project-local config cleanup and optional base refresh | No | No | Removes deprecated skillpacks state: legacy skillpacks-owned base installs from `~/.claude/skills` and `~/.codex/skills`, plus BIP project config keys from discovered projects. With `--reinstall-base`, enables project-local base skills in discovered projects below the current directory, or initializes the current directory when none are found. With `--dry-run`, previews removals and migration actions without mutating global skills or project files. |
+| `uninstall-global [--reinstall-base] [--dry-run]` | Node-owned compatibility alias | Same backend as `cleanup` | No | No | Deprecated alias retained for existing automation; prefer `cleanup`. |
 | `install <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active packs, active skills, aliases, hibernated diagnostics, markers, hashes, and project config writes. |
 | `remove <name...>` | Node-owned | Manifest plus lifecycle helpers | No | No | Handles active pack removal, individual skill removal, and hibernated stale cleanup. |
 | `refresh` | Node-owned | Manifest plus lifecycle helpers | No | No | Recreates enabled base skills, packs, and individual skill roots from `.agents/project.json`. |
