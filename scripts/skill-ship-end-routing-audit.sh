@@ -22,8 +22,8 @@ require_line() {
   fi
 }
 
-require_line "$CODEX_FILE" "version: v0.5" "v0.5 version bump"
-require_line "$CLAUDE_FILE" "version: v0.5" "v0.5 version bump"
+require_line "$CODEX_FILE" "version: v0.14" "current Codex ship-end contract version"
+require_line "$CLAUDE_FILE" "version: v0.13" "current Claude ship-end contract version"
 
 for file in "$CODEX_FILE" "$CLAUDE_FILE"; do
   require_line "$file" "Prefer an owning workflow/domain route over execution-loop defaults." "owning-route precedence"

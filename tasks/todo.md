@@ -2,6 +2,35 @@
 
 No active implementation task is currently promoted.
 
+## Review - Skill Quality Audit Before Publish 2026-07-04
+
+Project: `agentic-skills`.
+
+### Goal
+
+Run a publish-blocking skill quality audit before `./publish.sh --dry-run patch`, patching any release-impacting skill issues before moving from the clean prep state into publish dry run.
+
+### Review
+
+Patched release-blocking audit findings:
+
+- Updated `scripts/skill-mirror-parity-audit.sh` so known intentional platform version drift is explicitly approved and platform-specific refresh/fresh-session wording normalizes correctly.
+- Updated `scripts/skill-ship-end-routing-audit.sh` so it asserts the current `ship-end` contract versions instead of stale `v0.5` expectations.
+- Reclassified `research-amend` from `type: research` to `type: analysis` in both mirrors, archived `v0.1`, bumped to `v0.2`, and updated skill changelogs.
+- Added standard staged-research lifecycle marker wording to both `youtube-meta-research` mirrors, archived `v0.0`, bumped to `v0.1`, and updated skill changelogs.
+- Fixed focused product-design flow-tree coverage to read `idea-scope-brief` from `packs/base/{claude,codex}`.
+- Regenerated package manifest and skills-catalog export metadata after skill frontmatter/content changes.
+
+Verified:
+
+- Starting state was clean on `master`; `npm view skillpacks version` and `npm view @glexcorp/gskp version` both reported `0.1.19`.
+- Structural audits passed: `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-next-step-routing.sh --missing`, `bash scripts/base-skill-version-parity-audit.sh`, `bash scripts/skill-archive-audit.sh --strict`, and `bash scripts/skill-mirror-parity-audit.sh --verbose`.
+- Workflow/routing audits passed: `bash scripts/skill-install-routing-audit.sh --active`, `bash scripts/skill-pack-routing-audit.sh`, `bash scripts/skill-ship-end-routing-audit.sh`, `bash scripts/skill-research-loop-handoff-audit.sh`, `node scripts/skill-alignment-routing-audit.mjs`, and `node scripts/researchish-skill-lifecycle-audit.mjs`.
+- Convention/page checks passed: `node scripts/upgrade-alignment-page.mjs --check`, `node scripts/upgrade-interrogation-page.mjs --check`, `node scripts/upgrade-design-tree-loop.mjs --check`, `node scripts/audit-alignment-pages.mjs`, and `node scripts/audit-interrogation-pages.mjs`.
+- Package/export checks passed: `npm run exports:check`, `npm run skillpacks:verify`, and `npm --workspace packages/skillpacks run test:node` (178/178).
+- Focused layer1 regression coverage passed: `pnpm --dir tests exec vitest run --project layer1 frontmatter install routing-graph pack-skill-mirror-parity skill-install-routing-audit skill-alignment-routing-audit researchish-skill-lifecycle-audit alignment-gates interrogation-confidence-gate product-design-flow-tree post-uat-consolidation-routing` (1730/1730).
+- Final commit/push and `./publish.sh --dry-run patch` are the remaining release-gate actions after task-doc and diff hygiene pass.
+
 ## Review - 0.1.20 Publish Dry-Run Prep 2026-07-04
 
 Project: `agentic-skills`.

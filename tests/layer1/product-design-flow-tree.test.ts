@@ -620,7 +620,7 @@ describe("product-design flow tree artifact boundaries", () => {
       const logicWiring = read(`packs/product-design/${mirror}/logic-wiring/SKILL.md`);
       const consolidate = read(`packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`);
       const specInterview = read(`packs/product-design/${mirror}/spec-interview/SKILL.md`);
-      const ideaScope = read(`base/${mirror}/idea-scope-brief/SKILL.md`);
+      const ideaScope = read(`packs/base/${mirror}/idea-scope-brief/SKILL.md`);
 
       expectContainsAll(userFlow, [
         "Platform Fit Workshop",

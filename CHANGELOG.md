@@ -30,6 +30,8 @@ Release-state note: npm currently reports both package names at `0.1.19`. Source
 - Hardened post-UAT product-design routing so one approved prototype no longer implies consolidation while approved variants remain unbuilt or UAT evidence is missing.
 - Made alignment gate metadata explicit in generated alignment bundles so approval cannot pass without an explicit gate outcome.
 - Updated this source repository's agent instructions to forbid `skillpacks install` / `init` / `which` commands here; skills must be used from in-tree sources or refreshed runtime copies in this repo.
+- Reclassified `research-amend` as an analysis skill and tightened `youtube-meta-research` staged-research lifecycle wording so active skill metadata matches lifecycle audits.
+- Updated publish-blocking audit scripts to recognize intentional platform version drift, normalize platform-specific refresh guidance, and assert the current `ship-end` routing contract.
 - Refreshed generated package manifest and public skills-catalog export metadata against the current source tree.
 
 ### Fixed
@@ -40,6 +42,7 @@ Release-state note: npm currently reports both package names at `0.1.19`. Source
 - Fixed session-triage evidence path handling so handoffs target canonical skill sources, resolve cross-directory files, and keep evidence paths locatable.
 - Fixed `ux-variations` assemble-stop routing so assemble/approval flows do not collide with alignment-page `Pre-approval stop` gates.
 - Fixed generated compiled YAML for overall-history alignment output so embedded newlines are real YAML newlines.
+- Fixed focused product-design flow-tree regression coverage to read base skills from `packs/base/{claude,codex}`.
 
 ### Verification
 
@@ -48,6 +51,9 @@ Release-state note: npm currently reports both package names at `0.1.19`. Source
 - Package verification passed: `npm run skillpacks:verify` (411 active skills, 42 packs, 383 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
 - Skills catalog export verification passed after regenerating export metadata: `npm run exports:check`.
 - Pattern A handoff audit passed: `bash scripts/skill-research-loop-handoff-audit.sh`.
+- Mirror parity audit passed after documenting intentional platform version drift and normalizing refresh guidance: `bash scripts/skill-mirror-parity-audit.sh --verbose`.
+- Research-ish lifecycle audit passed after the `research-amend` and `youtube-meta-research` fixes: `node scripts/researchish-skill-lifecycle-audit.mjs`.
+- Focused layer1 regression coverage passed: `pnpm --dir tests exec vitest run --project layer1 frontmatter install routing-graph pack-skill-mirror-parity skill-install-routing-audit skill-alignment-routing-audit researchish-skill-lifecycle-audit alignment-gates interrogation-confidence-gate product-design-flow-tree post-uat-consolidation-routing` (1730/1730).
 - Skill archive audit passed: `bash scripts/skill-archive-audit.sh --strict` (411 skills checked, 0 violations).
 - Task-doc audit passed after converting publish-readiness checklist items to review evidence: `node scripts/audit-task-docs.mjs`.
 - Diff hygiene passed: `git diff --check`.

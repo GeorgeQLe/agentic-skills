@@ -1,8 +1,8 @@
 ---
 name: research-amend
 description: Amend approved research artifacts through a bounded alignment-gated workflow
-type: research
-version: v0.1
+type: analysis
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "[research path or artifact] [amendment request]"
 visual_tier: document

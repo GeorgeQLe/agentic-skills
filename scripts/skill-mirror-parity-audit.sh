@@ -51,9 +51,11 @@ const approvedOneSided = new Map([
 ]);
 
 const approvedFrontmatterDrift = new Map([
+  ["agent-work-admin/plan-phase::version", "Intentional platform split: Codex carries approval-packet execution behavior not present in Claude."],
   ["agent-work-admin/plan-phase::argument-hint", "Pre-existing platform argument-hint drift."],
   ["agent-work-admin/spec-drift::argument-hint", "Pre-existing platform argument-hint drift."],
   ["alignment-loop/vertical-slice-splitter::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["base/provision-agentic-config::version", "Intentional platform split: Codex provision block includes AGENTS.md-specific instructions."],
   ["business-ops/burn-rate::argument-hint", "Pre-existing platform argument-hint drift."],
   ["business-ops/mvp-gap::argument-hint", "Pre-existing platform argument-hint drift."],
   ["business-ops/scale-audit::argument-hint", "Pre-existing platform argument-hint drift."],
@@ -66,21 +68,27 @@ const approvedFrontmatterDrift = new Map([
   ["code-review/regression-check::argument-hint", "Pre-existing platform argument-hint drift."],
   ["code-review/slim-audit::argument-hint", "Pre-existing platform argument-hint drift."],
   ["context-transfer/handoff::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["docs-health/hygiene::version", "Intentional platform split: Claude carries Claude-specific progress tracking constraints."],
   ["exec-loop/exec::argument-hint", "Codex supports --execute-approved approval packets."],
   ["exec-loop/exec::version", "Intentional split: Claude can open plan mode, while Codex cannot and keeps a separate execution contract."],
   ["exec-loop/ship::version", "Codex gates the $brainstorm route (v0.9); Claude ship has no brainstorm route and stays v0.8."],
+  ["exec-loop/ship-end::version", "Intentional platform split: Codex carries Codex-specific wrap-up validation and command routing."],
   ["guided-walkthrough/guide::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/affected::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["monorepo/mono-plan::version", "Intentional platform split: Codex carries Codex-specific execution/approval routing."],
   ["monorepo/mono-plan::argument-hint", "Pre-existing platform argument-hint drift."],
   ["monorepo/scaffold::argument-hint", "Pre-existing platform argument-hint drift."],
   ["poketowork-kanban/poketo-kanban::argument-hint", "Pre-existing platform argument-hint drift."],
   ["product-design/brainstorm::argument-hint", "Pre-existing platform argument-hint drift."],
   ["product-design/eval-ideas::argument-hint", "Pre-existing punctuation-only argument-hint drift."],
   ["product-design/spec-interview::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["product-design/state-model::version", "Intentional platform split: Codex carries Codex-specific staged design-tree routing updates."],
+  ["product-design/ux-variations::version", "Intentional platform split: Codex carries Codex-specific staged design-tree routing updates."],
   ["release-ops/deploy::argument-hint", "Pre-existing platform argument-hint drift."],
   ["release-ops/release::argument-hint", "Pre-existing platform argument-hint drift."],
   ["skill-dev/create-local-skill::argument-hint", "Pre-existing platform argument-hint drift."],
   ["teardown/decommission::argument-hint", "Pre-existing platform argument-hint drift."],
+  ["vard/vard-align::version", "Intentional platform split: Codex carries Codex-specific package availability and routing updates."],
   ["youtube-ops/youtube-peer-benchmark::argument-hint", "Pre-existing platform argument-hint drift."],
 ]);
 
@@ -236,6 +244,7 @@ function extractSharedSection(text, heading) {
 function normalizePlatformSyntax(text) {
   return text
     .replace(/\r\n/g, "\n")
+    .replace(/After install, tell Claude users to run `\/reload-skills`; if the top-level `\.claude\/skills` directory did not exist at session start or the skill is still invisible, restart Claude Code\./g, "After install, tell users to refresh the active skill registry.")
     .replace(/After install, tell Claude users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
     .replace(/After install, tell Codex users[^.]*\./g, "After install, tell users to refresh the active skill registry.")
     .replace(/[Tt]ell Claude users to [^.]*\./g, "tell users to refresh the active skill registry after install.")
@@ -244,6 +253,8 @@ function normalizePlatformSyntax(text) {
     .replace(/\$([a-z][a-z0-9-]+)/g, "/$1")
     .replace(/\bCodex\b/g, "Agent")
     .replace(/\bClaude\b/g, "Agent")
+    .replace(/ If `?\/([a-z][a-z0-9-]+)`? remains unavailable after install, tell the user to start a fresh Agent CLI session and retry `?\/([a-z][a-z0-9-]+(?: [^.`\n]*)?)`?\./g, "")
+    .replace(/\n3\. Start a fresh Agent CLI session and retry `?\/([a-z][a-z0-9-]+(?: [^.`\n]*)?)`? if `?\/([a-z][a-z0-9-]+)`? remains unavailable after install\./g, "")
     .replace(/\.(?:claude|codex)\/skills/g, ".agent/skills")
     .replace(/[ \t]+$/gm, "")
     .trim();

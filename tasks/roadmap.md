@@ -2,6 +2,32 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Skill Quality Audit Before Publish
+
+### Goal
+
+Run a publish-blocking skill quality audit before `./publish.sh --dry-run patch`, patching any release-impacting skill issues before moving from the clean prep state into publish dry run or real publish.
+
+### Plan
+
+- [x] Confirm clean starting state on `master` and npm latest versions `0.1.19` for both package names.
+- [x] Run structural skill audits covering version metadata, broken dependencies, next-step routing, archive history, base parity, and mirror parity.
+- [x] Run workflow/routing quality audits covering install, pack, ship-end, research-loop, alignment, and researchish lifecycle contracts.
+- [x] Run convention, page, package freshness, and focused layer1 regression checks.
+- [x] Patch release-blocking findings only; archive/version `SKILL.md` behavior changes and regenerate package/catalog metadata after patches.
+- [x] Rerun final release gates before commit/push and publish dry run.
+
+### Acceptance Criteria
+
+- Critical/High findings are patched before publish dry run.
+- Medium findings are patched when they affect installability, routing, package contents, generated metadata, or active skill behavior.
+- Package metadata and export artifacts are fresh if any relevant source changes occur.
+- Final release gates and dry run pass while npm latest remains `0.1.19` and the next target is `0.1.20`.
+
+### Review
+
+Fixed mirror parity script drift, stale ship-end routing audit expectations, `research-amend` lifecycle classification, `youtube-meta-research` staged-research marker coverage, and a stale `base/` test path. Regenerated package/catalog metadata and recorded the 0.1.20 package changelog boundary. Final dry run remains the post-push release gate.
+
 ## Historical Implementation - 0.1.20 Publish Dry-Run Prep
 
 ### Goal

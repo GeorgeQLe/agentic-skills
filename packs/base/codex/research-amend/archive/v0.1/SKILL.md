@@ -1,8 +1,8 @@
 ---
 name: research-amend
 description: Amend approved research artifacts through a bounded alignment-gated workflow
-type: analysis
-version: v0.2
+type: research
+version: v0.1
 required_conventions: [alignment-page]
 argument-hint: "[research path or artifact] [amendment request]"
 visual_tier: document
@@ -10,7 +10,7 @@ visual_tier: document
 
 # Research Amend
 
-Invoke as `/research-amend`.
+Invoke as `$research-amend`.
 
 Use this skill when the user wants to correct, add, or reweight already-approved research without rerunning an entire Pattern A research workflow by default. Typical inputs include a missed competitor, corrected pricing/source fact, new customer quote, stale source, or downstream-impacting correction.
 
@@ -18,7 +18,7 @@ Use this skill when the user wants to correct, add, or reweight already-approved
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell instead of the target skill. After install, tell Claude users to run `/reload-skills`; if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible, restart Claude Code. For unavailable pack skills, recommend `npx skillpacks install <pack-or-skill>`; for unavailable base skills, recommend `npx skillpacks init` before the skill.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `npx skillpacks install <pack>` from the project shell instead of the target skill. After install, tell Codex users to start a fresh Codex CLI session if the `$` skill list remains stale. For unavailable pack skills, recommend `npx skillpacks install <pack-or-skill>`; for unavailable base skills, recommend `npx skillpacks init` before the skill.
 
 ## Amendment Boundaries
 
@@ -27,7 +27,7 @@ Only use the bounded amendment path for research that is already canonical, appr
 - **Low impact:** factual correction, source URL/date update, typo, or one profile/detail that does not change recommendations. Patch the affected canonical artifact and evidence/search log.
 - **Medium impact:** one missed competitor, one new customer evidence item, or one limited correction that changes a matrix row, gap, caveat, or local recommendation. Patch affected intermediate(s), canonical synthesis sections, and evidence/search log.
 - **High impact:** change affects category definition, strategic map, top recommendations, positioning assumptions, ICP, journey sequence, or downstream routing. Do not small-patch. Route to the affected Pattern A framework(s) and synthesis rerun.
-- **Systemic impact:** new ICP/category, many missed competitors, stale source base, invalid original scope, or broad evidence collapse. Do not small-patch. Recommend a full Pattern A rerun or `/research-roadmap` to plan the rerun.
+- **Systemic impact:** new ICP/category, many missed competitors, stale source base, invalid original scope, or broad evidence collapse. Do not small-patch. Recommend a full Pattern A rerun or `$research-roadmap` to plan the rerun.
 
 A single missed competitor defaults to **medium impact** when it changes one competitive row or local comparison, and escalates to **high** only when it changes category framing, strategic grouping, top recommendations, or synthesis conclusions.
 
@@ -90,7 +90,7 @@ End the terminal response with:
 Review the amendment page, compile response YAML, clear context, and paste the compiled YAML into a fresh session.
 ```
 
-The compiled YAML in the page must begin with the invocation comment and include top-level `command` plus `agent_routing.command` set to the same `/research-amend <same scope argument>` invocation.
+The compiled YAML in the page must begin with the invocation comment and include top-level `command` plus `agent_routing.command` set to the same `$research-amend <same scope argument>` invocation.
 
 ### 4. Apply Approved Amendment
 
