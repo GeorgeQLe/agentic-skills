@@ -469,6 +469,14 @@ The next phase must be in plain English, not only an internal
 brief path and intermediate directory were checked, because those filesystem facts are the
 only progress ledger.
 
+**Assemble-ready review-gate exception.** The one exception is the **assemble+approve** stop
+whose deliverable alignment page is in `review`: the binding review gate is the next action, so
+the alignment convention's **Pre-approval stop** governs (`docs/alignment-page-convention.md`).
+Keep the progress fields (`Completed`, `Durable cursor`, `Current phase complete`, `Next phase`)
+but drop the `Why repeat this command` / `Session guidance` repeat-command lines and the
+`## Invoke With YAML` payload as the presented next action; foreground "Review required" and
+present only the page's compiled response YAML.
+
 The `Session guidance` line is an **action directive**, not a passive recommendation: it tells
 the user the physical handoff — clear context (`/clear`) and paste the `## Invoke With YAML`
 block in a fresh session, where the skill cold-starts and resolves state from the durable
@@ -479,7 +487,9 @@ a cold agent self-route), not consumed state like the research loop's compiled a
 ### Optional Human Review Summary
 
 Every intra-skill chunked stop — setup stop, per-unit stop, and assemble-ready handoff — must
-append this prompt after the `## Invoke With YAML` block:
+append this prompt after the `## Invoke With YAML` block (at the assemble-ready stop governed by
+the Assemble-ready review-gate exception above there is no `## Invoke With YAML` block, so append
+it after the review-gate handoff / compiled response YAML instead):
 
 ```markdown
 **Optional Human Review**

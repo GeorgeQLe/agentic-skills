@@ -15367,3 +15367,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Regenerated package/catalog artifacts from the staged index. First verification exposed stale design-tree loop bundles and stale catalog export metadata; regenerated both and reran the failed gates successfully.
 - Verification: package Node tests 178/178, package `skillpacks:verify`, catalog export check, skill archive audit, Pattern A handoff audit, task-doc audit, and diff hygiene passed.
 - Manifest: `tasks/ship-manifest-2026-07-02-0-1-20-publish-readiness.md`.
+
+## 2026-07-04 — ux-variations assemble-stop review-gate carve-out (investigation fix, steps 1–8)
+
+- Resolved the verified contract collision at the chunked assemble+approve stop: the deliverable alignment page is in `review` (alignment Pre-approval stop governs), but the chunking Progress Handoff Block still mandated repeat-command framing + a second `## Invoke With YAML`, producing two same-`command` YAMLs.
+- Canonical edits: added a *Precedence at chunked assemble stops* clause to `docs/alignment-page-convention.md` Pre-approval stop; added an *Assemble-ready review-gate exception* to `docs/design-tree-loop-convention.md` §5 and reconciled the Optional Human Review anchor; mirrored the carve-out into both `ux-variations` SKILL.md variants (§0c + step 8) — assemble stop now leads with the HTML review path + single compiled response YAML, no repeat-command line, no second Invoke With YAML.
+- Version bump (variants had diverged): codex v0.32→v0.33, claude v0.31→v0.32; archived pristine pre-change SKILL.md under `archive/v0.32/` and `archive/v0.31/`; both CHANGELOGs updated.
+- Regenerated 22 `DESIGN-TREE-LOOP.md` bundles (carry the exception). Legacy sibling `ALIGNMENT-PAGE.md` bundles are frozen fallback (not rewritten in default mode); the alignment convention propagates via the packaged resolver at build/publish.
+- Step 7 sibling check: `state-model`/`ui-interview`/`user-flow-map` do not hard-code the assemble-stop repeat-command block at the review stop; no additional edits needed.
+- Verification: `upgrade-design-tree-loop.mjs --check`, `upgrade-alignment-page.mjs --check`, `audit-alignment-pages.mjs`, `git diff --check` all clean; canonical-source acceptance replay confirmed the assemble stop leads with review, presents only the compiled response YAML, drops repeat-command/second-YAML framing, retains progress fields.
