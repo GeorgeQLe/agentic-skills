@@ -2,6 +2,16 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Refresh Stale Skillpacks Generated Artifacts
+
+### Goal
+
+Fix the failed `build:manifest:check` by regenerating stale generated skillpacks artifacts from the current committed skill source.
+
+### Review
+
+Regenerated the package manifest and catalog exports in the required order, staging the package manifest before export generation. Verification passed for `build:manifest:check`, `build:check`, `exports:check`, `skillpacks:verify`, and diff whitespace hygiene.
+
 ## Historical Implementation - Skill Quality Audit Before Publish
 
 ### Goal

@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "ffece4800172ca1273454278664c8387f349f62f",
-  "generated_at": "2026-07-04T05:52:10.183Z",
-  "source_fingerprint": "fe0409bad2b5ee55111405028c6408cda304395f3cb8a7e522dcac9f65469775",
+  "source_commit": "373045a91feab43601534213cc4d8b4841b67dff",
+  "generated_at": "2026-07-04T06:25:16.440Z",
+  "source_fingerprint": "1b2d02b2610413b004ee4947ceeda2d217b32f922bc65931f7d80091172dcc90",
   "source_count": 455,
   "skill_count": 411,
   "pack_count": 42,
@@ -981,10 +981,10 @@
       "name": "research-amend",
       "title": "Research Amend",
       "description": "Amend approved research artifacts through a bounded alignment-gated workflow",
-      "type": "research",
+      "type": "analysis",
       "contextIntake": null,
       "visualTier": "document",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -997,6 +997,7 @@
       "mirrorKey": "research-amend",
       "tags": [
         "amend",
+        "analysis",
         "base",
         "claude",
         "research"
@@ -1423,10 +1424,10 @@
       "name": "research-amend",
       "title": "Research Amend",
       "description": "Amend approved research artifacts through a bounded alignment-gated workflow",
-      "type": "research",
+      "type": "analysis",
       "contextIntake": null,
       "visualTier": "document",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1439,6 +1440,7 @@
       "mirrorKey": "research-amend",
       "tags": [
         "amend",
+        "analysis",
         "base",
         "codex",
         "research"
@@ -10607,7 +10609,7 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.0",
+      "version": "v0.1",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -11063,7 +11065,7 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.0",
+      "version": "v0.1",
       "requiredConventions": [
         "alignment-page"
       ],

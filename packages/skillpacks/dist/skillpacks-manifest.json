@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "af08fb248340a976a44bfff2d65a772cdb64c1912ac196d5bc8ffcb1371afb05",
+  "source_fingerprint": "17f2ca8c3c6c5a579a5a64508c66b38cb3849c644867f07da953f0ea68f7de41",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1628,7 +1628,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1636,9 +1636,10 @@
       ],
       "path": "packs/base/claude/research-amend/SKILL.md",
       "installable": true,
-      "content_sha256": "597e2c34148320f24eb48131ac4d392e1d0ca9a5fdd8f8d9638d9265f3558ef6",
+      "content_sha256": "59790dba2b6f2373fe38f5e60eb3ff4917567985ecec8dc0e849687405a25f9c",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/research-amend",
       "deck_memberships": []
@@ -2025,7 +2026,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2033,9 +2034,10 @@
       ],
       "path": "packs/base/codex/research-amend/SKILL.md",
       "installable": true,
-      "content_sha256": "81e72e30c2bdba50aef5800d7369ba68f9b82c43c42233d5ad58047eb837e132",
+      "content_sha256": "13d5f2f262ac96c9d812be02553f8903a68b9cbf660ae2986cb6d27cee3d5baa",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$research-amend",
       "deck_memberships": []
@@ -11057,7 +11059,7 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11065,8 +11067,10 @@
       ],
       "path": "packs/youtube-ops/claude/youtube-meta-research/SKILL.md",
       "installable": true,
-      "content_sha256": "fabc0c183c22a6f919f5d84ebfc1132e3294d4a9df93f0c407f45c45fb207e56",
-      "archive_versions": [],
+      "content_sha256": "58c2d87aef270c974edc5b827a604228005b3911fd4a6070ce8672ed82d70b7a",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/youtube-meta-research",
       "deck_memberships": []
     },
@@ -11455,7 +11459,7 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11463,8 +11467,10 @@
       ],
       "path": "packs/youtube-ops/codex/youtube-meta-research/SKILL.md",
       "installable": true,
-      "content_sha256": "6b6ce4b8de197f8b74822fbcd17dd90a2c42402d4fb04cc6e7af5645b9dd2cb3",
-      "archive_versions": [],
+      "content_sha256": "b8ee24d27734e283fb2e799f0450924d013ed5cb21e3d9295241027b3e0b2cfc",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$youtube-meta-research",
       "deck_memberships": []
     },

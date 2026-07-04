@@ -2,6 +2,27 @@
 
 No active implementation task is currently promoted.
 
+## Review - Refresh Stale Skillpacks Generated Artifacts 2026-07-04
+
+Project: `agentic-skills`.
+
+### Goal
+
+Fix the failed `build:manifest:check` by regenerating stale generated skillpacks artifacts from the current committed skill source.
+
+### Review
+
+Verified:
+
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` from current skill source.
+- Staged the refreshed package manifest before regenerating catalog exports so `scripts/generate-skills-catalog-export.mjs` read the fresh manifest from the git index.
+- Regenerated `exports/skills-catalog/v1/catalog.json`, `exports/skills-catalog/v1/manifest.json`, and `exports/skills-catalog/v1/proof.json`.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `npm run exports:check` passed.
+- `npm run skillpacks:verify` passed.
+- `git diff --check` and `git diff --cached --check` passed.
+
 ## Review - Skill Quality Audit Before Publish 2026-07-04
 
 Project: `agentic-skills`.
