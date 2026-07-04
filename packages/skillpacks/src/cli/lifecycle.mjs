@@ -446,11 +446,34 @@ function sourceOwnedBySkillpacks(source) {
   return ownedPrefixes.some((prefix) => source === prefix || source.startsWith(`${prefix}/`));
 }
 
+function sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName) {
+  if (!source) {
+    return false;
+  }
+
+  const normalizedSource = source.replace(/\\/g, '/');
+  const segments = normalizedSource.split('/').filter(Boolean);
+  if (!segments.includes('agentic-skills') && !segments.includes('skillpacks')) {
+    return false;
+  }
+
+  const suffixes = [
+    ['base', tool, skillName],
+    ['packs', 'base', tool, skillName],
+    ['global', tool, skillName],
+    ['global', 'packs', tool, skillName]
+  ].map((parts) => parts.join('/'));
+
+  return suffixes.some((suffix) => normalizedSource === suffix || normalizedSource.endsWith(`/${suffix}`));
+}
+
 function targetManagedBySkillpacks(target) {
   return managedMarkerField(target, 'managed_by') === 'agentic-skills';
 }
 
-function removeRepoSkillInstall(target) {
+function removeRepoSkillInstall(target, options = {}) {
+  const { tool = '', skillName = '', allowLegacyGlobalSource = false } = options;
+
   if (!existsSync(target)) {
     return false;
   }
@@ -467,7 +490,9 @@ function removeRepoSkillInstall(target) {
 
   if (isManagedSkillDir(target)) {
     const source = managedMarkerField(target, 'source');
-    if (targetManagedBySkillpacks(target) && sourceOwnedBySkillpacks(source)) {
+    const legacyGlobalSource =
+      allowLegacyGlobalSource && sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName);
+    if (targetManagedBySkillpacks(target) && (sourceOwnedBySkillpacks(source) || legacyGlobalSource)) {
       rmSync(target, { recursive: true, force: true });
       return true;
     }
@@ -494,6 +519,30 @@ function repoSkillInstallOwned(target) {
   return false;
 }
 
+function globalRepoSkillInstallOwned(target, tool, skillName) {
+  if (!existsSync(target)) {
+    return false;
+  }
+
+  const stats = lstatSync(target);
+  if (stats.isSymbolicLink()) {
+    return sourceOwnedBySkillpacks(readlinkSync(target));
+  }
+
+  if (isManagedSkillDir(target)) {
+    const source = managedMarkerField(target, 'source');
+    return (
+      targetManagedBySkillpacks(target)
+      && (
+        sourceOwnedBySkillpacks(source)
+        || sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName)
+      )
+    );
+  }
+
+  return false;
+}
+
 function globalRepoSkillInstalls(homeRoot = homedir()) {
   const installs = [];
 
@@ -505,7 +554,7 @@ function globalRepoSkillInstalls(homeRoot = homedir()) {
 
     for (const entry of readdirSync(root).sort((a, b) => a.localeCompare(b))) {
       const target = join(root, entry);
-      if (repoSkillInstallOwned(target)) {
+      if (globalRepoSkillInstallOwned(target, tool, entry)) {
         installs.push({
           tool,
           skillName: entry,
@@ -1589,7 +1638,11 @@ export async function uninstallGlobal({
   } else {
     removed = 0;
     for (const install of installs) {
-      if (removeRepoSkillInstall(install.target)) {
+      if (removeRepoSkillInstall(install.target, {
+        tool: install.tool,
+        skillName: install.skillName,
+        allowLegacyGlobalSource: true
+      })) {
         console.log(`Removed ${install.rel}`);
         removed += 1;
       }

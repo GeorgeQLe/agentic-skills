@@ -432,6 +432,31 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(unmanagedMarkerDir), true);
   });
 
+  it('uninstall-global removes legacy managed globals sourced from older agentic-skills checkouts', async () => {
+    const home = makeTempProject();
+    const codexRoot = join(home, '.codex/skills');
+    mkdirSync(codexRoot, { recursive: true });
+
+    const oldCheckout = join(home, 'old-agentic-skills-checkout', 'agentic-skills');
+    writeManagedSkillDir(
+      join(codexRoot, 'codebase-status'),
+      join(oldCheckout, 'base/codex/codebase-status')
+    );
+    writeManagedSkillDir(
+      join(codexRoot, 'not-codebase-status'),
+      join(oldCheckout, 'base/codex/codebase-status')
+    );
+
+    const { stdout, exitCode } = await captureConsole(() => uninstallGlobal({ homeRoot: home }));
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed \.codex\/skills\/codebase-status/);
+    assert.match(stdout, /Removed 1 repo-managed base skill install\(s\)/);
+    assert.doesNotMatch(stdout, /not-codebase-status/);
+    assert.equal(existsSync(join(codexRoot, 'codebase-status')), false);
+    assert.equal(existsSync(join(codexRoot, 'not-codebase-status')), true);
+  });
+
   it('uninstall-global --dry-run previews only repo-managed installs without removing them', async () => {
     const home = makeTempProject();
     const claudeRoot = join(home, '.claude/skills');

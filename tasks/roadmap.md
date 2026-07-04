@@ -113,6 +113,30 @@ Verified:
 - `git diff --check` passed.
 - Commit and push are the final shipping action after local audits pass.
 
+## Historical Implementation - Uninstall-Global Ownership Investigation
+
+### Goal
+
+Verify and fix the mismatch where a real global Codex skill installed from the local `agentic-skills` checkout is visible to Codex but `npx skillpacks uninstall-global` reports zero removable global installs because the current npm package does not consider that marker source owned.
+
+### Plan
+
+- [x] Capture the investigation prompt and current task state.
+- [x] Inspect the actual global and project-local `codebase-status` skill files and install markers.
+- [x] Trace CLI ownership/removal logic for `uninstall-global`, including current-package source checks.
+- [x] Implement the smallest durable CLI/test change for legacy repo-managed global install cleanup or reporting.
+- [x] Run focused package tests plus diff hygiene, then document the review and ship.
+
+### Acceptance Criteria
+
+- Local evidence confirms or corrects each user claim.
+- The CLI behavior is no longer misleading for legacy repo-managed global skills created from a local checkout.
+- Regression tests cover the legacy marker source case.
+
+### Review
+
+The user's diagnosis was confirmed: the global copy was present and stale, while the npm-run cleanup command only trusted sources owned by the currently executing package/checkout. The fix adds a global-cleanup-only compatibility path for managed marker directories with legacy `agentic-skills`/`skillpacks` source layouts that match the same tool and skill name. Focused lifecycle tests, serialized package Node tests, real-home dry-run, and package build checks passed.
+
 ## Historical Implementation - Design-Tree Handoff Verification
 
 ### Goal

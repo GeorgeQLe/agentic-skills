@@ -1,6 +1,48 @@
 # Current Task State
 
-No active implementation task is currently promoted.
+## Current Implementation - Uninstall-Global Ownership Investigation
+
+Project: `agentic-skills`.
+
+### Goal
+
+Verify why `uninstall-global` reports zero removable global installs while a global `codebase-status` skill exists, then fix the CLI behavior or wording so legacy repo-managed global installs can be identified and cleaned correctly.
+
+### Plan
+
+- [x] Verify the global and project-local `codebase-status` skill markers and versions.
+- [x] Trace `uninstall-global` ownership detection in the CLI source.
+- [x] Identify the minimal fix and add focused regression coverage.
+- [x] Run focused tests and hygiene checks.
+- [x] Record review, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- The user’s claim is classified against local evidence.
+- `uninstall-global` handles legacy local-checkout managed global installs intentionally, either by removing them under an explicit contract or by reporting them separately with actionable guidance.
+- Tests cover npm-package/current-checkout ownership and legacy local-checkout marker sources.
+
+### Review
+
+Confirmed:
+
+- Global `~/.codex/skills/codebase-status` exists at v0.10 with a marker source under `/home/georgeqle/projects/tools/dev/agentic-skills/base/codex/codebase-status`.
+- Project-local `omni-editor/.codex/skills/codebase-status` exists at v0.11 with a marker source under the npm `npx` cache.
+- The old `uninstall-global` ownership check only trusted sources under the currently executing package root or inferred checkout root, so npm-run cleanup could decline old local-checkout marker sources.
+
+Fixed:
+
+- `uninstall-global` now recognizes managed user-home skill directories whose marker source matches legacy `agentic-skills` or `skillpacks` global/base layouts for the same tool and skill name.
+- Symlink and project-local refresh ownership remain on the stricter current-package source check.
+- Added regression coverage for an older local checkout source plus a mismatched target that must remain untouched.
+
+Verified:
+
+- `node --test test/lifecycle.test.mjs` passed: 60 tests.
+- `node packages/skillpacks/bin/skillpacks.mjs uninstall-global --dry-run` now reports 19 removable repo-managed user-home installs in this home directory, including `.codex/skills/codebase-status`.
+- `node --test --test-concurrency=1 packages/skillpacks/test/*.test.mjs` passed: 179 tests.
+- Plain `npm --workspace packages/skillpacks run test:node` failed because package test files mutate package metadata concurrently; rerunning serialized passed.
+- `npm --workspace packages/skillpacks run build:check` passed after regenerating the stale tracked manifest.
 
 ## Review - Patch Packaged Alignment Audit Missing Shared Lib 2026-07-04
 
